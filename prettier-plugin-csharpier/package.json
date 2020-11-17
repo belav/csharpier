@@ -1,0 +1,38 @@
+{
+  "name": "prettier-plugin-csharpier",
+  "version": "0.1.0-development",
+  "description": "Prettier C# Plugin",
+  "repository": "belav/csharpier",
+  "author": "Bela VanderVoort",
+  "license": "MIT",
+  "main": "dist",
+  "dependencies": {
+    "prettier": "^2.1.2"
+  },
+  "scripts": {
+    "watch": "webpack --env=watch",
+    "build": "npm run clean-dist && webpack",
+    "clean-dist": "rimraf dist/*",
+    "prettier": "prettier --write \"{src,test}/**/*.{js,ts}\"",
+    "test": "jest",
+    "samples": "node ./Samples/_index.js",
+    "fetch-antlr": "node fetch",
+    "generate-parser": "java -jar bin/antlr-4.7.2-complete.jar -Dlanguage=JavaScript src/csharp/*.g4",
+    "csharpier": "prettier --plugin=. --parser=cs",
+    "csharpier:debug": "node --lazy --inspect-brk src/debug.js"
+  },
+  "devDependencies": {
+    "@babel/core": "7.12.3",
+    "@types/prettier": "2.1.5",
+    "awesome-typescript-loader": "5.2.1",
+    "babel-loader": "8.2.1",
+    "copy-webpack-plugin": "6.3.1",
+    "jest": "26.6.3",
+    "plop": "2.7.4",
+    "rimraf": "3.0.2",
+    "source-map-loader": "1.1.2",
+    "typescript": "4.0.5",
+    "webpack": "5.4.0",
+    "webpack-cli": "4.2.0"
+  }
+}
