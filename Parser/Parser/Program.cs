@@ -23,6 +23,8 @@ public class ClassName
         {
             var testToParse = args.Length == 0 ? TestClass : args[0];
             
+            System.Text.StringBuilder
+            
             var rootNode = CSharpSyntaxTree.ParseText(testToParse).GetRoot();
             var jsonSerializerSettings = new JsonSerializerSettings
             {
