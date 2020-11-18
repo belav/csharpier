@@ -9,6 +9,9 @@ Then from prettier-plugin-csharpier
 
 ```
 npm install
+npm run build
+# or to watch typescript and recompile
+npm run watch
 ```
 
 From there you can test out samples

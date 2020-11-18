@@ -23,8 +23,8 @@ export const print: PrintMethod<ClassDeclarationNode> = (path, options, print) =
     if (hasMembers) {
 
     } else {
-        braces.push(" ", "{", "}")
+        braces.push(" ", "{", " ", "}")
     }
 
-    return concat([join(" ", parts), ...braces, hardline]);
+    return concat([join(" ", parts), ...braces]);
 };

@@ -20,6 +20,7 @@ fs.readdirSync(__dirname).forEach(file => {
         parser: "cs",
         plugins: ["."],
         endOfLine: "auto",
+        tabWidth: 4,
         writeParserJson: referenceFile.replace(".cs", ".json"),
     });
 

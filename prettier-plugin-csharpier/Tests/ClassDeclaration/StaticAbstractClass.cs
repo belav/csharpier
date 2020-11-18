@@ -1,1 +1,1 @@
-public static abstract class EmptyClass {}
+public static abstract class EmptyClass { }

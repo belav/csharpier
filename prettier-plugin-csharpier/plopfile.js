@@ -4,16 +4,20 @@ module.exports = function (plop) {
             {
                 type: "input",
                 name: "name",
-                message: "name?",
-            },
+                message: "name?"
+            }
         ],
-
         actions: [
             {
                 type: "add",
                 path: "src/Printer/Types/{{name}}.ts",
-                templateFile: "Templates/NodeType.hbs",
+                templateFile: "Templates/NodeType/Type.hbs"
             },
-        ],
+            {
+                type: "add",
+                path: "Tests/{{name}}/{{camelCase name}}.js",
+                templateFile: "Templates/NodeType/Test.hbs"
+            }
+        ]
     });
 };

@@ -11,6 +11,7 @@ function runTest(directory, name) {
         plugins: ["."],
         endOfLine: "auto",
         writeParserJson: codePath.replace(".cs", ".json"),
+        tabWidth: 4,
     });
 
     fs.writeFileSync(codePath.replace(".cs", ".actual.cs"), actualCode, "utf8");
