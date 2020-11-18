@@ -25,6 +25,7 @@ generateTypesFile();
 
 module.exports = env => {
     return {
+        mode: "development",
         watch: env && env.watch,
         watchOptions: {
             ignored: /node_modules/
@@ -42,7 +43,7 @@ module.exports = env => {
         resolve: {
             extensions: [".ts", ".tsx", ".js"],
         },
-        devtool: "source-map",
+        devtool: "inline-source-map",
         plugins: [],
         module: {
             rules: [

@@ -1,4 +1,7 @@
 export { print as ClassDeclaration } from "./Types/ClassDeclaration"
 export { print as CompilationUnit } from "./Types/CompilationUnit"
+export { print as FieldDeclaration } from "./Types/FieldDeclaration"
+export { print as IdentifierName } from "./Types/IdentifierName"
 export { print as NamespaceDeclaration } from "./Types/NamespaceDeclaration"
+export { print as QualifiedName } from "./Types/QualifiedName"
 export { print as UsingDirective } from "./Types/UsingDirective"

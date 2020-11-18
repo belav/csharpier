@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -39,6 +40,21 @@ public class ClassName
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
             var props = base.CreateProperties(type, memberSerialization);
+            for (var x = props.Count - 1; x >= 0; x--)
+            {
+                var propertyName = props[x].PropertyName ?? "";
+                if (propertyName == "syntaxTree"
+                    || propertyName.Contains("Trivia")
+                    || propertyName == "semicolonToken"
+                    || propertyName == "openBraceToken"
+                    || propertyName == "closeBraceToken"
+                    || propertyName == "endOfFileToken"
+                    )
+                {
+                    props.RemoveAt(x);
+                }
+            }
+            
             if (type.GetProperty("RawKind") != null)
             {
                 props.Insert(0, new JsonProperty

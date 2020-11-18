@@ -11,7 +11,7 @@ function loc(prop: any) {
 
 function parseText(text: string) {
     // TODO where should this dll really live?
-    const executionResult = spawnSync("dotnet",["exec", "..\\Parser\\bin\\Debug\\netcoreapp2.2\\Parser.dll", text], {
+    const executionResult = spawnSync("dotnet",["exec", "..\\Parser\\Parser\\bin\\Debug\\netcoreapp2.2\\Parser.dll", text], {
         maxBuffer: 1000 * 1000 * 100, // 100 MB
     });
     const error = executionResult.stderr.toString();
@@ -23,6 +23,7 @@ function parseText(text: string) {
     return executionResult;
 }
 
+// TODO we can possibly ditch a lot more from the json, the trivia doesn't seem relevant since we are replacing it with our own spaces, lines, etc
 function parseCSharp(text: string, parsers: object, options: any) {
     const executionResult = parseText(text);
     const ast = JSON.parse(executionResult.stdout.toString());

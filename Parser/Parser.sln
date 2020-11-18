@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser", "Parser.csproj", "{719DAB51-7CE5-417F-B7C2-063908A50459}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser", "Parser\Parser.csproj", "{719DAB51-7CE5-417F-B7C2-063908A50459}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier", "CSharpier\CSharpier.csproj", "{494E8025-CFED-435F-8643-5F23493033CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,9 @@ Global
 		{719DAB51-7CE5-417F-B7C2-063908A50459}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{719DAB51-7CE5-417F-B7C2-063908A50459}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{719DAB51-7CE5-417F-B7C2-063908A50459}.Release|Any CPU.Build.0 = Release|Any CPU
+		{494E8025-CFED-435F-8643-5F23493033CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{494E8025-CFED-435F-8643-5F23493033CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{494E8025-CFED-435F-8643-5F23493033CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{494E8025-CFED-435F-8643-5F23493033CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

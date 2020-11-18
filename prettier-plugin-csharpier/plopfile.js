@@ -15,7 +15,7 @@ module.exports = function (plop) {
             },
             {
                 type: "add",
-                path: "Tests/{{name}}/{{camelCase name}}.js",
+                path: "Tests/{{name}}/_{{camelCase name}}.js",
                 templateFile: "Templates/NodeType/Test.hbs"
             }
         ]

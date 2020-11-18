@@ -1,10 +1,11 @@
-using System.Linq;
+using System;
 
 namespace Namespace {
     using System;
 
     public class ClassName
     {
+        private static const string SomeName;
     }
 }
 

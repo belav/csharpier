@@ -1,7 +1,8 @@
 using First;
 using Second;
 
-namespace Namespace {
+namespace Namespace
+{
     using Third;
     public class ClassName { }
 }

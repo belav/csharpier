@@ -7,11 +7,6 @@ export interface NamespaceDeclarationNode extends Node<"NamespaceDeclaration"> {
     namespaceKeyword: {
         text: string;
     };
-    name: {
-        identifier: {
-            text: string;
-        };
-    };
     members: Node[];
     usings: Node[];
 }
@@ -21,12 +16,12 @@ export const print: PrintMethod<NamespaceDeclarationNode> = (path, options, prin
     const parts: Doc[] = [];
     parts.push(node.namespaceKeyword.text);
     parts.push(" ");
-    parts.push(node.name.identifier.text);
+    parts.push(path.call(print, "name"));
 
     const hasMembers = node.members.length > 0;
     const hasUsing = node.usings.length > 0;
     if (hasMembers || hasUsing) {
-        parts.push(concat([" ", "{"]));
+        parts.push(concat([hardline, "{"]));
         parts.push(
             indent(
                 concat([

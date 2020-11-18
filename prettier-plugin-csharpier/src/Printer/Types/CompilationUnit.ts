@@ -5,6 +5,7 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface CompilationUnitNode extends Node<"ompilationUnit"> {
     usings: Node[];
+    members: Node[];
 }
 
 export const print: PrintMethod<CompilationUnitNode> = (path, options, print) => {
@@ -15,8 +16,11 @@ export const print: PrintMethod<CompilationUnitNode> = (path, options, print) =>
         parts.push(hardline);
     }
 
-    parts.push(path.call(print, "members", 0));
-    parts.push(hardline);
+    if (node.members.length > 0) {
+        parts.push(concat(path.map(print, "members")));
+        parts.push(hardline);
+    }
+
 
     return concat(parts);
 };

@@ -14,8 +14,7 @@ export const print: PrintMethod<UsingDirectiveNode> = (path, options, print) => 
     const parts: Doc[] = [];
     parts.push(node.usingKeyword.text);
     parts.push(" ");
-    // TODO we should really have something to deal with QualifiedName, IdentifierName, IdentifierToken, etc, this just works with simple examples
-    parts.push((node as any).name.identifier.text);
+    parts.push(group(path.call(print, "name")));
     parts.push(";")
     parts.push(hardline);
 

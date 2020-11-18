@@ -14,7 +14,12 @@ function runTest(directory, name) {
         tabWidth: 4,
     });
 
-    fs.writeFileSync(codePath.replace(".cs", ".actual.cs"), actualCode, "utf8");
+    const actualFilePath = codePath.replace(".cs", ".actual.cs");
+    if (!fs.existsSync(actualFilePath) || fs.readFileSync(actualFilePath, "utf8") !== actualCode) {
+        // this may trigger HMR if the file doesn't exist or is being changed.
+        fs.writeFileSync(actualFilePath, actualCode);
+    }
+
 
     expect(actualCode).toBe(code);
 }
