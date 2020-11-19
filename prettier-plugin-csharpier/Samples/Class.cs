@@ -6,6 +6,8 @@ namespace Namespace {
     public class ClassName
     {
         private static const string SomeName;
+
+        void DoStuff();
     }
 }
 

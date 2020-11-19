@@ -1,0 +1,4 @@
+public class ClassName
+{
+    public void DoStuff() {}
+}

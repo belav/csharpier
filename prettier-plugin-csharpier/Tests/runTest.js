@@ -16,7 +16,6 @@ function runTest(directory, name) {
 
     const actualFilePath = codePath.replace(".cs", ".actual.cs");
     if (!fs.existsSync(actualFilePath) || fs.readFileSync(actualFilePath, "utf8") !== actualCode) {
-        // this may trigger HMR if the file doesn't exist or is being changed.
         fs.writeFileSync(actualFilePath, actualCode);
     }
 

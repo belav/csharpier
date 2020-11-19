@@ -12,7 +12,6 @@ generateTypesFile = () => {
     const typesFilePath = path.resolve(__dirname, "src/Printer/Types.ts")
 
     if (!fs.existsSync(typesFilePath) || fs.readFileSync(typesFilePath, "utf8") !== typesFile) {
-        // this may trigger HMR if the file doesn't exist or is being changed.
         fs.writeFileSync(typesFilePath, typesFile);
     }
 }
