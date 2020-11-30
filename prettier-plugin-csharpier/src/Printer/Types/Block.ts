@@ -7,5 +7,5 @@ export interface BlockNode extends SyntaxTreeNode<"Block"> {
 }
 
 export const print: PrintMethod<BlockNode> = (path, options, print) => {
-    return group(concat([line, "{", line, concat(path.map(print, "statements")), line, "}"]));
+    return group(concat([line, "{", line, indent(concat(path.map(print, "statements"))), line, "}"]));
 };

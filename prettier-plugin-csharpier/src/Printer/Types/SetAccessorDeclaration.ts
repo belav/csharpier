@@ -13,8 +13,10 @@ export const print: PrintMethod<SetAccessorDeclarationNode> = (path, options, pr
     const parts: Doc[] = [];
     parts.push(getValue(node.keyword));
     if (!node.body) {
+        parts.unshift(line);
         parts.push(";")
     } else {
+        parts.unshift(hardline);
         parts.push(path.call(print, "body"));
     }
 
