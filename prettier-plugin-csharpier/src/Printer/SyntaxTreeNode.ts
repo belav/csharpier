@@ -8,10 +8,18 @@ export interface HasValue {
     text: string;
 }
 
+export interface HasIdentifier {
+    identifier: HasValue;
+}
+
 export interface HasModifiers {
     modifiers: HasValue[];
 }
 
-export function getValue(hasValue: HasValue) {
+export function printIdentifier(hasIdentifier: HasIdentifier) {
+    return printValue(hasIdentifier.identifier);
+}
+
+export function printValue(hasValue: HasValue) {
     return hasValue.text;
 }

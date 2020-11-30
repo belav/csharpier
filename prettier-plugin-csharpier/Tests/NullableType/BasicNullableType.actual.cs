@@ -1,0 +1,4 @@
+public class BasicClass
+{
+    private Guid? NullableGuidField;
+}

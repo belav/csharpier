@@ -1,5 +1,5 @@
 import { PrintMethod } from "../PrintMethod";
-import { getValue, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { printValue, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface ArrowExpressionClauseNode extends SyntaxTreeNode<"ArrowExpressionClause"> {
@@ -9,5 +9,5 @@ export interface ArrowExpressionClauseNode extends SyntaxTreeNode<"ArrowExpressi
 
 export const print: PrintMethod<ArrowExpressionClauseNode> = (path, options, print) => {
     const node = path.getValue();
-    return concat([getValue(node.arrowToken), " ", path.call(print, "expression")])
+    return concat([printValue(node.arrowToken), " ", path.call(print, "expression")])
 };

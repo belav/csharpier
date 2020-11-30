@@ -1,6 +1,6 @@
 import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
-import { getValue, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { printValue, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface SetAccessorDeclarationNode extends SyntaxTreeNode<"SetAccessorDeclaration"> {
@@ -12,7 +12,7 @@ export interface SetAccessorDeclarationNode extends SyntaxTreeNode<"SetAccessorD
 export const print: PrintMethod<SetAccessorDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
-    parts.push(getValue(node.keyword));
+    parts.push(printValue(node.keyword));
     if (!node.body && !node.expressionBody) {
         parts.unshift(line);
         parts.push(";")

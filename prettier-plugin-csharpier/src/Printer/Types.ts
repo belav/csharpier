@@ -22,3 +22,4 @@ export { print as SimpleMemberAccessExpression } from "./Types/SimpleMemberAcces
 export { print as ThisExpression } from "./Types/ThisExpression"
 export { print as UsingDirective } from "./Types/UsingDirective"
 export { print as VariableDeclaration } from "./Types/VariableDeclaration"
+export { print as VariableDeclarator } from "./Types/VariableDeclarator"

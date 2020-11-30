@@ -1,11 +1,10 @@
 import { Doc } from "prettier";
-import { getValue, HasModifiers, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { printValue, HasModifiers, HasValue, SyntaxTreeNode, HasIdentifier, printIdentifier } from "../SyntaxTreeNode";
 import { PrintMethod } from "../PrintMethod";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 import { printModifiers } from "../PrintModifiers";
 
-export interface ClassDeclarationNode extends SyntaxTreeNode<"ClassDeclaration">, HasModifiers {
-    identifier: HasValue;
+export interface ClassDeclarationNode extends SyntaxTreeNode<"ClassDeclaration">, HasModifiers, HasIdentifier {
     members: SyntaxTreeNode[];
 }
 
@@ -14,7 +13,7 @@ export const print: PrintMethod<ClassDeclarationNode> = (path, options, print) =
     const parts: Doc[] = [];
     parts.push(printModifiers(node));
     parts.push("class");
-    parts.push(" ", getValue(node.identifier));
+    parts.push(" ", printIdentifier(node));
 
     const hasMembers = node.members.length > 0;
     if (hasMembers) {

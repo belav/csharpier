@@ -1,5 +1,5 @@
 import { PrintMethod } from "../PrintMethod";
-import { getValue, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { printValue, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface ThisExpressionNode extends SyntaxTreeNode<"ThisExpression"> {
@@ -7,5 +7,5 @@ export interface ThisExpressionNode extends SyntaxTreeNode<"ThisExpression"> {
 }
 
 export const print: PrintMethod<ThisExpressionNode> = (path, options, print) => {
-    return getValue(path.getValue().token);
+    return printValue(path.getValue().token);
 };

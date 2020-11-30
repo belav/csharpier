@@ -1,5 +1,5 @@
 import { PrintMethod } from "../PrintMethod";
-import { getValue, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { printValue, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 import { print as otherPrint } from "./SetAccessorDeclaration"
 
