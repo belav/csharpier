@@ -5,19 +5,27 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface SetAccessorDeclarationNode extends SyntaxTreeNode<"SetAccessorDeclaration"> {
     keyword: HasValue;
-    body: unknown;
+    expressionBody?: SyntaxTreeNode;
+    body?: SyntaxTreeNode;
 }
 
 export const print: PrintMethod<SetAccessorDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
     parts.push(getValue(node.keyword));
-    if (!node.body) {
+    if (!node.body && !node.expressionBody) {
         parts.unshift(line);
         parts.push(";")
     } else {
         parts.unshift(hardline);
-        parts.push(path.call(print, "body"));
+        if (node.body) {
+            parts.push(path.call(print, "body"));
+        } else {
+            parts.push(" ");
+            parts.push(path.call(print, "expressionBody"));
+            parts.push(";");
+        }
+
     }
 
     return concat(parts);

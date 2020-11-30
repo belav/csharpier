@@ -8,6 +8,7 @@ export interface PropertyDeclarationNode extends SyntaxTreeNode<"PropertyDeclara
     identifier: HasValue;
     accessorList?: SyntaxTreeNode;
     expressionBody?: SyntaxTreeNode;
+    semicolon?: HasValue;
 }
 
 export const print: PrintMethod<PropertyDeclarationNode> = (path, options, print) => {
@@ -15,9 +16,9 @@ export const print: PrintMethod<PropertyDeclarationNode> = (path, options, print
 
     let contents: Doc;
     if (node.accessorList) {
-        contents = concat(["{", indent(concat(path.map(print, "accessorList", "accessors"))), line, "}");
+        contents = concat(["{", indent(concat(path.map(print, "accessorList", "accessors"))), line, "}"]);
     } else {
-        contents = path.call(print, "expressionBody");
+        contents = concat([path.call(print, "expressionBody"), ";"]);
     }
 
     return group(

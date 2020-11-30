@@ -12,6 +12,10 @@ test("Property with this expression", () => {
     runTest(__dirname, "PropertyWithThisExpression");
 });
 
-test("Property with lambda", () => {
-    runTest(__dirname, "PropertyWithLambda");
+test("Property with lambda body", () => {
+    runTest(__dirname, "PropertyWithLambdaBody");
+});
+
+test("Property with lambda accessors", () => {
+    runTest(__dirname, "PropertyWithLambdaAccessors");
 });
