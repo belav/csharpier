@@ -1,10 +1,10 @@
 import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
-import { getValue, Node } from "../Node";
+import { getValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface VariableDeclarationNode extends Node<"VariableDeclaration"> {
-    type: Node;
+export interface VariableDeclarationNode extends SyntaxTreeNode<"VariableDeclaration"> {
+    type: SyntaxTreeNode;
 }
 
 export const print: PrintMethod<VariableDeclarationNode> = (path, options, print) => {

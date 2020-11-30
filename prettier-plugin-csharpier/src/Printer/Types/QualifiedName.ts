@@ -1,8 +1,8 @@
 import { PrintMethod } from "../PrintMethod";
-import { Node } from "../Node";
+import { SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface QualifiedNameNode extends Node<"QualifiedName"> {
+export interface QualifiedNameNode extends SyntaxTreeNode<"QualifiedName"> {
 
 }
 

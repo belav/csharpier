@@ -1,6 +1,13 @@
 using System;
 
-namespace Namespace {
+namespace Namespace
+{
     using System;
     public class ClassName
+    {
+        private static const string SomeName;
+        void DoStuff() {}
+        private string property;
+        public string Property { get; set; }
+    }
 }

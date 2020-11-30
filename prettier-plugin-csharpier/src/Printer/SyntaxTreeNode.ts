@@ -1,4 +1,4 @@
-export interface Node<T = string> {
+export interface SyntaxTreeNode<T = string> {
     nodeType: T;
 }
 

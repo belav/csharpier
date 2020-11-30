@@ -1,5 +1,5 @@
 import { concat, join } from "./Builders";
-import { getValue, HasModifiers } from "./Node";
+import { getValue, HasModifiers } from "./SyntaxTreeNode";
 
 export function printModifiers(node: HasModifiers) {
     if (node.modifiers.length === 0) {

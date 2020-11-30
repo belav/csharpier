@@ -1,20 +1,18 @@
 import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
-import { Node } from "../Node";
+import { getValue, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface NamespaceDeclarationNode extends Node<"NamespaceDeclaration"> {
-    namespaceKeyword: {
-        text: string;
-    };
-    members: Node[];
-    usings: Node[];
+export interface NamespaceDeclarationNode extends SyntaxTreeNode<"NamespaceDeclaration"> {
+    namespaceKeyword: HasValue;
+    members: SyntaxTreeNode[];
+    usings: SyntaxTreeNode[];
 }
 
 export const print: PrintMethod<NamespaceDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
-    parts.push(node.namespaceKeyword.text);
+    parts.push(getValue(node.namespaceKeyword));
     parts.push(" ");
     parts.push(path.call(print, "name"));
 

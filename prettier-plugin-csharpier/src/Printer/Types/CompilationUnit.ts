@@ -1,11 +1,11 @@
 import { Doc } from "prettier";
-import { Node } from "../Node";
+import { SyntaxTreeNode } from "../SyntaxTreeNode";
 import { PrintMethod } from "../PrintMethod";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface CompilationUnitNode extends Node<"ompilationUnit"> {
-    usings: Node[];
-    members: Node[];
+export interface CompilationUnitNode extends SyntaxTreeNode<"ompilationUnit"> {
+    usings: SyntaxTreeNode[];
+    members: SyntaxTreeNode[];
 }
 
 export const print: PrintMethod<CompilationUnitNode> = (path, options, print) => {

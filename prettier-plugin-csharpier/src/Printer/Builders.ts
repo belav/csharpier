@@ -1,4 +1,4 @@
-import { doc } from "prettier";
+import { Doc, doc } from "prettier";
 const { indent, softline, group, concat, line, hardline, join } = doc.builders;
 const doubleHardline = concat([hardline, hardline]);
 

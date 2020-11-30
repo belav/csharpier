@@ -6,6 +6,11 @@ test("basic test", () => {
     expect(actual).toBe("public class ClassName");
 });
 
+test("property test", () => {
+    const actual = print(group(concat(["public", " ", "string", " ", "Property", " ", "{", " ", "get;", line, "set;", " ", "}"])));
+    expect(actual).toBe("public string Property { get; set; }");
+});
+
 test("indent using", () => {
     const parts = [];
     parts.push("namespace Namespace");
@@ -30,7 +35,7 @@ test("indent numbers", () => {
             indent(
                 concat([
                     hardline,
-                    join(concat([',', line]), ["1", "2", "3"])
+                    join(concat([',', hardline]), ["1", "2", "3"])
                 ])
             ),
             hardline,
@@ -49,6 +54,7 @@ test("indent numbers", () => {
 function print(doc) {
     const result = prettier.doc.printer.printDocToString(doc, {
         tabWidth: 4,
+        printWidth: 80,
     });
     return result.formatted;
 }

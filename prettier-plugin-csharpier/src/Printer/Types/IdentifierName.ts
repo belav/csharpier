@@ -1,8 +1,8 @@
 import { PrintMethod } from "../PrintMethod";
-import { getValue, HasValue, Node } from "../Node";
+import { getValue, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface IdentifierNameNode extends Node<"IdentifierName"> {
+export interface IdentifierNameNode extends SyntaxTreeNode<"IdentifierName"> {
     identifier: HasValue;
 }
 

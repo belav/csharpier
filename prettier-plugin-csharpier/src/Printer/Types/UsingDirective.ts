@@ -1,9 +1,9 @@
 import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
-import { Node } from "../Node";
+import { SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface UsingDirectiveNode extends Node<"UsingDirective"> {
+export interface UsingDirectiveNode extends SyntaxTreeNode<"UsingDirective"> {
     usingKeyword: {
         text: string;
     }

@@ -8,6 +8,10 @@ namespace Namespace {
         private static const string SomeName;
 
         void DoStuff();
+
+        private string property;
+
+        public string Property { get { return property; } set { property = value; } }
     }
 }
 
