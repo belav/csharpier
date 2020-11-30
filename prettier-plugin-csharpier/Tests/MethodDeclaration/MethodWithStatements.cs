@@ -1,0 +1,8 @@
+public class ClassName
+{
+    public void DoStuff()
+    {
+        DoStuff();
+        DoStuff();
+    }
+}

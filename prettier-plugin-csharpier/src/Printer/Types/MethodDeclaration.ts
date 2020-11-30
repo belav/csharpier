@@ -7,7 +7,7 @@ import { printModifiers } from "../PrintModifiers";
 export interface MethodDeclarationNode extends SyntaxTreeNode<"MethodDeclaration">, HasModifiers, HasIdentifier {
     returnType: SyntaxTreeNode;
     parameterList: SyntaxTreeNode;
-    body: SyntaxTreeNode;
+    body?: SyntaxTreeNode;
 }
 
 export const print: PrintMethod<MethodDeclarationNode> = (path, options, print) => {
@@ -17,7 +17,13 @@ export const print: PrintMethod<MethodDeclarationNode> = (path, options, print) 
     parts.push(path.call(print, "returnType"));
     parts.push(" ", printIdentifier(node));
 
-    parts.push("() {}");
+    parts.push("()");
+    if (node.body) {
+        parts.push(path.call(print, "body"));
+    } else{
+        parts.push(" { }")
+    }
+
 
     return concat(parts);
 };

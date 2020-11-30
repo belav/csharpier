@@ -32,6 +32,8 @@ namespace Insite.Spire.Services
 
     public class RetrievePageService : IRetrievePageService
     {
+        // TODO keep line breaks for some things, like spacing between these?
+        // TODO we do want to keep some of the line breaks in the body of methods
         private readonly ICatalogPathBuilder catalogPathBuilder;
         private readonly ICatalogService catalogService;
         private readonly INavigationFilterService navigationFilterService;

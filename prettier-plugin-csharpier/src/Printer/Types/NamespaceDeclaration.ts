@@ -25,7 +25,7 @@ export const print: PrintMethod<NamespaceDeclarationNode> = (path, options, prin
                 concat([
                     hardline,
                     hasUsing ? concat([concat(path.map(print, "usings")), hardline]) : "",
-                    hasMembers ? concat(path.map(print, "members")) : "",
+                    hasMembers ? join(doubleHardline, path.map(print, "members")) : "",
                 ]),
             ),
         );

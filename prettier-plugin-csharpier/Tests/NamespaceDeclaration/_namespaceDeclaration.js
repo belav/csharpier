@@ -6,4 +6,8 @@ test("Empty namespace", () => {
 
 test("Namespace With Using And Class", () => {
     runTest(__dirname, "NamespaceWithUsingAndClass");
+});
+
+test("Namespace With Multiple Classes", () => {
+    runTest(__dirname, "NamespaceWithMultipleClasses");
 })
