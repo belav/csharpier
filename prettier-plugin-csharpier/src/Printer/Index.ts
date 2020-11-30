@@ -1,6 +1,6 @@
 import { Dictionary } from "../Common/Types";
 import { PrintMethod } from "./PrintMethod";
-import * as types from "./types";
+import * as types from "./Types";
 
 const printNode: PrintMethod = (path, options, print) => {
     const node = path.getValue();
