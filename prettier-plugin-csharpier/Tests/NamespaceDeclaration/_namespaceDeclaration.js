@@ -1,5 +1,5 @@
 const runTest = require("../RunTest");
 
-test("Empty namespace formats correctly", () => {
+test("Empty namespace, () => {
     runTest(__dirname, "EmptyNamespace");
 });

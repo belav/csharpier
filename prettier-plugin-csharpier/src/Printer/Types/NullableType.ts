@@ -2,10 +2,10 @@ import { PrintMethod } from "../PrintMethod";
 import { SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface {{name}}Node extends SyntaxTreeNode<"{{name}}"> {
+export interface NullableTypeNode extends SyntaxTreeNode<"NullableType"> {
 
 }
 
-export const print: PrintMethod<{{name}}Node> = (path, options, print) => {
-    return "TODO {{name}}";
+export const print: PrintMethod<NullableTypeNode> = (path, options, print) => {
+    return "TODO NullableType";
 };

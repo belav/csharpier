@@ -1,5 +1,5 @@
 const runTest = require("../RunTest");
 
-test("Basic using statements work", () => {
+test("Basic using", () => {
     runTest(__dirname, "BasicUsing");
 });

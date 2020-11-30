@@ -1,9 +1,9 @@
 const runTest = require("../RunTest");
 
-test("Empty class formats correctly", () => {
+test("Empty class", () => {
     runTest(__dirname, "EmptyClass");
 });
 
-test("Static Abstract class formats correctly", () => {
+test("Static abstract class", () => {
     runTest(__dirname, "StaticAbstractClass");
 });

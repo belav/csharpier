@@ -7,5 +7,5 @@ export interface ExpressionStatementNode extends SyntaxTreeNode<"ExpressionState
 }
 
 export const print: PrintMethod<ExpressionStatementNode> = (path, options, print) => {
-    return concat([path.call(print, "expression"), ";"];
+    return concat([path.call(print, "expression"), ";"]);
 };
