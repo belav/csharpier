@@ -26,7 +26,7 @@ const options = {
     writeParserJson: {
         type: "string",
         category: "Global",
-    }
+    },
 };
 
 // TODO strip json to just this? https://github.com/ashmind/SharpLab/blob/main/source/Server/Decompilation/AstOnly/RoslynAstTarget.cs

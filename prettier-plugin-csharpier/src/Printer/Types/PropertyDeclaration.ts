@@ -20,14 +20,5 @@ export const print: PrintMethod<PropertyDeclarationNode> = (path, options, print
         contents = concat([path.call(print, "expressionBody"), ";"]);
     }
 
-    return group(
-        concat([
-            printModifiers(node),
-            path.call(print, "type"),
-            " ",
-            printIdentifier(node),
-            line,
-            contents,
-        ]),
-    );
+    return group(concat([printModifiers(node), path.call(print, "type"), " ", printIdentifier(node), line, contents]));
 };

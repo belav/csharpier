@@ -1,5 +1,7 @@
 import { Doc, FastPath } from "prettier";
 import { concat } from "./Builders";
+import { Print } from "./PrintMethod";
+import has = Reflect.has;
 
 export interface SyntaxTreeNode<T = string> {
     nodeType: T;
@@ -24,6 +26,9 @@ export function printIdentifier(hasIdentifier: HasIdentifier) {
 }
 
 export function printValue(hasValue: HasValue) {
+    if (typeof hasValue.text === "undefined") {
+        throw new Error("There was no text property on " + JSON.stringify(hasValue, null, "    "));
+    }
     return hasValue.text;
 }
 
@@ -33,7 +38,10 @@ export interface LeftRightExpression {
     right: SyntaxTreeNode;
 }
 
-export function printLeftRightExpression<T extends LeftRightExpression>(path: FastPath<T>, print: (path: FastPath<T>) => Doc,) {
+export function printLeftRightExpression<T extends LeftRightExpression>(
+    path: FastPath<T>,
+    print: Print<T>,
+) {
     const node = path.getValue();
-    return concat([path.call(print, "left"), " ", printValue(node.operatorToken), " ", path.call(print, "right")])
+    return concat([path.call(print, "left"), " ", printValue(node.operatorToken), " ", path.call(print, "right")]);
 }

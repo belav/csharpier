@@ -6,7 +6,7 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface UsingDirectiveNode extends SyntaxTreeNode<"UsingDirective"> {
     usingKeyword: {
         text: string;
-    }
+    };
 }
 
 export const print: PrintMethod<UsingDirectiveNode> = (path, options, print) => {
@@ -15,7 +15,7 @@ export const print: PrintMethod<UsingDirectiveNode> = (path, options, print) => 
     parts.push(node.usingKeyword.text);
     parts.push(" ");
     parts.push(group(path.call(print, "name")));
-    parts.push(";")
+    parts.push(";");
     parts.push(hardline);
 
     return concat(parts);

@@ -26,7 +26,7 @@ module.exports = function (plop) {
         actions: [
             {
                 type: "add",
-                path: "Tests/{{name}}/_{{camelCase name}}.js",
+                path: "Tests/{{name}}/Basic{{name}}.cs",
                 templateFile: "Templates/NodeType/Test.hbs"
             },
         ]

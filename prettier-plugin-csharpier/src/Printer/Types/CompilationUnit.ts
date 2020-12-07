@@ -21,6 +21,5 @@ export const print: PrintMethod<CompilationUnitNode> = (path, options, print) =>
         parts.push(hardline);
     }
 
-
     return concat(parts);
 };

@@ -8,5 +8,7 @@ export interface ArgumentListNode extends SyntaxTreeNode<"ArgumentList"> {
 }
 
 export const print: PrintMethod<ArgumentListNode> = (path, options, print) => {
-    return group(concat(["(", indent(concat([softline, printCommaList(path.map(print, "arguments"))])), softline, ")"]));
+    return group(
+        concat(["(", indent(concat([softline, printCommaList(path.map(print, "arguments"))])), softline, ")"]),
+    );
 };

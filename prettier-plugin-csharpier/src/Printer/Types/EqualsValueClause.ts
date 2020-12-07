@@ -8,5 +8,5 @@ export interface EqualsValueClauseNode extends SyntaxTreeNode<"EqualsValueClause
 
 export const print: PrintMethod<EqualsValueClauseNode> = (path, options, print) => {
     const node = path.getValue();
-    return concat([printValue(node.equalsToken), " ", path.call(print, "value")])
+    return concat([printValue(node.equalsToken), " ", path.call(print, "value")]);
 };

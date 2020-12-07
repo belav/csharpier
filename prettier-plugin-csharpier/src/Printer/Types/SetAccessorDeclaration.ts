@@ -15,7 +15,7 @@ export const print: PrintMethod<SetAccessorDeclarationNode> = (path, options, pr
     parts.push(printValue(node.keyword));
     if (!node.body && !node.expressionBody) {
         parts.unshift(line);
-        parts.push(";")
+        parts.push(";");
     } else {
         parts.unshift(hardline);
         if (node.body) {
@@ -25,7 +25,6 @@ export const print: PrintMethod<SetAccessorDeclarationNode> = (path, options, pr
             parts.push(path.call(print, "expressionBody"));
             parts.push(";");
         }
-
     }
 
     return concat(parts);

@@ -5,6 +5,7 @@ import * as types from "./Types";
 let foundFirst = false;
 const missingNodes: string[] = [];
 
+// TODO watch doesn't work in here, but we don't often change it
 const printNode: PrintMethod = (path, options, print) => {
     const node = path.getValue();
 
@@ -27,9 +28,16 @@ const printNode: PrintMethod = (path, options, print) => {
         const result = thePrint(path, options, print);
         if (thisIsFirst) {
             if (missingNodes.length > 0) {
-                throw new Error(`Unknown C# nodes, run the following commands:\nplop node ${missingNodes.join("\nplop node ")}`);
+                throw new Error(
+                    `Unknown C# nodes, run the following commands:\nplop node ${missingNodes.join("\nplop node ")}`,
+                );
             }
         }
+
+        if (typeof result === "undefined") {
+            throw new Error("undefined was returned for the " + JSON.stringify(node, null, "    "));
+        }
+
         return result;
     }
 

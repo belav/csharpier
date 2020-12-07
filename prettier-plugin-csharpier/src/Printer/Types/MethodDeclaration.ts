@@ -20,10 +20,9 @@ export const print: PrintMethod<MethodDeclarationNode> = (path, options, print) 
     parts.push("()");
     if (node.body) {
         parts.push(path.call(print, "body"));
-    } else{
-        parts.push(" { }")
+    } else {
+        parts.push(" { }");
     }
-
 
     return concat(parts);
 };
