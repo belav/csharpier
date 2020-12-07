@@ -1,3 +1,5 @@
+import { FastPath } from "prettier";
+
 export interface SyntaxTreeNode<T = string> {
     nodeType: T;
 }

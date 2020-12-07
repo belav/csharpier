@@ -4,13 +4,7 @@ public class ClassName
 
     public string Property
     {
-        get
-        {
-            return property;
-        }
-        set
-        {
-            property = value;
-        }
+        get { return property; }
+        set { property = value; }
     }
 }

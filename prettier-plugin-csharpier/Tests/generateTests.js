@@ -6,7 +6,7 @@ const getDirectories = source =>
         .filter(o => o.isDirectory())
         .map(o => o.name);
 
-const testsDirectory = path.resolve(__dirname, "Tests");
+const testsDirectory = path.resolve(__dirname);
 
 getDirectories(testsDirectory).forEach(directoryName => {
     const fileName = "_" + directoryName[0].toLowerCase() + directoryName.substring(1) + ".js";
