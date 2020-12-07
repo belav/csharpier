@@ -1,5 +1,5 @@
-const prettier = require('prettier')
-const { concat, group, join, line, softline, hardline, indent } = prettier.doc.builders
+const prettier = require("prettier");
+const { concat, group, join, line, softline, hardline, indent } = prettier.doc.builders;
 
 test("basic test", () => {
     const actual = print(concat(["public", " ", "class", " ", "ClassName"]));
@@ -25,17 +25,7 @@ test("indent using", () => {
 
 test("indent numbers", () => {
     const doc = group(
-        concat([
-            '[',
-            indent(
-                concat([
-                    hardline,
-                    join(concat([',', line]), ["1", "2", "3"])
-                ])
-            ),
-            hardline,
-            ']'
-        ])
+        concat(["[", indent(concat([hardline, join(concat([",", line]), ["1", "2", "3"])])), hardline, "]"]),
     );
 
     const actual = print(doc);
@@ -44,6 +34,35 @@ test("indent numbers", () => {
     2,
     3
 ]`);
+});
+
+test("indent argumentList", () => {
+    const parts = [];
+    parts.push("this.Method");
+    parts.push(
+        concat([
+            "(",
+            indent(
+                concat([
+                    line,
+                    "lkjasdjlkfajklsdfkljasdfjklasjklfjkasdlf",
+                    ",",
+                    line,
+                    "lkjasdlfkjajlsdfjklasdklfaksjldf",
+                    ",",
+                ]),
+            ),
+            softline,
+            ")",
+            ";",
+        ]),
+    );
+
+    const actual = print(concat(parts));
+    expect(actual).toBe(`this.Method(
+    lkjasdjlkfajklsdfkljasdfjklasjklfjkasdlf,
+    lkjasdlfkjajlsdfjklasdklfaksjldf,
+);`);
 });
 
 function print(doc) {
