@@ -98,12 +98,16 @@ namespace Insite.Spire.Services
             var nodeQuery = unitOfWork.GetRepository<Node>(
 
             ).GetTableAsNoTracking().Where(
-                node => TODO LogicalAndExpression
+                node => node.WebsiteId == siteContext.WebsiteDto.Id && node.Type == type
             ).Select(node => node.Id);
             var now = DateTimeProvider.Current.Now;
             return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking(
 
-            ).Where(pageUrl => TODO LogicalAndExpression);
+            ).Where(
+                pageUrl => nodeQuery.Contains(
+                    pageUrl.NodeId
+                ) && pageUrl.LanguageId == siteContext.LanguageDto.Id && TODO LessThanOrEqualExpression && TODO ParenthesizedExpression
+            );
         }
 
         public RetrievePageResult GetPageByUrl()
@@ -130,7 +134,7 @@ namespace Insite.Spire.Services
                 uri.AbsolutePath
             ).Select(o => TODO AnonymousObjectCreationExpression);
             nodeId = TODO ConditionalAccessExpression;
-            if (TODO LogicalAndExpression)
+            if (nodeId.HasValue && TODO LogicalNotExpression)
             {
                 if (isSwitchingLanguage)
                 {
@@ -198,7 +202,7 @@ namespace Insite.Spire.Services
             );
             var activeLanguage = siteContext.LanguageDto.Id;
             retrievePageResult = null;
-            if (TODO LogicalAndExpression)
+            if (TODO ConditionalAccessExpression != null && TODO GreaterThanExpression)
             {
                 if (isSwitchingLanguage)
                 {
@@ -214,7 +218,9 @@ namespace Insite.Spire.Services
                     "ProductDetailsPage"
                 );
             }
-            if (TODO LogicalAndExpression)
+            if (TODO ConditionalAccessExpression != null && TODO ConditionalAccessExpression != null && result.SubCategories.Any(
+
+            ))
             {
                 return GetNodeIdByType(
                     unitOfWork,
@@ -222,7 +228,9 @@ namespace Insite.Spire.Services
                     "CategoryDetailsPage"
                 );
             }
-            if (TODO LogicalAndExpression)
+            if (urlParts.Length == 2 && TODO ElementAccessExpression.EqualsIgnoreCase(
+                this.catalogPathBuilder.GetBrandRootPath()
+            ))
             {
                 return GetNodeIdByType(
                     unitOfWork,
@@ -234,7 +242,7 @@ namespace Insite.Spire.Services
                 siteContext.WebsiteDto.Id,
                 TODO ElementAccessExpression
             );
-            if (TODO LogicalAndExpression)
+            if (brandsLanguageIds.Count != 0 && TODO LogicalNotExpression)
             {
                 if (isSwitchingLanguage)
                 {
@@ -242,11 +250,11 @@ namespace Insite.Spire.Services
                     return null;
                 }
             }
-            if (TODO LogicalAndExpression)
+            if (TODO ConditionalAccessExpression == ResultCode.Error && TODO ConditionalAccessExpression == SubCode.NotFound)
             {
                 return null;
             }
-            if (TODO LogicalOrExpression)
+            if (TODO ConditionalAccessExpression != null || TODO ConditionalAccessExpression != null || TODO ConditionalAccessExpression != null || TODO ParenthesizedExpression)
             {
                 return GetNodeIdByType(
                     unitOfWork,
@@ -261,9 +269,9 @@ namespace Insite.Spire.Services
         {
             return unitOfWork.GetRepository<Node>().GetTableAsNoTracking(
 
-            ).Where(o => TODO LogicalAndExpression).Select(
-                o => o.Id
-            ).FirstOrDefault();
+            ).Where(
+                o => o.WebsiteId == siteContext.WebsiteDto.Id && o.Type == pageType
+            ).Select(o => o.Id).FirstOrDefault();
         }
 
         private RetrievePageResult PageById()
@@ -319,7 +327,9 @@ namespace Insite.Spire.Services
             {
                 return query;
             }
-            return query.Where(o => TODO LogicalAndExpression);
+            return query.Where(
+                o => o.PublishOn != null && TODO LessThanExpression
+            );
         }
 
         private RetrievePageResult CreateResult()
@@ -402,7 +412,7 @@ namespace Insite.Spire.Services
             return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking(
 
             ).Where(where).Where(
-                o => TODO LogicalAndExpression
+                o => o.WebsiteId == siteContext.WebsiteDto.Id && TODO ParenthesizedExpression
             ).OrderByDescending(o => TODO CoalesceExpression);
         }
     }

@@ -1,11 +1,11 @@
 import { PrintMethod } from "../PrintMethod";
-import { SyntaxTreeNode } from "../SyntaxTreeNode";
+import { LeftRightExpression, printLeftRightExpression, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface LogicalOrExpressionNode extends SyntaxTreeNode<"LogicalOrExpression"> {
+export interface LogicalOrExpressionNode extends SyntaxTreeNode<"LogicalOrExpression">, LeftRightExpression {
 
 }
 
 export const print: PrintMethod<LogicalOrExpressionNode> = (path, options, print) => {
-    return "TODO LogicalOrExpression";
+    return printLeftRightExpression(path, print);
 };

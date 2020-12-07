@@ -1,5 +1,8 @@
 const runTest = require("../RunTest");
 
+test("AndIfStatement", () => {
+    runTest(__dirname, "AndIfStatement");
+});
 test("BasicIfStatement", () => {
     runTest(__dirname, "BasicIfStatement");
 });
@@ -8,4 +11,7 @@ test("EqualsIfStatement", () => {
 });
 test("NotEqualsIfStatement", () => {
     runTest(__dirname, "NotEqualsIfStatement");
+});
+test("OrIfStatement", () => {
+    runTest(__dirname, "OrIfStatement");
 });

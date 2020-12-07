@@ -1,5 +1,8 @@
 const path = require("path");
 const fs = require("fs");
+const generateTests = require("./Tests/generateTests");
+
+generateTests.watch();
 
 const typesDirectory = path.resolve(__dirname, "src/Printer/Types");
 
@@ -12,16 +15,16 @@ generateTypesFile = () => {
         )}"\r\n`;
     });
 
-    const typesFilePath = path.resolve(__dirname, "src/Printer/Types.ts")
+    const typesFilePath = path.resolve(__dirname, "src/Printer/Types.ts");
 
     if (!fs.existsSync(typesFilePath) || fs.readFileSync(typesFilePath, "utf8") !== typesFile) {
         fs.writeFileSync(typesFilePath, typesFile);
     }
-}
+};
 
 fs.watch(typesDirectory, () => {
     generateTypesFile();
-})
+});
 
 generateTypesFile();
 
@@ -30,11 +33,9 @@ module.exports = env => {
         mode: "development",
         watch: env && env.watch,
         watchOptions: {
-            ignored: /node_modules/
+            ignored: /node_modules/,
         },
-        entry: [
-            "./src/index.ts"
-        ],
+        entry: ["./src/index.ts"],
         output: {
             path: path.resolve(__dirname, "dist"),
             filename: "index.js",
@@ -58,7 +59,7 @@ module.exports = env => {
         },
         target: "node",
         externals: {
-            "prettier": {
+            prettier: {
                 commonjs: "prettier",
                 commonjs2: "prettier",
                 amd: "prettier",
@@ -67,7 +68,7 @@ module.exports = env => {
                 commonjs: "edge-js",
                 commonjs2: "edge-js",
                 amd: "edge-js",
-            }
-        }
-    }
+            },
+        },
+    };
 };
