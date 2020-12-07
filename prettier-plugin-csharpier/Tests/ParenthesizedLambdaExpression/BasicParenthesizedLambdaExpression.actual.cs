@@ -2,6 +2,6 @@ public class ClassName
 {
     public void MethodName()
     {
-        this.Where( () => true);
+        this.Where(() => true);
     }
 }

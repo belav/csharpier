@@ -5,13 +5,13 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface ArgumentNode extends SyntaxTreeNode<"Argument"> {
     expression: SyntaxTreeNode;
-    refKindKeyword: HasValue | null;
+    refKindKeyword: HasValue;
 }
 
 export const print: PrintMethod<ArgumentNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
-    if (node.refKindKeyword) {
+    if (node.refKindKeyword.value) {
         parts.push(printValue(node.refKindKeyword), " ");
     }
     parts.push(path.call(print, "expression"));

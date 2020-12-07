@@ -43,6 +43,7 @@ namespace Insite.Spire.Services
         private readonly IRulesEngine rulesEngine;
         private readonly IHtmlRedirectPipeline htmlRedirectPipeline;
 
+        // TODO we are losing parameters on everything
         public RetrievePageService(
             ICatalogPathBuilder catalogPathBuilder,
             ICatalogService catalogService,
