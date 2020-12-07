@@ -1,9 +1,5 @@
 const runTest = require("../RunTest");
 
-test("Basic method", () => {
+test("Basic method formats correctly", () => {
     runTest(__dirname, "BasicMethod");
-});
-
-test("Method with statements", () => {
-    runTest(__dirname, "MethodWithStatements");
 });

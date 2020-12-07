@@ -8,5 +8,5 @@ export interface VariableDeclarationNode extends SyntaxTreeNode<"VariableDeclara
 }
 
 export const print: PrintMethod<VariableDeclarationNode> = (path, options, print) => {
-    return concat([path.call(print, "type"), " ", concat(path.map(print, "variables"))]);
+    return concat([path.call(print, "type"), " ", concat(path.map(print, "variables")), ";"]);
 };

@@ -11,7 +11,7 @@ export const print: PrintMethod<BlockNode> = (path, options, print) => {
     const hasStatements = path.getValue().statements.length > 0;
     let body: Doc = " ";
     if (hasStatements) {
-        body = concat([indent(concat([line, join(hardline, path.map(print, "statements"))])), line]);
+        body = concat([indent(concat([hardline, join(hardline, path.map(print, "statements"))])), hardline]);
     }
     return group(concat([line, "{", body, "}"]));
 };

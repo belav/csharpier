@@ -14,8 +14,5 @@ export const print: PrintMethod<FieldDeclarationNode> = (path, options, print) =
     parts.push(printModifiers(node));
 
     parts.push(path.call(print, "declaration"));
-
-    parts.push(concat([";"]));
-
     return concat(parts);
 };

@@ -7,5 +7,5 @@ export interface LocalDeclarationStatementNode extends SyntaxTreeNode<"LocalDecl
 }
 
 export const print: PrintMethod<LocalDeclarationStatementNode> = (path, options, print) => {
-    return "TODO LocalDeclarationStatement";
+    return path.call(print,  "declaration");
 };

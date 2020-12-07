@@ -12,7 +12,6 @@ function runTest(directory, name) {
         endOfLine: "auto",
         writeParserJson: codePath.replace(".cs", ".json"),
         tabWidth: 4,
-        printWidth: 80,
     });
 
     const actualFilePath = codePath.replace(".cs", ".actual.cs");

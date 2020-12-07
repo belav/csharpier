@@ -1,13 +1,5 @@
 const runTest = require("../RunTest");
 
-test("Empty namespace", () => {
+test("Empty namespace formats correctly", () => {
     runTest(__dirname, "EmptyNamespace");
 });
-
-test("Namespace With Using And Class", () => {
-    runTest(__dirname, "NamespaceWithUsingAndClass");
-});
-
-test("Namespace With Multiple Classes", () => {
-    runTest(__dirname, "NamespaceWithMultipleClasses");
-})

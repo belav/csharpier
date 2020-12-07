@@ -10,14 +10,12 @@
     "prettier": "^2.1.2"
   },
   "scripts": {
-    "watch": "nodemon",
+    "start": "npx nodemon",
     "build": "npm run clean-dist && webpack",
     "clean-dist": "rimraf dist/*",
     "prettier": "prettier --write \"{src,test}/**/*.{js,ts}\"",
     "test": "jest",
     "samples": "node ./Samples/_index.js",
-    "fetch-antlr": "node fetch",
-    "generate-parser": "java -jar bin/antlr-4.7.2-complete.jar -Dlanguage=JavaScript src/csharp/*.g4",
     "csharpier": "prettier --plugin=. --parser=cs",
     "csharpier:debug": "node --lazy --inspect-brk src/debug.js"
   },

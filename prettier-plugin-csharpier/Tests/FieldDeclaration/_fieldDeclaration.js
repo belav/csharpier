@@ -1,9 +1,9 @@
 const runTest = require("../RunTest");
 
-test("Basic field", () => {
+test("Basic field formats correctly", () => {
     runTest(__dirname, "BasicField");
 });
 
-test("Namespaced field", () => {
+test("Namespaced field formats correctly", () => {
     runTest(__dirname, "NamespacedField");
 });
