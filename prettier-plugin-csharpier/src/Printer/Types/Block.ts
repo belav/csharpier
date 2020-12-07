@@ -11,11 +11,11 @@ export interface BlockNode extends SyntaxTreeNode<"Block"> {
 export const print: PrintMethod<BlockNode> = (path, options, print) => {
     const node = path.getValue();
     const parent = getParentNode(path);
-    const statementSeperator = parent.nodeType === "MethodDeclaration" ? hardline : line;
+    const statementSeparator = parent.nodeType === "GetAccessorDeclaration" || parent.nodeType === "SetAccessorDeclaration" ? line : hardline;
     const hasStatements = node.statements.length > 0;
     let body: Doc = " ";
     if (hasStatements) {
-        body = concat([indent(concat([statementSeperator, join(statementSeperator, path.map(print, "statements"))])), statementSeperator]);
+        body = concat([indent(concat([statementSeparator, join(statementSeparator, path.map(print, "statements"))])), statementSeparator]);
     }
     return group(concat([line, "{", body, "}"]));
 };

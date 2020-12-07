@@ -69,15 +69,13 @@ namespace Insite.Spire.Services
                 siteContext
             );
             var pageVersions = pageVersionQuery.Where(
-                TODO SimpleLambdaExpression
-            ).ToArray().GroupBy(TODO SimpleLambdaExpression).Select(
-                TODO SimpleLambdaExpression
-            ).ToArray();
+                o => o.Page.Node.Type == type
+            ).ToArray().GroupBy(o => o.PageId).Select(o => o.First()).ToArray();
             return this.CreateResult(
                 this.GetPageVariantVersion(pageVersions, siteContext),
                 unitOfWork,
                 siteContext,
-                TODO NullLiteralExpression
+                null
             );
         }
 
@@ -88,44 +86,39 @@ namespace Insite.Spire.Services
                 siteContext
             );
             var pageVersions = pageVersionQuery.Where(
-                TODO SimpleLambdaExpression
-            ).GroupBy(TODO SimpleLambdaExpression).Select(
-                TODO SimpleLambdaExpression
+                o => o.Page.Node.ParentId == parentNodeId
+            ).GroupBy(o => o.PageId).Select(o => o.FirstOrDefault()).ToList();
+            return pageVersions.Select(
+                o => JsonConvert.DeserializeObject<PageModel>(o.Value)
             ).ToList();
-            return pageVersions.Select(TODO SimpleLambdaExpression).ToList();
         }
 
         public IQueryable<PageUrl> GetPublishedPageUrlsByType()
         {
             var nodeQuery = unitOfWork.GetRepository<Node>(
 
-            ).GetTableAsNoTracking().Where(TODO SimpleLambdaExpression).Select(
-                TODO SimpleLambdaExpression
-            );
+            ).GetTableAsNoTracking().Where(
+                node => TODO LogicalAndExpression
+            ).Select(node => node.Id);
             var now = DateTimeProvider.Current.Now;
             return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking(
 
-            ).Where(TODO SimpleLambdaExpression);
+            ).Where(pageUrl => TODO LogicalAndExpression);
         }
 
         public RetrievePageResult GetPageByUrl()
         {
             var htmlRedirect = this.GetHtmlRedirect(url);
-            if (TODO NotEqualsExpression)
+            if (TODO ConditionalAccessExpression != null)
             {
                 return TODO ObjectCreationExpression;
             }
             if (url.StartsWithIgnoreCase("/Content/Page/"))
             {
-                var id = Guid.Parse(
-                    url.Substring(
-                        "/Content/Page/".Length,
-                        TODO NumericLiteralExpression
-                    )
-                );
+                var id = Guid.Parse(url.Substring("/Content/Page/".Length, 36));
                 return this.PageById(unitOfWork, siteContext, id, url);
             }
-            Guid? nodeId = TODO NullLiteralExpression;
+            Guid? nodeId = null;
             var uri = TODO ObjectCreationExpression;
             var queryString = uri.ParseQueryString();
             var isSwitchingLanguage = TODO ElementAccessExpression.EqualsIgnoreCase(
@@ -135,7 +128,7 @@ namespace Insite.Spire.Services
                 unitOfWork,
                 siteContext,
                 uri.AbsolutePath
-            ).Select(TODO SimpleLambdaExpression);
+            ).Select(o => TODO AnonymousObjectCreationExpression);
             nodeId = TODO ConditionalAccessExpression;
             if (TODO LogicalAndExpression)
             {
@@ -154,7 +147,7 @@ namespace Insite.Spire.Services
                     }
                 }
             }
-            if (TODO EqualsExpression)
+            if (nodeId == null)
             {
                 nodeId = this.GetCatalogNodeId(
                     unitOfWork,
@@ -163,19 +156,22 @@ namespace Insite.Spire.Services
                     isSwitchingLanguage,
                     TODO DeclarationExpression
                 );
-                if (TODO NotEqualsExpression) { return retrievePageResult; }
+                if (retrievePageResult != null)
+                {
+                    return retrievePageResult;
+                }
             }
             var pageVersions = this.PageVersionQuery(
                 unitOfWork,
                 siteContext
-            ).Where(TODO SimpleLambdaExpression).ToArray().GroupBy(
-                TODO SimpleLambdaExpression
-            ).Select(TODO SimpleLambdaExpression).ToArray();
+            ).Where(o => o.Page.NodeId == nodeId).ToArray().GroupBy(
+                o => o.PageId
+            ).Select(o => o.First()).ToArray();
             var pageVersionJson = this.GetPageVariantVersion(
                 pageVersions,
                 siteContext
             );
-            if (TODO NotEqualsExpression)
+            if (pageVersionJson != null)
             {
                 return this.CreateResult(
                     pageVersionJson,
@@ -196,24 +192,21 @@ namespace Insite.Spire.Services
         private Guid? GetCatalogNodeId()
         {
             var relativeUrlNoQuery = TODO ConditionalExpression;
-            var urlParts = relativeUrlNoQuery.Trim(
-                TODO CharacterLiteralExpression,
-                TODO CharacterLiteralExpression
-            ).Split(TODO CharacterLiteralExpression);
+            var urlParts = relativeUrlNoQuery.Trim('/', ' ').Split('/');
             var result = this.catalogService.GetCatalogPage(
                 TODO ObjectCreationExpression
             );
             var activeLanguage = siteContext.LanguageDto.Id;
-            retrievePageResult = TODO NullLiteralExpression;
+            retrievePageResult = null;
             if (TODO LogicalAndExpression)
             {
                 if (isSwitchingLanguage)
                 {
                     retrievePageResult = TODO ObjectCreationExpression;
-                    return TODO NullLiteralExpression;
+                    return null;
                 }
             }
-            if (TODO NotEqualsExpression)
+            if (TODO ConditionalAccessExpression != null)
             {
                 return GetNodeIdByType(
                     unitOfWork,
@@ -246,12 +239,12 @@ namespace Insite.Spire.Services
                 if (isSwitchingLanguage)
                 {
                     retrievePageResult = TODO ObjectCreationExpression;
-                    return TODO NullLiteralExpression;
+                    return null;
                 }
             }
             if (TODO LogicalAndExpression)
             {
-                return TODO NullLiteralExpression;
+                return null;
             }
             if (TODO LogicalOrExpression)
             {
@@ -261,15 +254,15 @@ namespace Insite.Spire.Services
                     "ProductListPage"
                 );
             }
-            return TODO NullLiteralExpression;
+            return null;
         }
 
         private static Guid? GetNodeIdByType()
         {
             return unitOfWork.GetRepository<Node>().GetTableAsNoTracking(
 
-            ).Where(TODO SimpleLambdaExpression).Select(
-                TODO SimpleLambdaExpression
+            ).Where(o => TODO LogicalAndExpression).Select(
+                o => o.Id
             ).FirstOrDefault();
         }
 
@@ -277,18 +270,18 @@ namespace Insite.Spire.Services
         {
             var query = unitOfWork.GetRepository<PageVersion>(
 
-            ).GetTableAsNoTracking().Where(TODO SimpleLambdaExpression);
+            ).GetTableAsNoTracking().Where(o => o.PageId == id);
             query = this.ApplyPublishedFilter(query);
             var pageJson = query.OrderByDescending(
-                TODO SimpleLambdaExpression
-            ).Select(TODO SimpleLambdaExpression).FirstOrDefault();
-            if (TODO EqualsExpression)
+                o => TODO CoalesceExpression
+            ).Select(o => o.Value).FirstOrDefault();
+            if (pageJson == null)
             {
                 pageJson = unitOfWork.GetRepository<PageTemporary>(
 
-                ).GetTableAsNoTracking().Where(
-                    TODO SimpleLambdaExpression
-                ).Select(TODO SimpleLambdaExpression).FirstOrDefault();
+                ).GetTableAsNoTracking().Where(o => o.Id == id).Select(
+                    o => o.Value
+                ).FirstOrDefault();
             }
             return this.CreateResult(pageJson, unitOfWork, siteContext, url);
         }
@@ -298,10 +291,10 @@ namespace Insite.Spire.Services
             var notFoundPage = this.PageVersionQuery(
                 unitOfWork,
                 siteContext
-            ).Where(TODO SimpleLambdaExpression).Select(
-                TODO SimpleLambdaExpression
+            ).Where(o => o.Page.Node.Type == "NotFoundErrorPage").Select(
+                o => o.Value
             ).FirstOrDefault();
-            if (TODO EqualsExpression)
+            if (notFoundPage == null)
             {
                 LogHelper.For(this).Warn("NotFoundErrorPage is not found");
             }
@@ -313,11 +306,11 @@ namespace Insite.Spire.Services
         {
             var query = unitOfWork.GetRepository<PageVersion>(
 
-            ).GetTableAsNoTracking().Expand(TODO SimpleLambdaExpression).Where(
-                TODO SimpleLambdaExpression
-            );
+            ).GetTableAsNoTracking().Expand(
+                o => o.Page.RuleManager.RuleClauses
+            ).Where(o => o.Page.Node.WebsiteId == siteContext.WebsiteDto.Id);
             query = this.ApplyPublishedFilter(query);
-            return query.OrderByDescending(TODO SimpleLambdaExpression);
+            return query.OrderByDescending(o => TODO CoalesceExpression);
         }
 
         private IQueryable<PageVersion> ApplyPublishedFilter()
@@ -326,13 +319,13 @@ namespace Insite.Spire.Services
             {
                 return query;
             }
-            return query.Where(TODO SimpleLambdaExpression);
+            return query.Where(o => TODO LogicalAndExpression);
         }
 
         private RetrievePageResult CreateResult()
         {
             var result = TODO ObjectCreationExpression;
-            if (TODO EqualsExpression)
+            if (pageJson == null)
             {
                 return this.NotFoundPage(unitOfWork, siteContext);
             }
@@ -341,18 +334,24 @@ namespace Insite.Spire.Services
             {
                 result.StatusCode = HttpStatusCode.InternalServerError;
             }
-            if (this.contentModeProvider.BypassFilters) { return result; }
+            if (this.contentModeProvider.BypassFilters)
+            {
+                return result;
+            }
             var parameter = TODO ObjectCreationExpression;
             var filterResult = this.navigationFilterService.ApplyFilters(
                 result.Page.Type,
                 parameter
             );
-            if (TODO EqualsExpression) { return result; }
-            if (TODO EqualsExpression)
+            if (filterResult == null)
+            {
+                return result;
+            }
+            if (filterResult.StatusCode == HttpStatusCode.NotFound)
             {
                 return this.NotFoundPage(unitOfWork, siteContext);
             }
-            result.Page = TODO NullLiteralExpression;
+            result.Page = null;
             result.StatusCode = filterResult.StatusCode;
             result.RedirectTo = filterResult.RedirectTo;
             return result;
@@ -364,7 +363,7 @@ namespace Insite.Spire.Services
                 unitOfWork,
                 siteContext,
                 "SignInPage"
-            ).Select(TODO SimpleLambdaExpression).FirstOrDefault();
+            ).Select(o => o.Url).FirstOrDefault();
         }
 
         private IQueryable<PageUrl> GetNodeUrls()
@@ -372,22 +371,21 @@ namespace Insite.Spire.Services
             return this.GetUrls(
                 unitOfWork,
                 siteContext,
-                TODO SimpleLambdaExpression
+                o => o.NodeId == nodeId
             );
         }
 
         public IQueryable<PageUrl> GetPotentialUrls()
         {
-            return this.GetUrls(
-                unitOfWork,
-                siteContext,
-                TODO SimpleLambdaExpression
-            );
+            return this.GetUrls(unitOfWork, siteContext, o => o.Url == url);
         }
 
         private GetByUriResult GetHtmlRedirect()
         {
-            if (url.IsBlank()) { return TODO NullLiteralExpression; }
+            if (url.IsBlank())
+            {
+                return null;
+            }
             var baseUrl = HttpContext.Current.Request.ActualUrl().GetLeftPart(
                 UriPartial.Authority
             );
@@ -403,9 +401,9 @@ namespace Insite.Spire.Services
             var displayUnpublishedContent = this.contentModeProvider.DisplayUnpublishedContent;
             return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking(
 
-            ).Where(where).Where(TODO SimpleLambdaExpression).OrderByDescending(
-                TODO SimpleLambdaExpression
-            );
+            ).Where(where).Where(
+                o => TODO LogicalAndExpression
+            ).OrderByDescending(o => TODO CoalesceExpression);
         }
     }
 
