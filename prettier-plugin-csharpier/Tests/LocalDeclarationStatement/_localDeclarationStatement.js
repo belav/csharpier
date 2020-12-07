@@ -1,9 +1,8 @@
 const runTest = require("../RunTest");
 
-test("Variable with initializer", () => {
+test("VariableWithInitializer", () => {
     runTest(__dirname, "VariableWithInitializer");
 });
-
-test("Variable without initializer", () => {
+test("VariableWithoutInitializer", () => {
     runTest(__dirname, "VariableWithoutInitializer");
 });

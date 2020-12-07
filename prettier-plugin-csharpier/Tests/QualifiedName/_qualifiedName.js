@@ -1,6 +1,5 @@
 const runTest = require("../RunTest");
 
-test("Using with dots works", () => {
+test("UsingWithDots", () => {
     runTest(__dirname, "UsingWithDots");
 });
-
