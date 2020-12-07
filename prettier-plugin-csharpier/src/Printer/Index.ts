@@ -2,8 +2,14 @@ import { Dictionary } from "../Common/Types";
 import { PrintMethod } from "./PrintMethod";
 import * as types from "./Types";
 
+let foundFirst = false;
+const missingNodes: string[] = [];
+
 const printNode: PrintMethod = (path, options, print) => {
     const node = path.getValue();
+
+    const thisIsFirst = !foundFirst;
+    foundFirst = true;
 
     const theTypes = (types as any) as Dictionary<PrintMethod>;
     if (!node) {
@@ -18,10 +24,20 @@ const printNode: PrintMethod = (path, options, print) => {
     const thePrint = theTypes[node.nodeType];
 
     if (thePrint) {
-        return thePrint(path, options, print);
+        const result = thePrint(path, options, print);
+        if (thisIsFirst) {
+            if (missingNodes.length > 0) {
+                throw new Error(`Unknown C# nodes, run the following commands:\nplop node ${missingNodes.join("\nplop node ")}`);
+            }
+        }
+        return result;
     }
 
-    throw new Error(`Unknown C# node: ${node.nodeType}`);
+    if (!missingNodes.find(o => o === node.nodeType)) {
+        missingNodes.push(node.nodeType);
+    }
+
+    return "";
 };
 
 const defaultExport = {

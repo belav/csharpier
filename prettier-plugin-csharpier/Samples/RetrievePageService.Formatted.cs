@@ -62,8 +62,9 @@ namespace Insite.Spire.Services
 
         public RetrievePageResult GetPageByType()
         {
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
+            var pageVersionQuery = this.PageVersionQuery(TODO Argument,
+                TODO Argument);
+            var pageVersions = pageVersionQuery.Where(TODO Argument).ToArray().GroupBy(TODO Argument).Select(TODO Argument).ToArray();
             return this.CreateResult(TODO Argument,
                 TODO Argument,
                 TODO Argument,
@@ -72,55 +73,62 @@ namespace Insite.Spire.Services
 
         public IList<PageModel> GetPagesByParent()
         {
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
+            var pageVersionQuery = this.PageVersionQuery(TODO Argument,
+                TODO Argument);
+            var pageVersions = pageVersionQuery.Where(TODO Argument).GroupBy(TODO Argument).Select(TODO Argument).ToList();
             return pageVersions.Select(TODO Argument).ToList();
         }
 
         public IQueryable<PageUrl> GetPublishedPageUrlsByType()
         {
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
+            var nodeQuery = unitOfWork.GetRepository<Node>().GetTableAsNoTracking().Where(TODO Argument).Select(TODO Argument);
+            var now = DateTimeProvider.Current.Now;
             return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking().Where(TODO Argument);
         }
 
         public RetrievePageResult GetPageByUrl()
         {
-            TODO LocalDeclarationStatement
+            var htmlRedirect = this.GetHtmlRedirect(TODO Argument);
             TODO IfStatement
             TODO IfStatement
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
+            Guid? nodeId = TODO NullLiteralExpression;
+            var uri = TODO ObjectCreationExpression;
+            var queryString = uri.ParseQueryString();
+            var isSwitchingLanguage = TODO ElementAccessExpression.EqualsIgnoreCase(TODO Argument);
+            var potentialUrls = this.GetPotentialUrls(TODO Argument,
+                TODO Argument,
+                TODO Argument).Select(TODO Argument);
             nodeId = TODO ConditionalAccessExpression;
             TODO IfStatement
             TODO IfStatement
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
+            var pageVersions = this.PageVersionQuery(TODO Argument,
+                TODO Argument).Where(TODO Argument).ToArray().GroupBy(TODO Argument).Select(TODO Argument).ToArray();
+            var pageVersionJson = this.GetPageVariantVersion(TODO Argument,
+                TODO Argument);
             TODO IfStatement
             return this.NotFoundPage(TODO Argument, TODO Argument);
         }
 
         private string GetPageVariantVersion()
         {
-            TODO LocalDeclarationStatement
+            var ruleObjects = TODO ObjectCreationExpression;
             return TODO CoalesceExpression;
         }
 
         private Guid? GetCatalogNodeId()
         {
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
+            var relativeUrlNoQuery = TODO ConditionalExpression;
+            var urlParts = relativeUrlNoQuery.Trim(TODO Argument,
+                TODO Argument).Split(TODO Argument);
+            var result = this.catalogService.GetCatalogPage(TODO Argument);
+            var activeLanguage = siteContext.LanguageDto.Id;
             retrievePageResult = TODO NullLiteralExpression;
             TODO IfStatement
             TODO IfStatement
             TODO IfStatement
             TODO IfStatement
-            TODO LocalDeclarationStatement
+            var brandsLanguageIds = this.catalogPathFinder.Value.GetLanguageIdsForBrandPath(TODO Argument,
+                TODO Argument);
             TODO IfStatement
             TODO IfStatement
             TODO IfStatement
@@ -134,9 +142,9 @@ namespace Insite.Spire.Services
 
         private RetrievePageResult PageById()
         {
-            TODO LocalDeclarationStatement
+            var query = unitOfWork.GetRepository<PageVersion>().GetTableAsNoTracking().Where(TODO Argument);
             query = this.ApplyPublishedFilter(TODO Argument);
-            TODO LocalDeclarationStatement
+            var pageJson = query.OrderByDescending(TODO Argument).Select(TODO Argument).FirstOrDefault();
             TODO IfStatement
             return this.CreateResult(TODO Argument,
                 TODO Argument,
@@ -146,15 +154,16 @@ namespace Insite.Spire.Services
 
         private RetrievePageResult NotFoundPage()
         {
-            TODO LocalDeclarationStatement
+            var notFoundPage = this.PageVersionQuery(TODO Argument,
+                TODO Argument).Where(TODO Argument).Select(TODO Argument).FirstOrDefault();
             TODO IfStatement
-            TODO LocalDeclarationStatement
+            var errorResult = TODO ObjectCreationExpression;
             return errorResult;
         }
 
         private IQueryable<PageVersion> PageVersionQuery()
         {
-            TODO LocalDeclarationStatement
+            var query = unitOfWork.GetRepository<PageVersion>().GetTableAsNoTracking().Expand(TODO Argument).Where(TODO Argument);
             query = this.ApplyPublishedFilter(TODO Argument);
             return query.OrderByDescending(TODO Argument);
         }
@@ -167,13 +176,14 @@ namespace Insite.Spire.Services
 
         private RetrievePageResult CreateResult()
         {
-            TODO LocalDeclarationStatement
+            var result = TODO ObjectCreationExpression;
             TODO IfStatement
             result.Page = JsonConvert.DeserializeObject<PageModel>(TODO Argument);
             TODO IfStatement
             TODO IfStatement
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
+            var parameter = TODO ObjectCreationExpression;
+            var filterResult = this.navigationFilterService.ApplyFilters(TODO Argument,
+                TODO Argument);
             TODO IfStatement
             TODO IfStatement
             result.Page = TODO NullLiteralExpression;
@@ -202,15 +212,15 @@ namespace Insite.Spire.Services
         private GetByUriResult GetHtmlRedirect()
         {
             TODO IfStatement
-            TODO LocalDeclarationStatement
-            TODO LocalDeclarationStatement
+            var baseUrl = HttpContext.Current.Request.ActualUrl().GetLeftPart(TODO Argument);
+            var getByUriResult = this.htmlRedirectPipeline.GetByUri(TODO Argument);
             PipelineHelper.VerifyResults(TODO Argument);
             return getByUriResult;
         }
 
         private IQueryable<PageUrl> GetUrls()
         {
-            TODO LocalDeclarationStatement
+            var displayUnpublishedContent = this.contentModeProvider.DisplayUnpublishedContent;
             return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking().Where(TODO Argument).Where(TODO Argument).OrderByDescending(TODO Argument);
         }
     }
