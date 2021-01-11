@@ -30,7 +30,7 @@ namespace Insite.Spire.Services
     using Insite.WebFramework.Routing.Pipelines.Results;
     using Newtonsoft.Json;
 
-    public class RetrievePageService
+    public class RetrievePageService : IRetrievePageService
     {
         private readonly ICatalogPathBuilder catalogPathBuilder;
 
