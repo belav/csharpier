@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/projectSettingsUpdater.xml
+/contentModel.xml
+/.idea.prettier-plugin-csharpier.iml
+/modules.xml
+# Datasource local storage ignored files
+/../../../../../../../:\Projects\csharpier\prettier-plugin-csharpier\.idea\.idea.prettier-plugin-csharpier.dir\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/

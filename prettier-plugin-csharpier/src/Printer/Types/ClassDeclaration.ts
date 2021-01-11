@@ -3,9 +3,11 @@ import { printValue, HasModifiers, HasValue, SyntaxTreeNode, HasIdentifier, prin
 import { PrintMethod } from "../PrintMethod";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 import { printModifiers } from "../PrintModifiers";
+import { BaseListNode } from './BaseList';
 
 export interface ClassDeclarationNode extends SyntaxTreeNode<"ClassDeclaration">, HasModifiers, HasIdentifier {
     members: SyntaxTreeNode[];
+    baseList: BaseListNode;
 }
 
 export const print: PrintMethod<ClassDeclarationNode> = (path, options, print) => {
@@ -15,6 +17,10 @@ export const print: PrintMethod<ClassDeclarationNode> = (path, options, print) =
     parts.push("class");
     parts.push(" ", printIdentifier(node));
 
+    if (node.baseList) {
+        parts.push(path.call(print, "baseList"));
+    }
+    
     const hasMembers = node.members.length > 0;
     if (hasMembers) {
         parts.push(concat([hardline, "{"]));

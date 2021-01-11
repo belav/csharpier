@@ -7,7 +7,7 @@
         <e p="CSharpier.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
-            <e p="netcoreapp2.2" t="Include">
+            <e p="netcoreapp3.1" t="Include">
               <e p="CSharpier.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
@@ -19,7 +19,7 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
-            <e p="netcoreapp2.2" t="Include">
+            <e p="netcoreapp3.1" t="Include">
               <e p="Parser.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
@@ -29,9 +29,7 @@
       </e>
       <e p="Parser.sln" t="IncludeFlat" />
     </e>
-    <e p="C:\Users\bvandervoort\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\bvandervoort\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_Parser.-1253763866.00" t="ExcludeRecursive" />
-    <e p="C:\Users\bvandervoort\AppData\Roaming\JetBrains\Rider2020.2\consoles\db" t="IncludeRecursive" />
-    <e p="C:\Users\bvandervoort\AppData\Roaming\JetBrains\Rider2020.2\extensions" t="IncludeRecursive" />
+    <e p="C:\Users\bela\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\bela\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_Parser.-1253763866.00" t="ExcludeRecursive" />
   </component>
 </project>

@@ -6,15 +6,13 @@ You'll first need to build the ../Parser .net solution
 Then
 
 ```
-npm run install
+npm install
 ```
 
 Run the following to build the plugin and set up watchers to rebuild as things change
 ```
 npm run start
 ```
-
-You will need to build the c# project for this to work
 
 There are two main ways to test/develop
 
@@ -36,3 +34,8 @@ npm run test
 - Add a new file at ./Tests/[NodeType]/[NameOfTest].cs
 - if using npm run start, ./Tests/[NodeType]/_[nodeType].js will be auto updated
 - otherwise run node ./Tests/generateTests.js
+
+## Useful Info
+- https://sharplab.io/ - Use to get an interactive view of the SyntaxTree for some c#
+- plop node [NodeName] - Use to add a new node file
+- https://dev.to/fvictorio/how-to-write-a-plugin-for-prettier-6gi - explains basics of prettier plugin
