@@ -14,8 +14,6 @@ extern alias Foo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using ConsoleApplication2.Test;
 using System.Linq.Expressions;
 using System.Text;
 using M = System.Math;
@@ -45,19 +43,19 @@ using static System.Linq.Enumerable;
 [assembly: System.Copyright(@"(C)""
 
 2009")]
-[module: System.Copyright("\n\t\u0123(C) \"2009" - ("\u0123" + "foo"))]
+[module: System.Copyright("\n\t\u0123(C) \"2009" + "\u0123")]
 
-class TopLevelType : IDisposable, Foo
+class TopLevelType : IDisposable
 {
-    void IDisposable.Dispose(int x, int y) { }
+    void IDisposable.Dispose() { }
 }
 
-namespace My.Moy
+namespace My
 {
     using A.B;
 
     interface CoContra<out T, in K> { }
-    delegate void CoContra2<[System.Obsolete()] out T, in K> (int i) where T : struct;
+    delegate void CoContra2<[System.Obsolete()] out T, in K> () where T : struct;
 
     public unsafe partial class A : C, I
     {
@@ -68,22 +66,16 @@ namespace My.Moy
 
         static A()
         {
-            a.a.d().e().a->c.a++.b().a;
-
-            var x = 1 * 1 + 1 * 1 + (1+(1+1)) + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1  + 1 + 1 + 1;
-
-            var y = a is Dictionary<string, object> dict ? 42 : 51;
         }
 
         [method: Obsolete]
-        public A([param: Obsolete] int foo, [param: Obsolete] int foo, [param: Obsolete] int foo, [param: Obsolete] int foo) :
+        public A([param: Obsolete] int foo) :
             base(1)
         {
         L:
             {
                 int i = sizeof(int);
                 ++i;
-                var s0 = $"foo{1,2}";
                 var s1 = $"x {1 , -2 :d}";
                 var s2 = $@"x {1 , -2 :d}";
             }
@@ -100,7 +92,6 @@ namespace My.Moy
             local3 = local4 = 1;
             var local5 = null as Action ?? null;
             var local6 = local5 is Action;
-            string local7 = default;
 
             var u = 1u;
             var U = 1U;
@@ -157,7 +148,6 @@ namespace My.Moy
             var remove = 0;
             var select = 0;
             var set = 0;
-			var var = 0;
             var when = 0;
             var where = 0;
             var yield = 0;
@@ -192,7 +182,7 @@ namespace My.Moy
                 0f,
                 1.1f
             };
-            int[, ,] cube = { { { 1111, 1121, }, { 1211, 1221 } }, { { 2111, 2121 }, { 2211, 2221 } } };
+            int[, ,] cube = { { { 111, 112, }, { 121, 122 } }, { { 211, 212 }, { 221, 222 } } };
             int[][] jagged = { { 111 }, { 121, 122 } };
             int[][,] arr = new int[5][,]; // as opposed to new int[][5,5]
             arr[0] = new int[5,5];  // as opposed to arr[0,0] = new int[5];
@@ -215,17 +205,6 @@ namespace My.Moy
                     {
                         return;
                     }
-            }
-            switch(shape)
-            {
-                case Circle c:
-                    WriteLine($"circle with radius {c.Radius}");
-                    break;
-                case Rectangle s when (s.Length == s.Height):
-                    WriteLine($"{s.Length} x {s.Height} square");
-                    break;
-                case null:
-                    throw new ArgumentNullException(nameof(shape));
             }
             while (i < 10)
             {
@@ -339,7 +318,6 @@ namespace My.Moy
         public void Handler(object value)
         {
         }
-
         public int m<T>(T t)
           where T : class, new()
         {
@@ -436,7 +414,7 @@ namespace My.Moy
         {
         }
     }
-    public interface I : J
+    public interface I
     {
         void A(int value);
         string Value
@@ -489,8 +467,7 @@ namespace My.Moy
             }
             async void Wait()
             {
-                // await System.Threading.Tasks.Task.Foooooooooooooooooooo.Delay(0);
-                await SystemxThreadingxTasksxTaskxFooooooooooooooooooooxDelay(0);
+                await System.Threading.Tasks.Task.Delay(0);
             }
             void AsyncAnonymous() // C # 5 feature
             {
@@ -620,28 +597,6 @@ namespace ConsoleApplication1
             List<int> i = null;
             int c = i.Count;
         }
-
-        class Foo : IDisposable
-        {
-            public int N;
-            public void Dispose(){}
-        }
-
-        unsafe void EmptyEmbeddedStatment()
-        {
-            // useless empty statements get deleted
-            ;
-            // but nontrivial ones remain
-            if (true) ; else if (true); else ;
-            while(false) ;
-            do ; while (false);
-            for(;;);
-            foreach(var x in "");
-            lock(new object());
-            using(var d = new Foo()) ;
-            var o = new Foo();
-            fixed(int* d = &o.N);
-        }
     }
 }
 
@@ -678,15 +633,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
             string strValue = /*s*/"hello";
             /*s*/MyClass c = new MyClass();
             string verbatimStr = /*s*/@"\\\\";
-            int i = 0 // foo
-                + 1 // bar
-                + 2; // qux
-            i = 3 // foo
-                + 4 // bar
-                + 5; // qux
-            i = strValue != null ?
-                6 : // bar
-                7; // qux
         }
     }
 
@@ -706,7 +652,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
             int j = __refvalue(tr, int);
             Params(a: t, b: t);
             Params(ref c, out c);
-            Params(out var d, out Test d);
         }
         void Params(ref dynamic a, out dynamic b, params dynamic[] c) {}
         void Params(out dynamic a = 2, ref dynamic c = default(dynamic), params dynamic[][] c) {}
@@ -747,7 +692,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
             i >>= i;/*>>=*/
             object s = x => x + 1;/*=>*/
             double d = .3;
-            ;
             Point point;
             unsafe
             {
@@ -783,11 +727,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
         public string Name => First + " " + Last;
         public int this[long id] => id;
 
-        private void NoOp()
-        {
-            // Empty body.
-        }
-
         async void Test()
         {
             // Using static
@@ -811,8 +750,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
                                    ""\";
             s = $"Color [ R={func(b: 3):#0.##}, G={G:#0.##}, B={B:#0.##}, A={A:#0.##} ]";
 
-            Logging.Log.Error($"Some error message text: ({someVariableValue} did not work)");
-
             // nameof expressions
             if (x == null)
                 throw new ArgumentNullException(nameof(x));
@@ -824,11 +761,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
                 [9] = "nine",
                 [13] = "thirteen"
             };
-
-            string LocalFunction(string arg)
-            {
-                return arg;
-            }
 
             // Exception filters
             try {}
@@ -852,57 +784,317 @@ namespace Comments.XmlComments.UndocumentedKeywords
             }
         }
     }
-
-    class CSharp7Features
-    {
-        (string, string, long) Tuples(long id)
-        {
-            int a;
-            // variable assignment is valid inside a tuple literal.
-            var foo = (2, a=1);
-
-            var unnamed = ("one", "two", "three");
-            var named = (first: "one", second: "two");
-            (string, long) foo = ("foo", 42);
-            (int? a, int? b) nullableMembers = (5, 10);
-            (int, (int, int)) nestedTuple = (1, (2, 3));
-            var (a, b, c) = Tuples(42);
-            (a, b, c) = (a, b, c);
-            return (named.first, named.second, id);
-        }
-
-        int ThrowExpressionExample() =>
-            3 == 3 ? 2 : throw new Exception();
-
-        class C : Exception
-        {
-            public static C operator +(C c1, C c2) => default;
-            void ThrowBinaryExpression()
-            {
-                throw new C() + new C();
-            }
-        }
-
-        void IsPatternMatch() {
-            if (3 is int foo) {}
-            if (3 is var bar) {}
-            if (3 is 3) {}
-            if (new object() is null) {}
-            if (0 is default(int) - 3) {}
-            if (true is false ^ false) {}
-            if (8 is sizeof(long)) {}
-        }
-
-        void UnmanagedConstraint<T>() where T : unmanaged { }
-    }
 }
-
-namespace Empty
-{
-    // Don't forget this comment!
-}
-
 #line 6
 #line 2 "test.cs"
 #line default
 #line hidden
+
+class CSharp70
+{
+    void PatternMatching(string arg, int b)
+    {
+        switch (arg)
+        {
+            case "A" when b > 50:
+            case "B" when b < 50:
+            default:
+                break;
+        }
+
+        (A<B,C> D, E<F,G> H) = e;
+
+        if (x?.y?.z is Type value2)
+        {
+            // code using value
+        }
+
+        if (expr is Type v) { Hello(); }
+    }
+
+	public static async Task LocalFunctions(string[] args)
+	{
+		string Hello2(int i)
+        {
+            return args[i];
+        }
+
+		async Task<string> Hello<T>(T i) => await Task.FromResult(args[i]);
+		await Hello(1);
+	}
+
+	public static void OutVar(string[] args)
+	{
+		int.TryParse(Hello(1), out var item);
+		int.TryParse(Hello(1), out int item);
+	}
+
+    public void ThrowExpression()
+    {
+        var result = nullableResult ?? throw new NullReferenceException();
+    }
+
+    public void BinaryLiterals()
+    {
+        int nineteen = 0b10011;
+    }
+
+    public void DigitSeparators()
+    {
+        int bin = 0b1001_1010_0001_0100;
+        int hex = 0x1b_a0_44_fe;
+        int dec = 33_554_432;
+        int weird = 1_2__3___4____5_____6______7_______8________9;
+        double real = 1_000.111_1e-1_000;
+    }
+}
+
+class CSharp71
+{
+    void DefaultWithoutTypeName(string content = default)
+    {
+        DefaultWithoutTypeName(default);
+    }
+
+    void TupleRecognize(int a, (int, int) b, (int, int, int)? c)
+    {
+        var result = list.Select(c => (c.f1, f3: c.f2)).Where(t => t.f2 == 1);
+    }
+}
+
+class CSharp72
+{
+    readonly struct ReadonlyRef1
+    {
+        Func<int, int> s = (in int x) => x;
+        ref TValue this[in TKey index] => null;
+        public static Vector3 operator+(in Vector3 x, in Vector3 y) => null;
+
+        static readonly ref Vector3 M1_Trace()
+        {
+            // OK
+            ref readonly var r1 = ref M1();
+
+            // Not valid. Need an LValue
+            ref readonly Vector3 r2 = ref default(Vector3);
+
+            // Not valid. r1 is readonly.
+            Mutate(ref r1);
+
+            // OK.
+            Print(in r1);
+
+            // OK.
+            return ref r1;
+        }
+    }
+
+    ref struct ReadonlyRef2
+    {
+        ref readonly Guid Test(in Vector3 v1, in Vector3 v2)
+        {
+            // not OK!!
+            v1 = default(Vector3);
+
+            // not OK!!
+            v1.X = 0;
+
+            // not OK!!
+            foo(ref v1.X);
+
+            return ref (arr != null ? ref arr[0]: ref otherArr[0]);
+
+            Span<int> span = stackalloc int[1];
+
+            // OK
+            return new Vector3(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
+        }
+
+        ref T Choice(bool condition, ref T consequence, ref T alternative)
+        {
+            if (condition)
+            {
+                 return ref consequence;
+            }
+            else
+            {
+                 return ref alternative;
+            }
+        }
+    }
+
+    public void DoSomething(bool isEmployed, string personName, int personAge) { }
+
+    public void NonTrailingNamedArguments()
+    {
+        DoSomething(isEmployed:true, name, age); // currently CS1738, but would become legal
+        DoSomething(true, personName:name, age); // currently CS1738, but would become legal
+        DoSomething(name, isEmployed:true, age); // remains illegal
+        DoSomething(name, age, isEmployed:true); // remains illegal
+        DoSomething(true, personAge:age, personName:name); // already legal
+    }
+
+    public void ConditionalRef()
+    {
+        ref var r = ref (arr != null ? ref arr[0]: ref otherArr[0]);
+    }
+
+    public void LeadingSeparator()
+    {
+        var res = 0
+        + 123      // permitted in C# 1.0 and later
+        + 1_2_3    // permitted in C# 7.0 and later
+        + 0x1_2_3  // permitted in C# 7.0 and later
+        + 0b101    // binary literals added in C# 7.0
+        + 0b1_0_1  // permitted in C# 7.0 and later
+
+        // in C# 7.2, _ is permitted after the `0x` or `0b`
+        + 0x_1_2   // permitted in C# 7.2 and later
+        + 0b_1_0_1 // permitted in C# 7.2 and later
+        ;
+    }
+}
+
+class CSharp73
+{
+    void Blittable<T>(T value) where T : unmanaged
+    {
+        var unmanaged = 666;
+    }
+
+    unsafe struct IndexingMovableFixed
+    {
+        public fixed int myFixedField[10];
+    }
+
+    static IndexingMovableFixed s;
+
+    public unsafe void IndexingMovableFixedFields()
+    {
+        int* ptr = s.myFixedField;
+        int t = s.myFixedField[5];
+    }
+
+    public void PatternBasedFixed()
+    {
+        fixed(byte* ptr = byteArray)
+        {
+           // ptr is a native pointer to the first element of the array
+           // byteArray is protected from being moved/collected by the GC for the duration of this block
+        }
+    }
+
+    public void StackallocArrayInitializer()
+    {
+        Span<int> a = stackalloc int[3];               // currently allowed
+        Span<int> a = stackalloc int[3] { 1, 2, 3 };
+        Span<int> a = stackalloc int[] { 1, 2, 3 };
+        Span<int> a = stackalloc[] { 1, 2, 3 };
+    }
+
+    public void TupleEquality()
+    {
+        (int, (int, int)) t1, t2;
+        var res = t1 == (1, (2, 3));
+    }
+}
+
+namespace CSharp80
+{
+	class CSharp80ExceptInterfaceDefaultImplement
+	{
+		void ReferenceNullable()
+		{
+			var? x = E;
+			x!.ToString();
+			string? wtf = null;
+			int?[]? hello;
+		}
+
+		void Patterns()
+		{
+			if (o is string { Length: 5 } s) Do();
+
+			return lang.CountOfTokens switch
+			{
+				1 => 100,
+				2 => 200,
+				_ => throw new global::System.Exception()
+			};
+
+			var newState = (GetState(), action, hasKey) switch
+			{
+				(DoorState.Closed, Action.Open, _) => DoorState.Opened,
+				(DoorState.Opened, Action.Close, _) => DoorState.Closed,
+				(DoorState.Closed, Action.Lock, true) => DoorState.Locked,
+				(DoorState.Locked, Action.Unlock, true) => DoorState.Closed,
+				(var state, _, _) => state
+			};
+		}
+
+		async Task AsyncStreams()
+		{
+			await foreach (var item in asyncEnumerables)
+			{
+			}
+		}
+
+		void Ranges()
+		{
+			var thirdItem = list[2];                // list[2]
+			var lastItem = list[^1];                // list[Index.CreateFromEnd(1)]
+			var multiDimensional = list[3, ^2];     // list[3, Index.CreateFromEnd(2)]
+
+			var slice1 = list[2..^3];               // list[Range.Create(2, Index.CreateFromEnd(3))]
+			var slice2 = list[..^3];                // list[Range.ToEnd(Index.CreateFromEnd(3))]
+			var slice3 = list[2..];                 // list[Range.FromStart(2)]
+			var slice4 = list[..];                  // list[Range.All]
+			var multiDimensional = list[1..2, ..];  // list[Range.Create(1, 2), Range.All]
+		}
+
+		void UsingDeclarators()
+		{
+			using var item = new FileStream("./.f");
+			fixed char* ch = "hell";
+			item.Dispose(); // no!
+		}
+
+		void StaticLocalFunction()
+		{
+			static unsafe void Func1() {}
+			static unsafe void Func1() {}
+			async static void Func2() {}
+			static async void Func2() {}
+		}
+
+		void NullCoalescingAssignment()
+		{
+			var item = a ??= b ??= c ??= d ??= throw new Exception();
+		}
+
+		public readonly float Hello()
+		{
+			return 0.1f;
+		}
+	}
+
+	interface IA
+	{
+		void M() { WriteLine("IA.M"); }
+	}
+
+	interface IA
+	{
+		void M() { WriteLine("IA.M"); }
+	}
+
+	interface IB : IA
+	{
+		override void IA.M() { WriteLine("IB.M"); } // explicitly named
+	}
+
+	interface IC : IA
+	{
+		override void M() { WriteLine("IC.M"); } // implicitly named
+	}
+}

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ConsoleApplication2.Test;
 using System.Linq.Expressions;
 using System.Text;
 using System.Math;
@@ -13,11 +12,10 @@ using System.Math;
 using System.DayOfWeek;
 using System.Linq.Enumerable;
 
-class TopLevelType : IDisposable,
-Foo
+class TopLevelType : IDisposable
 {
-    void Dispose(int x, int y) { }
-}namespace My.Moy
+    void Dispose() { }
+}namespace My
 {
     using A.B;
 
@@ -32,14 +30,9 @@ Foo
 
         private const int global = TODO SubtractExpression;
 
-        static A()
-        {
-            TODO PostIncrementExpression.b().a;
-            var x = TODO MultiplyExpression + TODO MultiplyExpression + (1 + (1 + 1)) + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1;
-            var y = TODO IsPatternExpression ? 42 : 51;
-        }
+        static A() { }
 
-        public A(int foo, int foo, int foo, int foo)
+        public A(int foo)
         {
             TODO LabeledStatement
             int? local = int.MaxValue;
@@ -50,7 +43,6 @@ Foo
             local3 = local4 = 1;
             var local5 = TODO AsExpression ?? null;
             var local6 = TODO IsExpression;
-            string local7 = TODO DefaultLiteralExpression;
             var u = 1u;
             var U = 1U;
             long hex = 0xBADC0DEHex = 0XDEADBEEFl = TODO UnaryMinusExpressionL = 1Ll2 = 2l;
@@ -103,7 +95,6 @@ Foo
             var remove = 0;
             var select = 0;
             var set = 0;
-            var var = 0;
             var when = 0;
             var where = 0;
             var yield = 0;
@@ -133,7 +124,6 @@ Foo
             arr[0] = TODO ArrayCreationExpression;
             arr[0][0, 0] = 47;
             TODO ArrayType arrayTypeInference = TODO ImplicitArrayCreationExpression;
-            TODO SwitchStatement
             TODO SwitchStatement
             TODO SwitchStatement
             TODO WhileStatement
@@ -349,29 +339,6 @@ Foo
             List<int> i = null;
             int c = i.Count;
         }
-
-        class Foo : IDisposable
-        {
-            public int N;
-
-            public void Dispose() { }
-        }
-
-        unsafe void EmptyEmbeddedStatment()
-        {
-            TODO EmptyStatement
-            if (true)TODO EmptyStatement
-            else if (true)TODO EmptyStatement
-            else TODO EmptyStatement
-            TODO WhileStatement
-            TODO DoStatement
-            TODO ForStatement
-            TODO ForEachStatement
-            TODO LockStatement
-            TODO UsingStatement
-            var o = new Foo();
-            TODO FixedStatement
-        }
     }
 }namespace Comments.XmlComments.UndocumentedKeywords
 {
@@ -384,9 +351,6 @@ Foo
             string strValue = "hello";
             MyClass c = new MyClass();
             string verbatimStr = @"\\\\";
-            int i = 0 + 1 + 2;
-            i = 3 + 4 + 5;
-            i = strValue != null ? 6 : 7;
         }
     }
 
@@ -405,7 +369,6 @@ Foo
             int j = TODO RefValueExpression;
             Params(t, t);
             Params(ref c, out c);
-            Params(out var d, out Test d);
         }
 
         void Params(dynamic a, dynamic b, TODO ArrayType c) { }
@@ -451,7 +414,6 @@ Foo
             TODO RightShiftAssignmentExpression;
             object s = x => x + 1;
             double d = .3;
-            TODO EmptyStatement
             Point point;
             TODO UnsafeStatement
             TODO AliasQualifiedName br = null;
@@ -484,8 +446,6 @@ Foo
 
         TODO IndexerDeclaration
 
-        private void NoOp() { }
-
         async void Test()
         {
             WriteLine(Sqrt(TODO MultiplyExpression + TODO MultiplyExpression));
@@ -503,9 +463,6 @@ Foo
             s = $@"\{p.Name}
                                    ""\";
             s = $"Color [ R={func(3)}, G={G}, B={B}, A={A} ]";
-            Logging.Log.Error(
-                $"Some error message text: ({someVariableValue} did not work)"
-            );
             if (x == null)TODO ThrowStatement
             WriteLine(nameof(person.Address.ZipCode));
             var numbers = new Dictionary<int, string>
@@ -514,52 +471,224 @@ Foo
                 TODO ImplicitElementAccess = "nine",
                 TODO ImplicitElementAccess = "thirteen"
             };
-            TODO LocalFunctionStatement
             TODO TryStatement
             Resource res = null;
             TODO TryStatement
         }
     }
-
-    class CSharp7Features
+}class CSharp70
+{
+    void PatternMatching(string arg, int b)
     {
-        TODO TupleType Tuples(long id)
+        TODO SwitchStatement
+        TODO TupleExpression = e;
+        if (TODO IsPatternExpression) { }
+        if (TODO IsPatternExpression)
         {
-            int a;
-            var foo = TODO TupleExpression;
-            var unnamed = TODO TupleExpression;
-            var named = TODO TupleExpression;
-            TODO TupleType foo = TODO TupleExpression;
-            TODO TupleType nullableMembers = TODO TupleExpression;
-            TODO TupleType nestedTuple = TODO TupleExpression;
-            var TODO ParenthesizedVariableDesignation = Tuples(42);
-            TODO TupleExpression = TODO TupleExpression;
-            return TODO TupleExpression;
+            Hello();
         }
-
-        int ThrowExpressionExample();
-
-        class C : Exception
-        {
-            TODO OperatorDeclaration
-
-            void ThrowBinaryExpression()
-            {
-                TODO ThrowStatement
-            }
-        }
-
-        void IsPatternMatch()
-        {
-            if (TODO IsPatternExpression) { }
-            if (TODO IsPatternExpression) { }
-            if (TODO IsPatternExpression) { }
-            if (TODO IsPatternExpression) { }
-            if (TODO IsPatternExpression) { }
-            if (TODO ExclusiveOrExpression) { }
-            if (TODO IsPatternExpression) { }
-        }
-
-        void UnmanagedConstraint() { }
     }
-}namespace Empty {}
+
+    public static async Task LocalFunctions(TODO ArrayType args)
+    {
+        TODO LocalFunctionStatement
+        TODO LocalFunctionStatement
+        TODO AwaitExpression;
+    }
+
+    public static void OutVar(TODO ArrayType args)
+    {
+        int.TryParse(Hello(1), out var item);
+        int.TryParse(Hello(1), out int item);
+    }
+
+    public void ThrowExpression()
+    {
+        var result = nullableResult ?? TODO ThrowExpression;
+    }
+
+    public void BinaryLiterals()
+    {
+        int nineteen = 0b10011;
+    }
+
+    public void DigitSeparators()
+    {
+        int bin = 0b1001_1010_0001_0100;
+        int hex = 0x1b_a0_44_fe;
+        int dec = 33_554_432;
+        int weird = 1_2__3___4____5_____6______7_______8________9;
+        double real = 1_000.111_1e-1_000;
+    }
+}class CSharp71
+{
+    void DefaultWithoutTypeName(string content)
+    {
+        DefaultWithoutTypeName(TODO DefaultLiteralExpression);
+    }
+
+    void TupleRecognize(int a, TODO TupleType b, TODO TupleType? c)
+    {
+        var result = list.Select(c => TODO TupleExpression).Where(
+            t => t.f2 == 1
+        );
+    }
+}class CSharp72
+{
+    TODO StructDeclaration
+
+    TODO StructDeclaration
+
+    public void DoSomething(bool isEmployed, string personName, int personAge)
+    { }
+
+    public void NonTrailingNamedArguments()
+    {
+        DoSomething(true, name, age);
+        DoSomething(true, name, age);
+        DoSomething(name, true, age);
+        DoSomething(name, age, true);
+        DoSomething(true, age, name);
+    }
+
+    public void ConditionalRef()
+    {
+        TODO RefType r = TODO RefExpression;
+    }
+
+    public void LeadingSeparator()
+    {
+        var res = 0 + 123 + 1_2_3 + 0x1_2_3 + 0b101 + 0b1_0_1 + 0x_1_2 + 0b_1_0_1;
+    }
+}class CSharp73
+{
+    void Blittable(T value)
+    {
+        var unmanaged = 666;
+    }
+
+    TODO StructDeclaration
+
+    static IndexingMovableFixed s;
+
+    public unsafe void IndexingMovableFixedFields()
+    {
+        TODO PointerType ptr = s.myFixedField;
+        int t = s.myFixedField[5];
+    }
+
+    public void PatternBasedFixed()
+    {
+        TODO FixedStatement
+    }
+
+    public void StackallocArrayInitializer()
+    {
+        Span<int> a = TODO StackAllocArrayCreationExpression;
+        Span<int> a = TODO StackAllocArrayCreationExpression;
+        Span<int> a = TODO StackAllocArrayCreationExpression;
+        Span<int> a = TODO ImplicitStackAllocArrayCreationExpression;
+    }
+
+    public void TupleEquality()
+    {
+        TODO TupleType t1t2;
+        var res = t1 == TODO TupleExpression;
+    }
+}namespace CSharp80
+{
+    class CSharp80ExceptInterfaceDefaultImplement
+    {
+        void ReferenceNullable()
+        {
+            var? x = E;
+            TODO SuppressNullableWarningExpression.ToString();
+            string? wtf = null;
+            TODO ArrayType? hello;
+        }
+
+        void Patterns()
+        {
+            if (TODO IsPatternExpression)Do();
+            return TODO SwitchExpression;
+            var newState = TODO SwitchExpression;
+        }
+
+        async Task AsyncStreams()
+        {
+            TODO ForEachStatement
+        }
+
+        void Ranges()
+        {
+            var thirdItem = list[2];
+            var lastItem = list[TODO IndexExpression];
+            var multiDimensional = list[3, TODO IndexExpression];
+            var slice1 = list[TODO RangeExpression];
+            var slice2 = list[TODO RangeExpression];
+            var slice3 = list[TODO RangeExpression];
+            var slice4 = list[TODO RangeExpression];
+            var multiDimensional = list[
+                TODO RangeExpression,
+                TODO RangeExpression
+            ];
+        }
+
+        void UsingDeclarators()
+        {
+            var item = new FileStream("./.f");
+            TODO FixedStatement
+            item.Dispose();
+        }
+
+        void StaticLocalFunction()
+        {
+            TODO LocalFunctionStatement
+            TODO LocalFunctionStatement
+            TODO LocalFunctionStatement
+            TODO LocalFunctionStatement
+        }
+
+        void NullCoalescingAssignment()
+        {
+            var item = TODO CoalesceAssignmentExpression;
+        }
+
+        public readonly float Hello()
+        {
+            return 0.1f;
+        }
+    }
+
+    interface IA
+    {
+        void M()
+        {
+            WriteLine("IA.M");
+        }
+    }
+
+    interface IA
+    {
+        void M()
+        {
+            WriteLine("IA.M");
+        }
+    }
+
+    interface IB
+    {
+        override void M()
+        {
+            WriteLine("IB.M");
+        }
+    }
+
+    interface IC
+    {
+        override void M()
+        {
+            WriteLine("IC.M");
+        }
+    }
+}
