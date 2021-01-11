@@ -1,26 +1,12 @@
 # CSharpier
 
-This is a prettier plugin for csharp. It uses a simple .net core console application to use Roslyn to generate the syntax tree
+This is a prettier plugin for csharp. It uses a simple .net core console application to use Roslyn to generate the syntax tree. It is in an early state, but can generate correct code for some basic cases.
+
+## Known Issues
+- Strips out all comments
+- Strips out empty lines in some areas, always adds empty lines in other areas
+- Formatting is a little rough
+- Doesn't currently handle a large number of node types
 
 ## Development
-You'll first need to build the Parser .net solution at Parser/Parser.sln
-
-Then from prettier-plugin-csharpier
-
-```
-npm install
-npm run build
-# or to watch typescript and recompile
-npm run watch
-```
-
-From there you can test out samples
-```
-npm run samples
-```
-Or an individual sample
-```
-npm run samples [NameOfFile]
-```
-
-You can also use jest to run any tests in /Tests
+See ./prettier-plugin-csharpier/README.md
