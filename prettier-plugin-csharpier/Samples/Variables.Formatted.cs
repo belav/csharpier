@@ -4,9 +4,9 @@ public class ClassName
     {
         bool value = true;
         var value2 = true;
-        bool value3
+        bool value3;
         bool value4 = this.OtherMethod();
-        bool value5 = TODO LogicalOrExpression;
-        bool value6 = TODO LogicalAndExpression;
+        bool value5 = value || value2;
+        bool value6 = value && value2;
     }
 }
