@@ -48,21 +48,32 @@ namespace Insite.Spire.Services
 
         private readonly IHtmlRedirectPipeline htmlRedirectPipeline;
 
-        public RetrievePageService()
+        public RetrievePageService(
+            ICatalogPathBuilder catalogPathBuilder,
+            ICatalogService catalogService,
+            INavigationFilterService navigationFilterService,
+            IContentModeProvider contentModeProvider,
+            ISiteContextServiceFactory siteContextServiceFactory,
+            Lazy<ICatalogPathFinder> catalogPathFinder,
+            IRulesEngine rulesEngine,
+            IHtmlRedirectPipeline htmlRedirectPipeline
+        )
         {
             this.catalogPathBuilder = catalogPathBuilder;
             this.catalogService = catalogService;
             this.navigationFilterService = navigationFilterService;
             this.contentModeProvider = contentModeProvider;
-            this.siteContextService = siteContextServiceFactory.GetSiteContextService(
-
-            );
+            this.siteContextService = siteContextServiceFactory.GetSiteContextService();
             this.catalogPathFinder = catalogPathFinder;
             this.rulesEngine = rulesEngine;
             this.htmlRedirectPipeline = htmlRedirectPipeline;
         }
 
-        public RetrievePageResult GetPageByType()
+        public RetrievePageResult GetPageByType(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            string type
+        )
         {
             var pageVersionQuery = this.PageVersionQuery(
                 unitOfWork,
@@ -79,7 +90,11 @@ namespace Insite.Spire.Services
             );
         }
 
-        public IList<PageModel> GetPagesByParent()
+        public IList<PageModel> GetPagesByParent(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            Guid parentNodeId
+        )
         {
             var pageVersionQuery = this.PageVersionQuery(
                 unitOfWork,
@@ -93,31 +108,35 @@ namespace Insite.Spire.Services
             ).ToList();
         }
 
-        public IQueryable<PageUrl> GetPublishedPageUrlsByType()
+        public IQueryable<PageUrl> GetPublishedPageUrlsByType(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            string type
+        )
         {
-            var nodeQuery = unitOfWork.GetRepository<Node>(
-
-            ).GetTableAsNoTracking().Where(
+            var nodeQuery = unitOfWork.GetRepository<Node>().GetTableAsNoTracking().Where(
                 node => node.WebsiteId == siteContext.WebsiteDto.Id && node.Type == type
             ).Select(node => node.Id);
             var now = DateTimeProvider.Current.Now;
-            return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking(
-
-            ).Where(
+            return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking().Where(
                 pageUrl => nodeQuery.Contains(
                     pageUrl.NodeId
                 ) && pageUrl.LanguageId == siteContext.LanguageDto.Id && pageUrl.PublishOn <= now && (pageUrl.PublishUntil == null || pageUrl.PublishUntil > now)
             );
         }
 
-        public RetrievePageResult GetPageByUrl()
+        public RetrievePageResult GetPageByUrl(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            string url
+        )
         {
             var htmlRedirect = this.GetHtmlRedirect(url);
             if (htmlRedirect?.HtmlRedirect != null)
             {
                 return new RetrievePageResult
                 {
-                    StatusCode = HttpStatusCode.Redirect
+                    StatusCode = HttpStatusCode.Redirect,
                     RedirectTo = htmlRedirect.HtmlRedirect.NewUrl
                 };
             }
@@ -157,7 +176,7 @@ namespace Insite.Spire.Services
                     {
                         return new RetrievePageResult
                         {
-                            StatusCode = HttpStatusCode.Found
+                            StatusCode = HttpStatusCode.Found,
                             RedirectTo = redirectTo
                         };
                     }
@@ -199,7 +218,10 @@ namespace Insite.Spire.Services
             return this.NotFoundPage(unitOfWork, siteContext);
         }
 
-        private string GetPageVariantVersion()
+        private string GetPageVariantVersion(
+            ICollection<PageVersion> pageVersions,
+            ISiteContext siteContext
+        )
         {
             var ruleObjects = new List<object>
             {
@@ -210,14 +232,20 @@ namespace Insite.Spire.Services
                     o.Page,
                     ruleObjects
                 )
-            ).Select(o => o.Value).FirstOrDefault(
-
-            ) ?? pageVersions.FirstOrDefault(
+            ).Select(
+                o => o.Value
+            ).FirstOrDefault() ?? pageVersions.FirstOrDefault(
                 o => o.Page.IsDefaultVariant
             )?.Value;
         }
 
-        private Guid? GetCatalogNodeId()
+        private Guid? GetCatalogNodeId(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            string url,
+            bool isSwitchingLanguage,
+            RetrievePageResult retrievePageResult
+        )
         {
             var relativeUrlNoQuery = url.Contains("?") ? url.Substring(
                 0,
@@ -238,7 +266,7 @@ namespace Insite.Spire.Services
                 {
                     retrievePageResult = new RetrievePageResult
                     {
-                        StatusCode = HttpStatusCode.Found
+                        StatusCode = HttpStatusCode.Found,
                         RedirectTo = result.RedirectUrl
                     };
                     return null;
@@ -252,9 +280,7 @@ namespace Insite.Spire.Services
                     "ProductDetailsPage"
                 );
             }
-            if (result?.Category != null && result?.SubCategories != null && result.SubCategories.Any(
-
-            ))
+            if (result?.Category != null && result?.SubCategories != null && result.SubCategories.Any())
             {
                 return GetNodeIdByType(
                     unitOfWork,
@@ -284,10 +310,11 @@ namespace Insite.Spire.Services
                 {
                     retrievePageResult = new RetrievePageResult
                     {
-                        StatusCode = HttpStatusCode.Found
-                        RedirectTo = $"/{this.catalogPathBuilder.GetBrandRootPath(
-
-                        )}/{string.Join("/", urlParts.Skip(1))}"
+                        StatusCode = HttpStatusCode.Found,
+                        RedirectTo = $"/{this.catalogPathBuilder.GetBrandRootPath()}/{string.Join(
+                            "/",
+                            urlParts.Skip(1)
+                        )}"
                     };
                     return null;
                 }
@@ -309,36 +336,44 @@ namespace Insite.Spire.Services
             return null;
         }
 
-        private static Guid? GetNodeIdByType()
+        private static Guid? GetNodeIdByType(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            string pageType
+        )
         {
-            return unitOfWork.GetRepository<Node>().GetTableAsNoTracking(
-
-            ).Where(
+            return unitOfWork.GetRepository<Node>().GetTableAsNoTracking().Where(
                 o => o.WebsiteId == siteContext.WebsiteDto.Id && o.Type == pageType
             ).Select(o => o.Id).FirstOrDefault();
         }
 
-        private RetrievePageResult PageById()
+        private RetrievePageResult PageById(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            Guid id,
+            string url
+        )
         {
-            var query = unitOfWork.GetRepository<PageVersion>(
-
-            ).GetTableAsNoTracking().Where(o => o.PageId == id);
+            var query = unitOfWork.GetRepository<PageVersion>().GetTableAsNoTracking().Where(
+                o => o.PageId == id
+            );
             query = this.ApplyPublishedFilter(query);
             var pageJson = query.OrderByDescending(
                 o => o.PublishOn ?? DateTimeOffset.MaxValue
             ).Select(o => o.Value).FirstOrDefault();
             if (pageJson == null)
             {
-                pageJson = unitOfWork.GetRepository<PageTemporary>(
-
-                ).GetTableAsNoTracking().Where(o => o.Id == id).Select(
-                    o => o.Value
-                ).FirstOrDefault();
+                pageJson = unitOfWork.GetRepository<PageTemporary>().GetTableAsNoTracking().Where(
+                    o => o.Id == id
+                ).Select(o => o.Value).FirstOrDefault();
             }
             return this.CreateResult(pageJson, unitOfWork, siteContext, url);
         }
 
-        private RetrievePageResult NotFoundPage()
+        private RetrievePageResult NotFoundPage(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext
+        )
         {
             var notFoundPage = this.PageVersionQuery(
                 unitOfWork,
@@ -352,7 +387,7 @@ namespace Insite.Spire.Services
             }
             var errorResult = new RetrievePageResult
             {
-                StatusCode = HttpStatusCode.NotFound
+                StatusCode = HttpStatusCode.NotFound,
                 Page = notFoundPage != null ? JsonConvert.DeserializeObject<PageModel>(
                     notFoundPage
                 ) : null
@@ -360,11 +395,12 @@ namespace Insite.Spire.Services
             return errorResult;
         }
 
-        private IQueryable<PageVersion> PageVersionQuery()
+        private IQueryable<PageVersion> PageVersionQuery(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext
+        )
         {
-            var query = unitOfWork.GetRepository<PageVersion>(
-
-            ).GetTableAsNoTracking().Expand(
+            var query = unitOfWork.GetRepository<PageVersion>().GetTableAsNoTracking().Expand(
                 o => o.Page.RuleManager.RuleClauses
             ).Where(o => o.Page.Node.WebsiteId == siteContext.WebsiteDto.Id);
             query = this.ApplyPublishedFilter(query);
@@ -373,7 +409,9 @@ namespace Insite.Spire.Services
             );
         }
 
-        private IQueryable<PageVersion> ApplyPublishedFilter()
+        private IQueryable<PageVersion> ApplyPublishedFilter(
+            IQueryable<PageVersion> query
+        )
         {
             if (this.contentModeProvider.DisplayUnpublishedContent)
             {
@@ -384,7 +422,12 @@ namespace Insite.Spire.Services
             );
         }
 
-        private RetrievePageResult CreateResult()
+        private RetrievePageResult CreateResult(
+            string pageJson,
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            string url
+        )
         {
             var result = new RetrievePageResult();
             if (pageJson == null)
@@ -402,10 +445,10 @@ namespace Insite.Spire.Services
             }
             var parameter = new NavigationFilterParameter
             {
-                SiteContext = siteContext
-                Url = url
-                Type = NavigationFilterType.RetrievingPage
-                Page = result.Page
+                SiteContext = siteContext,
+                Url = url,
+                Type = NavigationFilterType.RetrievingPage,
+                Page = result.Page,
                 SignInPageUrl = new Lazy<string>(
                     () => GetSignInPageUrl(this, unitOfWork, siteContext)
                 )
@@ -428,7 +471,11 @@ namespace Insite.Spire.Services
             return result;
         }
 
-        public static string GetSignInPageUrl()
+        public static string GetSignInPageUrl(
+            IRetrievePageService retrievePageService,
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext
+        )
         {
             return retrievePageService.GetPublishedPageUrlsByType(
                 unitOfWork,
@@ -437,7 +484,11 @@ namespace Insite.Spire.Services
             ).Select(o => o.Url).FirstOrDefault();
         }
 
-        private IQueryable<PageUrl> GetNodeUrls()
+        private IQueryable<PageUrl> GetNodeUrls(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            Guid nodeId
+        )
         {
             return this.GetUrls(
                 unitOfWork,
@@ -446,12 +497,16 @@ namespace Insite.Spire.Services
             );
         }
 
-        public IQueryable<PageUrl> GetPotentialUrls()
+        public IQueryable<PageUrl> GetPotentialUrls(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            string url
+        )
         {
             return this.GetUrls(unitOfWork, siteContext, o => o.Url == url);
         }
 
-        private GetByUriResult GetHtmlRedirect()
+        private GetByUriResult GetHtmlRedirect(string url)
         {
             if (url.IsBlank())
             {
@@ -467,12 +522,16 @@ namespace Insite.Spire.Services
             return getByUriResult;
         }
 
-        private IQueryable<PageUrl> GetUrls()
+        private IQueryable<PageUrl> GetUrls(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            Expression<Func<PageUrl, bool>> where
+        )
         {
             var displayUnpublishedContent = this.contentModeProvider.DisplayUnpublishedContent;
-            return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking(
-
-            ).Where(where).Where(
+            return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking().Where(
+                where
+            ).Where(
                 o => o.WebsiteId == siteContext.WebsiteDto.Id && (displayUnpublishedContent || (o.PublishOn.HasValue && o.PublishOn < DateTimeOffset.Now && (o.PublishUntil == null || o.PublishUntil > DateTimeOffset.Now)))
             ).OrderByDescending(o => o.PublishOn ?? DateTimeOffset.MaxValue);
         }
@@ -480,12 +539,28 @@ namespace Insite.Spire.Services
 
     public interface IRetrievePageService
     {
-        RetrievePageResult GetPageByUrl() { }
+        RetrievePageResult GetPageByUrl(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            string url
+        ) { }
 
-        IQueryable<PageUrl> GetPublishedPageUrlsByType() { }
+        IQueryable<PageUrl> GetPublishedPageUrlsByType(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            string type
+        ) { }
 
-        RetrievePageResult GetPageByType() { }
+        RetrievePageResult GetPageByType(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            string type
+        ) { }
 
-        IList<PageModel> GetPagesByParent() { }
+        IList<PageModel> GetPagesByParent(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            Guid parentNodeId
+        ) { }
     }
 }

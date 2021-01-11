@@ -89,6 +89,7 @@ export { print as ObjectInitializerExpression } from "./Types/ObjectInitializerE
 export { print as OperatorDeclaration } from "./Types/OperatorDeclaration"
 export { print as OrAssignmentExpression } from "./Types/OrAssignmentExpression"
 export { print as Parameter } from "./Types/Parameter"
+export { print as ParameterList } from "./Types/ParameterList"
 export { print as ParenthesizedExpression } from "./Types/ParenthesizedExpression"
 export { print as ParenthesizedLambdaExpression } from "./Types/ParenthesizedLambdaExpression"
 export { print as PostDecrementExpression } from "./Types/PostDecrementExpression"

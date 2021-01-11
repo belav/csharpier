@@ -2,9 +2,10 @@ import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
 import { HasValue, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
+import { ParameterNode } from "./Parameter";
 
 export interface SimpleLambdaExpressionNode extends SyntaxTreeNode<"SimpleLambdaExpression"> {
-    parameter: SyntaxTreeNode;
+    parameter: ParameterNode;
     arrowToken: HasValue;
 }
 

@@ -9,11 +9,14 @@ export function printStatements<T extends SyntaxTreeNode, T2 extends SyntaxTreeN
     separator: Doc,
     path: FastPath<T>,
     print: Print<T>,
+    endOfLineDoc?: Doc,
 ) {
+    const actualEndOfLine = endOfLineDoc ? concat([endOfLineDoc, separator]) : separator;
+
     const hasStatements = node[propertyName] && ((node[propertyName] as unknown) as SyntaxTreeNode[]).length > 0;
     let body: Doc = " ";
     if (hasStatements) {
-        body = concat([indent(concat([separator, join(separator, path.map(print, propertyName))])), separator]);
+        body = concat([indent(concat([separator, join(actualEndOfLine, path.map(print, propertyName))])), separator]);
     }
     return group(concat([line, "{", body, "}"]));
 }

@@ -14,7 +14,7 @@ export const print: PrintMethod<ConstructorDeclarationNode> = (path, options, pr
     const parts: Doc[] = [];
     parts.push(printModifiers(node));
     parts.push(printIdentifier(node));
-    parts.push("()");
+    parts.push(path.call(print, "parameterList"));
     parts.push(path.call(print, "body"));
 
     return group(concat(parts));

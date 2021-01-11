@@ -43,7 +43,6 @@ namespace Insite.Spire.Services
         private readonly IRulesEngine rulesEngine;
         private readonly IHtmlRedirectPipeline htmlRedirectPipeline;
 
-        // TODO we are losing parameters on everything
         public RetrievePageService(
             ICatalogPathBuilder catalogPathBuilder,
             ICatalogService catalogService,
@@ -52,7 +51,8 @@ namespace Insite.Spire.Services
             ISiteContextServiceFactory siteContextServiceFactory,
             Lazy<ICatalogPathFinder> catalogPathFinder,
             IRulesEngine rulesEngine,
-            IHtmlRedirectPipeline htmlRedirectPipeline)
+            IHtmlRedirectPipeline htmlRedirectPipeline
+        )
         {
             this.catalogPathBuilder = catalogPathBuilder;
             this.catalogService = catalogService;
@@ -64,42 +64,60 @@ namespace Insite.Spire.Services
             this.htmlRedirectPipeline = htmlRedirectPipeline;
         }
 
-        // TODO get the method stuff on the same line
-        public RetrievePageResult GetPageByType(IUnitOfWork unitOfWork, ISiteContext siteContext, string type)
+        public RetrievePageResult GetPageByType(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            string type
+        )
         {
-            var pageVersionQuery = this.PageVersionQuery(unitOfWork, siteContext);
-            var pageVersions = pageVersionQuery.Where(o => o.Page.Node.Type == type)
-                .ToArray().GroupBy(o => o.PageId).Select(o => o.First()).ToArray();
-
-            return this.CreateResult(this.GetPageVariantVersion(pageVersions, siteContext), unitOfWork, siteContext, null);
+            var pageVersionQuery = this.PageVersionQuery(
+                unitOfWork,
+                siteContext
+            );
+            var pageVersions = pageVersionQuery.Where(
+                o => o.Page.Node.Type == type
+            ).ToArray().GroupBy(o => o.PageId).Select(o => o.First()).ToArray();
+            return this.CreateResult(
+                this.GetPageVariantVersion(pageVersions, siteContext),
+                unitOfWork,
+                siteContext,
+                null
+            );
         }
 
-        public IList<PageModel> GetPagesByParent(IUnitOfWork unitOfWork, ISiteContext siteContext, Guid parentNodeId)
+        public IList<PageModel> GetPagesByParent(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            Guid parentNodeId
+        )
         {
-            var pageVersionQuery = this.PageVersionQuery(unitOfWork, siteContext);
-            var pageVersions = pageVersionQuery.Where(o => o.Page.Node.ParentId == parentNodeId)
-                .GroupBy(o => o.PageId).Select(o => o.FirstOrDefault()).ToList();
-            return pageVersions.Select(o => JsonConvert.DeserializeObject<PageModel>(o.Value)).ToList();
+            var pageVersionQuery = this.PageVersionQuery(
+                unitOfWork,
+                siteContext
+            );
+            var pageVersions = pageVersionQuery.Where(
+                o => o.Page.Node.ParentId == parentNodeId
+            ).GroupBy(o => o.PageId).Select(o => o.FirstOrDefault()).ToList();
+            return pageVersions.Select(
+                o => JsonConvert.DeserializeObject<PageModel>(o.Value)
+            ).ToList();
         }
 
-        public IQueryable<PageUrl> GetPublishedPageUrlsByType(IUnitOfWork unitOfWork, ISiteContext siteContext, string type)
+        public IQueryable<PageUrl> GetPublishedPageUrlsByType(
+            IUnitOfWork unitOfWork,
+            ISiteContext siteContext,
+            string type
+        )
         {
-            var nodeQuery = unitOfWork
-                .GetRepository<Node>()
-                .GetTableAsNoTracking()
-                .Where(node => node.WebsiteId == siteContext.WebsiteDto.Id && node.Type == type)
-                .Select(node => node.Id);
-
+            var nodeQuery = unitOfWork.GetRepository<Node>().GetTableAsNoTracking().Where(
+                node => node.WebsiteId == siteContext.WebsiteDto.Id && node.Type == type
+            ).Select(node => node.Id);
             var now = DateTimeProvider.Current.Now;
-
-            return unitOfWork
-                .GetRepository<PageUrl>()
-                .GetTableAsNoTracking()
-                .Where(pageUrl =>
-                    nodeQuery.Contains(pageUrl.NodeId) &&
-                    pageUrl.LanguageId == siteContext.LanguageDto.Id &&
-                    pageUrl.PublishOn <= now &&
-                    (pageUrl.PublishUntil == null || pageUrl.PublishUntil > now));
+            return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking().Where(
+                pageUrl => nodeQuery.Contains(
+                    pageUrl.NodeId
+                ) && pageUrl.LanguageId == siteContext.LanguageDto.Id && pageUrl.PublishOn <= now && (pageUrl.PublishUntil == null || pageUrl.PublishUntil > now)
+            );
         }
 
         public RetrievePageResult GetPageByUrl(IUnitOfWork unitOfWork, ISiteContext siteContext, string url)
