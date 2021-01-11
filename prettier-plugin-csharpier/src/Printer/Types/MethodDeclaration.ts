@@ -22,7 +22,7 @@ export const print: PrintMethod<MethodDeclarationNode> = (path, options, print) 
     if (node.body) {
         parts.push(path.call(print, "body"));
     } else {
-        parts.push(" { }");
+        parts.push(";");
     }
 
     return concat(parts);

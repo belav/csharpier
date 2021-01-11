@@ -155,7 +155,7 @@ namespace Insite.Spire.Services
                 unitOfWork,
                 siteContext,
                 uri.AbsolutePath
-            ).Select(o => new { o.NodeIdo.LanguageId });
+            ).Select(o => new { o.NodeId, o.LanguageId });
             nodeId = potentialUrls.FirstOrDefault()?.NodeId;
             if (nodeId.HasValue && !potentialUrls.Any(
                 o => o.LanguageId == siteContext.LanguageDto.Id
@@ -180,6 +180,16 @@ namespace Insite.Spire.Services
                             RedirectTo = redirectTo
                         };
                     }
+                }
+                else
+                {
+                    var defaultLanguageId = unitOfWork.GetTypedRepository<ILanguageRepository>().GetCachedDefault(
+                        siteContext.WebsiteDto.Id
+                    )?.Id;
+                    var languageId = defaultLanguageId.HasValue && potentialUrls.Any(
+                        o => o.LanguageId == defaultLanguageId
+                    ) ? defaultLanguageId : potentialUrls.First().LanguageId;
+                    this.siteContextService.SetLanguage(languageId);
                 }
             }
             if (nodeId == null)
@@ -271,6 +281,27 @@ namespace Insite.Spire.Services
                     };
                     return null;
                 }
+                else
+                {
+                    var languageIds = this.catalogPathFinder.Value.GetLanguageIdsForCatalogUrlPath(
+                        siteContext.WebsiteDto.Id,
+                        urlParts[0]
+                    );
+                    if (languageIds.Count != 0 && !languageIds.Contains(
+                        activeLanguage
+                    ))
+                    {
+                        this.siteContextService.SetLanguage(
+                            languageIds.First()
+                        );
+                        retrievePageResult = new RetrievePageResult
+                        {
+                            StatusCode = HttpStatusCode.Found,
+                            RedirectTo = url
+                        };
+                        return null;
+                    }
+                }
             }
             if (result?.Product != null)
             {
@@ -315,6 +346,18 @@ namespace Insite.Spire.Services
                             "/",
                             urlParts.Skip(1)
                         )}"
+                    };
+                    return null;
+                }
+                else
+                {
+                    this.siteContextService.SetLanguage(
+                        brandsLanguageIds.First()
+                    );
+                    retrievePageResult = new RetrievePageResult
+                    {
+                        StatusCode = HttpStatusCode.Found,
+                        RedirectTo = url
                     };
                     return null;
                 }
@@ -543,24 +586,24 @@ namespace Insite.Spire.Services
             IUnitOfWork unitOfWork,
             ISiteContext siteContext,
             string url
-        ) { }
+        );
 
         IQueryable<PageUrl> GetPublishedPageUrlsByType(
             IUnitOfWork unitOfWork,
             ISiteContext siteContext,
             string type
-        ) { }
+        );
 
         RetrievePageResult GetPageByType(
             IUnitOfWork unitOfWork,
             ISiteContext siteContext,
             string type
-        ) { }
+        );
 
         IList<PageModel> GetPagesByParent(
             IUnitOfWork unitOfWork,
             ISiteContext siteContext,
             Guid parentNodeId
-        ) { }
+        );
     }
 }

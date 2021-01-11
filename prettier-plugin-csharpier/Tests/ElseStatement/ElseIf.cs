@@ -1,0 +1,14 @@
+public class ClassName
+{
+    public void MethodName()
+    {
+        if (true)
+        {
+            DoIf();
+        }
+        else if (false)
+        {
+            DoElse();
+        }
+    }
+}

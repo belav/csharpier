@@ -13,9 +13,10 @@ using System.Math;
 using System.DayOfWeek;
 using System.Linq.Enumerable;
 
-class TopLevelType
+class TopLevelType : IDisposable,
+Foo
 {
-    void Dispose() { }
+    void Dispose(int x, int y) { }
 }namespace My.Moy
 {
     using A.B;
@@ -24,102 +25,113 @@ class TopLevelType
 
     TODO DelegateDeclaration
 
-    public unsafe partial class A
+    public unsafe partial class A : C,
+    I
     {
-        static extern bool CreateDirectory() { }
+        static extern bool CreateDirectory(string name, SecurityAttribute sa);
 
         private const int global = TODO SubtractExpression;
 
         static A()
         {
             TODO PostIncrementExpression.b().a;
-            var x = TODO AddExpression;
-            var y = TODO ConditionalExpression;
+            var x = TODO MultiplyExpression + TODO MultiplyExpression + (1 + (1 + 1)) + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1;
+            var y = TODO IsPatternExpression ? 42 : 51;
         }
 
-        public A()
+        public A(int foo, int foo, int foo, int foo)
         {
             TODO LabeledStatement
             int? local = int.MaxValue;
-            Guid? local0 = TODO ObjectCreationExpression;
+            Guid? local0 = new Guid(r.ToString());
             var ?????? = local;
             var ??? = local;
-            var local3 = TODO NumericLiteralExpressionlocal4 = TODO NumericLiteralExpression;
-            local3 = local4 = TODO NumericLiteralExpression;
-            var local5 = TODO CoalesceExpression;
+            var local3 = 0local4 = 1;
+            local3 = local4 = 1;
+            var local5 = TODO AsExpression ?? null;
             var local6 = TODO IsExpression;
             string local7 = TODO DefaultLiteralExpression;
-            var u = TODO NumericLiteralExpression;
-            var U = TODO NumericLiteralExpression;
-            long hex = TODO NumericLiteralExpressionHex = TODO NumericLiteralExpressionl = TODO UnaryMinusExpressionL = TODO NumericLiteralExpressionl2 = TODO NumericLiteralExpression;
-            ulong ul = TODO NumericLiteralExpressionUl = TODO NumericLiteralExpressionuL = TODO NumericLiteralExpressionUL = TODO NumericLiteralExpressionlu = TODO NumericLiteralExpressionLu = TODO NumericLiteralExpressionlU = TODO NumericLiteralExpressionLU = TODO NumericLiteralExpression;
+            var u = 1u;
+            var U = 1U;
+            long hex = 0xBADC0DEHex = 0XDEADBEEFl = TODO UnaryMinusExpressionL = 1Ll2 = 2l;
+            ulong ul = 1ulUl = 1UluL = 1uLUL = 1ULlu = 1luLu = 1LulU = 1lULU = 1LU;
             int minInt32Value = TODO UnaryMinusExpression;
             int minInt64Value = TODO UnaryMinusExpression;
             bool @bool;
             byte @byte;
-            char @char = TODO CharacterLiteralExpression\u0066 = TODO CharacterLiteralExpressionhexchar = TODO CharacterLiteralExpressionhexchar2 = TODO CastExpression;
-            string \U00000065 = TODO StringLiteralExpression;
-            decimal @decimal = TODO NumericLiteralExpression;
-            @decimal = TODO NumericLiteralExpression;
+            char @char = 'c'\u0066 = '\u0066'hexchar = '\x0130'hexchar2 = TODO CastExpression;
+            string \U00000065 = "\U00000065";
+            decimal @decimal = 1.44M;
+            @decimal = 1.2m;
             dynamic @dynamic;
             double @double = M.PI;
-            @double = TODO NumericLiteralExpression;
-            @double = TODO NumericLiteralExpression;
+            @double = 1d;
+            @double = 1D;
             @double = TODO UnaryMinusExpression;
-            float @float = TODO NumericLiteralExpression;
-            @float = TODO NumericLiteralExpression;
-            int @int = TODO CoalesceExpression;
+            float @float = 1.2f;
+            @float = 1.44F;
+            int @int = local ?? TODO UnaryMinusExpression;
             long @long;
             object @object;
             sbyte @sbyte;
             short @short;
-            string @string = TODO StringLiteralExpression;
+            string @string = @"""/*";
             uint @uint;
             ulong @ulong;
             ushort @ushort;
             dynamic dynamic = local5;
-            var add = TODO NumericLiteralExpression;
-            var alias = TODO NumericLiteralExpression;
-            var arglist = TODO NumericLiteralExpression;
-            var ascending = TODO NumericLiteralExpression;
-            var async = TODO NumericLiteralExpression;
-            var await = TODO NumericLiteralExpression;
-            var by = TODO NumericLiteralExpression;
-            var descending = TODO NumericLiteralExpression;
-            var dynamic = TODO NumericLiteralExpression;
-            var equals = TODO NumericLiteralExpression;
-            var from = TODO NumericLiteralExpression;
-            var get = TODO NumericLiteralExpression;
-            var group = TODO NumericLiteralExpression;
-            var into = TODO NumericLiteralExpression;
-            var join = TODO NumericLiteralExpression;
-            var let = TODO NumericLiteralExpression;
-            var nameof = TODO NumericLiteralExpression;
-            var on = TODO NumericLiteralExpression;
-            var orderby = TODO NumericLiteralExpression;
-            var partial = TODO NumericLiteralExpression;
-            var remove = TODO NumericLiteralExpression;
-            var select = TODO NumericLiteralExpression;
-            var set = TODO NumericLiteralExpression;
-            var var = TODO NumericLiteralExpression;
-            var when = TODO NumericLiteralExpression;
-            var where = TODO NumericLiteralExpression;
-            var yield = TODO NumericLiteralExpression;
-            var __ = TODO NumericLiteralExpression;
-            where = yield = TODO NumericLiteralExpression;
-            TODO IfStatement
-            var o1 = TODO ObjectCreationExpression;
-            var o2 = TODO ObjectCreationExpression;
-            var o3 = TODO ObjectCreationExpression;
-            var o4 = TODO ObjectCreationExpression;
-            var o5 = TODO AnonymousObjectCreationExpression;
-            var dictionaryInitializer = TODO ObjectCreationExpression;
+            var add = 0;
+            var alias = 0;
+            var arglist = 0;
+            var ascending = 0;
+            var async = 0;
+            var await = 0;
+            var by = 0;
+            var descending = 0;
+            var dynamic = 0;
+            var equals = 0;
+            var from = 0;
+            var get = 0;
+            var group = 0;
+            var into = 0;
+            var join = 0;
+            var let = 0;
+            var nameof = 0;
+            var on = 0;
+            var orderby = 0;
+            var partial = 0;
+            var remove = 0;
+            var select = 0;
+            var set = 0;
+            var var = 0;
+            var when = 0;
+            var where = 0;
+            var yield = 0;
+            var __ = 0;
+            where = yield = 0;
+            if (i > 0)
+            {
+                return;
+            }
+            else if (i == 0)
+            {
+                TODO ThrowStatement
+            }
+            var o1 = new MyObject();
+            var o2 = new MyObject(var);
+            var o3 = new MyObject { A = i };
+            var o4 = new MyObject(@dynamic) { A = 0, B = 0, C = 0 };
+            var o5 = new { A = 0 };
+            var dictionaryInitializer = new Dictionary<int, string>
+            {
+                TODO ComplexElementInitializerExpression, TODO ComplexElementInitializerExpression
+            };
             TODO ArrayType a = TODO ArrayCreationExpression;
             TODO ArrayType cube = TODO ArrayInitializerExpression;
             TODO ArrayType jagged = TODO ArrayInitializerExpression;
             TODO ArrayType arr = TODO ArrayCreationExpression;
-            TODO ElementAccessExpression = TODO ArrayCreationExpression;
-            TODO ElementAccessExpression = TODO NumericLiteralExpression;
+            arr[0] = TODO ArrayCreationExpression;
+            arr[0][0, 0] = 47;
             TODO ArrayType arrayTypeInference = TODO ImplicitArrayCreationExpression;
             TODO SwitchStatement
             TODO SwitchStatement
@@ -151,20 +163,17 @@ class TopLevelType
 
         private volatile int f2;
 
-        public void Handler() { }
+        public void Handler(object value) { }
 
-        public int m()
+        public int m(T t)
         {
-            TODO BaseExpression.m(TODO Argument);
-            return TODO NumericLiteralExpression;
+            TODO BaseExpression.m(t);
+            return 1;
         }
 
         public string P
         {
-            get
-            {
-                return TODO StringLiteralExpression;
-            }
+            get { return "A"; }
             set;
         }
 
@@ -189,11 +198,14 @@ class TopLevelType
 
     public interface I
     {
-        void A() { }
+        void A(int value);
 
         string Value { get; set; }
 
-        unsafe void UpdateSignatureByHashingContent() { }
+        unsafe void UpdateSignatureByHashingContent(
+            TODO PointerType buffer,
+            int size
+        );
     }
 
     TODO EnumDeclaration
@@ -207,12 +219,12 @@ class TopLevelType
 
         public class ??????
         {
-            public static IEnumerable Power()
+            public static IEnumerable Power(int number, int exponent)
             {
-                ?????? ?????? = TODO ObjectCreationExpression;
+                ?????? ?????? = new ??????();
                 ??????.Main();
-                int counter = TODO ParenthesizedExpression;
-                int ??? = TODO NumericLiteralExpression;
+                int counter = (0 + 0);
+                int ??? = 0;
                 TODO WhileStatement
             }
 
@@ -228,7 +240,7 @@ class TopLevelType
 
             void AsyncAnonymous()
             {
-                var task = Task.Factory.StartNew(TODO Argument);
+                var task = Task.Factory.StartNew(() => );
             }
         }
     }
@@ -236,7 +248,7 @@ class TopLevelType
 {
     namespace RecursiveGenericBaseType
     {
-        class A
+        class A : B<A<T>, A<T>>
         {
             protected virtual A<T> M() { }
 
@@ -245,7 +257,7 @@ class TopLevelType
             static B<A<T>, A<T>> O() { }
         }
 
-        sealed class B
+        sealed class B : A<B<T1, T2>>
         {
             protected override A<T> M() { }
 
@@ -261,12 +273,12 @@ class TopLevelType
         {
             public T f;
 
-            public class Foo
+            public class Foo : IEnumerable<T>
             {
-                public void Method()
+                public void Method(K k, T t, U u)
                 {
                     A<int> a;
-                    M(TODO Argument);
+                    M(A<B, C>(5));
                 }
             }
         }
@@ -276,10 +288,8 @@ class TopLevelType
     {
         void Bar3()
         {
-            var x = TODO ObjectCreationExpression;
-            x.Method<string, string>(TODO Argument,
-                TODO Argument,
-                TODO Argument);
+            var x = new Boo.Bar<int>.Foo<object>();
+            x.Method<string, string>(" ", 5, new object());
             var q = TODO QueryExpression;
         }
 
@@ -287,29 +297,29 @@ class TopLevelType
 
         TODO ConversionOperatorDeclaration
 
-        public int foo = TODO NumericLiteralExpression;
+        public int foo = 5;
 
         void Bar2()
         {
-            foo = TODO NumericLiteralExpression;
-            this.Foo = TODO NumericLiteralExpression.GetType();
-            Test t = TODO StringLiteralExpression;
+            foo = 6;
+            this.Foo = 5.GetType();
+            Test t = "sss";
         }
 
         TODO EventFieldDeclaration
 
         void Blah()
         {
-            int i = TODO NumericLiteralExpression;
-            int? j = TODO NumericLiteralExpression;
-            Expression<Func<int>> e = TODO ParenthesizedLambdaExpression;
-            Expression<Func<bool, Action>> e2 = TODO SimpleLambdaExpression;
+            int i = 5;
+            int? j = 6;
+            Expression<Func<int>> e = () => i;
+            Expression<Func<bool, Action>> e2 = b => () => ;
             Func<bool, bool> f = TODO AnonymousMethodExpression;
-            Func<int, int, int> f2 = TODO ParenthesizedLambdaExpression;
-            f2 = TODO ParenthesizedLambdaExpression;
+            Func<int, int, int> f2 = () => 0;
+            f2 = () => 1;
             Action a = Blah;
-            f2 = TODO ParenthesizedLambdaExpression;
-            f2 = TODO ParenthesizedLambdaExpression;
+            f2 = () => ;
+            f2 = () => ;
         }
 
         TODO DelegateDeclaration
@@ -321,31 +331,26 @@ class TopLevelType
             get
             {
                 var result = TODO TypeOfExpression;
-                var t = TODO EqualsExpression;
+                var t = TODO TypeOfExpression == TODO TypeOfExpression;
                 t = TODO TypeOfExpression;
                 return TODO TypeOfExpression;
             }
-            set
-            {
-                var t = TODO TypeOfExpression;
-                t.ToString();
-                t = value;
-            }
+            set { var t = TODO TypeOfExpression; t.ToString(); t = value; }
         }
 
         public void Constants()
         {
-            int i = TODO AddExpression;
-            TODO AliasQualifiedName.String s = TODO AddExpression;
+            int i = 1 + 2 + 3 + 5;
+            TODO AliasQualifiedName.String s = "a" + TODO CastExpression + "a" + "a" + "a" + "A";
         }
 
         public void ConstructedType()
         {
-            List<int> i = TODO NullLiteralExpression;
+            List<int> i = null;
             int c = i.Count;
         }
 
-        class Foo
+        class Foo : IDisposable
         {
             public int N;
 
@@ -355,14 +360,16 @@ class TopLevelType
         unsafe void EmptyEmbeddedStatment()
         {
             TODO EmptyStatement
-            TODO IfStatement
+            if (true)TODO EmptyStatement
+            else if (true)TODO EmptyStatement
+            else TODO EmptyStatement
             TODO WhileStatement
             TODO DoStatement
             TODO ForStatement
             TODO ForEachStatement
             TODO LockStatement
             TODO UsingStatement
-            var o = TODO ObjectCreationExpression;
+            var o = new Foo();
             TODO FixedStatement
         }
     }
@@ -370,16 +377,16 @@ class TopLevelType
 {
     class C
     {
-        void M()
+        void M(T t, U u)
         {
-            int intValue = TODO NumericLiteralExpression;
-            intValue = TODO AddExpression;
-            string strValue = TODO StringLiteralExpression;
-            MyClass c = TODO ObjectCreationExpression;
-            string verbatimStr = TODO StringLiteralExpression;
-            int i = TODO AddExpression;
-            i = TODO AddExpression;
-            i = TODO ConditionalExpression;
+            int intValue = 0;
+            intValue = intValue + 1;
+            string strValue = "hello";
+            MyClass c = new MyClass();
+            string verbatimStr = @"\\\\";
+            int i = 0 + 1 + 2;
+            i = 3 + 4 + 5;
+            i = strValue != null ? 6 : 7;
         }
     }
 
@@ -389,49 +396,49 @@ class TopLevelType
 
     class yield
     {
-        void Foo()
+        void Foo(__arglist)
         {
-            C<U> c = TODO NullLiteralExpression;
-            c.M<int>(TODO Argument, TODO Argument);
+            C<U> c = null;
+            c.M<int>(5, TODO DefaultExpression);
             TypedReference tr = TODO MakeRefExpression;
             Type t = TODO RefTypeExpression;
             int j = TODO RefValueExpression;
-            Params(TODO Argument, TODO Argument);
-            Params(TODO Argument, TODO Argument);
-            Params(TODO Argument, TODO Argument);
+            Params(t, t);
+            Params(ref c, out c);
+            Params(out var d, out Test d);
         }
 
-        void Params() { }
+        void Params(dynamic a, dynamic b, TODO ArrayType c) { }
 
-        void Params() { }
+        void Params(dynamic a, dynamic c, TODO ArrayType c) { }
 
         public override string ToString()
         {
             return TODO BaseExpression.ToString();
         }
 
-        public partial void OnError() { }
+        public partial void OnError();
 
         public partial void method()
         {
             TODO ArrayType a = TODO ArrayCreationExpression;
             TODO ArrayType var = TODO ArrayInitializerExpression;
-            int i = TODO ElementAccessExpression;
-            Foo<T> f = TODO ObjectCreationExpression;
+            int i = a[i];
+            Foo<T> f = new Foo<int>();
             f.method();
             i = TODO BitwiseOrExpression;
             bool b = TODO BitwiseOrExpression;
-            b = TODO LogicalNotExpression;
+            b = !b;
             i = TODO BitwiseNotExpression;
-            b = TODO LogicalAndExpression;
-            int? ii = TODO NumericLiteralExpression;
-            int f = TODO ConditionalExpression;
+            b = i < i && i > i;
+            int? ii = 5;
+            int f = true ? 1 : 0;
             TODO PostIncrementExpression;
             TODO PostDecrementExpression;
-            b = TODO LogicalOrExpression;
+            b = true && false || true;
             TODO LeftShiftExpression;
             TODO RightShiftExpression;
-            b = TODO LogicalAndExpression;
+            b = i == i && i != i && i <= i && TODO GreaterThanOrEqualExpression;
             TODO AddAssignmentExpression;
             TODO SubtractAssignmentExpression;
             TODO MultiplyAssignmentExpression;
@@ -442,14 +449,14 @@ class TopLevelType
             TODO ExclusiveOrAssignmentExpression;
             TODO LeftShiftAssignmentExpression;
             TODO RightShiftAssignmentExpression;
-            object s = TODO SimpleLambdaExpression;
-            double d = TODO NumericLiteralExpression;
+            object s = x => x + 1;
+            double d = .3;
             TODO EmptyStatement
             Point point;
             TODO UnsafeStatement
-            TODO AliasQualifiedName br = TODO NullLiteralExpression;
-            TODO ElementAccessExpression = TODO NumericLiteralExpression;
-            TODO ElementAccessExpression = TODO StringLiteralExpression;
+            TODO AliasQualifiedName br = null;
+            x[1] = 3;
+            x[1, 5] = "str";
         }
 
         TODO StructDeclaration
@@ -465,15 +472,15 @@ class TopLevelType
 
         public string Fourth { get; }
 
-        public Point Move() { }
+        public Point Move(int dx, int dy);
 
         TODO OperatorDeclaration
 
         TODO ConversionOperatorDeclaration
 
-        public void Print() { }
+        public void Print();
 
-        public string Name => TODO AddExpression;
+        public string Name => First + " " + Last;
 
         TODO IndexerDeclaration
 
@@ -481,34 +488,42 @@ class TopLevelType
 
         async void Test()
         {
-            WriteLine(TODO Argument);
-            WriteLine(TODO Argument);
-            var range = Range(TODO Argument, TODO Argument);
-            var even = range.Where(TODO Argument);
-            int? length = TODO ConditionalAccessExpression;
-            Customer first = TODO ConditionalAccessExpression;
-            int length = TODO CoalesceExpression;
-            int? first = TODO ConditionalAccessExpression;
-            TODO ConditionalAccessExpression;
-            string s = TODO InterpolatedStringExpression;
-            s = TODO InterpolatedStringExpression;
-            s = TODO InterpolatedStringExpression;
-            s = TODO InterpolatedStringExpression;
-            s = TODO InterpolatedStringExpression;
-            Logging.Log.Error(TODO Argument);
-            TODO IfStatement
-            WriteLine(TODO Argument);
-            var numbers = TODO ObjectCreationExpression;
+            WriteLine(Sqrt(TODO MultiplyExpression + TODO MultiplyExpression));
+            WriteLine(TODO SubtractExpression);
+            var range = Range(5, 17);
+            var even = range.Where(i => TODO ModuloExpression == 0);
+            int? length = customers?.Length;
+            Customer first = customers?TODO ElementBindingExpression;
+            int length = customers?.Length ?? 0;
+            int? first = customers?TODO ElementBindingExpression?.Orders?.Count();
+            PropertyChanged?.Invoke(this, args);
+            string s = $"{p.Name} is {p.Age} year{{s}} old #";
+            s = $"{p.Name} is \"{p.Age} year{(p.Age == 1 ? "" : "s")} old";
+            s = $"{(p.Age == 2 ? $"{new Person { }}" : "")}";
+            s = $@"\{p.Name}
+                                   ""\";
+            s = $"Color [ R={func(3)}, G={G}, B={B}, A={A} ]";
+            Logging.Log.Error(
+                $"Some error message text: ({someVariableValue} did not work)"
+            );
+            if (x == null)TODO ThrowStatement
+            WriteLine(nameof(person.Address.ZipCode));
+            var numbers = new Dictionary<int, string>
+            {
+                TODO ImplicitElementAccess = "seven",
+                TODO ImplicitElementAccess = "nine",
+                TODO ImplicitElementAccess = "thirteen"
+            };
             TODO LocalFunctionStatement
             TODO TryStatement
-            Resource res = TODO NullLiteralExpression;
+            Resource res = null;
             TODO TryStatement
         }
     }
 
     class CSharp7Features
     {
-        TODO TupleType Tuples()
+        TODO TupleType Tuples(long id)
         {
             int a;
             var foo = TODO TupleExpression;
@@ -517,14 +532,14 @@ class TopLevelType
             TODO TupleType foo = TODO TupleExpression;
             TODO TupleType nullableMembers = TODO TupleExpression;
             TODO TupleType nestedTuple = TODO TupleExpression;
-            TODO DeclarationExpression = Tuples(TODO Argument);
+            var TODO ParenthesizedVariableDesignation = Tuples(42);
             TODO TupleExpression = TODO TupleExpression;
             return TODO TupleExpression;
         }
 
-        int ThrowExpressionExample() { }
+        int ThrowExpressionExample();
 
-        class C
+        class C : Exception
         {
             TODO OperatorDeclaration
 
@@ -536,13 +551,13 @@ class TopLevelType
 
         void IsPatternMatch()
         {
-            TODO IfStatement
-            TODO IfStatement
-            TODO IfStatement
-            TODO IfStatement
-            TODO IfStatement
-            TODO IfStatement
-            TODO IfStatement
+            if (TODO IsPatternExpression) { }
+            if (TODO IsPatternExpression) { }
+            if (TODO IsPatternExpression) { }
+            if (TODO IsPatternExpression) { }
+            if (TODO IsPatternExpression) { }
+            if (TODO ExclusiveOrExpression) { }
+            if (TODO IsPatternExpression) { }
         }
 
         void UnmanagedConstraint() { }

@@ -3,11 +3,19 @@ using System;
 namespace Namespace
 {
     using System;
+
     public class ClassName
     {
         private static const string SomeName;
-        void DoStuff() {}
+
+        void DoStuff();
+
         private string property;
-        public string Property { get; set; }
+
+        public string Property
+        {
+            get { return property; }
+            set { property = value; }
+        }
     }
 }

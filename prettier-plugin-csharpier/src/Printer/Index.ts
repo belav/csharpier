@@ -14,12 +14,14 @@ const printNode: PrintMethod = (path, options, print) => {
 
     const theTypes = (types as any) as Dictionary<PrintMethod>;
     if (!node) {
-        throw new Error(
+        console.warn(
             "There was no nodeType of " +
                 path.stack[path.stack.length - 2] +
                 " on the node of nodeType " +
                 path.stack[path.stack.length - 3].nodeType,
         );
+
+        return "";
     }
 
     const thePrint = theTypes[node.nodeType];

@@ -9,6 +9,8 @@ fs.readdirSync(__dirname).forEach(file => {
         return;
     }
 
+    console.log("Formatting " + file);
+
     const referenceFile = path.join(__dirname, file);
     const formattedFile = referenceFile.replace(".cs", ".Formatted.cs");
 
