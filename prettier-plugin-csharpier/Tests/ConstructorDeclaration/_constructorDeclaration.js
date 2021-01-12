@@ -6,3 +6,6 @@ test("BasicConstructorDeclaration", () => {
 test("ConstructorWithParameters", () => {
     runTest(__dirname, "ConstructorWithParameters");
 });
+test("LongConstructor", () => {
+    runTest(__dirname, "LongConstructor");
+});

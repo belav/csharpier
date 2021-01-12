@@ -31,6 +31,7 @@ export { print as ComplexElementInitializerExpression } from "./Types/ComplexEle
 export { print as ConditionalAccessExpression } from "./Types/ConditionalAccessExpression"
 export { print as ConditionalExpression } from "./Types/ConditionalExpression"
 export { print as ConstructorDeclaration } from "./Types/ConstructorDeclaration"
+export { print as ContinueStatement } from "./Types/ContinueStatement"
 export { print as ConversionOperatorDeclaration } from "./Types/ConversionOperatorDeclaration"
 export { print as DeclarationExpression } from "./Types/DeclarationExpression"
 export { print as DefaultExpression } from "./Types/DefaultExpression"

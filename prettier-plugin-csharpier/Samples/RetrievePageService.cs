@@ -9,6 +9,7 @@ namespace Insite.Spire.Services
     using System.Web;
     using Insite.Catalog.Services;
     using Insite.Catalog.Services.Parameters;
+    using Insite.Catalog.Services.Results;
     using Insite.Common.Extensions;
     using Insite.Common.Logging;
     using Insite.Common.Providers;
@@ -21,6 +22,7 @@ namespace Insite.Spire.Services
     using Insite.Core.Plugins.Pipelines;
     using Insite.Core.Services;
     using Insite.Core.Spire;
+    using Insite.Core.WebApi;
     using Insite.Data.Entities;
     using Insite.Data.Extensions;
     using Insite.Data.Repositories.Interfaces;
@@ -32,8 +34,6 @@ namespace Insite.Spire.Services
 
     public class RetrievePageService : IRetrievePageService
     {
-        // TODO keep line breaks for some things, like spacing between these?
-        // TODO we do want to keep some of the line breaks in the body of methods
         private readonly ICatalogPathBuilder catalogPathBuilder;
         private readonly ICatalogService catalogService;
         private readonly INavigationFilterService navigationFilterService;
@@ -51,8 +51,7 @@ namespace Insite.Spire.Services
             ISiteContextServiceFactory siteContextServiceFactory,
             Lazy<ICatalogPathFinder> catalogPathFinder,
             IRulesEngine rulesEngine,
-            IHtmlRedirectPipeline htmlRedirectPipeline
-        )
+            IHtmlRedirectPipeline htmlRedirectPipeline)
         {
             this.catalogPathBuilder = catalogPathBuilder;
             this.catalogService = catalogService;
@@ -64,60 +63,53 @@ namespace Insite.Spire.Services
             this.htmlRedirectPipeline = htmlRedirectPipeline;
         }
 
-        public RetrievePageResult GetPageByType(
-            IUnitOfWork unitOfWork,
-            ISiteContext siteContext,
-            string type
-        )
+        public RetrievePageResult GetPageByType(IUnitOfWork unitOfWork, ISiteContext siteContext, string type)
         {
-            var pageVersionQuery = this.PageVersionQuery(
-                unitOfWork,
-                siteContext
-            );
-            var pageVersions = pageVersionQuery.Where(
-                o => o.Page.Node.Type == type
-            ).ToArray().GroupBy(o => o.PageId).Select(o => o.First()).ToArray();
-            return this.CreateResult(
-                this.GetPageVariantVersion(pageVersions, siteContext),
-                unitOfWork,
-                siteContext,
-                null
-            );
+            var pageVersionQuery = this.PageVersionQuery(unitOfWork, siteContext);
+            var pageVersions = pageVersionQuery.Where(o => o.Page.Node.Type == type).ToList();
+
+            return this.CreateResult(this.GetPageVersionVariantJson(unitOfWork, pageVersions, siteContext), unitOfWork, siteContext, null);
         }
 
-        public IList<PageModel> GetPagesByParent(
-            IUnitOfWork unitOfWork,
-            ISiteContext siteContext,
-            Guid parentNodeId
-        )
+        public PagesCollectionModel GetPagesByParent(IUnitOfWork unitOfWork, ISiteContext siteContext, Guid parentNodeId)
         {
-            var pageVersionQuery = this.PageVersionQuery(
-                unitOfWork,
-                siteContext
-            );
-            var pageVersions = pageVersionQuery.Where(
-                o => o.Page.Node.ParentId == parentNodeId
-            ).GroupBy(o => o.PageId).Select(o => o.FirstOrDefault()).ToList();
-            return pageVersions.Select(
-                o => JsonConvert.DeserializeObject<PageModel>(o.Value)
-            ).ToList();
+            var pageVersionQuery = this.PageVersionQuery(unitOfWork, siteContext);
+            var pageVersions = pageVersionQuery.Where(o => o.Page.Node.ParentId == parentNodeId)
+                // we need to get this queryable in memory, the groupby/todictionary below don't play nice with generated sql for some reason.
+                .AsEnumerable()
+                .GroupBy(o => o.Page.NodeId)
+                .ToDictionary(o => o.Key, o => o.ToList());
+
+            var pages = new List<PageModel>();
+            foreach (var keyValuePair in pageVersions)
+            {
+                pages.Add(JsonConvert.DeserializeObject<PageModel>(this.GetPageVersionVariantJson(unitOfWork, keyValuePair.Value, siteContext)));
+            }
+
+            return new PagesCollectionModel
+            {
+                Pages = pages,
+            };
         }
 
-        public IQueryable<PageUrl> GetPublishedPageUrlsByType(
-            IUnitOfWork unitOfWork,
-            ISiteContext siteContext,
-            string type
-        )
+        public IQueryable<PageUrl> GetPublishedPageUrlsByType(IUnitOfWork unitOfWork, ISiteContext siteContext, string type)
         {
-            var nodeQuery = unitOfWork.GetRepository<Node>().GetTableAsNoTracking().Where(
-                node => node.WebsiteId == siteContext.WebsiteDto.Id && node.Type == type
-            ).Select(node => node.Id);
+            var nodeQuery = unitOfWork
+                .GetRepository<Node>()
+                .GetTableAsNoTracking()
+                .Where(node => node.WebsiteId == siteContext.WebsiteDto.Id && node.Type == type)
+                .Select(node => node.Id);
+
             var now = DateTimeProvider.Current.Now;
-            return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking().Where(
-                pageUrl => nodeQuery.Contains(
-                    pageUrl.NodeId
-                ) && pageUrl.LanguageId == siteContext.LanguageDto.Id && pageUrl.PublishOn <= now && (pageUrl.PublishUntil == null || pageUrl.PublishUntil > now)
-            );
+
+            return unitOfWork
+                .GetRepository<PageUrl>()
+                .GetTableAsNoTracking()
+                .Where(pageUrl =>
+                    nodeQuery.Contains(pageUrl.NodeId) &&
+                    pageUrl.LanguageId == siteContext.LanguageDto.Id &&
+                    pageUrl.PublishOn <= now &&
+                    (pageUrl.PublishUntil == null || pageUrl.PublishUntil > now));
         }
 
         public RetrievePageResult GetPageByUrl(IUnitOfWork unitOfWork, ISiteContext siteContext, string url)
@@ -185,9 +177,10 @@ namespace Insite.Spire.Services
                 }
             }
 
+            GetCatalogPageResult catalogPageResult = null;
             if (nodeId == null)
             {
-                nodeId = this.GetCatalogNodeId(unitOfWork, siteContext, url, isSwitchingLanguage, out var retrievePageResult);
+                nodeId = this.GetCatalogNodeId(unitOfWork, siteContext, url, isSwitchingLanguage, out var retrievePageResult, ref catalogPageResult);
                 if (retrievePageResult != null)
                 {
                     return retrievePageResult;
@@ -195,9 +188,9 @@ namespace Insite.Spire.Services
             }
 
             var pageVersions = this.PageVersionQuery(unitOfWork, siteContext)
-                .Where(o => o.Page.NodeId == nodeId).ToArray().GroupBy(o => o.PageId).Select(o => o.First()).ToArray();
+                .Where(o => o.Page.NodeId == nodeId).ToList();
 
-            var pageVersionJson = this.GetPageVariantVersion(pageVersions, siteContext);
+            var pageVersionJson = this.GetPageVersionVariantJson(unitOfWork, pageVersions, siteContext, catalogPageResult);
 
             if (pageVersionJson != null)
             {
@@ -207,25 +200,40 @@ namespace Insite.Spire.Services
             return this.NotFoundPage(unitOfWork, siteContext);
         }
 
-        private string GetPageVariantVersion(ICollection<PageVersion> pageVersions, ISiteContext siteContext)
+        private string GetPageVersionVariantJson(IUnitOfWork unitOfWork, ICollection<PageVersion> pageVersions, ISiteContext siteContext, GetCatalogPageResult catalogPageResult = null)
         {
             var ruleObjects = new List<object>
             {
                 siteContext.ShipTo,
-                siteContext.UserProfileDto
+                siteContext.UserProfileDto,
+                catalogPageResult?.Category,
+                catalogPageResult?.Product,
             };
 
-            return pageVersions.Where(o => !o.Page.IsDefaultVariant && o.Page.RuleManager != null && this.rulesEngine.Execute(o.Page, ruleObjects))
-                .Select(o => o.Value).FirstOrDefault() ?? pageVersions.FirstOrDefault(o => o.Page.IsDefaultVariant)?.Value;
+            var pageVersion = pageVersions.Where(o => !o.Page.IsDefaultVariant && o.Page.RuleManager != null && this.rulesEngine.Execute(o.Page, ruleObjects))
+                .FirstOrDefault() ?? pageVersions.FirstOrDefault(o => o.Page.IsDefaultVariant);
+
+            if (pageVersion == null)
+            {
+                return null;
+            }
+
+            if (pageVersion.Page.LayoutPageId.HasValue)
+            {
+                return this.CombineWithLayout(unitOfWork, pageVersion);
+            }
+
+            return pageVersion.Value;
         }
 
-        private Guid? GetCatalogNodeId(IUnitOfWork unitOfWork, ISiteContext siteContext, string url, bool isSwitchingLanguage, out RetrievePageResult retrievePageResult)
+        private Guid? GetCatalogNodeId(IUnitOfWork unitOfWork, ISiteContext siteContext, string url, bool isSwitchingLanguage, out RetrievePageResult retrievePageResult, ref GetCatalogPageResult catalogPageResult)
         {
             var relativeUrlNoQuery = url.Contains("?") ? url.Substring(0, url.IndexOf("?", StringComparison.Ordinal)) : url;
             var urlParts = relativeUrlNoQuery.Trim('/', ' ').Split('/');
             var result = this.catalogService.GetCatalogPage(new GetCatalogPageParameter(relativeUrlNoQuery) { GetSubCategories = true });
             var activeLanguage = siteContext.LanguageDto.Id;
 
+            catalogPageResult = result;
             retrievePageResult = null;
 
             if (result?.RedirectUrl != null && urlParts.Length > 0) // URL requested doesn't match the active language.
@@ -296,17 +304,17 @@ namespace Insite.Spire.Services
                 }
             }
 
-            if (result?.ResultCode == ResultCode.Error && result?.SubCode == SubCode.NotFound)
-            {
-                return null;
-            }
-
             if (result?.Category != null ||
                      result?.Brand != null ||
                      result?.ProductLine != null ||
                      (urlParts.Length == 1 && urlParts[0].EqualsIgnoreCase("search")))
             {
                 return GetNodeIdByType(unitOfWork, siteContext, "ProductListPage");
+            }
+
+            if (result?.ResultCode == ResultCode.Error && result?.SubCode == SubCode.NotFound)
+            {
+                return null;
             }
 
             return null;
@@ -321,28 +329,59 @@ namespace Insite.Spire.Services
 
         private RetrievePageResult PageById(IUnitOfWork unitOfWork, ISiteContext siteContext, Guid id, string url)
         {
+            PageTemporary pageTemporary = null;
+            PageModel pageTemporaryModel = null;
+
             var query = unitOfWork
                 .GetRepository<PageVersion>()
                 .GetTableAsNoTracking()
+                .Expand(o => o.Page)
                 .Where(o => o.PageId == id);
-            query = this.ApplyPublishedFilter(query);
+            query = this.ApplyPublishedFilter(query, unitOfWork);
 
-            var pageJson = query
+            var pageVersion = query
                 .OrderByDescending(o => o.PublishOn ?? DateTimeOffset.MaxValue)
-                .Select(o => o.Value)
                 .FirstOrDefault();
 
-            if (pageJson == null)
+            if (pageVersion == null)
             {
-                pageJson = unitOfWork
+                pageTemporary = unitOfWork
                     .GetRepository<PageTemporary>()
                     .GetTableAsNoTracking()
-                    .Where(o => o.Id == id)
-                    .Select(o => o.Value)
-                    .FirstOrDefault();
+                    .FirstOrDefault(o => o.Id == id);
+
+                if (pageTemporary != null)
+                {
+                    pageTemporaryModel = JsonConvert.DeserializeObject<PageModel>(pageTemporary.Value);
+                }
+            }
+
+            var pageJson = pageVersion?.Value ?? pageTemporary?.Value;
+            if ((pageVersion?.Page.LayoutPageId.HasValue ?? false) || (pageTemporaryModel?.LayoutPageId.HasValue ?? false))
+            {
+                pageJson = this.CombineWithLayout(unitOfWork, pageVersion, pageTemporaryModel);
             }
 
             return this.CreateResult(pageJson, unitOfWork, siteContext, url);
+        }
+
+        private string CombineWithLayout(IUnitOfWork unitOfWork, PageVersion pageVersion, PageModel pageTemporary = null)
+        {
+            var layoutPageId = pageVersion != null ? pageVersion.Page.LayoutPageId : pageTemporary.LayoutPageId;
+            var layoutPageVersion = unitOfWork.GetRepository<PageVersion>().GetTableAsNoTracking().Where(o => o.PageId == layoutPageId)
+                .OrderByDescending(o => o.PublishOn ?? DateTimeOffset.MaxValue).FirstOrDefault();
+
+            var pageVersionPageModel = pageVersion != null ? JsonConvert.DeserializeObject<PageModel>(pageVersion.Value) : pageTemporary;
+
+            if (layoutPageVersion != null)
+            {
+                var layoutPageModel = JsonConvert.DeserializeObject<PageModel>(layoutPageVersion.Value);
+                layoutPageModel.Widgets.Where(o => o.ParentId == layoutPageModel.Id).Each(o => o.ParentId = pageVersionPageModel.Id);
+                layoutPageModel.Widgets.Each(o => o.IsLayout = true);
+                pageVersionPageModel.Widgets.AddRange(layoutPageModel.Widgets);
+            }
+
+            return JsonConvert.SerializeObject(pageVersionPageModel);
         }
 
         private RetrievePageResult NotFoundPage(IUnitOfWork unitOfWork, ISiteContext siteContext)
@@ -372,19 +411,23 @@ namespace Insite.Spire.Services
                 .Expand(o => o.Page.RuleManager.RuleClauses)
                 .Where(o => o.Page.Node.WebsiteId == siteContext.WebsiteDto.Id);
 
-            query = this.ApplyPublishedFilter(query);
-
-            return query.OrderByDescending(o => o.PublishOn ?? DateTimeOffset.MaxValue);
+            return this.ApplyPublishedFilter(query, unitOfWork);
         }
 
-        private IQueryable<PageVersion> ApplyPublishedFilter(IQueryable<PageVersion> query)
+        private IQueryable<PageVersion> ApplyPublishedFilter(IQueryable<PageVersion> query, IUnitOfWork unitOfWork)
         {
+            var pageVersionTable = unitOfWork.GetRepository<PageVersion>().GetTableAsNoTracking();
             if (this.contentModeProvider.DisplayUnpublishedContent)
             {
-                return query;
+                return query.Where(pageVersion => !pageVersionTable.Any(otherPageVersion => otherPageVersion.PageId == pageVersion.PageId
+                                                                                            && (otherPageVersion.PublishOn ?? DateTimeOffset.MaxValue) > (pageVersion.PublishOn ?? DateTimeOffset.MaxValue)));
             }
 
-            return query.Where(o => o.PublishOn != null && o.PublishOn < DateTimeProvider.Current.Now);
+            return query.Where(pageVersion => pageVersion.PublishOn != null
+                                    && pageVersion.PublishOn < DateTimeProvider.Current.Now
+                                    && !pageVersionTable.Any(otherPageVersion => otherPageVersion.PageId == pageVersion.PageId
+                                                                                 && otherPageVersion.PublishOn < DateTimeProvider.Current.Now
+                                                                                 && otherPageVersion.PublishOn > pageVersion.PublishOn));
         }
 
         private RetrievePageResult CreateResult(string pageJson, IUnitOfWork unitOfWork, ISiteContext siteContext, string url)
@@ -430,6 +473,7 @@ namespace Insite.Spire.Services
             result.Page = null;
             result.StatusCode = filterResult.StatusCode;
             result.RedirectTo = filterResult.RedirectTo;
+            result.AuthorizationFailed = filterResult.AuthorizationFailed;
 
             return result;
         }
@@ -467,7 +511,6 @@ namespace Insite.Spire.Services
         {
             var displayUnpublishedContent = this.contentModeProvider.DisplayUnpublishedContent;
 
-            // TODO this formats really weirdly
             return unitOfWork.GetRepository<PageUrl>().GetTableAsNoTracking()
                 .Where(where)
                 .Where(
@@ -486,6 +529,6 @@ namespace Insite.Spire.Services
 
         RetrievePageResult GetPageByType(IUnitOfWork unitOfWork, ISiteContext siteContext, string type);
 
-        IList<PageModel> GetPagesByParent(IUnitOfWork unitOfWork, ISiteContext siteContext, Guid parentNodeId);
+        PagesCollectionModel GetPagesByParent(IUnitOfWork unitOfWork, ISiteContext siteContext, Guid parentNodeId);
     }
 }

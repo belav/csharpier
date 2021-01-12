@@ -46,6 +46,7 @@ public class ClassName
             {
                 var propertyName = props[x].PropertyName ?? "";
                 if (propertyName == "syntaxTree"
+                    || propertyName == "parentTrivia"
                     || propertyName == "semicolonToken"
                     || propertyName == "openBraceToken"
                     || propertyName == "closeBraceToken"

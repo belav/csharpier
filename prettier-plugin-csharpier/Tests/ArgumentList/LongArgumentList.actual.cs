@@ -4,7 +4,6 @@ public class ClassName
     {
         this.Method(
             "ljkasdfkljasdlkjfklajsdfkjlasdfkjlasdkljfajklsdfkjasdf",
-            "kljasdfkljaslkjdfljaksdfkjlaksljfaksjldf"
-        );
+            "kljasdfkljaslkjdfljaksdfkjlaksljfaksjldf");
     }
 }

@@ -9,9 +9,9 @@ namespace TheNamespace
                 return GetNodeIdByType(
                     unitOfWork,
                     siteContext,
-                    "ProductListPage"
-                );
+                    "ProductListPage");
             }
+
             return null;
         }
     }

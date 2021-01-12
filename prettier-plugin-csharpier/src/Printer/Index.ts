@@ -1,4 +1,6 @@
 import { Dictionary } from "../Common/Types";
+import { concat, hardline } from "./Builders";
+import { hasLeadingExtraLine, printExtraLines } from "./Helpers";
 import { PrintMethod } from "./PrintMethod";
 import * as types from "./Types";
 
@@ -37,10 +39,10 @@ const printNode: PrintMethod = (path, options, print) => {
         }
 
         if (typeof result === "undefined") {
-            throw new Error("undefined was returned for the " + JSON.stringify(node, null, "    "));
+            throw new Error("undefined was by the print call for the nodeType of " + node.nodeType);
         }
 
-        return result;
+        return hasLeadingExtraLine(node) ? concat([hardline, result]) : result;
     }
 
     if (!missingNodes.find(o => o === node.nodeType)) {

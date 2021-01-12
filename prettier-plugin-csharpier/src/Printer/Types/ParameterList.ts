@@ -14,5 +14,5 @@ export const print: PrintMethod<ParameterListNode> = (path, options, print) => {
         return "()";
     }
 
-    return group(concat(["(", indent(concat([softline, printCommaList(path.map(print, "parameters"))])), softline, ")"]));
+    return group(concat(["(", indent(concat([softline, printCommaList(path.map(print, "parameters"))])), ")"]));
 };

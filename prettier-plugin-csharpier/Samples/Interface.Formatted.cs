@@ -5,6 +5,5 @@ public interface AnInterface
         string second,
         string third,
         string fourth,
-        string fifth
-    );
+        string fifth);
 }

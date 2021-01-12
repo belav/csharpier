@@ -1,5 +1,6 @@
 import { Doc, FastPath } from "prettier";
-import { concat } from "./Builders";
+import { concat, hardline } from "./Builders";
+import { hasLeadingExtraLine } from "./Helpers";
 import { Print } from "./PrintMethod";
 
 export interface HasTrivia
@@ -12,7 +13,7 @@ export interface SyntaxTreeNode<T = string> extends HasTrivia{
     nodeType: T;
 }
 
-export interface HasValue {
+export interface HasValue extends HasTrivia {
     value: string;
     valueText: string;
     text: string;
@@ -34,7 +35,8 @@ export function printValue(hasValue: HasValue) {
     if (typeof hasValue.text === "undefined") {
         throw new Error("There was no text property on " + JSON.stringify(hasValue, null, "    "));
     }
-    return hasValue.text;
+
+    return hasLeadingExtraLine(hasValue) ? concat([hardline, hasValue.text]) : hasValue.text;
 }
 
 export interface LeftRightExpression {

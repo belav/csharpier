@@ -15,12 +15,12 @@ using System.Linq.Enumerable;
 class TopLevelType : IDisposable
 {
     void Dispose() { }
-}namespace My
+}
+
+namespace My
 {
     using A.B;
-
     interface CoContra { }
-
     TODO DelegateDeclaration
 
     public unsafe partial class A : C,
@@ -31,24 +31,26 @@ class TopLevelType : IDisposable
         private const int global = TODO SubtractExpression;
 
         static A() { }
-
         public A(int foo)
         {
             TODO LabeledStatement
             int? local = int.MaxValue;
             Guid? local0 = new Guid(r.ToString());
+
             var ?????? = local;
             var ??? = local;
             var local3 = 0local4 = 1;
             local3 = local4 = 1;
             var local5 = TODO AsExpression ?? null;
             var local6 = TODO IsExpression;
+
             var u = 1u;
             var U = 1U;
             long hex = 0xBADC0DEHex = 0XDEADBEEFl = TODO UnaryMinusExpressionL = 1Ll2 = 2l;
             ulong ul = 1ulUl = 1UluL = 1uLUL = 1ULlu = 1luLu = 1LulU = 1lULU = 1LU;
             int minInt32Value = TODO UnaryMinusExpression;
             int minInt64Value = TODO UnaryMinusExpression;
+
             bool @bool;
             byte @byte;
             char @char = 'c'\u0066 = '\u0066'hexchar = '\x0130'hexchar2 = TODO CastExpression;
@@ -71,6 +73,7 @@ class TopLevelType : IDisposable
             uint @uint;
             ulong @ulong;
             ushort @ushort;
+
             dynamic dynamic = local5;
             var add = 0;
             var alias = 0;
@@ -100,6 +103,7 @@ class TopLevelType : IDisposable
             var yield = 0;
             var __ = 0;
             where = yield = 0;
+
             if (i > 0)
             {
                 return;
@@ -131,7 +135,11 @@ class TopLevelType : IDisposable
             TODO ForStatement
             TODO LabeledStatement
             TODO LabeledStatement
-            TODO ForEachStatement
+            foreach (var i in Items())
+            {
+                if (i == 7)return;
+                else continue;
+            }
             TODO CheckedStatement
             TODO UncheckedStatement
             TODO LockStatement
@@ -146,46 +154,30 @@ class TopLevelType : IDisposable
             var query = TODO QueryExpression;
             query = TODO QueryExpression;
         }
-
         TODO DestructorDeclaration
-
         private readonly int f1;
-
         private volatile int f2;
-
         public void Handler(object value) { }
-
         public int m(T t)
         {
             TODO BaseExpression.m(t);
             return 1;
         }
-
         public string P
         {
             get { return "A"; }
             set;
         }
-
         public abstract string P { get; }
-
         TODO IndexerDeclaration
-
         TODO EventFieldDeclaration
-
         TODO EventDeclaration
-
         TODO OperatorDeclaration
-
         TODO OperatorDeclaration
-
         TODO OperatorDeclaration
-
         class C { }
     }
-
     TODO StructDeclaration
-
     public interface I
     {
         void A(int value);
@@ -194,19 +186,14 @@ class TopLevelType : IDisposable
 
         unsafe void UpdateSignatureByHashingContent(
             TODO PointerType buffer,
-            int size
-        );
+            int size);
     }
-
     TODO EnumDeclaration
-
     TODO DelegateDeclaration
-
     namespace Test
     {
         using System;
         using System.Collections;
-
         public class ??????
         {
             public static IEnumerable Power(int number, int exponent)
@@ -217,42 +204,40 @@ class TopLevelType : IDisposable
                 int ??? = 0;
                 TODO WhileStatement
             }
-
             static void Main()
             {
-                TODO ForEachStatement
+                foreach (int i in Power(2, 8))
+                {
+                    Console.Write("{0} ", i);
+                }
             }
-
             async void Wait()
             {
                 TODO AwaitExpression;
             }
-
             void AsyncAnonymous()
             {
                 var task = Task.Factory.StartNew(() => );
             }
         }
     }
-}namespace ConsoleApplication1
+}
+
+namespace ConsoleApplication1
 {
     namespace RecursiveGenericBaseType
     {
         class A : B<A<T>, A<T>>
         {
             protected virtual A<T> M() { }
-
             protected abstract B<A<T>, A<T>> N() { }
-
             static B<A<T>, A<T>> O() { }
         }
 
         sealed class B : A<B<T1, T2>>
         {
             protected override A<T> M() { }
-
             protected sealed override B<A<T>, A<T>> N() { }
-
             new static A<T> O() { }
         }
     }
@@ -262,7 +247,6 @@ class TopLevelType : IDisposable
         public class Bar
         {
             public T f;
-
             public class Foo : IEnumerable<T>
             {
                 public void Method(K k, T t, U u)
@@ -280,28 +264,26 @@ class TopLevelType : IDisposable
         {
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
+
             var q = TODO QueryExpression;
         }
-
         TODO ConversionOperatorDeclaration
-
         TODO ConversionOperatorDeclaration
 
         public int foo = 5;
-
         void Bar2()
         {
             foo = 6;
             this.Foo = 5.GetType();
             Test t = "sss";
         }
-
         TODO EventFieldDeclaration
 
         void Blah()
         {
             int i = 5;
             int? j = 6;
+
             Expression<Func<int>> e = () => i;
             Expression<Func<bool, Action>> e2 = b => () => ;
             Func<bool, bool> f = TODO AnonymousMethodExpression;
@@ -311,9 +293,7 @@ class TopLevelType : IDisposable
             f2 = () => ;
             f2 = () => ;
         }
-
         TODO DelegateDeclaration
-
         TODO DelegateDeclaration
 
         public Type Foo
@@ -340,12 +320,15 @@ class TopLevelType : IDisposable
             int c = i.Count;
         }
     }
-}namespace Comments.XmlComments.UndocumentedKeywords
+}
+
+namespace Comments.XmlComments.UndocumentedKeywords
 {
     class C
     {
         void M(T t, U u)
         {
+
             int intValue = 0;
             intValue = intValue + 1;
             string strValue = "hello";
@@ -353,6 +336,7 @@ class TopLevelType : IDisposable
             string verbatimStr = @"\\\\";
         }
     }
+    //General Test F. Type a very long class name, verify colorization happens correctly only upto the correct size (118324)
 
     class TestClassXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX { }
 
@@ -370,9 +354,7 @@ class TopLevelType : IDisposable
             Params(t, t);
             Params(ref c, out c);
         }
-
         void Params(dynamic a, dynamic b, TODO ArrayType c) { }
-
         void Params(dynamic a, dynamic c, TODO ArrayType c) { }
 
         public override string ToString()
@@ -420,51 +402,59 @@ class TopLevelType : IDisposable
             x[1] = 3;
             x[1, 5] = "str";
         }
-
         TODO StructDeclaration
     }
+    // From here:https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6
 
     class CSharp6Features
     {
-        public string First { get; set; }
 
+        public string First
+        {
+            get;
+            set;
+        }
         public string Last { get; set; }
 
-        public string Third { get; }
-
+        public string Third
+        {
+            get;
+        }
         public string Fourth { get; }
 
         public Point Move(int dx, int dy);
-
         TODO OperatorDeclaration
-
         TODO ConversionOperatorDeclaration
-
         public void Print();
 
-        public string Name => First + " " + Last;
-
+        public string Name
+        => First + " " + Last;
         TODO IndexerDeclaration
 
         async void Test()
         {
+
             WriteLine(Sqrt(TODO MultiplyExpression + TODO MultiplyExpression));
             WriteLine(TODO SubtractExpression);
             var range = Range(5, 17);
             var even = range.Where(i => TODO ModuloExpression == 0);
+
             int? length = customers?.Length;
             Customer first = customers?TODO ElementBindingExpression;
             int length = customers?.Length ?? 0;
             int? first = customers?TODO ElementBindingExpression?.Orders?.Count();
             PropertyChanged?.Invoke(this, args);
+
             string s = $"{p.Name} is {p.Age} year{{s}} old #";
             s = $"{p.Name} is \"{p.Age} year{(p.Age == 1 ? "" : "s")} old";
             s = $"{(p.Age == 2 ? $"{new Person { }}" : "")}";
             s = $@"\{p.Name}
                                    ""\";
             s = $"Color [ R={func(3)}, G={G}, B={B}, A={A} ]";
+
             if (x == null)TODO ThrowStatement
             WriteLine(nameof(person.Address.ZipCode));
+
             var numbers = new Dictionary<int, string>
             {
                 TODO ImplicitElementAccess = "seven",
@@ -472,17 +462,22 @@ class TopLevelType : IDisposable
                 TODO ImplicitElementAccess = "thirteen"
             };
             TODO TryStatement
+
             Resource res = null;
             TODO TryStatement
         }
     }
-}class CSharp70
+}
+
+class CSharp70
 {
     void PatternMatching(string arg, int b)
     {
         TODO SwitchStatement
         TODO TupleExpression = e;
+
         if (TODO IsPatternExpression) { }
+
         if (TODO IsPatternExpression)
         {
             Hello();
@@ -491,8 +486,12 @@ class TopLevelType : IDisposable
 
     public static async Task LocalFunctions(TODO ArrayType args)
     {
-        TODO LocalFunctionStatement
-        TODO LocalFunctionStatement
+        string Hello2(int i)
+        {
+            return args[i];
+        }
+
+        async Task<string> Hello(T i);
         TODO AwaitExpression;
     }
 
@@ -520,7 +519,9 @@ class TopLevelType : IDisposable
         int weird = 1_2__3___4____5_____6______7_______8________9;
         double real = 1_000.111_1e-1_000;
     }
-}class CSharp71
+}
+
+class CSharp71
 {
     void DefaultWithoutTypeName(string content)
     {
@@ -530,13 +531,13 @@ class TopLevelType : IDisposable
     void TupleRecognize(int a, TODO TupleType b, TODO TupleType? c)
     {
         var result = list.Select(c => TODO TupleExpression).Where(
-            t => t.f2 == 1
-        );
+            t => t.f2 == 1);
     }
-}class CSharp72
+}
+
+class CSharp72
 {
     TODO StructDeclaration
-
     TODO StructDeclaration
 
     public void DoSomething(bool isEmployed, string personName, int personAge)
@@ -558,15 +559,17 @@ class TopLevelType : IDisposable
 
     public void LeadingSeparator()
     {
-        var res = 0 + 123 + 1_2_3 + 0x1_2_3 + 0b101 + 0b1_0_1 + 0x_1_2 + 0b_1_0_1;
+        var res = 0 + 123 + 1_2_3 + 0x1_2_3 + 0b101 + 0b1_0_1
+        + 0x_1_2 + 0b_1_0_1;
     }
-}class CSharp73
+}
+
+class CSharp73
 {
     void Blittable(T value)
     {
         var unmanaged = 666;
     }
-
     TODO StructDeclaration
 
     static IndexingMovableFixed s;
@@ -595,7 +598,9 @@ class TopLevelType : IDisposable
         TODO TupleType t1t2;
         var res = t1 == TODO TupleExpression;
     }
-}namespace CSharp80
+}
+
+namespace CSharp80
 {
     class CSharp80ExceptInterfaceDefaultImplement
     {
@@ -610,13 +615,15 @@ class TopLevelType : IDisposable
         void Patterns()
         {
             if (TODO IsPatternExpression)Do();
+
             return TODO SwitchExpression;
+
             var newState = TODO SwitchExpression;
         }
 
         async Task AsyncStreams()
         {
-            TODO ForEachStatement
+            foreach (var item in asyncEnumerables) { }
         }
 
         void Ranges()
@@ -624,6 +631,7 @@ class TopLevelType : IDisposable
             var thirdItem = list[2];
             var lastItem = list[TODO IndexExpression];
             var multiDimensional = list[3, TODO IndexExpression];
+
             var slice1 = list[TODO RangeExpression];
             var slice2 = list[TODO RangeExpression];
             var slice3 = list[TODO RangeExpression];
@@ -643,10 +651,10 @@ class TopLevelType : IDisposable
 
         void StaticLocalFunction()
         {
-            TODO LocalFunctionStatement
-            TODO LocalFunctionStatement
-            TODO LocalFunctionStatement
-            TODO LocalFunctionStatement
+            static unsafe void Func1() { }
+            static unsafe void Func1() { }
+            async static void Func2() { }
+            static async void Func2() { }
         }
 
         void NullCoalescingAssignment()
@@ -659,7 +667,6 @@ class TopLevelType : IDisposable
             return 0.1f;
         }
     }
-
     interface IA
     {
         void M()
@@ -667,7 +674,6 @@ class TopLevelType : IDisposable
             WriteLine("IA.M");
         }
     }
-
     interface IA
     {
         void M()
@@ -675,16 +681,14 @@ class TopLevelType : IDisposable
             WriteLine("IA.M");
         }
     }
-
-    interface IB
+    interface IB : IA
     {
         override void M()
         {
             WriteLine("IB.M");
         }
     }
-
-    interface IC
+    interface IC : IA
     {
         override void M()
         {

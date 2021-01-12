@@ -1,10 +1,10 @@
-
 public class ClassName
 {
-
     public void MethodName()
     {
-
-        this.MethodName();
+        foreach (var x in y)
+        {
+            x = 1;
+        }
     }
 }

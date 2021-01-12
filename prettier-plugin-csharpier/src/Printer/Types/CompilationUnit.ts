@@ -13,13 +13,13 @@ export const print: PrintMethod<CompilationUnitNode> = (path, options, print) =>
     const parts: Doc[] = [];
     if (node.usings.length > 0) {
         parts.push(concat(path.map(print, "usings")));
-        parts.push(hardline);
     }
 
     if (node.members.length > 0) {
         parts.push(join(hardline, path.map(print, "members")));
-        parts.push(hardline);
     }
+
+    parts.push(hardline);
 
     return concat(parts);
 };
