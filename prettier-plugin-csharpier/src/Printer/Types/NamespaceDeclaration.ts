@@ -24,8 +24,8 @@ export const print: PrintMethod<NamespaceDeclarationNode> = (path, options, prin
             indent(
                 concat([
                     hardline,
-                    hasUsing ? concat([concat(path.map(print, "usings")), hardline]) : "",
-                    hasMembers ? join(doubleHardline, path.map(print, "members")) : "",
+                    hasUsing ? concat([concat(path.map(print, "usings"))]) : "",
+                    hasMembers ? join(hardline, path.map(print, "members")) : "",
                 ]),
             ),
         );

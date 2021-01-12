@@ -1,5 +1,5 @@
 import { Doc, FastPath } from "prettier";
-import { concat, group, indent, join, line } from "./Builders";
+import { concat, group, hardline, indent, join, line } from "./Builders";
 import { Print } from "./PrintMethod";
 import { SyntaxTreeNode } from "./SyntaxTreeNode";
 
@@ -32,4 +32,51 @@ export function getParentNode(path: FastPath) {
     }
 
     return result;
+}
+
+export function printExtraLines(parts: Doc[], node: SyntaxTreeNode) {
+    let foundStuff = false;
+
+    const nodeAsAny = node as any;
+
+    if (node.leadingTrivia) {
+        for (const trivia of node.leadingTrivia) {
+            if (trivia.nodeType === "EndOfLineTrivia") {
+                parts.push(hardline);
+                foundStuff = true;
+            }
+        }
+    }
+
+    if (foundStuff) {
+        return;
+    }
+
+    if (nodeAsAny["modifiers"]) {
+        for (const mightHaveTrivia of nodeAsAny["modifiers"]) {
+            if (mightHaveTrivia.leadingTrivia) {
+                for (const trivia of mightHaveTrivia.leadingTrivia) {
+                    if (trivia.nodeType === "EndOfLineTrivia") {
+                        parts.push(hardline);
+                        foundStuff = true;
+                    }
+                }
+            }
+        }
+    }
+
+    if (foundStuff) {
+        return;
+    }
+
+    if (nodeAsAny["keyword"]) {
+        if (nodeAsAny["keyword"].leadingTrivia) {
+            for (const trivia of nodeAsAny["keyword"].leadingTrivia) {
+                if (trivia.nodeType === "EndOfLineTrivia") {
+                    parts.push(hardline);
+                    foundStuff = true;
+                }
+            }
+        }
+    }
 }

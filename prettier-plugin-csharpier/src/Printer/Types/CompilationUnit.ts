@@ -17,7 +17,7 @@ export const print: PrintMethod<CompilationUnitNode> = (path, options, print) =>
     }
 
     if (node.members.length > 0) {
-        parts.push(concat(path.map(print, "members")));
+        parts.push(join(hardline, path.map(print, "members")));
         parts.push(hardline);
     }
 

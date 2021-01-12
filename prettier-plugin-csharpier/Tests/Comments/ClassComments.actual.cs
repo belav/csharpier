@@ -1,2 +1,6 @@
-public class ClassName { }// other class
+
+public class ClassName { }
+
+
+// other class
 class ClassName2 { }

@@ -1,15 +1,14 @@
 import { Doc, FastPath } from "prettier";
 import { concat } from "./Builders";
 import { Print } from "./PrintMethod";
-import has = Reflect.has;
 
 export interface HasTrivia
 {
-    leadingTrivia: SyntaxTreeNode[];
-    trailingTrivia: SyntaxTreeNode[];
+    leadingTrivia?: SyntaxTreeNode[];
+    trailingTrivia?: SyntaxTreeNode[];
 }
 
-export interface SyntaxTreeNode<T = string> {
+export interface SyntaxTreeNode<T = string> extends HasTrivia{
     nodeType: T;
 }
 

@@ -1,5 +1,6 @@
 import { Doc } from "prettier";
 import { printComments } from "../Comments";
+import { printExtraLines } from "../Helpers";
 import { printValue, HasModifiers, HasValue, SyntaxTreeNode, HasIdentifier, printIdentifier } from "../SyntaxTreeNode";
 import { PrintMethod } from "../PrintMethod";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
@@ -14,6 +15,7 @@ export interface ClassDeclarationNode extends SyntaxTreeNode<"ClassDeclaration">
 export const print: PrintMethod<ClassDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
+    printExtraLines(parts, node);
     printComments(parts, node);
     parts.push(printModifiers(node));
     parts.push("class");
