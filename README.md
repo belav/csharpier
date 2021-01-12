@@ -9,4 +9,4 @@ Compare ./prettier-plugin-csharpier/Samples/AllInOne.cs to ./prettier-plugin-csh
 - Formatting is a little rough
 
 ## Development
-See (./prettier-plugin-csharpier/README.md)
+See [Development Readme](./prettier-plugin-csharpier/README.md)
