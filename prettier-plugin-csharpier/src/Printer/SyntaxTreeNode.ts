@@ -3,6 +3,12 @@ import { concat } from "./Builders";
 import { Print } from "./PrintMethod";
 import has = Reflect.has;
 
+export interface HasTrivia
+{
+    leadingTrivia: SyntaxTreeNode[];
+    trailingTrivia: SyntaxTreeNode[];
+}
+
 export interface SyntaxTreeNode<T = string> {
     nodeType: T;
 }
@@ -18,7 +24,7 @@ export interface HasIdentifier {
 }
 
 export interface HasModifiers {
-    modifiers: HasValue[];
+    modifiers: (HasValue & HasTrivia)[];
 }
 
 export function printIdentifier(hasIdentifier: HasIdentifier) {

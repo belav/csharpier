@@ -11,8 +11,10 @@ namespace Parser
     class Program
     {
         private const string TestClass = @"
+// class comment
 public class ClassName
 {
+    // method comment
     void LongMethod(string first, string second, string third, string fourth, string fifth) {
         // do stuff
     }
@@ -44,7 +46,6 @@ public class ClassName
             {
                 var propertyName = props[x].PropertyName ?? "";
                 if (propertyName == "syntaxTree"
-                    || propertyName.Contains("Trivia")
                     || propertyName == "semicolonToken"
                     || propertyName == "openBraceToken"
                     || propertyName == "closeBraceToken"
@@ -63,6 +64,19 @@ public class ClassName
                     PropertyType = typeof(string),
                     PropertyName = "nodeType",
                     ValueProvider = new RawKindTypeProvider(),
+                    Readable = true,
+                    Writable = false
+                });
+            }
+
+            if (type == typeof(SyntaxTrivia))
+            {
+                props.Insert(0, new JsonProperty
+                {
+                    DeclaringType = type,
+                    PropertyType = typeof(string),
+                    PropertyName = "commentText",
+                    ValueProvider = new CommentTextProvider(),
                     Readable = true,
                     Writable = false
                 });
@@ -97,6 +111,29 @@ public class ClassName
             }
             
             public void SetValue(object target, object value)
+            {
+                throw new NotImplementedException();
+            }
+        }
+        
+        class CommentTextProvider : IValueProvider
+        {
+            public object GetValue(object target)
+            {
+                if (target is SyntaxTrivia trivia)
+                {
+                    if (trivia.RawKind == 8541)
+                    {
+                        return trivia.ToString();
+                    }
+
+                    return null;
+                }
+                
+                throw new Exception("CommentTextProvider used on non SyntaxTrivia type");
+            }
+            
+            public void SetValue(object target, object? value)
             {
                 throw new NotImplementedException();
             }
