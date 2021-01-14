@@ -21,19 +21,19 @@ namespace My
 {
     using A.B;
     interface CoContra { }
-    TODO DelegateDeclaration
+
 
     public unsafe partial class A : C,
     I
     {
         static extern bool CreateDirectory(string name, SecurityAttribute sa);
 
-        private const int global = TODO SubtractExpression;
+        private const int global = ;
 
         static A() { }
         public A(int foo)
         {
-            TODO LabeledStatement
+
             int? local = int.MaxValue;
             Guid? local0 = new Guid(r.ToString());
 
@@ -41,19 +41,19 @@ namespace My
             var ??? = local;
             var local3 = 0local4 = 1;
             local3 = local4 = 1;
-            var local5 = TODO AsExpression ?? null;
-            var local6 = TODO IsExpression;
+            var local5 =  ?? null;
+            var local6 = ;
 
             var u = 1u;
             var U = 1U;
-            long hex = 0xBADC0DEHex = 0XDEADBEEFl = TODO UnaryMinusExpressionL = 1Ll2 = 2l;
+            long hex = 0xBADC0DEHex = 0XDEADBEEFl = L = 1Ll2 = 2l;
             ulong ul = 1ulUl = 1UluL = 1uLUL = 1ULlu = 1luLu = 1LulU = 1lULU = 1LU;
-            int minInt32Value = TODO UnaryMinusExpression;
-            int minInt64Value = TODO UnaryMinusExpression;
+            int minInt32Value = ;
+            int minInt64Value = ;
 
             bool @bool;
             byte @byte;
-            char @char = 'c'\u0066 = '\u0066'hexchar = '\x0130'hexchar2 = TODO CastExpression;
+            char @char = 'c'\u0066 = '\u0066'hexchar = '\x0130'hexchar2 = ;
             string \U00000065 = "\U00000065";
             decimal @decimal = 1.44M;
             @decimal = 1.2m;
@@ -61,10 +61,10 @@ namespace My
             double @double = M.PI;
             @double = 1d;
             @double = 1D;
-            @double = TODO UnaryMinusExpression;
+            @double = ;
             float @float = 1.2f;
             @float = 1.44F;
-            int @int = local ?? TODO UnaryMinusExpression;
+            int @int = local ?? ;
             long @long;
             object @object;
             sbyte @sbyte;
@@ -110,57 +110,54 @@ namespace My
             }
             else if (i == 0)
             {
-                TODO ThrowStatement
+
             }
             var o1 = new MyObject();
             var o2 = new MyObject(var);
             var o3 = new MyObject { A = i };
             var o4 = new MyObject(@dynamic) { A = 0, B = 0, C = 0 };
             var o5 = new { A = 0 };
-            var dictionaryInitializer = new Dictionary<int, string>
-            {
-                TODO ComplexElementInitializerExpression, TODO ComplexElementInitializerExpression
-            };
-            TODO ArrayType a = TODO ArrayCreationExpression;
-            TODO ArrayType cube = TODO ArrayInitializerExpression;
-            TODO ArrayType jagged = TODO ArrayInitializerExpression;
-            TODO ArrayType arr = TODO ArrayCreationExpression;
-            arr[0] = TODO ArrayCreationExpression;
+            var dictionaryInitializer = new Dictionary<int, string> { ,  };
+             a = ;
+             cube = ;
+             jagged = ;
+             arr = ;
+            arr[0] = ;
             arr[0][0, 0] = 47;
-            TODO ArrayType arrayTypeInference = TODO ImplicitArrayCreationExpression;
-            TODO SwitchStatement
-            TODO SwitchStatement
-            TODO WhileStatement
-            TODO DoStatement
-            TODO ForStatement
-            TODO LabeledStatement
-            TODO LabeledStatement
+             arrayTypeInference = ;
+
+
+
+
+
+
+
             foreach (var i in Items())
             {
                 if (i == 7)return;
                 else continue;
             }
-            TODO CheckedStatement
-            TODO UncheckedStatement
-            TODO LockStatement
-            TODO UsingStatement
-            TODO YieldReturnStatement
-            TODO YieldBreakStatement
-            TODO FixedStatement
-            TODO FixedStatement
-            TODO UnsafeStatement
-            TODO TryStatement
-            var anonymous = TODO ArrayInitializerExpression;
-            var query = TODO QueryExpression;
-            query = TODO QueryExpression;
+
+
+
+
+
+
+
+
+
+
+            var anonymous = ;
+            var query = ;
+            query = ;
         }
-        TODO DestructorDeclaration
+
         private readonly int f1;
         private volatile int f2;
         public void Handler(object value) { }
         public int m(T t)
         {
-            TODO BaseExpression.m(t);
+            .m(t);
             return 1;
         }
         public string P
@@ -169,27 +166,25 @@ namespace My
             set;
         }
         public abstract string P { get; }
-        TODO IndexerDeclaration
-        TODO EventFieldDeclaration
-        TODO EventDeclaration
-        TODO OperatorDeclaration
-        TODO OperatorDeclaration
-        TODO OperatorDeclaration
+
+
+
+
+
+
         class C { }
     }
-    TODO StructDeclaration
+
     public interface I
     {
         void A(int value);
 
         string Value { get; set; }
 
-        unsafe void UpdateSignatureByHashingContent(
-            TODO PointerType buffer,
-            int size);
+        unsafe void UpdateSignatureByHashingContent( buffer, int size);
     }
-    TODO EnumDeclaration
-    TODO DelegateDeclaration
+
+
     namespace Test
     {
         using System;
@@ -202,7 +197,7 @@ namespace My
                 ??????.Main();
                 int counter = (0 + 0);
                 int ??? = 0;
-                TODO WhileStatement
+
             }
             static void Main()
             {
@@ -213,7 +208,7 @@ namespace My
             }
             async void Wait()
             {
-                TODO AwaitExpression;
+                ;
             }
             void AsyncAnonymous()
             {
@@ -265,10 +260,10 @@ namespace ConsoleApplication1
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
 
-            var q = TODO QueryExpression;
+            var q = ;
         }
-        TODO ConversionOperatorDeclaration
-        TODO ConversionOperatorDeclaration
+
+
 
         public int foo = 5;
         void Bar2()
@@ -277,7 +272,7 @@ namespace ConsoleApplication1
             this.Foo = 5.GetType();
             Test t = "sss";
         }
-        TODO EventFieldDeclaration
+
 
         void Blah()
         {
@@ -286,32 +281,26 @@ namespace ConsoleApplication1
 
             Expression<Func<int>> e = () => i;
             Expression<Func<bool, Action>> e2 = b => () => ;
-            Func<bool, bool> f = TODO AnonymousMethodExpression;
+            Func<bool, bool> f = ;
             Func<int, int, int> f2 = () => 0;
             f2 = () => 1;
             Action a = Blah;
             f2 = () => ;
             f2 = () => ;
         }
-        TODO DelegateDeclaration
-        TODO DelegateDeclaration
+
+
 
         public Type Foo
         {
-            get
-            {
-                var result = TODO TypeOfExpression;
-                var t = TODO TypeOfExpression == TODO TypeOfExpression;
-                t = TODO TypeOfExpression;
-                return TODO TypeOfExpression;
-            }
-            set { var t = TODO TypeOfExpression; t.ToString(); t = value; }
+            get { var result = ; var t =  == ; t = ; return ; }
+            set { var t = ; t.ToString(); t = value; }
         }
 
         public void Constants()
         {
             int i = 1 + 2 + 3 + 5;
-            TODO AliasQualifiedName.String s = "a" + TODO CastExpression + "a" + "a" + "a" + "A";
+            .String s = "a" +  + "a" + "a" + "a" + "A";
         }
 
         public void ConstructedType()
@@ -347,62 +336,62 @@ namespace Comments.XmlComments.UndocumentedKeywords
         void Foo(__arglist)
         {
             C<U> c = null;
-            c.M<int>(5, TODO DefaultExpression);
-            TypedReference tr = TODO MakeRefExpression;
-            Type t = TODO RefTypeExpression;
-            int j = TODO RefValueExpression;
+            c.M<int>(5, );
+            TypedReference tr = ;
+            Type t = ;
+            int j = ;
             Params(t, t);
             Params(ref c, out c);
         }
-        void Params(dynamic a, dynamic b, TODO ArrayType c) { }
-        void Params(dynamic a, dynamic c, TODO ArrayType c) { }
+        void Params(dynamic a, dynamic b,  c) { }
+        void Params(dynamic a, dynamic c,  c) { }
 
         public override string ToString()
         {
-            return TODO BaseExpression.ToString();
+            return .ToString();
         }
 
         public partial void OnError();
 
         public partial void method()
         {
-            TODO ArrayType a = TODO ArrayCreationExpression;
-            TODO ArrayType var = TODO ArrayInitializerExpression;
+             a = ;
+             var = ;
             int i = a[i];
             Foo<T> f = new Foo<int>();
             f.method();
-            i = TODO BitwiseOrExpression;
-            bool b = TODO BitwiseOrExpression;
+            i = ;
+            bool b = ;
             b = !b;
-            i = TODO BitwiseNotExpression;
+            i = ;
             b = i < i && i > i;
             int? ii = 5;
             int f = true ? 1 : 0;
-            TODO PostIncrementExpression;
-            TODO PostDecrementExpression;
+            ;
+            ;
             b = true && false || true;
-            TODO LeftShiftExpression;
-            TODO RightShiftExpression;
-            b = i == i && i != i && i <= i && TODO GreaterThanOrEqualExpression;
-            TODO AddAssignmentExpression;
-            TODO SubtractAssignmentExpression;
-            TODO MultiplyAssignmentExpression;
-            TODO DivideAssignmentExpression;
-            TODO ModuloAssignmentExpression;
-            TODO AndAssignmentExpression;
-            TODO OrAssignmentExpression;
-            TODO ExclusiveOrAssignmentExpression;
-            TODO LeftShiftAssignmentExpression;
-            TODO RightShiftAssignmentExpression;
+            ;
+            ;
+            b = i == i && i != i && i <= i && ;
+            ;
+            ;
+            ;
+            ;
+            ;
+            ;
+            ;
+            ;
+            ;
+            ;
             object s = x => x + 1;
             double d = .3;
             Point point;
-            TODO UnsafeStatement
-            TODO AliasQualifiedName br = null;
+
+             br = null;
             x[1] = 3;
             x[1, 5] = "str";
         }
-        TODO StructDeclaration
+
     }
     // From here:https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6
 
@@ -423,26 +412,26 @@ namespace Comments.XmlComments.UndocumentedKeywords
         public string Fourth { get; }
 
         public Point Move(int dx, int dy);
-        TODO OperatorDeclaration
-        TODO ConversionOperatorDeclaration
+
+
         public void Print();
 
         public string Name
         => First + " " + Last;
-        TODO IndexerDeclaration
+
 
         async void Test()
         {
 
-            WriteLine(Sqrt(TODO MultiplyExpression + TODO MultiplyExpression));
-            WriteLine(TODO SubtractExpression);
+            WriteLine(Sqrt( + ));
+            WriteLine();
             var range = Range(5, 17);
-            var even = range.Where(i => TODO ModuloExpression == 0);
+            var even = range.Where(i =>  == 0);
 
             int? length = customers?.Length;
-            Customer first = customers?TODO ElementBindingExpression;
+            Customer first = customers?;
             int length = customers?.Length ?? 0;
-            int? first = customers?TODO ElementBindingExpression?.Orders?.Count();
+            int? first = customers??.Orders?.Count();
             PropertyChanged?.Invoke(this, args);
 
             string s = $"{p.Name} is {p.Age} year{{s}} old #";
@@ -452,19 +441,19 @@ namespace Comments.XmlComments.UndocumentedKeywords
                                    ""\";
             s = $"Color [ R={func(3)}, G={G}, B={B}, A={A} ]";
 
-            if (x == null)TODO ThrowStatement
+            if (x == null)
             WriteLine(nameof(person.Address.ZipCode));
 
             var numbers = new Dictionary<int, string>
             {
-                TODO ImplicitElementAccess = "seven",
-                TODO ImplicitElementAccess = "nine",
-                TODO ImplicitElementAccess = "thirteen"
+                 = "seven",
+                 = "nine",
+                 = "thirteen"
             };
-            TODO TryStatement
+
 
             Resource res = null;
-            TODO TryStatement
+
         }
     }
 }
@@ -473,18 +462,18 @@ class CSharp70
 {
     void PatternMatching(string arg, int b)
     {
-        TODO SwitchStatement
-        TODO TupleExpression = e;
 
-        if (TODO IsPatternExpression) { }
+         = e;
 
-        if (TODO IsPatternExpression)
+        if () { }
+
+        if ()
         {
             Hello();
         }
     }
 
-    public static async Task LocalFunctions(TODO ArrayType args)
+    public static async Task LocalFunctions( args)
     {
         string Hello2(int i)
         {
@@ -492,10 +481,10 @@ class CSharp70
         }
 
         async Task<string> Hello(T i);
-        TODO AwaitExpression;
+        ;
     }
 
-    public static void OutVar(TODO ArrayType args)
+    public static void OutVar( args)
     {
         int.TryParse(Hello(1), out var item);
         int.TryParse(Hello(1), out int item);
@@ -503,7 +492,7 @@ class CSharp70
 
     public void ThrowExpression()
     {
-        var result = nullableResult ?? TODO ThrowExpression;
+        var result = nullableResult ?? ;
     }
 
     public void BinaryLiterals()
@@ -525,20 +514,19 @@ class CSharp71
 {
     void DefaultWithoutTypeName(string content)
     {
-        DefaultWithoutTypeName(TODO DefaultLiteralExpression);
+        DefaultWithoutTypeName();
     }
 
-    void TupleRecognize(int a, TODO TupleType b, TODO TupleType? c)
+    void TupleRecognize(int a,  b, ? c)
     {
-        var result = list.Select(c => TODO TupleExpression).Where(
-            t => t.f2 == 1);
+        var result = list.Select(c => ).Where(t => t.f2 == 1);
     }
 }
 
 class CSharp72
 {
-    TODO StructDeclaration
-    TODO StructDeclaration
+
+
 
     public void DoSomething(bool isEmployed, string personName, int personAge)
     { }
@@ -554,7 +542,7 @@ class CSharp72
 
     public void ConditionalRef()
     {
-        TODO RefType r = TODO RefExpression;
+         r = ;
     }
 
     public void LeadingSeparator()
@@ -570,33 +558,33 @@ class CSharp73
     {
         var unmanaged = 666;
     }
-    TODO StructDeclaration
+
 
     static IndexingMovableFixed s;
 
     public unsafe void IndexingMovableFixedFields()
     {
-        TODO PointerType ptr = s.myFixedField;
+         ptr = s.myFixedField;
         int t = s.myFixedField[5];
     }
 
     public void PatternBasedFixed()
     {
-        TODO FixedStatement
+
     }
 
     public void StackallocArrayInitializer()
     {
-        Span<int> a = TODO StackAllocArrayCreationExpression;
-        Span<int> a = TODO StackAllocArrayCreationExpression;
-        Span<int> a = TODO StackAllocArrayCreationExpression;
-        Span<int> a = TODO ImplicitStackAllocArrayCreationExpression;
+        Span<int> a = ;
+        Span<int> a = ;
+        Span<int> a = ;
+        Span<int> a = ;
     }
 
     public void TupleEquality()
     {
-        TODO TupleType t1t2;
-        var res = t1 == TODO TupleExpression;
+         t1t2;
+        var res = t1 == ;
     }
 }
 
@@ -607,18 +595,18 @@ namespace CSharp80
         void ReferenceNullable()
         {
             var? x = E;
-            TODO SuppressNullableWarningExpression.ToString();
+            .ToString();
             string? wtf = null;
-            TODO ArrayType? hello;
+            ? hello;
         }
 
         void Patterns()
         {
-            if (TODO IsPatternExpression)Do();
+            if ()Do();
 
-            return TODO SwitchExpression;
+            return ;
 
-            var newState = TODO SwitchExpression;
+            var newState = ;
         }
 
         async Task AsyncStreams()
@@ -629,23 +617,20 @@ namespace CSharp80
         void Ranges()
         {
             var thirdItem = list[2];
-            var lastItem = list[TODO IndexExpression];
-            var multiDimensional = list[3, TODO IndexExpression];
+            var lastItem = list[];
+            var multiDimensional = list[3, ];
 
-            var slice1 = list[TODO RangeExpression];
-            var slice2 = list[TODO RangeExpression];
-            var slice3 = list[TODO RangeExpression];
-            var slice4 = list[TODO RangeExpression];
-            var multiDimensional = list[
-                TODO RangeExpression,
-                TODO RangeExpression
-            ];
+            var slice1 = list[];
+            var slice2 = list[];
+            var slice3 = list[];
+            var slice4 = list[];
+            var multiDimensional = list[, ];
         }
 
         void UsingDeclarators()
         {
             var item = new FileStream("./.f");
-            TODO FixedStatement
+
             item.Dispose();
         }
 
@@ -659,7 +644,7 @@ namespace CSharp80
 
         void NullCoalescingAssignment()
         {
-            var item = TODO CoalesceAssignmentExpression;
+            var item = ;
         }
 
         public readonly float Hello()
