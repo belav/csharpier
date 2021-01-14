@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface YieldBreakStatementNode extends SyntaxTreeNode<"YieldBreakStatement"> {}
 
 export const print: PrintMethod<YieldBreakStatementNode> = (path, options, print) => {
-    return "TODO YieldBreakStatement";
+    return (options as any).printTodo ? "TODO Node YieldBreakStatement" : "";
 };

@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface BitwiseNotExpressionNode extends SyntaxTreeNode<"BitwiseNotExpression"> {}
 
 export const print: PrintMethod<BitwiseNotExpressionNode> = (path, options, print) => {
-    return "TODO BitwiseNotExpression";
+    return (options as any).printTodo ? "TODO Node BitwiseNotExpression" : "";
 };

@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface QueryExpressionNode extends SyntaxTreeNode<"QueryExpression"> {}
 
 export const print: PrintMethod<QueryExpressionNode> = (path, options, print) => {
-    return "TODO QueryExpression";
+    return (options as any).printTodo ? "TODO Node QueryExpression" : "";
 };

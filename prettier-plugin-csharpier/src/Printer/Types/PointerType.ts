@@ -7,5 +7,5 @@ export interface PointerTypeNode extends SyntaxTreeNode<"PointerType"> {
 }
 
 export const print: PrintMethod<PointerTypeNode> = (path, options, print) => {
-    return "TODO PointerType";
+    return (options as any).printTodo ? "TODO Node PointerType" : "";
 };

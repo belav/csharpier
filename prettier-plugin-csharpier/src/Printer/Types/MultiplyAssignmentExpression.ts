@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface MultiplyAssignmentExpressionNode extends SyntaxTreeNode<"MultiplyAssignmentExpression"> {}
 
 export const print: PrintMethod<MultiplyAssignmentExpressionNode> = (path, options, print) => {
-    return "TODO MultiplyAssignmentExpression";
+    return (options as any).printTodo ? "TODO Node MultiplyAssignmentExpression" : "";
 };

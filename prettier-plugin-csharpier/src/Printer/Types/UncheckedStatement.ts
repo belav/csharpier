@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface UncheckedStatementNode extends SyntaxTreeNode<"UncheckedStatement"> {}
 
 export const print: PrintMethod<UncheckedStatementNode> = (path, options, print) => {
-    return "TODO UncheckedStatement";
+    return (options as any).printTodo ? "TODO Node UncheckedStatement" : "";
 };

@@ -55,7 +55,6 @@ namespace Insite.Spire.Services
 
                     foreach (var nodeId in homePageNodes)
                     {
-
                         this.pageUrlService.Value.UpdateUrls(
                             unitOfWork,
                             nodeId);

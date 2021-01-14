@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface AnonymousMethodExpressionNode extends SyntaxTreeNode<"AnonymousMethodExpression"> {}
 
 export const print: PrintMethod<AnonymousMethodExpressionNode> = (path, options, print) => {
-    return "TODO AnonymousMethodExpression";
+    return (options as any).printTodo ? "TODO Node AnonymousMethodExpression" : "";
 };

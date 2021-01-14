@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface DefaultLiteralExpressionNode extends SyntaxTreeNode<"DefaultLiteralExpression"> {}
 
 export const print: PrintMethod<DefaultLiteralExpressionNode> = (path, options, print) => {
-    return "TODO DefaultLiteralExpression";
+    return (options as any).printTodo ? "TODO Node DefaultLiteralExpression" : "";
 };

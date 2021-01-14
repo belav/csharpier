@@ -7,5 +7,5 @@ export interface ThrowExpressionNode extends SyntaxTreeNode<"ThrowExpression"> {
 }
 
 export const print: PrintMethod<ThrowExpressionNode> = (path, options, print) => {
-    return "TODO ThrowExpression";
+    return (options as any).printTodo ? "TODO Node ThrowExpression" : "";
 };

@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface FixedStatementNode extends SyntaxTreeNode<"FixedStatement"> {}
 
 export const print: PrintMethod<FixedStatementNode> = (path, options, print) => {
-    return "TODO FixedStatement";
+    return (options as any).printTodo ? "TODO Node FixedStatement" : "";
 };

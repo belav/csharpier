@@ -7,5 +7,5 @@ export interface {{name}}Node extends SyntaxTreeNode<"{{name}}"> {
 }
 
 export const print: PrintMethod<{{name}}Node> = (path, options, print) => {
-    return "TODO {{name}}";
+    return (options as any).printTodo ? "TODO Node {{name}}" : "";
 };

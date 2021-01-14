@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface UnaryMinusExpressionNode extends SyntaxTreeNode<"UnaryMinusExpression"> {}
 
 export const print: PrintMethod<UnaryMinusExpressionNode> = (path, options, print) => {
-    return "TODO UnaryMinusExpression";
+    return (options as any).printTodo ? "TODO Node UnaryMinusExpression" : "";
 };

@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface AliasQualifiedNameNode extends SyntaxTreeNode<"AliasQualifiedName"> {}
 
 export const print: PrintMethod<AliasQualifiedNameNode> = (path, options, print) => {
-    return "TODO AliasQualifiedName";
+    return (options as any).printTodo ? "TODO Node AliasQualifiedName" : "";
 };

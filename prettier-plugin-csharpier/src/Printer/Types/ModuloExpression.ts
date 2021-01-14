@@ -7,5 +7,5 @@ export interface ModuloExpressionNode extends SyntaxTreeNode<"ModuloExpression">
 }
 
 export const print: PrintMethod<ModuloExpressionNode> = (path, options, print) => {
-    return "TODO ModuloExpression";
+    return (options as any).printTodo ? "TODO Node ModuloExpression" : "";
 };

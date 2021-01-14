@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface LeftShiftAssignmentExpressionNode extends SyntaxTreeNode<"LeftShiftAssignmentExpression"> {}
 
 export const print: PrintMethod<LeftShiftAssignmentExpressionNode> = (path, options, print) => {
-    return "TODO LeftShiftAssignmentExpression";
+    return (options as any).printTodo ? "TODO Node LeftShiftAssignmentExpression" : "";
 };

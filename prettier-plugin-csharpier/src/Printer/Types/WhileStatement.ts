@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface WhileStatementNode extends SyntaxTreeNode<"WhileStatement"> {}
 
 export const print: PrintMethod<WhileStatementNode> = (path, options, print) => {
-    return "TODO WhileStatement";
+    return (options as any).printTodo ? "TODO Node WhileStatement" : "";
 };

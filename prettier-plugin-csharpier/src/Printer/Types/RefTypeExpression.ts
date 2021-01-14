@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface RefTypeExpressionNode extends SyntaxTreeNode<"RefTypeExpression"> {}
 
 export const print: PrintMethod<RefTypeExpressionNode> = (path, options, print) => {
-    return "TODO RefTypeExpression";
+    return (options as any).printTodo ? "TODO Node RefTypeExpression" : "";
 };

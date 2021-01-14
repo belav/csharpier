@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface TupleTypeNode extends SyntaxTreeNode<"TupleType"> {}
 
 export const print: PrintMethod<TupleTypeNode> = (path, options, print) => {
-    return "TODO TupleType";
+    return (options as any).printTodo ? "TODO Node TupleType" : "";
 };

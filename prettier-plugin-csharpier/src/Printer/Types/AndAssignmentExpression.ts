@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface AndAssignmentExpressionNode extends SyntaxTreeNode<"AndAssignmentExpression"> {}
 
 export const print: PrintMethod<AndAssignmentExpressionNode> = (path, options, print) => {
-    return "TODO AndAssignmentExpression";
+    return (options as any).printTodo ? "TODO Node AndAssignmentExpression" : "";
 };

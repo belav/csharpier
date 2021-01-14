@@ -7,5 +7,5 @@ export interface ImplicitStackAllocArrayCreationExpressionNode extends SyntaxTre
 }
 
 export const print: PrintMethod<ImplicitStackAllocArrayCreationExpressionNode> = (path, options, print) => {
-    return "TODO ImplicitStackAllocArrayCreationExpression";
+    return (options as any).printTodo ? "TODO Node ImplicitStackAllocArrayCreationExpression" : "";
 };

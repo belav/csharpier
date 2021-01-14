@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface EventDeclarationNode extends SyntaxTreeNode<"EventDeclaration"> {}
 
 export const print: PrintMethod<EventDeclarationNode> = (path, options, print) => {
-    return "TODO EventDeclaration";
+    return (options as any).printTodo ? "TODO Node EventDeclaration" : "";
 };

@@ -7,5 +7,5 @@ export interface IsPatternExpressionNode extends SyntaxTreeNode<"IsPatternExpres
 }
 
 export const print: PrintMethod<IsPatternExpressionNode> = (path, options, print) => {
-    return "TODO IsPatternExpression";
+    return (options as any).printTodo ? "TODO Node IsPatternExpression" : "";
 };

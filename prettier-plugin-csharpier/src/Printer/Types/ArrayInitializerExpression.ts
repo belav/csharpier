@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface ArrayInitializerExpressionNode extends SyntaxTreeNode<"ArrayInitializerExpression"> {}
 
 export const print: PrintMethod<ArrayInitializerExpressionNode> = (path, options, print) => {
-    return "TODO ArrayInitializerExpression";
+    return (options as any).printTodo ? "TODO Node ArrayInitializerExpression" : "";
 };

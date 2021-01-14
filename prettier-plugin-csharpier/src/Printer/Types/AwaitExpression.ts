@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface AwaitExpressionNode extends SyntaxTreeNode<"AwaitExpression"> {}
 
 export const print: PrintMethod<AwaitExpressionNode> = (path, options, print) => {
-    return "TODO AwaitExpression";
+    return (options as any).printTodo ? "TODO Node AwaitExpression" : "";
 };

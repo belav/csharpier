@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface LockStatementNode extends SyntaxTreeNode<"LockStatement"> {}
 
 export const print: PrintMethod<LockStatementNode> = (path, options, print) => {
-    return "TODO LockStatement";
+    return (options as any).printTodo ? "TODO Node LockStatement" : "";
 };

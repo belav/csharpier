@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface SubtractAssignmentExpressionNode extends SyntaxTreeNode<"SubtractAssignmentExpression"> {}
 
 export const print: PrintMethod<SubtractAssignmentExpressionNode> = (path, options, print) => {
-    return "TODO SubtractAssignmentExpression";
+    return (options as any).printTodo ? "TODO Node SubtractAssignmentExpression" : "";
 };

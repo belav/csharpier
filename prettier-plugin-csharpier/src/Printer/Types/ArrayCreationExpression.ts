@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface ArrayCreationExpressionNode extends SyntaxTreeNode<"ArrayCreationExpression"> {}
 
 export const print: PrintMethod<ArrayCreationExpressionNode> = (path, options, print) => {
-    return "TODO ArrayCreationExpression";
+    return (options as any).printTodo ? "TODO Node ArrayCreationExpression" : "";
 };

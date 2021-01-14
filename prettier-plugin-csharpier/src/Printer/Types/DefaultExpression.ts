@@ -7,5 +7,5 @@ export interface DefaultExpressionNode extends SyntaxTreeNode<"DefaultExpression
 }
 
 export const print: PrintMethod<DefaultExpressionNode> = (path, options, print) => {
-    return "TODO DefaultExpression";
+    return (options as any).printTodo ? "TODO Node DefaultExpression" : "";
 };

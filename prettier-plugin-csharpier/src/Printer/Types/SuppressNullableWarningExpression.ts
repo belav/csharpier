@@ -7,5 +7,5 @@ export interface SuppressNullableWarningExpressionNode extends SyntaxTreeNode<"S
 }
 
 export const print: PrintMethod<SuppressNullableWarningExpressionNode> = (path, options, print) => {
-    return "TODO SuppressNullableWarningExpression";
+    return (options as any).printTodo ? "TODO Node SuppressNullableWarningExpression" : "";
 };

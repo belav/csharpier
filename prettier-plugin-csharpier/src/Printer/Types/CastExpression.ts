@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface CastExpressionNode extends SyntaxTreeNode<"CastExpression"> {}
 
 export const print: PrintMethod<CastExpressionNode> = (path, options, print) => {
-    return "TODO CastExpression";
+    return (options as any).printTodo ? "TODO Node CastExpression" : "";
 };

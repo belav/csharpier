@@ -7,5 +7,5 @@ export interface ParenthesizedVariableDesignationNode extends SyntaxTreeNode<"Pa
 }
 
 export const print: PrintMethod<ParenthesizedVariableDesignationNode> = (path, options, print) => {
-    return "TODO ParenthesizedVariableDesignation";
+    return (options as any).printTodo ? "TODO Node ParenthesizedVariableDesignation" : "";
 };

@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface ConversionOperatorDeclarationNode extends SyntaxTreeNode<"ConversionOperatorDeclaration"> {}
 
 export const print: PrintMethod<ConversionOperatorDeclarationNode> = (path, options, print) => {
-    return "TODO ConversionOperatorDeclaration";
+    return (options as any).printTodo ? "TODO Node ConversionOperatorDeclaration" : "";
 };

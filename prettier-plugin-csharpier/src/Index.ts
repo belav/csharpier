@@ -23,6 +23,11 @@ const printers = {
 };
 
 const options = {
+    printTodo: {
+        type: "boolean",
+        category: "Global",
+        default: false,
+    },
     writeParserJson: {
         type: "string",
         category: "Global",

@@ -7,5 +7,5 @@ export interface RefExpressionNode extends SyntaxTreeNode<"RefExpression"> {
 }
 
 export const print: PrintMethod<RefExpressionNode> = (path, options, print) => {
-    return "TODO RefExpression";
+    return (options as any).printTodo ? "TODO Node RefExpression" : "";
 };

@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface PostDecrementExpressionNode extends SyntaxTreeNode<"PostDecrementExpression"> {}
 
 export const print: PrintMethod<PostDecrementExpressionNode> = (path, options, print) => {
-    return "TODO PostDecrementExpression";
+    return (options as any).printTodo ? "TODO Node PostDecrementExpression" : "";
 };

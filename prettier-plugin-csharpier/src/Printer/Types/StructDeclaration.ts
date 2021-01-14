@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface StructDeclarationNode extends SyntaxTreeNode<"StructDeclaration"> {}
 
 export const print: PrintMethod<StructDeclarationNode> = (path, options, print) => {
-    return "TODO StructDeclaration";
+    return (options as any).printTodo ? "TODO Node StructDeclaration" : "";
 };

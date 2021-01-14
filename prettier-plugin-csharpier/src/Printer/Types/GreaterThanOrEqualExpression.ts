@@ -7,5 +7,5 @@ export interface GreaterThanOrEqualExpressionNode extends SyntaxTreeNode<"Greate
 }
 
 export const print: PrintMethod<GreaterThanOrEqualExpressionNode> = (path, options, print) => {
-    return "TODO GreaterThanOrEqualExpression";
+    return (options as any).printTodo ? "TODO Node GreaterThanOrEqualExpression" : "";
 };

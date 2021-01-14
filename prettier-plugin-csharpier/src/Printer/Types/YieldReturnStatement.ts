@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface YieldReturnStatementNode extends SyntaxTreeNode<"YieldReturnStatement"> {}
 
 export const print: PrintMethod<YieldReturnStatementNode> = (path, options, print) => {
-    return "TODO YieldReturnStatement";
+    return (options as any).printTodo ? "TODO Node YieldReturnStatement" : "";
 };

@@ -7,5 +7,5 @@ export interface IndexExpressionNode extends SyntaxTreeNode<"IndexExpression"> {
 }
 
 export const print: PrintMethod<IndexExpressionNode> = (path, options, print) => {
-    return "TODO IndexExpression";
+    return (options as any).printTodo ? "TODO Node IndexExpression" : "";
 };

@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface DestructorDeclarationNode extends SyntaxTreeNode<"DestructorDeclaration"> {}
 
 export const print: PrintMethod<DestructorDeclarationNode> = (path, options, print) => {
-    return "TODO DestructorDeclaration";
+    return (options as any).printTodo ? "TODO Node DestructorDeclaration" : "";
 };

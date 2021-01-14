@@ -7,5 +7,5 @@ export interface ImplicitElementAccessNode extends SyntaxTreeNode<"ImplicitEleme
 }
 
 export const print: PrintMethod<ImplicitElementAccessNode> = (path, options, print) => {
-    return "TODO ImplicitElementAccess";
+    return (options as any).printTodo ? "TODO Node ImplicitElementAccess" : "";
 };

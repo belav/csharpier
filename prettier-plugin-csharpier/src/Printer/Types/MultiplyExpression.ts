@@ -7,5 +7,5 @@ export interface MultiplyExpressionNode extends SyntaxTreeNode<"MultiplyExpressi
 }
 
 export const print: PrintMethod<MultiplyExpressionNode> = (path, options, print) => {
-    return "TODO MultiplyExpression";
+    return (options as any).printTodo ? "TODO Node MultiplyExpression" : "";
 };

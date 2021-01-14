@@ -7,5 +7,5 @@ export interface RangeExpressionNode extends SyntaxTreeNode<"RangeExpression"> {
 }
 
 export const print: PrintMethod<RangeExpressionNode> = (path, options, print) => {
-    return "TODO RangeExpression";
+    return (options as any).printTodo ? "TODO Node RangeExpression" : "";
 };

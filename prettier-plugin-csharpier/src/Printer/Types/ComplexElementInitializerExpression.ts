@@ -7,5 +7,5 @@ export interface ComplexElementInitializerExpressionNode extends SyntaxTreeNode<
 }
 
 export const print: PrintMethod<ComplexElementInitializerExpressionNode> = (path, options, print) => {
-    return "TODO ComplexElementInitializerExpression";
+    return (options as any).printTodo ? "TODO Node ComplexElementInitializerExpression" : "";
 };

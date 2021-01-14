@@ -2,7 +2,7 @@ const prettier = require("prettier");
 const fs = require("fs");
 const path = require("path");
 
-const [, , sampleName] = process.argv;
+const [, , sampleName, printTodo] = process.argv;
 
 fs.readdirSync(__dirname).forEach(file => {
     if (!file.endsWith(".cs") || file.endsWith(".Formatted.cs") || (sampleName && !file.startsWith(sampleName + "."))) {
@@ -24,6 +24,7 @@ fs.readdirSync(__dirname).forEach(file => {
         endOfLine: "auto",
         tabWidth: 4,
         writeParserJson: referenceFile.replace(".cs", ".json"),
+        printTodo: !!printTodo,
     });
 
     console.timeEnd(file)

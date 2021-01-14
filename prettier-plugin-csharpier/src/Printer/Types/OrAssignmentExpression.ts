@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface OrAssignmentExpressionNode extends SyntaxTreeNode<"OrAssignmentExpression"> {}
 
 export const print: PrintMethod<OrAssignmentExpressionNode> = (path, options, print) => {
-    return "TODO OrAssignmentExpression";
+    return (options as any).printTodo ? "TODO Node OrAssignmentExpression" : "";
 };

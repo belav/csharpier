@@ -26,7 +26,10 @@ export function printCommaList(list: Doc[]) {
 }
 
 export function getParentNode(path: FastPath) {
-    const result = path.stack[path.stack.length - 3] as SyntaxTreeNode;
+    let result = path.stack[path.stack.length - 3] as SyntaxTreeNode;
+    if (Array.isArray(result)) {
+        result = path.stack[path.stack.length - 5] as SyntaxTreeNode
+    }
     if (typeof result !== "object" || !result.nodeType) {
         throw new Error("The object " + result + " did not appear to be a SyntaxTreeNode");
     }

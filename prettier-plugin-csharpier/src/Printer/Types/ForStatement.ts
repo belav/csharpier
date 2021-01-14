@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface ForStatementNode extends SyntaxTreeNode<"ForStatement"> {}
 
 export const print: PrintMethod<ForStatementNode> = (path, options, print) => {
-    return "TODO ForStatement";
+    return (options as any).printTodo ? "TODO Node ForStatement" : "";
 };

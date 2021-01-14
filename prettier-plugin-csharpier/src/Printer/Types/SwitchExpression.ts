@@ -7,5 +7,5 @@ export interface SwitchExpressionNode extends SyntaxTreeNode<"SwitchExpression">
 }
 
 export const print: PrintMethod<SwitchExpressionNode> = (path, options, print) => {
-    return "TODO SwitchExpression";
+    return (options as any).printTodo ? "TODO Node SwitchExpression" : "";
 };

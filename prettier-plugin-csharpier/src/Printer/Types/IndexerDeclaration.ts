@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface IndexerDeclarationNode extends SyntaxTreeNode<"IndexerDeclaration"> {}
 
 export const print: PrintMethod<IndexerDeclarationNode> = (path, options, print) => {
-    return "TODO IndexerDeclaration";
+    return (options as any).printTodo ? "TODO Node IndexerDeclaration" : "";
 };

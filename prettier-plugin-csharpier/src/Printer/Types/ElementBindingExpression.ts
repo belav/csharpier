@@ -7,5 +7,5 @@ export interface ElementBindingExpressionNode extends SyntaxTreeNode<"ElementBin
 }
 
 export const print: PrintMethod<ElementBindingExpressionNode> = (path, options, print) => {
-    return "TODO ElementBindingExpression";
+    return (options as any).printTodo ? "TODO Node ElementBindingExpression" : "";
 };

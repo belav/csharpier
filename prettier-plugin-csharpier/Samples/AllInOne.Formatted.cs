@@ -41,8 +41,8 @@ namespace My
             var ??? = local;
             var local3 = 0local4 = 1;
             local3 = local4 = 1;
-            var local5 =  ?? null;
-            var local6 = ;
+            var local5 = null as Action ?? null;
+            var local6 = local5 is Action;
 
             var u = 1u;
             var U = 1U;
@@ -125,8 +125,24 @@ namespace My
             arr[0] = ;
             arr[0][0, 0] = 47;
              arrayTypeInference = ;
-
-
+            switch (3) { }
+            switch (i)
+            {
+                case 0:
+                case 1:
+                {
+                    goto case 2;
+                }
+                case 2 + 3:
+                {
+                    goto default;
+                    break;
+                }
+                default:
+                {
+                    return;
+                }
+            }
 
 
 
@@ -462,7 +478,12 @@ class CSharp70
 {
     void PatternMatching(string arg, int b)
     {
+        switch (arg)
+        {
 
+
+            default:break;
+        }
          = e;
 
         if () { }

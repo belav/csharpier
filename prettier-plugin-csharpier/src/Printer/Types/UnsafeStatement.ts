@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface UnsafeStatementNode extends SyntaxTreeNode<"UnsafeStatement"> {}
 
 export const print: PrintMethod<UnsafeStatementNode> = (path, options, print) => {
-    return "TODO UnsafeStatement";
+    return (options as any).printTodo ? "TODO Node UnsafeStatement" : "";
 };

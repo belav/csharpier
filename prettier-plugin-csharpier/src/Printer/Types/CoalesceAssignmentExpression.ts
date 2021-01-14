@@ -7,5 +7,5 @@ export interface CoalesceAssignmentExpressionNode extends SyntaxTreeNode<"Coales
 }
 
 export const print: PrintMethod<CoalesceAssignmentExpressionNode> = (path, options, print) => {
-    return "TODO CoalesceAssignmentExpression";
+    return (options as any).printTodo ? "TODO Node CoalesceAssignmentExpression" : "";
 };

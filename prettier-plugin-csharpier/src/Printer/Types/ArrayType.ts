@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface ArrayTypeNode extends SyntaxTreeNode<"ArrayType"> {}
 
 export const print: PrintMethod<ArrayTypeNode> = (path, options, print) => {
-    return "TODO ArrayType";
+    return (options as any).printTodo ? "TODO Node ArrayType" : "";
 };

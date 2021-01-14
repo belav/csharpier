@@ -7,5 +7,5 @@ export interface ExclusiveOrExpressionNode extends SyntaxTreeNode<"ExclusiveOrEx
 }
 
 export const print: PrintMethod<ExclusiveOrExpressionNode> = (path, options, print) => {
-    return "TODO ExclusiveOrExpression";
+    return (options as any).printTodo ? "TODO Node ExclusiveOrExpression" : "";
 };
