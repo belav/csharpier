@@ -2,6 +2,7 @@ import { Doc } from "prettier";
 import { hardline } from "./Builders";
 import { SyntaxTreeNode } from "./SyntaxTreeNode";
 
+// TODO 0 make a script that will kill and recreate the progress branch, the compare view in github doesn't seem to update
 // TODO 0 also compilation unit doesn't put lines after things, and we kind of ignore the line breaks in the original file
 // TODO 0 can we call this from inside of print?
 // TODO 0 and if we figure out comments/line breaks, move on to all the missing node types
