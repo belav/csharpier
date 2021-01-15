@@ -1,0 +1,4 @@
+class ClassName
+{
+    int[] array;
+}

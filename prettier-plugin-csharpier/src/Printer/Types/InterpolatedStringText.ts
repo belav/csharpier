@@ -1,5 +1,5 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { HasValue, printPathValue, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface InterpolatedStringTextNode extends SyntaxTreeNode<"InterpolatedStringText"> {
@@ -7,5 +7,5 @@ export interface InterpolatedStringTextNode extends SyntaxTreeNode<"Interpolated
 }
 
 export const print: PrintMethod<InterpolatedStringTextNode> = (path, options, print) => {
-    return printValue(path.getValue().textToken);
+    return printPathValue(path, "textToken");
 };

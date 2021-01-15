@@ -7,6 +7,7 @@ export interface VariableDeclarationNode extends SyntaxTreeNode<"VariableDeclara
     type: SyntaxTreeNode;
 }
 
+// TODO force these onto new lines??
 export const print: PrintMethod<VariableDeclarationNode> = (path, options, print) => {
-    return concat([path.call(print, "type"), " ", concat(path.map(print, "variables")), ";"]);
+    return concat([path.call(print, "type"), " ", join(", ", path.map(print, "variables")), ";"]);
 };

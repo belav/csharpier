@@ -1,5 +1,5 @@
 import { PrintMethod } from "../PrintMethod";
-import { printValue, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { printValue, HasValue, SyntaxTreeNode, printPathValue } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 import { IdentifierNameNode } from "./IdentifierName";
 
@@ -10,6 +10,5 @@ export interface SimpleMemberAccessExpressionNode extends SyntaxTreeNode<"Simple
 }
 
 export const print: PrintMethod<SimpleMemberAccessExpressionNode> = (path, options, print) => {
-    const node = path.getValue();
-    return concat([path.call(print, "expression"), printValue(node.operatorToken), path.call(print, "name")]);
+    return concat([path.call(print, "expression"), printPathValue(path, "operatorToken"), path.call(print, "name")]);
 };

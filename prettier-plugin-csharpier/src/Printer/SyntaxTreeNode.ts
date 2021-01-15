@@ -31,6 +31,11 @@ export function printIdentifier(hasIdentifier: HasIdentifier) {
     return printValue(hasIdentifier.identifier);
 }
 
+export function printPathValue<T1, T2 extends keyof T1>(path: FastPath<T1>, property: T2) {
+    const node = path.getValue();
+    return printValue(node[property] as any as HasValue);
+}
+
 export function printValue(hasValue: HasValue) {
     if (typeof hasValue.text === "undefined") {
         throw new Error("There was no text property on " + JSON.stringify(hasValue, null, "    "));
