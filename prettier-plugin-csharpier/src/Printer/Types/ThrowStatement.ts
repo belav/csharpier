@@ -8,7 +8,7 @@ export interface ThrowStatementNode extends SyntaxTreeNode<"ThrowStatement"> {
 }
 
 export const print: PrintMethod<ThrowStatementNode> = (path, options, print) => {
-    const node = path.getValue()
+    const node = path.getValue();
     const expression = node.expression ? concat([" ", path.call(print, "expression")]) : "";
-    return concat([printValue(node.throwKeyword), expression, ";"]);
+    return concat([printValue(node.throwKeyword), expression, node.nodeType === "ThrowStatement" ? ";" : ""]);
 };

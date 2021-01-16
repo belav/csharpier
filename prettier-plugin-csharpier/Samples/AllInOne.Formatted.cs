@@ -129,13 +129,16 @@ namespace My
                 { 1, "" },
                 { 2, "a" }
             };
-            float[] a = TODO Node ArrayCreationExpression;
-            int[, , ] cube = TODO Node ArrayInitializerExpression;
-            int[][] jagged = TODO Node ArrayInitializerExpression;
-            int[][, ] arr = TODO Node ArrayCreationExpression;
-            arr[0] = TODO Node ArrayCreationExpression;
+            float[] a = new float[];
+            int[,,] cube = {
+                { { 111, 112 }, { 121, 122 } },
+                { { 211, 212 }, { 221, 222 } }
+            };
+            int[][] jagged = { { 111 }, { 121, 122 } };
+            int[][,] arr = new int[5][,];
+            arr[0] = new int[5,5];
             arr[0][0, 0] = 47;
-            int[] arrayTypeInference = TODO Node ImplicitArrayCreationExpression;
+            int[] arrayTypeInference = new[] { 0, 1 };
             switch (3) { }
             switch (i)
             {
@@ -230,9 +233,9 @@ namespace My
                 try { }
                 catch  { }
             }
-            var anonymous = TODO Node ArrayInitializerExpression;
-            var query = TODO Node QueryExpression;
-            query = TODO Node QueryExpression;
+            var anonymous = { A = 1, B = 2, C = 3 };
+            var query = ;
+            query = ;
         }
         ~A() { }
         private readonly int f1;
@@ -249,12 +252,12 @@ namespace My
             set;
         }
         public abstract string P { get; }
-        TODO Node IndexerDeclaration
-        TODO Node EventFieldDeclaration
-        TODO Node EventDeclaration
-        TODO Node OperatorDeclaration
-        TODO Node OperatorDeclaration
-        TODO Node OperatorDeclaration
+        public abstract int this[int index] { get; set; }
+
+
+
+
+
         class C { }
     }
     public struct S : I
@@ -272,9 +275,9 @@ namespace My
             set;
         }
         public abstract string P { get; }
-        TODO Node IndexerDeclaration
-        TODO Node EventFieldDeclaration
-        TODO Node OperatorDeclaration
+        public abstract int this[int index] { get; set; }
+
+
         fixed int field;
         class C { }
     }
@@ -308,7 +311,7 @@ namespace My
                 int ??? = 0;
                 while (++counter++ < --exponent--)
                 {
-                    result = result * number + TODO Node UnaryPlusExpression + number;
+                    result = result * number + +number++++ + number;
                     yield return result;
                 }
             }
@@ -373,10 +376,10 @@ namespace ConsoleApplication1
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
 
-            var q = TODO Node QueryExpression;
+            var q = ;
         }
-        TODO Node ConversionOperatorDeclaration
-        TODO Node ConversionOperatorDeclaration
+
+
 
         public int foo = 5;
         void Bar2()
@@ -385,7 +388,7 @@ namespace ConsoleApplication1
             this.Foo = 5.GetType();
             Test t = "sss";
         }
-        TODO Node EventFieldDeclaration
+
 
         void Blah()
         {
@@ -394,7 +397,7 @@ namespace ConsoleApplication1
 
             Expression<Func<int>> e = () => i;
             Expression<Func<bool, Action>> e2 = b => () => ;
-            Func<bool, bool> f = TODO Node AnonymousMethodExpression;
+            Func<bool, bool> f = ;
             Func<int, int, int> f2 = () => 0;
             f2 = () => 1;
             Action a = Blah;
@@ -475,8 +478,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
         public partial void method()
         {
-            int?[] a = TODO Node ArrayCreationExpression;
-            int[] var = TODO Node ArrayInitializerExpression;
+            int?[] a = new int?[5];
+            int[] var = { 1, 2, 3, 4, 5 };
             int i = a[i];
             Foo<T> f = new Foo<int>();
             f.method();
@@ -547,13 +550,13 @@ namespace Comments.XmlComments.UndocumentedKeywords
         public string Fourth { get; }
 
         public Point Move(int dx, int dy);
-        TODO Node OperatorDeclaration
-        TODO Node ConversionOperatorDeclaration
+
+
         public void Print();
 
         public string Name
         => First + " " + Last;
-        TODO Node IndexerDeclaration
+        public int this[long id] => id;
 
         async void Test()
         {
@@ -581,9 +584,9 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
             var numbers = new Dictionary<int, string>
             {
-                TODO Node ImplicitElementAccess = "seven",
-                TODO Node ImplicitElementAccess = "nine",
-                TODO Node ImplicitElementAccess = "thirteen"
+                [7] = "seven",
+                [9] = "nine",
+                [13] = "thirteen"
             };
 
             try { }
@@ -612,15 +615,15 @@ class CSharp70
     {
         switch (arg)
         {
-            TODO Node CasePatternSwitchLabel
-            TODO Node CasePatternSwitchLabel
+
+
             default:break;
         }
-        TODO Node TupleExpression = e;
+        (A<B, C> D, E<F, G> H) = e;
 
-        if (TODO Node IsPatternExpression) { }
+        if (x?.y?.z is Type value2) { }
 
-        if (TODO Node IsPatternExpression)
+        if (expr is Type v)
         {
             Hello();
         }
@@ -645,7 +648,7 @@ class CSharp70
 
     public void ThrowExpression()
     {
-        var result = nullableResult ?? TODO Node ThrowExpression;
+        var result = nullableResult ?? throw new NullReferenceException();
     }
 
     public void BinaryLiterals()
@@ -670,10 +673,9 @@ class CSharp71
         DefaultWithoutTypeName(default);
     }
 
-    void TupleRecognize(int a, TODO Node TupleType b, TODO Node TupleType? c)
+    void TupleRecognize(int a, (int, int) b, (int, int, int)? c)
     {
-        var result = list.Select(c => TODO Node TupleExpression).Where(
-            t => t.f2 == 1);
+        var result = list.Select(c => (c.f1, c.f2)).Where(t => t.f2 == 1);
     }
 }
 
@@ -682,25 +684,27 @@ class CSharp72
     readonly struct ReadonlyRef1
     {
         Func<int, int> s = () => x;
-        TODO Node IndexerDeclaration
-        TODO Node OperatorDeclaration
+        ref TValue this[TKey index] => null;
 
-        static readonly TODO Node RefType M1_Trace()
+
+        static readonly ref Vector3 M1_Trace()
         {
-            TODO Node RefType r1 = TODO Node RefExpression;
-            TODO Node RefType r2 = TODO Node RefExpression;
+
+            ref readonly var r1 = ref M1();
+
+            ref readonly Vector3 r2 = ref default(Vector3);
 
             Mutate(ref r1);
 
             Print(in r1);
 
-            return TODO Node RefExpression;
+            return ref r1;
         }
     }
 
     ref struct ReadonlyRef2
     {
-        TODO Node RefType Test(Vector3 v1, Vector3 v2)
+        ref readonly Guid Test(Vector3 v1, Vector3 v2)
         {
 
             v1 = default(Vector3);
@@ -709,21 +713,22 @@ class CSharp72
 
             foo(ref v1.X);
 
-            return TODO Node RefExpression;
+            return ref (arr != null ? ref arr[0] : ref otherArr[0]);
 
             Span<int> span = stackalloc int[1];
 
             return new Vector3(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
         }
-        TODO Node RefType Choice(bool condition, T consequence, T alternative)
+
+        ref T Choice(bool condition, T consequence, T alternative)
         {
             if (condition)
             {
-                return TODO Node RefExpression;
+                return ref consequence;
             }
             else
             {
-                return TODO Node RefExpression;
+                return ref alternative;
             }
         }
     }
@@ -742,7 +747,7 @@ class CSharp72
 
     public void ConditionalRef()
     {
-        TODO Node RefType r = TODO Node RefExpression;
+        ref var r = ref (arr != null ? ref arr[0] : ref otherArr[0]);
     }
 
     public void LeadingSeparator()
@@ -782,12 +787,12 @@ class CSharp73
         Span<int> a = stackalloc int[3];
         Span<int> a = stackalloc int[3];
         Span<int> a = stackalloc int[];
-        Span<int> a = TODO Node ImplicitStackAllocArrayCreationExpression;
+        Span<int> a = stackalloc[] { 1, 2, 3 };
     }
 
     public void TupleEquality()
     {
-        TODO Node TupleType t1, t2;
-        var res = t1 == TODO Node TupleExpression;
+        (int, (int, int)) t1, t2;
+        var res = t1 == (1, (2, 3));
     }
 }
