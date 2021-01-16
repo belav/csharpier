@@ -1,1 +1,1 @@
-export { printKeywordType as print } from "../SyntaxTreeNode";
+export { print } from "../PrintKeywordType";

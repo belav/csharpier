@@ -17,7 +17,7 @@ export const print: PrintMethod<ForStatementNode> = (path, options, print) => {
         printPathValue(path, "forKeyword"),
         " (",
         path.call(print, "declaration"),
-        " ",
+        "; ",
         path.call(print, "condition"),
         "; ",
         join(", ", path.map(print, "incrementors")),

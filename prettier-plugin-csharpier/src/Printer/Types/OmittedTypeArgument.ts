@@ -7,5 +7,5 @@ export interface OmittedTypeArgumentNode extends SyntaxTreeNode<"OmittedTypeArgu
 }
 
 export const print: PrintMethod<OmittedTypeArgumentNode> = (path, options, print) => {
-    return (options as any).printTodo ? "TODO Node OmittedTypeArgument" : "";
+    return "";
 };

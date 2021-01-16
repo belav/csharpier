@@ -13,5 +13,6 @@ foreach($file in $types) {
 $text = ($total - $unfinished).ToString() + " of " + $total.ToString()
 $percent = ($total - $unfinished) / $total * 100;
 Write-Output $text
+Write-Output $unfinished
 Write-Output $percent
 

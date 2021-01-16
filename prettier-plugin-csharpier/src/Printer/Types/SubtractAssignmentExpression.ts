@@ -1,1 +1,1 @@
-export { printLeftRightOperator as print } from "../SyntaxTreeNode";
+export { print } from "../PrintLeftRightOperator";

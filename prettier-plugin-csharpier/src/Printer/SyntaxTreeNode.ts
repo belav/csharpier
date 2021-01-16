@@ -1,5 +1,5 @@
 import { Doc, FastPath, ParserOptions } from "prettier";
-import { concat, hardline } from "./Builders";
+import { concat, hardline, join } from "./Builders";
 import { hasLeadingExtraLine } from "./Helpers";
 import { Print } from "./PrintMethod";
 import { BlockNode } from "./Types/Block";
@@ -27,6 +27,8 @@ export interface HasModifiers {
     modifiers: (HasValue & HasTrivia)[];
 }
 
+// TODO move some of these into helpers? or who cares?
+
 export function printPathIdentifier<T extends HasIdentifier>(path: FastPath<T>) {
     return printIdentifier(path.getValue());
 }
@@ -48,74 +50,21 @@ export function printValue(hasValue: HasValue) {
     return hasLeadingExtraLine(hasValue) ? concat([hardline, hasValue.text]) : hasValue.text;
 }
 
-export interface LeftRightOperator {
-    left: SyntaxTreeNode;
-    operatorToken: HasValue;
-    right: SyntaxTreeNode;
-}
+export function printModifiers(node: HasModifiers) {
+    if (node.modifiers.length === 0) {
+        return "";
+    }
 
-export function printLeftRightOperator<T extends LeftRightOperator>(
-    path: FastPath<T>,
-    options: ParserOptions<T>,
-    print: Print<T>,
-) {
     return concat([
-        path.call(print, "left"),
+        join(
+            " ",
+            node.modifiers.map(o => printValue(o)),
+        ),
         " ",
-        printPathValue(path, "operatorToken"),
-        " ",
-        path.call(print, "right"),
     ]);
 }
 
 export interface Operator {
     operatorToken: HasValue;
     operand: SyntaxTreeNode;
-}
-
-export function printPostOperator<T extends Operator>(path: FastPath<T>, options: ParserOptions<T>, print: Print<T>) {
-    return concat([path.call(print, "operand"), printPathValue(path, "operatorToken")]);
-}
-
-export function printPreOperator<T extends Operator>(path: FastPath<T>, options: ParserOptions<T>, print: Print<T>) {
-    return concat([printPathValue(path, "operatorToken"), path.call(print, "operand")]);
-}
-
-interface KeywordBlock {
-    keyword: HasValue;
-    block: BlockNode;
-}
-
-export function printKeywordBlock<T extends KeywordBlock>(
-    path: FastPath<T>,
-    options: ParserOptions<T>,
-    print: Print<T>,
-) {
-    return concat([printPathValue(path, "keyword"), path.call(print, "block")]);
-}
-
-interface KeywordType {
-    keyword: HasValue;
-    type: SyntaxTreeNode;
-}
-
-export function printKeywordType<T extends KeywordType>(
-    path: FastPath<T>,
-    options: ParserOptions<T>,
-    print: Print<T>,
-) {
-    return concat([printPathValue(path, "keyword"), "(", path.call(print, "type"), ")"]);
-}
-
-interface KeywordExpression {
-    keyword: HasValue;
-    expression: SyntaxTreeNode;
-}
-
-export function printKeywordExpression<T extends KeywordExpression>(
-    path: FastPath<T>,
-    options: ParserOptions<T>,
-    print: Print<T>,
-) {
-    return concat([printPathValue(path, "keyword"), "(", path.call(print, "expression"), ")"]);
 }

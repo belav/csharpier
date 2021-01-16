@@ -1,1 +1,1 @@
-export { printKeywordExpression as print } from "../SyntaxTreeNode";
+export { print } from "../PrintKeywordExpression";

@@ -1,8 +1,15 @@
 import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
-import { printValue, HasModifiers, HasValue, SyntaxTreeNode, HasIdentifier, printIdentifier } from "../SyntaxTreeNode";
+import {
+    printValue,
+    HasModifiers,
+    HasValue,
+    SyntaxTreeNode,
+    HasIdentifier,
+    printIdentifier,
+    printModifiers
+} from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
-import { printModifiers } from "../PrintModifiers";
 
 export interface PropertyDeclarationNode extends SyntaxTreeNode<"PropertyDeclaration">, HasModifiers, HasIdentifier {
     accessorList?: SyntaxTreeNode;

@@ -13,7 +13,7 @@ export const print: PrintMethod<CollectionInitializerExpressionNode> = (path, op
     const hasExpressions = node.expressions.length > 0;
     let body: Doc = " ";
     if (hasExpressions) {
-        body = concat([indent(concat([line, join(", ", path.map(print, "expressions"))])), line]);
+        body = concat([indent(concat([hardline, join(concat([",", hardline]), path.map(print, "expressions"))])), line]);
     }
     return group(concat([line, "{", body, "}"]));
 };

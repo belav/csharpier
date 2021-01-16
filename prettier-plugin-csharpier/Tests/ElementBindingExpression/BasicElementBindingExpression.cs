@@ -1,0 +1,7 @@
+class ClassName
+{
+    void MethodName()
+    {
+        var first = customers?[0];
+    }
+}

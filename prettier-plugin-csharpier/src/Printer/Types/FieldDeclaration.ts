@@ -1,8 +1,7 @@
 import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
-import { printValue, HasModifiers, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { printValue, HasModifiers, HasValue, SyntaxTreeNode, printModifiers } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
-import { printModifiers } from "../PrintModifiers";
 
 export interface FieldDeclarationNode extends SyntaxTreeNode<"FieldDeclaration">, HasModifiers {
     declaration: SyntaxTreeNode;
@@ -14,5 +13,6 @@ export const print: PrintMethod<FieldDeclarationNode> = (path, options, print) =
     parts.push(printModifiers(node));
 
     parts.push(path.call(print, "declaration"));
+    parts.push(";");
     return concat(parts);
 };

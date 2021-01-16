@@ -1,6 +1,6 @@
 import { Dictionary } from "../Common/Types";
 import { concat, hardline } from "./Builders";
-import { hasLeadingExtraLine, printExtraLines } from "./Helpers";
+import { hasLeadingExtraLine } from "./Helpers";
 import { PrintMethod } from "./PrintMethod";
 import * as types from "./Types";
 

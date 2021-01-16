@@ -1,1 +1,1 @@
-export { printPreOperator as print } from "../SyntaxTreeNode";
+export { print } from "../PrintPreOperator";

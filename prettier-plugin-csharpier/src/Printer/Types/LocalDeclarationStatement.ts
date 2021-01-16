@@ -5,5 +5,5 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface LocalDeclarationStatementNode extends SyntaxTreeNode<"LocalDeclarationStatement"> {}
 
 export const print: PrintMethod<LocalDeclarationStatementNode> = (path, options, print) => {
-    return path.call(print, "declaration");
+    return concat([path.call(print, "declaration"), ";"]);
 };

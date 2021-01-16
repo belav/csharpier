@@ -3,8 +3,10 @@ import { SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface ComplexElementInitializerExpressionNode
-    extends SyntaxTreeNode<"ComplexElementInitializerExpression"> {}
+    extends SyntaxTreeNode<"ComplexElementInitializerExpression"> {
+    expressions: SyntaxTreeNode[]
+}
 
 export const print: PrintMethod<ComplexElementInitializerExpressionNode> = (path, options, print) => {
-    return (options as any).printTodo ? "TODO Node ComplexElementInitializerExpression" : "";
+    return concat(["{", " ", join(", ", path.map(print, "expressions")), " ", "}"]);
 };

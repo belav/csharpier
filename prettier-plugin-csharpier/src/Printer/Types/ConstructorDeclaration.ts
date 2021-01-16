@@ -1,7 +1,6 @@
 import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
-import { printModifiers } from "../PrintModifiers";
-import { HasIdentifier, HasModifiers, printIdentifier, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { HasIdentifier, HasModifiers, printIdentifier, printModifiers, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface ConstructorDeclarationNode

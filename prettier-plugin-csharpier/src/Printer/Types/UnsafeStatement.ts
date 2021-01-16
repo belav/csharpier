@@ -1,9 +1,12 @@
 import { PrintMethod } from "../PrintMethod";
-import { SyntaxTreeNode } from "../SyntaxTreeNode";
+import { HasValue, printPathValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface UnsafeStatementNode extends SyntaxTreeNode<"UnsafeStatement"> {}
+export interface UnsafeStatementNode extends SyntaxTreeNode<"UnsafeStatement"> {
+    unsafeKeyword: HasValue;
+    block: SyntaxTreeNode;
+}
 
 export const print: PrintMethod<UnsafeStatementNode> = (path, options, print) => {
-    return (options as any).printTodo ? "TODO Node UnsafeStatement" : "";
+    return concat([printPathValue(path, "unsafeKeyword"), path.call(print, "block")]);
 };

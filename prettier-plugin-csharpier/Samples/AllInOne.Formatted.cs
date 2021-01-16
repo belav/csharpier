@@ -21,7 +21,7 @@ namespace My
 {
     using A.B;
     interface CoContra { }
-
+    delegate void CoContra2<T, K>() where T : struct;
 
     public unsafe partial class A : C,
     I
@@ -117,21 +117,25 @@ namespace My
             }
             else if (i == 0)
             {
-                throw [object Object];
+                throw new Exception();
             }
             var o1 = new MyObject();
             var o2 = new MyObject(var);
             var o3 = new MyObject { A = i };
             var o4 = new MyObject(@dynamic) { A = 0, B = 0, C = 0 };
             var o5 = new { A = 0 };
-            var dictionaryInitializer = new Dictionary<int, string> { ,  };
-            float[] a = ;
-            int[, , ] cube = ;
-            int[][] jagged = ;
-            int[][, ] arr = ;
-            arr[0] = ;
+            var dictionaryInitializer = new Dictionary<int, string>
+            {
+                { 1, "" },
+                { 2, "a" }
+            };
+            float[] a = TODO Node ArrayCreationExpression;
+            int[, , ] cube = TODO Node ArrayInitializerExpression;
+            int[][] jagged = TODO Node ArrayInitializerExpression;
+            int[][, ] arr = TODO Node ArrayCreationExpression;
+            arr[0] = TODO Node ArrayCreationExpression;
             arr[0][0, 0] = 47;
-            int[] arrayTypeInference = ;
+            int[] arrayTypeInference = TODO Node ImplicitArrayCreationExpression;
             switch (3) { }
             switch (i)
             {
@@ -165,7 +169,7 @@ namespace My
             while (i < 10);
             for (int j = 0; j < 100; ++j)
             {
-                for ( ; )
+                for (; ; )
                 {
                     for (int i = 0, j = 0; i < length; i++, j++) { }
                     if (true)continue;
@@ -190,16 +194,25 @@ namespace My
                 unchecked(++i);
             }
             lock (sync)process();
-            using (var v = BeginScope();)
-            using (A a = new A();)
-            using (A a = new A(), b = new A();)
+            using (var v = BeginScope())
+            using (A a = new A())
+            using (A a = new A(), b = new A())
             using ()
             return;
             yield return [object Object];
             yield break;
-
-
-
+            fixed (int* p = stackalloc int[100], q = &y)
+            {
+                *intref = 1;
+            }
+            fixed (int* p = stackalloc int[100])
+            {
+                *intref = 1;
+            }
+            unsafe
+            {
+                int* p = null;
+            }
             try
             {
                 throw null;
@@ -217,9 +230,9 @@ namespace My
                 try { }
                 catch  { }
             }
-            var anonymous = ;
-            var query = ;
-            query = ;
+            var anonymous = TODO Node ArrayInitializerExpression;
+            var query = TODO Node QueryExpression;
+            query = TODO Node QueryExpression;
         }
         ~A() { }
         private readonly int f1;
@@ -236,25 +249,51 @@ namespace My
             set;
         }
         public abstract string P { get; }
-
-
-
-
-
-
+        TODO Node IndexerDeclaration
+        TODO Node EventFieldDeclaration
+        TODO Node EventDeclaration
+        TODO Node OperatorDeclaration
+        TODO Node OperatorDeclaration
+        TODO Node OperatorDeclaration
         class C { }
     }
-
+    public struct S : I
+    {
+        public S() { }
+        private int f1;
+        private volatile int f2;
+        public abstract int m<T>(T t)
+        {
+            return 1;
+        }
+        public string P
+        {
+            get { int value = 0; return "A"; }
+            set;
+        }
+        public abstract string P { get; }
+        TODO Node IndexerDeclaration
+        TODO Node EventFieldDeclaration
+        TODO Node OperatorDeclaration
+        fixed int field;
+        class C { }
+    }
     public interface I
     {
         void A(int value);
 
         string Value { get; set; }
 
-        unsafe void UpdateSignatureByHashingContent( buffer, int size);
+        unsafe void UpdateSignatureByHashingContent(byte* buffer, int size);
     }
-
-
+    public enum E
+    {
+        A,
+        B,
+        C,
+        E
+    }
+    delegate void Delegate(object P);
     namespace Test
     {
         using System;
@@ -269,7 +308,7 @@ namespace My
                 int ??? = 0;
                 while (++counter++ < --exponent--)
                 {
-                    result = result * number +  + number;
+                    result = result * number + TODO Node UnaryPlusExpression + number;
                     yield return result;
                 }
             }
@@ -334,10 +373,10 @@ namespace ConsoleApplication1
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
 
-            var q = ;
+            var q = TODO Node QueryExpression;
         }
-
-
+        TODO Node ConversionOperatorDeclaration
+        TODO Node ConversionOperatorDeclaration
 
         public int foo = 5;
         void Bar2()
@@ -346,7 +385,7 @@ namespace ConsoleApplication1
             this.Foo = 5.GetType();
             Test t = "sss";
         }
-
+        TODO Node EventFieldDeclaration
 
         void Blah()
         {
@@ -355,7 +394,7 @@ namespace ConsoleApplication1
 
             Expression<Func<int>> e = () => i;
             Expression<Func<bool, Action>> e2 = b => () => ;
-            Func<bool, bool> f = ;
+            Func<bool, bool> f = TODO Node AnonymousMethodExpression;
             Func<int, int, int> f2 = () => 0;
             f2 = () => 1;
             Action a = Blah;
@@ -363,7 +402,8 @@ namespace ConsoleApplication1
             f2 = () => ;
         }
 
-
+        delegate Recursive Recursive(Recursive r);
+        delegate Recursive Recursive<A, R>(Recursive<A, R> r);
 
         public Type Foo
         {
@@ -380,7 +420,7 @@ namespace ConsoleApplication1
         public void Constants()
         {
             int i = 1 + 2 + 3 + 5;
-            .String s = "a" + (System.String)"a" + "a" + "a" + "a" + "A";
+            global::System.String s = "a" + (System.String)"a" + "a" + "a" + "a" + "A";
         }
 
         public void ConstructedType()
@@ -435,8 +475,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
         public partial void method()
         {
-            int?[] a = ;
-            int[] var = ;
+            int?[] a = TODO Node ArrayCreationExpression;
+            int[] var = TODO Node ArrayInitializerExpression;
             int i = a[i];
             Foo<T> f = new Foo<int>();
             f.method();
@@ -467,12 +507,26 @@ namespace Comments.XmlComments.UndocumentedKeywords
             object s = x => x + 1;
             double d = .3;
             Point point;
+            unsafe
+            {
+                Point* p = &point;
 
-             br = null;
+                p->x = 10;
+            }
+            IO::BinaryReader br = null;
             x[1] = 3;
             x[1, 5] = "str";
         }
 
+        struct Point
+        {
+            public int X;
+            public int Y;
+            public void ThisAccess()
+            {
+                this = this;
+            }
+        }
     }
     // From here:https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6
 
@@ -493,13 +547,13 @@ namespace Comments.XmlComments.UndocumentedKeywords
         public string Fourth { get; }
 
         public Point Move(int dx, int dy);
-
-
+        TODO Node OperatorDeclaration
+        TODO Node ConversionOperatorDeclaration
         public void Print();
 
         public string Name
         => First + " " + Last;
-
+        TODO Node IndexerDeclaration
 
         async void Test()
         {
@@ -510,9 +564,9 @@ namespace Comments.XmlComments.UndocumentedKeywords
             var even = range.Where(i => i % 2 == 0);
 
             int? length = customers?.Length;
-            Customer first = customers?;
+            Customer first = customers?[0];
             int length = customers?.Length ?? 0;
-            int? first = customers??.Orders?.Count();
+            int? first = customers?[0]?.Orders?.Count();
             PropertyChanged?.Invoke(this, args);
 
             string s = $"{p.Name} is {p.Age} year{{s}} old #";
@@ -522,14 +576,14 @@ namespace Comments.XmlComments.UndocumentedKeywords
                                    ""\";
             s = $"Color [ R={func(3)}, G={G}, B={B}, A={A} ]";
 
-            if (x == null)throw [object Object];
+            if (x == null)throw new ArgumentNullException(nameof(x));
             WriteLine(nameof(person.Address.ZipCode));
 
             var numbers = new Dictionary<int, string>
             {
-                 = "seven",
-                 = "nine",
-                 = "thirteen"
+                TODO Node ImplicitElementAccess = "seven",
+                TODO Node ImplicitElementAccess = "nine",
+                TODO Node ImplicitElementAccess = "thirteen"
             };
 
             try { }
@@ -558,15 +612,15 @@ class CSharp70
     {
         switch (arg)
         {
-
-
+            TODO Node CasePatternSwitchLabel
+            TODO Node CasePatternSwitchLabel
             default:break;
         }
-         = e;
+        TODO Node TupleExpression = e;
 
-        if () { }
+        if (TODO Node IsPatternExpression) { }
 
-        if ()
+        if (TODO Node IsPatternExpression)
         {
             Hello();
         }
@@ -591,7 +645,7 @@ class CSharp70
 
     public void ThrowExpression()
     {
-        var result = nullableResult ?? ;
+        var result = nullableResult ?? TODO Node ThrowExpression;
     }
 
     public void BinaryLiterals()
@@ -616,16 +670,63 @@ class CSharp71
         DefaultWithoutTypeName(default);
     }
 
-    void TupleRecognize(int a,  b, ? c)
+    void TupleRecognize(int a, TODO Node TupleType b, TODO Node TupleType? c)
     {
-        var result = list.Select(c => ).Where(t => t.f2 == 1);
+        var result = list.Select(c => TODO Node TupleExpression).Where(
+            t => t.f2 == 1);
     }
 }
 
 class CSharp72
 {
+    readonly struct ReadonlyRef1
+    {
+        Func<int, int> s = () => x;
+        TODO Node IndexerDeclaration
+        TODO Node OperatorDeclaration
 
+        static readonly TODO Node RefType M1_Trace()
+        {
+            TODO Node RefType r1 = TODO Node RefExpression;
+            TODO Node RefType r2 = TODO Node RefExpression;
 
+            Mutate(ref r1);
+
+            Print(in r1);
+
+            return TODO Node RefExpression;
+        }
+    }
+
+    ref struct ReadonlyRef2
+    {
+        TODO Node RefType Test(Vector3 v1, Vector3 v2)
+        {
+
+            v1 = default(Vector3);
+
+            v1.X = 0;
+
+            foo(ref v1.X);
+
+            return TODO Node RefExpression;
+
+            Span<int> span = stackalloc int[1];
+
+            return new Vector3(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
+        }
+        TODO Node RefType Choice(bool condition, T consequence, T alternative)
+        {
+            if (condition)
+            {
+                return TODO Node RefExpression;
+            }
+            else
+            {
+                return TODO Node RefExpression;
+            }
+        }
+    }
 
     public void DoSomething(bool isEmployed, string personName, int personAge)
     { }
@@ -641,7 +742,7 @@ class CSharp72
 
     public void ConditionalRef()
     {
-         r = ;
+        TODO Node RefType r = TODO Node RefExpression;
     }
 
     public void LeadingSeparator()
@@ -658,125 +759,35 @@ class CSharp73
         var unmanaged = 666;
     }
 
+    unsafe struct IndexingMovableFixed
+    {
+        public fixed int myFixedField;
+    }
 
     static IndexingMovableFixed s;
 
     public unsafe void IndexingMovableFixedFields()
     {
-         ptr = s.myFixedField;
+        int* ptr = s.myFixedField;
         int t = s.myFixedField[5];
     }
 
     public void PatternBasedFixed()
     {
-
+        fixed (byte* ptr = byteArray) { }
     }
 
     public void StackallocArrayInitializer()
     {
-        Span<int> a = ;
-        Span<int> a = ;
-        Span<int> a = ;
-        Span<int> a = ;
+        Span<int> a = stackalloc int[3];
+        Span<int> a = stackalloc int[3];
+        Span<int> a = stackalloc int[];
+        Span<int> a = TODO Node ImplicitStackAllocArrayCreationExpression;
     }
 
     public void TupleEquality()
     {
-         t1, t2;
-        var res = t1 == ;
-    }
-}
-
-namespace CSharp80
-{
-    class CSharp80ExceptInterfaceDefaultImplement
-    {
-        void ReferenceNullable()
-        {
-            var? x = E;
-            .ToString();
-            string? wtf = null;
-            int?[]? hello;
-        }
-
-        void Patterns()
-        {
-            if ()Do();
-
-            return ;
-
-            var newState = ;
-        }
-
-        async Task AsyncStreams()
-        {
-            foreach (var item in asyncEnumerables) { }
-        }
-
-        void Ranges()
-        {
-            var thirdItem = list[2];
-            var lastItem = list[];
-            var multiDimensional = list[3, ];
-
-            var slice1 = list[];
-            var slice2 = list[];
-            var slice3 = list[];
-            var slice4 = list[];
-            var multiDimensional = list[, ];
-        }
-
-        void UsingDeclarators()
-        {
-            var item = new FileStream("./.f");
-
-            item.Dispose();
-        }
-
-        void StaticLocalFunction()
-        {
-            static unsafe void Func1() { }
-            static unsafe void Func1() { }
-            async static void Func2() { }
-            static async void Func2() { }
-        }
-
-        void NullCoalescingAssignment()
-        {
-            var item = ;
-        }
-
-        public readonly float Hello()
-        {
-            return 0.1f;
-        }
-    }
-    interface IA
-    {
-        void M()
-        {
-            WriteLine("IA.M");
-        }
-    }
-    interface IA
-    {
-        void M()
-        {
-            WriteLine("IA.M");
-        }
-    }
-    interface IB : IA
-    {
-        override void M()
-        {
-            WriteLine("IB.M");
-        }
-    }
-    interface IC : IA
-    {
-        override void M()
-        {
-            WriteLine("IC.M");
-        }
+        TODO Node TupleType t1, t2;
+        var res = t1 == TODO Node TupleExpression;
     }
 }
