@@ -234,8 +234,8 @@ namespace My
                 catch  { }
             }
             var anonymous = { A = 1, B = 2, C = 3 };
-            var query = ;
-            query = ;
+            var query = TODO Node QueryExpression;
+            query = TODO Node QueryExpression;
         }
         ~A() { }
         private readonly int f1;
@@ -253,11 +253,21 @@ namespace My
         }
         public abstract string P { get; }
         public abstract int this[int index] { get; set; }
-
-
-
-
-
+        TODO Node EventFieldDeclaration
+        TODO Node EventDeclaration
+        public static A operator +(A first, A second)
+        {
+            Delegate handler = new Delegate(Handler);
+            return first.Add(second);
+        }
+        public static bool operator true(A a)
+        {
+            return true;
+        }
+        public static bool operator false(A a)
+        {
+            return false;
+        }
         class C { }
     }
     public struct S : I
@@ -276,8 +286,11 @@ namespace My
         }
         public abstract string P { get; }
         public abstract int this[int index] { get; set; }
-
-
+        TODO Node EventFieldDeclaration
+        public static A operator +(A first, A second)
+        {
+            return first.Add(second);
+        }
         fixed int field;
         class C { }
     }
@@ -376,10 +389,10 @@ namespace ConsoleApplication1
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
 
-            var q = ;
+            var q = TODO Node QueryExpression;
         }
-
-
+        TODO Node ConversionOperatorDeclaration
+        TODO Node ConversionOperatorDeclaration
 
         public int foo = 5;
         void Bar2()
@@ -388,7 +401,7 @@ namespace ConsoleApplication1
             this.Foo = 5.GetType();
             Test t = "sss";
         }
-
+        TODO Node EventFieldDeclaration
 
         void Blah()
         {
@@ -397,7 +410,7 @@ namespace ConsoleApplication1
 
             Expression<Func<int>> e = () => i;
             Expression<Func<bool, Action>> e2 = b => () => ;
-            Func<bool, bool> f = ;
+            Func<bool, bool> f = TODO Node AnonymousMethodExpression;
             Func<int, int, int> f2 = () => 0;
             f2 = () => 1;
             Action a = Blah;
@@ -550,8 +563,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
         public string Fourth { get; }
 
         public Point Move(int dx, int dy);
-
-
+        public static Complex operator +(Complex a, Complex b);
+        TODO Node ConversionOperatorDeclaration
         public void Print();
 
         public string Name
@@ -615,8 +628,8 @@ class CSharp70
     {
         switch (arg)
         {
-
-
+            case "A" when b > 50:
+            case "B" when b < 50:
             default:break;
         }
         (A<B, C> D, E<F, G> H) = e;
@@ -685,7 +698,7 @@ class CSharp72
     {
         Func<int, int> s = () => x;
         ref TValue this[TKey index] => null;
-
+        public static Vector3 operator +(Vector3 x, Vector3 y);
 
         static readonly ref Vector3 M1_Trace()
         {
