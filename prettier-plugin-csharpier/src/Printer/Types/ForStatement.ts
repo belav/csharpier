@@ -1,9 +1,27 @@
+import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
-import { SyntaxTreeNode } from "../SyntaxTreeNode";
+import { HasValue, printPathValue, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface ForStatementNode extends SyntaxTreeNode<"ForStatement"> {}
+export interface ForStatementNode extends SyntaxTreeNode<"ForStatement"> {
+    forKeyword: HasValue;
+    declaration: SyntaxTreeNode;
+    initializers: SyntaxTreeNode[];
+    condition: SyntaxTreeNode;
+    incrementors: SyntaxTreeNode[];
+    statement: SyntaxTreeNode;
+}
 
 export const print: PrintMethod<ForStatementNode> = (path, options, print) => {
-    return (options as any).printTodo ? "TODO Node ForStatement" : "";
+    return concat([
+        printPathValue(path, "forKeyword"),
+        " (",
+        path.call(print, "declaration"),
+        " ",
+        path.call(print, "condition"),
+        "; ",
+        join(", ", path.map(print, "incrementors")),
+        ")",
+        path.call(print, "statement"),
+    ]);
 };

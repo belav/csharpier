@@ -11,5 +11,11 @@ export interface SimpleLambdaExpressionNode extends SyntaxTreeNode<"SimpleLambda
 }
 
 export const print: PrintMethod<SimpleLambdaExpressionNode> = (path, options, print) => {
-    return concat([path.call(print, "parameter"), " ", printPathValue(path, "arrowToken"), " ", path.call(print, "body")]);
+    return concat([
+        path.call(print, "parameter"),
+        " ",
+        printPathValue(path, "arrowToken"),
+        " ",
+        path.call(print, "body"),
+    ]);
 };

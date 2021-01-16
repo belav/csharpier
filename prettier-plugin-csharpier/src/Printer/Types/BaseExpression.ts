@@ -1,9 +1,1 @@
-import { PrintMethod } from "../PrintMethod";
-import { SyntaxTreeNode } from "../SyntaxTreeNode";
-import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
-
-export interface BaseExpressionNode extends SyntaxTreeNode<"BaseExpression"> {}
-
-export const print: PrintMethod<BaseExpressionNode> = (path, options, print) => {
-    return (options as any).printTodo ? "TODO Node BaseExpression" : "";
-};
+export { print } from "./ThisExpression";

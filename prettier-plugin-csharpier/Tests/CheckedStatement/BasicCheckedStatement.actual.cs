@@ -1,0 +1,10 @@
+class ClassName
+{
+    void MethodName()
+    {
+        checked
+        {
+            checked(++i);
+        }
+    }
+}

@@ -21,19 +21,26 @@ namespace My
 {
     using A.B;
     interface CoContra { }
-    TODO Node DelegateDeclaration
+
 
     public unsafe partial class A : C,
     I
     {
         static extern bool CreateDirectory(string name, SecurityAttribute sa);
 
-        private const int global = TODO Node SubtractExpression;
+        private const int global = int.MinValue - 1;
 
         static A() { }
         public A(int foo)
         {
-            TODO Node LabeledStatement
+            L:
+
+            {
+                int i = sizeof(int);
+                ++i;
+                var s1 = $"x {1}";
+                var s2 = $@"x {1}";
+            }
             int? local = int.MaxValue;
             Guid? local0 = new Guid(r.ToString());
 
@@ -110,24 +117,21 @@ namespace My
             }
             else if (i == 0)
             {
-                throw new Exception();
+                throw [object Object];
             }
             var o1 = new MyObject();
             var o2 = new MyObject(var);
             var o3 = new MyObject { A = i };
             var o4 = new MyObject(@dynamic) { A = 0, B = 0, C = 0 };
             var o5 = new { A = 0 };
-            var dictionaryInitializer = new Dictionary<int, string>
-            {
-                TODO Node ComplexElementInitializerExpression, TODO Node ComplexElementInitializerExpression
-            };
-            float[] a = TODO Node ArrayCreationExpression;
-            int[, , ] cube = TODO Node ArrayInitializerExpression;
-            int[][] jagged = TODO Node ArrayInitializerExpression;
-            int[][, ] arr = TODO Node ArrayCreationExpression;
-            arr[0] = TODO Node ArrayCreationExpression;
+            var dictionaryInitializer = new Dictionary<int, string> { ,  };
+            float[] a = ;
+            int[, , ] cube = ;
+            int[][] jagged = ;
+            int[][, ] arr = ;
+            arr[0] = ;
             arr[0][0, 0] = 47;
-            int[] arrayTypeInference = TODO Node ImplicitArrayCreationExpression;
+            int[] arrayTypeInference = ;
             switch (3) { }
             switch (i)
             {
@@ -159,35 +163,71 @@ namespace My
                 break;
             }
             while (i < 10);
-            TODO Node ForStatement
-            TODO Node LabeledStatement
-            TODO Node LabeledStatement
+            for (int j = 0; j < 100; ++j)
+            {
+                for ( ; )
+                {
+                    for (int i = 0, j = 0; i < length; i++, j++) { }
+                    if (true)continue;
+                    break;
+                }
+            }
+            label:
+            goto label;
+            label2:
+            ;
             foreach (var i in Items())
             {
                 if (i == 7)return;
                 else continue;
             }
-            TODO Node CheckedStatement
-            TODO Node UncheckedStatement
-            TODO Node LockStatement
-            TODO Node UsingStatement
-            TODO Node YieldReturnStatement
-            TODO Node YieldBreakStatement
-            TODO Node FixedStatement
-            TODO Node FixedStatement
-            TODO Node UnsafeStatement
-            TODO Node TryStatement
-            var anonymous = TODO Node ArrayInitializerExpression;
-            var query = TODO Node QueryExpression;
-            query = TODO Node QueryExpression;
+            checked
+            {
+                checked(++i);
+            }
+            unchecked
+            {
+                unchecked(++i);
+            }
+            lock (sync)process();
+            using (var v = BeginScope();)
+            using (A a = new A();)
+            using (A a = new A(), b = new A();)
+            using ()
+            return;
+            yield return [object Object];
+            yield break;
+
+
+
+            try
+            {
+                throw null;
+            }
+            catch (System.AccessViolationExceptionav)
+            {
+                throw av;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                try { }
+                catch  { }
+            }
+            var anonymous = ;
+            var query = ;
+            query = ;
         }
-        TODO Node DestructorDeclaration
+        ~A() { }
         private readonly int f1;
         private volatile int f2;
         public void Handler(object value) { }
-        public int m(T t)
+        public int m<T>(T t)
         {
-            TODO Node BaseExpression.m(t);
+            base.m(t);
             return 1;
         }
         public string P
@@ -196,27 +236,25 @@ namespace My
             set;
         }
         public abstract string P { get; }
-        TODO Node IndexerDeclaration
-        TODO Node EventFieldDeclaration
-        TODO Node EventDeclaration
-        TODO Node OperatorDeclaration
-        TODO Node OperatorDeclaration
-        TODO Node OperatorDeclaration
+
+
+
+
+
+
         class C { }
     }
-    TODO Node StructDeclaration
+
     public interface I
     {
         void A(int value);
 
         string Value { get; set; }
 
-        unsafe void UpdateSignatureByHashingContent(
-            TODO Node PointerType buffer,
-            int size);
+        unsafe void UpdateSignatureByHashingContent( buffer, int size);
     }
-    TODO Node EnumDeclaration
-    TODO Node DelegateDeclaration
+
+
     namespace Test
     {
         using System;
@@ -231,8 +269,8 @@ namespace My
                 int ??? = 0;
                 while (++counter++ < --exponent--)
                 {
-                    result = TODO Node MultiplyExpression + TODO Node UnaryPlusExpression + number;
-                    TODO Node YieldReturnStatement
+                    result = result * number +  + number;
+                    yield return result;
                 }
             }
             static void Main()
@@ -244,7 +282,7 @@ namespace My
             }
             async void Wait()
             {
-                TODO Node AwaitExpression;
+                await System.Threading.Tasks.Task.Delay(0);
             }
             void AsyncAnonymous()
             {
@@ -280,7 +318,7 @@ namespace ConsoleApplication1
             public T f;
             public class Foo : IEnumerable<T>
             {
-                public void Method(K k, T t, U u)
+                public void Method<K, V>(K k, T t, U u)
                 {
                     A<int> a;
                     M(A<B, C>(5));
@@ -296,10 +334,10 @@ namespace ConsoleApplication1
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
 
-            var q = TODO Node QueryExpression;
+            var q = ;
         }
-        TODO Node ConversionOperatorDeclaration
-        TODO Node ConversionOperatorDeclaration
+
+
 
         public int foo = 5;
         void Bar2()
@@ -308,7 +346,7 @@ namespace ConsoleApplication1
             this.Foo = 5.GetType();
             Test t = "sss";
         }
-        TODO Node EventFieldDeclaration
+
 
         void Blah()
         {
@@ -317,32 +355,32 @@ namespace ConsoleApplication1
 
             Expression<Func<int>> e = () => i;
             Expression<Func<bool, Action>> e2 = b => () => ;
-            Func<bool, bool> f = TODO Node AnonymousMethodExpression;
+            Func<bool, bool> f = ;
             Func<int, int, int> f2 = () => 0;
             f2 = () => 1;
             Action a = Blah;
             f2 = () => ;
             f2 = () => ;
         }
-        TODO Node DelegateDeclaration
-        TODO Node DelegateDeclaration
+
+
 
         public Type Foo
         {
             get
             {
-                var result = TODO Node TypeOfExpression;
-                var t = TODO Node TypeOfExpression == TODO Node TypeOfExpression;
-                t = TODO Node TypeOfExpression;
-                return TODO Node TypeOfExpression;
+                var result = typeof(IEnumerable<int>);
+                var t = typeof(int?) == typeof(Nullable<int>);
+                t = typeof(IEnumerable<int?[][][]>);
+                return typeof(IEnumerable<>);
             }
-            set { var t = TODO Node TypeOfExpression; t.ToString(); t = value; }
+            set { var t = typeof(System.Int32); t.ToString(); t = value; }
         }
 
         public void Constants()
         {
             int i = 1 + 2 + 3 + 5;
-            TODO Node AliasQualifiedName.String s = "a" + (System.String)"a" + "a" + "a" + "a" + "A";
+            .String s = "a" + (System.String)"a" + "a" + "a" + "a" + "A";
         }
 
         public void ConstructedType()
@@ -357,7 +395,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
 {
     class C
     {
-        void M(T t, U u)
+        void M<U>(T t, U u)
         {
 
             int intValue = 0;
@@ -375,13 +413,13 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
     class yield
     {
-        void Foo(__arglist)
+        void Foo<U>(__arglist)
         {
             C<U> c = null;
-            c.M<int>(5, TODO Node DefaultExpression);
-            TypedReference tr = TODO Node MakeRefExpression;
-            Type t = TODO Node RefTypeExpression;
-            int j = TODO Node RefValueExpression;
+            c.M<int>(5, default(U));
+            TypedReference tr = __makeref(c);
+            Type t = __reftype(tr);
+            int j = __refvalue(tr);
             Params(t, t);
             Params(ref c, out c);
         }
@@ -390,50 +428,51 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
         public override string ToString()
         {
-            return TODO Node BaseExpression.ToString();
+            return base.ToString();
         }
 
         public partial void OnError();
 
         public partial void method()
         {
-            int?[] a = TODO Node ArrayCreationExpression;
-            int[] var = TODO Node ArrayInitializerExpression;
+            int?[] a = ;
+            int[] var = ;
             int i = a[i];
             Foo<T> f = new Foo<int>();
             f.method();
-            i = TODO Node BitwiseOrExpression;
-            bool b = TODO Node BitwiseOrExpression;
+            i = i + i - i * i / i % i & i | i ^ i;
+            bool b = true & false | true ^ false;
             b = !b;
-            i = TODO Node BitwiseNotExpression;
+            i = ~i;
             b = i < i && i > i;
             int? ii = 5;
             int f = true ? 1 : 0;
             i++;
             i--;
             b = true && false || true;
-            TODO Node LeftShiftExpression;
-            TODO Node RightShiftExpression;
-            b = i == i && i != i && i <= i && TODO Node GreaterThanOrEqualExpression;
-            TODO Node AddAssignmentExpression;
-            TODO Node SubtractAssignmentExpression;
-            TODO Node MultiplyAssignmentExpression;
-            TODO Node DivideAssignmentExpression;
-            TODO Node ModuloAssignmentExpression;
-            TODO Node AndAssignmentExpression;
-            TODO Node OrAssignmentExpression;
-            TODO Node ExclusiveOrAssignmentExpression;
-            TODO Node LeftShiftAssignmentExpression;
-            TODO Node RightShiftAssignmentExpression;
+            i << 5;
+            i >> 5;
+            b = i == i && i != i && i <= i && i >= i;
+            i += 5.0;
+            i -= i;
+            i *= i;
+
+            i /= i;
+            i %= i;
+            i &= i;
+            i |= i;
+            i ^= i;
+            i <<= i;
+            i >>= i;
             object s = x => x + 1;
             double d = .3;
             Point point;
-            TODO Node UnsafeStatement
-            TODO Node AliasQualifiedName br = null;
+
+             br = null;
             x[1] = 3;
             x[1, 5] = "str";
         }
-        TODO Node StructDeclaration
+
     }
     // From here:https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6
 
@@ -454,28 +493,26 @@ namespace Comments.XmlComments.UndocumentedKeywords
         public string Fourth { get; }
 
         public Point Move(int dx, int dy);
-        TODO Node OperatorDeclaration
-        TODO Node ConversionOperatorDeclaration
+
+
         public void Print();
 
         public string Name
         => First + " " + Last;
-        TODO Node IndexerDeclaration
+
 
         async void Test()
         {
 
-            WriteLine(
-                Sqrt(
-                    TODO Node MultiplyExpression + TODO Node MultiplyExpression));
-            WriteLine(TODO Node SubtractExpression);
+            WriteLine(Sqrt(3 * 3 + 4 * 4));
+            WriteLine(Friday - Monday);
             var range = Range(5, 17);
-            var even = range.Where(i => TODO Node ModuloExpression == 0);
+            var even = range.Where(i => i % 2 == 0);
 
             int? length = customers?.Length;
-            Customer first = customers?TODO Node ElementBindingExpression;
+            Customer first = customers?;
             int length = customers?.Length ?? 0;
-            int? first = customers?TODO Node ElementBindingExpression?.Orders?.Count();
+            int? first = customers??.Orders?.Count();
             PropertyChanged?.Invoke(this, args);
 
             string s = $"{p.Name} is {p.Age} year{{s}} old #";
@@ -485,19 +522,32 @@ namespace Comments.XmlComments.UndocumentedKeywords
                                    ""\";
             s = $"Color [ R={func(3)}, G={G}, B={B}, A={A} ]";
 
-            if (x == null)throw new ArgumentNullException(nameof(x));
+            if (x == null)throw [object Object];
             WriteLine(nameof(person.Address.ZipCode));
 
             var numbers = new Dictionary<int, string>
             {
-                TODO Node ImplicitElementAccess = "seven",
-                TODO Node ImplicitElementAccess = "nine",
-                TODO Node ImplicitElementAccess = "thirteen"
+                 = "seven",
+                 = "nine",
+                 = "thirteen"
             };
-            TODO Node TryStatement
+
+            try { }
+            catch (MyExceptione) { }
 
             Resource res = null;
-            TODO Node TryStatement
+            try
+            {
+                res = await Resource.OpenAsync();
+            }
+            catch (ResourceExceptione)
+            {
+                await Resource.LogAsync(res, e);
+            }
+            finally
+            {
+                if (res != null)await res.CloseAsync();
+            }
         }
     }
 }
@@ -508,15 +558,15 @@ class CSharp70
     {
         switch (arg)
         {
-            TODO Node CasePatternSwitchLabel
-            TODO Node CasePatternSwitchLabel
+
+
             default:break;
         }
-        TODO Node TupleExpression = e;
+         = e;
 
-        if (TODO Node IsPatternExpression) { }
+        if () { }
 
-        if (TODO Node IsPatternExpression)
+        if ()
         {
             Hello();
         }
@@ -529,8 +579,8 @@ class CSharp70
             return args[i];
         }
 
-        async Task<string> Hello(T i);
-        TODO Node AwaitExpression;
+        async Task<string> Hello<T>(T i);
+        await Hello(1);
     }
 
     public static void OutVar(string[] args)
@@ -541,7 +591,7 @@ class CSharp70
 
     public void ThrowExpression()
     {
-        var result = nullableResult ?? TODO Node ThrowExpression;
+        var result = nullableResult ?? ;
     }
 
     public void BinaryLiterals()
@@ -563,20 +613,19 @@ class CSharp71
 {
     void DefaultWithoutTypeName(string content)
     {
-        DefaultWithoutTypeName(TODO Node DefaultLiteralExpression);
+        DefaultWithoutTypeName(default);
     }
 
-    void TupleRecognize(int a, TODO Node TupleType b, TODO Node TupleType? c)
+    void TupleRecognize(int a,  b, ? c)
     {
-        var result = list.Select(c => TODO Node TupleExpression).Where(
-            t => t.f2 == 1);
+        var result = list.Select(c => ).Where(t => t.f2 == 1);
     }
 }
 
 class CSharp72
 {
-    TODO Node StructDeclaration
-    TODO Node StructDeclaration
+
+
 
     public void DoSomething(bool isEmployed, string personName, int personAge)
     { }
@@ -592,7 +641,7 @@ class CSharp72
 
     public void ConditionalRef()
     {
-        TODO Node RefType r = TODO Node RefExpression;
+         r = ;
     }
 
     public void LeadingSeparator()
@@ -604,37 +653,37 @@ class CSharp72
 
 class CSharp73
 {
-    void Blittable(T value)
+    void Blittable<T>(T value)
     {
         var unmanaged = 666;
     }
-    TODO Node StructDeclaration
+
 
     static IndexingMovableFixed s;
 
     public unsafe void IndexingMovableFixedFields()
     {
-        TODO Node PointerType ptr = s.myFixedField;
+         ptr = s.myFixedField;
         int t = s.myFixedField[5];
     }
 
     public void PatternBasedFixed()
     {
-        TODO Node FixedStatement
+
     }
 
     public void StackallocArrayInitializer()
     {
-        Span<int> a = TODO Node StackAllocArrayCreationExpression;
-        Span<int> a = TODO Node StackAllocArrayCreationExpression;
-        Span<int> a = TODO Node StackAllocArrayCreationExpression;
-        Span<int> a = TODO Node ImplicitStackAllocArrayCreationExpression;
+        Span<int> a = ;
+        Span<int> a = ;
+        Span<int> a = ;
+        Span<int> a = ;
     }
 
     public void TupleEquality()
     {
-        TODO Node TupleType t1, t2;
-        var res = t1 == TODO Node TupleExpression;
+         t1, t2;
+        var res = t1 == ;
     }
 }
 
@@ -645,18 +694,18 @@ namespace CSharp80
         void ReferenceNullable()
         {
             var? x = E;
-            TODO Node SuppressNullableWarningExpression.ToString();
+            .ToString();
             string? wtf = null;
             int?[]? hello;
         }
 
         void Patterns()
         {
-            if (TODO Node IsPatternExpression)Do();
+            if ()Do();
 
-            return TODO Node SwitchExpression;
+            return ;
 
-            var newState = TODO Node SwitchExpression;
+            var newState = ;
         }
 
         async Task AsyncStreams()
@@ -667,23 +716,20 @@ namespace CSharp80
         void Ranges()
         {
             var thirdItem = list[2];
-            var lastItem = list[TODO Node IndexExpression];
-            var multiDimensional = list[3, TODO Node IndexExpression];
+            var lastItem = list[];
+            var multiDimensional = list[3, ];
 
-            var slice1 = list[TODO Node RangeExpression];
-            var slice2 = list[TODO Node RangeExpression];
-            var slice3 = list[TODO Node RangeExpression];
-            var slice4 = list[TODO Node RangeExpression];
-            var multiDimensional = list[
-                TODO Node RangeExpression,
-                TODO Node RangeExpression
-            ];
+            var slice1 = list[];
+            var slice2 = list[];
+            var slice3 = list[];
+            var slice4 = list[];
+            var multiDimensional = list[, ];
         }
 
         void UsingDeclarators()
         {
             var item = new FileStream("./.f");
-            TODO Node FixedStatement
+
             item.Dispose();
         }
 
@@ -697,7 +743,7 @@ namespace CSharp80
 
         void NullCoalescingAssignment()
         {
-            var item = TODO Node CoalesceAssignmentExpression;
+            var item = ;
         }
 
         public readonly float Hello()

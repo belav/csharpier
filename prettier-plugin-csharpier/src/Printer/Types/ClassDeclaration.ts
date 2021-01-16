@@ -4,7 +4,7 @@ import { printValue, HasModifiers, HasValue, SyntaxTreeNode, HasIdentifier, prin
 import { PrintMethod } from "../PrintMethod";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 import { printModifiers } from "../PrintModifiers";
-import { BaseListNode } from './BaseList';
+import { BaseListNode } from "./BaseList";
 
 export interface ClassDeclarationNode extends SyntaxTreeNode<"ClassDeclaration">, HasModifiers, HasIdentifier {
     keyword: HasValue;
@@ -23,7 +23,7 @@ export const print: PrintMethod<ClassDeclarationNode> = (path, options, print) =
     if (node.baseList) {
         parts.push(path.call(print, "baseList"));
     }
-    
+
     const hasMembers = node.members.length > 0;
     if (hasMembers) {
         parts.push(concat([hardline, "{"]));

@@ -1,1 +1,1 @@
-export { print } from "./AsExpression"
+export { print } from "./AsExpression";

@@ -1,11 +1,11 @@
 import { Doc } from "prettier";
 import { printStatements } from "../Helpers";
 import { PrintMethod } from "../PrintMethod";
-import { printLeftRightExpression, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { printLeftRightOperator, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface CollectionInitializerExpressionNode extends SyntaxTreeNode<"CollectionInitializerExpression"> {
-    expressions: SyntaxTreeNode[]
+    expressions: SyntaxTreeNode[];
 }
 
 export const print: PrintMethod<CollectionInitializerExpressionNode> = (path, options, print) => {

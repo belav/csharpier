@@ -9,6 +9,7 @@ export interface MethodDeclarationNode extends SyntaxTreeNode<"MethodDeclaration
     returnType: SyntaxTreeNode;
     parameterList: ParameterListNode;
     body?: SyntaxTreeNode;
+    typeParameterList?: SyntaxTreeNode;
 }
 
 export const print: PrintMethod<MethodDeclarationNode> = (path, options, print) => {
@@ -17,7 +18,9 @@ export const print: PrintMethod<MethodDeclarationNode> = (path, options, print) 
     parts.push(printModifiers(node));
     parts.push(path.call(print, "returnType"));
     parts.push(" ", printIdentifier(node));
-
+    if (node.typeParameterList) {
+        parts.push(path.call(print, "typeParameterList"));
+    }
     parts.push(path.call(print, "parameterList"));
     if (node.body) {
         parts.push(path.call(print, "body"));

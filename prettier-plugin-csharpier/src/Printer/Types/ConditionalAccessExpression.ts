@@ -6,7 +6,6 @@ export interface ConditionalAccessExpressionNode extends SyntaxTreeNode<"Conditi
     expression: SyntaxTreeNode;
     operatorToken: HasValue;
     whenNotNull: SyntaxTreeNode;
-
 }
 
 export const print: PrintMethod<ConditionalAccessExpressionNode> = (path, options, print) => {

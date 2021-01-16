@@ -1,1 +1,1 @@
-export { print } from "./SetAccessorDeclaration"
+export { print } from "./SetAccessorDeclaration";

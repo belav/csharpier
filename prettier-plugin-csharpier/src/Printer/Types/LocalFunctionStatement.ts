@@ -1,1 +1,1 @@
-export { print } from "./MethodDeclaration"
+export { print } from "./MethodDeclaration";

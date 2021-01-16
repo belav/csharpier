@@ -1,9 +1,9 @@
 import { PrintMethod } from "../PrintMethod";
-import { SyntaxTreeNode } from "../SyntaxTreeNode";
+import { HasIdentifier, printIdentifier, printPathIdentifier, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface LabeledStatementNode extends SyntaxTreeNode<"LabeledStatement"> {}
+export interface LabeledStatementNode extends SyntaxTreeNode<"LabeledStatement">, HasIdentifier {}
 
 export const print: PrintMethod<LabeledStatementNode> = (path, options, print) => {
-    return (options as any).printTodo ? "TODO Node LabeledStatement" : "";
+    return concat([printPathIdentifier(path), ":", hardline, path.call(print, "statement")]);
 };

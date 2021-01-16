@@ -3,9 +3,9 @@ import { SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface InterpolationNode extends SyntaxTreeNode<"Interpolation"> {
-    expression: SyntaxTreeNode
+    expression: SyntaxTreeNode;
 }
 
 export const print: PrintMethod<InterpolationNode> = (path, options, print) => {
-    return concat(["{", path.call(print, "expression"), "}"])
+    return concat(["{", path.call(print, "expression"), "}"]);
 };

@@ -11,9 +11,8 @@ export const print: PrintMethod<ParameterNode> = (path, options, print) => {
     const identifier = printIdentifier(path.getValue());
 
     if (node.type) {
-        return concat([path.call(print, "type"), " ", identifier])
+        return concat([path.call(print, "type"), " ", identifier]);
     }
 
     return identifier;
-
 };

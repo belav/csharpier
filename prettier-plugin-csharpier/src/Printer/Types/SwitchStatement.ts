@@ -13,6 +13,12 @@ export const print: PrintMethod<SwitchStatementNode> = (path, options, print) =>
     const sections =
         node.sections.length === 0
             ? " { }"
-            : concat([hardline, "{", indent(concat([hardline, join(hardline, path.map(print, "sections"))])), hardline, "}"]);
+            : concat([
+                  hardline,
+                  "{",
+                  indent(concat([hardline, join(hardline, path.map(print, "sections"))])),
+                  hardline,
+                  "}",
+              ]);
     return concat([printValue(node.switchKeyword), " (", path.call(print, "expression"), ")", sections]);
 };

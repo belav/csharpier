@@ -5,9 +5,9 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface AnonymousObjectMemberDeclaratorNode extends SyntaxTreeNode<"AnonymousObjectMemberDeclarator"> {
     nameEquals: {
-        name: SyntaxTreeNode,
-    } | null,
-    expression: SyntaxTreeNode,
+        name: SyntaxTreeNode;
+    } | null;
+    expression: SyntaxTreeNode;
 }
 
 export const print: PrintMethod<AnonymousObjectMemberDeclaratorNode> = (path, options, print) => {

@@ -1,12 +1,14 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { HasValue, printPathValue, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface ThrowStatementNode extends SyntaxTreeNode<"ThrowStatement"> {
     throwKeyword: HasValue;
-    expression: SyntaxTreeNode
+    expression?: SyntaxTreeNode;
 }
 
 export const print: PrintMethod<ThrowStatementNode> = (path, options, print) => {
-    return concat([printPathValue(path, "throwKeyword"), " ", path.call(print, "expression"), ";"])
+    const node = path.getValue()
+    const expression = node.expression ? " " +  path.call(print, "expression") : "";
+    return concat([printValue(node.throwKeyword), expression, ";"]);
 };

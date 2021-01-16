@@ -9,5 +9,5 @@ export interface MemberBindingExpressionNode extends SyntaxTreeNode<"MemberBindi
 }
 
 export const print: PrintMethod<MemberBindingExpressionNode> = (path, options, print) => {
-    return concat([printPathValue(path, "operatorToken"), path.call(print, "name")])
+    return concat([printPathValue(path, "operatorToken"), path.call(print, "name")]);
 };

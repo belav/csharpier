@@ -9,5 +9,11 @@ export interface AsExpressionNode extends SyntaxTreeNode<"AsExpression"> {
 }
 
 export const print: PrintMethod<AsExpressionNode> = (path, options, print) => {
-    return concat([path.call(print, "left"), " ", printPathValue(path, "operatorToken"), " ", path.call(print, "right")])
+    return concat([
+        path.call(print, "left"),
+        " ",
+        printPathValue(path, "operatorToken"),
+        " ",
+        path.call(print, "right"),
+    ]);
 };

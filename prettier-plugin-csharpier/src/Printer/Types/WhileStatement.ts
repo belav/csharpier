@@ -9,5 +9,11 @@ export interface WhileStatementNode extends SyntaxTreeNode<"WhileStatement"> {
 }
 
 export const print: PrintMethod<WhileStatementNode> = (path, options, print) => {
-    return concat([printPathValue(path, "whileKeyword"), " (", path.call(print, "condition"), ")", path.call(print, "statement")]);
+    return concat([
+        printPathValue(path, "whileKeyword"),
+        " (",
+        path.call(print, "condition"),
+        ")",
+        path.call(print, "statement"),
+    ]);
 };

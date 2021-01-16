@@ -1,9 +1,15 @@
 import { PrintMethod } from "../PrintMethod";
-import { SyntaxTreeNode } from "../SyntaxTreeNode";
+import { HasValue, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface YieldReturnStatementNode extends SyntaxTreeNode<"YieldReturnStatement"> {}
+export interface YieldReturnStatementNode extends SyntaxTreeNode<"YieldReturnStatement"> {
+    yieldKeyword: HasValue;
+    returnOrBreakKeyword: HasValue;
+    expression?: SyntaxTreeNode;
+}
 
 export const print: PrintMethod<YieldReturnStatementNode> = (path, options, print) => {
-    return (options as any).printTodo ? "TODO Node YieldReturnStatement" : "";
+    const node = path.getValue();
+    const expression = node.expression ? " " + path.call(print, "expression") : "";
+    return concat([printValue(node.yieldKeyword), " ", printValue(node.returnOrBreakKeyword), expression, ";"]);
 };

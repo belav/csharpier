@@ -11,5 +11,11 @@ export interface GotoCaseStatementNode extends SyntaxTreeNode<"GotoCaseStatement
 export const print: PrintMethod<GotoCaseStatementNode> = (path, options, print) => {
     const node = path.getValue();
     const expression = node.expression ? " " + path.call(print, "expression") : "";
-    return concat([printValue(node.gotoKeyword), " ", printValue(node.caseOrDefaultKeyword), expression, ";"]);
+    return concat([
+        printValue(node.gotoKeyword),
+        !!node.caseOrDefaultKeyword.value ? " " : "",
+        printValue(node.caseOrDefaultKeyword),
+        expression,
+        ";",
+    ]);
 };
