@@ -255,9 +255,19 @@ namespace My
         public abstract int this[int index] { get; set; }
 
 
-
-
-
+        public static A operator +(A first, A second)
+        {
+            Delegate handler = new Delegate(Handler);
+            return first.Add(second);
+        }
+        public static bool operator true(A a)
+        {
+            return true;
+        }
+        public static bool operator false(A a)
+        {
+            return false;
+        }
         class C { }
     }
     public struct S : I
@@ -277,7 +287,10 @@ namespace My
         public abstract string P { get; }
         public abstract int this[int index] { get; set; }
 
-
+        public static A operator +(A first, A second)
+        {
+            return first.Add(second);
+        }
         fixed int field;
         class C { }
     }
@@ -550,7 +563,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
         public string Fourth { get; }
 
         public Point Move(int dx, int dy);
-
+        public static Complex operator +(Complex a, Complex b);
 
         public void Print();
 
@@ -615,8 +628,8 @@ class CSharp70
     {
         switch (arg)
         {
-
-
+            case "A" when b > 50:
+            case "B" when b < 50:
             default:break;
         }
         (A<B, C> D, E<F, G> H) = e;
@@ -685,7 +698,7 @@ class CSharp72
     {
         Func<int, int> s = () => x;
         ref TValue this[TKey index] => null;
-
+        public static Vector3 operator +(Vector3 x, Vector3 y);
 
         static readonly ref Vector3 M1_Trace()
         {
