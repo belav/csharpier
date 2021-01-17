@@ -234,8 +234,8 @@ namespace My
                 catch  { }
             }
             var anonymous = { A = 1, B = 2, C = 3 };
-            var query = ;
-            query = ;
+            var query = from c in customers group c by c.Country;
+            query = from c in customers select c;
         }
         ~A() { }
         private readonly int f1;
@@ -253,8 +253,19 @@ namespace My
         }
         public abstract string P { get; }
         public abstract int this[int index] { get; set; }
-
-
+        public readonly event Event E;
+        public event Action E1
+        {
+            add
+            {
+                value = value;
+            }
+            remove
+            {
+                E += Handler;
+                E -= Handler;
+            }
+        }
         public static A operator +(A first, A second)
         {
             Delegate handler = new Delegate(Handler);
@@ -286,7 +297,7 @@ namespace My
         }
         public abstract string P { get; }
         public abstract int this[int index] { get; set; }
-
+        public event Event E;
         public static A operator +(A first, A second)
         {
             return first.Add(second);
@@ -389,10 +400,17 @@ namespace ConsoleApplication1
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
 
-            var q = ;
+            var q = from i in new int[] select i;
         }
 
-
+        public static implicit operator Test(string s)
+        {
+            return new ConsoleApplication1.Test();
+        }
+        public static explicit operator Test(string s)
+        {
+            return new Test();
+        }
 
         public int foo = 5;
         void Bar2()
@@ -402,6 +420,7 @@ namespace ConsoleApplication1
             Test t = "sss";
         }
 
+        public event EventHandler MyEvent = delegate { };
 
         void Blah()
         {
@@ -410,7 +429,10 @@ namespace ConsoleApplication1
 
             Expression<Func<int>> e = () => i;
             Expression<Func<bool, Action>> e2 = b => () => ;
-            Func<bool, bool> f = ;
+            Func<bool, bool> f = delegate(bool a)
+            {
+                return await !a;
+            };
             Func<int, int, int> f2 = () => 0;
             f2 = () => 1;
             Action a = Blah;
@@ -564,7 +586,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
         public Point Move(int dx, int dy);
         public static Complex operator +(Complex a, Complex b);
-
+        public static implicit operator string(Person p);
         public void Print();
 
         public string Name

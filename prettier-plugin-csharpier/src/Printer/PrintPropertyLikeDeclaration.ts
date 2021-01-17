@@ -12,7 +12,15 @@ import {
     SyntaxTreeNode,
 } from "./SyntaxTreeNode";
 import { IndexerDeclaration } from "./Types";
-import { BaseListNode } from "./Types/BaseList";
+
+export interface EventDeclarationNode
+    extends SyntaxTreeNode<"EventDeclaration">,
+        HasModifiers,
+        HasIdentifier {
+    eventKeyword: HasValue;
+    type: SyntaxTreeNode;
+    accessorList?: SyntaxTreeNode;
+}
 
 export interface PropertyDeclarationNode
     extends SyntaxTreeNode<"PropertyDeclaration">,
@@ -31,7 +39,7 @@ export interface IndexerDeclarationNode extends SyntaxTreeNode<"IndexerDeclarati
     expressionBody?: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<PropertyDeclarationNode | IndexerDeclarationNode> = (path, options, print) => {
+export const print: PrintMethod<PropertyDeclarationNode | IndexerDeclarationNode | EventDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
 
     let contents: Doc;
@@ -46,11 +54,14 @@ export const print: PrintMethod<PropertyDeclarationNode | IndexerDeclarationNode
         identifier = printIdentifier(node);
     } else if (node.nodeType === "IndexerDeclaration") {
         identifier = concat([printValue(node.thisKeyword), "[", join(", ", path.map(print, "parameterList", "parameters")), "]"]);
+    } else if (node.nodeType === "EventDeclaration") {
+        identifier = printIdentifier(node);
     }
 
     return group(
         concat([
             printModifiers(node),
+            (node.nodeType === "EventDeclaration" ? printValue(node.eventKeyword) + " ": ""),
             path.call(print, "type"),
             " ",
             identifier,

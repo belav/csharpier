@@ -17,9 +17,11 @@ export interface MethodLikeDeclarationNode
         HasModifiers,
         HasIdentifier {
     attributeLists: SyntaxTreeNode[];
-    returnType: SyntaxTreeNode;
+    returnType?: SyntaxTreeNode;
+    implicitOrExplicitKeyword?: HasValue;
     operatorKeyword?: HasValue;
     operatorToken?: HasValue;
+    type?: SyntaxTreeNode;
     parameterList: ParameterListNode;
     body?: SyntaxTreeNode;
     typeParameterList?: SyntaxTreeNode;
@@ -29,11 +31,23 @@ export const print: PrintMethod<MethodLikeDeclarationNode> = (path, options, pri
     const node = path.getValue();
     const parts: Doc[] = [];
     parts.push(printModifiers(node));
-    parts.push(path.call(print, "returnType"));
+    if (node.returnType) {
+        parts.push(path.call(print, "returnType"), " ");
+    }
     if (node.identifier) {
-        parts.push(" ", printIdentifier(node));
-    } else {
-        parts.push(" ", printValue(node.operatorKeyword!), " ", printValue(node.operatorToken!));
+        parts.push(printIdentifier(node));
+    }
+    if (node.implicitOrExplicitKeyword) {
+        parts.push(printValue(node.implicitOrExplicitKeyword), " ");
+    }
+    if (node.operatorKeyword) {
+        parts.push(printValue(node.operatorKeyword), " ");
+    }
+    if (node.operatorToken) {
+        parts.push(printValue(node.operatorToken));
+    }
+    if (node.type) {
+        parts.push(path.call(print, "type"));
     }
 
     if (node.typeParameterList) {
