@@ -31,7 +31,7 @@ public class ClassName
             var jsonSerializerSettings = new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                // TODO can we somehow store this thing between files?
+                // TODO can we somehow store this thing between files?ll .
                 ContractResolver = new TypeInsertionResolver(),
                 DefaultValueHandling = DefaultValueHandling.Ignore
             };

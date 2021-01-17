@@ -12,7 +12,7 @@ export const print: PrintMethod<RefTypeNode> = (path, options, print) => {
     const node = path.getValue();
     return concat([
         printValue(node.refKeyword),
-        node.readOnlyKeyword.value ? " " + printValue(node.readOnlyKeyword) : "",
+        node.readOnlyKeyword ? " " + printValue(node.readOnlyKeyword) : "",
         " ",
         path.call(print, "type"),
     ]);
