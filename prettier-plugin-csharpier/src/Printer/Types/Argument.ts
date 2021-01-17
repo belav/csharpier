@@ -11,7 +11,7 @@ export interface ArgumentNode extends SyntaxTreeNode<"Argument"> {
 export const print: PrintMethod<ArgumentNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
-    if (node.refKindKeyword.value) {
+    if (node.refKindKeyword?.value) {
         parts.push(printValue(node.refKindKeyword), " ");
     }
     parts.push(path.call(print, "expression"));

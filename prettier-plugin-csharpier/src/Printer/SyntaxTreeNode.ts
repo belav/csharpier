@@ -42,7 +42,10 @@ export function printPathValue<T1, T2 extends keyof T1>(path: FastPath<T1>, prop
     return printValue((node[property] as any) as HasValue);
 }
 
-export function printValue(hasValue: HasValue) {
+export function printValue(hasValue: HasValue | undefined) {
+    if (!hasValue) {
+        return "";
+    }
     if (typeof hasValue.text === "undefined") {
         throw new Error("There was no text property on " + JSON.stringify(hasValue, null, "    "));
     }

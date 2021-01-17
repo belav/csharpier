@@ -4,7 +4,7 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface GotoCaseStatementNode extends SyntaxTreeNode<"GotoCaseStatement"> {
     gotoKeyword: HasValue;
-    caseOrDefaultKeyword: HasValue;
+    caseOrDefaultKeyword?: HasValue;
     expression?: SyntaxTreeNode;
 }
 
@@ -13,7 +13,7 @@ export const print: PrintMethod<GotoCaseStatementNode> = (path, options, print) 
     const expression = node.expression ? " " + path.call(print, "expression") : "";
     return concat([
         printValue(node.gotoKeyword),
-        !!node.caseOrDefaultKeyword.value ? " " : "",
+        node.caseOrDefaultKeyword ? " " : "",
         printValue(node.caseOrDefaultKeyword),
         expression,
         ";",

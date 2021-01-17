@@ -1,16 +1,16 @@
 
-using  System;
-using  System.Collections.Generic;
-using  System.Linq;
-using  System.Linq.Expressions;
-using  System.Text;
-using  M = System.Math;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using M = System.Math;
 
-using  System.Diagnostics;
+using System.Diagnostics;
 
-using  ConsoleApplication2.Test;
-using  X = int1;
-using  Y = ABC.X<int>;
+using ConsoleApplication2.Test;
+using X = int1;
+using Y = ABC.X<int>;
 
 using static System.Math;
 using static System.DayOfWeek;
@@ -23,7 +23,7 @@ class TopLevelType : IDisposable
 
 namespace My
 {
-    using  A.B;
+    using A.B;
     interface CoContra { }
     delegate void CoContra2<T, K>() where T : struct;
 
@@ -328,8 +328,8 @@ namespace My
     delegate void Delegate(object P);
     namespace Test
     {
-        using  System;
-        using  System.Collections;
+        using System;
+        using System.Collections;
         public class Список
         {
             public static IEnumerable Power(int number, int exponent)

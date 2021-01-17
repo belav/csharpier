@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -12,14 +13,14 @@ namespace Parser
     class Program
     {
         private const string TestClass = @"
-// class comment
 public class ClassName
 {
-    // method comment
-    void LongMethod(string first, string second, string third, string fourth, string fifth) {
-        // do stuff
+    public void MethodName()
+    {
+        return;
     }
 }
+
 ";
         
         static void Main(string[] args)
@@ -30,8 +31,9 @@ public class ClassName
             var jsonSerializerSettings = new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                // TODO can we somehow store this thing between files?
                 ContractResolver = new TypeInsertionResolver(),
-                
+                DefaultValueHandling = DefaultValueHandling.Ignore
             };
             
             Console.OutputEncoding = Encoding.UTF8;
@@ -41,6 +43,19 @@ public class ClassName
 
     public class TypeInsertionResolver : CamelCasePropertyNamesContractResolver
     {
+        protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
+        {
+            var property = base.CreateProperty(member, memberSerialization);
+            if (property.PropertyType == typeof(SyntaxTokenList)
+                || (property.PropertyType.IsGenericType && 
+                    (property.PropertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>) || property.PropertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>))))
+            {
+                property.DefaultValueHandling = DefaultValueHandling.Include;
+            }
+
+            return property;
+        }
+
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
             var props = base.CreateProperties(type, memberSerialization);
