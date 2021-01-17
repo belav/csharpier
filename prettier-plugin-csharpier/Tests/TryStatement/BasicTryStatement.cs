@@ -10,6 +10,10 @@ class ClassName
         {
             throw;
         }
+        catch (ArgumentException ex)
+        {
+            throw;
+        }
         finally
         {
             return;

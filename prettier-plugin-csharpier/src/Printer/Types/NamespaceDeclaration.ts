@@ -2,6 +2,7 @@ import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
 import { printValue, HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
+import has = Reflect.has;
 
 export interface NamespaceDeclarationNode extends SyntaxTreeNode<"NamespaceDeclaration"> {
     namespaceKeyword: HasValue;
@@ -24,7 +25,8 @@ export const print: PrintMethod<NamespaceDeclarationNode> = (path, options, prin
             indent(
                 concat([
                     hardline,
-                    hasUsing ? concat([concat(path.map(print, "usings"))]) : "",
+                    hasUsing ? join(hardline, path.map(print, "usings")) : "",
+                    hasUsing && hasMembers ? hardline : "",
                     hasMembers ? join(hardline, path.map(print, "members")) : "",
                 ]),
             ),

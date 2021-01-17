@@ -10,6 +10,6 @@ export interface YieldReturnStatementNode extends SyntaxTreeNode<"YieldReturnSta
 
 export const print: PrintMethod<YieldReturnStatementNode> = (path, options, print) => {
     const node = path.getValue();
-    const expression = node.expression ? " " + path.call(print, "expression") : "";
+    const expression = node.expression ? concat([" ", path.call(print, "expression")]) : "";
     return concat([printValue(node.yieldKeyword), " ", printValue(node.returnOrBreakKeyword), expression, ";"]);
 };

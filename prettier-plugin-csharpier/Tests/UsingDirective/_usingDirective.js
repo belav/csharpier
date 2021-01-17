@@ -1,5 +1,11 @@
 const runTest = require("../RunTest");
 
-test("BasicUsing", () => {
-    runTest(__dirname, "BasicUsing");
+test("BasicUsingDirective", () => {
+    runTest(__dirname, "BasicUsingDirective");
+});
+test("UsingWithAlias", () => {
+    runTest(__dirname, "UsingWithAlias");
+});
+test("UsingWithStatic", () => {
+    runTest(__dirname, "UsingWithStatic");
 });

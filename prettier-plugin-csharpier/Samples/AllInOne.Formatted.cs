@@ -1,16 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Math;
-using System.Diagnostics;
-using ConsoleApplication2.Test;
-using int1;
-using ABC.X<int>;
-using System.Math;
-using System.DayOfWeek;
-using System.Linq.Enumerable;
+
+using  System;
+using  System.Collections.Generic;
+using  System.Linq;
+using  System.Linq.Expressions;
+using  System.Text;
+using  M = System.Math;
+
+using  System.Diagnostics;
+
+using  ConsoleApplication2.Test;
+using  X = int1;
+using  Y = ABC.X<int>;
+
+using static System.Math;
+using static System.DayOfWeek;
+using static System.Linq.Enumerable;
 
 class TopLevelType : IDisposable
 {
@@ -19,7 +23,7 @@ class TopLevelType : IDisposable
 
 namespace My
 {
-    using A.B;
+    using  A.B;
     interface CoContra { }
     delegate void CoContra2<T, K>() where T : struct;
 
@@ -31,6 +35,7 @@ namespace My
         private const int global = int.MinValue - 1;
 
         static A() { }
+
         public A(int foo)
         {
             L:
@@ -44,8 +49,8 @@ namespace My
             int? local = int.MaxValue;
             Guid? local0 = new Guid(r.ToString());
 
-            var ?????? = local;
-            var ??? = local;
+            var привет = local;
+            var мир = local;
             var local3 = 0, local4 = 1;
             local3 = local4 = 1;
             var local5 = null as Action ?? null;
@@ -202,7 +207,7 @@ namespace My
             using (A a = new A(), b = new A())
             using ()
             return;
-            yield return [object Object];
+            yield return this.items[3];
             yield break;
             fixed (int* p = stackalloc int[100], q = &y)
             {
@@ -220,7 +225,7 @@ namespace My
             {
                 throw null;
             }
-            catch (System.AccessViolationExceptionav)
+            catch (System.AccessViolationException av)
             {
                 throw av;
             }
@@ -323,16 +328,16 @@ namespace My
     delegate void Delegate(object P);
     namespace Test
     {
-        using System;
-        using System.Collections;
-        public class ??????
+        using  System;
+        using  System.Collections;
+        public class Список
         {
             public static IEnumerable Power(int number, int exponent)
             {
-                ?????? ?????? = new ??????();
-                ??????.Main();
+                Список Список = new Список();
+                Список.Main();
                 int counter = (0 + 0);
-                int ??? = 0;
+                int אתר = 0;
                 while (++counter++ < --exponent--)
                 {
                     result = result * number + +number++++ + number;
@@ -625,14 +630,14 @@ namespace Comments.XmlComments.UndocumentedKeywords
             };
 
             try { }
-            catch (MyExceptione) { }
+            catch (MyException e) { }
 
             Resource res = null;
             try
             {
                 res = await Resource.OpenAsync();
             }
-            catch (ResourceExceptione)
+            catch (ResourceException e)
             {
                 await Resource.LogAsync(res, e);
             }

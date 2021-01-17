@@ -64,13 +64,9 @@ namespace My
 
         private const int global = int.MinValue - 1;
 
-        static A()
-        {
-        }
+        static A() { }
 
-        [method: Obsolete]
-        public A([param: Obsolete] int foo) :
-            base(1)
+        public A(int foo)
         {
         L:
             {
@@ -375,9 +371,7 @@ namespace My
     }
     public struct S : I
     {
-        public S()
-        {
-        }
+        public S() { }
         private int f1;
         [Obsolete("Use Script instead", error: false)]
         private volatile int f2;

@@ -112,6 +112,7 @@ export { print as ModuloAssignmentExpression } from "./Types/ModuloAssignmentExp
 export { print as ModuloExpression } from "./Types/ModuloExpression"
 export { print as MultiplyAssignmentExpression } from "./Types/MultiplyAssignmentExpression"
 export { print as MultiplyExpression } from "./Types/MultiplyExpression"
+export { print as NameEquals } from "./Types/NameEquals"
 export { print as NamespaceDeclaration } from "./Types/NamespaceDeclaration"
 export { print as NotEqualsExpression } from "./Types/NotEqualsExpression"
 export { print as NullableType } from "./Types/NullableType"
