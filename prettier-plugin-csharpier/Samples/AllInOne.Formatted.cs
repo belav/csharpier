@@ -504,7 +504,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             Type t = __reftype(tr);
             int j = __refvalue(tr);
             Params(t, t);
-            Params(ref c, out c);
+            Params(c, c);
         }
         void Params(dynamic a, dynamic b, dynamic[] c) { }
         void Params(dynamic a, dynamic c, dynamic[][] c) { }
@@ -682,8 +682,8 @@ class CSharp70
 
     public static void OutVar(string[] args)
     {
-        int.TryParse(Hello(1), out var item);
-        int.TryParse(Hello(1), out int item);
+        int.TryParse(Hello(1), var item);
+        int.TryParse(Hello(1), int item);
     }
 
     public void ThrowExpression()
@@ -734,9 +734,9 @@ class CSharp72
 
             ref readonly Vector3 r2 = ref default(Vector3);
 
-            Mutate(ref r1);
+            Mutate(r1);
 
-            Print(in r1);
+            Print(r1);
 
             return ref r1;
         }
@@ -751,7 +751,7 @@ class CSharp72
 
             v1.X = 0;
 
-            foo(ref v1.X);
+            foo(v1.X);
 
             return ref (arr != null ? ref arr[0] : ref otherArr[0]);
 

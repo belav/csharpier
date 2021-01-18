@@ -5,18 +5,18 @@ namespace CSharp80
         void ReferenceNullable()
         {
             var? x = E;
-            TODO Node SuppressNullableWarningExpression.ToString();
+            .ToString();
             string? wtf = null;
             int?[]? hello;
         }
 
         void Patterns()
         {
-            if (TODO Node IsPatternExpression)Do();
+            if (o is )Do();
 
-            return TODO Node SwitchExpression;
+            return ;
 
-            var newState = TODO Node SwitchExpression;
+            var newState = ;
         }
 
         async Task AsyncStreams()
@@ -27,17 +27,14 @@ namespace CSharp80
         void Ranges()
         {
             var thirdItem = list[2];
-            var lastItem = list[TODO Node IndexExpression];
-            var multiDimensional = list[3, TODO Node IndexExpression];
+            var lastItem = list[];
+            var multiDimensional = list[3, ];
 
-            var slice1 = list[TODO Node RangeExpression];
-            var slice2 = list[TODO Node RangeExpression];
-            var slice3 = list[TODO Node RangeExpression];
-            var slice4 = list[TODO Node RangeExpression];
-            var multiDimensional = list[
-                TODO Node RangeExpression,
-                TODO Node RangeExpression
-            ];
+            var slice1 = list[];
+            var slice2 = list[];
+            var slice3 = list[];
+            var slice4 = list[];
+            var multiDimensional = list[, ];
         }
 
         void UsingDeclarators()
@@ -57,7 +54,7 @@ namespace CSharp80
 
         void NullCoalescingAssignment()
         {
-            var item = TODO Node CoalesceAssignmentExpression;
+            var item = ;
         }
 
         public readonly float Hello()

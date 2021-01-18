@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -25,19 +26,37 @@ public class ClassName
         
         static void Main(string[] args)
         {
-            var testToParse = args.Length == 0 ? TestClass : args[0];
+            var stringToParse = args.Length == 0 ? TestClass : args[0];
 
-            var rootNode = CSharpSyntaxTree.ParseText(testToParse).GetRoot();
+            var rootNode = CSharpSyntaxTree.ParseText(stringToParse).GetRoot() as CompilationUnitSyntax;
+            
+            
+            Console.OutputEncoding = Encoding.UTF8;
+
+            var result = WriteWithSyntaxNodeJsonWrite(rootNode);
+            
+            Console.WriteLine(result);
+        }
+
+        private static string WriteWithSyntaxNodeJsonWrite(CompilationUnitSyntax rootNode)
+        {
+            var stringBuilder = new StringBuilder();
+            SyntaxNodeJsonWriter.WriteCompilationUnitSyntax(stringBuilder, rootNode);
+            var result = stringBuilder.ToString();
+            File.WriteAllText(@"c:\Temp\custom.json", result);
+            return result;
+        }
+
+        private static string WriteWithJsonConvert(CompilationUnitSyntax rootNode)
+        {
             var jsonSerializerSettings = new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                // TODO can we somehow store this thing between files?ll .
                 ContractResolver = new TypeInsertionResolver(),
                 DefaultValueHandling = DefaultValueHandling.Ignore
             };
-            
-            Console.OutputEncoding = Encoding.UTF8;
-            Console.WriteLine(JsonConvert.SerializeObject(rootNode, jsonSerializerSettings));
+            var result = JsonConvert.SerializeObject(rootNode, jsonSerializerSettings);
+            return result;
         }
     }
 
@@ -68,7 +87,12 @@ public class ClassName
                     || propertyName == "openBraceToken"
                     || propertyName == "closeBraceToken"
                     || propertyName == "endOfFileToken"
-                    )
+                    || propertyName == "rawKind"
+                    || propertyName == "language"
+                    || propertyName == "fullSpan"
+                    || propertyName == "span"
+                    || propertyName == "spanStart"
+                    || (type == typeof(SyntaxToken) && (propertyName == "value" || propertyName == "valueText")))
                 {
                     props.RemoveAt(x);
                 }

@@ -1,11 +1,5 @@
-// class
-public class ClassName
-{
-    // method 1
-    // method 2
-    public void MethodName()
-    {
-        // method call
-        this.MethodName();
-    }
-}
+// public class
+public class ClassName { }
+
+// other class
+class ClassName2 {}

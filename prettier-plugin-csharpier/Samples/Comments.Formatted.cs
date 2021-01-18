@@ -1,10 +1,4 @@
 
-public class ClassName
-{
+public class ClassName { }
 
-    public void MethodName()
-    {
-
-        this.MethodName();
-    }
-}
+class ClassName2 { }

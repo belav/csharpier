@@ -26,30 +26,23 @@
         </e>
         <e p="Parser.csproj" t="IncludeRecursive" />
         <e p="Program.cs" t="Include" />
+        <e p="SyntaxNodeJsonWriter.cs" t="Include" />
+        <e p="SyntaxNodeJsonWriter.generated.cs" t="Include" />
       </e>
       <e p="Parser.sln" t="IncludeFlat" />
-      <e p="ParserTests" t="IncludeRecursive">
+      <e p="SyntaxNodeJsonWriterGenerator" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
-              <e p="ParserTests.AssemblyInfo.cs" t="Include" />
+              <e p="SyntaxNodeJsonWriterGenerator.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
         </e>
-        <e p="ParserTests.csproj" t="IncludeRecursive" />
-        <e p="UnitTest1.cs" t="Include" />
+        <e p="Program.cs" t="Include" />
+        <e p="SyntaxNodeJsonWriterGenerator.csproj" t="IncludeRecursive" />
       </e>
     </e>
-    <e p="C:\Users\bela\.nuget\packages\microsoft.net.test.sdk\16.5.0\build\netcoreapp2.1" t="Include">
-      <e p="Microsoft.NET.Test.Sdk.Program.cs" t="Include" />
-    </e>
-    <e p="C:\Users\bela\.nuget\packages\microsoft.testplatform.testhost\16.5.0\build\netcoreapp2.1\x64\testhost.dll" t="Include" />
-    <e p="C:\Users\bela\.nuget\packages\microsoft.testplatform.testhost\16.5.0\build\netcoreapp2.1\x64\testhost.exe" t="Include" />
-    <e p="C:\Users\bela\.nuget\packages\nunit3testadapter\3.16.1\build\netcoreapp2.1\nunit.engine.api.dll" t="Include" />
-    <e p="C:\Users\bela\.nuget\packages\nunit3testadapter\3.16.1\build\netcoreapp2.1\nunit.engine.dll" t="Include" />
-    <e p="C:\Users\bela\.nuget\packages\nunit3testadapter\3.16.1\build\netcoreapp2.1\NUnit3.TestAdapter.dll" t="Include" />
-    <e p="C:\Users\bela\.nuget\packages\nunit3testadapter\3.16.1\build\netcoreapp2.1\NUnit3.TestAdapter.pdb" t="Include" />
     <e p="C:\Users\bela\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
     <e p="C:\Users\bela\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_Parser.-1253763866.00" t="ExcludeRecursive" />
   </component>

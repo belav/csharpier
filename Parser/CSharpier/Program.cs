@@ -4,6 +4,7 @@ using System.IO;
 
 namespace CSharpier
 {
+    // POC for trying to use c# to run node
     class Program
     {
         static void Main(string[] args)
@@ -16,7 +17,6 @@ namespace CSharpier
         
         public static string ExecuteApplication(string pathToExe, string workingDirectory, string args)
         {
-
             var processStartInfo = new ProcessStartInfo(pathToExe, args)
             {
                 UseShellExecute = false,
