@@ -50,8 +50,6 @@ class TopLevelType : IDisposable
     void IDisposable.Dispose() { }
 }
 
-TODO
-
 namespace My
 {
     using A.B;
