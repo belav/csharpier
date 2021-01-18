@@ -13,6 +13,7 @@ export interface SyntaxTreeNode<T = string> extends HasTrivia {
     nodeType: T;
 }
 
+// TODO 0 this is really SyntaxToken and we no longer give it value/valueText
 export interface HasValue extends HasTrivia {
     value: string;
     valueText: string;
