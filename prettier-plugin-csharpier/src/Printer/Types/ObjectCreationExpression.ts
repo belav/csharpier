@@ -1,15 +1,15 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface ObjectCreationExpressionNode extends SyntaxTreeNode<"ObjectCreationExpression"> {
-    newKeyword: HasValue;
+    newKeyword: SyntaxToken;
     type: SyntaxTreeNode;
     argumentList?: SyntaxTreeNode;
     initializer?: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<ObjectCreationExpressionNode> = (path, options, print) => {
+export const printObjectCreationExpression: PrintMethod<ObjectCreationExpressionNode> = (path, options, print) => {
     const node = path.getValue();
     return concat([
         "new",

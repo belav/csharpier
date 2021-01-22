@@ -1,23 +1,23 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasIdentifier, HasValue, printIdentifier, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { HasIdentifier, SyntaxToken, printIdentifier, printSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface FromClauseNode extends SyntaxTreeNode<"FromClause"> {
-    fromKeyword: HasValue;
+    fromKeyword: SyntaxToken;
     type?: SyntaxTreeNode;
-    identifier: HasValue;
-    inKeyword: HasValue;
+    identifier: SyntaxToken;
+    inKeyword: SyntaxToken;
     expression: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<FromClauseNode> = (path, options, print) => {
+export const printFromClause: PrintMethod<FromClauseNode> = (path, options, print) => {
     const node = path.getValue();
     return concat([
-        printValue(node.fromKeyword),
+        printSyntaxToken(node.fromKeyword),
         " ",
         printIdentifier(node),
         " ",
-        printValue(node.inKeyword),
+        printSyntaxToken(node.inKeyword),
         " ",
         path.call(print, "expression"),
     ]);

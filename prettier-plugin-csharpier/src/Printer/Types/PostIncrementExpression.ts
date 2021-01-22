@@ -1,1 +1,1 @@
-export { print } from "../PrintPostOperator";
+export { printPostOperator as printPostIncrementExpression } from "../PrintPostOperator";

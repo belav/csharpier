@@ -4,6 +4,6 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface SimpleBaseTypeNode extends SyntaxTreeNode<"SimpleBaseType"> {}
 
-export const print: PrintMethod<SimpleBaseTypeNode> = (path, options, print) => {
+export const printSimpleBaseType: PrintMethod<SimpleBaseTypeNode> = (path, options, print) => {
     return path.call(print, "type");
 };

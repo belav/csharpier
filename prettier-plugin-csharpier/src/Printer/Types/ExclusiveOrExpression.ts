@@ -1,1 +1,1 @@
-export { print } from "../PrintLeftRightOperator";
+export { printLeftRightOperator as printExclusiveOrExpression } from "../PrintLeftRightOperator";

@@ -1,1 +1,1 @@
-export { print } from "../PrintKeywordBlock";
+export { printKeywordBlock as printCheckedStatement } from "../PrintKeywordBlock";

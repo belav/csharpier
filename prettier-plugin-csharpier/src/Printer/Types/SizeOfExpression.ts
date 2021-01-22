@@ -1,1 +1,1 @@
-export { print } from "../PrintKeywordType";
+export { printKeywordType as printSizeOfExpression } from "../PrintKeywordType";

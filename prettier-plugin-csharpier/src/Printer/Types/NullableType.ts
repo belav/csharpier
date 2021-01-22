@@ -6,6 +6,6 @@ export interface NullableTypeNode extends SyntaxTreeNode<"NullableType"> {
     elementType: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<NullableTypeNode> = (path, options, print) => {
+export const printNullableType: PrintMethod<NullableTypeNode> = (path, options, print) => {
     return concat([path.call(print, "elementType"), "?"]);
 };

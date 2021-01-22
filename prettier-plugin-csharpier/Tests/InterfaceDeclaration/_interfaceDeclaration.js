@@ -9,3 +9,6 @@ test("InterfaceWithBaseList", () => {
 test("InterfaceWithMethod", () => {
     runTest(__dirname, "InterfaceWithMethod");
 });
+test("InterfaceWithTypeParameters", () => {
+    runTest(__dirname, "InterfaceWithTypeParameters");
+});

@@ -6,11 +6,14 @@ import { printCommaList } from "../Helpers";
 
 export interface BaseListNode extends SyntaxTreeNode<"BaseList"> {}
 
-export const print: PrintMethod<BaseListNode> = (path, options, print) => {
-    const node = path.getValue();
-    const parts: Doc[] = [];
-    parts.push(" ", ":", " ");
-    parts.push(printCommaList(path.map(print, "types")));
-
-    return concat(parts);
+export const printBaseList: PrintMethod<BaseListNode> = (path, options, print) => {
+    /* TODO 0 this should format like this instead
+public class ThisIsSomeLongNameAndItShouldFormatWell
+    : AnotherLongClassName<T>,
+        AndYetAnotherLongClassName
+{
+    void MethodName() { }
+}
+    */
+    return group(indent(concat([line, ":", " ", printCommaList(path.map(print, "types"))])));
 };

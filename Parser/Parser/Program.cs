@@ -42,9 +42,7 @@ public class ClassName
         {
             var stringBuilder = new StringBuilder();
             SyntaxNodeJsonWriter.WriteCompilationUnitSyntax(stringBuilder, rootNode);
-            var result = stringBuilder.ToString();
-            File.WriteAllText(@"c:\Temp\custom.json", result);
-            return result;
+            return stringBuilder.ToString();
         }
 
         private static string WriteWithJsonConvert(CompilationUnitSyntax rootNode)

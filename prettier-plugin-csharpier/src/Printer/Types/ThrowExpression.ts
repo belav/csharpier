@@ -1,1 +1,1 @@
-export { print } from "./ThrowStatement";
+export { printThrowStatement as printThrowExpression } from "./ThrowStatement";

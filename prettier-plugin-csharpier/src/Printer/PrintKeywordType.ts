@@ -1,17 +1,17 @@
 import { FastPath, ParserOptions } from "prettier";
 import { concat } from "./Builders";
 import { Print } from "./PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "./SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "./SyntaxTreeNode";
 
 interface KeywordType {
-    keyword: HasValue;
+    keyword: SyntaxToken;
     type: SyntaxTreeNode;
 }
 
-export function print<T extends KeywordType>(
+export function printKeywordType<T extends KeywordType>(
     path: FastPath<T>,
     options: ParserOptions<T>,
     print: Print<T>,
 ) {
-    return concat([printPathValue(path, "keyword"), "(", path.call(print, "type"), ")"]);
+    return concat([printPathSyntaxToken(path, "keyword"), "(", path.call(print, "type"), ")"]);
 }

@@ -10,7 +10,7 @@ export interface ConditionalExpressionNode extends SyntaxTreeNode<"ConditionalEx
     whenFalse: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<ConditionalExpressionNode> = (path, options, print) => {
+export const printConditionalExpression: PrintMethod<ConditionalExpressionNode> = (path, options, print) => {
     return concat([
         path.call(print, "condition"),
         " ? ",

@@ -1,12 +1,12 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface NameEqualsNode extends SyntaxTreeNode<"NameEquals"> {
     name: SyntaxTreeNode;
-    equalsToken: HasValue;
+    equalsToken: SyntaxToken;
 }
 
-export const print: PrintMethod<NameEqualsNode> = (path, options, print) => {
-    return concat([path.call(print, "name"), " ", printPathValue(path, "equalsToken")]);
+export const printNameEquals: PrintMethod<NameEqualsNode> = (path, options, print) => {
+    return concat([path.call(print, "name"), " ", printPathSyntaxToken(path, "equalsToken")]);
 };

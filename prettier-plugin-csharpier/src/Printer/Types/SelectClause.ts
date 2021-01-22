@@ -1,12 +1,12 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface SelectClauseNode extends SyntaxTreeNode<"SelectClause"> {
-    selectKeyword: HasValue;
+    selectKeyword: SyntaxToken;
     expression: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<SelectClauseNode> = (path, options, print) => {
-    return concat([printPathValue(path, "selectKeyword"), " ", path.call(print, "expression")]);
+export const printSelectClause: PrintMethod<SelectClauseNode> = (path, options, print) => {
+    return concat([printPathSyntaxToken(path, "selectKeyword"), " ", path.call(print, "expression")]);
 };

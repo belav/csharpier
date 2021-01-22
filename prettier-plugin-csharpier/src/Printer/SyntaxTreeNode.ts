@@ -13,19 +13,16 @@ export interface SyntaxTreeNode<T = string> extends HasTrivia {
     nodeType: T;
 }
 
-// TODO 0 this is really SyntaxToken and we no longer give it value/valueText
-export interface HasValue extends HasTrivia {
-    value: string;
-    valueText: string;
+export interface SyntaxToken extends HasTrivia {
     text: string;
 }
 
 export interface HasIdentifier {
-    identifier: HasValue;
+    identifier: SyntaxToken;
 }
 
 export interface HasModifiers {
-    modifiers: (HasValue & HasTrivia)[];
+    modifiers: SyntaxToken[];
 }
 
 // TODO move some of these into helpers? or who cares?
@@ -35,23 +32,23 @@ export function printPathIdentifier<T extends HasIdentifier>(path: FastPath<T>) 
 }
 
 export function printIdentifier(hasIdentifier: HasIdentifier) {
-    return printValue(hasIdentifier.identifier);
+    return printSyntaxToken(hasIdentifier.identifier);
 }
 
-export function printPathValue<T1, T2 extends keyof T1>(path: FastPath<T1>, property: T2) {
+export function printPathSyntaxToken<T1, T2 extends keyof T1>(path: FastPath<T1>, property: T2) {
     const node = path.getValue();
-    return printValue((node[property] as any) as HasValue);
+    return printSyntaxToken((node[property] as any) as SyntaxToken);
 }
 
-export function printValue(hasValue: HasValue | undefined) {
-    if (!hasValue) {
+export function printSyntaxToken(syntaxToken: SyntaxToken | undefined) {
+    if (!syntaxToken) {
         return "";
     }
-    if (typeof hasValue.text === "undefined") {
-        throw new Error("There was no text property on " + JSON.stringify(hasValue, null, "    "));
+    if (typeof syntaxToken.text === "undefined") {
+        throw new Error("There was no text property on " + JSON.stringify(syntaxToken, null, "    "));
     }
 
-    return hasLeadingExtraLine(hasValue) ? concat([hardline, hasValue.text]) : hasValue.text;
+    return hasLeadingExtraLine(syntaxToken) ? concat([hardline, syntaxToken.text]) : syntaxToken.text;
 }
 
 export function printModifiers(node: HasModifiers) {
@@ -62,13 +59,13 @@ export function printModifiers(node: HasModifiers) {
     return concat([
         join(
             " ",
-            node.modifiers.map(o => printValue(o)),
+            node.modifiers.map(o => printSyntaxToken(o)),
         ),
         " ",
     ]);
 }
 
 export interface Operator {
-    operatorToken: HasValue;
+    operatorToken: SyntaxToken;
     operand: SyntaxTreeNode;
 }

@@ -1,21 +1,21 @@
 import { Doc } from "prettier";
 import { PrintMethod } from "./PrintMethod";
-import { printValue, HasValue, SyntaxTreeNode } from "./SyntaxTreeNode";
+import { printSyntaxToken, SyntaxToken, SyntaxTreeNode } from "./SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "./Builders";
 
 interface AccessorDeclarationNode
     extends SyntaxTreeNode<
         "SetAccessorDeclaration" | "GetAccessorDeclaration" | "AddAccessorDeclaration" | "RemoveAccessorDeclaration"
     > {
-    keyword: HasValue;
+    keyword: SyntaxToken;
     expressionBody?: SyntaxTreeNode;
     body?: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<AccessorDeclarationNode> = (path, options, print) => {
+export const printAccessorDeclaration: PrintMethod<AccessorDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
-    parts.push(printValue(node.keyword));
+    parts.push(printSyntaxToken(node.keyword));
     if (!node.body && !node.expressionBody) {
         parts.unshift(line);
         parts.push(";");

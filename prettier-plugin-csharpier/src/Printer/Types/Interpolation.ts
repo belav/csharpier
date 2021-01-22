@@ -6,6 +6,6 @@ export interface InterpolationNode extends SyntaxTreeNode<"Interpolation"> {
     expression: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<InterpolationNode> = (path, options, print) => {
+export const printInterpolation: PrintMethod<InterpolationNode> = (path, options, print) => {
     return concat(["{", path.call(print, "expression"), "}"]);
 };

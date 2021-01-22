@@ -62,6 +62,7 @@ namespace CSharp80
             return 0.1f;
         }
     }
+
     interface IA
     {
         void M()
@@ -69,6 +70,7 @@ namespace CSharp80
             WriteLine("IA.M");
         }
     }
+
     interface IA
     {
         void M()
@@ -76,13 +78,15 @@ namespace CSharp80
             WriteLine("IA.M");
         }
     }
+
     interface IB : IA
     {
-        override void M()
+        override void IA.M()
         {
             WriteLine("IB.M");
         }
     }
+
     interface IC : IA
     {
         override void M()

@@ -1,10 +1,10 @@
 import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, printSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface ForStatementNode extends SyntaxTreeNode<"ForStatement"> {
-    forKeyword: HasValue;
+    forKeyword: SyntaxToken;
     declaration: SyntaxTreeNode;
     initializers: SyntaxTreeNode[];
     condition: SyntaxTreeNode;
@@ -12,9 +12,9 @@ export interface ForStatementNode extends SyntaxTreeNode<"ForStatement"> {
     statement: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<ForStatementNode> = (path, options, print) => {
+export const printForStatement: PrintMethod<ForStatementNode> = (path, options, print) => {
     return concat([
-        printPathValue(path, "forKeyword"),
+        printPathSyntaxToken(path, "forKeyword"),
         " (",
         path.call(print, "declaration"),
         "; ",

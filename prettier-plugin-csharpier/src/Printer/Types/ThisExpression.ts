@@ -1,11 +1,11 @@
 import { PrintMethod } from "../PrintMethod";
-import { printValue, HasValue, SyntaxTreeNode, printPathValue } from "../SyntaxTreeNode";
+import { printSyntaxToken, SyntaxToken, SyntaxTreeNode, printPathSyntaxToken } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface ThisExpressionNode extends SyntaxTreeNode<"ThisExpression"> {
-    token: HasValue;
+    token: SyntaxToken;
 }
 
-export const print: PrintMethod<ThisExpressionNode> = (path, options, print) => {
-    return printPathValue(path, "token");
+export const printThisExpression: PrintMethod<ThisExpressionNode> = (path, options, print) => {
+    return printPathSyntaxToken(path, "token");
 };

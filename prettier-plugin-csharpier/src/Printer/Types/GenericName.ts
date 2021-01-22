@@ -4,6 +4,6 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface GenericNameNode extends SyntaxTreeNode<"GenericName">, HasIdentifier {}
 
-export const print: PrintMethod<GenericNameNode> = (path, options, print) => {
+export const printGenericName: PrintMethod<GenericNameNode> = (path, options, print) => {
     return group(concat([printPathIdentifier(path), "<", path.call(print, "typeArgumentList"), ">"]));
 };

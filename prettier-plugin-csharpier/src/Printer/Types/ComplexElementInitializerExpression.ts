@@ -7,6 +7,6 @@ export interface ComplexElementInitializerExpressionNode
     expressions: SyntaxTreeNode[]
 }
 
-export const print: PrintMethod<ComplexElementInitializerExpressionNode> = (path, options, print) => {
+export const printComplexElementInitializerExpression: PrintMethod<ComplexElementInitializerExpressionNode> = (path, options, print) => {
     return concat(["{", " ", join(", ", path.map(print, "expressions")), " ", "}"]);
 };

@@ -6,7 +6,7 @@ export interface CatchDeclarationNode extends SyntaxTreeNode<"CatchDeclaration">
     type: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<CatchDeclarationNode> = (path, options, print) => {
+export const printCatchDeclaration: PrintMethod<CatchDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     return concat(["(", path.call(print, "type"), node.identifier ? " " : "",  printIdentifier(node), ")"]);
 };

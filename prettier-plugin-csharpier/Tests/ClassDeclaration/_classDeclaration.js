@@ -6,6 +6,9 @@ test("ClassImplementsInterface", () => {
 test("EmptyClass", () => {
     runTest(__dirname, "EmptyClass");
 });
+test("LongBaseListFormatsOnLines", () => {
+    runTest(__dirname, "LongBaseListFormatsOnLines");
+});
 test("MultipleClassesWithModifiers", () => {
     runTest(__dirname, "MultipleClassesWithModifiers");
 });

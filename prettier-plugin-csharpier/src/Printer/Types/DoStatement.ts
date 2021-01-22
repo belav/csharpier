@@ -1,20 +1,20 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface DoStatementNode extends SyntaxTreeNode<"DoStatement"> {
-    doKeyword: HasValue;
+    doKeyword: SyntaxToken;
     statement: SyntaxTreeNode;
-    whileKeyword: HasValue;
+    whileKeyword: SyntaxToken;
     condition: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<DoStatementNode> = (path, options, print) => {
+export const printDoStatement: PrintMethod<DoStatementNode> = (path, options, print) => {
     return concat([
-        printPathValue(path, "doKeyword"),
+        printPathSyntaxToken(path, "doKeyword"),
         path.call(print, "statement"),
         hardline,
-        printPathValue(path, "whileKeyword"),
+        printPathSyntaxToken(path, "whileKeyword"),
         " (",
         path.call(print, "condition"),
         ");",

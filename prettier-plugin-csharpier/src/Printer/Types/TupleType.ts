@@ -7,6 +7,6 @@ export interface TupleTypeNode extends SyntaxTreeNode<"TupleType"> {
     elements: SyntaxTreeNode[];
 }
 
-export const print: PrintMethod<TupleTypeNode> = (path, options, print) => {
+export const printTupleType: PrintMethod<TupleTypeNode> = (path, options, print) => {
     return concat(["(", join(", ", path.map(print, "elements")), ")"]);
 };

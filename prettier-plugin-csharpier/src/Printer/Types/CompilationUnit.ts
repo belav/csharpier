@@ -8,7 +8,7 @@ export interface CompilationUnitNode extends SyntaxTreeNode<"ompilationUnit"> {
     members: SyntaxTreeNode[];
 }
 
-export const print: PrintMethod<CompilationUnitNode> = (path, options, print) => {
+export const printCompilationUnit: PrintMethod<CompilationUnitNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
     if (node.usings.length > 0) {

@@ -4,6 +4,6 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface EmptyStatementNode extends SyntaxTreeNode<"EmptyStatement"> {}
 
-export const print: PrintMethod<EmptyStatementNode> = (path, options, print) => {
+export const printEmptyStatement: PrintMethod<EmptyStatementNode> = (path, options, print) => {
     return ";";
 };

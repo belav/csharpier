@@ -4,6 +4,6 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface LabeledStatementNode extends SyntaxTreeNode<"LabeledStatement">, HasIdentifier {}
 
-export const print: PrintMethod<LabeledStatementNode> = (path, options, print) => {
+export const printLabeledStatement: PrintMethod<LabeledStatementNode> = (path, options, print) => {
     return concat([printPathIdentifier(path), ":", hardline, path.call(print, "statement")]);
 };

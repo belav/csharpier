@@ -7,6 +7,6 @@ export interface ElementAccessExpressionNode extends SyntaxTreeNode<"ElementAcce
     argumentList: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<ElementAccessExpressionNode> = (path, options, print) => {
+export const printElementAccessExpression: PrintMethod<ElementAccessExpressionNode> = (path, options, print) => {
     return concat([path.call(print, "expression"), path.call(print, "argumentList")]);
 };

@@ -1,11 +1,11 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface DefaultLiteralExpressionNode extends SyntaxTreeNode<"DefaultLiteralExpression"> {
-    token: HasValue;
+    token: SyntaxToken;
 }
 
-export const print: PrintMethod<DefaultLiteralExpressionNode> = (path, options, print) => {
-    return printPathValue(path, "token");
+export const printDefaultLiteralExpression: PrintMethod<DefaultLiteralExpressionNode> = (path, options, print) => {
+    return printPathSyntaxToken(path, "token");
 };

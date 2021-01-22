@@ -1,18 +1,18 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface IsPatternExpressionNode extends SyntaxTreeNode<"IsPatternExpression"> {
     expression: SyntaxTreeNode;
-    isKeyword: HasValue;
+    isKeyword: SyntaxToken;
     pattern: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<IsPatternExpressionNode> = (path, options, print) => {
+export const printIsPatternExpression: PrintMethod<IsPatternExpressionNode> = (path, options, print) => {
     return concat([
         path.call(print, "expression"),
         " ",
-        printPathValue(path, "isKeyword"),
+        printPathSyntaxToken(path, "isKeyword"),
         " ",
         path.call(print, "pattern"),
     ]);

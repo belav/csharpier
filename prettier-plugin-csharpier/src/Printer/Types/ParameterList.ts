@@ -8,7 +8,7 @@ export interface ParameterListNode extends SyntaxTreeNode<"ParameterList"> {
     parameters: ParameterNode[];
 }
 
-export const print: PrintMethod<ParameterListNode> = (path, options, print) => {
+export const printParameterList: PrintMethod<ParameterListNode> = (path, options, print) => {
     const node = path.getValue();
     if (node.parameters.length === 0) {
         return "()";

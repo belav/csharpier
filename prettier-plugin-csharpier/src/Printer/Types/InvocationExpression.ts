@@ -7,6 +7,6 @@ export interface InvocationExpressionNode extends SyntaxTreeNode<"InvocationExpr
     argumentList: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<InvocationExpressionNode> = (path, options, print) => {
+export const printInvocationExpression: PrintMethod<InvocationExpressionNode> = (path, options, print) => {
     return concat([path.call(print, "expression"), path.call(print, "argumentList")]);
 };

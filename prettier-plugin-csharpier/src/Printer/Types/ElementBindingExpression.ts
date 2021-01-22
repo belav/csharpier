@@ -6,6 +6,6 @@ export interface ElementBindingExpressionNode extends SyntaxTreeNode<"ElementBin
     argumentList: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<ElementBindingExpressionNode> = (path, options, print) => {
+export const printElementBindingExpression: PrintMethod<ElementBindingExpressionNode> = (path, options, print) => {
     return path.call(print, "argumentList");
 };

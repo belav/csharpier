@@ -9,7 +9,7 @@ const typesDirectory = path.resolve(__dirname, "src/Printer/Types");
 generateTypesFile = () => {
     let typesFile = "";
     fs.readdirSync(typesDirectory).forEach(typeFile => {
-        typesFile += `export { print as ${typeFile.replace(".ts", "")} } from "./Types/${typeFile.replace(
+        typesFile += `export { print${typeFile.replace(".ts", "")} as ${typeFile.replace(".ts", "")} } from "./Types/${typeFile.replace(
             ".ts",
             "",
         )}"\r\n`;

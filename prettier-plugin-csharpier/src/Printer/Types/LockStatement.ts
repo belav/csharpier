@@ -1,16 +1,16 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface LockStatementNode extends SyntaxTreeNode<"LockStatement"> {
-    lockKeyword: HasValue;
+    lockKeyword: SyntaxToken;
     expression: SyntaxTreeNode;
     statement: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<LockStatementNode> = (path, options, print) => {
+export const printLockStatement: PrintMethod<LockStatementNode> = (path, options, print) => {
     return concat([
-        printPathValue(path, "lockKeyword"),
+        printPathSyntaxToken(path, "lockKeyword"),
         " (",
         path.call(print, "expression"),
         ")",

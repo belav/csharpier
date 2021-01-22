@@ -5,6 +5,6 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface TypeArgumentListNode extends SyntaxTreeNode<"TypeArgumentList"> {}
 
-export const print: PrintMethod<TypeArgumentListNode> = (path, options, print) => {
+export const printTypeArgumentList: PrintMethod<TypeArgumentListNode> = (path, options, print) => {
     return indent(group(printCommaList(path.map(print, "arguments"))));
 };

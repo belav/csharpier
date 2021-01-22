@@ -8,6 +8,6 @@ export interface QueryBodyNode extends SyntaxTreeNode<"QueryBody"> {
     continuation?: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<QueryBodyNode> = (path, options, print) => {
+export const printQueryBody: PrintMethod<QueryBodyNode> = (path, options, print) => {
     return path.call(print, "selectOrGroup");
 };

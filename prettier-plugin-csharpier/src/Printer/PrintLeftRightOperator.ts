@@ -1,15 +1,17 @@
 import { FastPath, ParserOptions } from "prettier";
 import { concat } from "./Builders";
 import { Print } from "./PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "./SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "./SyntaxTreeNode";
 
 export interface LeftRightOperator {
     left: SyntaxTreeNode;
-    operatorToken: HasValue;
+    operatorToken: SyntaxToken;
     right: SyntaxTreeNode;
 }
 
-export function print<T extends LeftRightOperator>(
+// TODO 0 the rawKind doesn't line up to the type in c#, maybe we should move away from that. that would cut out a lot of code
+// everything that uses this print ends up being BinaryExpressionSyntax, AssignmentExpressionSyntax or BinaryPatternSyntax
+export function printLeftRightOperator<T extends LeftRightOperator>(
     path: FastPath<T>,
     options: ParserOptions<T>,
     print: Print<T>,
@@ -17,7 +19,7 @@ export function print<T extends LeftRightOperator>(
     return concat([
         path.call(print, "left"),
         " ",
-        printPathValue(path, "operatorToken"),
+        printPathSyntaxToken(path, "operatorToken"),
         " ",
         path.call(print, "right"),
     ]);

@@ -4,11 +4,11 @@ import { SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 import { ParameterNode } from "./Parameter";
 
-export interface ParameterListNode extends SyntaxTreeNode<"TypeParameterList"> {
+export interface TypeParameterListNode extends SyntaxTreeNode<"TypeParameterList"> {
     parameters: ParameterNode[];
 }
 
-export const print: PrintMethod<ParameterListNode> = (path, options, print) => {
+export const printTypeParameterList: PrintMethod<TypeParameterListNode> = (path, options, print) => {
     const node = path.getValue();
     if (node.parameters.length === 0) {
         return "";

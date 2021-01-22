@@ -8,7 +8,7 @@ export interface ObjectInitializerExpressionNode extends SyntaxTreeNode<"ObjectI
     expressions?: SyntaxTreeNode[];
 }
 
-export const print: PrintMethod<ObjectInitializerExpressionNode> = (path, options, print) => {
+export const printObjectInitializerExpression: PrintMethod<ObjectInitializerExpressionNode> = (path, options, print) => {
     const node = path.getValue();
     return printStatements(node, "expressions", line, path, print, ",");
 };

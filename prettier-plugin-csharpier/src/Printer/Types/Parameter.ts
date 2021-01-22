@@ -6,7 +6,7 @@ export interface ParameterNode extends SyntaxTreeNode<"Parameter">, HasIdentifie
     type?: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<ParameterNode> = (path, options, print) => {
+export const printParameter: PrintMethod<ParameterNode> = (path, options, print) => {
     const node = path.getValue();
     const identifier = printIdentifier(path.getValue());
 

@@ -7,6 +7,6 @@ export interface SwitchSectionNode extends SyntaxTreeNode<"SwitchSection"> {
     statements: SyntaxTreeNode[];
 }
 
-export const print: PrintMethod<SwitchSectionNode> = (path, options, print) => {
+export const printSwitchSection: PrintMethod<SwitchSectionNode> = (path, options, print) => {
     return concat([join(hardline, path.map(print, "labels")), concat(path.map(print, "statements"))]);
 };

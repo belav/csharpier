@@ -1,1 +1,1 @@
-export { print } from "../PrintPreOperator";
+export { printPreOperator as printUnaryMinusExpression } from "../PrintPreOperator";

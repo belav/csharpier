@@ -4,6 +4,6 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface OmittedArraySizeExpressionNode extends SyntaxTreeNode<"OmittedArraySizeExpression"> {}
 
-export const print: PrintMethod<OmittedArraySizeExpressionNode> = (path, options, print) => {
+export const printOmittedArraySizeExpression: PrintMethod<OmittedArraySizeExpressionNode> = (path, options, print) => {
     return "";
 };

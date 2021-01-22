@@ -1,17 +1,17 @@
 import { PrintMethod } from "../PrintMethod";
 import {
-    printValue,
-    HasValue,
+    printSyntaxToken,
+    SyntaxToken,
     SyntaxTreeNode,
     HasIdentifier,
     printIdentifier,
-    printPathValue,
+    printPathSyntaxToken,
     printPathIdentifier,
 } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface IdentifierNameNode extends SyntaxTreeNode<"IdentifierName">, HasIdentifier {}
 
-export const print: PrintMethod<IdentifierNameNode> = (path, options, print) => {
+export const printIdentifierName: PrintMethod<IdentifierNameNode> = (path, options, print) => {
     return printPathIdentifier(path);
 };

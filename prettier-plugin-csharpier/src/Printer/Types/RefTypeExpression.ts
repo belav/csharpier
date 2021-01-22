@@ -1,1 +1,1 @@
-export { print } from "../PrintKeywordExpression";
+export { printKeywordExpression as printRefTypeExpression } from "../PrintKeywordExpression";

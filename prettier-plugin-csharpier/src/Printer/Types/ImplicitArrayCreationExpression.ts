@@ -1,17 +1,17 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface ImplicitArrayCreationExpressionNode extends SyntaxTreeNode<"ImplicitArrayCreationExpression"> {
-    newKeyword: HasValue;
+    newKeyword: SyntaxToken;
     commas: SyntaxTreeNode[];
     initializer: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<ImplicitArrayCreationExpressionNode> = (path, options, print) => {
+export const printImplicitArrayCreationExpression: PrintMethod<ImplicitArrayCreationExpressionNode> = (path, options, print) => {
     const node = path.getValue();
     const commas = node.commas.map(o => ",");
 
 
-    return concat([printPathValue(path, "newKeyword"), "[", concat(commas), "]", " ", path.call(print, "initializer")]);
+    return concat([printPathSyntaxToken(path, "newKeyword"), "[", concat(commas), "]", " ", path.call(print, "initializer")]);
 };

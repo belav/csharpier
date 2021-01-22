@@ -1,11 +1,11 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, printSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface ContinueStatementNode extends SyntaxTreeNode<"ContinueStatement"> {
-    continueKeyword: HasValue;
+    continueKeyword: SyntaxToken;
 }
 
-export const print: PrintMethod<ContinueStatementNode> = (path, options, print) => {
-    return concat([printPathValue(path, "continueKeyword"), ";"]);
+export const printContinueStatement: PrintMethod<ContinueStatementNode> = (path, options, print) => {
+    return concat([printPathSyntaxToken(path, "continueKeyword"), ";"]);
 };

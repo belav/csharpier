@@ -1,1 +1,1 @@
-export { print } from "./YieldReturnStatement";
+export { printYieldReturnStatement as printYieldBreakStatement } from "./YieldReturnStatement";

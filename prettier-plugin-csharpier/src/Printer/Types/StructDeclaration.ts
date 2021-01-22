@@ -1,1 +1,1 @@
-export { print } from "../PrintClassLikeDeclaration";
+export { printClassLikeDeclaration as printStructDeclaration } from "../PrintClassLikeDeclaration";

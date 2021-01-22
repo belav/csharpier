@@ -4,6 +4,6 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface ArrayRankSpecifierNode extends SyntaxTreeNode<"ArrayRankSpecifier"> {}
 
-export const print: PrintMethod<ArrayRankSpecifierNode> = (path, options, print) => {
+export const printArrayRankSpecifier: PrintMethod<ArrayRankSpecifierNode> = (path, options, print) => {
     return concat(["[", join(",", path.map(print, "sizes")), "]"]);
 };

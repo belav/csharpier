@@ -8,7 +8,7 @@ export interface ConstructorDeclarationNode
         HasModifiers,
         HasIdentifier {}
 
-export const print: PrintMethod<ConstructorDeclarationNode> = (path, options, print) => {
+export const printConstructorDeclaration: PrintMethod<ConstructorDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
     parts.push(printModifiers(node));

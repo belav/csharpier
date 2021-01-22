@@ -1,18 +1,18 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface RefTypeNode extends SyntaxTreeNode<"RefType"> {
-    refKeyword: HasValue;
-    readOnlyKeyword: HasValue;
+    refKeyword: SyntaxToken;
+    readOnlyKeyword: SyntaxToken;
     type: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<RefTypeNode> = (path, options, print) => {
+export const printRefType: PrintMethod<RefTypeNode> = (path, options, print) => {
     const node = path.getValue();
     return concat([
-        printValue(node.refKeyword),
-        node.readOnlyKeyword ? " " + printValue(node.readOnlyKeyword) : "",
+        printSyntaxToken(node.refKeyword),
+        node.readOnlyKeyword ? " " + printSyntaxToken(node.readOnlyKeyword) : "",
         " ",
         path.call(print, "type"),
     ]);

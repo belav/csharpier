@@ -1,16 +1,16 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface UsingStatementNode extends SyntaxTreeNode<"UsingStatement"> {
-    usingKeyword: HasValue;
+    usingKeyword: SyntaxToken;
     declaration: SyntaxTreeNode;
     statement: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<UsingStatementNode> = (path, options, print) => {
+export const printUsingStatement: PrintMethod<UsingStatementNode> = (path, options, print) => {
     return concat([
-        printPathValue(path, "usingKeyword"),
+        printPathSyntaxToken(path, "usingKeyword"),
         " (",
         path.call(print, "declaration"),
         ")",

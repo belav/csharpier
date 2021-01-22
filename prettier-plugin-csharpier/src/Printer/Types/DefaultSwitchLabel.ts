@@ -1,11 +1,11 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, printSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface DefaultSwitchLabelNode extends SyntaxTreeNode<"DefaultSwitchLabel"> {
-    keyword: HasValue;
+    keyword: SyntaxToken;
 }
 
-export const print: PrintMethod<DefaultSwitchLabelNode> = (path, options, print) => {
-    return concat([printPathValue(path, "keyword"), ":"]);
+export const printDefaultSwitchLabel: PrintMethod<DefaultSwitchLabelNode> = (path, options, print) => {
+    return concat([printPathSyntaxToken(path, "keyword"), ":"]);
 };

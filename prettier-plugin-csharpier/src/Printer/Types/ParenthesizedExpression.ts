@@ -6,6 +6,6 @@ export interface ParenthesizedExpressionNode extends SyntaxTreeNode<"Parenthesiz
     expression: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<ParenthesizedExpressionNode> = (path, options, print) => {
+export const printParenthesizedExpression: PrintMethod<ParenthesizedExpressionNode> = (path, options, print) => {
     return concat(["(", path.call(print, "expression"), ")"]);
 };

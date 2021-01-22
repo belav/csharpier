@@ -1,1 +1,1 @@
-export { print } from "../PrintPropertyLikeDeclaration";
+export { printPropertyLikeDeclaration as printEventDeclaration } from "../PrintPropertyLikeDeclaration";

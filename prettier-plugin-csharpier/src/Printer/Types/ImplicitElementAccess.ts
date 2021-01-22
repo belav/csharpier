@@ -6,6 +6,6 @@ export interface ImplicitElementAccessNode extends SyntaxTreeNode<"ImplicitEleme
     argumentList: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<ImplicitElementAccessNode> = (path, options, print) => {
+export const printImplicitElementAccess: PrintMethod<ImplicitElementAccessNode> = (path, options, print) => {
     return path.call(print, "argumentList");
 };

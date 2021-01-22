@@ -10,7 +10,7 @@ export interface AnonymousObjectMemberDeclaratorNode extends SyntaxTreeNode<"Ano
     expression: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<AnonymousObjectMemberDeclaratorNode> = (path, options, print) => {
+export const printAnonymousObjectMemberDeclarator: PrintMethod<AnonymousObjectMemberDeclaratorNode> = (path, options, print) => {
     const node = path.getValue();
     const hasNameEquals = !!node.nameEquals;
     const parts: Doc[] = [];

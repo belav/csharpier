@@ -7,6 +7,6 @@ export interface CastExpressionNode extends SyntaxTreeNode<"CastExpression"> {
     expression: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<CastExpressionNode> = (path, options, print) => {
+export const printCastExpression: PrintMethod<CastExpressionNode> = (path, options, print) => {
     return concat(["(", path.call(print, "type"), ")", path.call(print, "expression")]);
 };

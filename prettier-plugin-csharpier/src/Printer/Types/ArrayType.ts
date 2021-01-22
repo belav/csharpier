@@ -7,6 +7,6 @@ export interface ArrayTypeNode extends SyntaxTreeNode<"ArrayType"> {
     rankSpecifiers: SyntaxTreeNode[];
 }
 
-export const print: PrintMethod<ArrayTypeNode> = (path, options, print) => {
+export const printArrayType: PrintMethod<ArrayTypeNode> = (path, options, print) => {
     return concat([path.call(print, "elementType"), concat(path.map(print, "rankSpecifiers"))]);
 };

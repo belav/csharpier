@@ -1,17 +1,17 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface TypeParameterConstraintClauseNode extends SyntaxTreeNode<"TypeParameterConstraintClause"> {
-    whereKeyword: HasValue;
+    whereKeyword: SyntaxToken;
     name: SyntaxTreeNode;
     constraints: SyntaxTreeNode[];
 }
 
-export const print: PrintMethod<TypeParameterConstraintClauseNode> = (path, options, print) => {
+export const printTypeParameterConstraintClause: PrintMethod<TypeParameterConstraintClauseNode> = (path, options, print) => {
     return concat([
         " ",
-        printPathValue(path, "whereKeyword"),
+        printPathSyntaxToken(path, "whereKeyword"),
         " ",
         path.call(print, "name"),
         " : ",

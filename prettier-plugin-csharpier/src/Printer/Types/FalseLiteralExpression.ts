@@ -4,6 +4,6 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface FalseLiteralExpressionNode extends SyntaxTreeNode<"FalseLiteralExpression"> {}
 
-export const print: PrintMethod<FalseLiteralExpressionNode> = (path, options, print) => {
+export const printFalseLiteralExpression: PrintMethod<FalseLiteralExpressionNode> = (path, options, print) => {
     return "false";
 };

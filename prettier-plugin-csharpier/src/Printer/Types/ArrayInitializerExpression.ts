@@ -7,6 +7,6 @@ export interface ArrayInitializerExpressionNode extends SyntaxTreeNode<"ArrayIni
     expressions: SyntaxTreeNode[];
 }
 
-export const print: PrintMethod<ArrayInitializerExpressionNode> = (path, options, print) => {
+export const printArrayInitializerExpression: PrintMethod<ArrayInitializerExpressionNode> = (path, options, print) => {
     return group(concat(["{", indent(concat([line, printCommaList(path.map(print, "expressions"))])), line, "}"]));
 };

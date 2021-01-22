@@ -18,17 +18,17 @@ using static System.Linq.Enumerable;
 
 class TopLevelType : IDisposable
 {
-    void Dispose() { }
+    void IDisposable.Dispose() { }
 }
 
 namespace My
 {
     using A.B;
-    interface CoContra { }
-    delegate void CoContra2<T, K>() where T : struct;
 
-    public unsafe partial class A : C,
-    I
+    interface CoContra<out T, in K> { }
+    delegate void CoContra2<out T, in K>() where T : struct;
+
+    public unsafe partial class A : C, I
     {
         static extern bool CreateDirectory(string name, SecurityAttribute sa);
 
@@ -46,8 +46,9 @@ namespace My
                 var s1 = $"x {1}";
                 var s2 = $@"x {1}";
             }
-            int? local = int.MaxValue;
-            Guid? local0 = new Guid(r.ToString());
+
+            const int? local = int.MaxValue;
+            const Guid? local0 = new Guid(r.ToString());
 
             var привет = local;
             var мир = local;
@@ -313,9 +314,7 @@ namespace My
     public interface I
     {
         void A(int value);
-
         string Value { get; set; }
-
         unsafe void UpdateSignatureByHashingContent(byte* buffer, int size);
     }
     public enum E
@@ -367,14 +366,14 @@ namespace ConsoleApplication1
 {
     namespace RecursiveGenericBaseType
     {
-        class A : B<A<T>, A<T>>
+        class A<T> : B<A<T>, A<T>>
         {
             protected virtual A<T> M() { }
             protected abstract B<A<T>, A<T>> N() { }
             static B<A<T>, A<T>> O() { }
         }
 
-        sealed class B : A<B<T1, T2>>
+        sealed class B<T1, T2> : A<B<T1, T2>>
         {
             protected override A<T> M() { }
             protected sealed override B<A<T>, A<T>> N() { }
@@ -384,10 +383,10 @@ namespace ConsoleApplication1
 
     namespace Boo
     {
-        public class Bar
+        public class Bar<T>
         {
             public T f;
-            public class Foo : IEnumerable<T>
+            public class Foo<U> : IEnumerable<T>
             {
                 public void Method<K, V>(K k, T t, U u)
                 {
@@ -476,7 +475,7 @@ namespace ConsoleApplication1
 
 namespace Comments.XmlComments.UndocumentedKeywords
 {
-    class C
+    class C<T>
     {
         void M<U>(T t, U u)
         {
@@ -504,7 +503,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             Type t = __reftype(tr);
             int j = __refvalue(tr);
             Params(t, t);
-            Params(c, c);
+            Params(ref c, out c);
         }
         void Params(dynamic a, dynamic b, dynamic[] c) { }
         void Params(dynamic a, dynamic c, dynamic[][] c) { }
@@ -682,8 +681,8 @@ class CSharp70
 
     public static void OutVar(string[] args)
     {
-        int.TryParse(Hello(1), var item);
-        int.TryParse(Hello(1), int item);
+        int.TryParse(Hello(1), out var item);
+        int.TryParse(Hello(1), out int item);
     }
 
     public void ThrowExpression()
@@ -734,9 +733,9 @@ class CSharp72
 
             ref readonly Vector3 r2 = ref default(Vector3);
 
-            Mutate(r1);
+            Mutate(ref r1);
 
-            Print(r1);
+            Print(in r1);
 
             return ref r1;
         }
@@ -751,7 +750,7 @@ class CSharp72
 
             v1.X = 0;
 
-            foo(v1.X);
+            foo(ref v1.X);
 
             return ref (arr != null ? ref arr[0] : ref otherArr[0]);
 

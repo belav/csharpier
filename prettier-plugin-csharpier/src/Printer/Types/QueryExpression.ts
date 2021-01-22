@@ -7,6 +7,6 @@ export interface QueryExpressionNode extends SyntaxTreeNode<"QueryExpression"> {
     body: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<QueryExpressionNode> = (path, options, print) => {
+export const printQueryExpression: PrintMethod<QueryExpressionNode> = (path, options, print) => {
     return concat([path.call(print, "fromClause"), " ", path.call(print, "body")]);
 };

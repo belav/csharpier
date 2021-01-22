@@ -1,1 +1,1 @@
-export { print } from "./CheckedExpression";
+export { printCheckedExpression as printUncheckedExpression } from "./CheckedExpression";

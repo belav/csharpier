@@ -1,11 +1,11 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, printSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface BreakStatementNode extends SyntaxTreeNode<"BreakStatement"> {
-    breakKeyword: HasValue;
+    breakKeyword: SyntaxToken;
 }
 
-export const print: PrintMethod<BreakStatementNode> = (path, options, print) => {
-    return concat([printPathValue(path, "breakKeyword"), ";"]);
+export const printBreakStatement: PrintMethod<BreakStatementNode> = (path, options, print) => {
+    return concat([printPathSyntaxToken(path, "breakKeyword"), ";"]);
 };

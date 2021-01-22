@@ -1,9 +1,9 @@
 import { PrintMethod } from "../PrintMethod";
-import { SyntaxTreeNode } from "../SyntaxTreeNode";
+import { HasModifiers, printModifiers, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface LocalDeclarationStatementNode extends SyntaxTreeNode<"LocalDeclarationStatement"> {}
+export interface LocalDeclarationStatementNode extends SyntaxTreeNode<"LocalDeclarationStatement">, HasModifiers {}
 
-export const print: PrintMethod<LocalDeclarationStatementNode> = (path, options, print) => {
-    return concat([path.call(print, "declaration"), ";"]);
+export const printLocalDeclarationStatement: PrintMethod<LocalDeclarationStatementNode> = (path, options, print) => {
+    return concat([printModifiers(path.getValue()), path.call(print, "declaration"), ";"]);
 };

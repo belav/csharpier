@@ -1,1 +1,1 @@
-export { print } from "../PrintAccessorDeclaration";
+export { printAccessorDeclaration as printSetAccessorDeclaration } from "../PrintAccessorDeclaration";

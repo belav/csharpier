@@ -5,33 +5,38 @@ import { PrintMethod } from "./PrintMethod";
 import {
     HasIdentifier,
     HasModifiers,
-    HasValue,
+    SyntaxToken,
     printIdentifier,
     printModifiers,
-    printValue,
+    printSyntaxToken,
     SyntaxTreeNode
 } from "./SyntaxTreeNode";
 import { BaseListNode } from "./Types/BaseList";
 
 export interface ClassLikeDeclarationNode extends SyntaxTreeNode<"ClassDeclaration" | "EnumDeclaration" | "StructDeclaration">, HasModifiers, HasIdentifier {
-    keyword?: HasValue;
-    enumKeyword?: HasValue;
-    members: SyntaxTreeNode[];
+    keyword?: SyntaxToken;
+    enumKeyword?: SyntaxToken;
+    typeParameterList?: SyntaxTreeNode;
     baseList: BaseListNode;
+    members: SyntaxTreeNode[];
 }
 
-export const print: PrintMethod<ClassLikeDeclarationNode> = (path, options, print) => {
+export const printClassLikeDeclaration: PrintMethod<ClassLikeDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
     printComments(parts, node);
     parts.push(printModifiers(node));
     if (node.keyword) {
-        parts.push(printValue(node.keyword));
+        parts.push(printSyntaxToken(node.keyword));
     }
     if (node.enumKeyword) {
-        parts.push(printValue(node.enumKeyword));
+        parts.push(printSyntaxToken(node.enumKeyword));
     }
     parts.push(" ", printIdentifier(node));
+    if (node.typeParameterList) {
+        // TODO 0 we know we want to call printTypeParameterList, is there some way to do that here?
+        parts.push(path.call(print, "typeParameterList"));
+    }
 
     if (node.baseList) {
         parts.push(path.call(print, "baseList"));

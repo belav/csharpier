@@ -1,12 +1,12 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printPathValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface StructConstraintNode extends SyntaxTreeNode<"StructConstraint"> {
-    classOrStructKeyword: HasValue;
-    questionToken: HasValue;
+    classOrStructKeyword: SyntaxToken;
+    questionToken: SyntaxToken;
 }
 
-export const print: PrintMethod<StructConstraintNode> = (path, options, print) => {
-    return concat([printPathValue(path, "classOrStructKeyword"), printPathValue(path, "questionToken")]);
+export const printStructConstraint: PrintMethod<StructConstraintNode> = (path, options, print) => {
+    return concat([printPathSyntaxToken(path, "classOrStructKeyword"), printPathSyntaxToken(path, "questionToken")]);
 };

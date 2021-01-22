@@ -4,6 +4,6 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 
 export interface SingleVariableDesignationNode extends SyntaxTreeNode<"SingleVariableDesignation">, HasIdentifier {}
 
-export const print: PrintMethod<SingleVariableDesignationNode> = (path, options, print) => {
+export const printSingleVariableDesignation: PrintMethod<SingleVariableDesignationNode> = (path, options, print) => {
     return printPathIdentifier(path);
 };

@@ -5,10 +5,10 @@ import { PrintMethod } from "./PrintMethod";
 import {
     HasIdentifier,
     HasModifiers,
-    HasValue,
+    SyntaxToken,
     printIdentifier,
     printModifiers,
-    printValue,
+    printSyntaxToken,
     SyntaxTreeNode,
 } from "./SyntaxTreeNode";
 import { IndexerDeclaration } from "./Types";
@@ -17,7 +17,7 @@ export interface EventDeclarationNode
     extends SyntaxTreeNode<"EventDeclaration">,
         HasModifiers,
         HasIdentifier {
-    eventKeyword: HasValue;
+    eventKeyword: SyntaxToken;
     type: SyntaxTreeNode;
     accessorList?: SyntaxTreeNode;
 }
@@ -33,13 +33,13 @@ export interface PropertyDeclarationNode
 
 export interface IndexerDeclarationNode extends SyntaxTreeNode<"IndexerDeclaration">, HasModifiers {
     type: SyntaxTreeNode;
-    thisKeyword: HasValue;
+    thisKeyword: SyntaxToken;
     accessorList?: SyntaxTreeNode;
     parameterList: SyntaxTreeNode;
     expressionBody?: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<PropertyDeclarationNode | IndexerDeclarationNode | EventDeclarationNode> = (path, options, print) => {
+export const printPropertyLikeDeclaration: PrintMethod<PropertyDeclarationNode | IndexerDeclarationNode | EventDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
 
     let contents: Doc;
@@ -53,7 +53,7 @@ export const print: PrintMethod<PropertyDeclarationNode | IndexerDeclarationNode
     if (node.nodeType === "PropertyDeclaration") {
         identifier = printIdentifier(node);
     } else if (node.nodeType === "IndexerDeclaration") {
-        identifier = concat([printValue(node.thisKeyword), "[", join(", ", path.map(print, "parameterList", "parameters")), "]"]);
+        identifier = concat([printSyntaxToken(node.thisKeyword), "[", join(", ", path.map(print, "parameterList", "parameters")), "]"]);
     } else if (node.nodeType === "EventDeclaration") {
         identifier = printIdentifier(node);
     }
@@ -61,7 +61,7 @@ export const print: PrintMethod<PropertyDeclarationNode | IndexerDeclarationNode
     return group(
         concat([
             printModifiers(node),
-            (node.nodeType === "EventDeclaration" ? printValue(node.eventKeyword) + " ": ""),
+            (node.nodeType === "EventDeclaration" ? printSyntaxToken(node.eventKeyword) + " ": ""),
             path.call(print, "type"),
             " ",
             identifier,

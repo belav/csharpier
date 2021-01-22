@@ -1,1 +1,1 @@
-export { print } from "../PrintMethodLikeDeclaration";
+export { printMethodLikeDeclaration as printOperatorDeclaration } from "../PrintMethodLikeDeclaration";

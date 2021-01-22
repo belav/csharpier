@@ -7,6 +7,6 @@ export interface DeclarationPatternNode extends SyntaxTreeNode<"DeclarationPatte
     designation: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<DeclarationPatternNode> = (path, options, print) => {
+export const printDeclarationPattern: PrintMethod<DeclarationPatternNode> = (path, options, print) => {
     return concat([path.call(print, "type"), " ", path.call(print, "designation")]);
 };

@@ -1,1 +1,1 @@
-export { print } from "../PrintFieldLikeDeclaration";
+export { printFieldLikeDeclaration as printFieldDeclaration } from "../PrintFieldLikeDeclaration";

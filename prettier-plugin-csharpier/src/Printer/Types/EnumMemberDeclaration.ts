@@ -7,6 +7,6 @@ export interface EnumMemberDeclarationNode extends SyntaxTreeNode<"EnumMemberDec
     equalValue?: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<EnumMemberDeclarationNode> = (path, options, print) => {
+export const printEnumMemberDeclaration: PrintMethod<EnumMemberDeclarationNode> = (path, options, print) => {
     return printIdentifier(path.getValue());
 };

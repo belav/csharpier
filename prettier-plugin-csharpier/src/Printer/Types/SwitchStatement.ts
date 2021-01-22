@@ -1,14 +1,14 @@
 import { PrintMethod } from "../PrintMethod";
-import { HasValue, printValue, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, printSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface SwitchStatementNode extends SyntaxTreeNode<"SwitchStatement"> {
-    switchKeyword: HasValue;
+    switchKeyword: SyntaxToken;
     expression: SyntaxTreeNode;
     sections: SyntaxTreeNode[];
 }
 
-export const print: PrintMethod<SwitchStatementNode> = (path, options, print) => {
+export const printSwitchStatement: PrintMethod<SwitchStatementNode> = (path, options, print) => {
     const node = path.getValue();
     const sections =
         node.sections.length === 0
@@ -20,5 +20,5 @@ export const print: PrintMethod<SwitchStatementNode> = (path, options, print) =>
                   hardline,
                   "}",
               ]);
-    return concat([printValue(node.switchKeyword), " (", path.call(print, "expression"), ")", sections]);
+    return concat([printSyntaxToken(node.switchKeyword), " (", path.call(print, "expression"), ")", sections]);
 };

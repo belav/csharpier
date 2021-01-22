@@ -1,8 +1,8 @@
 import { FastPath, ParserOptions } from "prettier";
 import { concat } from "./Builders";
 import { Print } from "./PrintMethod";
-import { Operator, printPathValue } from "./SyntaxTreeNode";
+import { Operator, printPathSyntaxToken } from "./SyntaxTreeNode";
 
-export function print<T extends Operator>(path: FastPath<T>, options: ParserOptions<T>, print: Print<T>) {
-    return concat([printPathValue(path, "operatorToken"), path.call(print, "operand")]);
+export function printPreOperator<T extends Operator>(path: FastPath<T>, options: ParserOptions<T>, print: Print<T>) {
+    return concat([printPathSyntaxToken(path, "operatorToken"), path.call(print, "operand")]);
 }

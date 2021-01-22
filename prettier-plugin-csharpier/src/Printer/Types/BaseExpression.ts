@@ -1,1 +1,1 @@
-export { print } from "./ThisExpression";
+export { printThisExpression as printBaseExpression } from "./ThisExpression";

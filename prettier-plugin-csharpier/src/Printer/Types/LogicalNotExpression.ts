@@ -7,6 +7,6 @@ export interface LogicalNotExpressionNode extends SyntaxTreeNode<"LogicalNotExpr
     operand: SyntaxTreeNode;
 }
 
-export const print: PrintMethod<LogicalNotExpressionNode> = (path, options, print) => {
+export const printLogicalNotExpression: PrintMethod<LogicalNotExpressionNode> = (path, options, print) => {
     return concat(["!", path.call(print, "operand")]);
 };

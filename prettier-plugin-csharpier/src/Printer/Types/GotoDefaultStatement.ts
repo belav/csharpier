@@ -1,1 +1,1 @@
-export { print } from "./GotoCaseStatement";
+export { printGotoCaseStatement as printGotoDefaultStatement } from "./GotoCaseStatement";
