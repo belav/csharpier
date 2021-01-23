@@ -37,7 +37,6 @@ export const printClassLikeDeclaration: PrintMethod<ClassLikeDeclarationNode> = 
     }
     parts.push(" ", printIdentifier(node));
     if (node.typeParameterList) {
-        // TODO 1 go through each node, copy interface from the generated one, figure out which path.calls can be optimized to this version
         parts.push(path.call(innerPath => printTypeParameterList(innerPath, options, print), "typeParameterList"));
     }
 
