@@ -11,8 +11,8 @@ export interface LeftRightOperator {
 
 export function printLeftRightOperator<T extends LeftRightOperator>(
     path: FastPath<T>,
-    options: ParserOptions<T>,
-    print: Print<T>,
+    options: ParserOptions,
+    print: Print,
 ) {
     return concat([
         path.call(print, "left"),

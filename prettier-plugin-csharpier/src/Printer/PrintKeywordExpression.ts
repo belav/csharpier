@@ -10,8 +10,8 @@ interface KeywordExpression {
 
 export function printKeywordExpression<T extends KeywordExpression>(
     path: FastPath<T>,
-    options: ParserOptions<T>,
-    print: Print<T>,
+    options: ParserOptions,
+    print: Print,
 ) {
     return concat([printPathSyntaxToken(path, "keyword"), "(", path.call(print, "expression"), ")"]);
 }

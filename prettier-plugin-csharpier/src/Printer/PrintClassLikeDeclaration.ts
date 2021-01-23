@@ -2,23 +2,24 @@ import { Doc } from "prettier";
 import { concat, hardline, indent, join } from "./Builders";
 import { printComments } from "./Comments";
 import { PrintMethod } from "./PrintMethod";
-import {
-    HasIdentifier,
-    HasModifiers,
-    SyntaxToken,
-    printIdentifier,
-    printModifiers,
-    printSyntaxToken,
-    SyntaxTreeNode
-} from "./SyntaxTreeNode";
-import { BaseListNode } from "./Types/BaseList";
+import { SyntaxToken, printIdentifier, printModifiers, printSyntaxToken, SyntaxTreeNode } from "./SyntaxTreeNode";
+import { AttributeListNode } from "./Types/AttributeList";
+import { BaseListNode, printBaseList } from "./Types/BaseList";
+import { TypeParameterConstraintClauseNode } from "./Types/TypeParameterConstraintClause";
+import { printTypeParameterList } from "./Types/TypeParameterList";
 
-export interface ClassLikeDeclarationNode extends SyntaxTreeNode<"ClassDeclaration" | "EnumDeclaration" | "StructDeclaration">, HasModifiers, HasIdentifier {
+export interface ClassLikeDeclarationNode
+    extends SyntaxTreeNode<"ClassDeclaration" | "EnumDeclaration" | "StructDeclaration"> {
+    attributeLists: AttributeListNode[];
+    modifiers: SyntaxToken[];
     keyword?: SyntaxToken;
+    identifier: SyntaxToken;
     enumKeyword?: SyntaxToken;
     typeParameterList?: SyntaxTreeNode;
-    baseList: BaseListNode;
+    baseList?: BaseListNode;
+    constraintClauses: TypeParameterConstraintClauseNode[];
     members: SyntaxTreeNode[];
+    arity?: number;
 }
 
 export const printClassLikeDeclaration: PrintMethod<ClassLikeDeclarationNode> = (path, options, print) => {
@@ -34,12 +35,12 @@ export const printClassLikeDeclaration: PrintMethod<ClassLikeDeclarationNode> = 
     }
     parts.push(" ", printIdentifier(node));
     if (node.typeParameterList) {
-        // TODO 0 we know we want to call printTypeParameterList, is there some way to do that here?
-        parts.push(path.call(print, "typeParameterList"));
+        // TODO 1 go through each node, copy interface from the generated one, figure out which path.calls can be optimized to this version
+        parts.push(path.call(innerPath => printTypeParameterList(innerPath, options, print), "typeParameterList"));
     }
 
     if (node.baseList) {
-        parts.push(path.call(print, "baseList"));
+        parts.push(path.call(innerPath => printBaseList(innerPath, options, print), "baseList"));
     }
 
     const hasMembers = node.members.length > 0;

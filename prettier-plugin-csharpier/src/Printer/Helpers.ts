@@ -8,7 +8,7 @@ export function printStatements<T extends SyntaxTreeNode, T2 extends SyntaxTreeN
     propertyName: keyof T2,
     separator: Doc,
     path: FastPath<T>,
-    print: Print<T>,
+    print: Print,
     endOfLineDoc?: Doc,
 ) {
     const actualEndOfLine = endOfLineDoc ? concat([endOfLineDoc, separator]) : separator;

@@ -914,7 +914,8 @@ class CSharp72
         }
     }
 
-    public void DoSomething(bool isEmployed, string personName, int personAge) { }
+    public void DoSomething(bool isEmployed, string personName, int personAge)
+    { }
 
     public void NonTrailingNamedArguments()
     {
