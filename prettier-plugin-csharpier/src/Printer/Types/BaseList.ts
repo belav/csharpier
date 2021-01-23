@@ -7,7 +7,7 @@ import { printCommaList } from "../Helpers";
 export interface BaseListNode extends SyntaxTreeNode<"BaseList"> {}
 
 export const printBaseList: PrintMethod<BaseListNode> = (path, options, print) => {
-    /* TODO 0 this should format like this instead
+    /* TODO this should format like this instead
 public class ThisIsSomeLongNameAndItShouldFormatWell
     : AnotherLongClassName<T>,
         AndYetAnotherLongClassName

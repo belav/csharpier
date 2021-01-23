@@ -12,7 +12,8 @@ namespace CSharp80
 
         void Patterns()
         {
-            if (o is )Do();
+            if (o is )
+                Do();
 
             return ;
 

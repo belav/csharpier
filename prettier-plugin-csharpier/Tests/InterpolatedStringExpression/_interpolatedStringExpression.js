@@ -6,3 +6,6 @@ test("BasicInterpolatedStringExpression", () => {
 test("Interpolation", () => {
     runTest(__dirname, "Interpolation");
 });
+test("InterpolationWithAlignmentAndFormat", () => {
+    runTest(__dirname, "InterpolationWithAlignmentAndFormat");
+});

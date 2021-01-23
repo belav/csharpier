@@ -89,9 +89,9 @@ namespace SyntaxNodeJsonWriterGenerator
                 var camelCaseName = CamelCaseName(propertyName);
                 var propertyType = propertyInfo.PropertyType;
 
-                if (ignoredProperties.Contains(camelCaseName)
-                    || ignoredTypes.Contains(propertyType)
-                    || (ignoredPropertiesByType.ContainsKey(type) && ignoredPropertiesByType[type].Contains(camelCaseName)))
+                if (Ignored.Properties.Contains(camelCaseName)
+                    || Ignored.Types.Contains(propertyType)
+                    || (Ignored.PropertiesByType.ContainsKey(type) && Ignored.PropertiesByType[type].Contains(camelCaseName)))
                 {
                     continue;
                 }
@@ -191,32 +191,5 @@ namespace SyntaxNodeJsonWriterGenerator
 
             return value;
         }
-
-        private static string[] ignoredProperties =
-        {
-            "language",
-            "rawKind",
-            "parent",
-            "parentTrivia",
-            "openBraceToken",
-            "closeBraceToken",
-            "semicolonToken",
-            "endOfFileToken",
-            "spanStart",
-        };
-        
-        private static Type[] ignoredTypes =
-        {
-            typeof(TextSpan),
-            typeof(SyntaxTree)
-        };
-
-        private static Dictionary<Type, string[]> ignoredPropertiesByType = new Dictionary<Type, string[]>
-        {
-            {typeof(PropertyDeclarationSyntax), new[] {"semicolon"}},
-            {typeof(IndexerDeclarationSyntax), new[] {"semicolon"}},
-            {typeof(SyntaxTrivia), new[] {"token"}},
-            {typeof(SyntaxToken), new[] {"value", "valueText"}},
-        };
     }
 }

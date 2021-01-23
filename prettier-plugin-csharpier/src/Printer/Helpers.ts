@@ -1,7 +1,7 @@
 import { Doc, FastPath } from "prettier";
 import { concat, group, hardline, indent, join, line } from "./Builders";
 import { Print } from "./PrintMethod";
-import { HasTrivia, SyntaxTreeNode } from "./SyntaxTreeNode";
+import { SyntaxTreeNode } from "./SyntaxTreeNode";
 
 export function printStatements<T extends SyntaxTreeNode, T2 extends SyntaxTreeNode>(
     node: T2,
@@ -37,7 +37,7 @@ export function getParentNode(path: FastPath) {
     return result;
 }
 
-export function hasLeadingExtraLine(node: HasTrivia) {
+export function hasLeadingExtraLine(node: SyntaxTreeNode) {
     if (node.leadingTrivia) {
         for (const trivia of node.leadingTrivia) {
             if (trivia.kind === "EndOfLineTrivia") {

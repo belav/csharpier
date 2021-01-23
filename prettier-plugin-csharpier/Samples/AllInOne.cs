@@ -72,8 +72,8 @@ namespace My
             {
                 int i = sizeof(int);
                 ++i;
-                var s1 = $"x {1 , -2 :d}";
-                var s2 = $@"x {1 , -2 :d}";
+                var s1 = $"x {1, -2:d}";
+                var s2 = $@"x {1, -2:d}";
             }
 
 #if DEBUG
@@ -92,8 +92,7 @@ namespace My
             var u = 1u;
             var U = 1U;
             long hex = 0xBADC0DE, Hex = 0XDEADBEEF, l = -1L, L = 1L, l2 = 2l;
-            ulong ul = 1ul, Ul = 1Ul, uL = 1uL, UL = 1UL,
-                lu = 1lu, Lu = 1Lu, lU = 1lU, LU = 1LU;
+            ulong ul = 1ul, Ul = 1Ul, uL = 1uL, UL = 1UL, lu = 1lu, Lu = 1Lu, lU = 1lU, LU = 1LU;
             int minInt32Value = -2147483648;
             int minInt64Value = -9223372036854775808L;
 
@@ -161,46 +160,41 @@ namespace My
             var o1 = new MyObject();
             var o2 = new MyObject(var);
             var o3 = new MyObject { A = i };
-            var o4 = new MyObject(@dynamic)
-            {
-                A = 0,
-                B = 0,
-                C = 0
-            };
+            var o4 = new MyObject(@dynamic) { A = 0, B = 0, C = 0 };
             var o5 = new { A = 0 };
             var dictionaryInitializer = new Dictionary<int, string>
             {
-                {1, ""},
-                {2, "a"}
+                { 1, "" },
+                { 2, "a" }
             };
-            float[] a = new float[]
-            {
-                0f,
-                1.1f
+            float[] a = new float[] { 0f, 1.1f };
+            int[,,] cube = {
+                { { 111, 112 }, { 121, 122 } },
+                { { 211, 212 }, { 221, 222 } }
             };
-            int[, ,] cube = { { { 111, 112, }, { 121, 122 } }, { { 211, 212 }, { 221, 222 } } };
+
             int[][] jagged = { { 111 }, { 121, 122 } };
             int[][,] arr = new int[5][,]; // as opposed to new int[][5,5]
             arr[0] = new int[5,5];  // as opposed to arr[0,0] = new int[5];
             arr[0][0,0] = 47;
-            int[] arrayTypeInference = new[] { 0, 1, };
+            int[] arrayTypeInference = new[] { 0, 1 };
             switch (3) { }
             switch (i)
             {
                 case 0:
                 case 1:
-                    {
-                        goto case 2;
-                    }
+                {
+                    goto case 2;
+                }
                 case 2 + 3:
-                    {
-                        goto default;
-                        break;
-                    }
+                {
+                    goto default;
+                    break;
+                }
                 default:
-                    {
-                        return;
-                    }
+                {
+                    return;
+                }
             }
             while (i < 10)
             {
@@ -220,7 +214,8 @@ namespace My
                 for(;;)
                 {
                     for (int i = 0, j = 0; i < length; i++, j++) { }
-                    if (true) continue;
+                    if (true)
+                        continue;
                     break;
                 }
             }
@@ -299,9 +294,7 @@ namespace My
                     select c into d
                     select d;
         }
-        ~A()
-        {
-        }
+        ~A() { }
         private readonly int f1;
         [Obsolete]
         [NonExisting]
@@ -365,9 +358,7 @@ namespace My
         {
             return false;
         }
-        class C
-        {
-        }
+        class C { }
     }
     public struct S : I
     {
@@ -404,18 +395,12 @@ namespace My
             return first.Add(second);
         }
         fixed int field[10];
-        class C
-        {
-        }
+        class C { }
     }
     public interface I
     {
         void A(int value);
-        string Value
-        {
-            get;
-            set;
-        }
+        string Value { get; set; }
         unsafe void UpdateSignatureByHashingContent([In]byte* buffer, int size);
     }
     [type: Flags]
@@ -507,9 +492,9 @@ namespace ConsoleApplication1
                     A<int> a;
                     M(A<B, C>(5));
                 }
-            };
-        };
-    };
+            }
+        }
+    }
 
     class Test
     {
@@ -536,7 +521,8 @@ namespace ConsoleApplication1
         void Bar2()
         {
             foo = 6;
-            this.Foo = 5.GetType(); Test t = "sss";
+            this.Foo = 5.GetType();
+            Test t = "sss";
         }
 
         public event EventHandler MyEvent = delegate { };
@@ -697,7 +683,15 @@ namespace Comments.XmlComments.UndocumentedKeywords
             x[i: 1, j: 5] = "str";
         }
 
-        struct Point { public int X; public int Y; public void ThisAccess() { this = this; } }
+        struct Point
+        {
+            public int X;
+            public int Y;
+            public void ThisAccess()
+            {
+                this = this;
+            }
+        }
     }
 
     // From here:https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6
@@ -803,7 +797,10 @@ class CSharp70
             // code using value
         }
 
-        if (expr is Type v) { Hello(); }
+        if (expr is Type v)
+        {
+            Hello();
+        }
     }
 
 	public static async Task LocalFunctions(string[] args)

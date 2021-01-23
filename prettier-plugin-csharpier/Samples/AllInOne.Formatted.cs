@@ -43,8 +43,8 @@ namespace My
             {
                 int i = sizeof(int);
                 ++i;
-                var s1 = $"x {1}";
-                var s2 = $@"x {1}";
+                var s1 = $"x {1, -2:d}";
+                var s2 = $@"x {1, -2:d}";
             }
 
             const int? local = int.MaxValue;
@@ -135,11 +135,12 @@ namespace My
                 { 1, "" },
                 { 2, "a" }
             };
-            float[] a = new float[];
+            float[] a = new float[] { 0f, 1.1f };
             int[,,] cube = {
                 { { 111, 112 }, { 121, 122 } },
                 { { 211, 212 }, { 221, 222 } }
             };
+
             int[][] jagged = { { 111 }, { 121, 122 } };
             int[][,] arr = new int[5][,];
             arr[0] = new int[5,5];
@@ -166,13 +167,15 @@ namespace My
             while (i < 10)
             {
                 ++i;
-                if (true)continue;
+                if (true)
+                    continue;
                 break;
             }
             do
             {
                 ++i;
-                if (true)continue;
+                if (true)
+                    continue;
                 break;
             }
             while (i < 10);
@@ -181,7 +184,8 @@ namespace My
                 for (; ; )
                 {
                     for (int i = 0, j = 0; i < length; i++, j++) { }
-                    if (true)continue;
+                    if (true)
+                        continue;
                     break;
                 }
             }
@@ -191,8 +195,10 @@ namespace My
             ;
             foreach (var i in Items())
             {
-                if (i == 7)return;
-                else continue;
+                if (i == 7)
+                    return;
+                else
+                    continue;
             }
             checked
             {
@@ -206,8 +212,8 @@ namespace My
             using (var v = BeginScope())
             using (A a = new A())
             using (A a = new A(), b = new A())
-            using ()
-            return;
+            using (BeginScope())
+                return;
             yield return this.items[3];
             yield break;
             fixed (int* p = stackalloc int[100], q = &y)
@@ -404,7 +410,7 @@ namespace ConsoleApplication1
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
 
-            var q = from i in new int[] select i;
+            var q = from i in new int[] { 1, 2, 3, 4 } select i;
         }
 
         public static implicit operator Test(string s)
@@ -609,14 +615,16 @@ namespace Comments.XmlComments.UndocumentedKeywords
             int? first = customers?[0]?.Orders?.Count();
             PropertyChanged?.Invoke(this, args);
 
-            string s = $"{p.Name} is {p.Age} year{{s}} old #";
+            string s = $"{p.Name, 20} is {p.Age:D3} year{{s}} old #";
             s = $"{p.Name} is \"{p.Age} year{(p.Age == 1 ? "" : "s")} old";
             s = $"{(p.Age == 2 ? $"{new Person {  }}" : "")}";
             s = $@"\{p.Name}
                                    ""\";
-            s = $"Color [ R={func(3)}, G={G}, B={B}, A={A} ]";
+            s = $"Color [ R={func(
+                3):#0.##}, G={G:#0.##}, B={B:#0.##}, A={A:#0.##} ]";
 
-            if (x == null)throw new ArgumentNullException(nameof(x));
+            if (x == null)
+                throw new ArgumentNullException(nameof(x));
             WriteLine(nameof(person.Address.ZipCode));
 
             var numbers = new Dictionary<int, string>
@@ -640,7 +648,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
             }
             finally
             {
-                if (res != null)await res.CloseAsync();
+                if (res != null)
+                    await res.CloseAsync();
             }
         }
     }

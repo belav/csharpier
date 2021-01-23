@@ -2,7 +2,7 @@
 import { spawnSync } from "child_process";
 import * as fs from "fs";
 
-// TODO this is probably wrong
+// TODO this is probably wrong - what is this?
 function loc(prop: any) {
     return function (node: any) {
         return node[prop];

@@ -6,10 +6,22 @@ import { BlockNode } from "./Block";
 import { IfStatementNode } from "./IfStatement";
 
 export interface ElseClauseNode extends SyntaxTreeNode<"ElseClause"> {
-    elseKeyword: SyntaxToken;
-    statement: BlockNode | IfStatementNode;
+    elseKeyword?: SyntaxToken;
+    statement?: SyntaxTreeNode;
 }
 
 export const printElseClause: PrintMethod<ElseClauseNode> = (path, options, print) => {
-    return concat([printPathSyntaxToken(path, "elseKeyword"), " ", path.call(print, "statement")]);
+    const node = path.getValue();
+    const parts: Doc[] = [printPathSyntaxToken(path, "elseKeyword")];
+    let statement = path.call(print, "statement");
+    if (node.statement?.nodeType === "Block") {
+        parts.push(statement);
+    } else if (node.statement?.nodeType === "IfStatement") {
+        parts.push(" ", statement);
+    }
+    else {
+        parts.push(indent(concat([hardline, statement])));
+    }
+
+    return concat(parts);
 };

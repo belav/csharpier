@@ -34,10 +34,8 @@ const options = {
     },
 };
 
-// TODO strip json to just this? https://github.com/ashmind/SharpLab/blob/main/source/Server/Decompilation/AstOnly/RoslynAstTarget.cs
-// or do something like it
-// TODO is this useful? https://raw.githubusercontent.com/dotnet/roslyn/1b0cf5c732062f66b71a3d62a165d6eb5f8b3022/src/Compilers/CSharp/Portable/Syntax/SyntaxKindFacts.cs
-// TODO readme in the root? make a build process? npm package? so much syntax to support!
+// TODO eventually go back to original AllInOne to figure out what kind of formatting we may want to change
+
 module.exports = {
     languages,
     printers,

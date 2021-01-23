@@ -9,6 +9,9 @@ test("BasicIfStatement", () => {
 test("EqualsIfStatement", () => {
     runTest(__dirname, "EqualsIfStatement");
 });
+test("IfStatementWithNoBraces", () => {
+    runTest(__dirname, "IfStatementWithNoBraces");
+});
 test("LogicalNotIfStatement", () => {
     runTest(__dirname, "LogicalNotIfStatement");
 });

@@ -4,20 +4,27 @@ import { hasLeadingExtraLine } from "./Helpers";
 import { Print } from "./PrintMethod";
 import { BlockNode } from "./Types/Block";
 
-export interface HasTrivia {
-    leadingTrivia?: SyntaxTreeNode[];
-    trailingTrivia?: SyntaxTreeNode[];
-}
-
-export interface SyntaxTreeNode<T = string, K = string> extends HasTrivia {
+export interface SyntaxTreeNode<T = string, K = string> {
     nodeType: T;
     kind: K;
+    isMissing?: boolean;
+    isStructuredTrivia?: boolean;
+    hasStructuredTrivia?: boolean;
+    containsSkippedText?: boolean;
+    containsDirectives?: boolean;
+    containsDiagnostics?: boolean;
+    hasLeadingTrivia?: boolean;
+    hasTrailingTrivia?: boolean;
+    containsAnnotations?: boolean;
+    leadingTrivia?: SyntaxTreeNode[];
+    trailingTrivia?: SyntaxTreeNode[];
 }
 
 export interface SyntaxToken extends SyntaxTreeNode<"SyntaxToken"> {
     text: string;
 }
 
+// TODO how does this compare to IdentifierNameNode?
 export interface HasIdentifier {
     identifier: SyntaxToken;
 }

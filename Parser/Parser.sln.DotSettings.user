@@ -1,8 +1,6 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=12f87900_002D0f2b_002D4e94_002D8760_002D8a4ac0c97f95/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestingComments" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::2EB78C98-88D6-4053-A542-04C947E8A70F::.NETCoreApp,Version=v3.1::ParserTests.Tests.DoWork&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::2EB78C98-88D6-4053-A542-04C947E8A70F::.NETCoreApp,Version=v3.1::ParserTests.JsonWriterTests.Blah&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::2EB78C98-88D6-4053-A542-04C947E8A70F::.NETCoreApp,Version=v3.1::ParserTests.JsonWriterTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::68233EC8-147C-49ED-B3EE-9372052BA65C::.NETCoreApp,Version=v3.1::SyntaxNodeTypeGenerator.Generator.DoWork&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

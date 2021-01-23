@@ -1,4 +1,4 @@
 public class ClassName
 {
-    public string Test = $"{SomeValue}${SomeOtherValue}";
+    public string Test = $"{SomeValue}{SomeOtherValue}";
 }

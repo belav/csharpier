@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier", "CSharpier\CSha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxNodeJsonWriterGenerator", "SyntaxNodeJsonWriterGenerator\SyntaxNodeJsonWriterGenerator.csproj", "{C73AC70E-4D1E-4266-AA77-6A0AAF7DA7C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxNodeTypeGenerator", "SyntaxNodeTypeGenerator\SyntaxNodeTypeGenerator.csproj", "{68233EC8-147C-49ED-B3EE-9372052BA65C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{C73AC70E-4D1E-4266-AA77-6A0AAF7DA7C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C73AC70E-4D1E-4266-AA77-6A0AAF7DA7C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C73AC70E-4D1E-4266-AA77-6A0AAF7DA7C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68233EC8-147C-49ED-B3EE-9372052BA65C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68233EC8-147C-49ED-B3EE-9372052BA65C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68233EC8-147C-49ED-B3EE-9372052BA65C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68233EC8-147C-49ED-B3EE-9372052BA65C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
