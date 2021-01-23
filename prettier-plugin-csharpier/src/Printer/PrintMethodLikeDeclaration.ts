@@ -1,4 +1,5 @@
 import { Doc } from "prettier";
+import { printAttributeLists } from "./PrintAttributeLists";
 import { PrintMethod } from "./PrintMethod";
 import {
     printSyntaxToken,
@@ -10,27 +11,35 @@ import {
     printModifiers,
 } from "./SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "./Builders";
+import { ArrowExpressionClauseNode } from "./Types/ArrowExpressionClause";
+import { AttributeListNode } from "./Types/AttributeList";
+import { BlockNode } from "./Types/Block";
 import { ParameterListNode } from "./Types/ParameterList";
+import { TypeParameterConstraintClauseNode } from "./Types/TypeParameterConstraintClause";
+import { TypeParameterListNode } from "./Types/TypeParameterList";
 
-export interface MethodLikeDeclarationNode
-    extends SyntaxTreeNode<"MethodDeclaration" | "OperatorDeclaration" | "InterfaceDeclaration">,
-        HasModifiers,
-        HasIdentifier {
-    attributeLists: SyntaxTreeNode[];
+interface MethodLikeDeclarationNode extends SyntaxTreeNode<"ConversionOperatorDeclaration" | "LocalFunctionStatement" | "MethodDeclaration" | "OperatorDeclaration"> {
+    attributeLists: AttributeListNode[];
+    modifiers: SyntaxToken[];
     returnType?: SyntaxTreeNode;
     explicitInterfaceSpecifier?: { name: HasIdentifier };
+    identifier: SyntaxToken;
+    typeParameterList?: TypeParameterListNode;
     implicitOrExplicitKeyword?: SyntaxToken;
     operatorKeyword?: SyntaxToken;
     operatorToken?: SyntaxToken;
     type?: SyntaxTreeNode;
-    parameterList: ParameterListNode;
-    body?: SyntaxTreeNode;
-    typeParameterList?: SyntaxTreeNode;
+    parameterList?: ParameterListNode;
+    constraintClauses: TypeParameterConstraintClauseNode[];
+    body?: BlockNode;
+    expressionBody?: ArrowExpressionClauseNode;
+    arity?: number;
 }
 
 export const printMethodLikeDeclaration: PrintMethod<MethodLikeDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
+    printAttributeLists(node, parts, path, options, print);
     parts.push(printModifiers(node));
     if (node.returnType) {
         parts.push(path.call(print, "returnType"), " ");

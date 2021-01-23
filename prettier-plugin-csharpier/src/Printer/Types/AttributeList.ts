@@ -1,5 +1,6 @@
+import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
-import { SyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { HasIdentifier, printPathIdentifier, SyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 import { NameEqualsNode } from "./NameEquals";
 
@@ -11,7 +12,7 @@ export interface AttributeListNode extends SyntaxTreeNode<"AttributeList"> {
 }
 
 interface AttributeTargetSpecifierNode extends SyntaxTreeNode<"AttributeTargetSpecifier"> {
-    identifier?: SyntaxToken;
+    identifier: SyntaxToken;
     colonToken?: SyntaxToken;
 }
 
@@ -33,20 +34,35 @@ interface AttributeArgumentNode extends SyntaxTreeNode<"AttributeArgument"> {
 }
 
 interface NameColonNode extends SyntaxTreeNode<"NameColon"> {
-    name?: IdentifierNameNode;
+    name?: HasIdentifier;
     colonToken?: SyntaxToken;
 }
 
-interface IdentifierNameNode extends SyntaxTreeNode<"IdentifierName"> {
-    identifier?: SyntaxToken;
-    arity?: number;
-    isVar?: boolean;
-    isUnmanaged?: boolean;
-    isNotNull?: boolean;
-    isNint?: boolean;
-    isNuint?: boolean;
-}
-
 export const printAttributeList: PrintMethod<AttributeListNode> = (path, options, print) => {
-    return (options as any).printTodo ? "TODO Node AttributeList" : "";
+    const node = path.getValue();
+    const parts: Doc[] = ["["];
+
+    if (node.target) {
+        parts.push(path.call(attributeTargetSpecifierPath => {
+            return printPathIdentifier(attributeTargetSpecifierPath);
+        }, "target"), ": ")
+    }
+
+    const attributes = path.map(attributePath => {
+        const attributeNode = attributePath.getValue();
+        const name = attributePath.call(print, "name");
+        if (!attributeNode.argumentList) {
+            return name;
+        }
+
+        const parts: Doc[] = [name, "("];
+        parts.push(join(", ", attributePath.map(attributeArgumentPath => {
+            return attributeArgumentPath.call(print, "expression");
+        }, "argumentList", "arguments")));
+        parts.push(")");
+        return concat(parts);
+    }, "attributes");
+
+    parts.push(join(", ", attributes), "]");
+    return concat(parts);
 };

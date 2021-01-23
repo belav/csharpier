@@ -1,9 +1,8 @@
+[Obsolete]
 class TopLevelType : IDisposable
 {
-    void IDisposable.Dispose() { }
-
-    void Method()
-    {
-        const int? local = int.MaxValue;
-    }
+    [Obsolete]
+    void Method() { }
+    [Obsolete]
+    const int? local = int.MaxValue;
 }

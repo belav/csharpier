@@ -30,6 +30,7 @@ namespace My
 
     public unsafe partial class A : C, I
     {
+        [DllImport("kernel32", true)]
         static extern bool CreateDirectory(string name, SecurityAttribute sa);
 
         private const int global = int.MinValue - 1;
@@ -181,7 +182,7 @@ namespace My
             while (i < 10);
             for (int j = 0; j < 100; ++j)
             {
-                for (; ; )
+                for (;;)
                 {
                     for (int i = 0, j = 0; i < length; i++, j++) { }
                     if (true)
@@ -208,7 +209,8 @@ namespace My
             {
                 unchecked(++i);
             }
-            lock (sync)process();
+            lock (sync)
+                process();
             using (var v = BeginScope())
             using (A a = new A())
             using (A a = new A(), b = new A())
@@ -251,7 +253,14 @@ namespace My
         }
         ~A() { }
         private readonly int f1;
+        [Obsolete]
+        [NonExisting]
+        [Foo::NonExisting(var, 5)]
+        [CLSCompliant(false)]
+        [Obsolete, System.NonSerialized, NonSerialized, CLSCompliant(true || false & true)]
         private volatile int f2;
+        [return: Obsolete]
+        [method: Obsolete]
         public void Handler(object value) { }
         public int m<T>(T t)
         {
@@ -264,14 +273,25 @@ namespace My
             set;
         }
         public abstract string P { get; }
-        public abstract int this[int index] { get; set; }
+        public abstract int this[int index]
+        {
+            protected internal get;
+            internal protected set;
+        }
+        [method: Obsolete]
+        [field: Obsolete]
+        [event: Obsolete]
         public readonly event Event E;
+        [event: Test]
         public event Action E1
         {
+            [Obsolete]
             add
             {
                 value = value;
             }
+            [Obsolete]
+            [return: Obsolete]
             remove
             {
                 E += Handler;
@@ -283,6 +303,8 @@ namespace My
             Delegate handler = new Delegate(Handler);
             return first.Add(second);
         }
+        [method: Obsolete]
+        [return: Obsolete]
         public static bool operator true(A a)
         {
             return true;
@@ -297,6 +319,7 @@ namespace My
     {
         public S() { }
         private int f1;
+        [Obsolete("Use Script instead", false)]
         private volatile int f2;
         public abstract int m<T>(T t)
         {
@@ -308,7 +331,12 @@ namespace My
             set;
         }
         public abstract string P { get; }
-        public abstract int this[int index] { get; set; }
+
+        public abstract int this[int index]
+        {
+            get;
+            internal protected set;
+        }
         public event Event E;
         public static A operator +(A first, A second)
         {
@@ -323,6 +351,7 @@ namespace My
         string Value { get; set; }
         unsafe void UpdateSignatureByHashingContent(byte* buffer, int size);
     }
+    [type: Flags]
     public enum E
     {
         A,
@@ -455,6 +484,7 @@ namespace ConsoleApplication1
 
         public Type Foo
         {
+            [Obsolete("Name", false)]
             get
             {
                 var result = typeof(IEnumerable<int>);

@@ -1,6 +1,7 @@
 import { Doc } from "prettier";
 import { concat, hardline, indent, join } from "./Builders";
 import { printComments } from "./Comments";
+import { printAttributeLists } from "./PrintAttributeLists";
 import { PrintMethod } from "./PrintMethod";
 import { SyntaxToken, printIdentifier, printModifiers, printSyntaxToken, SyntaxTreeNode } from "./SyntaxTreeNode";
 import { AttributeListNode } from "./Types/AttributeList";
@@ -26,6 +27,7 @@ export const printClassLikeDeclaration: PrintMethod<ClassLikeDeclarationNode> = 
     const node = path.getValue();
     const parts: Doc[] = [];
     printComments(parts, node);
+    printAttributeLists(node, parts, path, options, print);
     parts.push(printModifiers(node));
     if (node.keyword) {
         parts.push(printSyntaxToken(node.keyword));

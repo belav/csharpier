@@ -1,26 +1,35 @@
 import { Doc } from "prettier";
+import { printAttributeLists } from "../PrintAttributeLists";
 import { PrintMethod } from "../PrintMethod";
-import { printSyntaxToken, SyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { printModifiers, printSyntaxToken, SyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
+import { ArrowExpressionClauseNode } from "./ArrowExpressionClause";
+import { AttributeListNode } from "./AttributeList";
+import { BlockNode } from "./Block";
 
-interface AccessorDeclarationNode
-    extends SyntaxTreeNode<
-        "SetAccessorDeclaration" | "GetAccessorDeclaration" | "AddAccessorDeclaration" | "RemoveAccessorDeclaration"
-        > {
-    keyword: SyntaxToken;
-    expressionBody?: SyntaxTreeNode;
-    body?: SyntaxTreeNode;
+export interface AccessorDeclarationNode extends SyntaxTreeNode<"AccessorDeclaration"> {
+    attributeLists: AttributeListNode[];
+    modifiers: SyntaxToken[];
+    keyword?: SyntaxToken;
+    body?: BlockNode;
+    expressionBody?: ArrowExpressionClauseNode;
 }
 
 export const printAccessorDeclaration: PrintMethod<AccessorDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
+    if (node.modifiers.length > 0 || node.attributeLists.length > 0 || node.body || node.expressionBody) {
+        parts.push(hardline);
+    } else {
+        parts.push(line);
+    }
+
+    printAttributeLists(node, parts, path, options, print);
+    parts.push(printModifiers(node))
     parts.push(printSyntaxToken(node.keyword));
     if (!node.body && !node.expressionBody) {
-        parts.unshift(line);
         parts.push(";");
     } else {
-        parts.unshift(hardline);
         if (node.body) {
             parts.push(path.call(print, "body"));
         } else {
@@ -30,5 +39,5 @@ export const printAccessorDeclaration: PrintMethod<AccessorDeclarationNode> = (p
         }
     }
 
-    return concat(parts);
+    return (concat(parts));
 };

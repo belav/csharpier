@@ -199,19 +199,21 @@ namespace My
             while (i < 10)
             {
                 ++i;
-                if (true) continue;
+                if (true)
+                    continue;
                 break;
             }
             do
             {
                 ++i;
-                if (true) continue;
+                if (true)
+                    continue;
                 break;
             }
             while (i < 10);
             for (int j = 0; j < 100; ++j)
             {
-                for(;;)
+                for (;;)
                 {
                     for (int i = 0, j = 0; i < length; i++, j++) { }
                     if (true)
@@ -221,7 +223,8 @@ namespace My
             }
             label:
             goto label;
-            label2: ;
+            label2:
+            ;
             foreach (var i in Items())
             {
                 if (i == 7)
@@ -272,14 +275,10 @@ namespace My
             }
             finally
             {
-                try { } catch { }
+                try { }
+                catch  { }
             }
-            var anonymous =
-            {
-                A = 1,
-                B = 2,
-                C = 3,
-            };
+            var anonymous = { A = 1, B = 2, C = 3 };
             var query = from c in customers
                         let d = c
                         where d != null
@@ -315,16 +314,10 @@ namespace My
         }
         public string P
         {
-            get
-            {
-                return "A";
-            }
+            get { return "A"; }
             set;
         }
-        public abstract string P
-        {
-            get;
-        }
+        public abstract string P { get; }
         public abstract int this[int index]
         {
             protected internal get;
@@ -380,10 +373,8 @@ namespace My
             }
             set;
         }
-        public abstract string P
-        {
-            get;
-        }
+        public abstract string P { get; }
+
         public abstract int this[int index]
         {
             get;

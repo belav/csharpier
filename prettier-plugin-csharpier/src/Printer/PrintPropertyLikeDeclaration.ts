@@ -1,6 +1,7 @@
 import { Doc } from "prettier";
 import { concat, group, hardline, indent, join, line } from "./Builders";
 import { printComments } from "./Comments";
+import { printAttributeLists } from "./PrintAttributeLists";
 import { PrintMethod } from "./PrintMethod";
 import {
     HasIdentifier,
@@ -12,31 +13,57 @@ import {
     SyntaxTreeNode,
 } from "./SyntaxTreeNode";
 import { IndexerDeclaration } from "./Types";
+import { AccessorDeclarationNode } from "./Types/AccessorDeclaration";
+import { ArrowExpressionClauseNode } from "./Types/ArrowExpressionClause";
+import { AttributeListNode } from "./Types/AttributeList";
+import { EqualsValueClauseNode } from "./Types/EqualsValueClause";
+import { ParameterNode } from "./Types/Parameter";
 
-export interface EventDeclarationNode
-    extends SyntaxTreeNode<"EventDeclaration">,
-        HasModifiers,
-        HasIdentifier {
-    eventKeyword: SyntaxToken;
-    type: SyntaxTreeNode;
-    accessorList?: SyntaxTreeNode;
+export interface PropertyDeclarationNode extends SyntaxTreeNode<"PropertyDeclaration"> {
+    attributeLists: AttributeListNode[];
+    modifiers: SyntaxToken[];
+    type?: SyntaxTreeNode;
+    explicitInterfaceSpecifier?: ExplicitInterfaceSpecifierNode;
+    identifier: SyntaxToken;
+    accessorList?: AccessorListNode;
+    expressionBody?: ArrowExpressionClauseNode;
+    initializer?: EqualsValueClauseNode;
 }
 
-export interface PropertyDeclarationNode
-    extends SyntaxTreeNode<"PropertyDeclaration">,
-        HasModifiers,
-        HasIdentifier {
-    type: SyntaxTreeNode;
-    accessorList?: SyntaxTreeNode;
-    expressionBody?: SyntaxTreeNode;
+interface AccessorListNode extends SyntaxTreeNode<"AccessorList"> {
+    accessors: AccessorDeclarationNode[];
 }
 
-export interface IndexerDeclarationNode extends SyntaxTreeNode<"IndexerDeclaration">, HasModifiers {
-    type: SyntaxTreeNode;
-    thisKeyword: SyntaxToken;
-    accessorList?: SyntaxTreeNode;
-    parameterList: SyntaxTreeNode;
-    expressionBody?: SyntaxTreeNode;
+interface ExplicitInterfaceSpecifierNode extends SyntaxTreeNode<"ExplicitInterfaceSpecifier"> {
+    name?: SyntaxTreeNode;
+    dotToken?: SyntaxToken;
+}
+
+export interface EventDeclarationNode extends SyntaxTreeNode<"EventDeclaration"> {
+    attributeLists: AttributeListNode[];
+    modifiers: SyntaxToken[];
+    eventKeyword?: SyntaxToken;
+    type?: SyntaxTreeNode;
+    explicitInterfaceSpecifier?: ExplicitInterfaceSpecifierNode;
+    identifier: SyntaxToken;
+    accessorList?: AccessorListNode;
+}
+
+export interface IndexerDeclarationNode extends SyntaxTreeNode<"IndexerDeclaration"> {
+    attributeLists: AttributeListNode[];
+    modifiers: SyntaxToken[];
+    type?: SyntaxTreeNode;
+    explicitInterfaceSpecifier?: ExplicitInterfaceSpecifierNode;
+    thisKeyword?: SyntaxToken;
+    parameterList?: BracketedParameterListNode;
+    accessorList?: AccessorListNode;
+    expressionBody?: ArrowExpressionClauseNode;
+}
+
+interface BracketedParameterListNode extends SyntaxTreeNode<"BracketedParameterList"> {
+    openBracketToken?: SyntaxToken;
+    parameters: ParameterNode[];
+    closeBracketToken?: SyntaxToken;
 }
 
 export const printPropertyLikeDeclaration: PrintMethod<PropertyDeclarationNode | IndexerDeclarationNode | EventDeclarationNode> = (path, options, print) => {
@@ -58,8 +85,13 @@ export const printPropertyLikeDeclaration: PrintMethod<PropertyDeclarationNode |
         identifier = printIdentifier(node);
     }
 
+    const parts: Doc[] = [];
+
+    printAttributeLists(node, parts, path, options, print);
+
     return group(
         concat([
+            concat(parts),
             printModifiers(node),
             (node.nodeType === "EventDeclaration" ? printSyntaxToken(node.eventKeyword) + " ": ""),
             path.call(print, "type"),

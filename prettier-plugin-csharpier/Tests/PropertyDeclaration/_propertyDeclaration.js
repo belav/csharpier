@@ -3,6 +3,9 @@ const runTest = require("../RunTest");
 test("BasicProperty", () => {
     runTest(__dirname, "BasicProperty");
 });
+test("PropertyModifiers", () => {
+    runTest(__dirname, "PropertyModifiers");
+});
 test("PropertyWithBackingValue", () => {
     runTest(__dirname, "PropertyWithBackingValue");
 });
