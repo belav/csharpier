@@ -72,7 +72,8 @@ namespace SyntaxNodeJsonWriterGenerator
             file.WriteLine("        {");
             file.WriteLine("            builder.Append(\"{\");");
             file.WriteLine("            var properties = new List<string>();");
-            file.WriteLine($"            properties.Add($\"\\\"nodeType\\\":\\\"{{syntaxNode.Kind().ToString()}}\\\"\");");
+            file.WriteLine($"            properties.Add($\"\\\"nodeType\\\":\\\"{{GetNodeType(syntaxNode.GetType())}}\\\"\");");
+            file.WriteLine($"            properties.Add($\"\\\"kind\\\":\\\"{{syntaxNode.Kind().ToString()}}\\\"\");");
 
             if (type == typeof(SyntaxTrivia))
             {

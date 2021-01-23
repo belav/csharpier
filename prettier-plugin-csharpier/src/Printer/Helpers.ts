@@ -40,7 +40,7 @@ export function getParentNode(path: FastPath) {
 export function hasLeadingExtraLine(node: HasTrivia) {
     if (node.leadingTrivia) {
         for (const trivia of node.leadingTrivia) {
-            if (trivia.nodeType === "EndOfLineTrivia") {
+            if (trivia.kind === "EndOfLineTrivia") {
                 return true;
             }
         }
@@ -57,7 +57,7 @@ export function printExtraLines(parts: Doc[], node: SyntaxTreeNode) {
 
     if (node.leadingTrivia) {
         for (const trivia of node.leadingTrivia) {
-            if (trivia.nodeType === "EndOfLineTrivia") {
+            if (trivia.kind === "EndOfLineTrivia") {
                 parts.push(hardline);
                 foundStuff = true;
             }
@@ -72,7 +72,7 @@ export function printExtraLines(parts: Doc[], node: SyntaxTreeNode) {
         for (const mightHaveTrivia of nodeAsAny["modifiers"]) {
             if (mightHaveTrivia.leadingTrivia) {
                 for (const trivia of mightHaveTrivia.leadingTrivia) {
-                    if (trivia.nodeType === "EndOfLineTrivia") {
+                    if (trivia.kind === "EndOfLineTrivia") {
                         parts.push(hardline);
                         foundStuff = true;
                     }
@@ -88,7 +88,7 @@ export function printExtraLines(parts: Doc[], node: SyntaxTreeNode) {
     if (nodeAsAny["keyword"]) {
         if (nodeAsAny["keyword"].leadingTrivia) {
             for (const trivia of nodeAsAny["keyword"].leadingTrivia) {
-                if (trivia.nodeType === "EndOfLineTrivia") {
+                if (trivia.kind === "EndOfLineTrivia") {
                     parts.push(hardline);
                     foundStuff = true;
                 }

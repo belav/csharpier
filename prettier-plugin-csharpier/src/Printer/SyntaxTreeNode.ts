@@ -9,11 +9,12 @@ export interface HasTrivia {
     trailingTrivia?: SyntaxTreeNode[];
 }
 
-export interface SyntaxTreeNode<T = string> extends HasTrivia {
+export interface SyntaxTreeNode<T = string, K = string> extends HasTrivia {
     nodeType: T;
+    kind: K;
 }
 
-export interface SyntaxToken extends HasTrivia {
+export interface SyntaxToken extends SyntaxTreeNode<"SyntaxToken"> {
     text: string;
 }
 

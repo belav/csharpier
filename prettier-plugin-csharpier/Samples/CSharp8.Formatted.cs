@@ -5,7 +5,7 @@ namespace CSharp80
         void ReferenceNullable()
         {
             var? x = E;
-            .ToString();
+            x!.ToString();
             string? wtf = null;
             int?[]? hello;
         }
@@ -27,8 +27,8 @@ namespace CSharp80
         void Ranges()
         {
             var thirdItem = list[2];
-            var lastItem = list[];
-            var multiDimensional = list[3, ];
+            var lastItem = list[^1];
+            var multiDimensional = list[3, ^2];
 
             var slice1 = list[];
             var slice2 = list[];
@@ -54,7 +54,7 @@ namespace CSharp80
 
         void NullCoalescingAssignment()
         {
-            var item = ;
+            var item = a ??= b ??= c ??= d ??= throw new Exception();
         }
 
         public readonly float Hello()

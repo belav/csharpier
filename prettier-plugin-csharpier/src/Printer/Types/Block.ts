@@ -11,6 +11,6 @@ export const printBlock: PrintMethod<BlockNode> = (path, options, print) => {
     const node = path.getValue();
     const parent = getParentNode(path);
     const statementSeparator =
-        parent.nodeType === "GetAccessorDeclaration" || parent.nodeType === "SetAccessorDeclaration" ? line : hardline;
+        parent.kind === "GetAccessorDeclaration" || parent.kind === "SetAccessorDeclaration" ? line : hardline;
     return printStatements(node, "statements", statementSeparator, path, print);
 };

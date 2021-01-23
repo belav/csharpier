@@ -249,7 +249,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
@@ -278,7 +279,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Left != default(NameSyntax))
             {
                 var leftBuilder = new StringBuilder();
@@ -319,7 +321,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
@@ -355,7 +358,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
             {
                 var lessThanTokenBuilder = new StringBuilder();
@@ -392,7 +396,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Alias != default(IdentifierNameSyntax))
             {
                 var aliasBuilder = new StringBuilder();
@@ -433,7 +438,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
                 var keywordBuilder = new StringBuilder();
@@ -461,7 +467,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ElementType != default(TypeSyntax))
             {
                 var elementTypeBuilder = new StringBuilder();
@@ -497,7 +504,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
                 var openBracketTokenBuilder = new StringBuilder();
@@ -535,7 +543,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ElementType != default(TypeSyntax))
             {
                 var elementTypeBuilder = new StringBuilder();
@@ -569,7 +578,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.DelegateKeyword != default(SyntaxToken))
             {
                 var delegateKeywordBuilder = new StringBuilder();
@@ -615,7 +625,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
             {
                 var lessThanTokenBuilder = new StringBuilder();
@@ -652,7 +663,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ManagedOrUnmanagedKeyword != default(SyntaxToken))
             {
                 var managedOrUnmanagedKeywordBuilder = new StringBuilder();
@@ -681,7 +693,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
                 var openBracketTokenBuilder = new StringBuilder();
@@ -718,7 +731,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(SyntaxToken))
             {
                 var nameBuilder = new StringBuilder();
@@ -741,7 +755,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ElementType != default(TypeSyntax))
             {
                 var elementTypeBuilder = new StringBuilder();
@@ -775,7 +790,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
                 var openParenTokenBuilder = new StringBuilder();
@@ -817,7 +833,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
                 var typeBuilder = new StringBuilder();
@@ -846,7 +863,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OmittedTypeArgumentToken != default(SyntaxToken))
             {
                 var omittedTypeArgumentTokenBuilder = new StringBuilder();
@@ -874,7 +892,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.RefKeyword != default(SyntaxToken))
             {
                 var refKeywordBuilder = new StringBuilder();
@@ -914,7 +933,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
                 var openParenTokenBuilder = new StringBuilder();
@@ -949,7 +969,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
                 var openParenTokenBuilder = new StringBuilder();
@@ -986,7 +1007,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
                 var operatorTokenBuilder = new StringBuilder();
@@ -1015,7 +1037,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.AwaitKeyword != default(SyntaxToken))
             {
                 var awaitKeywordBuilder = new StringBuilder();
@@ -1044,7 +1067,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Operand != default(ExpressionSyntax))
             {
                 var operandBuilder = new StringBuilder();
@@ -1073,7 +1097,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
@@ -1108,7 +1133,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
@@ -1143,7 +1169,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
                 var operatorTokenBuilder = new StringBuilder();
@@ -1172,7 +1199,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ArgumentList != default(BracketedArgumentListSyntax))
             {
                 var argumentListBuilder = new StringBuilder();
@@ -1195,7 +1223,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LeftOperand != default(ExpressionSyntax))
             {
                 var leftOperandBuilder = new StringBuilder();
@@ -1230,7 +1259,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ArgumentList != default(BracketedArgumentListSyntax))
             {
                 var argumentListBuilder = new StringBuilder();
@@ -1253,7 +1283,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Left != default(ExpressionSyntax))
             {
                 var leftBuilder = new StringBuilder();
@@ -1288,7 +1319,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Left != default(ExpressionSyntax))
             {
                 var leftBuilder = new StringBuilder();
@@ -1323,7 +1355,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Condition != default(ExpressionSyntax))
             {
                 var conditionBuilder = new StringBuilder();
@@ -1370,7 +1403,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Token != default(SyntaxToken))
             {
                 var tokenBuilder = new StringBuilder();
@@ -1393,7 +1427,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Token != default(SyntaxToken))
             {
                 var tokenBuilder = new StringBuilder();
@@ -1416,7 +1451,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Token != default(SyntaxToken))
             {
                 var tokenBuilder = new StringBuilder();
@@ -1439,7 +1475,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
                 var keywordBuilder = new StringBuilder();
@@ -1480,7 +1517,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
                 var keywordBuilder = new StringBuilder();
@@ -1521,7 +1559,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
                 var keywordBuilder = new StringBuilder();
@@ -1574,7 +1613,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
                 var keywordBuilder = new StringBuilder();
@@ -1615,7 +1655,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
                 var keywordBuilder = new StringBuilder();
@@ -1656,7 +1697,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
                 var keywordBuilder = new StringBuilder();
@@ -1697,7 +1739,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
                 var keywordBuilder = new StringBuilder();
@@ -1738,7 +1781,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
@@ -1767,7 +1811,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
@@ -1796,7 +1841,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
                 var openParenTokenBuilder = new StringBuilder();
@@ -1833,7 +1879,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
                 var openBracketTokenBuilder = new StringBuilder();
@@ -1870,7 +1917,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NameColon != default(NameColonSyntax))
             {
                 var nameColonBuilder = new StringBuilder();
@@ -1911,7 +1959,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(IdentifierNameSyntax))
             {
                 var nameBuilder = new StringBuilder();
@@ -1940,7 +1989,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
                 var typeBuilder = new StringBuilder();
@@ -1969,7 +2019,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
                 var openParenTokenBuilder = new StringBuilder();
@@ -2010,7 +2061,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var modifiers = new List<string>();
             foreach(var node in syntaxNode.Modifiers)
             {
@@ -2071,7 +2123,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var modifiers = new List<string>();
             foreach(var node in syntaxNode.Modifiers)
             {
@@ -2132,7 +2185,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.RefKeyword != default(SyntaxToken))
             {
                 var refKeywordBuilder = new StringBuilder();
@@ -2161,7 +2215,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var modifiers = new List<string>();
             foreach(var node in syntaxNode.Modifiers)
             {
@@ -2222,7 +2277,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var expressions = new List<string>();
             foreach(var node in syntaxNode.Expressions)
             {
@@ -2247,7 +2303,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
             {
                 var newKeywordBuilder = new StringBuilder();
@@ -2282,7 +2339,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
             {
                 var newKeywordBuilder = new StringBuilder();
@@ -2323,7 +2381,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
@@ -2358,7 +2417,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NameEquals != default(NameEqualsSyntax))
             {
                 var nameEqualsBuilder = new StringBuilder();
@@ -2387,7 +2447,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
             {
                 var newKeywordBuilder = new StringBuilder();
@@ -2418,7 +2479,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
             {
                 var newKeywordBuilder = new StringBuilder();
@@ -2453,7 +2515,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
             {
                 var newKeywordBuilder = new StringBuilder();
@@ -2502,7 +2565,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StackAllocKeyword != default(SyntaxToken))
             {
                 var stackAllocKeywordBuilder = new StringBuilder();
@@ -2537,7 +2601,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StackAllocKeyword != default(SyntaxToken))
             {
                 var stackAllocKeywordBuilder = new StringBuilder();
@@ -2578,7 +2643,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.FromClause != default(FromClauseSyntax))
             {
                 var fromClauseBuilder = new StringBuilder();
@@ -2607,7 +2673,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var clauses = new List<string>();
             foreach(var node in syntaxNode.Clauses)
             {
@@ -2644,7 +2711,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.FromKeyword != default(SyntaxToken))
             {
                 var fromKeywordBuilder = new StringBuilder();
@@ -2691,7 +2759,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LetKeyword != default(SyntaxToken))
             {
                 var letKeywordBuilder = new StringBuilder();
@@ -2732,7 +2801,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.JoinKeyword != default(SyntaxToken))
             {
                 var joinKeywordBuilder = new StringBuilder();
@@ -2809,7 +2879,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.IntoKeyword != default(SyntaxToken))
             {
                 var intoKeywordBuilder = new StringBuilder();
@@ -2838,7 +2909,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.WhereKeyword != default(SyntaxToken))
             {
                 var whereKeywordBuilder = new StringBuilder();
@@ -2867,7 +2939,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OrderByKeyword != default(SyntaxToken))
             {
                 var orderByKeywordBuilder = new StringBuilder();
@@ -2898,7 +2971,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
@@ -2927,7 +3001,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.SelectKeyword != default(SyntaxToken))
             {
                 var selectKeywordBuilder = new StringBuilder();
@@ -2956,7 +3031,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.GroupKeyword != default(SyntaxToken))
             {
                 var groupKeywordBuilder = new StringBuilder();
@@ -2997,7 +3073,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.IntoKeyword != default(SyntaxToken))
             {
                 var intoKeywordBuilder = new StringBuilder();
@@ -3032,7 +3109,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OmittedArraySizeExpressionToken != default(SyntaxToken))
             {
                 var omittedArraySizeExpressionTokenBuilder = new StringBuilder();
@@ -3055,7 +3133,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StringStartToken != default(SyntaxToken))
             {
                 var stringStartTokenBuilder = new StringBuilder();
@@ -3092,7 +3171,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
@@ -3127,7 +3207,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ThrowKeyword != default(SyntaxToken))
             {
                 var throwKeywordBuilder = new StringBuilder();
@@ -3156,7 +3237,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.WhenKeyword != default(SyntaxToken))
             {
                 var whenKeywordBuilder = new StringBuilder();
@@ -3185,7 +3267,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.UnderscoreToken != default(SyntaxToken))
             {
                 var underscoreTokenBuilder = new StringBuilder();
@@ -3208,7 +3291,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
                 var typeBuilder = new StringBuilder();
@@ -3237,7 +3321,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.VarKeyword != default(SyntaxToken))
             {
                 var varKeywordBuilder = new StringBuilder();
@@ -3266,7 +3351,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
                 var typeBuilder = new StringBuilder();
@@ -3307,7 +3393,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
                 var openParenTokenBuilder = new StringBuilder();
@@ -3344,7 +3431,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var subpatterns = new List<string>();
             foreach(var node in syntaxNode.Subpatterns)
             {
@@ -3369,7 +3457,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NameColon != default(NameColonSyntax))
             {
                 var nameColonBuilder = new StringBuilder();
@@ -3398,7 +3487,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
@@ -3421,7 +3511,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
                 var openParenTokenBuilder = new StringBuilder();
@@ -3456,7 +3547,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
                 var operatorTokenBuilder = new StringBuilder();
@@ -3485,7 +3577,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
                 var typeBuilder = new StringBuilder();
@@ -3508,7 +3601,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Left != default(PatternSyntax))
             {
                 var leftBuilder = new StringBuilder();
@@ -3543,7 +3637,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
                 var operatorTokenBuilder = new StringBuilder();
@@ -3572,7 +3667,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.TextToken != default(SyntaxToken))
             {
                 var textTokenBuilder = new StringBuilder();
@@ -3595,7 +3691,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
@@ -3630,7 +3727,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.CommaToken != default(SyntaxToken))
             {
                 var commaTokenBuilder = new StringBuilder();
@@ -3659,7 +3757,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ColonToken != default(SyntaxToken))
             {
                 var colonTokenBuilder = new StringBuilder();
@@ -3688,7 +3787,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -3727,7 +3827,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -3760,7 +3861,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -3837,7 +3939,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -3889,7 +3992,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
                 var typeBuilder = new StringBuilder();
@@ -3920,7 +4024,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
@@ -3955,7 +4060,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.EqualsToken != default(SyntaxToken))
             {
                 var equalsTokenBuilder = new StringBuilder();
@@ -3984,7 +4090,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
@@ -4007,7 +4114,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.UnderscoreToken != default(SyntaxToken))
             {
                 var underscoreTokenBuilder = new StringBuilder();
@@ -4030,7 +4138,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
                 var openParenTokenBuilder = new StringBuilder();
@@ -4067,7 +4176,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4099,7 +4209,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4124,7 +4235,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4167,7 +4279,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4210,7 +4323,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4241,7 +4355,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4272,7 +4387,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4309,7 +4425,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4346,7 +4463,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4389,7 +4507,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4444,7 +4563,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4505,7 +4625,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4594,7 +4715,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4673,7 +4795,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4746,7 +4869,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4813,7 +4937,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4868,7 +4993,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4905,7 +5031,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4942,7 +5069,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -4997,7 +5125,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -5058,7 +5187,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ElseKeyword != default(SyntaxToken))
             {
                 var elseKeywordBuilder = new StringBuilder();
@@ -5087,7 +5217,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -5144,7 +5275,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var labels = new List<string>();
             foreach(var node in syntaxNode.Labels)
             {
@@ -5177,7 +5309,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
                 var keywordBuilder = new StringBuilder();
@@ -5218,7 +5351,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
                 var keywordBuilder = new StringBuilder();
@@ -5253,7 +5387,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
                 var keywordBuilder = new StringBuilder();
@@ -5282,7 +5417,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.GoverningExpression != default(ExpressionSyntax))
             {
                 var governingExpressionBuilder = new StringBuilder();
@@ -5319,7 +5455,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Pattern != default(PatternSyntax))
             {
                 var patternBuilder = new StringBuilder();
@@ -5360,7 +5497,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -5411,7 +5549,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.CatchKeyword != default(SyntaxToken))
             {
                 var catchKeywordBuilder = new StringBuilder();
@@ -5452,7 +5591,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
                 var openParenTokenBuilder = new StringBuilder();
@@ -5493,7 +5633,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.WhenKeyword != default(SyntaxToken))
             {
                 var whenKeywordBuilder = new StringBuilder();
@@ -5534,7 +5675,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.FinallyKeyword != default(SyntaxToken))
             {
                 var finallyKeywordBuilder = new StringBuilder();
@@ -5563,7 +5705,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var externs = new List<string>();
             foreach(var node in syntaxNode.Externs)
             {
@@ -5612,7 +5755,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ExternKeyword != default(SyntaxToken))
             {
                 var externKeywordBuilder = new StringBuilder();
@@ -5647,7 +5791,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.UsingKeyword != default(SyntaxToken))
             {
                 var usingKeywordBuilder = new StringBuilder();
@@ -5688,7 +5833,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -5757,7 +5903,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
                 var openBracketTokenBuilder = new StringBuilder();
@@ -5800,7 +5947,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
@@ -5829,7 +5977,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(NameSyntax))
             {
                 var nameBuilder = new StringBuilder();
@@ -5858,7 +6007,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
                 var openParenTokenBuilder = new StringBuilder();
@@ -5895,7 +6045,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NameEquals != default(NameEqualsSyntax))
             {
                 var nameEqualsBuilder = new StringBuilder();
@@ -5930,7 +6081,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(IdentifierNameSyntax))
             {
                 var nameBuilder = new StringBuilder();
@@ -5959,7 +6111,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
             {
                 var lessThanTokenBuilder = new StringBuilder();
@@ -5996,7 +6149,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -6033,7 +6187,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -6107,7 +6262,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -6181,7 +6337,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -6255,7 +6412,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -6335,7 +6493,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -6394,7 +6553,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -6466,7 +6626,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -6511,7 +6672,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ColonToken != default(SyntaxToken))
             {
                 var colonTokenBuilder = new StringBuilder();
@@ -6542,7 +6704,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
                 var typeBuilder = new StringBuilder();
@@ -6565,7 +6728,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
                 var typeBuilder = new StringBuilder();
@@ -6594,7 +6758,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.WhereKeyword != default(SyntaxToken))
             {
                 var whereKeywordBuilder = new StringBuilder();
@@ -6637,7 +6802,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
             {
                 var newKeywordBuilder = new StringBuilder();
@@ -6672,7 +6838,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ClassOrStructKeyword != default(SyntaxToken))
             {
                 var classOrStructKeywordBuilder = new StringBuilder();
@@ -6701,7 +6868,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
                 var typeBuilder = new StringBuilder();
@@ -6724,7 +6892,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.DefaultKeyword != default(SyntaxToken))
             {
                 var defaultKeywordBuilder = new StringBuilder();
@@ -6747,7 +6916,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -6786,7 +6956,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -6831,7 +7002,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(NameSyntax))
             {
                 var nameBuilder = new StringBuilder();
@@ -6860,7 +7032,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -6944,7 +7117,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -7013,7 +7187,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -7082,7 +7257,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -7145,7 +7321,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ColonToken != default(SyntaxToken))
             {
                 var colonTokenBuilder = new StringBuilder();
@@ -7180,7 +7357,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -7243,7 +7421,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -7312,7 +7491,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ArrowToken != default(SyntaxToken))
             {
                 var arrowTokenBuilder = new StringBuilder();
@@ -7341,7 +7521,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -7404,7 +7585,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -7473,7 +7655,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var accessors = new List<string>();
             foreach(var node in syntaxNode.Accessors)
             {
@@ -7498,7 +7681,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -7549,7 +7733,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
                 var openParenTokenBuilder = new StringBuilder();
@@ -7586,7 +7771,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
                 var openBracketTokenBuilder = new StringBuilder();
@@ -7623,7 +7809,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -7674,7 +7861,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -7713,7 +7901,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach(var node in syntaxNode.AttributeLists)
             {
@@ -7752,7 +7941,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var tokens = new List<string>();
             foreach(var node in syntaxNode.Tokens)
             {
@@ -7777,7 +7967,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var content = new List<string>();
             foreach(var node in syntaxNode.Content)
             {
@@ -7808,7 +7999,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
                 var typeBuilder = new StringBuilder();
@@ -7831,7 +8023,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Container != default(TypeSyntax))
             {
                 var containerBuilder = new StringBuilder();
@@ -7866,7 +8059,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(TypeSyntax))
             {
                 var nameBuilder = new StringBuilder();
@@ -7895,7 +8089,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ThisKeyword != default(SyntaxToken))
             {
                 var thisKeywordBuilder = new StringBuilder();
@@ -7924,7 +8119,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorKeyword != default(SyntaxToken))
             {
                 var operatorKeywordBuilder = new StringBuilder();
@@ -7959,7 +8155,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ImplicitOrExplicitKeyword != default(SyntaxToken))
             {
                 var implicitOrExplicitKeywordBuilder = new StringBuilder();
@@ -8000,7 +8197,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
                 var openParenTokenBuilder = new StringBuilder();
@@ -8037,7 +8235,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
                 var openBracketTokenBuilder = new StringBuilder();
@@ -8074,7 +8273,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.RefKindKeyword != default(SyntaxToken))
             {
                 var refKindKeywordBuilder = new StringBuilder();
@@ -8109,7 +8309,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StartTag != default(XmlElementStartTagSyntax))
             {
                 var startTagBuilder = new StringBuilder();
@@ -8146,7 +8347,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
             {
                 var lessThanTokenBuilder = new StringBuilder();
@@ -8189,7 +8391,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanSlashToken != default(SyntaxToken))
             {
                 var lessThanSlashTokenBuilder = new StringBuilder();
@@ -8224,7 +8427,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
             {
                 var lessThanTokenBuilder = new StringBuilder();
@@ -8267,7 +8471,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Prefix != default(XmlPrefixSyntax))
             {
                 var prefixBuilder = new StringBuilder();
@@ -8296,7 +8501,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Prefix != default(SyntaxToken))
             {
                 var prefixBuilder = new StringBuilder();
@@ -8325,7 +8531,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(XmlNameSyntax))
             {
                 var nameBuilder = new StringBuilder();
@@ -8374,7 +8581,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(XmlNameSyntax))
             {
                 var nameBuilder = new StringBuilder();
@@ -8421,7 +8629,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(XmlNameSyntax))
             {
                 var nameBuilder = new StringBuilder();
@@ -8468,7 +8677,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var textTokens = new List<string>();
             foreach(var node in syntaxNode.TextTokens)
             {
@@ -8493,7 +8703,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StartCDataToken != default(SyntaxToken))
             {
                 var startCDataTokenBuilder = new StringBuilder();
@@ -8530,7 +8741,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StartProcessingInstructionToken != default(SyntaxToken))
             {
                 var startProcessingInstructionTokenBuilder = new StringBuilder();
@@ -8573,7 +8785,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanExclamationMinusMinusToken != default(SyntaxToken))
             {
                 var lessThanExclamationMinusMinusTokenBuilder = new StringBuilder();
@@ -8610,7 +8823,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -8660,7 +8874,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -8710,7 +8925,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -8753,7 +8969,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -8795,7 +9012,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -8837,7 +9055,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -8879,7 +9098,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -8921,7 +9141,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -8963,7 +9184,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -9005,7 +9227,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -9053,7 +9276,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -9101,7 +9325,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -9155,7 +9380,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -9217,7 +9443,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -9283,7 +9510,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -9331,7 +9559,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -9379,7 +9608,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -9421,7 +9651,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
                 var hashTokenBuilder = new StringBuilder();
@@ -9475,7 +9706,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteString("text", syntaxNode.Text));
             properties.Add(WriteBoolean("hasLeadingTrivia", syntaxNode.HasLeadingTrivia));
@@ -9507,7 +9739,8 @@ namespace Parser
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.RawKind == 8541)
             {
                 properties.Add($"\"commentText\":\"{syntaxNode.ToString()}\"");

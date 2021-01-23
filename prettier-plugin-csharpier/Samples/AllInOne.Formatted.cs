@@ -487,7 +487,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
             string verbatimStr = @"\\\\";
         }
     }
-    //General Test F. Type a very long class name, verify colorization happens correctly only upto the correct size (118324)
 
     class TestClassXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX { }
 
@@ -570,7 +569,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
             }
         }
     }
-    // From here:https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6
 
     class CSharp6Features
     {
@@ -613,7 +611,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
             string s = $"{p.Name} is {p.Age} year{{s}} old #";
             s = $"{p.Name} is \"{p.Age} year{(p.Age == 1 ? "" : "s")} old";
-            s = $"{(p.Age == 2 ? $"{new Person { }}" : "")}";
+            s = $"{(p.Age == 2 ? $"{new Person {  }}" : "")}";
             s = $@"\{p.Name}
                                    ""\";
             s = $"Color [ R={func(3)}, G={G}, B={B}, A={A} ]";

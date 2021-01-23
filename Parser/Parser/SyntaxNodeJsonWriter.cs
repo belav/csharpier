@@ -35,5 +35,16 @@ namespace Parser
 
             return null;
         }
+
+        private static string GetNodeType(Type type)
+        {
+            var name = type.Name;
+            if (name.EndsWith("Syntax"))
+            {
+                return name.Substring(0, name.Length - "Syntax".Length);
+            }
+
+            return name;
+        }
     }
 }

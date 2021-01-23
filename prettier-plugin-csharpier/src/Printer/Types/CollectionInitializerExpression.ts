@@ -7,6 +7,7 @@ export interface CollectionInitializerExpressionNode extends SyntaxTreeNode<"Col
     expressions: SyntaxTreeNode[];
 }
 
+// TODO 0 kill
 export const printCollectionInitializerExpression: PrintMethod<CollectionInitializerExpressionNode> = (path, options, print) => {
     const node = path.getValue();
     const hasExpressions = node.expressions.length > 0;
