@@ -294,10 +294,7 @@ namespace My
         public event Action E1
         {
             [Obsolete]
-            add
-            {
-                value = value;
-            }
+            add { value = value; }
             [Obsolete]
             [return: Obsolete]
             remove
@@ -336,7 +333,11 @@ namespace My
         }
         public string P
         {
-            get { int value = 0; return "A"; }
+            get
+            {
+                int value = 0;
+                return "A";
+            }
             set;
         }
         public abstract string P { get; }
@@ -506,7 +507,12 @@ namespace ConsoleApplication1
                 t = typeof(IEnumerable<int?[][][]>);
                 return typeof(IEnumerable<>);
             }
-            set { var t = typeof(System.Int32); t.ToString(); t = value; }
+            set
+            {
+                var t = typeof(System.Int32);
+                t.ToString();
+                t = value;
+            }
         }
 
         public void Constants()

@@ -3,6 +3,9 @@ const runTest = require("../RunTest");
 test("BasicProperty", () => {
     runTest(__dirname, "BasicProperty");
 });
+test("LineBreaks", () => {
+    runTest(__dirname, "LineBreaks");
+});
 test("PropertyModifiers", () => {
     runTest(__dirname, "PropertyModifiers");
 });

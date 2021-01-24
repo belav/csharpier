@@ -333,7 +333,11 @@ namespace My
             add { value = value; }
             [Obsolete]
             [return: Obsolete]
-            remove { E += Handler; E -= Handler; }
+            remove
+            {
+                E += Handler;
+                E -= Handler;
+            }
         }
         public static A operator +(A first, A second)
         {
@@ -454,7 +458,7 @@ namespace ConsoleApplication1
     namespace RecursiveGenericBaseType
     {
         class A<T> : B<A<T>, A<T>>
-		    where T : A<T>
+            where T : A<T>
         {
             protected virtual A<T> M() { }
             protected abstract B<A<T>, A<T>> N() { }
@@ -472,7 +476,7 @@ namespace ConsoleApplication1
     namespace Boo
     {
         public class Bar<T>
-		    where T : IComparable
+            where T : IComparable
         {
             public T f;
             public class Foo<U> : IEnumerable<T>
