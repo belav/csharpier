@@ -1,4 +1,6 @@
 
+extern alias Foo;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +17,10 @@ using Y = ABC.X<int>;
 using static System.Math;
 using static System.DayOfWeek;
 using static System.Linq.Enumerable;
+[assembly: System.Copyright(@"(C)""
+
+2009")]
+[module: System.Copyright("\n\t\u0123(C) \"2009" + "\u0123")]
 
 class TopLevelType : IDisposable
 {
@@ -26,7 +32,8 @@ namespace My
     using A.B;
 
     interface CoContra<out T, in K> { }
-    delegate void CoContra2<out T, in K>() where T : struct;
+    delegate void CoContra2<out T, in K>()
+        where T : struct;
 
     public unsafe partial class A : C, I
     {
@@ -263,6 +270,7 @@ namespace My
         [method: Obsolete]
         public void Handler(object value) { }
         public int m<T>(T t)
+            where T : class, new()
         {
             base.m(t);
             return 1;
@@ -322,6 +330,7 @@ namespace My
         [Obsolete("Use Script instead", false)]
         private volatile int f2;
         public abstract int m<T>(T t)
+            where T : struct
         {
             return 1;
         }
@@ -359,7 +368,8 @@ namespace My
         C,
         E
     }
-    delegate void Delegate(object P);
+
+    public delegate void Delegate(object P);
     namespace Test
     {
         using System;
@@ -402,6 +412,7 @@ namespace ConsoleApplication1
     namespace RecursiveGenericBaseType
     {
         class A<T> : B<A<T>, A<T>>
+            where T : A<T>
         {
             protected virtual A<T> M() { }
             protected abstract B<A<T>, A<T>> N() { }
@@ -419,11 +430,14 @@ namespace ConsoleApplication1
     namespace Boo
     {
         public class Bar<T>
+            where T : IComparable
         {
             public T f;
             public class Foo<U> : IEnumerable<T>
             {
                 public void Method<K, V>(K k, T t, U u)
+                    where K : IList<V>, IList<T>, IList<U>
+                    where V : IList<K>
                 {
                     A<int> a;
                     M(A<B, C>(5));
@@ -836,6 +850,7 @@ class CSharp72
 class CSharp73
 {
     void Blittable<T>(T value)
+        where T : unmanaged
     {
         var unmanaged = 666;
     }

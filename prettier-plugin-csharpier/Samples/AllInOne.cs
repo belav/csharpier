@@ -55,7 +55,8 @@ namespace My
     using A.B;
 
     interface CoContra<out T, in K> { }
-    delegate void CoContra2<[System.Obsolete()] out T, in K> () where T : struct;
+    delegate void CoContra2<[System.Obsolete()] out T, in K> ()
+        where T : struct;
 
     public unsafe partial class A : C, I
     {
@@ -303,11 +304,9 @@ namespace My
         private volatile int f2;
         [return: Obsolete]
         [method: Obsolete]
-        public void Handler(object value)
-        {
-        }
+        public void Handler(object value) { }
         public int m<T>(T t)
-          where T : class, new()
+            where T : class, new()
         {
             base.m(t);
             return 1;
@@ -454,7 +453,8 @@ namespace ConsoleApplication1
 {
     namespace RecursiveGenericBaseType
     {
-        class A<T> : B<A<T>, A<T>> where T : A<T>
+        class A<T> : B<A<T>, A<T>>
+		    where T : A<T>
         {
             protected virtual A<T> M() { }
             protected abstract B<A<T>, A<T>> N() { }
@@ -471,7 +471,8 @@ namespace ConsoleApplication1
 
     namespace Boo
     {
-        public class Bar<T> where T : IComparable
+        public class Bar<T>
+		    where T : IComparable
         {
             public T f;
             public class Foo<U> : IEnumerable<T>
@@ -627,7 +628,10 @@ namespace Comments.XmlComments.UndocumentedKeywords
         void Params(ref dynamic a, out dynamic b, params dynamic[] c) {}
         void Params(out dynamic a = 2, ref dynamic c = default(dynamic), params dynamic[][] c) {}
 
-        public override string ToString() { return base.ToString(); }
+        public override string ToString()
+        {
+            return base.ToString();
+        }
 
         public partial void OnError();
 
@@ -940,7 +944,8 @@ class CSharp72
 
 class CSharp73
 {
-    void Blittable<T>(T value) where T : unmanaged
+    void Blittable<T>(T value)
+        where T : unmanaged
     {
         var unmanaged = 666;
     }

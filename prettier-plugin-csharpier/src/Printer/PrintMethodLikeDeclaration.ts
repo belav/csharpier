@@ -1,5 +1,6 @@
 import { Doc } from "prettier";
 import { printAttributeLists } from "./PrintAttributeLists";
+import { printConstraintClauses } from "./PrintConstraintClauses";
 import { PrintMethod } from "./PrintMethod";
 import {
     printSyntaxToken,
@@ -63,11 +64,12 @@ export const printMethodLikeDeclaration: PrintMethod<MethodLikeDeclarationNode> 
     if (node.type) {
         parts.push(path.call(print, "type"));
     }
-
     if (node.typeParameterList) {
         parts.push(path.call(print, "typeParameterList"));
     }
     parts.push(path.call(print, "parameterList"));
+    printConstraintClauses(node, parts, path, options, print);
+
     if (node.body) {
         parts.push(path.call(print, "body"));
     } else {

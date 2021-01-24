@@ -1,3 +1,7 @@
+[assembly: System.Copyright(@"(C)""
+
+2009")]
+[module: System.Copyright("\n\t\u0123(C) \"2009" + "\u0123")]
 [Obsolete]
 class ClassName
 {

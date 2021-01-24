@@ -7,7 +7,7 @@ import * as types from "./Types";
 let foundFirst = false;
 const missingNodes: string[] = [];
 
-// TODO watch doesn't work in here, but we don't often change it
+// watch doesn't work in here, but we don't often change it
 const printNode: PrintMethod = (path, options, print) => {
     const node = path.getValue();
 

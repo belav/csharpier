@@ -2,6 +2,7 @@ import { Doc } from "prettier";
 import { concat, hardline, indent, join } from "./Builders";
 import { printComments } from "./Comments";
 import { printAttributeLists } from "./PrintAttributeLists";
+import { printConstraintClauses } from "./PrintConstraintClauses";
 import { PrintMethod } from "./PrintMethod";
 import { SyntaxToken, printIdentifier, printModifiers, printSyntaxToken, SyntaxTreeNode } from "./SyntaxTreeNode";
 import { AttributeListNode } from "./Types/AttributeList";
@@ -44,9 +45,11 @@ export const printClassLikeDeclaration: PrintMethod<ClassLikeDeclarationNode> = 
         parts.push(path.call(innerPath => printBaseList(innerPath, options, print), "baseList"));
     }
 
+    printConstraintClauses(node, parts, path, options, print);
+
     const hasMembers = node.members.length > 0;
     if (hasMembers) {
-        parts.push(concat([hardline, "{"]));
+        parts.push(concat([node.constraintClauses?.length > 0 ? "" : hardline, "{"]));
         let lineSeparator = hardline;
         if (node.nodeType === "EnumDeclaration") {
             lineSeparator = concat([",", hardline]);
@@ -55,7 +58,7 @@ export const printClassLikeDeclaration: PrintMethod<ClassLikeDeclarationNode> = 
         parts.push(hardline);
         parts.push("}");
     } else {
-        parts.push(" ", "{", " ", "}");
+        parts.push(node.constraintClauses?.length > 0 ? "" : " ", "{", " ", "}");
     }
 
     return concat(parts);

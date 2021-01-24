@@ -2,9 +2,10 @@ import { Doc } from "prettier";
 import { hardline } from "./Builders";
 import { SyntaxTreeNode } from "./SyntaxTreeNode";
 
-// TODO 0 also compilation unit doesn't put lines after things, and we kind of ignore the line breaks in the original file
+// TODO 0 we have some work to do with new lines, we just look for them on modifiers, but then our attributes test is screwy
+// For nodes of certain types, we need to look for new lines on properties in order, and if we find them, break.
+// IE - are there new lines on attributes? Use those, break. Else are there new lines on modifiers? Use those, break. etc
 // TODO 0 can we call this from inside of print?
-// TODO 0 and if we figure out comments/line breaks, move on to all the missing node types
 export function printComments(parts: Doc[], node: SyntaxTreeNode) {
     for (const key in node) {
         const asAny = node as any;

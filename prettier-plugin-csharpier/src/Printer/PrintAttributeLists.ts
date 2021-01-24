@@ -9,13 +9,14 @@ interface HasAttributeLists {
 
 // TODO what else has attributeLists??
 export function printAttributeLists(node: HasAttributeLists, parts: Doc[], path: FastPath, options: ParserOptions, print: Print) {
-    parts.push(
-        join(
-            hardline,
-            path.map(innerPath => printAttributeList(innerPath, options, print), "attributeLists"),
-        ),
-    );
     if (node.attributeLists.length > 0) {
+        parts.push(
+            join(
+                hardline,
+                path.map(innerPath => printAttributeList(innerPath, options, print), "attributeLists"),
+            ),
+        );
+
         parts.push(hardline);
     }
 }
