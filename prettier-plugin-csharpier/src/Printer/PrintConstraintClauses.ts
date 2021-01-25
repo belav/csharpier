@@ -38,7 +38,11 @@ export function printConstraintClauses(
             ),
         );
 
-        if (node.nodeType !== "DelegateDeclaration" && node.nodeType !== "MethodDeclaration" && node.nodeType !== "LocalFunctionStatement") {
+        if (
+            node.nodeType !== "DelegateDeclaration" &&
+            node.nodeType !== "MethodDeclaration" &&
+            node.nodeType !== "LocalFunctionStatement"
+        ) {
             parts.push(hardline);
         }
     }

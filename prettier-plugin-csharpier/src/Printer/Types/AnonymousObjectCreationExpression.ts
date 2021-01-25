@@ -8,7 +8,11 @@ export interface AnonymousObjectCreationExpressionNode extends SyntaxTreeNode<"A
     initializers: SyntaxTreeNode;
 }
 
-export const printAnonymousObjectCreationExpression: PrintMethod<AnonymousObjectCreationExpressionNode> = (path, options, print) => {
+export const printAnonymousObjectCreationExpression: PrintMethod<AnonymousObjectCreationExpressionNode> = (
+    path,
+    options,
+    print,
+) => {
     const node = path.getValue();
     return concat(["new", printStatements(node, "initializers", line, path, print, ",")]);
 };

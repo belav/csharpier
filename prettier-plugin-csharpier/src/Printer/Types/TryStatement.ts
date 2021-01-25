@@ -13,7 +13,12 @@ export interface TryStatementNode extends SyntaxTreeNode<"TryStatement"> {
 export const printTryStatement: PrintMethod<TryStatementNode> = (path, options, print) => {
     const parts: Doc[] = [];
     const node = path.getValue();
-    parts.push(printSyntaxToken(node.tryKeyword), path.call(print, "block"), hardline, join(hardline, path.map(print, "catches")));
+    parts.push(
+        printSyntaxToken(node.tryKeyword),
+        path.call(print, "block"),
+        hardline,
+        join(hardline, path.map(print, "catches")),
+    );
     if (node.finally) {
         parts.push(hardline, path.call(print, "finally"));
     }

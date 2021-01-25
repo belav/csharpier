@@ -66,16 +66,10 @@ export const printAttributeList: PrintMethod<AttributeListNode> = (path, options
                         const attributeArgumentNode = attributeArgumentPath.getValue();
                         return concat([
                             attributeArgumentNode.nameEquals
-                                ? attributeArgumentPath.call(
-                                      o => printNameEquals(o, options, print),
-                                      "nameEquals",
-                                  )
+                                ? attributeArgumentPath.call(o => printNameEquals(o, options, print), "nameEquals")
                                 : "",
                             attributeArgumentNode.nameColon
-                                ? attributeArgumentPath.call(
-                                o => printNameColon(o, options, print),
-                                "nameColon",
-                                )
+                                ? attributeArgumentPath.call(o => printNameColon(o, options, print), "nameColon")
                                 : "",
                             attributeArgumentPath.call(print, "expression"),
                         ]);

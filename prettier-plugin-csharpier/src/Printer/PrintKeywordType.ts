@@ -8,10 +8,6 @@ interface KeywordType {
     type: SyntaxTreeNode;
 }
 
-export function printKeywordType<T extends KeywordType>(
-    path: FastPath<T>,
-    options: ParserOptions,
-    print: Print,
-) {
+export function printKeywordType<T extends KeywordType>(path: FastPath<T>, options: ParserOptions, print: Print) {
     return concat([printPathSyntaxToken(path, "keyword"), "(", path.call(print, "type"), ")"]);
 }

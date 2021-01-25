@@ -9,10 +9,6 @@ interface KeywordBlock {
     block: BlockNode;
 }
 
-export function printKeywordBlock<T extends KeywordBlock>(
-    path: FastPath<T>,
-    options: ParserOptions,
-    print: Print,
-) {
+export function printKeywordBlock<T extends KeywordBlock>(path: FastPath<T>, options: ParserOptions, print: Print) {
     return concat([printPathSyntaxToken(path, "keyword"), path.call(print, "block")]);
 }

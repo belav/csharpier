@@ -10,6 +10,9 @@ export interface MemberAccessExpressionNode extends SyntaxTreeNode<"MemberAccess
 }
 
 export const printMemberAccessExpression: PrintMethod<MemberAccessExpressionNode> = (path, options, print) => {
-    return concat([path.call(print, "expression"), printPathSyntaxToken(path, "operatorToken"), path.call(print, "name")]);
+    return concat([
+        path.call(print, "expression"),
+        printPathSyntaxToken(path, "operatorToken"),
+        path.call(print, "name"),
+    ]);
 };
-

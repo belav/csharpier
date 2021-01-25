@@ -628,13 +628,15 @@ interface FunctionPointerTypeNode extends SyntaxTreeNode<"FunctionPointerType"> 
     isNuint?: boolean;
 }
 
-interface FunctionPointerUnmanagedCallingConventionListNode extends SyntaxTreeNode<"FunctionPointerUnmanagedCallingConventionList"> {
+interface FunctionPointerUnmanagedCallingConventionListNode
+    extends SyntaxTreeNode<"FunctionPointerUnmanagedCallingConventionList"> {
     openBracketToken?: SyntaxToken;
     callingConventions: FunctionPointerUnmanagedCallingConventionNode[];
     closeBracketToken?: SyntaxToken;
 }
 
-interface FunctionPointerUnmanagedCallingConventionNode extends SyntaxTreeNode<"FunctionPointerUnmanagedCallingConvention"> {
+interface FunctionPointerUnmanagedCallingConventionNode
+    extends SyntaxTreeNode<"FunctionPointerUnmanagedCallingConvention"> {
     name?: SyntaxToken;
 }
 
@@ -719,7 +721,8 @@ interface ImplicitObjectCreationExpressionNode extends SyntaxTreeNode<"ImplicitO
     initializer?: InitializerExpressionNode;
 }
 
-interface ImplicitStackAllocArrayCreationExpressionNode extends SyntaxTreeNode<"ImplicitStackAllocArrayCreationExpression"> {
+interface ImplicitStackAllocArrayCreationExpressionNode
+    extends SyntaxTreeNode<"ImplicitStackAllocArrayCreationExpression"> {
     stackAllocKeyword?: SyntaxToken;
     openBracketToken?: SyntaxToken;
     closeBracketToken?: SyntaxToken;
@@ -1608,4 +1611,3 @@ interface YieldStatementNode extends SyntaxTreeNode<"YieldStatement"> {
     returnOrBreakKeyword?: SyntaxToken;
     expression?: SyntaxTreeNode;
 }
-

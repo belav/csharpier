@@ -19,7 +19,10 @@ import { ParameterListNode } from "./Types/ParameterList";
 import { TypeParameterConstraintClauseNode } from "./Types/TypeParameterConstraintClause";
 import { TypeParameterListNode } from "./Types/TypeParameterList";
 
-interface MethodLikeDeclarationNode extends SyntaxTreeNode<"ConversionOperatorDeclaration" | "LocalFunctionStatement" | "MethodDeclaration" | "OperatorDeclaration"> {
+interface MethodLikeDeclarationNode
+    extends SyntaxTreeNode<
+        "ConversionOperatorDeclaration" | "LocalFunctionStatement" | "MethodDeclaration" | "OperatorDeclaration"
+    > {
     attributeLists: AttributeListNode[];
     modifiers: SyntaxToken[];
     returnType?: SyntaxTreeNode;
@@ -46,7 +49,7 @@ export const printMethodLikeDeclaration: PrintMethod<MethodLikeDeclarationNode> 
         parts.push(path.call(print, "returnType"), " ");
     }
     if (node.explicitInterfaceSpecifier) {
-        parts.push(printIdentifier(node.explicitInterfaceSpecifier.name), ".")
+        parts.push(printIdentifier(node.explicitInterfaceSpecifier.name), ".");
     }
     if (node.identifier) {
         parts.push(printIdentifier(node));

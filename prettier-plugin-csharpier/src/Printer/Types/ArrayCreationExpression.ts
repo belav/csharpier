@@ -11,10 +11,12 @@ export interface ArrayCreationExpressionNode extends SyntaxTreeNode<"ArrayCreati
 
 export const printArrayCreationExpression: PrintMethod<ArrayCreationExpressionNode> = (path, options, print) => {
     const node = path.getValue();
-    return group(concat([
-        printPathSyntaxToken(path, "newKeyword"),
-        " ",
-        path.call(print, "type"),
-        node.initializer ? concat([line, path.call(print, "initializer")]) : "",
-    ]));
+    return group(
+        concat([
+            printPathSyntaxToken(path, "newKeyword"),
+            " ",
+            path.call(print, "type"),
+            node.initializer ? concat([line, path.call(print, "initializer")]) : "",
+        ]),
+    );
 };

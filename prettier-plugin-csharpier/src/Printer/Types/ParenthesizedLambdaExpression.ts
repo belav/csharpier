@@ -15,13 +15,20 @@ export interface ParenthesizedLambdaExpressionNode extends SyntaxTreeNode<"Paren
     // body?: SyntaxTreeNode; appears to duplicate block
 }
 
-export const printParenthesizedLambdaExpression: PrintMethod<ParenthesizedLambdaExpressionNode> = (path, options, print) => {
+export const printParenthesizedLambdaExpression: PrintMethod<ParenthesizedLambdaExpressionNode> = (
+    path,
+    options,
+    print,
+) => {
     const node = path.getValue();
     const parts: Doc[] = [];
     if (node.asyncKeyword) {
         parts.push("async ");
     }
-    parts.push(path.call(o => printParameterList(o, options, print), "parameterList"), " => ");
+    parts.push(
+        path.call(o => printParameterList(o, options, print), "parameterList"),
+        " => ",
+    );
     if (node.expressionBody) {
         parts.push(path.call(print, "expressionBody"));
     } else if (node.block) {

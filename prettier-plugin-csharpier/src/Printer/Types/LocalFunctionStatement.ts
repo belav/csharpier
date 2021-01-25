@@ -1,1 +1,1 @@
-export { printMethodLikeDeclaration as printLocalFunctionStatement} from "../PrintMethodLikeDeclaration";
+export { printMethodLikeDeclaration as printLocalFunctionStatement } from "../PrintMethodLikeDeclaration";

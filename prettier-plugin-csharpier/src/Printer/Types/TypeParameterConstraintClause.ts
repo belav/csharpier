@@ -8,7 +8,11 @@ export interface TypeParameterConstraintClauseNode extends SyntaxTreeNode<"TypeP
     constraints: SyntaxTreeNode[];
 }
 
-export const printTypeParameterConstraintClause: PrintMethod<TypeParameterConstraintClauseNode> = (path, options, print) => {
+export const printTypeParameterConstraintClause: PrintMethod<TypeParameterConstraintClauseNode> = (
+    path,
+    options,
+    print,
+) => {
     return concat([
         printPathSyntaxToken(path, "whereKeyword"),
         " ",

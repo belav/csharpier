@@ -26,7 +26,7 @@ export const printParameter: PrintMethod<ParameterNode> = (path, options, print)
     }
     parts.push(printIdentifier(node));
     if (node.default) {
-        parts.push(path.call(o => printEqualsValueClause(o, options, print), "default"))
+        parts.push(path.call(o => printEqualsValueClause(o, options, print), "default"));
     }
 
     return concat(parts);

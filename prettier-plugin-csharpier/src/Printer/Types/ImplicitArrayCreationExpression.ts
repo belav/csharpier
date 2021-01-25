@@ -8,10 +8,20 @@ export interface ImplicitArrayCreationExpressionNode extends SyntaxTreeNode<"Imp
     initializer: SyntaxTreeNode;
 }
 
-export const printImplicitArrayCreationExpression: PrintMethod<ImplicitArrayCreationExpressionNode> = (path, options, print) => {
+export const printImplicitArrayCreationExpression: PrintMethod<ImplicitArrayCreationExpressionNode> = (
+    path,
+    options,
+    print,
+) => {
     const node = path.getValue();
     const commas = node.commas.map(o => ",");
 
-
-    return concat([printPathSyntaxToken(path, "newKeyword"), "[", concat(commas), "]", " ", path.call(print, "initializer")]);
+    return concat([
+        printPathSyntaxToken(path, "newKeyword"),
+        "[",
+        concat(commas),
+        "]",
+        " ",
+        path.call(print, "initializer"),
+    ]);
 };

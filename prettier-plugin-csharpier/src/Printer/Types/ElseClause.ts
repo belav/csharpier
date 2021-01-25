@@ -18,8 +18,7 @@ export const printElseClause: PrintMethod<ElseClauseNode> = (path, options, prin
         parts.push(statement);
     } else if (node.statement?.nodeType === "IfStatement") {
         parts.push(" ", statement);
-    }
-    else {
+    } else {
         parts.push(indent(concat([hardline, statement])));
     }
 

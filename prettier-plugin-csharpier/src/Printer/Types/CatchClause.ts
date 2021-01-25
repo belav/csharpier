@@ -9,5 +9,10 @@ export interface CatchClauseNode extends SyntaxTreeNode<"CatchClause"> {
 }
 
 export const printCatchClause: PrintMethod<CatchClauseNode> = (path, options, print) => {
-    return concat([printPathSyntaxToken(path, "catchKeyword"), " ", path.call(print, "declaration"), path.call(print, "block")]);
+    return concat([
+        printPathSyntaxToken(path, "catchKeyword"),
+        " ",
+        path.call(print, "declaration"),
+        path.call(print, "block"),
+    ]);
 };

@@ -23,7 +23,10 @@ export const printForStatement: PrintMethod<ForStatementNode> = (path, options, 
     const node = path.getValue();
     const parts: Doc[] = [printPathSyntaxToken(path, "forKeyword"), " ("];
     if (node.declaration) {
-        parts.push(path.call(innerPath => printVariableDeclaration(innerPath, options, print), "declaration"), "; ");
+        parts.push(
+            path.call(innerPath => printVariableDeclaration(innerPath, options, print), "declaration"),
+            "; ",
+        );
     } else {
         parts.push(";");
     }

@@ -6,7 +6,10 @@ import { concat, group, hardline, indent, join, softline, line, doubleHardline }
 export interface InitializerExpressionNode
     extends SyntaxTreeNode<
         "InitializerExpression",
-        "ComplexElementInitializerExpression" | "ArrayInitializerExpression" | "ObjectInitializerExpression" | "CollectionInitializerExpression"
+        | "ComplexElementInitializerExpression"
+        | "ArrayInitializerExpression"
+        | "ObjectInitializerExpression"
+        | "CollectionInitializerExpression"
     > {
     expressions: SyntaxTreeNode[];
 }
@@ -15,7 +18,11 @@ export const printInitializerExpression: PrintMethod<InitializerExpressionNode> 
     const node = path.getValue();
     return group(
         concat([
-            node.kind === "ArrayInitializerExpression" ? "" : node.kind === "ComplexElementInitializerExpression" ? softline : line,
+            node.kind === "ArrayInitializerExpression"
+                ? ""
+                : node.kind === "ComplexElementInitializerExpression"
+                ? softline
+                : line,
             "{",
             indent(concat([line, printCommaList(path.map(print, "expressions"))])),
             line,

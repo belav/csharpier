@@ -8,6 +8,10 @@ export interface ImplicitStackAllocArrayCreationExpressionNode
     initializer: SyntaxTreeNode;
 }
 
-export const printImplicitStackAllocArrayCreationExpression: PrintMethod<ImplicitStackAllocArrayCreationExpressionNode> = (path, options, print) => {
-    return concat([printPathSyntaxToken(path, "stackAllocKeyword"), "[] ", path.call(print, "initializer")])
+export const printImplicitStackAllocArrayCreationExpression: PrintMethod<ImplicitStackAllocArrayCreationExpressionNode> = (
+    path,
+    options,
+    print,
+) => {
+    return concat([printPathSyntaxToken(path, "stackAllocKeyword"), "[] ", path.call(print, "initializer")]);
 };

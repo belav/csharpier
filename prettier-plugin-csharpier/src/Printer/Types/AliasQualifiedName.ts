@@ -9,5 +9,5 @@ export interface AliasQualifiedNameNode extends SyntaxTreeNode<"AliasQualifiedNa
 }
 
 export const printAliasQualifiedName: PrintMethod<AliasQualifiedNameNode> = (path, options, print) => {
-    return concat([path.call(print,  "alias"), printPathSyntaxToken(path, "colonColonToken"), path.call(print, "name")]);
+    return concat([path.call(print, "alias"), printPathSyntaxToken(path, "colonColonToken"), path.call(print, "name")]);
 };

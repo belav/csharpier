@@ -7,6 +7,10 @@ export interface StackAllocArrayCreationExpressionNode extends SyntaxTreeNode<"S
     type: SyntaxTreeNode;
 }
 
-export const printStackAllocArrayCreationExpression: PrintMethod<StackAllocArrayCreationExpressionNode> = (path, options, print) => {
+export const printStackAllocArrayCreationExpression: PrintMethod<StackAllocArrayCreationExpressionNode> = (
+    path,
+    options,
+    print,
+) => {
     return concat([printPathSyntaxToken(path, "stackAllocKeyword"), " ", path.call(print, "type")]);
 };

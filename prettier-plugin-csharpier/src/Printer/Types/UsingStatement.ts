@@ -24,7 +24,8 @@ export const printUsingStatement: PrintMethod<UsingStatementNode> = (path, optio
         // TODO optimize this call
         path.call(print, "declaration"),
         path.call(print, "expression"),
-        ")"];
+        ")",
+    ];
 
     let statement = path.call(print, "statement");
     if (node.statement?.nodeType === "UsingStatement") {

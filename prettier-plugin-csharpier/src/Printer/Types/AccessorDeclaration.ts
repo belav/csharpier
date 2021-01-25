@@ -27,7 +27,7 @@ export const printAccessorDeclaration: PrintMethod<AccessorDeclarationNode> = (p
     }
 
     printAttributeLists(node, parts, path, options, print);
-    parts.push(printModifiers(node))
+    parts.push(printModifiers(node));
     parts.push(printSyntaxToken(node.keyword));
     if (!node.body && !node.expressionBody) {
         parts.push(";");
@@ -41,5 +41,5 @@ export const printAccessorDeclaration: PrintMethod<AccessorDeclarationNode> = (p
         }
     }
 
-    return (concat(parts));
+    return concat(parts);
 };

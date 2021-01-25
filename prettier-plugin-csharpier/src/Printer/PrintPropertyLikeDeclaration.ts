@@ -66,7 +66,9 @@ interface BracketedParameterListNode extends SyntaxTreeNode<"BracketedParameterL
     closeBracketToken?: SyntaxToken;
 }
 
-export const printPropertyLikeDeclaration: PrintMethod<PropertyDeclarationNode | IndexerDeclarationNode | EventDeclarationNode> = (path, options, print) => {
+export const printPropertyLikeDeclaration: PrintMethod<
+    PropertyDeclarationNode | IndexerDeclarationNode | EventDeclarationNode
+> = (path, options, print) => {
     const node = path.getValue();
 
     let contents: Doc;
@@ -80,7 +82,12 @@ export const printPropertyLikeDeclaration: PrintMethod<PropertyDeclarationNode |
     if (node.nodeType === "PropertyDeclaration") {
         identifier = printIdentifier(node);
     } else if (node.nodeType === "IndexerDeclaration") {
-        identifier = concat([printSyntaxToken(node.thisKeyword), "[", join(", ", path.map(print, "parameterList", "parameters")), "]"]);
+        identifier = concat([
+            printSyntaxToken(node.thisKeyword),
+            "[",
+            join(", ", path.map(print, "parameterList", "parameters")),
+            "]",
+        ]);
     } else if (node.nodeType === "EventDeclaration") {
         identifier = printIdentifier(node);
     }
@@ -93,7 +100,7 @@ export const printPropertyLikeDeclaration: PrintMethod<PropertyDeclarationNode |
         concat([
             concat(parts),
             printModifiers(node),
-            (node.nodeType === "EventDeclaration" ? printSyntaxToken(node.eventKeyword) + " ": ""),
+            node.nodeType === "EventDeclaration" ? printSyntaxToken(node.eventKeyword) + " " : "",
             path.call(print, "type"),
             " ",
             identifier,
