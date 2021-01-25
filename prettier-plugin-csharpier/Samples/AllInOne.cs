@@ -281,18 +281,17 @@ namespace My
             }
             var anonymous = { A = 1, B = 2, C = 3 };
             var query = from c in customers
-                        let d = c
-                        where d != null
-                        join c1 in customers on c1.GetHashCode() equals c.GetHashCode()
-                        join c1 in customers on c1.GetHashCode() equals c.GetHashCode() into e
-                        group c by c.Country
-                            into g
-                            orderby g.Count() ascending
-                            orderby g.Key descending
-                            select new { Country = g.Key, CustCount = g.Count() };
+                let d = c
+                where d != null
+                join c1 in customers on c1.GetHashCode() equals c.GetHashCode()
+                join c1 in customers on c1.GetHashCode() equals c.GetHashCode() into e
+                group c by c.Country into g
+                orderby g.Count() ascending
+                orderby g.Key descending
+                select new { Country = g.Key, CustCount = g.Count() };
             query = from c in customers
-                    select c into d
-                    select d;
+                select c into d
+                select d;
         }
         ~A() { }
         private readonly int f1;
@@ -502,8 +501,8 @@ namespace ConsoleApplication1
             x.Method<string, string>(" ", 5, new object());
 
             var q = from i in new int[] { 1, 2, 3, 4 }
-                    where i > 5
-                    select i;
+                where i > 5
+                select i;
         }
 
         public static implicit operator Test(string s)
