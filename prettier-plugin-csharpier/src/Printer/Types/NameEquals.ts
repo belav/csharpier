@@ -8,5 +8,5 @@ export interface NameEqualsNode extends SyntaxTreeNode<"NameEquals"> {
 }
 
 export const printNameEquals: PrintMethod<NameEqualsNode> = (path, options, print) => {
-    return concat([path.call(print, "name"), " ", printPathSyntaxToken(path, "equalsToken")]);
+    return concat([path.call(print, "name"), " = "]);
 };

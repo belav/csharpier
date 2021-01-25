@@ -86,6 +86,7 @@ export { printMakeRefExpression as MakeRefExpression } from "./Types/MakeRefExpr
 export { printMemberAccessExpression as MemberAccessExpression } from "./Types/MemberAccessExpression"
 export { printMemberBindingExpression as MemberBindingExpression } from "./Types/MemberBindingExpression"
 export { printMethodDeclaration as MethodDeclaration } from "./Types/MethodDeclaration"
+export { printNameColon as NameColon } from "./Types/NameColon"
 export { printNameEquals as NameEquals } from "./Types/NameEquals"
 export { printNamespaceDeclaration as NamespaceDeclaration } from "./Types/NamespaceDeclaration"
 export { printNullableType as NullableType } from "./Types/NullableType"

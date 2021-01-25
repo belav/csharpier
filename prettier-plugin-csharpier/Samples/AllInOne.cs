@@ -363,7 +363,7 @@ namespace My
         [Obsolete("Use Script instead", error: false)]
         private volatile int f2;
         public abstract int m<T>(T t)
-          where T : struct
+            where T : struct
         {
             return 1;
         }
@@ -444,10 +444,12 @@ namespace My
             }
             void AsyncAnonymous() // C # 5 feature
             {
-                var task = Task.Factory.StartNew(async () =>
-                {
-                    return await new WebClient().DownloadStringTaskAsync("http://example.com");
-                });
+                var task = Task.Factory.StartNew(
+                    async () =>
+                    {
+                        return await new WebClient().DownloadStringTaskAsync(
+                            "http://example.com");
+                    });
             }
         }
     }
@@ -529,20 +531,26 @@ namespace ConsoleApplication1
             int? j = 6;
 
             Expression<Func<int>> e = () => i;
-            Expression<Func<bool, Action>> e2 = b => () => { return; };
-            Func<bool, bool> f = async delegate (bool a)
+            Expression<Func<bool, Action>> e2 = b => () =>
+            {
+                return;
+            };
+            Func<bool, bool> f = async delegate(bool a)
             {
                 return await !a;
             };
             Func<int, int, int> f2 = (a, b) => 0;
             f2 = (int a, int b) => 1;
             Action a = Blah;
-            f2 = () => {};
-            f2 = () => {;};
+            f2 = () =>  { };
+            f2 = () =>
+            {
+                ;
+            };
         }
 
         delegate Recursive Recursive(Recursive r);
-        delegate Recursive Recursive<A,R>(Recursive<A,R> r);
+        delegate Recursive Recursive<A, R>(Recursive<A, R> r);
 
         public Type Foo
         {

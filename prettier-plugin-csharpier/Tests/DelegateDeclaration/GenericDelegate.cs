@@ -1,5 +1,5 @@
 class ClassName
 {
-    delegate void Delegate<T>()
+    delegate void Delegate<[System.Obsolete()] out T>()
         where T : struct;
 }

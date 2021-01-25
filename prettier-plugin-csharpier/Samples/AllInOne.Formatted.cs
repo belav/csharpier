@@ -1,19 +1,15 @@
 
 extern alias Foo;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using M = System.Math;
-
 using System.Diagnostics;
-
 using ConsoleApplication2.Test;
 using X = int1;
 using Y = ABC.X<int>;
-
 using static System.Math;
 using static System.DayOfWeek;
 using static System.Linq.Enumerable;
@@ -32,12 +28,12 @@ namespace My
     using A.B;
 
     interface CoContra<out T, in K> { }
-    delegate void CoContra2<out T, in K>()
+    delegate void CoContra2<[System.Obsolete()] out T, in K>()
         where T : struct;
 
     public unsafe partial class A : C, I
     {
-        [DllImport("kernel32", true)]
+        [DllImport("kernel32", SetLastError = true)]
         static extern bool CreateDirectory(string name, SecurityAttribute sa);
 
         private const int global = int.MinValue - 1;
@@ -324,7 +320,7 @@ namespace My
     {
         public S() { }
         private int f1;
-        [Obsolete("Use Script instead", false)]
+        [Obsolete("Use Script instead", error: false)]
         private volatile int f2;
         public abstract int m<T>(T t)
             where T : struct
@@ -352,21 +348,21 @@ namespace My
         {
             return first.Add(second);
         }
-        fixed int field;
+        fixed int field[10];
         class C { }
     }
     public interface I
     {
         void A(int value);
         string Value { get; set; }
-        unsafe void UpdateSignatureByHashingContent(byte* buffer, int size);
+        unsafe void UpdateSignatureByHashingContent([In]byte* buffer, int size);
     }
     [type: Flags]
     public enum E
     {
         A,
-        B,
-        C,
+        B = A,
+        C = 2 + A,
         E
     }
 
@@ -402,7 +398,12 @@ namespace My
             }
             void AsyncAnonymous()
             {
-                var task = Task.Factory.StartNew(() => );
+                var task = Task.Factory.StartNew(
+                    async () =>
+                    {
+                        return await new WebClient().DownloadStringTaskAsync(
+                            "http://example.com");
+                    });
             }
         }
     }
@@ -461,7 +462,7 @@ namespace ConsoleApplication1
         {
             return new ConsoleApplication1.Test();
         }
-        public static explicit operator Test(string s)
+        public static explicit operator Test(string s = "")
         {
             return new Test();
         }
@@ -482,16 +483,22 @@ namespace ConsoleApplication1
             int? j = 6;
 
             Expression<Func<int>> e = () => i;
-            Expression<Func<bool, Action>> e2 = b => () => ;
-            Func<bool, bool> f = delegate(bool a)
+            Expression<Func<bool, Action>> e2 = b => () =>
+            {
+                return;
+            };
+            Func<bool, bool> f = async delegate(bool a)
             {
                 return await !a;
             };
-            Func<int, int, int> f2 = () => 0;
-            f2 = () => 1;
+            Func<int, int, int> f2 = (a, b) => 0;
+            f2 = (int a, int b) => 1;
             Action a = Blah;
-            f2 = () => ;
-            f2 = () => ;
+            f2 = () =>  { };
+            f2 = () =>
+            {
+                ;
+            };
         }
 
         delegate Recursive Recursive(Recursive r);
@@ -499,7 +506,7 @@ namespace ConsoleApplication1
 
         public Type Foo
         {
-            [Obsolete("Name", false)]
+            [Obsolete("Name", error = false)]
             get
             {
                 var result = typeof(IEnumerable<int>);
@@ -560,8 +567,11 @@ namespace Comments.XmlComments.UndocumentedKeywords
             Params(t, t);
             Params(ref c, out c);
         }
-        void Params(dynamic a, dynamic b, dynamic[] c) { }
-        void Params(dynamic a, dynamic c, dynamic[][] c) { }
+        void Params(ref dynamic a, out dynamic b, params dynamic[] c) { }
+        void Params(
+            out dynamic a = 2,
+            ref dynamic c = default(dynamic),
+            params dynamic[][] c) { }
 
         public override string ToString()
         {
@@ -764,7 +774,7 @@ class CSharp70
 
 class CSharp71
 {
-    void DefaultWithoutTypeName(string content)
+    void DefaultWithoutTypeName(string content = default)
     {
         DefaultWithoutTypeName(default);
     }
@@ -779,9 +789,9 @@ class CSharp72
 {
     readonly struct ReadonlyRef1
     {
-        Func<int, int> s = () => x;
-        ref TValue this[TKey index] => null;
-        public static Vector3 operator +(Vector3 x, Vector3 y);
+        Func<int, int> s = (in int x) => x;
+        ref TValue this[in TKey index] => null;
+        public static Vector3 operator +(in Vector3 x, in Vector3 y);
 
         static readonly ref Vector3 M1_Trace()
         {
@@ -800,7 +810,7 @@ class CSharp72
 
     ref struct ReadonlyRef2
     {
-        ref readonly Guid Test(Vector3 v1, Vector3 v2)
+        ref readonly Guid Test(in Vector3 v1, in Vector3 v2)
         {
 
             v1 = default(Vector3);
@@ -816,7 +826,7 @@ class CSharp72
             return new Vector3(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
         }
 
-        ref T Choice(bool condition, T consequence, T alternative)
+        ref T Choice(bool condition, ref T consequence, ref T alternative)
         {
             if (condition)
             {
@@ -863,7 +873,7 @@ class CSharp73
 
     unsafe struct IndexingMovableFixed
     {
-        public fixed int myFixedField;
+        public fixed int myFixedField[10];
     }
 
     static IndexingMovableFixed s;
