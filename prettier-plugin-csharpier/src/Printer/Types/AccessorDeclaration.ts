@@ -3,9 +3,9 @@ import { printAttributeLists } from "../PrintAttributeLists";
 import { PrintMethod } from "../PrintMethod";
 import { printModifiers, printSyntaxToken, SyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
-import { ArrowExpressionClauseNode } from "./ArrowExpressionClause";
+import { ArrowExpressionClauseNode, printArrowExpressionClause } from "./ArrowExpressionClause";
 import { AttributeListNode } from "./AttributeList";
-import { BlockNode } from "./Block";
+import { BlockNode, printBlock } from "./Block";
 
 // TODO 1 go through each node, copy interface from the generated one, figure out which path.calls can be optimized to this version
 // also for some of the methods outside of the Types folder.
@@ -33,10 +33,9 @@ export const printAccessorDeclaration: PrintMethod<AccessorDeclarationNode> = (p
         parts.push(";");
     } else {
         if (node.body) {
-            parts.push(path.call(print, "body"));
+            parts.push(path.call(o => printBlock(o, options, print), "body"));
         } else {
-            parts.push(" ");
-            parts.push(path.call(print, "expressionBody"));
+            parts.push(path.call(o => printArrowExpressionClause(o, options, print), "expressionBody"));
             parts.push(";");
         }
     }

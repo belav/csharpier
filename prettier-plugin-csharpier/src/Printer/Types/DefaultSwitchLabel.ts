@@ -3,9 +3,10 @@ import { SyntaxToken, printPathSyntaxToken, printSyntaxToken, SyntaxTreeNode } f
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface DefaultSwitchLabelNode extends SyntaxTreeNode<"DefaultSwitchLabel"> {
-    keyword: SyntaxToken;
+    keyword?: SyntaxToken;
+    colonToken?: SyntaxToken;
 }
 
 export const printDefaultSwitchLabel: PrintMethod<DefaultSwitchLabelNode> = (path, options, print) => {
-    return concat([printPathSyntaxToken(path, "keyword"), ":"]);
+    return concat(["default:"]);
 };

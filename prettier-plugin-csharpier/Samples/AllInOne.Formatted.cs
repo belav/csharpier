@@ -248,7 +248,7 @@ namespace My
             finally
             {
                 try { }
-                catch  { }
+                catch { }
             }
             var anonymous = { A = 1, B = 2, C = 3 };
             var query = from c in customers
@@ -554,7 +554,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
     {
         void M<U>(T t, U u)
         {
-
             int intValue = 0;
             intValue = intValue + 1;
             string strValue = "hello";
@@ -650,32 +649,26 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
     class CSharp6Features
     {
-
-        public string First
-        {
-            get;
-            set;
-        }
-        public string Last { get; set; }
+        public string First { get; set; } = "Jane";
+        public string Last { get; set; } = "Doe";
 
         public string Third
         {
             get;
-        }
-        public string Fourth { get; }
+        } = "Jane";
+        public string Fourth { get; } = "Doe";
 
-        public Point Move(int dx, int dy);
-        public static Complex operator +(Complex a, Complex b);
-        public static implicit operator string(Person p);
-        public void Print();
+        public Point Move(int dx, int dy) => new Point(x + dx, y + dy);
+        public static Complex operator +(Complex a, Complex b) => a.Add(b);
+        public static implicit operator string(
+            Person p) => p.First + " " + p.Last;
+        public void Print() => Console.WriteLine(First + " " + Last);
 
-        public string Name
-        => First + " " + Last;
+        public string Name => First + " " + Last;
         public int this[long id] => id;
 
         async void Test()
         {
-
             WriteLine(Sqrt(3 * 3 + 4 * 4));
             WriteLine(Friday - Monday);
             var range = Range(5, 17);
@@ -705,9 +698,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
                 [9] = "nine",
                 [13] = "thirteen"
             };
-
             try { }
-            catch (MyException e) { }
+            catch (MyException e) when (myfilter(e)) { }
 
             Resource res = null;
             try
@@ -735,7 +727,8 @@ class CSharp70
         {
             case "A" when b > 50:
             case "B" when b < 50:
-            default:break;
+            default:
+                break;
         }
         (A<B, C> D, E<F, G> H) = e;
 
@@ -754,7 +747,7 @@ class CSharp70
             return args[i];
         }
 
-        async Task<string> Hello<T>(T i);
+        async Task<string> Hello<T>(T i) => await Task.FromResult(args[i]);
         await Hello(1);
     }
 
@@ -803,11 +796,10 @@ class CSharp72
     {
         Func<int, int> s = (in int x) => x;
         ref TValue this[in TKey index] => null;
-        public static Vector3 operator +(in Vector3 x, in Vector3 y);
+        public static Vector3 operator +(in Vector3 x, in Vector3 y) => null;
 
         static readonly ref Vector3 M1_Trace()
         {
-
             ref readonly var r1 = ref M1();
 
             ref readonly Vector3 r2 = ref default(Vector3);
@@ -824,7 +816,6 @@ class CSharp72
     {
         ref readonly Guid Test(in Vector3 v1, in Vector3 v2)
         {
-
             v1 = default(Vector3);
 
             v1.X = 0;
@@ -904,8 +895,8 @@ class CSharp73
     public void StackallocArrayInitializer()
     {
         Span<int> a = stackalloc int[3];
-        Span<int> a = stackalloc int[3];
-        Span<int> a = stackalloc int[];
+        Span<int> a = stackalloc int[3] { 1, 2, 3 };
+        Span<int> a = stackalloc int[] { 1, 2, 3 };
         Span<int> a = stackalloc[] { 1, 2, 3 };
     }
 

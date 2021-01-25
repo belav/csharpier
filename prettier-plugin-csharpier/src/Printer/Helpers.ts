@@ -40,6 +40,9 @@ export function getParentNode(path: FastPath) {
 export function hasLeadingExtraLine(node: SyntaxTreeNode) {
     if (node.leadingTrivia) {
         for (const trivia of node.leadingTrivia) {
+            if (trivia.kind === "SingleLineCommentTrivia") {
+                return false;
+            }
             if (trivia.kind === "EndOfLineTrivia") {
                 return true;
             }

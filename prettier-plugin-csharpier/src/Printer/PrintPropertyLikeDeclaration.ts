@@ -14,16 +14,20 @@ import {
 } from "./SyntaxTreeNode";
 import { IndexerDeclaration } from "./Types";
 import { AccessorDeclarationNode } from "./Types/AccessorDeclaration";
-import { ArrowExpressionClauseNode } from "./Types/ArrowExpressionClause";
+import { ArrowExpressionClauseNode, printArrowExpressionClause } from "./Types/ArrowExpressionClause";
 import { AttributeListNode } from "./Types/AttributeList";
-import { EqualsValueClauseNode } from "./Types/EqualsValueClause";
+import { EqualsValueClauseNode, printEqualsValueClause } from "./Types/EqualsValueClause";
 import { ParameterNode } from "./Types/Parameter";
 
-export interface PropertyDeclarationNode extends SyntaxTreeNode<"PropertyDeclaration"> {
+export interface PropertyLikeDeclarationNode
+    extends SyntaxTreeNode<"EventDeclaration" | "IndexerDeclaration" | "PropertyDeclaration"> {
     attributeLists: AttributeListNode[];
     modifiers: SyntaxToken[];
+    eventKeyword?: SyntaxToken;
     type?: SyntaxTreeNode;
     explicitInterfaceSpecifier?: ExplicitInterfaceSpecifierNode;
+    thisKeyword?: SyntaxToken;
+    parameterList?: BracketedParameterListNode;
     identifier: SyntaxToken;
     accessorList?: AccessorListNode;
     expressionBody?: ArrowExpressionClauseNode;
@@ -39,43 +43,20 @@ interface ExplicitInterfaceSpecifierNode extends SyntaxTreeNode<"ExplicitInterfa
     dotToken?: SyntaxToken;
 }
 
-export interface EventDeclarationNode extends SyntaxTreeNode<"EventDeclaration"> {
-    attributeLists: AttributeListNode[];
-    modifiers: SyntaxToken[];
-    eventKeyword?: SyntaxToken;
-    type?: SyntaxTreeNode;
-    explicitInterfaceSpecifier?: ExplicitInterfaceSpecifierNode;
-    identifier: SyntaxToken;
-    accessorList?: AccessorListNode;
-}
-
-export interface IndexerDeclarationNode extends SyntaxTreeNode<"IndexerDeclaration"> {
-    attributeLists: AttributeListNode[];
-    modifiers: SyntaxToken[];
-    type?: SyntaxTreeNode;
-    explicitInterfaceSpecifier?: ExplicitInterfaceSpecifierNode;
-    thisKeyword?: SyntaxToken;
-    parameterList?: BracketedParameterListNode;
-    accessorList?: AccessorListNode;
-    expressionBody?: ArrowExpressionClauseNode;
-}
-
 interface BracketedParameterListNode extends SyntaxTreeNode<"BracketedParameterList"> {
     openBracketToken?: SyntaxToken;
     parameters: ParameterNode[];
     closeBracketToken?: SyntaxToken;
 }
 
-export const printPropertyLikeDeclaration: PrintMethod<
-    PropertyDeclarationNode | IndexerDeclarationNode | EventDeclarationNode
-> = (path, options, print) => {
+export const printPropertyLikeDeclaration: PrintMethod<PropertyLikeDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
 
     let contents: Doc;
     if (node.accessorList) {
-        contents = concat(["{", indent(concat(path.map(print, "accessorList", "accessors"))), line, "}"]);
+        contents = concat([line, "{", indent(concat(path.map(print, "accessorList", "accessors"))), line, "}"]);
     } else {
-        contents = concat([path.call(print, "expressionBody"), ";"]);
+        contents = concat([path.call(o => printArrowExpressionClause(o, options, print), "expressionBody"), ";"]);
     }
 
     let identifier: Doc = "";
@@ -104,8 +85,10 @@ export const printPropertyLikeDeclaration: PrintMethod<
             path.call(print, "type"),
             " ",
             identifier,
-            line,
             contents,
+            node.initializer
+                ? concat([path.call(o => printEqualsValueClause(o, options, print), "initializer"), ";"])
+                : "",
         ]),
     );
 };

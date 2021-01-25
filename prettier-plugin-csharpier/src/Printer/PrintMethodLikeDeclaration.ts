@@ -12,12 +12,12 @@ import {
     printModifiers,
 } from "./SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "./Builders";
-import { ArrowExpressionClauseNode } from "./Types/ArrowExpressionClause";
+import { ArrowExpressionClauseNode, printArrowExpressionClause } from "./Types/ArrowExpressionClause";
 import { AttributeListNode } from "./Types/AttributeList";
-import { BlockNode } from "./Types/Block";
+import { BlockNode, printBlock } from "./Types/Block";
 import { ParameterListNode } from "./Types/ParameterList";
 import { TypeParameterConstraintClauseNode } from "./Types/TypeParameterConstraintClause";
-import { TypeParameterListNode } from "./Types/TypeParameterList";
+import { printTypeParameterList, TypeParameterListNode } from "./Types/TypeParameterList";
 
 interface MethodLikeDeclarationNode
     extends SyntaxTreeNode<
@@ -55,11 +55,10 @@ export const printMethodLikeDeclaration: PrintMethod<MethodLikeDeclarationNode> 
         parts.push(printIdentifier(node));
     }
     if (node.implicitOrExplicitKeyword) {
-        // TODO there are probably a lot more optimizations to be made like this
         parts.push(printSyntaxToken(node.implicitOrExplicitKeyword), " ");
     }
     if (node.operatorKeyword) {
-        parts.push(printSyntaxToken(node.operatorKeyword), " ");
+        parts.push("operator ");
     }
     if (node.operatorToken) {
         parts.push(printSyntaxToken(node.operatorToken));
@@ -68,14 +67,17 @@ export const printMethodLikeDeclaration: PrintMethod<MethodLikeDeclarationNode> 
         parts.push(path.call(print, "type"));
     }
     if (node.typeParameterList) {
-        parts.push(path.call(print, "typeParameterList"));
+        parts.push(path.call(o => printTypeParameterList(o, options, print), "typeParameterList"));
     }
     parts.push(path.call(print, "parameterList"));
     printConstraintClauses(node, parts, path, options, print);
 
     if (node.body) {
-        parts.push(path.call(print, "body"));
+        parts.push(path.call(o => printBlock(o, options, print), "body"));
     } else {
+        if (node.expressionBody) {
+            parts.push(path.call(o => printArrowExpressionClause(o, options, print), "expressionBody"));
+        }
         parts.push(";");
     }
 

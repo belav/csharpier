@@ -22,7 +22,6 @@ export { printCasePatternSwitchLabel as CasePatternSwitchLabel } from "./Types/C
 export { printCaseSwitchLabel as CaseSwitchLabel } from "./Types/CaseSwitchLabel"
 export { printCastExpression as CastExpression } from "./Types/CastExpression"
 export { printCatchClause as CatchClause } from "./Types/CatchClause"
-export { printCatchDeclaration as CatchDeclaration } from "./Types/CatchDeclaration"
 export { printCheckedExpression as CheckedExpression } from "./Types/CheckedExpression"
 export { printCheckedStatement as CheckedStatement } from "./Types/CheckedStatement"
 export { printClassDeclaration as ClassDeclaration } from "./Types/ClassDeclaration"

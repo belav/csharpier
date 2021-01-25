@@ -8,5 +8,5 @@ export interface ArrowExpressionClauseNode extends SyntaxTreeNode<"ArrowExpressi
 }
 
 export const printArrowExpressionClause: PrintMethod<ArrowExpressionClauseNode> = (path, options, print) => {
-    return concat([printPathSyntaxToken(path, "arrowToken"), " ", path.call(print, "expression")]);
+    return concat([" => ", path.call(print, "expression")]);
 };

@@ -12,6 +12,9 @@ test("PropertyModifiers", () => {
 test("PropertyWithBackingValue", () => {
     runTest(__dirname, "PropertyWithBackingValue");
 });
+test("PropertyWithInitializer", () => {
+    runTest(__dirname, "PropertyWithInitializer");
+});
 test("PropertyWithLambdaAccessors", () => {
     runTest(__dirname, "PropertyWithLambdaAccessors");
 });

@@ -753,7 +753,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
             WriteLine(nameof(person.Address.ZipCode)); // prints "ZipCode"
 
             // Index initializers
-            var numbers = new Dictionary<int, string> {
+            var numbers = new Dictionary<int, string>
+			{
                 [7] = "seven",
                 [9] = "nine",
                 [13] = "thirteen"
@@ -761,8 +762,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
             // Exception filters
             try {}
-            catch (MyException e) when (myfilter(e))
-            { }
+            catch (MyException e) when (myfilter(e)) { }
 
             // Await in catch and finally blocks
             Resource res = null;
