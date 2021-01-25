@@ -43,7 +43,6 @@ namespace My
         public A(int foo)
         {
             L:
-
             {
                 int i = sizeof(int);
                 ++i;

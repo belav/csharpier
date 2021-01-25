@@ -55,7 +55,7 @@ namespace My
     using A.B;
 
     interface CoContra<out T, in K> { }
-    delegate void CoContra2<[System.Obsolete()] out T, in K> ()
+    delegate void CoContra2<[System.Obsolete()] out T, in K>()
         where T : struct;
 
     public unsafe partial class A : C, I
@@ -177,7 +177,7 @@ namespace My
             int[][] jagged = { { 111 }, { 121, 122 } };
             int[][,] arr = new int[5][,]; // as opposed to new int[][5,5]
             arr[0] = new int[5,5];  // as opposed to arr[0,0] = new int[5];
-            arr[0][0,0] = 47;
+            arr[0][0, 0] = 47;
             int[] arrayTypeInference = new[] { 0, 1 };
             switch (3) { }
             switch (i)
@@ -277,7 +277,7 @@ namespace My
             finally
             {
                 try { }
-                catch  { }
+                catch { }
             }
             var anonymous = { A = 1, B = 2, C = 3 };
             var query = from c in customers
@@ -727,7 +727,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
         async void Test()
         {
             // Using static
-            WriteLine(Sqrt(3*3 + 4*4));
+            WriteLine(Sqrt(3 * 3 + 4 * 4));
             WriteLine(Friday - Monday);
             var range = Range(5, 17);                // Ok: not extension
             var even = range.Where(i => i % 2 == 0); // Ok
@@ -754,14 +754,14 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
             // Index initializers
             var numbers = new Dictionary<int, string>
-			{
+            {
                 [7] = "seven",
                 [9] = "nine",
                 [13] = "thirteen"
             };
 
             // Exception filters
-            try {}
+            try { }
             catch (MyException e) when (myfilter(e)) { }
 
             // Await in catch and finally blocks
@@ -770,7 +770,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             {
                 res = await Resource.OpenAsync();       // You could do this.
             }
-            catch(ResourceException e)
+            catch (ResourceException e)
             {
                 await Resource.LogAsync(res, e);         // Now you can do this …
             }
@@ -812,22 +812,22 @@ class CSharp70
         }
     }
 
-	public static async Task LocalFunctions(string[] args)
-	{
-		string Hello2(int i)
+    public static async Task LocalFunctions(string[] args)
+    {
+        string Hello2(int i)
         {
             return args[i];
         }
 
-		async Task<string> Hello<T>(T i) => await Task.FromResult(args[i]);
-		await Hello(1);
-	}
+        async Task<string> Hello<T>(T i) => await Task.FromResult(args[i]);
+        await Hello(1);
+    }
 
-	public static void OutVar(string[] args)
-	{
-		int.TryParse(Hello(1), out var item);
-		int.TryParse(Hello(1), out int item);
-	}
+    public static void OutVar(string[] args)
+    {
+        int.TryParse(Hello(1), out var item);
+        int.TryParse(Hello(1), out int item);
+    }
 
     public void ThrowExpression()
     {
@@ -868,7 +868,7 @@ class CSharp72
     {
         Func<int, int> s = (in int x) => x;
         ref TValue this[in TKey index] => null;
-        public static Vector3 operator+(in Vector3 x, in Vector3 y) => null;
+        public static Vector3 operator +(in Vector3 x, in Vector3 y) => null;
 
         static readonly ref Vector3 M1_Trace()
         {
@@ -928,16 +928,16 @@ class CSharp72
 
     public void NonTrailingNamedArguments()
     {
-        DoSomething(isEmployed:true, name, age); // currently CS1738, but would become legal
-        DoSomething(true, personName:name, age); // currently CS1738, but would become legal
-        DoSomething(name, isEmployed:true, age); // remains illegal
-        DoSomething(name, age, isEmployed:true); // remains illegal
-        DoSomething(true, personAge:age, personName:name); // already legal
+        DoSomething(isEmployed: true, name, age); // currently CS1738, but would become legal
+        DoSomething(true, personName: name, age); // currently CS1738, but would become legal
+        DoSomething(name, isEmployed: true, age); // remains illegal
+        DoSomething(name, age, isEmployed: true); // remains illegal
+        DoSomething(true, personAge: age, personName: name); // already legal
     }
 
     public void ConditionalRef()
     {
-        ref var r = ref (arr != null ? ref arr[0]: ref otherArr[0]);
+        ref var r = ref (arr != null ? ref arr[0] : ref otherArr[0]);
     }
 
     public void LeadingSeparator()
