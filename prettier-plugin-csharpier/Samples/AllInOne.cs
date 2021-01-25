@@ -637,8 +637,11 @@ namespace Comments.XmlComments.UndocumentedKeywords
             Params(a: t, b: t);
             Params(ref c, out c);
         }
-        void Params(ref dynamic a, out dynamic b, params dynamic[] c) {}
-        void Params(out dynamic a = 2, ref dynamic c = default(dynamic), params dynamic[][] c) {}
+        void Params(ref dynamic a, out dynamic b, params dynamic[] c) { }
+        void Params(
+            out dynamic a = 2,
+            ref dynamic c = default(dynamic),
+            params dynamic[][] c) { }
 
         public override string ToString()
         {

@@ -563,8 +563,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
             c.M<int>(5, default(U));
             TypedReference tr = __makeref(c);
             Type t = __reftype(tr);
-            int j = __refvalue(tr);
-            Params(t, t);
+            int j = __refvalue(tr, int);
+            Params(a: t, b: t);
             Params(ref c, out c);
         }
         void Params(ref dynamic a, out dynamic b, params dynamic[] c) { }
@@ -621,8 +621,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
                 p->x = 10;
             }
             IO::BinaryReader br = null;
-            x[1] = 3;
-            x[1, 5] = "str";
+            x[i: 1] = 3;
+            x[i: 1, j: 5] = "str";
         }
 
         struct Point
@@ -681,7 +681,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             s = $@"\{p.Name}
                                    ""\";
             s = $"Color [ R={func(
-                3):#0.##}, G={G:#0.##}, B={B:#0.##}, A={A:#0.##} ]";
+                b: 3):#0.##}, G={G:#0.##}, B={B:#0.##}, A={A:#0.##} ]";
 
             if (x == null)
                 throw new ArgumentNullException(nameof(x));
@@ -781,7 +781,7 @@ class CSharp71
 
     void TupleRecognize(int a, (int, int) b, (int, int, int)? c)
     {
-        var result = list.Select(c => (c.f1, c.f2)).Where(t => t.f2 == 1);
+        var result = list.Select(c => (c.f1, f3: c.f2)).Where(t => t.f2 == 1);
     }
 }
 
@@ -844,11 +844,11 @@ class CSharp72
 
     public void NonTrailingNamedArguments()
     {
-        DoSomething(true, name, age);
-        DoSomething(true, name, age);
-        DoSomething(name, true, age);
-        DoSomething(name, age, true);
-        DoSomething(true, age, name);
+        DoSomething(isEmployed: true, name, age);
+        DoSomething(true, personName: name, age);
+        DoSomething(name, isEmployed: true, age);
+        DoSomething(name, age, isEmployed: true);
+        DoSomething(true, personAge: age, personName: name);
     }
 
     public void ConditionalRef()

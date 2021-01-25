@@ -9,12 +9,12 @@ import {
 } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
-export interface NameEqualsNode extends SyntaxTreeNode<"NameEquals"> {
+export interface NameColonNode extends SyntaxTreeNode<"NameEquals"> {
     name: HasIdentifier;
     colonToken: SyntaxToken;
 }
 
-export const printNameColon: PrintMethod<NameEqualsNode> = (path, options, print) => {
+export const printNameColon: PrintMethod<NameColonNode> = (path, options, print) => {
     const node = path.getValue();
     return concat([printIdentifier(node.name), ": "]);
 };

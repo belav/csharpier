@@ -34,11 +34,6 @@ interface AttributeArgumentNode extends SyntaxTreeNode<"AttributeArgument"> {
     expression?: SyntaxTreeNode;
 }
 
-interface NameColonNode extends SyntaxTreeNode<"NameColon"> {
-    name?: HasIdentifier;
-    colonToken?: SyntaxToken;
-}
-
 export const printAttributeList: PrintMethod<AttributeListNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = ["["];

@@ -9,3 +9,6 @@ test("EmptyArgumentListStaysOnSameLine", () => {
 test("LongArgumentList", () => {
     runTest(__dirname, "LongArgumentList");
 });
+test("NamedArguments", () => {
+    runTest(__dirname, "NamedArguments");
+});
