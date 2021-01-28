@@ -13,7 +13,7 @@ function parseText(text: string) {
     // TODO where should this dll really live?
     const executionResult = spawnSync(
         "dotnet",
-        ["exec", "..\\Parser\\Parser\\bin\\Debug\\netcoreapp3.1\\Parser.dll", text],
+        ["exec", "..\\netcoreapp3.1\\Parser.dll", text],
         {
             maxBuffer: 1000 * 1000 * 100, // 100 MB
         },

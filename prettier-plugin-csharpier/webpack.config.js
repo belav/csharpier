@@ -28,6 +28,22 @@ fs.watch(typesDirectory, () => {
 
 generateTypesFile();
 
+const parserPath = path.resolve(__dirname, "../Parser/Parser/bin/Debug/netcoreapp3.1/Parser.dll")
+
+copyParserDll = () => {
+    const folderForDll = path.resolve(__dirname, "dist/netcoreapp3.1");
+    if (!fs.existsSync(folderForDll)) {
+        fs.mkdirSync(folderForDll, { recursive: true });
+    }
+    fs.copyFileSync(parserPath, path.resolve(__dirname, "dist/netcoreapp3.1/Parser.dll"));
+};
+
+fs.watch(parserPath, () => {
+    copyParserDll();
+});
+
+copyParserDll();
+
 module.exports = env => {
     return {
         mode: "development",

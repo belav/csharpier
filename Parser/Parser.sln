@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxNodeJsonWriterGenerat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxNodeTypeGenerator", "SyntaxNodeTypeGenerator\SyntaxNodeTypeGenerator.csproj", "{68233EC8-147C-49ED-B3EE-9372052BA65C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground", "Playground\Playground.csproj", "{E7F03E73-82C7-4DB2-AF20-F25C45231A72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{68233EC8-147C-49ED-B3EE-9372052BA65C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68233EC8-147C-49ED-B3EE-9372052BA65C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68233EC8-147C-49ED-B3EE-9372052BA65C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7F03E73-82C7-4DB2-AF20-F25C45231A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7F03E73-82C7-4DB2-AF20-F25C45231A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7F03E73-82C7-4DB2-AF20-F25C45231A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7F03E73-82C7-4DB2-AF20-F25C45231A72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
