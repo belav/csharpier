@@ -2,7 +2,6 @@ import { PrintMethod } from "../PrintMethod";
 import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode, HasIdentifier, printIdentifier } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 import { BlockNode, printBlock } from "./Block";
-import { CatchDeclarationNode } from "./CatchDeclaration";
 
 export interface CatchClauseNode extends SyntaxTreeNode<"CatchClause"> {
     catchKeyword?: SyntaxToken;

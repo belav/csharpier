@@ -3,7 +3,7 @@ import { Print, PrintMethod } from "../PrintMethod";
 import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 import { AttributeListNode } from "./AttributeList";
-import { VariableDeclarationNode } from "./VariableDeclaration";
+import { printVariableDeclaration, VariableDeclarationNode } from "./VariableDeclaration";
 
 export interface UsingStatementNode extends SyntaxTreeNode<"UsingStatement"> {
     attributeLists: AttributeListNode[];
@@ -21,9 +21,8 @@ export const printUsingStatement: PrintMethod<UsingStatementNode> = (path, optio
     const parts: Doc[] = [
         printPathSyntaxToken(path, "usingKeyword"),
         " (",
-        // TODO optimize this call
-        path.call(print, "declaration"),
-        path.call(print, "expression"),
+        node.declaration ? path.call(o => printVariableDeclaration(o, options, print), "declaration") : "",
+        node.expression ? path.call(print, "expression") : "",
         ")",
     ];
 

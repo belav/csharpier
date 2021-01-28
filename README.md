@@ -1,7 +1,7 @@
 # CSharpier
 
 This is a prettier plugin for csharp. It uses a simple .net core console application to use Roslyn to generate the syntax tree. 
-It can generate mostly correct code for c# <= 7.3. The remaining major issues
+It can generate mostly correct code for c# <= 8.0. The remaining major issues
 - Strips out all comments
 - Strips out preprocessor statements
 - Loses some new lines from the original code that would be desirable to keep.

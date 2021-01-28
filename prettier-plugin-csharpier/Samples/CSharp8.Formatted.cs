@@ -12,17 +12,29 @@ namespace CSharp80
 
         void Patterns()
         {
-            if (o is )
+            if (o is string { Length: 5 } s)
                 Do();
 
-            return ;
+            return lang.CountOfTokens switch
+            {
+                1 => 100,
+                2 => 200,
+                _ => throw new global::System.Exception()
+            };
 
-            var newState = ;
+            var newState = (GetState(), action, hasKey) switch
+            {
+                (DoorState.Closed, Action.Open, _) => DoorState.Opened,
+                (DoorState.Opened, Action.Close, _) => DoorState.Closed,
+                (DoorState.Closed, Action.Lock, true) => DoorState.Locked,
+                (DoorState.Locked, Action.Unlock, true) => DoorState.Closed,
+                (var state, _, _) => state
+            };
         }
 
         async Task AsyncStreams()
         {
-            foreach (var item in asyncEnumerables) { }
+            await foreach (var item in asyncEnumerables) { }
         }
 
         void Ranges()
@@ -31,16 +43,16 @@ namespace CSharp80
             var lastItem = list[^1];
             var multiDimensional = list[3, ^2];
 
-            var slice1 = list[];
-            var slice2 = list[];
-            var slice3 = list[];
-            var slice4 = list[];
-            var multiDimensional = list[, ];
+            var slice1 = list[2..^3];
+            var slice2 = list[..^3];
+            var slice3 = list[2..];
+            var slice4 = list[..];
+            var multiDimensional = list[1..2, ..];
         }
 
         void UsingDeclarators()
         {
-            var item = new FileStream("./.f");
+            using var item = new FileStream("./.f");
             fixed (char* ch = "hell");
             item.Dispose();
         }

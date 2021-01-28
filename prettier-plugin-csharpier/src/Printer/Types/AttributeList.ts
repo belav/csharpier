@@ -2,7 +2,7 @@ import { Doc } from "prettier";
 import { PrintMethod } from "../PrintMethod";
 import { HasIdentifier, printPathIdentifier, SyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
-import { printNameColon } from "./NameColon";
+import { NameColonNode, printNameColon } from "./NameColon";
 import { NameEqualsNode, printNameEquals } from "./NameEquals";
 
 export interface AttributeListNode extends SyntaxTreeNode<"AttributeList"> {
