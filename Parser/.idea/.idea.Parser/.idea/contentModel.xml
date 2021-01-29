@@ -6,7 +6,7 @@
         <e p="bin" t="ExcludeRecursive" />
         <e p="CSharpier.csproj" t="IncludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
-          <e p="Release" t="Include">
+          <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
               <e p="CSharpier.AssemblyInfo.cs" t="Include" />
             </e>
@@ -18,8 +18,8 @@
       <e p="Parser" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
-          <e p="Release" t="Include">
-            <e p="netcoreapp3.1" t="Include">
+          <e p="Debug" t="Include">
+            <e p="net5.0" t="Include">
               <e p="Parser.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
@@ -31,7 +31,9 @@
       </e>
       <e p="Parser.sln" t="IncludeFlat" />
       <e p="Playground" t="IncludeRecursive">
-        <e p=".gitignore" t="Include" />
+        <e p="App_Data" t="Include">
+          <e p="logs_20210128.txt" t="Include" />
+        </e>
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
@@ -42,7 +44,7 @@
           <e p="build" t="Include">
             <e p="favicon.ico" t="Include" />
             <e p="index.html" t="Include" />
-            <e p="precache-manifest.34d80b52e69ff8f24c8008c4d6241e21.js" t="Include" />
+            <e p="precache-manifest.dc26eb12f65686368fc12551cdf35920.js" t="Include" />
             <e p="service-worker.js" t="Include" />
             <e p="static" t="Include">
               <e p="css" t="Include">
@@ -53,8 +55,8 @@
                 <e p="2.816cd913.chunk.js" t="Include" />
                 <e p="2.816cd913.chunk.js.LICENSE.txt" t="Include" />
                 <e p="2.816cd913.chunk.js.map" t="Include" />
-                <e p="main.71e4beba.chunk.js" t="Include" />
-                <e p="main.71e4beba.chunk.js.map" t="Include" />
+                <e p="main.7dafeb30.chunk.js" t="Include" />
+                <e p="main.7dafeb30.chunk.js.map" t="Include" />
                 <e p="runtime-main.40c3c141.js" t="Include" />
                 <e p="runtime-main.40c3c141.js.map" t="Include" />
               </e>
@@ -207,8 +209,9 @@
         <e p="Controllers" t="Include">
           <e p="FormatController.cs" t="Include" />
         </e>
+        <e p="Extensions.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
-          <e p="Release" t="Include">
+          <e p="Debug" t="Include">
             <e p="net5.0" t="Include">
               <e p="Playground.AssemblyInfo.cs" t="Include" />
               <e p="Playground.RazorAssemblyInfo.cs" t="Include" />
@@ -229,22 +232,22 @@
       </e>
       <e p="SyntaxNodeJsonWriterGenerator" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
+        <e p="Generator.cs" t="Include" />
         <e p="Ignored.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
-          <e p="Release" t="Include">
+          <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
               <e p="SyntaxNodeJsonWriterGenerator.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
         </e>
-        <e p="Program.cs" t="Include" />
         <e p="SyntaxNodeJsonWriterGenerator.csproj" t="IncludeRecursive" />
       </e>
       <e p="SyntaxNodeTypeGenerator" t="IncludeRecursive">
         <e p="bin" t="ExcludeRecursive" />
         <e p="Generator.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive">
-          <e p="Release" t="Include">
+          <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
               <e p="SyntaxNodeTypeGenerator.AssemblyInfo.cs" t="Include" />
             </e>

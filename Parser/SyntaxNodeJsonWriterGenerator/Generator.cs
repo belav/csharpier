@@ -6,14 +6,17 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using NUnit.Framework;
 
 namespace SyntaxNodeJsonWriterGenerator
 {
-    class Program
+    [TestFixture]
+    public class Generator
     {
-        static List<string> missingTypes = new List<string>();
-        
-        static void Main(string[] args)
+        List<string> missingTypes = new List<string>();
+
+        [Test]
+        public void DoWork()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
             while (directory.Name != "Parser")
@@ -21,7 +24,8 @@ namespace SyntaxNodeJsonWriterGenerator
                 directory = directory.Parent;
             }
 
-            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes().Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o)).ToList();
+            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
+                .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o)).ToList();
 
             var fileName = directory.FullName + @"\Parser\SyntaxNodeJsonWriter.generated.cs";
             using (var file = new StreamWriter(fileName, false))
@@ -39,12 +43,15 @@ namespace SyntaxNodeJsonWriterGenerator
                 file.WriteLine("    public partial class SyntaxNodeJsonWriter");
                 file.WriteLine("    {");
 
-                file.WriteLine($"        public static void WriteSyntaxNode(StringBuilder builder, SyntaxNode syntaxNode)");
+                file.WriteLine(
+                    $"        public static void WriteSyntaxNode(StringBuilder builder, SyntaxNode syntaxNode)");
                 file.WriteLine("        {");
                 foreach (var syntaxNodeType in syntaxNodeTypes)
                 {
-                    file.WriteLine($"            if (syntaxNode is {syntaxNodeType.Name}) Write{syntaxNodeType.Name}(builder, syntaxNode as {syntaxNodeType.Name});");   
+                    file.WriteLine(
+                        $"            if (syntaxNode is {syntaxNodeType.Name}) Write{syntaxNodeType.Name}(builder, syntaxNode as {syntaxNodeType.Name});");
                 }
+
                 file.WriteLine("        }");
                 file.WriteLine("");
 
@@ -52,37 +59,40 @@ namespace SyntaxNodeJsonWriterGenerator
                 {
                     GenerateMethod(file, syntaxNodeType);
                 }
-                
+
                 GenerateMethod(file, typeof(SyntaxToken));
                 GenerateMethod(file, typeof(SyntaxTrivia));
 
                 file.WriteLine("    }");
                 file.WriteLine("}");
             }
-            
+
             if (missingTypes.Any())
             {
                 throw new Exception(Environment.NewLine + string.Join(Environment.NewLine, missingTypes));
             }
         }
 
-        private static void GenerateMethod(StreamWriter file, Type type)
+        private void GenerateMethod(StreamWriter file, Type type)
         {
-            file.WriteLine($"        public static void Write{type.Name}(StringBuilder builder, {type.Name} syntaxNode)");
+            file.WriteLine(
+                $"        public static void Write{type.Name}(StringBuilder builder, {type.Name} syntaxNode)");
             file.WriteLine("        {");
             file.WriteLine("            builder.Append(\"{\");");
             file.WriteLine("            var properties = new List<string>();");
-            file.WriteLine($"            properties.Add($\"\\\"nodeType\\\":\\\"{{GetNodeType(syntaxNode.GetType())}}\\\"\");");
+            file.WriteLine(
+                $"            properties.Add($\"\\\"nodeType\\\":\\\"{{GetNodeType(syntaxNode.GetType())}}\\\"\");");
             file.WriteLine($"            properties.Add($\"\\\"kind\\\":\\\"{{syntaxNode.Kind().ToString()}}\\\"\");");
 
             if (type == typeof(SyntaxTrivia))
             {
                 file.WriteLine($"            if (syntaxNode.RawKind == 8541)");
                 file.WriteLine($"            {{");
-                file.WriteLine($"                properties.Add($\"\\\"commentText\\\":\\\"{{syntaxNode.ToString()}}\\\"\");");
+                file.WriteLine(
+                    $"                properties.Add($\"\\\"commentText\\\":\\\"{{syntaxNode.ToString()}}\\\"\");");
                 file.WriteLine($"            }}");
             }
-            
+
             foreach (var propertyInfo in type.GetProperties())
             {
                 var propertyName = propertyInfo.Name;
@@ -91,26 +101,30 @@ namespace SyntaxNodeJsonWriterGenerator
 
                 if (Ignored.Properties.Contains(camelCaseName)
                     || Ignored.Types.Contains(propertyType)
-                    || (Ignored.PropertiesByType.ContainsKey(type) && Ignored.PropertiesByType[type].Contains(camelCaseName)))
+                    || (Ignored.PropertiesByType.ContainsKey(type) &&
+                        Ignored.PropertiesByType[type].Contains(camelCaseName)))
                 {
                     continue;
                 }
-                
+
                 if (propertyType == typeof(bool))
                 {
-                    file.WriteLine($"            properties.Add(WriteBoolean(\"{camelCaseName}\", syntaxNode.{propertyName}));");
+                    file.WriteLine(
+                        $"            properties.Add(WriteBoolean(\"{camelCaseName}\", syntaxNode.{propertyName}));");
                 }
                 else if (propertyType == typeof(string))
                 {
-                    file.WriteLine($"            properties.Add(WriteString(\"{camelCaseName}\", syntaxNode.{propertyName}));");
+                    file.WriteLine(
+                        $"            properties.Add(WriteString(\"{camelCaseName}\", syntaxNode.{propertyName}));");
                 }
                 else if (propertyType == typeof(int))
                 {
-                    file.WriteLine($"            properties.Add(WriteInt(\"{camelCaseName}\", syntaxNode.{propertyName}));");
+                    file.WriteLine(
+                        $"            properties.Add(WriteInt(\"{camelCaseName}\", syntaxNode.{propertyName}));");
                 }
                 else if (typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType)
-                    || propertyType == typeof(SyntaxToken)
-                    || propertyType == typeof(SyntaxTrivia))
+                         || propertyType == typeof(SyntaxToken)
+                         || propertyType == typeof(SyntaxTrivia))
                 {
                     var methodName = "WriteSyntaxNode";
                     if (propertyType == typeof(SyntaxToken))
@@ -130,13 +144,15 @@ namespace SyntaxNodeJsonWriterGenerator
                     file.WriteLine("            {");
                     file.WriteLine($"                var {camelCaseName}Builder = new StringBuilder();");
                     file.WriteLine($"                {methodName}({camelCaseName}Builder, syntaxNode.{propertyName});");
-                    file.WriteLine($"                properties.Add($\"\\\"{camelCaseName}\\\":{{{camelCaseName}Builder.ToString()}}\");");
+                    file.WriteLine(
+                        $"                properties.Add($\"\\\"{camelCaseName}\\\":{{{camelCaseName}Builder.ToString()}}\");");
                     file.WriteLine("            }");
                 }
                 else if ((propertyType.IsGenericType &&
-                         (propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>) || propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)))
-                    || propertyType == typeof(SyntaxTokenList)
-                    || propertyType == typeof(SyntaxTriviaList))
+                          (propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>) ||
+                           propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)))
+                         || propertyType == typeof(SyntaxTokenList)
+                         || propertyType == typeof(SyntaxTriviaList))
                 {
                     var methodName = "WriteSyntaxNode";
                     if (propertyType == typeof(SyntaxTokenList))
@@ -155,7 +171,7 @@ namespace SyntaxNodeJsonWriterGenerator
                             methodName = "Write" + genericArgument.Name;
                         }
                     }
-                    
+
                     file.WriteLine($"            var {camelCaseName} = new List<string>();");
                     file.WriteLine($"            foreach(var node in syntaxNode.{propertyName})");
                     file.WriteLine("            {");
@@ -163,7 +179,8 @@ namespace SyntaxNodeJsonWriterGenerator
                     file.WriteLine($"                {methodName}(innerBuilder, node);");
                     file.WriteLine($"                {camelCaseName}.Add(innerBuilder.ToString());");
                     file.WriteLine("            }");
-                    file.WriteLine($"            properties.Add($\"\\\"{camelCaseName}\\\":[{{string.Join(\",\", {camelCaseName})}}]\");");
+                    file.WriteLine(
+                        $"            properties.Add($\"\\\"{camelCaseName}\\\":[{{string.Join(\",\", {camelCaseName})}}]\");");
                 }
                 else
                 {

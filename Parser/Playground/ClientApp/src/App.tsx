@@ -13,9 +13,12 @@ export class App extends Component<{}, State> {
     constructor(props: {}) {
         super(props);
         this.state = {
-            enteredCode: `public class ClassName
-{
-    public void MethodName() { }
+            enteredCode: `public class UglyClassName {
+            public string MyProperty
+            {
+             get;  set; }
+
+    public void MethodName(string LongParameter1, string longParameter2, string LongParameter3) { this.MethodName("ajskdf", "kjlasdfkljasldkfklajsdf", "ljkasdfkljaskldfjasdf"; }
 }`,
             formattedCode: "",
         };
@@ -39,6 +42,15 @@ export class App extends Component<{}, State> {
         })
     }
 
+    private timer?: number;
+    
+    formatCodeSoon = () => {
+        window.clearTimeout(this.timer)
+        this.timer = window.setTimeout(() => {
+            this.formatCode();
+        }, 1000);
+    }
+
     render() {
         const options = {
             lineNumbers: true,
@@ -58,7 +70,7 @@ export class App extends Component<{}, State> {
                                 this.setState({enteredCode: value});
                             }}
                             onChange={() => {
-                                this.formatCode();
+                                this.formatCodeSoon();
                             }}
                         />
                     </EnteredCodeStyle>
@@ -85,6 +97,11 @@ const EnteredCodeStyle = styled.div`
     .CodeMirror {
         height: 100%;
     }
+    
+    @media only screen and (max-width: 768px) {
+        width: 100%;
+        height: 50%;
+    }
 `;
 
 const WrapperStyle = styled.div`
@@ -93,6 +110,7 @@ const WrapperStyle = styled.div`
 
 const CodeWrapperStyle = styled.div`
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
     height: calc(100vh - 80px);
     border-top: 1px solid #ccc;

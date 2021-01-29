@@ -11,8 +11,8 @@
   },
   "scripts": {
     "start": "npx nodemon",
-    "build": "npm run clean-dist && webpack",
-    "clean-dist": "rimraf dist/*",
+    "build": "npm run clean-build && webpack --config=webpack-build.config.js",
+    "clean-build": "rimraf buildTODO/*",
     "prettier": "prettier --write \"{src,test}/**/*.{js,ts}\"",
     "test": "jest",
     "samples": "node ./Samples/_index.js",

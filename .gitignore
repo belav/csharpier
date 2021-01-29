@@ -15,6 +15,8 @@ node_modules
 bin
 obj
 
+App_Data
+
 /prettier-plugin-csharpier/Samples/**/*.json
 /prettier-plugin-csharpier/Tests/**/*.json
 
