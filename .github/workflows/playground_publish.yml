@@ -17,17 +17,10 @@ jobs:
     steps:
       - 
         uses: actions/checkout@v2
-        
-      - 
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0.2'
       - 
         run: dotnet publish -c release --output ./publish
-        
       -
         run: mkdir offline && touch offline/app_offline.htm
-        
       - 
         name: Upload app_offline.htm
         uses: sebastianpopp/ftp-action@releases/v2
@@ -38,6 +31,7 @@ jobs:
           localDir: "CSharpier/CSharpier.Playground/offline"
           remoteDir: "/csharpier_bntstudios_com"
       - 
+        name: Delete existing playground files
         uses: StephanThierry/ftp-delete-action@releases/v1
         with:
           host: ${{ secrets.FTP_HOST }}
@@ -55,6 +49,7 @@ jobs:
           localDir: "CSharpier/CSharpier.Playground/publish"
           remoteDir: "/csharpier_bntstudios_com"
       - 
+        name: Delete app_offline.htm
         uses: StephanThierry/ftp-delete-action@releases/v1
         with:
           host: ${{ secrets.FTP_HOST }}
