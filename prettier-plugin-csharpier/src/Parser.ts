@@ -15,7 +15,7 @@ function parseText(text: string) {
     // TODO where should this dll really live?
     const executionResult = spawnSync(
         "dotnet",
-        ["exec", "net5.0\\Parser.dll", text],
+        ["exec", "net5.0\\CSharpier.Parser.dll", text],
         {
             maxBuffer: 1000 * 1000 * 100, // 100 MB
         },

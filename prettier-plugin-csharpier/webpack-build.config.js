@@ -30,10 +30,10 @@ generateTypesFile();
 
 const outputPath = path.resolve(__dirname, "build/prettier-plugin-csharpier");
 
-const parserPath = path.resolve(__dirname, "../Parser/Parser/bin/Release/netcoreapp3.1");
+const parserPath = path.resolve(__dirname, "../CSharpier/CSharpier.Parser/bin/Release/net5.0");
 
 copyParserDll = () => {
-    const folderForDll = path.resolve(outputPath, "netcoreapp3.1");
+    const folderForDll = path.resolve(outputPath, "net5.0");
     if (!fs.existsSync(folderForDll)) {
         fs.mkdirSync(folderForDll, { recursive: true });
     }
@@ -41,12 +41,9 @@ copyParserDll = () => {
         "Microsoft.CodeAnalysis.CSharp.dll",
         "Microsoft.CodeAnalysis.dll",
         "Newtonsoft.Json.dll",
-        "Parser.deps.json",
-        "Parser.dll",
-        "Parser.runtimeconfig.json",
-        "System.Collections.Immutable.dll",
-        "System.Reflection.Metadata.dll",
-        "System.Runtime.CompilerServices.Unsafe.dll",
+        "CSharpier.Parser.deps.json",
+        "CSharpier.Parser.dll",
+        "CSharpier.Parser.runtimeconfig.json"
     ];
     for (const file of filesToCopy) {
         fs.copyFileSync(path.resolve(parserPath, file), path.resolve(folderForDll, file));

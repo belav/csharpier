@@ -1,0 +1,64 @@
+name: Publish Playground
+on:
+  push:
+    branches: [ master ]
+    paths:
+    - .github/workflows/playground_publish.yml
+    - 'CSharpier/Csharpier.Playground/**'
+
+defaults:
+  run:
+    working-directory: CSharpier/CSharpier.Playground
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: .Net 5.0 Publish
+    steps:
+      - 
+        uses: actions/checkout@v2
+        
+      - 
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.2'
+      - 
+        run: dotnet publish -c release --output ./publish
+        
+      -
+        run: mkdir offline && touch offline/app_offline.htm
+        
+      - 
+        name: Upload app_offline.htm
+        uses: sebastianpopp/ftp-action@releases/v2
+        with:
+          host: ${{ secrets.FTP_HOST }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          localDir: "CSharpier/CSharpier.Playground/offline"
+          remoteDir: "/csharpier_bntstudios_com"
+      - 
+        uses: StephanThierry/ftp-delete-action@releases/v1
+        with:
+          host: ${{ secrets.FTP_HOST }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          remoteFiles: "ClientApp/**/*;*.json;*.dll;*.exe;web.config"
+          workingDir: "/csharpier_bntstudios_com"
+      - 
+        name: Upload playground
+        uses: sebastianpopp/ftp-action@releases/v2
+        with:
+          host: ${{ secrets.FTP_HOST }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          localDir: "CSharpier/CSharpier.Playground/publish"
+          remoteDir: "/csharpier_bntstudios_com"
+      - 
+        uses: StephanThierry/ftp-delete-action@releases/v1
+        with:
+          host: ${{ secrets.FTP_HOST }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          remoteFiles: "app_offline.htm"
+          workingDir: "/csharpier_bntstudios_com"

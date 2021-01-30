@@ -42,6 +42,7 @@
           <e p=".gitignore" t="Include" />
           <e p=".prettierrc" t="Include" />
           <e p="build" t="Include">
+            <e p="asset-manifest.json" t="Include" />
             <e p="favicon.ico" t="Include" />
             <e p="index.html" t="Include" />
             <e p="precache-manifest.dc26eb12f65686368fc12551cdf35920.js" t="Include" />

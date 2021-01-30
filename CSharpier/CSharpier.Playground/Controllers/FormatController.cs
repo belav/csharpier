@@ -5,20 +5,24 @@ using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
-namespace Playground.Controllers
+namespace CSharpier.Playground.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class FormatController : ControllerBase
     {
-        private IWebHostEnvironment webHostEnvironment;
-        private ILogger logger;
+        private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly ILogger logger;
+        private readonly PlaygroundOptions options;
 
-        public FormatController(IWebHostEnvironment webHostEnvironment, ILogger<FormatController> logger)
+        // ReSharper disable once SuggestBaseTypeForParameter
+        public FormatController(IWebHostEnvironment webHostEnvironment, ILogger<FormatController> logger, IOptions<PlaygroundOptions> options)
         {
             this.webHostEnvironment = webHostEnvironment;
             this.logger = logger;
+            this.options = options.Value;
         }
 
         [HttpPost]
@@ -34,11 +38,8 @@ namespace Playground.Controllers
             {
                 System.IO.File.WriteAllText(filePath, content, Encoding.UTF8);
 
-                // TODO this needs to be configurable somehow, or the node thing needs to build into here. It probably makes sense for this to make node build into here
-                var workingDirectory = Path.Combine(this.webHostEnvironment.ContentRootPath, "Prettier");
-                // var workingDirectory = "C:\\Projects\\csharpier\\prettier-plugin-csharpier\\build";
-                // TODO this doesn't work, and we dont' get any kind of logging, I need to add a logger.
-                // the command works on the server itself now, so wtf
+                // TODO  the node thing needs to build into here? It probably makes sense for this to make node build into here. Meaning the publish of this kicks off the build steps in the plugin that get files into the Prettier directory
+                var workingDirectory = Path.Combine(this.webHostEnvironment.ContentRootPath, this.options.PrettierDirectory);
                 Console.WriteLine(ExecuteApplication("node", workingDirectory, "./index.js " + filePath));   
             }
 

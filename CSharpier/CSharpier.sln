@@ -1,14 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser", "Parser\Parser.csproj", "{719DAB51-7CE5-417F-B7C2-063908A50459}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier", "CSharpier\CSharpier.csproj", "{494E8025-CFED-435F-8643-5F23493033CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Parser", "CSharpier.Parser\CSharpier.Parser.csproj", "{719DAB51-7CE5-417F-B7C2-063908A50459}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxNodeJsonWriterGenerator", "SyntaxNodeJsonWriterGenerator\SyntaxNodeJsonWriterGenerator.csproj", "{C73AC70E-4D1E-4266-AA77-6A0AAF7DA7C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxNodeTypeGenerator", "SyntaxNodeTypeGenerator\SyntaxNodeTypeGenerator.csproj", "{68233EC8-147C-49ED-B3EE-9372052BA65C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground", "Playground\Playground.csproj", "{E7F03E73-82C7-4DB2-AF20-F25C45231A72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Playground", "CSharpier.Playground\CSharpier.Playground.csproj", "{E7F03E73-82C7-4DB2-AF20-F25C45231A72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +18,6 @@ Global
 		{719DAB51-7CE5-417F-B7C2-063908A50459}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{719DAB51-7CE5-417F-B7C2-063908A50459}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{719DAB51-7CE5-417F-B7C2-063908A50459}.Release|Any CPU.Build.0 = Release|Any CPU
-		{494E8025-CFED-435F-8643-5F23493033CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{494E8025-CFED-435F-8643-5F23493033CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{494E8025-CFED-435F-8643-5F23493033CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{494E8025-CFED-435F-8643-5F23493033CB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C73AC70E-4D1E-4266-AA77-6A0AAF7DA7C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C73AC70E-4D1E-4266-AA77-6A0AAF7DA7C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C73AC70E-4D1E-4266-AA77-6A0AAF7DA7C4}.Release|Any CPU.ActiveCfg = Release|Any CPU

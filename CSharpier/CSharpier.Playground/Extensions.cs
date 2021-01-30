@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Playground
+namespace CSharpier.Playground
 {
     public static class StringExtensions
     {
