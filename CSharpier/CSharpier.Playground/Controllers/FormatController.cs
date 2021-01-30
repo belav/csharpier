@@ -34,23 +34,31 @@ namespace CSharpier.Playground.Controllers
             var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
 
             // TODO 0 we need to report back errors and what not
+            // failing to compile/parse with roslyn
+            // what about when the prettier plugin fails because of missing node types or other errors?
             if (!System.IO.File.Exists(formattedFilePath))
             {
                 System.IO.File.WriteAllText(filePath, content, Encoding.UTF8);
-
-                // TODO  the node thing needs to build into here? It probably makes sense for this to make node build into here. Meaning the publish of this kicks off the build steps in the plugin that get files into the Prettier directory
                 var workingDirectory = Path.Combine(this.webHostEnvironment.ContentRootPath, this.options.PrettierDirectory);
                 Console.WriteLine(ExecuteApplication("node", workingDirectory, "./index.js " + filePath));   
             }
 
-            // TODO we need to use node to format this
-            // TODO I switch the parser project to .net50 to get it running on the web server, I should rename the folder that it lives in.
-            // what if it fails to parse with roslyn?
-            // we should also wait until the file is done changing on the client side
-            // we should also auto deploy
-            // dotnet publish -c release creates a publishable thing for this, but we also need to build the Parser/prettier plugin and deploy those along with it somehow.
-            // maybe that is just another step, and we automate this whole thing with github actions, or azure devops.
-            return System.IO.File.ReadAllText(filePath.Replace(".cs", ".Formatted.cs"));
+            // TODO 0 
+            // we should add a button to click to format code, instead of auto formatting
+            // we also want to eventually expose options
+            // TODO 0 deploy stuff
+            // right now the playground deploys, but it doesn't update anything in the Prettier folder that it uses
+            // we should build CSharpier.Parser in release, and copy that in
+            // we should build the prettier-plugin-csharpier and copy it in
+            // we should copy in the package.json and index.js that we use in that folder, and run npm install
+
+            if (!System.IO.File.Exists(formattedFilePath))
+            {
+
+                return "// Failed to format" + Environment.NewLine + content;
+            }
+            
+            return System.IO.File.ReadAllText(formattedFilePath);
         }
 
         public string ExecuteApplication(string pathToExe, string workingDirectory, string args)
