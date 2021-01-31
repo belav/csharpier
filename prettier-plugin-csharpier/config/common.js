@@ -4,12 +4,17 @@ const webpack = require("webpack");
 
 module.exports = {
     setupCommonConfig: function (parserPath) {
-        fs.copyFileSync(path.resolve(__dirname, "playground_index.js"), path.resolve(__dirname, "../dist/index.js"));
+        const distPath = path.resolve(__dirname, "../dist");
+
+        if (!fs.existsSync(distPath)) {
+            fs.mkdirSync(distPath);
+        }
+        fs.copyFileSync(path.resolve(__dirname, "playground_index.js"), path.resolve(distPath, "index.js"));
 
         return {
             entry: [path.resolve(__dirname, "../src/Index.ts")],
             output: {
-                path: path.resolve(__dirname, "../dist/prettier-plugin-csharpier"),
+                path: path.resolve(distPath, "prettier-plugin-csharpier"),
                 filename: "index.js",
                 libraryTarget: "umd",
                 library: "csharpier",
