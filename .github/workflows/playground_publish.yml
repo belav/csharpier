@@ -3,8 +3,8 @@ on:
   push:
     branches: [ master ]
     paths:
-    - .github/workflows/playground_publish.yml
-    - 'CSharpier/Csharpier.Playground/**'
+      - .github/workflows/playground_publish.yml
+      - "CSharpier/Csharpier.Playground/**"
 
 defaults:
   run:
@@ -21,7 +21,7 @@ jobs:
         run: dotnet publish -c release --output ../../publish
       -
         working-directory: prettier-plugin-csharpier
-        run: npm run build
+        run: npm install && npm run build
       -
         working-directory: prettier-plugin-csharpier
         run: cp  ./dist ../publish/Prettier
