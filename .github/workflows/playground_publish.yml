@@ -18,7 +18,16 @@ jobs:
       - 
         uses: actions/checkout@v2
       - 
-        run: dotnet publish -c release --output ./publish
+        run: dotnet publish -c release --output ../../publish
+      -
+        working-directory: prettier-plugin-csharpier
+        run: npm run build
+      -
+        working-directory: prettier-plugin-csharpier
+        run: cp  ./dist ../publish/Prettier
+      -
+        working-directory: publish/Prettier
+        run: npm install
       -
         run: mkdir offline && touch offline/app_offline.htm
       - 
@@ -30,24 +39,19 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           localDir: "CSharpier/CSharpier.Playground/offline"
           remoteDir: "/csharpier_bntstudios_com"
+      #will this clean files? https://github.com/SamKirkland/FTP-Deploy-Action it sounds like it, it could exclude app_data and app_offline, and I could delete those later
+      # this may be better because port isn't separate https://github.com/marketplace/actions/simple-ftp-deploy
       - 
-        name: Delete existing playground files
-        uses: StephanThierry/ftp-delete-action@releases/v1
+        name: FTP Deploy
+        uses: kevinpainchaud/simple-ftp-deploy-action@v1.2.1
         with:
-          host: ${{ secrets.FTP_HOST }}
-          user: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          remoteFiles: "ClientApp/**/*;*.json;*.dll;*.exe;web.config"
-          workingDir: "/csharpier_bntstudios_com"
-      - 
-        name: Upload playground
-        uses: sebastianpopp/ftp-action@releases/v2
-        with:
-          host: ftp://${{ secrets.FTP_HOST }}
-          user: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          localDir: "CSharpier/CSharpier.Playground/publish"
-          remoteDir: "/csharpier_bntstudios_com"
+          ftp_host: ${{ secrets.FTP_HOST }}
+          ftp_username: ${{ secrets.FTP_USERNAME }}
+          ftp_password: ${{ secrets.FTP_PASSWORD }}
+          local_source_dir: "publish"
+          dist_target_dir: "/csharpier_bntstudios_com"
+          delete: "true"
+          exclude: "'App_Data' 'app_offline.htm'"
       - 
         name: Delete app_offline.htm
         uses: StephanThierry/ftp-delete-action@releases/v1

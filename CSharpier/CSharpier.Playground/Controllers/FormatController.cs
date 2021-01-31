@@ -46,7 +46,6 @@ namespace CSharpier.Playground.Controllers
             }
 
             // TODO 0 
-            // we should add a button to click to format code, instead of auto formatting
             // we also want to eventually expose options
             // TODO 0 deploy stuff
             // right now the playground deploys, but it doesn't update anything in the Prettier folder that it uses
