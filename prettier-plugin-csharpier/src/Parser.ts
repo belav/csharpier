@@ -12,11 +12,11 @@ function loc(prop: any) {
 function parseText(text: string) {
     console.log(__dirname);
 
-    // TODO where should this dll really live?
     const executionResult = spawnSync(
         "dotnet",
-        ["exec", "net5.0\\CSharpier.Parser.dll", text],
+        ["exec", PARSER_PATH, text],
         {
+            cwd: __dirname,
             maxBuffer: 1000 * 1000 * 100, // 100 MB
         },
     );

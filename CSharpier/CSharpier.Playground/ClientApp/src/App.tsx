@@ -28,7 +28,7 @@ export class App extends Component<{}, State> {
         this.formatCode();
     }
     
-    async formatCode() {
+    formatCode = async () => {
         const response = await fetch("/Format", {
             method: "POST",
             body: JSON.stringify(this.state.enteredCode),
@@ -60,7 +60,17 @@ export class App extends Component<{}, State> {
 
         return (
             <WrapperStyle>
-                <Header>CSharpier</Header>
+                <Header>
+                    <div>
+                        <Title>
+                            CSharpier
+                        </Title>
+                        <FormatButton onClick={this.formatCode}>Format</FormatButton>
+                    </div>
+                    <div>
+                        
+                    </div>
+                </Header>
                 <CodeWrapperStyle>
                     <EnteredCodeStyle>
                         <CodeMirror
@@ -69,9 +79,7 @@ export class App extends Component<{}, State> {
                             onBeforeChange={(editor, data, value) => {
                                 this.setState({enteredCode: value});
                             }}
-                            onChange={() => {
-                                this.formatCodeSoon();
-                            }}
+                            onChange={() => {}}
                         />
                     </EnteredCodeStyle>
                     <EnteredCodeStyle>
@@ -101,6 +109,7 @@ const EnteredCodeStyle = styled.div`
     @media only screen and (max-width: 768px) {
         width: 100%;
         height: 50%;
+        border-bottom: 1px solid #ccc;
     }
 `;
 
@@ -122,10 +131,29 @@ const Header = styled.div`
     background-color: #f7f7f7;
     display: flex;
     align-items: center;
+    
+    > div {
+        width: 50%;
+        display: flex;
+    }
+`;
+
+const Title = styled.h1`
     padding-left: 28px;
     font-size: 22px;
     font-style: italic;
-`;
+`
+
+const FormatButton = styled.button`
+    margin-left: auto;
+    background-color: #666;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+`
 
 const Footer = styled.div`
     height: 20px;

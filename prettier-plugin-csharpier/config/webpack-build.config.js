@@ -1,32 +1,9 @@
 const path = require("path");
 const fs = require("fs");
-const generateTests = require("./Tests/generateTests");
 
-generateTests.watch();
+const generateTypeFiles = require("./generateTypeFiles");
 
-const typesDirectory = path.resolve(__dirname, "src/Printer/Types");
-
-generateTypesFile = () => {
-    let typesFile = "";
-    fs.readdirSync(typesDirectory).forEach(typeFile => {
-        typesFile += `export { print${typeFile.replace(".ts", "")} as ${typeFile.replace(
-            ".ts",
-            "",
-        )} } from "./Types/${typeFile.replace(".ts", "")}"\r\n`;
-    });
-
-    const typesFilePath = path.resolve(__dirname, "src/Printer/Types.ts");
-
-    if (!fs.existsSync(typesFilePath) || fs.readFileSync(typesFilePath, "utf8") !== typesFile) {
-        fs.writeFileSync(typesFilePath, typesFile);
-    }
-};
-
-fs.watch(typesDirectory, () => {
-    generateTypesFile();
-});
-
-generateTypesFile();
+generateTypeFiles.generate();
 
 const outputPath = path.resolve(__dirname, "build/prettier-plugin-csharpier");
 

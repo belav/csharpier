@@ -33,6 +33,8 @@ namespace CSharpier.Playground.Controllers
 
             var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
 
+            var output = "";
+            
             // TODO 0 we need to report back errors and what not
             // failing to compile/parse with roslyn
             // what about when the prettier plugin fails because of missing node types or other errors?
@@ -40,7 +42,7 @@ namespace CSharpier.Playground.Controllers
             {
                 System.IO.File.WriteAllText(filePath, content, Encoding.UTF8);
                 var workingDirectory = Path.Combine(this.webHostEnvironment.ContentRootPath, this.options.PrettierDirectory);
-                Console.WriteLine(ExecuteApplication("node", workingDirectory, "./index.js " + filePath));   
+                output = ExecuteApplication("node", workingDirectory, "./index.js " + filePath);   
             }
 
             // TODO 0 
@@ -54,8 +56,7 @@ namespace CSharpier.Playground.Controllers
 
             if (!System.IO.File.Exists(formattedFilePath))
             {
-
-                return "// Failed to format" + Environment.NewLine + content;
+                return output;
             }
             
             return System.IO.File.ReadAllText(formattedFilePath);

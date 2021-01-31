@@ -5,12 +5,12 @@
   "repository": "belav/csharpier",
   "author": "Bela VanderVoort",
   "license": "MIT",
-  "main": "dist",
+  "main": "dist/prettier-plugin-csharpier",
   "dependencies": {
     "prettier": "^2.1.2"
   },
   "scripts": {
-    "start": "npx nodemon",
+    "start": "webpack --config=config/development.config.js",
     "build": "npm run clean-build && webpack --config=webpack-build.config.js",
     "clean-build": "rimraf buildTODO/*",
     "prettier": "prettier --write \"{src,test}/**/*.{js,ts}\"",
@@ -21,7 +21,7 @@
   },
   "nodemonConfig": {
     "watch": "src/Printer/Types",
-    "exec": "webpack --env=watch"
+    "exec": "webpack --config=config/development.config.js"
   },
   "devDependencies": {
     "@babel/core": "7.12.3",
