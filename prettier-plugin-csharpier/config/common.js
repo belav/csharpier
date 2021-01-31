@@ -12,7 +12,7 @@ module.exports = {
         fs.copyFileSync(path.resolve(__dirname, "playground_index.js"), path.resolve(distPath, "index.js"));
 
         return {
-            entry: [path.resolve(__dirname, "../src/Index.ts")],
+            entry: [path.resolve(__dirname, "../src/index.ts")],
             output: {
                 path: path.resolve(distPath, "prettier-plugin-csharpier"),
                 filename: "index.js",
