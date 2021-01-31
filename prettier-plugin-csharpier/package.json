@@ -11,8 +11,7 @@
   },
   "scripts": {
     "start": "webpack --config=config/development.config.js",
-    "build": "npm run clean-build && webpack --config=webpack-build.config.js",
-    "clean-build": "rimraf buildTODO/*",
+    "build": "webpack --config=config/production.config.js",
     "prettier": "prettier --write \"{src,test}/**/*.{js,ts}\"",
     "test": "jest",
     "samples": "node ./Samples/_index.js",
@@ -31,7 +30,6 @@
     "copy-webpack-plugin": "6.3.1",
     "jest": "26.6.3",
     "plop": "2.7.4",
-    "rimraf": "3.0.2",
     "source-map-loader": "1.1.2",
     "typescript": "4.0.5",
     "webpack": "5.19.0",
