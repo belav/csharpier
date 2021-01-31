@@ -2,9 +2,6 @@ name: Publish Playground
 on:
   push:
     branches: [ master ]
-    paths:
-      - .github/workflows/playground_publish.yml
-      - "CSharpier/Csharpier.Playground/**"
 
 defaults:
   run:
