@@ -10,6 +10,7 @@ module.exports = {
             fs.mkdirSync(distPath);
         }
         fs.copyFileSync(path.resolve(__dirname, "playground_index.js"), path.resolve(distPath, "index.js"));
+        fs.copyFileSync(path.resolve(__dirname, "playground_package.json"), path.resolve(distPath, "package.json"));
 
         return {
             entry: [path.resolve(__dirname, "../src/index.ts")],
