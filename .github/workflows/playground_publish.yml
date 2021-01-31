@@ -49,6 +49,7 @@ jobs:
           dist_target_dir: "/csharpier_bntstudios_com"
           delete: "true"
           exclude: "'App_Data' 'app_offline.htm'"
+          other_flags: "-p"
       - 
         name: Delete app_offline.htm
         uses: StephanThierry/ftp-delete-action@releases/v1
