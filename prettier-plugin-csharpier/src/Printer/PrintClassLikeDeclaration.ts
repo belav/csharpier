@@ -1,8 +1,9 @@
 import { Doc } from "prettier";
 import { concat, hardline, indent, join } from "./Builders";
-import { printComments } from "./Comments";
 import { printAttributeLists } from "./PrintAttributeLists";
+import { printComments } from "./PrintComments";
 import { printConstraintClauses } from "./PrintConstraintClauses";
+import { printExtraNewLines } from "./PrintExtraNewLines";
 import { PrintMethod } from "./PrintMethod";
 import { SyntaxToken, printIdentifier, printModifiers, printSyntaxToken, SyntaxTreeNode } from "./SyntaxTreeNode";
 import { AttributeListNode } from "./Types/AttributeList";
@@ -27,8 +28,11 @@ export interface ClassLikeDeclarationNode
 export const printClassLikeDeclaration: PrintMethod<ClassLikeDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
-    printComments(parts, node);
+
+    printExtraNewLines(node, parts, "attributeLists", "modifiers", "keyword")
+
     printAttributeLists(node, parts, path, options, print);
+    printComments(node, parts, "modifiers", "keyword", "identifier");
     parts.push(printModifiers(node));
     if (node.keyword) {
         parts.push(printSyntaxToken(node.keyword));

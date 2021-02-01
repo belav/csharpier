@@ -1,6 +1,8 @@
 import { Doc } from "prettier";
 import { printAttributeLists } from "./PrintAttributeLists";
+import { printComments } from "./PrintComments";
 import { printConstraintClauses } from "./PrintConstraintClauses";
+import { printExtraNewLines } from "./PrintExtraNewLines";
 import { PrintMethod } from "./PrintMethod";
 import {
     printSyntaxToken,
@@ -43,7 +45,9 @@ interface MethodLikeDeclarationNode
 export const printMethodLikeDeclaration: PrintMethod<MethodLikeDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
+    printExtraNewLines(node, parts, "attributeLists", "modifiers")
     printAttributeLists(node, parts, path, options, print);
+    printComments(node, parts, "modifiers", "returnType", "identifier")
     parts.push(printModifiers(node));
     if (node.returnType) {
         parts.push(path.call(print, "returnType"), " ");

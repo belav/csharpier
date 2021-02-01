@@ -1,11 +1,8 @@
 import { Doc } from "prettier";
 import { concat, group, hardline, indent, join, line } from "./Builders";
-import { printComments } from "./Comments";
 import { printAttributeLists } from "./PrintAttributeLists";
 import { PrintMethod } from "./PrintMethod";
 import {
-    HasIdentifier,
-    HasModifiers,
     SyntaxToken,
     printIdentifier,
     printModifiers,

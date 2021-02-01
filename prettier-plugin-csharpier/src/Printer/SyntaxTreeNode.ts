@@ -56,7 +56,7 @@ export function printSyntaxToken(syntaxToken: SyntaxToken | undefined) {
         throw new Error("There was no text property on " + JSON.stringify(syntaxToken, null, "    "));
     }
 
-    return hasLeadingExtraLine(syntaxToken) ? concat([hardline, syntaxToken.text]) : syntaxToken.text;
+    return syntaxToken.text;
 }
 
 export function printModifiers(node: HasModifiers) {

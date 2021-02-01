@@ -38,14 +38,11 @@ namespace CSharpier.Playground.Controllers
             // TODO 0 we need to report back errors and what not
             // failing to compile/parse with roslyn
             // what about when the prettier plugin fails because of missing node types or other errors?
-            if (!System.IO.File.Exists(formattedFilePath))
-            {
-                System.IO.File.WriteAllText(filePath, content, Encoding.UTF8);
-                var workingDirectory = Path.Combine(this.webHostEnvironment.ContentRootPath, this.options.PrettierDirectory);
-                output = ExecuteApplication("node", workingDirectory, "./index.js " + filePath);   
-            }
+            System.IO.File.WriteAllText(filePath, content, Encoding.UTF8);
+            var workingDirectory = Path.Combine(this.webHostEnvironment.ContentRootPath, this.options.PrettierDirectory);
+            output = ExecuteApplication("node", workingDirectory, "./index.js " + filePath);
 
-            // TODO 0 
+                // TODO 0 
             // we also want to eventually expose options
             // TODO 0 deploy stuff
             // right now the playground deploys, but it doesn't update anything in the Prettier folder that it uses
