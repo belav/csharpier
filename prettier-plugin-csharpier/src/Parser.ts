@@ -7,6 +7,7 @@ function parseText(text: string) {
         "dotnet",
         ["exec", PARSER_PATH, text],
         {
+            cwd: __dirname,
             maxBuffer: 1000 * 1000 * 100, // 100 MB
         },
     );
