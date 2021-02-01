@@ -928,8 +928,14 @@ class CSharp72
 
     public void NonTrailingNamedArguments()
     {
-        DoSomething(isEmployed: true, name, age); // currently CS1738, but would become legal
-        DoSomething(true, personName: name, age); // currently CS1738, but would become legal
+        DoSomething(
+            isEmployed: true,
+            name,
+            age); // currently CS1738, but would become legal
+        DoSomething(
+            true,
+            personName: name,
+            age); // currently CS1738, but would become legal
         DoSomething(name, isEmployed: true, age); // remains illegal
         DoSomething(name, age, isEmployed: true); // remains illegal
         DoSomething(true, personAge: age, personName: name); // already legal

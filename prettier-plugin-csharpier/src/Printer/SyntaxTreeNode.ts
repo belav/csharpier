@@ -1,8 +1,5 @@
 import { Doc, FastPath, ParserOptions } from "prettier";
 import { concat, hardline, join } from "./Builders";
-import { hasLeadingExtraLine } from "./Helpers";
-import { Print } from "./PrintMethod";
-import { BlockNode } from "./Types/Block";
 
 export interface SyntaxTreeNode<T = string, K = string> {
     nodeType: T;
@@ -49,7 +46,7 @@ export function printPathSyntaxToken<T1, T2 extends keyof T1>(path: FastPath<T1>
 }
 
 export function printSyntaxToken(syntaxToken: SyntaxToken | undefined) {
-    if (!syntaxToken) {
+    if (!syntaxToken || syntaxToken.isMissing) {
         return "";
     }
     if (typeof syntaxToken.text === "undefined") {

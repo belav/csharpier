@@ -19,7 +19,7 @@ namespace SyntaxNodeTypeGenerator
         public void DoWork()
         {
             var rootRepositoryFolder = new DirectoryInfo(Directory.GetCurrentDirectory());
-            while (rootRepositoryFolder.Name != "Parser")
+            while (rootRepositoryFolder.Name != "CSharpier")
             {
                 rootRepositoryFolder = rootRepositoryFolder.Parent;
             }

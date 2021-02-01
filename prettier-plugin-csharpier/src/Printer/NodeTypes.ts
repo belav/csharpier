@@ -6,10 +6,13 @@ interface AccessorDeclarationNode extends SyntaxTreeNode<"AccessorDeclaration"> 
     keyword?: SyntaxToken;
     body?: BlockNode;
     expressionBody?: ArrowExpressionClauseNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface AccessorListNode extends SyntaxTreeNode<"AccessorList"> {
+    openBraceToken?: SyntaxToken;
     accessors: AccessorDeclarationNode[];
+    closeBraceToken?: SyntaxToken;
 }
 
 interface AliasQualifiedNameNode extends SyntaxTreeNode<"AliasQualifiedName"> {
@@ -20,20 +23,25 @@ interface AliasQualifiedNameNode extends SyntaxTreeNode<"AliasQualifiedName"> {
     isVar?: boolean;
     isUnmanaged?: boolean;
     isNotNull?: boolean;
+    isNint?: boolean;
+    isNuint?: boolean;
 }
 
 interface AnonymousMethodExpressionNode extends SyntaxTreeNode<"AnonymousMethodExpression"> {
-    asyncKeyword?: SyntaxToken;
+    modifiers: SyntaxToken[];
     delegateKeyword?: SyntaxToken;
     parameterList?: ParameterListNode;
     block?: BlockNode;
     expressionBody?: SyntaxTreeNode;
+    asyncKeyword?: SyntaxToken;
     body?: SyntaxTreeNode;
 }
 
 interface AnonymousObjectCreationExpressionNode extends SyntaxTreeNode<"AnonymousObjectCreationExpression"> {
     newKeyword?: SyntaxToken;
+    openBraceToken?: SyntaxToken;
     initializers: AnonymousObjectMemberDeclaratorNode[];
+    closeBraceToken?: SyntaxToken;
 }
 
 interface AnonymousObjectMemberDeclaratorNode extends SyntaxTreeNode<"AnonymousObjectMemberDeclarator"> {
@@ -73,6 +81,8 @@ interface ArrayTypeNode extends SyntaxTreeNode<"ArrayType"> {
     isVar?: boolean;
     isUnmanaged?: boolean;
     isNotNull?: boolean;
+    isNint?: boolean;
+    isNuint?: boolean;
 }
 
 interface ArrowExpressionClauseNode extends SyntaxTreeNode<"ArrowExpressionClause"> {
@@ -143,8 +153,17 @@ interface BinaryExpressionNode extends SyntaxTreeNode<"BinaryExpression"> {
     right?: SyntaxTreeNode;
 }
 
+interface BinaryPatternNode extends SyntaxTreeNode<"BinaryPattern"> {
+    left?: SyntaxTreeNode;
+    operatorToken?: SyntaxToken;
+    right?: SyntaxTreeNode;
+}
+
 interface BlockNode extends SyntaxTreeNode<"Block"> {
+    attributeLists: AttributeListNode[];
+    openBraceToken?: SyntaxToken;
     statements: SyntaxTreeNode[];
+    closeBraceToken?: SyntaxToken;
 }
 
 interface BracketedArgumentListNode extends SyntaxTreeNode<"BracketedArgumentList"> {
@@ -160,7 +179,9 @@ interface BracketedParameterListNode extends SyntaxTreeNode<"BracketedParameterL
 }
 
 interface BreakStatementNode extends SyntaxTreeNode<"BreakStatement"> {
+    attributeLists: AttributeListNode[];
     breakKeyword?: SyntaxToken;
+    semicolonToken?: SyntaxToken;
 }
 
 interface CasePatternSwitchLabelNode extends SyntaxTreeNode<"CasePatternSwitchLabel"> {
@@ -212,6 +233,7 @@ interface CheckedExpressionNode extends SyntaxTreeNode<"CheckedExpression"> {
 }
 
 interface CheckedStatementNode extends SyntaxTreeNode<"CheckedStatement"> {
+    attributeLists: AttributeListNode[];
     keyword?: SyntaxToken;
     block?: BlockNode;
 }
@@ -224,7 +246,10 @@ interface ClassDeclarationNode extends SyntaxTreeNode<"ClassDeclaration"> {
     typeParameterList?: TypeParameterListNode;
     baseList?: BaseListNode;
     constraintClauses: TypeParameterConstraintClauseNode[];
+    openBraceToken?: SyntaxToken;
     members: SyntaxTreeNode[];
+    closeBraceToken?: SyntaxToken;
+    semicolonToken?: SyntaxToken;
     arity?: number;
 }
 
@@ -272,6 +297,7 @@ interface ConstructorDeclarationNode extends SyntaxTreeNode<"ConstructorDeclarat
     initializer?: ConstructorInitializerNode;
     body?: BlockNode;
     expressionBody?: ArrowExpressionClauseNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface ConstructorInitializerNode extends SyntaxTreeNode<"ConstructorInitializer"> {
@@ -281,7 +307,9 @@ interface ConstructorInitializerNode extends SyntaxTreeNode<"ConstructorInitiali
 }
 
 interface ContinueStatementNode extends SyntaxTreeNode<"ContinueStatement"> {
+    attributeLists: AttributeListNode[];
     continueKeyword?: SyntaxToken;
+    semicolonToken?: SyntaxToken;
 }
 
 interface ConversionOperatorDeclarationNode extends SyntaxTreeNode<"ConversionOperatorDeclaration"> {
@@ -293,6 +321,7 @@ interface ConversionOperatorDeclarationNode extends SyntaxTreeNode<"ConversionOp
     parameterList?: ParameterListNode;
     body?: BlockNode;
     expressionBody?: ArrowExpressionClauseNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface ConversionOperatorMemberCrefNode extends SyntaxTreeNode<"ConversionOperatorMemberCref"> {
@@ -330,6 +359,10 @@ interface DeclarationPatternNode extends SyntaxTreeNode<"DeclarationPattern"> {
     designation?: SyntaxTreeNode;
 }
 
+interface DefaultConstraintNode extends SyntaxTreeNode<"DefaultConstraint"> {
+    defaultKeyword?: SyntaxToken;
+}
+
 interface DefaultExpressionNode extends SyntaxTreeNode<"DefaultExpression"> {
     keyword?: SyntaxToken;
     openParenToken?: SyntaxToken;
@@ -360,6 +393,7 @@ interface DelegateDeclarationNode extends SyntaxTreeNode<"DelegateDeclaration"> 
     typeParameterList?: TypeParameterListNode;
     parameterList?: ParameterListNode;
     constraintClauses: TypeParameterConstraintClauseNode[];
+    semicolonToken?: SyntaxToken;
     arity?: number;
 }
 
@@ -371,6 +405,7 @@ interface DestructorDeclarationNode extends SyntaxTreeNode<"DestructorDeclaratio
     parameterList?: ParameterListNode;
     body?: BlockNode;
     expressionBody?: ArrowExpressionClauseNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface DiscardDesignationNode extends SyntaxTreeNode<"DiscardDesignation"> {
@@ -387,12 +422,14 @@ interface DocumentationCommentTriviaNode extends SyntaxTreeNode<"DocumentationCo
 }
 
 interface DoStatementNode extends SyntaxTreeNode<"DoStatement"> {
+    attributeLists: AttributeListNode[];
     doKeyword?: SyntaxToken;
     statement?: SyntaxTreeNode;
     whileKeyword?: SyntaxToken;
     openParenToken?: SyntaxToken;
     condition?: SyntaxTreeNode;
     closeParenToken?: SyntaxToken;
+    semicolonToken?: SyntaxToken;
 }
 
 interface ElementAccessExpressionNode extends SyntaxTreeNode<"ElementAccessExpression"> {
@@ -430,6 +467,8 @@ interface ElseDirectiveTriviaNode extends SyntaxTreeNode<"ElseDirectiveTrivia"> 
 }
 
 interface EmptyStatementNode extends SyntaxTreeNode<"EmptyStatement"> {
+    attributeLists: AttributeListNode[];
+    semicolonToken?: SyntaxToken;
 }
 
 interface EndIfDirectiveTriviaNode extends SyntaxTreeNode<"EndIfDirectiveTrivia"> {
@@ -454,7 +493,10 @@ interface EnumDeclarationNode extends SyntaxTreeNode<"EnumDeclaration"> {
     enumKeyword?: SyntaxToken;
     identifier?: SyntaxToken;
     baseList?: BaseListNode;
+    openBraceToken?: SyntaxToken;
     members: EnumMemberDeclarationNode[];
+    closeBraceToken?: SyntaxToken;
+    semicolonToken?: SyntaxToken;
 }
 
 interface EnumMemberDeclarationNode extends SyntaxTreeNode<"EnumMemberDeclaration"> {
@@ -485,6 +527,7 @@ interface EventDeclarationNode extends SyntaxTreeNode<"EventDeclaration"> {
     explicitInterfaceSpecifier?: ExplicitInterfaceSpecifierNode;
     identifier?: SyntaxToken;
     accessorList?: AccessorListNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface EventFieldDeclarationNode extends SyntaxTreeNode<"EventFieldDeclaration"> {
@@ -492,6 +535,7 @@ interface EventFieldDeclarationNode extends SyntaxTreeNode<"EventFieldDeclaratio
     modifiers: SyntaxToken[];
     eventKeyword?: SyntaxToken;
     declaration?: VariableDeclarationNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface ExplicitInterfaceSpecifierNode extends SyntaxTreeNode<"ExplicitInterfaceSpecifier"> {
@@ -500,7 +544,9 @@ interface ExplicitInterfaceSpecifierNode extends SyntaxTreeNode<"ExplicitInterfa
 }
 
 interface ExpressionStatementNode extends SyntaxTreeNode<"ExpressionStatement"> {
+    attributeLists: AttributeListNode[];
     expression?: SyntaxTreeNode;
+    semicolonToken?: SyntaxToken;
     allowsAnyExpression?: boolean;
 }
 
@@ -508,12 +554,14 @@ interface ExternAliasDirectiveNode extends SyntaxTreeNode<"ExternAliasDirective"
     externKeyword?: SyntaxToken;
     aliasKeyword?: SyntaxToken;
     identifier?: SyntaxToken;
+    semicolonToken?: SyntaxToken;
 }
 
 interface FieldDeclarationNode extends SyntaxTreeNode<"FieldDeclaration"> {
     attributeLists: AttributeListNode[];
     modifiers: SyntaxToken[];
     declaration?: VariableDeclarationNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface FinallyClauseNode extends SyntaxTreeNode<"FinallyClause"> {
@@ -522,6 +570,7 @@ interface FinallyClauseNode extends SyntaxTreeNode<"FinallyClause"> {
 }
 
 interface FixedStatementNode extends SyntaxTreeNode<"FixedStatement"> {
+    attributeLists: AttributeListNode[];
     fixedKeyword?: SyntaxToken;
     openParenToken?: SyntaxToken;
     declaration?: VariableDeclarationNode;
@@ -530,6 +579,7 @@ interface FixedStatementNode extends SyntaxTreeNode<"FixedStatement"> {
 }
 
 interface ForEachStatementNode extends SyntaxTreeNode<"ForEachStatement"> {
+    attributeLists: AttributeListNode[];
     awaitKeyword?: SyntaxToken;
     forEachKeyword?: SyntaxToken;
     openParenToken?: SyntaxToken;
@@ -542,6 +592,7 @@ interface ForEachStatementNode extends SyntaxTreeNode<"ForEachStatement"> {
 }
 
 interface ForEachVariableStatementNode extends SyntaxTreeNode<"ForEachVariableStatement"> {
+    attributeLists: AttributeListNode[];
     awaitKeyword?: SyntaxToken;
     forEachKeyword?: SyntaxToken;
     openParenToken?: SyntaxToken;
@@ -553,6 +604,7 @@ interface ForEachVariableStatementNode extends SyntaxTreeNode<"ForEachVariableSt
 }
 
 interface ForStatementNode extends SyntaxTreeNode<"ForStatement"> {
+    attributeLists: AttributeListNode[];
     forKeyword?: SyntaxToken;
     openParenToken?: SyntaxToken;
     declaration?: VariableDeclarationNode;
@@ -573,6 +625,45 @@ interface FromClauseNode extends SyntaxTreeNode<"FromClause"> {
     expression?: SyntaxTreeNode;
 }
 
+interface FunctionPointerCallingConventionNode extends SyntaxTreeNode<"FunctionPointerCallingConvention"> {
+    managedOrUnmanagedKeyword?: SyntaxToken;
+    unmanagedCallingConventionList?: FunctionPointerUnmanagedCallingConventionListNode;
+}
+
+interface FunctionPointerParameterListNode extends SyntaxTreeNode<"FunctionPointerParameterList"> {
+    lessThanToken?: SyntaxToken;
+    parameters: FunctionPointerParameterNode[];
+    greaterThanToken?: SyntaxToken;
+}
+
+interface FunctionPointerParameterNode extends SyntaxTreeNode<"FunctionPointerParameter"> {
+    attributeLists: AttributeListNode[];
+    modifiers: SyntaxToken[];
+    type?: SyntaxTreeNode;
+}
+
+interface FunctionPointerTypeNode extends SyntaxTreeNode<"FunctionPointerType"> {
+    delegateKeyword?: SyntaxToken;
+    asteriskToken?: SyntaxToken;
+    callingConvention?: FunctionPointerCallingConventionNode;
+    parameterList?: FunctionPointerParameterListNode;
+    isVar?: boolean;
+    isUnmanaged?: boolean;
+    isNotNull?: boolean;
+    isNint?: boolean;
+    isNuint?: boolean;
+}
+
+interface FunctionPointerUnmanagedCallingConventionListNode extends SyntaxTreeNode<"FunctionPointerUnmanagedCallingConventionList"> {
+    openBracketToken?: SyntaxToken;
+    callingConventions: FunctionPointerUnmanagedCallingConventionNode[];
+    closeBracketToken?: SyntaxToken;
+}
+
+interface FunctionPointerUnmanagedCallingConventionNode extends SyntaxTreeNode<"FunctionPointerUnmanagedCallingConvention"> {
+    name?: SyntaxToken;
+}
+
 interface GenericNameNode extends SyntaxTreeNode<"GenericName"> {
     identifier?: SyntaxToken;
     typeArgumentList?: TypeArgumentListNode;
@@ -581,6 +672,8 @@ interface GenericNameNode extends SyntaxTreeNode<"GenericName"> {
     isVar?: boolean;
     isUnmanaged?: boolean;
     isNotNull?: boolean;
+    isNint?: boolean;
+    isNuint?: boolean;
 }
 
 interface GlobalStatementNode extends SyntaxTreeNode<"GlobalStatement"> {
@@ -590,9 +683,11 @@ interface GlobalStatementNode extends SyntaxTreeNode<"GlobalStatement"> {
 }
 
 interface GotoStatementNode extends SyntaxTreeNode<"GotoStatement"> {
+    attributeLists: AttributeListNode[];
     gotoKeyword?: SyntaxToken;
     caseOrDefaultKeyword?: SyntaxToken;
     expression?: SyntaxTreeNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface GroupClauseNode extends SyntaxTreeNode<"GroupClause"> {
@@ -608,6 +703,8 @@ interface IdentifierNameNode extends SyntaxTreeNode<"IdentifierName"> {
     isVar?: boolean;
     isUnmanaged?: boolean;
     isNotNull?: boolean;
+    isNint?: boolean;
+    isNuint?: boolean;
 }
 
 interface IfDirectiveTriviaNode extends SyntaxTreeNode<"IfDirectiveTrivia"> {
@@ -622,6 +719,7 @@ interface IfDirectiveTriviaNode extends SyntaxTreeNode<"IfDirectiveTrivia"> {
 }
 
 interface IfStatementNode extends SyntaxTreeNode<"IfStatement"> {
+    attributeLists: AttributeListNode[];
     ifKeyword?: SyntaxToken;
     openParenToken?: SyntaxToken;
     condition?: SyntaxTreeNode;
@@ -640,6 +738,12 @@ interface ImplicitArrayCreationExpressionNode extends SyntaxTreeNode<"ImplicitAr
 
 interface ImplicitElementAccessNode extends SyntaxTreeNode<"ImplicitElementAccess"> {
     argumentList?: BracketedArgumentListNode;
+}
+
+interface ImplicitObjectCreationExpressionNode extends SyntaxTreeNode<"ImplicitObjectCreationExpression"> {
+    newKeyword?: SyntaxToken;
+    argumentList?: ArgumentListNode;
+    initializer?: InitializerExpressionNode;
 }
 
 interface ImplicitStackAllocArrayCreationExpressionNode extends SyntaxTreeNode<"ImplicitStackAllocArrayCreationExpression"> {
@@ -664,6 +768,7 @@ interface IndexerDeclarationNode extends SyntaxTreeNode<"IndexerDeclaration"> {
     parameterList?: BracketedParameterListNode;
     accessorList?: AccessorListNode;
     expressionBody?: ArrowExpressionClauseNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface IndexerMemberCrefNode extends SyntaxTreeNode<"IndexerMemberCref"> {
@@ -672,7 +777,9 @@ interface IndexerMemberCrefNode extends SyntaxTreeNode<"IndexerMemberCref"> {
 }
 
 interface InitializerExpressionNode extends SyntaxTreeNode<"InitializerExpression"> {
+    openBraceToken?: SyntaxToken;
     expressions: SyntaxTreeNode[];
+    closeBraceToken?: SyntaxToken;
 }
 
 interface InterfaceDeclarationNode extends SyntaxTreeNode<"InterfaceDeclaration"> {
@@ -683,7 +790,10 @@ interface InterfaceDeclarationNode extends SyntaxTreeNode<"InterfaceDeclaration"
     typeParameterList?: TypeParameterListNode;
     baseList?: BaseListNode;
     constraintClauses: TypeParameterConstraintClauseNode[];
+    openBraceToken?: SyntaxToken;
     members: SyntaxTreeNode[];
+    closeBraceToken?: SyntaxToken;
+    semicolonToken?: SyntaxToken;
     arity?: number;
 }
 
@@ -708,9 +818,11 @@ interface InterpolationFormatClauseNode extends SyntaxTreeNode<"InterpolationFor
 }
 
 interface InterpolationNode extends SyntaxTreeNode<"Interpolation"> {
+    openBraceToken?: SyntaxToken;
     expression?: SyntaxTreeNode;
     alignmentClause?: InterpolationAlignmentClauseNode;
     formatClause?: InterpolationFormatClauseNode;
+    closeBraceToken?: SyntaxToken;
 }
 
 interface InvocationExpressionNode extends SyntaxTreeNode<"InvocationExpression"> {
@@ -743,6 +855,7 @@ interface JoinIntoClauseNode extends SyntaxTreeNode<"JoinIntoClause"> {
 }
 
 interface LabeledStatementNode extends SyntaxTreeNode<"LabeledStatement"> {
+    attributeLists: AttributeListNode[];
     identifier?: SyntaxToken;
     colonToken?: SyntaxToken;
     statement?: SyntaxTreeNode;
@@ -779,14 +892,17 @@ interface LoadDirectiveTriviaNode extends SyntaxTreeNode<"LoadDirectiveTrivia"> 
 }
 
 interface LocalDeclarationStatementNode extends SyntaxTreeNode<"LocalDeclarationStatement"> {
+    attributeLists: AttributeListNode[];
     awaitKeyword?: SyntaxToken;
     usingKeyword?: SyntaxToken;
     modifiers: SyntaxToken[];
     declaration?: VariableDeclarationNode;
+    semicolonToken?: SyntaxToken;
     isConst?: boolean;
 }
 
 interface LocalFunctionStatementNode extends SyntaxTreeNode<"LocalFunctionStatement"> {
+    attributeLists: AttributeListNode[];
     modifiers: SyntaxToken[];
     returnType?: SyntaxTreeNode;
     identifier?: SyntaxToken;
@@ -795,9 +911,11 @@ interface LocalFunctionStatementNode extends SyntaxTreeNode<"LocalFunctionStatem
     constraintClauses: TypeParameterConstraintClauseNode[];
     body?: BlockNode;
     expressionBody?: ArrowExpressionClauseNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface LockStatementNode extends SyntaxTreeNode<"LockStatement"> {
+    attributeLists: AttributeListNode[];
     lockKeyword?: SyntaxToken;
     openParenToken?: SyntaxToken;
     expression?: SyntaxTreeNode;
@@ -834,6 +952,7 @@ interface MethodDeclarationNode extends SyntaxTreeNode<"MethodDeclaration"> {
     constraintClauses: TypeParameterConstraintClauseNode[];
     body?: BlockNode;
     expressionBody?: ArrowExpressionClauseNode;
+    semicolonToken?: SyntaxToken;
     arity?: number;
 }
 
@@ -857,9 +976,12 @@ interface NamespaceDeclarationNode extends SyntaxTreeNode<"NamespaceDeclaration"
     modifiers: SyntaxToken[];
     namespaceKeyword?: SyntaxToken;
     name?: SyntaxTreeNode;
+    openBraceToken?: SyntaxToken;
     externs: ExternAliasDirectiveNode[];
     usings: UsingDirectiveNode[];
     members: SyntaxTreeNode[];
+    closeBraceToken?: SyntaxToken;
+    semicolonToken?: SyntaxToken;
 }
 
 interface NullableDirectiveTriviaNode extends SyntaxTreeNode<"NullableDirectiveTrivia"> {
@@ -878,6 +1000,8 @@ interface NullableTypeNode extends SyntaxTreeNode<"NullableType"> {
     isVar?: boolean;
     isUnmanaged?: boolean;
     isNotNull?: boolean;
+    isNint?: boolean;
+    isNuint?: boolean;
 }
 
 interface ObjectCreationExpressionNode extends SyntaxTreeNode<"ObjectCreationExpression"> {
@@ -896,6 +1020,8 @@ interface OmittedTypeArgumentNode extends SyntaxTreeNode<"OmittedTypeArgument"> 
     isVar?: boolean;
     isUnmanaged?: boolean;
     isNotNull?: boolean;
+    isNint?: boolean;
+    isNuint?: boolean;
 }
 
 interface OperatorDeclarationNode extends SyntaxTreeNode<"OperatorDeclaration"> {
@@ -907,6 +1033,7 @@ interface OperatorDeclarationNode extends SyntaxTreeNode<"OperatorDeclaration"> 
     parameterList?: ParameterListNode;
     body?: BlockNode;
     expressionBody?: ArrowExpressionClauseNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface OperatorMemberCrefNode extends SyntaxTreeNode<"OperatorMemberCref"> {
@@ -946,12 +1073,19 @@ interface ParenthesizedExpressionNode extends SyntaxTreeNode<"ParenthesizedExpre
 }
 
 interface ParenthesizedLambdaExpressionNode extends SyntaxTreeNode<"ParenthesizedLambdaExpression"> {
-    asyncKeyword?: SyntaxToken;
+    modifiers: SyntaxToken[];
     parameterList?: ParameterListNode;
     arrowToken?: SyntaxToken;
     block?: BlockNode;
     expressionBody?: SyntaxTreeNode;
+    asyncKeyword?: SyntaxToken;
     body?: SyntaxTreeNode;
+}
+
+interface ParenthesizedPatternNode extends SyntaxTreeNode<"ParenthesizedPattern"> {
+    openParenToken?: SyntaxToken;
+    pattern?: SyntaxTreeNode;
+    closeParenToken?: SyntaxToken;
 }
 
 interface ParenthesizedVariableDesignationNode extends SyntaxTreeNode<"ParenthesizedVariableDesignation"> {
@@ -966,6 +1100,8 @@ interface PointerTypeNode extends SyntaxTreeNode<"PointerType"> {
     isVar?: boolean;
     isUnmanaged?: boolean;
     isNotNull?: boolean;
+    isNint?: boolean;
+    isNuint?: boolean;
 }
 
 interface PositionalPatternClauseNode extends SyntaxTreeNode<"PositionalPatternClause"> {
@@ -1007,11 +1143,18 @@ interface PredefinedTypeNode extends SyntaxTreeNode<"PredefinedType"> {
     isVar?: boolean;
     isUnmanaged?: boolean;
     isNotNull?: boolean;
+    isNint?: boolean;
+    isNuint?: boolean;
 }
 
 interface PrefixUnaryExpressionNode extends SyntaxTreeNode<"PrefixUnaryExpression"> {
     operatorToken?: SyntaxToken;
     operand?: SyntaxTreeNode;
+}
+
+interface PrimaryConstructorBaseTypeNode extends SyntaxTreeNode<"PrimaryConstructorBaseType"> {
+    type?: SyntaxTreeNode;
+    argumentList?: ArgumentListNode;
 }
 
 interface PropertyDeclarationNode extends SyntaxTreeNode<"PropertyDeclaration"> {
@@ -1023,10 +1166,13 @@ interface PropertyDeclarationNode extends SyntaxTreeNode<"PropertyDeclaration"> 
     accessorList?: AccessorListNode;
     expressionBody?: ArrowExpressionClauseNode;
     initializer?: EqualsValueClauseNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface PropertyPatternClauseNode extends SyntaxTreeNode<"PropertyPatternClause"> {
+    openBraceToken?: SyntaxToken;
     subpatterns: SubpatternNode[];
+    closeBraceToken?: SyntaxToken;
 }
 
 interface QualifiedCrefNode extends SyntaxTreeNode<"QualifiedCref"> {
@@ -1043,6 +1189,8 @@ interface QualifiedNameNode extends SyntaxTreeNode<"QualifiedName"> {
     isVar?: boolean;
     isUnmanaged?: boolean;
     isNotNull?: boolean;
+    isNint?: boolean;
+    isNuint?: boolean;
 }
 
 interface QueryBodyNode extends SyntaxTreeNode<"QueryBody"> {
@@ -1066,6 +1214,22 @@ interface RangeExpressionNode extends SyntaxTreeNode<"RangeExpression"> {
     leftOperand?: SyntaxTreeNode;
     operatorToken?: SyntaxToken;
     rightOperand?: SyntaxTreeNode;
+}
+
+interface RecordDeclarationNode extends SyntaxTreeNode<"RecordDeclaration"> {
+    attributeLists: AttributeListNode[];
+    modifiers: SyntaxToken[];
+    keyword?: SyntaxToken;
+    identifier?: SyntaxToken;
+    typeParameterList?: TypeParameterListNode;
+    parameterList?: ParameterListNode;
+    baseList?: BaseListNode;
+    constraintClauses: TypeParameterConstraintClauseNode[];
+    openBraceToken?: SyntaxToken;
+    members: SyntaxTreeNode[];
+    closeBraceToken?: SyntaxToken;
+    semicolonToken?: SyntaxToken;
+    arity?: number;
 }
 
 interface RecursivePatternNode extends SyntaxTreeNode<"RecursivePattern"> {
@@ -1103,6 +1267,8 @@ interface RefTypeNode extends SyntaxTreeNode<"RefType"> {
     isVar?: boolean;
     isUnmanaged?: boolean;
     isNotNull?: boolean;
+    isNint?: boolean;
+    isNuint?: boolean;
 }
 
 interface RefValueExpressionNode extends SyntaxTreeNode<"RefValueExpression"> {
@@ -1122,9 +1288,16 @@ interface RegionDirectiveTriviaNode extends SyntaxTreeNode<"RegionDirectiveTrivi
     directiveNameToken?: SyntaxToken;
 }
 
+interface RelationalPatternNode extends SyntaxTreeNode<"RelationalPattern"> {
+    operatorToken?: SyntaxToken;
+    expression?: SyntaxTreeNode;
+}
+
 interface ReturnStatementNode extends SyntaxTreeNode<"ReturnStatement"> {
+    attributeLists: AttributeListNode[];
     returnKeyword?: SyntaxToken;
     expression?: SyntaxTreeNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface SelectClauseNode extends SyntaxTreeNode<"SelectClause"> {
@@ -1145,11 +1318,12 @@ interface SimpleBaseTypeNode extends SyntaxTreeNode<"SimpleBaseType"> {
 }
 
 interface SimpleLambdaExpressionNode extends SyntaxTreeNode<"SimpleLambdaExpression"> {
-    asyncKeyword?: SyntaxToken;
+    modifiers: SyntaxToken[];
     parameter?: ParameterNode;
     arrowToken?: SyntaxToken;
     block?: BlockNode;
     expressionBody?: SyntaxTreeNode;
+    asyncKeyword?: SyntaxToken;
     body?: SyntaxTreeNode;
 }
 
@@ -1182,7 +1356,10 @@ interface StructDeclarationNode extends SyntaxTreeNode<"StructDeclaration"> {
     typeParameterList?: TypeParameterListNode;
     baseList?: BaseListNode;
     constraintClauses: TypeParameterConstraintClauseNode[];
+    openBraceToken?: SyntaxToken;
     members: SyntaxTreeNode[];
+    closeBraceToken?: SyntaxToken;
+    semicolonToken?: SyntaxToken;
     arity?: number;
 }
 
@@ -1201,7 +1378,9 @@ interface SwitchExpressionArmNode extends SyntaxTreeNode<"SwitchExpressionArm"> 
 interface SwitchExpressionNode extends SyntaxTreeNode<"SwitchExpression"> {
     governingExpression?: SyntaxTreeNode;
     switchKeyword?: SyntaxToken;
+    openBraceToken?: SyntaxToken;
     arms: SwitchExpressionArmNode[];
+    closeBraceToken?: SyntaxToken;
 }
 
 interface SwitchSectionNode extends SyntaxTreeNode<"SwitchSection"> {
@@ -1210,11 +1389,14 @@ interface SwitchSectionNode extends SyntaxTreeNode<"SwitchSection"> {
 }
 
 interface SwitchStatementNode extends SyntaxTreeNode<"SwitchStatement"> {
+    attributeLists: AttributeListNode[];
     switchKeyword?: SyntaxToken;
     openParenToken?: SyntaxToken;
     expression?: SyntaxTreeNode;
     closeParenToken?: SyntaxToken;
+    openBraceToken?: SyntaxToken;
     sections: SwitchSectionNode[];
+    closeBraceToken?: SyntaxToken;
 }
 
 interface ThisExpressionNode extends SyntaxTreeNode<"ThisExpression"> {
@@ -1227,11 +1409,14 @@ interface ThrowExpressionNode extends SyntaxTreeNode<"ThrowExpression"> {
 }
 
 interface ThrowStatementNode extends SyntaxTreeNode<"ThrowStatement"> {
+    attributeLists: AttributeListNode[];
     throwKeyword?: SyntaxToken;
     expression?: SyntaxTreeNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface TryStatementNode extends SyntaxTreeNode<"TryStatement"> {
+    attributeLists: AttributeListNode[];
     tryKeyword?: SyntaxToken;
     block?: BlockNode;
     catches: CatchClauseNode[];
@@ -1256,6 +1441,8 @@ interface TupleTypeNode extends SyntaxTreeNode<"TupleType"> {
     isVar?: boolean;
     isUnmanaged?: boolean;
     isNotNull?: boolean;
+    isNint?: boolean;
+    isNuint?: boolean;
 }
 
 interface TypeArgumentListNode extends SyntaxTreeNode<"TypeArgumentList"> {
@@ -1298,6 +1485,15 @@ interface TypeParameterNode extends SyntaxTreeNode<"TypeParameter"> {
     identifier?: SyntaxToken;
 }
 
+interface TypePatternNode extends SyntaxTreeNode<"TypePattern"> {
+    type?: SyntaxTreeNode;
+}
+
+interface UnaryPatternNode extends SyntaxTreeNode<"UnaryPattern"> {
+    operatorToken?: SyntaxToken;
+    pattern?: SyntaxTreeNode;
+}
+
 interface UndefDirectiveTriviaNode extends SyntaxTreeNode<"UndefDirectiveTrivia"> {
     hashToken?: SyntaxToken;
     undefKeyword?: SyntaxToken;
@@ -1308,6 +1504,7 @@ interface UndefDirectiveTriviaNode extends SyntaxTreeNode<"UndefDirectiveTrivia"
 }
 
 interface UnsafeStatementNode extends SyntaxTreeNode<"UnsafeStatement"> {
+    attributeLists: AttributeListNode[];
     unsafeKeyword?: SyntaxToken;
     block?: BlockNode;
 }
@@ -1317,9 +1514,11 @@ interface UsingDirectiveNode extends SyntaxTreeNode<"UsingDirective"> {
     staticKeyword?: SyntaxToken;
     alias?: NameEqualsNode;
     name?: SyntaxTreeNode;
+    semicolonToken?: SyntaxToken;
 }
 
 interface UsingStatementNode extends SyntaxTreeNode<"UsingStatement"> {
+    attributeLists: AttributeListNode[];
     awaitKeyword?: SyntaxToken;
     usingKeyword?: SyntaxToken;
     openParenToken?: SyntaxToken;
@@ -1364,11 +1563,18 @@ interface WhereClauseNode extends SyntaxTreeNode<"WhereClause"> {
 }
 
 interface WhileStatementNode extends SyntaxTreeNode<"WhileStatement"> {
+    attributeLists: AttributeListNode[];
     whileKeyword?: SyntaxToken;
     openParenToken?: SyntaxToken;
     condition?: SyntaxTreeNode;
     closeParenToken?: SyntaxToken;
     statement?: SyntaxTreeNode;
+}
+
+interface WithExpressionNode extends SyntaxTreeNode<"WithExpression"> {
+    expression?: SyntaxTreeNode;
+    withKeyword?: SyntaxToken;
+    initializer?: InitializerExpressionNode;
 }
 
 interface XmlCDataSectionNode extends SyntaxTreeNode<"XmlCDataSection"> {
@@ -1455,8 +1661,10 @@ interface XmlTextNode extends SyntaxTreeNode<"XmlText"> {
 }
 
 interface YieldStatementNode extends SyntaxTreeNode<"YieldStatement"> {
+    attributeLists: AttributeListNode[];
     yieldKeyword?: SyntaxToken;
     returnOrBreakKeyword?: SyntaxToken;
     expression?: SyntaxTreeNode;
+    semicolonToken?: SyntaxToken;
 }
 

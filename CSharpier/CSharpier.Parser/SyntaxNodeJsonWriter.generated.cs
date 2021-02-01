@@ -2279,6 +2279,12 @@ namespace Parser
             var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var expressions = new List<string>();
             foreach(var node in syntaxNode.Expressions)
             {
@@ -2287,6 +2293,12 @@ namespace Parser
                 expressions.Add(innerBuilder.ToString());
             }
             properties.Add($"\"expressions\":[{string.Join(",", expressions)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2455,6 +2467,12 @@ namespace Parser
                 WriteSyntaxToken(newKeywordBuilder, syntaxNode.NewKeyword);
                 properties.Add($"\"newKeyword\":{newKeywordBuilder.ToString()}");
             }
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var initializers = new List<string>();
             foreach(var node in syntaxNode.Initializers)
             {
@@ -2463,6 +2481,12 @@ namespace Parser
                 initializers.Add(innerBuilder.ToString());
             }
             properties.Add($"\"initializers\":[{string.Join(",", initializers)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3433,6 +3457,12 @@ namespace Parser
             var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var subpatterns = new List<string>();
             foreach(var node in syntaxNode.Subpatterns)
             {
@@ -3441,6 +3471,12 @@ namespace Parser
                 subpatterns.Add(innerBuilder.ToString());
             }
             properties.Add($"\"subpatterns\":[{string.Join(",", subpatterns)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3693,6 +3729,12 @@ namespace Parser
             var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
@@ -3710,6 +3752,12 @@ namespace Parser
                 var formatClauseBuilder = new StringBuilder();
                 WriteInterpolationFormatClauseSyntax(formatClauseBuilder, syntaxNode.FormatClause);
                 properties.Add($"\"formatClause\":{formatClauseBuilder.ToString()}");
+            }
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -3837,6 +3885,12 @@ namespace Parser
                 attributeLists.Add(innerBuilder.ToString());
             }
             properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var statements = new List<string>();
             foreach(var node in syntaxNode.Statements)
             {
@@ -3845,6 +3899,12 @@ namespace Parser
                 statements.Add(innerBuilder.ToString());
             }
             properties.Add($"\"statements\":[{string.Join(",", statements)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3923,6 +3983,12 @@ namespace Parser
                 WriteArrowExpressionClauseSyntax(expressionBodyBuilder, syntaxNode.ExpressionBody);
                 properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3974,6 +4040,12 @@ namespace Parser
                 var declarationBuilder = new StringBuilder();
                 WriteVariableDeclarationSyntax(declarationBuilder, syntaxNode.Declaration);
                 properties.Add($"\"declaration\":{declarationBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("isConst", syntaxNode.IsConst));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4192,6 +4264,12 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("allowsAnyExpression", syntaxNode.AllowsAnyExpression));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -4219,6 +4297,12 @@ namespace Parser
                 attributeLists.Add(innerBuilder.ToString());
             }
             properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4307,6 +4391,12 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4339,6 +4429,12 @@ namespace Parser
                 WriteSyntaxToken(breakKeywordBuilder, syntaxNode.BreakKeyword);
                 properties.Add($"\"breakKeyword\":{breakKeywordBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4370,6 +4466,12 @@ namespace Parser
                 var continueKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(continueKeywordBuilder, syntaxNode.ContinueKeyword);
                 properties.Add($"\"continueKeyword\":{continueKeywordBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -4409,6 +4511,12 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4446,6 +4554,12 @@ namespace Parser
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -4490,6 +4604,12 @@ namespace Parser
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -4608,6 +4728,12 @@ namespace Parser
                 var closeParenTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -5251,6 +5377,12 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var sections = new List<string>();
             foreach(var node in syntaxNode.Sections)
             {
@@ -5259,6 +5391,12 @@ namespace Parser
                 sections.Add(innerBuilder.ToString());
             }
             properties.Add($"\"sections\":[{string.Join(",", sections)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5431,6 +5569,12 @@ namespace Parser
                 WriteSyntaxToken(switchKeywordBuilder, syntaxNode.SwitchKeyword);
                 properties.Add($"\"switchKeyword\":{switchKeywordBuilder.ToString()}");
             }
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var arms = new List<string>();
             foreach(var node in syntaxNode.Arms)
             {
@@ -5439,6 +5583,12 @@ namespace Parser
                 arms.Add(innerBuilder.ToString());
             }
             properties.Add($"\"arms\":[{string.Join(",", arms)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5775,6 +5925,12 @@ namespace Parser
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
                 properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5816,6 +5972,12 @@ namespace Parser
                 var nameBuilder = new StringBuilder();
                 WriteSyntaxNode(nameBuilder, syntaxNode.Name);
                 properties.Add($"\"name\":{nameBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -5863,6 +6025,12 @@ namespace Parser
                 WriteSyntaxNode(nameBuilder, syntaxNode.Name);
                 properties.Add($"\"name\":{nameBuilder.ToString()}");
             }
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var externs = new List<string>();
             foreach(var node in syntaxNode.Externs)
             {
@@ -5887,6 +6055,18 @@ namespace Parser
                 members.Add(innerBuilder.ToString());
             }
             properties.Add($"\"members\":[{string.Join(",", members)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6237,6 +6417,12 @@ namespace Parser
                 constraintClauses.Add(innerBuilder.ToString());
             }
             properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var members = new List<string>();
             foreach(var node in syntaxNode.Members)
             {
@@ -6245,6 +6431,18 @@ namespace Parser
                 members.Add(innerBuilder.ToString());
             }
             properties.Add($"\"members\":[{string.Join(",", members)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -6312,6 +6510,12 @@ namespace Parser
                 constraintClauses.Add(innerBuilder.ToString());
             }
             properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var members = new List<string>();
             foreach(var node in syntaxNode.Members)
             {
@@ -6320,6 +6524,18 @@ namespace Parser
                 members.Add(innerBuilder.ToString());
             }
             properties.Add($"\"members\":[{string.Join(",", members)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -6387,6 +6603,12 @@ namespace Parser
                 constraintClauses.Add(innerBuilder.ToString());
             }
             properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var members = new List<string>();
             foreach(var node in syntaxNode.Members)
             {
@@ -6395,6 +6617,18 @@ namespace Parser
                 members.Add(innerBuilder.ToString());
             }
             properties.Add($"\"members\":[{string.Join(",", members)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -6468,6 +6702,12 @@ namespace Parser
                 constraintClauses.Add(innerBuilder.ToString());
             }
             properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var members = new List<string>();
             foreach(var node in syntaxNode.Members)
             {
@@ -6476,6 +6716,18 @@ namespace Parser
                 members.Add(innerBuilder.ToString());
             }
             properties.Add($"\"members\":[{string.Join(",", members)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -6529,6 +6781,12 @@ namespace Parser
                 WriteBaseListSyntax(baseListBuilder, syntaxNode.BaseList);
                 properties.Add($"\"baseList\":{baseListBuilder.ToString()}");
             }
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var members = new List<string>();
             foreach(var node in syntaxNode.Members)
             {
@@ -6537,6 +6795,18 @@ namespace Parser
                 members.Add(innerBuilder.ToString());
             }
             properties.Add($"\"members\":[{string.Join(",", members)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6609,6 +6879,12 @@ namespace Parser
                 constraintClauses.Add(innerBuilder.ToString());
             }
             properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -6940,6 +7216,12 @@ namespace Parser
                 WriteVariableDeclarationSyntax(declarationBuilder, syntaxNode.Declaration);
                 properties.Add($"\"declaration\":{declarationBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6985,6 +7267,12 @@ namespace Parser
                 var declarationBuilder = new StringBuilder();
                 WriteVariableDeclarationSyntax(declarationBuilder, syntaxNode.Declaration);
                 properties.Add($"\"declaration\":{declarationBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -7100,6 +7388,12 @@ namespace Parser
                 WriteArrowExpressionClauseSyntax(expressionBodyBuilder, syntaxNode.ExpressionBody);
                 properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -7171,6 +7465,12 @@ namespace Parser
                 WriteArrowExpressionClauseSyntax(expressionBodyBuilder, syntaxNode.ExpressionBody);
                 properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7241,6 +7541,12 @@ namespace Parser
                 WriteArrowExpressionClauseSyntax(expressionBodyBuilder, syntaxNode.ExpressionBody);
                 properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7304,6 +7610,12 @@ namespace Parser
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(expressionBodyBuilder, syntaxNode.ExpressionBody);
                 properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -7405,6 +7717,12 @@ namespace Parser
                 WriteArrowExpressionClauseSyntax(expressionBodyBuilder, syntaxNode.ExpressionBody);
                 properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7474,6 +7792,12 @@ namespace Parser
                 var initializerBuilder = new StringBuilder();
                 WriteEqualsValueClauseSyntax(initializerBuilder, syntaxNode.Initializer);
                 properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -7569,6 +7893,12 @@ namespace Parser
                 WriteAccessorListSyntax(accessorListBuilder, syntaxNode.AccessorList);
                 properties.Add($"\"accessorList\":{accessorListBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7639,6 +7969,12 @@ namespace Parser
                 WriteArrowExpressionClauseSyntax(expressionBodyBuilder, syntaxNode.ExpressionBody);
                 properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
             }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7657,6 +7993,12 @@ namespace Parser
             var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
             var accessors = new List<string>();
             foreach(var node in syntaxNode.Accessors)
             {
@@ -7665,6 +8007,12 @@ namespace Parser
                 accessors.Add(innerBuilder.ToString());
             }
             properties.Add($"\"accessors\":[{string.Join(",", accessors)}]");
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7716,6 +8064,12 @@ namespace Parser
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(expressionBodyBuilder, syntaxNode.ExpressionBody);
                 properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
@@ -9743,7 +10097,7 @@ namespace Parser
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.RawKind == 8541)
             {
-                properties.Add($"\"commentText\":\"{syntaxNode.ToString()}\"");
+                properties.Add(WriteString("commentText", syntaxNode.ToString()));
             }
             properties.Add(WriteBoolean("containsDiagnostics", syntaxNode.ContainsDiagnostics));
             properties.Add(WriteBoolean("hasStructure", syntaxNode.HasStructure));

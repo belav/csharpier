@@ -3,9 +3,9 @@ import { SyntaxToken, printSyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface InterpolatedStringExpressionNode extends SyntaxTreeNode<"InterpolatedStringExpression"> {
-    stringStartToken: SyntaxToken;
+    stringStartToken?: SyntaxToken;
     contents: SyntaxTreeNode[];
-    stringEndToken: SyntaxToken;
+    stringEndToken?: SyntaxToken;
 }
 
 export const printInterpolatedStringExpression: PrintMethod<InterpolatedStringExpressionNode> = (

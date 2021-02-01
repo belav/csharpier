@@ -1,9 +1,11 @@
-import { FastPath, ParserOptions } from "prettier";
+import { Doc, FastPath, ParserOptions } from "prettier";
 import { concat } from "./Builders";
+import { printLeadingComments } from "./PrintComments";
+import { printExtraNewLines } from "./PrintExtraNewLines";
 import { Print } from "./PrintMethod";
 import { SyntaxToken, printPathSyntaxToken, SyntaxTreeNode } from "./SyntaxTreeNode";
 
-export interface LeftRightOperator {
+export interface LeftRightOperator extends SyntaxTreeNode {
     left: SyntaxTreeNode;
     operatorToken: SyntaxToken;
     right: SyntaxTreeNode;
@@ -14,11 +16,10 @@ export function printLeftRightOperator<T extends LeftRightOperator>(
     options: ParserOptions,
     print: Print,
 ) {
-    return concat([
-        path.call(print, "left"),
-        " ",
-        printPathSyntaxToken(path, "operatorToken"),
-        " ",
-        path.call(print, "right"),
-    ]);
+    const node = path.getValue();
+    const parts: Doc[] = [];
+    printExtraNewLines(node, parts, ["left", "identifier"])
+    printLeadingComments(node, parts, ["left", "identifier"]);
+    parts.push(path.call(print, "left"), " ", printPathSyntaxToken(path, "operatorToken"), " ", path.call(print, "right"));
+    return concat(parts);
 }

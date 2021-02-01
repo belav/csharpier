@@ -4,24 +4,61 @@
 // TODO 0 can we call this from inside of print?
 import { Doc } from "prettier";
 import { hardline } from "./Builders";
-import { SyntaxTreeNode } from "./SyntaxTreeNode";
 
-export type HasLeadingTrivia = {
+export type HasTrivia = {
     leadingTrivia?: {
-        kind: "SingleLineCommentTrivia" | "EndOfLineTrivia"
+        kind: "SingleLineCommentTrivia" | "EndOfLineTrivia" | "WhitespaceTrivia"
+        commentText?: string;
+    }[];
+    trailingTrivia?: {
+        kind: "SingleLineCommentTrivia" | "WhitespaceTrivia"
         commentText?: string;
     }[];
 }
 
-export function printComments<T extends SyntaxTreeNode, K extends keyof T>(node: T, parts: Doc[], ...properties: K[]) {
-    for (const propertyKey of properties) {
-        const property = node[propertyKey] as HasLeadingTrivia;
+export function getTriviaProperty(node: any, propertyKey: any) {
+    let property: any = node;
+    if (Array.isArray(propertyKey)) {
+        for (const subPropertyKey of propertyKey) {
+            property = property[subPropertyKey];
+            if (!property) {
+                return;
+            }
+        }
+    } else {
+        property = node[propertyKey];
+    }
 
-        const doWork = (value?: HasLeadingTrivia) => {
-            if (value?.leadingTrivia) {
-                for (const trivia of value.leadingTrivia) {
+    return property;
+}
+
+export function printLeadingComments(node: any, parts: Doc[], ...properties: any[]) {
+    printComments(node, parts, true, properties);
+}
+
+export function printTrailingComments(node: any, parts: Doc[], ...properties: any[]) {
+    printComments(node, parts, false, properties);
+}
+
+function printComments(node: any, parts: Doc[], isLeading: boolean, properties: any[]) {
+    for (const propertyKey of properties) {
+        const property = getTriviaProperty(node, propertyKey);
+        if (!property) {
+            continue;
+        }
+
+        const doWork = (value?: HasTrivia) => {
+            const triviaArray = isLeading ? value?.leadingTrivia : value?.trailingTrivia;
+            if (triviaArray) {
+                for (const trivia of triviaArray) {
                     if (trivia.kind === "SingleLineCommentTrivia") {
-                        parts.push(trivia.commentText!, hardline);
+                        if (!isLeading) {
+                            parts.push(" ");
+                        }
+                        parts.push(trivia.commentText!);
+                        if (isLeading) {
+                            parts.push(hardline);
+                        }
                     }
                 }
             }
@@ -32,7 +69,5 @@ export function printComments<T extends SyntaxTreeNode, K extends keyof T>(node:
         } else {
             doWork(property);
         }
-
-
     }
 }

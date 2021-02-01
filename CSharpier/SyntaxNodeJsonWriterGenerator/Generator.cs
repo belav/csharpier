@@ -19,7 +19,7 @@ namespace SyntaxNodeJsonWriterGenerator
         public void DoWork()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
-            while (directory.Name != "Parser")
+            while (directory.Name != "CSharpier")
             {
                 directory = directory.Parent;
             }
@@ -27,7 +27,7 @@ namespace SyntaxNodeJsonWriterGenerator
             var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
                 .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o)).ToList();
 
-            var fileName = directory.FullName + @"\Parser\SyntaxNodeJsonWriter.generated.cs";
+            var fileName = directory.FullName + @"\CSharpier.Parser\SyntaxNodeJsonWriter.generated.cs";
             using (var file = new StreamWriter(fileName, false))
             {
                 file.WriteLine("using System.Collections.Generic;");
@@ -89,7 +89,7 @@ namespace SyntaxNodeJsonWriterGenerator
                 file.WriteLine($"            if (syntaxNode.RawKind == 8541)");
                 file.WriteLine($"            {{");
                 file.WriteLine(
-                    $"                properties.Add($\"\\\"commentText\\\":\\\"{{syntaxNode.ToString()}}\\\"\");");
+                    $"                properties.Add(WriteString(\"commentText\", syntaxNode.ToString()));");
                 file.WriteLine($"            }}");
             }
 

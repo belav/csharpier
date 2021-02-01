@@ -1,11 +1,17 @@
+import { Doc } from "prettier";
+import { printTrailingComments } from "../PrintComments";
 import { PrintMethod } from "../PrintMethod";
-import { printSyntaxToken, SyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
+import { SyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 
 export interface ExpressionStatementNode extends SyntaxTreeNode<"ExpressionStatement"> {
     expression: SyntaxTreeNode;
+    semicolonToken: SyntaxToken;
 }
 
 export const printExpressionStatement: PrintMethod<ExpressionStatementNode> = (path, options, print) => {
-    return concat([path.call(print, "expression"), ";"]);
+    const node = path.getValue();
+    const parts: Doc[] = [path.call(print, "expression"), ";"]
+    printTrailingComments(node, parts, "semicolonToken");
+    return concat(parts);
 };

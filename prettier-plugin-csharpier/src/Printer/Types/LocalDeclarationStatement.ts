@@ -1,4 +1,6 @@
 import { Doc } from "prettier";
+import { printLeadingComments, printTrailingComments } from "../PrintComments";
+import { printExtraNewLines } from "../PrintExtraNewLines";
 import { PrintMethod } from "../PrintMethod";
 import { HasModifiers, printModifiers, SyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
@@ -15,6 +17,8 @@ export interface LocalDeclarationStatementNode extends SyntaxTreeNode<"LocalDecl
 export const printLocalDeclarationStatement: PrintMethod<LocalDeclarationStatementNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
+    printExtraNewLines(node, parts, "awaitKeyword", "usingKeyword", "modifiers", ["declaration", "type", "identifier"]);
+    printLeadingComments(node, parts, "awaitKeyword", "usingKeyword", "modifiers", ["declaration", "type", "identifier"]);
     if (node.awaitKeyword) {
         parts.push("await ");
     }
@@ -24,5 +28,6 @@ export const printLocalDeclarationStatement: PrintMethod<LocalDeclarationStateme
     parts.push(printModifiers(node));
     parts.push(path.call(o => printVariableDeclaration(o, options, print), "declaration"));
     parts.push(";");
+    printTrailingComments(node, parts, "semicolonToken");
     return concat(parts);
 };

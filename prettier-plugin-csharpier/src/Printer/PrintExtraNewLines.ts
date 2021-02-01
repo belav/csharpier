@@ -1,15 +1,14 @@
 import { Doc } from "prettier";
 import { hardline } from "./Builders";
-import { HasLeadingTrivia } from "./PrintComments";
-import { SyntaxTreeNode } from "./SyntaxTreeNode";
+import { getTriviaProperty, HasTrivia } from "./PrintComments";
 
-export function printExtraNewLines<T extends SyntaxTreeNode, K extends keyof T>(node: T, parts: Doc[], ...properties: K[]) {
+export function printExtraNewLines(node: any, parts: Doc[], ...properties: any[]) {
     for (const propertyKey of properties) {
-        const property = node[propertyKey] as HasLeadingTrivia;
+        const property = getTriviaProperty(node, propertyKey);
 
         let foundNewLine = false;
 
-        const doWork = (value?: HasLeadingTrivia) => {
+        const doWork = (value?: HasTrivia) => {
             if (!value?.leadingTrivia) {
                 return;
             }
@@ -22,7 +21,7 @@ export function printExtraNewLines<T extends SyntaxTreeNode, K extends keyof T>(
                     return;
                 }
             }
-        }
+        };
 
         if (Array.isArray(property)) {
             for (const actualProperty of property) {

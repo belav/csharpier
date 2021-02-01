@@ -134,7 +134,7 @@ namespace My
             };
             int[][] jagged = { { 111 }, { 121, 122 } };
             int[][,] arr = new int[5][,];
-            arr[0] = new int[5,5]; // as opposed to arr[0,0] = new int[5];
+            arr[0] = new int[5,5];
             arr[0][0, 0] = 47;
             int[] arrayTypeInference = new[] { 0, 1 };
             switch (3) { }
@@ -537,7 +537,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
         }
     }
 
-    //General Test F. Type a very long class name, verify colorization happens correctly only upto the correct size (118324)
     class TestClassXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX { }
 
     class TestClassXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX22 { }
@@ -622,7 +621,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
         }
     }
 
-    // From here:https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6
     class CSharp6Features
     {
         public string First { get; set; } = "Jane";
@@ -630,7 +628,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
         public string Third { get; } = "Jane";
         public string Fourth { get; } = "Doe";
 
-        // Expression bodies on method-like members
         public Point Move(int dx, int dy) => new Point(x + dx, y + dy);
         public static Complex operator +(Complex a, Complex b) => a.Add(b);
         public static implicit operator string(
@@ -655,11 +652,12 @@ namespace Comments.XmlComments.UndocumentedKeywords
             s = $"{(p.Age == 2 ? $"{new Person {  }}" : "")}";
             s = $@"\{p.Name}
                                    ""\";
-            s = $"Color [ R={func(
-                b: 3):#0.##}, G={G:#0.##}, B={B:#0.##}, A={A:#0.##} ]";
+            s = $"Color [ R={func()};
+            b:
+            3;
             if (x == null)
                 throw new ArgumentNullException(nameof(x));
-            WriteLine(nameof(person.Address.ZipCode)); // prints "ZipCode"
+            WriteLine(nameof(person.Address.ZipCode));
             var numbers = new Dictionary<int, string>
             {
                 [7] = "seven",
@@ -671,16 +669,16 @@ namespace Comments.XmlComments.UndocumentedKeywords
             Resource res = null;
             try
             {
-                res = await Resource.OpenAsync(); // You could do this.
+                res = await Resource.OpenAsync();
             }
             catch (ResourceException e)
             {
-                await Resource.LogAsync(res, e); // Now you can do this …
+                await Resource.LogAsync(res, e);
             }
             finally
             {
                 if (res != null)
-                    await res.CloseAsync(); // … and this.
+                    await res.CloseAsync();
             }
         }
     }
@@ -776,7 +774,6 @@ class CSharp72
     {
         ref readonly Guid Test(in Vector3 v1, in Vector3 v2)
         {
-            // not OK!!
             v1 = default(Vector3);
             v1.X = 0;
             foo(ref v1.X);
@@ -802,17 +799,11 @@ class CSharp72
 
     public void NonTrailingNamedArguments()
     {
-        DoSomething(
-            isEmployed: true,
-            name,
-            age); // currently CS1738, but would become legal
-        DoSomething(
-            true,
-            personName: name,
-            age); // currently CS1738, but would become legal
-        DoSomething(name, isEmployed: true, age); // remains illegal
-        DoSomething(name, age, isEmployed: true); // remains illegal
-        DoSomething(true, personAge: age, personName: name); // already legal
+        DoSomething(isEmployed: true, name, age);
+        DoSomething(true, personName: name, age);
+        DoSomething(name, isEmployed: true, age);
+        DoSomething(name, age, isEmployed: true);
+        DoSomething(true, personAge: age, personName: name);
     }
 
     public void ConditionalRef()

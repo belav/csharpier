@@ -14,9 +14,6 @@ namespace SyntaxNodeJsonWriterGenerator
             "rawKind",
             "parent",
             "parentTrivia",
-            "openBraceToken",
-            "closeBraceToken",
-            "semicolonToken",
             "endOfFileToken",
             "spanStart",
         };

@@ -22,12 +22,20 @@ function parseText(text: string) {
 
 function parseCSharp(text: string, parsers: object, options: any) {
     const executionResult = parseText(text);
-    const ast = JSON.parse(executionResult.stdout.toString());
-    if (options.writeParserJson) {
-        fs.writeFileSync(options.writeParserJson, JSON.stringify(ast, null, "    "), "utf8");
+    let stdout = "";
+    try{
+        stdout = executionResult.stdout.toString();
+        const ast = JSON.parse(stdout);
+        if (options.writeParserJson) {
+            fs.writeFileSync(options.writeParserJson, JSON.stringify(ast, null, "    "), "utf8");
+        }
+        return ast;
     }
-
-    return ast;
+    catch (exception) {
+        if (options.writeParserJson) {
+            fs.writeFileSync(options.writeParserJson, stdout, "utf8");
+        }
+    }
 }
 
 const defaultExport = {

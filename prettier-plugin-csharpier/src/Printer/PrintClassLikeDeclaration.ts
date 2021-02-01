@@ -1,7 +1,7 @@
 import { Doc } from "prettier";
 import { concat, hardline, indent, join } from "./Builders";
 import { printAttributeLists } from "./PrintAttributeLists";
-import { printComments } from "./PrintComments";
+import { printLeadingComments } from "./PrintComments";
 import { printConstraintClauses } from "./PrintConstraintClauses";
 import { printExtraNewLines } from "./PrintExtraNewLines";
 import { PrintMethod } from "./PrintMethod";
@@ -32,7 +32,7 @@ export const printClassLikeDeclaration: PrintMethod<ClassLikeDeclarationNode> = 
     printExtraNewLines(node, parts, "attributeLists", "modifiers", "keyword")
 
     printAttributeLists(node, parts, path, options, print);
-    printComments(node, parts, "modifiers", "keyword", "identifier");
+    printLeadingComments(node, parts, "modifiers", "keyword", "identifier");
     parts.push(printModifiers(node));
     if (node.keyword) {
         parts.push(printSyntaxToken(node.keyword));
