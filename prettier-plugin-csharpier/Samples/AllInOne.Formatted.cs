@@ -44,14 +44,17 @@ namespace My
                 var s1 = $"x {1, -2:d}";
                 var s2 = $@"x {1, -2:d}";
             }
+
             const int? local = int.MaxValue;
             const Guid? local0 = new Guid(r.ToString());
+
             var привет = local;
             var мир = local;
             var local3 = 0, local4 = 1;
             local3 = local4 = 1;
             var local5 = null as Action ?? null;
             var local6 = local5 is Action;
+
             var u = 1u;
             var U = 1U;
             long hex = 0xBADC0DE, Hex = 0XDEADBEEF, l = -1L, L = 1L, l2 = 2l;
@@ -80,6 +83,7 @@ namespace My
             uint @uint;
             ulong @ulong;
             ushort @ushort;
+
             dynamic dynamic = local5;
             var add = 0;
             var alias = 0;
@@ -133,7 +137,7 @@ namespace My
                 { { 211, 212 }, { 221, 222 } }
             };
             int[][] jagged = { { 111 }, { 121, 122 } };
-            int[][,] arr = new int[5][,];
+            int[][,] arr = new int[5][,]; // as opposed to new int[][5,5]
             arr[0] = new int[5,5]; // as opposed to arr[0,0] = new int[5];
             arr[0][0, 0] = 47;
             int[] arrayTypeInference = new[] { 0, 1 };
@@ -447,6 +451,7 @@ namespace ConsoleApplication1
         {
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
+
             var q = from i in new int[] { 1, 2, 3, 4 }
                 where i > 5
                 select i;
@@ -472,6 +477,7 @@ namespace ConsoleApplication1
         {
             int i = 5;
             int? j = 6;
+
             Expression<Func<int>> e = () => i;
             Expression<Func<bool, Action>> e2 = b => () =>
             {
@@ -569,7 +575,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
         public partial void method()
         {
-            int?[] a = new int?[5];
+            int?[] a = new int?[5]; // YES []
             int[] var = { 1, 2, 3, 4, 5 };
             int i = a[i];
             Foo<T> f = new Foo<int>();
@@ -579,8 +585,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
             b = !b;
             i = ~i;
             b = i < i && i > i;
-            int? ii = 5;
-            int f = true ? 1 : 0;
+            int? ii = 5; // NO ?
+            int f = true ? 1 : 0; // YES :
             i++;
             i--;
             b = true && false || true;
@@ -643,11 +649,11 @@ namespace Comments.XmlComments.UndocumentedKeywords
         {
             WriteLine(Sqrt(3 * 3 + 4 * 4));
             WriteLine(Friday - Monday);
-            var range = Range(5, 17);
-            var even = range.Where(i => i % 2 == 0);
-            int? length = customers?.Length;
-            Customer first = customers?[0];
-            int length = customers?.Length ?? 0;
+            var range = Range(5, 17); // Ok: not extension
+            var even = range.Where(i => i % 2 == 0); // Ok
+            int? length = customers?.Length; // null if customers is null
+            Customer first = customers?[0]; // null if customers is null
+            int length = customers?.Length ?? 0; // 0 if customers is null
             int? first = customers?[0]?.Orders?.Count();
             PropertyChanged?.Invoke(this, args);
             string s = $"{p.Name, 20} is {p.Age:D3} year{{s}} old #";
@@ -660,6 +666,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
             if (x == null)
                 throw new ArgumentNullException(nameof(x));
             WriteLine(nameof(person.Address.ZipCode)); // prints "ZipCode"
+
+            // Index initializers
             var numbers = new Dictionary<int, string>
             {
                 [7] = "seven",
@@ -668,6 +676,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
             };
             try { }
             catch (MyException e) when (myfilter(e)) { }
+
+            // Await in catch and finally blocks
             Resource res = null;
             try
             {
@@ -781,6 +791,7 @@ class CSharp72
             v1.X = 0;
             foo(ref v1.X);
             return ref (arr != null ? ref arr[0] : ref otherArr[0]);
+
             Span<int> span = stackalloc int[1];
             return new Vector3(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
         }
@@ -853,7 +864,7 @@ class CSharp73
 
     public void StackallocArrayInitializer()
     {
-        Span<int> a = stackalloc int[3];
+        Span<int> a = stackalloc int[3]; // currently allowed
         Span<int> a = stackalloc int[3] { 1, 2, 3 };
         Span<int> a = stackalloc int[] { 1, 2, 3 };
         Span<int> a = stackalloc[] { 1, 2, 3 };
@@ -886,6 +897,7 @@ namespace CSharp80
                 2 => 200,
                 _ => throw new global::System.Exception()
             };
+
             var newState = (GetState(), action, hasKey) switch
             {
                 (DoorState.Closed, Action.Open, _) => DoorState.Opened,
@@ -902,14 +914,25 @@ namespace CSharp80
         }
         void Ranges()
         {
-            var thirdItem = list[2];
-            var lastItem = list[^1];
-            var multiDimensional = list[3, ^2];
-            var slice1 = list[2..^3];
-            var slice2 = list[..^3];
-            var slice3 = list[2..];
-            var slice4 = list[..];
-            var multiDimensional = list[1..2, ..];
+            var thirdItem = list[2]; // list[2]
+            var lastItem = list[^1]; // list[Index.CreateFromEnd(1)]
+            var multiDimensional = list[
+                3,
+                ^2
+            ]; // list[3, Index.CreateFromEnd(2)]
+
+            var slice1 = list[
+                2..^3
+            ]; // list[Range.Create(2, Index.CreateFromEnd(3))]
+            var slice2 = list[
+                ..^3
+            ]; // list[Range.ToEnd(Index.CreateFromEnd(3))]
+            var slice3 = list[2..]; // list[Range.FromStart(2)]
+            var slice4 = list[..]; // list[Range.All]
+            var multiDimensional = list[
+                1..2,
+                ..
+            ]; // list[Range.Create(1, 2), Range.All]
         }
         void UsingDeclarators()
         {

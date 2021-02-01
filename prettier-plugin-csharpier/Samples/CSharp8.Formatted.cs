@@ -19,6 +19,7 @@ namespace CSharp80
                 2 => 200,
                 _ => throw new global::System.Exception()
             };
+
             var newState = (GetState(), action, hasKey) switch
             {
                 (DoorState.Closed, Action.Open, _) => DoorState.Opened,
@@ -35,14 +36,25 @@ namespace CSharp80
         }
         void Ranges()
         {
-            var thirdItem = list[2];
-            var lastItem = list[^1];
-            var multiDimensional = list[3, ^2];
-            var slice1 = list[2..^3];
-            var slice2 = list[..^3];
-            var slice3 = list[2..];
-            var slice4 = list[..];
-            var multiDimensional = list[1..2, ..];
+            var thirdItem = list[2]; // list[2]
+            var lastItem = list[^1]; // list[Index.CreateFromEnd(1)]
+            var multiDimensional = list[
+                3,
+                ^2
+            ]; // list[3, Index.CreateFromEnd(2)]
+
+            var slice1 = list[
+                2..^3
+            ]; // list[Range.Create(2, Index.CreateFromEnd(3))]
+            var slice2 = list[
+                ..^3
+            ]; // list[Range.ToEnd(Index.CreateFromEnd(3))]
+            var slice3 = list[2..]; // list[Range.FromStart(2)]
+            var slice4 = list[..]; // list[Range.All]
+            var multiDimensional = list[
+                1..2,
+                ..
+            ]; // list[Range.Create(1, 2), Range.All]
         }
         void UsingDeclarators()
         {
