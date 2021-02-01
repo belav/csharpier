@@ -1,7 +1,7 @@
 This is currently in development. There is a good chance it will produce code that doesn't compile and lose parts of files.
 
 ## Development
-You'll first need to build the ../Parser .net solution
+You'll first need to build the ../CSharpier/CSharpier.Parser .net solution
 
 Then
 
