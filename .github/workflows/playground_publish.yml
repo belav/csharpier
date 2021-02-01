@@ -17,6 +17,9 @@ jobs:
       - 
         run: dotnet publish -c release --output ../../publish
       -
+        working-directory: CSharpier/CSharpier.Parser
+        run: dotnet build -c release --output ../../publish/Prettier/CSharpier.Parser/net5.0
+      -
         working-directory: prettier-plugin-csharpier
         run: npm install && npm run build
       -

@@ -1,11 +1,8 @@
 // @ts-ignore
 import { spawnSync } from "child_process";
 import * as fs from "fs";
-import * as path from "path";
 
 function parseText(text: string) {
-    console.log(__dirname);
-    console.log(path.resolve(__dirname, PARSER_PATH));
     const executionResult = spawnSync(
         "dotnet",
         ["exec", PARSER_PATH, text],
