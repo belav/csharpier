@@ -4,7 +4,6 @@ const prettier = require("prettier");
 
 const inputFile = process.argv[2];
 
-// TODO 0 where do we really put this? Can the build rebuild the parser dotnet thing too?
 const codePath = path.resolve(__dirname, inputFile);
 const code = fs.readFileSync(codePath, "utf8");
 
