@@ -3,16 +3,19 @@ import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/clike/clike";
 import styled from "styled-components";
+import { Loading } from './Icons/Loading';
 
 interface State {
     enteredCode: string;
     formattedCode: string;
+    isLoading: boolean;
 }
 
 export class App extends Component<{}, State> {
     constructor(props: {}) {
         super(props);
         this.state = {
+            isLoading: false,
             enteredCode: `public class UglyClassName {
             public string MyProperty
             {
@@ -29,6 +32,9 @@ export class App extends Component<{}, State> {
     }
     
     formatCode = async () => {
+        this.setState({
+            isLoading: true,
+        })
         const response = await fetch("/Format", {
             method: "POST",
             body: JSON.stringify(this.state.enteredCode),
@@ -39,16 +45,8 @@ export class App extends Component<{}, State> {
         const data = await response.text();
         this.setState({
             formattedCode: data,
+            isLoading: false,
         })
-    }
-
-    private timer?: number;
-    
-    formatCodeSoon = () => {
-        window.clearTimeout(this.timer)
-        this.timer = window.setTimeout(() => {
-            this.formatCode();
-        }, 1000);
     }
 
     render() {
@@ -65,7 +63,14 @@ export class App extends Component<{}, State> {
                         <Title>
                             CSharpier
                         </Title>
-                        <FormatButton onClick={this.formatCode}>Format</FormatButton>
+                        <FormatButton onClick={this.formatCode}>
+                            {this.state.isLoading &&
+                                <LoadingStyle />
+                            }
+                            {!this.state.isLoading &&
+                                <>Format</>
+                            }
+                        </FormatButton>
                     </div>
                     <div>
                         
@@ -153,6 +158,26 @@ const FormatButton = styled.button`
     font-size: 18px;
     border-radius: 4px;
     cursor: pointer;
+    width: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
+const LoadingStyle = styled(Loading)`
+  animation-name: spin;
+  animation-duration: 2000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 `
 
 const Footer = styled.div`
