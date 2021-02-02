@@ -28,6 +28,11 @@ const options = {
         category: "Global",
         default: false,
     },
+    validateComments: {
+        type: "boolean",
+        category: "Global",
+        default: false,
+    },
     writeParserJson: {
         type: "string",
         category: "Global",

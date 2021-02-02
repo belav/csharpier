@@ -9,6 +9,12 @@ using Microsoft.Extensions.Options;
 
 namespace CSharpier.Playground.Controllers
 {
+    public class FormatResult
+    {
+        public string Code { get; set; }
+        public string Json { get; set; }
+    }
+    
     [ApiController]
     [Route("[controller]")]
     public class FormatController : ControllerBase
@@ -26,21 +32,19 @@ namespace CSharpier.Playground.Controllers
         }
 
         [HttpPost]
-        public string Post([FromBody] string content)
+        public FormatResult Post([FromBody] string content)
         {
             var filePath = Path.Combine(this.webHostEnvironment.ContentRootPath, "App_Data", "Uploads", content.CalculateHash() + ".cs");
             new FileInfo(filePath).EnsureDirectoryExists();
 
             var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
-
-            var output = "";
             
             // TODO 0 we need to report back errors and what not
             // failing to compile/parse with roslyn
             // what about when the prettier plugin fails because of missing node types or other errors?
-            System.IO.File.WriteAllText(filePath, content, Encoding.UTF8);
+            this.WriteAllText(filePath, content);
             var workingDirectory = Path.Combine(this.webHostEnvironment.ContentRootPath, this.options.PrettierDirectory);
-            output = ExecuteApplication("node", workingDirectory, "./index.js " + filePath);
+            var output = ExecuteApplication("node", workingDirectory, "./index.js " + filePath);
 
                 // TODO 0 
             // we also want to eventually expose options
@@ -50,12 +54,40 @@ namespace CSharpier.Playground.Controllers
             // we should build the prettier-plugin-csharpier and copy it in
             // we should copy in the package.json and index.js that we use in that folder, and run npm install
 
-            if (!System.IO.File.Exists(formattedFilePath))
-            {
-                return output;
-            }
+            var jsonFilePath = filePath.Replace(".cs", ".json");
+            var json = this.Exists(jsonFilePath)
+                ? this.ReadAllText(jsonFilePath)
+                : "";
             
-            return System.IO.File.ReadAllText(formattedFilePath);
+            if (!this.Exists(formattedFilePath))
+            {
+                return new FormatResult
+                {
+                    Code = output,
+                    Json = json,
+                };
+            }
+
+            return new FormatResult
+            {
+                Code = this.ReadAllText(formattedFilePath),
+                Json = json,
+            };
+        }
+
+        private string ReadAllText(string filePath)
+        {
+            return System.IO.File.ReadAllText(filePath);
+        }
+
+        private void WriteAllText(string filePath, string content)
+        {
+            System.IO.File.WriteAllText(filePath, content, Encoding.UTF8);
+        }
+
+        private bool Exists(string filePath)
+        {
+            return System.IO.File.Exists(filePath);
         }
 
         public string ExecuteApplication(string pathToExe, string workingDirectory, string args)

@@ -45,7 +45,7 @@ interface MethodLikeDeclarationNode
 export const printMethodLikeDeclaration: PrintMethod<MethodLikeDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
-    printExtraNewLines(node, parts, "attributeLists", "modifiers")
+    printExtraNewLines(node, parts, "attributeLists", "modifiers", ["returnType", "keyword"])
     printAttributeLists(node, parts, path, options, print);
     printLeadingComments(node, parts, "modifiers", "returnType", "identifier")
     parts.push(printModifiers(node));

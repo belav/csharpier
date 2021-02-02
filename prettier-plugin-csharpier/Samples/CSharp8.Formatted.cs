@@ -9,6 +9,7 @@ namespace CSharp80
             string? wtf = null;
             int?[]? hello;
         }
+
         void Patterns()
         {
             if (o is string { Length: 5 } s)
@@ -34,6 +35,7 @@ namespace CSharp80
         {
             await foreach (var item in asyncEnumerables) { }
         }
+
         void Ranges()
         {
             var thirdItem = list[2]; // list[2]
@@ -56,12 +58,14 @@ namespace CSharp80
                 ..
             ]; // list[Range.Create(1, 2), Range.All]
         }
+
         void UsingDeclarators()
         {
             using var item = new FileStream("./.f");
             fixed (char* ch = "hell");
             item.Dispose(); // no!
         }
+
         void StaticLocalFunction()
         {
             static unsafe void Func1() { }
@@ -69,6 +73,7 @@ namespace CSharp80
             async static void Func2() { }
             static async void Func2() { }
         }
+
         void NullCoalescingAssignment()
         {
             var item = a ??= b ??= c ??= d ??= throw new Exception();

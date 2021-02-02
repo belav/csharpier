@@ -176,7 +176,7 @@ namespace My
 
             int[][] jagged = { { 111 }, { 121, 122 } };
             int[][,] arr = new int[5][,]; // as opposed to new int[][5,5]
-            arr[0] = new int[5,5];  // as opposed to arr[0,0] = new int[5];
+            arr[0] = new int[5,5]; // as opposed to arr[0,0] = new int[5];
             arr[0][0, 0] = 47;
             int[] arrayTypeInference = new[] { 0, 1 };
             switch (3) { }
@@ -651,41 +651,41 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
         public partial void method()
         {
-            int?[] a = new int?[5];/*[] bug*/ // YES []
-            int[] var = { 1, 2, 3, 4, 5 };/*,;*/
-            int i = a[i];/*[]*/
-            Foo<T> f = new Foo<int>();/*<> ()*/
-            f.method();/*().*/
-            i = i + i - i * i / i % i & i | i ^ i;/*+ - * / % & | ^*/
-            bool b = true & false | true ^ false;/*& | ^*/
-            b = !b;/*!*/
-            i = ~i;/*~i*/
-            b = i < i && i > i;/*< && >*/
-            int? ii = 5;/*? bug*/ // NO ?
-            int f = true ? 1 : 0;/*? :*/   // YES :
-            i++;/*++*/
-            i--;/*--*/
-            b = true && false || true;/*&& ||*/
-            i << 5;/*<<*/
-            i >> 5;/*>>*/
-            b = i == i && i != i && i <= i && i >= i;/*= == && != <= >=*/
-            i += 5.0;/*+=*/
-            i -= i;/*-=*/
-            i *= i;/**=*/
-            i /= i;/*/=*/
-            i %= i;/*%=*/
-            i &= i;/*&=*/
-            i |= i;/*|=*/
-            i ^= i;/*^=*/
-            i <<= i;/*<<=*/
-            i >>= i;/*>>=*/
-            object s = x => x + 1;/*=>*/
+            int?[] a = new int?[5]; /*[] bug*/ // YES []
+            int[] var = { 1, 2, 3, 4, 5 }; /*,;*/
+            int i = a[i]; /*[]*/
+            Foo<T> f = new Foo<int>(); /*<> ()*/
+            f.method(); /*().*/
+            i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
+            bool b = true & false | true ^ false; /*& | ^*/
+            b = !b; /*!*/
+            i = ~i; /*~i*/
+            b = i < i && i > i; /*< && >*/
+            int? ii = 5; /*? bug*/ // NO ?
+            int f = true ? 1 : 0; /*? :*/ // YES :
+            i++; /*++*/
+            i--; /*--*/
+            b = true && false || true; /*&& ||*/
+            i << 5; /*<<*/
+            i >> 5; /*>>*/
+            b = i == i && i != i && i <= i && i >= i; /*= == && != <= >=*/
+            i += 5.0; /*+=*/
+            i -= i; /*-=*/
+            i *= i; /**=*/
+            i /= i; /*/=*/
+            i %= i; /*%=*/
+            i &= i; /*&=*/
+            i |= i; /*|=*/
+            i ^= i; /*^=*/
+            i <<= i; /*<<=*/
+            i >>= i; /*>>=*/
+            object s = x => x + 1; /*=>*/
             double d = .3;
             Point point;
             unsafe
             {
-                Point* p = &point;/** &*/
-                p->x = 10;/*->*/
+                Point* p = &point; /** &*/
+                p->x = 10; /*->*/
             }
             IO::BinaryReader br = null;
             x[i: 1] = 3;
@@ -1048,15 +1048,25 @@ namespace CSharp80
 
         void Ranges()
         {
-            var thirdItem = list[2];                // list[2]
-            var lastItem = list[^1];                // list[Index.CreateFromEnd(1)]
-            var multiDimensional = list[3, ^2];     // list[3, Index.CreateFromEnd(2)]
+            var thirdItem = list[2]; // list[2]
+            var lastItem = list[^1]; // list[Index.CreateFromEnd(1)]
+            var multiDimensional = list[
+                3,
+                ^2
+            ]; // list[3, Index.CreateFromEnd(2)]
 
-            var slice1 = list[2..^3];               // list[Range.Create(2, Index.CreateFromEnd(3))]
-            var slice2 = list[..^3];                // list[Range.ToEnd(Index.CreateFromEnd(3))]
-            var slice3 = list[2..];                 // list[Range.FromStart(2)]
-            var slice4 = list[..];                  // list[Range.All]
-            var multiDimensional = list[1..2, ..];  // list[Range.Create(1, 2), Range.All]
+            var slice1 = list[
+                2..^3
+            ]; // list[Range.Create(2, Index.CreateFromEnd(3))]
+            var slice2 = list[
+                ..^3
+            ]; // list[Range.ToEnd(Index.CreateFromEnd(3))]
+            var slice3 = list[2..]; // list[Range.FromStart(2)]
+            var slice4 = list[..]; // list[Range.All]
+            var multiDimensional = list[
+                1..2,
+                ..
+            ]; // list[Range.Create(1, 2), Range.All]
         }
 
         void UsingDeclarators()

@@ -8,7 +8,9 @@ import { Loading } from './Icons/Loading';
 interface State {
     enteredCode: string;
     formattedCode: string;
+    json: string;
     isLoading: boolean;
+    showCode: boolean;
 }
 
 export class App extends Component<{}, State> {
@@ -24,6 +26,8 @@ export class App extends Component<{}, State> {
     public void MethodName(string LongParameter1, string longParameter2, string LongParameter3) { this.MethodName("ajskdf", "kjlasdfkljasldkfklajsdf", "ljkasdfkljaskldfjasdf"; }
 }`,
             formattedCode: "",
+            json: "",
+            showCode: true,
         };
     }
 
@@ -42,10 +46,11 @@ export class App extends Component<{}, State> {
                 "Content-Type": "application/json",
             },
         });
-        const data = await response.text();
+        const data = await response.json();
         this.setState({
-            formattedCode: data,
+            formattedCode: data.code,
             isLoading: false,
+            json: data.json,
         })
     }
 
@@ -55,6 +60,16 @@ export class App extends Component<{}, State> {
             matchBrackets: true,
             mode: "text/x-java",
         };
+        
+        const jsonOptions = {
+            lineNumbers: true,
+            mode: {
+                name: "javascript",
+                json: true,   
+            },
+            foldGutter: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        }
 
         return (
             <WrapperStyle>
@@ -72,9 +87,10 @@ export class App extends Component<{}, State> {
                             }
                         </FormatButton>
                     </div>
-                    <div>
-                        
-                    </div>
+                    <Tabs>
+                        <Tab data-isactive={this.state.showCode} onClick={() => this.setState({ showCode: true })}>Formatted Code</Tab>
+                        <Tab data-isactive={!this.state.showCode} onClick={() => this.setState({ showCode: false })}>AST</Tab>
+                    </Tabs>
                 </Header>
                 <CodeWrapperStyle>
                     <EnteredCodeStyle>
@@ -88,12 +104,26 @@ export class App extends Component<{}, State> {
                         />
                     </EnteredCodeStyle>
                     <EnteredCodeStyle>
+                        {this.state.showCode &&
+                            <CodeMirror
+                                value={this.state.formattedCode}
+                                options={{...options, readOnly: true}}
+                                onBeforeChange={() => {
+                                }}
+                                onChange={() => {
+                                }}
+                            />
+                        }
+                        {!this.state.showCode &&
                         <CodeMirror
-                            value={this.state.formattedCode}
-                            options={{...options, readOnly: true}}
-                            onBeforeChange={() => {}}
-                            onChange={() => {}}
+                            value={this.state.json}
+                            options={{...jsonOptions, readOnly: true}}
+                            onBeforeChange={() => {
+                            }}
+                            onChange={() => {
+                            }}
                         />
+                        }
                     </EnteredCodeStyle>
                 </CodeWrapperStyle>
                 <Footer/>
@@ -162,7 +192,32 @@ const FormatButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+const Tabs = styled.div`
+    padding-left: 48px;
+    height: 100%;
+    display: flex;
+    align-items: baseline;
 `
+
+const Tab = styled.button`
+    font-size: 16px;
+    margin-right: 20px;
+    margin-top: auto;
+    border: 1px solid #ddd;
+    margin-bottom: -1px;
+    padding: 4px 8px;
+    cursor: pointer;
+    &[data-isactive=true] {
+        background: white;
+        border-bottom: none;
+        cursor: default;
+    }
+    &:focus {
+        outline: none;
+    }
+`;
 
 const LoadingStyle = styled(Loading)`
   animation-name: spin;

@@ -1,5 +1,6 @@
 import { Doc, FastPath } from "prettier";
 import { concat, group, hardline, indent, join, line } from "./Builders";
+import { printTrailingComments } from "./PrintComments";
 import { Print } from "./PrintMethod";
 import { SyntaxTreeNode } from "./SyntaxTreeNode";
 
@@ -18,7 +19,10 @@ export function printStatements<T extends SyntaxTreeNode, T2 extends SyntaxTreeN
     if (hasStatements) {
         body = concat([indent(concat([separator, join(actualEndOfLine, path.map(print, propertyName))])), separator]);
     }
-    return group(concat([line, "{", body, "}"]));
+
+    const parts: Doc[] = [line, "{", body, "}"];
+    printTrailingComments(node, parts, "closeBraceToken");
+    return group(concat(parts));
 }
 
 export function printCommaList(list: Doc[]) {

@@ -86,7 +86,7 @@ namespace SyntaxNodeJsonWriterGenerator
 
             if (type == typeof(SyntaxTrivia))
             {
-                file.WriteLine($"            if (syntaxNode.RawKind == 8541)");
+                file.WriteLine($"            if (syntaxNode.RawKind == 8541 || syntaxNode.RawKind == 8542)");
                 file.WriteLine($"            {{");
                 file.WriteLine(
                     $"                properties.Add(WriteString(\"commentText\", syntaxNode.ToString()));");

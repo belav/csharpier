@@ -21,6 +21,7 @@ class TopLevelType : IDisposable
 {
     void IDisposable.Dispose() { }
 }
+
 namespace My
 {
     using A.B;
@@ -33,8 +34,11 @@ namespace My
     {
         [DllImport("kernel32", SetLastError = true)]
         static extern bool CreateDirectory(string name, SecurityAttribute sa);
+
         private const int global = int.MinValue - 1;
+
         static A() { }
+
         public A(int foo)
         {
             L:
@@ -61,6 +65,7 @@ namespace My
             ulong ul = 1ul, Ul = 1Ul, uL = 1uL, UL = 1UL, lu = 1lu, Lu = 1Lu, lU = 1lU, LU = 1LU;
             int minInt32Value = -2147483648;
             int minInt64Value = -9223372036854775808L;
+
             bool @bool;
             byte @byte;
             char @char = 'c', \u0066 = '\u0066', hexchar = '\x0130', hexchar2 = (char)0xBAD;
@@ -407,6 +412,7 @@ namespace My
         }
     }
 }
+
 namespace ConsoleApplication1
 {
     namespace RecursiveGenericBaseType
@@ -426,6 +432,7 @@ namespace ConsoleApplication1
             new static A<T> O() { }
         }
     }
+
     namespace Boo
     {
         public class Bar<T>
@@ -465,6 +472,7 @@ namespace ConsoleApplication1
         {
             return new Test();
         }
+
         public int foo = 5;
         void Bar2()
         {
@@ -472,7 +480,9 @@ namespace ConsoleApplication1
             this.Foo = 5.GetType();
             Test t = "sss";
         }
+
         public event EventHandler MyEvent = delegate { };
+
         void Blah()
         {
             int i = 5;
@@ -529,15 +539,25 @@ namespace ConsoleApplication1
         }
     }
 }
+
 namespace Comments.XmlComments.UndocumentedKeywords
 {
     class C<T>
     {
         void M<U>(T t, U u)
         {
+            // comment
+            /* *** / */
+            /* //
+             */
+            /*s*/
+            //comment
+            // /***/
+            /*s*/
             int intValue = 0;
             intValue = intValue + 1;
             string strValue = "hello";
+            /*s*/
             MyClass c = new MyClass();
             string verbatimStr = @"\\\\";
         }
@@ -575,42 +595,42 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
         public partial void method()
         {
-            int?[] a = new int?[5]; // YES []
-            int[] var = { 1, 2, 3, 4, 5 };
-            int i = a[i];
-            Foo<T> f = new Foo<int>();
-            f.method();
-            i = i + i - i * i / i % i & i | i ^ i;
-            bool b = true & false | true ^ false;
-            b = !b;
-            i = ~i;
-            b = i < i && i > i;
-            int? ii = 5; // NO ?
-            int f = true ? 1 : 0; // YES :
-            i++;
-            i--;
-            b = true && false || true;
-            i << 5;
-            i >> 5;
-            b = i == i && i != i && i <= i && i >= i;
-            i += 5.0;
-            i -= i;
+            int?[] a = new int?[5]; /*[] bug*/ // YES []
+            int[] var = { 1, 2, 3, 4, 5 }; /*,;*/
+            int i = a[i]; /*[]*/
+            Foo<T> f = new Foo<int>(); /*<> ()*/
+            f.method(); /*().*/
+            i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
+            bool b = true & false | true ^ false; /*& | ^*/
+            b = !b; /*!*/
+            i = ~i; /*~i*/
+            b = i < i && i > i; /*< && >*/
+            int? ii = 5; /*? bug*/ // NO ?
+            int f = true ? 1 : 0; /*? :*/ // YES :
+            i++; /*++*/
+            i--; /*--*/
+            b = true && false || true; /*&& ||*/
+            i << 5; /*<<*/
+            i >> 5; /*>>*/
+            b = i == i && i != i && i <= i && i >= i; /*= == && != <= >=*/
+            i += 5.0; /*+=*/
+            i -= i; /*-=*/
             i *= i;
 
-            i /= i;
-            i %= i;
-            i &= i;
-            i |= i;
-            i ^= i;
-            i <<= i;
-            i >>= i;
-            object s = x => x + 1;
+            i /= i; /*/=*/
+            i %= i; /*%=*/
+            i &= i; /*&=*/
+            i |= i; /*|=*/
+            i ^= i; /*^=*/
+            i <<= i; /*<<=*/
+            i >>= i; /*>>=*/
+            object s = x => x + 1; /*=>*/
             double d = .3;
             Point point;
             unsafe
             {
                 Point* p = &point;
-                p->x = 10;
+                p->x = 10; /*->*/
             }
             IO::BinaryReader br = null;
             x[i: 1] = 3;
@@ -656,6 +676,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
             int length = customers?.Length ?? 0; // 0 if customers is null
             int? first = customers?[0]?.Orders?.Count();
             PropertyChanged?.Invoke(this, args);
+
+            // String interpolation
             string s = $"{p.Name, 20} is {p.Age:D3} year{{s}} old #";
             s = $"{p.Name} is \"{p.Age} year{(p.Age == 1 ? "" : "s")} old";
             s = $"{(p.Age == 2 ? $"{new Person {  }}" : "")}";
@@ -758,6 +780,7 @@ class CSharp71
     {
         DefaultWithoutTypeName(default);
     }
+
     void TupleRecognize(int a, (int, int) b, (int, int, int)? c)
     {
         var result = list.Select(c => (c.f1, f3: c.f2)).Where(t => t.f2 == 1);
@@ -849,6 +872,7 @@ class CSharp73
     {
         public fixed int myFixedField[10];
     }
+
     static IndexingMovableFixed s;
 
     public unsafe void IndexingMovableFixedFields()
@@ -876,6 +900,7 @@ class CSharp73
         var res = t1 == (1, (2, 3));
     }
 }
+
 namespace CSharp80
 {
     class CSharp80ExceptInterfaceDefaultImplement
@@ -887,6 +912,7 @@ namespace CSharp80
             string? wtf = null;
             int?[]? hello;
         }
+
         void Patterns()
         {
             if (o is string { Length: 5 } s)
@@ -912,6 +938,7 @@ namespace CSharp80
         {
             await foreach (var item in asyncEnumerables) { }
         }
+
         void Ranges()
         {
             var thirdItem = list[2]; // list[2]
@@ -934,12 +961,14 @@ namespace CSharp80
                 ..
             ]; // list[Range.Create(1, 2), Range.All]
         }
+
         void UsingDeclarators()
         {
             using var item = new FileStream("./.f");
             fixed (char* ch = "hell");
             item.Dispose();
         }
+
         void StaticLocalFunction()
         {
             static unsafe void Func1() { }
@@ -947,6 +976,7 @@ namespace CSharp80
             async static void Func2() { }
             static async void Func2() { }
         }
+
         void NullCoalescingAssignment()
         {
             var item = a ??= b ??= c ??= d ??= throw new Exception();

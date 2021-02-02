@@ -1,18 +1,17 @@
-// TODO 0 we have some work to do with new lines, we just look for them on modifiers, but then our attributes test is screwy
-// For nodes of certain types, we need to look for new lines on properties in order, and if we find them, break.
-// IE - are there new lines on attributes? Use those, break. Else are there new lines on modifiers? Use those, break. etc
-// TODO 0 can we call this from inside of print?
+
 import { Doc } from "prettier";
 import { hardline } from "./Builders";
 
 export type HasTrivia = {
     leadingTrivia?: {
-        kind: "SingleLineCommentTrivia" | "EndOfLineTrivia" | "WhitespaceTrivia"
+        kind: "SingleLineCommentTrivia" | "MultiLineCommentTrivia" | "EndOfLineTrivia" | "WhitespaceTrivia"
         commentText?: string;
+        printed?: boolean;
     }[];
     trailingTrivia?: {
-        kind: "SingleLineCommentTrivia" | "WhitespaceTrivia"
+        kind: "SingleLineCommentTrivia" | "MultiLineCommentTrivia" | "WhitespaceTrivia"
         commentText?: string;
+        printed?: boolean;
     }[];
 }
 
@@ -51,7 +50,8 @@ function printComments(node: any, parts: Doc[], isLeading: boolean, properties: 
             const triviaArray = isLeading ? value?.leadingTrivia : value?.trailingTrivia;
             if (triviaArray) {
                 for (const trivia of triviaArray) {
-                    if (trivia.kind === "SingleLineCommentTrivia") {
+                    if (trivia.kind === "SingleLineCommentTrivia" || trivia.kind === "MultiLineCommentTrivia") {
+                        trivia.printed = true;
                         if (!isLeading) {
                             parts.push(" ");
                         }

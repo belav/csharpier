@@ -13,6 +13,7 @@ function runTest(directory, name) {
         writeParserJson: codePath.replace(".cs", ".json"),
         tabWidth: 4,
         printTodo: true,
+        validateComments: true,
     });
 
     const expectedFilePath = codePath.replace(".cs", ".expected.cs");

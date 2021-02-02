@@ -25,6 +25,7 @@ fs.readdirSync(__dirname).forEach(file => {
         tabWidth: 4,
         writeParserJson: referenceFile.replace(".cs", ".json"),
         printTodo: !!printTodo,
+        validateComments: true,
     });
 
     console.timeEnd(file)

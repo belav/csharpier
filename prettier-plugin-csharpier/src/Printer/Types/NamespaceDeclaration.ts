@@ -1,5 +1,6 @@
 import { Doc } from "prettier";
 import { printAttributeLists } from "../PrintAttributeLists";
+import { printExtraNewLines } from "../PrintExtraNewLines";
 import { PrintMethod } from "../PrintMethod";
 import { printModifiers, printSyntaxToken, SyntaxToken, SyntaxTreeNode } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
@@ -21,6 +22,7 @@ export interface NamespaceDeclarationNode extends SyntaxTreeNode<"NamespaceDecla
 export const printNamespaceDeclaration: PrintMethod<NamespaceDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
+    printExtraNewLines(node, parts, "attributeLists", "modifiers", "namespaceKeyword");
     printAttributeLists(node, parts, path, options, print);
     parts.push(printModifiers(node));
     parts.push(printSyntaxToken(node.namespaceKeyword));

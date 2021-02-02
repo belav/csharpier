@@ -3,6 +3,7 @@ import { concat, hardline } from "./Builders";
 import { hasLeadingExtraLine } from "./Helpers";
 import { PrintMethod } from "./PrintMethod";
 import * as types from "./Types";
+import { validateComments } from "./ValidateComments";
 
 let foundFirst = false;
 const missingNodes: string[] = [];
@@ -30,6 +31,10 @@ const printNode: PrintMethod = (path, options, print) => {
     if (thePrint) {
         const result = thePrint(path, options, print);
         if (thisIsFirst) {
+            if ((options as any).validateComments) {
+                validateComments(path.getValue());
+            }
+
             if (missingNodes.length > 0) {
                 throw new Error(
                     `Unknown C# nodes, run the following commands:\nplop node ${missingNodes.join("\nplop node ")}`,

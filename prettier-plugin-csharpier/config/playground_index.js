@@ -11,7 +11,7 @@ const actualCode = prettier.format(code, {
     parser: "cs",
     plugins: ["./prettier-plugin-csharpier"],
     endOfLine: "auto",
-    // writeParserJson: codePath.replace(".cs", ".json"),
+    writeParserJson: codePath.replace(".cs", ".json"),
     tabWidth: 4,
     // printTodo: true,
 });
