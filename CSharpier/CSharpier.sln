@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxNodeTypeGenerator", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Playground", "CSharpier.Playground\CSharpier.Playground.csproj", "{E7F03E73-82C7-4DB2-AF20-F25C45231A72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier", "CSharpier\CSharpier.csproj", "{F1DE8719-9961-4F83-8BE6-34639C96DA5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests", "CSharpier.Tests\CSharpier.Tests.csproj", "{A77E4297-FAA5-40AB-9856-ECF72AF5D859}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{E7F03E73-82C7-4DB2-AF20-F25C45231A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7F03E73-82C7-4DB2-AF20-F25C45231A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7F03E73-82C7-4DB2-AF20-F25C45231A72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1DE8719-9961-4F83-8BE6-34639C96DA5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1DE8719-9961-4F83-8BE6-34639C96DA5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1DE8719-9961-4F83-8BE6-34639C96DA5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1DE8719-9961-4F83-8BE6-34639C96DA5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A77E4297-FAA5-40AB-9856-ECF72AF5D859}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A77E4297-FAA5-40AB-9856-ECF72AF5D859}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A77E4297-FAA5-40AB-9856-ECF72AF5D859}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A77E4297-FAA5-40AB-9856-ECF72AF5D859}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

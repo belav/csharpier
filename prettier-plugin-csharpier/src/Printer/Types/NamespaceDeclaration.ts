@@ -33,7 +33,7 @@ export const printNamespaceDeclaration: PrintMethod<NamespaceDeclarationNode> = 
     const hasUsing = node.usings.length > 0;
     const hasExterns = node.externs.length > 0;
     if (hasMembers || hasUsing || hasExterns) {
-        parts.push(concat([hardline, "{"]));
+        parts.push(hardline, "{");
 
         const innerParts: Doc[] = [];
         innerParts.push(hardline);
@@ -67,7 +67,7 @@ export const printNamespaceDeclaration: PrintMethod<NamespaceDeclarationNode> = 
         parts.push(hardline);
         parts.push("}");
     } else {
-        parts.push(" ", "{", "}");
+        parts.push(" ", "{", " ", "}");
     }
 
     return concat([concat(parts)]);

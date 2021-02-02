@@ -1,7 +1,6 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=12f87900_002D0f2b_002D4e94_002D8760_002D8a4ac0c97f95/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestingComments" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c04cd52b_002Dede8_002D4207_002D95e7_002D2b27884f2d36/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="NamespaceDeclarations" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::68233EC8-147C-49ED-B3EE-9372052BA65C::.NETCoreApp,Version=v3.1::SyntaxNodeTypeGenerator.Generator.DoWork&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::C73AC70E-4D1E-4266-AA77-6A0AAF7DA7C4::.NETCoreApp,Version=v3.1::SyntaxNodeJsonWriterGenerator.Generator.DoWork&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::A77E4297-FAA5-40AB-9856-ECF72AF5D859::net5.0::CSharpier.Tests.NamespaceDeclarations&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

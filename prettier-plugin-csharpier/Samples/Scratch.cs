@@ -1,11 +1,5 @@
-[Obsolete]
-class TopLevelType : IDisposable
+public namespace Namespace
 {
-    [Obsolete]
-    void Method()
-    {
-    }
-
-    [Obsolete]
-    const int? local = int.MaxValue;
+    using System;
+    using System.Text;
 }

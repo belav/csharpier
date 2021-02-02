@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -27,14 +28,12 @@ public class ClassName
         static void Main(string[] args)
         {
             var stringToParse = args.Length == 0 ? TestClass : args[0];
-
             var rootNode = CSharpSyntaxTree.ParseText(stringToParse).GetRoot() as CompilationUnitSyntax;
-            
-            
+
             Console.OutputEncoding = Encoding.UTF8;
 
             var result = WriteWithSyntaxNodeJsonWrite(rootNode);
-            
+
             Console.WriteLine(result);
         }
 

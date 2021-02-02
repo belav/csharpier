@@ -1,1 +1,1 @@
-namespace Namespace {}
+namespace Namespace { }
