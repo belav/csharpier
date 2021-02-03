@@ -3,8 +3,9 @@ This is a work in progress .net port of the core printing part of prettier. The 
 
 Compare [AllInOne](./CSharpier/CSharpier.Tests/Samples/AllInOne.cst) to [AllInOne.Formatted](./CSharpier/CSharpier.Tests/prettier-plugin-csharpier/Samples/AllInOne.Formatted.cs) to get a sense of what is missing. [Compare In Github](https://github.com/belav/csharpier/compare/master...progress)
 
-# Prettier-Plugin-CSharpier (most likely abandoned due to performance issues with the approach)
+# Prettier-Plugin-CSharpier
 
+**This is most likely abandoned due to performance issues with the approach**
 This is a prettier plugin for csharp. It uses a simple .net core console application to use Roslyn to generate the syntax tree. 
 It can generate mostly correct code for c# <= 8.0. The remaining major issues
 - Comments are a WIP, most of them are lost on formatting.
