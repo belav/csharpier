@@ -12,13 +12,5 @@ export interface FromClauseNode extends SyntaxTreeNode<"FromClause"> {
 
 export const printFromClause: PrintMethod<FromClauseNode> = (path, options, print) => {
     const node = path.getValue();
-    return concat([
-        "from",
-        " ",
-        printIdentifier(node),
-        " ",
-        "in",
-        " ",
-        path.call(print, "expression"),
-    ]);
+    return concat(["from", " ", printIdentifier(node), " ", "in", " ", path.call(print, "expression")]);
 };

@@ -9,6 +9,6 @@ export interface BracketedArgumentListNode extends SyntaxTreeNode<"BracketedArgu
 
 export const printBracketedArgumentList: PrintMethod<BracketedArgumentListNode> = (path, options, print) => {
     return group(
-        concat(["[", indent(concat([softline, printCommaList(path.map(print, "arguments"))])), softline, "]"]),
+        concat(["[", indent(concat([softline, printCommaList(path.map(print, "arguments"))])), softline, "]"])
     );
 };

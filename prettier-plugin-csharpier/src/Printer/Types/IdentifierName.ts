@@ -6,7 +6,7 @@ import {
     HasIdentifier,
     printIdentifier,
     printPathSyntaxToken,
-    printPathIdentifier,
+    printPathIdentifier
 } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 

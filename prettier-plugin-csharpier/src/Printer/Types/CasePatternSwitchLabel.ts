@@ -15,6 +15,6 @@ export const printCasePatternSwitchLabel: PrintMethod<CasePatternSwitchLabelNode
         path.call(print, "pattern"),
         " ",
         path.call(print, "whenClause"),
-        ":",
+        ":"
     ]);
 };

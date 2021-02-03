@@ -25,7 +25,7 @@ export const printForStatement: PrintMethod<ForStatementNode> = (path, options, 
     if (node.declaration) {
         parts.push(
             path.call(innerPath => printVariableDeclaration(innerPath, options, print), "declaration"),
-            "; ",
+            "; "
         );
     } else {
         parts.push(";");

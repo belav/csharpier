@@ -24,10 +24,16 @@ export const printTryStatement: PrintMethod<TryStatementNode> = (path, options, 
         "try",
         path.call(o => printBlock(o, options, print), "block"),
         hardline,
-        join(hardline, path.map(o => printCatchClause(o, options, print), "catches")),
+        join(
+            hardline,
+            path.map(o => printCatchClause(o, options, print), "catches")
+        )
     );
     if (node.finally) {
-        parts.push(hardline, path.call(o => printFinallyClause(o, options, print), "finally"));
+        parts.push(
+            hardline,
+            path.call(o => printFinallyClause(o, options, print), "finally")
+        );
     }
     return concat(parts);
 };

@@ -12,7 +12,7 @@ interface KeywordExpression {
 export function printKeywordExpression<T extends KeywordExpression>(
     path: FastPath<T>,
     options: ParserOptions,
-    print: Print,
+    print: Print
 ) {
     const node = path.getValue();
     return concat([
@@ -20,6 +20,6 @@ export function printKeywordExpression<T extends KeywordExpression>(
         "(",
         path.call(print, "expression"),
         node.type ? ", " + path.call(print, "type") : "",
-        ")",
+        ")"
     ]);
 }

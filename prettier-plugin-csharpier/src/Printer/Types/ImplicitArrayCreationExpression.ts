@@ -11,7 +11,7 @@ export interface ImplicitArrayCreationExpressionNode extends SyntaxTreeNode<"Imp
 export const printImplicitArrayCreationExpression: PrintMethod<ImplicitArrayCreationExpressionNode> = (
     path,
     options,
-    print,
+    print
 ) => {
     const node = path.getValue();
     const commas = node.commas.map(o => ",");
@@ -22,6 +22,6 @@ export const printImplicitArrayCreationExpression: PrintMethod<ImplicitArrayCrea
         concat(commas),
         "]",
         " ",
-        path.call(print, "initializer"),
+        path.call(print, "initializer")
     ]);
 };

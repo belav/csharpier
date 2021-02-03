@@ -64,9 +64,9 @@ export function printModifiers(node: HasModifiers) {
     return concat([
         join(
             " ",
-            node.modifiers.map(o => printSyntaxToken(o)),
+            node.modifiers.map(o => printSyntaxToken(o))
         ),
-        " ",
+        " "
     ]);
 }
 

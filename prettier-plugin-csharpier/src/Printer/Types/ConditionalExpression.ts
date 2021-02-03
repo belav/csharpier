@@ -16,6 +16,6 @@ export const printConditionalExpression: PrintMethod<ConditionalExpressionNode> 
         " ? ",
         path.call(print, "whenTrue"),
         " : ",
-        path.call(print, "whenFalse"),
+        path.call(print, "whenFalse")
     ]);
 };

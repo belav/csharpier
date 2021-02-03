@@ -22,10 +22,22 @@ export const printSwitchExpression: PrintMethod<SwitchExpressionNode> = (path, o
         " switch",
         hardline,
         "{",
-        indent(concat([hardline, join(concat([",", hardline]), path.map(switchExpressionArmPath => {
-            return concat([switchExpressionArmPath.call(print, "pattern"), " => ", switchExpressionArmPath.call(print, "expression")]);
-        }, "arms"))])),
+        indent(
+            concat([
+                hardline,
+                join(
+                    concat([",", hardline]),
+                    path.map(switchExpressionArmPath => {
+                        return concat([
+                            switchExpressionArmPath.call(print, "pattern"),
+                            " => ",
+                            switchExpressionArmPath.call(print, "expression")
+                        ]);
+                    }, "arms")
+                )
+            ])
+        ),
         hardline,
-        "}",
+        "}"
     ]);
 };

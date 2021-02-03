@@ -23,9 +23,9 @@ export const printOrderByClause: PrintMethod<OrderByClauseNode> = (path, options
                     path.call(print, "expression"),
                     orderingNode.ascendingOrDescendingKeyword
                         ? " " + printSyntaxToken(orderingNode.ascendingOrDescendingKeyword)
-                        : "",
+                        : ""
                 ]);
-            }, "orderings"),
-        ),
+            }, "orderings")
+        )
     ]);
 };

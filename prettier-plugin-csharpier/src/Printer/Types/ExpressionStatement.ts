@@ -11,7 +11,7 @@ export interface ExpressionStatementNode extends SyntaxTreeNode<"ExpressionState
 
 export const printExpressionStatement: PrintMethod<ExpressionStatementNode> = (path, options, print) => {
     const node = path.getValue();
-    const parts: Doc[] = [path.call(print, "expression"), ";"]
+    const parts: Doc[] = [path.call(print, "expression"), ";"];
     printTrailingComments(node, parts, "semicolonToken");
     return concat(parts);
 };

@@ -11,12 +11,12 @@ export interface InterpolatedStringExpressionNode extends SyntaxTreeNode<"Interp
 export const printInterpolatedStringExpression: PrintMethod<InterpolatedStringExpressionNode> = (
     path,
     options,
-    print,
+    print
 ) => {
     const node = path.getValue();
     return concat([
         printSyntaxToken(node.stringStartToken),
         concat(path.map(print, "contents")),
-        printSyntaxToken(node.stringEndToken),
+        printSyntaxToken(node.stringEndToken)
     ]);
 };

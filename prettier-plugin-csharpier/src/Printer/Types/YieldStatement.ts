@@ -16,6 +16,6 @@ export const printYieldStatement: PrintMethod<YieldStatementNode> = (path, optio
         " ",
         printSyntaxToken(node.returnOrBreakKeyword),
         expression,
-        ";",
+        ";"
     ]);
 };

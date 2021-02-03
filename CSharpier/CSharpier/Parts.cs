@@ -5,13 +5,13 @@ namespace CSharpier
 {
     public class Parts
     {
-        public readonly List<Builder> TheParts = new List<Builder>();
+        public readonly List<Doc> TheParts = new List<Doc>();
 
         public Parts()
         {
         }
-        
-        public Parts(Builder[] parts)
+
+        public Parts(params Doc[] parts)
         {
             this.TheParts = parts.ToList();
         }
@@ -20,11 +20,11 @@ namespace CSharpier
         {
             foreach (var value in values)
             {
-                this.TheParts.Add(Builders.String(value));
+                this.TheParts.Add(new StringDoc(value));
             }
         }
         
-        public void Push(params Builder[] value)
+        public void Push(params Doc[] value)
         {
             this.TheParts.AddRange(value);
         }

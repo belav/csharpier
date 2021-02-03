@@ -11,7 +11,7 @@ export interface ConditionalAccessExpressionNode extends SyntaxTreeNode<"Conditi
 export const printConditionalAccessExpression: PrintMethod<ConditionalAccessExpressionNode> = (
     path,
     options,
-    print,
+    print
 ) => {
     return concat([path.call(print, "expression"), "?", path.call(print, "whenNotNull")]);
 };

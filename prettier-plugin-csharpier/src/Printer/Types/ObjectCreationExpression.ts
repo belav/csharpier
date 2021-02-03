@@ -16,6 +16,6 @@ export const printObjectCreationExpression: PrintMethod<ObjectCreationExpression
         " ",
         path.call(print, "type"),
         node.argumentList ? path.call(print, "argumentList") : "",
-        node.initializer ? path.call(print, "initializer") : "",
+        node.initializer ? path.call(print, "initializer") : ""
     ]);
 };

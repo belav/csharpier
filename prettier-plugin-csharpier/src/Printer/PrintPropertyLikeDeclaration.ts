@@ -2,13 +2,7 @@ import { Doc } from "prettier";
 import { concat, group, hardline, indent, join, line } from "./Builders";
 import { printAttributeLists } from "./PrintAttributeLists";
 import { PrintMethod } from "./PrintMethod";
-import {
-    SyntaxToken,
-    printIdentifier,
-    printModifiers,
-    printSyntaxToken,
-    SyntaxTreeNode,
-} from "./SyntaxTreeNode";
+import { SyntaxToken, printIdentifier, printModifiers, printSyntaxToken, SyntaxTreeNode } from "./SyntaxTreeNode";
 import { IndexerDeclaration } from "./Types";
 import { AccessorDeclarationNode } from "./Types/AccessorDeclaration";
 import { ArrowExpressionClauseNode, printArrowExpressionClause } from "./Types/ArrowExpressionClause";
@@ -64,7 +58,7 @@ export const printPropertyLikeDeclaration: PrintMethod<PropertyLikeDeclarationNo
             printSyntaxToken(node.thisKeyword),
             "[",
             join(", ", path.map(print, "parameterList", "parameters")),
-            "]",
+            "]"
         ]);
     } else if (node.nodeType === "EventDeclaration") {
         identifier = printIdentifier(node);
@@ -85,7 +79,7 @@ export const printPropertyLikeDeclaration: PrintMethod<PropertyLikeDeclarationNo
             contents,
             node.initializer
                 ? concat([path.call(o => printEqualsValueClause(o, options, print), "initializer"), ";"])
-                : "",
-        ]),
+                : ""
+        ])
     );
 };

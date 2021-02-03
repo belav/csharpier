@@ -14,6 +14,6 @@ export const printWhileStatement: PrintMethod<WhileStatementNode> = (path, optio
         " (",
         path.call(print, "condition"),
         ")",
-        path.call(print, "statement"),
+        path.call(print, "statement")
     ]);
 };

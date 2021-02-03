@@ -18,7 +18,7 @@ export const printSwitchStatement: PrintMethod<SwitchStatementNode> = (path, opt
                   "{",
                   indent(concat([hardline, join(hardline, path.map(print, "sections"))])),
                   hardline,
-                  "}",
+                  "}"
               ]);
     return concat([printSyntaxToken(node.switchKeyword), " (", path.call(print, "expression"), ")", sections]);
 };

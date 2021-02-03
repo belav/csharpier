@@ -10,7 +10,7 @@ export function printStatements<T extends SyntaxTreeNode, T2 extends SyntaxTreeN
     separator: Doc,
     path: FastPath<T>,
     print: Print,
-    endOfLineDoc?: Doc,
+    endOfLineDoc?: Doc
 ) {
     const actualEndOfLine = endOfLineDoc ? concat([endOfLineDoc, separator]) : separator;
 

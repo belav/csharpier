@@ -15,6 +15,6 @@ export const printFixedStatement: PrintMethod<FixedStatementNode> = (path, optio
         "(",
         path.call(print, "declaration"),
         ")",
-        path.call(print, "statement"),
+        path.call(print, "statement")
     ]);
 };

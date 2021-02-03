@@ -15,6 +15,6 @@ export const printExternAliasDirective: PrintMethod<ExternAliasDirectiveNode> = 
         printPathSyntaxToken(path, "aliasKeyword"),
         " ",
         printPathIdentifier(path),
-        ";",
+        ";"
     ]);
 };

@@ -1,19 +1,18 @@
-
 import { Doc } from "prettier";
 import { hardline } from "./Builders";
 
 export type HasTrivia = {
     leadingTrivia?: {
-        kind: "SingleLineCommentTrivia" | "MultiLineCommentTrivia" | "EndOfLineTrivia" | "WhitespaceTrivia"
+        kind: "SingleLineCommentTrivia" | "MultiLineCommentTrivia" | "EndOfLineTrivia" | "WhitespaceTrivia";
         commentText?: string;
         printed?: boolean;
     }[];
     trailingTrivia?: {
-        kind: "SingleLineCommentTrivia" | "MultiLineCommentTrivia" | "WhitespaceTrivia"
+        kind: "SingleLineCommentTrivia" | "MultiLineCommentTrivia" | "WhitespaceTrivia";
         commentText?: string;
         printed?: boolean;
     }[];
-}
+};
 
 export function getTriviaProperty(node: any, propertyKey: any) {
     let property: any = node;
@@ -62,7 +61,7 @@ function printComments(node: any, parts: Doc[], isLeading: boolean, properties: 
                     }
                 }
             }
-        }
+        };
 
         if (Array.isArray(property)) {
             property.forEach(o => doWork(o));

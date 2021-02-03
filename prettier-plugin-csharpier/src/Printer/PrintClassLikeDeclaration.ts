@@ -29,7 +29,7 @@ export const printClassLikeDeclaration: PrintMethod<ClassLikeDeclarationNode> = 
     const node = path.getValue();
     const parts: Doc[] = [];
 
-    printExtraNewLines(node, parts, "attributeLists", "modifiers", "keyword")
+    printExtraNewLines(node, parts, "attributeLists", "modifiers", "keyword");
 
     printAttributeLists(node, parts, path, options, print);
     printLeadingComments(node, parts, "modifiers", "keyword", "identifier");

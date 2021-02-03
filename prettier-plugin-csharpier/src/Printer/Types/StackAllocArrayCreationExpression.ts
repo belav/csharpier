@@ -12,7 +12,7 @@ export interface StackAllocArrayCreationExpressionNode extends SyntaxTreeNode<"S
 export const printStackAllocArrayCreationExpression: PrintMethod<StackAllocArrayCreationExpressionNode> = (
     path,
     options,
-    print,
+    print
 ) => {
     const node = path.getValue();
     return concat([
@@ -20,6 +20,6 @@ export const printStackAllocArrayCreationExpression: PrintMethod<StackAllocArray
         path.call(print, "type"),
         node.initializer
             ? concat([" ", path.call(o => printInitializerExpression(o, options, print), "initializer")])
-            : "",
+            : ""
     ]);
 };

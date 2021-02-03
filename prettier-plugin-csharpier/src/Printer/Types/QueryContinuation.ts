@@ -15,6 +15,6 @@ export const printQueryContinuation: PrintMethod<QueryContinuationNode> = (path,
         " ",
         printPathIdentifier(path),
         line,
-        path.call(o => printQueryBody(o, options, print), "body"),
+        path.call(o => printQueryBody(o, options, print), "body")
     ]);
 };

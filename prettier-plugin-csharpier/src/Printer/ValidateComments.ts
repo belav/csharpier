@@ -16,16 +16,16 @@ export function validateComments(node: SyntaxTreeNode) {
 }
 
 function checkComments(node: any, path: string, missingComments: any[]) {
-    for(const key of Object.keys(node)) {
+    for (const key of Object.keys(node)) {
         const property = node[key];
-        if (typeof (property) !== "object") {
+        if (typeof property !== "object") {
             continue;
         }
         if (Array.isArray(property)) {
             for (let x = 0; x < property.length; x++) {
                 let newPath = path + "." + key + "[" + x + "]";
                 if (property[x].nodeType) {
-                    newPath += `(${property[x].nodeType})`
+                    newPath += `(${property[x].nodeType})`;
                 }
 
                 checkComments(property[x], newPath, missingComments);
@@ -33,12 +33,11 @@ function checkComments(node: any, path: string, missingComments: any[]) {
         }
 
         if (property.nodeType === "SyntaxTrivia" && property.commentText) {
-            if (!property.printed)
-            {
+            if (!property.printed) {
                 missingComments.push({
                     commentText: property.commentText,
-                    path: path,
-                })
+                    path: path
+                });
             }
         } else {
             checkComments(property, path + "." + key, missingComments);

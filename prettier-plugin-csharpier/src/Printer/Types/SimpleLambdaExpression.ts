@@ -16,6 +16,6 @@ export const printSimpleLambdaExpression: PrintMethod<SimpleLambdaExpressionNode
         " ",
         printPathSyntaxToken(path, "arrowToken"),
         " ",
-        path.call(print, "body"),
+        path.call(print, "body")
     ]);
 };

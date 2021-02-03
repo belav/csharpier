@@ -1,0 +1,187 @@
+﻿extern alias Foo;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using M = System.Math;
+using System.Diagnostics;
+using ConsoleApplication2.Test;
+using X = int1;
+using Y = ABC.X<int>;
+using static System.Math;
+using static System.DayOfWeek;
+using static System.Linq.Enumerable;
+TODO AttributeListsTODO AttributeListsTODO Modifiersclass TopLevelType : IDisposableTODO ConstraintClauses
+){
+            TODO AttributeListsTODO Modifiersvoid Dispose()TODO ConstraintClausesTODO Statements
+}
+TODO AttributeListsTODO Modifiersnamespace My
+{
+                using A.B;
+                TODO InterfaceDeclarationSyntax
+                TODO Modifiersdelegate void CoContra2<TODO AttributeListsout T, TODO AttributeListsin K>()TODO ConstraintClauses;
+                TODO AttributeListsTODO Modifiersclass A : C, ITODO ConstraintClauses
+                ){
+                            TODO AttributeListsTODO Modifiersbool CreateDirectory(TODO AttributeListsTODO Modifiersstring name, TODO AttributeListsTODO ModifiersSecurityAttribute sa)TODO ConstraintClauses;
+                            TODO FieldDeclarationSyntax
+                            TODO ModifiersA()TODO Statements
+                            TODO ModifiersA(TODO AttributeListsTODO Modifiersint foo)TODO Statements
+                            ~A()TODO Statements
+                            TODO FieldDeclarationSyntax
+                            TODO FieldDeclarationSyntax
+                            TODO AttributeListsTODO Modifiersvoid Handler(TODO AttributeListsTODO Modifiersobject value)TODO ConstraintClausesTODO Statements
+                            TODO AttributeListsTODO Modifiersint m<TODO AttributeListsT>(TODO AttributeListsTODO ModifiersT t)TODO ConstraintClausesTODO Statements
+                            TODO PropertyDeclarationSyntax
+                            TODO PropertyDeclarationSyntax
+                            TODO IndexerDeclarationSyntax
+                            TODO EventFieldDeclarationSyntax
+                            TODO EventDeclarationSyntax
+                            TODO OperatorDeclarationSyntax
+                            TODO OperatorDeclarationSyntax
+                            TODO OperatorDeclarationSyntax
+                            TODO AttributeListsTODO Modifiersclass CTODO ConstraintClauses { }
+                }
+                TODO StructDeclarationSyntax
+                TODO InterfaceDeclarationSyntax
+                TODO EnumDeclarationSyntax
+                TODO Modifiersdelegate void Delegate(TODO AttributeListsTODO Modifiersobject P)TODO ConstraintClauses;
+                TODO AttributeListsTODO Modifiersnamespace Test
+                {
+                                                        using System;
+                                                        using System.Collections;
+                                                        TODO AttributeListsTODO Modifiersclass СписокTODO ConstraintClauses
+                                                        ){
+                                                            TODO AttributeListsTODO ModifiersIEnumerable Power(TODO AttributeListsTODO Modifiersint number, TODO AttributeListsTODO Modifiersint exponent)TODO ConstraintClausesTODO Statements
+                                                            TODO AttributeListsTODO Modifiersvoid Main()TODO ConstraintClausesTODO Statements
+                                                            TODO AttributeListsTODO Modifiersvoid Wait()TODO ConstraintClausesTODO Statements
+                                                            TODO AttributeListsTODO Modifiersvoid AsyncAnonymous()TODO ConstraintClausesTODO Statements
+                                                        }
+                }
+}
+TODO AttributeListsTODO Modifiersnamespace ConsoleApplication1
+{
+                                                                    TODO AttributeListsTODO Modifiersnamespace RecursiveGenericBaseType
+                                                                    {
+                                                                        TODO AttributeListsTODO Modifiersclass A<TODO AttributeListsT> : B<A<T>, A<T>>TODO ConstraintClausesString(){
+                                                                                                TODO AttributeListsTODO ModifiersA<T> M()TODO ConstraintClausesTODO Statements
+                                                                                                TODO AttributeListsTODO ModifiersB<A<T>, A<T>> N()TODO ConstraintClausesTODO Statements
+                                                                                                TODO AttributeListsTODO ModifiersB<A<T>, A<T>> O()TODO ConstraintClausesTODO Statements
+                                                                        }
+                                                                        TODO AttributeListsTODO Modifiersclass B<TODO AttributeListsT1, TODO AttributeListsT2> : A<B<T1, T2>>TODO ConstraintClauses
+                                                                        ){
+                                                                                                                                                TODO AttributeListsTODO ModifiersA<T> M()TODO ConstraintClausesTODO Statements
+                                                                                                                                                TODO AttributeListsTODO ModifiersB<A<T>, A<T>> N()TODO ConstraintClausesTODO Statements
+                                                                                                                                                TODO AttributeListsTODO ModifiersA<T> O()TODO ConstraintClausesTODO Statements
+                                                                        }
+                                                                    }
+                                                                    TODO AttributeListsTODO Modifiersnamespace Boo
+                                                                    {
+                                                                                                                                                                        TODO AttributeListsTODO Modifiersclass Bar<TODO AttributeListsT>TODO ConstraintClausesString(){
+                                                                                                                                                                                TODO FieldDeclarationSyntax
+                                                                                                                                                                                TODO AttributeListsTODO Modifiersclass Foo<TODO AttributeListsU> : IEnumerable<T>TODO ConstraintClauses
+                                                                                                                                                                                ){
+                                                                                                                                                                                                TODO AttributeListsTODO Modifiersvoid Method<TODO AttributeListsK, TODO AttributeListsV>(TODO AttributeListsTODO ModifiersK k, TODO AttributeListsTODO ModifiersT t, TODO AttributeListsTODO ModifiersU u)TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                }
+                                                                                                                                                                        }
+                                                                    }
+                                                                    TODO AttributeListsTODO Modifiersclass TestTODO ConstraintClauses
+                                                                    ){
+                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid Bar3()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                            TODO ConversionOperatorDeclarationSyntax
+                                                                                                                                                                                                            TODO ConversionOperatorDeclarationSyntax
+                                                                                                                                                                                                            TODO FieldDeclarationSyntax
+                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid Bar2()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                            TODO EventFieldDeclarationSyntax
+                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid Blah()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                            TODO Modifiersdelegate Recursive Recursive(TODO AttributeListsTODO ModifiersRecursive r)TODO ConstraintClauses;
+                                                                                                                                                                                                            TODO Modifiersdelegate Recursive Recursive<TODO AttributeListsA, TODO AttributeListsR>(TODO AttributeListsTODO ModifiersRecursive<A, R> r)TODO ConstraintClauses;
+                                                                                                                                                                                                            TODO PropertyDeclarationSyntax
+                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid Constants()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid ConstructedType()TODO ConstraintClausesTODO Statements
+                                                                    }
+}
+TODO AttributeListsTODO Modifiersnamespace Comments.XmlComments.UndocumentedKeywords
+{
+                                                                                                                                                                                                                                TODO AttributeListsTODO Modifiersclass C<TODO AttributeListsT>TODO ConstraintClauses
+                                                                                                                                                                                                                                ){
+                                                                                                                                                                                                                                        TODO AttributeListsTODO Modifiersvoid M<TODO AttributeListsU>(TODO AttributeListsTODO ModifiersT t, TODO AttributeListsTODO ModifiersU u)TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                TODO AttributeListsTODO Modifiersclass TestClassXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXTODO ConstraintClauses { }
+                                                                                                                                                                                                                                TODO AttributeListsTODO Modifiersclass TestClassXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX22TODO ConstraintClauses { }
+                                                                                                                                                                                                                                TODO AttributeListsTODO Modifiersclass yieldTODO ConstraintClauses
+                                                                                                                                                                                                                                ){
+                                                                                                                                                                                                                                                    TODO AttributeListsTODO Modifiersvoid Foo<TODO AttributeListsU>(TODO AttributeListsTODO Modifiers__arglist)TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                    TODO AttributeListsTODO Modifiersvoid Params(TODO AttributeListsTODO Modifiersdynamic a, TODO AttributeListsTODO Modifiersdynamic b, TODO AttributeListsTODO Modifiersdynamic[] c)TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                    TODO AttributeListsTODO Modifiersvoid Params(TODO AttributeListsTODO Modifiersdynamic a = 2, TODO AttributeListsTODO Modifiersdynamic c = TODO DefaultExpressionSyntax, TODO AttributeListsTODO Modifiersdynamic[][] c)TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                    TODO AttributeListsTODO Modifiersstring ToString()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                    TODO AttributeListsTODO Modifiersvoid OnError()TODO ConstraintClauses;
+                                                                                                                                                                                                                                                    TODO AttributeListsTODO Modifiersvoid method()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                    TODO StructDeclarationSyntax
+                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                TODO AttributeListsTODO Modifiersclass CSharp6FeaturesTODO ConstraintClauses
+                                                                                                                                                                                                                                ){
+                                                                                                                                                                                                                                                                        TODO PropertyDeclarationSyntax
+                                                                                                                                                                                                                                                                        TODO PropertyDeclarationSyntax
+                                                                                                                                                                                                                                                                        TODO PropertyDeclarationSyntax
+                                                                                                                                                                                                                                                                        TODO PropertyDeclarationSyntax
+                                                                                                                                                                                                                                                                        TODO AttributeListsTODO ModifiersPoint Move(TODO AttributeListsTODO Modifiersint dx, TODO AttributeListsTODO Modifiersint dy)TODO ConstraintClauses => new Point(TODO BinaryExpressionSyntax, TODO BinaryExpressionSyntax);
+                                                                                                                                                                                                                                                                        TODO OperatorDeclarationSyntax
+                                                                                                                                                                                                                                                                        TODO ConversionOperatorDeclarationSyntax
+                                                                                                                                                                                                                                                                        TODO AttributeListsTODO Modifiersvoid Print()TODO ConstraintClauses => Console.WriteLine(TODO BinaryExpressionSyntax);
+                                                                                                                                                                                                                                                                        TODO PropertyDeclarationSyntax
+                                                                                                                                                                                                                                                                        TODO IndexerDeclarationSyntax
+                                                                                                                                                                                                                                                                        TODO AttributeListsTODO Modifiersvoid Test()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                }
+}
+TODO AttributeListsTODO Modifiersclass CSharp70TODO ConstraintClauses
+){
+                                                                                                                                                                                                                                                                                        TODO AttributeListsTODO Modifiersvoid PatternMatching(TODO AttributeListsTODO Modifiersstring arg, TODO AttributeListsTODO Modifiersint b)TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                        TODO AttributeListsTODO ModifiersTask LocalFunctions(TODO AttributeListsTODO Modifiersstring[] args)TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                        TODO AttributeListsTODO Modifiersvoid OutVar(TODO AttributeListsTODO Modifiersstring[] args)TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                        TODO AttributeListsTODO Modifiersvoid ThrowExpression()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                        TODO AttributeListsTODO Modifiersvoid BinaryLiterals()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                        TODO AttributeListsTODO Modifiersvoid DigitSeparators()TODO ConstraintClausesTODO Statements
+}
+TODO AttributeListsTODO Modifiersclass CSharp71TODO ConstraintClauses
+){
+                                                                                                                                                                                                                                                                                                        TODO AttributeListsTODO Modifiersvoid DefaultWithoutTypeName(TODO AttributeListsTODO Modifiersstring content = default)TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                        TODO AttributeListsTODO Modifiersvoid TupleRecognize(TODO AttributeListsTODO Modifiersint a, TODO AttributeListsTODO Modifiers(int, int) b, TODO AttributeListsTODO Modifiers(int, int, int)? c)TODO ConstraintClausesTODO Statements
+}
+TODO AttributeListsTODO Modifiersclass CSharp72TODO ConstraintClauses
+){
+                                                                                                                                                                                                                                                                                                                    TODO StructDeclarationSyntax
+                                                                                                                                                                                                                                                                                                                    TODO StructDeclarationSyntax
+                                                                                                                                                                                                                                                                                                                    TODO AttributeListsTODO Modifiersvoid DoSomething(TODO AttributeListsTODO Modifiersbool isEmployed, TODO AttributeListsTODO Modifiersstring personName, TODO AttributeListsTODO Modifiersint personAge)TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                    TODO AttributeListsTODO Modifiersvoid NonTrailingNamedArguments()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                    TODO AttributeListsTODO Modifiersvoid ConditionalRef()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                    TODO AttributeListsTODO Modifiersvoid LeadingSeparator()TODO ConstraintClausesTODO Statements
+}
+TODO AttributeListsTODO Modifiersclass CSharp73TODO ConstraintClauses
+){
+                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid Blittable<TODO AttributeListsT>(TODO AttributeListsTODO ModifiersT value)TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                            TODO StructDeclarationSyntax
+                                                                                                                                                                                                                                                                                                                            TODO FieldDeclarationSyntax
+                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid IndexingMovableFixedFields()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid PatternBasedFixed()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid StackallocArrayInitializer()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid TupleEquality()TODO ConstraintClausesTODO Statements
+}
+TODO AttributeListsTODO Modifiersnamespace CSharp80
+{
+                                                                                                                                                                                                                                                                                                                                        TODO AttributeListsTODO Modifiersclass CSharp80ExceptInterfaceDefaultImplementTODO ConstraintClauses
+                                                                                                                                                                                                                                                                                                                                        ){
+                                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid ReferenceNullable()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid Patterns()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO ModifiersTask AsyncStreams()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid Ranges()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid UsingDeclarators()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid StaticLocalFunction()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersvoid NullCoalescingAssignment()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                                            TODO AttributeListsTODO Modifiersfloat Hello()TODO ConstraintClausesTODO Statements
+                                                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                                                        TODO InterfaceDeclarationSyntax
+                                                                                                                                                                                                                                                                                                                                        TODO InterfaceDeclarationSyntax
+                                                                                                                                                                                                                                                                                                                                        TODO InterfaceDeclarationSyntax
+                                                                                                                                                                                                                                                                                                                                        TODO InterfaceDeclarationSyntax
+}

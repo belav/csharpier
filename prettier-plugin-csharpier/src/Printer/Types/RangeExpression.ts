@@ -15,6 +15,6 @@ export const printRangeExpression: PrintMethod<RangeExpressionNode> = (path, opt
     return concat([
         node.leftOperand ? path.call(print, "leftOperand") : "",
         printPathSyntaxToken(path, "operatorToken"),
-        node.rightOperand ? path.call(print, "rightOperand") : "",
+        node.rightOperand ? path.call(print, "rightOperand") : ""
     ]);
 };

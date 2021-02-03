@@ -14,6 +14,6 @@ export const printRefType: PrintMethod<RefTypeNode> = (path, options, print) => 
         printSyntaxToken(node.refKeyword),
         node.readOnlyKeyword ? " " + printSyntaxToken(node.readOnlyKeyword) : "",
         " ",
-        path.call(print, "type"),
+        path.call(print, "type")
     ]);
 };

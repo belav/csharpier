@@ -6,60 +6,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
 {
-    public class IndentBuilder : Builder
+    public partial class Printer
     {
-        public Builder Contents { get; set; }
-    }
-    
-    public class StringBuilder : Builder
-    {
-        public string Value { get; set; }
-        
-        public StringBuilder(string value)
-        {
-            this.Value = value;
-        }
-    }
-    
-    public class LineBuilder : Builder
-    {
-        public enum LineType
-        {
-            Normal,
-            Hard,
-            Soft
-        }
-        
-        public LineType Type { get; set; }
-        public bool IsLiteral { get; set; }
-    }
+        public static Doc BreakParent = new BreakParent();
 
-    public class Group : Builder
-    {
-        public Builder Contents { get; set; }
-    }
-    
-    public class BreakParent : Builder
-    {
-    }
+        public static Doc HardLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard }, BreakParent);
+        public static Doc Line = new LineDoc { Type = LineDoc.LineType.Normal };
+        public static Doc SoftLine = new LineDoc { Type = LineDoc.LineType.Soft };
 
-    public class Concat : Builder
-    {
-        public Parts Parts { get; set; }
-    }
-
-    public abstract class Builder
-    {
-        public string Type { get; set; }
-    }
-
-    public static class Builders
-    {
-        public static Builder BreakParent = new BreakParent();
-
-        public static Builder HardLine = Builders.Concat(new LineBuilder { Type = LineBuilder.LineType.Hard }, Builders.BreakParent);
-
-        public static Builder Concat(Parts parts)
+        public static Doc Concat(Parts parts)
         {
             return new Concat
             {
@@ -67,7 +22,7 @@ namespace CSharpier
             };
         }
 
-        public static Builder Concat(params Builder[] parts)
+        public static Doc Concat(params Doc[] parts)
         {
             return new Concat
             {
@@ -75,12 +30,12 @@ namespace CSharpier
             };
         }
 
-        public static Builder String(string value)
+        public static Doc String(string value)
         {
-            return new StringBuilder(value);
+            return new StringDoc(value);
         }
 
-        public static Builder Join(Builder separator, IEnumerable<Builder> array)
+        public static Doc Join(Doc separator, IEnumerable<Doc> array)
         {
             var parts = new Parts();
 
@@ -97,7 +52,7 @@ namespace CSharpier
             return Concat(parts);
         }
 
-        public static Builder Group(Builder contents)
+        public static Doc Group(Doc contents)
         {
             return new Group
             {
@@ -109,103 +64,48 @@ namespace CSharpier
             };
         }
 
-        public static Builder Indent(Builder contents)
+        public static Doc Indent(Doc contents)
         {
-            return new IndentBuilder
+            return new IndentDoc
             {
                 Contents = contents
             };
         }
-    }
 
-
-    public partial class Printer
-    {
-        public Builder Print(SyntaxNode syntaxNode)
+        private bool NotNull(SyntaxToken value)
         {
-            if (syntaxNode is CompilationUnitSyntax compilationUnit)
-            {
-                return this.PrintCompilationUnitSyntax(compilationUnit);
-            }
-            else if (syntaxNode is NamespaceDeclarationSyntax namespaceDeclaration)
-            {
-                return this.PrintNamespaceDeclarationSyntax(namespaceDeclaration);
-            }
-            else if (syntaxNode is IdentifierNameSyntax identifierName)
-            {
-                return this.PrintIdentifierNameSyntax(identifierName);
-            }
-            else if (syntaxNode is UsingDirectiveSyntax usingDirectiveSyntax)
-            {
-                return this.PrintUsingDirectiveSyntax(usingDirectiveSyntax);
-            }
-            else if (syntaxNode is QualifiedNameSyntax qualifiedNameSyntax)
-            {
-                return this.PrintQualifiedNameSyntax(qualifiedNameSyntax);
-            }
-
-            throw new Exception("Can't handle " + syntaxNode.GetType().Name);
+            return value.RawKind != 0;
         }
 
-        private Builder PrintQualifiedNameSyntax(QualifiedNameSyntax node)
+        // TODO kill after conversion from typescript
+        private bool NotNull(SyntaxNode value)
         {
-            return Builders.Concat(this.Print(node.Left), Builders.String("."), this.Print(node.Right));
+            return value != null;
         }
 
-        public Builder PrintUsingDirectiveSyntax(UsingDirectiveSyntax node)
+        private void PrintAttributeLists(SyntaxList<AttributeListSyntax> attributeLists, Parts parts)
         {
-            var parts = new Parts();
-            parts.Push("using ");
-            if (node.StaticKeyword.RawKind != 0) {
-                parts.Push("static ");
-            }
-
-            parts.Push(this.Print(node.Name), Builders.String(";"));
-
-            return Builders.Concat(parts);
-        }
-        
-        public Builder PrintIdentifierNameSyntax(IdentifierNameSyntax node)
-        {
-            return Builders.String(node.Identifier.Text);
+            parts.Push(String("TODO AttributeLists"));
         }
 
-        public Builder PrintCompilationUnitSyntax(CompilationUnitSyntax node)
+        private Doc PrintModifiers(SyntaxTokenList modifiers)
         {
-            return this.Print(node.Members[0]);
+            return String("TODO Modifiers");
         }
 
-        public Builder PrintNamespaceDeclarationSyntax(NamespaceDeclarationSyntax node)
+        private Doc PrintStatements(object statements, Doc separator, Doc endOfLineDoc = null)
         {
-            var parts = new Parts();
-            foreach (var modifier in node.Modifiers)
-            {
-                parts.Push(modifier.Text);
-                parts.Push(" ");
-            }
+            return String("TODO Statements");
+        }
 
-            parts.Push("namespace");
-            parts.Push(" ");
-            parts.Push(this.Print(node.Name));
-            if (node.Usings.Count > 0)
-            {
-                parts.Push(Builders.HardLine, Builders.String("{"));
+        private Doc PrintCommaList(IEnumerable<Doc> docs)
+        {
+            return Join(Concat(String(","), Line), docs);
+        }
 
-                var innerParts = new Parts();
-                innerParts.Push(Builders.HardLine);
-                
-                innerParts.Push(Builders.Join(Builders.HardLine, node.Usings.Select(this.PrintUsingDirectiveSyntax)));
-                
-                parts.Push(Builders.Indent(Builders.Concat(innerParts)));
-
-                parts.Push(Builders.HardLine, Builders.String("}"));
-            }
-            else
-            {
-                parts.Push(" { }");   
-            }
-
-            return Builders.Concat(parts);
+        private void PrintConstraintClauses(object value, Parts parts)
+        {
+            parts.Push("TODO ConstraintClauses");
         }
     }
 }

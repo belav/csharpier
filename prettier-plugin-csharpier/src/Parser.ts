@@ -3,14 +3,10 @@ import { spawnSync } from "child_process";
 import * as fs from "fs";
 
 function parseText(text: string) {
-    const executionResult = spawnSync(
-        "dotnet",
-        ["exec", PARSER_PATH, text],
-        {
-            cwd: __dirname,
-            maxBuffer: 1000 * 1000 * 100, // 100 MB
-        },
-    );
+    const executionResult = spawnSync("dotnet", ["exec", PARSER_PATH, text], {
+        cwd: __dirname,
+        maxBuffer: 1000 * 1000 * 100 // 100 MB
+    });
     const error = executionResult.stderr.toString();
     if (error) {
         console.log(error);
@@ -23,15 +19,14 @@ function parseText(text: string) {
 function parseCSharp(text: string, parsers: object, options: any) {
     const executionResult = parseText(text);
     let stdout = "";
-    try{
+    try {
         stdout = executionResult.stdout.toString();
         const ast = JSON.parse(stdout);
         if (options.writeParserJson) {
             fs.writeFileSync(options.writeParserJson, JSON.stringify(ast, null, "    "), "utf8");
         }
         return ast;
-    }
-    catch (exception) {
+    } catch (exception) {
         if (options.writeParserJson) {
             fs.writeFileSync(options.writeParserJson, stdout, "utf8");
         }
@@ -40,7 +35,7 @@ function parseCSharp(text: string, parsers: object, options: any) {
 
 const defaultExport = {
     parse: parseCSharp,
-    astFormat: "cs",
+    astFormat: "cs"
 };
 
 export default defaultExport;

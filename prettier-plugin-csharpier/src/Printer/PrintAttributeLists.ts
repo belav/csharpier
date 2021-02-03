@@ -14,7 +14,7 @@ export function printAttributeLists(
     parts: Doc[],
     path: FastPath,
     options: ParserOptions,
-    print: Print,
+    print: Print
 ) {
     if (node.attributeLists.length === 0) {
         return;
@@ -23,8 +23,8 @@ export function printAttributeLists(
     parts.push(
         join(
             seperator,
-            path.map(innerPath => printAttributeList(innerPath, options, print), "attributeLists"),
-        ),
+            path.map(innerPath => printAttributeList(innerPath, options, print), "attributeLists")
+        )
     );
 
     if (node.nodeType !== "Parameter") {

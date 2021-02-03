@@ -11,7 +11,7 @@ import {
     SyntaxTreeNode,
     HasIdentifier,
     printIdentifier,
-    printModifiers,
+    printModifiers
 } from "./SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "./Builders";
 import { ArrowExpressionClauseNode, printArrowExpressionClause } from "./Types/ArrowExpressionClause";
@@ -45,9 +45,9 @@ interface MethodLikeDeclarationNode
 export const printMethodLikeDeclaration: PrintMethod<MethodLikeDeclarationNode> = (path, options, print) => {
     const node = path.getValue();
     const parts: Doc[] = [];
-    printExtraNewLines(node, parts, "attributeLists", "modifiers", ["returnType", "keyword"])
+    printExtraNewLines(node, parts, "attributeLists", "modifiers", ["returnType", "keyword"]);
     printAttributeLists(node, parts, path, options, print);
-    printLeadingComments(node, parts, "modifiers", "returnType", "identifier")
+    printLeadingComments(node, parts, "modifiers", "returnType", "identifier");
     parts.push(printModifiers(node));
     if (node.returnType) {
         parts.push(path.call(print, "returnType"), " ");

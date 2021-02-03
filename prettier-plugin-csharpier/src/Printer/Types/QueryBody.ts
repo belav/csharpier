@@ -20,7 +20,10 @@ export const printQueryBody: PrintMethod<QueryBodyNode> = (path, options, print)
     parts.push(path.call(print, "selectOrGroup"));
     if (node.continuation) {
         // TODO indent when there is a group by before the into?
-        parts.push(" ", path.call(o => printQueryContinuation(o, options, print), "continuation"));
+        parts.push(
+            " ",
+            path.call(o => printQueryContinuation(o, options, print), "continuation")
+        );
     }
 
     return concat(parts);

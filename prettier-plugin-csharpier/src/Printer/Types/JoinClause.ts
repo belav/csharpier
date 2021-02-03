@@ -31,6 +31,6 @@ export const printJoinClause: PrintMethod<JoinClauseNode> = (path, options, prin
         path.call(print, "leftExpression"),
         " equals ",
         path.call(print, "rightExpression"),
-        node.into ? " into " + printIdentifier(node.into) : "",
+        node.into ? " into " + printIdentifier(node.into) : ""
     ]);
 };

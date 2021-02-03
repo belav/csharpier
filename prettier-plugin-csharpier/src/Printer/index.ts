@@ -20,7 +20,7 @@ const printNode: PrintMethod = (path, options, print) => {
             "There was no nodeType of " +
                 path.stack[path.stack.length - 2] +
                 " on the node of nodeType " +
-                path.stack[path.stack.length - 3].nodeType,
+                path.stack[path.stack.length - 3].nodeType
         );
 
         return "";
@@ -37,7 +37,7 @@ const printNode: PrintMethod = (path, options, print) => {
 
             if (missingNodes.length > 0) {
                 throw new Error(
-                    `Unknown C# nodes, run the following commands:\nplop node ${missingNodes.join("\nplop node ")}`,
+                    `Unknown C# nodes, run the following commands:\nplop node ${missingNodes.join("\nplop node ")}`
                 );
             }
         }
@@ -57,7 +57,7 @@ const printNode: PrintMethod = (path, options, print) => {
 };
 
 const defaultExport = {
-    print: printNode,
+    print: printNode
 };
 
 export default defaultExport;

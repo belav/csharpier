@@ -16,7 +16,7 @@ export const printArrayCreationExpression: PrintMethod<ArrayCreationExpressionNo
             printPathSyntaxToken(path, "newKeyword"),
             " ",
             path.call(print, "type"),
-            node.initializer ? concat([line, path.call(print, "initializer")]) : "",
-        ]),
+            node.initializer ? concat([line, path.call(print, "initializer")]) : ""
+        ])
     );
 };

@@ -36,7 +36,7 @@ export const printCatchClause: PrintMethod<CatchClauseNode> = (path, options, pr
                       catchDeclarationPath.call(print, "type"),
                       catchDeclarationNode.identifier ? " " : "",
                       printIdentifier(catchDeclarationNode),
-                      ")",
+                      ")"
                   ]);
               }, "declaration")
             : "",
@@ -45,6 +45,6 @@ export const printCatchClause: PrintMethod<CatchClauseNode> = (path, options, pr
                   return concat([" when (", catchFilterClausePath.call(print, "filterExpression"), ")"]);
               }, "filter")
             : "",
-        path.call(o => printBlock(o, options, print), "block"),
+        path.call(o => printBlock(o, options, print), "block")
     ]);
 };

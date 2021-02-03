@@ -41,14 +41,14 @@ export const printRecursivePattern: PrintMethod<RecursivePatternNode> = (path, o
                                   subpatternNode.nameColon
                                       ? subpatternPath.call(o => printNameColon(o, options, print), "nameColon")
                                       : "",
-                                  subpatternPath.call(print, "pattern"),
+                                  subpatternPath.call(print, "pattern")
                               ]);
                           },
                           "positionalPatternClause",
-                          "subpatterns",
-                      ),
+                          "subpatterns"
+                      )
                   ),
-                  ")",
+                  ")"
               ])
             : "",
         node.propertyPatternClause
@@ -60,16 +60,16 @@ export const printRecursivePattern: PrintMethod<RecursivePatternNode> = (path, o
                           subpatternPath => {
                               return concat([
                                   subpatternPath.call(o => printNameColon(o, options, print), "nameColon"),
-                                  subpatternPath.call(print, "pattern"),
+                                  subpatternPath.call(print, "pattern")
                               ]);
                           },
                           "propertyPatternClause",
-                          "subpatterns",
-                      ),
+                          "subpatterns"
+                      )
                   ),
-                  " } ",
+                  " } "
               ])
             : "",
-        node.designation ? path.call(print, "designation") : "",
+        node.designation ? path.call(print, "designation") : ""
     ]);
 };

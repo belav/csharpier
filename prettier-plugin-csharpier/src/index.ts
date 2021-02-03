@@ -10,33 +10,33 @@ const languages = [
         codemirrorMode: "clike",
         extensions: [".cs", ".cake", ".cshtml", ".csx"],
         vscodeLanguageIds: ["csharp"],
-        linguistLanguageId: 42,
-    },
+        linguistLanguageId: 42
+    }
 ];
 
 const parsers = {
-    cs: parser,
+    cs: parser
 };
 
 const printers = {
-    cs: printer,
+    cs: printer
 };
 
 const options = {
     printTodo: {
         type: "boolean",
         category: "Global",
-        default: false,
+        default: false
     },
     validateComments: {
         type: "boolean",
         category: "Global",
-        default: false,
+        default: false
     },
     writeParserJson: {
         type: "string",
-        category: "Global",
-    },
+        category: "Global"
+    }
 };
 
 // TODO eventually go back to original AllInOne to figure out what kind of formatting we may want to change
@@ -47,6 +47,6 @@ module.exports = {
     parsers,
     options,
     defaultOptions: {
-        tabWidth: 4,
-    },
+        tabWidth: 4
+    }
 };

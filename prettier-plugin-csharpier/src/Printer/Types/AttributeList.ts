@@ -41,7 +41,7 @@ export const printAttributeList: PrintMethod<AttributeListNode> = (path, options
     if (node.target) {
         parts.push(
             path.call(attributeTargetSpecifierPath => printPathIdentifier(attributeTargetSpecifierPath), "target"),
-            ": ",
+            ": "
         );
     }
 
@@ -66,13 +66,13 @@ export const printAttributeList: PrintMethod<AttributeListNode> = (path, options
                             attributeArgumentNode.nameColon
                                 ? attributeArgumentPath.call(o => printNameColon(o, options, print), "nameColon")
                                 : "",
-                            attributeArgumentPath.call(print, "expression"),
+                            attributeArgumentPath.call(print, "expression")
                         ]);
                     },
                     "argumentList",
-                    "arguments",
-                ),
-            ),
+                    "arguments"
+                )
+            )
         );
         parts.push(")");
         return concat(parts);

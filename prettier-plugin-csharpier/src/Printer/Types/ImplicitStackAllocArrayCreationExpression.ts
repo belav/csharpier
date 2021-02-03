@@ -11,7 +11,7 @@ export interface ImplicitStackAllocArrayCreationExpressionNode
 export const printImplicitStackAllocArrayCreationExpression: PrintMethod<ImplicitStackAllocArrayCreationExpressionNode> = (
     path,
     options,
-    print,
+    print
 ) => {
     return concat([printPathSyntaxToken(path, "stackAllocKeyword"), "[] ", path.call(print, "initializer")]);
 };

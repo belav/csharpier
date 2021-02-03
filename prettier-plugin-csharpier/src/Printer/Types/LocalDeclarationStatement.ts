@@ -28,8 +28,24 @@ export const printLocalDeclarationStatement: PrintMethod<LocalDeclarationStateme
     // TODO 0 test that out next! make the print lines/comments stuff do nothing, and see if I can get the tests passing with more generic stuff.
     // TODO 0 the visit pattern https://github.com/prettier/prettier/issues/5747
     // looks like it depends on a class from the parser, I'm not sure if I could do it exactly, plus I do need access to the parent in at least one place
-    printExtraNewLines(node, parts, "awaitKeyword", "usingKeyword", "modifiers", ["declaration", "type", "keyword"], ["declaration", "type", "identifier"]);
-    printLeadingComments(node, parts, "awaitKeyword", "usingKeyword", "modifiers", ["declaration", "type", "keyword"], ["declaration", "type", "identifier"]);
+    printExtraNewLines(
+        node,
+        parts,
+        "awaitKeyword",
+        "usingKeyword",
+        "modifiers",
+        ["declaration", "type", "keyword"],
+        ["declaration", "type", "identifier"]
+    );
+    printLeadingComments(
+        node,
+        parts,
+        "awaitKeyword",
+        "usingKeyword",
+        "modifiers",
+        ["declaration", "type", "keyword"],
+        ["declaration", "type", "identifier"]
+    );
     if (node.awaitKeyword) {
         parts.push("await ");
     }

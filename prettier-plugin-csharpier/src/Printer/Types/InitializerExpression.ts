@@ -26,7 +26,7 @@ export const printInitializerExpression: PrintMethod<InitializerExpressionNode> 
             "{",
             indent(concat([line, printCommaList(path.map(print, "expressions"))])),
             line,
-            "}",
-        ]),
+            "}"
+        ])
     );
 };

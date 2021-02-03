@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier", "CSharpier\CSha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests", "CSharpier.Tests\CSharpier.Tests.csproj", "{A77E4297-FAA5-40AB-9856-ECF72AF5D859}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worker", "Worker\Worker.csproj", "{CF32D239-2A27-4F46-8945-8B7B9A2C8774}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{A77E4297-FAA5-40AB-9856-ECF72AF5D859}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A77E4297-FAA5-40AB-9856-ECF72AF5D859}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A77E4297-FAA5-40AB-9856-ECF72AF5D859}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF32D239-2A27-4F46-8945-8B7B9A2C8774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF32D239-2A27-4F46-8945-8B7B9A2C8774}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF32D239-2A27-4F46-8945-8B7B9A2C8774}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF32D239-2A27-4F46-8945-8B7B9A2C8774}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -12,6 +12,6 @@ export interface QueryExpressionNode extends SyntaxTreeNode<"QueryExpression"> {
 export const printQueryExpression: PrintMethod<QueryExpressionNode> = (path, options, print) => {
     return concat([
         path.call(o => printFromClause(o, options, print), "fromClause"),
-        indent(concat([line, path.call(o => printQueryBody(o, options, print), "body")])),
+        indent(concat([line, path.call(o => printQueryBody(o, options, print), "body")]))
     ]);
 };

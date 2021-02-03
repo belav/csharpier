@@ -4,7 +4,7 @@ import { FastPath, Print } from "./PrintMethod";
 import { SyntaxTreeNode } from "./SyntaxTreeNode";
 import {
     printTypeParameterConstraintClause,
-    TypeParameterConstraintClauseNode,
+    TypeParameterConstraintClauseNode
 } from "./Types/TypeParameterConstraintClause";
 
 interface HasConstraintClauses extends SyntaxTreeNode {
@@ -16,7 +16,7 @@ export function printConstraintClauses(
     parts: Doc[],
     path: FastPath,
     options: ParserOptions,
-    print: Print,
+    print: Print
 ) {
     if (!node.constraintClauses || node.constraintClauses.length == 0) {
         return;
@@ -31,11 +31,11 @@ export function printConstraintClauses(
                         hardline,
                         path.map(
                             innerPath => printTypeParameterConstraintClause(innerPath, options, print),
-                            "constraintClauses",
-                        ),
-                    ),
-                ]),
-            ),
+                            "constraintClauses"
+                        )
+                    )
+                ])
+            )
         );
 
         if (

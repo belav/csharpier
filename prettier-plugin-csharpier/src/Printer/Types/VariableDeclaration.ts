@@ -15,7 +15,7 @@ export const printVariableDeclaration: PrintMethod<VariableDeclarationNode> = (p
         " ",
         join(
             ", ",
-            path.map(o => printVariableDeclarator(o, options, print), "variables"),
-        ),
+            path.map(o => printVariableDeclarator(o, options, print), "variables")
+        )
     ]);
 };

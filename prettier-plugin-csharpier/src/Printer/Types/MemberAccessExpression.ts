@@ -13,6 +13,6 @@ export const printMemberAccessExpression: PrintMethod<MemberAccessExpressionNode
     return concat([
         path.call(print, "expression"),
         printPathSyntaxToken(path, "operatorToken"),
-        path.call(print, "name"),
+        path.call(print, "name")
     ]);
 };

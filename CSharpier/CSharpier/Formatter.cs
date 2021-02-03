@@ -29,7 +29,7 @@ namespace CSharpier
             };
         }
 
-        private string PrintDocument(Builder document)
+        private string PrintDocument(Doc document)
         {
             var width = 120; // TODO options
             var newLine = Environment.NewLine; // TODO options
@@ -52,7 +52,7 @@ namespace CSharpier
             {
                 switch (command.Doc)
                 {
-                    case StringBuilder stringBuilder:
+                    case StringDoc stringBuilder:
                         // TODO new line stuff
                         output.Append(stringBuilder.Value);
                         break;
@@ -66,8 +66,9 @@ namespace CSharpier
                                 Indent = command.Indent
                             });
                         }
+
                         break;
-                    case IndentBuilder indentBuilder:
+                    case IndentDoc indentBuilder:
                         currentStack.Push(new PrintCommand
                         {
                             Indent = MakeIndent(command.Indent),
@@ -76,12 +77,12 @@ namespace CSharpier
                         });
 
                         break;
-                    case LineBuilder line:
+                    case LineDoc line:
                         if (!command.IsModeBreak)
                         {
-                            if (line.Type != LineBuilder.LineType.Hard)
+                            if (line.Type != LineDoc.LineType.Hard)
                             {
-                                if (line.Type != LineBuilder.LineType.Soft)
+                                if (line.Type != LineDoc.LineType.Soft)
                                 {
                                     output.Append(' ');
 
@@ -127,16 +128,70 @@ namespace CSharpier
                             else
                             {
                                 position -= Trim(output);
-                                    output.Append(newLine + command.Indent.Value);
+                                output.Append(newLine + command.Indent.Value);
                                 position = command.Indent.Length;
                             }
 
                             break;
                         }
+
                         break;
                     case Group group:
-                        // TODO this looks more difficult
+                        switch (command.IsModeBreak)
+                        {
+                            case false:
+                                if (!shouldRemeasure)
+                                {
+                                    currentStack.Push(new PrintCommand
+                                    {
+                                        Indent = command.Indent,
+                                        IsModeBreak = group.Break,
+                                        Doc = group.Contents,
+                                    });
+                                    break;
+                                }
+
+                                continue;
+                            case true:
+                                shouldRemeasure = false;
+
+                                var next = new PrintCommand
+                                {
+                                    Indent = command.Indent,
+                                    IsModeBreak = false,
+                                    Doc = group.Contents
+                                };
+
+                                var rem = width - position;
+
+                                if (!group.Break && Fits(next, currentStack, rem))
+                                {
+                                    currentStack.Push(next);
+                                }
+                                else
+                                {
+                                    // TODO expandedStates is a big complicated thing here, but I don't think I'll use it?
+                                    // TODO can't this just push the same next as above but flipping the break mode?
+                                    currentStack.Push(new PrintCommand
+                                    {
+                                        Indent = command.Indent,
+                                        IsModeBreak = true,
+                                        Doc = group.Contents
+                                    });
+                                }
+
+                                break;
+                        }
+
+                        // TODO we may not use ids for groups
+                        // if (doc.id)
+                        // {
+                        //     groupModeMap[doc.id] = cmds[cmds.length - 1][1];
+                        // }
+
                         break;
+
+
                     case BreakParent breakParent: // this doesn't seem to be used in here
                         break;
                     default:
@@ -144,8 +199,17 @@ namespace CSharpier
                 }
             }
 
-            return output.ToString();
+            return
+                output.ToString();
         }
+
+        private bool Fits(PrintCommand next, Stack<PrintCommand> currentStack, int rem)
+        {
+            return true;
+            // TODO this is huge!!
+            throw new NotImplementedException();
+        }
+
 
         // TODO there is more going on here with dedent and number/string align
         private Indent MakeIndent(Indent indent)
@@ -153,25 +217,31 @@ namespace CSharpier
             // TODO options;
             var useTabs = false;
             var tabWidth = 4;
-
             var queue = indent.Queue;
-            queue.Add(new IndentType { Type = "Indent" });
-            
+            queue.Add(new IndentType
+            {
+                Type = "Indent"
+            });
             var value = "";
             var length = 0;
             var lastTabs = 0;
-            var lastSpaces = 0;
 
+            var lastSpaces = 0;
             foreach (var part in queue)
             {
-                switch (part.Type) {
+                switch (part.Type)
+                {
                     case "Indent":
                         flush();
-                        if (useTabs) {
+                        if (useTabs)
+                        {
                             addTabs(1);
-                        } else {
+                        }
+                        else
+                        {
                             addSpaces(tabWidth);
                         }
+
                         break;
                     case "stringAlign":
                         flush();
@@ -186,7 +256,7 @@ namespace CSharpier
                         throw new Exception(part.Type);
                 }
             }
-            
+
             flushSpaces();
 
             void addTabs(int count)
@@ -201,21 +271,28 @@ namespace CSharpier
                 length += count;
             }
 
-            void flush() {
-                if (useTabs) {
+            void flush()
+            {
+                if (useTabs)
+                {
                     flushTabs();
-                } else {
+                }
+                else
+                {
                     flushSpaces();
                 }
             }
 
-            void flushTabs() {
-                if (lastTabs > 0) {
+            void flushTabs()
+            {
+                if (lastTabs > 0)
+                {
                     addTabs(lastTabs);
                 }
+
                 resetLast();
             }
-            
+
             void flushSpaces()
             {
                 if (lastSpaces > 0)
@@ -224,14 +301,17 @@ namespace CSharpier
                 }
 
                 resetLast();
-            };
+            }
+
+            ;
 
             void resetLast()
             {
                 lastTabs = 0;
                 lastSpaces = 0;
-            };
+            }
 
+            ;
             return new Indent
             {
                 Value = value,
@@ -242,14 +322,13 @@ namespace CSharpier
 
         private int Trim(System.Text.StringBuilder stringBuilder)
         {
-            if (stringBuilder.Length == 0) {
+            if (stringBuilder.Length == 0)
+            {
                 return 0;
             }
 
             var trimCount = 0;
-            
             var i = stringBuilder.Length - 1;
-
             for (; i >= 0; i--)
             {
                 if (!char.IsWhiteSpace(stringBuilder[i]))
@@ -260,13 +339,12 @@ namespace CSharpier
                 trimCount++;
             }
 
-            // TODO what does this do?
-            // if (out.length && typeof out[out.length - 1] === "string") {
-            //     const trimmed = out[out.length - 1].replace(/[\t ]*$/, "");
-            //     trimCount += out[out.length - 1].length - trimmed.length;
-            //         out[out.length - 1] = trimmed;
-            // }
-
+// TODO what does this do?
+// if (out.length && typeof out[out.length - 1] === "string") {
+//     const trimmed = out[out.length - 1].replace(/[\t ]*$/, "");
+//     trimCount += out[out.length - 1].length - trimmed.length;
+//         out[out.length - 1] = trimmed;
+// }
             return trimCount;
         }
     }
@@ -281,7 +359,7 @@ namespace CSharpier
     {
         public Indent Indent { get; set; }
         public bool IsModeBreak { get; set; }
-        public Builder Doc { get; set; }
+        public Doc Doc { get; set; }
     }
 
     internal class Indent

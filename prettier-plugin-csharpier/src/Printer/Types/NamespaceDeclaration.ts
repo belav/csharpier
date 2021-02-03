@@ -25,7 +25,7 @@ export const printNamespaceDeclaration: PrintMethod<NamespaceDeclarationNode> = 
     printExtraNewLines(node, parts, "attributeLists", "modifiers", "namespaceKeyword");
     printAttributeLists(node, parts, path, options, print);
     parts.push(printModifiers(node));
-    parts.push(printSyntaxToken(node.namespaceKeyword));
+    parts.push("namespace");
     parts.push(" ");
     parts.push(path.call(print, "name"));
 
@@ -41,9 +41,9 @@ export const printNamespaceDeclaration: PrintMethod<NamespaceDeclarationNode> = 
             innerParts.push(
                 join(
                     hardline,
-                    path.map(innerPath => printExternAliasDirective(innerPath, options, print), "externs"),
+                    path.map(innerPath => printExternAliasDirective(innerPath, options, print), "externs")
                 ),
-                hardline,
+                hardline
             );
         }
 
@@ -51,9 +51,9 @@ export const printNamespaceDeclaration: PrintMethod<NamespaceDeclarationNode> = 
             innerParts.push(
                 join(
                     hardline,
-                    path.map(innerPath => printUsingDirective(innerPath, options, print), "usings"),
+                    path.map(innerPath => printUsingDirective(innerPath, options, print), "usings")
                 ),
-                hardline,
+                hardline
             );
         }
 

@@ -21,9 +21,9 @@ export const printCompilationUnit: PrintMethod<CompilationUnitNode> = (path, opt
         parts.push(
             join(
                 hardline,
-                path.map(innerPath => printExternAliasDirective(innerPath, options, print), "externs"),
+                path.map(innerPath => printExternAliasDirective(innerPath, options, print), "externs")
             ),
-            hardline,
+            hardline
         );
     }
 
@@ -31,9 +31,9 @@ export const printCompilationUnit: PrintMethod<CompilationUnitNode> = (path, opt
         parts.push(
             join(
                 hardline,
-                path.map(innerPath => printUsingDirective(innerPath, options, print), "usings"),
+                path.map(innerPath => printUsingDirective(innerPath, options, print), "usings")
             ),
-            hardline,
+            hardline
         );
     }
 

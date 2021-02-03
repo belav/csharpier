@@ -18,7 +18,7 @@ export interface ParenthesizedLambdaExpressionNode extends SyntaxTreeNode<"Paren
 export const printParenthesizedLambdaExpression: PrintMethod<ParenthesizedLambdaExpressionNode> = (
     path,
     options,
-    print,
+    print
 ) => {
     const node = path.getValue();
     const parts: Doc[] = [];
@@ -27,7 +27,7 @@ export const printParenthesizedLambdaExpression: PrintMethod<ParenthesizedLambda
     }
     parts.push(
         path.call(o => printParameterList(o, options, print), "parameterList"),
-        " => ",
+        " => "
     );
     if (node.expressionBody) {
         parts.push(path.call(print, "expressionBody"));

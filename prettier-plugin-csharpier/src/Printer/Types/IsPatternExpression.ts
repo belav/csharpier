@@ -9,9 +9,5 @@ export interface IsPatternExpressionNode extends SyntaxTreeNode<"IsPatternExpres
 }
 
 export const printIsPatternExpression: PrintMethod<IsPatternExpressionNode> = (path, options, print) => {
-    return concat([
-        path.call(print, "expression"),
-        " is ",
-        path.call(print, "pattern"),
-    ]);
+    return concat([path.call(print, "expression"), " is ", path.call(print, "pattern")]);
 };

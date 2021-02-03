@@ -7,7 +7,7 @@ import {
     printIdentifier,
     printSyntaxToken,
     SyntaxTreeNode,
-    printModifiers,
+    printModifiers
 } from "../SyntaxTreeNode";
 import { concat, group, hardline, indent, join, softline, line, doubleHardline } from "../Builders";
 import { AttributeListNode } from "./AttributeList";

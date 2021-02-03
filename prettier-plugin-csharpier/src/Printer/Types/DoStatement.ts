@@ -17,6 +17,6 @@ export const printDoStatement: PrintMethod<DoStatementNode> = (path, options, pr
         printPathSyntaxToken(path, "whileKeyword"),
         " (",
         path.call(print, "condition"),
-        ");",
+        ");"
     ]);
 };

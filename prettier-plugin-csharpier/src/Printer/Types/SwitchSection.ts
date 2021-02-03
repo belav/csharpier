@@ -13,7 +13,7 @@ export const printSwitchSection: PrintMethod<SwitchSectionNode> = (path, options
     const node = path.getValue();
     const parts: Doc[] = [join(hardline, path.map(print, "labels"))];
     if (node.statements.length === 1 && node.statements[0].nodeType === "Block") {
-        parts.push(path.call(o => printBlock(o, options, print), "statements", 0))
+        parts.push(path.call(o => printBlock(o, options, print), "statements", 0));
     } else {
         parts.push(indent(concat([hardline, concat(path.map(print, "statements"))])));
     }

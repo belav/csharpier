@@ -23,7 +23,7 @@ export const printUsingStatement: PrintMethod<UsingStatementNode> = (path, optio
         " (",
         node.declaration ? path.call(o => printVariableDeclaration(o, options, print), "declaration") : "",
         node.expression ? path.call(print, "expression") : "",
-        ")",
+        ")"
     ];
 
     let statement = path.call(print, "statement");

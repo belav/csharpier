@@ -22,13 +22,7 @@ export const printForEachStatement: PrintMethod<ForEachStatementNode> = (path, o
         parts.push("await ");
     }
     parts.push("foreach ", "(");
-    parts.push(
-        path.call(print, "type"),
-        " ",
-        printIdentifier(node),
-        " in ",
-        path.call(print, "expression"),
-    );
+    parts.push(path.call(print, "type"), " ", printIdentifier(node), " in ", path.call(print, "expression"));
     parts.push(")");
     parts.push(path.call(print, "statement"));
 

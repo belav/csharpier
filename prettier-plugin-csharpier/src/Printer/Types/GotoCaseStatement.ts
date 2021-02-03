@@ -16,6 +16,6 @@ export const printGotoCaseStatement: PrintMethod<GotoCaseStatementNode> = (path,
         node.caseOrDefaultKeyword ? " " : "",
         printSyntaxToken(node.caseOrDefaultKeyword),
         expression,
-        ";",
+        ";"
     ]);
 };

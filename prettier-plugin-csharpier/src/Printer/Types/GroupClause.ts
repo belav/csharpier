@@ -18,6 +18,6 @@ export const printGroupClause: PrintMethod<GroupClauseNode> = (path, options, pr
         " ",
         printSyntaxToken(node.byKeyword),
         " ",
-        path.call(print, "byExpression"),
+        path.call(print, "byExpression")
     ]);
 };
