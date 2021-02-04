@@ -8,6 +8,72 @@ namespace Worker
 {
     public class TypescriptConverter
     {
+        // TODO make this powershell that runs on build?
+        [Test]
+        public void CreateUnitTests()
+        {
+            var rootDirectory = new DirectoryInfo(@"C:\Projects\csharpier");
+            var csharpDirectory = Path.Combine(rootDirectory.FullName, @"CSharpier\CSharpier.Tests\TestFiles");
+            foreach (var directory in new DirectoryInfo(csharpDirectory).GetDirectories())
+            {
+                var output = new StringBuilder();
+
+                output.AppendLine(@$"using CSharpier.Tests.TestFileTests;
+using NUnit.Framework;
+
+namespace CSharpier.Tests.TestFiles
+{{
+    public class {directory.Name}Tests : BaseTest
+    {{");
+
+
+                foreach (var file in directory.GetFiles())
+                {
+                    if (!file.Name.Contains(".cst") || file.Name.Contains(".actual") || file.Name.Contains(".expected"))
+                    {
+                        continue;
+                    }
+
+                    var testName = file.Name.Replace(".cst", "");
+                    output.AppendLine(@$"        [Test]
+        public void {testName}()
+        {{
+            this.RunTest(""{directory.Name}"", ""{testName}"");
+        }}");
+                }
+
+                output.AppendLine("    }");
+                output.AppendLine("}");
+                
+                File.WriteAllText(Path.Combine(directory.FullName, "_" + directory.Name + "Tests.cs"), output.ToString());
+            }
+        }
+        
+        [Test]
+        public void MoveTestFiles()
+        {
+            var rootDirectory = new DirectoryInfo(@"C:\Projects\csharpier");
+            var typescriptDirectory = Path.Combine(rootDirectory.FullName, @"prettier-plugin-csharpier\Tests");
+            var csharpDirectory = Path.Combine(rootDirectory.FullName, @"CSharpier\CSharpier.Tests\TestFiles");
+            foreach (var directory in new DirectoryInfo(typescriptDirectory).GetDirectories())
+            {
+                var csharpSubdirectory = Path.Combine(csharpDirectory, directory.Name);
+                if (!Directory.Exists(csharpSubdirectory))
+                {
+                    Directory.CreateDirectory(csharpSubdirectory);
+                }
+
+                foreach (var file in directory.GetFiles())
+                {
+                    if (!file.Name.Contains(".cs"))
+                    {
+                        continue;
+                    }
+                    file.CopyTo(Path.Combine(csharpSubdirectory, file.Name.Replace(".cs", ".cst")));
+                }
+            }
+        }
+
         [Test]
         public void GeneratePrinterSwitch()
         {

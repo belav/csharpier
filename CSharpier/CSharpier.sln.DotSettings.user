@@ -14,6 +14,8 @@
     &lt;Project Location="C:\Projects\csharpier\CSharpier\CSharpier.Tests" Presentation="&amp;lt;CSharpier.Tests&amp;gt;" /&gt;&#xD;
     &lt;TestAncestor&gt;&#xD;
       &lt;TestId&gt;NUnit3x::CF32D239-2A27-4F46-8945-8B7B9A2C8774::net5.0::Worker.TypescriptConverter.GeneratePrinterSwitch&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::CF32D239-2A27-4F46-8945-8B7B9A2C8774::net5.0::Worker.TypescriptConverter.MoveTestFiles&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::CF32D239-2A27-4F46-8945-8B7B9A2C8774::net5.0::Worker.TypescriptConverter.CreateUnitTests&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

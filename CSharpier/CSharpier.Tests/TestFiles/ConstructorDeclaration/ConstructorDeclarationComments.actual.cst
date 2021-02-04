@@ -1,0 +1,6 @@
+﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass BasicClassTODO ConstraintClauses
+){
+    TODO ModifiersBasicClass()TODO Statements
+    TODO ModifiersBasicClass(TODO AttributeListsTODO Modifiersint x)TODO Statements
+    TODO ModifiersBasicClass(TODO AttributeListsTODO Modifiersstring s)TODO Statements
+}

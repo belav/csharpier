@@ -1,0 +1,4 @@
+class ClassName
+{
+    private short x = (short)0;
+}

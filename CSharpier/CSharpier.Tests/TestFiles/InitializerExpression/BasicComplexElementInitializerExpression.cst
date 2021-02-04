@@ -1,0 +1,8 @@
+class ClassName
+{
+    Dictionary<int, string> dictionary = new Dictionary<int, string>
+    {
+        { 1, "one" },
+        { 2, "two" }
+    };
+}

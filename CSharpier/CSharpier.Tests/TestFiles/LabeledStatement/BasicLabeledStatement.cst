@@ -1,0 +1,8 @@
+class ClassName
+{
+    void MethodName()
+    {
+        label:
+        goto label;
+    }
+}

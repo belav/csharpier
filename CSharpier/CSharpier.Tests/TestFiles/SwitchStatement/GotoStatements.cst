@@ -1,0 +1,21 @@
+public class ClassName
+{
+    public void MethodName()
+    {
+        switch (0)
+        {
+            case 1:
+            {
+                goto case 2;
+            }
+            case 2:
+            {
+                goto default;
+            }
+            default:
+            {
+                return;
+            }
+        }
+    }
+}

@@ -13,9 +13,11 @@ namespace CSharpier
             this.PrintAttributeLists(node.AttributeLists, parts);
             // TODO printLeadingComments(node, parts, String("modifiers"), String("keyword"), String("identifier"));
             parts.Push(this.PrintModifiers(node.Modifiers));
-            if (node.Keyword.RawKind != 0) {
+            if (node.Keyword.RawKind != 0)
+            {
                 parts.Push(node.Keyword.Text);
             }
+
             // if (NotNull(node.EnumKeyword)) {
             //     parts.Push(printSyntaxToken(node.EnumKeyword));
             // }
@@ -24,24 +26,32 @@ namespace CSharpier
             {
                 parts.Push(this.PrintTypeParameterListSyntax(node.TypeParameterList));
             }
+
             if (node.BaseList != null)
             {
                 parts.Push(this.PrintBaseListSyntax(node.BaseList));
             }
+
             this.PrintConstraintClauses(node.ConstraintClauses, parts);
             var hasMembers = node.Members.Count > 0;
-            if (hasMembers) {
+            if (hasMembers)
+            {
                 parts.Push(Concat(node.ConstraintClauses.Count > 0 ? "String(" : HardLine, "){"));
                 var LineSeparator = HardLine;
-                if (node is EnumDeclarationSyntax) {
+                if (node is EnumDeclarationSyntax)
+                {
                     LineSeparator = Concat(String(","), HardLine);
                 }
+
                 parts.Push(Indent(Concat(HardLine, Join(LineSeparator, node.Members.Select(this.Print)))));
                 parts.Push(HardLine);
                 parts.Push(String("}"));
-            } else {
+            }
+            else
+            {
                 parts.Push(node.ConstraintClauses.Count > 0 ? "" : " ", "{", " ", "}");
             }
+
             return Concat(parts);
         }
     }
