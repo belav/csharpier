@@ -1,6 +1,13 @@
-﻿TODO AttributeListsTODO Modifiersdelegate void Delegate<TODO AttributeListsT>()TODO ConstraintClauses;
-TODO AttributeListsTODO Modifiersclass ClassName<TODO AttributeListsT>TODO ConstraintClausesString(){
-            TODO AttributeListsTODO Modifiersvoid MethodName<TODO AttributeListsT>()TODO ConstraintClausesTODO Statements
+﻿delegate void Delegate<T>()
+    where T : struct;
+
+class ClassName<T>
+    where T : class
+{
+    void MethodName<T>()
+        where T : class {
+        
+    }
 }
-TODO InterfaceDeclarationSyntax
-TODO StructDeclarationSyntax
+
+

@@ -8,11 +8,11 @@ namespace CSharpier
         private Doc PrintTypeParameterSyntax(TypeParameterSyntax node)
         {
             var parts = new Parts();
-            this.PrintAttributeLists(node.AttributeLists, parts);
-            if (NotNull(node.VarianceKeyword)) {
+            this.PrintAttributeLists(node, node.AttributeLists, parts);
+            if (NotNullToken(node.VarianceKeyword)) {
                 parts.Push(node.VarianceKeyword.Text, String(" "));
             }
-            parts.Push(node.Identifier.Text);
+            parts.Add(node.Identifier.Text);
             return Concat(parts);
         }
     }

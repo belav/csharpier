@@ -1,3 +1,5 @@
+import * as fs from "fs";
+import { Doc } from "prettier";
 import { Dictionary } from "../Common/Types";
 import { concat, hardline } from "./Builders";
 import { hasLeadingExtraLine } from "./Helpers";
@@ -35,6 +37,9 @@ const printNode: PrintMethod = (path, options, print) => {
                 validateComments(path.getValue());
             }
 
+            // TODO pass as an option, and write out somewhere better. then it'll be easier to compare to c#
+            fs.writeFileSync("c:/temp/blah.txt", printDocTree(result, ""));
+
             if (missingNodes.length > 0) {
                 throw new Error(
                     `Unknown C# nodes, run the following commands:\nplop node ${missingNodes.join("\nplop node ")}`
@@ -55,6 +60,34 @@ const printNode: PrintMethod = (path, options, print) => {
 
     return "";
 };
+
+function printDocTree(doc: Doc, indent: string): string {
+    if (typeof (doc) === "string")
+    {
+        return indent + "\"" + doc + "\"";
+    }
+
+    switch (doc.type)
+    {
+        case "concat":
+            let result = indent + "concat:\r\n";
+            for (const child of doc.parts)
+            {
+                result += printDocTree(child, indent + "    ") + "\r\n";
+            }
+            return result;
+        case "line":
+            return indent + (doc.hard ? "Hard" : doc.soft ? "Soft" : "Normal");
+        case "break-parent":
+            return indent + "breakParent";
+        case "indent":
+            return indent + "indent:\r\n" + printDocTree(doc.contents, indent + "    ");
+        case "group":
+            return indent + "group:\r\n" + printDocTree(doc.contents, indent + "    ");
+        default:
+            throw new Error("Can't handle " + doc.type);
+    }
+}
 
 const defaultExport = {
     print: printNode

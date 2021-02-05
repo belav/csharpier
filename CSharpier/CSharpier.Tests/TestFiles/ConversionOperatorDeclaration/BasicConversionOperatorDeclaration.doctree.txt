@@ -1,0 +1,35 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "Test"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        ""
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

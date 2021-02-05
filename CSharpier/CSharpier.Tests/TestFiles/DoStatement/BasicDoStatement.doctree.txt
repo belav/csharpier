@@ -1,0 +1,95 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "MethodName"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    concat:
+                                        indent:
+                                            concat:
+                                                concat:
+                                                    Hard
+                                                    breakParent
+
+                                                concat:
+                                                    concat:
+                                                        "do"
+                                                        group:
+                                                            concat:
+                                                                Normal
+                                                                "{"
+                                                                concat:
+                                                                    indent:
+                                                                        concat:
+                                                                            concat:
+                                                                                Hard
+                                                                                breakParent
+
+                                                                            concat:
+                                                                                "return;"
+
+
+                                                                    concat:
+                                                                        Hard
+                                                                        breakParent
+
+
+                                                                "}"
+
+                                                        concat:
+                                                            Hard
+                                                            breakParent
+
+                                                        "while"
+                                                        " ("
+                                                        "true"
+                                                        ");"
+
+
+
+                                        concat:
+                                            Hard
+                                            breakParent
+
+
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

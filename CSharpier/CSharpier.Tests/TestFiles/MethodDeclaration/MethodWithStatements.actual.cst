@@ -1,4 +1,7 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO AttributeListsTODO Modifiersvoid DoStuff()TODO ConstraintClausesTODO Statements
+﻿public class ClassName
+{
+    public void DoStuff() {
+        DoStuff();
+        DoStuff();
+    }
 }

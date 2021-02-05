@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintLocalFunctionStatementSyntax(LocalFunctionStatementSyntax node)
         {
-            return "TODO LocalFunctionStatementSyntax";
+            return ""; // TODO methodLikeDeclaration
         }
     }
 }

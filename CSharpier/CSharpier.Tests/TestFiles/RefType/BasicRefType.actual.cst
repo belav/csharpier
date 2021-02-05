@@ -1,4 +1,6 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO AttributeListsTODO Modifiersref Vector3 MethodName()TODO ConstraintClausesTODO Statements
+﻿class ClassName
+{
+    ref Vector3 MethodName() {
+        break;
+    }
 }

@@ -1,0 +1,35 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "Class1"
+            " "
+            "{"
+            " "
+            "}"
+
+        concat:
+            Hard
+            breakParent
+
+        concat:
+            concat:
+                Hard
+                breakParent
+
+            ""
+            "class"
+            " "
+            "Class2"
+            " "
+            "{"
+            " "
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

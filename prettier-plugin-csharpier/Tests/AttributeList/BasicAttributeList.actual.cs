@@ -16,5 +16,6 @@ class ClassName
         set;
     }
     [Obsolete]
-    void MethodName([In]string value) { }
+    void MethodName([In]string value)
+    { }
 }

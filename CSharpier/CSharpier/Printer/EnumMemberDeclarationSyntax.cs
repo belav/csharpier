@@ -8,11 +8,11 @@ namespace CSharpier
         private Doc PrintEnumMemberDeclarationSyntax(EnumMemberDeclarationSyntax node)
         {
             var parts = new Parts();
-            this.PrintAttributeLists(node.AttributeLists, parts);
-            parts.Push(this.PrintModifiers(node.Modifiers));
-            parts.Push(node.Identifier.Text);
-            if (NotNull(node.EqualsValue)) {
-                parts.Push(this.PrintEqualsValueClauseSyntax(node.EqualsValue));
+            this.PrintAttributeLists(node, node.AttributeLists, parts);
+            parts.Add(this.PrintModifiers(node.Modifiers));
+            parts.Add(node.Identifier.Text);
+            if (node.EqualsValue != null) {
+                parts.Add(this.PrintEqualsValueClauseSyntax(node.EqualsValue));
             }
             return Concat(parts);
         }

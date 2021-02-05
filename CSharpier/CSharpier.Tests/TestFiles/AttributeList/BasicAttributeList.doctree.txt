@@ -1,0 +1,164 @@
+concat:
+    concat:
+        concat:
+            "["
+            "assembly"
+            ": "
+            concat:
+                concat:
+                    concat:
+                        "System"
+                        "."
+                        "Copyright"
+
+                    "("
+                    concat:
+                        concat:
+                            ""
+                            ""
+                            "@"(C)""
+
+2009""
+
+
+                    ")"
+
+
+            "]"
+
+        concat:
+            Hard
+            breakParent
+
+        concat:
+            "["
+            "module"
+            ": "
+            concat:
+                concat:
+                    concat:
+                        "System"
+                        "."
+                        "Copyright"
+
+                    "("
+                    concat:
+                        concat:
+                            ""
+                            ""
+                            concat:
+                                ""\n\t\u0123(C) \"2009""
+                                " "
+                                "+"
+                                " "
+                                ""\u0123""
+
+
+
+                    ")"
+
+
+            "]"
+
+
+    concat:
+        concat:
+            concat:
+                concat:
+                    "["
+                    concat:
+                        "Obsolete"
+
+                    "]"
+
+
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        ""
+                        concat:
+                            Hard
+                            breakParent
+
+                        ""
+                        concat:
+                            Hard
+                            breakParent
+
+                        concat:
+                            concat:
+                                concat:
+                                    "["
+                                    concat:
+                                        "Obsolete"
+
+                                    "]"
+
+
+                            ""
+                            "void"
+                            " "
+                            "MethodName"
+                            group:
+                                concat:
+                                    "("
+                                    indent:
+                                        concat:
+                                            Soft
+                                            concat:
+                                                concat:
+                                                    concat:
+                                                        concat:
+                                                            "["
+                                                            concat:
+                                                                "In"
+
+                                                            "]"
+
+
+                                                    Normal
+                                                    ""
+                                                    "string"
+                                                    " "
+                                                    "value"
+
+
+
+                                    ")"
+
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    " "
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

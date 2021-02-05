@@ -9,18 +9,18 @@ namespace CSharpier
         {
             var parts = new Parts();
             //this.PrintExtraNewLines(node, String("attributeLists"), String("modifiers"), String("namespaceKeyword"));
-            this.PrintAttributeLists(node.AttributeLists, parts);
-            parts.Push(this.PrintModifiers(node.Modifiers));
-            parts.Push(String("namespace"));
-            parts.Push(String(" "));
-            parts.Push(this.Print(node.Name));
+            this.PrintAttributeLists(node, node.AttributeLists, parts);
+            parts.Add(this.PrintModifiers(node.Modifiers));
+            parts.Add(String("namespace"));
+            parts.Add(String(" "));
+            parts.Add(this.Print(node.Name));
             var hasMembers = node.Members.Count > 0;
             var hasUsing = node.Usings.Count > 0;
             var hasExterns = node.Externs.Count > 0;
             if (hasMembers || hasUsing || hasExterns) {
                 parts.Push(HardLine, String("{"));
                 var innerParts = new Parts();
-                innerParts.Push(HardLine);
+                innerParts.Add(HardLine);
                 if (hasExterns) {
                     innerParts.Push(
                         Join(
@@ -42,10 +42,10 @@ namespace CSharpier
                 if (hasMembers) {
                     innerParts.Push(Join(HardLine, node.Members.Select(this.Print)), HardLine);
                 }
-                innerParts.TheParts.RemoveAt(innerParts.TheParts.Count - 1);
-                parts.Push(Indent(Concat(innerParts)));
-                parts.Push(HardLine);
-                parts.Push(String("}"));
+                innerParts.RemoveAt(innerParts.Count - 1);
+                parts.Add(Indent(Concat(innerParts)));
+                parts.Add(HardLine);
+                parts.Add(String("}"));
             } else {
                 parts.Push(String(" "), String("{"), String(" "), String("}"));
             }

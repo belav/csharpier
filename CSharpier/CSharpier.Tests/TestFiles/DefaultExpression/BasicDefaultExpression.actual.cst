@@ -1,4 +1,6 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO AttributeListsTODO Modifiersvoid MethodName<TODO AttributeListsT>()TODO ConstraintClausesTODO Statements
+﻿class ClassName
+{
+    void MethodName<T>() {
+        return default(T);
+    }
 }

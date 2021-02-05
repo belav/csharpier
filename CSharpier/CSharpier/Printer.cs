@@ -18,7 +18,7 @@ namespace CSharpier
         {
             return new Concat
             {
-                Parts = parts
+                Contents = parts
             };
         }
 
@@ -26,7 +26,7 @@ namespace CSharpier
         {
             return new Concat
             {
-                Parts = new Parts(parts)
+                Contents = new List<Doc>(parts)
             };
         }
 
@@ -40,13 +40,21 @@ namespace CSharpier
             var parts = new Parts();
 
             var list = array.ToList();
+
+            // TODO 0 this is good, but changes things from prettier
+            // if (list.Count == 1)
+            // {
+            //     return list[0];
+            // }
             
-            for (var x = 0; x < list.Count; x++) {
-                if (x != 0) {
-                    parts.Push(separator);
+            for (var x = 0; x < list.Count; x++)
+            {
+                if (x != 0)
+                {
+                    parts.Add(separator);
                 }
 
-                parts.Push(list[x]);
+                parts.Add(list[x]);
             }
 
             return Concat(parts);
@@ -72,30 +80,64 @@ namespace CSharpier
             };
         }
 
-        private bool NotNull(SyntaxToken value)
+        private bool NotNullToken(SyntaxToken value)
         {
             return value.RawKind != 0;
         }
 
-        // TODO kill after conversion from typescript
-        private bool NotNull(SyntaxNode value)
+        private void PrintAttributeLists(SyntaxNode node, SyntaxList<AttributeListSyntax> attributeLists, List<Doc> parts)
         {
-            return value != null;
-        }
+            if (attributeLists.Count == 0)
+            {
+                return;
+            }
 
-        private void PrintAttributeLists(SyntaxList<AttributeListSyntax> attributeLists, Parts parts)
-        {
-            parts.Push(String("TODO AttributeLists"));
+            var separator = node is TypeParameterSyntax || node is ParameterSyntax ? Line : HardLine;
+            parts.Add(
+                Join(
+                    separator,
+                    attributeLists.Select(this.PrintAttributeListSyntax)
+                )
+            );
+
+            if (node is ParameterSyntax)
+            {
+                parts.Add(separator);
+            }
         }
 
         private Doc PrintModifiers(SyntaxTokenList modifiers)
         {
-            return String("TODO Modifiers");
+            if (modifiers.Count == 0)
+            {
+                return "";
+            }
+
+            return Concat(
+                Join(
+                    " ",
+                    modifiers.Select(o => String(o.Text))
+                ),
+                " "
+            );
         }
 
-        private Doc PrintStatements(object statements, Doc separator, Doc endOfLineDoc = null)
+        private Doc PrintStatements<T>(IReadOnlyList<T> statements, Doc separator, Doc endOfLineDoc = null)
+            where T : SyntaxNode
         {
-            return String("TODO Statements");
+            var actualEndOfLine = endOfLineDoc != null ? Concat(endOfLineDoc, separator) : separator;
+            
+            Doc body = " ";
+            if (statements.Count > 0)
+            {
+                body = Concat(Indent(Concat(separator, Join(actualEndOfLine, statements.Select(this.Print)))), separator);
+            }
+
+            // TODO 000000 for some reason, this Line doesn't print the same between csharpier and prettier in the MethodWithStatements test
+            // could it be options?? or something we are missing in the DocPrinter. Ugh
+            var parts = new Parts(Line, "{", body, "}");
+            // TODO printTrailingComments(node, parts, "closeBraceToken");
+            return Group(Concat(parts));
         }
 
         private Doc PrintCommaList(IEnumerable<Doc> docs)
@@ -103,9 +145,49 @@ namespace CSharpier
             return Join(Concat(String(","), Line), docs);
         }
 
-        private void PrintConstraintClauses(object value, Parts parts)
+        private void PrintConstraintClauses(SyntaxNode node, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, List<Doc> parts)
         {
-            parts.Push("TODO ConstraintClauses");
+            if (constraintClauses.Count == 0)
+            {
+                return;
+            }
+
+
+            parts.Add(
+                Indent(
+                    Concat(
+                        HardLine,
+                        Join(
+                            HardLine,
+                            constraintClauses.Select(this.PrintTypeParameterConstraintClauseSyntax)
+                        )
+                    )
+                )
+            );
+
+            if (
+                !(node is DelegateDeclarationSyntax)
+                && !(node is MethodDeclarationSyntax)
+                && !(node is LocalFunctionStatementSyntax)
+            )
+            {
+                parts.Add(HardLine);
+            }
+        }
+
+        private Doc PrintLeftRightOperator(SyntaxNode node, SyntaxNode left, SyntaxToken operatorToken, SyntaxNode right)
+        {
+            var parts = new Parts();
+                // TODO printExtraNewLines(node, parts, ["left", "identifier"]);
+                // TODO printLeadingComments(node, parts, ["left", "identifier"]);
+                parts.Push(
+                    this.Print(left),
+                    " ",
+                    operatorToken.Text,
+                    " ",
+                    this.Print(right)
+                );
+            return Concat(parts);
         }
     }
 }

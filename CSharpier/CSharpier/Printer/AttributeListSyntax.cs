@@ -20,7 +20,7 @@ namespace CSharpier
             var attributes = new List<Doc>();
             foreach (var attributeNode in node.Attributes)
             {
-                var name = this.Print(attributeNode);
+                var name = this.Print(attributeNode.Name);
                 if (attributeNode.ArgumentList == null)
                 {
                     attributes.Add(name);
@@ -28,7 +28,7 @@ namespace CSharpier
                 }
 
                 var innerParts = new Parts(name, "(");
-                innerParts.Push(
+                innerParts.Add(
                     Join(
                         String(", "),
                         attributeNode.ArgumentList.Arguments.Select(attributeArgumentNode => Concat(
@@ -42,7 +42,7 @@ namespace CSharpier
                         ))
                     )
                 );
-                innerParts.Push(String(")"));
+                innerParts.Add(String(")"));
                 attributes.Add(Concat(innerParts));
             };
             parts.Push(Join(String(", "), attributes), String("]"));

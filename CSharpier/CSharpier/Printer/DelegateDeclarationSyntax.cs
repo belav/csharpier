@@ -8,16 +8,16 @@ namespace CSharpier
         private Doc PrintDelegateDeclarationSyntax(DelegateDeclarationSyntax node)
         {
             var parts = new Parts();
-            parts.Push(this.PrintModifiers(node.Modifiers));
+            parts.Add(this.PrintModifiers(node.Modifiers));
             parts.Push(node.DelegateKeyword.Text, String(" "));
-            parts.Push(this.Print(node.ReturnType));
+            parts.Add(this.Print(node.ReturnType));
             parts.Push(String(" "), node.Identifier.Text);
-            if (NotNull(node.TypeParameterList)) {
-                parts.Push(this.Print(node.TypeParameterList));
+            if (node.TypeParameterList != null) {
+                parts.Add(this.Print(node.TypeParameterList));
             }
-            parts.Push(this.Print(node.ParameterList));
-            this.PrintConstraintClauses(node.ConstraintClauses, parts);
-            parts.Push(String(";"));
+            parts.Add(this.Print(node.ParameterList));
+            this.PrintConstraintClauses(node, node.ConstraintClauses, parts);
+            parts.Add(String(";"));
             return Concat(parts);
         }
     }

@@ -1,4 +1,6 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO AttributeListsTODO Modifiersvoid MethodName()TODO ConstraintClausesTODO Statements
+﻿public class ClassName
+{
+    public void MethodName() {
+        this.Where(o => true);
+    }
 }

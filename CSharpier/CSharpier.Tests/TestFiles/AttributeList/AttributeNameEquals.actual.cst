@@ -1,4 +1,4 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO AttributeListsTODO Modifiersbool CreateDirectory(TODO AttributeListsTODO Modifiersstring name, TODO AttributeListsTODO ModifiersSecurityAttribute sa)TODO ConstraintClauses;
+﻿class ClassName
+{
+    [DllImport("kernel32", SetLastError = true)]static extern bool CreateDirectory(string name, SecurityAttribute sa);
 }

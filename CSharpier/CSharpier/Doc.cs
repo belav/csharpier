@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace CSharpier
 {
     public class Doc
@@ -48,6 +50,6 @@ namespace CSharpier
 
     public class Concat : Doc
     {
-        public Parts Parts { get; set; }
+        public List<Doc> Contents { get; set; }
     }
 }

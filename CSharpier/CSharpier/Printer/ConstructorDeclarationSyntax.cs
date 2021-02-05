@@ -10,10 +10,10 @@ namespace CSharpier
             var parts = new Parts();
             //this.PrintExtraNewLines(node, String("attributeLists"), String("modifiers"), String("identifier"));
             // TODO printLeadingComments(node, parts, String("attributeLists"), String("modifiers"), String("identifier"));
-            parts.Push(this.PrintModifiers(node.Modifiers));
-            parts.Push(node.Identifier.Text);
-            parts.Push(this.PrintParameterListSyntax(node.ParameterList));
-            parts.Push(this.PrintBlockSyntax(node.Body));
+            parts.Add(this.PrintModifiers(node.Modifiers));
+            parts.Add(node.Identifier.Text);
+            parts.Add(this.PrintParameterListSyntax(node.ParameterList));
+            parts.Add(this.PrintBlockSyntax(node.Body));
             return Group(Concat(parts));
         }
     }

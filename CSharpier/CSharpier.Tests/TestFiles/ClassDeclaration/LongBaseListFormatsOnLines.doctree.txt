@@ -1,0 +1,78 @@
+concat:
+    concat:
+        concat:
+            concat:
+                concat:
+                    "public"
+
+                " "
+
+            "class"
+            " "
+            "ThisIsSomeLongNameAndItShouldFormatWell"
+            group:
+                indent:
+                    concat:
+                        Normal
+                        ":"
+                        " "
+                        concat:
+                            group:
+                                concat:
+                                    "AnotherLongClassName"
+                                    "<"
+                                    indent:
+                                        group:
+                                            concat:
+                                                "T"
+
+                                    ">"
+
+                            concat:
+                                ","
+                                Normal
+
+                            "AndYetAnotherLongClassName"
+
+
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "MethodName"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    " "
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

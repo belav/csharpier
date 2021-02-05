@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintSizeOfExpressionSyntax(SizeOfExpressionSyntax node)
         {
-            return "TODO SizeOfExpressionSyntax";
+            return Concat(node.Keyword.Text, "(", this.Print(node.Type), ")");
         }
     }
 }

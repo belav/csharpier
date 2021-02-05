@@ -8,17 +8,20 @@ namespace CSharpier
         private Doc PrintParameterSyntax(ParameterSyntax node)
         {
             var parts = new Parts();
-            if (node.AttributeLists != null) {
-                this.PrintAttributeLists(node.AttributeLists, parts);
-            }
-            parts.Push(this.PrintModifiers(node.Modifiers));
-            if (NotNull(node.Type)) {
+            this.PrintAttributeLists(node, node.AttributeLists, parts);
+
+            parts.Add(this.PrintModifiers(node.Modifiers));
+            if (node.Type != null)
+            {
                 parts.Push(this.Print(node.Type), String(" "));
             }
-            parts.Push(node.Identifier.Text);
-            if (NotNull(node.Default)) {
-                parts.Push(this.PrintEqualsValueClauseSyntax(node.Default));
+
+            parts.Add(node.Identifier.Text);
+            if (node.Default != null)
+            {
+                parts.Add(this.PrintEqualsValueClauseSyntax(node.Default));
             }
+
             return Concat(parts);
         }
     }

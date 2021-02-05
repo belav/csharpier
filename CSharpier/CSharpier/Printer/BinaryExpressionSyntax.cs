@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintBinaryExpressionSyntax(BinaryExpressionSyntax node)
         {
-            return "TODO BinaryExpressionSyntax";
+            return this.PrintLeftRightOperator(node, node.Left, node.OperatorToken, node.Right);
         }
     }
 }

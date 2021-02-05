@@ -1,4 +1,4 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO Modifiersdelegate void Delegate()TODO ConstraintClauses;
+﻿class ClassName
+{
+    delegate void Delegate();
 }

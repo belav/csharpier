@@ -8,13 +8,13 @@ namespace CSharpier
         private Doc PrintArgumentSyntax(ArgumentSyntax node)
         {
             var parts = new Parts();
-            if (NotNull(node.NameColon)) {
-                parts.Push(this.PrintNameColonSyntax(node.NameColon));
+            if (node.NameColon != null) {
+                parts.Add(this.PrintNameColonSyntax(node.NameColon));
             }
-            if (NotNull(node.RefKindKeyword)) {
+            if (NotNullToken(node.RefKindKeyword)) {
                 parts.Push(String(node.RefKindKeyword.Text), String(" "));
             }
-            parts.Push(this.Print(node.Expression));
+            parts.Add(this.Print(node.Expression));
             return Concat(parts);
         }
     }

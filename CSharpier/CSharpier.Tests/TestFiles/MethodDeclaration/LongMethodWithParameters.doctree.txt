@@ -1,0 +1,153 @@
+concat:
+    concat:
+        concat:
+            concat:
+                concat:
+                    "public"
+
+                " "
+
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            concat:
+                                concat:
+                                    "public"
+
+                                " "
+
+                            "void"
+                            " "
+                            "LongMethodNameForceLineBreak"
+                            group:
+                                concat:
+                                    "("
+                                    indent:
+                                        concat:
+                                            Soft
+                                            concat:
+                                                concat:
+                                                    ""
+                                                    "string"
+                                                    " "
+                                                    "oneoneoneoneoneoneoneoneone"
+
+                                                concat:
+                                                    ","
+                                                    Normal
+
+                                                concat:
+                                                    ""
+                                                    "string"
+                                                    " "
+                                                    "twotwotwotwotwotwotwotwo"
+
+                                                concat:
+                                                    ","
+                                                    Normal
+
+                                                concat:
+                                                    ""
+                                                    "string"
+                                                    " "
+                                                    "threethreethreethreethreethree"
+
+
+
+                                    ")"
+
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    " "
+                                    "}"
+
+
+                        concat:
+                            Hard
+                            breakParent
+
+                        concat:
+                            concat:
+                                concat:
+                                    "public"
+
+                                " "
+
+                            "void"
+                            " "
+                            "LongMethodNameForceLineBreak"
+                            group:
+                                concat:
+                                    "("
+                                    indent:
+                                        concat:
+                                            Soft
+                                            concat:
+                                                concat:
+                                                    ""
+                                                    "string"
+                                                    " "
+                                                    "one"
+
+                                                concat:
+                                                    ","
+                                                    Normal
+
+                                                concat:
+                                                    ""
+                                                    "string"
+                                                    " "
+                                                    "two"
+
+                                                concat:
+                                                    ","
+                                                    Normal
+
+                                                concat:
+                                                    ""
+                                                    "string"
+                                                    " "
+                                                    "three"
+
+
+
+                                    ")"
+
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    " "
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

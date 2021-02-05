@@ -1,4 +1,17 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO AttributeListsTODO Modifiersvoid MethodName()TODO ConstraintClausesTODO Statements
+﻿class ClassName
+{
+    void MethodName() {
+        try {
+            throw null;
+        }
+        catch (Exception) {
+            throw;
+        }
+        catch (ArgumentException ex) {
+            throw;
+        }
+        finally {
+            return;
+        }
+    }
 }

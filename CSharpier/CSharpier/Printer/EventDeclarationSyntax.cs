@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintEventDeclarationSyntax(EventDeclarationSyntax node)
         {
-            return "TODO EventDeclarationSyntax";
+            return ""; // TODO propertyLikeDeclaration
         }
     }
 }

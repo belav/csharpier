@@ -1,0 +1,72 @@
+concat:
+    concat:
+        concat:
+            concat:
+                ""
+                "namespace"
+                " "
+                "Namespace"
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+                indent:
+                    concat:
+                        concat:
+                            Hard
+                            breakParent
+
+                        concat:
+                            concat:
+                                concat:
+                                    concat:
+                                        "public"
+
+                                    " "
+
+                                "class"
+                                " "
+                                "FirstClass"
+                                " "
+                                "{"
+                                " "
+                                "}"
+
+                            concat:
+                                Hard
+                                breakParent
+
+                            concat:
+                                concat:
+                                    Hard
+                                    breakParent
+
+                                concat:
+                                    concat:
+                                        "public"
+
+                                    " "
+
+                                "class"
+                                " "
+                                "SecondClass"
+                                " "
+                                "{"
+                                " "
+                                "}"
+
+
+
+                concat:
+                    Hard
+                    breakParent
+
+                "}"
+
+
+
+    concat:
+        Hard
+        breakParent
+

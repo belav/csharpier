@@ -8,12 +8,12 @@ namespace CSharpier
         private Doc PrintUsingDirectiveSyntax(UsingDirectiveSyntax node)
         {
             var parts = new Parts();
-            parts.Push(String("using "));
-            if (NotNull(node.StaticKeyword)) {
-                parts.Push(String("static "));
+            parts.Add(String("using "));
+            if (NotNullToken(node.StaticKeyword)) {
+                parts.Add(String("static "));
             }
-            if (NotNull(node.Alias)) {
-                parts.Push(this.PrintNameEqualsSyntax(node.Alias));
+            if (node.Alias != null) {
+                parts.Add(this.PrintNameEqualsSyntax(node.Alias));
             }
             parts.Push(Group(this.Print(node.Name)), String(";"));
             return Concat(parts);

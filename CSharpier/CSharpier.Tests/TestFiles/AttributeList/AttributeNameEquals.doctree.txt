@@ -1,0 +1,104 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            concat:
+                                concat:
+                                    "["
+                                    concat:
+                                        concat:
+                                            "DllImport"
+                                            "("
+                                            concat:
+                                                concat:
+                                                    ""
+                                                    ""
+                                                    ""kernel32""
+
+                                                ", "
+                                                concat:
+                                                    concat:
+                                                        "SetLastError"
+                                                        " = "
+
+                                                    ""
+                                                    "true"
+
+
+                                            ")"
+
+
+                                    "]"
+
+
+                            concat:
+                                concat:
+                                    "static"
+                                    " "
+                                    "extern"
+
+                                " "
+
+                            "bool"
+                            " "
+                            "CreateDirectory"
+                            group:
+                                concat:
+                                    "("
+                                    indent:
+                                        concat:
+                                            Soft
+                                            concat:
+                                                concat:
+                                                    ""
+                                                    "string"
+                                                    " "
+                                                    "name"
+
+                                                concat:
+                                                    ","
+                                                    Normal
+
+                                                concat:
+                                                    ""
+                                                    "SecurityAttribute"
+                                                    " "
+                                                    "sa"
+
+
+
+                                    ")"
+
+                            ";"
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

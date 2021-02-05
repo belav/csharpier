@@ -1,4 +1,5 @@
 public class ClassName
 {
-    public void DoStuff() { }
+    public void DoStuff()
+    { }
 }

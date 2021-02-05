@@ -1,0 +1,100 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "delegate"
+                            " "
+                            "void"
+                            " "
+                            "Delegate"
+                            group:
+                                concat:
+                                    "<"
+                                    indent:
+                                        concat:
+                                            Soft
+                                            concat:
+                                                concat:
+                                                    concat:
+                                                        concat:
+                                                            "["
+                                                            concat:
+                                                                concat:
+                                                                    concat:
+                                                                        "System"
+                                                                        "."
+                                                                        "Obsolete"
+
+                                                                    "("
+                                                                    concat:
+
+                                                                    ")"
+
+
+                                                            "]"
+
+
+                                                    "out"
+                                                    " "
+                                                    "T"
+
+
+
+                                    ">"
+
+                            "()"
+                            indent:
+                                concat:
+                                    concat:
+                                        Hard
+                                        breakParent
+
+                                    concat:
+                                        concat:
+                                            "where"
+                                            " "
+                                            "T"
+                                            " : "
+                                            concat:
+                                                concat:
+                                                    "struct"
+                                                    ""
+
+
+
+
+
+                            ";"
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

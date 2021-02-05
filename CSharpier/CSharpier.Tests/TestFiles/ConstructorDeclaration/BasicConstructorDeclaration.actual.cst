@@ -1,4 +1,4 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass BasicClassTODO ConstraintClauses
-){
-    TODO ModifiersBasicClass()TODO Statements
+﻿public class BasicClass
+{
+    public BasicClass() { }
 }

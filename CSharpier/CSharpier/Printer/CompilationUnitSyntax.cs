@@ -26,12 +26,12 @@ namespace CSharpier
                     HardLine
                 );
             }
-            this.PrintAttributeLists(node.AttributeLists, parts);
+            this.PrintAttributeLists(node, node.AttributeLists, parts);
             if (node.Members.Count > 0) {
-                parts.Push(Join(HardLine, node.Members.Select(this.Print)));
+                parts.Add(Join(HardLine, node.Members.Select(this.Print)));
             }
-            if (parts.TheParts[^1] != HardLine) {
-                parts.Push(HardLine);
+            if (parts[^1] != HardLine) {
+                parts.Add(HardLine);
             }
             return Concat(parts);
         }

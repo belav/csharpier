@@ -1,0 +1,19 @@
+concat:
+    concat:
+        concat:
+            concat:
+                ""
+                "namespace"
+                " "
+                "Namespace"
+                " "
+                "{"
+                " "
+                "}"
+
+
+
+    concat:
+        Hard
+        breakParent
+

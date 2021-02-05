@@ -18,9 +18,9 @@ namespace CSharpier
             if (node.Statement is UsingStatementSyntax) {
                 parts.Push(HardLine, statement);
             } else if (node.Statement is BlockSyntax) {
-                parts.Push(statement);
+                parts.Add(statement);
             } else {
-                parts.Push(Indent(Concat(HardLine, statement)));
+                parts.Add(Indent(Concat(HardLine, statement)));
             }
             return Concat(parts);
         }

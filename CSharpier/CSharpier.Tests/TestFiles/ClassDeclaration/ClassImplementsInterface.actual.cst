@@ -1,1 +1,1 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass EmptyClass : IInterfaceTODO ConstraintClauses { }
+﻿public class EmptyClass : IInterface { }

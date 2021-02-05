@@ -1,0 +1,72 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            concat:
+                                concat:
+                                    "["
+                                    "return"
+                                    ": "
+                                    concat:
+                                        "Obsolete"
+
+                                    "]"
+
+                                concat:
+                                    Hard
+                                    breakParent
+
+                                concat:
+                                    "["
+                                    "method"
+                                    ": "
+                                    concat:
+                                        "Obsolete"
+
+                                    "]"
+
+
+                            ""
+                            "void"
+                            " "
+                            "Handler"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    " "
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

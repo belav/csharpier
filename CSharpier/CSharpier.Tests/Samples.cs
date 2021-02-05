@@ -17,9 +17,10 @@ namespace CSharpier.Tests
 
             var file = Path.Combine(directory.FullName, "Samples/AllInOne.cst");
             var code = File.ReadAllText(file);
-            var formattedCode = new Formatter().Format(code);
+            var formattedCode = new Formatter().Format(code, new Options());
             
-            File.WriteAllText(file.Replace(".cst", ".Formatted.cst"), formattedCode, Encoding.UTF8);
+            // TODO what about BOM? keep it if incoming file?
+            File.WriteAllText(file.Replace(".cst", ".Formatted.cst"), formattedCode, new UTF8Encoding(false));
         }
     }
 }

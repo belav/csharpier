@@ -1,0 +1,32 @@
+concat:
+    concat:
+        concat:
+            concat:
+                concat:
+                    "public"
+
+                " "
+
+            "class"
+            " "
+            "EmptyClass"
+            group:
+                indent:
+                    concat:
+                        Normal
+                        ":"
+                        " "
+                        concat:
+                            "IInterface"
+
+
+            " "
+            "{"
+            " "
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

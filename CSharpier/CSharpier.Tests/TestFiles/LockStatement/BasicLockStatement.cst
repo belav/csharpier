@@ -4,7 +4,6 @@ class ClassName
     {
         lock (sync)
             process();
-
         lock (sync)
         {
             process();

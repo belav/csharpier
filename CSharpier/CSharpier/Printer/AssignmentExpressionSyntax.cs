@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintAssignmentExpressionSyntax(AssignmentExpressionSyntax node)
         {
-            return "TODO AssignmentExpressionSyntax";
+            return this.PrintLeftRightOperator(node, node.Left, node.OperatorToken, node.Right);
         }
     }
 }

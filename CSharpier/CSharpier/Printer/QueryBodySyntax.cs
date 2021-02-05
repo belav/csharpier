@@ -8,18 +8,22 @@ namespace CSharpier
         private Doc PrintQueryBodySyntax(QueryBodySyntax node)
         {
             var parts = new Parts();
-            parts.Push(Join(Line, node.Clauses.Select(this.Print)));
-            if (node.Clauses.Count > 0) {
-                parts.Push(Line);
+            parts.Add(Join(Line, node.Clauses.Select(this.Print)));
+            if (node.Clauses.Count > 0)
+            {
+                parts.Add(Line);
             }
-            parts.Push(this.Print(node.SelectOrGroup));
-            if (NotNull(node.Continuation)) {
+
+            parts.Add(this.Print(node.SelectOrGroup));
+            if (node.Continuation != null)
+            {
                 // TODO indent when there is a group by before the into?
                 parts.Push(
                     String(" "),
                     this.PrintQueryContinuationSyntax(node.Continuation)
                 );
             }
+
             return Concat(parts);
         }
     }

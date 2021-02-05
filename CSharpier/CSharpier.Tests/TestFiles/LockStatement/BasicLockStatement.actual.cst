@@ -1,4 +1,10 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO AttributeListsTODO Modifiersvoid MethodName()TODO ConstraintClausesTODO Statements
+﻿class ClassName
+{
+    void MethodName() {
+        lock (sync)
+            process();
+        lock (sync) {
+            process();
+        }
+    }
 }

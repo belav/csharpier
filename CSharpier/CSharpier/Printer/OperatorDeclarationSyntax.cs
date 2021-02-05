@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintOperatorDeclarationSyntax(OperatorDeclarationSyntax node)
         {
-            return "TODO OperatorDeclarationSyntax";
+            return ""; // TODO methodLikeDeclaration
         }
     }
 }

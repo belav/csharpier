@@ -1,5 +1,6 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersnamespace Namespace
+﻿namespace Namespace
 {
-    TODO AttributeListsTODO Modifiersclass FirstClassTODO ConstraintClauses { }
-    TODO AttributeListsTODO Modifiersclass SecondClassTODO ConstraintClauses { }
+    public class FirstClass { }
+    
+    public class SecondClass { }
 }

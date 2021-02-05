@@ -2,7 +2,9 @@ class ClassName
 {
     void MethodName()
     {
-        try { }
-        catch { }
+        try
+        { }
+        catch
+        { }
     }
 }

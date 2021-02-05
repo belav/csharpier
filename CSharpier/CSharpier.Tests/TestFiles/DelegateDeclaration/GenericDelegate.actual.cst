@@ -1,4 +1,5 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO Modifiersdelegate void Delegate<TODO AttributeListsout T>()TODO ConstraintClauses;
+﻿class ClassName
+{
+    delegate void Delegate<[System.Obsolete()]out T>()
+        where T : struct;
 }

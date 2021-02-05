@@ -1,0 +1,21 @@
+concat:
+    concat:
+        concat:
+            "using "
+            group:
+                concat:
+                    concat:
+                        "One"
+                        "."
+                        "Two"
+
+                    "."
+                    "Three"
+
+            ";"
+
+
+    concat:
+        Hard
+        breakParent
+

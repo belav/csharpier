@@ -1,4 +1,11 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO AttributeListsTODO Modifiersvoid MethodName()TODO ConstraintClausesTODO Statements
+﻿class ClassName
+{
+    void MethodName() {
+        if (true == false)
+            return "if";
+        else if (true != false)
+            return "elseif";
+        else
+            return "else";
+    }
 }

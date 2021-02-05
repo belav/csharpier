@@ -25,7 +25,11 @@ namespace CSharpier.Tests.TestFileTests
             var code = File.ReadAllText(filePath);
             
             var formatter = new Formatter();
-            var actualCode = formatter.Format(code);
+            var docTree = formatter.Format(code, new Options { PrintDocTree = true });
+            var docTreePath = filePath.Replace(".cst", ".doctree.txt");
+            File.WriteAllText(docTreePath, docTree);
+            
+            var actualCode = formatter.Format(code, new Options());
 
             var actualFilePath = filePath.Replace(".cst", ".actual.cst");
             File.WriteAllText(actualFilePath, actualCode, Encoding.UTF8);

@@ -1,0 +1,65 @@
+concat:
+    concat:
+        concat:
+            concat:
+                ""
+                "namespace"
+                " "
+                "Namespace"
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+                indent:
+                    concat:
+                        concat:
+                            Hard
+                            breakParent
+
+                        concat:
+                            concat:
+                                "using "
+                                group:
+                                    "System"
+                                ";"
+
+
+                        concat:
+                            Hard
+                            breakParent
+
+                        concat:
+                            concat:
+                                concat:
+                                    Hard
+                                    breakParent
+
+                                concat:
+                                    concat:
+                                        "public"
+
+                                    " "
+
+                                "class"
+                                " "
+                                "BasicClass"
+                                " "
+                                "{"
+                                " "
+                                "}"
+
+
+
+                concat:
+                    Hard
+                    breakParent
+
+                "}"
+
+
+
+    concat:
+        Hard
+        breakParent
+

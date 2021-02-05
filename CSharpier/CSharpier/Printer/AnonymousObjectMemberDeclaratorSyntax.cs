@@ -9,10 +9,10 @@ namespace CSharpier
         {
             var parts = new Parts();
             if (node.NameEquals != null) {
-                parts.Push(this.PrintIdentifierNameSyntax(node.NameEquals.Name));
-                parts.Push(String(" = "));
+                parts.Add(this.PrintIdentifierNameSyntax(node.NameEquals.Name));
+                parts.Add(String(" = "));
             }
-            parts.Push(this.Print(node.Expression));
+            parts.Add(this.Print(node.Expression));
             return Concat(parts);
         }
     }

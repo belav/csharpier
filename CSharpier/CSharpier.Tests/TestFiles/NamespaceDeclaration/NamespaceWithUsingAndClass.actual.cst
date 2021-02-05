@@ -1,5 +1,6 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersnamespace Namespace
+﻿namespace Namespace
 {
     using System;
-    TODO AttributeListsTODO Modifiersclass BasicClassTODO ConstraintClauses { }
+    
+    public class BasicClass { }
 }

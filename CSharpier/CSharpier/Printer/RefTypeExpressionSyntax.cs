@@ -7,7 +7,12 @@ namespace CSharpier
     {
         private Doc PrintRefTypeExpressionSyntax(RefTypeExpressionSyntax node)
         {
-            return "TODO RefTypeExpressionSyntax";
+            return Concat(
+                node.Keyword.Text,
+                "(",
+                this.Print(node.Expression),
+                ")"
+            );
         }
     }
 }

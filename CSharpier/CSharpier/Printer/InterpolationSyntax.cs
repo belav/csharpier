@@ -14,7 +14,7 @@ namespace CSharpier
             if (node.FormatClause != null) {
                 parts.Push(String(":"), node.FormatClause.FormatStringToken.Text);
             }
-            parts.Push(String("}"));
+            parts.Add(String("}"));
             return Concat(parts);
         }
     }

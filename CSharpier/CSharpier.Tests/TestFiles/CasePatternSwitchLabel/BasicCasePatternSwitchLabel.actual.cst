@@ -1,4 +1,13 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO AttributeListsTODO Modifiersvoid MethodName(TODO AttributeListsTODO Modifiersstring arg, TODO AttributeListsTODO Modifiersint b)TODO ConstraintClausesTODO Statements
+﻿class ClassName
+{
+    void MethodName(string arg, int b) {
+        switch (arg)
+        {
+            case "A" when b > 50:
+            case "B" when B < 50:
+            default: {
+                break;
+            }
+        }
+    }
 }

@@ -11,14 +11,14 @@ namespace CSharpier
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {
-                parts.Push(statement);
+                parts.Add(statement);
             }
             else
             {
-                parts.Push(Indent(Concat(HardLine, statement)));
+                parts.Add(Indent(Concat(HardLine, statement)));
             }
 
-            if (NotNull(node.Else))
+            if (node.Else != null)
             {
                 parts.Push(HardLine, this.Print(node.Else));
             }

@@ -1,0 +1,143 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "MethodName"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    concat:
+                                        indent:
+                                            concat:
+                                                concat:
+                                                    Hard
+                                                    breakParent
+
+                                                concat:
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            group:
+                                                                concat:
+                                                                    "Func"
+                                                                    "<"
+                                                                    indent:
+                                                                        group:
+                                                                            concat:
+                                                                                "bool"
+                                                                                concat:
+                                                                                    ","
+                                                                                    Normal
+
+                                                                                "bool"
+
+                                                                    ">"
+
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "f"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "delegate"
+                                                                            group:
+                                                                                concat:
+                                                                                    "("
+                                                                                    indent:
+                                                                                        concat:
+                                                                                            Soft
+                                                                                            concat:
+                                                                                                concat:
+                                                                                                    ""
+                                                                                                    "bool"
+                                                                                                    " "
+                                                                                                    "a"
+
+
+
+                                                                                    ")"
+
+                                                                            group:
+                                                                                concat:
+                                                                                    Normal
+                                                                                    "{"
+                                                                                    concat:
+                                                                                        indent:
+                                                                                            concat:
+                                                                                                concat:
+                                                                                                    Hard
+                                                                                                    breakParent
+
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        "return"
+                                                                                                        " "
+                                                                                                        concat:
+                                                                                                            "!"
+                                                                                                            "a"
+
+                                                                                                        ";"
+
+
+
+                                                                                        concat:
+                                                                                            Hard
+                                                                                            breakParent
+
+
+                                                                                    "}"
+
+
+
+
+
+
+                                                        ";"
+
+
+
+                                        concat:
+                                            Hard
+                                            breakParent
+
+
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

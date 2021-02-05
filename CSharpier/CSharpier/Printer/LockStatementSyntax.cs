@@ -11,11 +11,11 @@ namespace CSharpier
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {
-                parts.Push(statement);
+                parts.Add(statement);
             }
             else
             {
-                parts.Push(Indent(Concat(HardLine, statement)));
+                parts.Add(Indent(Concat(HardLine, statement)));
             }
 
             return Concat(parts);

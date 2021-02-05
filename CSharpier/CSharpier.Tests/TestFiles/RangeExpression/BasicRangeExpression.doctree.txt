@@ -1,0 +1,412 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "Ranges"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    concat:
+                                        indent:
+                                            concat:
+                                                concat:
+                                                    Hard
+                                                    breakParent
+
+                                                concat:
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "thirdItem"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "list"
+                                                                            group:
+                                                                                concat:
+                                                                                    "["
+                                                                                    indent:
+                                                                                        concat:
+                                                                                            Soft
+                                                                                            concat:
+                                                                                                concat:
+                                                                                                    "2"
+
+
+
+                                                                                    Soft
+                                                                                    "]"
+
+
+
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "lastItem"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "list"
+                                                                            group:
+                                                                                concat:
+                                                                                    "["
+                                                                                    indent:
+                                                                                        concat:
+                                                                                            Soft
+                                                                                            concat:
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        "^"
+                                                                                                        "1"
+
+
+
+
+                                                                                    Soft
+                                                                                    "]"
+
+
+
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "multiDimensional"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "list"
+                                                                            group:
+                                                                                concat:
+                                                                                    "["
+                                                                                    indent:
+                                                                                        concat:
+                                                                                            Soft
+                                                                                            concat:
+                                                                                                concat:
+                                                                                                    "3"
+
+                                                                                                concat:
+                                                                                                    ","
+                                                                                                    Normal
+
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        "^"
+                                                                                                        "2"
+
+
+
+
+                                                                                    Soft
+                                                                                    "]"
+
+
+
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "slice1"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "list"
+                                                                            group:
+                                                                                concat:
+                                                                                    "["
+                                                                                    indent:
+                                                                                        concat:
+                                                                                            Soft
+                                                                                            concat:
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        "2"
+                                                                                                        ".."
+                                                                                                        concat:
+                                                                                                            "^"
+                                                                                                            "3"
+
+
+
+
+
+                                                                                    Soft
+                                                                                    "]"
+
+
+
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "slice2"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "list"
+                                                                            group:
+                                                                                concat:
+                                                                                    "["
+                                                                                    indent:
+                                                                                        concat:
+                                                                                            Soft
+                                                                                            concat:
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        ""
+                                                                                                        ".."
+                                                                                                        concat:
+                                                                                                            "^"
+                                                                                                            "3"
+
+
+
+
+
+                                                                                    Soft
+                                                                                    "]"
+
+
+
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "slice3"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "list"
+                                                                            group:
+                                                                                concat:
+                                                                                    "["
+                                                                                    indent:
+                                                                                        concat:
+                                                                                            Soft
+                                                                                            concat:
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        "2"
+                                                                                                        ".."
+                                                                                                        ""
+
+
+
+
+                                                                                    Soft
+                                                                                    "]"
+
+
+
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "slice4"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "list"
+                                                                            group:
+                                                                                concat:
+                                                                                    "["
+                                                                                    indent:
+                                                                                        concat:
+                                                                                            Soft
+                                                                                            concat:
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        ""
+                                                                                                        ".."
+                                                                                                        ""
+
+
+
+
+                                                                                    Soft
+                                                                                    "]"
+
+
+
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "multiDimensional"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "list"
+                                                                            group:
+                                                                                concat:
+                                                                                    "["
+                                                                                    indent:
+                                                                                        concat:
+                                                                                            Soft
+                                                                                            concat:
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        "1"
+                                                                                                        ".."
+                                                                                                        "2"
+
+
+                                                                                                concat:
+                                                                                                    ","
+                                                                                                    Normal
+
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        ""
+                                                                                                        ".."
+                                                                                                        ""
+
+
+
+
+                                                                                    Soft
+                                                                                    "]"
+
+
+
+
+
+
+                                                        ";"
+
+
+
+                                        concat:
+                                            Hard
+                                            breakParent
+
+
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

@@ -1,4 +1,9 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO AttributeListsTODO Modifiersvoid MethodName()TODO ConstraintClausesTODO Statements
+﻿class ClassName
+{
+    void MethodName() {
+        var x = 0;
+        var y = 0;
+        bool b1;
+        bool b2;
+    }
 }

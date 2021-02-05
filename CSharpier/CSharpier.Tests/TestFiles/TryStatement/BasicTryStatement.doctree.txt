@@ -1,0 +1,205 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "MethodName"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    concat:
+                                        indent:
+                                            concat:
+                                                concat:
+                                                    Hard
+                                                    breakParent
+
+                                                concat:
+                                                    concat:
+                                                        "try"
+                                                        group:
+                                                            concat:
+                                                                Normal
+                                                                "{"
+                                                                concat:
+                                                                    indent:
+                                                                        concat:
+                                                                            concat:
+                                                                                Hard
+                                                                                breakParent
+
+                                                                            concat:
+                                                                                concat:
+                                                                                    "throw"
+                                                                                    concat:
+                                                                                        " "
+                                                                                        "null"
+
+                                                                                    ";"
+
+
+
+                                                                    concat:
+                                                                        Hard
+                                                                        breakParent
+
+
+                                                                "}"
+
+                                                        concat:
+                                                            Hard
+                                                            breakParent
+
+                                                        concat:
+                                                            concat:
+                                                                "catch"
+                                                                concat:
+                                                                    " ("
+                                                                    "Exception"
+                                                                    ""
+                                                                    ""
+                                                                    ")"
+
+                                                                group:
+                                                                    concat:
+                                                                        Normal
+                                                                        "{"
+                                                                        concat:
+                                                                            indent:
+                                                                                concat:
+                                                                                    concat:
+                                                                                        Hard
+                                                                                        breakParent
+
+                                                                                    concat:
+                                                                                        concat:
+                                                                                            "throw"
+                                                                                            ""
+                                                                                            ";"
+
+
+
+                                                                            concat:
+                                                                                Hard
+                                                                                breakParent
+
+
+                                                                        "}"
+
+
+                                                            concat:
+                                                                Hard
+                                                                breakParent
+
+                                                            concat:
+                                                                "catch"
+                                                                concat:
+                                                                    " ("
+                                                                    "ArgumentException"
+                                                                    " "
+                                                                    "ex"
+                                                                    ")"
+
+                                                                group:
+                                                                    concat:
+                                                                        Normal
+                                                                        "{"
+                                                                        concat:
+                                                                            indent:
+                                                                                concat:
+                                                                                    concat:
+                                                                                        Hard
+                                                                                        breakParent
+
+                                                                                    concat:
+                                                                                        concat:
+                                                                                            "throw"
+                                                                                            ""
+                                                                                            ";"
+
+
+
+                                                                            concat:
+                                                                                Hard
+                                                                                breakParent
+
+
+                                                                        "}"
+
+
+
+                                                        concat:
+                                                            Hard
+                                                            breakParent
+
+                                                        concat:
+                                                            "finally"
+                                                            group:
+                                                                concat:
+                                                                    Normal
+                                                                    "{"
+                                                                    concat:
+                                                                        indent:
+                                                                            concat:
+                                                                                concat:
+                                                                                    Hard
+                                                                                    breakParent
+
+                                                                                concat:
+                                                                                    "return;"
+
+
+                                                                        concat:
+                                                                            Hard
+                                                                            breakParent
+
+
+                                                                    "}"
+
+
+
+
+
+                                        concat:
+                                            Hard
+                                            breakParent
+
+
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

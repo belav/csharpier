@@ -1,0 +1,21 @@
+concat:
+    concat:
+        concat:
+            "using "
+            concat:
+                "M"
+                " = "
+
+            group:
+                concat:
+                    "System"
+                    "."
+                    "Math"
+
+            ";"
+
+
+    concat:
+        Hard
+        breakParent
+

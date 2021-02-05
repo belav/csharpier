@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintThrowExpressionSyntax(ThrowExpressionSyntax node)
         {
-            return "TODO ThrowExpressionSyntax";
+            return Concat(node.ThrowKeyword.Text, " ", this.Print(node.Expression));
         }
     }
 }

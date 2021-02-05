@@ -1,1 +1,7 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassName<TODO AttributeListsN, TODO AttributeListsC, TODO AttributeListsT, TODO AttributeListsTT, TODO AttributeListsL>TODO ConstraintClauses{ }
+﻿class ClassName<N, C, T, TT, L>
+    where N : new()
+    where C : class
+    where T : IComparable
+    where TT : IList<N>
+    where L : class, new()
+{ }

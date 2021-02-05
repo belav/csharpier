@@ -2,9 +2,6 @@ class ClassName
 {
     void MethodName()
     {
-        // stuff
-        if (true) { }
-
         // leading comment
         var x = 0;
 

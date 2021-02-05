@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintCheckedStatementSyntax(CheckedStatementSyntax node)
         {
-            return "TODO CheckedStatementSyntax";
+            return Concat(node.Keyword.Text, this.PrintBlockSyntax(node.Block));
         }
     }
 }

@@ -1,0 +1,65 @@
+concat:
+    concat:
+        concat:
+            concat:
+                concat:
+                    "public"
+
+                " "
+
+            "class"
+            " "
+            "ClassName"
+            " "
+            "{"
+            " "
+            "}"
+
+        concat:
+            Hard
+            breakParent
+
+        concat:
+            concat:
+                Hard
+                breakParent
+
+            ""
+            "class"
+            " "
+            "ClassName2"
+            " "
+            "{"
+            " "
+            "}"
+
+        concat:
+            Hard
+            breakParent
+
+        concat:
+            concat:
+                Hard
+                breakParent
+
+            concat:
+                concat:
+                    "public"
+                    " "
+                    "static"
+
+                " "
+
+            "class"
+            " "
+            "ClassName3"
+            " "
+            "{"
+            " "
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

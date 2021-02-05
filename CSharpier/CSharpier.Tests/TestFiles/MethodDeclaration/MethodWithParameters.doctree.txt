@@ -1,0 +1,84 @@
+concat:
+    concat:
+        concat:
+            concat:
+                concat:
+                    "public"
+
+                " "
+
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            concat:
+                                concat:
+                                    "public"
+
+                                " "
+
+                            "void"
+                            " "
+                            "DoStuff"
+                            group:
+                                concat:
+                                    "("
+                                    indent:
+                                        concat:
+                                            Soft
+                                            concat:
+                                                concat:
+                                                    ""
+                                                    "string"
+                                                    " "
+                                                    "one"
+
+                                                concat:
+                                                    ","
+                                                    Normal
+
+                                                concat:
+                                                    ""
+                                                    "string"
+                                                    " "
+                                                    "two"
+
+
+
+                                    ")"
+
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    " "
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

@@ -1,0 +1,43 @@
+concat:
+    concat:
+        concat:
+            concat:
+                concat:
+                    "["
+                    concat:
+                        concat:
+                            "Obsolete"
+                            "("
+                            concat:
+                                concat:
+                                    ""
+                                    ""
+                                    ""message""
+
+                                ", "
+                                concat:
+                                    ""
+                                    ""
+                                    "true"
+
+
+                            ")"
+
+
+                    "]"
+
+
+            ""
+            "class"
+            " "
+            "ClassName"
+            " "
+            "{"
+            " "
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

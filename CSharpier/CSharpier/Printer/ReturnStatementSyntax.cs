@@ -8,7 +8,7 @@ namespace CSharpier
         private Doc PrintReturnStatementSyntax(ReturnStatementSyntax node)
         {
             if (node.Expression == null) {
-                return node.ReturnKeyword.Text + String(";");
+                return node.ReturnKeyword.Text + ";";
             }
             return Concat(node.ReturnKeyword.Text, String(" "), this.Print(node.Expression), String(";"));
         }

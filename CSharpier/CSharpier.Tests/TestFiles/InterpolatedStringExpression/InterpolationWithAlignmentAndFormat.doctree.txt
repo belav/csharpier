@@ -1,0 +1,168 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "MethodName"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    concat:
+                                        indent:
+                                            concat:
+                                                concat:
+                                                    Hard
+                                                    breakParent
+
+                                                concat:
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "s1"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "$""
+                                                                            concat:
+                                                                                "x "
+                                                                                concat:
+                                                                                    "{"
+                                                                                    "1"
+                                                                                    ", "
+                                                                                    concat:
+                                                                                        "-"
+                                                                                        "2"
+
+                                                                                    ":"
+                                                                                    "d"
+                                                                                    "}"
+
+
+                                                                            """
+
+
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "s2"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "$""
+                                                                            concat:
+                                                                                "x "
+                                                                                concat:
+                                                                                    "{"
+                                                                                    "1"
+                                                                                    ", "
+                                                                                    concat:
+                                                                                        "-"
+                                                                                        "2"
+
+                                                                                    "}"
+
+
+                                                                            """
+
+
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "s3"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "$""
+                                                                            concat:
+                                                                                "x "
+                                                                                concat:
+                                                                                    "{"
+                                                                                    "1"
+                                                                                    ":"
+                                                                                    "d"
+                                                                                    "}"
+
+
+                                                                            """
+
+
+
+
+
+                                                        ";"
+
+
+
+                                        concat:
+                                            Hard
+                                            breakParent
+
+
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

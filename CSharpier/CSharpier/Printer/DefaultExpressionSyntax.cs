@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintDefaultExpressionSyntax(DefaultExpressionSyntax node)
         {
-            return "TODO DefaultExpressionSyntax";
+            return Concat(node.Keyword.Text, "(", this.Print(node.Type), ")");
         }
     }
 }

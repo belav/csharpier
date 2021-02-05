@@ -1,4 +1,5 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO AttributeListsTODO Modifiersvoid Handler()TODO ConstraintClausesTODO Statements
+﻿class ClassName
+{
+    [return: Obsolete]
+    [method: Obsolete]void Handler() { }
 }

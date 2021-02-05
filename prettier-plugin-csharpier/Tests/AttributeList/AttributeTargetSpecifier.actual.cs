@@ -2,5 +2,6 @@ class ClassName
 {
     [return: Obsolete]
     [method: Obsolete]
-    void Handler() { }
+    void Handler()
+    { }
 }

@@ -10,45 +10,59 @@ namespace CSharpier
         {
             var parts = new Parts();
             //this.PrintExtraNewLines(node, String("attributeLists"), String("modifiers"), [String("returnType"), String("keyword")]);
-            this.PrintAttributeLists(node.AttributeLists, parts);
+            this.PrintAttributeLists(node, node.AttributeLists, parts);
             //printLeadingComments(node, parts, String("modifiers"), String("returnType"), String("identifier"));
-            parts.Push(this.PrintModifiers(node.Modifiers));
-            if (NotNull(node.ReturnType)) {
+            parts.Add(this.PrintModifiers(node.Modifiers));
+            if (node.ReturnType != null)
+            {
                 parts.Push(this.Print(node.ReturnType), String(" "));
             }
-            if (node.ExplicitInterfaceSpecifier != null) {
-                // TODO this doesn't appear valid ? parts.Push(printIdentifier(node.ExplicitInterfaceSpecifier.name), ".");
+
+            if (node.ExplicitInterfaceSpecifier != null)
+            {
+                // TODO this doesn't appear valid ? parts.Add(printIdentifier(node.ExplicitInterfaceSpecifier.name), ".");
             }
+
             // TODO this is only true if this isn't a method, I think
-            if (node.Identifier.RawKind != 0) {
-                parts.Push(node.Identifier.Text);
+            if (node.Identifier.RawKind != 0)
+            {
+                parts.Add(node.Identifier.Text);
             }
+
             // TODO non method stuff
-            // if (NotNull(node.ImplicitOrExplicitKeyword)) {
-            //     parts.Push(printSyntaxToken(node.ImplicitOrExplicitKeyword), String(" "));
+            // if (node.ImplicitOrExplicitKeyword != null) {
+            //     parts.Add(printSyntaxToken(node.ImplicitOrExplicitKeyword), String(" "));
             // }
-            // if (NotNull(node.OperatorKeyword)) {
-            //     parts.Push(String("operator "));
+            // if (node.OperatorKeyword != null) {
+            //     parts.Add(String("operator "));
             // }
-            // if (NotNull(node.OperatorToken)) {
-            //     parts.Push(printSyntaxToken(node.OperatorToken));
+            // if (node.OperatorToken != null) {
+            //     parts.Add(printSyntaxToken(node.OperatorToken));
             // }
-            // if (NotNull(node.Type)) {
-            //     parts.Push(this.Print(node.Type));
+            // if (node.Type != null) {
+            //     parts.Add(this.Print(node.Type));
             // }
-            if (NotNull(node.TypeParameterList)) {
-                parts.Push(this.PrintTypeParameterListSyntax(node.TypeParameterList));
+            if (node.TypeParameterList != null)
+            {
+                parts.Add(this.PrintTypeParameterListSyntax(node.TypeParameterList));
             }
-            parts.Push(this.Print(node.ParameterList));
-            this.PrintConstraintClauses(node, parts);
-            if (NotNull(node.Body)) {
-                parts.Push(this.PrintBlockSyntax(node.Body));
-            } else {
-                if (NotNull(node.ExpressionBody)) {
-                    parts.Push(this.PrintArrowExpressionClauseSyntax(node.ExpressionBody));
+
+            parts.Add(this.Print(node.ParameterList));
+            this.PrintConstraintClauses(node, node.ConstraintClauses, parts);
+            if (node.Body != null)
+            {
+                parts.Add(this.PrintBlockSyntax(node.Body));
+            }
+            else
+            {
+                if (node.ExpressionBody != null)
+                {
+                    parts.Add(this.PrintArrowExpressionClauseSyntax(node.ExpressionBody));
                 }
-                parts.Push(String(";"));
+
+                parts.Add(String(";"));
             }
+
             return Concat(parts);
         }
     }

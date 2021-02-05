@@ -1,4 +1,5 @@
 class ClassName
 {
-    ~ClassName() { }
+    ~ClassName()
+    { }
 }

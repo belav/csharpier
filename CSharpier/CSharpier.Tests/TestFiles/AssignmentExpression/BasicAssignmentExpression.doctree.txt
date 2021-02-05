@@ -1,0 +1,93 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "MethodName"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    concat:
+                                        indent:
+                                            concat:
+                                                concat:
+                                                    Hard
+                                                    breakParent
+
+                                                concat:
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "x"
+                                                                    concat:
+                                                                        " = "
+                                                                        "0"
+
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        concat:
+                                                            "x"
+                                                            " "
+                                                            "="
+                                                            " "
+                                                            "15"
+
+                                                        ";"
+
+
+
+                                        concat:
+                                            Hard
+                                            breakParent
+
+
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

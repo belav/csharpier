@@ -1,0 +1,134 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "MethodName"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    concat:
+                                        indent:
+                                            concat:
+                                                concat:
+                                                    Hard
+                                                    breakParent
+
+                                                concat:
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "x"
+                                                                    concat:
+                                                                        " = "
+                                                                        "0"
+
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "y"
+                                                                    concat:
+                                                                        " = "
+                                                                        "0"
+
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "bool"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "b1"
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "bool"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "b2"
+
+
+
+                                                        ";"
+
+
+
+                                        concat:
+                                            Hard
+                                            breakParent
+
+
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

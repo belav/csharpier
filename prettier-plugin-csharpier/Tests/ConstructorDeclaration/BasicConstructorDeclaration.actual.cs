@@ -1,4 +1,5 @@
 public class BasicClass
 {
-    public BasicClass() { }
+    public BasicClass()
+    { }
 }

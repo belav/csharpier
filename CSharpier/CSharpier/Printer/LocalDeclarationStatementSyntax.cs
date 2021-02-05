@@ -36,15 +36,15 @@ namespace CSharpier
             //     [String("declaration"), String("type"), String("keyword")],
             //     [String("declaration"), String("type"), String("identifier")]
             // );
-            if (NotNull(node.AwaitKeyword)) {
-                parts.Push(String("await "));
+            if (NotNullToken(node.AwaitKeyword)) {
+                parts.Add(String("await "));
             }
-            if (NotNull(node.UsingKeyword)) {
-                parts.Push(String("using "));
+            if (NotNullToken(node.UsingKeyword)) {
+                parts.Add(String("using "));
             }
-            parts.Push(this.PrintModifiers(node.Modifiers));
-            parts.Push(this.PrintVariableDeclarationSyntax(node.Declaration));
-            parts.Push(String(";"));
+            parts.Add(this.PrintModifiers(node.Modifiers));
+            parts.Add(this.PrintVariableDeclarationSyntax(node.Declaration));
+            parts.Add(String(";"));
             // TODO printTrailingComments(node, parts, String("semicolonToken"));
             return Concat(parts);
         }

@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintIndexerDeclarationSyntax(IndexerDeclarationSyntax node)
         {
-            return "TODO IndexerDeclarationSyntax";
+            return ""; // TODO propertyLikeDeclaration
         }
     }
 }

@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintBaseExpressionSyntax(BaseExpressionSyntax node)
         {
-            return "TODO BaseExpressionSyntax";
+            return String(node.Token.Text);
         }
     }
 }

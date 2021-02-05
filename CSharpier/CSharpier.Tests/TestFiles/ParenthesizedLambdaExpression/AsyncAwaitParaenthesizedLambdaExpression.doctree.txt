@@ -1,0 +1,164 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "AsyncAnonymous"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    concat:
+                                        indent:
+                                            concat:
+                                                concat:
+                                                    Hard
+                                                    breakParent
+
+                                                concat:
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "task"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            concat:
+                                                                                concat:
+                                                                                    "Task"
+                                                                                    "."
+                                                                                    "Factory"
+
+                                                                                "."
+                                                                                "StartNew"
+
+                                                                            group:
+                                                                                concat:
+                                                                                    "("
+                                                                                    indent:
+                                                                                        concat:
+                                                                                            Soft
+                                                                                            concat:
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        "async "
+                                                                                                        "()"
+                                                                                                        " => "
+                                                                                                        group:
+                                                                                                            concat:
+                                                                                                                Normal
+                                                                                                                "{"
+                                                                                                                concat:
+                                                                                                                    indent:
+                                                                                                                        concat:
+                                                                                                                            concat:
+                                                                                                                                Hard
+                                                                                                                                breakParent
+
+                                                                                                                            concat:
+                                                                                                                                concat:
+                                                                                                                                    "return"
+                                                                                                                                    " "
+                                                                                                                                    concat:
+                                                                                                                                        "await"
+                                                                                                                                        " "
+                                                                                                                                        concat:
+                                                                                                                                            concat:
+                                                                                                                                                concat:
+                                                                                                                                                    "new"
+                                                                                                                                                    " "
+                                                                                                                                                    "WebClient"
+                                                                                                                                                    "()"
+                                                                                                                                                    ""
+
+                                                                                                                                                "."
+                                                                                                                                                "DownloadStringTaskAsync"
+
+                                                                                                                                            group:
+                                                                                                                                                concat:
+                                                                                                                                                    "("
+                                                                                                                                                    indent:
+                                                                                                                                                        concat:
+                                                                                                                                                            Soft
+                                                                                                                                                            concat:
+                                                                                                                                                                concat:
+                                                                                                                                                                    ""http://example.com""
+
+
+
+                                                                                                                                                    ")"
+
+
+
+                                                                                                                                    ";"
+
+
+
+                                                                                                                    concat:
+                                                                                                                        Hard
+                                                                                                                        breakParent
+
+
+                                                                                                                "}"
+
+
+
+
+
+                                                                                    ")"
+
+
+
+
+
+
+                                                        ";"
+
+
+
+                                        concat:
+                                            Hard
+                                            breakParent
+
+
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

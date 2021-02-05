@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintEventFieldDeclarationSyntax(EventFieldDeclarationSyntax node)
         {
-            return "TODO EventFieldDeclarationSyntax";
+            return ""; // TODO fieldLikeDeclaration
         }
     }
 }

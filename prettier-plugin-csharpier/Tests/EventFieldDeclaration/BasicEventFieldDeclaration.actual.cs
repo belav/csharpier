@@ -1,4 +1,5 @@
 class ClassName
 {
-    public event EventHandler MyEvent = delegate { };
+    public event EventHandler MyEvent = delegate
+    { };
 }

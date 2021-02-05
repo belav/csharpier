@@ -1,0 +1,269 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "MethodName"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    concat:
+                                        indent:
+                                            concat:
+                                                concat:
+                                                    Hard
+                                                    breakParent
+
+                                                concat:
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "query"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            concat:
+                                                                                "from"
+                                                                                " "
+                                                                                "c"
+                                                                                " "
+                                                                                "in"
+                                                                                " "
+                                                                                "customers"
+
+                                                                            indent:
+                                                                                concat:
+                                                                                    Normal
+                                                                                    concat:
+                                                                                        concat:
+                                                                                            concat:
+                                                                                                "let "
+                                                                                                "d"
+                                                                                                " = "
+                                                                                                "c"
+
+                                                                                            Normal
+                                                                                            concat:
+                                                                                                "where "
+                                                                                                concat:
+                                                                                                    "d"
+                                                                                                    " "
+                                                                                                    "!="
+                                                                                                    " "
+                                                                                                    "null"
+
+
+                                                                                            Normal
+                                                                                            concat:
+                                                                                                "join "
+                                                                                                "c1"
+                                                                                                " in "
+                                                                                                "customers"
+                                                                                                " on "
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        "c1"
+                                                                                                        "."
+                                                                                                        "GetHashCode"
+
+                                                                                                    "()"
+
+                                                                                                " equals "
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        "c"
+                                                                                                        "."
+                                                                                                        "GetHashCode"
+
+                                                                                                    "()"
+
+                                                                                                ""
+
+                                                                                            Normal
+                                                                                            concat:
+                                                                                                "join "
+                                                                                                "c1"
+                                                                                                " in "
+                                                                                                "customers"
+                                                                                                " on "
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        "c1"
+                                                                                                        "."
+                                                                                                        "GetHashCode"
+
+                                                                                                    "()"
+
+                                                                                                " equals "
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        "c"
+                                                                                                        "."
+                                                                                                        "GetHashCode"
+
+                                                                                                    "()"
+
+                                                                                                " into e"
+
+
+                                                                                        Normal
+                                                                                        concat:
+                                                                                            "group"
+                                                                                            " "
+                                                                                            "c"
+                                                                                            " "
+                                                                                            "by"
+                                                                                            " "
+                                                                                            concat:
+                                                                                                "c"
+                                                                                                "."
+                                                                                                "Country"
+
+
+                                                                                        " "
+                                                                                        concat:
+                                                                                            "into"
+                                                                                            " "
+                                                                                            "g"
+                                                                                            Normal
+                                                                                            concat:
+                                                                                                concat:
+                                                                                                    concat:
+                                                                                                        "orderby "
+                                                                                                        concat:
+                                                                                                            concat:
+                                                                                                                concat:
+                                                                                                                    concat:
+                                                                                                                        "g"
+                                                                                                                        "."
+                                                                                                                        "Count"
+
+                                                                                                                    "()"
+
+                                                                                                                " ascending"
+
+
+
+                                                                                                    Normal
+                                                                                                    concat:
+                                                                                                        "orderby "
+                                                                                                        concat:
+                                                                                                            concat:
+                                                                                                                concat:
+                                                                                                                    "g"
+                                                                                                                    "."
+                                                                                                                    "Key"
+
+                                                                                                                " descending"
+
+
+
+
+                                                                                                Normal
+                                                                                                concat:
+                                                                                                    "select"
+                                                                                                    " "
+                                                                                                    concat:
+                                                                                                        "new"
+                                                                                                        group:
+                                                                                                            concat:
+                                                                                                                Normal
+                                                                                                                "{"
+                                                                                                                concat:
+                                                                                                                    indent:
+                                                                                                                        concat:
+                                                                                                                            Normal
+                                                                                                                            concat:
+                                                                                                                                concat:
+                                                                                                                                    "Country"
+                                                                                                                                    " = "
+                                                                                                                                    concat:
+                                                                                                                                        "g"
+                                                                                                                                        "."
+                                                                                                                                        "Key"
+
+
+                                                                                                                                concat:
+                                                                                                                                    ","
+                                                                                                                                    Normal
+
+                                                                                                                                concat:
+                                                                                                                                    "CustCount"
+                                                                                                                                    " = "
+                                                                                                                                    concat:
+                                                                                                                                        concat:
+                                                                                                                                            "g"
+                                                                                                                                            "."
+                                                                                                                                            "Count"
+
+                                                                                                                                        "()"
+
+
+
+
+                                                                                                                    Normal
+
+                                                                                                                "}"
+
+
+
+
+
+
+
+
+
+
+
+
+                                                        ";"
+
+
+
+                                        concat:
+                                            Hard
+                                            breakParent
+
+
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

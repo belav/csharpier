@@ -1,5 +1,5 @@
 ﻿extern alias Foo;
-TODO AttributeListsTODO AttributeListsTODO Modifiersnamespace Namespace
+namespace Namespace
 {
     extern alias Bar;
 }

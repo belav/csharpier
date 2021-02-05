@@ -8,32 +8,32 @@ namespace CSharpier
         private Doc PrintAccessorDeclarationSyntax(AccessorDeclarationSyntax node)
         {
             var parts = new Parts();
-            if (node.Modifiers.Count > 0 || node.AttributeLists.Count > 0 || NotNull(node.Body) || NotNull(node.ExpressionBody))
+            if (node.Modifiers.Count > 0 || node.AttributeLists.Count > 0 || node.Body != null || node.ExpressionBody != null)
             {
-                parts.Push(HardLine);
+                parts.Add(HardLine);
             }
             else
             {
-                parts.Push(Line);
+                parts.Add(Line);
             }
 
-            this.PrintAttributeLists(node.AttributeLists, parts);
-            parts.Push(this.PrintModifiers(node.Modifiers));
-            parts.Push(node.Keyword.Text);
-            if (!NotNull(node.Body) && !NotNull(node.ExpressionBody))
+            this.PrintAttributeLists(node, node.AttributeLists, parts);
+            parts.Add(this.PrintModifiers(node.Modifiers));
+            parts.Add(node.Keyword.Text);
+            if (node.Body == null && node.ExpressionBody == null)
             {
-                parts.Push(String(";"));
+                parts.Add(String(";"));
             }
             else
             {
-                if (NotNull(node.Body))
+                if (node.Body != null)
                 {
-                    parts.Push(this.PrintBlockSyntax(node.Body));
+                    parts.Add(this.PrintBlockSyntax(node.Body));
                 }
                 else
                 {
-                    parts.Push(this.PrintArrowExpressionClauseSyntax(node.ExpressionBody));
-                    parts.Push(String(";"));
+                    parts.Add(this.PrintArrowExpressionClauseSyntax(node.ExpressionBody));
+                    parts.Add(String(";"));
                 }
             }
 

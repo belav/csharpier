@@ -1,0 +1,122 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "MethodName"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    concat:
+                                        indent:
+                                            concat:
+                                                concat:
+                                                    Hard
+                                                    breakParent
+
+                                                concat:
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            concat:
+                                                                "("
+                                                                concat:
+                                                                    "int"
+                                                                    ", "
+                                                                    "int"
+
+                                                                ")"
+
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "t1"
+
+
+
+                                                        ";"
+
+                                                    concat:
+                                                        Hard
+                                                        breakParent
+
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            "var"
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "res"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "t1"
+                                                                            " "
+                                                                            "=="
+                                                                            " "
+                                                                            concat:
+                                                                                "("
+                                                                                concat:
+                                                                                    concat:
+                                                                                        "1"
+
+                                                                                    ", "
+                                                                                    concat:
+                                                                                        "2"
+
+
+                                                                                ")"
+
+
+
+
+
+
+                                                        ";"
+
+
+
+                                        concat:
+                                            Hard
+                                            breakParent
+
+
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

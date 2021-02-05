@@ -1,0 +1,91 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "MethodName"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    concat:
+                                        indent:
+                                            concat:
+                                                concat:
+                                                    Hard
+                                                    breakParent
+
+                                                concat:
+                                                    concat:
+                                                        ""
+                                                        concat:
+                                                            concat:
+                                                                "ref"
+                                                                "CSharpier.StringDocreadonly"
+                                                                " "
+                                                                "var"
+
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "r1"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "ref"
+                                                                            " "
+                                                                            concat:
+                                                                                "MethodName"
+                                                                                "()"
+
+
+
+
+
+
+                                                        ";"
+
+
+
+                                        concat:
+                                            Hard
+                                            breakParent
+
+
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

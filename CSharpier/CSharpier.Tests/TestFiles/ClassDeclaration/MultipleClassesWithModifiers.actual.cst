@@ -1,2 +1,3 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass Class1TODO ConstraintClauses { }
-TODO AttributeListsTODO Modifiersclass Class2TODO ConstraintClauses { }
+﻿public class Class1 { }
+
+public class Class2 { }

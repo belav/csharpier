@@ -8,7 +8,7 @@ namespace CSharpier
         private Doc PrintTryStatementSyntax(TryStatementSyntax node)
         {
             var parts = new Parts();
-            this.PrintAttributeLists(node.AttributeLists, parts);
+            this.PrintAttributeLists(node, node.AttributeLists, parts);
             parts.Push(
                 String("try"),
                 this.PrintBlockSyntax(node.Block),
@@ -18,7 +18,7 @@ namespace CSharpier
                     node.Catches.Select(this.PrintCatchClauseSyntax)
                 )
             );
-            if (NotNull(node.Finally)) {
+            if (node.Finally != null) {
                 parts.Push(
                     HardLine,
                     this.PrintFinallyClauseSyntax(node.Finally)

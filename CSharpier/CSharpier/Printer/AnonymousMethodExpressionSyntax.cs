@@ -8,19 +8,19 @@ namespace CSharpier
         private Doc PrintAnonymousMethodExpressionSyntax(AnonymousMethodExpressionSyntax node)
         {
             var parts = new Parts();
-            if (NotNull(node.AsyncKeyword)) {
-                parts.Push(String("async "));
+            if (NotNullToken(node.AsyncKeyword)) {
+                parts.Add(String("async "));
             }
-            if (NotNull(node.DelegateKeyword)) {
-                parts.Push(String("delegate"));
+            if (NotNullToken(node.DelegateKeyword)) {
+                parts.Add(String("delegate"));
             }
-            if (NotNull(node.ParameterList)) {
-                parts.Push(this.PrintParameterListSyntax(node.ParameterList));
+            if (node.ParameterList != null) {
+                parts.Add(this.PrintParameterListSyntax(node.ParameterList));
             }
-            if (NotNull(node.ExpressionBody)) {
-                parts.Push(this.Print(node.ExpressionBody));
-            } else if (NotNull(node.Block)) {
-                parts.Push(this.PrintBlockSyntax(node.Block));
+            if (node.ExpressionBody != null) {
+                parts.Add(this.Print(node.ExpressionBody));
+            } else if (node.Block != null) {
+                parts.Add(this.PrintBlockSyntax(node.Block));
             }
             return Concat(parts);
         }

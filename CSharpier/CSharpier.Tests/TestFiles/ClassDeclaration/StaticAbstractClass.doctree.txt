@@ -1,0 +1,26 @@
+concat:
+    concat:
+        concat:
+            concat:
+                concat:
+                    "public"
+                    " "
+                    "static"
+                    " "
+                    "abstract"
+
+                " "
+
+            "class"
+            " "
+            "EmptyClass"
+            " "
+            "{"
+            " "
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

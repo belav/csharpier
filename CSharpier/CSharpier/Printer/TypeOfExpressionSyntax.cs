@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintTypeOfExpressionSyntax(TypeOfExpressionSyntax node)
         {
-            return "TODO TypeOfExpressionSyntax";
+            return Concat(node.Keyword.Text, "(", this.Print(node.Type), ")");
         }
     }
 }

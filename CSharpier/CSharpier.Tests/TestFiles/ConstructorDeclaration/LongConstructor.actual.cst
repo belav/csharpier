@@ -1,4 +1,4 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass LongConstructorClassTODO ConstraintClauses
-){
-    TODO ModifiersLongConstructorClass(TODO AttributeListsTODO Modifiersstring oneoneoneoneoneoneone, TODO AttributeListsTODO Modifiersstring twotwotwotwotwotwo)TODO Statements
+﻿public class LongConstructorClass
+{
+    public LongConstructorClass(string oneoneoneoneoneoneone, string twotwotwotwotwotwo) { }
 }

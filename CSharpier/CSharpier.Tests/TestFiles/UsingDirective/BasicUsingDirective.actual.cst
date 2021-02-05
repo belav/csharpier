@@ -1,8 +1,9 @@
 ﻿using First;
 using Second;
-TODO AttributeListsTODO AttributeListsTODO Modifiersnamespace Namespace
+namespace Namespace
 {
     using Third;
     using One.Two.Three;
-    TODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses { }
+    
+    public class ClassName { }
 }

@@ -8,7 +8,7 @@ namespace CSharpier
         private Doc PrintForStatementSyntax(ForStatementSyntax node)
         {
             var parts = new Parts(node.ForKeyword.Text, " (");
-            if (NotNull(node.Declaration))
+            if (node.Declaration != null)
             {
                 parts.Push(
                     this.PrintVariableDeclarationSyntax(node.Declaration),
@@ -17,27 +17,27 @@ namespace CSharpier
             }
             else
             {
-                parts.Push(String(";"));
+                parts.Add(String(";"));
             }
 
-            if (NotNull(node.Condition))
+            if (node.Condition != null)
             {
                 parts.Push(this.Print(node.Condition), String("; "));
             }
             else
             {
-                parts.Push(String(";"));
+                parts.Add(String(";"));
             }
 
             parts.Push(Join(String(", "), node.Incrementors.Select(this.Print)), String(")"));
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {
-                parts.Push(statement);
+                parts.Add(statement);
             }
             else
             {
-                parts.Push(Indent(Concat(HardLine, statement)));
+                parts.Add(Indent(Concat(HardLine, statement)));
             }
 
             return Concat(parts);

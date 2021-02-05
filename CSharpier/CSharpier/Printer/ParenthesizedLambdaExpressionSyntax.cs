@@ -8,17 +8,17 @@ namespace CSharpier
         private Doc PrintParenthesizedLambdaExpressionSyntax(ParenthesizedLambdaExpressionSyntax node)
         {
             var parts = new Parts();
-            if (NotNull(node.AsyncKeyword)) {
-                parts.Push(String("async "));
+            if (NotNullToken(node.AsyncKeyword)) {
+                parts.Add(String("async "));
             }
             parts.Push(
                 this.PrintParameterListSyntax(node.ParameterList),
                 String(" => ")
             );
-            if (NotNull(node.ExpressionBody)) {
-                parts.Push(this.Print(node.ExpressionBody));
-            } else if (NotNull(node.Block)) {
-                parts.Push(this.PrintBlockSyntax(node.Block));
+            if (node.ExpressionBody != null) {
+                parts.Add(this.Print(node.ExpressionBody));
+            } else if (node.Block != null) {
+                parts.Add(this.PrintBlockSyntax(node.Block));
             }
             return Concat(parts);
         }

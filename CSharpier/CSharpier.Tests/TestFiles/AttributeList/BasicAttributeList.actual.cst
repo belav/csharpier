@@ -1,6 +1,9 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ClassNameTODO ConstraintClauses
-){
-    TODO FieldDeclarationSyntax
-    TODO PropertyDeclarationSyntax
-    TODO AttributeListsTODO Modifiersvoid MethodName(TODO AttributeListsTODO Modifiersstring value)TODO ConstraintClausesTODO Statements
+﻿[assembly: System.Copyright(@"(C)""
+
+2009")]
+[module: System.Copyright("\n\t\u0123(C) \"2009" + "\u0123")][Obsolete]class ClassName
+{
+    
+    
+    [Obsolete]void MethodName([In] string value) { }
 }

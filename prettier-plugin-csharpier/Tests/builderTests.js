@@ -1,9 +1,49 @@
 const prettier = require("prettier");
 const { concat, group, join, line, softline, hardline, indent } = prettier.doc.builders;
 
-test("basic test", () => {
-    const actual = print(concat(["public", " ", "class", " ", "ClassName"]));
-    expect(actual).toBe("public class ClassName");
+test("basic concat", () => {
+    const actual = print(concat(["1", "2", "3"]));
+    expect(actual).toBe("123");
+});
+
+test("concat with hardline", () => {
+    const actual = print(concat(["1", hardline, "3"]));
+    expect(actual).toBe("1\n3");
+});
+
+test("concat with line", () => {
+    const actual = print(concat(["1", line, "3"]));
+    expect(actual).toBe("1\n3");
+});
+
+test("group with line", () => {
+    const actual = print(group(concat(["1", line, "3"])));
+    expect(actual).toBe("1 3");
+});
+
+test("group with hardline", () => {
+    const actual = print(group(concat(["1", hardline, "3"])));
+    expect(actual).toBe("1\n3");
+});
+
+test("group with line and hardline", () => {
+    const actual = print(group(concat(["1", line, "2", hardline, "3"])));
+    expect(actual).toBe("1 2\n3");
+});
+
+test("large group concat with line", () => {
+    const actual = print(group(concat(["LongTextLongTextLongTextLongText", line, "LongTextLongTextLongTextLongText", line, "LongTextLongTextLongTextLongText"])));
+    expect(actual).toBe("LongTextLongTextLongTextLongText\nLongTextLongTextLongTextLongText\nLongTextLongTextLongTextLongText");
+});
+
+test("indent with hardline", () => {
+    const actual = print(indent(concat([hardline, "1", hardline, "2"])));
+    expect(actual).toBe("\n    1\n    2");
+});
+
+test("two indents with hardline", () => {
+    const actual = print(concat([indent(concat([hardline, "11", hardline, "12"])), hardline, hardline, indent(concat([hardline, "21", hardline, "22"]))]));
+    expect(actual).toBe("\n    11\n    12\n\n\n    21\n    22");
 });
 
 test("indent using", () => {
@@ -25,7 +65,7 @@ test("indent using", () => {
 
 test("indent numbers", () => {
     const doc = group(
-        concat(["[", indent(concat([hardline, join(concat([",", line]), ["1", "2", "3"])])), hardline, "]"]),
+        concat(["[", indent(concat([hardline, join(concat([",", hardline]), ["1", "2", "3"])])), hardline, "]"]),
     );
 
     const actual = print(doc);
@@ -68,6 +108,7 @@ test("indent argumentList", () => {
 function print(doc) {
     const result = prettier.doc.printer.printDocToString(doc, {
         tabWidth: 4,
+        printWidth: 80,
     });
     return result.formatted;
 }

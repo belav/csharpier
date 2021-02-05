@@ -1,5 +1,6 @@
 public class ClassName
 {
     // method
-    public void MethodName() { }
+    public void MethodName()
+    { }
 }

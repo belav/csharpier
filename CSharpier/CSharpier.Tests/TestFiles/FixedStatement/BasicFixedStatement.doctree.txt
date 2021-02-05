@@ -1,0 +1,133 @@
+concat:
+    concat:
+        concat:
+            ""
+            "class"
+            " "
+            "ClassName"
+            concat:
+                concat:
+                    Hard
+                    breakParent
+
+                "{"
+
+            indent:
+                concat:
+                    concat:
+                        Hard
+                        breakParent
+
+                    concat:
+                        concat:
+                            ""
+                            "void"
+                            " "
+                            "MethodName"
+                            "()"
+                            group:
+                                concat:
+                                    Normal
+                                    "{"
+                                    concat:
+                                        indent:
+                                            concat:
+                                                concat:
+                                                    Hard
+                                                    breakParent
+
+                                                concat:
+                                                    concat:
+                                                        "fixed"
+                                                        " "
+                                                        "("
+                                                        concat:
+                                                            concat:
+                                                                "int"
+                                                                "*"
+
+                                                            " "
+                                                            concat:
+                                                                concat:
+                                                                    "p"
+                                                                    concat:
+                                                                        " = "
+                                                                        concat:
+                                                                            "stackalloc "
+                                                                            concat:
+                                                                                "int"
+                                                                                concat:
+                                                                                    concat:
+                                                                                        "["
+                                                                                        concat:
+                                                                                            "100"
+
+                                                                                        "]"
+
+
+
+                                                                            ""
+
+
+
+
+
+                                                        ")"
+                                                        group:
+                                                            concat:
+                                                                Normal
+                                                                "{"
+                                                                concat:
+                                                                    indent:
+                                                                        concat:
+                                                                            concat:
+                                                                                Hard
+                                                                                breakParent
+
+                                                                            concat:
+                                                                                concat:
+                                                                                    concat:
+                                                                                        concat:
+                                                                                            "*"
+                                                                                            "intref"
+
+                                                                                        " "
+                                                                                        "="
+                                                                                        " "
+                                                                                        "1"
+
+                                                                                    ";"
+
+
+
+                                                                    concat:
+                                                                        Hard
+                                                                        breakParent
+
+
+                                                                "}"
+
+
+
+
+                                        concat:
+                                            Hard
+                                            breakParent
+
+
+                                    "}"
+
+
+
+
+            concat:
+                Hard
+                breakParent
+
+            "}"
+
+
+    concat:
+        Hard
+        breakParent
+

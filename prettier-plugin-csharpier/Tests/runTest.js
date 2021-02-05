@@ -14,6 +14,7 @@ function runTest(directory, name) {
         tabWidth: 4,
         printTodo: true,
         validateComments: true,
+        printWidth: 80,
     });
 
     const expectedFilePath = codePath.replace(".cs", ".expected.cs");

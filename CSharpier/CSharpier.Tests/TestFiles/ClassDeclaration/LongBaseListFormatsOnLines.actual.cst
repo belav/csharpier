@@ -1,4 +1,4 @@
-﻿TODO AttributeListsTODO AttributeListsTODO Modifiersclass ThisIsSomeLongNameAndItShouldFormatWell : AnotherLongClassName<T>, AndYetAnotherLongClassNameTODO ConstraintClauses
-){
-            TODO AttributeListsTODO Modifiersvoid MethodName()TODO ConstraintClausesTODO Statements
+﻿public class ThisIsSomeLongNameAndItShouldFormatWell : AnotherLongClassName<T>, AndYetAnotherLongClassName
+{
+    void MethodName() { }
 }

@@ -8,121 +8,15 @@ namespace Worker
 {
     public class TypescriptConverter
     {
-        // TODO make this powershell that runs on build?
-        [Test]
-        public void CreateUnitTests()
-        {
-            var rootDirectory = new DirectoryInfo(@"C:\Projects\csharpier");
-            var csharpDirectory = Path.Combine(rootDirectory.FullName, @"CSharpier\CSharpier.Tests\TestFiles");
-            foreach (var directory in new DirectoryInfo(csharpDirectory).GetDirectories())
-            {
-                var output = new StringBuilder();
-
-                output.AppendLine(@$"using CSharpier.Tests.TestFileTests;
-using NUnit.Framework;
-
-namespace CSharpier.Tests.TestFiles
-{{
-    public class {directory.Name}Tests : BaseTest
-    {{");
-
-
-                foreach (var file in directory.GetFiles())
-                {
-                    if (!file.Name.Contains(".cst") || file.Name.Contains(".actual") || file.Name.Contains(".expected"))
-                    {
-                        continue;
-                    }
-
-                    var testName = file.Name.Replace(".cst", "");
-                    output.AppendLine(@$"        [Test]
-        public void {testName}()
-        {{
-            this.RunTest(""{directory.Name}"", ""{testName}"");
-        }}");
-                }
-
-                output.AppendLine("    }");
-                output.AppendLine("}");
-                
-                File.WriteAllText(Path.Combine(directory.FullName, "_" + directory.Name + "Tests.cs"), output.ToString());
-            }
-        }
-        
-        [Test]
-        public void MoveTestFiles()
-        {
-            var rootDirectory = new DirectoryInfo(@"C:\Projects\csharpier");
-            var typescriptDirectory = Path.Combine(rootDirectory.FullName, @"prettier-plugin-csharpier\Tests");
-            var csharpDirectory = Path.Combine(rootDirectory.FullName, @"CSharpier\CSharpier.Tests\TestFiles");
-            foreach (var directory in new DirectoryInfo(typescriptDirectory).GetDirectories())
-            {
-                var csharpSubdirectory = Path.Combine(csharpDirectory, directory.Name);
-                if (!Directory.Exists(csharpSubdirectory))
-                {
-                    Directory.CreateDirectory(csharpSubdirectory);
-                }
-
-                foreach (var file in directory.GetFiles())
-                {
-                    if (!file.Name.Contains(".cs"))
-                    {
-                        continue;
-                    }
-                    file.CopyTo(Path.Combine(csharpSubdirectory, file.Name.Replace(".cs", ".cst")));
-                }
-            }
-        }
-
-        [Test]
-        public void GeneratePrinterSwitch()
-        {
-            var rootDirectory = new DirectoryInfo(@"C:\Projects\csharpier");
-            var output = new StringBuilder();
-
-            output.AppendLine(@"using System;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-namespace CSharpier
-{
-    public partial class Printer
-    {
-        public Doc Print(SyntaxNode syntaxNode)
-        {");
-
-            var csharpDirectory = Path.Combine(rootDirectory.FullName, @"CSharpier\CSharpier\Printer");
-            var isFirst = true;
-            foreach (var file in new DirectoryInfo(csharpDirectory).GetFiles())
-            {
-                output.Append("            ");
-                output.Append(isFirst ? "if" : "else if");
-                isFirst = false;
-                var name = file.Name.Replace(".cs", "");
-                var camelCaseName = name[0].ToString().ToLower() + name.Substring(1);
-                output.AppendLine($@" (syntaxNode is {name} {camelCaseName})
-            {{
-                return this.Print{name}({camelCaseName});
-            }}");
-            }
-
-            output.AppendLine(@"
-            throw new Exception(""Can't handle "" + syntaxNode.GetType().Name);
-        }
-    }
-}");
-
-            File.WriteAllText(csharpDirectory + ".generated.cs", output.ToString());
-        }
-
         [Test]
         public void DoWork()
         {
+            return;
             var rootDirectory = new DirectoryInfo(@"C:\Projects\csharpier");
             var typescriptTypeDirectory = Path.Combine(rootDirectory.FullName, @"prettier-plugin-csharpier\src\Printer");
-            var inputFile = Path.Combine(typescriptTypeDirectory, "PrintMethodLikeDeclaration.ts");
+            var inputFile = Path.Combine(typescriptTypeDirectory, "PrintAttributeLists.ts");
 
-            var nodeNameWithoutSyntax = "MethodDeclaration";
+            var nodeNameWithoutSyntax = "AttributeStuff";
             var nodeNameWithSyntax = nodeNameWithoutSyntax + "Syntax";
 
             using var streamReader = new StreamReader(inputFile);
@@ -178,7 +72,7 @@ namespace CSharpier
                 line = line.Replace("printExtraNewLines(node, parts, ", "//this.PrintExtraNewLines(node, ");
                 line = line.Replace("printAttributeLists(node, parts, path, options, print)", "this.PrintAttributeLists(node.AttributeLists, parts)");
                 line = line.Replace("innerParts.splice(innerParts.length - 1, 1);", "innerParts.TheParts.RemoveAt(innerParts.TheParts.Count - 1);");
-                line = line.Replace(".push(", ".Push(");
+                line = line.Replace(".Add(", ".Add(");
                 line = line.Replace("group(", "Group(");
                 line = line.Replace("indent(", "Indent(");
                 line = line.Replace("join(", "Join(");
