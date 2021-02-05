@@ -1,16 +1,20 @@
 ﻿public class ClassName
 {
-    public void MethodName() {
+    public void MethodName()
+    {
         switch (0)
         {
             case 0:
-            case 1: {
+            case 1:
+            {
                 break;
             }
-            case 2: {
+            case 2:
+            {
                 return;
             }
-            default: {
+            default:
+            {
                 return;
             }
         }

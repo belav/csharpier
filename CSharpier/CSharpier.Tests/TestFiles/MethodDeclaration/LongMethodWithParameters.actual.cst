@@ -4,5 +4,8 @@
         string oneoneoneoneoneoneoneoneone,
         string twotwotwotwotwotwotwotwo,
         string threethreethreethreethreethree) { }
-    public void LongMethodNameForceLineBreak(string one, string two, string three) { }
+    public void LongMethodNameForceLineBreak(
+        string one,
+        string two,
+        string three) { }
 }

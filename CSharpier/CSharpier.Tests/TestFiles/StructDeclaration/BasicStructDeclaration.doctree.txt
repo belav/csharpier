@@ -1,8 +1,0 @@
-concat:
-    concat:
-        ""
-
-    concat:
-        Hard
-        breakParent
-

@@ -2,7 +2,8 @@
 {
     public BasicClass() { }
     public BasicClass(int x) { }
-    public BasicClass(string s) {
+    public BasicClass(string s)
+    {
         return;
     }
 }

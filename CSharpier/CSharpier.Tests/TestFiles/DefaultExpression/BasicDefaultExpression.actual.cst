@@ -1,6 +1,7 @@
 ﻿class ClassName
 {
-    void MethodName<T>() {
+    void MethodName<T>()
+    {
         return default(T);
     }
 }

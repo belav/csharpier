@@ -1,6 +1,7 @@
 ﻿class ClassName
 {
-    void MethodName() {
+    void MethodName()
+    {
         TypedReference tr = __makeref(c);
     }
 }

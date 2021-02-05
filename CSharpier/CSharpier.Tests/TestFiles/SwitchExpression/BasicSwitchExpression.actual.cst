@@ -1,9 +1,10 @@
 ﻿class ClassName
 {
-    int MethodName() {
+    int MethodName()
+    {
         return 1 switch
         {
-            
+
         };
     }
 }

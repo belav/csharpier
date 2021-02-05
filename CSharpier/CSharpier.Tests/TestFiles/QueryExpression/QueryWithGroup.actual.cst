@@ -1,6 +1,7 @@
 ﻿class ClassName
 {
-    void MethodName() {
+    void MethodName()
+    {
         var query = from c in customers group c by c.Country;
     }
 }

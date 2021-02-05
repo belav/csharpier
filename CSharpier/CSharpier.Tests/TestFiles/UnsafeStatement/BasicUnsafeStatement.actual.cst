@@ -1,7 +1,9 @@
 ﻿class ClassName
 {
-    void MethodName() {
-        unsafe {
+    void MethodName()
+    {
+        unsafe
+        {
             int* p = null;
         }
     }

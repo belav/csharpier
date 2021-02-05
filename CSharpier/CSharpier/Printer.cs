@@ -126,16 +126,19 @@ namespace CSharpier
             where T : SyntaxNode
         {
             var actualEndOfLine = endOfLineDoc != null ? Concat(endOfLineDoc, separator) : separator;
-            
+
+            Doc beforeBody = Line;
             Doc body = " ";
             if (statements.Count > 0)
             {
+                beforeBody = HardLine;
                 body = Concat(Indent(Concat(separator, Join(actualEndOfLine, statements.Select(this.Print)))), separator);
             }
 
             // TODO 000000 for some reason, this Line doesn't print the same between csharpier and prettier in the MethodWithStatements test
-            // could it be options?? or something we are missing in the DocPrinter. Ugh
-            var parts = new Parts(Line, "{", body, "}");
+            // it is almost like the prettier plugin is ignoring the width I send, but when I logged it directly in prettier source it had 80
+            // but this line definitely seems to be wrong
+            var parts = new Parts(beforeBody, "{", body, "}");
             // TODO printTrailingComments(node, parts, "closeBraceToken");
             return Group(Concat(parts));
         }

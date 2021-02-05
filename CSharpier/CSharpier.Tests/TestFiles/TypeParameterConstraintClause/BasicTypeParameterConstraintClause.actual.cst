@@ -5,8 +5,9 @@ class ClassName<T>
     where T : class
 {
     void MethodName<T>()
-        where T : class {
-        
+        where T : class
+    {
+
     }
 }
 

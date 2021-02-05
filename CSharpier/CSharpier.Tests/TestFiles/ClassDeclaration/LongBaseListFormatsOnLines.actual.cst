@@ -1,4 +1,6 @@
-﻿public class ThisIsSomeLongNameAndItShouldFormatWell : AnotherLongClassName<T>, AndYetAnotherLongClassName
+﻿public class ThisIsSomeLongNameAndItShouldFormatWell
+    : AnotherLongClassName<T>,
+    AndYetAnotherLongClassName
 {
     void MethodName() { }
 }

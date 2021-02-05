@@ -1,7 +1,9 @@
 ﻿class ClassName
 {
-    void MethodName() {
-        checked {
+    void MethodName()
+    {
+        checked
+        {
             checked(++i);
         }
     }

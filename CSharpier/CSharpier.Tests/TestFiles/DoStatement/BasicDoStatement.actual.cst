@@ -1,7 +1,9 @@
 ﻿class ClassName
 {
-    void MethodName() {
-        do {
+    void MethodName()
+    {
+        do
+        {
             return;
         }
         while (true);

@@ -1,10 +1,13 @@
 ﻿public class ClassName
 {
-    public void MethodName() {
-        if (true) {
+    public void MethodName()
+    {
+        if (true)
+        {
             DoIf();
         }
-        else if (false) {
+        else if (false)
+        {
             DoElse();
         }
     }

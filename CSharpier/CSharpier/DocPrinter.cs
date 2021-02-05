@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CSharpier
 {
@@ -291,7 +292,7 @@ namespace CSharpier
                 Mode = PrintMode.MODE_BREAK,
             });
 
-            var output = new StringBuilder();
+            var output = new List<string>();
             var shouldRemeasure = false;
 
             var lineSuffix = new List<PrintCommand>();
@@ -300,9 +301,10 @@ namespace CSharpier
             {
                 switch (command.Doc)
                 {
-                    case StringDoc stringBuilder:
+                    case StringDoc stringDoc:
                         // TODO new line stuff
-                        output.Append(stringBuilder.Value);
+                        output.Add(stringDoc.Value);
+                        position += GetStringWidth(stringDoc.Value);
                         break;
                     case Concat concat:
                         for (var x = concat.Contents.Count - 1; x >= 0; x--)
@@ -388,7 +390,7 @@ namespace CSharpier
                                 {
                                     if (line.Type != LineDoc.LineType.Soft)
                                     {
-                                        output.Append(' ');
+                                        output.Add(" ");
 
                                         position += 1;
                                     }
@@ -425,13 +427,13 @@ namespace CSharpier
                                     //     out.Add(newLine, ind.root.value);
                                     //     pos = ind.root.length;
                                     // } else {
-                                    output.Append(newLine);
+                                    output.Add(newLine);
                                     position = 0;
                                 }
                                 else
                                 {
                                     position -= Trim(output);
-                                    output.Append(newLine + command.Indent.Value);
+                                    output.Add(newLine + command.Indent.Value);
                                     position = command.Indent.Length;
                                 }
 
@@ -446,8 +448,7 @@ namespace CSharpier
                 }
             }
 
-            return
-                output.ToString();
+            return string.Join("", output);
         }
 
         // TODO in prettier these deals with unicode characters that are double width
@@ -456,31 +457,31 @@ namespace CSharpier
             return value.Length;
         }
 
-        private int Trim(StringBuilder stringBuilder)
+        // TODO this can probably be optimzed
+        private int Trim(List<string> output)
         {
-            if (stringBuilder.Length == 0)
+            if (output.Count == 0)
             {
                 return 0;
             }
 
             var trimCount = 0;
-            var i = stringBuilder.Length - 1;
-            for (; i >= 0; i--)
-            {
-                if (!char.IsWhiteSpace(stringBuilder[i]))
-                {
-                    break;
-                }
 
-                trimCount++;
+            // Trim whitespace at the end of line
+            while (output.Count > 0 && Regex.IsMatch(output[^1], "^[\\t ]*$"))
+            {
+                trimCount += output[^1].Length;
+                output.RemoveAt(output.Count - 1);
             }
 
-// TODO what does this do?
-// if (out.length && typeof out[out.length - 1] === "string") {
-//     const trimmed = out[out.length - 1].replace(/[\t ]*$/, "");
-//     trimCount += out[out.length - 1].length - trimmed.length;
-//         out[out.length - 1] = trimmed;
-// }
+            if (output.Count > 0)
+            {
+                var trimmed = output[^1];
+                trimmed = Regex.Replace(trimmed, "[\\t ]*$", "");
+                trimCount += output[^1].Length - trimmed.Length;
+                output[^1] = trimmed;
+            }
+
             return trimCount;
         }
 

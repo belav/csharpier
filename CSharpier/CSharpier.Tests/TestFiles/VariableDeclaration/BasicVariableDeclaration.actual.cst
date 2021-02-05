@@ -1,6 +1,7 @@
 ﻿class ClassName
 {
-    void MethodName() {
+    void MethodName()
+    {
         int x = 0, y = 1;
     }
 }

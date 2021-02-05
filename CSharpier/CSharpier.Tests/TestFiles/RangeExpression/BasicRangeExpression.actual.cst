@@ -1,6 +1,7 @@
 ﻿class ClassName
 {
-    void Ranges() {
+    void Ranges()
+    {
         var thirdItem = list[2];
         var lastItem = list[^1];
         var multiDimensional = list[3, ^2];

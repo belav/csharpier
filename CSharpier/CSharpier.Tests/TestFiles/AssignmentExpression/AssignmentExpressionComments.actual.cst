@@ -1,6 +1,7 @@
 ﻿class ClassName
 {
-    void MethodName() {
+    void MethodName()
+    {
         var x = 0;
         x = 15;
         x = 25;

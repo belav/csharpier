@@ -1,5 +1,4 @@
 public class BasicClass
 {
-    public BasicClass(string one, string two)
-    { }
+    public BasicClass(string one, string two) { }
 }

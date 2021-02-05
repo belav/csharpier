@@ -1,9 +1,11 @@
 ﻿class ClassName
 {
-    void MethodName() {
+    void MethodName()
+    {
         lock (sync)
             process();
-        lock (sync) {
+        lock (sync)
+        {
             process();
         }
     }

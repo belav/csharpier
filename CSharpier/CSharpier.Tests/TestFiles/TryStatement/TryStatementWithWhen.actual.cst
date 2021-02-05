@@ -1,10 +1,13 @@
 ﻿class ClassName
 {
-    void MethodName() {
-        try {
+    void MethodName()
+    {
+        try
+        {
             throw null;
         }
-        catch (Exception e) when (myFilter(e)) {
+        catch (Exception e) when (myFilter(e))
+        {
             throw;
         }
     }

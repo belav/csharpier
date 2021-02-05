@@ -38,7 +38,7 @@ const printNode: PrintMethod = (path, options, print) => {
             }
 
             // TODO pass as an option, and write out somewhere better. then it'll be easier to compare to c#
-            fs.writeFileSync("c:/temp/blah.txt", printDocTree(result, ""));
+            fs.writeFileSync("c:/temp/blah.json", JSON.stringify(result));
 
             if (missingNodes.length > 0) {
                 throw new Error(
@@ -61,7 +61,7 @@ const printNode: PrintMethod = (path, options, print) => {
     return "";
 };
 
-function printDocTree(doc: Doc, indent: string): string {
+export function printDocTree(doc: Doc, indent: string): string {
     if (typeof (doc) === "string")
     {
         return indent + "\"" + doc + "\"";
@@ -70,20 +70,28 @@ function printDocTree(doc: Doc, indent: string): string {
     switch (doc.type)
     {
         case "concat":
-            let result = indent + "concat:\r\n";
-            for (const child of doc.parts)
-            {
-                result += printDocTree(child, indent + "    ") + "\r\n";
+            if (doc.parts.length == 2 && typeof doc.parts[1] !== "string" && doc.parts[1].type === "break-parent") {
+                return indent + "hardline";
             }
+
+            let result = indent + "concat([\r\n";
+            for (let x = 0; x < doc.parts.length; x++)
+            {
+                result += printDocTree(doc.parts[x], indent + "    ");
+                if (x < doc.parts.length - 1) {
+                    result += ",\r\n";
+                }
+            }
+            result += "])"
             return result;
         case "line":
-            return indent + (doc.hard ? "Hard" : doc.soft ? "Soft" : "Normal");
+            return indent + (doc.hard ? "hardline" : doc.soft ? "softlife" : "line");
         case "break-parent":
             return indent + "breakParent";
         case "indent":
-            return indent + "indent:\r\n" + printDocTree(doc.contents, indent + "    ");
+            return indent + "indent(\r\n" + printDocTree(doc.contents, indent + "    ") + ")";
         case "group":
-            return indent + "group:\r\n" + printDocTree(doc.contents, indent + "    ");
+            return indent + "group(\r\n" + printDocTree(doc.contents, indent + "    ") + ")";
         default:
             throw new Error("Can't handle " + doc.type);
     }

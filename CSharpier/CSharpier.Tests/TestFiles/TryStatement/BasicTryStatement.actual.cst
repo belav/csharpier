@@ -1,16 +1,21 @@
 ﻿class ClassName
 {
-    void MethodName() {
-        try {
+    void MethodName()
+    {
+        try
+        {
             throw null;
         }
-        catch (Exception) {
+        catch (Exception)
+        {
             throw;
         }
-        catch (ArgumentException ex) {
+        catch (ArgumentException ex)
+        {
             throw;
         }
-        finally {
+        finally
+        {
             return;
         }
     }

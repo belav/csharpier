@@ -1,4 +1,5 @@
 const prettier = require("prettier");
+const fs = require("fs");
 const { concat, group, join, line, softline, hardline, indent } = prettier.doc.builders;
 
 test("basic concat", () => {
@@ -28,6 +29,68 @@ test("group with hardline", () => {
 
 test("group with line and hardline", () => {
     const actual = print(group(concat(["1", line, "2", hardline, "3"])));
+    expect(actual).toBe("1 2\n3");
+});
+
+test("blah2", () => {
+    const doc = JSON.parse(fs.readFileSync("c:/temp/blah.json"));
+    const actual = print(doc);
+    expect(actual).toBe("yeah");
+});
+
+test("blah", () => {
+    const doc = concat([
+        concat([
+            concat([
+                concat([
+                    concat([
+                        "public"]),
+                    " "]),
+                "class",
+                " ",
+                "ClassName",
+                concat([
+                    hardline,
+                    "{"]),
+                indent(
+                    concat([
+                        hardline,
+                        concat([
+                            concat([
+                                concat([
+                                    concat([
+                                        "public"]),
+                                    " "]),
+                                "void",
+                                " ",
+                                "DoStuff",
+                                "()",
+                                group(
+                                    concat([
+                                        hardline,
+                                        "{",
+                                        concat([
+                                            indent(
+                                                concat([
+                                                    hardline,
+                                                    concat([
+                                                        concat([
+                                                            concat([
+                                                                "DoStuff",
+                                                                "()"]),
+                                                            ";"]),
+                                                        hardline,
+                                                        concat([
+                                                            concat([
+                                                                "DoStuff",
+                                                                "()"]),
+                                                            ";"])])])),
+                                            hardline]),
+                                        "}"]))])])])),
+                hardline,
+                "}"])]),
+        hardline]);
+    const actual = print(doc);
     expect(actual).toBe("1 2\n3");
 });
 
@@ -106,9 +169,49 @@ test("indent argumentList", () => {
 });
 
 function print(doc) {
+    const docTree = printDocTree(doc, "");
+    fs.writeFileSync("c:/temp/blah.txt", docTree);
+
     const result = prettier.doc.printer.printDocToString(doc, {
         tabWidth: 4,
+        endOfLine: "auto",
         printWidth: 80,
     });
     return result.formatted;
+}
+
+function printDocTree(doc, indent) {
+    if (typeof (doc) === "string")
+    {
+        return indent + "\"" + doc + "\"";
+    }
+
+    switch (doc.type)
+    {
+        case "concat":
+            if (doc.parts.length == 2 && typeof doc.parts[1] !== "string" && doc.parts[1].type === "break-parent") {
+                return indent + "hardline";
+            }
+
+            let result = indent + "concat([\r\n";
+            for (let x = 0; x < doc.parts.length; x++)
+            {
+                result += printDocTree(doc.parts[x], indent + "    ");
+                if (x < doc.parts.length - 1) {
+                    result += ",\r\n";
+                }
+            }
+            result += "])"
+            return result;
+        case "line":
+            return indent + (doc.hard ? "hardline" : doc.soft ? "softlife" : "line");
+        case "break-parent":
+            return indent + "breakParent";
+        case "indent":
+            return indent + "indent(\r\n" + printDocTree(doc.contents, indent + "    ") + ")";
+        case "group":
+            return indent + "group(\r\n" + printDocTree(doc.contents, indent + "    ") + ")";
+        default:
+            throw new Error("Can't handle " + doc.type);
+    }
 }

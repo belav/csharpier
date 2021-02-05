@@ -1,6 +1,7 @@
 ﻿class ClassName
 {
-    ref Vector3 MethodName() {
+    ref Vector3 MethodName()
+    {
         break;
     }
 }

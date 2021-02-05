@@ -1,5 +1,4 @@
 public class ClassName
 {
-    public void DoStuff(string one, string two)
-    { }
+    public void DoStuff(string one, string two) { }
 }

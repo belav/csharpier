@@ -1,7 +1,9 @@
 ﻿public class ClassName
 {
-    public void MethodName() {
-        foreach (var x in y) {
+    public void MethodName()
+    {
+        foreach (var x in y)
+        {
             continue;
         }
     }

@@ -1,7 +1,9 @@
 ﻿class ClassName
 {
-    void MethodName() {
-        using (BeginScope()) {
+    void MethodName()
+    {
+        using (BeginScope())
+        {
             return;
         }
     }
