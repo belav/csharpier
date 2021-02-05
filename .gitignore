@@ -21,3 +21,5 @@ App_Data
 /prettier-plugin-csharpier/Tests/**/*.json
 
 dist
+
+*.doctree.txt
