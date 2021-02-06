@@ -36,41 +36,23 @@ namespace CSharpier.Playground.Controllers
         {
             var filePath = Path.Combine(this.webHostEnvironment.ContentRootPath, "App_Data", "Uploads", content.CalculateHash() + ".cs");
             new FileInfo(filePath).EnsureDirectoryExists();
-
-            var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
-            
             // TODO we need to report back errors and what not
             // failing to compile/parse with roslyn
             // what about when the prettier plugin fails because of missing node types or other errors?
             this.WriteAllText(filePath, content);
-            var workingDirectory = Path.Combine(this.webHostEnvironment.ContentRootPath, this.options.PrettierDirectory);
-            var output = ExecuteApplication("node", workingDirectory, "./index.js " + filePath);
-
             // TODO we also want to eventually expose options
-            // TODO deploy stuff - this is done, but should be redone because .net!
-            // right now the playground deploys, but it doesn't update anything in the Prettier folder that it uses
-            // we should build CSharpier.Parser in release, and copy that in
-            // we should build the prettier-plugin-csharpier and copy it in
-            // we should copy in the package.json and index.js that we use in that folder, and run npm install
-
-            var jsonFilePath = filePath.Replace(".cs", ".json");
-            var json = this.Exists(jsonFilePath)
-                ? this.ReadAllText(jsonFilePath)
-                : "";
-            
-            if (!this.Exists(formattedFilePath))
+            var result = new Formatter().MakeCodeCSharpier(content, new Options
             {
-                return new FormatResult
-                {
-                    Code = output,
-                    Json = json,
-                };
-            }
+                IncludeAST = true,
+            });
+
+            var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
+            this.WriteAllText(formattedFilePath, result.Code);
 
             return new FormatResult
             {
-                Code = this.ReadAllText(formattedFilePath),
-                Json = json,
+                Code = result.Code,
+                Json = result.AST,
             };
         }
 

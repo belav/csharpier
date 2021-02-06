@@ -17,15 +17,6 @@ jobs:
       - 
         run: dotnet publish -c release --output ../../publish
       -
-        working-directory: prettier-plugin-csharpier
-        run: npm install && npm run build
-      -
-        working-directory: prettier-plugin-csharpier
-        run: cp -r ./dist ../publish/Prettier
-      -
-        working-directory: publish/Prettier
-        run: npm install
-      -
         run: mkdir offline && touch offline/app_offline.htm
       - 
         name: Upload app_offline.htm
@@ -37,11 +28,6 @@ jobs:
           localDir: "CSharpier/CSharpier.Playground/offline"
           remoteDir: "/csharpier_bntstudios_com"
       -
-        working-directory: CSharpier/CSharpier.Parser
-        run: dotnet build -c release --output ../../publish/Prettier/prettier-plugin-csharpier/CSharpier.Parser/net5.0          
-      #will this clean files? https://github.com/SamKirkland/FTP-Deploy-Action it sounds like it, it could exclude app_data and app_offline, and I could delete those later
-      # this may be better because port isn't separate https://github.com/marketplace/actions/simple-ftp-deploy
-      - 
         name: FTP Deploy
         uses: kevinpainchaud/simple-ftp-deploy-action@v1.2.1
         with:
