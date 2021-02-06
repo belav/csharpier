@@ -74,10 +74,11 @@ export class App extends Component<{}, State> {
         return (
             <WrapperStyle>
                 <Header>
-                    <div>
+                    <Left>
                         <Title>
                             CSharpier
                         </Title>
+                        <a className="github-button" href="https://github.com/belav/csharpier" data-size="large" data-show-count="true" aria-label="Star belav/csharpier on GitHub">Github</a>
                         <FormatButton onClick={this.formatCode}>
                             {this.state.isLoading &&
                                 <LoadingStyle />
@@ -86,7 +87,7 @@ export class App extends Component<{}, State> {
                                 <>Format</>
                             }
                         </FormatButton>
-                    </div>
+                    </Left>
                     <Tabs>
                         <Tab data-isactive={this.state.showCode} onClick={() => this.setState({ showCode: true })}>Formatted Code</Tab>
                         <Tab data-isactive={!this.state.showCode} onClick={() => this.setState({ showCode: false })}>AST</Tab>
@@ -173,10 +174,15 @@ const Header = styled.div`
     }
 `;
 
+const Left = styled.div`
+    align-items: center;
+`;
+
 const Title = styled.h1`
     padding-left: 28px;
     font-size: 22px;
     font-style: italic;
+    margin-right: 20px;
 `
 
 const FormatButton = styled.button`
