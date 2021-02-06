@@ -1,6 +1,5 @@
 delegate void Delegate<T>()
     where T : struct;
-
 class ClassName<T>
     where T : class
 {
@@ -14,11 +13,9 @@ class ClassName<T>
         }
     }
 }
-
 interface InterfaceName<T>
     where T : class
 { }
-
 struct Struct<T>
     where T : class
 { }

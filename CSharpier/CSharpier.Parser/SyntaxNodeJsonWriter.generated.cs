@@ -10095,7 +10095,6 @@ namespace Parser
             var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
-            properties.Add($"\"rawKing\":\"{syntaxNode.RawKind}\"");
             if (syntaxNode.RawKind == 8541 || syntaxNode.RawKind == 8542)
             {
                 properties.Add(WriteString("commentText", syntaxNode.ToString()));

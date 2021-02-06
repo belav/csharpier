@@ -1,0 +1,182 @@
+﻿{
+  "nodeType": "CompilationUnit",
+  "kind": "CompilationUnit",
+  "externs": [],
+  "usings": [],
+  "attributeLists": [],
+  "members": [
+    {
+      "nodeType": "StructDeclaration",
+      "kind": "StructDeclaration",
+      "attributeLists": [],
+      "modifiers": [],
+      "keyword": {
+        "nodeType": "SyntaxToken",
+        "kind": "StructKeyword",
+        "text": "struct",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia"
+          }
+        ]
+      },
+      "identifier": {
+        "nodeType": "SyntaxToken",
+        "kind": "IdentifierToken",
+        "text": "S",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndOfLineTrivia"
+          }
+        ]
+      },
+      "constraintClauses": [],
+      "openBraceToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "OpenBraceToken",
+        "text": "{",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndOfLineTrivia"
+          }
+        ]
+      },
+      "members": [
+        {
+          "nodeType": "FieldDeclaration",
+          "kind": "FieldDeclaration",
+          "attributeLists": [],
+          "modifiers": [
+            {
+              "nodeType": "SyntaxToken",
+              "kind": "FixedKeyword",
+              "text": "fixed",
+              "hasLeadingTrivia": true,
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ]
+            }
+          ],
+          "declaration": {
+            "nodeType": "VariableDeclaration",
+            "kind": "VariableDeclaration",
+            "type": {
+              "nodeType": "PredefinedType",
+              "kind": "PredefinedType",
+              "keyword": {
+                "nodeType": "SyntaxToken",
+                "kind": "IntKeyword",
+                "text": "int",
+                "hasTrailingTrivia": true,
+                "leadingTrivia": [],
+                "trailingTrivia": [
+                  {
+                    "nodeType": "SyntaxTrivia",
+                    "kind": "WhitespaceTrivia"
+                  }
+                ]
+              },
+              "hasTrailingTrivia": true
+            },
+            "variables": [
+              {
+                "nodeType": "VariableDeclarator",
+                "kind": "VariableDeclarator",
+                "identifier": {
+                  "nodeType": "SyntaxToken",
+                  "kind": "IdentifierToken",
+                  "text": "field",
+                  "leadingTrivia": [],
+                  "trailingTrivia": []
+                },
+                "argumentList": {
+                  "nodeType": "BracketedArgumentList",
+                  "kind": "BracketedArgumentList",
+                  "openBracketToken": {
+                    "nodeType": "SyntaxToken",
+                    "kind": "OpenBracketToken",
+                    "text": "[",
+                    "leadingTrivia": [],
+                    "trailingTrivia": []
+                  },
+                  "arguments": [
+                    {
+                      "nodeType": "Argument",
+                      "kind": "Argument",
+                      "expression": {
+                        "nodeType": "LiteralExpression",
+                        "kind": "NumericLiteralExpression",
+                        "token": {
+                          "nodeType": "SyntaxToken",
+                          "kind": "NumericLiteralToken",
+                          "text": "10",
+                          "leadingTrivia": [],
+                          "trailingTrivia": []
+                        }
+                      }
+                    }
+                  ],
+                  "closeBracketToken": {
+                    "nodeType": "SyntaxToken",
+                    "kind": "CloseBracketToken",
+                    "text": "]",
+                    "leadingTrivia": [],
+                    "trailingTrivia": []
+                  }
+                }
+              }
+            ]
+          },
+          "semicolonToken": {
+            "nodeType": "SyntaxToken",
+            "kind": "SemicolonToken",
+            "text": ";",
+            "hasTrailingTrivia": true,
+            "leadingTrivia": [],
+            "trailingTrivia": [
+              {
+                "nodeType": "SyntaxTrivia",
+                "kind": "EndOfLineTrivia"
+              }
+            ]
+          },
+          "hasLeadingTrivia": true,
+          "hasTrailingTrivia": true
+        }
+      ],
+      "closeBraceToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "CloseBraceToken",
+        "text": "}",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndOfLineTrivia"
+          }
+        ]
+      },
+      "hasTrailingTrivia": true
+    }
+  ]
+}

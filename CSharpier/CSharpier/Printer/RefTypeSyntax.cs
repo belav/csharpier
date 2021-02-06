@@ -9,7 +9,7 @@ namespace CSharpier
         {
             return Concat(
                 node.RefKeyword.Text,
-                node.ReadOnlyKeyword.RawKind != 0 ? String(" ") + node.ReadOnlyKeyword.Text : "",
+                node.ReadOnlyKeyword.RawKind != 0 ? " " + node.ReadOnlyKeyword.Text : "",
                 String(" "),
                 this.Print(node.Type)
             );

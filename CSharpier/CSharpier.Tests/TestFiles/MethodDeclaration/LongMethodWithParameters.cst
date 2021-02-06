@@ -4,7 +4,6 @@ public class ClassName
         string oneoneoneoneoneoneoneoneone,
         string twotwotwotwotwotwotwotwo,
         string threethreethreethreethreethree) { }
-
     public void LongMethodNameForceLineBreak(
         string one,
         string two,

@@ -1,28 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Microsoft.CodeAnalysis;
+using System.Text;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
 
 namespace CSharpier
 {
     public class Formatter
     {
         // TODO we should make this work in parallel to speed things up
-        public string Format(string code, Options options)
+        public CSharpierResult MakeCodeCSharpier(string code, Options options)
         {
-            var rootNode = CSharpSyntaxTree.ParseText(code).GetRoot();
+            var rootNode = CSharpSyntaxTree.ParseText(code).GetRoot() as CompilationUnitSyntax;
 
             var document = new Printer().Print(rootNode);
 
-            if (options.PrintDocTree)
+            return new CSharpierResult
             {
-                return this.PrintDocTree(document, "");
-            }
-            
-            return new DocPrinter().Print(document, new Options());
+                Code = new DocPrinter().Print(document, options),
+                DocTree = options.IncludeDocTree ? this.PrintDocTree(document, "") : null,
+                AST = options.IncludeAST ? this.PrintAST(rootNode) : null
+            };
+        }
+        
+        private string PrintAST(CompilationUnitSyntax rootNode)
+        {
+            var stringBuilder = new StringBuilder();
+            SyntaxNodeJsonWriter.WriteCompilationUnitSyntax(stringBuilder, rootNode);
+            return JsonConvert.SerializeObject(JsonConvert.DeserializeObject(stringBuilder.ToString()), Formatting.Indented);
         }
 
         private string PrintDocTree(Doc document, string indent)
@@ -32,23 +37,44 @@ namespace CSharpier
                 case StringDoc stringDoc:
                     return indent + "\"" + stringDoc.Value + "\"";
                 case Concat concat:
-                    var result = indent + "concat:" + Environment.NewLine;
-                    foreach (var child in concat.Contents)
-                    {
-                        result += this.PrintDocTree(child, indent + "    ") + Environment.NewLine;
+                    if (concat.Parts.Count == 2 && concat.Parts[0] is LineDoc && concat.Parts[1] is BreakParent) {
+                        return indent + "HardLine";
                     }
+                    
+                    var result = indent + "Concat(";
+                    if (concat.Parts.Count > 0)
+                    {
+                        result += Environment.NewLine;
+                    }
+                    for (var x = 0; x < concat.Parts.Count; x++)
+                    {
+                        result += this.PrintDocTree(concat.Parts[x], indent + "    ");
+                        if (x < concat.Parts.Count - 1)
+                        {
+                            result += "," + Environment.NewLine;
+                        }
+                    }
+
+                    result += ")";
                     return result;
                 case LineDoc lineDoc:
-                    return indent + lineDoc.Type;
+                    return indent + (lineDoc.Type == LineDoc.LineType.Normal ? "Line" : "SoftLine");
                 case BreakParent breakParent:
                     return indent + "breakParent";
                 case IndentDoc indentDoc:
-                    return indent + "indent:" + Environment.NewLine + this.PrintDocTree(indentDoc.Contents, indent + "    ");
+                    return indent + "Indent(" + Environment.NewLine + this.PrintDocTree(indentDoc.Contents, indent + "    ") + ")";
                 case Group group:
-                    return indent + "group:" + Environment.NewLine + this.PrintDocTree(group.Contents, indent + "    ");
+                    return indent + "Group(" + Environment.NewLine + this.PrintDocTree(group.Contents, indent + "    ") + ")";
                 default:
                     throw new Exception("Can't handle " + document);
             }
         }
+    }
+
+    public class CSharpierResult
+    {
+        public string Code { get; set; }
+        public string DocTree { get; set; }
+        public string AST { get; set; }
     }
 }

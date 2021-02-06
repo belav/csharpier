@@ -1,1 +1,2 @@
-﻿[Obsolete("message", true)]class ClassName { }
+﻿[Obsolete("message", true)]
+class ClassName { }

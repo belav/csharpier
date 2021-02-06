@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintFieldDeclarationSyntax(FieldDeclarationSyntax node)
         {
-            return ""; // TODO fieldLikeDeclaration
+            return this.PrintBaseFieldDeclarationSyntax(node);
         }
     }
 }

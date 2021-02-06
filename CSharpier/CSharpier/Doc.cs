@@ -10,7 +10,7 @@ namespace CSharpier
         }
     }
     
-    public class IndentDoc : Doc
+    public class IndentDoc : Doc, IHasContents
     {
         public Doc Contents { get; set; }
     }
@@ -38,10 +38,11 @@ namespace CSharpier
         public bool IsLiteral { get; set; }
     }
 
-    public class Group : Doc
+    public class Group : Doc, IHasContents
     {
         public Doc Contents { get; set; }
         public bool Break { get; set; }
+        public bool ExpandedStates { get; set; }
     }
     
     public class BreakParent : Doc
@@ -50,6 +51,26 @@ namespace CSharpier
 
     public class Concat : Doc
     {
-        public List<Doc> Contents { get; set; }
+        public List<Doc> Parts { get; set; }
+    }
+
+    public class Align : Doc, IHasContents
+    {
+        public Doc Contents { get; set; }
+    }
+    
+    public class Fill : Doc, IHasContents
+    {
+        public Doc Contents { get; set; }
+    }
+    
+    public class LineSuffix : Doc, IHasContents
+    {
+        public Doc Contents { get; set; }
+    }
+
+    interface IHasContents
+    {
+        Doc Contents { get; set; }
     }
 }

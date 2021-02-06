@@ -1,4 +1,4 @@
 ﻿class ClassName : IDisposable
 {
-    void Dispose() { }
+    void IDisposable.Dispose() { }
 }

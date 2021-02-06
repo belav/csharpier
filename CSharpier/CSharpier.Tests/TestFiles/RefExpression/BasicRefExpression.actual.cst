@@ -2,6 +2,6 @@
 {
     void MethodName()
     {
-        refCSharpier.StringDocreadonly var r1 = ref MethodName();
+        ref readonly var r1 = ref MethodName();
     }
 }

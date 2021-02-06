@@ -1,0 +1,142 @@
+﻿{
+  "nodeType": "CompilationUnit",
+  "kind": "CompilationUnit",
+  "externs": [],
+  "usings": [],
+  "attributeLists": [],
+  "members": [
+    {
+      "nodeType": "InterfaceDeclaration",
+      "kind": "InterfaceDeclaration",
+      "attributeLists": [],
+      "modifiers": [],
+      "keyword": {
+        "nodeType": "SyntaxToken",
+        "kind": "InterfaceKeyword",
+        "text": "interface",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia"
+          }
+        ]
+      },
+      "identifier": {
+        "nodeType": "SyntaxToken",
+        "kind": "IdentifierToken",
+        "text": "CoContra",
+        "leadingTrivia": [],
+        "trailingTrivia": []
+      },
+      "typeParameterList": {
+        "nodeType": "TypeParameterList",
+        "kind": "TypeParameterList",
+        "lessThanToken": {
+          "nodeType": "SyntaxToken",
+          "kind": "LessThanToken",
+          "text": "<",
+          "leadingTrivia": [],
+          "trailingTrivia": []
+        },
+        "parameters": [
+          {
+            "nodeType": "TypeParameter",
+            "kind": "TypeParameter",
+            "attributeLists": [],
+            "varianceKeyword": {
+              "nodeType": "SyntaxToken",
+              "kind": "OutKeyword",
+              "text": "out",
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ]
+            },
+            "identifier": {
+              "nodeType": "SyntaxToken",
+              "kind": "IdentifierToken",
+              "text": "T",
+              "leadingTrivia": [],
+              "trailingTrivia": []
+            }
+          },
+          {
+            "nodeType": "TypeParameter",
+            "kind": "TypeParameter",
+            "attributeLists": [],
+            "varianceKeyword": {
+              "nodeType": "SyntaxToken",
+              "kind": "InKeyword",
+              "text": "in",
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ]
+            },
+            "identifier": {
+              "nodeType": "SyntaxToken",
+              "kind": "IdentifierToken",
+              "text": "K",
+              "leadingTrivia": [],
+              "trailingTrivia": []
+            }
+          }
+        ],
+        "greaterThanToken": {
+          "nodeType": "SyntaxToken",
+          "kind": "GreaterThanToken",
+          "text": ">",
+          "hasTrailingTrivia": true,
+          "leadingTrivia": [],
+          "trailingTrivia": [
+            {
+              "nodeType": "SyntaxTrivia",
+              "kind": "WhitespaceTrivia"
+            }
+          ]
+        },
+        "hasTrailingTrivia": true
+      },
+      "constraintClauses": [],
+      "openBraceToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "OpenBraceToken",
+        "text": "{",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia"
+          }
+        ]
+      },
+      "members": [],
+      "closeBraceToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "CloseBraceToken",
+        "text": "}",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndOfLineTrivia"
+          }
+        ]
+      },
+      "arity": 2,
+      "hasTrailingTrivia": true
+    }
+  ]
+}

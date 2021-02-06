@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintInterfaceDeclarationSyntax(InterfaceDeclarationSyntax node)
         {
-            return ""; // TODO classLikeDeclaration
+            return this.PrintBaseTypeDeclarationSyntax(node);
         }
     }
 }

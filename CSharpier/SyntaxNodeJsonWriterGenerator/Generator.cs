@@ -67,6 +67,8 @@ namespace SyntaxNodeJsonWriterGenerator
                 file.WriteLine("}");
             }
 
+            File.Copy(fileName, fileName.Replace("CSharpier.Parser", "CSharpier"), true);
+            
             if (missingTypes.Any())
             {
                 throw new Exception(Environment.NewLine + string.Join(Environment.NewLine, missingTypes));

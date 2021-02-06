@@ -51,11 +51,6 @@ namespace CSharpier
 
                 line = "        " + line;
 
-                // TODO 0 printExtraNewLines
-                // TODO 0 printAttributeLists
-                // TODO 0 printModifiers
-                // TODO 0 printSyntaxToken
-
                 line = Regex.Replace(line, @"path.call\(print, ""(\w+)""\)", "this.Print(node.$1)");
                 line = Regex.Replace(line, @"path.map\(print, ""(\w+)""\)", "node.$1.Select(this.Print)");
                 line = Regex.Replace(line, @"path.call\(o => print(\w+)\(o, options, print\), ""(\w+)""\)", "this.Print$1Syntax(node.$2)");

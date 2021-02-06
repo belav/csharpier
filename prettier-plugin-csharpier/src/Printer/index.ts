@@ -37,6 +37,10 @@ const printNode: PrintMethod = (path, options, print) => {
                 validateComments(path.getValue());
             }
 
+            if ((options as any).writeParserJson) {
+                fs.writeFileSync((options as any).writeParserJson.replace(".json", ".doctree.txt"), printDocTree(result, ""), "utf8");
+            }
+
             // TODO pass as an option, and write out somewhere better. then it'll be easier to compare to c#
             fs.writeFileSync("c:/temp/blah.json", JSON.stringify(result));
 

@@ -177,14 +177,14 @@ namespace CSharpier
                     switch (doc)
                     {
                         case Concat concat:
-                            for (var i = concat.Contents.Count - 1; i >= 0; i--)
+                            for (var i = concat.Parts.Count - 1; i >= 0; i--)
                             {
                                 cmds.Push(
                                     new PrintCommand
                                     {
                                         Indent = ind,
                                         Mode = mode,
-                                        Doc = concat.Contents[i]
+                                        Doc = concat.Parts[i]
                                     });
                             }
 
@@ -208,16 +208,15 @@ namespace CSharpier
                         //
                         //     break;
                         case Group group:
-                            if (mustBeFlat)
+                            if (mustBeFlat && group.Break)
                             {
-                                // TODO && doc.break
                                 return false;
                             }
 
                             cmds.Push(new PrintCommand
                             {
                                 Indent = ind,
-                                Mode = mode, //TODO doc.break ? MODE_BREAK : mode,
+                                Mode = group.Break ? PrintMode.MODE_BREAK : mode,
                                 Doc = group.Contents,
                             });
 
@@ -277,9 +276,10 @@ namespace CSharpier
             return false;
         }
 
-        // TODO 0 write some unit tests for this to get it working like prettier, I have some tests in the plugin to try to figure out how it works that I can use
         public string Print(Doc document, Options options)
         {
+            DocPrinterUtils.PropagateBreaks(document);
+            
             var width = options.Width;
             var newLine = Environment.NewLine; // TODO options
             var position = 0;
@@ -292,7 +292,7 @@ namespace CSharpier
                 Mode = PrintMode.MODE_BREAK,
             });
 
-            var output = new List<string>();
+            var output = new StringBuilder();
             var shouldRemeasure = false;
 
             var lineSuffix = new List<PrintCommand>();
@@ -303,15 +303,15 @@ namespace CSharpier
                 {
                     case StringDoc stringDoc:
                         // TODO new line stuff
-                        output.Add(stringDoc.Value);
+                        output.Append(stringDoc.Value);
                         position += GetStringWidth(stringDoc.Value);
                         break;
                     case Concat concat:
-                        for (var x = concat.Contents.Count - 1; x >= 0; x--)
+                        for (var x = concat.Parts.Count - 1; x >= 0; x--)
                         {
                             currentStack.Push(new PrintCommand
                             {
-                                Doc = concat.Contents[x],
+                                Doc = concat.Parts[x],
                                 Mode = command.Mode,
                                 Indent = command.Indent
                             });
@@ -336,7 +336,7 @@ namespace CSharpier
                                     currentStack.Push(new PrintCommand
                                     {
                                         Indent = command.Indent,
-                                        Mode = PrintMode.MODE_FLAT, // TODO doc.break stuff here
+                                        Mode = group.Break ? PrintMode.MODE_BREAK : PrintMode.MODE_FLAT,
                                         Doc = group.Contents,
                                     });
                                     break;
@@ -390,7 +390,7 @@ namespace CSharpier
                                 {
                                     if (line.Type != LineDoc.LineType.Soft)
                                     {
-                                        output.Add(" ");
+                                        output.Append(" ");
 
                                         position += 1;
                                     }
@@ -427,13 +427,13 @@ namespace CSharpier
                                     //     out.Add(newLine, ind.root.value);
                                     //     pos = ind.root.length;
                                     // } else {
-                                    output.Add(newLine);
+                                    output.Append(newLine);
                                     position = 0;
                                 }
                                 else
                                 {
                                     position -= Trim(output);
-                                    output.Add(newLine + command.Indent.Value);
+                                    output.Append(newLine + command.Indent.Value);
                                     position = command.Indent.Length;
                                 }
 
@@ -457,33 +457,57 @@ namespace CSharpier
             return value.Length;
         }
 
-        // TODO this can probably be optimzed
-        private int Trim(List<string> output)
+        private int Trim(StringBuilder stringBuilder)
         {
-            if (output.Count == 0)
+            if (stringBuilder.Length == 0)
             {
                 return 0;
             }
 
             var trimCount = 0;
-
-            // Trim whitespace at the end of line
-            while (output.Count > 0 && Regex.IsMatch(output[^1], "^[\\t ]*$"))
+            var i = stringBuilder.Length - 1;
+            for (; i >= 0; i--)
             {
-                trimCount += output[^1].Length;
-                output.RemoveAt(output.Count - 1);
+                if (stringBuilder[i] != ' ' && stringBuilder[i] != '\t')
+                {
+                    break;
+                }
+
+                trimCount++;
             }
 
-            if (output.Count > 0)
-            {
-                var trimmed = output[^1];
-                trimmed = Regex.Replace(trimmed, "[\\t ]*$", "");
-                trimCount += output[^1].Length - trimmed.Length;
-                output[^1] = trimmed;
-            }
+            stringBuilder.Length = i + 1;
 
             return trimCount;
         }
+        
+        // // TODO does the above method do the same thing as this method?
+        // private int Trim(List<string> output)
+        // {
+        //     if (output.Count == 0)
+        //     {
+        //         return 0;
+        //     }
+        //
+        //     var trimCount = 0;
+        //
+        //     // Trim whitespace at the end of line
+        //     while (output.Count > 0 && Regex.IsMatch(output[^1], "^[\\t ]*$"))
+        //     {
+        //         trimCount += output[^1].Length;
+        //         output.RemoveAt(output.Count - 1);
+        //     }
+        //
+        //     if (output.Count > 0)
+        //     {
+        //         var trimmed = output[^1];
+        //         trimmed = Regex.Replace(trimmed, "[\\t ]*$", "");
+        //         trimCount += output[^1].Length - trimmed.Length;
+        //         output[^1] = trimmed;
+        //     }
+        //
+        //     return trimCount;
+        // }
 
         private class IndentType
         {

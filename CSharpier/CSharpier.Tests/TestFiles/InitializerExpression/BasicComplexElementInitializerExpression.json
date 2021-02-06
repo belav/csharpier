@@ -1,0 +1,451 @@
+﻿{
+  "nodeType": "CompilationUnit",
+  "kind": "CompilationUnit",
+  "externs": [],
+  "usings": [],
+  "attributeLists": [],
+  "members": [
+    {
+      "nodeType": "ClassDeclaration",
+      "kind": "ClassDeclaration",
+      "attributeLists": [],
+      "modifiers": [],
+      "keyword": {
+        "nodeType": "SyntaxToken",
+        "kind": "ClassKeyword",
+        "text": "class",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia"
+          }
+        ]
+      },
+      "identifier": {
+        "nodeType": "SyntaxToken",
+        "kind": "IdentifierToken",
+        "text": "ClassName",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndOfLineTrivia"
+          }
+        ]
+      },
+      "constraintClauses": [],
+      "openBraceToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "OpenBraceToken",
+        "text": "{",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndOfLineTrivia"
+          }
+        ]
+      },
+      "members": [
+        {
+          "nodeType": "FieldDeclaration",
+          "kind": "FieldDeclaration",
+          "attributeLists": [],
+          "modifiers": [],
+          "declaration": {
+            "nodeType": "VariableDeclaration",
+            "kind": "VariableDeclaration",
+            "type": {
+              "nodeType": "GenericName",
+              "kind": "GenericName",
+              "identifier": {
+                "nodeType": "SyntaxToken",
+                "kind": "IdentifierToken",
+                "text": "Dictionary",
+                "hasLeadingTrivia": true,
+                "leadingTrivia": [
+                  {
+                    "nodeType": "SyntaxTrivia",
+                    "kind": "WhitespaceTrivia"
+                  }
+                ],
+                "trailingTrivia": []
+              },
+              "typeArgumentList": {
+                "nodeType": "TypeArgumentList",
+                "kind": "TypeArgumentList",
+                "lessThanToken": {
+                  "nodeType": "SyntaxToken",
+                  "kind": "LessThanToken",
+                  "text": "<",
+                  "leadingTrivia": [],
+                  "trailingTrivia": []
+                },
+                "arguments": [
+                  {
+                    "nodeType": "PredefinedType",
+                    "kind": "PredefinedType",
+                    "keyword": {
+                      "nodeType": "SyntaxToken",
+                      "kind": "IntKeyword",
+                      "text": "int",
+                      "leadingTrivia": [],
+                      "trailingTrivia": []
+                    }
+                  },
+                  {
+                    "nodeType": "PredefinedType",
+                    "kind": "PredefinedType",
+                    "keyword": {
+                      "nodeType": "SyntaxToken",
+                      "kind": "StringKeyword",
+                      "text": "string",
+                      "leadingTrivia": [],
+                      "trailingTrivia": []
+                    }
+                  }
+                ],
+                "greaterThanToken": {
+                  "nodeType": "SyntaxToken",
+                  "kind": "GreaterThanToken",
+                  "text": ">",
+                  "hasTrailingTrivia": true,
+                  "leadingTrivia": [],
+                  "trailingTrivia": [
+                    {
+                      "nodeType": "SyntaxTrivia",
+                      "kind": "WhitespaceTrivia"
+                    }
+                  ]
+                },
+                "hasTrailingTrivia": true
+              },
+              "arity": 2,
+              "hasLeadingTrivia": true,
+              "hasTrailingTrivia": true
+            },
+            "variables": [
+              {
+                "nodeType": "VariableDeclarator",
+                "kind": "VariableDeclarator",
+                "identifier": {
+                  "nodeType": "SyntaxToken",
+                  "kind": "IdentifierToken",
+                  "text": "dictionary",
+                  "hasTrailingTrivia": true,
+                  "leadingTrivia": [],
+                  "trailingTrivia": [
+                    {
+                      "nodeType": "SyntaxTrivia",
+                      "kind": "WhitespaceTrivia"
+                    }
+                  ]
+                },
+                "initializer": {
+                  "nodeType": "EqualsValueClause",
+                  "kind": "EqualsValueClause",
+                  "equalsToken": {
+                    "nodeType": "SyntaxToken",
+                    "kind": "EqualsToken",
+                    "text": "=",
+                    "hasTrailingTrivia": true,
+                    "leadingTrivia": [],
+                    "trailingTrivia": [
+                      {
+                        "nodeType": "SyntaxTrivia",
+                        "kind": "WhitespaceTrivia"
+                      }
+                    ]
+                  },
+                  "value": {
+                    "nodeType": "ObjectCreationExpression",
+                    "kind": "ObjectCreationExpression",
+                    "newKeyword": {
+                      "nodeType": "SyntaxToken",
+                      "kind": "NewKeyword",
+                      "text": "new",
+                      "hasTrailingTrivia": true,
+                      "leadingTrivia": [],
+                      "trailingTrivia": [
+                        {
+                          "nodeType": "SyntaxTrivia",
+                          "kind": "WhitespaceTrivia"
+                        }
+                      ]
+                    },
+                    "type": {
+                      "nodeType": "GenericName",
+                      "kind": "GenericName",
+                      "identifier": {
+                        "nodeType": "SyntaxToken",
+                        "kind": "IdentifierToken",
+                        "text": "Dictionary",
+                        "leadingTrivia": [],
+                        "trailingTrivia": []
+                      },
+                      "typeArgumentList": {
+                        "nodeType": "TypeArgumentList",
+                        "kind": "TypeArgumentList",
+                        "lessThanToken": {
+                          "nodeType": "SyntaxToken",
+                          "kind": "LessThanToken",
+                          "text": "<",
+                          "leadingTrivia": [],
+                          "trailingTrivia": []
+                        },
+                        "arguments": [
+                          {
+                            "nodeType": "PredefinedType",
+                            "kind": "PredefinedType",
+                            "keyword": {
+                              "nodeType": "SyntaxToken",
+                              "kind": "IntKeyword",
+                              "text": "int",
+                              "leadingTrivia": [],
+                              "trailingTrivia": []
+                            }
+                          },
+                          {
+                            "nodeType": "PredefinedType",
+                            "kind": "PredefinedType",
+                            "keyword": {
+                              "nodeType": "SyntaxToken",
+                              "kind": "StringKeyword",
+                              "text": "string",
+                              "leadingTrivia": [],
+                              "trailingTrivia": []
+                            }
+                          }
+                        ],
+                        "greaterThanToken": {
+                          "nodeType": "SyntaxToken",
+                          "kind": "GreaterThanToken",
+                          "text": ">",
+                          "hasTrailingTrivia": true,
+                          "leadingTrivia": [],
+                          "trailingTrivia": [
+                            {
+                              "nodeType": "SyntaxTrivia",
+                              "kind": "EndOfLineTrivia"
+                            }
+                          ]
+                        },
+                        "hasTrailingTrivia": true
+                      },
+                      "arity": 2,
+                      "hasTrailingTrivia": true
+                    },
+                    "initializer": {
+                      "nodeType": "InitializerExpression",
+                      "kind": "CollectionInitializerExpression",
+                      "openBraceToken": {
+                        "nodeType": "SyntaxToken",
+                        "kind": "OpenBraceToken",
+                        "text": "{",
+                        "hasLeadingTrivia": true,
+                        "hasTrailingTrivia": true,
+                        "leadingTrivia": [
+                          {
+                            "nodeType": "SyntaxTrivia",
+                            "kind": "WhitespaceTrivia"
+                          }
+                        ],
+                        "trailingTrivia": [
+                          {
+                            "nodeType": "SyntaxTrivia",
+                            "kind": "EndOfLineTrivia"
+                          }
+                        ]
+                      },
+                      "expressions": [
+                        {
+                          "nodeType": "InitializerExpression",
+                          "kind": "ComplexElementInitializerExpression",
+                          "openBraceToken": {
+                            "nodeType": "SyntaxToken",
+                            "kind": "OpenBraceToken",
+                            "text": "{",
+                            "hasLeadingTrivia": true,
+                            "hasTrailingTrivia": true,
+                            "leadingTrivia": [
+                              {
+                                "nodeType": "SyntaxTrivia",
+                                "kind": "WhitespaceTrivia"
+                              }
+                            ],
+                            "trailingTrivia": [
+                              {
+                                "nodeType": "SyntaxTrivia",
+                                "kind": "WhitespaceTrivia"
+                              }
+                            ]
+                          },
+                          "expressions": [
+                            {
+                              "nodeType": "LiteralExpression",
+                              "kind": "NumericLiteralExpression",
+                              "token": {
+                                "nodeType": "SyntaxToken",
+                                "kind": "NumericLiteralToken",
+                                "text": "1",
+                                "leadingTrivia": [],
+                                "trailingTrivia": []
+                              }
+                            },
+                            {
+                              "nodeType": "LiteralExpression",
+                              "kind": "StringLiteralExpression",
+                              "token": {
+                                "nodeType": "SyntaxToken",
+                                "kind": "StringLiteralToken",
+                                "text": "\"one\"",
+                                "hasTrailingTrivia": true,
+                                "leadingTrivia": [],
+                                "trailingTrivia": [
+                                  {
+                                    "nodeType": "SyntaxTrivia",
+                                    "kind": "WhitespaceTrivia"
+                                  }
+                                ]
+                              },
+                              "hasTrailingTrivia": true
+                            }
+                          ],
+                          "closeBraceToken": {
+                            "nodeType": "SyntaxToken",
+                            "kind": "CloseBraceToken",
+                            "text": "}",
+                            "leadingTrivia": [],
+                            "trailingTrivia": []
+                          },
+                          "hasLeadingTrivia": true
+                        },
+                        {
+                          "nodeType": "InitializerExpression",
+                          "kind": "ComplexElementInitializerExpression",
+                          "openBraceToken": {
+                            "nodeType": "SyntaxToken",
+                            "kind": "OpenBraceToken",
+                            "text": "{",
+                            "hasLeadingTrivia": true,
+                            "hasTrailingTrivia": true,
+                            "leadingTrivia": [
+                              {
+                                "nodeType": "SyntaxTrivia",
+                                "kind": "WhitespaceTrivia"
+                              }
+                            ],
+                            "trailingTrivia": [
+                              {
+                                "nodeType": "SyntaxTrivia",
+                                "kind": "WhitespaceTrivia"
+                              }
+                            ]
+                          },
+                          "expressions": [
+                            {
+                              "nodeType": "LiteralExpression",
+                              "kind": "NumericLiteralExpression",
+                              "token": {
+                                "nodeType": "SyntaxToken",
+                                "kind": "NumericLiteralToken",
+                                "text": "2",
+                                "leadingTrivia": [],
+                                "trailingTrivia": []
+                              }
+                            },
+                            {
+                              "nodeType": "LiteralExpression",
+                              "kind": "StringLiteralExpression",
+                              "token": {
+                                "nodeType": "SyntaxToken",
+                                "kind": "StringLiteralToken",
+                                "text": "\"two\"",
+                                "hasTrailingTrivia": true,
+                                "leadingTrivia": [],
+                                "trailingTrivia": [
+                                  {
+                                    "nodeType": "SyntaxTrivia",
+                                    "kind": "WhitespaceTrivia"
+                                  }
+                                ]
+                              },
+                              "hasTrailingTrivia": true
+                            }
+                          ],
+                          "closeBraceToken": {
+                            "nodeType": "SyntaxToken",
+                            "kind": "CloseBraceToken",
+                            "text": "}",
+                            "hasTrailingTrivia": true,
+                            "leadingTrivia": [],
+                            "trailingTrivia": [
+                              {
+                                "nodeType": "SyntaxTrivia",
+                                "kind": "EndOfLineTrivia"
+                              }
+                            ]
+                          },
+                          "hasLeadingTrivia": true,
+                          "hasTrailingTrivia": true
+                        }
+                      ],
+                      "closeBraceToken": {
+                        "nodeType": "SyntaxToken",
+                        "kind": "CloseBraceToken",
+                        "text": "}",
+                        "hasLeadingTrivia": true,
+                        "leadingTrivia": [
+                          {
+                            "nodeType": "SyntaxTrivia",
+                            "kind": "WhitespaceTrivia"
+                          }
+                        ],
+                        "trailingTrivia": []
+                      },
+                      "hasLeadingTrivia": true
+                    }
+                  }
+                }
+              }
+            ],
+            "hasLeadingTrivia": true
+          },
+          "semicolonToken": {
+            "nodeType": "SyntaxToken",
+            "kind": "SemicolonToken",
+            "text": ";",
+            "hasTrailingTrivia": true,
+            "leadingTrivia": [],
+            "trailingTrivia": [
+              {
+                "nodeType": "SyntaxTrivia",
+                "kind": "EndOfLineTrivia"
+              }
+            ]
+          },
+          "hasLeadingTrivia": true,
+          "hasTrailingTrivia": true
+        }
+      ],
+      "closeBraceToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "CloseBraceToken",
+        "text": "}",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndOfLineTrivia"
+          }
+        ]
+      },
+      "hasTrailingTrivia": true
+    }
+  ]
+}

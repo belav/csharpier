@@ -25,16 +25,22 @@ namespace CSharpier.Tests.TestFileTests
             var code = File.ReadAllText(filePath);
             
             var formatter = new Formatter();
-            var docTree = formatter.Format(code, new Options { PrintDocTree = true });
+            var result = formatter.MakeCodeCSharpier(code, new Options
+            {
+                IncludeDocTree = true,
+                IncludeAST = true
+            });
+
             var docTreePath = filePath.Replace(".cst", ".doctree.txt");
-            File.WriteAllText(docTreePath, docTree);
+            File.WriteAllText(docTreePath, result.DocTree, Encoding.UTF8);
+
+            var astPath = filePath.Replace(".cst", ".json");
+            File.WriteAllText(astPath, result.AST, Encoding.UTF8);
             
-            var actualCode = formatter.Format(code, new Options());
-
             var actualFilePath = filePath.Replace(".cst", ".actual.cst");
-            File.WriteAllText(actualFilePath, actualCode, Encoding.UTF8);
+            File.WriteAllText(actualFilePath, result.Code, Encoding.UTF8);
 
-            actualCode.Should().Be(code);
+            result.Code.Should().Be(code);
         }
     }
 }

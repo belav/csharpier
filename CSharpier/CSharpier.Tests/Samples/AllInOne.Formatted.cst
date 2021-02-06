@@ -16,23 +16,23 @@ using static System.Linq.Enumerable;
 
 2009")]
 [module: System.Copyright("\n\t\u0123(C) \"2009" + "\u0123")]
+
 class TopLevelType : IDisposable
 {
-    void Dispose() { }
+    void IDisposable.Dispose() { }
 }
 namespace My
 {
     using A.B;
-
-    delegate void CoContra2<[System.Obsolete()]out T, in K>()
+    interface CoContra<out T, in K> { }
+    delegate void CoContra2<[System.Obsolete()] out T, in K>()
         where T : struct;
 
     public unsafe partial class A : C, I
     {
-        [DllImport("kernel32", SetLastError = true)]static extern bool CreateDirectory(
-            string name,
-            SecurityAttribute sa);
-
+        [DllImport("kernel32", SetLastError = true)]
+        static extern bool CreateDirectory(string name, SecurityAttribute sa);
+        private const int global = int.MinValue - 1;
         static A() { }
         public A(int foo)
         {
@@ -120,9 +120,12 @@ namespace My
             var o2 = new MyObject(var);
             var o3 = new MyObject { A = i };
             var o4 = new MyObject(@dynamic) { A = 0, B = 0, C = 0 };
-            var o5 = new
-            { A = 0 };
-            var dictionaryInitializer = new Dictionary<int, string> { { 1, "" }, { 2, "a" } };
+            var o5 = new { A = 0 };
+            var dictionaryInitializer = new Dictionary<int, string>
+            {
+                { 1, "" },
+                { 2, "a" }
+            };
             float[] a = new float[] { 0f, 1.1f };
             int[,,] cube = {
                 { { 111, 112 }, { 121, 122 } },
@@ -234,37 +237,129 @@ namespace My
                 catch { }
             }
             var anonymous = { A = 1, B = 2, C = 3 };
-            var query = from c in customers let d = c where d != null join c1 in customers on c1.GetHashCode() equals c.GetHashCode() join c1 in customers on c1.GetHashCode() equals c.GetHashCode() into e group c by c.Country into g orderby g.Count() ascending orderby g.Key descending select new
-                {
-                    Country = g.Key,
-                    CustCount = g.Count()
-                };
-            query = from c in customers select c into d select d;
+            var query = from c in customers
+                let d = c
+                where d != null
+                join c1 in customers on c1.GetHashCode() equals c.GetHashCode()
+                join c1 in customers on c1.GetHashCode() equals c.GetHashCode() into e
+                group c by c.Country into g
+                orderby g.Count() ascending
+                orderby g.Key descending
+                select new { Country = g.Key, CustCount = g.Count() };
+            query = from c in customers
+                select c into d
+                select d;
         }
         ~A() { }
-
-
+        private readonly int f1;
+        [Obsolete]
+        [NonExisting]
+        [Foo::NonExisting(var, 5)]
+        [CLSCompliant(false)]
+        [Obsolete, System.NonSerialized, NonSerialized, CLSCompliant(true || false & true)]
+        private volatile int f2;
         [return: Obsolete]
-        [method: Obsolete]public void Handler(object value) { }
+        [method: Obsolete]
+        public void Handler(object value) { }
         public int m<T>(T t)
             where T : class, new()
         {
             base.m(t);
             return 1;
         }
-
-
-
-
-
-
-
-
+        public string P
+        {
+            get { return "A"; }
+            set;
+        }
+        public abstract string P { get; }
+        public abstract int this[int index]
+        {
+            protected internal get;
+            internal protected set;
+        }
+        [method: Obsolete]
+        [field: Obsolete]
+        [event: Obsolete]
+        public readonly event Event E;
+        [event: Test]
+        public event Action E1
+        {
+            [Obsolete]
+            add { value = value; }
+            [Obsolete]
+            [return: Obsolete]
+            remove
+            {
+                E += Handler;
+                E -= Handler;
+            }
+        }
+        public static A operator +(A first, A second)
+        {
+            Delegate handler = new Delegate(Handler);
+            return first.Add(second);
+        }
+        [method: Obsolete]
+        [return: Obsolete]
+        public static bool operator true(A a)
+        {
+            return true;
+        }
+        public static bool operator false(A a)
+        {
+            return false;
+        }
         class C { }
     }
-
-
-
+    public struct S : I
+    {
+        public S() { }
+        private int f1;
+        [Obsolete("Use Script instead", error: false)]
+        private volatile int f2;
+        public abstract int m<T>(T t)
+            where T : struct
+        {
+            return 1;
+        }
+        public string P
+        {
+            get
+            {
+                int value = 0;
+                return "A";
+            }
+            set;
+        }
+        public abstract string P { get; }
+        public abstract int this[int index]
+        {
+            get;
+            internal protected set;
+        }
+        public event Event E;
+        public static A operator +(A first, A second)
+        {
+            return first.Add(second);
+        }
+        fixed int field[10];
+        class C { }
+    }
+    public interface I
+    {
+        void A(int value);
+        string Value { get; set; }
+        unsafe void UpdateSignatureByHashingContent([In]byte* buffer, int size);
+    }
+    [type: Flags]
+    public enum E
+    {
+        A,
+        B = A,
+        C = 2 + A,
+        E
+    }
     public delegate void Delegate(object P);
     namespace Test
     {
@@ -297,7 +392,8 @@ namespace My
             }
             void AsyncAnonymous()
             {
-                var task = Task.Factory.StartNew(async () =>
+                var task = Task.Factory.StartNew(
+                    async () =>
                     {
                         return await new WebClient().DownloadStringTaskAsync(
                             "http://example.com");
@@ -330,7 +426,7 @@ namespace ConsoleApplication1
         public class Bar<T>
             where T : IComparable
         {
-
+            public T f;
             public class Foo<U> : IEnumerable<T>
             {
                 public void Method<K, V>(K k, T t, U u)
@@ -350,18 +446,26 @@ namespace ConsoleApplication1
         {
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
-            var q = from i in new int[] { 1, 2, 3, 4 } where i > 5 select i;
+            var q = from i in new int[] { 1, 2, 3, 4 }
+                where i > 5
+                select i;
         }
-
-
-
+        public static implicit operator Test(string s)
+        {
+            return new ConsoleApplication1.Test();
+        }
+        public static explicit operator Test(string s = "")
+        {
+            return new Test();
+        }
+        public int foo = 5;
         void Bar2()
         {
             foo = 6;
             this.Foo = 5.GetType();
             Test t = "sss";
         }
-
+        public event EventHandler MyEvent = delegate { };
         void Blah()
         {
             int i = 5;
@@ -386,7 +490,23 @@ namespace ConsoleApplication1
         }
         delegate Recursive Recursive(Recursive r);
         delegate Recursive Recursive<A, R>(Recursive<A, R> r);
-
+        public Type Foo
+        {
+            [Obsolete("Name", error = false)]
+            get
+            {
+                var result = typeof(IEnumerable<int>);
+                var t = typeof(int?) == typeof(Nullable<int>);
+                t = typeof(IEnumerable<int?[][][]>);
+                return typeof(IEnumerable<>);
+            }
+            set
+            {
+                var t = typeof(System.Int32);
+                t.ToString();
+                t = value;
+            }
+        }
         public void Constants()
         {
             int i = 1 + 2 + 3 + 5;
@@ -481,21 +601,29 @@ namespace Comments.XmlComments.UndocumentedKeywords
             x[i: 1] = 3;
             x[i: 1, j: 5] = "str";
         }
-
+        struct Point
+        {
+            public int X;
+            public int Y;
+            public void ThisAccess()
+            {
+                this = this;
+            }
+        }
     }
 
     class CSharp6Features
     {
-
-
-
-
+        public string First { get; set; } = "Jane";
+        public string Last { get; set; } = "Doe";
+        public string Third { get; } = "Jane";
+        public string Fourth { get; } = "Doe";
         public Point Move(int dx, int dy) => new Point(x + dx, y + dy);
-
-
+        public static Complex operator +(Complex a, Complex b) => a.Add(b);
+        public static implicit operator string(Person p) => p.First + " " + p.Last;
         public void Print() => Console.WriteLine(First + " " + Last);
-
-
+        public string Name => First + " " + Last;
+        public int this[long id] => id;
         async void Test()
         {
             WriteLine(Sqrt(3 * 3 + 4 * 4));
@@ -516,7 +644,12 @@ namespace Comments.XmlComments.UndocumentedKeywords
             if (x == null)
                 throw new ArgumentNullException(nameof(x));
             WriteLine(nameof(person.Address.ZipCode));
-            var numbers = new Dictionary<int, string> { [7] = "seven", [9] = "nine", [13] = "thirteen" };
+            var numbers = new Dictionary<int, string>
+            {
+                [7] = "seven",
+                [9] = "nine",
+                [13] = "thirteen"
+            };
             try { }
             catch (MyException e) when (myfilter(e)) { }
             Resource res = null;
@@ -557,8 +690,11 @@ class CSharp70
     }
     public static async Task LocalFunctions(string[] args)
     {
-
-
+        string Hello2(int i)
+        {
+            return args[i];
+        }
+        async Task<string> Hello<T>(T i) => await Task.FromResult(args[i]);
         await Hello(1);
     }
     public static void OutVar(string[] args)
@@ -598,8 +734,44 @@ class CSharp71
 
 class CSharp72
 {
+    readonly struct ReadonlyRef1
+    {
+        Func<int, int> s = (in int x) => x;
+        ref TValue this[in TKey index] => null;
+        public static Vector3 operator +(in Vector3 x, in Vector3 y) => null;
+        static readonly ref Vector3 M1_Trace()
+        {
+            ref readonly var r1 = ref M1();
+            ref readonly Vector3 r2 = ref default(Vector3);
+            Mutate(ref r1);
+            Print(in r1);
+            return ref r1;
+        }
+    }
 
-
+    ref struct ReadonlyRef2
+    {
+        ref readonly Guid Test(in Vector3 v1, in Vector3 v2)
+        {
+            v1 = default(Vector3);
+            v1.X = 0;
+            foo(ref v1.X);
+            return ref (arr != null ? ref arr[0] : ref otherArr[0]);
+            Span<int> span = stackalloc int[1];
+            return new Vector3(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
+        }
+        ref T Choice(bool condition, ref T consequence, ref T alternative)
+        {
+            if (condition)
+            {
+                return ref consequence;
+            }
+            else
+            {
+                return ref alternative;
+            }
+        }
+    }
     public void DoSomething(bool isEmployed, string personName, int personAge)
     { }
     public void NonTrailingNamedArguments()
@@ -628,7 +800,11 @@ class CSharp73
         var unmanaged = 666;
     }
 
-
+    unsafe struct IndexingMovableFixed
+    {
+        public fixed int myFixedField[10];
+    }
+    static IndexingMovableFixed s;
     public unsafe void IndexingMovableFixedFields()
     {
         int* ptr = s.myFixedField;
@@ -668,11 +844,17 @@ namespace CSharp80
                 Do();
             return lang.CountOfTokens switch
             {
-
+                1 => 100,
+                2 => 200,
+                _ => throw new global::System.Exception()
             };
             var newState = (GetState(), action, hasKey) switch
             {
-
+                (DoorState.Closed, Action.Open, _) => DoorState.Opened,
+                (DoorState.Opened, Action.Close, _) => DoorState.Closed,
+                (DoorState.Closed, Action.Lock, true) => DoorState.Locked,
+                (DoorState.Locked, Action.Unlock, true) => DoorState.Closed,
+                (var state, _, _) => state
             };
         }
         async Task AsyncStreams()
@@ -698,10 +880,10 @@ namespace CSharp80
         }
         void StaticLocalFunction()
         {
-
-
-
-
+            static unsafe void Func1() { }
+            static unsafe void Func1() { }
+            async static void Func2() { }
+            static async void Func2() { }
         }
         void NullCoalescingAssignment()
         {
@@ -712,8 +894,32 @@ namespace CSharp80
             return 0.1f;
         }
     }
-
-
-
-
+    interface IA
+    {
+        void M()
+        {
+            WriteLine("IA.M");
+        }
+    }
+    interface IA
+    {
+        void M()
+        {
+            WriteLine("IA.M");
+        }
+    }
+    interface IB : IA
+    {
+        override void IA.M()
+        {
+            WriteLine("IB.M");
+        }
+    }
+    interface IC : IA
+    {
+        override void M()
+        {
+            WriteLine("IC.M");
+        }
+    }
 }

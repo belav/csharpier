@@ -14,18 +14,13 @@ namespace CSharpier
                 String("{"),
                 Indent(
                     Concat(
-                        HardLine
-                        // Join(
-                        //     Concat(String(","), HardLine),
-                        //     // TODO this is only for the SwitchExpressionArmNode
-                        //     path.map(switchExpressionArmPath => {
-                        //         return Concat(
-                        //             switchExpressionArmPath.call(print, String("pattern")),
-                        //             String(" => "),
-                        //             switchExpressionArmPath.call(print, String("expression"))
-                        //         );
-                        //     }, String("arms"))
-                        // )
+                        HardLine,
+                        Join(
+                            Concat(String(","), HardLine),
+                            node.Arms.Select(o => Concat(this.Print(o.Pattern),
+                                " => ",
+                                this.Print(o.Expression)))
+                        )
                     )
                 ),
                 HardLine,

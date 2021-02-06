@@ -24,7 +24,7 @@ namespace CSharpier.Tests
 
             result.Should().Be("1\r\n3");
         }
-        
+
         [Test]
         public void Concat_With_Line()
         {
@@ -34,7 +34,7 @@ namespace CSharpier.Tests
 
             result.Should().Be("1\r\n3");
         }
-        
+
         [Test]
         public void Group_With_Line()
         {
@@ -54,7 +54,7 @@ namespace CSharpier.Tests
 
             result.Should().Be("1\r\n3");
         }
-        
+
         [Test]
         public void Group_With_Line_And_Hardline()
         {
@@ -62,9 +62,29 @@ namespace CSharpier.Tests
 
             var result = this.Print(doc);
 
-            result.Should().Be("1 2\r\n3");
+            result.Should().Be("1\r\n2\r\n3");
         }
         
+        [Test]
+        public void Group_With_Line_And_BreakParent()
+        {
+            var doc = Group(Concat("1", Line, "2", Line, "3", BreakParent));
+
+            var result = this.Print(doc);
+
+            result.Should().Be("1\r\n2\r\n3");
+        }
+        
+        [Test]
+        public void Indent_With_BreakParent()
+        {
+            var doc = Group(Indent(Concat(SoftLine, "1", Line, "2", Line, "3", BreakParent)));
+
+            var result = this.Print(doc);
+
+            result.Should().Be("\r\n    1\r\n    2\r\n    3");
+        }
+
         [Test]
         public void Large_Group_Concat_With_Line()
         {
@@ -75,7 +95,7 @@ namespace CSharpier.Tests
 
             result.Should().Be($"{longText}\r\n{longText}\r\n{longText}");
         }
-        
+
         [Test]
         public void Indent_With_Hardline()
         {
@@ -85,7 +105,7 @@ namespace CSharpier.Tests
 
             result.Should().Be($"\r\n    1\r\n    2");
         }
-        
+
         [Test]
         public void Two_Indents_With_Hardline()
         {
@@ -98,15 +118,24 @@ namespace CSharpier.Tests
             result.Should().Be($"\r\n    1\r\n\r\n    2");
         }
 
+        [Test]
+        public void Scratch()
+        {
+            var doc = " ";
+            var result = this.Print(doc);
+            result.Should().Be(" ");
+        }
+
         private string Print(Doc doc)
         {
             return new DocPrinter().Print(doc, new Options());
         }
-        
+
         public static Doc HardLine = Printer.HardLine;
         public static Doc Line = Printer.Line;
         public static Doc SoftLine = Printer.SoftLine;
-        
+        public static Doc BreakParent = Printer.BreakParent;
+
         public static Doc Group(Doc contents)
         {
             return Printer.Group(contents);
@@ -121,7 +150,7 @@ namespace CSharpier.Tests
         {
             return Printer.Concat(parts);
         }
-        
+
         public static Doc Indent(Doc contents)
         {
             return Printer.Indent(contents);

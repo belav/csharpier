@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintPropertyDeclarationSyntax(PropertyDeclarationSyntax node)
         {
-            return ""; // TODO propertyLikeDeclaration;
+            return this.PrintBasePropertyDeclarationSyntax(node);
         }
     }
 }

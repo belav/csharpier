@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintEnumDeclarationSyntax(EnumDeclarationSyntax node)
         {
-            return ""; // TODO printClassLikeDeclaration
+            return this.PrintBaseTypeDeclarationSyntax(node);
         }
     }
 }

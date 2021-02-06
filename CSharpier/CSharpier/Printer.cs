@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -18,7 +19,7 @@ namespace CSharpier
         {
             return new Concat
             {
-                Contents = parts
+                Parts = parts
             };
         }
 
@@ -26,7 +27,7 @@ namespace CSharpier
         {
             return new Concat
             {
-                Contents = new List<Doc>(parts)
+                Parts = new List<Doc>(parts)
             };
         }
 
@@ -41,12 +42,11 @@ namespace CSharpier
 
             var list = array.ToList();
 
-            // TODO 0 this is good, but changes things from prettier
-            // if (list.Count == 1)
-            // {
-            //     return list[0];
-            // }
-            
+            if (list.Count == 1)
+            {
+                return list[0];
+            }
+
             for (var x = 0; x < list.Count; x++)
             {
                 if (x != 0)
@@ -100,7 +100,7 @@ namespace CSharpier
                 )
             );
 
-            if (node is ParameterSyntax)
+            if (!(node is ParameterSyntax))
             {
                 parts.Add(separator);
             }
@@ -126,19 +126,14 @@ namespace CSharpier
             where T : SyntaxNode
         {
             var actualEndOfLine = endOfLineDoc != null ? Concat(endOfLineDoc, separator) : separator;
-
-            Doc beforeBody = Line;
+            
             Doc body = " ";
             if (statements.Count > 0)
             {
-                beforeBody = HardLine;
                 body = Concat(Indent(Concat(separator, Join(actualEndOfLine, statements.Select(this.Print)))), separator);
             }
 
-            // TODO 000000 for some reason, this Line doesn't print the same between csharpier and prettier in the MethodWithStatements test
-            // it is almost like the prettier plugin is ignoring the width I send, but when I logged it directly in prettier source it had 80
-            // but this line definitely seems to be wrong
-            var parts = new Parts(beforeBody, "{", body, "}");
+            var parts = new Parts(Line, "{", body, "}");
             // TODO printTrailingComments(node, parts, "closeBraceToken");
             return Group(Concat(parts));
         }
@@ -148,9 +143,11 @@ namespace CSharpier
             return Join(Concat(String(","), Line), docs);
         }
 
-        private void PrintConstraintClauses(SyntaxNode node, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, List<Doc> parts)
+        private void PrintConstraintClauses(SyntaxNode node, IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses, List<Doc> parts)
         {
-            if (constraintClauses.Count == 0)
+            var constraintClausesList = constraintClauses.ToList();
+
+            if (constraintClausesList.Count == 0)
             {
                 return;
             }
@@ -162,7 +159,7 @@ namespace CSharpier
                         HardLine,
                         Join(
                             HardLine,
-                            constraintClauses.Select(this.PrintTypeParameterConstraintClauseSyntax)
+                            constraintClausesList.Select(this.PrintTypeParameterConstraintClauseSyntax)
                         )
                     )
                 )
@@ -181,15 +178,253 @@ namespace CSharpier
         private Doc PrintLeftRightOperator(SyntaxNode node, SyntaxNode left, SyntaxToken operatorToken, SyntaxNode right)
         {
             var parts = new Parts();
-                // TODO printExtraNewLines(node, parts, ["left", "identifier"]);
-                // TODO printLeadingComments(node, parts, ["left", "identifier"]);
-                parts.Push(
-                    this.Print(left),
+            // TODO printExtraNewLines(node, parts, ["left", "identifier"]);
+            // TODO printLeadingComments(node, parts, ["left", "identifier"]);
+            parts.Push(
+                this.Print(left),
+                " ",
+                operatorToken.Text,
+                " ",
+                this.Print(right)
+            );
+            return Concat(parts);
+        }
+
+        private Doc PrintBaseFieldDeclarationSyntax(BaseFieldDeclarationSyntax node)
+        {
+            var parts = new Parts();
+            // printExtraNewLines(node, parts, "attributeLists", "modifiers", "eventKeyword", "declaration");
+            this.PrintAttributeLists(node, node.AttributeLists, parts);
+            // printLeadingComments(node, parts, "modifiers", "eventKeyword", "declaration");
+            parts.Push(this.PrintModifiers(node.Modifiers));
+            if (node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax)
+            {
+                parts.Push(eventFieldDeclarationSyntax.EventKeyword.Text, " ");
+            }
+
+            parts.Push(this.Print(node.Declaration));
+            parts.Push(";");
+            // printTrailingComments(node, parts, "semicolonToken");
+            return Concat(parts);
+        }
+
+        private Doc PrintBaseTypeDeclarationSyntax(BaseTypeDeclarationSyntax node)
+        {
+            TypeParameterListSyntax typeParameterList = null;
+            var hasConstraintClauses = false;
+            var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
+            var hasMembers = false;
+            string keyword = null;
+            var memberSeparator = HardLine;
+            var members = Enumerable.Empty<CSharpSyntaxNode>();
+
+            if (node is TypeDeclarationSyntax typeDeclarationSyntax)
+            {
+                typeParameterList = typeDeclarationSyntax.TypeParameterList;
+                constraintClauses = typeDeclarationSyntax.ConstraintClauses;
+                hasConstraintClauses = typeDeclarationSyntax.ConstraintClauses.Count > 0;
+                members = typeDeclarationSyntax.Members;
+                hasMembers = typeDeclarationSyntax.Members.Count > 0;
+                if (node is ClassDeclarationSyntax classDeclarationSyntax)
+                {
+                    keyword = classDeclarationSyntax.Keyword.Text;
+                }
+                else if (node is StructDeclarationSyntax structDeclarationSyntax)
+                {
+                    keyword = structDeclarationSyntax.Keyword.Text;
+                }
+                else if (node is InterfaceDeclarationSyntax interfaceDeclarationSyntax)
+                {
+                    keyword = interfaceDeclarationSyntax.Keyword.Text;
+                }
+            }
+            else if (node is EnumDeclarationSyntax enumDeclarationSyntax)
+            {
+                members = enumDeclarationSyntax.Members;
+                hasMembers = enumDeclarationSyntax.Members.Count > 0;
+                keyword = enumDeclarationSyntax.EnumKeyword.Text;
+                memberSeparator = Concat(String(","), HardLine);
+            }
+
+            var parts = new Parts();
+
+            this.PrintExtraNewLines(node, parts);
+
+            this.PrintAttributeLists(node, node.AttributeLists, parts);
+            // TODO printLeadingComments(node, parts, String("modifiers"), String("keyword"), String("identifier"));
+            parts.Add(this.PrintModifiers(node.Modifiers));
+            if (keyword != null)
+            {
+                parts.Add(keyword);
+            }
+
+            parts.Push(String(" "), node.Identifier.Text);
+            if (typeParameterList != null)
+            {
+                parts.Add(this.PrintTypeParameterListSyntax(typeParameterList));
+            }
+
+            if (node.BaseList != null)
+            {
+                parts.Add(this.PrintBaseListSyntax(node.BaseList));
+            }
+
+            this.PrintConstraintClauses(node, constraintClauses, parts);
+
+            if (hasMembers)
+            {
+                parts.Add(Concat(hasConstraintClauses ? "" : HardLine, "{"));
+                parts.Add(Indent(Concat(HardLine, Join(memberSeparator, members.Select(this.Print)))));
+                parts.Add(HardLine);
+                parts.Add(String("}"));
+            }
+            else
+            {
+                parts.Push(hasConstraintClauses ? "" : " ", "{", " ", "}");
+            }
+
+            return Concat(parts);
+        }
+
+
+        // TODO 0 how do I really do extra new lines?
+        private void PrintExtraNewLines(BaseTypeDeclarationSyntax node, Parts parts)
+        {
+            // TODO attribute lists?
+            if (node.Modifiers.Count > 0)
+            {
+                foreach (var trivia in node.Modifiers[0].LeadingTrivia)
+                {
+                    if (trivia.Kind() == SyntaxKind.EndOfLineTrivia)
+                    {
+                        parts.Push(HardLine);
+                    }
+                    else if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            if (node is ClassDeclarationSyntax classDeclarationSyntax)
+            {
+                foreach (var trivia in classDeclarationSyntax.Keyword.LeadingTrivia)
+                {
+                    if (trivia.Kind() == SyntaxKind.EndOfLineTrivia)
+                    {
+                        parts.Push(HardLine);
+                    }
+                    else if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+
+        private Doc PrintBaseMethodDeclarationSyntax(CSharpSyntaxNode node)
+        {
+            SyntaxList<AttributeListSyntax> attributeLists;
+            SyntaxTokenList? modifiers = null;
+            TypeSyntax returnType = null;
+            ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifier = null;
+            TypeParameterListSyntax typeParameterList = null;
+            string identifier = null;
+            var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
+            ParameterListSyntax parameterList = null;
+            BlockSyntax body = null;
+            ArrowExpressionClauseSyntax expressionBody = null;
+            if (node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax)
+            {
+                attributeLists = baseMethodDeclarationSyntax.AttributeLists;
+                modifiers = baseMethodDeclarationSyntax.Modifiers;
+                parameterList = baseMethodDeclarationSyntax.ParameterList;
+                body = baseMethodDeclarationSyntax.Body;
+                expressionBody = baseMethodDeclarationSyntax.ExpressionBody;
+                if (node is MethodDeclarationSyntax methodDeclarationSyntax)
+                {
+                    returnType = methodDeclarationSyntax.ReturnType;
+                    explicitInterfaceSpecifier = methodDeclarationSyntax.ExplicitInterfaceSpecifier;
+                    identifier = methodDeclarationSyntax.Identifier.Text;
+                    typeParameterList = methodDeclarationSyntax.TypeParameterList;
+                    constraintClauses = methodDeclarationSyntax.ConstraintClauses;
+                }
+            }
+            else if (node is LocalFunctionStatementSyntax localFunctionStatementSyntax)
+            {
+                attributeLists = localFunctionStatementSyntax.AttributeLists;
+                modifiers = localFunctionStatementSyntax.Modifiers;
+                returnType = localFunctionStatementSyntax.ReturnType;
+                identifier = localFunctionStatementSyntax.Identifier.Text;
+                typeParameterList = localFunctionStatementSyntax.TypeParameterList;
+                parameterList = localFunctionStatementSyntax.ParameterList;
+                constraintClauses = localFunctionStatementSyntax.ConstraintClauses;
+                body = localFunctionStatementSyntax.Body;
+                expressionBody = localFunctionStatementSyntax.ExpressionBody;
+            }
+
+            var parts = new Parts();
+            //this.PrintExtraNewLines(node, String("attributeLists"), String("modifiers"), [String("returnType"), String("keyword")]);
+            this.PrintAttributeLists(node, attributeLists, parts);
+            // printLeadingComments(node, parts, String("modifiers"), String("returnType"), String("identifier"));
+            if (modifiers.HasValue)
+            {
+                parts.Add(this.PrintModifiers(modifiers.Value));
+            }
+
+            if (returnType != null)
+            {
+                parts.Push(this.Print(returnType), String(" "));
+            }
+
+            if (explicitInterfaceSpecifier != null)
+            {
+                parts.Push(this.Print(explicitInterfaceSpecifier.Name), ".");
+            }
+
+            if (identifier != null)
+            {
+                parts.Add(identifier);
+            }
+
+            if (node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax)
+            {
+                parts.Push(conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword.Text,
                     " ",
-                    operatorToken.Text,
+                    conversionOperatorDeclarationSyntax.OperatorKeyword.Text,
                     " ",
-                    this.Print(right)
-                );
+                    this.Print(conversionOperatorDeclarationSyntax.Type));
+            }
+            else if (node is OperatorDeclarationSyntax operatorDeclarationSyntax)
+            {
+                parts.Push(this.Print(operatorDeclarationSyntax.ReturnType), " ", operatorDeclarationSyntax.OperatorKeyword.Text, " ", operatorDeclarationSyntax.OperatorToken.Text);
+            }
+
+            if (typeParameterList != null)
+            {
+                parts.Add(this.PrintTypeParameterListSyntax(typeParameterList));
+            }
+
+            if (parameterList != null)
+            {
+                parts.Add(this.Print(parameterList));
+            }
+
+            this.PrintConstraintClauses(node, constraintClauses, parts);
+            if (body != null)
+            {
+                parts.Add(this.PrintBlockSyntax(body));
+            }
+            else
+            {
+                if (expressionBody != null)
+                {
+                    parts.Add(this.PrintArrowExpressionClauseSyntax(expressionBody));
+                }
+
+                parts.Add(String(";"));
+            }
+
             return Concat(parts);
         }
     }
