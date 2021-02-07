@@ -11,8 +11,8 @@ namespace CSharpier
             if (node.NameColon != null) {
                 parts.Add(this.PrintNameColonSyntax(node.NameColon));
             }
-            if (NotNullToken(node.RefKindKeyword)) {
-                parts.Push(String(node.RefKindKeyword.Text), String(" "));
+            if (node.RefKindKeyword.RawKind != 0) {
+                parts.Push(node.RefKindKeyword.Text, " ");
             }
             parts.Add(this.Print(node.Expression));
             return Concat(parts);

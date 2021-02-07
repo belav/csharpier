@@ -8,12 +8,12 @@ namespace CSharpier
         private Doc PrintCasePatternSwitchLabelSyntax(CasePatternSwitchLabelSyntax node)
         {
             return Concat(
-                String(node.Keyword.Text),
-                String(" "),
+                "case",
+                " ",
                 this.Print(node.Pattern),
-                String(" "),
+                " ",
                 this.Print(node.WhenClause),
-                String(":")
+                ":"
             );
         }
     }

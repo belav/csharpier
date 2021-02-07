@@ -8,7 +8,7 @@ namespace CSharpier
         private Doc PrintParenthesizedLambdaExpressionSyntax(ParenthesizedLambdaExpressionSyntax node)
         {
             var parts = new Parts();
-            if (NotNullToken(node.AsyncKeyword)) {
+            if (node.AsyncKeyword.RawKind != 0) {
                 parts.Add(String("async "));
             }
             parts.Push(

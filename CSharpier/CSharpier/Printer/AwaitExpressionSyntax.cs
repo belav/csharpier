@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintAwaitExpressionSyntax(AwaitExpressionSyntax node)
         {
-            return Concat(String(node.AwaitKeyword.Text), String(" "), this.Print(node.Expression));
+            return Concat("await", " ", this.Print(node.Expression));
         }
     }
 }

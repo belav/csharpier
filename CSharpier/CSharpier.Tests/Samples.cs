@@ -31,11 +31,17 @@ namespace CSharpier.Tests
             var file = Path.Combine(directory.FullName, $"Samples/{fileName}.cst");
             var code = File.ReadAllText(file);
             var stopwatch = Stopwatch.StartNew();
-            var formattedCode = new Formatter().MakeCodeCSharpier(code, new Options()).Code;
+            var result = new CodeFormatter().Format(code, new Options
+            {
+                IncludeDocTree = true,
+                IncludeAST = true,
+            });
             Console.WriteLine(stopwatch.ElapsedMilliseconds.ToString());
             
             // TODO what about BOM? keep it if incoming file?
-            File.WriteAllText(file.Replace(".cst", ".Formatted.cst"), formattedCode, new UTF8Encoding(false));
+            File.WriteAllText(file.Replace(".cst", ".Formatted.cst"), result.Code, new UTF8Encoding(false));
+            File.WriteAllText(file.Replace(".cst", ".doctree.txt"), result.DocTree, new UTF8Encoding(false));
+            File.WriteAllText(file.Replace(".cst", ".json"), result.AST, new UTF8Encoding(false));
         }
     }
 }

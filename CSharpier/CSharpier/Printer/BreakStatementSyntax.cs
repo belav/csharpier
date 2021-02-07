@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintBreakStatementSyntax(BreakStatementSyntax node)
         {
-            return Concat(String(node.BreakKeyword.Text), String(";"));
+            return Concat("break", ";");
         }
     }
 }

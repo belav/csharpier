@@ -6,10 +6,10 @@ using Newtonsoft.Json;
 
 namespace CSharpier
 {
-    public class Formatter
+    public class CodeFormatter
     {
-        // TODO we should make this work in parallel to speed things up
-        public CSharpierResult MakeCodeCSharpier(string code, Options options)
+        // TODO we should make this work in parallel to speed things up, that would probably happen in CLI
+        public CSharpierResult Format(string code, Options options)
         {
             var rootNode = CSharpSyntaxTree.ParseText(code).GetRoot() as CompilationUnitSyntax;
 

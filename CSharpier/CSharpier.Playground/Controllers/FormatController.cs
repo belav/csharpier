@@ -41,7 +41,7 @@ namespace CSharpier.Playground.Controllers
             // what about when the prettier plugin fails because of missing node types or other errors?
             this.WriteAllText(filePath, content);
             // TODO we also want to eventually expose options
-            var result = new Formatter().MakeCodeCSharpier(content, new Options
+            var result = new CodeFormatter().Format(content, new Options
             {
                 IncludeAST = true,
             });

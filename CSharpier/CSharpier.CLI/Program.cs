@@ -8,8 +8,8 @@ namespace CSharpier.CLI
         static void Main(string[] args)
         {
             var code = File.ReadAllText("C:\\Projects\\csharpier\\CSharpier\\CSharpier.Tests\\Samples\\AllInOne.cst");
-            var formatter = new Formatter();
-            var result = formatter.MakeCodeCSharpier(code, new Options());
+            var formatter = new CodeFormatter();
+            var result = formatter.Format(code, new Options());
             Console.Write(result);
         }
     }

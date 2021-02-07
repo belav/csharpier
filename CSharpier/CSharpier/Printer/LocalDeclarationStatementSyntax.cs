@@ -8,11 +8,6 @@ namespace CSharpier
         private Doc PrintLocalDeclarationStatementSyntax(LocalDeclarationStatementSyntax node)
         {
             var parts = new Parts();
-            // TODO 0 should we make methods for things like declaration? so we don't have to put all these crazy things here
-            // in our main print, we look up something fot he node and call
-            // node.PrintLeadingComments, node.Print, node.PrintTrailingComments
-            // TODO 0 the other option is to do it more like prettier-java, we just look for comments on everything, and prepend/append them and let prettier format it with the comments where they used to be
-            // TODO 0 test that out next! make the print Lines/comments stuff do nothing, and see if I can get the tests passing with more generic stuff.
             // printExtraNewLines(
             //     node,
             //     parts,
@@ -31,10 +26,10 @@ namespace CSharpier
             //     [String("declaration"), String("type"), String("keyword")],
             //     [String("declaration"), String("type"), String("identifier")]
             // );
-            if (NotNullToken(node.AwaitKeyword)) {
+            if (node.AwaitKeyword.RawKind != 0) {
                 parts.Add(String("await "));
             }
-            if (NotNullToken(node.UsingKeyword)) {
+            if (node.UsingKeyword.RawKind != 0) {
                 parts.Add(String("using "));
             }
             parts.Add(this.PrintModifiers(node.Modifiers));

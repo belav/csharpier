@@ -24,8 +24,8 @@ namespace CSharpier.Tests.TestFileTests
             var filePath = Path.Combine(this.rootDirectory.FullName, "TestFiles", folderName, fileName + ".cst");
             var code = File.ReadAllText(filePath);
             
-            var formatter = new Formatter();
-            var result = formatter.MakeCodeCSharpier(code, new Options
+            var formatter = new CodeFormatter();
+            var result = formatter.Format(code, new Options
             {
                 IncludeDocTree = true,
                 IncludeAST = true

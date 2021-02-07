@@ -8,7 +8,7 @@ namespace CSharpier
         private Doc PrintForEachStatementSyntax(ForEachStatementSyntax node)
         {
             var parts = new Parts();
-            if (NotNullToken(node.AwaitKeyword)) {
+            if (node.AwaitKeyword.RawKind != 0) {
                 parts.Add(String("await "));
             }
             parts.Push(String("foreach "), String("("));

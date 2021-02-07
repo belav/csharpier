@@ -9,10 +9,10 @@ namespace CSharpier
         {
             return Group(
                 Concat(
-                    String(node.NewKeyword.Text),
-                    String(" "),
+                    "new",
+                    " ",
                     this.Print(node.Type),
-                    node.Initializer != null ? Concat(Line, this.Print(node.Initializer)) : String("")
+                    node.Initializer != null ? Concat(Line, this.Print(node.Initializer)) : ""
                 )
             );
         }

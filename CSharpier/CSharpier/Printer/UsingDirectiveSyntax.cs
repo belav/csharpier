@@ -9,13 +9,13 @@ namespace CSharpier
         {
             var parts = new Parts();
             parts.Add(String("using "));
-            if (NotNullToken(node.StaticKeyword)) {
+            if (node.StaticKeyword.RawKind != 0) {
                 parts.Add(String("static "));
             }
             if (node.Alias != null) {
                 parts.Add(this.PrintNameEqualsSyntax(node.Alias));
             }
-            parts.Push(Group(this.Print(node.Name)), String(";"));
+            parts.Push(this.Print(node.Name), String(";"));
             return Concat(parts);
         }
     }

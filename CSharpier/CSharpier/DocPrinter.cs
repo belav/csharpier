@@ -198,7 +198,7 @@ namespace CSharpier
                             });
 
                             break;
-                        // TODO
+                        // TODO align/trim?
                         // case "align":
                         //     cmds.Add([makeAlign(ind, doc.n, options), mode, doc.contents]);
                         //
@@ -220,12 +220,12 @@ namespace CSharpier
                                 Doc = group.Contents,
                             });
 
-                            // TODO
+                            // TODO groupId
                             // if (doc.id) {
                             //     groupModeMap[doc.id] = cmds[cmds.length - 1][1];
                             // }
                             break;
-                        // TODO
+                        // TODO fill/if-break
                         // case "fill":
                         //     for (let i = doc.parts.length - 1; i >= 0; i--) {
                         //         cmds.Add([ind, mode, doc.parts[i]]);
@@ -362,7 +362,6 @@ namespace CSharpier
                                 else
                                 {
                                     // TODO expandedStates is a big complicated thing here, but I don't think I'll use it?
-                                    // TODO can't this just push the same next as above but flipping the break mode?
                                     currentStack.Push(new PrintCommand
                                     {
                                         Indent = command.Indent,
@@ -374,7 +373,7 @@ namespace CSharpier
                                 break;
                         }
 
-                        // TODO we may not use ids for groups
+                        // TODO group ids
                         // if (doc.id)
                         // {
                         //     groupModeMap[doc.id] = cmds[cmds.length - 1][1];
@@ -422,7 +421,7 @@ namespace CSharpier
 
                                 if (line.IsLiteral)
                                 {
-                                    // TODO what is this?
+                                    // TODO indent.root perhaps?
                                     // if (ind.root) {
                                     //     out.Add(newLine, ind.root.value);
                                     //     pos = ind.root.length;
@@ -451,7 +450,7 @@ namespace CSharpier
             return string.Join("", output);
         }
 
-        // TODO in prettier these deals with unicode characters that are double width
+        // TODO in prettier this deals with unicode characters that are double width
         private int GetStringWidth(string value)
         {
             return value.Length;

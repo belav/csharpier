@@ -9,7 +9,7 @@ namespace CSharpier
         {
             var parts = new Parts();
             this.PrintAttributeLists(node, node.AttributeLists, parts);
-            if (NotNullToken(node.VarianceKeyword)) {
+            if (node.VarianceKeyword.RawKind != 0) {
                 parts.Push(node.VarianceKeyword.Text, String(" "));
             }
             parts.Add(node.Identifier.Text);

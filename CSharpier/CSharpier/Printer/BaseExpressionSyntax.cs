@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintBaseExpressionSyntax(BaseExpressionSyntax node)
         {
-            return String(node.Token.Text);
+            return "base";
         }
     }
 }

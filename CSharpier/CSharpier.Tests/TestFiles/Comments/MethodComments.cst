@@ -2,4 +2,11 @@ public class ClassName
 {
     // method
     public void MethodName() { }
+
+    // leading
+    public // trailing
+    static // more trailing
+    // more leading
+    void /* what about here */ MethodName2() { }
+    
 }

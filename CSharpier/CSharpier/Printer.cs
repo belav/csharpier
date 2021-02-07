@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -65,7 +66,7 @@ namespace CSharpier
             return new Group
             {
                 Contents = contents,
-                // TODO options if I use them?
+                // TODO group options if I use them
                 // id: opts.id,
                 // break: !!opts.shouldBreak,
                 // expandedStates: opts.expandedStates,
@@ -80,11 +81,11 @@ namespace CSharpier
             };
         }
 
-        private bool NotNullToken(SyntaxToken value)
+        private Doc PrintCommaList(IEnumerable<Doc> docs)
         {
-            return value.RawKind != 0;
+            return Join(Concat(String(","), Line), docs);
         }
-
+        
         private void PrintAttributeLists(SyntaxNode node, SyntaxList<AttributeListSyntax> attributeLists, List<Doc> parts)
         {
             if (attributeLists.Count == 0)
@@ -113,13 +114,37 @@ namespace CSharpier
                 return "";
             }
 
-            return Concat(
-                Join(
-                    " ",
-                    modifiers.Select(o => String(o.Text))
-                ),
-                " "
-            );
+            return Concat(Join(" ", modifiers.Select(o => String(o.Text))), " ");
+
+            // var parts = new Parts();
+            // foreach (var modifier in modifiers)
+            // {
+            //     foreach (var leadingTrivia in modifier.LeadingTrivia)
+            //     {
+            //         if (leadingTrivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
+            //         {
+            //             parts.Push(leadingTrivia.ToString(), Environment.NewLine);
+            //         }
+            //     }
+            //     parts.Push(modifier.Text);
+            //
+            //     var hasTrailing = false;
+            //     foreach (var trailingTrivia in modifier.TrailingTrivia)
+            //     {
+            //         if (trailingTrivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
+            //         {
+            //             parts.Push(" ", trailingTrivia.ToString());
+            //             hasTrailing = true;
+            //         }
+            //     }
+            //
+            //     if (!hasTrailing)
+            //     {
+            //         parts.Push(Line);
+            //     }
+            // }
+            //
+            // return Concat(parts);
         }
 
         private Doc PrintStatements<T>(IReadOnlyList<T> statements, Doc separator, Doc endOfLineDoc = null)
@@ -136,11 +161,6 @@ namespace CSharpier
             var parts = new Parts(Line, "{", body, "}");
             // TODO printTrailingComments(node, parts, "closeBraceToken");
             return Group(Concat(parts));
-        }
-
-        private Doc PrintCommaList(IEnumerable<Doc> docs)
-        {
-            return Join(Concat(String(","), Line), docs);
         }
 
         private void PrintConstraintClauses(SyntaxNode node, IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses, List<Doc> parts)
@@ -205,226 +225,6 @@ namespace CSharpier
             parts.Push(this.Print(node.Declaration));
             parts.Push(";");
             // printTrailingComments(node, parts, "semicolonToken");
-            return Concat(parts);
-        }
-
-        private Doc PrintBaseTypeDeclarationSyntax(BaseTypeDeclarationSyntax node)
-        {
-            TypeParameterListSyntax typeParameterList = null;
-            var hasConstraintClauses = false;
-            var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
-            var hasMembers = false;
-            string keyword = null;
-            var memberSeparator = HardLine;
-            var members = Enumerable.Empty<CSharpSyntaxNode>();
-
-            if (node is TypeDeclarationSyntax typeDeclarationSyntax)
-            {
-                typeParameterList = typeDeclarationSyntax.TypeParameterList;
-                constraintClauses = typeDeclarationSyntax.ConstraintClauses;
-                hasConstraintClauses = typeDeclarationSyntax.ConstraintClauses.Count > 0;
-                members = typeDeclarationSyntax.Members;
-                hasMembers = typeDeclarationSyntax.Members.Count > 0;
-                if (node is ClassDeclarationSyntax classDeclarationSyntax)
-                {
-                    keyword = classDeclarationSyntax.Keyword.Text;
-                }
-                else if (node is StructDeclarationSyntax structDeclarationSyntax)
-                {
-                    keyword = structDeclarationSyntax.Keyword.Text;
-                }
-                else if (node is InterfaceDeclarationSyntax interfaceDeclarationSyntax)
-                {
-                    keyword = interfaceDeclarationSyntax.Keyword.Text;
-                }
-            }
-            else if (node is EnumDeclarationSyntax enumDeclarationSyntax)
-            {
-                members = enumDeclarationSyntax.Members;
-                hasMembers = enumDeclarationSyntax.Members.Count > 0;
-                keyword = enumDeclarationSyntax.EnumKeyword.Text;
-                memberSeparator = Concat(String(","), HardLine);
-            }
-
-            var parts = new Parts();
-
-            this.PrintExtraNewLines(node, parts);
-
-            this.PrintAttributeLists(node, node.AttributeLists, parts);
-            // TODO printLeadingComments(node, parts, String("modifiers"), String("keyword"), String("identifier"));
-            parts.Add(this.PrintModifiers(node.Modifiers));
-            if (keyword != null)
-            {
-                parts.Add(keyword);
-            }
-
-            parts.Push(String(" "), node.Identifier.Text);
-            if (typeParameterList != null)
-            {
-                parts.Add(this.PrintTypeParameterListSyntax(typeParameterList));
-            }
-
-            if (node.BaseList != null)
-            {
-                parts.Add(this.PrintBaseListSyntax(node.BaseList));
-            }
-
-            this.PrintConstraintClauses(node, constraintClauses, parts);
-
-            if (hasMembers)
-            {
-                parts.Add(Concat(hasConstraintClauses ? "" : HardLine, "{"));
-                parts.Add(Indent(Concat(HardLine, Join(memberSeparator, members.Select(this.Print)))));
-                parts.Add(HardLine);
-                parts.Add(String("}"));
-            }
-            else
-            {
-                parts.Push(hasConstraintClauses ? "" : " ", "{", " ", "}");
-            }
-
-            return Concat(parts);
-        }
-
-
-        // TODO 0 how do I really do extra new lines?
-        private void PrintExtraNewLines(BaseTypeDeclarationSyntax node, Parts parts)
-        {
-            // TODO attribute lists?
-            if (node.Modifiers.Count > 0)
-            {
-                foreach (var trivia in node.Modifiers[0].LeadingTrivia)
-                {
-                    if (trivia.Kind() == SyntaxKind.EndOfLineTrivia)
-                    {
-                        parts.Push(HardLine);
-                    }
-                    else if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
-                    {
-                        return;
-                    }
-                }
-            }
-
-            if (node is ClassDeclarationSyntax classDeclarationSyntax)
-            {
-                foreach (var trivia in classDeclarationSyntax.Keyword.LeadingTrivia)
-                {
-                    if (trivia.Kind() == SyntaxKind.EndOfLineTrivia)
-                    {
-                        parts.Push(HardLine);
-                    }
-                    else if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
-                    {
-                        return;
-                    }
-                }
-            }
-        }
-
-        private Doc PrintBaseMethodDeclarationSyntax(CSharpSyntaxNode node)
-        {
-            SyntaxList<AttributeListSyntax> attributeLists;
-            SyntaxTokenList? modifiers = null;
-            TypeSyntax returnType = null;
-            ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifier = null;
-            TypeParameterListSyntax typeParameterList = null;
-            string identifier = null;
-            var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
-            ParameterListSyntax parameterList = null;
-            BlockSyntax body = null;
-            ArrowExpressionClauseSyntax expressionBody = null;
-            if (node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax)
-            {
-                attributeLists = baseMethodDeclarationSyntax.AttributeLists;
-                modifiers = baseMethodDeclarationSyntax.Modifiers;
-                parameterList = baseMethodDeclarationSyntax.ParameterList;
-                body = baseMethodDeclarationSyntax.Body;
-                expressionBody = baseMethodDeclarationSyntax.ExpressionBody;
-                if (node is MethodDeclarationSyntax methodDeclarationSyntax)
-                {
-                    returnType = methodDeclarationSyntax.ReturnType;
-                    explicitInterfaceSpecifier = methodDeclarationSyntax.ExplicitInterfaceSpecifier;
-                    identifier = methodDeclarationSyntax.Identifier.Text;
-                    typeParameterList = methodDeclarationSyntax.TypeParameterList;
-                    constraintClauses = methodDeclarationSyntax.ConstraintClauses;
-                }
-            }
-            else if (node is LocalFunctionStatementSyntax localFunctionStatementSyntax)
-            {
-                attributeLists = localFunctionStatementSyntax.AttributeLists;
-                modifiers = localFunctionStatementSyntax.Modifiers;
-                returnType = localFunctionStatementSyntax.ReturnType;
-                identifier = localFunctionStatementSyntax.Identifier.Text;
-                typeParameterList = localFunctionStatementSyntax.TypeParameterList;
-                parameterList = localFunctionStatementSyntax.ParameterList;
-                constraintClauses = localFunctionStatementSyntax.ConstraintClauses;
-                body = localFunctionStatementSyntax.Body;
-                expressionBody = localFunctionStatementSyntax.ExpressionBody;
-            }
-
-            var parts = new Parts();
-            //this.PrintExtraNewLines(node, String("attributeLists"), String("modifiers"), [String("returnType"), String("keyword")]);
-            this.PrintAttributeLists(node, attributeLists, parts);
-            // printLeadingComments(node, parts, String("modifiers"), String("returnType"), String("identifier"));
-            if (modifiers.HasValue)
-            {
-                parts.Add(this.PrintModifiers(modifiers.Value));
-            }
-
-            if (returnType != null)
-            {
-                parts.Push(this.Print(returnType), String(" "));
-            }
-
-            if (explicitInterfaceSpecifier != null)
-            {
-                parts.Push(this.Print(explicitInterfaceSpecifier.Name), ".");
-            }
-
-            if (identifier != null)
-            {
-                parts.Add(identifier);
-            }
-
-            if (node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax)
-            {
-                parts.Push(conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword.Text,
-                    " ",
-                    conversionOperatorDeclarationSyntax.OperatorKeyword.Text,
-                    " ",
-                    this.Print(conversionOperatorDeclarationSyntax.Type));
-            }
-            else if (node is OperatorDeclarationSyntax operatorDeclarationSyntax)
-            {
-                parts.Push(this.Print(operatorDeclarationSyntax.ReturnType), " ", operatorDeclarationSyntax.OperatorKeyword.Text, " ", operatorDeclarationSyntax.OperatorToken.Text);
-            }
-
-            if (typeParameterList != null)
-            {
-                parts.Add(this.PrintTypeParameterListSyntax(typeParameterList));
-            }
-
-            if (parameterList != null)
-            {
-                parts.Add(this.Print(parameterList));
-            }
-
-            this.PrintConstraintClauses(node, constraintClauses, parts);
-            if (body != null)
-            {
-                parts.Add(this.PrintBlockSyntax(body));
-            }
-            else
-            {
-                if (expressionBody != null)
-                {
-                    parts.Add(this.PrintArrowExpressionClauseSyntax(expressionBody));
-                }
-
-                parts.Add(String(";"));
-            }
-
             return Concat(parts);
         }
     }

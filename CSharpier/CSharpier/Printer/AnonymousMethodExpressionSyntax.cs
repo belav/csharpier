@@ -8,10 +8,10 @@ namespace CSharpier
         private Doc PrintAnonymousMethodExpressionSyntax(AnonymousMethodExpressionSyntax node)
         {
             var parts = new Parts();
-            if (NotNullToken(node.AsyncKeyword)) {
+            if (node.AsyncKeyword.RawKind != 0) {
                 parts.Add(String("async "));
             }
-            if (NotNullToken(node.DelegateKeyword)) {
+            if (node.DelegateKeyword.RawKind != 0) {
                 parts.Add(String("delegate"));
             }
             if (node.ParameterList != null) {
@@ -19,6 +19,7 @@ namespace CSharpier
             }
             if (node.ExpressionBody != null) {
                 parts.Add(this.Print(node.ExpressionBody));
+                // TODO why is this never null?
             } else if (node.Block != null) {
                 parts.Add(this.PrintBlockSyntax(node.Block));
             }
