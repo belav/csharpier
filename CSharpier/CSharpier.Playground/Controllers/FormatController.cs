@@ -13,6 +13,7 @@ namespace CSharpier.Playground.Controllers
     {
         public string Code { get; set; }
         public string Json { get; set; }
+        public string Doc { get; set; }
     }
     
     [ApiController]
@@ -44,6 +45,7 @@ namespace CSharpier.Playground.Controllers
             var result = new CodeFormatter().Format(content, new Options
             {
                 IncludeAST = true,
+                IncludeDocTree = true,
             });
 
             var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
@@ -53,6 +55,7 @@ namespace CSharpier.Playground.Controllers
             {
                 Code = result.Code,
                 Json = result.AST,
+                Doc = result.DocTree,
             };
         }
 

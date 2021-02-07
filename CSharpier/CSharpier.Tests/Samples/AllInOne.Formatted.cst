@@ -24,6 +24,7 @@ class TopLevelType : IDisposable
 namespace My
 {
     using A.B;
+
     interface CoContra<out T, in K> { }
     delegate void CoContra2<[System.Obsolete()] out T, in K>()
         where T : struct;
@@ -43,20 +44,27 @@ namespace My
                 var s1 = $"x {1, -2:d}";
                 var s2 = $@"x {1, -2:d}";
             }
+            
+#if DEBUG
+      Console.WriteLine(export.iefSupplied.command);
+#endif
             const int? local = int.MaxValue;
             const Guid? local0 = new Guid(r.ToString());
+
             var привет = local;
             var мир = local;
             var local3 = 0, local4 = 1;
             local3 = local4 = 1;
             var local5 = null as Action ?? null;
             var local6 = local5 is Action;
+
             var u = 1u;
             var U = 1U;
             long hex = 0xBADC0DE, Hex = 0XDEADBEEF, l = -1L, L = 1L, l2 = 2l;
             ulong ul = 1ul, Ul = 1Ul, uL = 1uL, UL = 1UL, lu = 1lu, Lu = 1Lu, lU = 1lU, LU = 1LU;
             int minInt32Value = -2147483648;
             int minInt64Value = -9223372036854775808L;
+
             bool @bool;
             byte @byte;
             char @char = 'c', \u0066 = '\u0066', hexchar = '\x0130', hexchar2 = (char)0xBAD;
@@ -79,6 +87,7 @@ namespace My
             uint @uint;
             ulong @ulong;
             ushort @ushort;
+
             dynamic dynamic = local5;
             var add = 0;
             var alias = 0;
@@ -131,8 +140,10 @@ namespace My
                 { { 111, 112 }, { 121, 122 } },
                 { { 211, 212 }, { 221, 222 } }
             };
+
             int[][] jagged = { { 111 }, { 121, 122 } };
-            int[][,] arr = new int[5][,];
+            int[][,] arr = new int[5][,]; // as opposed to new int[][5,5]
+
             arr[0] = new int[5,5];
             arr[0][0, 0] = 47;
             int[] arrayTypeInference = new[] { 0, 1 };
@@ -360,6 +371,8 @@ namespace My
         C = 2 + A,
         E
     }
+    
+#endif
     public delegate void Delegate(object P);
     namespace Test
     {
@@ -446,10 +459,12 @@ namespace ConsoleApplication1
         {
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
+
             var q = from i in new int[] { 1, 2, 3, 4 }
                 where i > 5
                 select i;
         }
+
         public static implicit operator Test(string s)
         {
             return new ConsoleApplication1.Test();
@@ -466,10 +481,12 @@ namespace ConsoleApplication1
             Test t = "sss";
         }
         public event EventHandler MyEvent = delegate { };
+
         void Blah()
         {
             int i = 5;
             int? j = 6;
+
             Expression<Func<int>> e = () => i;
             Expression<Func<bool, Action>> e2 = b => () =>
             {
@@ -507,11 +524,13 @@ namespace ConsoleApplication1
                 t = value;
             }
         }
+
         public void Constants()
         {
             int i = 1 + 2 + 3 + 5;
             global::System.String s = "a" + (System.String)"a" + "a" + "a" + "a" + "A";
         }
+
         public void ConstructedType()
         {
             List<int> i = null;
@@ -521,10 +540,14 @@ namespace ConsoleApplication1
 }
 namespace Comments.XmlComments.UndocumentedKeywords
 {
-    class C<T>
+    class /*///*/
+    C<T>
     {
         void M<U>(T t, U u)
         {
+            // comment
+            //comment
+            // /***/
             int intValue = 0;
             intValue = intValue + 1;
             string strValue = "hello";
@@ -533,6 +556,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
         }
     }
 
+    //General Test F. Type a very long class name, verify colorization happens correctly only upto the correct size (118324)
     class TestClassXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX { }
 
     class TestClassXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX22 { }
@@ -554,25 +578,38 @@ namespace Comments.XmlComments.UndocumentedKeywords
             out dynamic a = 2,
             ref dynamic c = default(dynamic),
             params dynamic[][] c) { }
+
         public override string ToString()
         {
             return base.ToString();
         }
+
         public partial void OnError();
+
         public partial void method()
         {
-            int?[] a = new int?[5];
-            int[] var = { 1, 2, 3, 4, 5 };
-            int i = a[i];
-            Foo<T> f = new Foo<int>();
+            int?[] a = new int?[5]; /*[] bug*/
+             // YES []
+
+            int[] var = { 1, 2, 3, 4, 5 }; /*,;*/
+
+            int i = a[i]; /*[]*/
+
+            Foo<T> f = new Foo<int>(); /*<> ()*/
+
             f.method();
             i = i + i - i * i / i % i & i | i ^ i;
-            bool b = true & false | true ^ false;
+            bool b = true & false | true ^ false; /*& | ^*/
+
             b = !b;
             i = ~i;
             b = i < i && i > i;
-            int? ii = 5;
-            int f = true ? 1 : 0;
+            int? ii = 5; /*? bug*/
+             // NO ?
+
+            int f = true ? 1 : 0; /*? :*/
+             // YES :
+
             i++;
             i--;
             b = true && false || true;
@@ -589,7 +626,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
             i ^= i;
             i <<= i;
             i >>= i;
-            object s = x => x + 1;
+            object s = x => x + 1; /*=>*/
+
             double d = .3;
             Point point;
             unsafe
@@ -601,6 +639,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             x[i: 1] = 3;
             x[i: 1, j: 5] = "str";
         }
+
         struct Point
         {
             public int X;
@@ -612,29 +651,45 @@ namespace Comments.XmlComments.UndocumentedKeywords
         }
     }
 
+    // From here:https://github.com/dotnet/roslyn/wiki/New-Language-Features-in-C%23-6
     class CSharp6Features
     {
+        // Initializers for auto-properties
         public string First { get; set; } = "Jane";
         public string Last { get; set; } = "Doe";
+        // Getter-only auto-properties
         public string Third { get; } = "Jane";
         public string Fourth { get; } = "Doe";
+
+        // Expression bodies on method-like members
         public Point Move(int dx, int dy) => new Point(x + dx, y + dy);
         public static Complex operator +(Complex a, Complex b) => a.Add(b);
         public static implicit operator string(Person p) => p.First + " " + p.Last;
         public void Print() => Console.WriteLine(First + " " + Last);
+        // Expression bodies on property-like function members
         public string Name => First + " " + Last;
         public int this[long id] => id;
+
         async void Test()
         {
             WriteLine(Sqrt(3 * 3 + 4 * 4));
             WriteLine(Friday - Monday);
-            var range = Range(5, 17);
-            var even = range.Where(i => i % 2 == 0);
-            int? length = customers?.Length;
-            Customer first = customers?[0];
-            int length = customers?.Length ?? 0;
+            var range = Range(5, 17); // Ok: not extension
+
+            var even = range.Where(i => i % 2 == 0); // Ok
+
+
+            // Null-conditional operators
+            int? length = customers?.Length; // null if customers is null
+
+            Customer first = customers?[0]; // null if customers is null
+
+            int length = customers?.Length ?? 0; // 0 if customers is null
+
             int? first = customers?[0]?.Orders?.Count();
             PropertyChanged?.Invoke(this, args);
+
+            // String interpolation
             string s = $"{p.Name, 20} is {p.Age:D3} year{{s}} old #";
             s = $"{p.Name} is \"{p.Age} year{(p.Age == 1 ? "" : "s")} old";
             s = $"{(p.Age == 2 ? $"{new Person {  }}" : "")}";
@@ -644,6 +699,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
             if (x == null)
                 throw new ArgumentNullException(nameof(x));
             WriteLine(nameof(person.Address.ZipCode));
+
+            // Index initializers
             var numbers = new Dictionary<int, string>
             {
                 [7] = "seven",
@@ -652,6 +709,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
             };
             try { }
             catch (MyException e) when (myfilter(e)) { }
+
+            // Await in catch and finally blocks
             Resource res = null;
             try
             {
@@ -682,34 +741,42 @@ class CSharp70
                 break;
         }
         (A<B, C> D, E<F, G> H) = e;
-        if (x?.y?.z is Type value2) { }
+        if (x?.y?.z is Type value2)
+        {// code using value
+        }
         if (expr is Type v)
         {
             Hello();
         }
     }
+
     public static async Task LocalFunctions(string[] args)
     {
         string Hello2(int i)
         {
             return args[i];
         }
+
         async Task<string> Hello<T>(T i) => await Task.FromResult(args[i]);
         await Hello(1);
     }
+
     public static void OutVar(string[] args)
     {
         int.TryParse(Hello(1), out var item);
         int.TryParse(Hello(1), out int item);
     }
+
     public void ThrowExpression()
     {
         var result = nullableResult ?? throw new NullReferenceException();
     }
+
     public void BinaryLiterals()
     {
         int nineteen = 0b10011;
     }
+
     public void DigitSeparators()
     {
         int bin = 0b1001_1010_0001_0100;
@@ -726,6 +793,7 @@ class CSharp71
     {
         DefaultWithoutTypeName(default);
     }
+
     void TupleRecognize(int a, (int, int) b, (int, int, int)? c)
     {
         var result = list.Select(c => (c.f1, f3: c.f2)).Where(t => t.f2 == 1);
@@ -739,9 +807,13 @@ class CSharp72
         Func<int, int> s = (in int x) => x;
         ref TValue this[in TKey index] => null;
         public static Vector3 operator +(in Vector3 x, in Vector3 y) => null;
+
         static readonly ref Vector3 M1_Trace()
         {
+            // OK
             ref readonly var r1 = ref M1();
+
+            // Not valid. Need an LValue
             ref readonly Vector3 r2 = ref default(Vector3);
             Mutate(ref r1);
             Print(in r1);
@@ -757,9 +829,11 @@ class CSharp72
             v1.X = 0;
             foo(ref v1.X);
             return ref (arr != null ? ref arr[0] : ref otherArr[0]);
+
             Span<int> span = stackalloc int[1];
             return new Vector3(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
         }
+
         ref T Choice(bool condition, ref T consequence, ref T alternative)
         {
             if (condition)
@@ -772,8 +846,10 @@ class CSharp72
             }
         }
     }
+
     public void DoSomething(bool isEmployed, string personName, int personAge)
     { }
+
     public void NonTrailingNamedArguments()
     {
         DoSomething(isEmployed: true, name, age);
@@ -782,10 +858,12 @@ class CSharp72
         DoSomething(name, age, isEmployed: true);
         DoSomething(true, personAge: age, personName: name);
     }
+
     public void ConditionalRef()
     {
         ref var r = ref (arr != null ? ref arr[0] : ref otherArr[0]);
     }
+
     public void LeadingSeparator()
     {
         var res = 0 + 123 + 1_2_3 + 0x1_2_3 + 0b101 + 0b1_0_1 + 0x_1_2 + 0b_1_0_1;
@@ -805,22 +883,30 @@ class CSharp73
         public fixed int myFixedField[10];
     }
     static IndexingMovableFixed s;
+
     public unsafe void IndexingMovableFixedFields()
     {
         int* ptr = s.myFixedField;
         int t = s.myFixedField[5];
     }
+
     public void PatternBasedFixed()
     {
-        fixed (byte* ptr = byteArray) { }
+        fixed (byte* ptr = byteArray)
+        {// ptr is a native pointer to the first element of the array
+        // byteArray is protected from being moved/collected by the GC for the duration of this block
+        }
     }
+
     public void StackallocArrayInitializer()
     {
-        Span<int> a = stackalloc int[3];
+        Span<int> a = stackalloc int[3]; // currently allowed
+
         Span<int> a = stackalloc int[3] { 1, 2, 3 };
         Span<int> a = stackalloc int[] { 1, 2, 3 };
         Span<int> a = stackalloc[] { 1, 2, 3 };
     }
+
     public void TupleEquality()
     {
         (int, (int, int)) t1, t2;
@@ -838,6 +924,7 @@ namespace CSharp80
             string? wtf = null;
             int?[]? hello;
         }
+
         void Patterns()
         {
             if (o is string { Length: 5 } s)
@@ -848,6 +935,7 @@ namespace CSharp80
                 2 => 200,
                 _ => throw new global::System.Exception()
             };
+
             var newState = (GetState(), action, hasKey) switch
             {
                 (DoorState.Closed, Action.Open, _) => DoorState.Opened,
@@ -857,27 +945,40 @@ namespace CSharp80
                 (var state, _, _) => state
             };
         }
+
         async Task AsyncStreams()
         {
             await foreach (var item in asyncEnumerables) { }
         }
+
         void Ranges()
         {
-            var thirdItem = list[2];
-            var lastItem = list[^1];
-            var multiDimensional = list[3, ^2];
-            var slice1 = list[2..^3];
-            var slice2 = list[..^3];
-            var slice3 = list[2..];
-            var slice4 = list[..];
-            var multiDimensional = list[1..2, ..];
+            var thirdItem = list[2]; // list[2]
+
+            var lastItem = list[^1]; // list[Index.CreateFromEnd(1)]
+
+            var multiDimensional = list[3, ^2]; // list[3, Index.CreateFromEnd(2)]
+
+
+            var slice1 = list[2..^3]; // list[Range.Create(2, Index.CreateFromEnd(3))]
+
+            var slice2 = list[..^3]; // list[Range.ToEnd(Index.CreateFromEnd(3))]
+
+            var slice3 = list[2..]; // list[Range.FromStart(2)]
+
+            var slice4 = list[..]; // list[Range.All]
+
+            var multiDimensional = list[1..2, ..]; // list[Range.Create(1, 2), Range.All]
+
         }
+
         void UsingDeclarators()
         {
             using var item = new FileStream("./.f");
             fixed (char* ch = "hell");
             item.Dispose();
         }
+
         void StaticLocalFunction()
         {
             static unsafe void Func1() { }
@@ -885,15 +986,18 @@ namespace CSharp80
             async static void Func2() { }
             static async void Func2() { }
         }
+
         void NullCoalescingAssignment()
         {
             var item = a ??= b ??= c ??= d ??= throw new Exception();
         }
+
         public readonly float Hello()
         {
             return 0.1f;
         }
     }
+
     interface IA
     {
         void M()
@@ -901,6 +1005,7 @@ namespace CSharp80
             WriteLine("IA.M");
         }
     }
+
     interface IA
     {
         void M()
@@ -908,6 +1013,7 @@ namespace CSharp80
             WriteLine("IA.M");
         }
     }
+
     interface IB : IA
     {
         override void IA.M()
@@ -915,6 +1021,7 @@ namespace CSharp80
             WriteLine("IB.M");
         }
     }
+
     interface IC : IA
     {
         override void M()

@@ -310,7 +310,7 @@
                 },
                 {
                   "nodeType": "SyntaxTrivia",
-                  "kind": "WhitespaceTrivia"
+                  "kind": "EndOfLineTrivia"
                 }
               ]
             },
@@ -321,7 +321,283 @@
             "nodeType": "SyntaxToken",
             "kind": "IdentifierToken",
             "text": "MethodName2",
+            "hasLeadingTrivia": true,
+            "leadingTrivia": [
+              {
+                "nodeType": "SyntaxTrivia",
+                "kind": "WhitespaceTrivia"
+              }
+            ],
+            "trailingTrivia": []
+          },
+          "parameterList": {
+            "nodeType": "ParameterList",
+            "kind": "ParameterList",
+            "openParenToken": {
+              "nodeType": "SyntaxToken",
+              "kind": "OpenParenToken",
+              "text": "(",
+              "leadingTrivia": [],
+              "trailingTrivia": []
+            },
+            "parameters": [],
+            "closeParenToken": {
+              "nodeType": "SyntaxToken",
+              "kind": "CloseParenToken",
+              "text": ")",
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ]
+            },
+            "hasTrailingTrivia": true
+          },
+          "constraintClauses": [],
+          "body": {
+            "nodeType": "Block",
+            "kind": "Block",
+            "attributeLists": [],
+            "openBraceToken": {
+              "nodeType": "SyntaxToken",
+              "kind": "OpenBraceToken",
+              "text": "{",
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ]
+            },
+            "statements": [],
+            "closeBraceToken": {
+              "nodeType": "SyntaxToken",
+              "kind": "CloseBraceToken",
+              "text": "}",
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "EndOfLineTrivia"
+                }
+              ]
+            },
+            "hasTrailingTrivia": true
+          },
+          "hasLeadingTrivia": true,
+          "hasTrailingTrivia": true
+        },
+        {
+          "nodeType": "MethodDeclaration",
+          "kind": "MethodDeclaration",
+          "attributeLists": [],
+          "modifiers": [
+            {
+              "nodeType": "SyntaxToken",
+              "kind": "PublicKeyword",
+              "text": "public",
+              "hasLeadingTrivia": true,
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                },
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "EndOfLineTrivia"
+                },
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "EndOfLineTrivia"
+                }
+              ]
+            },
+            {
+              "nodeType": "SyntaxToken",
+              "kind": "StaticKeyword",
+              "text": "static",
+              "hasLeadingTrivia": true,
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "EndOfLineTrivia"
+                }
+              ]
+            }
+          ],
+          "returnType": {
+            "nodeType": "PredefinedType",
+            "kind": "PredefinedType",
+            "keyword": {
+              "nodeType": "SyntaxToken",
+              "kind": "VoidKeyword",
+              "text": "void",
+              "hasLeadingTrivia": true,
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ]
+            },
+            "hasLeadingTrivia": true,
+            "hasTrailingTrivia": true
+          },
+          "identifier": {
+            "nodeType": "SyntaxToken",
+            "kind": "IdentifierToken",
+            "text": "MethodName3",
             "leadingTrivia": [],
+            "trailingTrivia": []
+          },
+          "parameterList": {
+            "nodeType": "ParameterList",
+            "kind": "ParameterList",
+            "openParenToken": {
+              "nodeType": "SyntaxToken",
+              "kind": "OpenParenToken",
+              "text": "(",
+              "leadingTrivia": [],
+              "trailingTrivia": []
+            },
+            "parameters": [],
+            "closeParenToken": {
+              "nodeType": "SyntaxToken",
+              "kind": "CloseParenToken",
+              "text": ")",
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ]
+            },
+            "hasTrailingTrivia": true
+          },
+          "constraintClauses": [],
+          "body": {
+            "nodeType": "Block",
+            "kind": "Block",
+            "attributeLists": [],
+            "openBraceToken": {
+              "nodeType": "SyntaxToken",
+              "kind": "OpenBraceToken",
+              "text": "{",
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ]
+            },
+            "statements": [],
+            "closeBraceToken": {
+              "nodeType": "SyntaxToken",
+              "kind": "CloseBraceToken",
+              "text": "}",
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "EndOfLineTrivia"
+                }
+              ]
+            },
+            "hasTrailingTrivia": true
+          },
+          "hasLeadingTrivia": true,
+          "hasTrailingTrivia": true
+        },
+        {
+          "nodeType": "MethodDeclaration",
+          "kind": "MethodDeclaration",
+          "attributeLists": [],
+          "modifiers": [],
+          "returnType": {
+            "nodeType": "PredefinedType",
+            "kind": "PredefinedType",
+            "keyword": {
+              "nodeType": "SyntaxToken",
+              "kind": "VoidKeyword",
+              "text": "void",
+              "hasLeadingTrivia": true,
+              "hasTrailingTrivia": true,
+              "leadingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                },
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "EndOfLineTrivia"
+                },
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                }
+              ],
+              "trailingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia"
+                },
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "SingleLineCommentTrivia",
+                  "commentText": "//other trailing"
+                },
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "EndOfLineTrivia"
+                }
+              ]
+            },
+            "hasLeadingTrivia": true,
+            "hasTrailingTrivia": true
+          },
+          "identifier": {
+            "nodeType": "SyntaxToken",
+            "kind": "IdentifierToken",
+            "text": "MethodName4",
+            "hasLeadingTrivia": true,
+            "leadingTrivia": [
+              {
+                "nodeType": "SyntaxTrivia",
+                "kind": "WhitespaceTrivia"
+              }
+            ],
             "trailingTrivia": []
           },
           "parameterList": {
@@ -392,18 +668,8 @@
         "nodeType": "SyntaxToken",
         "kind": "CloseBraceToken",
         "text": "}",
-        "hasLeadingTrivia": true,
         "hasTrailingTrivia": true,
-        "leadingTrivia": [
-          {
-            "nodeType": "SyntaxTrivia",
-            "kind": "WhitespaceTrivia"
-          },
-          {
-            "nodeType": "SyntaxTrivia",
-            "kind": "EndOfLineTrivia"
-          }
-        ],
+        "leadingTrivia": [],
         "trailingTrivia": [
           {
             "nodeType": "SyntaxTrivia",

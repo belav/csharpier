@@ -8,34 +8,19 @@ namespace CSharpier
         private Doc PrintLocalDeclarationStatementSyntax(LocalDeclarationStatementSyntax node)
         {
             var parts = new Parts();
-            // printExtraNewLines(
-            //     node,
-            //     parts,
-            //     String("awaitKeyword"),
-            //     String("usingKeyword"),
-            //     String("modifiers"),
-            //     [String("declaration"), String("type"), String("keyword")],
-            //     [String("declaration"), String("type"), String("identifier")]
-            // );
-            // printLeadingComments(
-            //     node,
-            //     parts,
-            //     String("awaitKeyword"),
-            //     String("usingKeyword"),
-            //     String("modifiers"),
-            //     [String("declaration"), String("type"), String("keyword")],
-            //     [String("declaration"), String("type"), String("identifier")]
-            // );
+            var printedExtraNewLines = false;
             if (node.AwaitKeyword.RawKind != 0) {
-                parts.Add(String("await "));
+                this.PrintLeadingTrivia(node.AwaitKeyword.LeadingTrivia, parts, ref printedExtraNewLines);
+                parts.Add("await ");
             }
             if (node.UsingKeyword.RawKind != 0) {
-                parts.Add(String("using "));
+                this.PrintLeadingTrivia(node.UsingKeyword.LeadingTrivia, parts, ref printedExtraNewLines);
+                parts.Add("using ");
             }
             parts.Add(this.PrintModifiers(node.Modifiers));
             parts.Add(this.PrintVariableDeclarationSyntax(node.Declaration));
-            parts.Add(String(";"));
-            // TODO printTrailingComments(node, parts, String("semicolonToken"));
+            parts.Add(";");
+            this.PrintTrailingTrivia(node.SemicolonToken.TrailingTrivia, parts);
             return Concat(parts);
         }
     }

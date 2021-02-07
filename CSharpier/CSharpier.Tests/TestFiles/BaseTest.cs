@@ -40,6 +40,12 @@ namespace CSharpier.Tests.TestFileTests
             var actualFilePath = filePath.Replace(".cst", ".actual.cst");
             File.WriteAllText(actualFilePath, result.Code, Encoding.UTF8);
 
+            var expectedFilePath = actualFilePath.Replace(".actual.", ".expected.");
+            if (File.Exists(expectedFilePath))
+            {
+                code = File.ReadAllText(expectedFilePath, Encoding.UTF8);
+            }
+
             result.Code.Should().Be(code);
         }
     }

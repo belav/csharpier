@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintAnonymousObjectCreationExpressionSyntax(AnonymousObjectCreationExpressionSyntax node)
         {
-            return Concat(String("new"), this.PrintStatements(node.Initializers, Line, String(",")));
+            return Concat(String("new"), this.PrintStatements(node.OpenBraceToken, node.Initializers, node.CloseBraceToken, Line, String(",")));
         }
     }
 }

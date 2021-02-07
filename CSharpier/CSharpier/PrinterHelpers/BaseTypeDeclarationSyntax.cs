@@ -1,4 +1,5 @@
 using System.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -12,7 +13,7 @@ namespace CSharpier
             var hasConstraintClauses = false;
             var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
             var hasMembers = false;
-            string keyword = null;
+            SyntaxToken? keyword = null;
             var memberSeparator = HardLine;
             var members = Enumerable.Empty<CSharpSyntaxNode>();
 
@@ -23,40 +24,43 @@ namespace CSharpier
                 hasConstraintClauses = typeDeclarationSyntax.ConstraintClauses.Count > 0;
                 members = typeDeclarationSyntax.Members;
                 hasMembers = typeDeclarationSyntax.Members.Count > 0;
-                if (node is ClassDeclarationSyntax)
+                if (node is ClassDeclarationSyntax classDeclarationSyntax)
                 {
-                    keyword = "class";
+                    keyword = classDeclarationSyntax.Keyword;
                 }
-                else if (node is StructDeclarationSyntax)
+                else if (node is StructDeclarationSyntax structDeclarationSyntax)
                 {
-                    keyword = "struct";
+                    keyword = structDeclarationSyntax.Keyword;
                 }
-                else if (node is InterfaceDeclarationSyntax)
+                else if (node is InterfaceDeclarationSyntax interfaceDeclarationSyntax)
                 {
-                    keyword = "interface";
+                    keyword = interfaceDeclarationSyntax.Keyword;
                 }
             }
             else if (node is EnumDeclarationSyntax enumDeclarationSyntax)
             {
                 members = enumDeclarationSyntax.Members;
                 hasMembers = enumDeclarationSyntax.Members.Count > 0;
-                keyword = "enum";
+                keyword = enumDeclarationSyntax.EnumKeyword;
                 memberSeparator = Concat(String(","), HardLine);
             }
 
             var parts = new Parts();
 
-            this.PrintExtraNewLines(node, parts);
-
             this.PrintAttributeLists(node, node.AttributeLists, parts);
-            // TODO printLeadingComments(node, parts, String("modifiers"), String("keyword"), String("identifier"));
-            parts.Add(this.PrintModifiers(node.Modifiers));
+            var printedExtraNewLines = false;
+            parts.Add(this.PrintModifiers(node.Modifiers, ref printedExtraNewLines));
             if (keyword != null)
             {
-                parts.Add(keyword);
+                PrintLeadingTrivia(keyword.Value.LeadingTrivia, parts, ref printedExtraNewLines, true);
+                parts.Add(keyword.Value.Text);
+                if (!PrintTrailingTrivia(keyword.Value.TrailingTrivia, parts))
+                {
+                    parts.Push(" ");
+                }
             }
 
-            parts.Push(String(" "), node.Identifier.Text);
+            parts.Push(node.Identifier.Text);
             if (typeParameterList != null)
             {
                 parts.Add(this.PrintTypeParameterListSyntax(typeParameterList));
@@ -83,42 +87,5 @@ namespace CSharpier
 
             return Concat(parts);
         }
-
-
-        // TODO 0 how do I really do extra new lines?
-        private void PrintExtraNewLines(BaseTypeDeclarationSyntax node, Parts parts)
-        {
-            // TODO attribute lists?
-            if (node.Modifiers.Count > 0)
-            {
-                foreach (var trivia in node.Modifiers[0].LeadingTrivia)
-                {
-                    if (trivia.Kind() == SyntaxKind.EndOfLineTrivia)
-                    {
-                        parts.Push(HardLine);
-                    }
-                    else if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
-                    {
-                        return;
-                    }
-                }
-            }
-
-            if (node is ClassDeclarationSyntax classDeclarationSyntax)
-            {
-                foreach (var trivia in classDeclarationSyntax.Keyword.LeadingTrivia)
-                {
-                    if (trivia.Kind() == SyntaxKind.EndOfLineTrivia)
-                    {
-                        parts.Push(HardLine);
-                    }
-                    else if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
-                    {
-                        return;
-                    }
-                }
-            }
-        }
-
     }
 }

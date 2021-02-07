@@ -1,0 +1,9 @@
+﻿public class ClassName
+{
+    void MethodName()
+    {
+#if DEBUG
+        Console.WriteLine("Do not get AST");
+#endif
+    }
+}

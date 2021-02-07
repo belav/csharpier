@@ -10,35 +10,46 @@ interface State {
     formattedCode: string;
     json: string;
     isLoading: boolean;
-    showCode: boolean;
+    tab: string;
+    doc: string;
 }
+
+const defaultCode = `public class UglyClassName {
+    public string MyProperty {
+        get;
+        set; 
+    }
+
+    public void MethodName(string LongParameter1, string longParameter2, string LongParameter3) { 
+        this.MethodName("ajskdf", "kjlasdfkljasldkfklajsdf", "ljkasdfkljaskldfjasdf";
+    }
+}`
 
 export class App extends Component<{}, State> {
     constructor(props: {}) {
         super(props);
+
+        const existingCode = window.sessionStorage.getItem("enteredCode") ?? defaultCode;
+
         this.state = {
             isLoading: false,
-            enteredCode: `public class UglyClassName {
-            public string MyProperty
-            {
-             get;  set; }
-
-    public void MethodName(string LongParameter1, string longParameter2, string LongParameter3) { this.MethodName("ajskdf", "kjlasdfkljasldkfklajsdf", "ljkasdfkljaskldfjasdf"; }
-}`,
+            enteredCode: existingCode,
             formattedCode: "",
             json: "",
-            showCode: true,
+            doc: "",
+            tab: "code",
         };
     }
 
     componentDidMount() {
         this.formatCode();
     }
-    
+
     formatCode = async () => {
         this.setState({
             isLoading: true,
         })
+        
         const response = await fetch("/Format", {
             method: "POST",
             body: JSON.stringify(this.state.enteredCode),
@@ -46,12 +57,23 @@ export class App extends Component<{}, State> {
                 "Content-Type": "application/json",
             },
         });
-        const data = await response.json();
-        this.setState({
-            formattedCode: data.code,
-            isLoading: false,
-            json: data.json,
-        })
+        if (response.status === 200) {
+            const data = await response.json();
+            this.setState({
+                formattedCode: data.code,
+                isLoading: false,
+                json: data.json,
+                doc: data.doc,
+            })   
+        } else {
+            const text = await response.text();
+            this.setState({
+                formattedCode: text,
+                isLoading: false,
+                json: text,
+                doc: text,
+            })
+        }
     }
 
     render() {
@@ -59,13 +81,14 @@ export class App extends Component<{}, State> {
             lineNumbers: true,
             matchBrackets: true,
             mode: "text/x-java",
+            taxSize: 4,
         };
-        
+
         const jsonOptions = {
             lineNumbers: true,
             mode: {
                 name: "javascript",
-                json: true,   
+                json: true,
             },
             foldGutter: true,
             gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
@@ -78,19 +101,24 @@ export class App extends Component<{}, State> {
                         <Title>
                             CSharpier
                         </Title>
-                        <a className="github-button" href="https://github.com/belav/csharpier" data-size="large" data-show-count="true" aria-label="Star belav/csharpier on GitHub">Github</a>
+                        <a className="github-button" href="https://github.com/belav/csharpier" data-size="large"
+                           data-show-count="true" aria-label="Star belav/csharpier on GitHub">Github</a>
                         <FormatButton onClick={this.formatCode}>
                             {this.state.isLoading &&
-                                <LoadingStyle />
+                            <LoadingStyle/>
                             }
                             {!this.state.isLoading &&
-                                <>Format</>
+                            <>Format</>
                             }
                         </FormatButton>
                     </Left>
                     <Tabs>
-                        <Tab data-isactive={this.state.showCode} onClick={() => this.setState({ showCode: true })}>Formatted Code</Tab>
-                        <Tab data-isactive={!this.state.showCode} onClick={() => this.setState({ showCode: false })}>AST</Tab>
+                        <Tab data-isactive={this.state.tab === "code"} onClick={() => this.setState({tab: "code"})}>Formatted
+                            Code</Tab>
+                        <Tab data-isactive={this.state.tab === "ast"}
+                             onClick={() => this.setState({tab: "ast"})}>AST</Tab>
+                        <Tab data-isactive={this.state.tab === "doc"}
+                             onClick={() => this.setState({tab: "doc"})}>Doc</Tab>
                     </Tabs>
                 </Header>
                 <CodeWrapperStyle>
@@ -99,25 +127,37 @@ export class App extends Component<{}, State> {
                             value={this.state.enteredCode}
                             options={options}
                             onBeforeChange={(editor, data, value) => {
+                                window.sessionStorage.setItem("enteredCode", value);
                                 this.setState({enteredCode: value});
                             }}
-                            onChange={() => {}}
+                            onChange={() => {
+                            }}
                         />
                     </EnteredCodeStyle>
                     <EnteredCodeStyle>
-                        {this.state.showCode &&
-                            <CodeMirror
-                                value={this.state.formattedCode}
-                                options={{...options, readOnly: true}}
-                                onBeforeChange={() => {
-                                }}
-                                onChange={() => {
-                                }}
-                            />
+                        {this.state.tab === "code" &&
+                        <CodeMirror
+                            value={this.state.formattedCode}
+                            options={{...options, readOnly: true}}
+                            onBeforeChange={() => {
+                            }}
+                            onChange={() => {
+                            }}
+                        />
                         }
-                        {!this.state.showCode &&
+                        {this.state.tab === "ast" &&
                         <CodeMirror
                             value={this.state.json}
+                            options={{...jsonOptions, readOnly: true}}
+                            onBeforeChange={() => {
+                            }}
+                            onChange={() => {
+                            }}
+                        />
+                        }
+                        {this.state.tab === "doc" &&
+                        <CodeMirror
+                            value={this.state.doc}
                             options={{...jsonOptions, readOnly: true}}
                             onBeforeChange={() => {
                             }}
@@ -141,7 +181,7 @@ const EnteredCodeStyle = styled.div`
     .CodeMirror {
         height: 100%;
     }
-    
+
     @media only screen and (max-width: 768px) {
         width: 100%;
         height: 50%;
@@ -167,7 +207,7 @@ const Header = styled.div`
     background-color: #f7f7f7;
     display: flex;
     align-items: center;
-    
+
     > div {
         width: 50%;
         display: flex;
@@ -215,30 +255,32 @@ const Tab = styled.button`
     margin-bottom: -1px;
     padding: 4px 8px;
     cursor: pointer;
+
     &[data-isactive=true] {
         background: white;
         border-bottom: none;
         cursor: default;
     }
+
     &:focus {
         outline: none;
     }
 `;
 
 const LoadingStyle = styled(Loading)`
-  animation-name: spin;
-  animation-duration: 2000ms;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
+    animation-name: spin;
+    animation-duration: 2000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
 
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
     }
-    to {
-      transform: rotate(360deg);
-    }
-  }
 `
 
 const Footer = styled.div`

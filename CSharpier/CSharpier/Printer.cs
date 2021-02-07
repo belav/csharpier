@@ -109,57 +109,135 @@ namespace CSharpier
 
         private Doc PrintModifiers(SyntaxTokenList modifiers)
         {
+            var boolean = true;
+            return this.PrintModifiers(modifiers, ref boolean);
+        }
+
+        private Doc PrintModifiers(SyntaxTokenList modifiers, ref bool printedExtraNewLines)
+        {
             if (modifiers.Count == 0)
             {
                 return "";
             }
 
-            return Concat(Join(" ", modifiers.Select(o => String(o.Text))), " ");
+            var parts = new Parts();
+            var isFirst = true;
+            foreach (var modifier in modifiers)
+            {
+                this.PrintLeadingTrivia(modifier.LeadingTrivia, parts, ref printedExtraNewLines, !isFirst);
+                parts.Push(modifier.Text);
+                if (!this.PrintTrailingTrivia(modifier.TrailingTrivia, parts))
+                {
+                    parts.Push(" ");
+                }
 
-            // var parts = new Parts();
-            // foreach (var modifier in modifiers)
-            // {
-            //     foreach (var leadingTrivia in modifier.LeadingTrivia)
-            //     {
-            //         if (leadingTrivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
-            //         {
-            //             parts.Push(leadingTrivia.ToString(), Environment.NewLine);
-            //         }
-            //     }
-            //     parts.Push(modifier.Text);
-            //
-            //     var hasTrailing = false;
-            //     foreach (var trailingTrivia in modifier.TrailingTrivia)
-            //     {
-            //         if (trailingTrivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
-            //         {
-            //             parts.Push(" ", trailingTrivia.ToString());
-            //             hasTrailing = true;
-            //         }
-            //     }
-            //
-            //     if (!hasTrailing)
-            //     {
-            //         parts.Push(Line);
-            //     }
-            // }
-            //
-            // return Concat(parts);
+                isFirst = false;
+            }
+            
+            return Group(Concat(parts));
         }
 
-        private Doc PrintStatements<T>(IReadOnlyList<T> statements, Doc separator, Doc endOfLineDoc = null)
+        private bool PrintLeadingTrivia(CSharpSyntaxNode node, Parts parts, ref bool printedExtraNewLines)
+        {
+            if (!node.HasLeadingTrivia)
+            {
+                return false;
+            }
+            
+            return this.PrintLeadingTrivia(node.GetLeadingTrivia(), parts, ref printedExtraNewLines);
+        }
+
+        private bool PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, Parts parts, ref bool printedExtraNewLines, bool includeHardLine = false)
+        {
+            var startCount = parts.Count;
+            var alreadyAddedHardline = false;
+            foreach (var trivia in leadingTrivia)
+            {
+                if (!printedExtraNewLines && trivia.Kind() == SyntaxKind.EndOfLineTrivia)
+                {
+                    parts.Push(HardLine);
+                    alreadyAddedHardline = true;
+                }
+                    
+                if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
+                {
+                    printedExtraNewLines = true;
+                    if (includeHardLine && !alreadyAddedHardline)
+                    {
+                        alreadyAddedHardline = true;
+                        parts.Push(HardLine);
+                    }
+                    parts.Push(Concat( trivia.ToString(), HardLine));
+                }
+                else if (trivia.Kind() == SyntaxKind.IfDirectiveTrivia)
+                {
+                    parts.Push(Environment.NewLine, trivia.ToString(), Environment.NewLine);
+                }
+                else if (trivia.Kind() == SyntaxKind.DisabledTextTrivia)
+                {
+                    parts.Push(trivia.ToString().TrimEnd('\n', '\r'));
+                }
+                else if (trivia.Kind() == SyntaxKind.ElseDirectiveTrivia)
+                {
+                    parts.Push(Environment.NewLine, trivia.ToString(), HardLine);
+                }
+                else if (trivia.Kind() == SyntaxKind.EndIfDirectiveTrivia)
+                {
+                    parts.Push(Environment.NewLine, trivia.ToString(), HardLine);
+                }
+            }
+
+            return startCount != parts.Count;
+        }
+        
+        private bool PrintTrailingTrivia(CSharpSyntaxNode node, Parts parts)
+        {
+            if (!node.HasTrailingTrivia)
+            {
+                return false;
+            }
+            
+            return this.PrintTrailingTrivia(node.GetTrailingTrivia(), parts);
+        }
+
+        private bool PrintTrailingTrivia(SyntaxTriviaList trailingTrivia, Parts parts)
+        {
+            var hasTrivia = false;
+            foreach (var trivia in trailingTrivia)
+            {
+                if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
+                {
+                    parts.Push(" ", trivia.ToString(), HardLine);
+                    hasTrivia = true;
+                }
+                else if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
+                {
+                    parts.Push(" ", trivia.ToString(), Line);
+                    hasTrivia = true;
+                }
+            }
+
+            return hasTrivia;
+        }
+        
+        private Doc PrintStatements<T>(SyntaxToken openBraceToken, IReadOnlyList<T> statements, SyntaxToken closeBraceToken, Doc separator, Doc endOfLineDoc = null)
             where T : SyntaxNode
         {
             var actualEndOfLine = endOfLineDoc != null ? Concat(endOfLineDoc, separator) : separator;
-            
-            Doc body = " ";
+
+            var parts = new Parts(Line, "{");
             if (statements.Count > 0)
             {
-                body = Concat(Indent(Concat(separator, Join(actualEndOfLine, statements.Select(this.Print)))), separator);
+                parts.Push(Concat(Indent(Concat(separator, Join(actualEndOfLine, statements.Select(this.Print)))), separator));
             }
-
-            var parts = new Parts(Line, "{", body, "}");
-            // TODO printTrailingComments(node, parts, "closeBraceToken");
+            var ignore = false;
+            var printedLeadingTrivia = this.PrintLeadingTrivia(closeBraceToken.LeadingTrivia, parts, ref ignore);
+            if (!printedLeadingTrivia && statements.Count == 0)
+            {
+                parts.Push(" ");
+            }
+            parts.Push("}");
+            this.PrintTrailingTrivia(closeBraceToken.TrailingTrivia, parts);
             return Group(Concat(parts));
         }
 

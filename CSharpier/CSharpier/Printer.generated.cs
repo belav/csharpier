@@ -134,6 +134,8 @@ namespace CSharpier
                     return this.PrintFromClauseSyntax(fromClauseSyntax);
                 case GenericNameSyntax genericNameSyntax:
                     return this.PrintGenericNameSyntax(genericNameSyntax);
+                case GlobalStatementSyntax globalStatementSyntax:
+                    return this.PrintGlobalStatementSyntax(globalStatementSyntax);
                 case GotoStatementSyntax gotoStatementSyntax:
                     return this.PrintGotoStatementSyntax(gotoStatementSyntax);
                 case GroupClauseSyntax groupClauseSyntax:

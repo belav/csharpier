@@ -7,6 +7,13 @@ public class ClassName
     public // trailing
     static // more trailing
     // more leading
-    void /* what about here */ MethodName2() { }
+    void /* what about here */
+    MethodName2() { }
     
+  	public
+    static
+      void MethodName3() { }
+  
+  	void //other trailing
+    MethodName4() { }
 }

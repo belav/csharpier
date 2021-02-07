@@ -6,7 +6,7 @@ const component: React.FC<{ size?: number; color?: string; className?: string }>
                                                                                         className,
                                                                                     }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color}
-         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className={className}>
+         strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
         <path fill="none" d="M12,22"/>
         <path fill="none" d="M12,22C6.5,22,2,17.5,2,12S6.5,2,12,2s10,4.5,10,10"/>
     </svg>

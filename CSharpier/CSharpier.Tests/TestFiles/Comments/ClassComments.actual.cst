@@ -1,5 +1,27 @@
-﻿public class ClassName { }
+﻿// public class
+public class ClassName { }
 
+// other class
 class ClassName2 { }
 
-public static class ClassName3 { }
+// leading
+public // trailing
+static // trailing
+class // trailing
+ClassName2 { }
+
+
+// this
+public
+// is
+static
+// valid
+// wtf
+class ClassName3
+{
+    // yeah
+    private
+    // no
+    readonly /*wtf*/
+    string Tester = "lajsdf";
+}
