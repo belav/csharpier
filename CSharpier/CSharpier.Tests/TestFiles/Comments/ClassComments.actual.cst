@@ -1,15 +1,12 @@
 ﻿// public class
 public class ClassName { }
-
 // other class
 class ClassName2 { }
-
 // leading
 public // trailing
 static // trailing
 class // trailing
 ClassName2 { }
-
 
 // this
 public
@@ -22,6 +19,5 @@ class ClassName3
     // yeah
     private
     // no
-    readonly /*wtf*/
-    string Tester = "lajsdf";
+    readonly /*wtf*/ string Tester = "lajsdf";
 }

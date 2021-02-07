@@ -65,6 +65,10 @@ namespace CSharpier
                     return indent + "Indent(" + Environment.NewLine + this.PrintDocTree(indentDoc.Contents, indent + "    ") + ")";
                 case Group group:
                     return indent + "Group(" + Environment.NewLine + this.PrintDocTree(group.Contents, indent + "    ") + ")";
+                case LeadingComment leadingComment:
+                    return indent + "LeadingComment(" + leadingComment.Comment + ", CommentType." + (leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine") + ")";
+                case TrailingComment trailingComment:
+                    return indent + "TrailingComment(" + trailingComment.Comment + ", CommentType." + (trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine") + ")"; 
                 default:
                     throw new Exception("Can't handle " + document);
             }

@@ -1,4 +1,4 @@
-{
+﻿{
   "nodeType": "CompilationUnit",
   "kind": "CompilationUnit",
   "externs": [],
@@ -201,7 +201,7 @@
                     {
                       "nodeType": "SyntaxTrivia",
                       "kind": "SingleLineCommentTrivia",
-                      "commentText": "// trailing "
+                      "commentText": "// trailing"
                     },
                     {
                       "nodeType": "SyntaxTrivia",
@@ -253,10 +253,6 @@
               "hasLeadingTrivia": true,
               "hasTrailingTrivia": true,
               "leadingTrivia": [
-                {
-                  "nodeType": "SyntaxTrivia",
-                  "kind": "WhitespaceTrivia"
-                },
                 {
                   "nodeType": "SyntaxTrivia",
                   "kind": "EndOfLineTrivia"
@@ -859,9 +855,16 @@
         "nodeType": "SyntaxToken",
         "kind": "CloseBraceToken",
         "text": "}",
+        "hasTrailingTrivia": true,
         "leadingTrivia": [],
-        "trailingTrivia": []
-      }
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndOfLineTrivia"
+          }
+        ]
+      },
+      "hasTrailingTrivia": true
     }
   ]
 }

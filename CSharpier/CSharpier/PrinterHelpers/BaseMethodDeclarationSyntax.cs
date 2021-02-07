@@ -60,6 +60,7 @@ namespace CSharpier
 
             if (returnType != null)
             {
+                // TODO 0 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow?
                 // TODO 0 another option for comments would be to make them a doc type, and then propagate breaks based on what we find
                 // single line comments (both leading & trailing) should always have a line after
                 // leading single line comments should always have a line before

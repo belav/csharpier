@@ -10,7 +10,6 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest("FieldDeclaration", "BasicField");
         }
-        [Ignore("TODO comments")]
         [Test]
         public void FieldDeclarationComments()
         {

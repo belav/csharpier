@@ -279,7 +279,7 @@ namespace CSharpier
         public string Print(Doc document, Options options)
         {
             DocPrinterUtils.PropagateBreaks(document);
-            
+
             var width = options.Width;
             var newLine = Environment.NewLine; // TODO options
             var position = 0;
@@ -294,15 +294,29 @@ namespace CSharpier
 
             var output = new StringBuilder();
             var shouldRemeasure = false;
+            var newLineNextStringValue = false;
+            var skipNextNewLine = false;
 
             var lineSuffix = new List<PrintCommand>();
 
-            while (currentStack.TryPop(out var command))
+            while (currentStack.Count > 0)
             {
+                var command = currentStack.Pop();
                 switch (command.Doc)
                 {
                     case StringDoc stringDoc:
-                        // TODO new line stuff
+                        if (stringDoc.Value == "")
+                        {
+                            break;
+                        }
+                        if (newLineNextStringValue)
+                        {
+                            // TODO new line stuff
+                            Trim(output);
+                            output.Append(newLine + command.Indent.Value);
+                            position = command.Indent.Length;
+                            newLineNextStringValue = false;
+                        }
                         output.Append(stringDoc.Value);
                         position += GetStringWidth(stringDoc.Value);
                         break;
@@ -431,9 +445,17 @@ namespace CSharpier
                                 }
                                 else
                                 {
-                                    position -= Trim(output);
-                                    output.Append(newLine + command.Indent.Value);
-                                    position = command.Indent.Length;
+                                    if (!newLineNextStringValue || !skipNextNewLine)
+                                    {
+                                        Trim(output);
+                                        output.Append(newLine + command.Indent.Value);
+                                        position = command.Indent.Length;
+                                    }
+
+                                    if (skipNextNewLine)
+                                    {
+                                        skipNextNewLine = false;
+                                    }
                                 }
 
                                 break;
@@ -442,6 +464,26 @@ namespace CSharpier
                         break;
                     case BreakParent breakParent: // this doesn't seem to be used in here
                         break;
+                    case LeadingComment leadingComment:
+                        Trim(output);
+                        if ((output.Length != 0 && output[^1] != '\n') || newLineNextStringValue)
+                        {
+                            output.Append(newLine);
+                        }
+
+                        output.Append(command.Indent.Value + leadingComment.Comment + newLine + command.Indent.Value);
+                        position = command.Indent.Length;
+                        newLineNextStringValue = false;
+                        skipNextNewLine = false;
+                        break;
+                    case TrailingComment trailingComment:
+                        Trim(output);
+                        output.Append(" " + trailingComment.Comment);
+                        position = command.Indent.Length;
+                        newLineNextStringValue = true;
+                        skipNextNewLine = true;
+                        break;
+
                     default:
                         throw new Exception("didn't handle " + command.Doc);
                 }
@@ -479,7 +521,7 @@ namespace CSharpier
 
             return trimCount;
         }
-        
+
         // // TODO does the above method do the same thing as this method?
         // private int Trim(List<string> output)
         // {

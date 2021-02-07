@@ -10,7 +10,6 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest("DelegateDeclaration", "BasicDelegateDeclaration");
         }
-        [Ignore("TODO formatting")]
         [Test]
         public void GenericDelegate()
         {

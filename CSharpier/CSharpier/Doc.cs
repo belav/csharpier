@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
 
 namespace CSharpier
 {
@@ -69,6 +71,24 @@ namespace CSharpier
         public Doc Contents { get; set; }
     }
 
+    public class LeadingComment : Doc
+    {
+        public CommentType Type { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class TrailingComment : Doc
+    {
+        public CommentType Type { get; set; }
+        public string Comment { get; set; }
+    }
+    
+    public enum CommentType
+    {
+        SingleLine,
+        MultiLine
+    }
+    
     interface IHasContents
     {
         Doc Contents { get; set; }

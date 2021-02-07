@@ -10,7 +10,6 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest("ConstructorDeclaration", "BasicConstructorDeclaration");
         }
-        [Ignore("TODO comments")]
         [Test]
         public void ConstructorDeclarationComments()
         {

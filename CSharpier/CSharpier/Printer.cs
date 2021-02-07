@@ -16,6 +16,25 @@ namespace CSharpier
         public static Doc Line = new LineDoc { Type = LineDoc.LineType.Normal };
         public static Doc SoftLine = new LineDoc { Type = LineDoc.LineType.Soft };
 
+        public static Doc LeadingComment(string comment, CommentType commentType)
+        {
+            return new LeadingComment
+            {
+                Type = commentType,
+                Comment = comment,
+            };
+        }
+        
+        public static Doc TrailingComment(string comment, CommentType commentType)
+        {
+            return new TrailingComment
+            {
+                Type = commentType,
+                Comment = comment,
+            };
+        }
+
+        
         public static Doc Concat(Parts parts)
         {
             return new Concat
@@ -150,24 +169,21 @@ namespace CSharpier
         private bool PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, Parts parts, ref bool printedExtraNewLines, bool includeHardLine = false)
         {
             var startCount = parts.Count;
-            var alreadyAddedHardline = false;
-            foreach (var trivia in leadingTrivia)
+            for (var x = 0; x < leadingTrivia.Count; x++)
             {
-                if (!printedExtraNewLines && trivia.Kind() == SyntaxKind.EndOfLineTrivia)
+                var trivia = leadingTrivia[x];
+                
+                if (!printedExtraNewLines 
+                    && trivia.Kind() == SyntaxKind.EndOfLineTrivia
+                    && (x == leadingTrivia.Count - 1 || leadingTrivia[x + 1].Kind() != SyntaxKind.SingleLineCommentTrivia))
                 {
                     parts.Push(HardLine);
-                    alreadyAddedHardline = true;
                 }
                     
                 if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
                 {
                     printedExtraNewLines = true;
-                    if (includeHardLine && !alreadyAddedHardline)
-                    {
-                        alreadyAddedHardline = true;
-                        parts.Push(HardLine);
-                    }
-                    parts.Push(Concat( trivia.ToString(), HardLine));
+                    parts.Push(LeadingComment(trivia.ToString(), CommentType.SingleLine));
                 }
                 else if (trivia.Kind() == SyntaxKind.IfDirectiveTrivia)
                 {
@@ -207,7 +223,7 @@ namespace CSharpier
             {
                 if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
                 {
-                    parts.Push(" ", trivia.ToString(), HardLine);
+                    parts.Push(TrailingComment(trivia.ToString(), CommentType.SingleLine));
                     hasTrivia = true;
                 }
                 else if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)

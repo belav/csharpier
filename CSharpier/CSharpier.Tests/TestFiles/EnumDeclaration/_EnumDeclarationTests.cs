@@ -8,7 +8,6 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void BasicEnumDeclaration()
         {
-
             this.RunTest("EnumDeclaration", "BasicEnumDeclaration");
         }
         [Test]
