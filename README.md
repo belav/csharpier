@@ -10,6 +10,9 @@ Try it out at [Playground](https://csharpier.bnt-studios.com)
 
 Compare [AllInOne](./CSharpier/CSharpier.Tests/Samples/AllInOne.cst) to [AllInOne.Formatted](./CSharpier/CSharpier.Tests/prettier-plugin-csharpier/Samples/AllInOne.Formatted.cs) to get a sense of what is missing. [Compare In Github](https://github.com/belav/csharpier/compare/master...progress)
 
+## Development
+See [Development Readme](./CSharpier/README.md)
+
 # Prettier-Plugin-CSharpier
 
 **This is most likely abandoned due to performance issues with the approach**
