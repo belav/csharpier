@@ -1,3 +1,14 @@
+#error Error message
+#warning Warning message
+#pragma warning disable 414, 3021
+#pragma warning restore 3021
+#pragma checksum "file.txt" "{00000000-0000-0000-0000-000000000000}" "2453"
+#define foo // Comment in directive
+#if foo
+#else
+#endif
+#undef foo
+
 extern alias Foo;
 using System;
 using System.Collections.Generic;
@@ -719,6 +730,11 @@ namespace Comments.XmlComments.UndocumentedKeywords
         }
     }
 }
+
+#line 6
+#line 2 "test.cs"
+#line default
+#line hidden
 
 class CSharp70
 {

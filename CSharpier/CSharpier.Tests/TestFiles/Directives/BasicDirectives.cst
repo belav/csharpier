@@ -1,0 +1,13 @@
+#error Error message
+#warning Warning message
+#pragma warning disable 414, 3021
+#pragma warning restore 3021
+#pragma checksum "file.txt" "{00000000-0000-0000-0000-000000000000}" "2453"
+#define foo // Comment in directive
+#if foo
+#elif bar
+#else
+#endif
+#undef foo
+#line 6
+class ClassName { }

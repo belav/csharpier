@@ -9,7 +9,7 @@ namespace CSharpier
     {
         private Doc PrintBaseMethodDeclarationSyntax(CSharpSyntaxNode node)
         {
-            SyntaxList<AttributeListSyntax> attributeLists;
+            SyntaxList<AttributeListSyntax>? attributeLists = null;
             SyntaxTokenList? modifiers = null;
             TypeSyntax returnType = null;
             ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifier = null;
@@ -51,7 +51,10 @@ namespace CSharpier
             var parts = new Parts();
             var printedExtraNewLines = false;
             //this.PrintExtraNewLines(node, String("attributeLists"), String("modifiers"), [String("returnType"), String("keyword")]);
-            this.PrintAttributeLists(node, attributeLists, parts);
+            if (attributeLists.HasValue)
+            {
+                this.PrintAttributeLists(node, attributeLists.Value, parts);   
+            }
             // printLeadingComments(node, parts, String("modifiers"), String("returnType"), String("identifier"));
             if (modifiers.HasValue)
             {
@@ -60,6 +63,7 @@ namespace CSharpier
 
             if (returnType != null)
             {
+                // TODO 0 try out method parameters with leading/trailing comments to see how this approach works
                 // TODO 0 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow?
                 // TODO 0 another option for comments would be to make them a doc type, and then propagate breaks based on what we find
                 // single line comments (both leading & trailing) should always have a line after

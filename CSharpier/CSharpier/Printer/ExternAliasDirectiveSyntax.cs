@@ -7,14 +7,11 @@ namespace CSharpier
     {
         private Doc PrintExternAliasDirectiveSyntax(ExternAliasDirectiveSyntax node)
         {
-            return Concat(
-                String(node.ExternKeyword.Text),
-                String(" "),
-                String(node.AliasKeyword.Text),
-                String(" "),
-                String(node.Identifier.Text),
-                String(";")
-            );
+            var parts = new Parts();
+            var stuff = false;
+            this.PrintLeadingTrivia(node.ExternKeyword.LeadingTrivia, parts, ref stuff);
+            parts.Push(node.ExternKeyword.Text, " ", node.AliasKeyword.Text, " ", node.Identifier.Text, ";");
+            return Concat(parts);
         }
     }
 }

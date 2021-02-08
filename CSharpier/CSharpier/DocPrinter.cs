@@ -435,17 +435,20 @@ namespace CSharpier
 
                                 if (line.IsLiteral)
                                 {
-                                    // TODO indent.root perhaps?
-                                    // if (ind.root) {
-                                    //     out.Add(newLine, ind.root.value);
-                                    //     pos = ind.root.length;
-                                    // } else {
-                                    output.Append(newLine);
-                                    position = 0;
+                                    if (output.Length > 0)
+                                    {
+                                        // TODO indent.root perhaps?
+                                        // if (ind.root) {
+                                        //     out.Add(newLine, ind.root.value);
+                                        //     pos = ind.root.length;
+                                        // } else {
+                                        output.Append(newLine);
+                                        position = 0;   
+                                    }
                                 }
                                 else
                                 {
-                                    if (!newLineNextStringValue || !skipNextNewLine)
+                                    if ((!newLineNextStringValue || !skipNextNewLine) && output.Length > 0)
                                     {
                                         Trim(output);
                                         output.Append(newLine + command.Indent.Value);

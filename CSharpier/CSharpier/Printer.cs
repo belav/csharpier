@@ -13,6 +13,7 @@ namespace CSharpier
         public static Doc BreakParent = new BreakParent();
 
         public static Doc HardLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard }, BreakParent);
+        public static Doc LiteralLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true }, BreakParent);
         public static Doc Line = new LineDoc { Type = LineDoc.LineType.Normal };
         public static Doc SoftLine = new LineDoc { Type = LineDoc.LineType.Soft };
 
@@ -24,7 +25,7 @@ namespace CSharpier
                 Comment = comment,
             };
         }
-        
+
         public static Doc TrailingComment(string comment, CommentType commentType)
         {
             return new TrailingComment
@@ -34,7 +35,7 @@ namespace CSharpier
             };
         }
 
-        
+
         public static Doc Concat(Parts parts)
         {
             return new Concat
@@ -104,7 +105,7 @@ namespace CSharpier
         {
             return Join(Concat(String(","), Line), docs);
         }
-        
+
         private void PrintAttributeLists(SyntaxNode node, SyntaxList<AttributeListSyntax> attributeLists, List<Doc> parts)
         {
             if (attributeLists.Count == 0)
@@ -152,7 +153,7 @@ namespace CSharpier
 
                 isFirst = false;
             }
-            
+
             return Group(Concat(parts));
         }
 
@@ -162,57 +163,78 @@ namespace CSharpier
             {
                 return false;
             }
-            
+
             return this.PrintLeadingTrivia(node.GetLeadingTrivia(), parts, ref printedExtraNewLines);
         }
 
         private bool PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, Parts parts, ref bool printedExtraNewLines, bool includeHardLine = false)
         {
             var startCount = parts.Count;
+            var hadDirective = false;
             for (var x = 0; x < leadingTrivia.Count; x++)
             {
                 var trivia = leadingTrivia[x];
-                
-                if (!printedExtraNewLines 
+
+                if (!printedExtraNewLines
                     && trivia.Kind() == SyntaxKind.EndOfLineTrivia
                     && (x == leadingTrivia.Count - 1 || leadingTrivia[x + 1].Kind() != SyntaxKind.SingleLineCommentTrivia))
                 {
                     parts.Push(HardLine);
                 }
-                    
+
                 if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
                 {
                     printedExtraNewLines = true;
                     parts.Push(LeadingComment(trivia.ToString(), CommentType.SingleLine));
                 }
-                else if (trivia.Kind() == SyntaxKind.IfDirectiveTrivia)
-                {
-                    parts.Push(Environment.NewLine, trivia.ToString(), Environment.NewLine);
-                }
                 else if (trivia.Kind() == SyntaxKind.DisabledTextTrivia)
                 {
-                    parts.Push(trivia.ToString().TrimEnd('\n', '\r'));
+                    parts.Push(LiteralLine, trivia.ToString().TrimEnd('\n', '\r'));
                 }
-                else if (trivia.Kind() == SyntaxKind.ElseDirectiveTrivia)
+                else if (trivia.Kind() == SyntaxKind.IfDirectiveTrivia
+                         || trivia.Kind() == SyntaxKind.ElseDirectiveTrivia
+                         || trivia.Kind() == SyntaxKind.ElifDirectiveTrivia
+                         || trivia.Kind() == SyntaxKind.EndIfDirectiveTrivia
+                         || trivia.Kind() == SyntaxKind.LineDirectiveTrivia
+                         || trivia.Kind() == SyntaxKind.ErrorDirectiveTrivia
+                         || trivia.Kind() == SyntaxKind.WarningDirectiveTrivia
+                         || trivia.Kind() == SyntaxKind.PragmaWarningDirectiveTrivia
+                         || trivia.Kind() == SyntaxKind.PragmaChecksumDirectiveTrivia
+                         || trivia.Kind() == SyntaxKind.DefineDirectiveTrivia
+                         || trivia.Kind() == SyntaxKind.UndefDirectiveTrivia)
                 {
-                    parts.Push(Environment.NewLine, trivia.ToString(), HardLine);
+                    hadDirective = true;
+                    parts.Push(LiteralLine, trivia.ToString());
                 }
-                else if (trivia.Kind() == SyntaxKind.EndIfDirectiveTrivia)
+                else if (trivia.Kind() == SyntaxKind.RegionDirectiveTrivia 
+                         || trivia.Kind() == SyntaxKind.EndRegionDirectiveTrivia)
                 {
-                    parts.Push(Environment.NewLine, trivia.ToString(), HardLine);
+                    var triviaText = trivia.ToString();
+                    if (x > 0 && leadingTrivia[x - 1].Kind() == SyntaxKind.WhitespaceTrivia)
+                    {
+                        triviaText = leadingTrivia[x - 1] + triviaText;
+                    }
+                    
+                    hadDirective = true;
+                    parts.Push(LiteralLine, triviaText);
                 }
             }
 
+            if (hadDirective)
+            {
+                parts.Push(HardLine);
+            }
+            
             return startCount != parts.Count;
         }
-        
+
         private bool PrintTrailingTrivia(CSharpSyntaxNode node, Parts parts)
         {
             if (!node.HasTrailingTrivia)
             {
                 return false;
             }
-            
+
             return this.PrintTrailingTrivia(node.GetTrailingTrivia(), parts);
         }
 
@@ -235,7 +257,7 @@ namespace CSharpier
 
             return hasTrivia;
         }
-        
+
         private Doc PrintStatements<T>(SyntaxToken openBraceToken, IReadOnlyList<T> statements, SyntaxToken closeBraceToken, Doc separator, Doc endOfLineDoc = null)
             where T : SyntaxNode
         {
@@ -246,12 +268,14 @@ namespace CSharpier
             {
                 parts.Push(Concat(Indent(Concat(separator, Join(actualEndOfLine, statements.Select(this.Print)))), separator));
             }
+
             var ignore = false;
             var printedLeadingTrivia = this.PrintLeadingTrivia(closeBraceToken.LeadingTrivia, parts, ref ignore);
             if (!printedLeadingTrivia && statements.Count == 0)
             {
                 parts.Push(" ");
             }
+
             parts.Push("}");
             this.PrintTrailingTrivia(closeBraceToken.TrailingTrivia, parts);
             return Group(Concat(parts));

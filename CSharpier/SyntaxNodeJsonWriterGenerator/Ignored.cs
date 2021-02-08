@@ -11,10 +11,8 @@ namespace SyntaxNodeJsonWriterGenerator
         public static string[] Properties =
         {
             "language",
-            "rawKind",
             "parent",
             "parentTrivia",
-            "endOfFileToken",
             "spanStart",
         };
         

@@ -38,7 +38,7 @@ namespace SyntaxNodeJsonWriterGenerator
                 file.WriteLine("using Microsoft.CodeAnalysis.CSharp;");
                 file.WriteLine("using Microsoft.CodeAnalysis.CSharp.Syntax;");
                 file.WriteLine();
-                file.WriteLine("namespace Parser");
+                file.WriteLine("namespace CSharpier");
                 file.WriteLine("{");
                 file.WriteLine("    public partial class SyntaxNodeJsonWriter");
                 file.WriteLine("    {");
@@ -88,11 +88,8 @@ namespace SyntaxNodeJsonWriterGenerator
 
             if (type == typeof(SyntaxTrivia))
             {
-                file.WriteLine($"            if (syntaxNode.RawKind == 8541 || syntaxNode.RawKind == 8542)");
-                file.WriteLine($"            {{");
                 file.WriteLine(
-                    $"                properties.Add(WriteString(\"commentText\", syntaxNode.ToString()));");
-                file.WriteLine($"            }}");
+                    $"            properties.Add(WriteString(\"text\", syntaxNode.ToString()));");
             }
 
             foreach (var propertyInfo in type.GetProperties())

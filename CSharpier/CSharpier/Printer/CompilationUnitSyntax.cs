@@ -30,6 +30,10 @@ namespace CSharpier
             if (node.Members.Count > 0) {
                 parts.Add(Join(HardLine, node.Members.Select(this.Print)));
             }
+
+            var ignored = false;
+            this.PrintLeadingTrivia(node.EndOfFileToken.LeadingTrivia, parts, ref ignored);
+            
             if (parts[^1] != HardLine) {
                 parts.Add(HardLine);
             }

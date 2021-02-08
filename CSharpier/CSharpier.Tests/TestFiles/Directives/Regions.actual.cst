@@ -1,0 +1,5 @@
+﻿#region Region
+    #region Nested
+class ClassName { }
+    #endregion Nested
+#endregion

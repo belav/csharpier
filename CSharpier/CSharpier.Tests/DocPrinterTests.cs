@@ -78,11 +78,11 @@ namespace CSharpier.Tests
         [Test]
         public void Indent_With_BreakParent()
         {
-            var doc = Group(Indent(Concat(SoftLine, "1", Line, "2", Line, "3", BreakParent)));
+            var doc = Concat("0", Group(Indent(Concat(SoftLine, "1", Line, "2", Line, "3", BreakParent))));
 
             var result = this.Print(doc);
 
-            result.Should().Be("\r\n    1\r\n    2\r\n    3");
+            result.Should().Be("0\r\n    1\r\n    2\r\n    3");
         }
 
         [Test]
@@ -99,23 +99,43 @@ namespace CSharpier.Tests
         [Test]
         public void Indent_With_Hardline()
         {
-            var doc = Indent(Concat(HardLine, "1", HardLine, "2"));
+            var doc = Concat("0", Indent(Concat(HardLine, "1", HardLine, "2")));
 
             var result = this.Print(doc);
 
-            result.Should().Be($"\r\n    1\r\n    2");
+            result.Should().Be($"0\r\n    1\r\n    2");
         }
 
         [Test]
         public void Two_Indents_With_Hardline()
         {
-            var doc = Concat(Indent(Concat(HardLine, "1")),
+            var doc = Concat("0", Concat(Indent(Concat(HardLine, "1")),
                 HardLine,
-                Indent(Concat(HardLine, "2")));
+                Indent(Concat(HardLine, "2"))));
 
             var result = this.Print(doc);
 
-            result.Should().Be($"\r\n    1\r\n\r\n    2");
+            result.Should().Be($"0\r\n    1\r\n\r\n    2");
+        }
+        
+        [Test]
+        public void Lines_Removed_From_Beginning()
+        {
+            var doc = Concat(HardLine, "1");
+
+            var result = this.Print(doc);
+
+            result.Should().Be($"1");
+        }
+        
+        [Test]
+        public void Literal_Lines_Removed_From_Beginning()
+        {
+            var doc = Concat(LiteralLine, "1");
+
+            var result = this.Print(doc);
+
+            result.Should().Be($"1");
         }
 
         [Test]
@@ -132,6 +152,7 @@ namespace CSharpier.Tests
         }
 
         public static Doc HardLine = Printer.HardLine;
+        public static Doc LiteralLine = Printer.LiteralLine;
         public static Doc Line = Printer.Line;
         public static Doc SoftLine = Printer.SoftLine;
         public static Doc BreakParent = Printer.BreakParent;

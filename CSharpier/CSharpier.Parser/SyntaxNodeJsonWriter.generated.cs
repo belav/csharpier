@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Parser
+namespace CSharpier
 {
     public partial class SyntaxNodeJsonWriter
     {
@@ -263,6 +263,7 @@ namespace Parser
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
             properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
             properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -305,6 +306,7 @@ namespace Parser
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
             properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
             properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -342,6 +344,7 @@ namespace Parser
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
             properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
             properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -380,6 +383,7 @@ namespace Parser
                 WriteSyntaxToken(greaterThanTokenBuilder, syntaxNode.GreaterThanToken);
                 properties.Add($"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -422,6 +426,7 @@ namespace Parser
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
             properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
             properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -451,6 +456,7 @@ namespace Parser
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
             properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
             properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -488,6 +494,7 @@ namespace Parser
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
             properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
             properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -527,6 +534,7 @@ namespace Parser
                 properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
             }
             properties.Add(WriteInt("rank", syntaxNode.Rank));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -562,6 +570,7 @@ namespace Parser
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
             properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
             properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -609,6 +618,7 @@ namespace Parser
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
             properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
             properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -647,6 +657,7 @@ namespace Parser
                 WriteSyntaxToken(greaterThanTokenBuilder, syntaxNode.GreaterThanToken);
                 properties.Add($"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -677,6 +688,7 @@ namespace Parser
                 WriteFunctionPointerUnmanagedCallingConventionListSyntax(unmanagedCallingConventionListBuilder, syntaxNode.UnmanagedCallingConventionList);
                 properties.Add($"\"unmanagedCallingConventionList\":{unmanagedCallingConventionListBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -715,6 +727,7 @@ namespace Parser
                 WriteSyntaxToken(closeBracketTokenBuilder, syntaxNode.CloseBracketToken);
                 properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -739,6 +752,7 @@ namespace Parser
                 WriteSyntaxToken(nameBuilder, syntaxNode.Name);
                 properties.Add($"\"name\":{nameBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -774,6 +788,7 @@ namespace Parser
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
             properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
             properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -817,6 +832,7 @@ namespace Parser
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
             properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
             properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -847,6 +863,7 @@ namespace Parser
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
                 properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -876,6 +893,7 @@ namespace Parser
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
             properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
             properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -917,6 +935,7 @@ namespace Parser
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
             properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
             properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -953,6 +972,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -991,6 +1011,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1021,6 +1042,7 @@ namespace Parser
                 WriteSyntaxNode(operandBuilder, syntaxNode.Operand);
                 properties.Add($"\"operand\":{operandBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1051,6 +1073,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1081,6 +1104,7 @@ namespace Parser
                 WriteSyntaxToken(operatorTokenBuilder, syntaxNode.OperatorToken);
                 properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1117,6 +1141,7 @@ namespace Parser
                 WriteSyntaxNode(nameBuilder, syntaxNode.Name);
                 properties.Add($"\"name\":{nameBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1153,6 +1178,7 @@ namespace Parser
                 WriteSyntaxNode(whenNotNullBuilder, syntaxNode.WhenNotNull);
                 properties.Add($"\"whenNotNull\":{whenNotNullBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1183,6 +1209,7 @@ namespace Parser
                 WriteSyntaxNode(nameBuilder, syntaxNode.Name);
                 properties.Add($"\"name\":{nameBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1207,6 +1234,7 @@ namespace Parser
                 WriteBracketedArgumentListSyntax(argumentListBuilder, syntaxNode.ArgumentList);
                 properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1243,6 +1271,7 @@ namespace Parser
                 WriteSyntaxNode(rightOperandBuilder, syntaxNode.RightOperand);
                 properties.Add($"\"rightOperand\":{rightOperandBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1267,6 +1296,7 @@ namespace Parser
                 WriteBracketedArgumentListSyntax(argumentListBuilder, syntaxNode.ArgumentList);
                 properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1303,6 +1333,7 @@ namespace Parser
                 WriteSyntaxNode(rightBuilder, syntaxNode.Right);
                 properties.Add($"\"right\":{rightBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1339,6 +1370,7 @@ namespace Parser
                 WriteSyntaxNode(rightBuilder, syntaxNode.Right);
                 properties.Add($"\"right\":{rightBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1387,6 +1419,7 @@ namespace Parser
                 WriteSyntaxNode(whenFalseBuilder, syntaxNode.WhenFalse);
                 properties.Add($"\"whenFalse\":{whenFalseBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1411,6 +1444,7 @@ namespace Parser
                 WriteSyntaxToken(tokenBuilder, syntaxNode.Token);
                 properties.Add($"\"token\":{tokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1435,6 +1469,7 @@ namespace Parser
                 WriteSyntaxToken(tokenBuilder, syntaxNode.Token);
                 properties.Add($"\"token\":{tokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1459,6 +1494,7 @@ namespace Parser
                 WriteSyntaxToken(tokenBuilder, syntaxNode.Token);
                 properties.Add($"\"token\":{tokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1501,6 +1537,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1543,6 +1580,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1597,6 +1635,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1639,6 +1678,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1681,6 +1721,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1723,6 +1764,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1765,6 +1807,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1795,6 +1838,7 @@ namespace Parser
                 WriteArgumentListSyntax(argumentListBuilder, syntaxNode.ArgumentList);
                 properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1825,6 +1869,7 @@ namespace Parser
                 WriteBracketedArgumentListSyntax(argumentListBuilder, syntaxNode.ArgumentList);
                 properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1863,6 +1908,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1901,6 +1947,7 @@ namespace Parser
                 WriteSyntaxToken(closeBracketTokenBuilder, syntaxNode.CloseBracketToken);
                 properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1943,6 +1990,7 @@ namespace Parser
                 WriteSyntaxToken(refOrOutKeywordBuilder, syntaxNode.RefOrOutKeyword);
                 properties.Add($"\"refOrOutKeyword\":{refOrOutKeywordBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -1973,6 +2021,7 @@ namespace Parser
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
                 properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2003,6 +2052,7 @@ namespace Parser
                 WriteSyntaxNode(designationBuilder, syntaxNode.Designation);
                 properties.Add($"\"designation\":{designationBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2045,6 +2095,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2107,6 +2158,7 @@ namespace Parser
                 WriteSyntaxNode(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2169,6 +2221,7 @@ namespace Parser
                 WriteSyntaxNode(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2199,6 +2252,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2261,6 +2315,7 @@ namespace Parser
                 WriteSyntaxNode(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2299,6 +2354,7 @@ namespace Parser
                 WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
                 properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2335,6 +2391,7 @@ namespace Parser
                 WriteInitializerExpressionSyntax(initializerBuilder, syntaxNode.Initializer);
                 properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2377,6 +2434,7 @@ namespace Parser
                 WriteInitializerExpressionSyntax(initializerBuilder, syntaxNode.Initializer);
                 properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2413,6 +2471,7 @@ namespace Parser
                 WriteInitializerExpressionSyntax(initializerBuilder, syntaxNode.Initializer);
                 properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2443,6 +2502,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2487,6 +2547,7 @@ namespace Parser
                 WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
                 properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2523,6 +2584,7 @@ namespace Parser
                 WriteInitializerExpressionSyntax(initializerBuilder, syntaxNode.Initializer);
                 properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2573,6 +2635,7 @@ namespace Parser
                 WriteInitializerExpressionSyntax(initializerBuilder, syntaxNode.Initializer);
                 properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2609,6 +2672,7 @@ namespace Parser
                 WriteInitializerExpressionSyntax(initializerBuilder, syntaxNode.Initializer);
                 properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2651,6 +2715,7 @@ namespace Parser
                 WriteInitializerExpressionSyntax(initializerBuilder, syntaxNode.Initializer);
                 properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2681,6 +2746,7 @@ namespace Parser
                 WriteQueryBodySyntax(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2719,6 +2785,7 @@ namespace Parser
                 WriteQueryContinuationSyntax(continuationBuilder, syntaxNode.Continuation);
                 properties.Add($"\"continuation\":{continuationBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2767,6 +2834,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2809,6 +2877,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2887,6 +2956,7 @@ namespace Parser
                 WriteJoinIntoClauseSyntax(intoBuilder, syntaxNode.Into);
                 properties.Add($"\"into\":{intoBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2917,6 +2987,7 @@ namespace Parser
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
                 properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2947,6 +3018,7 @@ namespace Parser
                 WriteSyntaxNode(conditionBuilder, syntaxNode.Condition);
                 properties.Add($"\"condition\":{conditionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -2979,6 +3051,7 @@ namespace Parser
                 orderings.Add(innerBuilder.ToString());
             }
             properties.Add($"\"orderings\":[{string.Join(",", orderings)}]");
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3009,6 +3082,7 @@ namespace Parser
                 WriteSyntaxToken(ascendingOrDescendingKeywordBuilder, syntaxNode.AscendingOrDescendingKeyword);
                 properties.Add($"\"ascendingOrDescendingKeyword\":{ascendingOrDescendingKeywordBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3039,6 +3113,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3081,6 +3156,7 @@ namespace Parser
                 WriteSyntaxNode(byExpressionBuilder, syntaxNode.ByExpression);
                 properties.Add($"\"byExpression\":{byExpressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3117,6 +3193,7 @@ namespace Parser
                 WriteQueryBodySyntax(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3141,6 +3218,7 @@ namespace Parser
                 WriteSyntaxToken(omittedArraySizeExpressionTokenBuilder, syntaxNode.OmittedArraySizeExpressionToken);
                 properties.Add($"\"omittedArraySizeExpressionToken\":{omittedArraySizeExpressionTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3179,6 +3257,7 @@ namespace Parser
                 WriteSyntaxToken(stringEndTokenBuilder, syntaxNode.StringEndToken);
                 properties.Add($"\"stringEndToken\":{stringEndTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3215,6 +3294,7 @@ namespace Parser
                 WriteSyntaxNode(patternBuilder, syntaxNode.Pattern);
                 properties.Add($"\"pattern\":{patternBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3245,6 +3325,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3275,6 +3356,7 @@ namespace Parser
                 WriteSyntaxNode(conditionBuilder, syntaxNode.Condition);
                 properties.Add($"\"condition\":{conditionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3299,6 +3381,7 @@ namespace Parser
                 WriteSyntaxToken(underscoreTokenBuilder, syntaxNode.UnderscoreToken);
                 properties.Add($"\"underscoreToken\":{underscoreTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3329,6 +3412,7 @@ namespace Parser
                 WriteSyntaxNode(designationBuilder, syntaxNode.Designation);
                 properties.Add($"\"designation\":{designationBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3359,6 +3443,7 @@ namespace Parser
                 WriteSyntaxNode(designationBuilder, syntaxNode.Designation);
                 properties.Add($"\"designation\":{designationBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3401,6 +3486,7 @@ namespace Parser
                 WriteSyntaxNode(designationBuilder, syntaxNode.Designation);
                 properties.Add($"\"designation\":{designationBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3439,6 +3525,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3477,6 +3564,7 @@ namespace Parser
                 WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
                 properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3507,6 +3595,7 @@ namespace Parser
                 WriteSyntaxNode(patternBuilder, syntaxNode.Pattern);
                 properties.Add($"\"pattern\":{patternBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3531,6 +3620,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3567,6 +3657,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3597,6 +3688,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3621,6 +3713,7 @@ namespace Parser
                 WriteSyntaxNode(typeBuilder, syntaxNode.Type);
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3657,6 +3750,7 @@ namespace Parser
                 WriteSyntaxNode(rightBuilder, syntaxNode.Right);
                 properties.Add($"\"right\":{rightBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3687,6 +3781,7 @@ namespace Parser
                 WriteSyntaxNode(patternBuilder, syntaxNode.Pattern);
                 properties.Add($"\"pattern\":{patternBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3711,6 +3806,7 @@ namespace Parser
                 WriteSyntaxToken(textTokenBuilder, syntaxNode.TextToken);
                 properties.Add($"\"textToken\":{textTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3759,6 +3855,7 @@ namespace Parser
                 WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
                 properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3789,6 +3886,7 @@ namespace Parser
                 WriteSyntaxNode(valueBuilder, syntaxNode.Value);
                 properties.Add($"\"value\":{valueBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3819,6 +3917,7 @@ namespace Parser
                 WriteSyntaxToken(formatStringTokenBuilder, syntaxNode.FormatStringToken);
                 properties.Add($"\"formatStringToken\":{formatStringTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3859,6 +3958,7 @@ namespace Parser
                 WriteSyntaxNode(statementBuilder, syntaxNode.Statement);
                 properties.Add($"\"statement\":{statementBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3905,6 +4005,7 @@ namespace Parser
                 WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
                 properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -3989,6 +4090,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4048,6 +4150,7 @@ namespace Parser
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("isConst", syntaxNode.IsConst));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4080,6 +4183,7 @@ namespace Parser
                 variables.Add(innerBuilder.ToString());
             }
             properties.Add($"\"variables\":[{string.Join(",", variables)}]");
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4116,6 +4220,7 @@ namespace Parser
                 WriteEqualsValueClauseSyntax(initializerBuilder, syntaxNode.Initializer);
                 properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4146,6 +4251,7 @@ namespace Parser
                 WriteSyntaxNode(valueBuilder, syntaxNode.Value);
                 properties.Add($"\"value\":{valueBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4170,6 +4276,7 @@ namespace Parser
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
                 properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4194,6 +4301,7 @@ namespace Parser
                 WriteSyntaxToken(underscoreTokenBuilder, syntaxNode.UnderscoreToken);
                 properties.Add($"\"underscoreToken\":{underscoreTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4232,6 +4340,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4271,6 +4380,7 @@ namespace Parser
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteBoolean("allowsAnyExpression", syntaxNode.AllowsAnyExpression));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4303,6 +4413,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4347,6 +4458,7 @@ namespace Parser
                 WriteSyntaxNode(statementBuilder, syntaxNode.Statement);
                 properties.Add($"\"statement\":{statementBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4397,6 +4509,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4435,6 +4548,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4473,6 +4587,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4517,6 +4632,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4561,6 +4677,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4611,6 +4728,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4667,6 +4785,7 @@ namespace Parser
                 WriteSyntaxNode(statementBuilder, syntaxNode.Statement);
                 properties.Add($"\"statement\":{statementBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4735,6 +4854,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4825,6 +4945,7 @@ namespace Parser
                 WriteSyntaxNode(statementBuilder, syntaxNode.Statement);
                 properties.Add($"\"statement\":{statementBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4905,6 +5026,7 @@ namespace Parser
                 WriteSyntaxNode(statementBuilder, syntaxNode.Statement);
                 properties.Add($"\"statement\":{statementBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -4979,6 +5101,7 @@ namespace Parser
                 WriteSyntaxNode(statementBuilder, syntaxNode.Statement);
                 properties.Add($"\"statement\":{statementBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5047,6 +5170,7 @@ namespace Parser
                 WriteSyntaxNode(statementBuilder, syntaxNode.Statement);
                 properties.Add($"\"statement\":{statementBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5103,6 +5227,7 @@ namespace Parser
                 WriteSyntaxNode(statementBuilder, syntaxNode.Statement);
                 properties.Add($"\"statement\":{statementBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5141,6 +5266,7 @@ namespace Parser
                 WriteBlockSyntax(blockBuilder, syntaxNode.Block);
                 properties.Add($"\"block\":{blockBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5179,6 +5305,7 @@ namespace Parser
                 WriteBlockSyntax(blockBuilder, syntaxNode.Block);
                 properties.Add($"\"block\":{blockBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5235,6 +5362,7 @@ namespace Parser
                 WriteSyntaxNode(statementBuilder, syntaxNode.Statement);
                 properties.Add($"\"statement\":{statementBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5297,6 +5425,7 @@ namespace Parser
                 WriteElseClauseSyntax(elseBuilder, syntaxNode.Else);
                 properties.Add($"\"else\":{elseBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5327,6 +5456,7 @@ namespace Parser
                 WriteSyntaxNode(statementBuilder, syntaxNode.Statement);
                 properties.Add($"\"statement\":{statementBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5397,6 +5527,7 @@ namespace Parser
                 WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
                 properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5431,6 +5562,7 @@ namespace Parser
                 statements.Add(innerBuilder.ToString());
             }
             properties.Add($"\"statements\":[{string.Join(",", statements)}]");
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5473,6 +5605,7 @@ namespace Parser
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
                 properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5509,6 +5642,7 @@ namespace Parser
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
                 properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5539,6 +5673,7 @@ namespace Parser
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
                 properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5589,6 +5724,7 @@ namespace Parser
                 WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
                 properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5631,6 +5767,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5683,6 +5820,7 @@ namespace Parser
                 WriteFinallyClauseSyntax(finallyBuilder, syntaxNode.Finally);
                 properties.Add($"\"finally\":{finallyBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5725,6 +5863,7 @@ namespace Parser
                 WriteBlockSyntax(blockBuilder, syntaxNode.Block);
                 properties.Add($"\"block\":{blockBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5767,6 +5906,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5809,6 +5949,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5839,6 +5980,7 @@ namespace Parser
                 WriteBlockSyntax(blockBuilder, syntaxNode.Block);
                 properties.Add($"\"block\":{blockBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5889,6 +6031,13 @@ namespace Parser
                 members.Add(innerBuilder.ToString());
             }
             properties.Add($"\"members\":[{string.Join(",", members)}]");
+            if (syntaxNode.EndOfFileToken != default(SyntaxToken))
+            {
+                var endOfFileTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(endOfFileTokenBuilder, syntaxNode.EndOfFileToken);
+                properties.Add($"\"endOfFileToken\":{endOfFileTokenBuilder.ToString()}");
+            }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5931,6 +6080,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -5979,6 +6129,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6067,6 +6218,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6111,6 +6263,7 @@ namespace Parser
                 WriteSyntaxToken(closeBracketTokenBuilder, syntaxNode.CloseBracketToken);
                 properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6141,6 +6294,7 @@ namespace Parser
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
                 properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6171,6 +6325,7 @@ namespace Parser
                 WriteAttributeArgumentListSyntax(argumentListBuilder, syntaxNode.ArgumentList);
                 properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6209,6 +6364,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6245,6 +6401,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6275,6 +6432,7 @@ namespace Parser
                 WriteSyntaxToken(equalsTokenBuilder, syntaxNode.EqualsToken);
                 properties.Add($"\"equalsToken\":{equalsTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6313,6 +6471,7 @@ namespace Parser
                 WriteSyntaxToken(greaterThanTokenBuilder, syntaxNode.GreaterThanToken);
                 properties.Add($"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6351,6 +6510,7 @@ namespace Parser
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
                 properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6444,6 +6604,7 @@ namespace Parser
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6537,6 +6698,7 @@ namespace Parser
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6630,6 +6792,7 @@ namespace Parser
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6729,6 +6892,7 @@ namespace Parser
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6807,6 +6971,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6886,6 +7051,7 @@ namespace Parser
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6932,6 +7098,7 @@ namespace Parser
                 WriteEqualsValueClauseSyntax(equalsValueBuilder, syntaxNode.EqualsValue);
                 properties.Add($"\"equalsValue\":{equalsValueBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6964,6 +7131,7 @@ namespace Parser
                 types.Add(innerBuilder.ToString());
             }
             properties.Add($"\"types\":[{string.Join(",", types)}]");
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -6988,6 +7156,7 @@ namespace Parser
                 WriteSyntaxNode(typeBuilder, syntaxNode.Type);
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7018,6 +7187,7 @@ namespace Parser
                 WriteArgumentListSyntax(argumentListBuilder, syntaxNode.ArgumentList);
                 properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7062,6 +7232,7 @@ namespace Parser
                 constraints.Add(innerBuilder.ToString());
             }
             properties.Add($"\"constraints\":[{string.Join(",", constraints)}]");
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7098,6 +7269,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7128,6 +7300,7 @@ namespace Parser
                 WriteSyntaxToken(questionTokenBuilder, syntaxNode.QuestionToken);
                 properties.Add($"\"questionToken\":{questionTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7152,6 +7325,7 @@ namespace Parser
                 WriteSyntaxNode(typeBuilder, syntaxNode.Type);
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7176,6 +7350,7 @@ namespace Parser
                 WriteSyntaxToken(defaultKeywordBuilder, syntaxNode.DefaultKeyword);
                 properties.Add($"\"defaultKeyword\":{defaultKeywordBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7222,6 +7397,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7274,6 +7450,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7304,6 +7481,7 @@ namespace Parser
                 WriteSyntaxToken(dotTokenBuilder, syntaxNode.DotToken);
                 properties.Add($"\"dotToken\":{dotTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7395,6 +7573,7 @@ namespace Parser
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7471,6 +7650,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7547,6 +7727,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7617,6 +7798,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7653,6 +7835,7 @@ namespace Parser
                 WriteArgumentListSyntax(argumentListBuilder, syntaxNode.ArgumentList);
                 properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7723,6 +7906,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7799,6 +7983,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7829,6 +8014,7 @@ namespace Parser
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
                 properties.Add($"\"expression\":{expressionBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7899,6 +8085,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -7975,6 +8162,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8013,6 +8201,7 @@ namespace Parser
                 WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
                 properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8071,6 +8260,7 @@ namespace Parser
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8109,6 +8299,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8147,6 +8338,7 @@ namespace Parser
                 WriteSyntaxToken(closeBracketTokenBuilder, syntaxNode.CloseBracketToken);
                 properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8199,6 +8391,7 @@ namespace Parser
                 WriteEqualsValueClauseSyntax(defaultBuilder, syntaxNode.Default);
                 properties.Add($"\"default\":{defaultBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8239,6 +8432,7 @@ namespace Parser
                 WriteSyntaxNode(typeBuilder, syntaxNode.Type);
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8279,6 +8473,7 @@ namespace Parser
                 WriteSyntaxNode(typeBuilder, syntaxNode.Type);
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8305,6 +8500,7 @@ namespace Parser
                 tokens.Add(innerBuilder.ToString());
             }
             properties.Add($"\"tokens\":[{string.Join(",", tokens)}]");
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8337,6 +8533,7 @@ namespace Parser
                 WriteSyntaxToken(endOfCommentBuilder, syntaxNode.EndOfComment);
                 properties.Add($"\"endOfComment\":{endOfCommentBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8361,6 +8558,7 @@ namespace Parser
                 WriteSyntaxNode(typeBuilder, syntaxNode.Type);
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8397,6 +8595,7 @@ namespace Parser
                 WriteSyntaxNode(memberBuilder, syntaxNode.Member);
                 properties.Add($"\"member\":{memberBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8427,6 +8626,7 @@ namespace Parser
                 WriteCrefParameterListSyntax(parametersBuilder, syntaxNode.Parameters);
                 properties.Add($"\"parameters\":{parametersBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8457,6 +8657,7 @@ namespace Parser
                 WriteCrefBracketedParameterListSyntax(parametersBuilder, syntaxNode.Parameters);
                 properties.Add($"\"parameters\":{parametersBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8493,6 +8694,7 @@ namespace Parser
                 WriteCrefParameterListSyntax(parametersBuilder, syntaxNode.Parameters);
                 properties.Add($"\"parameters\":{parametersBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8535,6 +8737,7 @@ namespace Parser
                 WriteCrefParameterListSyntax(parametersBuilder, syntaxNode.Parameters);
                 properties.Add($"\"parameters\":{parametersBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8573,6 +8776,7 @@ namespace Parser
                 WriteSyntaxToken(closeParenTokenBuilder, syntaxNode.CloseParenToken);
                 properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8611,6 +8815,7 @@ namespace Parser
                 WriteSyntaxToken(closeBracketTokenBuilder, syntaxNode.CloseBracketToken);
                 properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8647,6 +8852,7 @@ namespace Parser
                 WriteSyntaxToken(refOrOutKeywordBuilder, syntaxNode.RefOrOutKeyword);
                 properties.Add($"\"refOrOutKeyword\":{refOrOutKeywordBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8685,6 +8891,7 @@ namespace Parser
                 WriteXmlElementEndTagSyntax(endTagBuilder, syntaxNode.EndTag);
                 properties.Add($"\"endTag\":{endTagBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8729,6 +8936,7 @@ namespace Parser
                 WriteSyntaxToken(greaterThanTokenBuilder, syntaxNode.GreaterThanToken);
                 properties.Add($"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8765,6 +8973,7 @@ namespace Parser
                 WriteSyntaxToken(greaterThanTokenBuilder, syntaxNode.GreaterThanToken);
                 properties.Add($"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8809,6 +9018,7 @@ namespace Parser
                 WriteSyntaxToken(slashGreaterThanTokenBuilder, syntaxNode.SlashGreaterThanToken);
                 properties.Add($"\"slashGreaterThanToken\":{slashGreaterThanTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8839,6 +9049,7 @@ namespace Parser
                 WriteSyntaxToken(localNameBuilder, syntaxNode.LocalName);
                 properties.Add($"\"localName\":{localNameBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8869,6 +9080,7 @@ namespace Parser
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
                 properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8919,6 +9131,7 @@ namespace Parser
                 WriteSyntaxToken(endQuoteTokenBuilder, syntaxNode.EndQuoteToken);
                 properties.Add($"\"endQuoteToken\":{endQuoteTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -8967,6 +9180,7 @@ namespace Parser
                 WriteSyntaxToken(endQuoteTokenBuilder, syntaxNode.EndQuoteToken);
                 properties.Add($"\"endQuoteToken\":{endQuoteTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9015,6 +9229,7 @@ namespace Parser
                 WriteSyntaxToken(endQuoteTokenBuilder, syntaxNode.EndQuoteToken);
                 properties.Add($"\"endQuoteToken\":{endQuoteTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9041,6 +9256,7 @@ namespace Parser
                 textTokens.Add(innerBuilder.ToString());
             }
             properties.Add($"\"textTokens\":[{string.Join(",", textTokens)}]");
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9079,6 +9295,7 @@ namespace Parser
                 WriteSyntaxToken(endCDataTokenBuilder, syntaxNode.EndCDataToken);
                 properties.Add($"\"endCDataToken\":{endCDataTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9123,6 +9340,7 @@ namespace Parser
                 WriteSyntaxToken(endProcessingInstructionTokenBuilder, syntaxNode.EndProcessingInstructionToken);
                 properties.Add($"\"endProcessingInstructionToken\":{endProcessingInstructionTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9161,6 +9379,7 @@ namespace Parser
                 WriteSyntaxToken(minusMinusGreaterThanTokenBuilder, syntaxNode.MinusMinusGreaterThanToken);
                 properties.Add($"\"minusMinusGreaterThanToken\":{minusMinusGreaterThanTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9212,6 +9431,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9263,6 +9483,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9307,6 +9528,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9350,6 +9572,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9393,6 +9616,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9436,6 +9660,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9479,6 +9704,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9522,6 +9748,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9565,6 +9792,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9614,6 +9842,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9663,6 +9892,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9718,6 +9948,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9781,6 +10012,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9848,6 +10080,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9897,6 +10130,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9946,6 +10180,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -9989,6 +10224,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -10044,6 +10280,7 @@ namespace Parser
                 WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
                 properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
             }
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteBoolean("isStructuredTrivia", syntaxNode.IsStructuredTrivia));
             properties.Add(WriteBoolean("hasStructuredTrivia", syntaxNode.HasStructuredTrivia));
@@ -10062,6 +10299,7 @@ namespace Parser
             var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(WriteString("text", syntaxNode.Text));
             properties.Add(WriteBoolean("hasLeadingTrivia", syntaxNode.HasLeadingTrivia));
@@ -10095,10 +10333,8 @@ namespace Parser
             var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
-            if (syntaxNode.RawKind == 8541 || syntaxNode.RawKind == 8542)
-            {
-                properties.Add(WriteString("commentText", syntaxNode.ToString()));
-            }
+            properties.Add(WriteString("text", syntaxNode.ToString()));
+            properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("containsDiagnostics", syntaxNode.ContainsDiagnostics));
             properties.Add(WriteBoolean("hasStructure", syntaxNode.HasStructure));
             properties.Add(WriteBoolean("isDirective", syntaxNode.IsDirective));
