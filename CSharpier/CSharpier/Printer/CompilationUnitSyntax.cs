@@ -33,7 +33,7 @@ namespace CSharpier
 
             this.PrintLeadingTrivia(node.EndOfFileToken.LeadingTrivia, parts);
             
-            if (parts[^1] != HardLine) {
+            if (parts.Count == 0 || parts[^1] != HardLine) {
                 parts.Add(HardLine);
             }
             return Concat(parts);

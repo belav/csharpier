@@ -150,6 +150,8 @@ namespace CSharpier
                     return this.PrintImplicitElementAccessSyntax(implicitElementAccessSyntax);
                 case ImplicitStackAllocArrayCreationExpressionSyntax implicitStackAllocArrayCreationExpressionSyntax:
                     return this.PrintImplicitStackAllocArrayCreationExpressionSyntax(implicitStackAllocArrayCreationExpressionSyntax);
+                case IncompleteMemberSyntax incompleteMemberSyntax:
+                    return this.PrintIncompleteMemberSyntax(incompleteMemberSyntax);
                 case IndexerDeclarationSyntax indexerDeclarationSyntax:
                     return this.PrintIndexerDeclarationSyntax(indexerDeclarationSyntax);
                 case InitializerExpressionSyntax initializerExpressionSyntax:
@@ -292,6 +294,8 @@ namespace CSharpier
                     return this.PrintTypeParameterListSyntax(typeParameterListSyntax);
                 case TypeParameterSyntax typeParameterSyntax:
                     return this.PrintTypeParameterSyntax(typeParameterSyntax);
+                case UnaryPatternSyntax unaryPatternSyntax:
+                    return this.PrintUnaryPatternSyntax(unaryPatternSyntax);
                 case UnsafeStatementSyntax unsafeStatementSyntax:
                     return this.PrintUnsafeStatementSyntax(unsafeStatementSyntax);
                 case UsingDirectiveSyntax usingDirectiveSyntax:

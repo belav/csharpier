@@ -63,8 +63,6 @@ namespace CSharpier
             {
                 // TODO 0 try out method parameters with leading/trailing comments to see how this approach works
                 // TODO 0 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow?
-                // TODO 0 look at class/method comments tests
-                // TODO 0 this should probably move into something like PredefinedTypeSyntax, but then the printedExtraNewLines doesn't work. Maybe we do just need a method for printing extra new lines in the appropriate places
                 parts.Push(this.Print(returnType));
                 parts.Push(SpaceIfNoPreviousComment);
             }
