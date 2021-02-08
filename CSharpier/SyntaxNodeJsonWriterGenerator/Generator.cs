@@ -38,7 +38,7 @@ namespace SyntaxNodeJsonWriterGenerator
                 file.WriteLine("using Microsoft.CodeAnalysis.CSharp;");
                 file.WriteLine("using Microsoft.CodeAnalysis.CSharp.Syntax;");
                 file.WriteLine();
-                file.WriteLine("namespace CSharpier");
+                file.WriteLine("namespace CSharpier.Parser");
                 file.WriteLine("{");
                 file.WriteLine("    public partial class SyntaxNodeJsonWriter");
                 file.WriteLine("    {");

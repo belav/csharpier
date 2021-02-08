@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace Parser
+namespace CSharpier.Parser
 {
     public partial class SyntaxNodeJsonWriter
     {
