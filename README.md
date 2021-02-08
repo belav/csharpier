@@ -26,7 +26,7 @@ It can generate mostly correct code for c# <= 8.0. The remaining major issues
 - Strips out preprocessor statements
 - Loses some new lines from the original code that would be desirable to keep.
 - Formatting (mostly when to line break/indent longer code) is not finalized and probably needs a lot of work.
-- It is slow, and a major reason it is slow is because it has to call a console app that serializes json. Running it on a very large project took 40+ minutes
+- It is slow, and a major reason it is slow is because it has to call a console app that serializes json. That console app has to initialize roslyn for each file. And then has to serialize each file into json.
 
 Compare [AllInOne](./prettier-plugin-csharpier/Samples/AllInOne.cs) to [AllInOne.Formatted](./prettier-plugin-csharpier/Samples/AllInOne.Formatted.cs) to get a sense of what is missing.
 
