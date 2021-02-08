@@ -8,7 +8,7 @@ class ClassName2 { }
 public // trailing
 static // trailing
 class // trailing
-ClassName2 /* more ugly */ { }
+ClassName2 { }
 
 
 // this
@@ -21,8 +21,8 @@ class
 // yeah
 ClassName3 // more trailing
 {
-  	// yeah
-	private
+    // yeah
+    private
     // no
-    readonly /*wtf*/ string Tester /*here too*/ = "lajsdf";
+    readonly string Tester = "lajsdf";
 }

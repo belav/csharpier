@@ -17,6 +17,7 @@ namespace CSharpier
             var memberSeparator = HardLine;
             var members = Enumerable.Empty<CSharpSyntaxNode>();
 
+            this.printNewLinesInLeadingTrivia.Push(true);
             if (node is TypeDeclarationSyntax typeDeclarationSyntax)
             {
                 typeParameterList = typeDeclarationSyntax.TypeParameterList;
@@ -48,11 +49,10 @@ namespace CSharpier
             var parts = new Parts();
 
             this.PrintAttributeLists(node, node.AttributeLists, parts);
-            var printedExtraNewLines = false;
-            parts.Add(this.PrintModifiers(node.Modifiers, ref printedExtraNewLines));
+            parts.Add(this.PrintModifiers(node.Modifiers));
             if (keyword != null)
             {
-                PrintLeadingTrivia(keyword.Value.LeadingTrivia, parts, ref printedExtraNewLines, true);
+                PrintLeadingTrivia(keyword.Value.LeadingTrivia, parts);
                 parts.Add(keyword.Value.Text);
                 if (!PrintTrailingTrivia(keyword.Value.TrailingTrivia, parts))
                 {
@@ -60,7 +60,11 @@ namespace CSharpier
                 }
             }
 
+            this.printNewLinesInLeadingTrivia.Pop();
+
+            this.PrintLeadingTrivia(node.Identifier.LeadingTrivia, parts);
             parts.Push(node.Identifier.Text);
+            this.PrintTrailingTrivia(node.Identifier.TrailingTrivia, parts);
             if (typeParameterList != null)
             {
                 parts.Add(this.PrintTypeParameterListSyntax(typeParameterList));

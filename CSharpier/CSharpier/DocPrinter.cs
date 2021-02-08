@@ -486,7 +486,18 @@ namespace CSharpier
                         newLineNextStringValue = true;
                         skipNextNewLine = true;
                         break;
+                    case SpaceIfNoPreviousComment:
+                        if (!newLineNextStringValue)
+                        {
+                            currentStack.Push(new PrintCommand
+                            {
+                                Doc = new StringDoc(" "),
+                                Mode = command.Mode,
+                                Indent = command.Indent
+                            });
+                        }
 
+                        break;
                     default:
                         throw new Exception("didn't handle " + command.Doc);
                 }

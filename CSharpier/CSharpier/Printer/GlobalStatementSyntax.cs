@@ -15,9 +15,8 @@ public class ClassName()
         private Doc PrintGlobalStatementSyntax(GlobalStatementSyntax node)
         {
             var parts = new Parts();
-            var printedExtraNewLines = false;
             this.PrintAttributeLists(node, node.AttributeLists, parts);
-            parts.Push(this.PrintModifiers(node.Modifiers, ref printedExtraNewLines));
+            parts.Push(this.PrintModifiers(node.Modifiers));
             parts.Push(this.Print(node.Statement));
             return Concat(parts);
         }

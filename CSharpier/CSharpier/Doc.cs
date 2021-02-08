@@ -51,6 +51,10 @@ namespace CSharpier
     {
     }
 
+    public class SpaceIfNoPreviousComment : Doc
+    {
+    }
+
     public class Concat : Doc
     {
         public List<Doc> Parts { get; set; }

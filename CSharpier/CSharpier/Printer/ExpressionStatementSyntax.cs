@@ -7,8 +7,10 @@ namespace CSharpier
     {
         private Doc PrintExpressionStatementSyntax(ExpressionStatementSyntax node)
         {
+            this.printNewLinesInLeadingTrivia.Push(true);
             var parts = new Parts(this.Print(node.Expression), ";");
-            // TODO printTrailingComments(node, parts, String("semicolonToken"));
+            this.printNewLinesInLeadingTrivia.Pop();
+            this.PrintTrailingTrivia(node.SemicolonToken.TrailingTrivia, parts);
             return Concat(parts);
         }
     }

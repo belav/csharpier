@@ -37,8 +37,8 @@ namespace CSharpier
                 case StringDoc stringDoc:
                     return indent + "\"" + stringDoc.Value + "\"";
                 case Concat concat:
-                    if (concat.Parts.Count == 2 && concat.Parts[0] is LineDoc && concat.Parts[1] is BreakParent) {
-                        return indent + "HardLine";
+                    if (concat.Parts.Count == 2 && concat.Parts[0] is LineDoc line && concat.Parts[1] is BreakParent) {
+                        return indent + (line.IsLiteral ? "LiteralLine" : "HardLine");
                     }
                     
                     var result = indent + "Concat(";
@@ -68,7 +68,9 @@ namespace CSharpier
                 case LeadingComment leadingComment:
                     return indent + "LeadingComment(" + leadingComment.Comment + ", CommentType." + (leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine") + ")";
                 case TrailingComment trailingComment:
-                    return indent + "TrailingComment(" + trailingComment.Comment + ", CommentType." + (trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine") + ")"; 
+                    return indent + "TrailingComment(" + trailingComment.Comment + ", CommentType." + (trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine") + ")";
+                case SpaceIfNoPreviousComment spaceIfNoPreviousComment:
+                    return indent + "SpaceIfNoPreviousComment"; 
                 default:
                     throw new Exception("Can't handle " + document);
             }

@@ -11,7 +11,7 @@ namespace CSharpier
     public partial class Printer
     {
         public static Doc BreakParent = new BreakParent();
-
+        public static Doc SpaceIfNoPreviousComment = new SpaceIfNoPreviousComment();
         public static Doc HardLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard }, BreakParent);
         public static Doc LiteralLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true }, BreakParent);
         public static Doc Line = new LineDoc { Type = LineDoc.LineType.Normal };
@@ -129,62 +129,73 @@ namespace CSharpier
 
         private Doc PrintModifiers(SyntaxTokenList modifiers)
         {
-            var boolean = true;
-            return this.PrintModifiers(modifiers, ref boolean);
-        }
-
-        private Doc PrintModifiers(SyntaxTokenList modifiers, ref bool printedExtraNewLines)
-        {
             if (modifiers.Count == 0)
             {
                 return "";
             }
 
             var parts = new Parts();
-            var isFirst = true;
             foreach (var modifier in modifiers)
             {
-                this.PrintLeadingTrivia(modifier.LeadingTrivia, parts, ref printedExtraNewLines, !isFirst);
+                this.PrintLeadingTrivia(modifier.LeadingTrivia, parts);
                 parts.Push(modifier.Text);
                 if (!this.PrintTrailingTrivia(modifier.TrailingTrivia, parts))
                 {
                     parts.Push(" ");
                 }
-
-                isFirst = false;
             }
 
             return Group(Concat(parts));
         }
 
-        private bool PrintLeadingTrivia(CSharpSyntaxNode node, Parts parts, ref bool printedExtraNewLines)
+        private bool PrintLeadingTrivia(CSharpSyntaxNode node, Parts parts)
         {
             if (!node.HasLeadingTrivia)
             {
                 return false;
             }
 
-            return this.PrintLeadingTrivia(node.GetLeadingTrivia(), parts, ref printedExtraNewLines);
+            return this.PrintLeadingTrivia(node.GetLeadingTrivia(), parts);
         }
 
-        private bool PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, Parts parts, ref bool printedExtraNewLines, bool includeHardLine = false)
+        private Stack<bool> printNewLinesInLeadingTrivia = new();
+        
+        // TODO 0 multiline comments need a doc type
+        private bool PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, Parts parts)
         {
+            this.printNewLinesInLeadingTrivia.TryPeek(out var doNewLines);
+            
             var startCount = parts.Count;
             var hadDirective = false;
             for (var x = 0; x < leadingTrivia.Count; x++)
             {
                 var trivia = leadingTrivia[x];
 
-                if (!printedExtraNewLines
-                    && trivia.Kind() == SyntaxKind.EndOfLineTrivia
-                    && (x == leadingTrivia.Count - 1 || leadingTrivia[x + 1].Kind() != SyntaxKind.SingleLineCommentTrivia))
+                if (doNewLines && trivia.Kind() == SyntaxKind.EndOfLineTrivia)
                 {
-                    parts.Push(HardLine);
+                    SyntaxKind? kind = null;
+                    if (x < leadingTrivia.Count - 1)
+                    {
+                        kind = leadingTrivia[x + 1].Kind();
+                    }
+                    // TODO this probably needs multiline trivia too
+                    // TODO this may screw up with regions that aren't at the beginning of the line?
+                    if (!kind.HasValue || kind == SyntaxKind.SingleLineCommentTrivia || kind == SyntaxKind.EndOfLineTrivia || kind == SyntaxKind.WhitespaceTrivia)
+                    {
+                        parts.Push(HardLine);
+                    }
                 }
-
+                if (trivia.Kind() != SyntaxKind.EndOfLineTrivia && trivia.Kind() != SyntaxKind.WhitespaceTrivia)
+                {
+                    if (doNewLines)
+                    {
+                        doNewLines = false;
+                        this.printNewLinesInLeadingTrivia.Pop();
+                        this.printNewLinesInLeadingTrivia.Push(false);
+                    }
+                }
                 if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
                 {
-                    printedExtraNewLines = true;
                     parts.Push(LeadingComment(trivia.ToString(), CommentType.SingleLine));
                 }
                 else if (trivia.Kind() == SyntaxKind.DisabledTextTrivia)
@@ -269,8 +280,7 @@ namespace CSharpier
                 parts.Push(Concat(Indent(Concat(separator, Join(actualEndOfLine, statements.Select(this.Print)))), separator));
             }
 
-            var ignore = false;
-            var printedLeadingTrivia = this.PrintLeadingTrivia(closeBraceToken.LeadingTrivia, parts, ref ignore);
+            var printedLeadingTrivia = this.PrintLeadingTrivia(closeBraceToken.LeadingTrivia, parts);
             if (!printedLeadingTrivia && statements.Count == 0)
             {
                 parts.Push(" ");
@@ -330,10 +340,9 @@ namespace CSharpier
 
         private Doc PrintBaseFieldDeclarationSyntax(BaseFieldDeclarationSyntax node)
         {
+            this.printNewLinesInLeadingTrivia.Push(true);
             var parts = new Parts();
-            // printExtraNewLines(node, parts, "attributeLists", "modifiers", "eventKeyword", "declaration");
             this.PrintAttributeLists(node, node.AttributeLists, parts);
-            // printLeadingComments(node, parts, "modifiers", "eventKeyword", "declaration");
             parts.Push(this.PrintModifiers(node.Modifiers));
             if (node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax)
             {
@@ -342,7 +351,7 @@ namespace CSharpier
 
             parts.Push(this.Print(node.Declaration));
             parts.Push(";");
-            // printTrailingComments(node, parts, "semicolonToken");
+            this.PrintTrailingTrivia(node.SemicolonToken.TrailingTrivia, parts);
             return Concat(parts);
         }
     }

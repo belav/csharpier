@@ -2,8 +2,12 @@
 {
     void MethodName()
     {
+        // leading on statement
         var x = 0;
+
+        // leading on expression
         x = 15;
-        x = 25;
+
+        x = 25; // trailing!!!!
     }
 }

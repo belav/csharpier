@@ -9,6 +9,7 @@ namespace CSharpier
     {
         private Doc PrintBaseMethodDeclarationSyntax(CSharpSyntaxNode node)
         {
+            this.printNewLinesInLeadingTrivia.Push(true);
             SyntaxList<AttributeListSyntax>? attributeLists = null;
             SyntaxTokenList? modifiers = null;
             TypeSyntax returnType = null;
@@ -49,34 +50,26 @@ namespace CSharpier
             }
 
             var parts = new Parts();
-            var printedExtraNewLines = false;
-            //this.PrintExtraNewLines(node, String("attributeLists"), String("modifiers"), [String("returnType"), String("keyword")]);
             if (attributeLists.HasValue)
             {
                 this.PrintAttributeLists(node, attributeLists.Value, parts);   
             }
-            // printLeadingComments(node, parts, String("modifiers"), String("returnType"), String("identifier"));
             if (modifiers.HasValue)
             {
-                parts.Add(this.PrintModifiers(modifiers.Value, ref printedExtraNewLines));
+                parts.Add(this.PrintModifiers(modifiers.Value));
             }
 
             if (returnType != null)
             {
                 // TODO 0 try out method parameters with leading/trailing comments to see how this approach works
                 // TODO 0 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow?
-                // TODO 0 another option for comments would be to make them a doc type, and then propagate breaks based on what we find
-                // single line comments (both leading & trailing) should always have a line after
-                // leading single line comments should always have a line before
                 // TODO 0 look at class/method comments tests
                 // TODO 0 this should probably move into something like PredefinedTypeSyntax, but then the printedExtraNewLines doesn't work. Maybe we do just need a method for printing extra new lines in the appropriate places
-                PrintLeadingTrivia(returnType, parts, ref printedExtraNewLines);
                 parts.Push(this.Print(returnType));
-                if (!PrintTrailingTrivia(returnType, parts))
-                {
-                    parts.Push(" ");
-                }
+                parts.Push(SpaceIfNoPreviousComment);
             }
+
+            this.printNewLinesInLeadingTrivia.Pop();
 
             if (explicitInterfaceSpecifier != null)
             {

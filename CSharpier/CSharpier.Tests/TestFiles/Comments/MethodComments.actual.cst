@@ -3,11 +3,11 @@
     // method
     public void MethodName() { }
 
-    // leading
-    public // trailing
+    // leading modifer
+    public // trailing modifier
     static // more trailing
-    // more leading
-    void /* what about here */
+    // leading return type
+    void // more trailing
     MethodName2() { }
 
     public static void MethodName3() { }

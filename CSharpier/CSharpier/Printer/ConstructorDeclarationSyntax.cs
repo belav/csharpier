@@ -7,11 +7,11 @@ namespace CSharpier
     {
         private Doc PrintConstructorDeclarationSyntax(ConstructorDeclarationSyntax node)
         {
+            this.printNewLinesInLeadingTrivia.Push(true);
             var parts = new Parts();
-            //this.PrintExtraNewLines(node, String("attributeLists"), String("modifiers"), String("identifier"));
-            // TODO printLeadingComments(node, parts, String("attributeLists"), String("modifiers"), String("identifier"));
             parts.Add(this.PrintModifiers(node.Modifiers));
             parts.Add(node.Identifier.Text);
+            this.printNewLinesInLeadingTrivia.Pop();
             parts.Add(this.PrintParameterListSyntax(node.ParameterList));
             parts.Add(this.PrintBlockSyntax(node.Body));
             return Group(Concat(parts));

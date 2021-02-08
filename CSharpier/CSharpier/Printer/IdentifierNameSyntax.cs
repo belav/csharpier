@@ -7,7 +7,11 @@ namespace CSharpier
     {
         private Doc PrintIdentifierNameSyntax(IdentifierNameSyntax node)
         {
-            return String(node.Identifier.Text);
+            var parts = new Parts();
+            this.PrintLeadingTrivia(node, parts);
+            parts.Push(node.Identifier.Text);
+            this.PrintTrailingTrivia(node, parts);
+            return Concat(parts);
         }
     }
 }

@@ -7,7 +7,11 @@ namespace CSharpier
     {
         private Doc PrintPredefinedTypeSyntax(PredefinedTypeSyntax node)
         {
-            return String(node.Keyword.Text);
+            var parts = new Parts();
+            this.PrintLeadingTrivia(node, parts);
+            parts.Push(node.Keyword.Text);
+            this.PrintTrailingTrivia(node, parts);
+            return Concat(parts);
         }
     }
 }
