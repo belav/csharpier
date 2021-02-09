@@ -1,7 +1,7 @@
 # CSharpier
 This is a WIP prettier port to .net for formatting c# code. It is NOT production ready.
 It can generate mostly correct code for c# <= 8.0.
-It formats a solution of ~11,000 source files in under six seconds.
+It formats a solution of ~11,000 source files in < 30 seconds
 
 The remaining major issues
 - Comments - the approach is being finalized before the work is done to get all nodes to format comments. Comments are lost in a number of places.
