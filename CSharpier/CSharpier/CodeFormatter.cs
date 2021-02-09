@@ -8,21 +8,22 @@ namespace CSharpier
 {
     public class CodeFormatter
     {
-        // TODO we should make this work in parallel to speed things up, that would probably happen in CLI
         public CSharpierResult Format(string code, Options options)
         {
             var rootNode = CSharpSyntaxTree.ParseText(code).GetRoot() as CompilationUnitSyntax;
 
             var document = new Printer().Print(rootNode);
 
+            var formattedCode = new DocPrinter().Print(document, options);
             return new CSharpierResult
             {
-                Code = new DocPrinter().Print(document, options),
+                Code = formattedCode,
                 DocTree = options.IncludeDocTree ? this.PrintDocTree(document, "") : null,
-                AST = options.IncludeAST ? this.PrintAST(rootNode) : null
+                AST = options.IncludeAST ? this.PrintAST(rootNode) : null,
+                TestRunFailed = options.TestRun && this.IsCodeBasicallyEqual(code, formattedCode)
             };
         }
-        
+
         private string PrintAST(CompilationUnitSyntax rootNode)
         {
             var stringBuilder = new StringBuilder();
@@ -32,6 +33,11 @@ namespace CSharpier
 
         private string PrintDocTree(Doc document, string indent)
         {
+            if (document == null)
+            {
+                return "null";
+            }
+            
             switch (document)
             {
                 case StringDoc stringDoc:
@@ -75,6 +81,33 @@ namespace CSharpier
                     throw new Exception("Can't handle " + document);
             }
         }
+        
+        private bool IsCodeBasicallyEqual(string code, string formattedCode)
+        {
+            return this.Squash(code) == this.Squash(formattedCode);
+        }
+
+        private string Squash(string code)
+        {
+            var result = new StringBuilder();
+            for (var x = 0; x < code.Length; x++)
+            {
+                var nextChar = code[x];
+                if (nextChar == ' ' || nextChar == '\t' || nextChar == '\r' || nextChar == '\n')
+                {
+                    if (result.Length == 0 || result[^1] != ' ')
+                    {
+                        result.Append(' ');
+                    }
+                }
+                else
+                {
+                    result.Append(nextChar);
+                }
+            }
+
+            return result.ToString();
+        }
     }
 
     public class CSharpierResult
@@ -82,5 +115,6 @@ namespace CSharpier
         public string Code { get; set; }
         public string DocTree { get; set; }
         public string AST { get; set; }
+        public bool TestRunFailed { get; set; }
     }
 }

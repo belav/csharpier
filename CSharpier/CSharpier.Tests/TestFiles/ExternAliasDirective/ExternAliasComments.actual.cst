@@ -1,0 +1,8 @@
+﻿// leading
+extern alias Foo; // trailing
+
+// leading with line
+extern // extern trailing
+// alias leading
+alias // alias trailing
+Foo;

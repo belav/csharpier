@@ -9,11 +9,13 @@ namespace CSharpier
         {
             this.printNewLinesInLeadingTrivia.Push(true);
             var parts = new Parts();
-            parts.Add(this.PrintModifiers(node.Modifiers));
-            parts.Add(node.Identifier.Text);
+            parts.Push(this.PrintModifiers(node.Modifiers));
+            parts.Push(this.PrintLeadingTrivia(node.Identifier));
+            parts.Push(node.Identifier.Text);
+            parts.Push(this.PrintTrailingTrivia(node.Identifier));
             this.printNewLinesInLeadingTrivia.Pop();
-            parts.Add(this.PrintParameterListSyntax(node.ParameterList));
-            parts.Add(this.PrintBlockSyntax(node.Body));
+            parts.Push(this.PrintParameterListSyntax(node.ParameterList));
+            parts.Push(this.PrintBlockSyntax(node.Body));
             return Group(Concat(parts));
         }
     }

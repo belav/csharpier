@@ -302,6 +302,11 @@ namespace CSharpier
             while (currentStack.Count > 0)
             {
                 var command = currentStack.Pop();
+                if (command.Doc == null)
+                {
+                    continue;
+                }
+                
                 switch (command.Doc)
                 {
                     case StringDoc stringDoc:

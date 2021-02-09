@@ -9,16 +9,30 @@
 #endif
 #undef foo
 extern alias Foo;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using M = System.Math;
+
+#if DEBUG || TRACE
 using System.Diagnostics;
+#elif SILVERLIGHT && WINDOWS_PHONE || DEBUG || foo == true || foo != false
+using System.Diagnostics;
+#else
+using System.Diagnostics;
+
+#endif
+#region Region
+    #region more
 using ConsoleApplication2.Test;
+
+    #endregion
 using X = int1;
 using Y = ABC.X<int>;
+
 using static System.Math;
 using static System.DayOfWeek;
 using static System.Linq.Enumerable;
@@ -31,6 +45,7 @@ class TopLevelType : IDisposable
 {
     void IDisposable.Dispose() { }
 }
+
 namespace My
 {
     using A.B;
@@ -428,6 +443,7 @@ namespace My
         }
     }
 }
+
 namespace ConsoleApplication1
 {
     namespace RecursiveGenericBaseType
@@ -447,6 +463,7 @@ namespace ConsoleApplication1
             new static A<T> O() { }
         }
     }
+
     namespace Boo
     {
         public class Bar<T>
@@ -553,10 +570,11 @@ namespace ConsoleApplication1
         }
     }
 }
+
 namespace Comments.XmlComments.UndocumentedKeywords
 {
     class /*///*/
-    C<T>
+     C<T>
     {
         void M<U>(T t, U u)
         {
@@ -954,6 +972,7 @@ class CSharp73
         var res = t1 == (1, (2, 3));
     }
 }
+
 namespace CSharp80
 {
     class CSharp80ExceptInterfaceDefaultImplement

@@ -1,0 +1,11 @@
+// leading
+namespace Namespace { } // trailing
+
+// leading with line
+namespace // trailing keyword
+// leading identifier
+Namespace // trailing identifier
+// leading semi start
+ { // trailing semi start
+// leading semi end
+} // trailing semi end

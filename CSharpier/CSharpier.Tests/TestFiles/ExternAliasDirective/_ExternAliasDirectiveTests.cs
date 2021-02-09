@@ -10,5 +10,10 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest("ExternAliasDirective", "BasicExternAliasDirective");
         }
+        [Test]
+        public void ExternAliasComments()
+        {
+            this.RunTest("ExternAliasDirective", "ExternAliasComments");
+        }
     }
 }

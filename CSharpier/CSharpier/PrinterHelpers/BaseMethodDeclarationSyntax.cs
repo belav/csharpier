@@ -61,8 +61,12 @@ namespace CSharpier
 
             if (returnType != null)
             {
+                // TODO 0 build a validation tool, it can format a file, and then squash whitespace/newlines down to a single space and compare the results
+                // TODO 0 can we write out unhandled nodes in the generic print? ToFullString() ??
+                // TODO 0 review each node for leading/trailing stuff
+                // TODO 0 multiline comments need a doc type
                 // TODO 0 try out method parameters with leading/trailing comments to see how this approach works
-                // TODO 0 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow?
+                // TODO 0 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow? that may get complicated
                 parts.Push(this.Print(returnType));
                 parts.Push(SpaceIfNoPreviousComment);
             }

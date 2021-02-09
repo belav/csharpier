@@ -35,8 +35,9 @@ namespace CSharpier.Tests
             {
                 IncludeDocTree = true,
                 IncludeAST = true,
+                TestRun = true,
             });
-            Console.WriteLine(stopwatch.ElapsedMilliseconds.ToString());
+            Console.WriteLine(result.TestRunFailed);
             
             // TODO what about BOM? keep it if incoming file?
             File.WriteAllText(file.Replace(".cst", ".Formatted.cst"), result.Code, new UTF8Encoding(false));

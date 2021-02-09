@@ -11,6 +11,11 @@ namespace CSharpier.Tests.TestFiles
             this.RunTest("NamespaceDeclaration", "EmptyNamespace");
         }
         [Test]
+        public void NamespaceComments()
+        {
+            this.RunTest("NamespaceDeclaration", "NamespaceComments");
+        }
+        [Test]
         public void NamespaceWithMultipleClasses()
         {
             this.RunTest("NamespaceDeclaration", "NamespaceWithMultipleClasses");

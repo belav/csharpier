@@ -5,20 +5,26 @@ namespace CSharpier
 {
     public partial class Printer
     {
+        // TODO 2 there are some weird edge cases in here that are in the comments test, they probably won't show up in the real world
         private Doc PrintNamespaceDeclarationSyntax(NamespaceDeclarationSyntax node)
         {
+            this.printNewLinesInLeadingTrivia.Push(true);
             var parts = new Parts();
-            //this.PrintExtraNewLines(node, String("attributeLists"), String("modifiers"), String("namespaceKeyword"));
             this.PrintAttributeLists(node, node.AttributeLists, parts);
             parts.Add(this.PrintModifiers(node.Modifiers));
-            parts.Add(String("namespace"));
+            parts.Push(this.PrintLeadingTrivia(node.NamespaceKeyword));
+            parts.Add(node.NamespaceKeyword.Text);
+            parts.Push(this.PrintTrailingTrivia(node.NamespaceKeyword));
+            this.printNewLinesInLeadingTrivia.Pop();
             parts.Add(String(" "));
             parts.Add(this.Print(node.Name));
             var hasMembers = node.Members.Count > 0;
             var hasUsing = node.Usings.Count > 0;
             var hasExterns = node.Externs.Count > 0;
+            parts.Push(this.PrintLeadingTrivia(node.OpenBraceToken));
             if (hasMembers || hasUsing || hasExterns) {
-                parts.Push(HardLine, String("{"));
+                parts.Push(HardLine, "{");
+                parts.Push(this.PrintTrailingTrivia(node.OpenBraceToken));
                 var innerParts = new Parts();
                 innerParts.Add(HardLine);
                 if (hasExterns) {
@@ -45,11 +51,26 @@ namespace CSharpier
                 innerParts.RemoveAt(innerParts.Count - 1);
                 parts.Add(Indent(Concat(innerParts)));
                 parts.Add(HardLine);
-                parts.Add(String("}"));
-            } else {
-                parts.Push(String(" "), String("{"), String(" "), String("}"));
+                parts.Push(this.PrintLeadingTrivia(node.CloseBraceToken));
+            } else
+            {
+                parts.Push(SpaceIfNoPreviousComment, "{");
+                var trailingStart = this.PrintTrailingTrivia(node.OpenBraceToken);
+                var leadingEnd = this.PrintLeadingTrivia(node.CloseBraceToken);
+                if (trailingStart == null && leadingEnd == null)
+                {
+                    parts.Push(" ");
+                }
+                else
+                {
+                    parts.Push(trailingStart);
+                    parts.Push(leadingEnd);
+                }
             }
-            return Concat(Concat(parts));
+            parts.Push("}");
+            parts.Push(this.PrintTrailingTrivia(node.CloseBraceToken));
+            
+            return Concat(parts);
         }
     }
 }

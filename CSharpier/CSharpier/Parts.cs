@@ -13,12 +13,10 @@ namespace CSharpier
         {
             this.AddRange(parts);
         }
-        
+
         public void Push(params Doc[] value)
         {
             this.AddRange(value);
         }
-        
-        
     }
 }

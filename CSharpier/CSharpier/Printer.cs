@@ -10,12 +10,12 @@ namespace CSharpier
 {
     public partial class Printer
     {
-        public static Doc BreakParent = new BreakParent();
-        public static Doc SpaceIfNoPreviousComment = new SpaceIfNoPreviousComment();
-        public static Doc HardLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard }, BreakParent);
-        public static Doc LiteralLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true }, BreakParent);
-        public static Doc Line = new LineDoc { Type = LineDoc.LineType.Normal };
-        public static Doc SoftLine = new LineDoc { Type = LineDoc.LineType.Soft };
+        public static readonly Doc BreakParent = new BreakParent();
+        public static readonly Doc SpaceIfNoPreviousComment = new SpaceIfNoPreviousComment();
+        public static readonly Doc HardLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard }, BreakParent);
+        public static readonly Doc LiteralLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true }, BreakParent);
+        public static readonly Doc Line = new LineDoc { Type = LineDoc.LineType.Normal };
+        public static readonly Doc SoftLine = new LineDoc { Type = LineDoc.LineType.Soft };
 
         public static Doc LeadingComment(string comment, CommentType commentType)
         {
@@ -137,35 +137,38 @@ namespace CSharpier
             var parts = new Parts();
             foreach (var modifier in modifiers)
             {
-                this.PrintLeadingTrivia(modifier.LeadingTrivia, parts);
+                parts.Push(this.PrintLeadingTrivia(modifier.LeadingTrivia));
                 parts.Push(modifier.Text);
-                if (!this.PrintTrailingTrivia(modifier.TrailingTrivia, parts))
-                {
-                    parts.Push(" ");
-                }
+                parts.Push(this.PrintTrailingTrivia(modifier));
+                parts.Push(SpaceIfNoPreviousComment);
             }
 
             return Group(Concat(parts));
         }
 
-        private bool PrintLeadingTrivia(CSharpSyntaxNode node, Parts parts)
+        private Doc PrintLeadingTrivia(CSharpSyntaxNode node)
         {
             if (!node.HasLeadingTrivia)
             {
-                return false;
+                return null;
             }
 
-            return this.PrintLeadingTrivia(node.GetLeadingTrivia(), parts);
+            return this.PrintLeadingTrivia(node.GetLeadingTrivia());
         }
 
-        private Stack<bool> printNewLinesInLeadingTrivia = new();
-        
-        // TODO 0 multiline comments need a doc type
-        private bool PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, Parts parts)
+        private Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
         {
-            this.printNewLinesInLeadingTrivia.TryPeek(out var doNewLines);
+            return this.PrintLeadingTrivia(syntaxToken.LeadingTrivia);
+        }
+        
+        private readonly Stack<bool> printNewLinesInLeadingTrivia = new();
+
+        private Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia)
+        {
+            var parts = new Parts();
             
-            var startCount = parts.Count;
+            this.printNewLinesInLeadingTrivia.TryPeek(out var doNewLines);
+
             var hadDirective = false;
             for (var x = 0; x < leadingTrivia.Count; x++)
             {
@@ -235,38 +238,41 @@ namespace CSharpier
             {
                 parts.Push(HardLine);
             }
-            
-            return startCount != parts.Count;
+
+            return parts.Count > 0 ? Concat(parts) : null;
         }
 
-        private bool PrintTrailingTrivia(CSharpSyntaxNode node, Parts parts)
+        private Doc PrintTrailingTrivia(CSharpSyntaxNode node)
         {
             if (!node.HasTrailingTrivia)
             {
-                return false;
+                return null;
             }
 
-            return this.PrintTrailingTrivia(node.GetTrailingTrivia(), parts);
+            return this.PrintTrailingTrivia(node.GetTrailingTrivia());
         }
 
-        private bool PrintTrailingTrivia(SyntaxTriviaList trailingTrivia, Parts parts)
+        private Doc PrintTrailingTrivia(SyntaxToken node)
         {
-            var hasTrivia = false;
+            return this.PrintTrailingTrivia(node.TrailingTrivia);
+        }
+        
+        private Doc PrintTrailingTrivia(SyntaxTriviaList trailingTrivia)
+        {
+            var parts = new Parts();
             foreach (var trivia in trailingTrivia)
             {
                 if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
                 {
                     parts.Push(TrailingComment(trivia.ToString(), CommentType.SingleLine));
-                    hasTrivia = true;
                 }
                 else if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
                 {
                     parts.Push(" ", trivia.ToString(), Line);
-                    hasTrivia = true;
                 }
             }
-
-            return hasTrivia;
+            
+            return parts.Count > 0 ? Concat(parts) : null;
         }
 
         private Doc PrintStatements<T>(SyntaxToken openBraceToken, IReadOnlyList<T> statements, SyntaxToken closeBraceToken, Doc separator, Doc endOfLineDoc = null)
@@ -280,14 +286,18 @@ namespace CSharpier
                 parts.Push(Concat(Indent(Concat(separator, Join(actualEndOfLine, statements.Select(this.Print)))), separator));
             }
 
-            var printedLeadingTrivia = this.PrintLeadingTrivia(closeBraceToken.LeadingTrivia, parts);
-            if (!printedLeadingTrivia && statements.Count == 0)
+            var leadingTrivia = this.PrintLeadingTrivia(closeBraceToken.LeadingTrivia);
+            if (leadingTrivia != null)
+            {
+                parts.Push(leadingTrivia);
+            }
+            else if (statements.Count == 0)
             {
                 parts.Push(" ");
             }
 
             parts.Push("}");
-            this.PrintTrailingTrivia(closeBraceToken.TrailingTrivia, parts);
+            parts.Push(this.PrintTrailingTrivia(closeBraceToken.TrailingTrivia));
             return Group(Concat(parts));
         }
 
@@ -351,7 +361,7 @@ namespace CSharpier
 
             parts.Push(this.Print(node.Declaration));
             parts.Push(";");
-            this.PrintTrailingTrivia(node.SemicolonToken.TrailingTrivia, parts);
+            parts.Push(this.PrintTrailingTrivia(node.SemicolonToken));
             return Concat(parts);
         }
     }

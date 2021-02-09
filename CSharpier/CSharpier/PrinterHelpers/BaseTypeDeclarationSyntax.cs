@@ -52,19 +52,17 @@ namespace CSharpier
             parts.Add(this.PrintModifiers(node.Modifiers));
             if (keyword != null)
             {
-                PrintLeadingTrivia(keyword.Value.LeadingTrivia, parts);
+                parts.Push(this.PrintLeadingTrivia(keyword.Value));
                 parts.Add(keyword.Value.Text);
-                if (!PrintTrailingTrivia(keyword.Value.TrailingTrivia, parts))
-                {
-                    parts.Push(" ");
-                }
+                parts.Push(this.PrintTrailingTrivia(keyword.Value.TrailingTrivia));
+                parts.Push(SpaceIfNoPreviousComment);
             }
 
             this.printNewLinesInLeadingTrivia.Pop();
 
-            this.PrintLeadingTrivia(node.Identifier.LeadingTrivia, parts);
+            parts.Push(this.PrintLeadingTrivia(node.Identifier));
             parts.Push(node.Identifier.Text);
-            this.PrintTrailingTrivia(node.Identifier.TrailingTrivia, parts);
+            parts.Push(this.PrintTrailingTrivia(node.Identifier));
             if (typeParameterList != null)
             {
                 parts.Add(this.PrintTypeParameterListSyntax(typeParameterList));

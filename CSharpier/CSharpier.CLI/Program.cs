@@ -17,6 +17,8 @@ namespace CSharpier.CLI
             //var path = "C:\\temp\\clifiles";
             var path = "C:\\Projects\\insite-commerce-prettier";
 
+            // TODO use test run stuff in here, maybe start with smaller directories to track down issues
+            // or only write changes for fails, so it is easy to find them.
 
             Parallel.ForEach(Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories), async (string file) =>
             {
@@ -24,7 +26,7 @@ namespace CSharpier.CLI
                 var stopwatch = Stopwatch.StartNew();
                 var formatter = new CodeFormatter();
                 var result = formatter.Format(code, new Options());
-                Console.WriteLine(file.Substring(path.Length) + ": " + stopwatch.ElapsedMilliseconds + "ms");
+                //Console.WriteLine(file.Substring(path.Length) + ": " + stopwatch.ElapsedMilliseconds + "ms");
                 await File.WriteAllTextAsync(file, result.Code, new UTF8Encoding(false));
             });
             Console.WriteLine("total: " + fullStopwatch.ElapsedMilliseconds + "ms");

@@ -10,7 +10,7 @@ namespace CSharpier
             this.printNewLinesInLeadingTrivia.Push(true);
             var parts = new Parts(this.Print(node.Expression), ";");
             this.printNewLinesInLeadingTrivia.Pop();
-            this.PrintTrailingTrivia(node.SemicolonToken.TrailingTrivia, parts);
+            parts.Push(this.PrintTrailingTrivia(node.SemicolonToken));
             return Concat(parts);
         }
     }

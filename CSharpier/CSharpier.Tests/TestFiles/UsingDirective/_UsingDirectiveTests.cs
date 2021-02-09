@@ -11,6 +11,11 @@ namespace CSharpier.Tests.TestFiles
             this.RunTest("UsingDirective", "BasicUsingDirective");
         }
         [Test]
+        public void UsingDirectiveComments()
+        {
+            this.RunTest("UsingDirective", "UsingDirectiveComments");
+        }
+        [Test]
         public void UsingWithAlias()
         {
             this.RunTest("UsingDirective", "UsingWithAlias");

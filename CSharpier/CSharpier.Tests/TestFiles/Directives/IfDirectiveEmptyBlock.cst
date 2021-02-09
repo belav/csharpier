@@ -4,6 +4,6 @@ public class ClassName
     {
 #if DEBUG
         Console.WriteLine("Rosyln does not parse this because DEBUG is not defined");
-#else
+#endif
     }
 }

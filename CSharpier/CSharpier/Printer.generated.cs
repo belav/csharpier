@@ -94,6 +94,8 @@ namespace CSharpier
                     return this.PrintDelegateDeclarationSyntax(delegateDeclarationSyntax);
                 case DestructorDeclarationSyntax destructorDeclarationSyntax:
                     return this.PrintDestructorDeclarationSyntax(destructorDeclarationSyntax);
+                case DiscardDesignationSyntax discardDesignationSyntax:
+                    return this.PrintDiscardDesignationSyntax(discardDesignationSyntax);
                 case DiscardPatternSyntax discardPatternSyntax:
                     return this.PrintDiscardPatternSyntax(discardPatternSyntax);
                 case DoStatementSyntax doStatementSyntax:
@@ -128,6 +130,8 @@ namespace CSharpier
                     return this.PrintFixedStatementSyntax(fixedStatementSyntax);
                 case ForEachStatementSyntax forEachStatementSyntax:
                     return this.PrintForEachStatementSyntax(forEachStatementSyntax);
+                case ForEachVariableStatementSyntax forEachVariableStatementSyntax:
+                    return this.PrintForEachVariableStatementSyntax(forEachVariableStatementSyntax);
                 case ForStatementSyntax forStatementSyntax:
                     return this.PrintForStatementSyntax(forStatementSyntax);
                 case FromClauseSyntax fromClauseSyntax:
@@ -148,6 +152,8 @@ namespace CSharpier
                     return this.PrintImplicitArrayCreationExpressionSyntax(implicitArrayCreationExpressionSyntax);
                 case ImplicitElementAccessSyntax implicitElementAccessSyntax:
                     return this.PrintImplicitElementAccessSyntax(implicitElementAccessSyntax);
+                case ImplicitObjectCreationExpressionSyntax implicitObjectCreationExpressionSyntax:
+                    return this.PrintImplicitObjectCreationExpressionSyntax(implicitObjectCreationExpressionSyntax);
                 case ImplicitStackAllocArrayCreationExpressionSyntax implicitStackAllocArrayCreationExpressionSyntax:
                     return this.PrintImplicitStackAllocArrayCreationExpressionSyntax(implicitStackAllocArrayCreationExpressionSyntax);
                 case IncompleteMemberSyntax incompleteMemberSyntax:
@@ -216,6 +222,8 @@ namespace CSharpier
                     return this.PrintParenthesizedExpressionSyntax(parenthesizedExpressionSyntax);
                 case ParenthesizedLambdaExpressionSyntax parenthesizedLambdaExpressionSyntax:
                     return this.PrintParenthesizedLambdaExpressionSyntax(parenthesizedLambdaExpressionSyntax);
+                case ParenthesizedVariableDesignationSyntax parenthesizedVariableDesignationSyntax:
+                    return this.PrintParenthesizedVariableDesignationSyntax(parenthesizedVariableDesignationSyntax);
                 case PointerTypeSyntax pointerTypeSyntax:
                     return this.PrintPointerTypeSyntax(pointerTypeSyntax);
                 case PostfixUnaryExpressionSyntax postfixUnaryExpressionSyntax:

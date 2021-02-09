@@ -31,9 +31,13 @@ namespace CSharpier
                 parts.Add(Join(HardLine, node.Members.Select(this.Print)));
             }
 
-            this.PrintLeadingTrivia(node.EndOfFileToken.LeadingTrivia, parts);
+            var finalTrivia = this.PrintLeadingTrivia(node.EndOfFileToken.LeadingTrivia);
+            if (finalTrivia != null)
+            {
+                parts.Push(finalTrivia);
+            }
             
-            if (parts.Count == 0 || parts[^1] != HardLine) {
+            if (parts.Count == 0 || (parts[^1] != HardLine && parts[^1] is Concat concat && concat.Parts[^1] != HardLine)) {
                 parts.Add(HardLine);
             }
             return Concat(parts);
