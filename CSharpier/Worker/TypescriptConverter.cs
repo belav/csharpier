@@ -24,7 +24,7 @@ namespace Worker
             output.AppendLine(@$"using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier.Core
 {{
     public partial class Printer
     {{
@@ -62,7 +62,7 @@ namespace CSharpier
                 line = Regex.Replace(line, @"""([^""|.]+)""", "String(\"$1\")");
                 line = Regex.Replace(line, @"if \(node.(\w+)\)", "if (NotNull(node.$1))");
                 line = Regex.Replace(line, @"const (\w+): Doc\[\] \= \[\]", "var $1 = new Parts()");
-                line = line.Replace("printPathIdentifier(path)", "String(node.Identifier.Text)");
+                line = line.Replace("printPathIdentifier(path)", "node.Identifier.Text");
                 line = line.Replace("printModifiers(node", "this.PrintModifiers(node.Modifiers");
                 line = line.Replace("printExtraNewLines(node, parts, ", "//this.PrintExtraNewLines(node, ");
                 line = line.Replace("printAttributeLists(node, parts, path, options, print)", "this.PrintAttributeLists(node.AttributeLists, parts)");

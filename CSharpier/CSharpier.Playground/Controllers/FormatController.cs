@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using CSharpier.Core;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -42,7 +43,7 @@ namespace CSharpier.Playground.Controllers
             // what about when the prettier plugin fails because of missing node types or other errors?
             this.WriteAllText(filePath, content);
             // TODO we also want to eventually expose options
-            var result = new CodeFormatter().Format(content, new Options
+            var result = new CodeFormatter().Format(content, new CSharpier.Core.Options
             {
                 IncludeAST = true,
                 IncludeDocTree = true,

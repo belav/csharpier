@@ -1,0 +1,204 @@
+﻿{
+  "nodeType": "CompilationUnit",
+  "kind": "CompilationUnit",
+  "externs": [],
+  "usings": [],
+  "attributeLists": [],
+  "members": [
+    {
+      "nodeType": "ClassDeclaration",
+      "kind": "ClassDeclaration",
+      "attributeLists": [],
+      "modifiers": [],
+      "keyword": {
+        "nodeType": "SyntaxToken",
+        "kind": "ClassKeyword",
+        "rawKind": 8374,
+        "text": "class",
+        "hasLeadingTrivia": true,
+        "hasTrailingTrivia": true,
+        "containsDiagnostics": true,
+        "containsDirectives": true,
+        "hasStructuredTrivia": true,
+        "leadingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "ErrorDirectiveTrivia",
+            "text": "#error Error message",
+            "rawKind": 8556,
+            "containsDiagnostics": true,
+            "hasStructure": true,
+            "isDirective": true
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WarningDirectiveTrivia",
+            "text": "#warning Warning message",
+            "rawKind": 8557,
+            "containsDiagnostics": true,
+            "hasStructure": true,
+            "isDirective": true
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "PragmaWarningDirectiveTrivia",
+            "text": "#pragma warning disable 414, 3021",
+            "rawKind": 8559,
+            "hasStructure": true,
+            "isDirective": true
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "PragmaWarningDirectiveTrivia",
+            "text": "#pragma warning restore 3021",
+            "rawKind": 8559,
+            "hasStructure": true,
+            "isDirective": true
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "PragmaChecksumDirectiveTrivia",
+            "text": "#pragma checksum \"file.txt\" \"{00000000-0000-0000-0000-000000000000}\" \"2453\"",
+            "rawKind": 8560,
+            "hasStructure": true,
+            "isDirective": true
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "DefineDirectiveTrivia",
+            "text": "#define foo // Comment in directive",
+            "rawKind": 8554,
+            "hasStructure": true,
+            "isDirective": true
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "IfDirectiveTrivia",
+            "text": "#if foo",
+            "rawKind": 8548,
+            "hasStructure": true,
+            "isDirective": true
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "ElifDirectiveTrivia",
+            "text": "#elif bar",
+            "rawKind": 8549,
+            "hasStructure": true,
+            "isDirective": true
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "ElseDirectiveTrivia",
+            "text": "#else",
+            "rawKind": 8550,
+            "hasStructure": true,
+            "isDirective": true
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndIfDirectiveTrivia",
+            "text": "#endif",
+            "rawKind": 8551,
+            "hasStructure": true,
+            "isDirective": true
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "UndefDirectiveTrivia",
+            "text": "#undef foo",
+            "rawKind": 8555,
+            "hasStructure": true,
+            "isDirective": true
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "LineDirectiveTrivia",
+            "text": "#line 6",
+            "rawKind": 8558,
+            "hasStructure": true,
+            "isDirective": true
+          }
+        ],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia",
+            "text": " ",
+            "rawKind": 8540
+          }
+        ]
+      },
+      "identifier": {
+        "nodeType": "SyntaxToken",
+        "kind": "IdentifierToken",
+        "rawKind": 8508,
+        "text": "ClassName",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia",
+            "text": " ",
+            "rawKind": 8540
+          }
+        ]
+      },
+      "constraintClauses": [],
+      "openBraceToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "OpenBraceToken",
+        "rawKind": 8205,
+        "text": "{",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia",
+            "text": " ",
+            "rawKind": 8540
+          }
+        ]
+      },
+      "members": [],
+      "closeBraceToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "CloseBraceToken",
+        "rawKind": 8206,
+        "text": "}",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndOfLineTrivia",
+            "text": "\r\n",
+            "rawKind": 8539
+          }
+        ]
+      },
+      "rawKind": 8855,
+      "hasStructuredTrivia": true,
+      "containsSkippedText": true,
+      "containsDirectives": true,
+      "containsDiagnostics": true,
+      "hasLeadingTrivia": true,
+      "hasTrailingTrivia": true
+    }
+  ],
+  "endOfFileToken": {
+    "nodeType": "SyntaxToken",
+    "kind": "EndOfFileToken",
+    "rawKind": 8496,
+    "leadingTrivia": [],
+    "trailingTrivia": []
+  },
+  "rawKind": 8840,
+  "hasStructuredTrivia": true,
+  "containsSkippedText": true,
+  "containsDirectives": true,
+  "containsDiagnostics": true,
+  "hasLeadingTrivia": true
+}

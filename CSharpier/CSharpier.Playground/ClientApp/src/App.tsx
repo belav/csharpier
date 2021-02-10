@@ -81,7 +81,23 @@ export class App extends Component<{}, State> {
             lineNumbers: true,
             matchBrackets: true,
             mode: "text/x-java",
-            taxSize: 4,
+            indentWithTabs: false,
+            smartIndent: false,
+            tabSize: 4,
+            extraKeys: {
+                Tab: (cm: any) => {
+                    if (cm.getMode().name === "null") {
+                        cm.execCommand("insertTab");
+                    } else {
+                        if (cm.somethingSelected()) {
+                            cm.execCommand("indentMore");
+                        } else {
+                            cm.execCommand("insertSoftTab");
+                        }
+                    }
+                },
+                'Shift-Tab': (cm: any) => cm.execCommand("indentLess")
+            }
         };
 
         const jsonOptions = {

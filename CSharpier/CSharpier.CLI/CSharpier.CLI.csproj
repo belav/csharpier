@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
+      <ProjectReference Include="..\CSharpier.Core\CSharpier.Core.csproj" />
     </ItemGroup>
 
 </Project>

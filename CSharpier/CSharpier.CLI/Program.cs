@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using CSharpier.Core;
 
 namespace CSharpier.CLI
 {
@@ -26,7 +24,7 @@ namespace CSharpier.CLI
                 var stopwatch = Stopwatch.StartNew();
                 var formatter = new CodeFormatter();
                 var result = formatter.Format(code, new Options());
-                //Console.WriteLine(file.Substring(path.Length) + ": " + stopwatch.ElapsedMilliseconds + "ms");
+                //Console.WriteLine(file.Subpath.Length + ": " + stopwatch.ElapsedMilliseconds + "ms");
                 await File.WriteAllTextAsync(file, result.Code, new UTF8Encoding(false));
             });
             Console.WriteLine("total: " + fullStopwatch.ElapsedMilliseconds + "ms");

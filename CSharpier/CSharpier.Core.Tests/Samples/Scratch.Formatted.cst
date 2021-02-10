@@ -1,0 +1,10 @@
+{
+    void MethodName() { }
+
+    void MethodName() { }
+
+    public void MethodName() { }
+
+    [Attribute]
+    public void MethodName() { }
+}

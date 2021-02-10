@@ -1,0 +1,98 @@
+﻿{
+  "nodeType": "CompilationUnit",
+  "kind": "CompilationUnit",
+  "externs": [],
+  "usings": [],
+  "attributeLists": [],
+  "members": [
+    {
+      "nodeType": "NamespaceDeclaration",
+      "kind": "NamespaceDeclaration",
+      "attributeLists": [],
+      "modifiers": [],
+      "namespaceKeyword": {
+        "nodeType": "SyntaxToken",
+        "kind": "NamespaceKeyword",
+        "rawKind": 8372,
+        "text": "namespace",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia",
+            "text": " ",
+            "rawKind": 8540
+          }
+        ]
+      },
+      "name": {
+        "nodeType": "IdentifierName",
+        "kind": "IdentifierName",
+        "identifier": {
+          "nodeType": "SyntaxToken",
+          "kind": "IdentifierToken",
+          "rawKind": 8508,
+          "text": "Namespace",
+          "hasTrailingTrivia": true,
+          "leadingTrivia": [],
+          "trailingTrivia": [
+            {
+              "nodeType": "SyntaxTrivia",
+              "kind": "WhitespaceTrivia",
+              "text": " ",
+              "rawKind": 8540
+            }
+          ]
+        },
+        "rawKind": 8616,
+        "hasTrailingTrivia": true
+      },
+      "openBraceToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "OpenBraceToken",
+        "rawKind": 8205,
+        "text": "{",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia",
+            "text": " ",
+            "rawKind": 8540
+          }
+        ]
+      },
+      "externs": [],
+      "usings": [],
+      "members": [],
+      "closeBraceToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "CloseBraceToken",
+        "rawKind": 8206,
+        "text": "}",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndOfLineTrivia",
+            "text": "\r\n",
+            "rawKind": 8539
+          }
+        ]
+      },
+      "rawKind": 8842,
+      "hasTrailingTrivia": true
+    }
+  ],
+  "endOfFileToken": {
+    "nodeType": "SyntaxToken",
+    "kind": "EndOfFileToken",
+    "rawKind": 8496,
+    "leadingTrivia": [],
+    "trailingTrivia": []
+  },
+  "rawKind": 8840
+}

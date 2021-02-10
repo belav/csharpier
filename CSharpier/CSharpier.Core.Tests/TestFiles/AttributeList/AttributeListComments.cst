@@ -1,0 +1,11 @@
+namespace Namespace
+{
+    // leading
+    [Obsolete] // trailing
+    class ClassOne { }
+
+    // leading with new line
+    [Obsolete] // more trailing
+    // leading before class
+    class ClassTwo { }
+}

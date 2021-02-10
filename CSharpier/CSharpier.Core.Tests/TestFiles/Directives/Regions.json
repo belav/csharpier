@@ -1,0 +1,151 @@
+﻿{
+  "nodeType": "CompilationUnit",
+  "kind": "CompilationUnit",
+  "externs": [],
+  "usings": [],
+  "attributeLists": [],
+  "members": [
+    {
+      "nodeType": "ClassDeclaration",
+      "kind": "ClassDeclaration",
+      "attributeLists": [],
+      "modifiers": [],
+      "keyword": {
+        "nodeType": "SyntaxToken",
+        "kind": "ClassKeyword",
+        "rawKind": 8374,
+        "text": "class",
+        "hasLeadingTrivia": true,
+        "hasTrailingTrivia": true,
+        "containsDirectives": true,
+        "hasStructuredTrivia": true,
+        "leadingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "RegionDirectiveTrivia",
+            "text": "#region Region",
+            "rawKind": 8552,
+            "hasStructure": true,
+            "isDirective": true
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia",
+            "text": "    ",
+            "rawKind": 8540
+          },
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "RegionDirectiveTrivia",
+            "text": "#region Nested",
+            "rawKind": 8552,
+            "hasStructure": true,
+            "isDirective": true
+          }
+        ],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia",
+            "text": " ",
+            "rawKind": 8540
+          }
+        ]
+      },
+      "identifier": {
+        "nodeType": "SyntaxToken",
+        "kind": "IdentifierToken",
+        "rawKind": 8508,
+        "text": "ClassName",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia",
+            "text": " ",
+            "rawKind": 8540
+          }
+        ]
+      },
+      "constraintClauses": [],
+      "openBraceToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "OpenBraceToken",
+        "rawKind": 8205,
+        "text": "{",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia",
+            "text": " ",
+            "rawKind": 8540
+          }
+        ]
+      },
+      "members": [],
+      "closeBraceToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "CloseBraceToken",
+        "rawKind": 8206,
+        "text": "}",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndOfLineTrivia",
+            "text": "\r\n",
+            "rawKind": 8539
+          }
+        ]
+      },
+      "rawKind": 8855,
+      "hasStructuredTrivia": true,
+      "containsSkippedText": true,
+      "containsDirectives": true,
+      "hasLeadingTrivia": true,
+      "hasTrailingTrivia": true
+    }
+  ],
+  "endOfFileToken": {
+    "nodeType": "SyntaxToken",
+    "kind": "EndOfFileToken",
+    "rawKind": 8496,
+    "hasLeadingTrivia": true,
+    "containsDirectives": true,
+    "hasStructuredTrivia": true,
+    "leadingTrivia": [
+      {
+        "nodeType": "SyntaxTrivia",
+        "kind": "WhitespaceTrivia",
+        "text": "    ",
+        "rawKind": 8540
+      },
+      {
+        "nodeType": "SyntaxTrivia",
+        "kind": "EndRegionDirectiveTrivia",
+        "text": "#endregion Nested",
+        "rawKind": 8553,
+        "hasStructure": true,
+        "isDirective": true
+      },
+      {
+        "nodeType": "SyntaxTrivia",
+        "kind": "EndRegionDirectiveTrivia",
+        "text": "#endregion",
+        "rawKind": 8553,
+        "hasStructure": true,
+        "isDirective": true
+      }
+    ],
+    "trailingTrivia": []
+  },
+  "rawKind": 8840,
+  "hasStructuredTrivia": true,
+  "containsSkippedText": true,
+  "containsDirectives": true,
+  "hasLeadingTrivia": true
+}

@@ -8,9 +8,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxNodeTypeGenerator", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Playground", "CSharpier.Playground\CSharpier.Playground.csproj", "{E7F03E73-82C7-4DB2-AF20-F25C45231A72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier", "CSharpier\CSharpier.csproj", "{F1DE8719-9961-4F83-8BE6-34639C96DA5E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Core", "CSharpier.Core\CSharpier.Core.csproj", "{F1DE8719-9961-4F83-8BE6-34639C96DA5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests", "CSharpier.Tests\CSharpier.Tests.csproj", "{A77E4297-FAA5-40AB-9856-ECF72AF5D859}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Core.Tests", "CSharpier.Core.Tests\CSharpier.Core.Tests.csproj", "{A77E4297-FAA5-40AB-9856-ECF72AF5D859}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worker", "Worker\Worker.csproj", "{CF32D239-2A27-4F46-8945-8B7B9A2C8774}"
 EndProject

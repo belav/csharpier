@@ -1,0 +1,120 @@
+﻿{
+  "nodeType": "CompilationUnit",
+  "kind": "CompilationUnit",
+  "externs": [],
+  "usings": [
+    {
+      "nodeType": "UsingDirective",
+      "kind": "UsingDirective",
+      "usingKeyword": {
+        "nodeType": "SyntaxToken",
+        "kind": "UsingKeyword",
+        "rawKind": 8373,
+        "text": "using",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "WhitespaceTrivia",
+            "text": " ",
+            "rawKind": 8540
+          }
+        ]
+      },
+      "name": {
+        "nodeType": "QualifiedName",
+        "kind": "QualifiedName",
+        "left": {
+          "nodeType": "QualifiedName",
+          "kind": "QualifiedName",
+          "left": {
+            "nodeType": "IdentifierName",
+            "kind": "IdentifierName",
+            "identifier": {
+              "nodeType": "SyntaxToken",
+              "kind": "IdentifierToken",
+              "rawKind": 8508,
+              "text": "One",
+              "leadingTrivia": [],
+              "trailingTrivia": []
+            },
+            "rawKind": 8616
+          },
+          "dotToken": {
+            "nodeType": "SyntaxToken",
+            "kind": "DotToken",
+            "rawKind": 8218,
+            "text": ".",
+            "leadingTrivia": [],
+            "trailingTrivia": []
+          },
+          "right": {
+            "nodeType": "IdentifierName",
+            "kind": "IdentifierName",
+            "identifier": {
+              "nodeType": "SyntaxToken",
+              "kind": "IdentifierToken",
+              "rawKind": 8508,
+              "text": "Two",
+              "leadingTrivia": [],
+              "trailingTrivia": []
+            },
+            "rawKind": 8616
+          },
+          "rawKind": 8617
+        },
+        "dotToken": {
+          "nodeType": "SyntaxToken",
+          "kind": "DotToken",
+          "rawKind": 8218,
+          "text": ".",
+          "leadingTrivia": [],
+          "trailingTrivia": []
+        },
+        "right": {
+          "nodeType": "IdentifierName",
+          "kind": "IdentifierName",
+          "identifier": {
+            "nodeType": "SyntaxToken",
+            "kind": "IdentifierToken",
+            "rawKind": 8508,
+            "text": "Three",
+            "leadingTrivia": [],
+            "trailingTrivia": []
+          },
+          "rawKind": 8616
+        },
+        "rawKind": 8617
+      },
+      "semicolonToken": {
+        "nodeType": "SyntaxToken",
+        "kind": "SemicolonToken",
+        "rawKind": 8212,
+        "text": ";",
+        "hasTrailingTrivia": true,
+        "leadingTrivia": [],
+        "trailingTrivia": [
+          {
+            "nodeType": "SyntaxTrivia",
+            "kind": "EndOfLineTrivia",
+            "text": "\r\n",
+            "rawKind": 8539
+          }
+        ]
+      },
+      "rawKind": 8843,
+      "hasTrailingTrivia": true
+    }
+  ],
+  "attributeLists": [],
+  "members": [],
+  "endOfFileToken": {
+    "nodeType": "SyntaxToken",
+    "kind": "EndOfFileToken",
+    "rawKind": 8496,
+    "leadingTrivia": [],
+    "trailingTrivia": []
+  },
+  "rawKind": 8840
+}
