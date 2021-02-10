@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintAliasQualifiedNameSyntax(AliasQualifiedNameSyntax node)
         {
-            return Concat(this.Print(node.Alias), "::", this.Print(node.Name));
+            return Concat(this.Print(node.Alias), this.PrintSyntaxToken(node.ColonColonToken), this.Print(node.Name));
         }
     }
 }

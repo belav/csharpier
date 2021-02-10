@@ -6,9 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintIdentifierNameSyntax(IdentifierNameSyntax node)
         {
-            return Concat(this.PrintLeadingTrivia(node),
-                node.Identifier.Text,
-                this.PrintTrailingTrivia(node));
+            return this.PrintSyntaxToken(node.Identifier);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace CSharpier.Core
         {
             if (document == null)
             {
-                return "null";
+                return indent + "null";
             }
             
             switch (document)

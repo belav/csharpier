@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintPredefinedTypeSyntax(PredefinedTypeSyntax node)
         {
-            return Concat(this.PrintLeadingTrivia(node), node.Keyword.Text, this.PrintTrailingTrivia(node));
+            return this.PrintSyntaxToken(node.Keyword);
         }
     }
 }

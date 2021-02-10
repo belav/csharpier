@@ -166,9 +166,11 @@ namespace CSharpier.Core
 
                 if (doc is StringDoc stringDoc)
                 {
-                    output.Append(stringDoc.Value);
-
-                    width -= GetStringWidth(stringDoc.Value);
+                    if (stringDoc.Value != null)
+                    {
+                        output.Append(stringDoc.Value);
+                        width -= GetStringWidth(stringDoc.Value);   
+                    }
                 }
                 else
                 {
@@ -308,7 +310,7 @@ namespace CSharpier.Core
                 switch (command.Doc)
                 {
                     case StringDoc stringDoc:
-                        if (stringDoc.Value == "")
+                        if (string.IsNullOrEmpty(stringDoc.Value))
                         {
                             break;
                         }
@@ -506,6 +508,11 @@ namespace CSharpier.Core
                 }
             }
 
+            if (output[^1] != '\n')
+            {
+                output.Append(newLine);
+            }
+            
             return string.Join("", output);
         }
 

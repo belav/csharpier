@@ -6,11 +6,10 @@ namespace CSharpier.Core
     {
         private Doc PrintExpressionStatementSyntax(ExpressionStatementSyntax node)
         {
-            this.printNewLinesInLeadingTrivia.Push(true);
-            var parts = new Parts(this.Print(node.Expression), ";");
-            this.printNewLinesInLeadingTrivia.Pop();
-            parts.Push(this.PrintTrailingTrivia(node.SemicolonToken));
-            return Concat(parts);
+            return Concat(this.PrintExtraNewLines(node),
+                this.Print(node.Expression),
+                this.PrintSyntaxToken(node.SemicolonToken)
+            );
         }
     }
 }

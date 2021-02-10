@@ -1,0 +1,11 @@
+public class ClassName
+{
+    public void DoStuff(
+        // leading
+        string one, // trailing
+        string two,
+        string three)
+    {
+        var x = 0;
+    }
+}

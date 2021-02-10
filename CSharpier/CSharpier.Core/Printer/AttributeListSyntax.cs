@@ -9,18 +9,13 @@ namespace CSharpier.Core
         private Doc PrintAttributeListSyntax(AttributeListSyntax node)
         {
             var parts = new Parts();
-            parts.Push(this.PrintLeadingTrivia(node.OpenBracketToken));
-            parts.Push(node.OpenBracketToken.Text);
-            parts.Push(this.PrintTrailingTrivia(node.OpenBracketToken));
+            parts.Push(this.PrintSyntaxToken(node.OpenBracketToken));
             if (node.Target != null)
             {
-                parts.Push(this.PrintLeadingTrivia(node.Target));
-                // TODO 2 more comments on target.identifier/target.colontoken??
                 parts.Push(
-                    node.Target.Identifier.Text,
-                    ": "
+                    this.PrintSyntaxToken(node.Target.Identifier),
+                    this.PrintSyntaxToken(node.Target.ColonToken, " ")
                 );
-                parts.Push(this.PrintTrailingTrivia(node.Target));
             }
 
             var attributes = new List<Doc>();

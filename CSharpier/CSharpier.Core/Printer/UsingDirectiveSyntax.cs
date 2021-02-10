@@ -6,23 +6,13 @@ namespace CSharpier.Core
     {
         private Doc PrintUsingDirectiveSyntax(UsingDirectiveSyntax node)
         {
-            this.printNewLinesInLeadingTrivia.Push(true);
-            var parts = new Parts();
-            parts.Push(this.PrintLeadingTrivia(node.UsingKeyword));
-            parts.Add(node.UsingKeyword.Text + " ");
-            parts.Push(this.PrintTrailingTrivia(node.UsingKeyword));
-            if (node.StaticKeyword.RawKind != 0)
-            {
-                parts.Push(this.PrintLeadingTrivia(node.StaticKeyword));
-                parts.Add(node.StaticKeyword.Text + " ");
-                parts.Push(this.PrintTrailingTrivia(node.StaticKeyword));
-            }
-            if (node.Alias != null) {
-                parts.Add(this.PrintNameEqualsSyntax(node.Alias));
-            }
-            parts.Push(this.Print(node.Name), ";");
-            parts.Push(this.PrintTrailingTrivia(node.SemicolonToken));
-            return Concat(parts);
+            return Concat(this.PrintExtraNewLines(node),
+                this.PrintSyntaxToken(node.UsingKeyword, " "),
+                this.PrintSyntaxToken(node.StaticKeyword, " "),
+                node.Alias == null ? null : this.PrintNameEqualsSyntax(node.Alias),
+                this.Print(node.Name),
+                this.PrintSyntaxToken(node.SemicolonToken)
+                );
         }
     }
 }

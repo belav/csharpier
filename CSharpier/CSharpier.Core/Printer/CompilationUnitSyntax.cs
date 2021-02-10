@@ -36,10 +36,7 @@ namespace CSharpier.Core
             {
                 parts.Push(finalTrivia);
             }
-            
-            if (parts.Count == 0 || (parts[^1] != HardLine && parts[^1] is Concat concat && concat.Parts[^1] != HardLine)) {
-                parts.Add(HardLine);
-            }
+
             return Concat(parts);
         }
     }

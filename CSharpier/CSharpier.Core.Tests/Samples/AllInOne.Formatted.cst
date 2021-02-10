@@ -17,6 +17,7 @@ using System.Linq.Expressions;
 using System.Text;
 using M = System.Math;
 
+
 #if DEBUG || TRACE
 using System.Diagnostics;
 #elif SILVERLIGHT && WINDOWS_PHONE || DEBUG || foo == true || foo != false
@@ -36,7 +37,6 @@ using Y = ABC.X<int>;
 using static System.Math;
 using static System.DayOfWeek;
 using static System.Linq.Enumerable;
-
 
 #endregion
 [assembly: System.Copyright(@"(C)""
@@ -75,6 +75,7 @@ namespace My
                 var s1 = $"x {1, -2:d}";
                 var s2 = $@"x {1, -2:d}";
             }
+
             
 #if DEBUG
       Console.WriteLine(export.iefSupplied.command);
@@ -433,7 +434,7 @@ namespace My
             {
                 await System.Threading.Tasks.Task.Delay(0);
             }
-            void AsyncAnonymous()
+            void AsyncAnonymous() // C # 5 feature
             {
                 var task = Task.Factory.StartNew(
                     async () =>
@@ -497,7 +498,6 @@ namespace ConsoleApplication1
                 select i;
         }
 
-
         public static implicit operator Test(string s)
         {
             return new ConsoleApplication1.Test();
@@ -517,11 +517,11 @@ namespace ConsoleApplication1
 
         public event EventHandler MyEvent = delegate { };
 
-
         void Blah()
         {
             int i = 5;
             int? j = 6;
+
             Expression<Func<int>> e = () => i;
             Expression<Func<bool, Action>> e2 = b => () =>
             {
@@ -577,7 +577,7 @@ namespace ConsoleApplication1
 namespace Comments.XmlComments.UndocumentedKeywords
 {
     class /*///*/
-     C<T>
+    C<T>
     {
         void M<U>(T t, U u)
         {
@@ -798,6 +798,7 @@ class CSharp70
             default:
                 break;
         }
+
         (A<B, C> D, E<F, G> H) = e;
         if (x?.y?.z is Type value2) {
         // code using value
@@ -866,10 +867,10 @@ class CSharp72
         ref TValue this[in TKey index] => null;
         public static Vector3 operator +(in Vector3 x, in Vector3 y) => null;
 
-
         static readonly ref Vector3 M1_Trace()
         {
             ref readonly var r1 = ref M1();
+
             ref readonly Vector3 r2 = ref default(Vector3);
 
             // Not valid. r1 is readonly.
@@ -894,6 +895,7 @@ class CSharp72
             // not OK!!
             foo(ref v1.X);
             return ref (arr != null ? ref arr[0] : ref otherArr[0]);
+
             Span<int> span = stackalloc int[1];
             return new Vector3(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
         }
@@ -911,10 +913,8 @@ class CSharp72
         }
     }
 
-
     public void DoSomething(bool isEmployed, string personName, int personAge)
     { }
-
 
     public void NonTrailingNamedArguments()
     {
@@ -925,16 +925,16 @@ class CSharp72
         DoSomething(true, personAge: age, personName: name); // already legal
     }
 
-
     public void ConditionalRef()
     {
         ref var r = ref (arr != null ? ref arr[0] : ref otherArr[0]);
     }
 
-
     public void LeadingSeparator()
     {
-        var res = 0 + 123 + 1_2_3 + 0x1_2_3 + 0b101 + 0b1_0_1 + 0x_1_2 + 0b_1_0_1;
+        var res = 0 + 123 + 1_2_3 + 0x1_2_3 + 0b101 + 0b1_0_1
+        // in C# 7.2, _ is permitted after the `0x` or `0b`
+        + 0x_1_2 + 0b_1_0_1;
     }
 }
 
@@ -953,13 +953,11 @@ class CSharp73
 
     static IndexingMovableFixed s;
 
-
     public unsafe void IndexingMovableFixedFields()
     {
         int* ptr = s.myFixedField;
         int t = s.myFixedField[5];
     }
-
 
     public void PatternBasedFixed()
     {
@@ -1079,7 +1077,7 @@ namespace CSharp80
 
     interface IB : IA
     {
-        override void IA.M()
+        override void IA.M() // explicitly named
         {
             WriteLine("IB.M");
         }
@@ -1087,7 +1085,7 @@ namespace CSharp80
 
     interface IC : IA
     {
-        override void M()
+        override void M() // implicitly named
         {
             WriteLine("IC.M");
         }

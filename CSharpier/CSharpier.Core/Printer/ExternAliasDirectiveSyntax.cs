@@ -6,19 +6,12 @@ namespace CSharpier.Core
     {
         private Doc PrintExternAliasDirectiveSyntax(ExternAliasDirectiveSyntax node)
         {
-            this.printNewLinesInLeadingTrivia.Push(true);
-            var parts = new Parts();
-            parts.Push(this.PrintLeadingTrivia(node.ExternKeyword));
-            this.printNewLinesInLeadingTrivia.Pop();
-            parts.Push(node.ExternKeyword.Text, " ");
-            parts.Push(this.PrintTrailingTrivia(node.ExternKeyword));
-            parts.Push(this.PrintLeadingTrivia(node.AliasKeyword));
-            parts.Push(node.AliasKeyword.Text, " ");
-            parts.Push(this.PrintTrailingTrivia(node.AliasKeyword));
-            parts.Push(this.PrintLeadingTrivia(node.Identifier));
-            parts.Push(node.Identifier.Text, ";");
-            parts.Push(this.PrintTrailingTrivia(node.SemicolonToken));
-            return Concat(parts);
+            return Concat(this.PrintExtraNewLines(node),
+                this.PrintSyntaxToken(node.ExternKeyword, " "),
+                this.PrintSyntaxToken(node.AliasKeyword, " "),
+                this.PrintSyntaxToken(node.Identifier),
+                this.PrintSyntaxToken(node.SemicolonToken)
+                );
         }
     }
 }

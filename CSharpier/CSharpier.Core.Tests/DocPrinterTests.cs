@@ -148,7 +148,7 @@ namespace CSharpier.Core.Tests
 
         private string Print(Doc doc)
         {
-            return new DocPrinter().Print(doc, new Options());
+            return new DocPrinter().Print(doc, new Options()).TrimEnd('\r', '\n');
         }
 
         public static Doc HardLine = Printer.HardLine;

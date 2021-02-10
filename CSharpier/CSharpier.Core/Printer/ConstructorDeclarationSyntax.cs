@@ -6,16 +6,11 @@ namespace CSharpier.Core
     {
         private Doc PrintConstructorDeclarationSyntax(ConstructorDeclarationSyntax node)
         {
-            this.printNewLinesInLeadingTrivia.Push(true);
-            var parts = new Parts();
-            parts.Push(this.PrintModifiers(node.Modifiers));
-            parts.Push(this.PrintLeadingTrivia(node.Identifier));
-            parts.Push(node.Identifier.Text);
-            parts.Push(this.PrintTrailingTrivia(node.Identifier));
-            this.printNewLinesInLeadingTrivia.Pop();
-            parts.Push(this.PrintParameterListSyntax(node.ParameterList));
-            parts.Push(this.PrintBlockSyntax(node.Body));
-            return Group(Concat(parts));
+            return Group(Concat(this.PrintExtraNewLines(node),
+                this.PrintModifiers(node.Modifiers),
+                this.PrintSyntaxToken(node.Identifier),
+                this.PrintParameterListSyntax(node.ParameterList),
+                this.PrintBlockSyntax(node.Body)));
         }
     }
 }

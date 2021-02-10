@@ -16,8 +16,7 @@ namespace CSharpier.Core
             SyntaxToken? keyword = null;
             var memberSeparator = HardLine;
             var members = Enumerable.Empty<CSharpSyntaxNode>();
-
-            this.printNewLinesInLeadingTrivia.Push(true);
+            
             if (node is TypeDeclarationSyntax typeDeclarationSyntax)
             {
                 typeParameterList = typeDeclarationSyntax.TypeParameterList;
@@ -47,22 +46,16 @@ namespace CSharpier.Core
             }
 
             var parts = new Parts();
-
+            parts.Push(this.PrintExtraNewLines(node));
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
             parts.Add(this.PrintModifiers(node.Modifiers));
             if (keyword != null)
             {
-                parts.Push(this.PrintLeadingTrivia(keyword.Value));
-                parts.Add(keyword.Value.Text);
-                parts.Push(this.PrintTrailingTrivia(keyword.Value.TrailingTrivia));
-                parts.Push(SpaceIfNoPreviousComment);
+                parts.Push(this.PrintSyntaxToken(keyword.Value, " "));
             }
 
-            this.printNewLinesInLeadingTrivia.Pop();
+            parts.Push(this.PrintSyntaxToken(node.Identifier));
 
-            parts.Push(this.PrintLeadingTrivia(node.Identifier));
-            parts.Push(node.Identifier.Text);
-            parts.Push(this.PrintTrailingTrivia(node.Identifier));
             if (typeParameterList != null)
             {
                 parts.Add(this.PrintTypeParameterListSyntax(typeParameterList));

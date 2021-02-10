@@ -50,20 +50,8 @@ namespace CSharpier.Core
             }
 
             var parts = new Parts();
-            
-            // TODO 0 I think I can ditch that stack, and just use this everywhere. Maybe leave the stack for now until I have comments/new lines fully done
-            foreach (var leadingTrivia in node.GetLeadingTrivia())
-            {
-                if (leadingTrivia.Kind() == SyntaxKind.EndOfLineTrivia)
-                {
-                    parts.Push(HardLine);
-                }
-                else if (leadingTrivia.Kind() != SyntaxKind.WhitespaceTrivia)
-                {
-                    break;
-                }
-            }
-            
+            parts.Push(this.PrintExtraNewLines(node));
+
             if (attributeLists.HasValue)
             {
                 parts.Push(this.PrintAttributeLists(node, attributeLists.Value));   
@@ -77,9 +65,6 @@ namespace CSharpier.Core
             {
                 // TODO 0 build a validation tool, it can format a file, and then squash whitespace/newlines down to a single space and compare the results
                 // TODO 0 can we write out unhandled nodes in the generic print? ToFullString() ??
-                // TODO 0 review each node for leading/trailing stuff
-                // TODO 0 multiline comments need a doc type
-                // TODO 0 try out method parameters with leading/trailing comments to see how this approach works
                 // TODO 0 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow? that may get complicated
                 parts.Push(this.Print(returnType));
                 parts.Push(SpaceIfNoPreviousComment);
@@ -117,7 +102,7 @@ namespace CSharpier.Core
 
             if (parameterList != null)
             {
-                parts.Add(this.Print(parameterList));
+                parts.Add(this.PrintParameterListSyntax(parameterList));
             }
 
             this.PrintConstraintClauses(node, constraintClauses, parts);

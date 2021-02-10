@@ -9,32 +9,27 @@ namespace CSharpier.Core
             var parts = new Parts();
             if (node.Modifiers.Count > 0 || node.AttributeLists.Count > 0 || node.Body != null || node.ExpressionBody != null)
             {
-                parts.Add(HardLine);
+                parts.Push(HardLine);
             }
             else
             {
-                parts.Add(Line);
+                parts.Push(Line);
             }
 
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
-            parts.Add(this.PrintModifiers(node.Modifiers));
-            parts.Add(node.Keyword.Text);
-            if (node.Body == null && node.ExpressionBody == null)
+            parts.Push(this.PrintModifiers(node.Modifiers));
+            parts.Push(this.PrintSyntaxToken(node.Keyword));
+
+            if (node.Body != null)
             {
-                parts.Add(";");
+                parts.Add(this.PrintBlockSyntax(node.Body));
             }
-            else
+            else if (node.ExpressionBody != null)
             {
-                if (node.Body != null)
-                {
-                    parts.Add(this.PrintBlockSyntax(node.Body));
-                }
-                else
-                {
-                    parts.Add(this.PrintArrowExpressionClauseSyntax(node.ExpressionBody));
-                    parts.Add(";");
-                }
+                parts.Add(this.PrintArrowExpressionClauseSyntax(node.ExpressionBody));
             }
+
+            parts.Push(this.PrintSyntaxToken(node.SemicolonToken));
 
             return Concat(parts);
         }

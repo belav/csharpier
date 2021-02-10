@@ -21,6 +21,11 @@ namespace CSharpier.Core.Tests.TestFiles
             this.RunTest("MethodDeclaration", "LongMethodWithParameters");
         }
         [Test]
+        public void MethodComments()
+        {
+            this.RunTest("MethodDeclaration", "MethodComments");
+        }
+        [Test]
         public void MethodWithParameters()
         {
             this.RunTest("MethodDeclaration", "MethodWithParameters");

@@ -9,6 +9,8 @@ namespace CSharpier.Core
     public partial class Printer
     {
         public static readonly Doc BreakParent = new BreakParent();
+
+        // TODO kill?
         public static readonly Doc SpaceIfNoPreviousComment = new SpaceIfNoPreviousComment();
         public static readonly Doc HardLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard }, BreakParent);
         public static readonly Doc LiteralLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true }, BreakParent);
@@ -79,11 +81,11 @@ namespace CSharpier.Core
             return Concat(parts);
         }
 
-        public static Doc Group(Doc contents)
+        public static Doc Group(params Doc[] contents)
         {
             return new Group
             {
-                Contents = contents,
+                Contents = contents.Length == 0 ? contents[0] : Concat(contents),
                 // TODO group options if I use them
                 // id: opts.id,
                 // break: !!opts.shouldBreak,
@@ -91,11 +93,11 @@ namespace CSharpier.Core
             };
         }
 
-        public static Doc Indent(Doc contents)
+        public static Doc Indent(params Doc[] contents)
         {
             return new IndentDoc
             {
-                Contents = contents
+                Contents = contents.Length == 0 ? contents[0] : Concat(contents)
             };
         }
 
@@ -111,29 +113,8 @@ namespace CSharpier.Core
                 return null;
             }
 
-            this.printNewLinesInLeadingTrivia.TryPeek(out var printNewLines);
-            if (printNewLines)
-            {
-                this.printNewLinesInLeadingTrivia.Pop();
-                this.printNewLinesInLeadingTrivia.Push(false);
-            }
-            
             var parts = new Parts();
             var separator = node is TypeParameterSyntax || node is ParameterSyntax ? Line : HardLine;
-            if (printNewLines)
-            {
-                foreach (var leadingTrivia in attributeLists[0].OpenBracketToken.LeadingTrivia)
-                {
-                    if (leadingTrivia.Kind() == SyntaxKind.EndOfLineTrivia)
-                    {
-                        parts.Push(HardLine);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }   
-            }
             parts.Add(
                 Join(
                     separator,
@@ -153,152 +134,19 @@ namespace CSharpier.Core
         {
             if (modifiers.Count == 0)
             {
-                return "";
+                return null;
             }
 
             var parts = new Parts();
             foreach (var modifier in modifiers)
             {
-                parts.Push(this.PrintLeadingTrivia(modifier.LeadingTrivia));
-                parts.Push(modifier.Text);
-                parts.Push(this.PrintTrailingTrivia(modifier));
-                parts.Push(SpaceIfNoPreviousComment);
+                parts.Push(this.PrintSyntaxToken(modifier, " "));
             }
 
             return Group(Concat(parts));
         }
 
-        // TODO 0 I don't know that we really wanna call this, but we could maybe use this for printing new lines?
-        // it looks like the methods GetLeadingTrivia calls could be used to find all the leading newlines
-        private Doc PrintLeadingTrivia(CSharpSyntaxNode node)
-        {
-            if (!node.HasLeadingTrivia)
-            {
-                return null;
-            }
-
-            return this.PrintLeadingTrivia(node.GetLeadingTrivia());
-        }
-
-        private Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
-        {
-            return this.PrintLeadingTrivia(syntaxToken.LeadingTrivia);
-        }
-        
-        private readonly Stack<bool> printNewLinesInLeadingTrivia = new();
-
-        private Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia)
-        {
-            var parts = new Parts();
-            
-            this.printNewLinesInLeadingTrivia.TryPeek(out var doNewLines);
-
-            var hadDirective = false;
-            for (var x = 0; x < leadingTrivia.Count; x++)
-            {
-                var trivia = leadingTrivia[x];
-
-                if (doNewLines && trivia.Kind() == SyntaxKind.EndOfLineTrivia)
-                {
-                    SyntaxKind? kind = null;
-                    if (x < leadingTrivia.Count - 1)
-                    {
-                        kind = leadingTrivia[x + 1].Kind();
-                    }
-                    // TODO this probably needs multiline trivia too
-                    // TODO this may screw up with regions that aren't at the beginning of the line?
-                    if (!kind.HasValue || kind == SyntaxKind.SingleLineCommentTrivia || kind == SyntaxKind.EndOfLineTrivia || kind == SyntaxKind.WhitespaceTrivia)
-                    {
-                        parts.Push(HardLine);
-                    }
-                }
-                if (trivia.Kind() != SyntaxKind.EndOfLineTrivia && trivia.Kind() != SyntaxKind.WhitespaceTrivia)
-                {
-                    if (doNewLines)
-                    {
-                        doNewLines = false;
-                        this.printNewLinesInLeadingTrivia.Pop();
-                        this.printNewLinesInLeadingTrivia.Push(false);
-                    }
-                }
-                if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
-                {
-                    parts.Push(LeadingComment(trivia.ToString(), CommentType.SingleLine));
-                }
-                else if (trivia.Kind() == SyntaxKind.DisabledTextTrivia)
-                {
-                    parts.Push(LiteralLine, trivia.ToString().TrimEnd('\n', '\r'));
-                }
-                else if (trivia.Kind() == SyntaxKind.IfDirectiveTrivia
-                         || trivia.Kind() == SyntaxKind.ElseDirectiveTrivia
-                         || trivia.Kind() == SyntaxKind.ElifDirectiveTrivia
-                         || trivia.Kind() == SyntaxKind.EndIfDirectiveTrivia
-                         || trivia.Kind() == SyntaxKind.LineDirectiveTrivia
-                         || trivia.Kind() == SyntaxKind.ErrorDirectiveTrivia
-                         || trivia.Kind() == SyntaxKind.WarningDirectiveTrivia
-                         || trivia.Kind() == SyntaxKind.PragmaWarningDirectiveTrivia
-                         || trivia.Kind() == SyntaxKind.PragmaChecksumDirectiveTrivia
-                         || trivia.Kind() == SyntaxKind.DefineDirectiveTrivia
-                         || trivia.Kind() == SyntaxKind.UndefDirectiveTrivia)
-                {
-                    hadDirective = true;
-                    parts.Push(LiteralLine, trivia.ToString());
-                }
-                else if (trivia.Kind() == SyntaxKind.RegionDirectiveTrivia 
-                         || trivia.Kind() == SyntaxKind.EndRegionDirectiveTrivia)
-                {
-                    var triviaText = trivia.ToString();
-                    if (x > 0 && leadingTrivia[x - 1].Kind() == SyntaxKind.WhitespaceTrivia)
-                    {
-                        triviaText = leadingTrivia[x - 1] + triviaText;
-                    }
-                    
-                    hadDirective = true;
-                    parts.Push(LiteralLine, triviaText);
-                }
-            }
-
-            if (hadDirective)
-            {
-                parts.Push(HardLine);
-            }
-
-            return parts.Count > 0 ? Concat(parts) : null;
-        }
-
-        private Doc PrintTrailingTrivia(CSharpSyntaxNode node)
-        {
-            if (!node.HasTrailingTrivia)
-            {
-                return null;
-            }
-
-            return this.PrintTrailingTrivia(node.GetTrailingTrivia());
-        }
-
-        private Doc PrintTrailingTrivia(SyntaxToken node)
-        {
-            return this.PrintTrailingTrivia(node.TrailingTrivia);
-        }
-        
-        private Doc PrintTrailingTrivia(SyntaxTriviaList trailingTrivia)
-        {
-            var parts = new Parts();
-            foreach (var trivia in trailingTrivia)
-            {
-                if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
-                {
-                    parts.Push(TrailingComment(trivia.ToString(), CommentType.SingleLine));
-                }
-                else if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
-                {
-                    parts.Push(" ", trivia.ToString(), Line);
-                }
-            }
-            
-            return parts.Count > 0 ? Concat(parts) : null;
-        }
-
+        // TODO 0 trivia!
         private Doc PrintStatements<T>(SyntaxToken openBraceToken, IReadOnlyList<T> statements, SyntaxToken closeBraceToken, Doc separator, Doc endOfLineDoc = null)
             where T : SyntaxNode
         {
@@ -307,7 +155,7 @@ namespace CSharpier.Core
             var parts = new Parts(Line, "{");
             if (statements.Count > 0)
             {
-                parts.Push(Concat(Indent(Concat(separator, Join(actualEndOfLine, statements.Select(this.Print)))), separator));
+                parts.Push(Concat(Indent(separator, Join(actualEndOfLine, statements.Select(this.Print))), separator));
             }
 
             var leadingTrivia = this.PrintLeadingTrivia(closeBraceToken.LeadingTrivia);
@@ -337,12 +185,10 @@ namespace CSharpier.Core
 
             parts.Add(
                 Indent(
-                    Concat(
+                    HardLine,
+                    Join(
                         HardLine,
-                        Join(
-                            HardLine,
-                            constraintClausesList.Select(this.PrintTypeParameterConstraintClauseSyntax)
-                        )
+                        constraintClausesList.Select(this.PrintTypeParameterConstraintClauseSyntax)
                     )
                 )
             );
@@ -359,13 +205,12 @@ namespace CSharpier.Core
 
         private Doc PrintLeftRightOperator(SyntaxNode node, SyntaxNode left, SyntaxToken operatorToken, SyntaxNode right)
         {
+            // TODO 0 trivia!
             var parts = new Parts();
-            // TODO printExtraNewLines(node, parts, ["left", "identifier"]);
-            // TODO printLeadingComments(node, parts, ["left", "identifier"]);
             parts.Push(
                 this.Print(left),
                 " ",
-                operatorToken.Text,
+                this.PrintSyntaxToken(operatorToken),
                 " ",
                 this.Print(right)
             );
@@ -374,18 +219,17 @@ namespace CSharpier.Core
 
         private Doc PrintBaseFieldDeclarationSyntax(BaseFieldDeclarationSyntax node)
         {
-            this.printNewLinesInLeadingTrivia.Push(true);
             var parts = new Parts();
+            parts.Push(this.PrintExtraNewLines(node));
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
             parts.Push(this.PrintModifiers(node.Modifiers));
             if (node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax)
             {
-                parts.Push(eventFieldDeclarationSyntax.EventKeyword.Text, " ");
+                parts.Push(this.PrintSyntaxToken(eventFieldDeclarationSyntax.EventKeyword, " "));
             }
 
             parts.Push(this.Print(node.Declaration));
-            parts.Push(";");
-            parts.Push(this.PrintTrailingTrivia(node.SemicolonToken));
+            parts.Push(this.PrintSyntaxToken(node.SemicolonToken));
             return Concat(parts);
         }
     }
