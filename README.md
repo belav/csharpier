@@ -3,11 +3,13 @@ This is a WIP prettier port to .net for formatting c# code. It is NOT production
 It can generate mostly correct code for c# <= 8.0.
 It formats a solution of ~11,000 source files in < 30 seconds
 
-The remaining major issues
-- Comments - the approach is being finalized before the work is done to get all nodes to format comments. Comments are lost in a number of places.
-- Preprocessor directives - partial support exists for if/else/endif, but csharpier is not able to format code within most if directives due to how roslyn parse that code. Other directives are not yet supported and lost.
-- New Lines - some new lines that should remain are lost - this will be addressed as comment support is added.
+The remaining issues
+- Leading/Trailing Trivia - A large number of these are currently lost. The approach to printing these is implemented, but changes need to be made to each node types print function as well as some of the helper functions before they will print correctly.
+  - Comments
+  - Preprocessor Directives
+  - New lines - the goal is to preserve new lines in some areas. For example the lines that appear between properties will be preserved.
 - Formatting (mostly when to line break/indent longer code) is not finalized.
+- A few node types are missing and code for them will be lost.
 
 Try it out at [Playground](https://csharpier.bnt-studios.com)
 
