@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 
-namespace CSharpier
+namespace CSharpier.Core
 {
     public class CodeFormatter
     {

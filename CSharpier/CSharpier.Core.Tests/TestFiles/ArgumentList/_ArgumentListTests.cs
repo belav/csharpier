@@ -1,7 +1,7 @@
-using CSharpier.Tests.TestFileTests;
+using CSharpier.Core.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Core.Tests.TestFiles
 {
     public class ArgumentListTests : BaseTest
     {

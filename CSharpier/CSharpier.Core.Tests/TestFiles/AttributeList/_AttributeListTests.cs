@@ -1,10 +1,20 @@
-using CSharpier.Tests.TestFileTests;
+using CSharpier.Core.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Core.Tests.TestFiles
 {
     public class AttributeListTests : BaseTest
     {
+        [Test]
+        public void AttributeListComments()
+        {
+            this.RunTest("AttributeList", "AttributeListComments");
+        }
+        [Test]
+        public void AttributeListNewLines()
+        {
+            this.RunTest("AttributeList", "AttributeListNewLines");
+        }
         [Test]
         public void AttributeNameColon()
         {
