@@ -293,6 +293,18 @@
             "trailingTrivia": [
               {
                 "nodeType": "SyntaxTrivia",
+                "kind": "WhitespaceTrivia",
+                "text": " ",
+                "rawKind": 8540
+              },
+              {
+                "nodeType": "SyntaxTrivia",
+                "kind": "SingleLineCommentTrivia",
+                "text": "// trailing initializer comment",
+                "rawKind": 8541
+              },
+              {
+                "nodeType": "SyntaxTrivia",
                 "kind": "EndOfLineTrivia",
                 "text": "\r\n",
                 "rawKind": 8539

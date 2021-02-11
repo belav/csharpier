@@ -50,9 +50,7 @@ namespace CSharpier.Core
 
             ;
             parts.Push(Join(", ", attributes));
-            parts.Push(this.PrintLeadingTrivia(node.CloseBracketToken));
-            parts.Push(node.CloseBracketToken.Text);
-            parts.Push(this.PrintTrailingTrivia(node.CloseBracketToken));
+            parts.Push(this.PrintSyntaxToken(node.CloseBracketToken));
 
             return Concat(parts);
         }

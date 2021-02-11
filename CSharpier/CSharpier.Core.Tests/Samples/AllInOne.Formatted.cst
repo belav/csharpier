@@ -1,4 +1,4 @@
-#error Error message
+﻿#error Error message
 #warning Warning message
 #pragma warning disable 414, 3021
 #pragma warning restore 3021
@@ -589,6 +589,22 @@ namespace ConsoleApplication1
 
 namespace Comments.XmlComments.UndocumentedKeywords
 {
+    /// <summary>
+    /// Whatever
+    /// </summary>
+    /// <!-- c -->
+    /// <![CDATA[c]]> //
+    /// <c></c> /* */
+    /// <code></code>
+    /// <example></example>
+    /// <exception cref="bla"></exception>
+    /// <include file='' path='[@name=""]'/>
+    /// <permission cref=" "></permission>
+    /// <remarks></remarks>
+    /// <see cref=""/>
+    /// <seealso cref=" "/>
+    /// <value></value>
+    /// <typeparam name="T"></typeparam>
     class /*///*/
     C<T>
     {

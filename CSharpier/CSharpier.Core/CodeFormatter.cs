@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 using Newtonsoft.Json;
 
 namespace CSharpier.Core
@@ -19,8 +24,7 @@ namespace CSharpier.Core
             {
                 Code = formattedCode,
                 DocTree = options.IncludeDocTree ? this.PrintDocTree(document, "") : null,
-                AST = options.IncludeAST ? this.PrintAST(rootNode) : null,
-                TestRunFailed = options.TestRun && this.IsCodeBasicallyEqual(code, formattedCode)
+                AST = options.IncludeAST ? this.PrintAST(rootNode) : null
             };
         }
 
@@ -81,32 +85,23 @@ namespace CSharpier.Core
                     throw new Exception("Can't handle " + document);
             }
         }
-        
-        private bool IsCodeBasicallyEqual(string code, string formattedCode)
-        {
-            return this.Squash(code) == this.Squash(formattedCode);
-        }
 
-        private string Squash(string code)
+        // this isn't super useful because it just shows me how to convert old into new, but doesn't show what that will actually change
+        public static bool IsCodeEqualAccordingToSyntaxDiffer(string code, string formattedCode)
         {
-            var result = new StringBuilder();
-            for (var x = 0; x < code.Length; x++)
+            var type = typeof(SyntaxNode).Assembly.GetTypes().First(o => o.Name == "SyntaxDiffer");
+            var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Static).Where(o => o.Name == "GetTextChanges");
+            foreach (var method in methods)
             {
-                var nextChar = code[x];
-                if (nextChar == ' ' || nextChar == '\t' || nextChar == '\r' || nextChar == '\n')
+                var blah = method.GetParameters();
+                if (blah.Length == 2 && blah[0].ParameterType == typeof(SyntaxTree))
                 {
-                    if (result.Length == 0 || result[^1] != ' ')
-                    {
-                        result.Append(' ');
-                    }
-                }
-                else
-                {
-                    result.Append(nextChar);
+                    var result = method.Invoke(null, new[] { CSharpSyntaxTree.ParseText(code), CSharpSyntaxTree.ParseText(formattedCode) }) as IList<TextChange>;
+                    return result.Count == 0;
                 }
             }
-
-            return result.ToString();
+            
+            return false;
         }
     }
 

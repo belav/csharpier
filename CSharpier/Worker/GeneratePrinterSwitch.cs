@@ -25,7 +25,7 @@ namespace CSharpier.Core
             switch (syntaxNode)
             {");
 
-            var csharpDirectory = Path.Combine(rootDirectory.FullName, @"CSharpier\CSharpier\Printer");
+            var csharpDirectory = Path.Combine(rootDirectory.FullName, @"CSharpier\CSharpier.Core\Printer");
             foreach (var file in new DirectoryInfo(csharpDirectory).GetFiles())
             {
                 var name = file.Name.Replace(".cs", "");

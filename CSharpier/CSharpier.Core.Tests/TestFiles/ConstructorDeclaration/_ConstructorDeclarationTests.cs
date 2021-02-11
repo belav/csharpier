@@ -16,6 +16,11 @@ namespace CSharpier.Core.Tests.TestFiles
             this.RunTest("ConstructorDeclaration", "ConstructorDeclarationComments");
         }
         [Test]
+        public void ConstructorDeclarationWithInitializer()
+        {
+            this.RunTest("ConstructorDeclaration", "ConstructorDeclarationWithInitializer");
+        }
+        [Test]
         public void ConstructorWithParameters()
         {
             this.RunTest("ConstructorDeclaration", "ConstructorWithParameters");

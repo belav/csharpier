@@ -78,6 +78,8 @@ namespace CSharpier.Core
                     return this.PrintConstructorConstraintSyntax(constructorConstraintSyntax);
                 case ConstructorDeclarationSyntax constructorDeclarationSyntax:
                     return this.PrintConstructorDeclarationSyntax(constructorDeclarationSyntax);
+                case ConstructorInitializerSyntax constructorInitializerSyntax:
+                    return this.PrintConstructorInitializerSyntax(constructorInitializerSyntax);
                 case ContinueStatementSyntax continueStatementSyntax:
                     return this.PrintContinueStatementSyntax(continueStatementSyntax);
                 case ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax:

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CSharpier.Core;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.CLI
 {
@@ -11,28 +13,74 @@ namespace CSharpier.CLI
     {
         static void Main(string[] args)
         {
+            // TODO 1 Configuration.cs
+            // TODO 1 CurrencyDto.cs
             var fullStopwatch = Stopwatch.StartNew();
             //var path = "C:\\temp\\clifiles";
-            var path = "C:\\Projects\\insite-commerce-prettier";
+            var path = @"C:\Projects\insite-commerce-prettier\Legacy\Data";
 
-            // TODO can I use this? https://stackoverflow.com/questions/34945023/roslyn-syntaxtree-diff
             // TODO use test run stuff in here, maybe start with smaller directories to track down issues
             // or only write changes for fails, so it is easy to find them.
             // TODO we can also look at prettier, they do some stuff like run it twice and compare AST, compare file to make sure the 2nd run doesn't change it from the first run, etc
             // not sure how the AST compare will work because we are modifying leading/trailing trivia, unless we compare everything except whitespace/endofline trivia
-            // hmmmm
             // seems like way more work than my current naive approach
 
-            Parallel.ForEach(Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories), async (string file) =>
-            {
-                var code = await File.ReadAllTextAsync(file);
-                var stopwatch = Stopwatch.StartNew();
-                var formatter = new CodeFormatter();
-                var result = formatter.Format(code, new Options());
-                //Console.WriteLine(file.Subpath.Length + ": " + stopwatch.ElapsedMilliseconds + "ms");
-                await File.WriteAllTextAsync(file, result.Code, new UTF8Encoding(false));
-            });
+            var tasks = Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories).AsParallel().Select(o => DoWork(o, path)).ToArray();
+            Task.WaitAll(tasks);
             Console.WriteLine("total: " + fullStopwatch.ElapsedMilliseconds + "ms");
+        }
+
+        private static async Task DoWork(string file, string path)
+        {
+            var code = await File.ReadAllTextAsync(file);
+            var formatter = new CodeFormatter();
+            var result = formatter.Format(code, new Options
+            {
+                TestRun = true,
+            });
+
+            if (!IsCodeBasicallyEqual(code, result.Code, file))
+            {
+                Console.WriteLine(file.Substring(path.Length) + " - failed!");
+            }
+
+            await File.WriteAllTextAsync(file, result.Code, Encoding.UTF8);
+        }
+        
+        public static bool IsCodeBasicallyEqual(string code, string formattedCode, string file)
+        {
+            var squashCode = Squash(code);
+            var squashFormattedCode = Squash(formattedCode);
+            if (squashCode != squashFormattedCode)
+            {
+                File.WriteAllText(file.Replace(".cs", ".org.cs"), squashCode);
+                File.WriteAllText(file.Replace(".cs", ".new.cs"), squashFormattedCode);
+                return false;
+            }
+
+            return true;
+        }
+
+        private static string Squash(string code)
+        {
+            var result = new StringBuilder();
+            for (var x = 0; x < code.Length; x++)
+            {
+                var nextChar = code[x];
+                if (nextChar == ' ' || nextChar == '\t' || nextChar == '\r' || nextChar == '\n')
+                {
+                    if (result.Length == 0 || result[^1] != ' ')
+                    {
+                        result.Append(' ');
+                    }
+                }
+                else
+                {
+                    result.Append(nextChar);
+                }
+            }
+
+            return result.ToString().Replace("( ", "(").TrimEnd(' ');
         }
     }
 }

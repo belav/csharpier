@@ -27,7 +27,6 @@ namespace CSharpier.Core
         
         // TODO 0 review each node for leading/trailing stuff plus all the helper methods
         // TODO 0 multiline comments need a doc type
-        // TODO 0 try out method parameters with leading/trailing comments to see how this approach works
         private Doc PrintSyntaxToken(SyntaxToken syntaxToken, Doc afterTokenIfNoTrailing = null)
         {
             if (syntaxToken.RawKind == 0)
@@ -97,9 +96,10 @@ namespace CSharpier.Core
                         this.printNewLinesInLeadingTrivia.Push(false);
                     }
                 }
-                if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
+                if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia
+                    || trivia.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia)
                 {
-                    parts.Push(LeadingComment(trivia.ToString(), CommentType.SingleLine));
+                    parts.Push(LeadingComment(trivia.ToFullString().TrimEnd('\n', '\r'), CommentType.SingleLine));
                 }
                 else if (trivia.Kind() == SyntaxKind.DisabledTextTrivia)
                 {

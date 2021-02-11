@@ -10,6 +10,7 @@ namespace CSharpier.Core
                 this.PrintModifiers(node.Modifiers),
                 this.PrintSyntaxToken(node.Identifier),
                 this.PrintParameterListSyntax(node.ParameterList),
+                node.Initializer != null ? this.Print(node.Initializer) : null,
                 this.PrintBlockSyntax(node.Body)));
         }
     }

@@ -13,11 +13,14 @@ namespace CSharpier.Core
             ArrowExpressionClauseSyntax expressionBody = null;
             Doc identifier = null;
             Doc eventKeyword = null;
+            SyntaxToken? semicolonToken = null;
+            
             if (node is PropertyDeclarationSyntax propertyDeclarationSyntax)
             {
                 expressionBody = propertyDeclarationSyntax.ExpressionBody;
                 initializer = propertyDeclarationSyntax.Initializer;
                 identifier = this.PrintSyntaxToken(propertyDeclarationSyntax.Identifier);
+                semicolonToken = propertyDeclarationSyntax.SemicolonToken;
             }
             else if (node is IndexerDeclarationSyntax indexerDeclarationSyntax)
             {
@@ -28,21 +31,27 @@ namespace CSharpier.Core
                     Join(", ", indexerDeclarationSyntax.ParameterList.Parameters.Select(this.PrintParameterSyntax)),
                     "]"
                 );
+                semicolonToken = indexerDeclarationSyntax.SemicolonToken;
             }
             else if (node is EventDeclarationSyntax eventDeclarationSyntax)
             {
                 eventKeyword = this.PrintSyntaxToken(eventDeclarationSyntax.EventKeyword, " ");
                 identifier = this.PrintSyntaxToken(eventDeclarationSyntax.Identifier);
+                semicolonToken = eventDeclarationSyntax.SemicolonToken;
             }
 
             Doc contents = "";
             if (node.AccessorList != null)
             {
-                contents = Group(Concat(Line, "{", Group(Indent(node.AccessorList.Accessors.Select(this.PrintAccessorDeclarationSyntax).ToArray())), Line, "}"));
+                contents = Group(Concat(Line, 
+                    this.PrintSyntaxToken(node.AccessorList.OpenBraceToken), 
+                    Group(Indent(node.AccessorList.Accessors.Select(this.PrintAccessorDeclarationSyntax).ToArray())), 
+                    Line,
+                    this.PrintSyntaxToken(node.AccessorList.CloseBraceToken)));
             }
             else if (expressionBody != null)
             {
-                contents = Concat(this.PrintArrowExpressionClauseSyntax(expressionBody), ";");
+                contents = Concat(this.PrintArrowExpressionClauseSyntax(expressionBody));
             }
 
 
@@ -61,8 +70,9 @@ namespace CSharpier.Core
                     identifier,
                     contents,
                     initializer != null
-                        ? Concat(this.PrintEqualsValueClauseSyntax(initializer), ";")
-                        : ""
+                        ? this.PrintEqualsValueClauseSyntax(initializer)
+                        : null,
+                    semicolonToken.HasValue ? this.PrintSyntaxToken(semicolonToken.Value) : null
                 )
             );
         }

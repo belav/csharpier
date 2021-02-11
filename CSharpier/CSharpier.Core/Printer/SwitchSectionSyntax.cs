@@ -11,7 +11,7 @@ namespace CSharpier.Core
             if (node.Statements.Count == 1 && node.Statements[0] is BlockSyntax blockSyntax) {
                 parts.Push(this.PrintBlockSyntax(blockSyntax));
             } else {
-                parts.Push(Indent(Concat(HardLine, Concat(node.Statements.Select(this.Print).ToArray()))));
+                parts.Push(Indent(Concat(HardLine, Join(HardLine, node.Statements.Select(this.Print).ToArray()))));
             }
             return Concat(parts);
         }

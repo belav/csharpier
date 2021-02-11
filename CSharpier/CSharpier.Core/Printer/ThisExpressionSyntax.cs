@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintThisExpressionSyntax(ThisExpressionSyntax node)
         {
-            return node.Token.Text;
+            return this.PrintSyntaxToken(node.Token);
         }
     }
 }

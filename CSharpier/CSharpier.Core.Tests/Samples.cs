@@ -38,11 +38,10 @@ namespace CSharpier.Core.Tests
                 TestRun = true,
             });
             Console.WriteLine(result.TestRunFailed);
-            
-            // TODO what about BOM? keep it if incoming file?
-            File.WriteAllText(file.Replace(".cst", ".Formatted.cst"), result.Code, new UTF8Encoding(false));
-            File.WriteAllText(file.Replace(".cst", ".doctree.txt"), result.DocTree, new UTF8Encoding(false));
-            File.WriteAllText(file.Replace(".cst", ".json"), result.AST, new UTF8Encoding(false));
+
+            File.WriteAllText(file.Replace(".cst", ".Formatted.cst"), result.Code, Encoding.UTF8);
+            File.WriteAllText(file.Replace(".cst", ".doctree.txt"), result.DocTree, Encoding.UTF8);
+            File.WriteAllText(file.Replace(".cst", ".json"), result.AST, Encoding.UTF8);
         }
     }
 }

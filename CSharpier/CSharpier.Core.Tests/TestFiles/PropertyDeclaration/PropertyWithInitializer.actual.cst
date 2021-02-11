@@ -1,4 +1,4 @@
 ﻿public class ClassName
 {
-    public string First { get; set; } = "First";
+    public string First { get; set; } = "First"; // trailing initializer comment
 }

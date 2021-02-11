@@ -1,16 +1,8 @@
-public class ClassName
+﻿public class ClassName
 {
-    public void MethodName()
-    {
+    /// <summary>Useless Summary</summary
+    public string Property { get; set; }
 
-        if (true)
-        {
-        // do something
-        }
-
-        if (false)
-        {
-        // do something else
-        }
-    }
+    /// <summary>Useless Summary</summary>
+    public void MethodName() { }
 }
