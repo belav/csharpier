@@ -7,13 +7,9 @@ namespace CSharpier.Core
         private Doc PrintArrayCreationExpressionSyntax(ArrayCreationExpressionSyntax node)
         {
             return Group(
-                Concat(
-                    "new",
-                    " ",
-                    this.Print(node.Type),
-                    node.Initializer != null ? Concat(Line, this.Print(node.Initializer)) : ""
-                )
-            );
+                this.PrintSyntaxToken(node.NewKeyword, " "),
+                this.Print(node.Type),
+                node.Initializer != null ? Concat(Line, this.Print(node.Initializer)) : null);
         }
     }
 }

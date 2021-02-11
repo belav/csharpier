@@ -6,10 +6,10 @@ namespace CSharpier.Core
     {
         private Doc PrintReturnStatementSyntax(ReturnStatementSyntax node)
         {
-            if (node.Expression == null) {
-                return node.ReturnKeyword.Text + ";";
-            }
-            return Concat(node.ReturnKeyword.Text, " ", this.Print(node.Expression), ";");
+            return Concat(this.PrintExtraNewLines(node),
+                this.PrintSyntaxToken(node.ReturnKeyword, node.Expression != null ? " " : null),
+                node.Expression != null ? this.Print(node.Expression) : null,
+                this.PrintSyntaxToken(node.SemicolonToken));
         }
     }
 }

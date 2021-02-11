@@ -9,9 +9,9 @@ namespace CSharpier.Core
         {
             var parts = new Parts(Join(HardLine, node.Labels.Select(this.Print)));
             if (node.Statements.Count == 1 && node.Statements[0] is BlockSyntax blockSyntax) {
-                parts.Add(this.PrintBlockSyntax(blockSyntax));
+                parts.Push(this.PrintBlockSyntax(blockSyntax));
             } else {
-                parts.Add(Indent(Concat(HardLine, Concat(node.Statements.Select(this.Print).ToArray()))));
+                parts.Push(Indent(Concat(HardLine, Concat(node.Statements.Select(this.Print).ToArray()))));
             }
             return Concat(parts);
         }

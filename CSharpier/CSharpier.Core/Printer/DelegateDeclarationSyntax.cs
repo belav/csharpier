@@ -7,16 +7,16 @@ namespace CSharpier.Core
         private Doc PrintDelegateDeclarationSyntax(DelegateDeclarationSyntax node)
         {
             var parts = new Parts();
-            parts.Add(this.PrintModifiers(node.Modifiers));
+            parts.Push(this.PrintModifiers(node.Modifiers));
             parts.Push(node.DelegateKeyword.Text, " ");
-            parts.Add(this.Print(node.ReturnType));
+            parts.Push(this.Print(node.ReturnType));
             parts.Push(" ", node.Identifier.Text);
             if (node.TypeParameterList != null) {
-                parts.Add(this.Print(node.TypeParameterList));
+                parts.Push(this.Print(node.TypeParameterList));
             }
-            parts.Add(this.Print(node.ParameterList));
+            parts.Push(this.Print(node.ParameterList));
             this.PrintConstraintClauses(node, node.ConstraintClauses, parts);
-            parts.Add(";");
+            parts.Push(";");
             return Concat(parts);
         }
     }

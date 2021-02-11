@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -72,10 +73,10 @@ namespace CSharpier.Core
             {
                 if (x != 0)
                 {
-                    parts.Add(separator);
+                    parts.Push(separator);
                 }
 
-                parts.Add(list[x]);
+                parts.Push(list[x]);
             }
 
             return Concat(parts);
@@ -101,6 +102,22 @@ namespace CSharpier.Core
             };
         }
 
+        private Doc PrintSeparatedSyntaxList<T>(SeparatedSyntaxList<T> list, Func<T, Doc> printFunc, Doc afterSeparator)
+            where T : SyntaxNode
+        {
+            var parts = new Parts();
+            for (var x = 0; x < list.Count; x++)
+            {
+                parts.Push(printFunc(list[x]));
+                if (x < list.Count - 1)
+                {
+                    parts.Push(this.PrintSyntaxToken(list.GetSeparator(x), afterSeparator));
+                }
+            }
+
+            return parts.Count == 0 ? null : Concat(parts);
+        }
+        
         private Doc PrintCommaList(IEnumerable<Doc> docs)
         {
             return Join(Concat(",", Line), docs);
@@ -115,7 +132,7 @@ namespace CSharpier.Core
 
             var parts = new Parts();
             var separator = node is TypeParameterSyntax || node is ParameterSyntax ? Line : HardLine;
-            parts.Add(
+            parts.Push(
                 Join(
                     separator,
                     attributeLists.Select(this.PrintAttributeListSyntax)
@@ -124,7 +141,7 @@ namespace CSharpier.Core
 
             if (!(node is ParameterSyntax))
             {
-                parts.Add(separator);
+                parts.Push(separator);
             }
 
             return Concat(parts);
@@ -205,7 +222,6 @@ namespace CSharpier.Core
 
         private Doc PrintLeftRightOperator(SyntaxNode node, SyntaxNode left, SyntaxToken operatorToken, SyntaxNode right)
         {
-            // TODO 0 trivia!
             var parts = new Parts();
             parts.Push(
                 this.Print(left),

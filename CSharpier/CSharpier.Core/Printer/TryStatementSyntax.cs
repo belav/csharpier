@@ -8,9 +8,10 @@ namespace CSharpier.Core
         private Doc PrintTryStatementSyntax(TryStatementSyntax node)
         {
             var parts = new Parts();
+            parts.Push(this.PrintExtraNewLines(node));
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
             parts.Push(
-                "try",
+                this.PrintSyntaxToken(node.TryKeyword),
                 this.PrintBlockSyntax(node.Block),
                 HardLine,
                 Join(

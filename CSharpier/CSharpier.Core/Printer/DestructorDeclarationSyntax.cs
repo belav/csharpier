@@ -7,10 +7,10 @@ namespace CSharpier.Core
         private Doc PrintDestructorDeclarationSyntax(DestructorDeclarationSyntax node)
         {
             var parts = new Parts();
-            parts.Add(node.TildeToken.Text);
-            parts.Add(node.Identifier.Text);
-            parts.Add(this.Print(node.ParameterList));
-            parts.Add(this.Print(node.Body));
+            parts.Push(node.TildeToken.Text);
+            parts.Push(node.Identifier.Text);
+            parts.Push(this.Print(node.ParameterList));
+            parts.Push(this.Print(node.Body));
             return Group(Concat(parts));
         }
     }

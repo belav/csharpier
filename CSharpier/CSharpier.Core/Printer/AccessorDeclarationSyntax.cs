@@ -22,11 +22,11 @@ namespace CSharpier.Core
 
             if (node.Body != null)
             {
-                parts.Add(this.PrintBlockSyntax(node.Body));
+                parts.Push(this.PrintBlockSyntax(node.Body));
             }
             else if (node.ExpressionBody != null)
             {
-                parts.Add(this.PrintArrowExpressionClauseSyntax(node.ExpressionBody));
+                parts.Push(this.PrintArrowExpressionClauseSyntax(node.ExpressionBody));
             }
 
             parts.Push(this.PrintSyntaxToken(node.SemicolonToken));

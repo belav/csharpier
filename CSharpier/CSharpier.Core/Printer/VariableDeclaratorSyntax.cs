@@ -8,12 +8,12 @@ namespace CSharpier.Core
         private Doc PrintVariableDeclaratorSyntax(VariableDeclaratorSyntax node)
         {
             var parts = new Parts();
-            parts.Add(node.Identifier.Text);
+            parts.Push(node.Identifier.Text);
             if (node.ArgumentList != null) {
-                parts.Add(this.PrintBracketedArgumentListSyntax(node.ArgumentList));
+                parts.Push(this.PrintBracketedArgumentListSyntax(node.ArgumentList));
             }
             if (node.Initializer != null) {
-                parts.Add(this.PrintEqualsValueClauseSyntax(node.Initializer));
+                parts.Push(this.PrintEqualsValueClauseSyntax(node.Initializer));
             }
             return Concat(parts);
         }

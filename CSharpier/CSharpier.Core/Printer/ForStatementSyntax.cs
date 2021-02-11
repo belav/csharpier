@@ -17,7 +17,7 @@ namespace CSharpier.Core
             }
             else
             {
-                parts.Add(";");
+                parts.Push(";");
             }
 
             if (node.Condition != null)
@@ -26,18 +26,18 @@ namespace CSharpier.Core
             }
             else
             {
-                parts.Add(";");
+                parts.Push(";");
             }
 
             parts.Push(Join(", ", node.Incrementors.Select(this.Print)), ")");
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {
-                parts.Add(statement);
+                parts.Push(statement);
             }
             else
             {
-                parts.Add(Indent(Concat(HardLine, statement)));
+                parts.Push(Indent(Concat(HardLine, statement)));
             }
 
             return Concat(parts);

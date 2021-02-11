@@ -10,7 +10,7 @@ namespace CSharpier.Core
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
             parts.Push(node.Identifier.Text, ":");
             if (node.Statement is BlockSyntax blockSyntax) {
-                parts.Add(this.PrintBlockSyntax(blockSyntax));
+                parts.Push(this.PrintBlockSyntax(blockSyntax));
             } else {
                 parts.Push(HardLine, this.Print(node.Statement));
             }

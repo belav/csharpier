@@ -8,13 +8,13 @@ namespace CSharpier.Core
         private Doc PrintQueryBodySyntax(QueryBodySyntax node)
         {
             var parts = new Parts();
-            parts.Add(Join(Line, node.Clauses.Select(this.Print)));
+            parts.Push(Join(Line, node.Clauses.Select(this.Print)));
             if (node.Clauses.Count > 0)
             {
-                parts.Add(Line);
+                parts.Push(Line);
             }
 
-            parts.Add(this.Print(node.SelectOrGroup));
+            parts.Push(this.Print(node.SelectOrGroup));
             if (node.Continuation != null)
             {
                 // TODO indent when there is a group by before the into?

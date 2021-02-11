@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintAwaitExpressionSyntax(AwaitExpressionSyntax node)
         {
-            return Concat("await", " ", this.Print(node.Expression));
+            return Concat(this.PrintSyntaxToken(node.AwaitKeyword, " "), this.Print(node.Expression));
         }
     }
 }

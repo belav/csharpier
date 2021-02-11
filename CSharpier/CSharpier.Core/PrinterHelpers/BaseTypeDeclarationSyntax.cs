@@ -48,7 +48,7 @@ namespace CSharpier.Core
             var parts = new Parts();
             parts.Push(this.PrintExtraNewLines(node));
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
-            parts.Add(this.PrintModifiers(node.Modifiers));
+            parts.Push(this.PrintModifiers(node.Modifiers));
             if (keyword != null)
             {
                 parts.Push(this.PrintSyntaxToken(keyword.Value, " "));
@@ -58,22 +58,22 @@ namespace CSharpier.Core
 
             if (typeParameterList != null)
             {
-                parts.Add(this.PrintTypeParameterListSyntax(typeParameterList));
+                parts.Push(this.PrintTypeParameterListSyntax(typeParameterList));
             }
 
             if (node.BaseList != null)
             {
-                parts.Add(this.PrintBaseListSyntax(node.BaseList));
+                parts.Push(this.PrintBaseListSyntax(node.BaseList));
             }
 
             this.PrintConstraintClauses(node, constraintClauses, parts);
 
             if (hasMembers)
             {
-                parts.Add(Concat(hasConstraintClauses ? "" : HardLine, "{"));
-                parts.Add(Indent(Concat(HardLine, Join(memberSeparator, members.Select(this.Print)))));
-                parts.Add(HardLine);
-                parts.Add("}");
+                parts.Push(Concat(hasConstraintClauses ? "" : HardLine, "{"));
+                parts.Push(Indent(Concat(HardLine, Join(memberSeparator, members.Select(this.Print)))));
+                parts.Push(HardLine);
+                parts.Push("}");
             }
             else
             {

@@ -10,10 +10,10 @@ namespace CSharpier.Core
             parts.Push(this.PrintSyntaxToken(node.AsyncKeyword, " "));
             parts.Push(this.PrintSyntaxToken(node.DelegateKeyword));
             if (node.ParameterList != null) {
-                parts.Add(this.PrintParameterListSyntax(node.ParameterList));
+                parts.Push(this.PrintParameterListSyntax(node.ParameterList));
             }
             // TODO 2 when will ExpressionBody ever exist? I can't find it in testing.
-            parts.Add(this.PrintBlockSyntax(node.Block));
+            parts.Push(this.PrintBlockSyntax(node.Block));
             
             return Concat(parts);
         }

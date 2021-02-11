@@ -21,9 +21,9 @@ namespace CSharpier.Core.Tests.TestFiles
             this.RunTest("IfStatement", "EqualsIfStatement");
         }
         [Test]
-        public void IfStatementWithNoBraces()
+        public void IfStatementAddsBraces()
         {
-            this.RunTest("IfStatement", "IfStatementWithNoBraces");
+            this.RunTest("IfStatement", "IfStatementAddsBraces");
         }
         [Test]
         public void LogicalNotIfStatement()

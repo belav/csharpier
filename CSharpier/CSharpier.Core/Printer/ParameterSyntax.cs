@@ -9,16 +9,16 @@ namespace CSharpier.Core
             var parts = new Parts();
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
 
-            parts.Add(this.PrintModifiers(node.Modifiers));
+            parts.Push(this.PrintModifiers(node.Modifiers));
             if (node.Type != null)
             {
                 parts.Push(this.Print(node.Type), " ");
             }
 
-            parts.Add(node.Identifier.Text);
+            parts.Push(this.PrintSyntaxToken(node.Identifier));
             if (node.Default != null)
             {
-                parts.Add(this.PrintEqualsValueClauseSyntax(node.Default));
+                parts.Push(this.PrintEqualsValueClauseSyntax(node.Default));
             }
 
             return Concat(parts);

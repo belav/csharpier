@@ -1,0 +1,18 @@
+﻿public class ClassName
+{
+    public void MethodName()
+    {
+        if (true)
+        {
+            DoSoemthing();
+        }
+        else if (false)
+        {
+            DoSomething();
+        }
+        else
+        {
+            DoSomething;
+        }
+    }
+}

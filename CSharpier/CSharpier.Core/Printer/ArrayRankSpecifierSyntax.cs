@@ -7,7 +7,11 @@ namespace CSharpier.Core
     {
         private Doc PrintArrayRankSpecifierSyntax(ArrayRankSpecifierSyntax node)
         {
-            return Concat("[", Join(",", node.Sizes.Select(this.Print)), "]");
+            return Concat(
+                this.PrintSyntaxToken(node.OpenBracketToken),
+                node.Sizes.Any() ? this.PrintSeparatedSyntaxList(node.Sizes, this.Print, null) : null,
+                this.PrintSyntaxToken(node.CloseBracketToken)
+                );
         }
     }
 }

@@ -6,7 +6,9 @@ namespace CSharpier.Core
     {
         private Doc PrintArrowExpressionClauseSyntax(ArrowExpressionClauseSyntax node)
         {
-            return Concat(" => ", this.Print(node.Expression));
+            return Group(Indent(Line,
+                this.PrintSyntaxToken(node.ArrowToken, " "),
+                this.Print(node.Expression)));
         }
     }
 }

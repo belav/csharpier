@@ -149,6 +149,7 @@ namespace My
             var yield = 0;
             var __ = 0;
             where = yield = 0;
+
             if (i > 0)
             {
                 return;
@@ -200,14 +201,18 @@ namespace My
             {
                 ++i;
                 if (true)
+                {
                     continue;
+                }
                 break;
             }
             do
             {
                 ++i;
                 if (true)
+                {
                     continue;
+                }
                 break;
             }
             while (i < 10);
@@ -217,7 +222,9 @@ namespace My
                 {
                     for (int i = 0, j = 0; i < length; i++, j++) { }
                     if (true)
+                    {
                         continue;
+                    }
                     break;
                 }
             }
@@ -228,9 +235,13 @@ namespace My
             foreach (var i in Items())
             {
                 if (i == 7)
+                {
                     return;
+                }
                 else
+                {
                     continue;
+                }
             }
             checked
             {
@@ -375,6 +386,7 @@ namespace My
             set;
         }
         public abstract string P { get; }
+
         public abstract int this[int index]
         {
             get;
@@ -542,6 +554,7 @@ namespace ConsoleApplication1
         }
         delegate Recursive Recursive(Recursive r);
         delegate Recursive Recursive<A, R>(Recursive<A, R> r);
+
         public Type Foo
         {
             [Obsolete("Name", error = false)]
@@ -715,6 +728,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
         // Initializers for auto-properties
         public string First { get; set; } = "Jane";
         public string Last { get; set; } = "Doe";
+
         // Getter-only auto-properties
         public string Third { get; } = "Jane";
         public string Fourth { get; } = "Doe";
@@ -722,8 +736,10 @@ namespace Comments.XmlComments.UndocumentedKeywords
         // Expression bodies on method-like members
         public Point Move(int dx, int dy) => new Point(x + dx, y + dy);
         public static Complex operator +(Complex a, Complex b) => a.Add(b);
-        public static implicit operator string(Person p) => p.First + " " + p.Last;
+        public static implicit operator string(Person p)
+            => p.First + " " + p.Last;
         public void Print() => Console.WriteLine(First + " " + Last);
+
         // Expression bodies on property-like function members
         public string Name => First + " " + Last;
         public int this[long id] => id;
@@ -750,8 +766,13 @@ namespace Comments.XmlComments.UndocumentedKeywords
             s = $@"\{p.Name}
                                    ""\";
             s = $"Color [ R={func(b: 3):#0.##}, G={G:#0.##}, B={B:#0.##}, A={A:#0.##} ]";
+
+            // nameof expressions
             if (x == null)
+            {
                 throw new ArgumentNullException(nameof(x));
+            }
+
             WriteLine(nameof(person.Address.ZipCode)); // prints "ZipCode"
 
             // Index initializers
@@ -761,6 +782,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
                 [9] = "nine",
                 [13] = "thirteen"
             };
+
+            // Exception filters
             try { }
             catch (MyException e) when (myfilter(e)) { }
 
@@ -777,7 +800,9 @@ namespace Comments.XmlComments.UndocumentedKeywords
             finally
             {
                 if (res != null)
+                {
                     await res.CloseAsync(); // … and this.
+                }
             }
         }
     }
@@ -800,10 +825,12 @@ class CSharp70
         }
 
         (A<B, C> D, E<F, G> H) = e;
+
         if (x?.y?.z is Type value2)
         {
         // code using value
         }
+
         if (expr is Type v)
         {
             Hello();
@@ -879,6 +906,8 @@ class CSharp72
 
             // OK.
             Print(in r1);
+
+            // OK.
             return ref r1;
         }
     }
@@ -895,9 +924,12 @@ class CSharp72
 
             // not OK!!
             foo(ref v1.X);
+
             return ref (arr != null ? ref arr[0] : ref otherArr[0]);
 
             Span<int> span = stackalloc int[1];
+
+            // OK
             return new Vector3(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
         }
 
@@ -933,9 +965,15 @@ class CSharp72
 
     public void LeadingSeparator()
     {
-        var res = 0 + 123 + 1_2_3 + 0x1_2_3 + 0b101 + 0b1_0_1
+        var res = 0 + 123 // permitted in C# 1.0 and later
+         + 1_2_3 // permitted in C# 7.0 and later
+         + 0x1_2_3 // permitted in C# 7.0 and later
+         + 0b101 // binary literals added in C# 7.0
+         + 0b1_0_1 // permitted in C# 7.0 and later
         // in C# 7.2, _ is permitted after the `0x` or `0b`
-        + 0x_1_2 + 0b_1_0_1;
+        + 0x_1_2 // permitted in C# 7.2 and later
+         + 0b_1_0_1 // permitted in C# 7.2 and later
+        ;
     }
 }
 
@@ -999,7 +1037,10 @@ namespace CSharp80
         void Patterns()
         {
             if (o is string { Length: 5 } s)
+            {
                 Do();
+            }
+
             return lang.CountOfTokens switch
             {
                 1 => 100,

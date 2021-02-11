@@ -28,7 +28,7 @@ namespace CSharpier.Core
             }
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
             if (node.Members.Count > 0) {
-                parts.Add(Join(HardLine, node.Members.Select(this.Print)));
+                parts.Push(Join(HardLine, node.Members.Select(this.Print)));
             }
 
             var finalTrivia = this.PrintLeadingTrivia(node.EndOfFileToken.LeadingTrivia);

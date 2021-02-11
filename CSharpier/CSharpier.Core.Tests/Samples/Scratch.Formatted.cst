@@ -1,7 +1,16 @@
-class ClassName
+public class ClassName
 {
-    void MethodName()
+    public void MethodName()
     {
-        bool b2;
+
+        if (true)
+        {
+        // do something
+        }
+
+        if (false)
+        {
+        // do something else
+        }
     }
 }

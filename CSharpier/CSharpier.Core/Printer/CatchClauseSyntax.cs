@@ -7,10 +7,10 @@ namespace CSharpier.Core
         private Doc PrintCatchClauseSyntax(CatchClauseSyntax node)
         {
             var parts = new Parts();
-            parts.Add("catch");
+            parts.Push("catch");
             if (node.Declaration != null)
             {
-                parts.Add(Concat(
+                parts.Push(Concat(
                     " (",
                     this.Print(node.Declaration.Type),
                     node.Declaration.Identifier.RawKind != 0 ? " " : "",
@@ -20,10 +20,10 @@ namespace CSharpier.Core
 
             if (node.Filter != null)
             {
-                parts.Add(Concat(" when (", this.Print(node.Filter.FilterExpression), ")"));
+                parts.Push(Concat(" when (", this.Print(node.Filter.FilterExpression), ")"));
             }
             
-            parts.Add(this.PrintBlockSyntax(node.Block));
+            parts.Push(this.PrintBlockSyntax(node.Block));
             return Concat(parts);
         }
     }

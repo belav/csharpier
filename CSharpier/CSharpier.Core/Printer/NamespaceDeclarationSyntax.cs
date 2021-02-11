@@ -19,7 +19,7 @@ namespace CSharpier.Core
             var hasUsing = node.Usings.Count > 0;
             var hasExterns = node.Externs.Count > 0;
             if (hasMembers || hasUsing || hasExterns) {
-                innerParts.Add(HardLine);
+                innerParts.Push(HardLine);
                 if (hasExterns) {
                     innerParts.Push(
                         Join(

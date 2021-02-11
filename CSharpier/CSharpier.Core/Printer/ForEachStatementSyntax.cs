@@ -8,12 +8,12 @@ namespace CSharpier.Core
         {
             var parts = new Parts();
             if (node.AwaitKeyword.RawKind != 0) {
-                parts.Add("await ");
+                parts.Push("await ");
             }
             parts.Push("foreach ", "(");
             parts.Push(this.Print(node.Type), " ", node.Identifier.Text, " in ", this.Print(node.Expression));
-            parts.Add(")");
-            parts.Add(this.Print(node.Statement));
+            parts.Push(")");
+            parts.Push(this.Print(node.Statement));
             return Concat(parts);
         }
     }

@@ -58,7 +58,7 @@ namespace CSharpier.Core
             }
             if (modifiers.HasValue)
             {
-                parts.Add(this.PrintModifiers(modifiers.Value));
+                parts.Push(this.PrintModifiers(modifiers.Value));
             }
 
             if (returnType != null)
@@ -79,7 +79,7 @@ namespace CSharpier.Core
 
             if (identifier != null)
             {
-                parts.Add(identifier);
+                parts.Push(identifier);
             }
 
             if (node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax)
@@ -97,27 +97,27 @@ namespace CSharpier.Core
 
             if (typeParameterList != null)
             {
-                parts.Add(this.PrintTypeParameterListSyntax(typeParameterList));
+                parts.Push(this.PrintTypeParameterListSyntax(typeParameterList));
             }
 
             if (parameterList != null)
             {
-                parts.Add(this.PrintParameterListSyntax(parameterList));
+                parts.Push(this.PrintParameterListSyntax(parameterList));
             }
 
             this.PrintConstraintClauses(node, constraintClauses, parts);
             if (body != null)
             {
-                parts.Add(this.PrintBlockSyntax(body));
+                parts.Push(this.PrintBlockSyntax(body));
             }
             else
             {
                 if (expressionBody != null)
                 {
-                    parts.Add(this.PrintArrowExpressionClauseSyntax(expressionBody));
+                    parts.Push(this.PrintArrowExpressionClauseSyntax(expressionBody));
                 }
 
-                parts.Add(";");
+                parts.Push(";");
             }
 
             return Concat(parts);

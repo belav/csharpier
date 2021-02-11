@@ -5,15 +5,13 @@ namespace CSharpier.Core
 {
     public partial class Printer
     {
-        // TODO 0 trivia start here!
         private Doc PrintArgumentListSyntax(ArgumentListSyntax node)
         {
-            if (node.Arguments.Count == 0)
-            {
-                return "()";
-            }
-
-            return Group(Concat("(", Indent(Concat(SoftLine, this.PrintCommaList(node.Arguments.Select(this.Print)))), ")"));
+            return Group(
+                this.PrintSyntaxToken(node.OpenParenToken),
+                node.Arguments.Any() ? Indent(SoftLine, this.PrintSeparatedSyntaxList(node.Arguments, this.PrintArgumentSyntax, Line)) : null,
+                this.PrintSyntaxToken(node.CloseParenToken)
+                );
         }
     }
 }

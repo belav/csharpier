@@ -13,7 +13,7 @@ namespace CSharpier.Core
             if (node.FormatClause != null) {
                 parts.Push(":", node.FormatClause.FormatStringToken.Text);
             }
-            parts.Add("}");
+            parts.Push("}");
             return Concat(parts);
         }
     }

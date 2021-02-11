@@ -1,27 +1,29 @@
 using System.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.Core
 {
     public partial class Printer
     {
+        // TODO trivia more in here, this is kind of a mess
         private Doc PrintBasePropertyDeclarationSyntax(BasePropertyDeclarationSyntax node)
         {
             EqualsValueClauseSyntax initializer = null;
             ArrowExpressionClauseSyntax expressionBody = null;
-            Doc identifier = "";
-            var eventKeyword = "";
+            Doc identifier = null;
+            Doc eventKeyword = null;
             if (node is PropertyDeclarationSyntax propertyDeclarationSyntax)
             {
                 expressionBody = propertyDeclarationSyntax.ExpressionBody;
                 initializer = propertyDeclarationSyntax.Initializer;
-                identifier = propertyDeclarationSyntax.Identifier.Text;
+                identifier = this.PrintSyntaxToken(propertyDeclarationSyntax.Identifier);
             }
             else if (node is IndexerDeclarationSyntax indexerDeclarationSyntax)
             {
                 expressionBody = indexerDeclarationSyntax.ExpressionBody;
                 identifier = Concat(
-                    indexerDeclarationSyntax.ThisKeyword.Text,
+                    this.PrintSyntaxToken(indexerDeclarationSyntax.ThisKeyword),
                     "[",
                     Join(", ", indexerDeclarationSyntax.ParameterList.Parameters.Select(this.PrintParameterSyntax)),
                     "]"
@@ -29,14 +31,14 @@ namespace CSharpier.Core
             }
             else if (node is EventDeclarationSyntax eventDeclarationSyntax)
             {
-                eventKeyword = eventDeclarationSyntax.EventKeyword.Text + " ";
-                identifier = eventDeclarationSyntax.Identifier.Text;
+                eventKeyword = this.PrintSyntaxToken(eventDeclarationSyntax.EventKeyword, " ");
+                identifier = this.PrintSyntaxToken(eventDeclarationSyntax.Identifier);
             }
 
             Doc contents = "";
             if (node.AccessorList != null)
             {
-                contents = Group(Concat(Line, "{", Group(Indent(Concat(node.AccessorList.Accessors.Select(this.PrintAccessorDeclarationSyntax).ToArray()))), Line, "}"));
+                contents = Group(Concat(Line, "{", Group(Indent(node.AccessorList.Accessors.Select(this.PrintAccessorDeclarationSyntax).ToArray())), Line, "}"));
             }
             else if (expressionBody != null)
             {
@@ -46,6 +48,7 @@ namespace CSharpier.Core
 
             var parts = new Parts();
 
+            parts.Push(this.PrintExtraNewLines(node));
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
 
             return Group(

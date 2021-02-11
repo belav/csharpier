@@ -8,16 +8,16 @@ namespace CSharpier.Core
         {
             var parts = new Parts();
             if (node.AsyncKeyword.RawKind != 0) {
-                parts.Add("async ");
+                parts.Push("async ");
             }
             parts.Push(
                 this.PrintParameterListSyntax(node.ParameterList),
                 " => "
             );
             if (node.ExpressionBody != null) {
-                parts.Add(this.Print(node.ExpressionBody));
+                parts.Push(this.Print(node.ExpressionBody));
             } else if (node.Block != null) {
-                parts.Add(this.PrintBlockSyntax(node.Block));
+                parts.Push(this.PrintBlockSyntax(node.Block));
             }
             return Concat(parts);
         }

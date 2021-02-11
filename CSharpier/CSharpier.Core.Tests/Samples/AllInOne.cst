@@ -717,7 +717,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
         // Expression bodies on method-like members
         public Point Move(int dx, int dy) => new Point(x + dx, y + dy);
         public static Complex operator +(Complex a, Complex b) => a.Add(b);
-        public static implicit operator string(Person p) => p.First + " " + p.Last;
+        public static implicit operator string(Person p)
+            => p.First + " " + p.Last;
         public void Print() => Console.WriteLine(First + " " + Last);
 
         // Expression bodies on property-like function members
@@ -729,7 +730,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             // Using static
             WriteLine(Sqrt(3 * 3 + 4 * 4));
             WriteLine(Friday - Monday);
-            var range = Range(5, 17);                // Ok: not extension
+            var range = Range(5, 17); // Ok: not extension
             var even = range.Where(i => i % 2 == 0); // Ok
 
             // Null-conditional operators
@@ -742,14 +743,17 @@ namespace Comments.XmlComments.UndocumentedKeywords
             // String interpolation
             string s = $"{p.Name, 20} is {p.Age:D3} year{{s}} old #";
             s = $"{p.Name} is \"{p.Age} year{(p.Age == 1 ? "" : "s")} old";
-            s = $"{(p.Age == 2 ? $"{new Person { } }" : "")}";
+            s = $"{(p.Age == 2 ? $"{new Person {  }}" : "")}";
             s = $@"\{p.Name}
                                    ""\";
             s = $"Color [ R={func(b: 3):#0.##}, G={G:#0.##}, B={B:#0.##}, A={A:#0.##} ]";
 
             // nameof expressions
             if (x == null)
+            {
                 throw new ArgumentNullException(nameof(x));
+            }
+
             WriteLine(nameof(person.Address.ZipCode)); // prints "ZipCode"
 
             // Index initializers
@@ -768,16 +772,18 @@ namespace Comments.XmlComments.UndocumentedKeywords
             Resource res = null;
             try
             {
-                res = await Resource.OpenAsync();       // You could do this.
+                res = await Resource.OpenAsync(); // You could do this.
             }
             catch (ResourceException e)
             {
-                await Resource.LogAsync(res, e);         // Now you can do this …
+                await Resource.LogAsync(res, e); // Now you can do this …
             }
             finally
             {
                 if (res != null)
+                {
                     await res.CloseAsync(); // … and this.
+                }
             }
         }
     }
@@ -902,7 +908,7 @@ class CSharp72
             // not OK!!
             foo(ref v1.X);
 
-            return ref (arr != null ? ref arr[0]: ref otherArr[0]);
+            return ref (arr != null ? ref arr[0] : ref otherArr[0]);
 
             Span<int> span = stackalloc int[1];
 
@@ -914,11 +920,11 @@ class CSharp72
         {
             if (condition)
             {
-                 return ref consequence;
+                return ref consequence;
             }
             else
             {
-                 return ref alternative;
+                return ref alternative;
             }
         }
     }
@@ -979,7 +985,7 @@ class CSharp73
 
     public void PatternBasedFixed()
     {
-        fixed(byte* ptr = byteArray)
+        fixed (byte* ptr = byteArray)
         {
            // ptr is a native pointer to the first element of the array
            // byteArray is protected from being moved/collected by the GC for the duration of this block
@@ -988,7 +994,7 @@ class CSharp73
 
     public void StackallocArrayInitializer()
     {
-        Span<int> a = stackalloc int[3];               // currently allowed
+        Span<int> a = stackalloc int[3]; // currently allowed
         Span<int> a = stackalloc int[3] { 1, 2, 3 };
         Span<int> a = stackalloc int[] { 1, 2, 3 };
         Span<int> a = stackalloc[] { 1, 2, 3 };
@@ -1016,7 +1022,9 @@ namespace CSharp80
         void Patterns()
         {
             if (o is string { Length: 5 } s)
+            {
                 Do();
+            }
 
             return lang.CountOfTokens switch
             {

@@ -6,12 +6,11 @@ namespace CSharpier.Core
     {
         private Doc PrintElseClauseSyntax(ElseClauseSyntax node)
         {
-            var parts = new Parts();
-            parts.Add(node.ElseKeyword.Text);
+            var parts = new Parts(this.PrintSyntaxToken(node.ElseKeyword));
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {
-                parts.Add(statement);
+                parts.Push(statement);
             }
             else if (node.Statement is IfStatementSyntax)
             {
@@ -19,7 +18,7 @@ namespace CSharpier.Core
             }
             else
             {
-                parts.Add(Indent(Concat(HardLine, statement)));
+                parts.Push(HardLine, "{", Indent(Concat(HardLine, statement)), HardLine, "}");
             }
 
             return Concat(parts);

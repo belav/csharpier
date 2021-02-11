@@ -21,7 +21,7 @@ namespace CSharpier.Core
             var attributes = new List<Doc>();
             foreach (var attributeNode in node.Attributes)
             {
-                // TODO 1 we are missing leading/trailing trivia in here
+                // TODO trivia!!
                 var name = this.Print(attributeNode.Name);
                 if (attributeNode.ArgumentList == null)
                 {
@@ -30,7 +30,7 @@ namespace CSharpier.Core
                 }
 
                 var innerParts = new Parts(name, "(");
-                innerParts.Add(
+                innerParts.Push(
                     Join(
                         ", ",
                         attributeNode.ArgumentList.Arguments.Select(attributeArgumentNode => Concat(
@@ -44,7 +44,7 @@ namespace CSharpier.Core
                         ))
                     )
                 );
-                innerParts.Add(")");
+                innerParts.Push(")");
                 attributes.Add(Concat(innerParts));
             }
 

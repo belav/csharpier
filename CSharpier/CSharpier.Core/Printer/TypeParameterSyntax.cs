@@ -11,7 +11,7 @@ namespace CSharpier.Core
             if (node.VarianceKeyword.RawKind != 0) {
                 parts.Push(node.VarianceKeyword.Text, " ");
             }
-            parts.Add(node.Identifier.Text);
+            parts.Push(node.Identifier.Text);
             return Concat(parts);
         }
     }
