@@ -1,8 +1,13 @@
-﻿public class ClassName
+﻿public class FunctionParameter : EntityBase
 {
-    /// <summary>Useless Summary</summary
-    public string Property { get; set; }
+    public Function Function[Required]
+    [UniqueIndex(AdditionalColumns = nameof(Name))]
+    public Guid FunctionId { get; set; }
 
-    /// <summary>Useless Summary</summary>
-    public void MethodName() { }
+    public string Name { get; set; }
+
+    public override string GetDisplayName()
+    {
+        return this.Name;
+    }
 }

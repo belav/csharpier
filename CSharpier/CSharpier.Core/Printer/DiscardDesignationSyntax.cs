@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintDiscardDesignationSyntax(DiscardDesignationSyntax node)
         {
-            return ""; // TODO DiscardDesignationSyntax
+            return this.PrintSyntaxToken(node.UnderscoreToken);
         }
     }
 }

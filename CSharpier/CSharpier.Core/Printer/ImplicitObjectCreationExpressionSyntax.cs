@@ -6,7 +6,10 @@ namespace CSharpier.Core
     {
         private Doc PrintImplicitObjectCreationExpressionSyntax(ImplicitObjectCreationExpressionSyntax node)
         {
-            return ""; // TODO ImplicitObjectCreationExpressionSyntax
+            // TODO 1 more tests for this?
+            return Concat(this.PrintSyntaxToken(node.NewKeyword),
+                this.PrintArgumentListSyntax(node.ArgumentList),
+                this.Print(node.Initializer));
         }
     }
 }

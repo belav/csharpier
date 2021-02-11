@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintConstructorConstraintSyntax(ConstructorConstraintSyntax node)
         {
-            return "new()";
+            return Concat(this.PrintSyntaxToken(node.NewKeyword), this.PrintSyntaxToken(node.OpenParenToken), this.PrintSyntaxToken(node.CloseParenToken));
         }
     }
 }

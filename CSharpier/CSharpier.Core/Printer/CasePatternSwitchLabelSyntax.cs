@@ -7,12 +7,13 @@ namespace CSharpier.Core
         private Doc PrintCasePatternSwitchLabelSyntax(CasePatternSwitchLabelSyntax node)
         {
             var parts = new Parts();
-            parts.Push(node.Keyword.Text, " ", this.Print(node.Pattern));
+            parts.Push(this.PrintSyntaxToken(node.Keyword, " "),
+                this.Print(node.Pattern));
             if (node.WhenClause != null)
             {
                 parts.Push(" ", this.Print(node.WhenClause));
             }
-            parts.Push(":");
+            parts.Push(this.PrintSyntaxToken(node.ColonToken));
             return Concat(parts);
         }
     }

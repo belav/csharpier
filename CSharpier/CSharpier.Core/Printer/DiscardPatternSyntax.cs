@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintDiscardPatternSyntax(DiscardPatternSyntax node)
         {
-            return "_";
+            return this.PrintSyntaxToken(node.UnderscoreToken);
         }
     }
 }

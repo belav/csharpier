@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintContinueStatementSyntax(ContinueStatementSyntax node)
         {
-            return Concat(node.ContinueKeyword.Text, ";");
+            return Concat(this.PrintSyntaxToken(node.ContinueKeyword), this.PrintSyntaxToken(node.SemicolonToken));
         }
     }
 }

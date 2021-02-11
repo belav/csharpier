@@ -4,10 +4,11 @@ namespace CSharpier.Core
 {
     public partial class Printer
     {
+        // TODO trivia
         private Doc PrintCatchClauseSyntax(CatchClauseSyntax node)
         {
             var parts = new Parts();
-            parts.Push("catch");
+            parts.Push(this.PrintSyntaxToken(node.CatchKeyword));
             if (node.Declaration != null)
             {
                 parts.Push(Concat(

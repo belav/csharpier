@@ -15,7 +15,18 @@ namespace CSharpier.Core
     {
         public CSharpierResult Format(string code, Options options)
         {
-            var rootNode = CSharpSyntaxTree.ParseText(code).GetRoot() as CompilationUnitSyntax;
+            // TODO bump up to 9 some day 
+            var syntaxTree = CSharpSyntaxTree.ParseText(code, new CSharpParseOptions(LanguageVersion.CSharp8, DocumentationMode.Diagnose));
+            var rootNode = syntaxTree.GetRoot() as CompilationUnitSyntax;
+            // TODO report these somehow?? also all in one currently fails this
+            // if (syntaxTree.GetDiagnostics().Any())
+            // {
+            //     return new CSharpierResult
+            //     {
+            //         Code = code,
+            //         AST = options.IncludeAST ? this.PrintAST(rootNode) : null
+            //     };
+            // }
 
             var document = new Printer().Print(rootNode);
 

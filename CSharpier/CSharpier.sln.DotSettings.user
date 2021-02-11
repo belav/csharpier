@@ -10,6 +10,7 @@
     &lt;ProjectFile&gt;C73AC70E-4D1E-4266-AA77-6A0AAF7DA7C4/f:Generator.cs&lt;/ProjectFile&gt;&#xD;
     &lt;ProjectFile&gt;68233EC8-147C-49ED-B3EE-9372052BA65C/f:Generator.cs&lt;/ProjectFile&gt;&#xD;
     &lt;ProjectFile&gt;A77E4297-FAA5-40AB-9856-ECF72AF5D859/d:TestFiles/d:AttributeList/f:_AttributeListTests.cs&lt;/ProjectFile&gt;&#xD;
+    &lt;Project Location="C:\Projects\csharpier\CSharpier\CSharpier.Core.Tests" Presentation="&amp;lt;CSharpier.Core.Tests&amp;gt;" /&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c04cd52b_002Dede8_002D4207_002D95e7_002D2b27884f2d36/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="NamespaceDeclarations" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;

@@ -13,14 +13,13 @@ namespace CSharpier.CLI
     {
         static void Main(string[] args)
         {
-            // TODO 1 Configuration.cs
-            // TODO 1 CurrencyDto.cs
+            // TODO 1 Configuration.cs from data.entities
+            // TODO 1 CurrencyDto.cs from data.entities
             var fullStopwatch = Stopwatch.StartNew();
             //var path = "C:\\temp\\clifiles";
-            var path = @"C:\Projects\insite-commerce-prettier\Legacy\Data";
+            //var path = @"C:\Projects\insite-commerce-prettier\Legacy\Data";
+            var path = @"c:\projects\mission-control";
 
-            // TODO use test run stuff in here, maybe start with smaller directories to track down issues
-            // or only write changes for fails, so it is easy to find them.
             // TODO we can also look at prettier, they do some stuff like run it twice and compare AST, compare file to make sure the 2nd run doesn't change it from the first run, etc
             // not sure how the AST compare will work because we are modifying leading/trailing trivia, unless we compare everything except whitespace/endofline trivia
             // seems like way more work than my current naive approach
@@ -32,7 +31,15 @@ namespace CSharpier.CLI
 
         private static async Task DoWork(string file, string path)
         {
-            var code = await File.ReadAllTextAsync(file);
+            if (file.EndsWith(".g.cs"))
+            {
+                return;
+            }
+
+            using var reader = new StreamReader(file);
+            var code = await reader.ReadToEndAsync();
+            var encoding = reader.CurrentEncoding;
+            reader.Close();
             var formatter = new CodeFormatter();
             var result = formatter.Format(code, new Options
             {
@@ -44,7 +51,7 @@ namespace CSharpier.CLI
                 Console.WriteLine(file.Substring(path.Length) + " - failed!");
             }
 
-            await File.WriteAllTextAsync(file, result.Code, Encoding.UTF8);
+            await File.WriteAllBytesAsync(file, encoding.GetBytes(result.Code));
         }
         
         public static bool IsCodeBasicallyEqual(string code, string formattedCode, string file)
@@ -80,7 +87,10 @@ namespace CSharpier.CLI
                 }
             }
 
-            return result.ToString().Replace("( ", "(").TrimEnd(' ');
+            return result.ToString()
+                .Replace("( ", "(")
+                .Replace(") ", ")")
+                .TrimEnd(' ');
         }
     }
 }

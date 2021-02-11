@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintBreakStatementSyntax(BreakStatementSyntax node)
         {
-            return Concat("break", ";");
+            return Concat(this.PrintSyntaxToken(node.BreakKeyword), this.PrintSyntaxToken(node.SemicolonToken));
         }
     }
 }

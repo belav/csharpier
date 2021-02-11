@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintCheckedStatementSyntax(CheckedStatementSyntax node)
         {
-            return Concat(node.Keyword.Text, this.PrintBlockSyntax(node.Block));
+            return Concat(this.PrintSyntaxToken(node.Keyword), this.PrintBlockSyntax(node.Block));
         }
     }
 }

@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintClassOrStructConstraintSyntax(ClassOrStructConstraintSyntax node)
         {
-            return Concat(node.ClassOrStructKeyword.Text, node.QuestionToken.Text);
+            return Concat(this.PrintSyntaxToken(node.ClassOrStructKeyword), this.PrintSyntaxToken(node.QuestionToken));
         }
     }
 }

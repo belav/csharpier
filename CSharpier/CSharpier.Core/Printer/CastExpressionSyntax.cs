@@ -6,7 +6,10 @@ namespace CSharpier.Core
     {
         private Doc PrintCastExpressionSyntax(CastExpressionSyntax node)
         {
-            return Concat("(", this.Print(node.Type), ")", this.Print(node.Expression));
+            return Concat(this.PrintSyntaxToken(node.OpenParenToken),
+                this.Print(node.Type),
+                this.PrintSyntaxToken(node.CloseParenToken),
+                this.Print(node.Expression));
         }
     }
 }

@@ -10,5 +10,10 @@ namespace CSharpier.Core.Tests.TestFiles
         {
             this.RunTest("TupleExpression", "BasicTupleExpression");
         }
+        [Test]
+        public void TupleWithIdentifer()
+        {
+            this.RunTest("TupleExpression", "TupleWithIdentifer");
+        }
     }
 }

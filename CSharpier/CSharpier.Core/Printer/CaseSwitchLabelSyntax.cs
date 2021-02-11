@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintCaseSwitchLabelSyntax(CaseSwitchLabelSyntax node)
         {
-            return Concat(node.Keyword.Text, " ", this.Print(node.Value), ":");
+            return Concat(this.PrintSyntaxToken(node.Keyword, " "), this.Print(node.Value), this.PrintSyntaxToken(node.ColonToken));
         }
     }
 }

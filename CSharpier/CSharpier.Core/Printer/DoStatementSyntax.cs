@@ -7,13 +7,15 @@ namespace CSharpier.Core
         private Doc PrintDoStatementSyntax(DoStatementSyntax node)
         {
             return Concat(
-                node.DoKeyword.Text,
+                this.PrintExtraNewLines(node),
+                this.PrintSyntaxToken(node.DoKeyword),
                 this.Print(node.Statement),
                 HardLine,
-                node.WhileKeyword.Text,
-                " (",
+                this.PrintSyntaxToken(node.WhileKeyword, " "),
+                this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Condition),
-                ");"
+                this.PrintSyntaxToken(node.CloseParenToken),
+                this.PrintSyntaxToken(node.SemicolonToken)
             );
         }
     }

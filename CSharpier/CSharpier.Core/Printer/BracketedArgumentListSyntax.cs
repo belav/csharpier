@@ -8,7 +8,10 @@ namespace CSharpier.Core
         private Doc PrintBracketedArgumentListSyntax(BracketedArgumentListSyntax node)
         {
             return Group(
-                Concat("[", Indent(Concat(SoftLine, this.PrintCommaList(node.Arguments.Select(this.Print)))), SoftLine, "]")
+                this.PrintSyntaxToken(node.OpenBracketToken),
+                Indent(Concat(SoftLine, this.PrintCommaList(node.Arguments.Select(this.Print)))),
+                SoftLine, 
+                this.PrintSyntaxToken(node.CloseBracketToken)
             );
         }
     }

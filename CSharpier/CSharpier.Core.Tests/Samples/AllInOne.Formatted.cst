@@ -552,6 +552,7 @@ namespace ConsoleApplication1
                 ;
             };
         }
+
         delegate Recursive Recursive(Recursive r);
         delegate Recursive Recursive<A, R>(Recursive<A, R> r);
 

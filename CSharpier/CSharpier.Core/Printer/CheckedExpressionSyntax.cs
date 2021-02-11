@@ -6,7 +6,11 @@ namespace CSharpier.Core
     {
         private Doc PrintCheckedExpressionSyntax(CheckedExpressionSyntax node)
         {
-            return Concat(node.Keyword.Text, "(", this.Print(node.Expression), ")");
+            return Concat(this.PrintSyntaxToken(node.Keyword),
+                this.PrintSyntaxToken(node.OpenParenToken),
+                this.Print(node.Expression),
+                this.PrintSyntaxToken(node.CloseParenToken)
+                );
         }
     }
 }

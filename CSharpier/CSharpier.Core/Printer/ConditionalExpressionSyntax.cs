@@ -8,9 +8,11 @@ namespace CSharpier.Core
         {
             return Concat(
                 this.Print(node.Condition),
-                " ? ",
+                " ",
+                this.PrintSyntaxToken(node.QuestionToken, " "),
                 this.Print(node.WhenTrue),
-                " : ",
+                " ",
+                this.PrintSyntaxToken(node.ColonToken, " "),
                 this.Print(node.WhenFalse)
             );
         }

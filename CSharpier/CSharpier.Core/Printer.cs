@@ -190,6 +190,7 @@ namespace CSharpier.Core
             return Group(Concat(parts));
         }
 
+        // TODO 0 change all methods to return docs
         private void PrintConstraintClauses(SyntaxNode node, IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses, List<Doc> parts)
         {
             var constraintClausesList = constraintClauses.ToList();

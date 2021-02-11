@@ -5,7 +5,6 @@ namespace CSharpier.Core
 {
     public partial class Printer
     {
-        // TODO Trivia from here!
         private Doc PrintBaseListSyntax(BaseListSyntax node)
         {
             /* TODO this should format like this instead

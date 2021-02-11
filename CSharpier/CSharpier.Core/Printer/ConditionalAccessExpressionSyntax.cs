@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintConditionalAccessExpressionSyntax(ConditionalAccessExpressionSyntax node)
         {
-            return Concat(this.Print(node.Expression), "?", this.Print(node.WhenNotNull));
+            return Concat(this.Print(node.Expression), this.PrintSyntaxToken(node.OperatorToken), this.Print(node.WhenNotNull));
         }
     }
 }
