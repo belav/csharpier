@@ -201,14 +201,18 @@ namespace My
             {
                 ++i;
                 if (true)
+                {
                     continue;
+                }
                 break;
             }
             do
             {
                 ++i;
                 if (true)
+                {
                     continue;
+                }
                 break;
             }
             while (i < 10);
@@ -218,7 +222,9 @@ namespace My
                 {
                     for (int i = 0, j = 0; i < length; i++, j++) { }
                     if (true)
+                    {
                         continue;
+                    }
                     break;
                 }
             }
@@ -229,9 +235,13 @@ namespace My
             foreach (var i in Items())
             {
                 if (i == 7)
+                {
                     return;
+                }
                 else
+                {
                     continue;
+                }
             }
             checked
             {
