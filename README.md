@@ -3,13 +3,14 @@ This is a WIP prettier port to .net for formatting c# code. It is NOT production
 It can generate mostly correct code for c# <= 8.0.
 It formats a solution of ~11,000 source files in < 30 seconds
 
-The remaining issues
-- Leading/Trailing Trivia - A large number of these are currently lost. The approach to printing these is implemented, but changes need to be made to each node types print function as well as some of the helper functions before they will print correctly.
+The remaining issues before I'm ready to call it an alpha
+- Leading/Trailing Trivia - The approach to printing these is implemented but a number of nodes are not yet printing them and they are lost. Each print function needs to be reviewed.
   - Comments
-  - Preprocessor Directives
+  - Preprocessor Directives - new lines around these are lost sometimes and should probably be preserved
   - New lines - the goal is to preserve new lines in some areas. For example the lines that appear between properties will be preserved.
-- Formatting (mostly when to line break/indent longer code) is not finalized.
 - A few node types are missing and code for them will be lost.
+- CSharpier will happily format invalid code, which results in very strange results
+- There is no CLI tool yet
 
 Try it out at [Playground](https://csharpier.bnt-studios.com)
 
