@@ -138,6 +138,7 @@ namespace CSharpier.Core
         {
             var commandsAsArray = restCommands.ToArray();
             var restIdx = commandsAsArray.Length;
+            var returnFalseIfMoreStringsFound = false;
             var cmds = new Stack<PrintCommand>();
             cmds.Push(next);
             // `out` is only used for width counting because `trim` requires to look
@@ -168,6 +169,10 @@ namespace CSharpier.Core
                 {
                     if (stringDoc.Value != null)
                     {
+                        if (returnFalseIfMoreStringsFound)
+                        {
+                            return false;
+                        }
                         output.Append(stringDoc.Value);
                         width -= GetStringWidth(stringDoc.Value);   
                     }
@@ -176,6 +181,14 @@ namespace CSharpier.Core
                 {
                     switch (doc)
                     {
+                        case LeadingComment:
+                        case TrailingComment:
+                            if (output.Length > 0)
+                            {
+                                returnFalseIfMoreStringsFound = true;
+                            }
+                            break;
+                                
                         case Concat concat:
                             for (var i = concat.Parts.Count - 1; i >= 0; i--)
                             {
@@ -508,7 +521,7 @@ namespace CSharpier.Core
                 }
             }
 
-            if (output[^1] != '\n')
+            if (output.Length == 0 || output[^1] != '\n')
             {
                 output.Append(newLine);
             }

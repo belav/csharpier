@@ -7,21 +7,14 @@ namespace CSharpier.Core
         private Doc PrintAnonymousMethodExpressionSyntax(AnonymousMethodExpressionSyntax node)
         {
             var parts = new Parts();
-            if (node.AsyncKeyword.RawKind != 0) {
-                parts.Add("async ");
-            }
-            if (node.DelegateKeyword.RawKind != 0) {
-                parts.Add("delegate");
-            }
+            parts.Push(this.PrintSyntaxToken(node.AsyncKeyword, " "));
+            parts.Push(this.PrintSyntaxToken(node.DelegateKeyword));
             if (node.ParameterList != null) {
                 parts.Add(this.PrintParameterListSyntax(node.ParameterList));
             }
-            if (node.ExpressionBody != null) {
-                parts.Add(this.Print(node.ExpressionBody));
-                // TODO why is this never null?
-            } else if (node.Block != null) {
-                parts.Add(this.PrintBlockSyntax(node.Block));
-            }
+            // TODO 2 when will ExpressionBody ever exist? I can't find it in testing.
+            parts.Add(this.PrintBlockSyntax(node.Block));
+            
             return Concat(parts);
         }
     }

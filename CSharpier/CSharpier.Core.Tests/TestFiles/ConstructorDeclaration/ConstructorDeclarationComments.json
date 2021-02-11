@@ -396,9 +396,9 @@
               "trailingTrivia": [
                 {
                   "nodeType": "SyntaxTrivia",
-                  "kind": "WhitespaceTrivia",
-                  "text": " ",
-                  "rawKind": 8540
+                  "kind": "EndOfLineTrivia",
+                  "text": "\r\n",
+                  "rawKind": 8539
                 }
               ]
             },
@@ -415,8 +415,16 @@
               "kind": "OpenBraceToken",
               "rawKind": 8205,
               "text": "{",
+              "hasLeadingTrivia": true,
               "hasTrailingTrivia": true,
-              "leadingTrivia": [],
+              "leadingTrivia": [
+                {
+                  "nodeType": "SyntaxTrivia",
+                  "kind": "WhitespaceTrivia",
+                  "text": "    ",
+                  "rawKind": 8540
+                }
+              ],
               "trailingTrivia": [
                 {
                   "nodeType": "SyntaxTrivia",
@@ -456,6 +464,7 @@
               ]
             },
             "rawKind": 8792,
+            "hasLeadingTrivia": true,
             "hasTrailingTrivia": true
           },
           "rawKind": 8878,

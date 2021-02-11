@@ -7,7 +7,8 @@ public class BasicClass
     public // trailing public
     // leading identifier  
     BasicClass // trailing identifier
-    (int x) { } // trailing comments1
+    (int x)
+    { } // trailing comments1
 
     public BasicClass(string s)
     {

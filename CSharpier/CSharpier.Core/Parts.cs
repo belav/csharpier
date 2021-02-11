@@ -15,6 +15,10 @@ namespace CSharpier.Core
 
         public void Push(params Doc[] value)
         {
+            if (value.Length == 1 && value[0] == null)
+            {
+                return;
+            }
             this.AddRange(value);
         }
     }

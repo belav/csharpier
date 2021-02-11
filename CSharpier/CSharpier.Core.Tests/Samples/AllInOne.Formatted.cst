@@ -800,7 +800,8 @@ class CSharp70
         }
 
         (A<B, C> D, E<F, G> H) = e;
-        if (x?.y?.z is Type value2) {
+        if (x?.y?.z is Type value2)
+        {
         // code using value
         }
         if (expr is Type v)
@@ -961,7 +962,8 @@ class CSharp73
 
     public void PatternBasedFixed()
     {
-        fixed (byte* ptr = byteArray) {
+        fixed (byte* ptr = byteArray)
+        {
         // ptr is a native pointer to the first element of the array
         // byteArray is protected from being moved/collected by the GC for the duration of this block
         }

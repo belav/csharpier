@@ -8,10 +8,10 @@ namespace CSharpier.Core
         {
             var parts = new Parts();
             if (node.NameEquals != null) {
-                parts.Add(this.PrintIdentifierNameSyntax(node.NameEquals.Name));
-                parts.Add(" = ");
+                parts.Push(this.PrintSyntaxToken(node.NameEquals.Name.Identifier, " "));
+                parts.Push(this.PrintSyntaxToken(node.NameEquals.EqualsToken, " "));
             }
-            parts.Add(this.Print(node.Expression));
+            parts.Push(this.Print(node.Expression));
             return Concat(parts);
         }
     }
