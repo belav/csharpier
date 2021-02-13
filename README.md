@@ -4,10 +4,11 @@ It can generate mostly correct code for c# <= 8.0.
 It formats a solution of ~11,000 source files in < 30 seconds
 
 The remaining issues before I'm ready to call it an alpha
-- Leading/Trailing Trivia - The approach to printing these is implemented but a number of nodes are not yet printing them and they are lost. Each print function needs to be reviewed.
-  - Comments
-  - Preprocessor Directives - new lines around these are lost sometimes and should probably be preserved
-  - New lines - the goal is to preserve new lines in some areas. For example the lines that appear between properties will be preserved.
+- ~~Leading/Trailing Trivia - The approach to printing these is implemented but a number of nodes are not yet printing them and they are lost. Each print function needs to be reviewed.~~
+  - ~~Comments~~
+  - ~~Preprocessor Directives - new lines around these are lost sometimes and should probably be preserved~~
+  - ~~New lines - the goal is to preserve new lines in some areas. For example the lines that appear between properties will be preserved.~~
+- Multiline comments aren't properly supported yet
 - A few node types are missing and code for them will be lost.
 - CSharpier will happily format invalid code, which results in very strange results
 - There is no CLI tool yet
