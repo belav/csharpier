@@ -158,45 +158,17 @@ namespace CSharpier.Core
             return Group(Concat(parts));
         }
 
-        // TODO 0 trivia!
-        private Doc PrintStatements<T>(SyntaxToken openBraceToken, IReadOnlyList<T> statements, SyntaxToken closeBraceToken, Doc separator, Doc endOfLineDoc = null)
-            where T : SyntaxNode
-        {
-            var actualEndOfLine = endOfLineDoc != null ? Concat(endOfLineDoc, separator) : separator;
-
-            var parts = new Parts(Line, "{");
-            if (statements.Count > 0)
-            {
-                parts.Push(Concat(Indent(separator, Join(actualEndOfLine, statements.Select(this.Print))), separator));
-            }
-
-            var leadingTrivia = this.PrintLeadingTrivia(closeBraceToken.LeadingTrivia);
-            if (leadingTrivia != null)
-            {
-                parts.Push(leadingTrivia);
-            }
-            else if (statements.Count == 0)
-            {
-                parts.Push(" ");
-            }
-
-            parts.Push("}");
-            parts.Push(this.PrintTrailingTrivia(closeBraceToken.TrailingTrivia));
-            return Group(Concat(parts));
-        }
-
-        // TODO 0 change all methods to return docs, this may be the only one left
-        private void PrintConstraintClauses(SyntaxNode node, IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses, List<Doc> parts)
+        private Doc PrintConstraintClauses(SyntaxNode node, IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses)
         {
             var constraintClausesList = constraintClauses.ToList();
 
             if (constraintClausesList.Count == 0)
             {
-                return;
+                return null;
             }
 
 
-            parts.Add(
+            var parts = new Parts(
                 Indent(
                     HardLine,
                     Join(
@@ -214,9 +186,11 @@ namespace CSharpier.Core
             {
                 parts.Add(HardLine);
             }
+
+            return Concat(parts);
         }
 
-        private Doc PrintLeftRightOperator(SyntaxNode node, SyntaxNode left, SyntaxToken operatorToken, SyntaxNode right)
+        private Doc PrintLeftRightOperator(SyntaxNode left, SyntaxToken operatorToken, SyntaxNode right)
         {
             var parts = new Parts();
             parts.Push(

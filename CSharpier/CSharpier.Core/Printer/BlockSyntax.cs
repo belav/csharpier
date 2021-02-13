@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.Core
@@ -10,8 +11,18 @@ namespace CSharpier.Core
             {
                 return "";
             }
-            var statementSeparator = node.Parent is AccessorDeclarationSyntax && node.Statements.Count <= 1 ? Line : HardLine;
-            return this.PrintStatements(node.OpenBraceToken, node.Statements, node.CloseBraceToken, statementSeparator);
+            
+            var statementSeparator = node.Parent is AccessorDeclarationSyntax && node.Statements.Count <= 1 
+                ? Line : HardLine;
+            
+            var parts = new Parts(Line, this.PrintSyntaxToken(node.OpenBraceToken));
+            if (node.Statements.Count > 0)
+            {
+                parts.Push(Concat(Indent(statementSeparator, Join(statementSeparator, node.Statements.Select(this.Print))), statementSeparator));
+            }
+
+            parts.Push(this.PrintSyntaxToken(node.CloseBraceToken, null, node.Statements.Count == 0 ? " " : null));
+            return Group(Concat(parts));
         }
     }
 }

@@ -24,10 +24,9 @@ namespace CSharpier.Core
 
             return parts.Any() ? Concat(parts) : null;
         }
-        
-        // TODO 0 the helper methods and the base class for any more missing trivia
+
         // TODO 0 multiline comments need a doc type
-        private Doc PrintSyntaxToken(SyntaxToken syntaxToken, Doc afterTokenIfNoTrailing = null)
+        private Doc PrintSyntaxToken(SyntaxToken syntaxToken, Doc afterTokenIfNoTrailing = null, Doc beforeTokenIfNoLeading = null)
         {
             if (syntaxToken.RawKind == 0)
             {
@@ -39,6 +38,10 @@ namespace CSharpier.Core
             if (leadingTrivia != null)
             {
                 parts.Push(leadingTrivia);
+            }
+            else
+            {
+                parts.Push(beforeTokenIfNoLeading);
             }
             parts.Push(syntaxToken.Text);
             var trailingTrivia = this.PrintTrailingTrivia(syntaxToken);

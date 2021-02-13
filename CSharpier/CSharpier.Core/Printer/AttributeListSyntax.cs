@@ -18,38 +18,29 @@ namespace CSharpier.Core
                 );
             }
 
-            var attributes = new List<Doc>();
-            foreach (var attributeNode in node.Attributes)
+            parts.Push(this.PrintSeparatedSyntaxList(node.Attributes, attributeNode =>
             {
-                // TODO trivia!!
                 var name = this.Print(attributeNode.Name);
                 if (attributeNode.ArgumentList == null)
                 {
-                    attributes.Add(name);
-                    continue;
+                    return name;
                 }
 
-                var innerParts = new Parts(name, "(");
-                innerParts.Push(
-                    Join(
-                        ", ",
-                        attributeNode.ArgumentList.Arguments.Select(attributeArgumentNode => Concat(
+                return Concat(name,
+                    this.PrintSyntaxToken(attributeNode.ArgumentList.OpenParenToken),
+                    this.PrintSeparatedSyntaxList(attributeNode.ArgumentList.Arguments, attributeArgumentNode => Concat(
                             attributeArgumentNode.NameEquals != null
                                 ? this.PrintNameEqualsSyntax(attributeArgumentNode.NameEquals)
-                                : "",
+                                : null,
                             attributeArgumentNode.NameColon != null
                                 ? this.PrintNameColonSyntax(attributeArgumentNode.NameColon)
-                                : "",
+                                : null,
                             this.Print(attributeArgumentNode.Expression)
-                        ))
-                    )
+                        ), " "),
+                    this.PrintSyntaxToken(attributeNode.ArgumentList.CloseParenToken)
                 );
-                innerParts.Push(")");
-                attributes.Add(Concat(innerParts));
-            }
+            }, " "));
 
-            ;
-            parts.Push(Join(", ", attributes));
             parts.Push(this.PrintSyntaxToken(node.CloseBracketToken));
 
             return Concat(parts);

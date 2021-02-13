@@ -16,7 +16,7 @@ namespace CSharpier.Core
                 parts.Push(this.Print(node.TypeParameterList));
             }
             parts.Push(this.Print(node.ParameterList));
-            this.PrintConstraintClauses(node, node.ConstraintClauses, parts);
+            parts.Push(this.PrintConstraintClauses(node, node.ConstraintClauses));
             parts.Push(this.PrintSyntaxToken(node.SemicolonToken));
             return Concat(parts);
         }

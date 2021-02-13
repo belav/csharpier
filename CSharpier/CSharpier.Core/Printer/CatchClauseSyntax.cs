@@ -4,24 +4,28 @@ namespace CSharpier.Core
 {
     public partial class Printer
     {
-        // TODO 0 trivia
         private Doc PrintCatchClauseSyntax(CatchClauseSyntax node)
         {
             var parts = new Parts();
             parts.Push(this.PrintSyntaxToken(node.CatchKeyword));
             if (node.Declaration != null)
             {
-                parts.Push(Concat(
-                    " (",
+                parts.Push(
+                    " ",
+                    this.PrintSyntaxToken(node.Declaration.OpenParenToken),
                     this.Print(node.Declaration.Type),
-                    node.Declaration.Identifier.RawKind != 0 ? " " : "",
-                    node.Declaration.Identifier.Text,
-                    ")"));
+                    node.Declaration.Identifier.RawKind != 0 ? " " : null,
+                    this.PrintSyntaxToken(node.Declaration.Identifier),
+                    this.PrintSyntaxToken(node.Declaration.CloseParenToken));
             }
 
             if (node.Filter != null)
             {
-                parts.Push(Concat(" when (", this.Print(node.Filter.FilterExpression), ")"));
+                parts.Push(" ",
+                    this.PrintSyntaxToken(node.Filter.WhenKeyword, " "),
+                    this.PrintSyntaxToken(node.Filter.OpenParenToken),
+                    this.Print(node.Filter.FilterExpression),
+                    this.PrintSyntaxToken(node.Filter.CloseParenToken));
             }
             
             parts.Push(this.PrintBlockSyntax(node.Block));

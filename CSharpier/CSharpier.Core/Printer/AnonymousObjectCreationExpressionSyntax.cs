@@ -6,9 +6,14 @@ namespace CSharpier.Core
     {
         private Doc PrintAnonymousObjectCreationExpressionSyntax(AnonymousObjectCreationExpressionSyntax node)
         {
-            // TODO trivia this one is seperatedSyntaxList, vs statements which is not.
-            // maybe I just don't share the code between them.
-            return Concat("new", this.PrintStatements(node.OpenBraceToken, node.Initializers, node.CloseBraceToken, Line, ","));
+            return Group(this.PrintSyntaxToken(node.NewKeyword, Line),
+                this.PrintSyntaxToken(node.OpenBraceToken),
+                Indent(
+                    Line,
+                    this.PrintSeparatedSyntaxList(node.Initializers, this.PrintAnonymousObjectMemberDeclaratorSyntax, Line)
+                ),
+                Line,
+                this.PrintSyntaxToken(node.CloseBraceToken));
         }
     }
 }

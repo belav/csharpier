@@ -48,6 +48,8 @@ namespace CSharpier.Core
                     return this.PrintBlockSyntax(blockSyntax);
                 case BracketedArgumentListSyntax bracketedArgumentListSyntax:
                     return this.PrintBracketedArgumentListSyntax(bracketedArgumentListSyntax);
+                case BracketedParameterListSyntax bracketedParameterListSyntax:
+                    return this.PrintBracketedParameterListSyntax(bracketedParameterListSyntax);
                 case BreakStatementSyntax breakStatementSyntax:
                     return this.PrintBreakStatementSyntax(breakStatementSyntax);
                 case CasePatternSwitchLabelSyntax casePatternSwitchLabelSyntax:

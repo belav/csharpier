@@ -409,16 +409,15 @@ namespace My
     }
     [type: Flags]
     public enum E
-    {
-        A,
-        B = A,
-        C = 2 + A,
-        
+    {A,
+    B = A,
+    C = 2 + A,
+    
 #if DEBUG
         D,
         }
 #else
-        E
+    E
     }
     
 #endif

@@ -6,7 +6,6 @@ namespace CSharpier.Core
 {
     public partial class Printer
     {
-        // TODO trivia more in here, this is kind of a mess
         private Doc PrintBasePropertyDeclarationSyntax(BasePropertyDeclarationSyntax node)
         {
             EqualsValueClauseSyntax initializer = null;
@@ -27,9 +26,7 @@ namespace CSharpier.Core
                 expressionBody = indexerDeclarationSyntax.ExpressionBody;
                 identifier = Concat(
                     this.PrintSyntaxToken(indexerDeclarationSyntax.ThisKeyword),
-                    "[",
-                    Join(", ", indexerDeclarationSyntax.ParameterList.Parameters.Select(this.PrintParameterSyntax)),
-                    "]"
+                    this.Print(indexerDeclarationSyntax.ParameterList)
                 );
                 semicolonToken = indexerDeclarationSyntax.SemicolonToken;
             }

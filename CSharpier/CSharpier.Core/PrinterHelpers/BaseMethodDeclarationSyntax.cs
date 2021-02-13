@@ -19,6 +19,7 @@ namespace CSharpier.Core
             ParameterListSyntax parameterList = null;
             BlockSyntax body = null;
             ArrowExpressionClauseSyntax expressionBody = null;
+            SyntaxToken? semicolonToken = null;
             if (node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax)
             {
                 attributeLists = baseMethodDeclarationSyntax.AttributeLists;
@@ -33,7 +34,10 @@ namespace CSharpier.Core
                     identifier = methodDeclarationSyntax.Identifier.Text;
                     typeParameterList = methodDeclarationSyntax.TypeParameterList;
                     constraintClauses = methodDeclarationSyntax.ConstraintClauses;
+                    
                 }
+
+                semicolonToken = baseMethodDeclarationSyntax.SemicolonToken;
             }
             else if (node is LocalFunctionStatementSyntax localFunctionStatementSyntax)
             {
@@ -46,6 +50,7 @@ namespace CSharpier.Core
                 constraintClauses = localFunctionStatementSyntax.ConstraintClauses;
                 body = localFunctionStatementSyntax.Body;
                 expressionBody = localFunctionStatementSyntax.ExpressionBody;
+                semicolonToken = localFunctionStatementSyntax.SemicolonToken;
             }
 
             var parts = new Parts();
@@ -69,7 +74,7 @@ namespace CSharpier.Core
 
             if (explicitInterfaceSpecifier != null)
             {
-                parts.Push(this.Print(explicitInterfaceSpecifier.Name), ".");
+                parts.Push(this.Print(explicitInterfaceSpecifier.Name), this.PrintSyntaxToken(explicitInterfaceSpecifier.DotToken));
             }
 
             if (identifier != null)
@@ -79,15 +84,16 @@ namespace CSharpier.Core
 
             if (node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax)
             {
-                parts.Push(conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword.Text,
-                    " ",
-                    conversionOperatorDeclarationSyntax.OperatorKeyword.Text,
-                    " ",
-                    this.Print(conversionOperatorDeclarationSyntax.Type));
+                parts.Push(this.PrintSyntaxToken(conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword, " "),
+                    this.PrintSyntaxToken(conversionOperatorDeclarationSyntax.OperatorKeyword, " "),
+                this.Print(conversionOperatorDeclarationSyntax.Type));
             }
             else if (node is OperatorDeclarationSyntax operatorDeclarationSyntax)
             {
-                parts.Push(this.Print(operatorDeclarationSyntax.ReturnType), " ", operatorDeclarationSyntax.OperatorKeyword.Text, " ", operatorDeclarationSyntax.OperatorToken.Text);
+                parts.Push(this.Print(operatorDeclarationSyntax.ReturnType),
+                    SpaceIfNoPreviousComment,
+                    this.PrintSyntaxToken(operatorDeclarationSyntax.OperatorKeyword, " "),
+                    this.PrintSyntaxToken(operatorDeclarationSyntax.OperatorToken));
             }
 
             if (typeParameterList != null)
@@ -100,7 +106,7 @@ namespace CSharpier.Core
                 parts.Push(this.PrintParameterListSyntax(parameterList));
             }
 
-            this.PrintConstraintClauses(node, constraintClauses, parts);
+            parts.Push(this.PrintConstraintClauses(node, constraintClauses));
             if (body != null)
             {
                 parts.Push(this.PrintBlockSyntax(body));
@@ -111,8 +117,11 @@ namespace CSharpier.Core
                 {
                     parts.Push(this.PrintArrowExpressionClauseSyntax(expressionBody));
                 }
+            }
 
-                parts.Push(";");
+            if (semicolonToken.HasValue)
+            {
+                parts.Push(this.PrintSyntaxToken(semicolonToken.Value));    
             }
 
             return Concat(parts);

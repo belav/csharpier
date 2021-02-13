@@ -14,16 +14,18 @@ namespace CSharpier.Core
             var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
             var hasMembers = false;
             SyntaxToken? keyword = null;
-            var memberSeparator = HardLine;
-            var members = Enumerable.Empty<CSharpSyntaxNode>();
+            Doc members = null;
             
             if (node is TypeDeclarationSyntax typeDeclarationSyntax)
             {
                 typeParameterList = typeDeclarationSyntax.TypeParameterList;
                 constraintClauses = typeDeclarationSyntax.ConstraintClauses;
                 hasConstraintClauses = typeDeclarationSyntax.ConstraintClauses.Count > 0;
-                members = typeDeclarationSyntax.Members;
                 hasMembers = typeDeclarationSyntax.Members.Count > 0;
+                if (typeDeclarationSyntax.Members.Count > 0)
+                {
+                    members = Indent(HardLine, Join(HardLine, typeDeclarationSyntax.Members.Select(this.Print)));   
+                }
                 if (node is ClassDeclarationSyntax classDeclarationSyntax)
                 {
                     keyword = classDeclarationSyntax.Keyword;
@@ -39,10 +41,9 @@ namespace CSharpier.Core
             }
             else if (node is EnumDeclarationSyntax enumDeclarationSyntax)
             {
-                members = enumDeclarationSyntax.Members;
+                members = Indent(HardLine, this.PrintSeparatedSyntaxList(enumDeclarationSyntax.Members, this.PrintEnumMemberDeclarationSyntax, HardLine));
                 hasMembers = enumDeclarationSyntax.Members.Count > 0;
                 keyword = enumDeclarationSyntax.EnumKeyword;
-                memberSeparator = Concat(",", HardLine);
             }
 
             var parts = new Parts();
@@ -66,18 +67,18 @@ namespace CSharpier.Core
                 parts.Push(this.PrintBaseListSyntax(node.BaseList));
             }
 
-            this.PrintConstraintClauses(node, constraintClauses, parts);
+            parts.Push(this.PrintConstraintClauses(node, constraintClauses));
 
             if (hasMembers)
             {
-                parts.Push(Concat(hasConstraintClauses ? "" : HardLine, "{"));
-                parts.Push(Indent(Concat(HardLine, Join(memberSeparator, members.Select(this.Print)))));
+                parts.Push(Concat(hasConstraintClauses ? "" : HardLine, this.PrintSyntaxToken(node.OpenBraceToken)));
+                parts.Push(members);
                 parts.Push(HardLine);
-                parts.Push("}");
+                parts.Push(this.PrintSyntaxToken(node.CloseBraceToken));
             }
             else
             {
-                parts.Push(hasConstraintClauses ? "" : " ", "{", " ", "}");
+                parts.Push(hasConstraintClauses ? "" : " ", this.PrintSyntaxToken(node.OpenBraceToken), " ", this.PrintSyntaxToken(node.CloseBraceToken));
             }
 
             return Concat(parts);
