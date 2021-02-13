@@ -86,14 +86,14 @@ namespace CSharpier.Core
                 // the parts need to be pushed onto the stack in reverse order,
                 // so that they are processed in the original order
                 // when the stack is popped.
-                if (doc is Concat concat) // TODO fill || doc.type == = "fill")
+                if (doc is Concat concat) // TODO 2 fill || doc.type == = "fill")
                 {
                     for (var x = concat.Parts.Count - 1; x >= 0; --x)
                     {
                         docsStack.Push(concat.Parts[x]);
                     }
                 }
-                // TODO ifbreak
+                // TODO 2 ifbreak
                 // else if (doc.type == = "if-break")
                 // {
                 //     if (doc.flatContents)

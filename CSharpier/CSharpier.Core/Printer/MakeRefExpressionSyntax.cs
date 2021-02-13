@@ -7,11 +7,10 @@ namespace CSharpier.Core
         private Doc PrintMakeRefExpressionSyntax(MakeRefExpressionSyntax node)
         {
             return Concat(
-                node.Keyword.Text,
-                "(",
+                this.PrintSyntaxToken(node.Keyword),
+                this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Expression),
-                ")"
-            );
+                this.PrintSyntaxToken(node.CloseParenToken));
         }
     }
 }

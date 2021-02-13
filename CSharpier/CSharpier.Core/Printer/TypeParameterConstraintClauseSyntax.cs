@@ -8,11 +8,11 @@ namespace CSharpier.Core
         private Doc PrintTypeParameterConstraintClauseSyntax(TypeParameterConstraintClauseSyntax node)
         {
             return Concat(
-                node.WhereKeyword.Text,
-                " ",
+                this.PrintSyntaxToken(node.WhereKeyword, " "),
                 this.Print(node.Name),
-                " : ",
-                Join(", ", node.Constraints.Select(this.Print))
+                SpaceIfNoPreviousComment,
+                this.PrintSyntaxToken(node.ColonToken, " "),
+                this.PrintSeparatedSyntaxList(node.Constraints, this.Print, " ")
             );
         }
     }

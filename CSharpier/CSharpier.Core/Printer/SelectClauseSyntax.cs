@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintSelectClauseSyntax(SelectClauseSyntax node)
         {
-            return Concat(node.SelectKeyword.Text, " ", this.Print(node.Expression));
+            return Concat(this.PrintSyntaxToken(node.SelectKeyword, " "), this.Print(node.Expression));
         }
     }
 }

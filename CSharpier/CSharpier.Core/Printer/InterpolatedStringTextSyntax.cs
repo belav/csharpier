@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintInterpolatedStringTextSyntax(InterpolatedStringTextSyntax node)
         {
-            return node.TextToken.Text;
+            return this.PrintSyntaxToken(node.TextToken);
         }
     }
 }

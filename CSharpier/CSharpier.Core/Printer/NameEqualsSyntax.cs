@@ -6,7 +6,9 @@ namespace CSharpier.Core
     {
         private Doc PrintNameEqualsSyntax(NameEqualsSyntax node)
         {
-            return Concat(this.Print(node.Name), " = ");
+            return Concat(this.Print(node.Name),
+                SpaceIfNoPreviousComment,
+                this.PrintSyntaxToken(node.EqualsToken, " "));
         }
     }
 }

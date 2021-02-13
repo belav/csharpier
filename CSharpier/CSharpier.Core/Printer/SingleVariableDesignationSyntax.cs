@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintSingleVariableDesignationSyntax(SingleVariableDesignationSyntax node)
         {
-            return node.Identifier.Text;
+            return this.PrintSyntaxToken(node.Identifier);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace CSharpier.Core
     {
         public static readonly Doc BreakParent = new BreakParent();
 
-        // TODO kill?
+        // TODO 0 kill? I think I need it? maybe all spaces should be this instead?
         public static readonly Doc SpaceIfNoPreviousComment = new SpaceIfNoPreviousComment();
         public static readonly Doc HardLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard }, BreakParent);
         public static readonly Doc LiteralLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true }, BreakParent);
@@ -87,7 +87,7 @@ namespace CSharpier.Core
             return new Group
             {
                 Contents = contents.Length == 0 ? contents[0] : Concat(contents),
-                // TODO group options if I use them
+                // TODO 2 group options if I use them
                 // id: opts.id,
                 // break: !!opts.shouldBreak,
                 // expandedStates: opts.expandedStates,
@@ -116,11 +116,6 @@ namespace CSharpier.Core
             }
 
             return parts.Count == 0 ? null : Concat(parts);
-        }
-        
-        private Doc PrintCommaList(IEnumerable<Doc> docs)
-        {
-            return Join(Concat(",", Line), docs);
         }
 
         private Doc PrintAttributeLists(SyntaxNode node, SyntaxList<AttributeListSyntax> attributeLists)
@@ -190,7 +185,7 @@ namespace CSharpier.Core
             return Group(Concat(parts));
         }
 
-        // TODO 0 change all methods to return docs
+        // TODO 0 change all methods to return docs, this may be the only one left
         private void PrintConstraintClauses(SyntaxNode node, IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses, List<Doc> parts)
         {
             var constraintClausesList = constraintClauses.ToList();

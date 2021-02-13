@@ -7,13 +7,12 @@ namespace CSharpier.Core
     {
         private Doc PrintImplicitArrayCreationExpressionSyntax(ImplicitArrayCreationExpressionSyntax node)
         {
-            var commas = node.Commas.Select(o => String(",")).ToArray();
+            var commas = node.Commas.Select(o => this.PrintSyntaxToken(o)).ToArray();
             return Concat(
-                node.NewKeyword.Text,
-                "[",
+                this.PrintSyntaxToken(node.NewKeyword),
+                this.PrintSyntaxToken(node.OpenBracketToken),
                 Concat(commas),
-                "]",
-                " ",
+                this.PrintSyntaxToken(node.CloseBracketToken, " "),
                 this.Print(node.Initializer)
             );
         }

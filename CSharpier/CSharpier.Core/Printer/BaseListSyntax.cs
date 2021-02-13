@@ -7,12 +7,15 @@ namespace CSharpier.Core
     {
         private Doc PrintBaseListSyntax(BaseListSyntax node)
         {
-            /* TODO this should format like this instead
+            /* TODO 1 this should format like this instead
             : AnotherLongClassName<T>,
                 AndYetAnotherLongClassName
             void MethodName() { }
             */
-            return Group(Indent(Concat(Line, ":", " ", this.PrintCommaList(node.Types.Select(this.Print)))));
+            return Group(Indent(Line,
+                this.PrintSyntaxToken(node.ColonToken, " "),
+                this.PrintSeparatedSyntaxList(node.Types, this.Print, Line)
+            ));
         }
     }
 }

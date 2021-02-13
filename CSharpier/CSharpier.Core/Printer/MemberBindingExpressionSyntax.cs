@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintMemberBindingExpressionSyntax(MemberBindingExpressionSyntax node)
         {
-            return Concat(node.OperatorToken.Text, this.Print(node.Name));
+            return Concat(this.PrintSyntaxToken(node.OperatorToken), this.Print(node.Name));
         }
     }
 }

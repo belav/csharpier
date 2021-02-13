@@ -6,7 +6,10 @@ namespace CSharpier.Core
     {
         private Doc PrintFromClauseSyntax(FromClauseSyntax node)
         {
-            return Concat("from", " ", node.Identifier.Text, " ", "in", " ", this.Print(node.Expression));
+            return Concat(this.PrintSyntaxToken(node.FromKeyword, " "),
+                this.PrintSyntaxToken(node.Identifier, " "),
+                this.PrintSyntaxToken(node.InKeyword, " "),
+                this.Print(node.Expression));
         }
     }
 }

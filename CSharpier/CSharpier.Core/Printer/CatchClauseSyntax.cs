@@ -4,7 +4,7 @@ namespace CSharpier.Core
 {
     public partial class Printer
     {
-        // TODO trivia
+        // TODO 0 trivia
         private Doc PrintCatchClauseSyntax(CatchClauseSyntax node)
         {
             var parts = new Parts();

@@ -8,12 +8,12 @@ namespace CSharpier.Core
         {
             var expression = node.Expression != null ? Concat(" ", this.Print(node.Expression)) : "";
             return Concat(
-                node.GotoKeyword.Text,
-                node.CaseOrDefaultKeyword.RawKind != 0 ? " " : "",
-                node.CaseOrDefaultKeyword.Text,
+                    this.PrintExtraNewLines(node),
+                this.PrintSyntaxToken(node.GotoKeyword),
+                node.CaseOrDefaultKeyword.RawKind != 0 ? SpaceIfNoPreviousComment : null,
+                this.PrintSyntaxToken(node.CaseOrDefaultKeyword),
                 expression,
-                ";"
-            );
+                this.PrintSyntaxToken(node.SemicolonToken));
         }
     }
 }

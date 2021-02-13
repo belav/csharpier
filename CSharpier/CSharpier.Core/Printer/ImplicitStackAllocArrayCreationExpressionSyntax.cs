@@ -6,7 +6,10 @@ namespace CSharpier.Core
     {
         private Doc PrintImplicitStackAllocArrayCreationExpressionSyntax(ImplicitStackAllocArrayCreationExpressionSyntax node)
         {
-            return Concat(node.StackAllocKeyword.Text, "[] ", this.Print(node.Initializer));
+            return Concat(this.PrintSyntaxToken(node.StackAllocKeyword),
+                this.PrintSyntaxToken(node.OpenBracketToken),
+                this.PrintSyntaxToken(node.CloseBracketToken, " "),
+                this.Print(node.Initializer));
         }
     }
 }

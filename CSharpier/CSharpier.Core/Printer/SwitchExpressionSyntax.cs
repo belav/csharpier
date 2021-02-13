@@ -9,22 +9,20 @@ namespace CSharpier.Core
         {
             return Concat(
                 this.Print(node.GoverningExpression),
-                " switch",
+                SpaceIfNoPreviousComment,
+                this.PrintSyntaxToken(node.SwitchKeyword),
                 HardLine,
-                "{",
+                this.PrintSyntaxToken(node.OpenBraceToken),
                 Indent(
                     Concat(
                         HardLine,
-                        Join(
-                            Concat(",", HardLine),
-                            node.Arms.Select(o => Concat(this.Print(o.Pattern),
-                                " => ",
-                                this.Print(o.Expression)))
-                        )
-                    )
+                        this.PrintSeparatedSyntaxList(node.Arms, o => Concat(this.Print(o.Pattern),
+                            SpaceIfNoPreviousComment,
+                            this.PrintSyntaxToken(o.EqualsGreaterThanToken, " "),
+                            this.Print(o.Expression)), HardLine))
                 ),
                 HardLine,
-                "}"
+                this.PrintSyntaxToken(node.CloseBraceToken)
             );
         }
     }

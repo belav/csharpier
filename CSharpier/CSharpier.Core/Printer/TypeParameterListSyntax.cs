@@ -8,9 +8,12 @@ namespace CSharpier.Core
         private Doc PrintTypeParameterListSyntax(TypeParameterListSyntax node)
         {
             if (node.Parameters.Count == 0) {
-                return "";
+                return null;
             }
-            return Group(Concat("<", Indent(Concat(SoftLine, this.PrintCommaList(node.Parameters.Select(this.Print)))), ">"));
+            return Group(this.PrintSyntaxToken(node.LessThanToken),
+                Indent(SoftLine,
+                    this.PrintSeparatedSyntaxList(node.Parameters, this.PrintTypeParameterSyntax, Line)),
+                this.PrintSyntaxToken(node.GreaterThanToken));
         }
     }
 }

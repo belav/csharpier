@@ -25,7 +25,7 @@ namespace CSharpier.Core
             return parts.Any() ? Concat(parts) : null;
         }
         
-        // TODO 0 review each node for leading/trailing stuff plus all the helper methods
+        // TODO 0 the helper methods and the base class for any more missing trivia
         // TODO 0 multiline comments need a doc type
         private Doc PrintSyntaxToken(SyntaxToken syntaxToken, Doc afterTokenIfNoTrailing = null)
         {
@@ -59,7 +59,7 @@ namespace CSharpier.Core
             return this.PrintLeadingTrivia(syntaxToken.LeadingTrivia);
         }
         
-        // TODO 0 probably ditch this, but leave it around for now
+        // TODO 1 probably ditch this, but leave it around for now
         private readonly Stack<bool> printNewLinesInLeadingTrivia = new();
 
         private Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia)
@@ -80,8 +80,8 @@ namespace CSharpier.Core
                     {
                         kind = leadingTrivia[x + 1].Kind();
                     }
-                    // TODO this probably needs multiline trivia too
-                    // TODO this may screw up with regions that aren't at the beginning of the line?
+                    // TODO 0 this probably needs multiline trivia too
+                    // TODO 0 this may screw up with regions that aren't at the beginning of the line?
                     if (!kind.HasValue || kind == SyntaxKind.SingleLineCommentTrivia || kind == SyntaxKind.EndOfLineTrivia || kind == SyntaxKind.WhitespaceTrivia)
                     {
                         parts.Push(HardLine);

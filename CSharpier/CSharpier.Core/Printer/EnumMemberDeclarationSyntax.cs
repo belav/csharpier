@@ -9,7 +9,7 @@ namespace CSharpier.Core
             var parts = new Parts();
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
             parts.Push(this.PrintModifiers(node.Modifiers));
-            parts.Push(node.Identifier.Text);
+            parts.Push(this.PrintSyntaxToken(node.Identifier));
             if (node.EqualsValue != null) {
                 parts.Push(this.PrintEqualsValueClauseSyntax(node.EqualsValue));
             }

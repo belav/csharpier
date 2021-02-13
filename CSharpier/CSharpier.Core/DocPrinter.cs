@@ -22,7 +22,7 @@ namespace CSharpier.Core
             return this.GenerateIndent(indent, new IndentType { Type = "indent" }, options);
         }
 
-        // TODO there is more going on here with dedent and number/string align
+        // TODO 2 there is more going on here with dedent and number/string align
         private Indent GenerateIndent(Indent ind, IndentType newPart, Options options)
         {
             var queue = new List<IndentType>(ind.Queue);
@@ -59,11 +59,11 @@ namespace CSharpier.Core
                     case "stringAlign":
                         flush();
                         value += part.Number;
-                        // TODO huh? length += part.n.length;
+                        // TODO 2 huh? length += part.n.length;
                         break;
                     case "numberAlign":
                         lastTabs += 1;
-                        // TODO huh? lastSpaces += part.n;
+                        // TODO 2 huh? lastSpaces += part.n;
                         break;
                     default:
                         throw new Exception(part.Type);
@@ -127,7 +127,7 @@ namespace CSharpier.Core
             ;
             return new Indent
             {
-                // TODO in prettier this has a ...ind
+                // TODO 2 in prettier this has a ...ind
                 Value = value,
                 Length = length,
                 Queue = queue
@@ -211,7 +211,7 @@ namespace CSharpier.Core
                             });
 
                             break;
-                        // TODO align/trim?
+                        // TODO 2 align/trim?
                         // case "align":
                         //     cmds.Add([makeAlign(ind, doc.n, options), mode, doc.contents]);
                         //
@@ -233,12 +233,12 @@ namespace CSharpier.Core
                                 Doc = group.Contents,
                             });
 
-                            // TODO groupId
+                            // TODO 2 groupId
                             // if (doc.id) {
                             //     groupModeMap[doc.id] = cmds[cmds.length - 1][1];
                             // }
                             break;
-                        // TODO fill/if-break
+                        // TODO 2 fill/if-break
                         // case "fill":
                         //     for (let i = doc.parts.length - 1; i >= 0; i--) {
                         //         cmds.Add([ind, mode, doc.parts[i]]);
@@ -294,7 +294,7 @@ namespace CSharpier.Core
             DocPrinterUtils.PropagateBreaks(document);
 
             var width = options.Width;
-            var newLine = Environment.NewLine; // TODO options
+            var newLine = Environment.NewLine; // TODO 1 options
             var position = 0;
 
             var currentStack = new Stack<PrintCommand>();
@@ -329,7 +329,7 @@ namespace CSharpier.Core
                         }
                         if (newLineNextStringValue)
                         {
-                            // TODO new line stuff
+                            // TODO 1 new line stuff
                             Trim(output);
                             output.Append(newLine + command.Indent.Value);
                             position = command.Indent.Length;
@@ -393,7 +393,7 @@ namespace CSharpier.Core
                                 }
                                 else
                                 {
-                                    // TODO expandedStates is a big complicated thing here, but I don't think I'll use it?
+                                    // TODO 2 expandedStates is a big complicated thing here, but I don't think I'll use it?
                                     currentStack.Push(new PrintCommand
                                     {
                                         Indent = command.Indent,
@@ -405,7 +405,7 @@ namespace CSharpier.Core
                                 break;
                         }
 
-                        // TODO group ids
+                        // TODO 2 group ids
                         // if (doc.id)
                         // {
                         //     groupModeMap[doc.id] = cmds[cmds.length - 1][1];
@@ -455,7 +455,7 @@ namespace CSharpier.Core
                                 {
                                     if (output.Length > 0)
                                     {
-                                        // TODO indent.root perhaps?
+                                        // TODO 2 indent.root perhaps?
                                         // if (ind.root) {
                                         //     out.Add(newLine, ind.root.value);
                                         //     pos = ind.root.length;
@@ -529,7 +529,7 @@ namespace CSharpier.Core
             return string.Join("", output);
         }
 
-        // TODO in prettier this deals with unicode characters that are double width
+        // TODO 1 in prettier this deals with unicode characters that are double width
         private int GetStringWidth(string value)
         {
             return value.Length;
@@ -559,7 +559,7 @@ namespace CSharpier.Core
             return trimCount;
         }
 
-        // // TODO does the above method do the same thing as this method?
+        // // TODO 2 does the above method do the same thing as this method?
         // private int Trim(List<string> output)
         // {
         //     if (output.Count == 0)

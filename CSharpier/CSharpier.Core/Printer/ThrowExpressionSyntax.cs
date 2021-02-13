@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintThrowExpressionSyntax(ThrowExpressionSyntax node)
         {
-            return Concat(node.ThrowKeyword.Text, " ", this.Print(node.Expression));
+            return Concat(this.PrintSyntaxToken(node.ThrowKeyword, " "), this.Print(node.Expression));
         }
     }
 }

@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintBlockSyntax(BlockSyntax node)
         {
-            if (node == null) // TODO why is this being called?
+            if (node == null) // TODO 1 why is this being called?
             {
                 return "";
             }

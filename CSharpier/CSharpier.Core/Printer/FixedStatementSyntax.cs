@@ -7,11 +7,10 @@ namespace CSharpier.Core
         private Doc PrintFixedStatementSyntax(FixedStatementSyntax node)
         {
             return Concat(
-                node.FixedKeyword.Text,
-                " ",
-                "(",
+                this.PrintSyntaxToken(node.FixedKeyword, " "),
+                this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Declaration),
-                ")",
+                this.PrintSyntaxToken(node.CloseParenToken),
                 this.Print(node.Statement)
             );
         }

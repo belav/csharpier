@@ -7,10 +7,10 @@ namespace CSharpier.Core
         private Doc PrintWhileStatementSyntax(WhileStatementSyntax node)
         {
             return Concat(
-                node.WhileKeyword.Text,
-                " (",
+                this.PrintSyntaxToken(node.WhileKeyword, " "),
+                this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Condition),
-                ")",
+                this.PrintSyntaxToken(node.CloseParenToken),
                 this.Print(node.Statement)
             );
         }

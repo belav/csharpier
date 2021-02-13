@@ -8,9 +8,8 @@ namespace CSharpier.Core
         {
             return Concat(
                 this.Print(node.Parameter),
-                " ",
-                node.ArrowToken.Text,
-                " ",
+                SpaceIfNoPreviousComment,
+                this.PrintSyntaxToken(node.ArrowToken, " "),
                 this.Print(node.Body)
             );
         }

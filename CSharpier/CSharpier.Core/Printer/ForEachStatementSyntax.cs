@@ -6,15 +6,18 @@ namespace CSharpier.Core
     {
         private Doc PrintForEachStatementSyntax(ForEachStatementSyntax node)
         {
-            var parts = new Parts();
-            if (node.AwaitKeyword.RawKind != 0) {
-                parts.Push("await ");
-            }
-            parts.Push("foreach ", "(");
-            parts.Push(this.Print(node.Type), " ", node.Identifier.Text, " in ", this.Print(node.Expression));
-            parts.Push(")");
-            parts.Push(this.Print(node.Statement));
-            return Concat(parts);
+            return Concat(
+                this.PrintExtraNewLines(node),
+                this.PrintSyntaxToken(node.AwaitKeyword, " "),
+                this.PrintSyntaxToken(node.ForEachKeyword, " "),
+                this.PrintSyntaxToken(node.OpenParenToken),
+                this.Print(node.Type),
+                " ",
+                this.PrintSyntaxToken(node.Identifier, " "),
+                this.PrintSyntaxToken(node.InKeyword, " "),
+                this.Print(node.Expression),
+                this.PrintSyntaxToken(node.CloseParenToken),
+                this.Print(node.Statement));
         }
     }
 }

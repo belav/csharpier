@@ -38,11 +38,11 @@ namespace CSharpier.Playground.Controllers
         {
             var filePath = Path.Combine(this.webHostEnvironment.ContentRootPath, "App_Data", "Uploads", content.CalculateHash() + ".cs");
             new FileInfo(filePath).EnsureDirectoryExists();
-            // TODO we need to report back errors and what not
+            // TODO 2 we need to report back errors and what not
             // failing to compile/parse with roslyn
             // what about when the prettier plugin fails because of missing node types or other errors?
             this.WriteAllText(filePath, content);
-            // TODO we also want to eventually expose options
+            // TODO 2 we also want to eventually expose options
             var result = new CodeFormatter().Format(content, new CSharpier.Core.Options
             {
                 IncludeAST = true,

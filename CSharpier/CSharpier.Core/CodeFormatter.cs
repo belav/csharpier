@@ -15,10 +15,10 @@ namespace CSharpier.Core
     {
         public CSharpierResult Format(string code, Options options)
         {
-            // TODO bump up to 9 some day 
+            // TODO 1 bump up to 9 some day 
             var syntaxTree = CSharpSyntaxTree.ParseText(code, new CSharpParseOptions(LanguageVersion.CSharp8, DocumentationMode.Diagnose));
             var rootNode = syntaxTree.GetRoot() as CompilationUnitSyntax;
-            // TODO report these somehow?? also all in one currently fails this
+            // TODO 0 report these somehow?? also all in one currently fails this. We should get that to be valid code and then turn this back on
             // if (syntaxTree.GetDiagnostics().Any())
             // {
             //     return new CSharpierResult

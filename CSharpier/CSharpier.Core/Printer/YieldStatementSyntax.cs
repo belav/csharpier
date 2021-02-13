@@ -8,11 +8,11 @@ namespace CSharpier.Core
         {
             var expression = node.Expression != null ? Concat(" ", this.Print(node.Expression)) : "";
             return Concat(
-                node.YieldKeyword.Text,
-                " ",
-                node.ReturnOrBreakKeyword.Text,
+                this.PrintExtraNewLines(node),
+                this.PrintSyntaxToken(node.YieldKeyword, " "),
+                this.PrintSyntaxToken(node.ReturnOrBreakKeyword),
                 expression,
-                ";"
+                this.PrintSyntaxToken(node.SemicolonToken)
             );
         }
     }

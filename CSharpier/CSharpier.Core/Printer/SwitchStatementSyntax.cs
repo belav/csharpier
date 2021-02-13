@@ -9,15 +9,20 @@ namespace CSharpier.Core
         {
             var sections =
                 node.Sections.Count == 0
-                    ? " { }"
+                    ? " "
                     : Concat(
-                          HardLine,
-                          "{",
-                          Indent(Concat(HardLine, Join(HardLine, node.Sections.Select(this.Print)))),
-                          HardLine,
-                          "}"
-                      );
-            return Concat(node.SwitchKeyword.Text, " (", this.Print(node.Expression), ")", sections);
+                        Indent(Concat(HardLine, Join(HardLine, node.Sections.Select(this.Print)))),
+                        HardLine
+                    );
+            return Group(
+                this.PrintSyntaxToken(node.SwitchKeyword, " "),
+                this.PrintSyntaxToken(node.OpenParenToken),
+                this.Print(node.Expression),
+                this.PrintSyntaxToken(node.CloseParenToken),
+                Line,
+                this.PrintSyntaxToken(node.OpenBraceToken),
+                sections,
+                this.PrintSyntaxToken(node.CloseBraceToken));
         }
     }
 }

@@ -7,8 +7,7 @@ namespace CSharpier.Core
     {
         private Doc PrintVariableDeclaratorSyntax(VariableDeclaratorSyntax node)
         {
-            var parts = new Parts();
-            parts.Push(node.Identifier.Text);
+            var parts = new Parts(this.PrintSyntaxToken(node.Identifier));
             if (node.ArgumentList != null) {
                 parts.Push(this.PrintBracketedArgumentListSyntax(node.ArgumentList));
             }

@@ -15,10 +15,11 @@ namespace CSharpier.Core
                         : node.Kind() == SyntaxKind.ComplexElementInitializerExpression
                             ? SoftLine
                             : Line,
-                    "{",
-                    Indent(Concat(Line, this.PrintCommaList(node.Expressions.Select(this.Print)))),
+                    this.PrintSyntaxToken(node.OpenBraceToken),
+                    Indent(Concat(Line, 
+                        this.PrintSeparatedSyntaxList(node.Expressions, this.Print, Line))),
                     Line,
-                    "}"
+                    this.PrintSyntaxToken(node.CloseBraceToken)
                 )
             );
         }

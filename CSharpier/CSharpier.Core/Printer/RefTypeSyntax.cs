@@ -7,9 +7,8 @@ namespace CSharpier.Core
         private Doc PrintRefTypeSyntax(RefTypeSyntax node)
         {
             return Concat(
-                node.RefKeyword.Text,
-                node.ReadOnlyKeyword.RawKind != 0 ? " " + node.ReadOnlyKeyword.Text : "",
-                " ",
+                this.PrintSyntaxToken(node.RefKeyword, " "),
+                this.PrintSyntaxToken(node.ReadOnlyKeyword, " "),
                 this.Print(node.Type)
             );
         }

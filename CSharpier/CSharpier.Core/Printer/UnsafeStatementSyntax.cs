@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintUnsafeStatementSyntax(UnsafeStatementSyntax node)
         {
-            return Concat(node.UnsafeKeyword.Text, this.Print(node.Block));
+            return Concat(this.PrintSyntaxToken(node.UnsafeKeyword), this.Print(node.Block));
         }
     }
 }

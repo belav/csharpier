@@ -7,10 +7,8 @@ namespace CSharpier.Core
         private Doc PrintQueryContinuationSyntax(QueryContinuationSyntax node)
         {
             return Concat(
-                "into",
-                " ",
-                node.Identifier.Text,
-                Line,
+                this.PrintSyntaxToken(node.IntoKeyword, " "),
+                this.PrintSyntaxToken(node.Identifier, Line),
                 this.PrintQueryBodySyntax(node.Body)
             );
         }

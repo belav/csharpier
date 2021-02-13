@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintEmptyStatementSyntax(EmptyStatementSyntax node)
         {
-            return ";";
+            return this.PrintSyntaxToken(node.SemicolonToken);
         }
     }
 }

@@ -7,7 +7,11 @@ namespace CSharpier.Core
         private Doc PrintThrowStatementSyntax(ThrowStatementSyntax node)
         {
             var expression = node.Expression != null ? Concat(" ", this.Print(node.Expression)) : "";
-            return Concat(node.ThrowKeyword.Text, expression, ";");
+            return Concat(
+                this.PrintExtraNewLines(node),
+                this.PrintSyntaxToken(node.ThrowKeyword),
+                expression,
+                this.PrintSyntaxToken(node.SemicolonToken));
         }
     }
 }

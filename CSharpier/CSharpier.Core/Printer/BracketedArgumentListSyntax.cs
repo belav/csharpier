@@ -9,7 +9,8 @@ namespace CSharpier.Core
         {
             return Group(
                 this.PrintSyntaxToken(node.OpenBracketToken),
-                Indent(Concat(SoftLine, this.PrintCommaList(node.Arguments.Select(this.Print)))),
+                Indent(Concat(SoftLine,
+                    this.PrintSeparatedSyntaxList(node.Arguments, this.Print, Line))),
                 SoftLine, 
                 this.PrintSyntaxToken(node.CloseBracketToken)
             );

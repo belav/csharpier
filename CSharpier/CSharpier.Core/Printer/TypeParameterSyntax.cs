@@ -6,13 +6,11 @@ namespace CSharpier.Core
     {
         private Doc PrintTypeParameterSyntax(TypeParameterSyntax node)
         {
-            var parts = new Parts();
-            parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
-            if (node.VarianceKeyword.RawKind != 0) {
-                parts.Push(node.VarianceKeyword.Text, " ");
-            }
-            parts.Push(node.Identifier.Text);
-            return Concat(parts);
+            return Concat(
+                this.PrintAttributeLists(node, node.AttributeLists),
+                this.PrintSyntaxToken(node.VarianceKeyword, " "),
+                this.PrintSyntaxToken(node.Identifier)
+            );
         }
     }
 }

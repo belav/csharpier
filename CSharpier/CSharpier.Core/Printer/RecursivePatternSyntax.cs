@@ -8,34 +8,30 @@ namespace CSharpier.Core
         private Doc PrintRecursivePatternSyntax(RecursivePatternSyntax node)
         {
             return Concat(
-                node.Type != null ? this.Print(node.Type) : "",
+                node.Type != null ? this.Print(node.Type) : null,
                 node.PositionalPatternClause != null
                     ? Concat(
-                        "(",
-                        Join(
-                            ", ",
-                            node.PositionalPatternClause.Subpatterns.Select(subpatternNode => Concat(
-                                subpatternNode.NameColon != null
-                                    ? this.PrintNameColonSyntax(subpatternNode.NameColon)
-                                    : "",
-                                this.Print(subpatternNode.Pattern)
-                            ))
-                        ),
-                        ")"
+                        this.PrintSyntaxToken(node.PositionalPatternClause.OpenParenToken),
+                        this.PrintSeparatedSyntaxList(node.PositionalPatternClause.Subpatterns, subpatternNode => Concat(
+                            subpatternNode.NameColon != null
+                                ? this.PrintNameColonSyntax(subpatternNode.NameColon)
+                                : "",
+                            this.Print(subpatternNode.Pattern)
+                        ), " "),
+                        this.PrintSyntaxToken(node.PositionalPatternClause.CloseParenToken)
                     )
                     : "",
                 node.PropertyPatternClause != null
                     ? Concat(
-                        " { ",
-                        Join(
-                            ", ",
-                            node.PropertyPatternClause.Subpatterns.Select(subpatternNode => Concat(
-                                    this.PrintNameColonSyntax(subpatternNode.NameColon),
-                                    this.Print(subpatternNode.Pattern)
-                                )
-                            )
+                        " ",
+                        this.PrintSyntaxToken(node.PropertyPatternClause.OpenBraceToken, " "),
+                        this.PrintSeparatedSyntaxList(node.PropertyPatternClause.Subpatterns, subpatternNode => Concat(
+                                this.PrintNameColonSyntax(subpatternNode.NameColon),
+                                this.Print(subpatternNode.Pattern)
+                            ), " "
                         ),
-                        " } "
+                        SpaceIfNoPreviousComment,
+                        this.PrintSyntaxToken(node.PropertyPatternClause.CloseBraceToken, " ")
                     )
                     : "",
                 node.Designation != null ? this.Print(node.Designation) : ""

@@ -7,15 +7,9 @@ namespace CSharpier.Core
     {
         private Doc PrintVariableDeclarationSyntax(VariableDeclarationSyntax node)
         {
-            var parts = new Parts();
-            parts.Push(this.Print(node.Type),
-                " ",
-                Join(
-                    String(", "),
-                    node.Variables.Select(this.PrintVariableDeclaratorSyntax)
-                ));
-
-            return Concat(parts);
+            return Concat(this.Print(node.Type),
+                SpaceIfNoPreviousComment,
+                this.PrintSeparatedSyntaxList(node.Variables, this.PrintVariableDeclaratorSyntax, " "));
         }
     }
 }

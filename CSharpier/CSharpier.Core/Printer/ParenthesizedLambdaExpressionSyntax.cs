@@ -6,19 +6,21 @@ namespace CSharpier.Core
     {
         private Doc PrintParenthesizedLambdaExpressionSyntax(ParenthesizedLambdaExpressionSyntax node)
         {
-            var parts = new Parts();
-            if (node.AsyncKeyword.RawKind != 0) {
-                parts.Push("async ");
-            }
-            parts.Push(
+            var parts = new Parts(
+                this.PrintSyntaxToken(node.AsyncKeyword, " "),
                 this.PrintParameterListSyntax(node.ParameterList),
-                " => "
+                SpaceIfNoPreviousComment,
+                this.PrintSyntaxToken(node.ArrowToken, " ")
             );
-            if (node.ExpressionBody != null) {
+            if (node.ExpressionBody != null)
+            {
                 parts.Push(this.Print(node.ExpressionBody));
-            } else if (node.Block != null) {
+            }
+            else if (node.Block != null)
+            {
                 parts.Push(this.PrintBlockSyntax(node.Block));
             }
+
             return Concat(parts);
         }
     }

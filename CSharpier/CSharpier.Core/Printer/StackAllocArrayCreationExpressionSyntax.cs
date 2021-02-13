@@ -7,7 +7,7 @@ namespace CSharpier.Core
         private Doc PrintStackAllocArrayCreationExpressionSyntax(StackAllocArrayCreationExpressionSyntax node)
         {
             return Concat(
-                "stackalloc ",
+                this.PrintSyntaxToken(node.StackAllocKeyword, " "),
                 this.Print(node.Type),
                 node.Initializer != null
                     ? Concat(" ", this.PrintInitializerExpressionSyntax(node.Initializer))

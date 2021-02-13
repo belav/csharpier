@@ -8,11 +8,10 @@ namespace CSharpier.Core
         {
             var parts = new Parts();
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
-
             parts.Push(this.PrintModifiers(node.Modifiers));
             if (node.Type != null)
             {
-                parts.Push(this.Print(node.Type), " ");
+                parts.Push(this.Print(node.Type), SpaceIfNoPreviousComment);
             }
 
             parts.Push(this.PrintSyntaxToken(node.Identifier));

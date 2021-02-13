@@ -6,7 +6,9 @@ namespace CSharpier.Core
     {
         private Doc PrintWhenClauseSyntax(WhenClauseSyntax node)
         {
-            return Concat(node.WhenKeyword.Text, " ", this.Print(node.Condition));
+            return Concat(
+                this.PrintSyntaxToken(node.WhenKeyword, " "),
+                this.Print(node.Condition));
         }
     }
 }

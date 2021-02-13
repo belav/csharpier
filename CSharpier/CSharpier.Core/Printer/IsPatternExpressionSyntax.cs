@@ -6,7 +6,10 @@ namespace CSharpier.Core
     {
         private Doc PrintIsPatternExpressionSyntax(IsPatternExpressionSyntax node)
         {
-            return Concat(this.Print(node.Expression), " is ", this.Print(node.Pattern));
+            return Concat(this.Print(node.Expression),
+                SpaceIfNoPreviousComment,
+                this.PrintSyntaxToken(node.IsKeyword, " "),
+                this.Print(node.Pattern));
         }
     }
 }

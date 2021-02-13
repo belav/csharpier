@@ -7,7 +7,9 @@ namespace CSharpier.Core
     {
         private Doc PrintTypeArgumentListSyntax(TypeArgumentListSyntax node)
         {
-            return Indent(Group(this.PrintCommaList(node.Arguments.Select(this.Print))));
+            return Concat(this.PrintSyntaxToken(node.LessThanToken),
+                Indent(this.PrintSeparatedSyntaxList(node.Arguments, this.Print, Line)),
+                this.PrintSyntaxToken(node.GreaterThanToken));
         }
     }
 }

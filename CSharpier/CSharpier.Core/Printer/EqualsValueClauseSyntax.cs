@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintEqualsValueClauseSyntax(EqualsValueClauseSyntax node)
         {
-            return Concat(" = ", this.Print(node.Value));
+            return Concat(" ", this.PrintSyntaxToken(node.EqualsToken, " "), this.Print(node.Value));
         }
     }
 }

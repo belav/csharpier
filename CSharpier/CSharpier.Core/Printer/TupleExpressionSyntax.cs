@@ -7,7 +7,10 @@ namespace CSharpier.Core
     {
         private Doc PrintTupleExpressionSyntax(TupleExpressionSyntax node)
         {
-            return Concat("(", Join(", ", node.Arguments.Select(this.Print)), ")");
+            return Concat(
+                this.PrintSyntaxToken(node.OpenParenToken),
+                this.PrintSeparatedSyntaxList(node.Arguments, this.Print, " "),
+                this.PrintSyntaxToken(node.CloseParenToken));
         }
     }
 }

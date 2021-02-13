@@ -7,11 +7,11 @@ namespace CSharpier.Core
         private Doc PrintUsingStatementSyntax(UsingStatementSyntax node)
         {
             var parts = new Parts(
-                node.UsingKeyword.Text,
-                " (",
-                node.Declaration != null ? this.PrintVariableDeclarationSyntax(node.Declaration) : "",
-                node.Expression != null ? this.Print(node.Expression) : "",
-                ")"
+                this.PrintSyntaxToken(node.UsingKeyword, " "),
+                this.PrintSyntaxToken(node.OpenParenToken),
+                node.Declaration != null ? this.PrintVariableDeclarationSyntax(node.Declaration) : null,
+                node.Expression != null ? this.Print(node.Expression) : null,
+                this.PrintSyntaxToken(node.CloseParenToken)
             );
             var statement = this.Print(node.Statement);
             if (node.Statement is UsingStatementSyntax) {

@@ -6,7 +6,10 @@ namespace CSharpier.Core
     {
         private Doc PrintLetClauseSyntax(LetClauseSyntax node)
         {
-            return Concat("let ", node.Identifier.Text, " = ", this.Print(node.Expression));
+            return Concat(this.PrintSyntaxToken(node.LetKeyword, " "),
+                this.PrintSyntaxToken(node.Identifier, " "),
+                this.PrintSyntaxToken(node.EqualsToken, " "),
+                this.Print(node.Expression));
         }
     }
 }

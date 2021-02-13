@@ -6,7 +6,9 @@ namespace CSharpier.Core
     {
         private Doc PrintWhereClauseSyntax(WhereClauseSyntax node)
         {
-            return Concat("where ", this.Print(node.Condition));
+            return Concat(
+                this.PrintSyntaxToken(node.WhereKeyword, " "),
+                this.Print(node.Condition));
         }
     }
 }

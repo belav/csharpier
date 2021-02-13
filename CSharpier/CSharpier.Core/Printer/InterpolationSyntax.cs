@@ -6,14 +6,18 @@ namespace CSharpier.Core
     {
         private Doc PrintInterpolationSyntax(InterpolationSyntax node)
         {
-            var parts = new Parts("{", this.Print(node.Expression));
+            var parts = new Parts(this.PrintSyntaxToken(node.OpenBraceToken),
+                this.Print(node.Expression)
+            );
             if (node.AlignmentClause != null) {
-                parts.Push(", ", this.Print(node.AlignmentClause.Value));
+                parts.Push(this.PrintSyntaxToken(node.AlignmentClause.CommaToken, " "),
+                    this.Print(node.AlignmentClause.Value));
             }
             if (node.FormatClause != null) {
-                parts.Push(":", node.FormatClause.FormatStringToken.Text);
+                parts.Push(this.PrintSyntaxToken(node.FormatClause.ColonToken), this.PrintSyntaxToken(node.FormatClause.FormatStringToken));
             }
-            parts.Push("}");
+
+            parts.Push(this.PrintSyntaxToken(node.CloseBraceToken));
             return Concat(parts);
         }
     }

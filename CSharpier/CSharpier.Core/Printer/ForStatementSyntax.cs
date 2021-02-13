@@ -7,29 +7,27 @@ namespace CSharpier.Core
     {
         private Doc PrintForStatementSyntax(ForStatementSyntax node)
         {
-            var parts = new Parts(node.ForKeyword.Text, " (");
+            var parts = new Parts(
+                this.PrintExtraNewLines(node),
+                this.PrintSyntaxToken(node.ForKeyword, " "),
+                this.PrintSyntaxToken(node.OpenParenToken));
             if (node.Declaration != null)
             {
-                parts.Push(
-                    this.PrintVariableDeclarationSyntax(node.Declaration),
-                    "; "
-                );
+                parts.Push(this.PrintVariableDeclarationSyntax(node.Declaration));
             }
-            else
-            {
-                parts.Push(";");
-            }
-
+            parts.Push(this.PrintSyntaxToken(node.FirstSemicolonToken));
             if (node.Condition != null)
             {
-                parts.Push(this.Print(node.Condition), "; ");
+                parts.Push(SpaceIfNoPreviousComment);
+                parts.Push(this.Print(node.Condition));
             }
-            else
+            parts.Push(this.PrintSyntaxToken(node.SecondSemicolonToken));
+            if (node.Incrementors.Any())
             {
-                parts.Push(";");
+                parts.Push(SpaceIfNoPreviousComment);
             }
-
-            parts.Push(Join(", ", node.Incrementors.Select(this.Print)), ")");
+            parts.Push(this.PrintSeparatedSyntaxList(node.Incrementors, this.Print, Line));
+            parts.Push(this.PrintSyntaxToken(node.CloseParenToken));
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {
@@ -37,6 +35,7 @@ namespace CSharpier.Core
             }
             else
             {
+                // TODO 1 force braces? we do in if and else
                 parts.Push(Indent(Concat(HardLine, statement)));
             }
 

@@ -8,17 +8,14 @@ namespace CSharpier.Core
         private Doc PrintOrderByClauseSyntax(OrderByClauseSyntax node)
         {
             return Concat(
-                "orderby ",
-                Join(
-                    ", ",
-                    node.Orderings.Select(orderingNode => Concat(
+                this.PrintSyntaxToken(node.OrderByKeyword, " "),
+                this.PrintSeparatedSyntaxList(node.Orderings, orderingNode => Concat(
                             this.Print(orderingNode.Expression),
                             orderingNode.AscendingOrDescendingKeyword.RawKind != 0
                                 ? " " + orderingNode.AscendingOrDescendingKeyword.Text
                                 : ""
-                        )
-                )
-            ));
+                        ), null)
+                );
         }
     }
 }

@@ -6,7 +6,9 @@ namespace CSharpier.Core
     {
         private Doc PrintVarPatternSyntax(VarPatternSyntax node)
         {
-            return Concat("var ", this.Print(node.Designation));
+            return Concat(
+                this.PrintSyntaxToken(node.VarKeyword, " "),
+                this.Print(node.Designation));
         }
     }
 }

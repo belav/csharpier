@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintPostfixUnaryExpressionSyntax(PostfixUnaryExpressionSyntax node)
         {
-            return Concat(this.Print(node.Operand), node.OperatorToken.Text);
+            return Concat(this.Print(node.Operand), this.PrintSyntaxToken(node.OperatorToken));
         }
     }
 }
