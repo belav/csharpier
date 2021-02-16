@@ -5,6 +5,7 @@ namespace CSharpier.Core
 {
     public partial class Printer
     {
+        // TODO 0 how do I go about preventing breaks here? should I make a group that removes all hardlines, lines, etc within it??
         private Doc PrintInterpolatedStringExpressionSyntax(InterpolatedStringExpressionSyntax node)
         {
             return Concat(

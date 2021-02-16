@@ -15,18 +15,19 @@ namespace CSharpier.Core
     {
         public CSharpierResult Format(string code, Options options)
         {
-            // TODO 1 bump up to 9 some day 
-            var syntaxTree = CSharpSyntaxTree.ParseText(code, new CSharpParseOptions(LanguageVersion.CSharp8, DocumentationMode.Diagnose));
+            var syntaxTree = CSharpSyntaxTree.ParseText(code, new CSharpParseOptions(LanguageVersion.CSharp9, DocumentationMode.Diagnose));
             var rootNode = syntaxTree.GetRoot() as CompilationUnitSyntax;
-            // TODO 0 report these somehow?? also all in one currently fails this. We should get that to be valid code and then turn this back on
-            // if (syntaxTree.GetDiagnostics().Any())
-            // {
-            //     return new CSharpierResult
-            //     {
-            //         Code = code,
-            //         AST = options.IncludeAST ? this.PrintAST(rootNode) : null
-            //     };
-            // }
+            var diagnostics = syntaxTree.GetDiagnostics();
+            // TODO 1 report that didn't format because of errors?
+            if (diagnostics.Any(o => o.Severity == DiagnosticSeverity.Error && o.Id != "CS1029"))
+            {
+                return new CSharpierResult
+                {
+                    Code = code,
+                    Errors = JsonConvert.SerializeObject(diagnostics, Formatting.Indented),
+                    AST = options.IncludeAST ? this.PrintAST(rootNode) : null
+                };
+            }
 
             var document = new Printer().Print(rootNode);
 
@@ -122,5 +123,7 @@ namespace CSharpier.Core
         public string DocTree { get; set; }
         public string AST { get; set; }
         public bool TestRunFailed { get; set; }
+        // TODO 1 what do I really do with this?
+        public string Errors { get; set; }
     }
 }

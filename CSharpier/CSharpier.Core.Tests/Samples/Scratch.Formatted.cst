@@ -1,12 +1,15 @@
-﻿public class FunctionParameter : EntityBase
-{
-    public Function Function[Required]
-    [UniqueIndex(AdditionalColumns = nameof(Name))]
-    public Guid FunctionId { get; set; }
-
-    public string Name { get; set; }
-
-    public override string GetDisplayName()
+﻿    public class FunctionParameter : EntityBase
     {
-        return this.Name;
+        public Function Function
+        
+        [Required]
+        [UniqueIndex(AdditionalColumns = nameof(Name))]
+        public Guid FunctionId { get; set; }
+        
+        public string Name { get; set; }
+        
+        public override string GetDisplayName()
+        {
+            return this.Name;
+        
     }

@@ -5,6 +5,8 @@ namespace CSharpier.Core
 {
     public partial class Printer
     {
+        // TODO 1 this breaks weird
+        // return $"Order jlkasdf saldkfj alsdkfj alksdfasdf is incorrect: [{linksText[i]}]";
         private Doc PrintBracketedArgumentListSyntax(BracketedArgumentListSyntax node)
         {
             return Group(

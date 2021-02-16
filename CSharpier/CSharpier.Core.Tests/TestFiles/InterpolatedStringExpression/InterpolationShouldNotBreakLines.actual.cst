@@ -1,0 +1,6 @@
+﻿public class ClassName
+{
+    public string Test = $"{SomeValue}{CallSomeLongMethodWithBiParameters(
+        jlkasdfkljasdflkaskdf,
+        jkasdflkjasdfsdkaljfasdkjf)}";
+}

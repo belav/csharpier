@@ -409,15 +409,17 @@ namespace My
     }
     [type: Flags]
     public enum E
-    {A,
-    B = A,
-    C = 2 + A,
-    
+    {
+        A,
+        B = A,
+        C = 2 + A,
+        
 #if DEBUG
         D,
         }
 #else
-    E
+        E,
+
     }
     
 #endif
@@ -617,14 +619,20 @@ namespace Comments.XmlComments.UndocumentedKeywords
         void M<U>(T t, U u)
         {
             // comment
+            /* *** / */
+            /* //
+             */
+            /*s*/
             //comment
             // /***/
+            /*s*/
             int /*s*/
              intValue = 0;
             intValue = intValue /*s*/
              + 1;
             string strValue = /*s*/
             "hello";
+            /*s*/
             MyClass c = new MyClass();
             string verbatimStr = /*s*/
             @"\\\\";
@@ -706,6 +714,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             i -= i; /*-=*/
 
             i *= i;
+            /**=*/
             i /= i; /*/=*/
 
             i %= i; /*%=*/
@@ -727,6 +736,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             unsafe
             {
                 Point* p = &point;
+                /** &*/
                 p->x = 10; /*->*/
 
             }

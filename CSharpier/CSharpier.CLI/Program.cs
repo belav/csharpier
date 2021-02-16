@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CSharpier.Core;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.CLI
@@ -17,10 +18,9 @@ namespace CSharpier.CLI
             // TODO 1 CurrencyDto.cs from data.entities
             var fullStopwatch = Stopwatch.StartNew();
             //var path = "C:\\temp\\clifiles";
-            //var path = @"C:\Projects\insite-commerce-prettier\Legacy\Data";
-            var path = @"c:\projects\mission-control";
+            var path = @"C:\Projects\insite-commerce-prettier\Legacy\Automation\Insite.Automated.Core";
 
-            // TODO we can also look at prettier, they do some stuff like run it twice and compare AST, compare file to make sure the 2nd run doesn't change it from the first run, etc
+            // TODO 0 we can also look at prettier, they do some stuff like run it twice and compare AST, compare file to make sure the 2nd run doesn't change it from the first run, etc
             // not sure how the AST compare will work because we are modifying leading/trailing trivia, unless we compare everything except whitespace/endofline trivia
             // seems like way more work than my current naive approach
 
@@ -46,22 +46,71 @@ namespace CSharpier.CLI
                 TestRun = true,
             });
 
-            if (!IsCodeBasicallyEqual(code, result.Code, file))
+            if (!string.IsNullOrEmpty(result.Errors))
             {
-                Console.WriteLine(file.Substring(path.Length) + " - failed!");
+                Console.WriteLine(file.Substring(path.Length) + " - failed to compile");
+                return;
             }
 
+            var syntaxNodeComparer = new SyntaxNodeComparer();
+            // TODO 1 use async inside of codeformatter?
+            var left = await CSharpSyntaxTree.ParseText(code, new CSharpParseOptions(LanguageVersion.CSharp9)).GetRootAsync();
+            var right = await CSharpSyntaxTree.ParseText(result.Code, new CSharpParseOptions(LanguageVersion.CSharp9)).GetRootAsync();
+
+            var squashThinksEqual = await IsCodeBasicallyEqual(code, result.Code, file, path);
+
+            var paddedFile = PadToSize(file.Substring(path.Length));
+
+            try
+            {
+                var comparerResult = syntaxNodeComparer.AreEqualIgnoringWhitespace(left, right, "Root");
+                if (!comparerResult.AreEqual)
+                {
+                    if (!squashThinksEqual)
+                    {
+                        Console.WriteLine(paddedFile + " - failed both!");
+                    }
+                    else
+                    {
+                        Console.WriteLine(paddedFile + " - failed comparer!");
+                    }
+                    Console.WriteLine("    " + comparerResult.MismatchedPath);
+                }
+                else if (!squashThinksEqual)
+                {
+                    Console.WriteLine(paddedFile + " - failed squash");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(paddedFile + " - failed with exception" + Environment.NewLine + ex.Message);
+            }
+            
+
+            
             await File.WriteAllBytesAsync(file, encoding.GetBytes(result.Code));
         }
         
-        public static bool IsCodeBasicallyEqual(string code, string formattedCode, string file)
+        private static string PadToSize(string value)
+        {
+            while (value.Length < 120)
+            {
+                value += " ";
+            }
+
+            return value;
+        }
+        
+        public static async Task<bool> IsCodeBasicallyEqual(string code, string formattedCode, string file, string path)
         {
             var squashCode = Squash(code);
             var squashFormattedCode = Squash(formattedCode);
+            var newFile = Path.Combine("c:/temp/testing",  file.Substring(path.Length).Replace("/", "_").Replace("\\", "_"));
+
             if (squashCode != squashFormattedCode)
             {
-                File.WriteAllText(file.Replace(".cs", ".org.cs"), squashCode);
-                File.WriteAllText(file.Replace(".cs", ".new.cs"), squashFormattedCode);
+                await File.WriteAllTextAsync(newFile.Replace(".cs", ".org.cs"), squashCode);
+                await File.WriteAllTextAsync(newFile.Replace(".cs", ".new.cs"), squashFormattedCode);
                 return false;
             }
 
@@ -90,6 +139,26 @@ namespace CSharpier.CLI
             return result.ToString()
                 .Replace("( ", "(")
                 .Replace(") ", ")")
+                .Replace(" (", "(")
+                .Replace(" )", ")")
+                .Replace("{ ", "{")
+                .Replace("} ", "}")
+                .Replace(" {", "{")
+                .Replace(" }", "}")
+                .Replace("[ ", "[")
+                .Replace("] ", "]")
+                .Replace(" ]", "]")
+                .Replace(" [", "[")
+                .Replace(" .", ".")
+                .Replace("< ", "<")
+                .Replace("> ", ">")
+                .Replace(" <", "<")
+                .Replace(" >", ">")
+                .Replace(", ", ",")
+                .Replace(": ", ":")
+                .Replace(" :", ":")
+                .Replace("; ", ";")
+                .Replace(" ;", ";")
                 .TrimEnd(' ');
         }
     }

@@ -18,7 +18,8 @@ namespace CSharpier.Core
             }
             else
             {
-                parts.Push(HardLine, "{", Indent(Concat(HardLine, statement)), HardLine, "}");
+                // TODO 1 force braces here?
+                parts.Push(Indent(Concat(HardLine, statement)));
             }
 
             return Concat(parts);

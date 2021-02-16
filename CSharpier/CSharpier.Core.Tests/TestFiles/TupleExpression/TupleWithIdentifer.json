@@ -319,7 +319,6 @@
                     "kind": "NewKeyword",
                     "rawKind": 8354,
                     "text": "new",
-                    "containsDiagnostics": true,
                     "leadingTrivia": [],
                     "trailingTrivia": []
                   },
@@ -523,8 +522,7 @@
                     },
                     "rawKind": 8645
                   },
-                  "rawKind": 8659,
-                  "containsDiagnostics": true
+                  "rawKind": 8659
                 },
                 "semicolonToken": {
                   "nodeType": "SyntaxToken",
@@ -543,7 +541,6 @@
                   ]
                 },
                 "rawKind": 8805,
-                "containsDiagnostics": true,
                 "hasLeadingTrivia": true,
                 "hasTrailingTrivia": true
               }
@@ -573,12 +570,10 @@
               ]
             },
             "rawKind": 8792,
-            "containsDiagnostics": true,
             "hasLeadingTrivia": true,
             "hasTrailingTrivia": true
           },
           "rawKind": 8875,
-          "containsDiagnostics": true,
           "hasLeadingTrivia": true,
           "hasTrailingTrivia": true
         }
@@ -600,7 +595,6 @@
         ]
       },
       "rawKind": 8855,
-      "containsDiagnostics": true,
       "hasTrailingTrivia": true
     }
   ],
@@ -611,6 +605,5 @@
     "leadingTrivia": [],
     "trailingTrivia": []
   },
-  "rawKind": 8840,
-  "containsDiagnostics": true
+  "rawKind": 8840
 }

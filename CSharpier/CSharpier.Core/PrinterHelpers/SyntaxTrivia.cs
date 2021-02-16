@@ -25,7 +25,7 @@ namespace CSharpier.Core
             return parts.Any() ? Concat(parts) : null;
         }
 
-        // TODO 0 multiline comments need a doc type
+        // TODO 0 multiline comments need lots of testing, formatting is real weird
         private Doc PrintSyntaxToken(SyntaxToken syntaxToken, Doc afterTokenIfNoTrailing = null, Doc beforeTokenIfNoLeading = null)
         {
             if (syntaxToken.RawKind == 0)
@@ -83,8 +83,7 @@ namespace CSharpier.Core
                     {
                         kind = leadingTrivia[x + 1].Kind();
                     }
-                    // TODO 0 this probably needs multiline trivia too
-                    // TODO 0 this may screw up with regions that aren't at the beginning of the line?
+                    // TODO 0 this may screw up with regions that aren't at the beginning of the line? should we deal with new lines/trivia between things differently??
                     if (!kind.HasValue || kind == SyntaxKind.SingleLineCommentTrivia || kind == SyntaxKind.EndOfLineTrivia || kind == SyntaxKind.WhitespaceTrivia)
                     {
                         parts.Push(HardLine);
@@ -103,6 +102,11 @@ namespace CSharpier.Core
                     || trivia.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia)
                 {
                     parts.Push(LeadingComment(trivia.ToFullString().TrimEnd('\n', '\r'), CommentType.SingleLine));
+                }
+                else if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia
+                    || trivia.Kind() == SyntaxKind.MultiLineDocumentationCommentTrivia)
+                {
+                    parts.Push(LeadingComment(trivia.ToFullString().TrimEnd('\n', '\r'), CommentType.MultiLine));
                 }
                 else if (trivia.Kind() == SyntaxKind.DisabledTextTrivia)
                 {

@@ -23,7 +23,8 @@ namespace CSharpier.Core
             }
             else
             {
-                parts.Push(HardLine, "{", Indent(Concat(HardLine, statement)), HardLine, "}");
+                // TODO 1 force semicolons here? make an option?
+                parts.Push(Indent(Concat(HardLine, statement)));
             }
 
             if (node.Else != null)

@@ -109,7 +109,8 @@ namespace CSharpier.Core
             for (var x = 0; x < list.Count; x++)
             {
                 parts.Push(printFunc(list[x]));
-                if (x < list.Count - 1)
+                // TODO 1 this keeps trailing commas, that should probably be an option, for let's keep what appears to make finding "bad" code formats easier
+                if (x < list.SeparatorCount)
                 {
                     parts.Push(this.PrintSyntaxToken(list.GetSeparator(x), afterSeparator));
                 }

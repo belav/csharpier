@@ -16,6 +16,11 @@ namespace CSharpier.Core.Tests.TestFiles
             this.RunTest("InterpolatedStringExpression", "Interpolation");
         }
         [Test]
+        public void InterpolationShouldNotBreakLines()
+        {
+            this.RunTest("InterpolatedStringExpression", "InterpolationShouldNotBreakLines");
+        }
+        [Test]
         public void InterpolationWithAlignmentAndFormat()
         {
             this.RunTest("InterpolatedStringExpression", "InterpolationWithAlignmentAndFormat");
