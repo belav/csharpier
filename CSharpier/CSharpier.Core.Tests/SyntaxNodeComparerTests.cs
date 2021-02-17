@@ -15,7 +15,7 @@ namespace CSharpier.Core.Tests
 
             var result = this.AreEqual(left, right);
 
-            result.MismatchedPath.Should().Be("Root-Members[0]");
+            result.Should().Be("Root-Members[0]");
         }
         
         [Test]
@@ -27,7 +27,7 @@ namespace CSharpier.Core.Tests
 
             var result = this.AreEqual(left, right);
             
-            result.MismatchedPath.Should().Be(null);
+            result.Should().Be(null);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace CSharpier.Core.Tests
 
             var result = this.AreEqual(left, right);
 
-            result.MismatchedPath.Should().Be("Root-Members[0]-Members[0]-AttributeLists-Count(1 != 0)");
+            result.Should().Be("Root-Members[0]-Members[0]-AttributeLists-Count(1 != 0)");
         }
 
         [Test]
@@ -94,30 +94,32 @@ namespace CSharpier.Core.Tests
 
             var result = this.AreEqual(left, right);
 
-            result.MismatchedPath.Should().BeNull();
+            result.Should().BeNull();
         }
 
         
         [Test]
         // TODO we should write out the old/new version somewhere, then I can write a units that looks at them for me.
-        [Ignore("ljkasdf")]
         public void Blah()
         {
-            var left = "";
-            var right = "";
+            var left = @"public enum Enum
+{
+    Integer,
+    String,
+};";
+            var right = @"public enum Enum
+{
+    Integer,
+    String,
+}";
             var result = this.AreEqual(left, right);
 
-            result.MismatchedPath.Should().BeNull();
+            result.Should().BeNull();
         }
 
-        private AreEqualResult AreEqual(string left, string right)
+        private string AreEqual(string left, string right)
         {
-            var cSharpParseOptions = new CSharpParseOptions(LanguageVersion.CSharp9);
-            var leftNode = CSharpSyntaxTree.ParseText(left, cSharpParseOptions);
-            var rightNode = CSharpSyntaxTree.ParseText(right, cSharpParseOptions);
-
-
-            return new SyntaxNodeComparer().AreEqualIgnoringWhitespace(leftNode.GetRoot(), rightNode.GetRoot(), "Root");
+            return new SyntaxNodeComparer(left, right).CompareSource();
         }
     }
 }

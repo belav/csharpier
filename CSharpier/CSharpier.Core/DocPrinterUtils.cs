@@ -36,7 +36,6 @@ namespace CSharpier.Core
                 }
                 if (doc is BreakParent && forceFlat == 0)
                 {
-                    Console.WriteLine("break parent");
                     BreakParentGroup();
                 }
                 else if (doc is Group group)
@@ -97,7 +96,6 @@ namespace CSharpier.Core
                     {
                         if (forceFlat > 0 && concat.Parts[x] is LineDoc lineDoc)
                         {
-                            Console.WriteLine("changing lines");
                             concat.Parts[x] = lineDoc.Type == LineDoc.LineType.Soft ? "" : " ";
                         }
                         

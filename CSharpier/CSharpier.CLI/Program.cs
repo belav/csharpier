@@ -18,7 +18,7 @@ namespace CSharpier.CLI
             // TODO 1 CurrencyDto.cs from data.entities
             var fullStopwatch = Stopwatch.StartNew();
             //var path = "C:\\temp\\clifiles";
-            var path = @"C:\Projects\insite-commerce-prettier\Legacy\Automation\Insite.Automated.Core";
+            var path = @"C:\Projects\insite-commerce-prettier\Legacy";
 
             // TODO 0 we can also look at prettier, they do some stuff like run it twice and compare AST, compare file to make sure the 2nd run doesn't change it from the first run, etc
             // not sure how the AST compare will work because we are modifying leading/trailing trivia, unless we compare everything except whitespace/endofline trivia
@@ -52,36 +52,34 @@ namespace CSharpier.CLI
                 return;
             }
 
-            var syntaxNodeComparer = new SyntaxNodeComparer();
             // TODO 1 use async inside of codeformatter?
-            var left = await CSharpSyntaxTree.ParseText(code, new CSharpParseOptions(LanguageVersion.CSharp9)).GetRootAsync();
-            var right = await CSharpSyntaxTree.ParseText(result.Code, new CSharpParseOptions(LanguageVersion.CSharp9)).GetRootAsync();
-
+            var syntaxNodeComparer = new SyntaxNodeComparer(code, result.Code);
+            
             // TODO 0 can probably kill squash soon, also make the ast compare based on an input option.
             // TODO 0 also refactor it a bit, I hate the names in it.
-            var squashThinksEqual = await IsCodeBasicallyEqual(code, result.Code, file, path);
+            //var squashThinksEqual = await IsCodeBasicallyEqual(code, result.Code, file, path);
 
             var paddedFile = PadToSize(file.Substring(path.Length));
 
             try
             {
-                var comparerResult = syntaxNodeComparer.AreEqualIgnoringWhitespace(left, right, "Root");
-                if (!comparerResult.AreEqual)
+                var failure = syntaxNodeComparer.CompareSource();
+                if (!string.IsNullOrEmpty(failure))
                 {
-                    if (!squashThinksEqual)
-                    {
-                        Console.WriteLine(paddedFile + " - failed both!");
-                    }
-                    else
-                    {
-                        Console.WriteLine(paddedFile + " - failed comparer!");
-                    }
-                    Console.WriteLine("    " + comparerResult.MismatchedPath);
+                    // if (!squashThinksEqual)
+                    // {
+                    //     Console.WriteLine(paddedFile + " - failed both!");
+                    // }
+                    // else
+                    // {
+                        Console.WriteLine(paddedFile + " - possible lose of source!");
+                    //}
+                    Console.WriteLine(failure);
                 }
-                else if (!squashThinksEqual)
-                {
-                    Console.WriteLine(paddedFile + " - failed squash");
-                }
+                // else if (!squashThinksEqual)
+                // {
+                //     Console.WriteLine(paddedFile + " - failed squash");
+                // }
             }
             catch (Exception ex)
             {

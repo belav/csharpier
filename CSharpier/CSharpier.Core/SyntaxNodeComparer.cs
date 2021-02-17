@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -10,32 +11,82 @@ namespace CSharpier.Core
 {
     public class SyntaxNodeComparer
     {
-        private static AreEqualResult Equal = new AreEqualResult { AreEqual = true };
+        protected string OriginalSourceCode { get; }
+        protected string NewSourceCode { get; }
+        protected SyntaxTree OriginalSyntaxTree { get; }
+        protected SyntaxTree NewSyntaxTree { get; }
 
-        public AreEqualResult AreEqualIgnoringWhitespace(SyntaxNode left, SyntaxNode right, string path)
+        private static readonly CompareResult Equal = new CompareResult();
+        
+        public SyntaxNodeComparer(string originalSourceCode, string newSourceCode)
         {
-            if (left == null && right == null)
+            this.OriginalSourceCode = originalSourceCode;
+            this.NewSourceCode = newSourceCode;
+            
+            var cSharpParseOptions = new CSharpParseOptions(LanguageVersion.CSharp9);
+            this.OriginalSyntaxTree = CSharpSyntaxTree.ParseText(this.OriginalSourceCode, cSharpParseOptions);
+            this.NewSyntaxTree = CSharpSyntaxTree.ParseText(this.NewSourceCode, cSharpParseOptions);
+        }
+
+        public string CompareSource()
+        {
+            var result = this.AreEqualIgnoringWhitespace(OriginalSyntaxTree.GetRoot(), NewSyntaxTree.GetRoot());
+            var message = "";
+            if (result.MismatchedResult)
+            {
+                message += "    Original: " + GetLine(result.OriginalSpan, this.OriginalSyntaxTree, this.OriginalSourceCode);
+                
+                message += "    New: " + GetLine(result.NewSpan, this.NewSyntaxTree, this.NewSourceCode);
+            }
+
+            return message == "" ? null : message;
+        }
+
+        public string GetLine(TextSpan? textSpan, SyntaxTree syntaxTree, string source)
+        {
+            if (!textSpan.HasValue)
+            {
+                return "Missing";
+            }
+
+            var line = syntaxTree.GetLineSpan(textSpan.Value).StartLinePosition.Line;
+            var endLine = syntaxTree.GetLineSpan(textSpan.Value).EndLinePosition.Line;
+
+            var result = "Around Line " + line + Environment.NewLine;
+            
+            var stringReader = new StringReader(source);
+            var x = 0;
+            var currentLine = stringReader.ReadLine();
+            while (x <= endLine + 2 && currentLine != null)
+            {
+                if (x >= line - 2)
+                {
+                    result += currentLine + Environment.NewLine;
+                }
+                
+                currentLine = stringReader.ReadLine();
+                x++;
+            }
+
+            return result;
+        }
+        
+        public CompareResult AreEqualIgnoringWhitespace(SyntaxNode originalNode, SyntaxNode newNode)
+        {
+            if (originalNode == null && newNode == null)
             {
                 return Equal;
             }
 
-            var type = left?.GetType();
-            if (type != right?.GetType())
+            var type = originalNode?.GetType();
+            if (type != newNode?.GetType())
             {
-                return new AreEqualResult
-                {
-                    AreEqual = false,
-                    MismatchedPath = path
-                };
+                return NotEqual(originalNode, newNode);
             }
 
-            if (left.RawKind != right.RawKind)
+            if (originalNode.RawKind != newNode.RawKind)
             {
-                return new AreEqualResult
-                {
-                    AreEqual = false,
-                    MismatchedPath = path + "-RawKind"
-                };
+                return NotEqual(originalNode, newNode);
             }
 
             foreach (var propertyInfo in type.GetProperties())
@@ -59,117 +110,101 @@ namespace CSharpier.Core
                     continue;
                 }
 
-                var leftValue = propertyInfo.GetValue(left);
-                var rightValue = propertyInfo.GetValue(right);
+                var originalValue = propertyInfo.GetValue(originalNode);
+                var newValue = propertyInfo.GetValue(newNode);
 
+                var result = Equal;
+                
                 if (propertyType == typeof(bool))
                 {
-                    if ((bool) leftValue != (bool) rightValue)
+                    if ((bool) originalValue != (bool) newValue)
                     {
-                        return NotEqual(path, $"{propertyName}({leftValue} != {rightValue})");
+                        return NotEqual(originalNode, newNode);
                     }
                 }
                 else if (propertyType == typeof(Int32))
                 {
-                    if ((int) leftValue != (int) rightValue)
+                    if ((int) originalValue != (int) newValue)
                     {
-                        return NotEqual(path, $"{propertyName}({leftValue} != {rightValue})");
+                        return NotEqual(originalNode, newNode);
                     }
                 }
                 else if (propertyType == typeof(SyntaxToken))
                 {
-                    var result = this.AreEqualIgnoringWhitespace((SyntaxToken) leftValue, (SyntaxToken) rightValue, path + "-" + propertyName);
-                    if (!result.AreEqual)
-                    {
-                        return result;
-                    }
+                    result = this.AreEqualIgnoringWhitespace((SyntaxToken) originalValue, (SyntaxToken) newValue, originalNode, newNode);
                 }
                 else if (propertyType == typeof(SyntaxTrivia))
                 {
-                    var result = this.AreEqualIgnoringWhitespace((SyntaxTrivia) leftValue, (SyntaxTrivia) rightValue, path + "-" + propertyName);
-                    if (!result.AreEqual)
-                    {
-                        return result;
-                    }
+                    result = this.AreEqualIgnoringWhitespace((SyntaxTrivia) originalValue, (SyntaxTrivia) newValue);
                 }
                 else if (typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType))
                 {
-                    var result = this.AreEqualIgnoringWhitespace(leftValue as SyntaxNode, rightValue as SyntaxNode, path + "-" + propertyName);
-                    if (!result.AreEqual)
-                    {
-                        return result;
-                    }
+                    result = this.AreEqualIgnoringWhitespace(originalValue as SyntaxNode, newValue as SyntaxNode);
                 }
                 else if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>))
                 {
-                    var leftList = (leftValue as IEnumerable).Cast<SyntaxNode>().ToList();
-                    var rightList = (rightValue as IEnumerable).Cast<SyntaxNode>().ToList();
-                    var result = CompareLists(leftList, rightList, path + "-" + propertyName, AreEqualIgnoringWhitespace);
-                    if (!result.AreEqual)
-                    {
-                        return result;
-                    }
+                    var leftList = (originalValue as IEnumerable).Cast<SyntaxNode>().ToList();
+                    var rightList = (newValue as IEnumerable).Cast<SyntaxNode>().ToList();
+                    result = CompareLists(leftList, rightList, AreEqualIgnoringWhitespace, o => o.Span);
                 }
                 else if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>))
                 {
-                    var leftList = (leftValue as IEnumerable).Cast<SyntaxNode>().ToList();
-                    var rightList = (rightValue as IEnumerable).Cast<SyntaxNode>().ToList();
-                    var result = CompareLists(leftList, rightList, path + "-" + propertyName, AreEqualIgnoringWhitespace);
-                    if (!result.AreEqual)
+                    var leftList = (originalValue as IEnumerable).Cast<SyntaxNode>().ToList();
+                    var rightList = (newValue as IEnumerable).Cast<SyntaxNode>().ToList();
+                    result = CompareLists(leftList, rightList, AreEqualIgnoringWhitespace, o => o.Span);
+                    if (result.MismatchedResult)
                     {
                         return result;
                     }
-
-                    var getSeparatorsMethod = propertyType.GetMethod("GetSeparators");
-                    var leftSeparators = (getSeparatorsMethod.Invoke(leftValue, null) as IEnumerable<SyntaxToken>).ToList();
-                    var rightSeparators = (getSeparatorsMethod.Invoke(rightValue, null) as IEnumerable<SyntaxToken>).ToList();
                     
-                    var result2 = CompareLists(leftSeparators, rightSeparators, path + "-" + propertyName, AreEqualIgnoringWhitespace);
-                    if (!result2.AreEqual)
-                    {
-                        return result2;
-                    }
+                    var getSeparatorsMethod = propertyType.GetMethod("GetSeparators");
+                    var leftSeparators = (getSeparatorsMethod.Invoke(originalValue, null) as IEnumerable<SyntaxToken>).ToList();
+                    var rightSeparators = (getSeparatorsMethod.Invoke(newValue, null) as IEnumerable<SyntaxToken>).ToList();
+                    
+                    result = CompareLists(leftSeparators, rightSeparators, AreEqualIgnoringWhitespace, o => o.Span);
                 }
                 else if (propertyType == typeof(SyntaxTokenList))
                 {
-                    var leftList = (leftValue as IEnumerable).Cast<SyntaxToken>().ToList();
-                    var rightList = (rightValue as IEnumerable).Cast<SyntaxToken>().ToList();
-                    var result = CompareLists(leftList, rightList, path + "-" + propertyName, AreEqualIgnoringWhitespace);
-                    if (!result.AreEqual)
-                    {
-                        return result;
-                    }
+                    var leftList = (originalValue as IEnumerable).Cast<SyntaxToken>().ToList();
+                    var rightList = (newValue as IEnumerable).Cast<SyntaxToken>().ToList();
+                    result = CompareLists(leftList, rightList, AreEqualIgnoringWhitespace, o => o.Span);
                 }
                 else if (propertyType == typeof(SyntaxTriviaList))
                 {
-                    var leftList = (leftValue as IEnumerable).Cast<SyntaxTrivia>().ToList();
-                    var rightList = (rightValue as IEnumerable).Cast<SyntaxTrivia>().ToList();
-                    var result = CompareLists(leftList, rightList, path + "-" + propertyName, AreEqualIgnoringWhitespace);
-                    if (!result.AreEqual)
-                    {
-                        return result;
-                    }
+                    var leftList = (originalValue as IEnumerable).Cast<SyntaxTrivia>().ToList();
+                    var rightList = (newValue as IEnumerable).Cast<SyntaxTrivia>().ToList();
+                    result = CompareLists(leftList, rightList, AreEqualIgnoringWhitespace, o => o.Span);
                 }
                 else
                 {
                     throw new Exception(propertyType.FullName);
+                }
+                
+                if (result.MismatchedResult)
+                {
+                    return result;
                 }
             }
 
             return Equal;
         }
 
-        private AreEqualResult CompareLists<T>(IList<T> left, IList<T> right, string path, Func<T, T, string, AreEqualResult> comparer)
+        private CompareResult CompareLists<T>(IList<T> originalList, IList<T> newList, Func<T, T, CompareResult> comparer, Func<T, TextSpan> getSpan)
         {
-            if (left.Count != right.Count)
+            for (var x = 0; x < originalList.Count || x < newList.Count; x++)
             {
-                return NotEqual(path, $"Count({left.Count} != {right.Count})");
-            }
+                if (x == originalList.Count)
+                {
+                    return NotEqual(null, getSpan(newList[x]));
+                }
 
-            for (var x = 0; x < left.Count; x++)
-            {
-                var result = comparer(left[x], right[x], path + "[" + x + "]");
-                if (!result.AreEqual)
+                if (x == newList.Count)
+                {
+                    return NotEqual(getSpan(originalList[x]), null);
+                }
+                
+                var result = comparer(originalList[x], newList[x]);
+                if (result.MismatchedResult)
                 {
                     return result;
                 }
@@ -178,61 +213,74 @@ namespace CSharpier.Core
             return Equal;
         }
         
-        private AreEqualResult NotEqual(string path, string propertyName)
+        private CompareResult NotEqual(SyntaxNode originalNode, SyntaxNode newNode)
         {
             return new()
             {
-                AreEqual = false,
-                MismatchedPath = path + "-" + propertyName
+                MismatchedResult = true,
+                OriginalSpan = originalNode.Span,
+                NewSpan = newNode.Span
+            };
+        }
+        
+        private CompareResult NotEqual(TextSpan? originalSpan, TextSpan? newSpan)
+        {
+            return new()
+            {
+                MismatchedResult = true,
+                OriginalSpan = originalSpan,
+                NewSpan = newSpan
             };
         }
 
-        private AreEqualResult AreEqualIgnoringWhitespace(SyntaxToken left, SyntaxToken right, string path)
+        private CompareResult AreEqualIgnoringWhitespace(SyntaxToken originalToken, SyntaxToken newToken)
+        {
+            return AreEqualIgnoringWhitespace(originalToken, newToken, null, null);
+        }
+        
+        private CompareResult AreEqualIgnoringWhitespace(SyntaxToken originalToken, SyntaxToken newToken, SyntaxNode originalNode, SyntaxNode newNode)
         {
             // TODO other stuff in here? properties? or just trivia?
-            if (left.Text != right.Text)
+            if (originalToken.Text != newToken.Text)
             {
-                return NotEqual(path, "Text");
+                return NotEqual(originalToken.RawKind == 0 ? originalNode.Span : originalToken.Span,
+                    newToken.RawKind == 0 ? newNode.Span : newToken.Span
+                    );
             }
-
-            var result = this.AreEqualIgnoringWhitespace(left.LeadingTrivia, right.LeadingTrivia, path + "-LeadingTrivia");
-            if (!result.AreEqual)
+        
+            var result = this.AreEqualIgnoringWhitespace(originalToken.LeadingTrivia, newToken.LeadingTrivia);
+            if (result.MismatchedResult)
             {
                 return result;
             }
             
-            var result2 = this.AreEqualIgnoringWhitespace(left.TrailingTrivia, right.TrailingTrivia, path + "-TrailingTrivia");
-            if (!result2.AreEqual)
+            var result2 = this.AreEqualIgnoringWhitespace(originalToken.TrailingTrivia, newToken.TrailingTrivia);
+            if (result2.MismatchedResult)
             {
                 return result2;
             }
-
+        
             return Equal;
         }
 
-        private AreEqualResult AreEqualIgnoringWhitespace(SyntaxTrivia left, SyntaxTrivia right, string path)
+        private CompareResult AreEqualIgnoringWhitespace(SyntaxTrivia originalTrivia, SyntaxTrivia newTrivia)
         {
-            if (left.RawKind != right.RawKind)
+            if (originalTrivia.ToString().TrimEnd() != newTrivia.ToString().TrimEnd())
             {
-                return NotEqual(path, "RawKind");
-            }
-
-            if (left.ToString() != right.ToString())
-            {
-                return NotEqual(path, "ToString");
+                return NotEqual(originalTrivia.Span, newTrivia.Span);
             }
 
             return Equal;
         }
 
-        private AreEqualResult AreEqualIgnoringWhitespace(SyntaxTriviaList left, SyntaxTriviaList right, string path)
+        private CompareResult AreEqualIgnoringWhitespace(SyntaxTriviaList left, SyntaxTriviaList right)
         {
             var cleanedLeft = left.Where(o => o.Kind() != SyntaxKind.EndOfLineTrivia
                                               && o.Kind() != SyntaxKind.WhitespaceTrivia).ToList();
             var cleanedRight = right.Where(o => o.Kind() != SyntaxKind.EndOfLineTrivia
                                                 && o.Kind() != SyntaxKind.WhitespaceTrivia).ToList();
-            var result = CompareLists(cleanedLeft, cleanedRight, path, AreEqualIgnoringWhitespace);
-            if (!result.AreEqual)
+            var result = CompareLists(cleanedLeft, cleanedRight, AreEqualIgnoringWhitespace, o => o.Span);
+            if (result.MismatchedResult)
             {
                 return result;
             }
@@ -241,9 +289,10 @@ namespace CSharpier.Core
         }
     }
 
-    public struct AreEqualResult
+    public struct CompareResult
     {
-        public bool AreEqual { get; set; }
-        public string MismatchedPath { get; set; }
+        public bool MismatchedResult;
+        public TextSpan? OriginalSpan;
+        public TextSpan? NewSpan;
     }
 }
