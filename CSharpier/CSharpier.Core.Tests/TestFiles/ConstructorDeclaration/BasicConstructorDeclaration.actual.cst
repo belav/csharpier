@@ -2,5 +2,6 @@
 {
     public BasicClass() { }
 
+    [Obsolete]
     public BasicClass(string one) { }
 }

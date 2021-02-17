@@ -5,11 +5,15 @@ namespace CSharpier.Core
 {
     public static class DocPrinterUtils
     {
+        private static Doc traverseDocOnExitStackMarker = new Doc();
+        
         public static void PropagateBreaks(Doc document)
         {
             var alreadyVisitedSet = new HashSet<Group>();
             var groupStack = new Stack<Group>();
-
+            // TODO 0 not sure if I need this stuff in here
+            var forceFlat = 0;
+            
             void BreakParentGroup()
             {
                 if (groupStack.Count > 0)
@@ -24,10 +28,15 @@ namespace CSharpier.Core
                 }
             }
 
-            bool PropagateBreaksOnEnterFn(Doc doc)
+            bool OnEnter(Doc doc)
             {
-                if (doc is BreakParent)
+                if (doc is ForceFlat)
                 {
+                    forceFlat++;
+                }
+                if (doc is BreakParent && forceFlat == 0)
+                {
+                    Console.WriteLine("break parent");
                     BreakParentGroup();
                 }
                 else if (doc is Group group)
@@ -44,9 +53,13 @@ namespace CSharpier.Core
                 return true;
             }
 
-            void PropagateBreaksOnExitFn(Doc doc)
+            void OnExit(Doc doc)
             {
-                if (doc is Group)
+                if (doc is ForceFlat)
+                {
+                    forceFlat--;
+                }
+                else if (doc is Group)
                 {
                     var group = groupStack.Pop();
                     if (group.Break)
@@ -56,14 +69,6 @@ namespace CSharpier.Core
                 }
             }
 
-            TraverseDoc(document, PropagateBreaksOnEnterFn, PropagateBreaksOnExitFn, true);
-        }
-
-
-        private static Doc traverseDocOnExitStackMarker = new Doc();
-
-        private static void TraverseDoc(Doc document, Func<Doc, bool> onEnter, Action<Doc> onExit, bool shouldTraverseConditionalGroups)
-        {
             var docsStack = new Stack<Doc>();
             docsStack.Push(document);
 
@@ -73,54 +78,31 @@ namespace CSharpier.Core
 
                 if (doc == traverseDocOnExitStackMarker)
                 {
-                    onExit(docsStack.Pop());
+                    OnExit(docsStack.Pop());
                     continue;
                 }
                 
                 docsStack.Push(doc);
                 docsStack.Push(traverseDocOnExitStackMarker);
 
-                if (!onEnter(doc)) continue;
-
-                // When there are multiple parts to process,
-                // the parts need to be pushed onto the stack in reverse order,
-                // so that they are processed in the original order
-                // when the stack is popped.
-                if (doc is Concat concat) // TODO 2 fill || doc.type == = "fill")
+                if (!OnEnter(doc))
                 {
+                    continue;
+                }
+
+                if (doc is Concat concat)
+                {
+                    // push onto stack in reverse order so they are processed in the original order
                     for (var x = concat.Parts.Count - 1; x >= 0; --x)
                     {
+                        if (forceFlat > 0 && concat.Parts[x] is LineDoc lineDoc)
+                        {
+                            Console.WriteLine("changing lines");
+                            concat.Parts[x] = lineDoc.Type == LineDoc.LineType.Soft ? "" : " ";
+                        }
+                        
                         docsStack.Push(concat.Parts[x]);
                     }
-                }
-                // TODO 2 ifbreak
-                // else if (doc.type == = "if-break")
-                // {
-                //     if (doc.flatContents)
-                //     {
-                //         docsStack.push(doc.flatContents);
-                //     }
-                //
-                //     if (doc.breakContents)
-                //     {
-                //         docsStack.push(doc.breakContents);
-                //     }
-                // }
-                else if (doc is Group group)
-                {
-                    // if (group.ExpandedStates) {
-                    // if (shouldTraverseConditionalGroups)
-                    // {
-                    //     for (let ic = doc.expandedStates.length, i = ic - 1; i >= 0; --i)
-                    //     {
-                    //         docsStack.push(doc.expandedStates[i]);
-                    //     }
-                    // }
-                    // else
-                    // {
-                    //     docsStack.push(doc.contents);
-                    // }
-                    // }
                 }
 
                 if (doc is IHasContents hasContents)

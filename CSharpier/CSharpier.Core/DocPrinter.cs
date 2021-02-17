@@ -312,6 +312,16 @@ namespace CSharpier.Core
 
             var lineSuffix = new List<PrintCommand>();
 
+            void Push(Doc doc, PrintMode printMode, Indent indent)
+            {
+                currentStack.Push(new PrintCommand
+                {
+                    Doc = doc,
+                    Mode = printMode,
+                    Indent = indent
+                });
+            } 
+            
             while (currentStack.Count > 0)
             {
                 var command = currentStack.Pop();
@@ -341,23 +351,12 @@ namespace CSharpier.Core
                     case Concat concat:
                         for (var x = concat.Parts.Count - 1; x >= 0; x--)
                         {
-                            currentStack.Push(new PrintCommand
-                            {
-                                Doc = concat.Parts[x],
-                                Mode = command.Mode,
-                                Indent = command.Indent
-                            });
+                            Push(concat.Parts[x], command.Mode, command.Indent);
                         }
 
                         break;
                     case IndentDoc indentBuilder:
-                        currentStack.Push(new PrintCommand
-                        {
-                            Indent = MakeIndent(command.Indent, options),
-                            Mode = command.Mode,
-                            Doc = indentBuilder.Contents
-                        });
-
+                        Push(indentBuilder.Contents, command.Mode, MakeIndent(command.Indent, options));
                         break;
                     case Group group:
                         switch (command.Mode)
@@ -365,19 +364,13 @@ namespace CSharpier.Core
                             case PrintMode.MODE_FLAT:
                                 if (!shouldRemeasure)
                                 {
-                                    currentStack.Push(new PrintCommand
-                                    {
-                                        Indent = command.Indent,
-                                        Mode = group.Break ? PrintMode.MODE_BREAK : PrintMode.MODE_FLAT,
-                                        Doc = group.Contents,
-                                    });
+                                    Push(group.Contents, group.Break ? PrintMode.MODE_BREAK : PrintMode.MODE_FLAT, command.Indent);
                                     break;
                                 }
 
                                 goto case PrintMode.MODE_BREAK;
                             case PrintMode.MODE_BREAK:
                                 shouldRemeasure = false;
-
                                 var next = new PrintCommand
                                 {
                                     Indent = command.Indent,
@@ -393,48 +386,32 @@ namespace CSharpier.Core
                                 }
                                 else
                                 {
-                                    // TODO 2 expandedStates is a big complicated thing here, but I don't think I'll use it?
-                                    currentStack.Push(new PrintCommand
-                                    {
-                                        Indent = command.Indent,
-                                        Mode = PrintMode.MODE_BREAK,
-                                        Doc = group.Contents
-                                    });
+                                    Push(group.Contents, PrintMode.MODE_BREAK, command.Indent);
                                 }
 
                                 break;
                         }
-
-                        // TODO 2 group ids
-                        // if (doc.id)
-                        // {
-                        //     groupModeMap[doc.id] = cmds[cmds.length - 1][1];
-                        // }
-
                         break;
-
                     case LineDoc line:
                         switch (command.Mode)
                         {
                             case PrintMode.MODE_FLAT:
-                                if (line.Type != LineDoc.LineType.Hard)
+                                if (line.Type == LineDoc.LineType.Soft)
                                 {
-                                    if (line.Type != LineDoc.LineType.Soft)
-                                    {
-                                        output.Append(" ");
-
-                                        position += 1;
-                                    }
+                                    break;
+                                }
+                                else if (line.Type == LineDoc.LineType.Normal)
+                                {
+                                    output.Append(" ");
+                                    position += 1;
+                                    
 
                                     break;
                                 }
 
-                                // This line was forced into the output even if we
-                                // were in flattened mode, so we need to tell the next
-                                // group that no matter what, it needs to remeasure
-                                // because the previous measurement didn't accurately
-                                // capture the entire expression (this is necessary
-                                // for nested groups)
+                                // This line was forced into the output even if we were in flattened mode, so we need to tell the next
+                                // group that no matter what, it needs to remeasure  because the previous measurement didn't accurately
+                                // capture the entire expression (this is necessary for nested groups)
                                 shouldRemeasure = true;
                                 goto case PrintMode.MODE_BREAK;
                             case PrintMode.MODE_BREAK:
@@ -455,11 +432,6 @@ namespace CSharpier.Core
                                 {
                                     if (output.Length > 0)
                                     {
-                                        // TODO 2 indent.root perhaps?
-                                        // if (ind.root) {
-                                        //     out.Add(newLine, ind.root.value);
-                                        //     pos = ind.root.length;
-                                        // } else {
                                         output.Append(newLine);
                                         position = 0;   
                                     }
@@ -483,7 +455,7 @@ namespace CSharpier.Core
                         }
 
                         break;
-                    case BreakParent breakParent: // this doesn't seem to be used in here
+                    case BreakParent:
                         break;
                     case LeadingComment leadingComment:
                         Trim(output);
@@ -507,14 +479,12 @@ namespace CSharpier.Core
                     case SpaceIfNoPreviousComment:
                         if (!newLineNextStringValue)
                         {
-                            currentStack.Push(new PrintCommand
-                            {
-                                Doc = new StringDoc(" "),
-                                Mode = command.Mode,
-                                Indent = command.Indent
-                            });
+                            Push(" ", command.Mode, command.Indent);
                         }
 
+                        break;
+                    case ForceFlat forceFlat:
+                        Push(forceFlat.Contents, PrintMode.MODE_FLAT, command.Indent);
                         break;
                     default:
                         throw new Exception("didn't handle " + command.Doc);
@@ -604,6 +574,7 @@ namespace CSharpier.Core
         {
             MODE_FLAT,
             MODE_BREAK,
+            MODE_FORCEFLAT
         }
 
         private class Indent

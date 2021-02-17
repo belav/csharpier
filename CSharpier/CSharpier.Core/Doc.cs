@@ -57,6 +57,11 @@ namespace CSharpier.Core
     {
         public List<Doc> Parts { get; set; }
     }
+    
+    public class ForceFlat : Doc, IHasContents
+    {
+        public Doc Contents { get; set; }
+    }
 
     public class Align : Doc, IHasContents
     {

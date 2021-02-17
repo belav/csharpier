@@ -12,11 +12,11 @@ namespace CSharpier.Core
         public static readonly Doc BreakParent = new BreakParent();
 
         // TODO 0 kill? I think I need it? maybe all spaces should be this instead?
-        public static readonly Doc SpaceIfNoPreviousComment = new SpaceIfNoPreviousComment();
-        public static readonly Doc HardLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard }, BreakParent);
-        public static readonly Doc LiteralLine = Concat(new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true }, BreakParent);
-        public static readonly Doc Line = new LineDoc { Type = LineDoc.LineType.Normal };
-        public static readonly Doc SoftLine = new LineDoc { Type = LineDoc.LineType.Soft };
+        public static Doc SpaceIfNoPreviousComment => new SpaceIfNoPreviousComment();
+        public static Doc HardLine => Concat(new LineDoc { Type = LineDoc.LineType.Hard }, BreakParent);
+        public static Doc LiteralLine => Concat(new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true }, BreakParent);
+        public static Doc Line => new LineDoc { Type = LineDoc.LineType.Normal };
+        public static Doc SoftLine => new LineDoc { Type = LineDoc.LineType.Soft };
 
         public static Doc LeadingComment(string comment, CommentType commentType)
         {
@@ -53,6 +53,14 @@ namespace CSharpier.Core
             };
         }
 
+        public static Doc ForceFlat(params Doc[] contents)
+        {
+            return new ForceFlat
+            {
+                Contents = contents.Length == 0 ? contents[0] : Concat(contents),
+            };
+        }
+        
         public static Doc String(string value)
         {
             return new StringDoc(value);

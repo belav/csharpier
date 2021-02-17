@@ -8,7 +8,7 @@ namespace CSharpier.Core
         // TODO 0 how do I go about preventing breaks here? should I make a group that removes all hardlines, lines, etc within it??
         private Doc PrintInterpolatedStringExpressionSyntax(InterpolatedStringExpressionSyntax node)
         {
-            return Concat(
+            return ForceFlat(
                 this.PrintSyntaxToken(node.StringStartToken),
                 Concat(node.Contents.Select(this.Print).ToArray()),
                 this.PrintSyntaxToken(node.StringEndToken)

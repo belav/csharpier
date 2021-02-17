@@ -1,4 +1,6 @@
+using System;
 using FluentAssertions;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace CSharpier.Core.Tests
@@ -137,6 +139,26 @@ namespace CSharpier.Core.Tests
 
             result.Should().Be($"1");
         }
+        
+        [Test]
+        public void ForceFlat_Prevents_Breaking()
+        {
+            var doc = ForceFlat("1", HardLine, "2");
+
+            var result = this.Print(doc);
+
+            result.Should().Be("1 2");
+        }
+        
+        [Test]
+        public void ForceFlat_Prevents_Breaking_With_Long_Content()
+        {
+            var doc = ForceFlat("lkjasdkfljalsjkdfkjlasdfjklakljsdfjkasdfkljsdafjk", Line, "jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj");
+
+            var result = this.Print(doc);
+
+            result.Should().Be($"lkjasdkfljalsjkdfkjlasdfjklakljsdfjkasdfkljsdafjk jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj");
+        }
 
         [Test]
         public void Scratch()
@@ -151,11 +173,11 @@ namespace CSharpier.Core.Tests
             return new DocPrinter().Print(doc, new Options()).TrimEnd('\r', '\n');
         }
 
-        public static Doc HardLine = Printer.HardLine;
-        public static Doc LiteralLine = Printer.LiteralLine;
-        public static Doc Line = Printer.Line;
-        public static Doc SoftLine = Printer.SoftLine;
-        public static Doc BreakParent = Printer.BreakParent;
+        public static Doc HardLine => Printer.HardLine;
+        public static Doc LiteralLine => Printer.LiteralLine;
+        public static Doc Line => Printer.Line;
+        public static Doc SoftLine => Printer.SoftLine;
+        public static Doc BreakParent => Printer.BreakParent;
 
         public static Doc Group(Doc contents)
         {
@@ -175,6 +197,11 @@ namespace CSharpier.Core.Tests
         public static Doc Indent(Doc contents)
         {
             return Printer.Indent(contents);
+        }
+        
+        public static Doc ForceFlat(params Doc[] parts)
+        {
+            return Printer.ForceFlat(parts);
         }
     }
 }

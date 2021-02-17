@@ -57,6 +57,8 @@ namespace CSharpier.CLI
             var left = await CSharpSyntaxTree.ParseText(code, new CSharpParseOptions(LanguageVersion.CSharp9)).GetRootAsync();
             var right = await CSharpSyntaxTree.ParseText(result.Code, new CSharpParseOptions(LanguageVersion.CSharp9)).GetRootAsync();
 
+            // TODO 0 can probably kill squash soon, also make the ast compare based on an input option.
+            // TODO 0 also refactor it a bit, I hate the names in it.
             var squashThinksEqual = await IsCodeBasicallyEqual(code, result.Code, file, path);
 
             var paddedFile = PadToSize(file.Substring(path.Length));

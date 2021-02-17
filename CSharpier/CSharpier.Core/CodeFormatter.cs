@@ -83,6 +83,8 @@ namespace CSharpier.Core
                     return indent + (lineDoc.Type == LineDoc.LineType.Normal ? "Line" : "SoftLine");
                 case BreakParent breakParent:
                     return indent + "breakParent";
+                case ForceFlat forceFlat:
+                    return indent + "ForceFlat(" + Environment.NewLine + this.PrintDocTree(forceFlat.Contents, indent + "    ") + ")";
                 case IndentDoc indentDoc:
                     return indent + "Indent(" + Environment.NewLine + this.PrintDocTree(indentDoc.Contents, indent + "    ") + ")";
                 case Group group:
