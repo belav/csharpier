@@ -8,9 +8,10 @@ The remaining issues before I'm ready to call it an alpha
   - ~~Comments~~
   - ~~Preprocessor Directives - new lines around these are lost sometimes and should probably be preserved~~
   - ~~New lines - the goal is to preserve new lines in some areas. For example the lines that appear between properties will be preserved.~~
-- Multiline comments aren't properly supported yet
-- A few node types are missing and code for them will be lost.
-- CSharpier will happily format invalid code, which results in very strange results
+- Multiline comments aren't properly supported yet - WIP
+- ~~CSharpier will happily format invalid code, which results in very strange results~~
+- CSharpier needs a mechanism to detect when formatting resulted in a lose of code - WIP
+- A few node types are missing and code for them will be lost - WIP now that CSharpier can detect when it loses code
 - There is no CLI tool yet
 
 Try it out at [Playground](https://csharpier.bnt-studios.com)
