@@ -14,7 +14,10 @@ The remaining issues before I'm ready to call it an alpha
 - Multiline comments aren't properly supported yet - WIP
 - ~~CSharpier will happily format invalid code, which results in very strange results~~
 - ~~CSharpier needs a mechanism to detect when formatting resulted in a lose of code~~
-- A few node types are missing and code for them will be lost - WIP now that CSharpier can detect when it loses code
+- CSharpier is being tested against a number of large open source repositories to find places where it is losing source code during formatted.
+  - ~~[Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)~~
+  - [Roslyn](https://github.com/dotnet/roslyn) WIP
+  - [Asp.Net Core](https://github.com/dotnet/aspnetcore)
 - There is no CLI tool yet
 
 Try it out at [Playground](https://csharpier.bnt-studios.com)
