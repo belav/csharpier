@@ -23,7 +23,7 @@ Try it out at [Playground](https://csharpier.bnt-studios.com)
 CSharpier supports validating the changes it made to a file. It does this by comparing the syntax tree before and after formatting, but ignoring any whitespace trivia in the syntax tree. If a file fails validation, CSharpier will output the lines that differ.
 For example
 ```
-\src\Workspaces\Core\Portable\FindSymbols\FindReferences\Finders\AbstractReferenceFinder_GlobalSuppressions.cs           - failed syntax tree validation
+\src\[Snip]\AbstractReferenceFinder_GlobalSuppressions.cs       - failed syntax tree validation
     Original: Around Line 280
             }
 
