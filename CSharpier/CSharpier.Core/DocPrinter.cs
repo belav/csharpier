@@ -211,15 +211,6 @@ namespace CSharpier.Core
                             });
 
                             break;
-                        // TODO 2 align/trim?
-                        // case "align":
-                        //     cmds.Add([makeAlign(ind, doc.n, options), mode, doc.contents]);
-                        //
-                        //     break;
-                        // case "trim":
-                        //     width += trim(out);
-                        //
-                        //     break;
                         case Group group:
                             if (mustBeFlat && group.Break)
                             {
@@ -232,34 +223,7 @@ namespace CSharpier.Core
                                 Mode = group.Break ? PrintMode.MODE_BREAK : mode,
                                 Doc = group.Contents,
                             });
-
-                            // TODO 2 groupId
-                            // if (doc.id) {
-                            //     groupModeMap[doc.id] = cmds[cmds.length - 1][1];
-                            // }
                             break;
-                        // TODO 2 fill/if-break
-                        // case "fill":
-                        //     for (let i = doc.parts.length - 1; i >= 0; i--) {
-                        //         cmds.Add([ind, mode, doc.parts[i]]);
-                        //     }
-                        //
-                        //     break;
-                        // case "if-break": {
-                        //     const groupMode = doc.groupId ? groupModeMap[doc.groupId] : mode;
-                        //     if (groupMode === MODE_BREAK) {
-                        //         if (doc.breakContents) {
-                        //             cmds.Add([ind, mode, doc.breakContents]);
-                        //         }
-                        //     }
-                        //     if (groupMode === MODE_FLAT) {
-                        //         if (doc.flatContents) {
-                        //             cmds.Add([ind, mode, doc.flatContents]);
-                        //         }
-                        //     }
-                        //
-                        //     break;
-                        // }
                         case LineDoc line:
                             switch (mode)
                             {

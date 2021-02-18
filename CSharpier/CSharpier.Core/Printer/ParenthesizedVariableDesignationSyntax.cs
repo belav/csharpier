@@ -6,7 +6,10 @@ namespace CSharpier.Core
     {
         private Doc PrintParenthesizedVariableDesignationSyntax(ParenthesizedVariableDesignationSyntax node)
         {
-            return ""; // TODO 1 ParenthesizedVariableDesignationSyntax
+            return Group(this.PrintSyntaxToken(node.OpenParenToken),
+                Indent(SoftLine, this.PrintSeparatedSyntaxList(node.Variables, this.Print, Line), SoftLine),
+                this.PrintSyntaxToken(node.CloseParenToken)
+            );
         }
     }
 }

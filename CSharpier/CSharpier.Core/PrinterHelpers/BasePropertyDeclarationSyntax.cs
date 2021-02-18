@@ -9,21 +9,24 @@ namespace CSharpier.Core
         private Doc PrintBasePropertyDeclarationSyntax(BasePropertyDeclarationSyntax node)
         {
             EqualsValueClauseSyntax initializer = null;
-            ArrowExpressionClauseSyntax expressionBody = null;
+            ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifierSyntax = null;
             Doc identifier = null;
             Doc eventKeyword = null;
+            ArrowExpressionClauseSyntax expressionBody = null;
             SyntaxToken? semicolonToken = null;
             
             if (node is PropertyDeclarationSyntax propertyDeclarationSyntax)
             {
                 expressionBody = propertyDeclarationSyntax.ExpressionBody;
                 initializer = propertyDeclarationSyntax.Initializer;
+                explicitInterfaceSpecifierSyntax = propertyDeclarationSyntax.ExplicitInterfaceSpecifier;
                 identifier = this.PrintSyntaxToken(propertyDeclarationSyntax.Identifier);
                 semicolonToken = propertyDeclarationSyntax.SemicolonToken;
             }
             else if (node is IndexerDeclarationSyntax indexerDeclarationSyntax)
             {
                 expressionBody = indexerDeclarationSyntax.ExpressionBody;
+                explicitInterfaceSpecifierSyntax = indexerDeclarationSyntax.ExplicitInterfaceSpecifier;
                 identifier = Concat(
                     this.PrintSyntaxToken(indexerDeclarationSyntax.ThisKeyword),
                     this.Print(indexerDeclarationSyntax.ParameterList)
@@ -33,6 +36,7 @@ namespace CSharpier.Core
             else if (node is EventDeclarationSyntax eventDeclarationSyntax)
             {
                 eventKeyword = this.PrintSyntaxToken(eventDeclarationSyntax.EventKeyword, " ");
+                explicitInterfaceSpecifierSyntax = eventDeclarationSyntax.ExplicitInterfaceSpecifier;
                 identifier = this.PrintSyntaxToken(eventDeclarationSyntax.Identifier);
                 semicolonToken = eventDeclarationSyntax.SemicolonToken;
             }
@@ -64,6 +68,7 @@ namespace CSharpier.Core
                     eventKeyword,
                     this.Print(node.Type),
                     " ",
+                    explicitInterfaceSpecifierSyntax != null ? Concat(this.Print(explicitInterfaceSpecifierSyntax.Name), this.PrintSyntaxToken(explicitInterfaceSpecifierSyntax.DotToken)) : null,
                     identifier,
                     contents,
                     initializer != null

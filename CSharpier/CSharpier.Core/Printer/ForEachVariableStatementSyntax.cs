@@ -6,7 +6,17 @@ namespace CSharpier.Core
     {
         private Doc PrintForEachVariableStatementSyntax(ForEachVariableStatementSyntax node)
         {
-            return ""; // TODO 1 ForEachVariableStatementSyntax, how is this different than a regular foreach? 
+            return Concat(
+                this.PrintExtraNewLines(node),
+                this.PrintSyntaxToken(node.AwaitKeyword, " "),
+                this.PrintSyntaxToken(node.ForEachKeyword, " "),
+                this.PrintSyntaxToken(node.OpenParenToken),
+                this.Print(node.Variable),
+                " ",
+                this.PrintSyntaxToken(node.InKeyword, " "),
+                this.Print(node.Expression),
+                this.PrintSyntaxToken(node.CloseParenToken),
+                this.Print(node.Statement));
         }
     }
 }

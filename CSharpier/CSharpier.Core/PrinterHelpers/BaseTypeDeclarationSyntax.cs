@@ -15,6 +15,7 @@ namespace CSharpier.Core
             var hasMembers = false;
             SyntaxToken? keyword = null;
             Doc members = null;
+            SyntaxToken? semicolonToken = null;
             
             if (node is TypeDeclarationSyntax typeDeclarationSyntax)
             {
@@ -38,12 +39,15 @@ namespace CSharpier.Core
                 {
                     keyword = interfaceDeclarationSyntax.Keyword;
                 }
+
+                semicolonToken = typeDeclarationSyntax.SemicolonToken;
             }
             else if (node is EnumDeclarationSyntax enumDeclarationSyntax)
             {
                 members = Indent(HardLine, this.PrintSeparatedSyntaxList(enumDeclarationSyntax.Members, this.PrintEnumMemberDeclarationSyntax, HardLine));
                 hasMembers = enumDeclarationSyntax.Members.Count > 0;
                 keyword = enumDeclarationSyntax.EnumKeyword;
+                semicolonToken = enumDeclarationSyntax.SemicolonToken;
             }
 
             var parts = new Parts();
@@ -79,6 +83,12 @@ namespace CSharpier.Core
             else
             {
                 parts.Push(hasConstraintClauses ? "" : " ", this.PrintSyntaxToken(node.OpenBraceToken), " ", this.PrintSyntaxToken(node.CloseBraceToken));
+            }
+
+            // TODO 1 should we ditch these? I don't know why you'd ever want one
+            if (semicolonToken.HasValue)
+            {
+                parts.Push(this.PrintSyntaxToken(semicolonToken.Value));   
             }
 
             return Concat(parts);

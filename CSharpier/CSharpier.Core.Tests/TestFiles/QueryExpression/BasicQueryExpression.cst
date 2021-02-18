@@ -4,5 +4,8 @@ class ClassName
     {
         var query = from c in customers
             select c;
+
+        var query = from Customer c in customers
+            select c;
     }
 }

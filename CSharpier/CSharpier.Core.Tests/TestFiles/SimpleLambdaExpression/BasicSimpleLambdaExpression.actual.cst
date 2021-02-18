@@ -3,5 +3,6 @@
     public void MethodName()
     {
         this.Where(o => true);
+        this.WhereAsync(async o => true);
     }
 }

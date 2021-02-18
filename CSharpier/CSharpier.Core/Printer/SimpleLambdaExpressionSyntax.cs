@@ -7,6 +7,7 @@ namespace CSharpier.Core
         private Doc PrintSimpleLambdaExpressionSyntax(SimpleLambdaExpressionSyntax node)
         {
             return Concat(
+                this.PrintSyntaxToken(node.AsyncKeyword, " "),
                 this.Print(node.Parameter),
                 SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(node.ArrowToken, " "),

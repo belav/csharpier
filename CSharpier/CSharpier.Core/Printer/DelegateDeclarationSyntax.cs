@@ -8,6 +8,7 @@ namespace CSharpier.Core
         {
             var parts = new Parts();
             parts.Push(this.PrintExtraNewLines(node));
+            parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
             parts.Push(this.PrintModifiers(node.Modifiers));
             parts.Push(this.PrintSyntaxToken(node.DelegateKeyword, " "));
             parts.Push(this.Print(node.ReturnType));

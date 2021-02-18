@@ -7,7 +7,8 @@ namespace CSharpier.Core
     {
         private Doc PrintBaseListSyntax(BaseListSyntax node)
         {
-            /* TODO 1 this should format like this instead
+            // TODO 1 this should format like this instead
+            /*
             : AnotherLongClassName<T>,
                 AndYetAnotherLongClassName
             void MethodName() { }
