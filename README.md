@@ -1,7 +1,10 @@
 # CSharpier
-This is a WIP prettier port to .net for formatting c# code. It is NOT production ready.
-It can generate mostly correct code for c# <= 8.0.
-It formats a solution of ~11,000 source files in < 30 seconds
+This is a WIP [Prettier](https://github.com/prettier/prettier) port to .net for formatting c# code.
+  - It is NOT production ready.
+  - It is opinionated and will eventually offer a limited set of style options.
+  - It can generate mostly correct code for c# <= 8.0 with a goal of supporting 9.0 before release.
+  - It formats a solution of ~11,000 source files in ~35 seconds
+  - It will support comparing the syntax tree of the formatted code to the original code to detect when code is lost. From my testing, this roughly doubles the time it takes to run. Generally this will be used the first time CSharpier is run on a large code base.
 
 The remaining issues before I'm ready to call it an alpha
 - ~~Leading/Trailing Trivia - The approach to printing these is implemented but a number of nodes are not yet printing them and they are lost. Each print function needs to be reviewed.~~
@@ -10,13 +13,11 @@ The remaining issues before I'm ready to call it an alpha
   - ~~New lines - the goal is to preserve new lines in some areas. For example the lines that appear between properties will be preserved.~~
 - Multiline comments aren't properly supported yet - WIP
 - ~~CSharpier will happily format invalid code, which results in very strange results~~
-- CSharpier needs a mechanism to detect when formatting resulted in a lose of code - WIP
+- ~~CSharpier needs a mechanism to detect when formatting resulted in a lose of code~~
 - A few node types are missing and code for them will be lost - WIP now that CSharpier can detect when it loses code
 - There is no CLI tool yet
 
 Try it out at [Playground](https://csharpier.bnt-studios.com)
-
-Compare [AllInOne](./CSharpier/CSharpier.Tests/Samples/AllInOne.cst) to [AllInOne.Formatted](./CSharpier/CSharpier.Tests/prettier-plugin-csharpier/Samples/AllInOne.Formatted.cs) to get a sense of what is missing. [Compare In Github](https://github.com/belav/csharpier/compare/master...progress)
 
 ## Development
 See [Development Readme](./CSharpier/README.md)
