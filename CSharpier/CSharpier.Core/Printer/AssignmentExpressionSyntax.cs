@@ -6,7 +6,12 @@ namespace CSharpier.Core
     {
         private Doc PrintAssignmentExpressionSyntax(AssignmentExpressionSyntax node)
         {
-            return this.PrintLeftRightOperator(node.Left, node.OperatorToken, node.Right);
+            return Concat(
+                this.Print(node.Left),
+                " ",
+                this.PrintSyntaxToken(node.OperatorToken),
+                " ",
+                this.Print(node.Right));
         }
     }
 }

@@ -18,8 +18,4 @@
     <ItemGroup>
       <ProjectReference Include="..\CSharpier.Core\CSharpier.Core.csproj" />
     </ItemGroup>
-
-    <Target Name="GenerateUnitTests" BeforeTargets="CoreBuild" Condition="'$(Configuration)'=='Debug'">
-        <Exec Command="powershell.exe -command &quot;&amp; {.\GenerateUnitTests.ps1 '$(ProjectDir)'}&quot;" />
-    </Target>
 </Project>

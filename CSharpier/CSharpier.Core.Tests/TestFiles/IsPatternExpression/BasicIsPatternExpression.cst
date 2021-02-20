@@ -2,9 +2,13 @@ class ClassName
 {
     void MethodName()
     {
-        if (expr is Type v)
+        someRecord = someRecord with  { Property = "Value" };
+
+        someRecord = someRecord with
         {
-            return;
-        }
+            Property = "Value",
+            AnotherProperty = "Value",
+            YetAnother = "Value"
+        };
     }
 }

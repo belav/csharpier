@@ -3,5 +3,8 @@ public class ClassName
     public void MethodName()
     {
         this.Where(() => true);
+        this.Where(async () => true);
+        this.Where(static () => true);
+        this.Where(async static () => true);
     }
 }

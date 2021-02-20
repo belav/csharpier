@@ -9,6 +9,7 @@ namespace CSharpier.Core
     {
         private Doc PrintBaseTypeDeclarationSyntax(BaseTypeDeclarationSyntax node)
         {
+            ParameterListSyntax parameterList = null;
             TypeParameterListSyntax typeParameterList = null;
             var hasConstraintClauses = false;
             var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
@@ -39,6 +40,11 @@ namespace CSharpier.Core
                 {
                     keyword = interfaceDeclarationSyntax.Keyword;
                 }
+                else if (node is RecordDeclarationSyntax recordDeclarationSyntax)
+                {
+                    keyword = recordDeclarationSyntax.Keyword;
+                    parameterList = recordDeclarationSyntax.ParameterList;
+                }
 
                 semicolonToken = typeDeclarationSyntax.SemicolonToken;
             }
@@ -60,6 +66,11 @@ namespace CSharpier.Core
             }
 
             parts.Push(this.PrintSyntaxToken(node.Identifier));
+
+            if (parameterList != null)
+            {
+                parts.Push(this.PrintParameterListSyntax(parameterList));
+            }
 
             if (typeParameterList != null)
             {

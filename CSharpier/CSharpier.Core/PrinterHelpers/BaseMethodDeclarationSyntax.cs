@@ -14,7 +14,7 @@ namespace CSharpier.Core
             TypeSyntax returnType = null;
             ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifier = null;
             TypeParameterListSyntax typeParameterList = null;
-            string identifier = null;
+            Doc identifier = null;
             var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
             ParameterListSyntax parameterList = null;
             BlockSyntax body = null;
@@ -31,7 +31,7 @@ namespace CSharpier.Core
                 {
                     returnType = methodDeclarationSyntax.ReturnType;
                     explicitInterfaceSpecifier = methodDeclarationSyntax.ExplicitInterfaceSpecifier;
-                    identifier = methodDeclarationSyntax.Identifier.Text;
+                    identifier = this.PrintSyntaxToken(methodDeclarationSyntax.Identifier);
                     typeParameterList = methodDeclarationSyntax.TypeParameterList;
                     constraintClauses = methodDeclarationSyntax.ConstraintClauses;
                     
@@ -44,7 +44,7 @@ namespace CSharpier.Core
                 attributeLists = localFunctionStatementSyntax.AttributeLists;
                 modifiers = localFunctionStatementSyntax.Modifiers;
                 returnType = localFunctionStatementSyntax.ReturnType;
-                identifier = localFunctionStatementSyntax.Identifier.Text;
+                identifier = this.PrintSyntaxToken(localFunctionStatementSyntax.Identifier);
                 typeParameterList = localFunctionStatementSyntax.TypeParameterList;
                 parameterList = localFunctionStatementSyntax.ParameterList;
                 constraintClauses = localFunctionStatementSyntax.ConstraintClauses;

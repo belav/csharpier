@@ -11,10 +11,8 @@ namespace CSharpier.Core
                 this.PrintSyntaxToken(node.OrderByKeyword, " "),
                 this.PrintSeparatedSyntaxList(node.Orderings, orderingNode => Concat(
                             this.Print(orderingNode.Expression),
-                            orderingNode.AscendingOrDescendingKeyword.RawKind != 0
-                                ? " " + orderingNode.AscendingOrDescendingKeyword.Text
-                                : ""
-                        ), null)
+                            this.PrintSyntaxToken(orderingNode.AscendingOrDescendingKeyword, null, " ")
+                ), null)
                 );
         }
     }

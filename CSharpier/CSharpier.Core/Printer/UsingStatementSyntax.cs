@@ -7,6 +7,8 @@ namespace CSharpier.Core
         private Doc PrintUsingStatementSyntax(UsingStatementSyntax node)
         {
             var parts = new Parts(
+                this.PrintExtraNewLines(node),
+                this.PrintSyntaxToken(node.AwaitKeyword, " "),
                 this.PrintSyntaxToken(node.UsingKeyword, " "),
                 this.PrintSyntaxToken(node.OpenParenToken),
                 node.Declaration != null ? this.PrintVariableDeclarationSyntax(node.Declaration) : null,

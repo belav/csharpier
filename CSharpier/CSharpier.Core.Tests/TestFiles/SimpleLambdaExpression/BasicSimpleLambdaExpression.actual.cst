@@ -4,5 +4,6 @@
     {
         this.Where(o => true);
         this.WhereAsync(async o => true);
+        this.WhereAsync(static o => true);
     }
 }

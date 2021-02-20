@@ -10,5 +10,10 @@ namespace CSharpier.Core.Tests.TestFiles
         {
             this.RunTest("DestructorDeclaration", "BasicDestructorDeclaration");
         }
+        [Test]
+        public void DestructorDeclarationWithExpressionBody()
+        {
+            this.RunTest("DestructorDeclaration", "DestructorDeclarationWithExpressionBody");
+        }
     }
 }

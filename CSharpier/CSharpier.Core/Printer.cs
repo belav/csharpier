@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.Core
@@ -196,19 +195,6 @@ namespace CSharpier.Core
                 parts.Add(HardLine);
             }
 
-            return Concat(parts);
-        }
-
-        private Doc PrintLeftRightOperator(SyntaxNode left, SyntaxToken operatorToken, SyntaxNode right)
-        {
-            var parts = new Parts();
-            parts.Push(
-                this.Print(left),
-                " ",
-                this.PrintSyntaxToken(operatorToken),
-                " ",
-                this.Print(right)
-            );
             return Concat(parts);
         }
 

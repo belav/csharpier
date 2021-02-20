@@ -7,7 +7,7 @@ namespace CSharpier.Core
         private Doc PrintParenthesizedLambdaExpressionSyntax(ParenthesizedLambdaExpressionSyntax node)
         {
             var parts = new Parts(
-                this.PrintSyntaxToken(node.AsyncKeyword, " "),
+                this.PrintModifiers(node.Modifiers),
                 this.PrintParameterListSyntax(node.ParameterList),
                 SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(node.ArrowToken, " ")

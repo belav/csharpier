@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintUnaryPatternSyntax(UnaryPatternSyntax node)
         {
-            return ""; // TODO 0 UnaryPatternSyntax
+            return Concat(this.PrintSyntaxToken(node.OperatorToken, " "), this.Print(node.Pattern));
         }
     }
 }

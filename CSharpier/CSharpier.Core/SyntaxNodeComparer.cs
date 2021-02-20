@@ -56,15 +56,21 @@ namespace CSharpier.Core
             
             var stringReader = new StringReader(source);
             var x = 0;
+            var linesWritten = 0;
             var currentLine = stringReader.ReadLine();
-            while (x <= endLine + 2 && currentLine != null)
+            while (x <= endLine + 2 || linesWritten < 8)
             {
                 if (x >= line - 2)
                 {
                     result += currentLine + Environment.NewLine;
+                    linesWritten++;
                 }
                 
                 currentLine = stringReader.ReadLine();
+                if (currentLine == null)
+                {
+                    break;
+                }
                 x++;
             }
 

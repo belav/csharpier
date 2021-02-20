@@ -6,13 +6,16 @@ namespace CSharpier.Core
     {
         private Doc PrintDestructorDeclarationSyntax(DestructorDeclarationSyntax node)
         {
-            var parts = new Parts();
-            parts.Push(this.PrintExtraNewLines(node));
-            parts.Push(this.PrintSyntaxToken(node.TildeToken));
-            parts.Push(this.PrintSyntaxToken(node.Identifier));
-            parts.Push(this.Print(node.ParameterList));
-            parts.Push(this.Print(node.Body));
-            return Group(Concat(parts));
+            return Concat(
+                this.PrintExtraNewLines(node),
+                this.PrintAttributeLists(node, node.AttributeLists),
+                this.PrintSyntaxToken(node.TildeToken),
+                this.PrintSyntaxToken(node.Identifier),
+                this.Print(node.ParameterList),
+                this.Print(node.Body),
+                this.Print(node.ExpressionBody),
+                this.PrintSyntaxToken(node.SemicolonToken)
+            );
         }
     }
 }

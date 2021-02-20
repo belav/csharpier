@@ -15,6 +15,7 @@ namespace CSharpier.Core
             {
                 parts.Push(this.PrintVariableDeclarationSyntax(node.Declaration));
             }
+            parts.Push(this.PrintSeparatedSyntaxList(node.Initializers, this.Print, " "));
             parts.Push(this.PrintSyntaxToken(node.FirstSemicolonToken));
             if (node.Condition != null)
             {

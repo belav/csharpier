@@ -122,7 +122,9 @@ namespace CSharpier.Core
                          || trivia.Kind() == SyntaxKind.PragmaWarningDirectiveTrivia
                          || trivia.Kind() == SyntaxKind.PragmaChecksumDirectiveTrivia
                          || trivia.Kind() == SyntaxKind.DefineDirectiveTrivia
-                         || trivia.Kind() == SyntaxKind.UndefDirectiveTrivia)
+                         || trivia.Kind() == SyntaxKind.UndefDirectiveTrivia
+                         || trivia.Kind() == SyntaxKind.NullableDirectiveTrivia
+                         )
                 {
                     hadDirective = true;
                     parts.Push(LiteralLine, trivia.ToString());

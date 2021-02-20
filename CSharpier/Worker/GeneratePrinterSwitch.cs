@@ -22,6 +22,11 @@ namespace CSharpier.Core
     {
         public Doc Print(SyntaxNode syntaxNode)
         {
+            if (syntaxNode == null)
+            {
+                return null;
+            }
+
             switch (syntaxNode)
             {");
 

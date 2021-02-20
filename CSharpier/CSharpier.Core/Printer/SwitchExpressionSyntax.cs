@@ -18,6 +18,8 @@ namespace CSharpier.Core
                         HardLine,
                         this.PrintSeparatedSyntaxList(node.Arms, o => Concat(this.Print(o.Pattern),
                             SpaceIfNoPreviousComment,
+                            o.WhenClause != null ? Concat(this.Print(o.WhenClause), SpaceIfNoPreviousComment) : null,
+                            
                             this.PrintSyntaxToken(o.EqualsGreaterThanToken, " "),
                             this.Print(o.Expression)), HardLine))
                 ),

@@ -15,6 +15,7 @@ namespace CSharpier.Playground.Controllers
         public string Code { get; set; }
         public string Json { get; set; }
         public string Doc { get; set; }
+        public string Errors { get; set; }
     }
     
     [ApiController]
@@ -57,6 +58,7 @@ namespace CSharpier.Playground.Controllers
                 Code = result.Code,
                 Json = result.AST,
                 Doc = result.DocTree,
+                Errors = result.Errors,
             };
         }
 

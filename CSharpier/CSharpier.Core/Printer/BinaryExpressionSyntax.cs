@@ -7,7 +7,12 @@ namespace CSharpier.Core
         // TODO 1 this needs some formatting help, could be fun
         private Doc PrintBinaryExpressionSyntax(BinaryExpressionSyntax node)
         {
-            return this.PrintLeftRightOperator(node.Left, node.OperatorToken, node.Right);
+            return Concat(
+                this.Print(node.Left),
+                " ",
+                this.PrintSyntaxToken(node.OperatorToken),
+                " ",
+                this.Print(node.Right));
         }
     }
 }

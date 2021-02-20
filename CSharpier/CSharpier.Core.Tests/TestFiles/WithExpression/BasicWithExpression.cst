@@ -1,0 +1,9 @@
+class ClassName
+{
+    void MethodName()
+    {
+        someRecord = someRecord with { Property = "Value" };
+
+        someRecord = someRecord with { Property = "Value", AnotherProperty = "Value", YetAnother = "Value" };   
+    }
+}
