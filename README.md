@@ -16,8 +16,8 @@ The remaining issues before I'm ready to call it an alpha
 - ~~CSharpier needs a mechanism to detect when formatting resulted in a lose of code~~
 - CSharpier is being tested against a number of large open source repositories to find places where it is losing source code during formatted.
   - ~~[Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)~~
-  - [Roslyn](https://github.com/dotnet/roslyn) In Progress
-  - [Asp.Net Core](https://github.com/dotnet/aspnetcore)
+  - ~~[Roslyn](https://github.com/dotnet/roslyn)~~
+  - [Asp.Net Core](https://github.com/dotnet/aspnetcore) In Progress
   - [.NET runtime](https://github.com/dotnet/runtime)
   - TBD
 - There is no CLI tool yet
