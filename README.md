@@ -18,6 +18,7 @@ The remaining issues before I'm ready to call it an alpha
   - ~~[Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)~~
   - [Roslyn](https://github.com/dotnet/roslyn) In Progress
   - [Asp.Net Core](https://github.com/dotnet/aspnetcore)
+  - [.NET runtime](https://github.com/dotnet/runtime)
   - TBD
 - There is no CLI tool yet
 
