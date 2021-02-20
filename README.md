@@ -17,8 +17,8 @@ The remaining issues before I'm ready to call it an alpha
 - CSharpier is being tested against a number of large open source repositories to find places where it is losing source code during formatted.
   - ~~[Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)~~
   - ~~[Roslyn](https://github.com/dotnet/roslyn)~~
-  - [Asp.Net Core](https://github.com/dotnet/aspnetcore) In Progress
-  - [.NET runtime](https://github.com/dotnet/runtime)
+  - ~~[Asp.Net Core](https://github.com/dotnet/aspnetcore)~~
+  - [.NET runtime](https://github.com/dotnet/runtime) In Progress
   - TBD
 - There is no CLI tool yet
 
