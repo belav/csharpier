@@ -11,7 +11,6 @@ The remaining issues before I'm ready to call it an alpha
   - ~~Comments~~
   - ~~Preprocessor Directives - new lines around these are lost sometimes and should probably be preserved~~
   - ~~New lines - the goal is to preserve new lines in some areas. For example the lines that appear between properties will be preserved.~~
-- Multiline comments aren't properly supported yet - WIP
 - ~~CSharpier will happily format invalid code, which results in very strange results~~
 - ~~CSharpier needs a mechanism to detect when formatting resulted in a lose of code~~
 - CSharpier is being tested against a number of large open source repositories to find places where it is losing source code during formatted.
