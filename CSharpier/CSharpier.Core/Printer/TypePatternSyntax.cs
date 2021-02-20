@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintTypePatternSyntax(TypePatternSyntax node)
         {
-            return ""; // TODO 0 TypePatternSyntax
+            return this.Print(node.Type);
         }
     }
 }

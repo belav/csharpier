@@ -57,6 +57,7 @@ export class App extends Component<{}, State> {
             body: JSON.stringify(this.state.enteredCode),
             headers: {
                 "Content-Type": "application/json",
+                "cache-control": "no-cache",
             },
         });
         if (response.status === 200) {

@@ -8,7 +8,7 @@ namespace CSharpier.Core
         {
             return Concat(
                 this.PrintExtraNewLines(node),
-                this.PrintSyntaxToken(node.DoKeyword),
+                this.PrintSyntaxToken(node.DoKeyword, node.Statement is not BlockSyntax ? " " : null),
                 this.Print(node.Statement),
                 HardLine,
                 this.PrintSyntaxToken(node.WhileKeyword, " "),

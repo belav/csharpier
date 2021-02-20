@@ -18,6 +18,8 @@ The remaining issues before I'm ready to call it an alpha
   - ~~[Roslyn](https://github.com/dotnet/roslyn)~~
   - ~~[Asp.Net Core](https://github.com/dotnet/aspnetcore)~~
   - [.NET runtime](https://github.com/dotnet/runtime) In Progress
+    - this contains some testing files that cause failures due to deep recursion that triggers a stack overflow.
+	- there are also some failures due to comments shifting lines or inserting line breaks between comments, although the resulting code is essentially the same.
   - TBD
 - There is no CLI tool yet
 

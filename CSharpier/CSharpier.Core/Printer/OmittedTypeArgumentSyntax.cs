@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintOmittedTypeArgumentSyntax(OmittedTypeArgumentSyntax node)
         {
-            return "";
+            return null;
         }
     }
 }

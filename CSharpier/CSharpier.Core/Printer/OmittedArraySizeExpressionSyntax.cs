@@ -6,7 +6,7 @@ namespace CSharpier.Core
     {
         private Doc PrintOmittedArraySizeExpressionSyntax(OmittedArraySizeExpressionSyntax node)
         {
-            return "";
+            return null;
         }
     }
 }

@@ -31,7 +31,11 @@ namespace CSharpier.CLI
             // TODO 0 lots fail to compile, codegen files should be excluded perhaps?
             //var path = @"C:\Projects\aspnetcore";
             // TODO 0 stackoverflows, probably because of the ridiculous testing files that are in there, and c# thinks there is a stackoverflow because the stack is so large, and looks like it is repeating.
-            var path = @"C:\Projects\runtime";
+            // actually it looks like runtime has tests that will fail in recursive tree walkers
+            // see https://github.com/dotnet/runtime/blob/master/src/tests/JIT/Regression/JitBlue/GitHub_10215/GitHub_10215.cs
+            // TODO 0 also some weird "failures" due to trivia moving lines, although the compiled code would be the same
+            //var path = @"C:\Projects\runtime";
+            var path = @"C:\Projects\core";
             //var path = @"C:\Projects\runtime\src\tests\Loader\classloader\generics\Instantiation\Nesting";
             //var path = @"C:\Projects\insite-commerce-prettier\Legacy";
 

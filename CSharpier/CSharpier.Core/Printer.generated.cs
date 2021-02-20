@@ -7,7 +7,6 @@ namespace CSharpier.Core
 {
     public partial class Printer
     {
-        // TODO 0 kill
         private int depth = 0;
         public Doc Print(SyntaxNode syntaxNode)
         {
@@ -16,6 +15,12 @@ namespace CSharpier.Core
                 return null;
             }
 
+            // TODO 0 kill? runtime repo has files that will fail on deep recursion
+            if (depth > 200)
+            {
+                throw new InTooDeepException();
+            }
+            
             depth++;
             try
             {
@@ -365,5 +370,9 @@ namespace CSharpier.Core
                 depth--;
             }
         }
+    }
+
+    public class InTooDeepException : Exception
+    {
     }
 }

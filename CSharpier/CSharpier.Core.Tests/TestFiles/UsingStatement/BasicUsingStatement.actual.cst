@@ -6,5 +6,10 @@
         {
             return;
         }
+
+        await using (var x = BeginScope())
+        {
+            return;
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace CSharpier.Core
             return Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
+                this.PrintModifiers(node.Modifiers),
                 this.PrintSyntaxToken(node.TildeToken),
                 this.PrintSyntaxToken(node.Identifier),
                 this.Print(node.ParameterList),

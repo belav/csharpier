@@ -2,13 +2,26 @@
 {
     void MethodName()
     {
-        someRecord = someRecord with  { Property = "Value" };
-
-        someRecord = someRecord with
+        if (expr is Type v)
         {
-            Property = "Value",
-            AnotherProperty = "Value",
-            YetAnother = "Value"
-        };
+            return;
+        }
+
+        if (expr is not null)
+        {
+            return;
+        }
+
+        if (MethodKind is not (MethodKind.Ordinary or MethodKind.LocalFunction))
+        {
+            return;
+        }
+
+        if (expr is < 'A' or > 'Z')
+        {
+            return;
+        }
+
+        Debug.Assert(result is Exception or IPAddress[] or IPHostEntry);
     }
 }

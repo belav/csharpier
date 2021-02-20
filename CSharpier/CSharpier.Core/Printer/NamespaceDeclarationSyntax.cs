@@ -54,7 +54,9 @@ namespace CSharpier.Core
                 this.PrintSyntaxToken(node.OpenBraceToken), 
                 Indent(Concat(innerParts)), 
                 hasMembers || hasUsing || hasExterns ? HardLine : null,
-                this.PrintSyntaxToken(node.CloseBraceToken)));
+                this.PrintSyntaxToken(node.CloseBraceToken),
+                this.PrintSyntaxToken(node.SemicolonToken)
+                ));
             return Concat(parts);
         }
     }

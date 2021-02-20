@@ -9,7 +9,7 @@ namespace CSharpier.Core
         {
             return Concat(this.PrintSyntaxToken(node.DelegateKeyword),
                 this.PrintSyntaxToken(node.AsteriskToken, " "),
-                node.CallingConvention != null ? this.PrintSyntaxToken(node.CallingConvention.ManagedOrUnmanagedKeyword) : null,
+                this.PrintCallingConvention(node.CallingConvention),
                 this.PrintSyntaxToken(node.ParameterList.LessThanToken),
                 Indent(Group(
                     SoftLine,
@@ -19,6 +19,25 @@ namespace CSharpier.Core
                             this.Print(o.Type)), Line)
                 )),
                 this.PrintSyntaxToken(node.ParameterList.GreaterThanToken)
+            );
+        }
+
+        private Doc PrintCallingConvention(FunctionPointerCallingConventionSyntax node)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+
+            return Concat(
+                this.PrintSyntaxToken(node.ManagedOrUnmanagedKeyword),
+                node.UnmanagedCallingConventionList != null
+                    ? Concat(
+                        this.PrintSyntaxToken(node.UnmanagedCallingConventionList.OpenBracketToken),
+                        this.PrintSeparatedSyntaxList(node.UnmanagedCallingConventionList.CallingConventions,  o => this.PrintSyntaxToken(o.Name), " "),
+                        this.PrintSyntaxToken(node.UnmanagedCallingConventionList.CloseBracketToken)
+                    )
+                    : null
             );
         }
     }

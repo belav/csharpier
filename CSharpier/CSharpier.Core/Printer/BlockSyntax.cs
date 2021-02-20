@@ -9,7 +9,7 @@ namespace CSharpier.Core
         {
             if (node == null) // TODO 1 why is this being called?
             {
-                return "";
+                return null;
             }
             
             var statementSeparator = node.Parent is AccessorDeclarationSyntax && node.Statements.Count <= 1 

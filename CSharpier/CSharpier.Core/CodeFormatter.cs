@@ -29,15 +29,26 @@ namespace CSharpier.Core
                 };
             }
 
-            var document = new Printer().Print(rootNode);
-
-            var formattedCode = new DocPrinter().Print(document, options);
-            return new CSharpierResult
+            try
             {
-                Code = formattedCode,
-                DocTree = options.IncludeDocTree ? this.PrintDocTree(document, "") : null,
-                AST = options.IncludeAST ? this.PrintAST(rootNode) : null
-            };
+                var document = new Printer().Print(rootNode);
+
+                var formattedCode = new DocPrinter().Print(document, options);
+                return new CSharpierResult
+                {
+                    Code = formattedCode,
+                    DocTree = options.IncludeDocTree ? this.PrintDocTree(document, "") : null,
+                    AST = options.IncludeAST ? this.PrintAST(rootNode) : null
+                };
+            }
+            catch (InTooDeepException)
+            {
+                return new CSharpierResult
+                {
+                    Errors = "We can't handle this deep of recursion yet."
+                };
+            }
+
         }
 
         private string PrintAST(CompilationUnitSyntax rootNode)
