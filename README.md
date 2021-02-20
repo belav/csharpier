@@ -2,7 +2,7 @@
 This is a WIP [Prettier](https://github.com/prettier/prettier) port to .net for formatting c# code.
   - It is NOT production ready.
   - It is opinionated and will eventually offer a limited set of style options.
-  - It can generate mostly correct code for c# <= 8.0 with a goal of supporting 9.0 before release.
+  - It can generate mostly correct code for c# <= 9.0.
   - It formats a solution of ~11,000 source files in ~35 seconds
   - It will support comparing the syntax tree of the formatted code to the original code to detect when code is lost. From my testing, this roughly doubles the time it takes to run. Generally this will be used the first time CSharpier is run on a large code base.
 
