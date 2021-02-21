@@ -262,11 +262,6 @@ const FormatButton = styled.button`
   justify-content: center;
 `;
 
-const TabsHeader = styled.div`
-  background-color: #f7f7f7;
-  display: flex;
-`
-
 const Tabs = styled.div`
   width: 50%;
   padding-left: 48px;
