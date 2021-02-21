@@ -22,7 +22,7 @@ const defaultCode = `public class UglyClassName {
     }
 
     public void MethodName(string LongParameter1, string longParameter2, string LongParameter3) { 
-        this.MethodName("ajskdf", "kjlasdfkljasldkfklajsdf", "ljkasdfkljaskldfjasdf";
+        this.MethodName("ajskdf", "kjlasdfkljasldkfklajsdf", "ljkasdfkljaskldfjasdf");
     }
 }`
 
