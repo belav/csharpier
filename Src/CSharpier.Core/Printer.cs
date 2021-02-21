@@ -10,7 +10,7 @@ namespace CSharpier.Core
     {
         public static readonly Doc BreakParent = new BreakParent();
 
-        // TODO 0 kill? I think I need it? maybe all spaces should be this instead?
+        // TODO 0 maybe all spaces should be this instead?
         public static Doc SpaceIfNoPreviousComment => new SpaceIfNoPreviousComment();
         public static Doc HardLine => Concat(new LineDoc { Type = LineDoc.LineType.Hard }, BreakParent);
         public static Doc LiteralLine => Concat(new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true }, BreakParent);

@@ -29,18 +29,14 @@ namespace CSharpier.Core
             this.NewSyntaxTree = CSharpSyntaxTree.ParseText(this.NewSourceCode, cSharpParseOptions);
         }
 
-        public class CompareCommand
-        {
-        }
-        
         public string CompareSource()
         {
-            var stack = new Stack<CompareCommand>();
-            stack.Push(new CompareCommand());
-            
-            whie
-            
-            var result = this.CompareCompilationUnitSyntax2(OriginalSyntaxTree.GetRoot() as CompilationUnitSyntax, NewSyntaxTree.GetRoot() as CompilationUnitSyntax);
+            // TODO the new generated one fails with stack overflows, look at this for how to potentially avoid recursion
+            // can have two stacks, pop the parent off, run compare, the compare method pushes new stuff onto the stack.
+            // the stuff on the stack would need an object, and an enum for what type of method to run on the object
+            // also maybe some parent data for a couple of the methods
+            // http://metacoding.azurewebsites.net/2016/08/16/how-to-avoid-recursion/
+            var result = this.AreEqualIgnoringWhitespace(OriginalSyntaxTree.GetRoot(), NewSyntaxTree.GetRoot());
             var message = "";
             if (result.MismatchedResult)
             {
@@ -52,30 +48,6 @@ namespace CSharpier.Core
             return message == "" ? null : message;
         }
 
-        private CompareResult CompareCompilationUnitSyntax2(CompilationUnitSyntax originalNode, CompilationUnitSyntax formattedNode)
-        {
-            CompareResult result;
-            result = this.CompareLists(originalNode.Externs, formattedNode.Externs, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
-            if (result.MismatchedResult) return result;
-            result = this.CompareLists(originalNode.Usings, formattedNode.Usings, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
-            if (result.MismatchedResult) return result;
-            result = this.CompareLists(originalNode.AttributeLists, formattedNode.AttributeLists, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
-            if (result.MismatchedResult) return result;
-            result = this.CompareLists(originalNode.Members, formattedNode.Members, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
-            if (result.MismatchedResult) return result;
-            result = this.Compare(originalNode.EndOfFileToken, formattedNode.EndOfFileToken, originalNode, formattedNode);
-            if (result.MismatchedResult) return result;
-            if (originalNode.RawKind != formattedNode.RawKind) return NotEqual(originalNode, formattedNode);
-            if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
-            if (originalNode.IsStructuredTrivia != formattedNode.IsStructuredTrivia) return NotEqual(originalNode, formattedNode);
-            if (originalNode.HasStructuredTrivia != formattedNode.HasStructuredTrivia) return NotEqual(originalNode, formattedNode);
-            if (originalNode.ContainsSkippedText != formattedNode.ContainsSkippedText) return NotEqual(originalNode, formattedNode);
-            if (originalNode.ContainsDirectives != formattedNode.ContainsDirectives) return NotEqual(originalNode, formattedNode);
-            if (originalNode.ContainsDiagnostics != formattedNode.ContainsDiagnostics) return NotEqual(originalNode, formattedNode);
-            if (originalNode.ContainsAnnotations != formattedNode.ContainsAnnotations) return NotEqual(originalNode, formattedNode);
-            return Equal;
-        }
-        
         public string GetLine(TextSpan? textSpan, SyntaxTree syntaxTree, string source)
         {
             if (!textSpan.HasValue)

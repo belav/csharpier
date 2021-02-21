@@ -17,11 +17,13 @@ The remaining issues before I'm ready to call it an alpha
   - ~~[Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)~~
   - ~~[Roslyn](https://github.com/dotnet/roslyn)~~
   - ~~[Asp.Net Core](https://github.com/dotnet/aspnetcore)~~
-  - [.NET runtime](https://github.com/dotnet/runtime) In Progress
-    - this contains some testing files that cause failures due to deep recursion that triggers a stack overflow.
-	- there are also some failures due to comments shifting lines or inserting line breaks between comments, although the resulting code is essentially the same.
-  - TBD
-- There is no CLI tool yet
+  - ~~[.NET runtime](https://github.com/dotnet/runtime)~~
+  - ~~[Entity Framework Core](https://github.com/dotnet/efcore)~~
+  - ~~[moq](https://github.com/moq/moq4)~~
+  - ~~[automapper](https://github.com/AutoMapper/AutoMapper)~~
+  - ~~[Castle Core](https://github.com/castleproject/Core)~~
+  - ~~[Asp.NET MVC](https://github.com/aspnet/AspNetWebStack)~~
+  - CLI Tool
 
 Try it out at [Playground](https://csharpier.bnt-studios.com)
 

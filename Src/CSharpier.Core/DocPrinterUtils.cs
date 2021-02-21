@@ -11,7 +11,6 @@ namespace CSharpier.Core
         {
             var alreadyVisitedSet = new HashSet<Group>();
             var groupStack = new Stack<Group>();
-            // TODO 0 not sure if I need this stuff in here
             var forceFlat = 0;
             
             void BreakParentGroup()
