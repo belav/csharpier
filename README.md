@@ -23,7 +23,7 @@ The remaining issues before I'm ready to call it an alpha
   - ~~[automapper](https://github.com/AutoMapper/AutoMapper)~~
   - ~~[Castle Core](https://github.com/castleproject/Core)~~
   - ~~[Asp.NET MVC](https://github.com/aspnet/AspNetWebStack)~~
-  - CLI Tool
+- CLI Tool
 
 Try it out at [Playground](https://csharpier.bnt-studios.com)
 
