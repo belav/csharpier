@@ -53,7 +53,7 @@ For example
 ```
 
 ## Development
-See [Development Readme](./CSharpier/README.md)
+See [Development Readme](./development.md)
 
 # Prettier-Plugin-CSharpier
 
