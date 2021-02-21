@@ -23,4 +23,4 @@ App_Data
 dist
 
 *.doctree.txt
-/Csharpier/CSharpier.Tests/TestFiles/**/*.json
+/Src/CSharpier.Tests/TestFiles/**/*.json

@@ -6,12 +6,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using SyntaxNodeJsonWriterGenerator;
 
-namespace SyntaxNodeTypeGenerator
+namespace Worker
 {
     [TestFixture]
-    public class Generator
+    public class TypescriptNodeTypeGenerator
     {
         static List<string> missingTypes = new List<string>();
 
@@ -19,7 +18,7 @@ namespace SyntaxNodeTypeGenerator
         public void DoWork()
         {
             var rootRepositoryFolder = new DirectoryInfo(Directory.GetCurrentDirectory());
-            while (rootRepositoryFolder.Name != "CSharpier")
+            while (rootRepositoryFolder.Name != "Src")
             {
                 rootRepositoryFolder = rootRepositoryFolder.Parent;
             }

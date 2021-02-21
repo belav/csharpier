@@ -15,9 +15,13 @@ namespace CSharpier.Core.Tests
 
             var result = this.AreEqual(left, right);
 
-            result.Should().Be("Root-Members[0]");
+            result.Should().Be(@"    Original: Around Line 0
+class ClassName { }
+    Formatted: Around Line 0
+namespace Namespace { }
+");
         }
-        
+
         [Test]
         public void Class_Not_Equal_Class_Different_Whitespace()
         {
@@ -26,12 +30,12 @@ namespace CSharpier.Core.Tests
 }";
 
             var result = this.AreEqual(left, right);
-            
-            result.Should().Be(null);
+
+            result.Should().BeNull();
         }
 
         [Test]
-        public void Missing_Attribute_Should_Mean_False()
+        public void MissingAttribute()
         {
             var left = @"class Resources
 {
@@ -49,7 +53,20 @@ namespace CSharpier.Core.Tests
 
             var result = this.AreEqual(left, right);
 
-            result.Should().Be("Root-Members[0]-Members[0]-AttributeLists-Count(1 != 0)");
+            result.Should().Be(@"    Original: Around Line 2
+class Resources
+{
+    [Obsolete]
+    public Resources()
+    {
+    }
+}
+    Formatted: Around Line 2
+class Resources
+{
+    public Resources() { }
+}
+");
         }
 
         [Test]
@@ -97,10 +114,9 @@ namespace CSharpier.Core.Tests
             result.Should().BeNull();
         }
 
-        
+
         [Test]
-        // TODO we should write out the old/new version somewhere, then I can write a units that looks at them for me.
-        public void Blah()
+        public void MissingSemiColon()
         {
             var left = @"public enum Enum
 {
@@ -114,7 +130,17 @@ namespace CSharpier.Core.Tests
 }";
             var result = this.AreEqual(left, right);
 
-            result.Should().BeNull();
+            result.Should().Be(@"    Original: Around Line 4
+    Integer,
+    String,
+};
+    Formatted: Around Line 0
+public enum Enum
+{
+    Integer,
+    String,
+}
+");
         }
 
         private string AreEqual(string left, string right)

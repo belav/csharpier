@@ -7,10 +7,10 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
-namespace SyntaxNodeJsonWriterGenerator
+namespace Worker
 {
     [TestFixture]
-    public class Generator
+    public class SyntaxNodeJsonWriterGenerator
     {
         List<string> missingTypes = new List<string>();
 
@@ -18,7 +18,7 @@ namespace SyntaxNodeJsonWriterGenerator
         public void DoWork()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
-            while (directory.Name != "CSharpier")
+            while (directory.Name != "Src")
             {
                 directory = directory.Parent;
             }

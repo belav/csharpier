@@ -9,7 +9,11 @@ namespace Worker
         [Test]
         public void DoWork()
         {
-            var rootDirectory = new DirectoryInfo(@"C:\Projects\csharpier");
+            var rootDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+            while (rootDirectory.Name != "Src")
+            {
+                rootDirectory = rootDirectory.Parent;
+            }
             var output = new StringBuilder();
 
             output.AppendLine(@"using System;
@@ -30,7 +34,7 @@ namespace CSharpier.Core
             switch (syntaxNode)
             {");
 
-            var csharpDirectory = Path.Combine(rootDirectory.FullName, @"CSharpier\CSharpier.Core\Printer");
+            var csharpDirectory = Path.Combine(rootDirectory.FullName, @"CSharpier.Core\Printer");
             foreach (var file in new DirectoryInfo(csharpDirectory).GetFiles())
             {
                 var name = file.Name.Replace(".cs", "");

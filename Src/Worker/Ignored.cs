@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace SyntaxNodeJsonWriterGenerator
+namespace Worker
 {
     public static class Ignored
     {

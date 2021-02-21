@@ -25,6 +25,7 @@ namespace CSharpier.CLI
             //var path = "C:\\temp\\clifiles";
             //var path = @"C:\Projects\Newtonsoft.Json";
             //var path = @"C:\Projects\epi-identity";
+            var path = @"C:\Projects\formattingTests\insite-commerce-prettier";
             // TODO 0 why does that weird file in roslyn fail validation?
             // also what about the files that fail to compile?
             //var path = @"C:\Projects\roslyn";
@@ -35,7 +36,7 @@ namespace CSharpier.CLI
             // see https://github.com/dotnet/runtime/blob/master/src/tests/JIT/Regression/JitBlue/GitHub_10215/GitHub_10215.cs
             // TODO 0 also some weird "failures" due to trivia moving lines, although the compiled code would be the same
             //var path = @"C:\Projects\runtime";
-            var path = @"C:\Projects\core";
+            //var path = @"C:\Projects\core";
             //var path = @"C:\Projects\runtime\src\tests\Loader\classloader\generics\Instantiation\Nesting";
             //var path = @"C:\Projects\insite-commerce-prettier\Legacy";
 
@@ -43,7 +44,7 @@ namespace CSharpier.CLI
             // not sure how the AST compare will work because we are modifying leading/trailing trivia, unless we compare everything except whitespace/endofline trivia
             // seems like way more work than my current naive approach
             
-            var tasks = Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories).AsParallel().Select(o => DoWork(o, path)).ToArray();
+            var tasks = Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories).Select(o => DoWork(o, path)).ToArray();
             Task.WaitAll(tasks);
             Console.WriteLine(PadToSize("total time: ", 80) + ReversePad(fullStopwatch.ElapsedMilliseconds + "ms"));
             Console.WriteLine(PadToSize("total files: ", 80) + ReversePad(files.ToString()));
@@ -54,6 +55,7 @@ namespace CSharpier.CLI
 
         private static async Task DoWork(string file, string path)
         {
+            Console.WriteLine(file);
             if (file.EndsWith(".g.cs"))
             {
                 return;
