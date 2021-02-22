@@ -51,7 +51,6 @@ public class ClassName
 ```
 
 ## Installation
-CSharpier is available at TODO
 ```console
 dotnet tool install -g csharpier
 ```
