@@ -15,14 +15,14 @@ interface State {
     hasErrors: boolean;
 }
 
-const defaultCode = `public class UglyClassName {
-    public string MyProperty {
+const defaultCode = `public class ClassName {
+    public string ShortPropertyName {
         get;
         set; 
     }
 
-    public void MethodName(string LongParameter1, string longParameter2, string LongParameter3) { 
-        this.MethodName("ajskdf", "kjlasdfkljasldkfklajsdf", "ljkasdfkljaskldfjasdf");
+    public void LongUglyMethod(string longParameter1, string longParameter2, string longParameter3) { 
+        this.LongUglyMethod("1234567890", "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     }
 }`
 

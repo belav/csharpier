@@ -3,5 +3,12 @@
     public void MethodName()
     {
         if (true && false) { }
+
+        if (
+            longStatementName &&
+            longerStatementName &&
+            evenLongeStatementName &&
+            superLongStatementName
+        ) { }
     }
 }

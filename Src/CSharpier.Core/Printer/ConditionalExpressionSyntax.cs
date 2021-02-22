@@ -6,14 +6,15 @@ namespace CSharpier.Core
     {
         private Doc PrintConditionalExpressionSyntax(ConditionalExpressionSyntax node)
         {
-            return Concat(
+            return Group(
+                Indent(
                 this.Print(node.Condition),
-                " ",
+                Line,
                 this.PrintSyntaxToken(node.QuestionToken, " "),
                 this.Print(node.WhenTrue),
-                " ",
+                Line,
                 this.PrintSyntaxToken(node.ColonToken, " "),
-                this.Print(node.WhenFalse)
+                this.Print(node.WhenFalse))
             );
         }
     }

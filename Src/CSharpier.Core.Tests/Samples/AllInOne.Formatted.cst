@@ -310,7 +310,9 @@ namespace My
         [NonExisting]
         [Foo::NonExisting(var, 5)]
         [CLSCompliant(false)]
-        [Obsolete, System.NonSerialized, NonSerialized, CLSCompliant(true || false & true)]
+        [Obsolete, System.NonSerialized, NonSerialized, CLSCompliant(true ||
+        false &
+        true)]
         private volatile int f2;
         [return: Obsolete]
         [method: Obsolete]
@@ -683,15 +685,20 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
             f.method(); /*().*/
 
-            i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
+            i = i + i - i * i / i % i &
+            i |
+            i ^ i; /*+ - * / % & | ^*/
 
-            bool b = true & false | true ^ false; /*& | ^*/
+            bool b = true &
+            false |
+            true ^ false; /*& | ^*/
 
             b = !b; /*!*/
 
             i = ~i; /*~i*/
 
-            b = i < i && i > i; /*< && >*/
+            b = i < i &&
+            i > i; /*< && >*/
 
             int? ii = 5; /*? bug*/
  // NO ?
@@ -701,13 +708,18 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
             i--; /*--*/
 
-            b = true && false || true; /*&& ||*/
+            b = true &&
+            false ||
+            true; /*&& ||*/
 
             i << 5; /*<<*/
 
             i >> 5; /*>>*/
 
-            b = i == i && i != i && i <= i && i >= i; /*= == && != <= >=*/
+            b = i == i &&
+            i != i &&
+            i <= i &&
+            i >= i; /*= == && != <= >=*/
 
             i += 5.0; /*+=*/
 
@@ -770,8 +782,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
         // Expression bodies on method-like members
         public Point Move(int dx, int dy) => new Point(x + dx, y + dy);
         public static Complex operator +(Complex a, Complex b) => a.Add(b);
-        public static implicit operator string(Person p)
-            => p.First + " " + p.Last;
+        public static implicit operator string(Person p) => p.First + " " + p.Last;
         public void Print() => Console.WriteLine(First + " " + Last);
 
         // Expression bodies on property-like function members
@@ -1002,13 +1013,13 @@ class CSharp72
     public void LeadingSeparator()
     {
         var res = 0 + 123 // permitted in C# 1.0 and later
-         + 1_2_3 // permitted in C# 7.0 and later
-         + 0x1_2_3 // permitted in C# 7.0 and later
-         + 0b101 // binary literals added in C# 7.0
-         + 0b1_0_1 // permitted in C# 7.0 and later
+        + 1_2_3 // permitted in C# 7.0 and later
+        + 0x1_2_3 // permitted in C# 7.0 and later
+        + 0b101 // binary literals added in C# 7.0
+        + 0b1_0_1 // permitted in C# 7.0 and later
         // in C# 7.2, _ is permitted after the `0x` or `0b`
         + 0x_1_2 // permitted in C# 7.2 and later
-         + 0b_1_0_1 // permitted in C# 7.2 and later
+        + 0b_1_0_1 // permitted in C# 7.2 and later
         ;
     }
 }

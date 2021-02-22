@@ -35,7 +35,6 @@ namespace CSharpier.Core.Tests
             {
                 IncludeDocTree = true,
                 IncludeAST = true,
-                TestRun = true,
             });
             Console.WriteLine(result.TestRunFailed);
 
