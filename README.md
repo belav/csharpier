@@ -52,18 +52,54 @@ public class ClassName
 
 ## Installation
 CSharpier is available at TODO
-```
+```console
 dotnet tool install -g csharpier
 ```
 
 ## Usage
-TODO
-show examples
-show command line arguments
+### Basic Usage
+Run csharpier from the directory you wish to format.
+```console
+# the first time running csharpier it is normally not possible to review all the changes it makes
+# and catch any instances of code being lost 
+dotnet csharpier --validate
 
-### Syntax Tree Validation
-CSharpier supports validating the changes it made to a file. It does this by comparing the syntax tree before and after formatting, but ignoring any whitespace trivia in the syntax tree. If a file fails validation, CSharpier will output the lines that differ.
-For example
+# after a project has already been csharpiered, you can choose
+# to skip the --validate flag to speed up formatting
+dotnet csharpier
+```
+
+### More Information
+By default csharpier will format any .cs files in the current directory and its children. It currently excludes .g.cs and .cshtml.cs files.
+
+The first time running csharpier against a project, it is strongly recommended that you use the --validate option.
+Formatting will take longer, but csharpier will validate the formatted syntax tree against the original and warn if it believes it introduced breaking changes. 
+
+```console
+Usage:
+  dotnet-csharpier [options] [<directory>]
+
+Arguments:
+  <directory>    A path to a directory containing files to format. If a path is not specified the current directory is used
+
+Options:
+  -v, --validate    Compare syntax tree of formatted file to original file to validate changes.
+  --version         Show version information
+  -?, -h, --help    Show help and usage information
+
+```
+
+### \<directory\>
+Currently CSharpier only supports being passed a directory to recursively scan for .cs files.
+If a directory is not supplied, it will use the current directory.
+
+### --validate
+CSharpier supports validating the changes it made to a file.
+It does this by comparing the syntax tree before and after formatting, but ignoring any whitespace trivia in the syntax tree.
+If a file fails validation, CSharpier will output the lines that differ.
+If this happens it indicates a bug in CSharpier's code.
+
+An example of CSharpier finding a file that failed validation.
 ```
 \src\[Snip]\AbstractReferenceFinder_GlobalSuppressions.cs       - failed syntax tree validation
     Original: Around Line 280

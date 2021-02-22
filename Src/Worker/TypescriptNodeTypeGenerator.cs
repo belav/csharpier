@@ -17,7 +17,8 @@ namespace Worker
         [TestCase]
         public void DoWork()
         {
-            var rootRepositoryFolder = new DirectoryInfo(Directory.GetCurrentDirectory());
+            var rootRepositoryFolder = new DirectoryInfo(
+                Directory.GetCurrentDirectory());
             while (rootRepositoryFolder.Name != "Src")
             {
                 rootRepositoryFolder = rootRepositoryFolder.Parent;
@@ -25,16 +26,19 @@ namespace Worker
 
             rootRepositoryFolder = rootRepositoryFolder.Parent;
 
-            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
-                .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o)).OrderBy(o => o.Name).ToList();
+            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes().Where(
+                o => !o.IsAbstract &&
+                typeof(CSharpSyntaxNode).IsAssignableFrom(o)).OrderBy(
+                o => o.Name).ToList();
 
             var fileName = rootRepositoryFolder.FullName + @"\prettier-plugin-csharpier\src\Printer\NodeTypes.ts";
 
             using (var file = new StreamWriter(fileName, false))
             {
-                file.WriteLine("import { SyntaxToken, SyntaxTreeNode } from \"./SyntaxTreeNode\";");
+                file.WriteLine(
+                    "import { SyntaxToken, SyntaxTreeNode } from \"./SyntaxTreeNode\";");
                 file.WriteLine();
-                
+
                 foreach (var syntaxNodeType in syntaxNodeTypes)
                 {
                     GenerateNode(file, syntaxNodeType);
@@ -43,7 +47,10 @@ namespace Worker
 
             if (missingTypes.Any())
             {
-                throw new Exception(Environment.NewLine + string.Join(Environment.NewLine, missingTypes));
+                throw new Exception(
+                    Environment.NewLine + string.Join(
+                        Environment.NewLine,
+                        missingTypes));
             }
         }
 
@@ -56,10 +63,13 @@ namespace Worker
                 var camelCaseName = CamelCaseName(propertyName);
                 var propertyType = propertyInfo.PropertyType;
 
-                if (Ignored.Properties.Contains(camelCaseName)
-                    || Ignored.Types.Contains(propertyType)
-                    || (Ignored.PropertiesByType.ContainsKey(type) && Ignored.PropertiesByType[type].Contains(camelCaseName))
-                    || IsBaseClassProperty(camelCaseName))
+                if (
+                    Ignored.Properties.Contains(camelCaseName) ||
+                    Ignored.Types.Contains(propertyType) ||
+                    (Ignored.PropertiesByType.ContainsKey(type) &&
+                    Ignored.PropertiesByType[type].Contains(camelCaseName)) ||
+                    IsBaseClassProperty(camelCaseName)
+                )
                 {
                     continue;
                 }
@@ -82,7 +92,9 @@ namespace Worker
                 {
                     typescriptType = "SyntaxTrivia";
                 }
-                else if (typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType))
+                else if (
+                    typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType)
+                )
                 {
                     typescriptType = "SyntaxTreeNode";
                     if (!propertyType.IsAbstract)
@@ -90,11 +102,13 @@ namespace Worker
                         typescriptType = TypescriptInterfaceName(propertyType);
                     }
                 }
-                else if ((propertyType.IsGenericType &&
-                          (propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>) ||
-                           propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)))
-                         || propertyType == typeof(SyntaxTokenList)
-                         || propertyType == typeof(SyntaxTriviaList))
+                else if (
+                    (propertyType.IsGenericType &&
+                    (propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>) ||
+                    propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>))) ||
+                    propertyType == typeof(SyntaxTokenList) ||
+                    propertyType == typeof(SyntaxTriviaList)
+                )
                 {
                     nullable = false;
                     if (propertyType == typeof(SyntaxTokenList))
@@ -109,10 +123,13 @@ namespace Worker
                     {
                         typescriptType = "SyntaxTreeNode";
 
-                        var genericArgument = propertyType.GetGenericArguments()[0];
+                        var genericArgument = propertyType.GetGenericArguments()[
+                            0
+                        ];
                         if (!genericArgument.IsAbstract)
                         {
-                            typescriptType = TypescriptInterfaceName(genericArgument);
+                            typescriptType = TypescriptInterfaceName(
+                                genericArgument);
                         }
                     }
 
@@ -120,10 +137,10 @@ namespace Worker
                 }
                 else
                 {
-                    missingTypes.Add(PadToSize(type.Name + "." + propertyName + ": ", 40) +
-                                     propertyType);
+                    missingTypes.Add(
+                        PadToSize(type.Name + "." + propertyName + ": ", 40) + propertyType);
                 }
-                
+
                 file.WriteLine($"    {CamelCaseName(propertyInfo.Name)}{(nullable ? "?" : "")}: {typescriptType};");
             }
 
@@ -133,22 +150,22 @@ namespace Worker
 
         private static bool IsBaseClassProperty(string camelCaseName)
         {
-            return camelCaseName == "isMissing"
-                   || camelCaseName == "isStructuredTrivia"
-                   || camelCaseName == "hasStructuredTrivia"
-                   || camelCaseName == "containsSkippedText"
-                   || camelCaseName == "containsDirectives"
-                   || camelCaseName == "containsDiagnostics"
-                   || camelCaseName == "hasLeadingTrivia"
-                   || camelCaseName == "hasTrailingTrivia"
-                   || camelCaseName == "containsAnnotations";
+            return camelCaseName == "isMissing" ||
+            camelCaseName == "isStructuredTrivia" ||
+            camelCaseName == "hasStructuredTrivia" ||
+            camelCaseName == "containsSkippedText" ||
+            camelCaseName == "containsDirectives" ||
+            camelCaseName == "containsDiagnostics" ||
+            camelCaseName == "hasLeadingTrivia" ||
+            camelCaseName == "hasTrailingTrivia" ||
+            camelCaseName == "containsAnnotations";
         }
 
         private static string CamelCaseName(string value)
         {
             return value.Substring(0, 1).ToLower() + value.Substring(1);
         }
-        
+
         private static string TypescriptNodeType(Type syntaxNodeType)
         {
             var name = syntaxNodeType.Name;
@@ -159,12 +176,12 @@ namespace Worker
 
             return name;
         }
-        
+
         private static string TypescriptInterfaceName(Type syntaxNodeType)
         {
             return TypescriptNodeType(syntaxNodeType) + "Node";
         }
-        
+
         private static string PadToSize(string value, int size)
         {
             while (value.Length < size)

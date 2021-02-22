@@ -29,7 +29,7 @@ namespace CSharpier.Parser
         {
             if (value != 0)
             {
-                return $"\"{name}\":{value}";   
+                return $"\"{name}\":{value}";
             }
 
             return null;

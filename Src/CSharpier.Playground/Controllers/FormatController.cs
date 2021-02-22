@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using CSharpier.Core;
+using CSharpier;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -17,7 +17,7 @@ namespace CSharpier.Playground.Controllers
         public string Doc { get; set; }
         public string Errors { get; set; }
     }
-    
+
     [ApiController]
     [Route("[controller]")]
     public class FormatController : ControllerBase
@@ -27,7 +27,10 @@ namespace CSharpier.Playground.Controllers
         private readonly PlaygroundOptions options;
 
         // ReSharper disable once SuggestBaseTypeForParameter
-        public FormatController(IWebHostEnvironment webHostEnvironment, ILogger<FormatController> logger, IOptions<PlaygroundOptions> options)
+        public FormatController(
+            IWebHostEnvironment webHostEnvironment,
+            ILogger<FormatController> logger,
+            IOptions<PlaygroundOptions> options)
         {
             this.webHostEnvironment = webHostEnvironment;
             this.logger = logger;
@@ -35,20 +38,27 @@ namespace CSharpier.Playground.Controllers
         }
 
         [HttpPost]
-        public FormatResult Post([FromBody] string content)
+        public FormatResult Post([FromBody]string content)
         {
-            var filePath = Path.Combine(this.webHostEnvironment.ContentRootPath, "App_Data", "Uploads", content.CalculateHash() + ".cs");
+            var filePath = Path.Combine(
+                this.webHostEnvironment.ContentRootPath,
+                "App_Data",
+                "Uploads",
+                content.CalculateHash() + ".cs");
             new FileInfo(filePath).EnsureDirectoryExists();
             // TODO 2 we need to report back errors and what not
             // failing to compile/parse with roslyn
             // what about when the prettier plugin fails because of missing node types or other errors?
             this.WriteAllText(filePath, content);
             // TODO 2 we also want to eventually expose options
-            var result = new CodeFormatter().Format(content, new CSharpier.Core.Options
-            {
-                IncludeAST = true,
-                IncludeDocTree = true,
-            });
+            var result = new CodeFormatter().Format(
+                content,
+                new CSharpier.Options
+                {
+                    IncludeAST = true,
+                    IncludeDocTree = true,
+
+                });
 
             var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
             this.WriteAllText(formattedFilePath, result.Code);
@@ -59,6 +69,7 @@ namespace CSharpier.Playground.Controllers
                 Json = result.AST,
                 Doc = result.DocTree,
                 Errors = result.Errors,
+
             };
         }
 
@@ -77,7 +88,10 @@ namespace CSharpier.Playground.Controllers
             return System.IO.File.Exists(filePath);
         }
 
-        public string ExecuteApplication(string pathToExe, string workingDirectory, string args)
+        public string ExecuteApplication(
+            string pathToExe,
+            string workingDirectory,
+            string args)
         {
             var processStartInfo = new ProcessStartInfo(pathToExe, args)
             {
@@ -91,11 +105,11 @@ namespace CSharpier.Playground.Controllers
             var process = Process.Start(processStartInfo);
             var output = process.StandardError.ReadToEnd();
             process.WaitForExit();
-            
-            this.logger.LogInformation("Output from '" + pathToExe + " " + args + "' was: " + Environment.NewLine + output);
+
+            this.logger.LogInformation(
+                "Output from '" + pathToExe + " " + args + "' was: " + Environment.NewLine + output);
 
             return output;
         }
-
     }
 }

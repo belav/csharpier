@@ -1,0 +1,5 @@
+cd src
+bump up version in CSharpier/CSharpier.csproj
+dotnet pack -c release
+upload to nuget
+Or really, just automate this.

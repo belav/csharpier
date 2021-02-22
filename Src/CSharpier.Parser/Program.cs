@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -17,7 +17,7 @@ public class ClassName
 }
 
 ";
-        
+
         static void Main(string[] args)
         {
             var stringToParse = args.Length == 0 ? TestClass : args[0];
@@ -30,10 +30,13 @@ public class ClassName
             Console.WriteLine(result);
         }
 
-        private static string WriteWithSyntaxNodeJsonWrite(CompilationUnitSyntax rootNode)
+        private static string WriteWithSyntaxNodeJsonWrite(
+            CompilationUnitSyntax rootNode)
         {
             var stringBuilder = new StringBuilder();
-            SyntaxNodeJsonWriter.WriteCompilationUnitSyntax(stringBuilder, rootNode);
+            SyntaxNodeJsonWriter.WriteCompilationUnitSyntax(
+                stringBuilder,
+                rootNode);
             return stringBuilder.ToString();
         }
     }

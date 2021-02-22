@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,8 +23,9 @@ namespace Worker
                 directory = directory.Parent;
             }
 
-            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
-                .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o)).ToList();
+            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes().Where(
+                o => !o.IsAbstract &&
+                typeof(CSharpSyntaxNode).IsAssignableFrom(o)).ToList();
 
             var fileName = directory.FullName + @"\CSharpier.Parser\SyntaxNodeJsonWriter.generated.cs";
             using (var file = new StreamWriter(fileName, false))
@@ -42,13 +43,11 @@ namespace Worker
                 file.WriteLine("    public partial class SyntaxNodeJsonWriter");
                 file.WriteLine("    {");
 
-                file.WriteLine(
-                    $"        public static void WriteSyntaxNode(StringBuilder builder, SyntaxNode syntaxNode)");
+                file.WriteLine($"        public static void WriteSyntaxNode(StringBuilder builder, SyntaxNode syntaxNode)");
                 file.WriteLine("        {");
                 foreach (var syntaxNodeType in syntaxNodeTypes)
                 {
-                    file.WriteLine(
-                        $"            if (syntaxNode is {syntaxNodeType.Name}) Write{syntaxNodeType.Name}(builder, syntaxNode as {syntaxNodeType.Name});");
+                    file.WriteLine($"            if (syntaxNode is {syntaxNodeType.Name}) Write{syntaxNodeType.Name}(builder, syntaxNode as {syntaxNodeType.Name});");
                 }
 
                 file.WriteLine("        }");
@@ -66,29 +65,32 @@ namespace Worker
                 file.WriteLine("}");
             }
 
-            File.Copy(fileName, fileName.Replace("CSharpier.Parser", "CSharpier"), true);
-            
+            File.Copy(
+                fileName,
+                fileName.Replace("CSharpier.Parser", "CSharpier"),
+                true);
+
             if (missingTypes.Any())
             {
-                throw new Exception(Environment.NewLine + string.Join(Environment.NewLine, missingTypes));
+                throw new Exception(
+                    Environment.NewLine + string.Join(
+                        Environment.NewLine,
+                        missingTypes));
             }
         }
 
         private void GenerateMethod(StreamWriter file, Type type)
         {
-            file.WriteLine(
-                $"        public static void Write{type.Name}(StringBuilder builder, {type.Name} syntaxNode)");
+            file.WriteLine($"        public static void Write{type.Name}(StringBuilder builder, {type.Name} syntaxNode)");
             file.WriteLine("        {");
             file.WriteLine("            builder.Append(\"{\");");
             file.WriteLine("            var properties = new List<string>();");
-            file.WriteLine(
-                $"            properties.Add($\"\\\"nodeType\\\":\\\"{{GetNodeType(syntaxNode.GetType())}}\\\"\");");
+            file.WriteLine($"            properties.Add($\"\\\"nodeType\\\":\\\"{{GetNodeType(syntaxNode.GetType())}}\\\"\");");
             file.WriteLine($"            properties.Add($\"\\\"kind\\\":\\\"{{syntaxNode.Kind().ToString()}}\\\"\");");
 
             if (type == typeof(SyntaxTrivia))
             {
-                file.WriteLine(
-                    $"            properties.Add(WriteString(\"text\", syntaxNode.ToString()));");
+                file.WriteLine($"            properties.Add(WriteString(\"text\", syntaxNode.ToString()));");
             }
 
             foreach (var propertyInfo in type.GetProperties())
@@ -97,32 +99,33 @@ namespace Worker
                 var camelCaseName = CamelCaseName(propertyName);
                 var propertyType = propertyInfo.PropertyType;
 
-                if (Ignored.Properties.Contains(camelCaseName)
-                    || Ignored.Types.Contains(propertyType)
-                    || (Ignored.PropertiesByType.ContainsKey(type) &&
-                        Ignored.PropertiesByType[type].Contains(camelCaseName)))
+                if (
+                    Ignored.Properties.Contains(camelCaseName) ||
+                    Ignored.Types.Contains(propertyType) ||
+                    (Ignored.PropertiesByType.ContainsKey(type) &&
+                    Ignored.PropertiesByType[type].Contains(camelCaseName))
+                )
                 {
                     continue;
                 }
 
                 if (propertyType == typeof(bool))
                 {
-                    file.WriteLine(
-                        $"            properties.Add(WriteBoolean(\"{camelCaseName}\", syntaxNode.{propertyName}));");
+                    file.WriteLine($"            properties.Add(WriteBoolean(\"{camelCaseName}\", syntaxNode.{propertyName}));");
                 }
                 else if (propertyType == typeof(string))
                 {
-                    file.WriteLine(
-                        $"            properties.Add(WriteString(\"{camelCaseName}\", syntaxNode.{propertyName}));");
+                    file.WriteLine($"            properties.Add(WriteString(\"{camelCaseName}\", syntaxNode.{propertyName}));");
                 }
                 else if (propertyType == typeof(int))
                 {
-                    file.WriteLine(
-                        $"            properties.Add(WriteInt(\"{camelCaseName}\", syntaxNode.{propertyName}));");
+                    file.WriteLine($"            properties.Add(WriteInt(\"{camelCaseName}\", syntaxNode.{propertyName}));");
                 }
-                else if (typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType)
-                         || propertyType == typeof(SyntaxToken)
-                         || propertyType == typeof(SyntaxTrivia))
+                else if (
+                    typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType) ||
+                    propertyType == typeof(SyntaxToken) ||
+                    propertyType == typeof(SyntaxTrivia)
+                )
                 {
                     var methodName = "WriteSyntaxNode";
                     if (propertyType == typeof(SyntaxToken))
@@ -142,15 +145,16 @@ namespace Worker
                     file.WriteLine("            {");
                     file.WriteLine($"                var {camelCaseName}Builder = new StringBuilder();");
                     file.WriteLine($"                {methodName}({camelCaseName}Builder, syntaxNode.{propertyName});");
-                    file.WriteLine(
-                        $"                properties.Add($\"\\\"{camelCaseName}\\\":{{{camelCaseName}Builder.ToString()}}\");");
+                    file.WriteLine($"                properties.Add($\"\\\"{camelCaseName}\\\":{{{camelCaseName}Builder.ToString()}}\");");
                     file.WriteLine("            }");
                 }
-                else if ((propertyType.IsGenericType &&
-                          (propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>) ||
-                           propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)))
-                         || propertyType == typeof(SyntaxTokenList)
-                         || propertyType == typeof(SyntaxTriviaList))
+                else if (
+                    (propertyType.IsGenericType &&
+                    (propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>) ||
+                    propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>))) ||
+                    propertyType == typeof(SyntaxTokenList) ||
+                    propertyType == typeof(SyntaxTriviaList)
+                )
                 {
                     var methodName = "WriteSyntaxNode";
                     if (propertyType == typeof(SyntaxTokenList))
@@ -163,7 +167,9 @@ namespace Worker
                     }
                     else
                     {
-                        var genericArgument = propertyType.GetGenericArguments()[0];
+                        var genericArgument = propertyType.GetGenericArguments()[
+                            0
+                        ];
                         if (!genericArgument.IsAbstract)
                         {
                             methodName = "Write" + genericArgument.Name;
@@ -177,17 +183,17 @@ namespace Worker
                     file.WriteLine($"                {methodName}(innerBuilder, node);");
                     file.WriteLine($"                {camelCaseName}.Add(innerBuilder.ToString());");
                     file.WriteLine("            }");
-                    file.WriteLine(
-                        $"            properties.Add($\"\\\"{camelCaseName}\\\":[{{string.Join(\",\", {camelCaseName})}}]\");");
+                    file.WriteLine($"            properties.Add($\"\\\"{camelCaseName}\\\":[{{string.Join(\",\", {camelCaseName})}}]\");");
                 }
                 else
                 {
-                    missingTypes.Add(PadToSize(type.Name + "." + propertyName + ": ", 40) +
-                                     propertyType);
+                    missingTypes.Add(
+                        PadToSize(type.Name + "." + propertyName + ": ", 40) + propertyType);
                 }
             }
 
-            file.WriteLine("            builder.Append(string.Join(\",\", properties.Where(o => o != null)));");
+            file.WriteLine(
+                "            builder.Append(string.Join(\",\", properties.Where(o => o != null)));");
             file.WriteLine("            builder.Append(\"}\");");
             file.WriteLine("        }");
         }

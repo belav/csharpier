@@ -875,7 +875,6 @@ interface IndexerDeclarationNode extends SyntaxTreeNode<"IndexerDeclaration"> {
     accessorList?: AccessorListNode;
     expressionBody?: ArrowExpressionClauseNode;
     semicolonToken?: SyntaxToken;
-    semicolon?: SyntaxToken;
     rawKind?: number;
 }
 
@@ -1326,7 +1325,6 @@ interface PropertyDeclarationNode extends SyntaxTreeNode<"PropertyDeclaration"> 
     expressionBody?: ArrowExpressionClauseNode;
     initializer?: EqualsValueClauseNode;
     semicolonToken?: SyntaxToken;
-    semicolon?: SyntaxToken;
     rawKind?: number;
 }
 

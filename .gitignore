@@ -17,10 +17,12 @@ obj
 
 App_Data
 
+nupkg
+
 /prettier-plugin-csharpier/Samples/**/*.json
 /prettier-plugin-csharpier/Tests/**/*.json
 
 dist
 
 *.doctree.txt
-/Src/CSharpier.Tests/TestFiles/**/*.json
+apiKey.txt
