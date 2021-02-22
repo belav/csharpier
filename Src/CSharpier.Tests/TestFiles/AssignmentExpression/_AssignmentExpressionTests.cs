@@ -1,7 +1,7 @@
-using CSharpier.Core.Tests.TestFileTests;
+using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Core.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles
 {
     public class AssignmentExpressionTests : BaseTest
     {

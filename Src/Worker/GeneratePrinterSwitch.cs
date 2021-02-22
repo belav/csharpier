@@ -26,6 +26,7 @@ namespace CSharpier
 {
     public partial class Printer
     {
+        private int depth = 0;
         public Doc Print(SyntaxNode syntaxNode)
         {
             if (syntaxNode == null)
@@ -33,8 +34,16 @@ namespace CSharpier
                 return null;
             }
 
-            switch (syntaxNode)
-            {");
+            // TODO 0 kill? runtime repo has files that will fail on deep recursion
+            if (depth > 200)
+            {
+                throw new InTooDeepException();
+            }
+            
+            depth++;
+            try {
+                switch (syntaxNode)
+                {");
 
             var csharpDirectory = Path.Combine(
                 rootDirectory.FullName,
@@ -44,14 +53,19 @@ namespace CSharpier
                 var name = file.Name.Replace(".cs", "");
                 var camelCaseName = name[0].ToString().ToLower() + name.Substring(
                     1);
-                output.AppendLine($@"                case {name} {camelCaseName}:
-                    return this.Print{name}({camelCaseName});");
+                output.AppendLine($@"                    case {name} {camelCaseName}:
+                        return this.Print{name}({camelCaseName});");
             }
 
             output.AppendLine(
                 @"
-                default:
-                    throw new Exception(""Can't handle "" + syntaxNode.GetType().Name);
+                    default:
+                        throw new Exception(""Can't handle "" + syntaxNode.GetType().Name);
+                }
+            }
+            finally
+            {
+                depth--;
             }
         }
     }

@@ -18,27 +18,5 @@
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c04cd52b_002Dede8_002D4207_002D95e7_002D2b27884f2d36/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="NamespaceDeclarations" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Or&gt;&#xD;
-    &lt;And&gt;&#xD;
-      &lt;TestAncestor&gt;&#xD;
-        &lt;TestId&gt;NUnit3x::A77E4297-FAA5-40AB-9856-ECF72AF5D859::net5.0::CSharpier.Tests.NamespaceDeclarations&lt;/TestId&gt;&#xD;
-        &lt;TestId&gt;NUnit3x::CF32D239-2A27-4F46-8945-8B7B9A2C8774::net5.0::Worker.Tests.ConvertTypescript&lt;/TestId&gt;&#xD;
-        &lt;TestId&gt;NUnit3x::CF32D239-2A27-4F46-8945-8B7B9A2C8774::net5.0::Worker.TypescriptConverter.DoWork&lt;/TestId&gt;&#xD;
-      &lt;/TestAncestor&gt;&#xD;
-      &lt;Not&gt;&#xD;
-        &lt;Project Location="C:\Projects\csharpier\CSharpier\CSharpier.Tests" Presentation="&amp;lt;CSharpier.Tests&amp;gt;" /&gt;&#xD;
-      &lt;/Not&gt;&#xD;
-    &lt;/And&gt;&#xD;
-    &lt;Project Location="C:\Projects\csharpier\CSharpier\CSharpier.Tests" Presentation="&amp;lt;CSharpier.Tests&amp;gt;" /&gt;&#xD;
-    &lt;TestAncestor&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::CF32D239-2A27-4F46-8945-8B7B9A2C8774::net5.0::Worker.TypescriptConverter.GeneratePrinterSwitch&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::CF32D239-2A27-4F46-8945-8B7B9A2C8774::net5.0::Worker.TypescriptConverter.MoveTestFiles&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::CF32D239-2A27-4F46-8945-8B7B9A2C8774::net5.0::Worker.TypescriptConverter.CreateUnitTests&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::C73AC70E-4D1E-4266-AA77-6A0AAF7DA7C4::.NETCoreApp,Version=v3.1::SyntaxNodeJsonWriterGenerator.Generator.DoWork&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;NUnit3x::CF32D239-2A27-4F46-8945-8B7B9A2C8774::net5.0::Worker.GeneratePrinterSwitch.DoWork&lt;/TestId&gt;&#xD;
-    &lt;/TestAncestor&gt;&#xD;
-    &lt;ProjectFile&gt;A77E4297-FAA5-40AB-9856-ECF72AF5D859/d:TestFiles/d:AttributeList/f:_AttributeListTests.cs&lt;/ProjectFile&gt;&#xD;
-    &lt;Project Location="C:\Projects\csharpier\CSharpier\CSharpier.Core.Tests" Presentation="&amp;lt;CSharpier.Core.Tests&amp;gt;" /&gt;&#xD;
-    &lt;ProjectFile&gt;CF32D239-2A27-4F46-8945-8B7B9A2C8774/f:SyntaxNodeComparerGenerator.cs&lt;/ProjectFile&gt;&#xD;
-  &lt;/Or&gt;&#xD;
+  &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
