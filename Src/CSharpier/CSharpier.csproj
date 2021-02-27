@@ -7,7 +7,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>CSharpier</RootNamespace>
 		<PackAsTool>true</PackAsTool>
-		<Version>0.8.1</Version>
+		<Version>0.8.2</Version>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/belav/csharpier</RepositoryUrl> 
 		<RepositoryType>git</RepositoryType>
@@ -17,6 +17,7 @@
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	  <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
+	  <PackageReference Include="UTF.Unknown" Version="2.3.0" />
     </ItemGroup>
 
     <ItemGroup>

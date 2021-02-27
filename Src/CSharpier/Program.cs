@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CSharpier;
+using UtfUnknown;
 
 namespace CSharpier
 {
@@ -102,7 +103,8 @@ namespace CSharpier
 
             using var reader = new StreamReader(file);
             var code = await reader.ReadToEndAsync();
-            var encoding = reader.CurrentEncoding;
+            var detectionResult = CharsetDetector.DetectFromFile(file);
+            var encoding = detectionResult.Detected.Encoding;
             reader.Close();
 
             CSharpierResult result;
@@ -160,7 +162,9 @@ namespace CSharpier
                 }
             }
 
-            await File.WriteAllBytesAsync(file, encoding.GetBytes(result.Code));
+            await using var stream = File.Open(file, FileMode.Create);
+            await using var writer = new StreamWriter(stream, encoding);
+            await writer.WriteAsync(result.Code);
         }
 
         private static string PadToSize(string value, int size = 120)

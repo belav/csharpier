@@ -329,7 +329,11 @@ namespace My
             set;
         }
         public abstract string P { get; }
-        public abstract int this[int index] { protected internal get; internal protected set; }
+        public abstract int this[int index]
+        {
+            protected internal get;
+            internal protected set;
+        }
         [method: Obsolete]
         [field: Obsolete]
         [event: Obsolete]
@@ -386,7 +390,11 @@ namespace My
         }
         public abstract string P { get; }
 
-        public abstract int this[int index] { get; internal protected set; }
+        public abstract int this[int index]
+        {
+            get;
+            internal protected set;
+        }
         public event Event E;
         public static A operator +(A first, A second)
         {
