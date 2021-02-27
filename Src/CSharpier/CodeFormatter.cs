@@ -102,9 +102,14 @@ namespace CSharpier
                     }
                     for (var x = 0; x < concat.Parts.Count; x++)
                     {
-                        result += this.PrintDocTree(
+                        var printResult = this.PrintDocTree(
                             concat.Parts[x],
                             indent + "    ");
+                        if (printResult == null)
+                        {
+                            continue;
+                        }
+                        result += printResult;
                         if (x < concat.Parts.Count - 1)
                         {
                             result += "," + Environment.NewLine;
@@ -114,11 +119,13 @@ namespace CSharpier
                     result += ")";
                     return result;
                 case LineDoc lineDoc:
-                    return indent + (lineDoc.Type == LineDoc.LineType.Normal
-                        ? "Line"
+                    return indent + (
+                        lineDoc.IsLiteral ? "LiteralLine"
+                        : lineDoc.Type == LineDoc.LineType.Normal ? "Line"
+                        : lineDoc.Type == LineDoc.LineType.Hard ? "HardLine"
                         : "SoftLine");
                 case BreakParent breakParent:
-                    return indent + "breakParent";
+                    return null;
                 case ForceFlat forceFlat:
                     return indent + "ForceFlat(" + Environment.NewLine + this.PrintDocTree(
                         forceFlat.Contents,

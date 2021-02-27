@@ -196,7 +196,7 @@ namespace CSharpier.Tests
         public static Doc LiteralLine => Printer.LiteralLine;
         public static Doc Line => Printer.Line;
         public static Doc SoftLine => Printer.SoftLine;
-        public static Doc BreakParent => Printer.BreakParent;
+        public static Doc BreakParent => new BreakParent();
 
         public static Doc Group(Doc contents)
         {

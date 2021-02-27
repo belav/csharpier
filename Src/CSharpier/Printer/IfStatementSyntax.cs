@@ -24,7 +24,7 @@ namespace CSharpier
             }
             else
             {
-                // TODO 1 force semicolons here? make an option?
+                // TODO 1 force braces here? make an option?
                 parts.Push(Indent(Concat(HardLine, statement)));
             }
 

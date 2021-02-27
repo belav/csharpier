@@ -26,15 +26,12 @@ namespace CSharpier
             return await rootCommand.InvokeAsync(args);
         }
 
-        // TODO 0 document the command line options
-        // does the tool print them out somehow?
         public static async Task<int> Run(string directory, bool validate)
         {
             var fullStopwatch = Stopwatch.StartNew();
 
             // TODO 1 Configuration.cs from data.entities
             // TODO 1 CurrencyDto.cs from data.entities
-            // TODO 0 should validate format twice?
             if (string.IsNullOrEmpty(directory))
             {
                 directory = Directory.GetCurrentDirectory();

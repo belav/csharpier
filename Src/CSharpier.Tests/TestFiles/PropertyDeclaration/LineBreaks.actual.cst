@@ -9,4 +9,15 @@
             return x;
         }
     }
+
+    public virtual ICollection<AdminActionPermission> ActionPermissions
+    { get; set;
+    } = new HashSet<AdminActionPermission>();
+
+    public Dictionary<string, string> Properties { get; set; } = new Dictionary<string,
+            string>();
+
+    public virtual LongerPropertyConfiguration LongerPropertyConfiguration
+    { get; set;
+    }
 }

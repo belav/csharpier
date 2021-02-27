@@ -6,9 +6,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
 {
+    // TODO 1 can I use source generators for some stuff?
+    // https://devblogs.microsoft.com/dotnet/introducing-c-source-generators/
     public partial class Printer
     {
-        public static readonly Doc BreakParent = new BreakParent();
+        private static Doc BreakParent => new BreakParent();
 
         // TODO 0 maybe all spaces should be this instead?
         public static Doc SpaceIfNoPreviousComment
@@ -48,15 +50,34 @@ namespace CSharpier
             };
         }
 
-
         public static Doc Concat(Parts parts)
         {
-            return new Concat { Parts = parts };
+            return new Concat { Parts = CleanParts(parts) };
         }
 
         public static Doc Concat(params Doc[] parts)
         {
-            return new Concat { Parts = new List<Doc>(parts) };
+            return new Concat { Parts = CleanParts(parts) };
+        }
+
+        public static List<Doc> CleanParts(IEnumerable<Doc> parts)
+        {
+#if DEBUG
+            var newParts = new List<Doc>();
+            foreach (var doc in parts)
+            {
+                if (doc is Concat concat)
+                {
+                    newParts.AddRange(CleanParts(concat.Parts));
+                }
+                else
+                {
+                    newParts.Add(doc);
+                }
+            }
+            return newParts;
+#endif
+            return parts.ToList();
         }
 
         public static Doc ForceFlat(params Doc[] contents)

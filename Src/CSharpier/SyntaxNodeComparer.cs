@@ -38,7 +38,7 @@ namespace CSharpier
 
         public string CompareSource()
         {
-            // TODO the new generated one fails with stack overflows, look at this for how to potentially avoid recursion
+            // TODO GH-9 the new generated one fails with stack overflows, look at this for how to potentially avoid recursion
             // can have two stacks, pop the parent off, run compare, the compare method pushes new stuff onto the stack.
             // the stuff on the stack would need an object, and an enum for what type of method to run on the object
             // also maybe some parent data for a couple of the methods
