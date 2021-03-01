@@ -2,7 +2,10 @@
 {
     public ClassName Value = new ClassName
     {
-        Property = true,
-        Property2 = false
+        Property1 = true,
+        Property2 = false,
+        Property3 = false,
+        Property4 = false,
+        Property5 = false
     };
 }

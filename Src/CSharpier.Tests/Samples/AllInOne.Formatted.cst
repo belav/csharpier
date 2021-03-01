@@ -93,13 +93,15 @@ namespace My
             var u = 1u;
             var U = 1U;
             long hex = 0xBADC0DE, Hex = 0XDEADBEEF, l = -1L, L = 1L, l2 = 2l;
-            ulong ul = 1ul, Ul = 1Ul, uL = 1uL, UL = 1UL, lu = 1lu, Lu = 1Lu, lU = 1lU, LU = 1LU;
+            ulong ul = 1ul, Ul = 1Ul, uL = 1uL, UL = 1UL, lu = 1lu, Lu = 1Lu, lU =
+                1lU, LU = 1LU;
             int minInt32Value = -2147483648;
             int minInt64Value = -9223372036854775808L;
 
             bool @bool;
             byte @byte;
-            char @char = 'c', \u0066 = '\u0066', hexchar = '\x0130', hexchar2 = (char)0xBAD;
+            char @char = 'c', \u0066 = '\u0066', hexchar = '\x0130', hexchar2 =
+                (char)0xBAD;
             string \U00000065 = "\U00000065";
             decimal @decimal = 1.44M;
             @decimal = 1.2m;
@@ -514,9 +516,7 @@ namespace ConsoleApplication1
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
 
-            var q = from i in new int[] { 1, 2, 3, 4 }
-                where i > 5
-                select i;
+            var q = from i in new int[] { 1, 2, 3, 4 } where i > 5 select i;
         }
 
         public static implicit operator Test(string s)
@@ -544,10 +544,11 @@ namespace ConsoleApplication1
             int? j = 6;
 
             Expression<Func<int>> e = () => i;
-            Expression<Func<bool, Action>> e2 = b => () =>
-            {
-                return;
-            };
+            Expression<Func<bool, Action>> e2 =
+                b => () =>
+                {
+                    return;
+                };
             Func<bool, bool> f = async delegate(bool a)
             {
                 return await !a;
@@ -632,12 +633,10 @@ namespace Comments.XmlComments.UndocumentedKeywords
              intValue = 0;
             intValue = intValue /*s*/
              + 1;
-            string strValue = /*s*/
-            "hello";
+            string strValue = /*s*/ "hello";
             /*s*/
             MyClass c = new MyClass();
-            string verbatimStr = /*s*/
-            @"\\\\";
+            string verbatimStr = /*s*/ @"\\\\";
         }
     }
 
@@ -689,9 +688,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             i |
             i ^ i; /*+ - * / % & | ^*/
 
-            bool b = true &
-            false |
-            true ^ false; /*& | ^*/
+            bool b = true & false | true ^ false; /*& | ^*/
 
             b = !b; /*!*/
 
@@ -1012,14 +1009,15 @@ class CSharp72
 
     public void LeadingSeparator()
     {
-        var res = 0 + 123 // permitted in C# 1.0 and later
-        + 1_2_3 // permitted in C# 7.0 and later
-        + 0x1_2_3 // permitted in C# 7.0 and later
-        + 0b101 // binary literals added in C# 7.0
-        + 0b1_0_1 // permitted in C# 7.0 and later
-        // in C# 7.2, _ is permitted after the `0x` or `0b`
-        + 0x_1_2 // permitted in C# 7.2 and later
-        + 0b_1_0_1 // permitted in C# 7.2 and later
+        var res =
+            0 + 123 // permitted in C# 1.0 and later
+            + 1_2_3 // permitted in C# 7.0 and later
+            + 0x1_2_3 // permitted in C# 7.0 and later
+            + 0b101 // binary literals added in C# 7.0
+            + 0b1_0_1 // permitted in C# 7.0 and later
+            // in C# 7.2, _ is permitted after the `0x` or `0b`
+            + 0x_1_2 // permitted in C# 7.2 and later
+            + 0b_1_0_1 // permitted in C# 7.2 and later
         ;
     }
 }

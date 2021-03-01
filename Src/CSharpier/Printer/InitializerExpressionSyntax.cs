@@ -9,7 +9,7 @@ namespace CSharpier
         private Doc PrintInitializerExpressionSyntax(
             InitializerExpressionSyntax node)
         {
-            return Group(
+            var result =
                 Concat(
                     node.Kind() == SyntaxKind.ArrayInitializerExpression
                         ? ""
@@ -25,7 +25,8 @@ namespace CSharpier
                                 this.Print,
                                 Line))),
                     Line,
-                    this.PrintSyntaxToken(node.CloseBraceToken)));
+                    this.PrintSyntaxToken(node.CloseBraceToken));
+            return node.Parent is not ObjectCreationExpressionSyntax ? Group(result) : result;
         }
     }
 }

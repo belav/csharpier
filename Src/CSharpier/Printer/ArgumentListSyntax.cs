@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintArgumentListSyntax(ArgumentListSyntax node)
         {
-            return Group(
+            var result = Concat(
                 this.PrintSyntaxToken(node.OpenParenToken),
                 node.Arguments.Any()
                     ? Indent(
@@ -18,6 +18,8 @@ namespace CSharpier
                             Line))
                     : null,
                 this.PrintSyntaxToken(node.CloseParenToken));
+            
+            return node.Parent is not ObjectCreationExpressionSyntax ? Group(result) : result;
         }
     }
 }

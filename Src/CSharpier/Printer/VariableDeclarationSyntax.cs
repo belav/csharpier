@@ -8,13 +8,18 @@ namespace CSharpier
         private Doc PrintVariableDeclarationSyntax(
             VariableDeclarationSyntax node)
         {
+
             return Concat(
                 this.Print(node.Type),
                 SpaceIfNoPreviousComment,
+                //Indent(
                 this.PrintSeparatedSyntaxList(
                     node.Variables,
                     this.PrintVariableDeclaratorSyntax,
-                    " "));
+                    " ")
+                //)
+                
+                );
         }
     }
 }

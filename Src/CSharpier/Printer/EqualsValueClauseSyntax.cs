@@ -6,11 +6,33 @@ namespace CSharpier
     {
         private Doc PrintEqualsValueClauseSyntax(EqualsValueClauseSyntax node)
         {
-            return Concat(
+            var separator = Line;
+            if (node.Value is AnonymousObjectCreationExpressionSyntax
+                || node.Value is AnonymousMethodExpressionSyntax
+                || node.Value is ConditionalExpressionSyntax
+                || node.Value is ObjectCreationExpressionSyntax
+                || node.Value is InitializerExpressionSyntax
+                || node.Value is ParenthesizedLambdaExpressionSyntax
+                || node.Value is InvocationExpressionSyntax
+                || node.Value is SwitchExpressionSyntax
+                || node.Value is QueryExpressionSyntax
+            )
+            {
+                separator = SpaceIfNoPreviousComment;
+            }
+            
+            var result = Group(
                 // TODO GH-6 this should probably be line, but that breaks a ton of things
-                " ",
-                this.PrintSyntaxToken(node.EqualsToken, " "),
+                SpaceIfNoPreviousComment,
+                this.PrintSyntaxToken(node.EqualsToken, separator),
                 this.Print(node.Value));
+
+            if (separator is LineDoc)
+            {
+                result = Indent(result);
+            }
+
+            return result;
         }
     }
 }

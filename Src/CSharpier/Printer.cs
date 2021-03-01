@@ -70,7 +70,7 @@ namespace CSharpier
                 {
                     newParts.AddRange(CleanParts(concat.Parts));
                 }
-                else
+                else if (doc != null)
                 {
                     newParts.Add(doc);
                 }
@@ -122,7 +122,7 @@ namespace CSharpier
         {
             return new Group
             {
-                Contents = contents.Length == 0 ? contents[0] : Concat(contents),
+                Contents = contents.Length == 1 ? contents[0] : Concat(contents),
 
             // TODO 2 group options if I use them
             // id: opts.id,
@@ -135,7 +135,7 @@ namespace CSharpier
         {
             return new IndentDoc
             {
-                Contents = contents.Length == 0 ? contents[0] : Concat(contents)
+                Contents = contents.Length == 1 ? contents[0] : Concat(contents)
             };
         }
 
