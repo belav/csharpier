@@ -151,6 +151,8 @@ namespace CSharpier
                 )
                 {
                     hadDirective = true;
+                    // GH-22 the problem is that we have a hardline followed by a literalline. What we really mean by literalLine is, add a line and dedent if this isn't preceded by a hardline.... I think
+                    // we should probably figure out better new lines for directives, because that could affect this.
                     parts.Push(LiteralLine, trivia.ToString());
                 }
                 else if (

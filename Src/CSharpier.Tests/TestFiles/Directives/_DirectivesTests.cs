@@ -6,14 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class DirectivesTests : BaseTest
     {
         [Test]
-        public void BasicDirectives()
+        public void Directives()
         {
-            this.RunTest("Directives", "BasicDirectives");
-        }
-        [Test]
-        public void IfDirectiveEmptyBlock()
-        {
-            this.RunTest("Directives", "IfDirectiveEmptyBlock");
+            this.RunTest("Directives", "Directives");
         }
         [Test]
         public void Regions()

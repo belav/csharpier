@@ -1,9 +1,0 @@
-﻿public class ClassName
-{
-    void MethodName()
-    {
-#if DEBUG
-        Console.WriteLine("Rosyln does not parse this because DEBUG is not defined");
-#endif
-    }
-}

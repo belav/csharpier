@@ -11,3 +11,20 @@
 #undef foo
 #line 6
 class ClassName { }
+
+public class ClassName
+{
+    void MethodName()
+    {
+#if DEBUG
+        Console.WriteLine("Rosyln does not parse this because DEBUG is not defined");
+#endif
+    }
+}
+
+namespace Namespace
+{
+    
+#pragma
+    class ExtraLineChecker { }
+}
