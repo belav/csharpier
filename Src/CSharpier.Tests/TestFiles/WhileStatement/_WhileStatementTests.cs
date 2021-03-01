@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class WhileStatementTests : BaseTest
     {
         [Test]
-        public void BasicWhileStatement()
+        public void WhileStatements()
         {
-            this.RunTest("WhileStatement", "BasicWhileStatement");
+            this.RunTest("WhileStatement", "WhileStatements");
         }
     }
 }

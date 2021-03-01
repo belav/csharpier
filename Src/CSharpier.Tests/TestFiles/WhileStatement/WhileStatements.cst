@@ -1,0 +1,23 @@
+class ClassName
+{
+    void MethodName()
+    {
+        while (true)
+        {
+            return;
+        }
+
+        while (true && false)
+        {
+            return;
+        }
+
+        while (
+            directoryInfo.Name != "Test" &&
+            directoryInfo.Parent != null &&
+            someLongCondition == "test")
+        {
+            directoryInfo = directoryInfo.Parent;
+        }
+    }
+}
