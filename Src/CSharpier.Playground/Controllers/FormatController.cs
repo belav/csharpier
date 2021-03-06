@@ -1,12 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using CSharpier;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace CSharpier.Playground.Controllers
 {
@@ -15,7 +19,13 @@ namespace CSharpier.Playground.Controllers
         public string Code { get; set; }
         public string Json { get; set; }
         public string Doc { get; set; }
-        public string Errors { get; set; }
+        public List<FormatError> Errors { get; set; }
+    }
+
+    public class FormatError
+    {
+        public FileLinePositionSpan LineSpan { get; set; }
+        public string Description { get; set; }
     }
 
     [ApiController]
@@ -68,8 +78,18 @@ namespace CSharpier.Playground.Controllers
                 Code = result.Code,
                 Json = result.AST,
                 Doc = result.DocTree,
-                Errors = result.Errors,
+                Errors = result.Errors.Select(ConvertError).ToList(),
 
+            };
+        }
+
+        private FormatError ConvertError(Diagnostic diagnostic)
+        {
+            var lineSpan = diagnostic.Location.SourceTree.GetLineSpan(diagnostic.Location.SourceSpan);
+            return new FormatError
+            {
+                LineSpan = lineSpan,
+                Description = diagnostic.ToString(),
             };
         }
 

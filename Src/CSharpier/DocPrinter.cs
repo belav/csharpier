@@ -414,6 +414,11 @@ namespace CSharpier
                                 {
                                     if (output.Length > 0)
                                     {
+                                        // if we have to undo this, another option I was considering was modifying NamespaceDeclarationSyntax
+                                        // when joining things with HardLines there, if the first item in each thing was a LiteralLine, skip the HardLine
+                                        // the problem with that approach is we'd have to make that same change in other places, but maybe
+                                        // there aren't a ton of those places.
+                                        
                                         Trim(output);
                                         if (newLine.Length == 2)
                                         {

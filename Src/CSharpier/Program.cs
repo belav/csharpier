@@ -130,9 +130,15 @@ namespace CSharpier
             }
 
 
-            if (!string.IsNullOrEmpty(result.Errors))
+            if (result.Errors.Any())
             {
                 Console.WriteLine(GetPath() + " - failed to compile");
+                return;
+            }
+
+            if (!result.FailureMessage.IsBlank())
+            {
+                Console.WriteLine(GetPath() + " - " + result.FailureMessage);
                 return;
             }
 

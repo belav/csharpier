@@ -34,7 +34,6 @@ namespace CSharpier.Tests
             var result = new CodeFormatter().Format(
                 code,
                 new Options { IncludeDocTree = true, IncludeAST = true,  });
-            Console.WriteLine(result.TestRunFailed);
 
             File.WriteAllText(
                 file.Replace(".cst", ".Formatted.cst"),

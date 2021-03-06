@@ -44,5 +44,44 @@ namespace CSharpier
             var hashedBytes = hasher.ComputeHash(Encoding.UTF8.GetBytes(value));
             return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
         }
+        
+        public static bool EqualsIgnoreCase(this string value, string otherValue)
+        {
+            return string.Compare(
+                value,
+                otherValue,
+                StringComparison.OrdinalIgnoreCase) == 0;
+        }
+
+        public static bool ContainsIgnoreCase(
+            this string value,
+            string otherValue)
+        {
+            return value.ToLower().Contains(otherValue.ToLower());
+        }
+
+        public static bool StartsWithIgnoreCase(
+            this string value,
+            string otherValue)
+        {
+            return value.StartsWith(
+                otherValue,
+                StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static bool EndsWithIgnoreCase(
+            this string value,
+            string otherValue)
+        {
+            return value.EndsWith(
+                otherValue,
+                StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static bool IsBlank(this string value)
+        {
+            return value == null ||
+                   string.IsNullOrEmpty(value.Trim());
+        }
     }
 }

@@ -27,6 +27,8 @@ const defaultCode = `public class ClassName {
 }`
 
 export class App extends Component<{}, State> {
+    private editor: any;
+
     constructor(props: {}) {
         super(props);
 
@@ -47,6 +49,56 @@ export class App extends Component<{}, State> {
         this.formatCode();
     }
 
+    private gutters: any[] = [];
+    private marks: any[] = [];
+
+    // this whole file is kind of a cluster, I'm thinking we shouldn't use react because it seems to cause issues
+    // with trying to get code mirror to work and because we just have a single component
+    // or maybe we just get rid of react for the code mirror parts of it
+    setupMarks = (errors: any[]) => {
+        if (!this.editor) {
+            setTimeout(() => {
+                this.setupMarks(errors);
+            }, 100);
+            return;
+        }
+
+        for (const gutter of this.gutters) {
+            this.editor.setGutterMarker(gutter, "gutter-errors");
+        }
+
+        this.gutters = [];
+
+        for (const mark of this.marks) {
+            mark.clear();
+        }
+        this.marks = [];
+        for (const error of errors) {
+            const from = {
+                line: error.lineSpan.startLinePosition.line,
+                ch: error.lineSpan.startLinePosition.character,
+            };
+            const to = {
+                line: error.lineSpan.endLinePosition.line,
+                ch: error.lineSpan.endLinePosition.character,
+            };
+
+            const msg = document.createElement("div");
+            const icon = msg.appendChild(document.createElement("span"));
+            icon.innerHTML = "X";
+            const title = msg.appendChild(document.createElement("div"));
+            title.innerHTML = error.description;
+            msg.className = "errorGutter";
+            this.gutters.push(this.editor.setGutterMarker(from.line, "gutter-errors", msg));
+
+            const options = {
+                className: "compilationError",
+                title: error.description,
+            }
+            this.marks.push(this.editor.markText(from, to, options));
+        }
+    }
+
     formatCode = async () => {
         this.setState({
             isLoading: true,
@@ -62,12 +114,17 @@ export class App extends Component<{}, State> {
         });
         if (response.status === 200) {
             const data = await response.json();
+
+            setTimeout(() => {
+                this.setupMarks(data.errors);    
+            }, 100);
+
             this.setState({
                 formattedCode: data.code,
                 isLoading: false,
                 json: data.json,
                 doc: data.doc,
-                hasErrors: !!data.errors, 
+                hasErrors: !!data.errors.length,
             })
         } else {
             const text = await response.text();
@@ -83,7 +140,6 @@ export class App extends Component<{}, State> {
 
     render() {
         const options = {
-            lineNumbers: true,
             matchBrackets: true,
             mode: "text/x-java",
             indentWithTabs: false,
@@ -102,11 +158,11 @@ export class App extends Component<{}, State> {
                     }
                 },
                 'Shift-Tab': (cm: any) => cm.execCommand("indentLess")
-            }
+            },
+            gutters: ["gutter-errors"],
         };
 
         const jsonOptions = {
-            lineNumbers: true,
             mode: {
                 name: "javascript",
                 json: true,
@@ -161,6 +217,11 @@ export class App extends Component<{}, State> {
                             <CodeMirror
                                 value={this.state.formattedCode}
                                 options={{...options, readOnly: true}}
+                                editorDidMount={editor => {
+                                    setTimeout(() => {
+                                        this.editor = editor;
+                                    }, 100);
+                                }}
                                 onBeforeChange={() => {
                                 }}
                                 onChange={() => {
@@ -196,125 +257,157 @@ export class App extends Component<{}, State> {
 }
 
 const EnteredCodeStyle = styled.div`
-  width: 50%;
-  height: 100%;
-
-  .react-codemirror2,
-  .CodeMirror {
+    width: 50%;
     height: 100%;
-  }
 
-  @media only screen and (max-width: 768px) {
-    width: 100%;
-    height: 50%;
-    border-bottom: 1px solid #ccc;
-  }
+    .react-codemirror2,
+    .CodeMirror {
+        height: 100%;
+    }
+
+    .compilationError {
+        border-bottom: solid 1px red;
+    }
+
+    .gutter-errors {
+        width: 16px;
+    }
+    
+    .errorGutter {
+        text-align: center;
+        &:hover {
+            div {
+                display: block;
+            }
+        }
+        span {
+            color: red;
+            font-weight: bold;
+        }
+
+        div {
+            position: absolute;
+            left: 32px;
+            top: -10px;
+            width: auto;
+            background-color: #ef6464;
+            padding: 2px;
+            white-space: nowrap;
+            display: none;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        width: 100%;
+        height: 50%;
+        border-bottom: 1px solid #ccc;
+    }
 `;
 
 const WrapperStyle = styled.div`
-  height: 100%;
+    height: 100%;
 `;
 
 const CodeWrapperStyle = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  height: calc(100vh - 80px);
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: calc(100vh - 80px);
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
 `;
 
 const Header = styled.div`
-  height: 60px;
-  background-color: #f7f7f7;
-  display: flex;
-  align-items: center;
-
-  > div {
-    width: 50%;
+    height: 60px;
+    background-color: #f7f7f7;
     display: flex;
-  }
+    align-items: center;
+
+    > div {
+        width: 50%;
+        display: flex;
+    }
 `;
 
 const Left = styled.div`
-  align-items: center;
+    align-items: center;
 `;
 
 const Title = styled.h1`
-  padding-left: 28px;
-  font-size: 22px;
-  font-style: italic;
-  margin-right: 20px;
+    padding-left: 28px;
+    font-size: 22px;
+    font-style: italic;
+    margin-right: 20px;
 `
 
 const FormatButton = styled.button`
-  margin-left: auto;
-  background-color: #666;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  font-size: 18px;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 82px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    margin-left: auto;
+    background-color: #666;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 const Tabs = styled.div`
-  width: 50%;
-  padding-left: 48px;
-  height: 100%;
-  display: flex;
-  align-items: baseline;
+    width: 50%;
+    padding-left: 48px;
+    height: 100%;
+    display: flex;
+    align-items: baseline;
 `
 
 const Tab = styled.button`
-  font-size: 16px;
-  margin-right: 20px;
-  margin-top: auto;
-  border: 1px solid #ddd;
-  margin-bottom: -1px;
-  padding: 4px 8px;
-  cursor: pointer;
+    font-size: 16px;
+    margin-right: 20px;
+    margin-top: auto;
+    border: 1px solid #ddd;
+    margin-bottom: -1px;
+    padding: 4px 8px;
+    cursor: pointer;
 
-  &[data-isactive=true] {
-    background: white;
-    border-bottom: none;
-    cursor: default;
-  }
+    &[data-isactive=true] {
+        background: white;
+        border-bottom: none;
+        cursor: default;
+    }
 
-  &[data-haserrors=true] {
-    color: red;
-  }
+    &[data-haserrors=true] {
+        color: red;
+    }
 
-  &:focus {
-    outline: none;
-  }
+    &:focus {
+        outline: none;
+    }
 `;
 
 const TabBody = styled.div<{ isVisible: boolean }>`
-  ${props => props.isVisible ? "" : "display: none;"}
-  height: 100%;
+    ${props => props.isVisible ? "" : "display: none;"}
+    height: 100%;
 `;
 
 const LoadingStyle = styled(Loading)`
-  animation-name: spin;
-  animation-duration: 2000ms;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
+    animation-name: spin;
+    animation-duration: 2000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
 
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
     }
-    to {
-      transform: rotate(360deg);
-    }
-  }
 `
 
 const Footer = styled.div`
-  height: 20px;
+    height: 20px;
 `;

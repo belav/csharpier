@@ -21,20 +21,16 @@ namespace CSharpier
                     LanguageVersion.CSharp9,
                     DocumentationMode.Diagnose));
             var rootNode = syntaxTree.GetRoot() as CompilationUnitSyntax;
-            var diagnostics = syntaxTree.GetDiagnostics();
+            var diagnostics = syntaxTree.GetDiagnostics().Where(
+                o => o.Severity == DiagnosticSeverity.Error &&
+                     o.Id != "CS1029").ToList();
             // TODO 1 report that didn't format because of errors?
-            if (
-                diagnostics.Any(
-                    o => o.Severity == DiagnosticSeverity.Error &&
-                    o.Id != "CS1029")
-            )
+            if (diagnostics.Any())
             {
                 return new CSharpierResult
                 {
                     Code = code,
-                    Errors = JsonConvert.SerializeObject(
-                        diagnostics,
-                        Formatting.Indented),
+                    Errors = diagnostics,
                     AST = options.IncludeAST ? this.PrintAST(rootNode) : null
                 };
             }
@@ -57,7 +53,7 @@ namespace CSharpier
             {
                 return new CSharpierResult
                 {
-                    Errors = "We can't handle this deep of recursion yet."
+                    FailureMessage = "We can't handle this deep of recursion yet."
                 };
             }
         }
@@ -188,7 +184,7 @@ namespace CSharpier
         public string DocTree { get; set; }
         public string AST { get; set; }
         public bool TestRunFailed { get; set; }
-        // TODO 1 what do I really do with this?
-        public string Errors { get; set; }
+        public IEnumerable<Diagnostic> Errors { get; set; } = Enumerable.Empty<Diagnostic>();
+        public string FailureMessage { get; set; }
     }
 }
