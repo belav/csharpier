@@ -24,7 +24,6 @@ public class ClassName
 
 namespace Namespace
 {
-    
 #pragma
     class ExtraLineChecker { }
 }

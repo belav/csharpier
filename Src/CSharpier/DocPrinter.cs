@@ -414,6 +414,22 @@ namespace CSharpier
                                 {
                                     if (output.Length > 0)
                                     {
+                                        Trim(output);
+                                        if (newLine.Length == 2)
+                                        {
+                                            if (output[^2] == '\r')
+                                            {
+                                                output.Length -= 2;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (output[^1] == '\n')
+                                            {
+                                                output.Length -= 1;
+                                            }   
+                                        }
+                                        
                                         output.Append(newLine);
                                         position = 0;
                                     }
@@ -497,14 +513,13 @@ namespace CSharpier
             return value.Length;
         }
 
-        private int Trim(StringBuilder stringBuilder)
+        private void Trim(StringBuilder stringBuilder)
         {
             if (stringBuilder.Length == 0)
             {
-                return 0;
+                return;
             }
-
-            var trimCount = 0;
+            
             var i = stringBuilder.Length - 1;
             for (; i >= 0; i--)
             {
@@ -512,13 +527,9 @@ namespace CSharpier
                 {
                     break;
                 }
-
-                trimCount++;
             }
 
             stringBuilder.Length = i + 1;
-
-            return trimCount;
         }
 
         // // TODO 2 does the above method do the same thing as this method?

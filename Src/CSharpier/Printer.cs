@@ -89,11 +89,6 @@ namespace CSharpier
             };
         }
 
-        public static Doc String(string value)
-        {
-            return new StringDoc(value);
-        }
-
         public static Doc Join(Doc separator, IEnumerable<Doc> array)
         {
             var parts = new Parts();

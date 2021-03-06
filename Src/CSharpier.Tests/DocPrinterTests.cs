@@ -163,6 +163,36 @@ namespace CSharpier.Tests
 
             result.Should().Be("1 2");
         }
+        
+        [Test]
+        public void LiteralLine_Trims_Space()
+        {
+            var doc = Concat("{", Indent(HardLine,"indent", LiteralLine), "}");
+
+            var result = this.Print(doc);
+
+            result.Should().Be("{\r\n    indent\r\n}");
+        }
+        
+        [Test]
+        public void HardLine_LiteralLine_Skips_HardLine_And_Trims()
+        {
+            var doc = Concat("{", Indent(HardLine, LiteralLine,"noindent"), HardLine, "}");
+
+            var result = this.Print(doc);
+
+            result.Should().Be("{\r\nnoindent\r\n}");
+        }
+        
+        [Test]
+        public void HardLine_LiteralLine_Skips_HardLine()
+        {
+            var doc = Concat("1", HardLine, LiteralLine, "2");
+
+            var result = this.Print(doc);
+
+            result.Should().Be("1\r\n2");
+        }
 
         [Test]
         public void ForceFlat_Prevents_Breaking_With_Long_Content()
@@ -213,7 +243,7 @@ namespace CSharpier.Tests
             return Printer.Concat(parts);
         }
 
-        public static Doc Indent(Doc contents)
+        public static Doc Indent(params Doc[] contents)
         {
             return Printer.Indent(contents);
         }
