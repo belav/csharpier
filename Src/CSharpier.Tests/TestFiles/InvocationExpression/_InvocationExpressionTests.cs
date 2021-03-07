@@ -3,33 +3,14 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests.TestFiles
 {
-    public class InterpolatedStringExpressionTests : BaseTest
+    public class InvocationExpressionTests : BaseTest
     {
         [Test]
-        public void BasicInterpolatedStringExpression()
+        public void InvocationExpressions()
         {
             this.RunTest(
-                "InterpolatedStringExpression",
-                "BasicInterpolatedStringExpression");
-        }
-        [Test]
-        public void Interpolation()
-        {
-            this.RunTest("InterpolatedStringExpression", "Interpolation");
-        }
-        [Test]
-        public void InterpolationShouldNotBreakLines()
-        {
-            this.RunTest(
-                "InterpolatedStringExpression",
-                "InterpolationShouldNotBreakLines");
-        }
-        [Test]
-        public void InterpolationWithAlignmentAndFormat()
-        {
-            this.RunTest(
-                "InterpolatedStringExpression",
-                "InterpolationWithAlignmentAndFormat");
+                "InvocationExpression",
+                "InvocationExpressions");
         }
     }
 }

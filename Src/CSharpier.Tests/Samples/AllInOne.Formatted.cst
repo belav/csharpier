@@ -297,9 +297,7 @@ namespace My
                 orderby g.Count() ascending
                 orderby g.Key descending
                 select new { Country = g.Key, CustCount = g.Count() };
-            query = from c in customers
-                select c into d
-                select d;
+            query = from c in customers select c into d select d;
         }
         ~A() { }
         private readonly int f1;
@@ -307,9 +305,9 @@ namespace My
         [NonExisting]
         [Foo::NonExisting(var, 5)]
         [CLSCompliant(false)]
-        [Obsolete, System.NonSerialized, NonSerialized, CLSCompliant(true ||
-        false &
-        true)]
+        [Obsolete, System.NonSerialized, NonSerialized, CLSCompliant(true
+        || false
+        & true)]
         private volatile int f2;
         [return: Obsolete]
         [method: Obsolete]
@@ -452,12 +450,14 @@ namespace My
             }
             void AsyncAnonymous() // C # 5 feature
             {
-                var task = Task.Factory.StartNew(
-                    async () =>
-                    {
-                        return await new WebClient().DownloadStringTaskAsync(
-                            "http://example.com");
-                    });
+                var task = Task
+                    .Factory
+                    .StartNew(
+                        async () =>
+                        {
+                            return await new WebClient()
+                                .DownloadStringTaskAsync("http://example.com");
+                        });
             }
         }
     }
@@ -624,8 +624,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             /*s*/
             int /*s*/
              intValue = 0;
-            intValue = intValue /*s*/
-             + 1;
+            intValue = intValue /*s*/  + 1;
             string strValue = /*s*/ "hello";
             /*s*/
             MyClass c = new MyClass();
@@ -676,61 +675,33 @@ namespace Comments.XmlComments.UndocumentedKeywords
             Foo<T> f = new Foo<int>(); /*<> ()*/
 
             f.method(); /*().*/
-
-            i = i + i - i * i / i % i &
-            i |
-            i ^ i; /*+ - * / % & | ^*/
-
+            i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
             bool b = true & false | true ^ false; /*& | ^*/
 
             b = !b; /*!*/
-
             i = ~i; /*~i*/
-
-            b = i < i &&
-            i > i; /*< && >*/
-
+            b = i < i && i > i; /*< && >*/
             int? ii = 5; /*? bug*/
  // NO ?
             int f = true ? 1 : 0; /*? :*/
  // YES :
             i++; /*++*/
-
             i--; /*--*/
-
-            b = true &&
-            false ||
-            true; /*&& ||*/
-
+            b = true && false || true; /*&& ||*/
             i << 5; /*<<*/
-
             i >> 5; /*>>*/
-
-            b = i == i &&
-            i != i &&
-            i <= i &&
-            i >= i; /*= == && != <= >=*/
-
+            b = i == i && i != i && i <= i && i >= i; /*= == && != <= >=*/
             i += 5.0; /*+=*/
-
             i -= i; /*-=*/
-
             i *= i;
             /**=*/
             i /= i; /*/=*/
-
             i %= i; /*%=*/
-
             i &= i; /*&=*/
-
             i |= i; /*|=*/
-
             i ^= i; /*^=*/
-
             i <<= i; /*<<=*/
-
             i >>= i; /*>>=*/
-
             object s = x => x + 1; /*=>*/
 
             double d = .3;
@@ -740,7 +711,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
                 Point* p = &point;
                 /** &*/
                 p->x = 10; /*->*/
-
             }
             IO::BinaryReader br = null;
             x[i: 1] = 3;

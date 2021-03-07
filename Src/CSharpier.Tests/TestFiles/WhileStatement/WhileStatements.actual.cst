@@ -13,10 +13,8 @@
         }
 
         while (
-            directoryInfo
-            .Name != "Test"
-            && directoryInfo
-            .Parent != null
+            directoryInfo.Name != "Test"
+            && directoryInfo.Parent != null
             && someLongCondition == "test")
         {
             directoryInfo = directoryInfo.Parent;
