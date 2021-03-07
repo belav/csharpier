@@ -11,9 +11,9 @@ namespace CSharpier
 
             return Concat(
                 this.Print(node.Left),
-                SpaceIfNoPreviousComment,
-                this.PrintSyntaxToken(node.OperatorToken),
                 useLine ? Line : SpaceIfNoPreviousComment,
+                this.PrintSyntaxToken(node.OperatorToken),
+                SpaceIfNoPreviousComment,
                 this.Print(node.Right));
         }
     }

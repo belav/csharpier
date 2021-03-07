@@ -62,6 +62,7 @@ namespace CSharpier
 
         public static List<Doc> CleanParts(IEnumerable<Doc> parts)
         {
+            return parts.ToList();
 #if DEBUG
             var newParts = new List<Doc>();
             foreach (var doc in parts)

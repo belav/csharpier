@@ -1,0 +1,19 @@
+﻿class ClassName
+{
+    void MethodName()
+    {
+        this.DoSomething().DoSomething();
+
+        this
+            .DoSomething()
+            .DoSomething()
+            .DoSomething()
+            .DoSomething()
+            .DoSomething();
+
+        this
+            .Method(
+                "ljkasdfkljasdlkjfklajsdfkjlasdfkjlasdkljfajklsdfkjasdf",
+                "kljasdfkljaslkjdfljaksdfkjlaksljfaksjldf");
+    }
+}

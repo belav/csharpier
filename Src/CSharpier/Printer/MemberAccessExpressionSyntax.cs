@@ -9,6 +9,7 @@ namespace CSharpier
         {
             return Concat(
                 this.Print(node.Expression),
+                SoftLine,
                 this.PrintSyntaxToken(node.OperatorToken),
                 this.Print(node.Name));
         }

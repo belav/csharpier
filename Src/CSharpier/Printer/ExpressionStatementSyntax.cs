@@ -1,3 +1,4 @@
+using System;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,7 +8,7 @@ namespace CSharpier
         private Doc PrintExpressionStatementSyntax(
             ExpressionStatementSyntax node)
         {
-            return Concat(
+            return Group(
                 this.PrintExtraNewLines(node),
                 this.Print(node.Expression),
                 this.PrintSyntaxToken(node.SemicolonToken));

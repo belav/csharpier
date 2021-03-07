@@ -6,24 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ArgumentListTests : BaseTest
     {
         [Test]
-        public void BasicArgumentList()
+        public void ArgumentLists()
         {
-            this.RunTest("ArgumentList", "BasicArgumentList");
-        }
-        [Test]
-        public void EmptyArgumentListStaysOnSameLine()
-        {
-            this.RunTest("ArgumentList", "EmptyArgumentListStaysOnSameLine");
-        }
-        [Test]
-        public void LongArgumentList()
-        {
-            this.RunTest("ArgumentList", "LongArgumentList");
-        }
-        [Test]
-        public void NamedArguments()
-        {
-            this.RunTest("ArgumentList", "NamedArguments");
+            this.RunTest("ArgumentList", "ArgumentLists");
         }
     }
 }
