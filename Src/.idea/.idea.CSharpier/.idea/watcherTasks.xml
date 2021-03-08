@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectTasksOptions">
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="$PROJECT_DIR$/CSharpier/bin/Debug/net5.0/dotnet-csharpier.dll $FilePath$" />
+      <option name="arguments" value="csharpier $FilePath$" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
