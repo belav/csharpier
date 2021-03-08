@@ -11,32 +11,45 @@ namespace CSharpier
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(node.ForKeyword, " "),
                 this.PrintSyntaxToken(node.OpenParenToken));
+            var innerGroup = new Parts();
+            innerGroup.Push(SoftLine);
             if (node.Declaration != null)
             {
-                parts.Push(
+                innerGroup.Push(
                     this.PrintVariableDeclarationSyntax(node.Declaration));
             }
-            parts.Push(
+            innerGroup.Push(
                 this.PrintSeparatedSyntaxList(
                     node.Initializers,
                     this.Print,
                     " "));
-            parts.Push(this.PrintSyntaxToken(node.FirstSemicolonToken));
+            innerGroup.Push(this.PrintSyntaxToken(node.FirstSemicolonToken));
             if (node.Condition != null)
             {
-                parts.Push(SpaceIfNoPreviousComment);
-                parts.Push(this.Print(node.Condition));
+                innerGroup.Push(
+                    Line,
+                    this.Print(node.Condition));
             }
-            parts.Push(this.PrintSyntaxToken(node.SecondSemicolonToken));
+            else
+            {
+                innerGroup.Push(SoftLine);
+            }
+            
+            innerGroup.Push(this.PrintSyntaxToken(node.SecondSemicolonToken));
             if (node.Incrementors.Any())
             {
-                parts.Push(SpaceIfNoPreviousComment);
+                innerGroup.Push(Line);
             }
-            parts.Push(
+            else
+            {
+                innerGroup.Push(SoftLine);
+            }
+            innerGroup.Push(
                 this.PrintSeparatedSyntaxList(
                     node.Incrementors,
                     this.Print,
                     Line));
+            parts.Push(Group(Indent(innerGroup.ToArray())));
             parts.Push(this.PrintSyntaxToken(node.CloseParenToken));
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
