@@ -25,7 +25,7 @@ public class ClassName
 namespace Namespace
 {
 #pragma
-using System.Linq;
+    using System.Linq;
 
 #pragma
     class ExtraLineChecker { }

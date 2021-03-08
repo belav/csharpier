@@ -7,10 +7,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
 {
-    public class NodeOrToken
+    public class PrintedNode
     {
         public CSharpSyntaxNode Node { get; set; }
-        public SyntaxToken? Token { get; set; }
         public Doc Doc { get; set; }
     }
     
@@ -19,64 +18,134 @@ namespace CSharpier
         private Doc PrintInvocationExpressionSyntax(
             InvocationExpressionSyntax node)
         {
-            var nodeOrTokens = new List<NodeOrToken>();
-
-            void PushToken(SyntaxToken syntaxToken)
-            {
-                nodeOrTokens.Add(new NodeOrToken { Token = syntaxToken });
-            }
-
-            void PushNode(CSharpSyntaxNode syntaxNode)
-            {
-                nodeOrTokens.Add(new NodeOrToken { Node = syntaxNode });
-            }
-            
-            void PushDoc(Doc doc)
-            {
-                nodeOrTokens.Add(new NodeOrToken { Doc = doc });
-            }
+            var printedNodes = new List<PrintedNode>();
             
             void Traverse(ExpressionSyntax expression)
             {
+                /*InvocationExpression
+                  [this.DoSomething().DoSomething][()]
+                  
+                  SimpleMemberAccessExpression
+                  [this.DoSomething()][.][DoSomething]
+                  
+                  InvocationExpression
+                  [this.DoSomething][()]
+                  
+                  SimpleMemberAccessExpression
+                  [this][.][DoSomething]
+                */
                 if (expression is InvocationExpressionSyntax invocationExpressionSyntax)
                 {
                     Traverse(invocationExpressionSyntax.Expression);
-                    PushNode(invocationExpressionSyntax.ArgumentList);
+                    printedNodes.Add(new PrintedNode
+                    {
+                        Doc = this.PrintArgumentListSyntax(invocationExpressionSyntax.ArgumentList),
+                        Node = invocationExpressionSyntax
+                    });
                 }
                 else if (expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax)
                 {
                     Traverse(memberAccessExpressionSyntax.Expression);
-                    PushDoc(SoftLine);
-                    PushToken(memberAccessExpressionSyntax.OperatorToken);
-                    PushNode(memberAccessExpressionSyntax.Name);
+                    printedNodes.Add(new PrintedNode
+                    {
+                        Doc = Concat(this.PrintSyntaxToken(memberAccessExpressionSyntax.OperatorToken), this.Print(memberAccessExpressionSyntax.Name)),
+                        Node = memberAccessExpressionSyntax
+                    });
                 }
                 else
                 {
-                    PushNode(expression);
+                    printedNodes.Add(new PrintedNode
+                    {
+                        Doc = this.Print(expression),
+                        Node = expression
+                    });
                 }
             }
             
             Traverse(node);
 
-            var parts = new Parts();
-            foreach (var nodeOrToken in nodeOrTokens)
+            var groups = new List<List<Doc>>();
+            var currentGroup = new List<Doc>();
+            currentGroup.Add(printedNodes[0].Doc);
+            var index = 1;
+            for (; index < printedNodes.Count; index++)
             {
-                if (nodeOrToken.Token != null)
+                if (printedNodes[index].Node is MemberAccessExpressionSyntax)
                 {
-                    parts.Push(this.PrintSyntaxToken(nodeOrToken.Token.Value));
-                }
-                else if (nodeOrToken.Doc != null)
-                {
-                    parts.Push(nodeOrToken.Doc);
+                    currentGroup.Add(printedNodes[index].Doc);
                 }
                 else
                 {
-                    parts.Push(this.Print(nodeOrToken.Node));
+                    break;
                 }
             }
-            // TODO GH-7 prettier has pretty complex logic for how to print this, which I think is what we need.
-            // the logic for where to put groups to get line breaks needs to happen here, it can't happen in the nodes below this.
-            return Group(parts.First(), Indent(parts.Skip(1).ToArray()));
+
+            // TODO GH-7 there is a lot more code in prettier for how to get this all working, also include some documents
+            if (printedNodes[index].Node is MemberAccessExpressionSyntax)
+            {
+                currentGroup.Add(printedNodes[index].Doc);
+                index++;
+            }
+            
+            groups.Add(currentGroup);
+            currentGroup = new List<Doc>();
+            
+            var hasSeenInvocationExpression = false;
+            for (; index < printedNodes.Count; index++)
+            {
+                if (hasSeenInvocationExpression && IsMemberish(printedNodes[index].Node)) {
+                    // [0] should be appended at the end of the group instead of the
+                    // beginning of the next one
+                    // if (printedNodes[i].node.computed && isNumericLiteral(printedNodes[i].node.property)) {
+                    //     currentGroup.push(printedNodes[i]);
+                    //     continue;
+                    // }
+
+                    groups.Add(currentGroup);
+                    currentGroup = new List<Doc>();
+                    hasSeenInvocationExpression = false;
+                }
+
+                if (printedNodes[index].Node is InvocationExpressionSyntax) {
+                    hasSeenInvocationExpression = true;
+                }
+                currentGroup.Add(printedNodes[index].Doc);
+
+                // if (printedNodes[i].node.comments && printedNodes[i].node.comments.some(comment => comment.trailing)) {
+                //     groups.push(currentGroup);
+                //     currentGroup = [];
+                //     hasSeenCallExpression = false;
+                // }
+            }
+
+            if (currentGroup.Any())
+            {
+                groups.Add(currentGroup);   
+            }
+
+            var cutoff = 3;
+            if (groups.Count < cutoff)
+            {
+                return Group(groups.SelectMany(o => o).ToArray());
+            }
+            
+            return Concat(Group(groups[0].ToArray()), PrintIndentedGroup(groups.Skip(1)));
+        }
+
+        private bool IsMemberish(CSharpSyntaxNode node)
+        {
+            return node is MemberAccessExpressionSyntax;
+        }
+
+        private Doc PrintIndentedGroup(IEnumerable<List<Doc>> groups)
+        {
+            if (!groups.Any())
+            {
+                return null;
+            }
+
+            // TODO GH-7 softline here?
+            return Indent(Group(Join(SoftLine, groups.Select(o => Group(o.ToArray())))));
         }
     }
 }

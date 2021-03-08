@@ -27,6 +27,7 @@ namespace CSharpier
             return await rootCommand.InvokeAsync(args);
         }
 
+        // TODO if someone kills this process while running, I think it can leave files half written
         public static async Task<int> Run(string directory, bool validate)
         {
             var fullStopwatch = Stopwatch.StartNew();

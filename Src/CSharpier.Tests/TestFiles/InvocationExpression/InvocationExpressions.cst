@@ -4,8 +4,7 @@ class ClassName
     {
         this.DoSomething().DoSomething();
 
-        this
-            .DoSomething()
+        this.DoSomething()
             .DoSomething()
             .DoSomething()
             .DoSomething()

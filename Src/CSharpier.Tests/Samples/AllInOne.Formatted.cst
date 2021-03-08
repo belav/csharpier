@@ -450,14 +450,12 @@ namespace My
             }
             void AsyncAnonymous() // C # 5 feature
             {
-                var task = Task
-                    .Factory
-                    .StartNew(
-                        async () =>
-                        {
-                            return await new WebClient()
-                                .DownloadStringTaskAsync("http://example.com");
-                        });
+                var task = Task.Factory.StartNew(
+                    async () =>
+                    {
+                        return await new WebClient().DownloadStringTaskAsync(
+                            "http://example.com");
+                    });
             }
         }
     }

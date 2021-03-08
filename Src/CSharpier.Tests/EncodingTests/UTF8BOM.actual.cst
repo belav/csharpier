@@ -14,14 +14,12 @@ namespace Insite.Admin
     public class AdminContext
     {
         public static bool DisableAdminAccess
-            => (ConfigurationManager.AppSettings["DisableAdminAccess"] ?? "false")
-                .EqualsIgnoreCase("true");
+            => (ConfigurationManager.AppSettings["DisableAdminAccess"] ?? "false").EqualsIgnoreCase(
+                "true");
 
         private static IPerRequestCacheManager perRequestCacheManager;
         private static IPerRequestCacheManager PerRequestCacheManager
-            => perRequestCacheManager ?? (perRequestCacheManager = DependencyLocator
-                .Current
-                .GetInstance<IPerRequestCacheManager>());
+            => perRequestCacheManager ?? (perRequestCacheManager = DependencyLocator.Current.GetInstance<IPerRequestCacheManager>());
 
         private static IAdminContext current;
 
@@ -29,8 +27,9 @@ namespace Insite.Admin
         {
             get
             {
-                return current ?? PerRequestCacheManager
-                    .Get("AdminContext_Current", LoadAdminContext);
+                return current ?? PerRequestCacheManager.Get(
+                    "AdminContext_Current",
+                    LoadAdminContext);
             }
             set { current = value; }
         }
