@@ -17,9 +17,8 @@ namespace CSharpier
                     node.Variables,
                     this.PrintVariableDeclaratorSyntax,
                     " ")
-                //)
-                
-                );
+            //)
+            );
         }
     }
 }

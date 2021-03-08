@@ -168,8 +168,8 @@ namespace CSharpier
             }
 
             var parts = new Parts();
-            var separator = node is TypeParameterSyntax ||
-                node is ParameterSyntax
+            var separator = node is TypeParameterSyntax
+                || node is ParameterSyntax
                 ? Line
                 : HardLine;
             parts.Push(
@@ -222,9 +222,9 @@ namespace CSharpier
                             this.PrintTypeParameterConstraintClauseSyntax))));
 
             if (
-                !(node is DelegateDeclarationSyntax) &&
-                !(node is MethodDeclarationSyntax) &&
-                !(node is LocalFunctionStatementSyntax)
+                !(node is DelegateDeclarationSyntax)
+                && !(node is MethodDeclarationSyntax)
+                && !(node is LocalFunctionStatementSyntax)
             )
             {
                 parts.Add(HardLine);

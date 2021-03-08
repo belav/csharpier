@@ -10,7 +10,8 @@ namespace CSharpier
             BasePropertyDeclarationSyntax node)
         {
             EqualsValueClauseSyntax initializer = null;
-            ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifierSyntax = null;
+            ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifierSyntax =
+                null;
             Doc identifier = null;
             Doc eventKeyword = null;
             ArrowExpressionClauseSyntax expressionBody = null;
@@ -50,28 +51,29 @@ namespace CSharpier
             {
                 // if (node.AccessorList.Accessors.Any(o => o.Body != null || o.ExpressionBody != null))
                 // {
-                    contents = Group(
-                        Concat(
-                            Line,
-                            this.PrintSyntaxToken(node.AccessorList.OpenBraceToken),
-                            Group(
-                                Indent(
-                                    node.AccessorList.Accessors.Select(
-                                        this.PrintAccessorDeclarationSyntax).ToArray())),
-                            Line,
-                            this.PrintSyntaxToken(
-                                node.AccessorList.CloseBraceToken)));   
-                // }
-                // else
-                // {
-                //     // TODO GH-6 I don't know that we should force flat here. Maybe I need to look more at what prettier does for complicated stuff.
-                //     contents = ForceFlat(
-                //         SpaceIfNoPreviousComment,
-                //         this.PrintSyntaxToken(node.AccessorList.OpenBraceToken),
-                //         Concat(node.AccessorList.Accessors.Select(this.PrintAccessorDeclarationSyntax).ToArray()),
-                //         SpaceIfNoPreviousComment,
-                //         this.PrintSyntaxToken(node.AccessorList.CloseBraceToken));
-                // }
+                contents = Group(
+                    Concat(
+                        Line,
+                        this.PrintSyntaxToken(node.AccessorList.OpenBraceToken),
+                        Group(
+                            Indent(
+                                node.AccessorList.Accessors.Select(
+                                        this.PrintAccessorDeclarationSyntax)
+                                    .ToArray())),
+                        Line,
+                        this.PrintSyntaxToken(
+                            node.AccessorList.CloseBraceToken)));
+            // }
+            // else
+            // {
+            //     // TODO GH-6 I don't know that we should force flat here. Maybe I need to look more at what prettier does for complicated stuff.
+            //     contents = ForceFlat(
+            //         SpaceIfNoPreviousComment,
+            //         this.PrintSyntaxToken(node.AccessorList.OpenBraceToken),
+            //         Concat(node.AccessorList.Accessors.Select(this.PrintAccessorDeclarationSyntax).ToArray()),
+            //         SpaceIfNoPreviousComment,
+            //         this.PrintSyntaxToken(node.AccessorList.CloseBraceToken));
+            // }
             }
             else if (expressionBody != null)
             {
@@ -101,7 +103,8 @@ namespace CSharpier
                     identifier,
                     contents,
                     initializer != null
-                        ? Indent(this.PrintEqualsValueClauseSyntax(initializer))
+                        ? Indent(
+                            this.PrintEqualsValueClauseSyntax(initializer))
                         : null,
                     semicolonToken.HasValue
                         ? this.PrintSyntaxToken(semicolonToken.Value)

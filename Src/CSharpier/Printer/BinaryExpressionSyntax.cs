@@ -7,7 +7,8 @@ namespace CSharpier
     {
         private Doc PrintBinaryExpressionSyntax(BinaryExpressionSyntax node)
         {
-            var useLine = node.OperatorToken.Kind() is SyntaxKind.BarBarToken or SyntaxKind.BarToken or SyntaxKind.AmpersandAmpersandToken or SyntaxKind.AmpersandToken;
+            var useLine =
+                node.OperatorToken.Kind() is SyntaxKind.BarBarToken or SyntaxKind.BarToken or SyntaxKind.AmpersandAmpersandToken or SyntaxKind.AmpersandToken;
 
             return Concat(
                 this.Print(node.Left),

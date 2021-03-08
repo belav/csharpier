@@ -32,8 +32,7 @@ namespace CSharpier
                                         " "),
                                     this.Print(o.Expression)),
                                 HardLine))),
-                    HardLine
-                ),
+                    HardLine),
                 this.PrintSyntaxToken(node.CloseBraceToken));
         }
     }

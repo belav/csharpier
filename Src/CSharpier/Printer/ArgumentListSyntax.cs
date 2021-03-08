@@ -18,8 +18,10 @@ namespace CSharpier
                             Line))
                     : null,
                 this.PrintSyntaxToken(node.CloseParenToken));
-            
-            return node.Parent is not ObjectCreationExpressionSyntax ? Group(result) : result;
+
+            return node.Parent is not ObjectCreationExpressionSyntax
+                ? Group(result)
+                : result;
         }
     }
 }

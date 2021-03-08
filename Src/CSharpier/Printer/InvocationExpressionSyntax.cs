@@ -12,14 +12,14 @@ namespace CSharpier
         public CSharpSyntaxNode Node { get; set; }
         public Doc Doc { get; set; }
     }
-    
+
     public partial class Printer
     {
         private Doc PrintInvocationExpressionSyntax(
             InvocationExpressionSyntax node)
         {
             var printedNodes = new List<PrintedNode>();
-            
+
             void Traverse(ExpressionSyntax expression)
             {
                 /*InvocationExpression
@@ -34,34 +34,45 @@ namespace CSharpier
                   SimpleMemberAccessExpression
                   [this][.][DoSomething]
                 */
-                if (expression is InvocationExpressionSyntax invocationExpressionSyntax)
+                if (
+                    expression is InvocationExpressionSyntax invocationExpressionSyntax
+                )
                 {
                     Traverse(invocationExpressionSyntax.Expression);
-                    printedNodes.Add(new PrintedNode
-                    {
-                        Doc = this.PrintArgumentListSyntax(invocationExpressionSyntax.ArgumentList),
-                        Node = invocationExpressionSyntax
-                    });
+                    printedNodes.Add(
+                        new PrintedNode
+                        {
+                            Doc = this.PrintArgumentListSyntax(
+                                invocationExpressionSyntax.ArgumentList),
+                            Node = invocationExpressionSyntax
+                        });
                 }
-                else if (expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax)
+                else if (
+                    expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax
+                )
                 {
                     Traverse(memberAccessExpressionSyntax.Expression);
-                    printedNodes.Add(new PrintedNode
-                    {
-                        Doc = Concat(this.PrintSyntaxToken(memberAccessExpressionSyntax.OperatorToken), this.Print(memberAccessExpressionSyntax.Name)),
-                        Node = memberAccessExpressionSyntax
-                    });
+                    printedNodes.Add(
+                        new PrintedNode
+                        {
+                            Doc = Concat(
+                                this.PrintSyntaxToken(
+                                    memberAccessExpressionSyntax.OperatorToken),
+                                this.Print(memberAccessExpressionSyntax.Name)),
+                            Node = memberAccessExpressionSyntax
+                        });
                 }
                 else
                 {
-                    printedNodes.Add(new PrintedNode
-                    {
-                        Doc = this.Print(expression),
-                        Node = expression
-                    });
+                    printedNodes.Add(
+                        new PrintedNode
+                        {
+                            Doc = this.Print(expression),
+                            Node = expression
+                        });
                 }
             }
-            
+
             Traverse(node);
 
             var groups = new List<List<Doc>>();
@@ -86,41 +97,44 @@ namespace CSharpier
                 currentGroup.Add(printedNodes[index].Doc);
                 index++;
             }
-            
+
             groups.Add(currentGroup);
             currentGroup = new List<Doc>();
-            
+
             var hasSeenInvocationExpression = false;
             for (; index < printedNodes.Count; index++)
             {
-                if (hasSeenInvocationExpression && IsMemberish(printedNodes[index].Node)) {
+                if (
+                    hasSeenInvocationExpression
+                    && IsMemberish(printedNodes[index].Node)
+                )
+                {
                     // [0] should be appended at the end of the group instead of the
                     // beginning of the next one
                     // if (printedNodes[i].node.computed && isNumericLiteral(printedNodes[i].node.property)) {
                     //     currentGroup.push(printedNodes[i]);
                     //     continue;
                     // }
-
                     groups.Add(currentGroup);
                     currentGroup = new List<Doc>();
                     hasSeenInvocationExpression = false;
                 }
 
-                if (printedNodes[index].Node is InvocationExpressionSyntax) {
+                if (printedNodes[index].Node is InvocationExpressionSyntax)
+                {
                     hasSeenInvocationExpression = true;
                 }
                 currentGroup.Add(printedNodes[index].Doc);
-
-                // if (printedNodes[i].node.comments && printedNodes[i].node.comments.some(comment => comment.trailing)) {
-                //     groups.push(currentGroup);
-                //     currentGroup = [];
-                //     hasSeenCallExpression = false;
-                // }
+            // if (printedNodes[i].node.comments && printedNodes[i].node.comments.some(comment => comment.trailing)) {
+            //     groups.push(currentGroup);
+            //     currentGroup = [];
+            //     hasSeenCallExpression = false;
+            // }
             }
 
             if (currentGroup.Any())
             {
-                groups.Add(currentGroup);   
+                groups.Add(currentGroup);
             }
 
             var cutoff = 3;
@@ -128,8 +142,10 @@ namespace CSharpier
             {
                 return Group(groups.SelectMany(o => o).ToArray());
             }
-            
-            return Concat(Group(groups[0].ToArray()), PrintIndentedGroup(groups.Skip(1)));
+
+            return Concat(
+                Group(groups[0].ToArray()),
+                PrintIndentedGroup(groups.Skip(1)));
         }
 
         private bool IsMemberish(CSharpSyntaxNode node)
@@ -145,7 +161,8 @@ namespace CSharpier
             }
 
             // TODO GH-7 softline here?
-            return Indent(Group(Join(SoftLine, groups.Select(o => Group(o.ToArray())))));
+            return Indent(
+                Group(Join(SoftLine, groups.Select(o => Group(o.ToArray())))));
         }
     }
 }

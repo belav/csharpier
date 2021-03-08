@@ -68,10 +68,26 @@ dotnet csharpier --validate
 dotnet csharpier
 ```
 
+### Formatting Single File
+```console
+dotnet chsarpier [PathToFile]
+```
+
+## IDE Support
+### Rider
+1. Open Settings
+2. Tools - File Watchers
+3. Add New File Watcher
+    * File Type: C# File
+    * Program: dotnet
+    * Arguments: csharpier $FilePath$
+    * Output paths to refresh: $FilePath$
+
+
 ### More Information
 By default csharpier will format any .cs files in the current directory and its children. It currently excludes .g.cs and .cshtml.cs files.
 
-The first time running csharpier against a project, it is strongly recommended that you use the --validate option.
+By default csharpier will also validate any files it formats by comparing the resulting syntax tree to the original.
 Formatting will take longer, but csharpier will validate the formatted syntax tree against the original and warn if it believes it introduced breaking changes. 
 
 ```console
@@ -82,7 +98,7 @@ Arguments:
   <directory>    A path to a directory containing files to format. If a path is not specified the current directory is used
 
 Options:
-  -v, --validate    Compare syntax tree of formatted file to original file to validate changes.
+  -f, --fast    Skip comparing syntax tree of formatted file to original file to validate changes.
   --version         Show version information
   -?, -h, --help    Show help and usage information
 
@@ -92,11 +108,12 @@ Options:
 Currently CSharpier only supports being passed a directory to recursively scan for .cs files.
 If a directory is not supplied, it will use the current directory.
 
-### --validate
-CSharpier supports validating the changes it made to a file.
+### --fast
+CSharpier validates the changes it makes to a file.
 It does this by comparing the syntax tree before and after formatting, but ignoring any whitespace trivia in the syntax tree.
 If a file fails validation, CSharpier will output the lines that differ.
 If this happens it indicates a bug in CSharpier's code.
+This validation may be skipped by passing the --fast argument.
 
 An example of CSharpier finding a file that failed validation.
 ```

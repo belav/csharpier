@@ -12,14 +12,15 @@ namespace CSharpier
         {
             var rootCommand = new RootCommand
             {
-                new Argument<string>("directory")
+                new Argument<string>(
+                    "directoryOrFile")
                 {
                     Arity = ArgumentArity.ZeroOrOne,
-                    Description = "A path to a directory containing files to format. If a path is not specified the current directory is used"
+                    Description = "A path to a directory containing files to format or a file to format. If a path is not specified the current directory is used"
                 }.LegalFilePathsOnly(),
                 new Option(
-                    new[] { "--validate", "-v" },
-                    "Compare syntax tree of formatted file to original file to validate changes.")
+                    new[] { "--fast", "-f" },
+                    "Skip comparing syntax tree of formatted file to original file to validate changes.")
             };
 
             rootCommand.Description = "csharpier";

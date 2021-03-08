@@ -360,8 +360,8 @@ namespace CSharpier
                                 var rem = width - position;
 
                                 if (
-                                    !group.Break &&
-                                    Fits(next, currentStack, rem, options)
+                                    !group.Break
+                                    && Fits(next, currentStack, rem, options)
                                 )
                                 {
                                     currentStack.Push(next);
@@ -418,7 +418,6 @@ namespace CSharpier
                                         // when joining things with HardLines there, if the first item in each thing was a LiteralLine, skip the HardLine
                                         // the problem with that approach is we'd have to make that same change in other places, but maybe
                                         // there aren't a ton of those places.
-                                        
                                         Trim(output);
                                         if (newLine.Length == 2)
                                         {
@@ -432,9 +431,9 @@ namespace CSharpier
                                             if (output[^1] == '\n')
                                             {
                                                 output.Length -= 1;
-                                            }   
+                                            }
                                         }
-                                        
+
                                         output.Append(newLine);
                                         position = 0;
                                     }
@@ -442,9 +441,9 @@ namespace CSharpier
                                 else
                                 {
                                     if (
-                                        (!newLineNextStringValue ||
-                                        !skipNextNewLine) &&
-                                        output.Length > 0
+                                        (!newLineNextStringValue
+                                        || !skipNextNewLine)
+                                        && output.Length > 0
                                     )
                                     {
                                         Trim(output);
@@ -466,9 +465,9 @@ namespace CSharpier
                     case LeadingComment leadingComment:
                         Trim(output);
                         if (
-                            (output.Length != 0 &&
-                            output[^1] != '\n') ||
-                            newLineNextStringValue
+                            (output.Length != 0
+                            && output[^1] != '\n')
+                            || newLineNextStringValue
                         )
                         {
                             output.Append(newLine);
@@ -524,7 +523,7 @@ namespace CSharpier
             {
                 return;
             }
-            
+
             var i = stringBuilder.Length - 1;
             for (; i >= 0; i--)
             {

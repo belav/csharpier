@@ -88,18 +88,18 @@ namespace CSharpier
                     }
                     // TODO 0 this may screw up with regions that aren't at the beginning of the line? should we deal with new lines/trivia between things differently??
                     if (
-                        !kind.HasValue ||
-                        kind == SyntaxKind.SingleLineCommentTrivia ||
-                        kind == SyntaxKind.EndOfLineTrivia ||
-                        kind == SyntaxKind.WhitespaceTrivia
+                        !kind.HasValue
+                        || kind == SyntaxKind.SingleLineCommentTrivia
+                        || kind == SyntaxKind.EndOfLineTrivia
+                        || kind == SyntaxKind.WhitespaceTrivia
                     )
                     {
                         parts.Push(HardLine);
                     }
                 }
                 if (
-                    trivia.Kind() != SyntaxKind.EndOfLineTrivia &&
-                    trivia.Kind() != SyntaxKind.WhitespaceTrivia
+                    trivia.Kind() != SyntaxKind.EndOfLineTrivia
+                    && trivia.Kind() != SyntaxKind.WhitespaceTrivia
                 )
                 {
                     if (doNewLines)
@@ -110,8 +110,8 @@ namespace CSharpier
                     }
                 }
                 if (
-                    trivia.Kind() == SyntaxKind.SingleLineCommentTrivia ||
-                    trivia.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia
+                    trivia.Kind() == SyntaxKind.SingleLineCommentTrivia
+                    || trivia.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia
                 )
                 {
                     parts.Push(
@@ -120,8 +120,8 @@ namespace CSharpier
                             CommentType.SingleLine));
                 }
                 else if (
-                    trivia.Kind() == SyntaxKind.MultiLineCommentTrivia ||
-                    trivia.Kind() == SyntaxKind.MultiLineDocumentationCommentTrivia
+                    trivia.Kind() == SyntaxKind.MultiLineCommentTrivia
+                    || trivia.Kind() == SyntaxKind.MultiLineDocumentationCommentTrivia
                 )
                 {
                     parts.Push(
@@ -136,18 +136,18 @@ namespace CSharpier
                         trivia.ToString().TrimEnd('\n', '\r'));
                 }
                 else if (
-                    trivia.Kind() == SyntaxKind.IfDirectiveTrivia ||
-                    trivia.Kind() == SyntaxKind.ElseDirectiveTrivia ||
-                    trivia.Kind() == SyntaxKind.ElifDirectiveTrivia ||
-                    trivia.Kind() == SyntaxKind.EndIfDirectiveTrivia ||
-                    trivia.Kind() == SyntaxKind.LineDirectiveTrivia ||
-                    trivia.Kind() == SyntaxKind.ErrorDirectiveTrivia ||
-                    trivia.Kind() == SyntaxKind.WarningDirectiveTrivia ||
-                    trivia.Kind() == SyntaxKind.PragmaWarningDirectiveTrivia ||
-                    trivia.Kind() == SyntaxKind.PragmaChecksumDirectiveTrivia ||
-                    trivia.Kind() == SyntaxKind.DefineDirectiveTrivia ||
-                    trivia.Kind() == SyntaxKind.UndefDirectiveTrivia ||
-                    trivia.Kind() == SyntaxKind.NullableDirectiveTrivia
+                    trivia.Kind() == SyntaxKind.IfDirectiveTrivia
+                    || trivia.Kind() == SyntaxKind.ElseDirectiveTrivia
+                    || trivia.Kind() == SyntaxKind.ElifDirectiveTrivia
+                    || trivia.Kind() == SyntaxKind.EndIfDirectiveTrivia
+                    || trivia.Kind() == SyntaxKind.LineDirectiveTrivia
+                    || trivia.Kind() == SyntaxKind.ErrorDirectiveTrivia
+                    || trivia.Kind() == SyntaxKind.WarningDirectiveTrivia
+                    || trivia.Kind() == SyntaxKind.PragmaWarningDirectiveTrivia
+                    || trivia.Kind() == SyntaxKind.PragmaChecksumDirectiveTrivia
+                    || trivia.Kind() == SyntaxKind.DefineDirectiveTrivia
+                    || trivia.Kind() == SyntaxKind.UndefDirectiveTrivia
+                    || trivia.Kind() == SyntaxKind.NullableDirectiveTrivia
                 )
                 {
                     hadDirective = true;
@@ -156,14 +156,14 @@ namespace CSharpier
                     parts.Push(LiteralLine, trivia.ToString());
                 }
                 else if (
-                    trivia.Kind() == SyntaxKind.RegionDirectiveTrivia ||
-                    trivia.Kind() == SyntaxKind.EndRegionDirectiveTrivia
+                    trivia.Kind() == SyntaxKind.RegionDirectiveTrivia
+                    || trivia.Kind() == SyntaxKind.EndRegionDirectiveTrivia
                 )
                 {
                     var triviaText = trivia.ToString();
                     if (
-                        x > 0 &&
-                        leadingTrivia[x - 1].Kind() == SyntaxKind.WhitespaceTrivia
+                        x > 0
+                        && leadingTrivia[x - 1].Kind() == SyntaxKind.WhitespaceTrivia
                     )
                     {
                         triviaText = leadingTrivia[x - 1] + triviaText;

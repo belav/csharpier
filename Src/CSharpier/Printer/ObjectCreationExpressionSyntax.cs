@@ -10,8 +10,12 @@ namespace CSharpier
             return Group(
                 this.PrintSyntaxToken(node.NewKeyword, " "),
                 this.Print(node.Type),
-                node.ArgumentList != null ? this.PrintArgumentListSyntax(node.ArgumentList) : "",
-                node.Initializer != null ? this.PrintInitializerExpressionSyntax(node.Initializer) : "");
+                node.ArgumentList != null
+                    ? this.PrintArgumentListSyntax(node.ArgumentList)
+                    : "",
+                node.Initializer != null
+                    ? this.PrintInitializerExpressionSyntax(node.Initializer)
+                    : "");
         }
     }
 }

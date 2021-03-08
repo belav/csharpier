@@ -73,8 +73,10 @@ namespace CSharpier
                 return "Missing";
             }
 
-            var line = syntaxTree.GetLineSpan(textSpan.Value).StartLinePosition.Line;
-            var endLine = syntaxTree.GetLineSpan(textSpan.Value).EndLinePosition.Line;
+            var line =
+                syntaxTree.GetLineSpan(textSpan.Value).StartLinePosition.Line;
+            var endLine =
+                syntaxTree.GetLineSpan(textSpan.Value).EndLinePosition.Line;
 
             var result = "Around Line " + line + Environment.NewLine;
 
@@ -82,8 +84,7 @@ namespace CSharpier
             var x = 0;
             var linesWritten = 0;
             var currentLine = stringReader.ReadLine();
-            while (x <= endLine + 2 ||
-            linesWritten < 8)
+            while (x <= endLine + 2 || linesWritten < 8)
             {
                 if (x >= line - 2)
                 {
@@ -126,14 +127,13 @@ namespace CSharpier
             {
                 var propertyName = propertyInfo.Name;
                 if (
-                    propertyName == "Language" ||
-                    propertyName == "Parent" ||
-                    propertyName == "HasLeadingTrivia" // we modify/remove whitespace and new lines so we can't look at these properties.
-                    ||
-                    propertyName == "HasTrailingTrivia" ||
-                    propertyName == "ParentTrivia" ||
-                    propertyName == "Arity" ||
-                    propertyName == "SpanStart"
+                    propertyName == "Language"
+                    || propertyName == "Parent"
+                    || propertyName == "HasLeadingTrivia" // we modify/remove whitespace and new lines so we can't look at these properties.
+                    || propertyName == "HasTrailingTrivia"
+                    || propertyName == "ParentTrivia"
+                    || propertyName == "Arity"
+                    || propertyName == "SpanStart"
                 )
                 {
                     continue;
@@ -141,8 +141,8 @@ namespace CSharpier
 
                 var propertyType = propertyInfo.PropertyType;
                 if (
-                    propertyType == typeof(TextSpan) ||
-                    propertyType == typeof(SyntaxTree)
+                    propertyType == typeof(TextSpan)
+                    || propertyType == typeof(SyntaxTree)
                 )
                 {
                     continue;
@@ -201,12 +201,14 @@ namespace CSharpier
                         formattedValueAsNode);
                 }
                 else if (
-                    propertyType.IsGenericType &&
-                    propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>)
+                    propertyType.IsGenericType
+                    && propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>)
                 )
                 {
-                    var originalList = (originalValue as IEnumerable).Cast<SyntaxNode>().ToList();
-                    var formattedList = (formattedValue as IEnumerable).Cast<SyntaxNode>().ToList();
+                    var originalList = (originalValue as IEnumerable).Cast<SyntaxNode>()
+                        .ToList();
+                    var formattedList = (formattedValue as IEnumerable).Cast<SyntaxNode>()
+                        .ToList();
                     result = CompareLists(
                         originalList,
                         formattedList,
@@ -216,12 +218,14 @@ namespace CSharpier
                         formattedNode.Span);
                 }
                 else if (
-                    propertyType.IsGenericType &&
-                    propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)
+                    propertyType.IsGenericType
+                    && propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)
                 )
                 {
-                    var originalList = (originalValue as IEnumerable).Cast<SyntaxNode>().ToList();
-                    var formattedList = (formattedValue as IEnumerable).Cast<SyntaxNode>().ToList();
+                    var originalList = (originalValue as IEnumerable).Cast<SyntaxNode>()
+                        .ToList();
+                    var formattedList = (formattedValue as IEnumerable).Cast<SyntaxNode>()
+                        .ToList();
                     result = CompareLists(
                         originalList,
                         formattedList,
@@ -253,8 +257,10 @@ namespace CSharpier
                 }
                 else if (propertyType == typeof(SyntaxTokenList))
                 {
-                    var originalList = (originalValue as IEnumerable).Cast<SyntaxToken>().ToList();
-                    var formattedList = (formattedValue as IEnumerable).Cast<SyntaxToken>().ToList();
+                    var originalList = (originalValue as IEnumerable).Cast<SyntaxToken>()
+                        .ToList();
+                    var formattedList = (formattedValue as IEnumerable).Cast<SyntaxToken>()
+                        .ToList();
                     result = CompareLists(
                         originalList,
                         formattedList,
@@ -265,8 +271,10 @@ namespace CSharpier
                 }
                 else if (propertyType == typeof(SyntaxTriviaList))
                 {
-                    var originalList = (originalValue as IEnumerable).Cast<SyntaxTrivia>().ToList();
-                    var formattedList = (formattedValue as IEnumerable).Cast<SyntaxTrivia>().ToList();
+                    var originalList = (originalValue as IEnumerable).Cast<SyntaxTrivia>()
+                        .ToList();
+                    var formattedList = (formattedValue as IEnumerable).Cast<SyntaxTrivia>()
+                        .ToList();
                     result = CompareLists(
                         originalList,
                         formattedList,
@@ -297,8 +305,7 @@ namespace CSharpier
             TextSpan originalParentSpan,
             TextSpan newParentSpan)
         {
-            for (var x = 0; x < originalList.Count ||
-            x < formattedList.Count; x++)
+            for (var x = 0; x < originalList.Count || x < formattedList.Count; x++)
             {
                 if (x == originalList.Count)
                 {
@@ -396,7 +403,8 @@ namespace CSharpier
             SyntaxTrivia formattedTrivia)
         {
             if (
-                originalTrivia.ToString().TrimEnd() != formattedTrivia.ToString().TrimEnd()
+                originalTrivia.ToString().TrimEnd() != formattedTrivia.ToString()
+                    .TrimEnd()
             )
             {
                 return NotEqual(originalTrivia.Span, formattedTrivia.Span);
@@ -410,11 +418,13 @@ namespace CSharpier
             SyntaxTriviaList formattedList)
         {
             var cleanedOriginal = originalList.Where(
-                o => o.Kind() != SyntaxKind.EndOfLineTrivia &&
-                o.Kind() != SyntaxKind.WhitespaceTrivia).ToList();
+                    o => o.Kind() != SyntaxKind.EndOfLineTrivia
+                    && o.Kind() != SyntaxKind.WhitespaceTrivia)
+                .ToList();
             var cleanedFormatted = formattedList.Where(
-                o => o.Kind() != SyntaxKind.EndOfLineTrivia &&
-                o.Kind() != SyntaxKind.WhitespaceTrivia).ToList();
+                    o => o.Kind() != SyntaxKind.EndOfLineTrivia
+                    && o.Kind() != SyntaxKind.WhitespaceTrivia)
+                .ToList();
             var result = CompareLists(
                 cleanedOriginal,
                 cleanedFormatted,

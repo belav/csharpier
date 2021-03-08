@@ -9,10 +9,10 @@ namespace CSharpier
         {
             var parts = new Parts();
             if (
-                node.Modifiers.Count > 0 ||
-                node.AttributeLists.Count > 0 ||
-                node.Body != null ||
-                node.ExpressionBody != null
+                node.Modifiers.Count > 0
+                || node.AttributeLists.Count > 0
+                || node.Body != null
+                || node.ExpressionBody != null
             )
             {
                 parts.Push(HardLine);

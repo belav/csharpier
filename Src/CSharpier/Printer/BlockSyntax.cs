@@ -12,8 +12,8 @@ namespace CSharpier
                 return null;
             }
 
-            var statementSeparator = node.Parent is AccessorDeclarationSyntax &&
-                node.Statements.Count <= 1
+            var statementSeparator = node.Parent is AccessorDeclarationSyntax
+                && node.Statements.Count <= 1
                 ? Line
                 : HardLine;
 

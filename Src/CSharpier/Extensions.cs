@@ -42,9 +42,11 @@ namespace CSharpier
         {
             using var hasher = MD5.Create();
             var hashedBytes = hasher.ComputeHash(Encoding.UTF8.GetBytes(value));
-            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            return BitConverter.ToString(hashedBytes)
+                .Replace("-", "")
+                .ToLower();
         }
-        
+
         public static bool EqualsIgnoreCase(this string value, string otherValue)
         {
             return string.Compare(
@@ -80,8 +82,8 @@ namespace CSharpier
 
         public static bool IsBlank(this string value)
         {
-            return value == null ||
-                   string.IsNullOrEmpty(value.Trim());
+            return value == null
+            || string.IsNullOrEmpty(value.Trim());
         }
     }
 }

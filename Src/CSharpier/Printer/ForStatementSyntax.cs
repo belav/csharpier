@@ -26,15 +26,13 @@ namespace CSharpier
             innerGroup.Push(this.PrintSyntaxToken(node.FirstSemicolonToken));
             if (node.Condition != null)
             {
-                innerGroup.Push(
-                    Line,
-                    this.Print(node.Condition));
+                innerGroup.Push(Line, this.Print(node.Condition));
             }
             else
             {
                 innerGroup.Push(SoftLine);
             }
-            
+
             innerGroup.Push(this.PrintSyntaxToken(node.SecondSemicolonToken));
             if (node.Incrementors.Any())
             {

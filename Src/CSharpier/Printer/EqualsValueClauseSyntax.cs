@@ -7,7 +7,8 @@ namespace CSharpier
         private Doc PrintEqualsValueClauseSyntax(EqualsValueClauseSyntax node)
         {
             var separator = Line;
-            if (node.Value is AnonymousObjectCreationExpressionSyntax
+            if (
+                node.Value is AnonymousObjectCreationExpressionSyntax
                 || node.Value is AnonymousMethodExpressionSyntax
                 || node.Value is ConditionalExpressionSyntax
                 || node.Value is ObjectCreationExpressionSyntax
@@ -20,7 +21,7 @@ namespace CSharpier
             {
                 separator = SpaceIfNoPreviousComment;
             }
-            
+
             var result = Group(
                 // TODO GH-6 this should probably be line, but that breaks a ton of things
                 SpaceIfNoPreviousComment,

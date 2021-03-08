@@ -21,9 +21,11 @@ namespace CSharpier
                     LanguageVersion.CSharp9,
                     DocumentationMode.Diagnose));
             var rootNode = syntaxTree.GetRoot() as CompilationUnitSyntax;
-            var diagnostics = syntaxTree.GetDiagnostics().Where(
-                o => o.Severity == DiagnosticSeverity.Error &&
-                     o.Id != "CS1029").ToList();
+            var diagnostics = syntaxTree.GetDiagnostics()
+                .Where(
+                    o => o.Severity == DiagnosticSeverity.Error
+                    && o.Id != "CS1029")
+                .ToList();
             // TODO 1 report that didn't format because of errors?
             if (diagnostics.Any())
             {
@@ -81,9 +83,9 @@ namespace CSharpier
                     return indent + "\"" + stringDoc.Value + "\"";
                 case Concat concat:
                     if (
-                        concat.Parts.Count == 2 &&
-                        concat.Parts[0] is LineDoc line &&
-                        concat.Parts[1] is BreakParent
+                        concat.Parts.Count == 2
+                        && concat.Parts[0] is LineDoc line
+                        && concat.Parts[1] is BreakParent
                     )
                     {
                         return indent + (line.IsLiteral
@@ -115,11 +117,13 @@ namespace CSharpier
                     result += ")";
                     return result;
                 case LineDoc lineDoc:
-                    return indent + (
-                        lineDoc.IsLiteral ? "LiteralLine"
-                        : lineDoc.Type == LineDoc.LineType.Normal ? "Line"
-                        : lineDoc.Type == LineDoc.LineType.Hard ? "HardLine"
-                        : "SoftLine");
+                    return indent + (lineDoc.IsLiteral
+                        ? "LiteralLine"
+                        : lineDoc.Type == LineDoc.LineType.Normal
+                            ? "Line"
+                            : lineDoc.Type == LineDoc.LineType.Hard
+                                ? "HardLine"
+                                : "SoftLine");
                 case BreakParent breakParent:
                     return null;
                 case ForceFlat forceFlat:
@@ -154,22 +158,24 @@ namespace CSharpier
             string code,
             string formattedCode)
         {
-            var type = typeof(SyntaxNode).Assembly.GetTypes().First(
-                o => o.Name == "SyntaxDiffer");
+            var type = typeof(SyntaxNode).Assembly.GetTypes()
+                .First(o => o.Name == "SyntaxDiffer");
             var methods = type.GetMethods(
-                BindingFlags.NonPublic |
-                BindingFlags.Static).Where(o => o.Name == "GetTextChanges");
+                    BindingFlags.NonPublic
+                    | BindingFlags.Static)
+                .Where(o => o.Name == "GetTextChanges");
             foreach (var method in methods)
             {
                 var blah = method.GetParameters();
                 if (blah.Length == 2 && blah[0].ParameterType == typeof(SyntaxTree))
                 {
-                    var result = method.Invoke(
-                        null,
-                        new[] {
-                            CSharpSyntaxTree.ParseText(code),
-                            CSharpSyntaxTree.ParseText(formattedCode)
-                        }) as IList<TextChange>;
+                    var result =
+                        method.Invoke(
+                            null,
+                            new[] {
+                                CSharpSyntaxTree.ParseText(code),
+                                CSharpSyntaxTree.ParseText(formattedCode)
+                            }) as IList<TextChange>;
                     return result.Count == 0;
                 }
             }

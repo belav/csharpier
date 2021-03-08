@@ -28,27 +28,38 @@ namespace CSharpier
         }
 
         // TODO if someone kills this process while running, I think it can leave files half written
-        public static async Task<int> Run(string directory, bool validate)
+        public static async Task<int> Run(string directoryOrFile, bool fast)
         {
             var fullStopwatch = Stopwatch.StartNew();
 
             // TODO 1 Configuration.cs from data.entities
             // TODO 1 CurrencyDto.cs from data.entities
-            if (string.IsNullOrEmpty(directory))
+            if (string.IsNullOrEmpty(directoryOrFile))
             {
-                directory = Directory.GetCurrentDirectory();
-            
-#if DEBUG
-                directory = GetTestingPath();
-#endif
+                directoryOrFile = Directory.GetCurrentDirectory();
             }
 
-            var tasks = Directory.EnumerateFiles(
-                directory,
-                "*.cs",
-                SearchOption.AllDirectories).AsParallel().Select(
-                o => DoWork(o, directory, validate)).ToArray();
-            Task.WaitAll(tasks);
+            var validate = !fast;
+
+            if (File.Exists(directoryOrFile))
+            {
+                await DoWork(
+                    directoryOrFile,
+                    Path.GetDirectoryName(directoryOrFile),
+                    validate);
+            }
+            else
+            {
+                var tasks = Directory.EnumerateFiles(
+                        directoryOrFile,
+                        "*.cs",
+                        SearchOption.AllDirectories)
+                    .AsParallel()
+                    .Select(o => DoWork(o, directoryOrFile, validate))
+                    .ToArray();
+                Task.WaitAll(tasks);
+            }
+
             Console.WriteLine(
                 PadToSize("total time: ", 80) + ReversePad(
                     fullStopwatch.ElapsedMilliseconds + "ms"));
