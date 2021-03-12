@@ -25,9 +25,6 @@ namespace CSharpier
             {
                 switch (syntaxNode)
                 {
-                    case AccessorDeclarationSyntax accessorDeclarationSyntax:
-                        return this.PrintAccessorDeclarationSyntax(
-                            accessorDeclarationSyntax);
                     case AliasQualifiedNameSyntax aliasQualifiedNameSyntax:
                         return this.PrintAliasQualifiedNameSyntax(
                             aliasQualifiedNameSyntax);

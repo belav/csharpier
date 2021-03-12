@@ -1,0 +1,59 @@
+public class ClassName
+{
+    public string Property { get; set; }
+    public string Interface.Property { get; set; }
+
+    string PropertyWithModifiers
+    {
+        protected internal get;
+        internal protected set;
+    }
+
+    private string backingValue;
+    public string PropertyWithBackingValue
+    {
+        get { return backingValue; }
+        set { backingValue = value; }
+    }
+
+    public string First { get; set; } = "First"; // trailing initializer comment
+
+    public string LambdaAccessors
+    {
+        get => this.Property;
+        set => this.Property = value;
+    }
+
+    public string LambdaBod => this.Property;
+
+    public string Property
+    {
+        get { return this.Property; }
+    }
+
+    public string GetMultiLines
+    {
+        set { value = value; }
+        get
+        {
+            var x = "test";
+            return x;
+        }
+    }
+    
+    public string Property
+    {
+        [Obsolete]
+        get;
+        [Obsolete]
+        set;
+    }
+
+    public virtual ICollection<SomeObject> SomeLongNameThatForcesALineBreak { get; set; }
+        = new HashSet<SomeObject>();
+
+    public Dictionary<string, string> Properties { get; set; }
+        = new Dictionary<string, string>();
+
+    public virtual LongerPropertyConfiguration LongerPropertyConfiguration { get; set; }
+}

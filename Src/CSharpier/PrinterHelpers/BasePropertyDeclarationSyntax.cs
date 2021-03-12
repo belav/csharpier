@@ -49,31 +49,32 @@ namespace CSharpier
             Doc contents = "";
             if (node.AccessorList != null)
             {
-                // if (node.AccessorList.Accessors.Any(o => o.Body != null || o.ExpressionBody != null))
-                // {
+                var separator = SpaceIfNoPreviousComment;
+                if (
+                    node.AccessorList.Accessors.Any(
+                        o => o.Body != null
+                        || o.ExpressionBody != null
+                        || o.Modifiers.Any()
+                        || o.AttributeLists.Any())
+                )
+                {
+                    separator = Line;
+                }
+
                 contents = Group(
                     Concat(
-                        Line,
+                        separator,
                         this.PrintSyntaxToken(node.AccessorList.OpenBraceToken),
                         Group(
                             Indent(
                                 node.AccessorList.Accessors.Select(
-                                        this.PrintAccessorDeclarationSyntax)
+                                        o => this.PrintAccessorDeclarationSyntax(
+                                            o,
+                                            separator))
                                     .ToArray())),
-                        Line,
+                        separator,
                         this.PrintSyntaxToken(
                             node.AccessorList.CloseBraceToken)));
-            // }
-            // else
-            // {
-            //     // TODO GH-6 I don't know that we should force flat here. Maybe I need to look more at what prettier does for complicated stuff.
-            //     contents = ForceFlat(
-            //         SpaceIfNoPreviousComment,
-            //         this.PrintSyntaxToken(node.AccessorList.OpenBraceToken),
-            //         Concat(node.AccessorList.Accessors.Select(this.PrintAccessorDeclarationSyntax).ToArray()),
-            //         SpaceIfNoPreviousComment,
-            //         this.PrintSyntaxToken(node.AccessorList.CloseBraceToken));
-            // }
             }
             else if (expressionBody != null)
             {
@@ -103,12 +104,49 @@ namespace CSharpier
                     identifier,
                     contents,
                     initializer != null
-                        ? Indent(
-                            this.PrintEqualsValueClauseSyntax(initializer))
+                        ? this.PrintEqualsValueClauseSyntax(initializer)
                         : null,
                     semicolonToken.HasValue
                         ? this.PrintSyntaxToken(semicolonToken.Value)
                         : null));
+        }
+
+        private Doc PrintAccessorDeclarationSyntax(
+            AccessorDeclarationSyntax node,
+            Doc separator)
+        {
+            var parts = new Parts();
+            if (
+                node.Modifiers.Count > 0
+                || node.AttributeLists.Count > 0
+                || node.Body != null
+                || node.ExpressionBody != null
+            )
+            {
+                parts.Push(HardLine);
+            }
+            else
+            {
+                parts.Push(separator);
+            }
+
+            parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
+            parts.Push(this.PrintModifiers(node.Modifiers));
+            parts.Push(this.PrintSyntaxToken(node.Keyword));
+
+            if (node.Body != null)
+            {
+                parts.Push(this.PrintBlockSyntax(node.Body));
+            }
+            else if (node.ExpressionBody != null)
+            {
+                parts.Push(
+                    this.PrintArrowExpressionClauseSyntax(node.ExpressionBody));
+            }
+
+            parts.Push(this.PrintSyntaxToken(node.SemicolonToken));
+
+            return Concat(parts);
         }
     }
 }

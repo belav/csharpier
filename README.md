@@ -82,6 +82,7 @@ dotnet chsarpier [PathToFile]
     * Program: dotnet
     * Arguments: csharpier $FilePath$
     * Output paths to refresh: $FilePath$
+	* Advanced Options - Auto-save edited files...: This should probably be off, otherwise if you pause while coding, csharpier will reformat the file as is.
 
 
 ### More Information

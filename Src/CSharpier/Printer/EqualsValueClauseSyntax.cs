@@ -7,7 +7,8 @@ namespace CSharpier
         private Doc PrintEqualsValueClauseSyntax(EqualsValueClauseSyntax node)
         {
             var separator = Line;
-            if (
+            if (node.Parent is PropertyDeclarationSyntax) { }
+            else if (
                 node.Value is AnonymousObjectCreationExpressionSyntax
                 || node.Value is AnonymousMethodExpressionSyntax
                 || node.Value is ConditionalExpressionSyntax
@@ -23,9 +24,10 @@ namespace CSharpier
             }
 
             var result = Group(
-                // TODO GH-6 this should probably be line, but that breaks a ton of things
-                SpaceIfNoPreviousComment,
-                this.PrintSyntaxToken(node.EqualsToken, separator),
+                separator,
+                this.PrintSyntaxToken(
+                    node.EqualsToken,
+                    SpaceIfNoPreviousComment),
                 this.Print(node.Value));
 
             if (separator is LineDoc)

@@ -1,5 +1,0 @@
-public class ClassName
-{
-    public string Property { get; set; }
-    public string Interface.Property { get; set; }
-}
