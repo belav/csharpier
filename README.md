@@ -61,11 +61,11 @@ Run csharpier from the directory you wish to format.
 ```console
 # the first time running csharpier it is normally not possible to review all the changes it makes
 # and catch any instances of code being lost 
-dotnet csharpier --validate
+dotnet csharpier
 
 # after a project has already been csharpiered, you can choose
-# to skip the --validate flag to speed up formatting
-dotnet csharpier
+# to use the --fast flag to speed up formatting
+dotnet csharpier --fast
 ```
 
 ### Formatting Single File
