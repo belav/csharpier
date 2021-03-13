@@ -38,12 +38,7 @@ namespace CSharpier
 
         public string CompareSource()
         {
-            // TODO GH-9 the new generated one fails with stack overflows, look at this for how to potentially avoid recursion
-            // can have two stacks, pop the parent off, run compare, the compare method pushes new stuff onto the stack.
-            // the stuff on the stack would need an object, and an enum for what type of method to run on the object
-            // also maybe some parent data for a couple of the methods
-            // http://metacoding.azurewebsites.net/2016/08/16/how-to-avoid-recursion/
-            var result = this.AreEqualIgnoringWhitespace(
+            var result = this.AreEqualIgnoringWhitespace2(
                 OriginalSyntaxTree.GetRoot(),
                 NewSyntaxTree.GetRoot());
             var message = "";
@@ -73,10 +68,10 @@ namespace CSharpier
                 return "Missing";
             }
 
-            var line =
-                syntaxTree.GetLineSpan(textSpan.Value).StartLinePosition.Line;
-            var endLine =
-                syntaxTree.GetLineSpan(textSpan.Value).EndLinePosition.Line;
+            var line
+                = syntaxTree.GetLineSpan(textSpan.Value).StartLinePosition.Line;
+            var endLine
+                = syntaxTree.GetLineSpan(textSpan.Value).EndLinePosition.Line;
 
             var result = "Around Line " + line + Environment.NewLine;
 
@@ -101,6 +96,29 @@ namespace CSharpier
             }
 
             return result;
+        }
+
+        private readonly Stack<SyntaxNode> originalStack = new Stack<SyntaxNode>();
+        private readonly Stack<SyntaxNode> formattedStack = new Stack<SyntaxNode>();
+
+        public CompareResult AreEqualIgnoringWhitespace2(
+            SyntaxNode originalStart,
+            SyntaxNode formattedStart)
+        {
+            originalStack.Push(originalStart);
+            formattedStack.Push(formattedStart);
+            while (originalStack.Count > 0)
+            {
+                var result = this.AreEqualIgnoringWhitespace(
+                    originalStack.Pop(),
+                    formattedStack.Pop());
+                if (result.MismatchedResult)
+                {
+                    return result;
+                }
+            }
+
+            return Equal;
         }
 
         public CompareResult AreEqualIgnoringWhitespace(
@@ -196,9 +214,9 @@ namespace CSharpier
                     {
                         return NotEqual(originalNode, formattedNode);
                     }
-                    result = this.AreEqualIgnoringWhitespace(
-                        originalValueAsNode,
-                        formattedValueAsNode);
+
+                    originalStack.Push(originalValueAsNode);
+                    formattedStack.Push(formattedValueAsNode);
                 }
                 else if (
                     propertyType.IsGenericType
@@ -212,7 +230,7 @@ namespace CSharpier
                     result = CompareLists(
                         originalList,
                         formattedList,
-                        AreEqualIgnoringWhitespace,
+                        null,
                         o => o.Span,
                         originalNode.Span,
                         formattedNode.Span);
@@ -229,7 +247,7 @@ namespace CSharpier
                     result = CompareLists(
                         originalList,
                         formattedList,
-                        AreEqualIgnoringWhitespace,
+                        null,
                         o => o.Span,
                         originalNode.Span,
                         formattedNode.Span);
@@ -319,10 +337,21 @@ namespace CSharpier
                     return NotEqual(getSpan(originalList[x]), newParentSpan);
                 }
 
-                var result = comparer(originalList[x], formattedList[x]);
-                if (result.MismatchedResult)
+                if (
+                    originalList[x] is SyntaxNode originalNode
+                    && formattedList[x] is SyntaxNode formattedNode
+                )
                 {
-                    return result;
+                    originalStack.Push(originalNode);
+                    formattedStack.Push(formattedNode);
+                }
+                else
+                {
+                    var result = comparer(originalList[x], formattedList[x]);
+                    if (result.MismatchedResult)
+                    {
+                        return result;
+                    }
                 }
             }
 
