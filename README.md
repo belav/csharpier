@@ -73,22 +73,10 @@ dotnet csharpier
 dotnet chsarpier [PathToFile]
 ```
 
-## IDE Support
-### Rider
-1. Open Settings
-2. Tools - File Watchers
-3. Add New File Watcher
-    * File Type: C# File
-    * Program: dotnet
-    * Arguments: csharpier $FilePath$
-    * Output paths to refresh: $FilePath$
-	* Advanced Options - Auto-save edited files...: This should probably be off, otherwise if you pause while coding, csharpier will reformat the file as is.
-
-
 ### More Information
-By default csharpier will format any .cs files in the current directory and its children. It currently excludes .g.cs and .cshtml.cs files.
+CSharpier currently excludes .g.cs and .cshtml.cs files.
 
-By default csharpier will also validate any files it formats by comparing the resulting syntax tree to the original.
+By default csharpier will validate any files it formats by comparing the resulting syntax tree to the original.
 Formatting will take longer, but csharpier will validate the formatted syntax tree against the original and warn if it believes it introduced breaking changes. 
 
 ```console
@@ -110,11 +98,10 @@ Currently CSharpier only supports being passed a directory to recursively scan f
 If a directory is not supplied, it will use the current directory.
 
 ### --fast
-CSharpier validates the changes it makes to a file.
+CSharpier validates the changes it makes to a file. 
 It does this by comparing the syntax tree before and after formatting, but ignoring any whitespace trivia in the syntax tree.
-If a file fails validation, CSharpier will output the lines that differ.
-If this happens it indicates a bug in CSharpier's code.
-This validation may be skipped by passing the --fast argument.
+If a file fails validation, CSharpier will output the lines that differ. If this happens it indicates a bug in CSharpier's code.  
+This validation may be skipped by passing the --fast argument. Validation appears to increase the formatting time by ~50%.
 
 An example of CSharpier finding a file that failed validation.
 ```
@@ -138,6 +125,17 @@ An example of CSharpier finding a file that failed validation.
 
             if (prefix.Span[^1] is not ':')
 ```
+
+## IDE Support
+### Rider
+1. Open Settings
+2. Tools - File Watchers
+3. Add New File Watcher
+    * File Type: C# File
+    * Program: dotnet
+    * Arguments: csharpier $FilePath$
+    * Output paths to refresh: $FilePath$
+    * Advanced Options - Auto-save edited files...: This should probably be off, otherwise if you pause while coding, csharpier will reformat the file as is.
 
 ## Development
 See [Development Readme](Src/README.md)
