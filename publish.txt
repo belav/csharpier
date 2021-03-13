@@ -2,4 +2,5 @@ cd src
 bump up version in CSharpier/CSharpier.csproj
 dotnet pack -c release -o ./nupkg
 upload to nuget
+create tag
 Or really, just automate this.
