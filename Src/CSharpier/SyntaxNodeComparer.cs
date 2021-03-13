@@ -38,11 +38,11 @@ namespace CSharpier
 
         public string CompareSource()
         {
-            var result = this.AreEqualIgnoringWhitespace2(
+            var result = this.AreEqualIgnoringWhitespace(
                 OriginalSyntaxTree.GetRoot(),
                 NewSyntaxTree.GetRoot());
             var message = "";
-            if (result.MismatchedResult)
+            if (result.IsInvalid)
             {
                 message += "    Original: " + GetLine(
                     result.OriginalSpan,
@@ -98,10 +98,10 @@ namespace CSharpier
             return result;
         }
 
-        private readonly Stack<SyntaxNode> originalStack = new Stack<SyntaxNode>();
-        private readonly Stack<SyntaxNode> formattedStack = new Stack<SyntaxNode>();
+        private readonly Stack<SyntaxNode> originalStack = new();
+        private readonly Stack<SyntaxNode> formattedStack = new();
 
-        public CompareResult AreEqualIgnoringWhitespace2(
+        public CompareResult AreEqualIgnoringWhitespace(
             SyntaxNode originalStart,
             SyntaxNode formattedStart)
         {
@@ -109,204 +109,10 @@ namespace CSharpier
             formattedStack.Push(formattedStart);
             while (originalStack.Count > 0)
             {
-                var result = this.AreEqualIgnoringWhitespace(
+                var result = this.Compare(
                     originalStack.Pop(),
                     formattedStack.Pop());
-                if (result.MismatchedResult)
-                {
-                    return result;
-                }
-            }
-
-            return Equal;
-        }
-
-        public CompareResult AreEqualIgnoringWhitespace(
-            SyntaxNode originalNode,
-            SyntaxNode formattedNode)
-        {
-            if (originalNode == null && formattedNode == null)
-            {
-                return Equal;
-            }
-
-            var type = originalNode?.GetType();
-            if (type != formattedNode?.GetType())
-            {
-                return NotEqual(originalNode, formattedNode);
-            }
-
-            if (originalNode.RawKind != formattedNode.RawKind)
-            {
-                return NotEqual(originalNode, formattedNode);
-            }
-
-            foreach (var propertyInfo in type.GetProperties())
-            {
-                var propertyName = propertyInfo.Name;
-                if (
-                    propertyName == "Language"
-                    || propertyName == "Parent"
-                    || propertyName == "HasLeadingTrivia" // we modify/remove whitespace and new lines so we can't look at these properties.
-                    || propertyName == "HasTrailingTrivia"
-                    || propertyName == "ParentTrivia"
-                    || propertyName == "Arity"
-                    || propertyName == "SpanStart"
-                )
-                {
-                    continue;
-                }
-
-                var propertyType = propertyInfo.PropertyType;
-                if (
-                    propertyType == typeof(TextSpan)
-                    || propertyType == typeof(SyntaxTree)
-                )
-                {
-                    continue;
-                }
-
-                var originalValue = propertyInfo.GetValue(originalNode);
-                var formattedValue = propertyInfo.GetValue(formattedNode);
-
-                var result = Equal;
-
-                if (propertyType == typeof(bool))
-                {
-                    if ((bool)originalValue != (bool)formattedValue)
-                    {
-                        return NotEqual(originalNode, formattedNode);
-                    }
-                }
-                else if (propertyType == typeof(Int32))
-                {
-                    if ((int)originalValue != (int)formattedValue)
-                    {
-                        return NotEqual(originalNode, formattedNode);
-                    }
-                }
-                else if (propertyType == typeof(SyntaxToken))
-                {
-                    result = this.Compare(
-                        (SyntaxToken)originalValue,
-                        (SyntaxToken)formattedValue,
-                        originalNode,
-                        formattedNode);
-                }
-                else if (propertyType == typeof(SyntaxTrivia))
-                {
-                    result = this.Compare(
-                        (SyntaxTrivia)originalValue,
-                        (SyntaxTrivia)formattedValue);
-                }
-                else if (
-                    typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType)
-                )
-                {
-                    var originalValueAsNode = originalValue as SyntaxNode;
-                    var formattedValueAsNode = formattedValue as SyntaxNode;
-                    if (originalValueAsNode == null && formattedValueAsNode == null)
-                    {
-                        continue;
-                    }
-
-                    if (originalValueAsNode == null || formattedValueAsNode == null)
-                    {
-                        return NotEqual(originalNode, formattedNode);
-                    }
-
-                    originalStack.Push(originalValueAsNode);
-                    formattedStack.Push(formattedValueAsNode);
-                }
-                else if (
-                    propertyType.IsGenericType
-                    && propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>)
-                )
-                {
-                    var originalList = (originalValue as IEnumerable).Cast<SyntaxNode>()
-                        .ToList();
-                    var formattedList = (formattedValue as IEnumerable).Cast<SyntaxNode>()
-                        .ToList();
-                    result = CompareLists(
-                        originalList,
-                        formattedList,
-                        null,
-                        o => o.Span,
-                        originalNode.Span,
-                        formattedNode.Span);
-                }
-                else if (
-                    propertyType.IsGenericType
-                    && propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)
-                )
-                {
-                    var originalList = (originalValue as IEnumerable).Cast<SyntaxNode>()
-                        .ToList();
-                    var formattedList = (formattedValue as IEnumerable).Cast<SyntaxNode>()
-                        .ToList();
-                    result = CompareLists(
-                        originalList,
-                        formattedList,
-                        null,
-                        o => o.Span,
-                        originalNode.Span,
-                        formattedNode.Span);
-                    if (result.MismatchedResult)
-                    {
-                        return result;
-                    }
-
-                    var getSeparatorsMethod = propertyType.GetMethod(
-                        "GetSeparators");
-                    var originalSeparators = (getSeparatorsMethod.Invoke(
-                        originalValue,
-                        null) as IEnumerable<SyntaxToken>).ToList();
-                    var formattedSeparators = (getSeparatorsMethod.Invoke(
-                        formattedValue,
-                        null) as IEnumerable<SyntaxToken>).ToList();
-
-                    result = CompareLists(
-                        originalSeparators,
-                        formattedSeparators,
-                        Compare,
-                        o => o.Span,
-                        originalNode.Span,
-                        formattedNode.Span);
-                }
-                else if (propertyType == typeof(SyntaxTokenList))
-                {
-                    var originalList = (originalValue as IEnumerable).Cast<SyntaxToken>()
-                        .ToList();
-                    var formattedList = (formattedValue as IEnumerable).Cast<SyntaxToken>()
-                        .ToList();
-                    result = CompareLists(
-                        originalList,
-                        formattedList,
-                        Compare,
-                        o => o.Span,
-                        originalNode.Span,
-                        formattedNode.Span);
-                }
-                else if (propertyType == typeof(SyntaxTriviaList))
-                {
-                    var originalList = (originalValue as IEnumerable).Cast<SyntaxTrivia>()
-                        .ToList();
-                    var formattedList = (formattedValue as IEnumerable).Cast<SyntaxTrivia>()
-                        .ToList();
-                    result = CompareLists(
-                        originalList,
-                        formattedList,
-                        Compare,
-                        o => o.Span,
-                        originalNode.Span,
-                        formattedNode.Span);
-                }
-                else
-                {
-                    throw new Exception(propertyType.FullName);
-                }
-
-                if (result.MismatchedResult)
+                if (result.IsInvalid)
                 {
                     return result;
                 }
@@ -348,7 +154,7 @@ namespace CSharpier
                 else
                 {
                     var result = comparer(originalList[x], formattedList[x]);
-                    if (result.MismatchedResult)
+                    if (result.IsInvalid)
                     {
                         return result;
                     }
@@ -364,7 +170,7 @@ namespace CSharpier
         {
             return new()
             {
-                MismatchedResult = true,
+                IsInvalid = true,
                 OriginalSpan = originalNode?.Span,
                 NewSpan = formattedNode?.Span
             };
@@ -376,13 +182,13 @@ namespace CSharpier
         {
             return new()
             {
-                MismatchedResult = true,
+                IsInvalid = true,
                 OriginalSpan = originalSpan,
                 NewSpan = formattedSpan
             };
         }
 
-        // TODO 0 this is used by compare lsits, but then we don't have parents if one is missing
+        // TODO this is used by compare lists, but then we don't have parents if one is missing
         private CompareResult Compare(
             SyntaxToken originalToken,
             SyntaxToken formattedToken)
@@ -396,7 +202,6 @@ namespace CSharpier
             SyntaxNode originalNode,
             SyntaxNode formattedNode)
         {
-            // TODO other stuff in here? properties? or just trivia?
             if (originalToken.Text != formattedToken.Text)
             {
                 return NotEqual(
@@ -408,23 +213,19 @@ namespace CSharpier
                         : formattedToken.Span);
             }
 
-            var result = this.compare(
+            var result = this.Compare(
                 originalToken.LeadingTrivia,
                 formattedToken.LeadingTrivia);
-            if (result.MismatchedResult)
+            if (result.IsInvalid)
             {
                 return result;
             }
 
-            var result2 = this.compare(
+            var result2 = this.Compare(
                 originalToken.TrailingTrivia,
                 formattedToken.TrailingTrivia);
-            if (result2.MismatchedResult)
-            {
-                return result2;
-            }
 
-            return Equal;
+            return result2.IsInvalid ? result2 : Equal;
         }
 
         private CompareResult Compare(
@@ -442,7 +243,7 @@ namespace CSharpier
             return Equal;
         }
 
-        private CompareResult compare(
+        private CompareResult Compare(
             SyntaxTriviaList originalList,
             SyntaxTriviaList formattedList)
         {
@@ -461,18 +262,13 @@ namespace CSharpier
                 o => o.Span,
                 originalList.Span,
                 formattedList.Span);
-            if (result.MismatchedResult)
-            {
-                return result;
-            }
-
-            return Equal;
+            return result.IsInvalid ? result : Equal;
         }
     }
 
     public struct CompareResult
     {
-        public bool MismatchedResult;
+        public bool IsInvalid;
         public TextSpan? OriginalSpan;
         public TextSpan? NewSpan;
     }
