@@ -17,6 +17,7 @@ namespace CSharpier
                             this.PrintArgumentSyntax,
                             Line))
                     : null,
+                node.Arguments.Any() ? SoftLine : null,
                 this.PrintSyntaxToken(node.CloseParenToken));
 
             return node.Parent is not ObjectCreationExpressionSyntax
