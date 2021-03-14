@@ -56,19 +56,10 @@ namespace CSharpier.Playground.Controllers
                 "Uploads",
                 content.CalculateHash() + ".cs");
             new FileInfo(filePath).EnsureDirectoryExists();
-            // TODO 2 we need to report back errors and what not
-            // failing to compile/parse with roslyn
-            // what about when the prettier plugin fails because of missing node types or other errors?
             this.WriteAllText(filePath, content);
-            // TODO 2 we also want to eventually expose options
             var result = new CodeFormatter().Format(
                 content,
-                new CSharpier.Options
-                {
-                    IncludeAST = true,
-                    IncludeDocTree = true,
-
-                });
+                new Options { IncludeAST = true, IncludeDocTree = true,  });
 
             var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
             this.WriteAllText(formattedFilePath, result.Code);
@@ -85,11 +76,13 @@ namespace CSharpier.Playground.Controllers
 
         private FormatError ConvertError(Diagnostic diagnostic)
         {
-            var lineSpan = diagnostic.Location.SourceTree.GetLineSpan(diagnostic.Location.SourceSpan);
+            var lineSpan = diagnostic.Location.SourceTree.GetLineSpan(
+                diagnostic.Location.SourceSpan);
             return new FormatError
             {
                 LineSpan = lineSpan,
                 Description = diagnostic.ToString(),
+
             };
         }
 
@@ -113,7 +106,9 @@ namespace CSharpier.Playground.Controllers
             string workingDirectory,
             string args)
         {
-            var processStartInfo = new ProcessStartInfo(pathToExe, args)
+            var processStartInfo = new ProcessStartInfo(
+                pathToExe,
+                args)
             {
                 UseShellExecute = false,
                 RedirectStandardError = true,
