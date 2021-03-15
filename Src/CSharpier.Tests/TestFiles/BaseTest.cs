@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using DiffEngine;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -18,9 +19,20 @@ namespace CSharpier.Tests.TestFileTests
             {
                 this.rootDirectory = this.rootDirectory.Parent;
             }
+            EmptyFiles.Extensions.AddTextExtension(".cst");
+
+            DiffTools.AddToolBasedOn(
+                DiffTool.WinMerge,
+                name: "WritableWinMerge",
+                arguments: (temp, target) =>
+                {
+                    var leftTitle = Path.GetFileName(temp);
+                    var rightTitle = Path.GetFileName(target);
+                    return $"/u /wr /e \"{temp}\" \"{target}\" /dl \"{leftTitle}\" /dr \"{rightTitle}\"";
+                });
         }
 
-        public void RunTest(string folderName, string fileName)
+        protected void RunTest(string folderName, string fileName)
         {
             var filePath = Path.Combine(
                 this.rootDirectory.FullName,
@@ -30,31 +42,25 @@ namespace CSharpier.Tests.TestFileTests
             var code = File.ReadAllText(filePath);
 
             var formatter = new CodeFormatter();
-            var result = formatter.Format(
-                code,
-                new Options
-                {
+            var result = formatter.Format(code, new Options());
 
-                // IncludeDocTree = true,
-                // IncludeAST = true
-                });
-
-            // var docTreePath = filePath.Replace(".cst", ".doctree.txt");
-            // File.WriteAllText(docTreePath, result.DocTree, Encoding.UTF8);
-            //
-            // var astPath = filePath.Replace(".cst", ".json");
-            // File.WriteAllText(astPath, result.AST, Encoding.UTF8);
             var actualFilePath = filePath.Replace(".cst", ".actual.cst");
             File.WriteAllText(actualFilePath, result.Code, Encoding.UTF8);
 
+            var targetFilePath = filePath;
             var expectedFilePath = actualFilePath.Replace(
                 ".actual.",
                 ".expected.");
             if (File.Exists(expectedFilePath))
             {
                 code = File.ReadAllText(expectedFilePath, Encoding.UTF8);
+                targetFilePath = expectedFilePath;
             }
 
+            if (result.Code != code)
+            {
+                DiffRunner.Launch(targetFilePath, actualFilePath);
+            }
             result.Code.Should().Be(code);
         }
     }
