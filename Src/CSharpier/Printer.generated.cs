@@ -353,6 +353,9 @@ namespace CSharpier
                     case PrefixUnaryExpressionSyntax prefixUnaryExpressionSyntax:
                         return this.PrintPrefixUnaryExpressionSyntax(
                             prefixUnaryExpressionSyntax);
+                    case PrimaryConstructorBaseTypeSyntax primaryConstructorBaseTypeSyntax:
+                        return this.PrintPrimaryConstructorBaseTypeSyntax(
+                            primaryConstructorBaseTypeSyntax);
                     case PropertyDeclarationSyntax propertyDeclarationSyntax:
                         return this.PrintPropertyDeclarationSyntax(
                             propertyDeclarationSyntax);

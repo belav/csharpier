@@ -19,17 +19,6 @@ namespace CSharpier.Tests.TestFileTests
             {
                 this.rootDirectory = this.rootDirectory.Parent;
             }
-            EmptyFiles.Extensions.AddTextExtension(".cst");
-
-            DiffTools.AddToolBasedOn(
-                DiffTool.WinMerge,
-                name: "WritableWinMerge",
-                arguments: (temp, target) =>
-                {
-                    var leftTitle = Path.GetFileName(temp);
-                    var rightTitle = Path.GetFileName(target);
-                    return $"/u /wr /e \"{temp}\" \"{target}\" /dl \"{leftTitle}\" /dr \"{rightTitle}\"";
-                });
         }
 
         protected void RunTest(string folderName, string fileName)
@@ -47,19 +36,19 @@ namespace CSharpier.Tests.TestFileTests
             var actualFilePath = filePath.Replace(".cst", ".actual.cst");
             File.WriteAllText(actualFilePath, result.Code, Encoding.UTF8);
 
-            var targetFilePath = filePath;
+            var filePathToChange = filePath;
             var expectedFilePath = actualFilePath.Replace(
                 ".actual.",
                 ".expected.");
             if (File.Exists(expectedFilePath))
             {
                 code = File.ReadAllText(expectedFilePath, Encoding.UTF8);
-                targetFilePath = expectedFilePath;
+                filePathToChange = expectedFilePath;
             }
 
             if (result.Code != code)
             {
-                DiffRunner.Launch(targetFilePath, actualFilePath);
+                DiffRunner.Launch(filePathToChange, actualFilePath);
             }
             result.Code.Should().Be(code);
         }

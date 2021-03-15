@@ -23,8 +23,7 @@ namespace Worker
                     Path.Combine(directory.FullName, "CSharpier/Printer"))
                 .Select(Path.GetFileNameWithoutExtension)
                 .ToList();
-
-
+            
             var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
                 .Where(
                     o => !o.IsAbstract

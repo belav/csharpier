@@ -1,4 +1,4 @@
-record DailyTemperature(double HighTemp, double LowTemp)
+﻿record DailyTemperature(double HighTemp, double LowTemp)
 {
     public double Mean => (HighTemp + LowTemp) / 2.0;
 }
@@ -12,3 +12,8 @@ record MostlyWeeklyTemperature(
 {
     public double Mean => (monday + monday + thursday + friday + sunday) / 5.0;
 }
+
+record R3(string x) : R1(x) { }
+
+record LongerRecordNameWhatHappenssssssssssssssssssss(string x)
+    : R4<string>(x) { }

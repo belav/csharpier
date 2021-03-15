@@ -114,16 +114,21 @@ namespace CSharpier
             return Concat(parts);
         }
 
+        public static Doc Group(Parts parts)
+        {
+            return new Group
+            {
+                Contents = parts.Count == 1 ? parts[0] : Concat(parts),
+
+            };
+        }
+
         public static Doc Group(params Doc[] contents)
         {
             return new Group
             {
                 Contents = contents.Length == 1 ? contents[0] : Concat(contents),
 
-            // TODO 2 group options if I use them
-            // id: opts.id,
-            // break: !!opts.shouldBreak,
-            // expandedStates: opts.expandedStates,
             };
         }
 

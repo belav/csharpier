@@ -144,7 +144,7 @@ namespace CSharpier
             Options options,
             bool mustBeFlat = false)
         {
-            var commandsAsArray = restCommands.ToArray();
+            var commandsAsArray = restCommands.Reverse().ToArray();
             var restIdx = commandsAsArray.Length;
             var returnFalseIfMoreStringsFound = false;
             var cmds = new Stack<PrintCommand>();

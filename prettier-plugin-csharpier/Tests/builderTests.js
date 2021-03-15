@@ -118,23 +118,15 @@ test("indent argumentList", () => {
 });
 
 test("scratch", () => {
-    const doc =
+    var doc = Concat(
+        "1",
+        Group(Concat(Line, "2")),
+        HardLine,
         Concat(
-            "string Property",
-            Group(
-                Concat(
-                    Line,
-                    "{",
-                    //Group(
-                    Indent(
-                        Concat(
-                            Line,
-                            "protected internal get;",
-                            BreakParent,
-                            Line,
-                            "protected internal set;")), //),
-                    Line,
-                    "}")));
+            "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+            Line,
+            "2"));
+
     const actual = print(doc);
     expect(actual).toBe("");
 });

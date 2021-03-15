@@ -28,3 +28,4 @@ CSharpier.Core.Tests contains a number of different unit tests.
 - https://dev.to/fvictorio/how-to-write-a-plugin-for-prettier-6gi is also useful for understanding how formatting works.
 - https://sharplab.io/ is useful for understanding the AST that is produced from some C# code
 - https://www.linqpad.net/ can also show the AST, but is less forgiving with errors in your code.
+- https://www.sapehin.com/blog/csharp-via-roslynapi-the-big-picture/ gives an overview of all the different syntax nodes in c#

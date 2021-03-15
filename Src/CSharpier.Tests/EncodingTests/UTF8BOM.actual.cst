@@ -14,9 +14,9 @@ namespace Insite.Admin
     public class AdminContext
     {
         public static bool DisableAdminAccess =>
-            (ConfigurationManager.AppSettings["DisableAdminAccess"] ?? "false").EqualsIgnoreCase(
-                "true"
-            );
+            (ConfigurationManager.AppSettings[
+                "DisableAdminAccess"
+            ] ?? "false").EqualsIgnoreCase("true");
 
         private static IPerRequestCacheManager perRequestCacheManager;
         private static IPerRequestCacheManager PerRequestCacheManager =>

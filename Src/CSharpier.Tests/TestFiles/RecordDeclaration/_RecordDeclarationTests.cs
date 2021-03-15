@@ -8,7 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void BasicRecordDeclaration()
         {
-            this.RunTest("RecordDeclaration", "BasicRecordDeclaration");
+            this.RunTest("RecordDeclaration", "RecordDeclarations");
         }
     }
 }

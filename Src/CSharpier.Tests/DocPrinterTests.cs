@@ -163,27 +163,31 @@ namespace CSharpier.Tests
 
             result.Should().Be("1 2");
         }
-        
+
         [Test]
         public void LiteralLine_Trims_Space()
         {
-            var doc = Concat("{", Indent(HardLine,"indent", LiteralLine), "}");
+            var doc = Concat("{", Indent(HardLine, "indent", LiteralLine), "}");
 
             var result = this.Print(doc);
 
             result.Should().Be("{\r\n    indent\r\n}");
         }
-        
+
         [Test]
         public void HardLine_LiteralLine_Skips_HardLine_And_Trims()
         {
-            var doc = Concat("{", Indent(HardLine, LiteralLine,"noindent"), HardLine, "}");
+            var doc = Concat(
+                "{",
+                Indent(HardLine, LiteralLine, "noindent"),
+                HardLine,
+                "}");
 
             var result = this.Print(doc);
 
             result.Should().Be("{\r\nnoindent\r\n}");
         }
-        
+
         [Test]
         public void HardLine_LiteralLine_Skips_HardLine()
         {
@@ -208,18 +212,36 @@ namespace CSharpier.Tests
         }
 
         [Test]
+        public void Long_Statement_With_Line_Should_Not_Break_Unrelated_Group()
+        {
+            var doc = Concat(
+                "1",
+                Group(Line, Concat("2")),
+                HardLine,
+                Concat(
+                    "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+                    Line,
+                    "2"));
+            var result = this.Print(doc);
+            result.Should()
+                .Be(
+                    @"1 2
+1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+2");
+        }
+
+        [Test]
         public void Scratch()
         {
-            var doc = " ";
+            var doc = "";
             var result = this.Print(doc);
-            result.Should().Be(" ");
+            result.Should().Be("");
         }
 
         private string Print(Doc doc)
         {
-            return new DocPrinter().Print(doc, new Options()).TrimEnd(
-                '\r',
-                '\n');
+            return new DocPrinter().Print(doc, new Options())
+                .TrimEnd('\r', '\n');
         }
 
         public static Doc HardLine => Printer.HardLine;
@@ -228,9 +250,17 @@ namespace CSharpier.Tests
         public static Doc SoftLine => Printer.SoftLine;
         public static Doc BreakParent => new BreakParent();
 
+        public static Doc SpaceIfNoPreviousComment
+            => Printer.SpaceIfNoPreviousComment;
+
         public static Doc Group(Doc contents)
         {
             return Printer.Group(contents);
+        }
+
+        public static Doc Group(params Doc[] parts)
+        {
+            return Printer.Group(parts);
         }
 
         public static Doc Concat(Parts parts)
