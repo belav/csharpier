@@ -88,15 +88,15 @@ namespace My
             var u = 1u;
             var U = 1U;
             long hex = 0xBADC0DE, Hex = 0XDEADBEEF, l = -1L, L = 1L, l2 = 2l;
-            ulong ul = 1ul, Ul = 1Ul, uL = 1uL, UL = 1UL, lu = 1lu, Lu = 1Lu, lU
-                = 1lU, LU = 1LU;
+            ulong ul = 1ul, Ul = 1Ul, uL = 1uL, UL = 1UL, lu = 1lu, Lu = 1Lu, lU =
+                1lU, LU = 1LU;
             int minInt32Value = -2147483648;
             int minInt64Value = -9223372036854775808L;
 
             bool @bool;
             byte @byte;
-            char @char = 'c', \u0066 = '\u0066', hexchar = '\x0130', hexchar2
-                = (char)0xBAD;
+            char @char = 'c', \u0066 = '\u0066', hexchar = '\x0130', hexchar2 =
+                (char)0xBAD;
             string \U00000065 = "\U00000065";
             decimal @decimal = 1.44M;
             @decimal = 1.2m;
@@ -411,7 +411,7 @@ namespace My
         C = 2 + A,
 #if DEBUG
         D,
-        }
+	}
 #else
         E,
 
@@ -453,8 +453,10 @@ namespace My
                     async () =>
                     {
                         return await new WebClient().DownloadStringTaskAsync(
-                            "http://example.com");
-                    });
+                            "http://example.com"
+                        );
+                    }
+                );
             }
         }
     }
@@ -534,8 +536,8 @@ namespace ConsoleApplication1
             int? j = 6;
 
             Expression<Func<int>> e = () => i;
-            Expression<Func<bool, Action>> e2
-                = b => () =>
+            Expression<Func<bool, Action>> e2 =
+                b => () =>
                 {
                     return;
                 };
@@ -968,8 +970,8 @@ class CSharp72
 
     public void LeadingSeparator()
     {
-        var res
-            = 0 + 123 // permitted in C# 1.0 and later
+        var res =
+            0 + 123 // permitted in C# 1.0 and later
             + 1_2_3 // permitted in C# 7.0 and later
             + 0x1_2_3 // permitted in C# 7.0 and later
             + 0b101 // binary literals added in C# 7.0

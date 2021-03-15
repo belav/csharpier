@@ -12,8 +12,13 @@
 
         this.Method(
             "ljkasdfkljasdlkjfklajsdfkjlasdfkjlasdkljfajklsdfkjasdf",
-            "kljasdfkljaslkjdfljaksdfkjlaksljfaksjldf");
+            "kljasdfkljaslkjdfljaksdfkjlaksljfaksjldf"
+        );
 
         var superLongMethodNameForceLine = someFactoryName.SuperLongMethodNameForceLine();
+
+        this.WhenThereExists(
+            a.Website().WithDomainName("test-integration.insite.com")
+        );
     }
 }

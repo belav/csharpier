@@ -12,7 +12,8 @@ class ClassName
 
         this.Method(
             "ljkasdfkljasdlkjfklajsdfkjlasdfkjlasdkljfajklsdfkjasdf",
-            "kljasdfkljaslkjdfljaksdfkjlaksljfaksjldf");
+            "kljasdfkljaslkjdfljaksdfkjlaksljfaksjldf"
+        );
 
         var superLongMethodNameForceLine = someFactoryName.SuperLongMethodNameForceLine();
         

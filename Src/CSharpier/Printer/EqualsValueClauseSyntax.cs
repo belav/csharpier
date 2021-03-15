@@ -24,10 +24,8 @@ namespace CSharpier
             }
 
             var result = Group(
-                separator,
-                this.PrintSyntaxToken(
-                    node.EqualsToken,
-                    SpaceIfNoPreviousComment),
+                SpaceIfNoPreviousComment,
+                this.PrintSyntaxToken(node.EqualsToken, separator),
                 this.Print(node.Value));
 
             if (separator is LineDoc)

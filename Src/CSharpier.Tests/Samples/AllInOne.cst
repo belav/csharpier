@@ -414,10 +414,10 @@ namespace My
         C = 2 + A,
 #if DEBUG
         D,
-        }
+	}
 #else
         E,
-        }
+	}
 #endif
 
 
@@ -457,8 +457,10 @@ namespace My
                     async () =>
                     {
                         return await new WebClient().DownloadStringTaskAsync(
-                            "http://example.com");
-                    });
+                            "http://example.com"
+                        );
+                    }
+                );
             }
         }
     }

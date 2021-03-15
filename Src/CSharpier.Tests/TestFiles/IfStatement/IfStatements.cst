@@ -11,7 +11,7 @@ public class ClassName
         if (
             longStatementName
             && longerStatementName
-            && evenLongeStatementName
+            && evenLongerStatementName
             && superLongStatementName
         ) { }
 

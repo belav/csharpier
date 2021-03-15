@@ -26,6 +26,9 @@ public class ClassName
 
     public string LambdaBod => this.Property;
 
+    public string LongNameForcesALineBreakSoWeCanTestEvenLonger =>
+        this.Property;
+
     public string Property
     {
         get { return this.Property; }
@@ -40,7 +43,7 @@ public class ClassName
             return x;
         }
     }
-    
+
     public string Property
     {
         [Obsolete]
@@ -49,11 +52,11 @@ public class ClassName
         set;
     }
 
-    public virtual ICollection<SomeObject> SomeLongNameThatForcesALineBreak { get; set; }
-        = new HashSet<SomeObject>();
+    public virtual ICollection<SomeObject> SomeLongNameThatForcesALineBreak { get; set; } =
+        new HashSet<SomeObject>();
 
-    public Dictionary<string, string> Properties { get; set; }
-        = new Dictionary<string, string>();
+    public Dictionary<string, string> Properties { get; set; } =
+        new Dictionary<string, string>();
 
     public virtual LongerPropertyConfiguration LongerPropertyConfiguration { get; set; }
 }

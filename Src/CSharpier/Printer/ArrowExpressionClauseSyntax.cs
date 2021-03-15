@@ -9,8 +9,8 @@ namespace CSharpier
         {
             return Group(
                 Indent(
-                    Line,
-                    this.PrintSyntaxToken(node.ArrowToken, " "),
+                    " ",
+                    this.PrintSyntaxToken(node.ArrowToken, Line),
                     this.Print(node.Expression)));
         }
     }
