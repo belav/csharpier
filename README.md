@@ -2,13 +2,20 @@
 CSharpier is an opinionated code formatter for c#. It uses Roslyn to parse your code and re-prints it using its own rules. The printing process was ported from [prettier](https://github.com/prettier/prettier) but has evolved over time.
 
 ### Work In Progress
-CSharpier is currently in alpha and I do not recommend using it on production code.
+CSharpier is currently in alpha and I'd be hesitant to recommend using it on production code.
   - It has been tested against a large number of public repositories to validate that the changes it makes do not lose any syntax but there is a possibility it will break your code.
   - The rules it uses to format code are not yet finalized and some of the results are ugly.
+  - The rules it uses to format your code will change over time.
   - There are currently no options exposed for formatting.
   - The options for what files it should format are limited.
 
-I encourage you to try it out on your own code and report any bugs, code that doesn't format well, or opinions on how you think the formatting should change.
+I'm currently using CSharpier to format some small projects I'm working on and I've only run into a few of critical bugs since releasing it in alpha.
+  - One bug dealt with file encoding, and would save some files with an incorrect encoding - this resulted in files that would not compile.
+  - Support for formatting a Record type's primary constructor was missing. CSharpier reported the missing type and did not format the file.
+  - CSharpier had a case where it would insert an extra new line on each format of a file.
+  - If you kill the CSharpier process while it is formatting a file, there is a chance it will leave a file half written. This will be fixed shortly.
+
+I encourage you to try it out on your own code and report any bugs, code that doesn't format well, or opinions on how you think the formatting should change. If you can live with the fact that the formatting will be changing over time, it is reasonably safe to use.
 
 ### Features
   - It is fast. It can format a solution of ~11,000 files in ~30 seconds.
