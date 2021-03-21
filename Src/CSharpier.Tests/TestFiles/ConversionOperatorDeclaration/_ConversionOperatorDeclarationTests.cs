@@ -6,11 +6,12 @@ namespace CSharpier.Tests.TestFiles
     public class ConversionOperatorDeclarationTests : BaseTest
     {
         [Test]
-        public void BasicConversionOperatorDeclaration()
+        public void ConversionOperatorDeclarations()
         {
             this.RunTest(
                 "ConversionOperatorDeclaration",
-                "BasicConversionOperatorDeclaration");
+                "ConversionOperatorDeclarations"
+            );
         }
     }
 }
