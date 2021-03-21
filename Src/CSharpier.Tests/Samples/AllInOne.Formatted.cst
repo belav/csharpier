@@ -304,9 +304,12 @@ namespace My
         [NonExisting]
         [Foo::NonExisting(var, 5)]
         [CLSCompliant(false)]
-        [Obsolete, System.NonSerialized, NonSerialized, CLSCompliant(true
-        || false
-        & true)]
+        [
+            Obsolete,
+            System.NonSerialized,
+            NonSerialized,
+            CLSCompliant(true || false & true)
+        ]
         private volatile int f2;
         [return: Obsolete]
         [method: Obsolete]

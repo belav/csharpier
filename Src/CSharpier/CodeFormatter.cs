@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -15,16 +17,35 @@ namespace CSharpier
     {
         public CSharpierResult Format(string code, Options options)
         {
+            return this.FormatAsync(
+                code,
+                options,
+                CancellationToken.None
+            ).Result;
+        }
+
+        public async Task<CSharpierResult> FormatAsync(
+            string code,
+            Options options,
+            CancellationToken cancellationToken)
+        {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 code,
                 new CSharpParseOptions(
                     LanguageVersion.CSharp9,
-                    DocumentationMode.Diagnose));
-            var rootNode = syntaxTree.GetRoot() as CompilationUnitSyntax;
-            var diagnostics = syntaxTree.GetDiagnostics()
+                    DocumentationMode.Diagnose
+                ),
+                cancellationToken: cancellationToken
+            );
+            var rootNode =
+                await syntaxTree.GetRootAsync(
+                    cancellationToken
+                ) as CompilationUnitSyntax;
+            var diagnostics = syntaxTree.GetDiagnostics(cancellationToken)
                 .Where(
                     o => o.Severity == DiagnosticSeverity.Error
-                    && o.Id != "CS1029")
+                    && o.Id != "CS1029"
+                )
                 .ToList();
             // TODO 1 report that didn't format because of errors?
             if (diagnostics.Any())
@@ -40,7 +61,6 @@ namespace CSharpier
             try
             {
                 var document = new Printer().Print(rootNode);
-
                 var formattedCode = new DocPrinter().Print(document, options);
                 return new CSharpierResult
                 {
@@ -65,10 +85,12 @@ namespace CSharpier
             var stringBuilder = new StringBuilder();
             SyntaxNodeJsonWriter.WriteCompilationUnitSyntax(
                 stringBuilder,
-                rootNode);
+                rootNode
+            );
             return JsonConvert.SerializeObject(
                 JsonConvert.DeserializeObject(stringBuilder.ToString()),
-                Formatting.Indented);
+                Formatting.Indented
+            );
         }
 
         private string PrintDocTree(Doc document, string indent)
@@ -102,7 +124,8 @@ namespace CSharpier
                     {
                         var printResult = this.PrintDocTree(
                             concat.Parts[x],
-                            indent + "    ");
+                            indent + "    "
+                        );
                         if (printResult == null)
                         {
                             continue;
@@ -129,15 +152,18 @@ namespace CSharpier
                 case ForceFlat forceFlat:
                     return indent + "ForceFlat(" + Environment.NewLine + this.PrintDocTree(
                         forceFlat.Contents,
-                        indent + "    ") + ")";
+                        indent + "    "
+                    ) + ")";
                 case IndentDoc indentDoc:
                     return indent + "Indent(" + Environment.NewLine + this.PrintDocTree(
                         indentDoc.Contents,
-                        indent + "    ") + ")";
+                        indent + "    "
+                    ) + ")";
                 case Group group:
                     return indent + "Group(" + Environment.NewLine + this.PrintDocTree(
                         group.Contents,
-                        indent + "    ") + ")";
+                        indent + "    "
+                    ) + ")";
                 case LeadingComment leadingComment:
                     return indent + "LeadingComment(" + leadingComment.Comment + ", CommentType." + (leadingComment.Type == CommentType.SingleLine
                         ? "SingleLine"
@@ -162,7 +188,8 @@ namespace CSharpier
                 .First(o => o.Name == "SyntaxDiffer");
             var methods = type.GetMethods(
                     BindingFlags.NonPublic
-                    | BindingFlags.Static)
+                    | BindingFlags.Static
+                )
                 .Where(o => o.Name == "GetTextChanges");
             foreach (var method in methods)
             {
@@ -175,7 +202,8 @@ namespace CSharpier
                             new[] {
                                 CSharpSyntaxTree.ParseText(code),
                                 CSharpSyntaxTree.ParseText(formattedCode)
-                            }) as IList<TextChange>;
+                            }
+                        ) as IList<TextChange>;
                     return result.Count == 0;
                 }
             }
@@ -189,8 +217,8 @@ namespace CSharpier
         public string Code { get; set; }
         public string DocTree { get; set; }
         public string AST { get; set; }
-        public bool TestRunFailed { get; set; }
-        public IEnumerable<Diagnostic> Errors { get; set; } = Enumerable.Empty<Diagnostic>();
+        public IEnumerable<Diagnostic> Errors { get; set; } =
+            Enumerable.Empty<Diagnostic>();
         public string FailureMessage { get; set; }
     }
 }

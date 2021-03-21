@@ -1,3 +1,4 @@
+using System.Threading;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -15,12 +16,14 @@ namespace CSharpier.Tests
 
             var result = this.AreEqual(left, right);
 
-            result.Should().Be(
-                @"    Original: Around Line 0
+            result.Should()
+                .Be(
+                    @"    Original: Around Line 0
 class ClassName { }
     Formatted: Around Line 0
 namespace Namespace { }
-");
+"
+                );
         }
 
         [Test]
@@ -38,7 +41,8 @@ namespace Namespace { }
         [Test]
         public void MissingAttribute()
         {
-            var left = @"class Resources
+            var left =
+                @"class Resources
 {
     [Obsolete]
     public Resources()
@@ -54,8 +58,9 @@ namespace Namespace { }
 
             var result = this.AreEqual(left, right);
 
-            result.Should().Be(
-                @"    Original: Around Line 2
+            result.Should()
+                .Be(
+                    @"    Original: Around Line 2
 class Resources
 {
     [Obsolete]
@@ -68,13 +73,15 @@ class Resources
 {
     public Resources() { }
 }
-");
+"
+                );
         }
 
         [Test]
         public void SeperatedSyntaxLists()
         {
-            var left = @"namespace Insite.Automated.Core
+            var left =
+                @"namespace Insite.Automated.Core
 {
     using System;
 
@@ -93,7 +100,8 @@ class Resources
     }
 }";
 
-            var right = @"namespace Insite.Automated.Core
+            var right =
+                @"namespace Insite.Automated.Core
 {
     using System;
 
@@ -132,8 +140,9 @@ class Resources
 }";
             var result = this.AreEqual(left, right);
 
-            result.Should().Be(
-                @"    Original: Around Line 4
+            result.Should()
+                .Be(
+                    @"    Original: Around Line 4
     Integer,
     String,
 };
@@ -143,12 +152,17 @@ public enum Enum
     Integer,
     String,
 }
-");
+"
+                );
         }
 
         private string AreEqual(string left, string right)
         {
-            return new SyntaxNodeComparer(left, right).CompareSource();
+            return new SyntaxNodeComparer(
+                left,
+                right,
+                CancellationToken.None
+            ).CompareSource();
         }
     }
 }

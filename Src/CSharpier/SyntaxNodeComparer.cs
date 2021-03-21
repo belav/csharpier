@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -21,41 +23,59 @@ namespace CSharpier
 
         public SyntaxNodeComparer(
             string originalSourceCode,
-            string newSourceCode)
+            string newSourceCode,
+            CancellationToken cancellationToken)
         {
             this.OriginalSourceCode = originalSourceCode;
             this.NewSourceCode = newSourceCode;
 
             var cSharpParseOptions = new CSharpParseOptions(
-                LanguageVersion.CSharp9);
+                LanguageVersion.CSharp9
+            );
             this.OriginalSyntaxTree = CSharpSyntaxTree.ParseText(
                 this.OriginalSourceCode,
-                cSharpParseOptions);
+                cSharpParseOptions,
+                cancellationToken: cancellationToken
+            );
             this.NewSyntaxTree = CSharpSyntaxTree.ParseText(
                 this.NewSourceCode,
-                cSharpParseOptions);
+                cSharpParseOptions,
+                cancellationToken: cancellationToken
+            );
         }
+
 
         public string CompareSource()
         {
-            var result = this.AreEqualIgnoringWhitespace(
-                OriginalSyntaxTree.GetRoot(),
-                NewSyntaxTree.GetRoot());
-            var message = "";
-            if (result.IsInvalid)
-            {
-                message += "    Original: " + GetLine(
-                    result.OriginalSpan,
-                    this.OriginalSyntaxTree,
-                    this.OriginalSourceCode);
+            return this.CompareSourceAsync(CancellationToken.None).Result;
+        }
 
-                message += "    Formatted: " + GetLine(
-                    result.NewSpan,
-                    this.NewSyntaxTree,
-                    this.NewSourceCode);
+        public async Task<string> CompareSourceAsync(
+            CancellationToken cancellationToken)
+        {
+            var result = this.AreEqualIgnoringWhitespace(
+                await OriginalSyntaxTree.GetRootAsync(cancellationToken),
+                await NewSyntaxTree.GetRootAsync(cancellationToken)
+            );
+
+            if (!result.IsInvalid)
+            {
+                return null;
             }
 
-            return message == "" ? null : message;
+            var message =
+                "    Original: " + GetLine(
+                    result.OriginalSpan,
+                    this.OriginalSyntaxTree,
+                    this.OriginalSourceCode
+                );
+
+            message += "    Formatted: " + GetLine(
+                result.NewSpan,
+                this.NewSyntaxTree,
+                this.NewSourceCode
+            );
+            return message;
         }
 
         public string GetLine(
@@ -68,10 +88,10 @@ namespace CSharpier
                 return "Missing";
             }
 
-            var line
-                = syntaxTree.GetLineSpan(textSpan.Value).StartLinePosition.Line;
-            var endLine
-                = syntaxTree.GetLineSpan(textSpan.Value).EndLinePosition.Line;
+            var line =
+                syntaxTree.GetLineSpan(textSpan.Value).StartLinePosition.Line;
+            var endLine =
+                syntaxTree.GetLineSpan(textSpan.Value).EndLinePosition.Line;
 
             var result = "Around Line " + line + Environment.NewLine;
 
@@ -92,6 +112,7 @@ namespace CSharpier
                 {
                     break;
                 }
+
                 x++;
             }
 
@@ -111,7 +132,8 @@ namespace CSharpier
             {
                 var result = this.Compare(
                     originalStack.Pop(),
-                    formattedStack.Pop());
+                    formattedStack.Pop()
+                );
                 if (result.IsInvalid)
                 {
                     return result;
@@ -135,7 +157,8 @@ namespace CSharpier
                 {
                     return NotEqual(
                         originalParentSpan,
-                        getSpan(formattedList[x]));
+                        getSpan(formattedList[x])
+                    );
                 }
 
                 if (x == formattedList.Count)
@@ -210,12 +233,14 @@ namespace CSharpier
                         : originalToken.Span,
                     formattedToken.RawKind == 0
                         ? formattedNode.Span
-                        : formattedToken.Span);
+                        : formattedToken.Span
+                );
             }
 
             var result = this.Compare(
                 originalToken.LeadingTrivia,
-                formattedToken.LeadingTrivia);
+                formattedToken.LeadingTrivia
+            );
             if (result.IsInvalid)
             {
                 return result;
@@ -223,7 +248,8 @@ namespace CSharpier
 
             var result2 = this.Compare(
                 originalToken.TrailingTrivia,
-                formattedToken.TrailingTrivia);
+                formattedToken.TrailingTrivia
+            );
 
             return result2.IsInvalid ? result2 : Equal;
         }
@@ -249,11 +275,13 @@ namespace CSharpier
         {
             var cleanedOriginal = originalList.Where(
                     o => o.Kind() != SyntaxKind.EndOfLineTrivia
-                    && o.Kind() != SyntaxKind.WhitespaceTrivia)
+                    && o.Kind() != SyntaxKind.WhitespaceTrivia
+                )
                 .ToList();
             var cleanedFormatted = formattedList.Where(
                     o => o.Kind() != SyntaxKind.EndOfLineTrivia
-                    && o.Kind() != SyntaxKind.WhitespaceTrivia)
+                    && o.Kind() != SyntaxKind.WhitespaceTrivia
+                )
                 .ToList();
             var result = CompareLists(
                 cleanedOriginal,
@@ -261,7 +289,8 @@ namespace CSharpier
                 Compare,
                 o => o.Span,
                 originalList.Span,
-                formattedList.Span);
+                formattedList.Span
+            );
             return result.IsInvalid ? result : Equal;
         }
     }

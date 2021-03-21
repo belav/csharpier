@@ -14,7 +14,8 @@ namespace CSharpier.Tests.TestFileTests
         public void Setup()
         {
             this.rootDirectory = new DirectoryInfo(
-                Directory.GetCurrentDirectory());
+                Directory.GetCurrentDirectory()
+            );
             while (this.rootDirectory.Name != "CSharpier.Tests")
             {
                 this.rootDirectory = this.rootDirectory.Parent;
@@ -27,7 +28,8 @@ namespace CSharpier.Tests.TestFileTests
                 this.rootDirectory.FullName,
                 "TestFiles",
                 folderName,
-                fileName + ".cst");
+                fileName + ".cst"
+            );
             var code = File.ReadAllText(filePath);
 
             var formatter = new CodeFormatter();
@@ -39,13 +41,15 @@ namespace CSharpier.Tests.TestFileTests
             var filePathToChange = filePath;
             var expectedFilePath = actualFilePath.Replace(
                 ".actual.",
-                ".expected.");
+                ".expected."
+            );
             if (File.Exists(expectedFilePath))
             {
                 code = File.ReadAllText(expectedFilePath, Encoding.UTF8);
                 filePathToChange = expectedFilePath;
             }
 
+            // TODO 0 we could run the syntaxNodeComparer as well, to ensure it gets code coverage.
             if (result.Code != code)
             {
                 DiffRunner.Launch(filePathToChange, actualFilePath);

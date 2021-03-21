@@ -14,46 +14,66 @@ namespace CSharpier
             {
                 parts.Push(
                     this.PrintSyntaxToken(node.Target.Identifier),
-                    this.PrintSyntaxToken(node.Target.ColonToken, " "));
+                    this.PrintSyntaxToken(node.Target.ColonToken, " ")
+                );
             }
 
             parts.Push(
-                this.PrintSeparatedSyntaxList(
-                    node.Attributes,
-                    attributeNode =>
-                    {
-                        var name = this.Print(attributeNode.Name);
-                        if (attributeNode.ArgumentList == null)
+                Indent(
+                    node.Attributes.Count > 1 ? SoftLine : null,
+                    this.PrintSeparatedSyntaxList(
+                        node.Attributes,
+                        attributeNode =>
                         {
-                            return name;
-                        }
+                            var name = this.Print(attributeNode.Name);
+                            if (attributeNode.ArgumentList == null)
+                            {
+                                return name;
+                            }
 
-                        return Concat(
-                            name,
-                            this.PrintSyntaxToken(
-                                attributeNode.ArgumentList.OpenParenToken),
-                            this.PrintSeparatedSyntaxList(
-                                attributeNode.ArgumentList.Arguments,
-                                attributeArgumentNode => Concat(
-                                    attributeArgumentNode.NameEquals != null
-                                        ? this.PrintNameEqualsSyntax(
-                                            attributeArgumentNode.NameEquals)
-                                        : null,
-                                    attributeArgumentNode.NameColon != null
-                                        ? this.PrintNameColonSyntax(
-                                            attributeArgumentNode.NameColon)
-                                        : null,
-                                    this.Print(
-                                        attributeArgumentNode.Expression)),
-                                " "),
-                            this.PrintSyntaxToken(
-                                attributeNode.ArgumentList.CloseParenToken));
-                    },
-                    " "));
+                            return Group(
+                                name,
+                                this.PrintSyntaxToken(
+                                    attributeNode.ArgumentList.OpenParenToken
+                                ),
+                                Indent(
+                                    SoftLine,
+                                    this.PrintSeparatedSyntaxList(
+                                        attributeNode.ArgumentList.Arguments,
+                                        attributeArgumentNode => Concat(
+                                            attributeArgumentNode.NameEquals != null
+                                                ? this.PrintNameEqualsSyntax(
+                                                    attributeArgumentNode.NameEquals
+                                                )
+                                                : null,
+                                            attributeArgumentNode.NameColon != null
+                                                ? this.PrintNameColonSyntax(
+                                                    attributeArgumentNode.NameColon
+                                                )
+                                                : null,
+                                            this.Print(
+                                                attributeArgumentNode.Expression
+                                            )
+                                        ),
+                                        Line
+                                    ),
+                                    this.PrintSyntaxToken(
+                                        attributeNode.ArgumentList.CloseParenToken
+                                    )
+                                )
+                            );
+                        },
+                        Line
+                    )
+                )
+            );
 
-            parts.Push(this.PrintSyntaxToken(node.CloseBracketToken));
+            parts.Push(
+                node.Attributes.Count > 1 ? SoftLine : null,
+                this.PrintSyntaxToken(node.CloseBracketToken)
+            );
 
-            return Concat(parts);
+            return Group(parts);
         }
     }
 }

@@ -157,7 +157,10 @@ export class App extends Component<{}, State> {
                         }
                     }
                 },
-                'Shift-Tab': (cm: any) => cm.execCommand("indentLess")
+                "Ctrl-Enter": () => {
+                    this.formatCode();
+                },
+                "Shift-Tab": (cm: any) => cm.execCommand("indentLess")
             },
             gutters: ["gutter-errors"],
         };

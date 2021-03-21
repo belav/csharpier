@@ -4,6 +4,8 @@ using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using CSharpier;
 using UtfUnknown;
@@ -22,13 +24,17 @@ namespace CSharpier
             var rootCommand = CommandLineOptions.Create();
 
             rootCommand.Handler = CommandHandler.Create(
-                new CommandLineOptions.Handler(Run));
+                new CommandLineOptions.Handler(Run)
+            );
 
             return await rootCommand.InvokeAsync(args);
         }
 
         // TODO if someone kills this process while running, I think it can leave files half written
-        public static async Task<int> Run(string directoryOrFile, bool fast)
+        public static async Task<int> Run(
+            string directoryOrFile,
+            bool fast,
+            CancellationToken cancellationToken)
         {
             var fullStopwatch = Stopwatch.StartNew();
 
@@ -46,38 +52,67 @@ namespace CSharpier
                 await DoWork(
                     directoryOrFile,
                     Path.GetDirectoryName(directoryOrFile),
-                    validate);
+                    validate,
+                    cancellationToken
+                );
             }
             else
             {
                 var tasks = Directory.EnumerateFiles(
                         directoryOrFile,
                         "*.cs",
-                        SearchOption.AllDirectories)
-                    .AsParallel()
-                    .Select(o => DoWork(o, directoryOrFile, validate))
+                        SearchOption.AllDirectories
+                    )
+                    .Select(
+                        o => DoWork(
+                            o,
+                            directoryOrFile,
+                            validate,
+                            cancellationToken
+                        )
+                    )
                     .ToArray();
-                Task.WaitAll(tasks);
+                try
+                {
+                    Task.WaitAll(tasks, cancellationToken);
+                }
+                catch (OperationCanceledException ex)
+                {
+                    if (ex.CancellationToken != cancellationToken)
+                    {
+                        throw;
+                    }
+                }
             }
 
             Console.WriteLine(
                 PadToSize("total time: ", 80) + ReversePad(
-                    fullStopwatch.ElapsedMilliseconds + "ms"));
+                    fullStopwatch.ElapsedMilliseconds + "ms"
+                )
+            );
             Console.WriteLine(
-                PadToSize("total files: ", 80) + ReversePad(files + "  "));
+                PadToSize("total files: ", 80) + ReversePad(files + "  ")
+            );
             if (validate)
             {
                 Console.WriteLine(
-                    PadToSize("files that failed syntax tree validation: ", 80) + ReversePad(
-                        sourceLost + "  "));
+                    PadToSize(
+                        "files that failed syntax tree validation: ",
+                        80
+                    ) + ReversePad(sourceLost + "  ")
+                );
                 Console.WriteLine(
                     PadToSize(
                         "files that threw exceptions while formatting: ",
-                        80) + ReversePad(exceptionsFormatting + "  "));
+                        80
+                    ) + ReversePad(exceptionsFormatting + "  ")
+                );
                 Console.WriteLine(
                     PadToSize(
                         "files that threw exceptions while validating syntax tree: ",
-                        80) + ReversePad(exceptionsValidatingSource + "  "));
+                        80
+                    ) + ReversePad(exceptionsValidatingSource + "  ")
+                );
             }
 
             return 0;
@@ -104,20 +139,31 @@ namespace CSharpier
             return path;
         }
 
-        private static async Task DoWork(string file, string path, bool validate)
+        private static async Task DoWork(
+            string file,
+            string path,
+            bool validate,
+            CancellationToken cancellationToken)
         {
-            if (file.EndsWith(".g.cs") || file.EndsWith(".cshtml.cs"))
+            if (
+                file.EndsWith(".g.cs")
+                || file.EndsWith(".cshtml.cs")
+                || file.ContainsIgnoreCase("\\obj\\")
+                || file.ContainsIgnoreCase("/obj/")
+            )
             {
                 return;
             }
 
-            files++;
+            cancellationToken.ThrowIfCancellationRequested();
 
             using var reader = new StreamReader(file);
             var code = await reader.ReadToEndAsync();
             var detectionResult = CharsetDetector.DetectFromFile(file);
             var encoding = detectionResult.Detected.Encoding;
             reader.Close();
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             CSharpierResult result;
 
@@ -128,12 +174,22 @@ namespace CSharpier
 
             try
             {
-                result = new CodeFormatter().Format(code, new Options());
+                result = await new CodeFormatter().FormatAsync(
+                    code,
+                    new Options(),
+                    cancellationToken
+                );
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
             }
             catch (Exception ex)
             {
+                files++;
                 Console.WriteLine(
-                    GetPath() + " - threw exception while formatting");
+                    GetPath() + " - threw exception while formatting"
+                );
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.StackTrace);
                 Console.WriteLine();
@@ -144,31 +200,38 @@ namespace CSharpier
 
             if (result.Errors.Any())
             {
+                files++;
                 Console.WriteLine(GetPath() + " - failed to compile");
                 return;
             }
 
             if (!result.FailureMessage.IsBlank())
             {
+                files++;
                 Console.WriteLine(GetPath() + " - " + result.FailureMessage);
                 return;
             }
 
-            // TODO 1 use async inside of codeformatter?
             if (validate)
             {
                 var syntaxNodeComparer = new SyntaxNodeComparer(
                     code,
-                    result.Code);
+                    result.Code,
+                    cancellationToken
+                );
 
                 try
                 {
-                    var failure = syntaxNodeComparer.CompareSource();
+                    var failure =
+                        await syntaxNodeComparer.CompareSourceAsync(
+                            cancellationToken
+                        );
                     if (!string.IsNullOrEmpty(failure))
                     {
                         sourceLost++;
                         Console.WriteLine(
-                            GetPath() + " - failed syntax tree validation");
+                            GetPath() + " - failed syntax tree validation"
+                        );
                         Console.WriteLine(failure);
                     }
                 }
@@ -176,13 +239,16 @@ namespace CSharpier
                 {
                     exceptionsValidatingSource++;
                     Console.WriteLine(
-                        GetPath() + " - failed with exception during syntax tree validation" + Environment.NewLine + ex.Message + ex.StackTrace);
+                        GetPath() + " - failed with exception during syntax tree validation" + Environment.NewLine + ex.Message + ex.StackTrace
+                    );
                 }
             }
 
-            await using var stream = File.Open(file, FileMode.Create);
-            await using var writer = new StreamWriter(stream, encoding);
-            await writer.WriteAsync(result.Code);
+            cancellationToken.ThrowIfCancellationRequested();
+            files++;
+
+            // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
+            File.WriteAllText(file, result.Code, encoding);
         }
 
         private static string PadToSize(string value, int size = 120)
