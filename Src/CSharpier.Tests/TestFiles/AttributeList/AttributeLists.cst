@@ -16,7 +16,7 @@ class ClassName
         set;
     }
 
-    [Obsolete]
+    [Obsolete, NonSerialized]
     void MethodName([In]string value) { }
 
     [

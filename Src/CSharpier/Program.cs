@@ -186,28 +186,28 @@ namespace CSharpier
             }
             catch (Exception ex)
             {
-                files++;
+                Interlocked.Increment(ref files);
                 Console.WriteLine(
                     GetPath() + " - threw exception while formatting"
                 );
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.StackTrace);
                 Console.WriteLine();
-                exceptionsFormatting++;
+                Interlocked.Increment(ref exceptionsFormatting);
                 return;
             }
 
 
             if (result.Errors.Any())
             {
-                files++;
+                Interlocked.Increment(ref files);
                 Console.WriteLine(GetPath() + " - failed to compile");
                 return;
             }
 
             if (!result.FailureMessage.IsBlank())
             {
-                files++;
+                Interlocked.Increment(ref files);
                 Console.WriteLine(GetPath() + " - " + result.FailureMessage);
                 return;
             }
@@ -228,7 +228,7 @@ namespace CSharpier
                         );
                     if (!string.IsNullOrEmpty(failure))
                     {
-                        sourceLost++;
+                        Interlocked.Increment(ref sourceLost);
                         Console.WriteLine(
                             GetPath() + " - failed syntax tree validation"
                         );
@@ -237,7 +237,7 @@ namespace CSharpier
                 }
                 catch (Exception ex)
                 {
-                    exceptionsValidatingSource++;
+                    Interlocked.Increment(ref exceptionsValidatingSource);
                     Console.WriteLine(
                         GetPath() + " - failed with exception during syntax tree validation" + Environment.NewLine + ex.Message + ex.StackTrace
                     );
@@ -245,7 +245,7 @@ namespace CSharpier
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            files++;
+            Interlocked.Increment(ref files);
 
             // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
             File.WriteAllText(file, result.Code, encoding);
