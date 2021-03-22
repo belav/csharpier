@@ -10,7 +10,7 @@ jobs:
       -
         uses: actions/checkout@v2
       -
-        run: dotnet test src/CSharpier.Tests/CSharpier.Tests.csproj
+        run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj
   publish-nuget:
     runs-on: ubuntu-latest
     name: publish
