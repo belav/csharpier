@@ -80,23 +80,36 @@ namespace My
 
             var привет = local;
             var мир = local;
-            var local3 = 0, local4 = 1;
+            var local3 = 0,
+                local4 = 1;
             local3 = local4 = 1;
             var local5 = null as Action ?? null;
             var local6 = local5 is Action;
 
             var u = 1u;
             var U = 1U;
-            long hex = 0xBADC0DE, Hex = 0XDEADBEEF, l = -1L, L = 1L, l2 = 2l;
-            ulong ul = 1ul, Ul = 1Ul, uL = 1uL, UL = 1UL, lu = 1lu, Lu = 1Lu, lU =
-                1lU, LU = 1LU;
+            long hex = 0xBADC0DE,
+                Hex = 0XDEADBEEF,
+                l = -1L,
+                L = 1L,
+                l2 = 2l;
+            ulong ul = 1ul,
+                Ul = 1Ul,
+                uL = 1uL,
+                UL = 1UL,
+                lu = 1lu,
+                Lu = 1Lu,
+                lU = 1lU,
+                LU = 1LU;
             int minInt32Value = -2147483648;
             int minInt64Value = -9223372036854775808L;
 
             bool @bool;
             byte @byte;
-            char @char = 'c', \u0066 = '\u0066', hexchar = '\x0130', hexchar2 =
-                (char)0xBAD;
+            char @char = 'c',
+                \u0066 = '\u0066',
+                hexchar = '\x0130',
+                hexchar2 = (char)0xBAD;
             string \U00000065 = "\U00000065";
             decimal @decimal = 1.44M;
             @decimal = 1.2m;
@@ -252,12 +265,14 @@ namespace My
                 process();
             using (var v = BeginScope())
             using (A a = new A())
-            using (A a = new A(), b = new A())
+            using (A a = new A(),
+                b = new A())
             using (BeginScope())
                 return;
             yield return this.items[3];
             yield break;
-            fixed (int* p = stackalloc int[100], q = &y)
+            fixed (int* p = stackalloc int[100],
+                q = &y)
             {
                 *intref = 1;
             }
@@ -1026,7 +1041,8 @@ class CSharp73
 
     public void TupleEquality()
     {
-        (int, (int, int)) t1, t2;
+        (int, (int, int)) t1,
+            t2;
         var res = t1 == (1, (2, 3));
     }
 }

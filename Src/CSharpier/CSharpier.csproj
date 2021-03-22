@@ -7,7 +7,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>CSharpier</RootNamespace>
 		<PackAsTool>true</PackAsTool>
-		<Version>0.8.6</Version>
+		<Version>0.8.7</Version>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/belav/csharpier</RepositoryUrl> 
 		<RepositoryType>git</RepositoryType>

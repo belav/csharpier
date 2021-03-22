@@ -1,0 +1,28 @@
+name: Publish Nuget
+on:
+  push:
+    branches: [ master ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: test
+    steps:
+      -
+        uses: actions/checkout@v2
+      -
+        run: dotnet test src/CSharpier.Tests
+  publish:
+    runs-on: ubuntu-latest
+    name: publish
+    needs: test
+    steps:
+      -  
+        uses: actions/checkout@v2
+      -  
+        name: publish on version change
+        id: publish_nuget
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: src/CSharpier/CSharpier.csproj
+          TAG_FORMAT: *
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}

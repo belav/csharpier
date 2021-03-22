@@ -7,16 +7,18 @@ namespace CSharpier
         private Doc PrintVariableDeclarationSyntax(
             VariableDeclarationSyntax node)
         {
+            var innerParts = Concat(
+                this.PrintSeparatedSyntaxList(
+                    node.Variables,
+                    this.PrintVariableDeclaratorSyntax,
+                    node.Parent is ForStatementSyntax ? Line : HardLine
+                )
+            );
+
             return Concat(
                 this.Print(node.Type),
                 SpaceIfNoPreviousComment,
-                Indent(
-                    this.PrintSeparatedSyntaxList(
-                        node.Variables,
-                        this.PrintVariableDeclaratorSyntax,
-                        HardLine
-                    )
-                )
+                node.Variables.Count > 1 ? Indent(innerParts) : innerParts
             );
         }
     }

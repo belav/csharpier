@@ -10,19 +10,23 @@ namespace CSharpier
             var parts = new Parts(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(node.ForKeyword, " "),
-                this.PrintSyntaxToken(node.OpenParenToken));
+                this.PrintSyntaxToken(node.OpenParenToken)
+            );
             var innerGroup = new Parts();
             innerGroup.Push(SoftLine);
             if (node.Declaration != null)
             {
                 innerGroup.Push(
-                    this.PrintVariableDeclarationSyntax(node.Declaration));
+                    this.PrintVariableDeclarationSyntax(node.Declaration)
+                );
             }
             innerGroup.Push(
                 this.PrintSeparatedSyntaxList(
                     node.Initializers,
                     this.Print,
-                    " "));
+                    " "
+                )
+            );
             innerGroup.Push(this.PrintSyntaxToken(node.FirstSemicolonToken));
             if (node.Condition != null)
             {
@@ -43,10 +47,14 @@ namespace CSharpier
                 innerGroup.Push(SoftLine);
             }
             innerGroup.Push(
-                this.PrintSeparatedSyntaxList(
-                    node.Incrementors,
-                    this.Print,
-                    Line));
+                Indent(
+                    this.PrintSeparatedSyntaxList(
+                        node.Incrementors,
+                        this.Print,
+                        Line
+                    )
+                )
+            );
             parts.Push(Group(Indent(innerGroup.ToArray())));
             parts.Push(this.PrintSyntaxToken(node.CloseParenToken));
             var statement = this.Print(node.Statement);

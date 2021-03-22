@@ -105,14 +105,12 @@ namespace CSharpier
             if (hasMembers)
             {
                 parts.Push(
-                    Concat(
-                        hasConstraintClauses ? "" : HardLine,
-                        this.PrintSyntaxToken(node.OpenBraceToken)
-                    )
+                    HardLine,
+                    this.PrintSyntaxToken(node.OpenBraceToken),
+                    members,
+                    HardLine,
+                    this.PrintSyntaxToken(node.CloseBraceToken)
                 );
-                parts.Push(members);
-                parts.Push(HardLine);
-                parts.Push(this.PrintSyntaxToken(node.CloseBraceToken));
             }
             else
             {

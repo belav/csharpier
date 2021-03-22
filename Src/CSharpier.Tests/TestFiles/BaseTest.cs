@@ -56,8 +56,7 @@ namespace CSharpier.Tests.TestFileTests
                 CancellationToken.None
             );
 
-            // TODO 0 we could run the syntaxNodeComparer as well, to ensure it gets code coverage.
-            if (result.Code != code)
+            if (result.Code != code && !BuildServerDetector.Detected)
             {
                 DiffRunner.Launch(filePathToChange, actualFilePath);
             }

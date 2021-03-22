@@ -1,4 +1,4 @@
-class ClassName
+﻿class ClassName
 {
     void MethodName()
     {

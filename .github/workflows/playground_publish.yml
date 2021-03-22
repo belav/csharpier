@@ -8,9 +8,16 @@ defaults:
     working-directory: Src/CSharpier.Playground
 
 jobs:
-  build:
+  test:
+    runs-on: ubuntu-latest
+    name: test
+    steps:
+      - uses: actions/checkout@v2
+      - run: dotnet test src/CSharpier.Tests
+  publish:
     runs-on: ubuntu-latest
     name: .Net 5.0 Publish
+    needs: test
     steps:
       - 
         uses: actions/checkout@v2
