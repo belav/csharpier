@@ -1,12 +1,12 @@
-using System;
 using FluentAssertions;
-using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace CSharpier.Tests
 {
     public class DocPrinterTests
     {
+        private static string NewLine = System.Environment.NewLine;
+
         [Test]
         public void Basic_Concat()
         {
@@ -24,7 +24,7 @@ namespace CSharpier.Tests
 
             var result = this.Print(doc);
 
-            result.Should().Be("1\r\n3");
+            result.Should().Be($"1{NewLine}3");
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace CSharpier.Tests
 
             var result = this.Print(doc);
 
-            result.Should().Be("1\r\n3");
+            result.Should().Be($"1{NewLine}3");
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace CSharpier.Tests
 
             var result = this.Print(doc);
 
-            result.Should().Be("1\r\n3");
+            result.Should().Be($"1{NewLine}3");
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace CSharpier.Tests
 
             var result = this.Print(doc);
 
-            result.Should().Be("1\r\n2\r\n3");
+            result.Should().Be($"1{NewLine}2{NewLine}3");
         }
 
         [Test]
@@ -74,7 +74,7 @@ namespace CSharpier.Tests
 
             var result = this.Print(doc);
 
-            result.Should().Be("1\r\n2\r\n3");
+            result.Should().Be($"1{NewLine}2{NewLine}3");
         }
 
         [Test]
@@ -84,18 +84,14 @@ namespace CSharpier.Tests
                 "0",
                 Group(
                     Indent(
-                        Concat(
-                            SoftLine,
-                            "1",
-                            Line,
-                            "2",
-                            Line,
-                            "3",
-                            BreakParent))));
+                        Concat(SoftLine, "1", Line, "2", Line, "3", BreakParent)
+                    )
+                )
+            );
 
             var result = this.Print(doc);
 
-            result.Should().Be("0\r\n    1\r\n    2\r\n    3");
+            result.Should().Be($"0{NewLine}    1{NewLine}    2{NewLine}    3");
         }
 
         [Test]
@@ -106,7 +102,7 @@ namespace CSharpier.Tests
 
             var result = this.Print(doc);
 
-            result.Should().Be($"{longText}\r\n{longText}\r\n{longText}");
+            result.Should().Be($"{longText}{NewLine}{longText}{NewLine}{longText}");
         }
 
         [Test]
@@ -116,7 +112,7 @@ namespace CSharpier.Tests
 
             var result = this.Print(doc);
 
-            result.Should().Be($"0\r\n    1\r\n    2");
+            result.Should().Be($"0{NewLine}    1{NewLine}    2");
         }
 
         [Test]
@@ -127,11 +123,13 @@ namespace CSharpier.Tests
                 Concat(
                     Indent(Concat(HardLine, "1")),
                     HardLine,
-                    Indent(Concat(HardLine, "2"))));
+                    Indent(Concat(HardLine, "2"))
+                )
+            );
 
             var result = this.Print(doc);
 
-            result.Should().Be($"0\r\n    1\r\n\r\n    2");
+            result.Should().Be($"0{NewLine}    1{NewLine}{NewLine}    2");
         }
 
         [Test]
@@ -171,7 +169,7 @@ namespace CSharpier.Tests
 
             var result = this.Print(doc);
 
-            result.Should().Be("{\r\n    indent\r\n}");
+            result.Should().Be($"{{{NewLine}    indent{NewLine}}}");
         }
 
         [Test]
@@ -181,11 +179,12 @@ namespace CSharpier.Tests
                 "{",
                 Indent(HardLine, LiteralLine, "noindent"),
                 HardLine,
-                "}");
+                "}"
+            );
 
             var result = this.Print(doc);
 
-            result.Should().Be("{\r\nnoindent\r\n}");
+            result.Should().Be($"{{{NewLine}noindent{NewLine}}}");
         }
 
         [Test]
@@ -195,7 +194,7 @@ namespace CSharpier.Tests
 
             var result = this.Print(doc);
 
-            result.Should().Be("1\r\n2");
+            result.Should().Be($"1{NewLine}2");
         }
 
         [Test]
@@ -204,7 +203,8 @@ namespace CSharpier.Tests
             var doc = ForceFlat(
                 "lkjasdkfljalsjkdfkjlasdfjklakljsdfjkasdfkljsdafjk",
                 Line,
-                "jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj");
+                "jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj"
+            );
 
             var result = this.Print(doc);
 
@@ -221,13 +221,11 @@ namespace CSharpier.Tests
                 Concat(
                     "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
                     Line,
-                    "2"));
+                    "2"
+                )
+            );
             var result = this.Print(doc);
-            result.Should()
-                .Be(
-                    @"1 2
-1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
-2");
+            result.Should().Be($"1 2{NewLine}1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111{NewLine}2");
         }
 
         [Test]
@@ -250,8 +248,8 @@ namespace CSharpier.Tests
         public static Doc SoftLine => Printer.SoftLine;
         public static Doc BreakParent => new BreakParent();
 
-        public static Doc SpaceIfNoPreviousComment
-            => Printer.SpaceIfNoPreviousComment;
+        public static Doc SpaceIfNoPreviousComment =>
+            Printer.SpaceIfNoPreviousComment;
 
         public static Doc Group(Doc contents)
         {
