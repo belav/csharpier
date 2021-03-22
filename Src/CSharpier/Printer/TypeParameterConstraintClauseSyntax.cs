@@ -8,15 +8,19 @@ namespace CSharpier
         private Doc PrintTypeParameterConstraintClauseSyntax(
             TypeParameterConstraintClauseSyntax node)
         {
-            return Concat(
+            return Group(
                 this.PrintSyntaxToken(node.WhereKeyword, " "),
                 this.Print(node.Name),
                 SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(node.ColonToken, " "),
-                this.PrintSeparatedSyntaxList(
-                    node.Constraints,
-                    this.Print,
-                    " "));
+                Indent(
+                    this.PrintSeparatedSyntaxList(
+                        node.Constraints,
+                        this.Print,
+                        Line
+                    )
+                )
+            );
         }
     }
 }

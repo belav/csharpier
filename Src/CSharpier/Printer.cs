@@ -13,20 +13,19 @@ namespace CSharpier
         private static Doc BreakParent => new BreakParent();
 
         // TODO 0 maybe all spaces should be this instead?
-        public static Doc SpaceIfNoPreviousComment
-            => new SpaceIfNoPreviousComment();
-        public static Doc HardLine
-            => Concat(
-                new LineDoc { Type = LineDoc.LineType.Hard },
-                BreakParent);
-        public static Doc LiteralLine
-            => Concat(
+        public static Doc SpaceIfNoPreviousComment =>
+            new SpaceIfNoPreviousComment();
+        public static Doc HardLine =>
+            Concat(new LineDoc { Type = LineDoc.LineType.Hard }, BreakParent);
+        public static Doc LiteralLine =>
+            Concat(
                 new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true },
-                BreakParent);
-        public static Doc Line
-            => new LineDoc { Type = LineDoc.LineType.Normal };
-        public static Doc SoftLine
-            => new LineDoc { Type = LineDoc.LineType.Soft };
+                BreakParent
+            );
+        public static Doc Line =>
+            new LineDoc { Type = LineDoc.LineType.Normal };
+        public static Doc SoftLine =>
+            new LineDoc { Type = LineDoc.LineType.Soft };
 
         public static Doc LeadingComment(string comment, CommentType commentType)
         {
@@ -38,9 +37,7 @@ namespace CSharpier
             };
         }
 
-        public static Doc TrailingComment(
-            string comment,
-            CommentType commentType)
+        public static Doc TrailingComment(string comment, CommentType commentType)
         {
             return new TrailingComment
             {
@@ -156,7 +153,9 @@ namespace CSharpier
                     parts.Push(
                         this.PrintSyntaxToken(
                             list.GetSeparator(x),
-                            afterSeparator));
+                            afterSeparator
+                        )
+                    );
                 }
             }
 
@@ -180,7 +179,9 @@ namespace CSharpier
             parts.Push(
                 Join(
                     separator,
-                    attributeLists.Select(this.PrintAttributeListSyntax)));
+                    attributeLists.Select(this.PrintAttributeListSyntax)
+                )
+            );
 
             if (!(node is ParameterSyntax))
             {
@@ -224,16 +225,11 @@ namespace CSharpier
                     Join(
                         HardLine,
                         constraintClausesList.Select(
-                            this.PrintTypeParameterConstraintClauseSyntax))));
-
-            if (
-                !(node is DelegateDeclarationSyntax)
-                && !(node is MethodDeclarationSyntax)
-                && !(node is LocalFunctionStatementSyntax)
-            )
-            {
-                parts.Add(HardLine);
-            }
+                            this.PrintTypeParameterConstraintClauseSyntax
+                        )
+                    )
+                )
+            );
 
             return Concat(parts);
         }
@@ -250,7 +246,9 @@ namespace CSharpier
                 parts.Push(
                     this.PrintSyntaxToken(
                         eventFieldDeclarationSyntax.EventKeyword,
-                        " "));
+                        " "
+                    )
+                );
             }
 
             parts.Push(this.Print(node.Declaration));

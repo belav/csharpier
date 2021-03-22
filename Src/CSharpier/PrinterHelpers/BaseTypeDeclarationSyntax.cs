@@ -31,7 +31,9 @@ namespace CSharpier
                         HardLine,
                         Join(
                             HardLine,
-                            typeDeclarationSyntax.Members.Select(this.Print)));
+                            typeDeclarationSyntax.Members.Select(this.Print)
+                        )
+                    );
                 }
                 if (node is ClassDeclarationSyntax classDeclarationSyntax)
                 {
@@ -62,7 +64,9 @@ namespace CSharpier
                     this.PrintSeparatedSyntaxList(
                         enumDeclarationSyntax.Members,
                         this.PrintEnumMemberDeclarationSyntax,
-                        HardLine));
+                        HardLine
+                    )
+                );
                 hasMembers = enumDeclarationSyntax.Members.Count > 0;
                 keyword = enumDeclarationSyntax.EnumKeyword;
                 semicolonToken = enumDeclarationSyntax.SemicolonToken;
@@ -87,7 +91,8 @@ namespace CSharpier
             if (typeParameterList != null)
             {
                 parts.Push(
-                    this.PrintTypeParameterListSyntax(typeParameterList));
+                    this.PrintTypeParameterListSyntax(typeParameterList)
+                );
             }
 
             if (node.BaseList != null)
@@ -102,7 +107,9 @@ namespace CSharpier
                 parts.Push(
                     Concat(
                         hasConstraintClauses ? "" : HardLine,
-                        this.PrintSyntaxToken(node.OpenBraceToken)));
+                        this.PrintSyntaxToken(node.OpenBraceToken)
+                    )
+                );
                 parts.Push(members);
                 parts.Push(HardLine);
                 parts.Push(this.PrintSyntaxToken(node.CloseBraceToken));
@@ -110,10 +117,11 @@ namespace CSharpier
             else
             {
                 parts.Push(
-                    hasConstraintClauses ? "" : " ",
+                    " ",
                     this.PrintSyntaxToken(node.OpenBraceToken),
                     " ",
-                    this.PrintSyntaxToken(node.CloseBraceToken));
+                    this.PrintSyntaxToken(node.CloseBraceToken)
+                );
             }
 
             // TODO 1 should we ditch these? I don't know why you'd ever want one
