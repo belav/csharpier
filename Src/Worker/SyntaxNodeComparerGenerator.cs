@@ -26,11 +26,12 @@ namespace Worker
             var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
                 .Where(
                     o => !o.IsAbstract
-                    && typeof(CSharpSyntaxNode).IsAssignableFrom(o))
+                    && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
+                )
                 .ToList();
 
-            var fileName
-                = directory.FullName + @"\CSharpier\SyntaxNodeComparer.generated.cs";
+            var fileName =
+                directory.FullName + @"\CSharpier\SyntaxNodeComparer.generated.cs";
             using (var file = new StreamWriter(fileName, false))
             {
                 file.WriteLine(
@@ -44,7 +45,7 @@ namespace CSharpier
 {
     public partial class SyntaxNodeComparer
     {
-        public CompareResult Compare(SyntaxNode originalNode, SyntaxNode formattedNode)
+        private CompareResult Compare(SyntaxNode originalNode, SyntaxNode formattedNode)
         {
             if (originalNode == null && formattedNode == null)
             {
@@ -63,12 +64,13 @@ namespace CSharpier
             }
 
             switch (originalNode)
-            {");
+            {"
+                );
                 foreach (var syntaxNodeType in syntaxNodeTypes)
                 {
-                    var lowerCaseName
-                        = syntaxNodeType.Name[0].ToString().ToLower() + syntaxNodeType.Name.Substring(
-                            1);
+                    var lowerCaseName =
+                        syntaxNodeType.Name[0].ToString()
+                            .ToLower() + syntaxNodeType.Name.Substring(1);
                     file.WriteLine($@"                case {syntaxNodeType.Name} {lowerCaseName}:
                     return this.Compare{syntaxNodeType.Name}({lowerCaseName}, formattedNode as {syntaxNodeType.Name});");
                 }
@@ -78,7 +80,8 @@ namespace CSharpier
                     throw new Exception(""Can't handle "" + originalNode.GetType().Name);
             }
         }
-        ");
+        "
+                );
 
                 foreach (var syntaxNodeType in syntaxNodeTypes)
                 {
@@ -94,7 +97,9 @@ namespace CSharpier
                 throw new Exception(
                     Environment.NewLine + string.Join(
                         Environment.NewLine,
-                        missingTypes));
+                        missingTypes
+                    )
+                );
             }
         }
 

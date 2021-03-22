@@ -44,7 +44,6 @@ namespace CSharpier
             );
         }
 
-
         public string CompareSource()
         {
             return this.CompareSourceAsync(CancellationToken.None).Result;
@@ -78,7 +77,7 @@ namespace CSharpier
             return message;
         }
 
-        public string GetLine(
+        private string GetLine(
             TextSpan? textSpan,
             SyntaxTree syntaxTree,
             string source)
@@ -107,6 +106,11 @@ namespace CSharpier
                     linesWritten++;
                 }
 
+                if (linesWritten > 15)
+                {
+                    break;
+                }
+
                 currentLine = stringReader.ReadLine();
                 if (currentLine == null)
                 {
@@ -122,7 +126,7 @@ namespace CSharpier
         private readonly Stack<SyntaxNode> originalStack = new();
         private readonly Stack<SyntaxNode> formattedStack = new();
 
-        public CompareResult AreEqualIgnoringWhitespace(
+        private CompareResult AreEqualIgnoringWhitespace(
             SyntaxNode originalStart,
             SyntaxNode formattedStart)
         {

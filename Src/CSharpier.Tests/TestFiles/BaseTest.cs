@@ -1,5 +1,6 @@
 using System.IO;
 using System.Text;
+using System.Threading;
 using DiffEngine;
 using FluentAssertions;
 using NUnit.Framework;
@@ -49,12 +50,21 @@ namespace CSharpier.Tests.TestFileTests
                 filePathToChange = expectedFilePath;
             }
 
+            var comparer = new SyntaxNodeComparer(
+                code,
+                result.Code,
+                CancellationToken.None
+            );
+
             // TODO 0 we could run the syntaxNodeComparer as well, to ensure it gets code coverage.
             if (result.Code != code)
             {
                 DiffRunner.Launch(filePathToChange, actualFilePath);
             }
             result.Code.Should().Be(code);
+
+            var compareResult = comparer.CompareSource();
+            compareResult.Should().BeNullOrEmpty();
         }
     }
 }

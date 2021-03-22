@@ -47,7 +47,6 @@ namespace CSharpier
                     && o.Id != "CS1029"
                 )
                 .ToList();
-            // TODO 1 report that didn't format because of errors?
             if (diagnostics.Any())
             {
                 return new CSharpierResult
@@ -177,38 +176,6 @@ namespace CSharpier
                 default:
                     throw new Exception("Can't handle " + document);
             }
-        }
-
-        // this isn't super useful because it just shows me how to convert old into new, but doesn't show what that will actually change
-        public static bool IsCodeEqualAccordingToSyntaxDiffer(
-            string code,
-            string formattedCode)
-        {
-            var type = typeof(SyntaxNode).Assembly.GetTypes()
-                .First(o => o.Name == "SyntaxDiffer");
-            var methods = type.GetMethods(
-                    BindingFlags.NonPublic
-                    | BindingFlags.Static
-                )
-                .Where(o => o.Name == "GetTextChanges");
-            foreach (var method in methods)
-            {
-                var blah = method.GetParameters();
-                if (blah.Length == 2 && blah[0].ParameterType == typeof(SyntaxTree))
-                {
-                    var result =
-                        method.Invoke(
-                            null,
-                            new[] {
-                                CSharpSyntaxTree.ParseText(code),
-                                CSharpSyntaxTree.ParseText(formattedCode)
-                            }
-                        ) as IList<TextChange>;
-                    return result.Count == 0;
-                }
-            }
-
-            return false;
         }
     }
 

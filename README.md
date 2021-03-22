@@ -12,8 +12,8 @@ CSharpier is currently in alpha and I'd be hesitant to recommend using it on pro
 I'm currently using CSharpier to format some small projects I'm working on and I've only run into a few of critical bugs since releasing it in alpha.
   - One bug dealt with file encoding, and would save some files with an incorrect encoding - this resulted in files that would not compile.
   - Support for formatting a Record type's primary constructor was missing. CSharpier reported the missing type and did not format the file.
-  - CSharpier had a case where it would insert an extra new line on each format of a file.
-  - If you kill the CSharpier process while it is formatting a file, there is a chance it will leave a file half written. This will be fixed shortly.
+  - CSharpier had a bug where it would insert an extra new line on each format of a file.
+  - If the CSharpier process was canceled while running, it would potentially leave a file half written.
 
 I encourage you to try it out on your own code and report any bugs, code that doesn't format well, or opinions on how you think the formatting should change. If you can live with the fact that the formatting will be changing over time, it is reasonably safe to use.
 

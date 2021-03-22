@@ -21,9 +21,14 @@ namespace CSharpier
                             o => Concat(
                                 this.PrintAttributeLists(o, o.AttributeLists),
                                 this.PrintModifiers(o.Modifiers),
-                                this.Print(o.Type)),
-                            Line))),
-                this.PrintSyntaxToken(node.ParameterList.GreaterThanToken));
+                                this.Print(o.Type)
+                            ),
+                            Line
+                        )
+                    )
+                ),
+                this.PrintSyntaxToken(node.ParameterList.GreaterThanToken)
+            );
         }
 
         private Doc PrintCallingConvention(
@@ -39,14 +44,19 @@ namespace CSharpier
                 node.UnmanagedCallingConventionList != null
                     ? Concat(
                         this.PrintSyntaxToken(
-                            node.UnmanagedCallingConventionList.OpenBracketToken),
+                            node.UnmanagedCallingConventionList.OpenBracketToken
+                        ),
                         this.PrintSeparatedSyntaxList(
                             node.UnmanagedCallingConventionList.CallingConventions,
                             o => this.PrintSyntaxToken(o.Name),
-                            " "),
+                            " "
+                        ),
                         this.PrintSyntaxToken(
-                            node.UnmanagedCallingConventionList.CloseBracketToken))
-                    : null);
+                            node.UnmanagedCallingConventionList.CloseBracketToken
+                        )
+                    )
+                    : null
+            );
         }
     }
 }
