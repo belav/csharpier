@@ -6,14 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class VariableDeclarationTests : BaseTest
     {
         [Test]
-        public void BasicVariableDeclaration()
+        public void VariableDeclarations()
         {
-            this.RunTest("VariableDeclaration", "BasicVariableDeclaration");
-        }
-        [Test]
-        public void VariableDeclarationComments()
-        {
-            this.RunTest("VariableDeclaration", "VariableDeclarationComments");
+            this.RunTest("VariableDeclaration", "VariableDeclarations");
         }
     }
 }

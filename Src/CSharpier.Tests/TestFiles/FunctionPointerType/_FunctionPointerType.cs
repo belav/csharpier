@@ -3,12 +3,12 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests.TestFiles
 {
-    public class ForStatementTests : BaseTest
+    public class FunctionPointerType : BaseTest
     {
         [Test]
-        public void ForStatements()
+        public void FunctionPointerTypes()
         {
-            this.RunTest("ForStatement", "ForStatements");
+            this.RunTest("FunctionPointerType", "FunctionPointerTypes");
         }
     }
 }
