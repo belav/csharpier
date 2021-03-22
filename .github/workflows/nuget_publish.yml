@@ -13,7 +13,7 @@ jobs:
         run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj
   publish-nuget:
     runs-on: ubuntu-latest
-    name: publish
+    name: publish nuget
     needs: test
     steps:
       -  
@@ -23,12 +23,12 @@ jobs:
         id: publish_nuget
         uses: rohith/publish-nuget@v2
         with:
-          PROJECT_FILE_PATH: src/CSharpier/CSharpier.csproj
+          PROJECT_FILE_PATH: Src/CSharpier/CSharpier.csproj
           TAG_FORMAT: "*"
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
   publish-playground:
     runs-on: ubuntu-latest
-    name: .Net 5.0 Publish
+    name: publish playground
     needs: publish-nuget
     steps:
       -
