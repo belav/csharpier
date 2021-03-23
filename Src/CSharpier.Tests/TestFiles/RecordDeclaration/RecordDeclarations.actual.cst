@@ -13,7 +13,9 @@ record MostlyWeeklyTemperature(
     public double Mean => (monday + monday + thursday + friday + sunday) / 5.0;
 }
 
-record R3(string x) : R1(x) { }
+record PC(string x) : PrimaryConstructor(x) { }
+
+record RecordWithoutBody(string property);
 
 record LongerRecordNameWhatHappenssssssssssssssssssss(string x)
     : R4<string>(x) { }
