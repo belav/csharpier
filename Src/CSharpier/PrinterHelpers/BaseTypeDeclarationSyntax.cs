@@ -112,7 +112,7 @@ namespace CSharpier
                     this.PrintSyntaxToken(node.CloseBraceToken)
                 );
             }
-            else
+            else if (node.OpenBraceToken.Kind() != SyntaxKind.None)
             {
                 parts.Push(
                     " ",
@@ -122,7 +122,6 @@ namespace CSharpier
                 );
             }
 
-            // TODO 1 should we ditch these? I don't know why you'd ever want one
             if (semicolonToken.HasValue)
             {
                 parts.Push(this.PrintSyntaxToken(semicolonToken.Value));
