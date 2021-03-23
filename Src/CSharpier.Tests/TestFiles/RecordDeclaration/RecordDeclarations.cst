@@ -15,5 +15,7 @@ record MostlyWeeklyTemperature(
 
 record R3(string x) : R1(x) { }
 
+record RecordWithoutBody(string property);
+
 record LongerRecordNameWhatHappenssssssssssssssssssss(string x)
     : R4<string>(x) { }
