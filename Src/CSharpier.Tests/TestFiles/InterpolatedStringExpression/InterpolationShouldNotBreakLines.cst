@@ -1,4 +1,9 @@
 public class ClassName
 {
     public string Test = $"{SomeValue}{CallSomeLongMethodWithBiParameters(jlkasdfkljasdflkaskdf, jkasdflkjasdfsdkaljfasdkjf)}";
+
+    public string Test2 = CallSomeLongMethodWithBiParameters(
+        $"some super long interpolated string with some substitions like {jkasdflkjasdfsdkaljfasdkjf}",
+        $"another long interpolated string with some substitions like {jlkasdfkljasdflkaskdf}"
+    );
 }
