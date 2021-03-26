@@ -31,7 +31,7 @@ namespace Worker
                 .ToList();
 
             var fileName =
-                directory.FullName + @"\CSharpier\SyntaxNodeComparer.generated.cs";
+                directory.FullName + "/CSharpier/SyntaxNodeComparer.generated.cs";
             using (var file = new StreamWriter(fileName, false))
             {
                 file.WriteLine(
