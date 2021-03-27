@@ -12,7 +12,8 @@ namespace CSharpier
                 " ",
                 this.PrintSyntaxToken(node.OperatorToken),
                 " ",
-                this.Print(node.Right));
+                this.Print(node.Right)
+            );
         }
     }
 }

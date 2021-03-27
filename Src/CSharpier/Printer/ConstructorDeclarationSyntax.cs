@@ -16,10 +16,10 @@ namespace CSharpier
                 node.Initializer != null ? this.Print(node.Initializer) : null,
                 this.PrintBlockSyntax(node.Body),
                 node.ExpressionBody != null
-                    ? this.PrintArrowExpressionClauseSyntax(
-                        node.ExpressionBody)
+                    ? this.PrintArrowExpressionClauseSyntax(node.ExpressionBody)
                     : null,
-                this.PrintSyntaxToken(node.SemicolonToken));
+                this.PrintSyntaxToken(node.SemicolonToken)
+            );
         }
     }
 }

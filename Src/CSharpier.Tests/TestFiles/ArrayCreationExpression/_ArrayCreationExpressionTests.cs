@@ -10,14 +10,16 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "ArrayCreationExpression",
-                "ArrayCreationWithInitializer");
+                "ArrayCreationWithInitializer"
+            );
         }
         [Test]
         public void BasicArrayCreationExpression()
         {
             this.RunTest(
                 "ArrayCreationExpression",
-                "BasicArrayCreationExpression");
+                "BasicArrayCreationExpression"
+            );
         }
     }
 }

@@ -10,21 +10,24 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "InitializerExpression",
-                "BasicArrayInitializerExpression");
+                "BasicArrayInitializerExpression"
+            );
         }
         [Test]
         public void BasicCollectionInitializerExpression()
         {
             this.RunTest(
                 "InitializerExpression",
-                "BasicCollectionInitializerExpression");
+                "BasicCollectionInitializerExpression"
+            );
         }
         [Test]
         public void BasicComplexElementInitializerExpression()
         {
             this.RunTest(
                 "InitializerExpression",
-                "BasicComplexElementInitializerExpression");
+                "BasicComplexElementInitializerExpression"
+            );
         }
         [Test]
         public void LongItemsArrayInitializer()

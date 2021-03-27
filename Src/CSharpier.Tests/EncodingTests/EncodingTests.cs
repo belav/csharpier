@@ -15,37 +15,39 @@ namespace CSharpier.Tests.EncodingTests
         public void Setup()
         {
             this.rootDirectory = new DirectoryInfo(
-                Directory.GetCurrentDirectory());
+                Directory.GetCurrentDirectory()
+            );
             while (this.rootDirectory.Name != "CSharpier.Tests")
             {
                 this.rootDirectory = this.rootDirectory.Parent;
             }
         }
-        
+
         [Test]
         public void UTF8()
         {
             this.RunTest(nameof(UTF8));
         }
-        
+
         [Test]
         public void UTF8BOM()
         {
             this.RunTest(nameof(UTF8BOM));
         }
-        
+
         [Test]
         public void USC2LEBOM()
         {
             this.RunTest(nameof(USC2LEBOM));
         }
-        
+
         public void RunTest(string fileName)
         {
             var filePath = Path.Combine(
                 this.rootDirectory.FullName,
                 "EncodingTests",
-                fileName + ".cst");
+                fileName + ".cst"
+            );
             using var reader = new StreamReader(filePath, Encoding.UTF8, true);
             var code = reader.ReadToEnd();
 

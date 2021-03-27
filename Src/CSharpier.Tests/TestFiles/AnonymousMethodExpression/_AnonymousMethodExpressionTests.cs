@@ -10,14 +10,16 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "AnonymousMethodExpression",
-                "AsyncDelegateAnonymousMethodExpression");
+                "AsyncDelegateAnonymousMethodExpression"
+            );
         }
         [Test]
         public void BasicAnonymousMethodExpression()
         {
             this.RunTest(
                 "AnonymousMethodExpression",
-                "BasicAnonymousMethodExpression");
+                "BasicAnonymousMethodExpression"
+            );
         }
     }
 }

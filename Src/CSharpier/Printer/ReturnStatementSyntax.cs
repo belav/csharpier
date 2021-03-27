@@ -10,9 +10,11 @@ namespace CSharpier
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.ReturnKeyword,
-                    node.Expression != null ? " " : null),
+                    node.Expression != null ? " " : null
+                ),
                 node.Expression != null ? this.Print(node.Expression) : null,
-                this.PrintSyntaxToken(node.SemicolonToken));
+                this.PrintSyntaxToken(node.SemicolonToken)
+            );
         }
     }
 }

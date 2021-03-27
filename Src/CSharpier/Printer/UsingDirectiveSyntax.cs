@@ -14,7 +14,8 @@ namespace CSharpier
                     ? null
                     : this.PrintNameEqualsSyntax(node.Alias),
                 this.Print(node.Name),
-                this.PrintSyntaxToken(node.SemicolonToken));
+                this.PrintSyntaxToken(node.SemicolonToken)
+            );
         }
     }
 }

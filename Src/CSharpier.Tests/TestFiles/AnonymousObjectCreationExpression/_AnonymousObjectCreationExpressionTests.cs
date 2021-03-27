@@ -10,14 +10,16 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "AnonymousObjectCreationExpression",
-                "BasicAnonymousObjectCreationExpression");
+                "BasicAnonymousObjectCreationExpression"
+            );
         }
         [Test]
         public void MultipleProperties()
         {
             this.RunTest(
                 "AnonymousObjectCreationExpression",
-                "MultipleProperties");
+                "MultipleProperties"
+            );
         }
         [Test]
         public void NoNames()

@@ -13,7 +13,8 @@ namespace CSharpier
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(node.ThrowKeyword),
                 expression,
-                this.PrintSyntaxToken(node.SemicolonToken));
+                this.PrintSyntaxToken(node.SemicolonToken)
+            );
         }
     }
 }

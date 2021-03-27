@@ -13,8 +13,10 @@ namespace CSharpier
                 node.Initializer != null
                     ? Concat(
                         " ",
-                        this.PrintInitializerExpressionSyntax(node.Initializer))
-                    : "");
+                        this.PrintInitializerExpressionSyntax(node.Initializer)
+                    )
+                    : ""
+            );
         }
     }
 }

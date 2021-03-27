@@ -10,7 +10,8 @@ namespace CSharpier
             return Concat(
                 this.PrintSyntaxToken(node.NewKeyword),
                 this.PrintSyntaxToken(node.OpenParenToken),
-                this.PrintSyntaxToken(node.CloseParenToken));
+                this.PrintSyntaxToken(node.CloseParenToken)
+            );
         }
     }
 }

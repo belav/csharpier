@@ -11,7 +11,8 @@ namespace CSharpier
                 this.Print(node.Expression),
                 SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(node.IsKeyword, " "),
-                this.Print(node.Pattern));
+                this.Print(node.Pattern)
+            );
         }
     }
 }

@@ -11,7 +11,8 @@ namespace CSharpier
             return Concat(
                 this.Print(node.Expression),
                 this.PrintSyntaxToken(node.OperatorToken),
-                this.Print(node.Name));
+                this.Print(node.Name)
+            );
         }
     }
 }

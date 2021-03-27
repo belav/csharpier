@@ -11,7 +11,8 @@ namespace CSharpier
             return ForceFlat(
                 this.PrintSyntaxToken(node.StringStartToken),
                 Concat(node.Contents.Select(this.Print).ToArray()),
-                this.PrintSyntaxToken(node.StringEndToken));
+                this.PrintSyntaxToken(node.StringEndToken)
+            );
         }
     }
 }

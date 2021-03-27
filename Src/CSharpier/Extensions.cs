@@ -34,7 +34,8 @@ namespace CSharpier
             {
                 throw new Exception(
                     "It was not possible to create the path " + directoryInfo.FullName,
-                    ex);
+                    ex
+                );
             }
         }
 
@@ -52,7 +53,8 @@ namespace CSharpier
             return string.Compare(
                 value,
                 otherValue,
-                StringComparison.OrdinalIgnoreCase) == 0;
+                StringComparison.OrdinalIgnoreCase
+            ) == 0;
         }
 
         public static bool ContainsIgnoreCase(
@@ -68,7 +70,8 @@ namespace CSharpier
         {
             return value.StartsWith(
                 otherValue,
-                StringComparison.OrdinalIgnoreCase);
+                StringComparison.OrdinalIgnoreCase
+            );
         }
 
         public static bool EndsWithIgnoreCase(
@@ -77,7 +80,8 @@ namespace CSharpier
         {
             return value.EndsWith(
                 otherValue,
-                StringComparison.OrdinalIgnoreCase);
+                StringComparison.OrdinalIgnoreCase
+            );
         }
 
         public static bool IsBlank(this string value)

@@ -20,7 +20,8 @@ namespace CSharpier
             }
             parts.Push(this.Print(node.ParameterList));
             parts.Push(
-                this.PrintConstraintClauses(node, node.ConstraintClauses));
+                this.PrintConstraintClauses(node, node.ConstraintClauses)
+            );
             parts.Push(this.PrintSyntaxToken(node.SemicolonToken));
             return Concat(parts);
         }

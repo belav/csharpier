@@ -10,21 +10,24 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "ObjectCreationExpression",
-                "BasicObjectCreationExpression");
+                "BasicObjectCreationExpression"
+            );
         }
         [Test]
         public void ObjectCreationWithBiggerInitializer()
         {
             this.RunTest(
                 "ObjectCreationExpression",
-                "ObjectCreationWithBiggerInitializer");
+                "ObjectCreationWithBiggerInitializer"
+            );
         }
         [Test]
         public void ObjectCreationWithInitializer()
         {
             this.RunTest(
                 "ObjectCreationExpression",
-                "ObjectCreationWithInitializer");
+                "ObjectCreationWithInitializer"
+            );
         }
     }
 }

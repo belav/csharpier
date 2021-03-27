@@ -94,9 +94,9 @@ namespace CSharpier
                     {
                         if (forceFlat > 0 && concat.Parts[x] is LineDoc lineDoc)
                         {
-                            concat.Parts[x] = lineDoc.Type == LineDoc.LineType.Soft
-                                ? ""
-                                : " ";
+                            concat.Parts[
+                                x
+                            ] = lineDoc.Type == LineDoc.LineType.Soft ? "" : " ";
                         }
 
                         docsStack.Push(concat.Parts[x]);

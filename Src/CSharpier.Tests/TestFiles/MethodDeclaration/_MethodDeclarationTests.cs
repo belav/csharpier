@@ -15,7 +15,8 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "MethodDeclaration",
-                "ExplicitlyInterfaceSpecifierMethod");
+                "ExplicitlyInterfaceSpecifierMethod"
+            );
         }
         [Test]
         public void LongMethodWithParameters()

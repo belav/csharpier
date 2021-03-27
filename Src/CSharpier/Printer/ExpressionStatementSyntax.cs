@@ -11,7 +11,8 @@ namespace CSharpier
             return Group(
                 this.PrintExtraNewLines(node),
                 this.Print(node.Expression),
-                this.PrintSyntaxToken(node.SemicolonToken));
+                this.PrintSyntaxToken(node.SemicolonToken)
+            );
         }
     }
 }

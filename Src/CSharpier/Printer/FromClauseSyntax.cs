@@ -11,7 +11,8 @@ namespace CSharpier
                 node.Type != null ? Concat(this.Print(node.Type), " ") : null,
                 this.PrintSyntaxToken(node.Identifier, " "),
                 this.PrintSyntaxToken(node.InKeyword, " "),
-                this.Print(node.Expression));
+                this.Print(node.Expression)
+            );
         }
     }
 }

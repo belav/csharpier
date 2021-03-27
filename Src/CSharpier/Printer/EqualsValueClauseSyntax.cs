@@ -26,7 +26,8 @@ namespace CSharpier
             var result = Group(
                 SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(node.EqualsToken, separator),
-                this.Print(node.Value));
+                this.Print(node.Value)
+            );
 
             if (separator is LineDoc)
             {

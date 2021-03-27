@@ -10,7 +10,8 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.LockKeyword, " "),
                 this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Expression),
-                this.PrintSyntaxToken(node.CloseParenToken));
+                this.PrintSyntaxToken(node.CloseParenToken)
+            );
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {

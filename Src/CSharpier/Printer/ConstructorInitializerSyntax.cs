@@ -11,7 +11,8 @@ namespace CSharpier
                 HardLine,
                 this.PrintSyntaxToken(node.ColonToken, " "),
                 this.PrintSyntaxToken(node.ThisOrBaseKeyword),
-                this.PrintArgumentListSyntax(node.ArgumentList));
+                this.PrintArgumentListSyntax(node.ArgumentList)
+            );
         }
     }
 }

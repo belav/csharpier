@@ -43,9 +43,11 @@ namespace CSharpier
                         new PrintedNode
                         {
                             Doc = this.PrintArgumentListSyntax(
-                                invocationExpressionSyntax.ArgumentList),
+                                invocationExpressionSyntax.ArgumentList
+                            ),
                             Node = invocationExpressionSyntax
-                        });
+                        }
+                    );
                 }
                 else if (
                     expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax
@@ -57,10 +59,13 @@ namespace CSharpier
                         {
                             Doc = Concat(
                                 this.PrintSyntaxToken(
-                                    memberAccessExpressionSyntax.OperatorToken),
-                                this.Print(memberAccessExpressionSyntax.Name)),
+                                    memberAccessExpressionSyntax.OperatorToken
+                                ),
+                                this.Print(memberAccessExpressionSyntax.Name)
+                            ),
                             Node = memberAccessExpressionSyntax
-                        });
+                        }
+                    );
                 }
                 else
                 {
@@ -69,7 +74,8 @@ namespace CSharpier
                         {
                             Doc = this.Print(expression),
                             Node = expression
-                        });
+                        }
+                    );
                 }
             }
 
@@ -145,7 +151,8 @@ namespace CSharpier
 
             return Concat(
                 Group(groups[0].ToArray()),
-                PrintIndentedGroup(groups.Skip(1)));
+                PrintIndentedGroup(groups.Skip(1))
+            );
         }
 
         private bool IsMemberish(CSharpSyntaxNode node)
@@ -162,7 +169,8 @@ namespace CSharpier
 
             // TODO GH-7 softline here?
             return Indent(
-                Group(Join(SoftLine, groups.Select(o => Group(o.ToArray())))));
+                Group(Join(SoftLine, groups.Select(o => Group(o.ToArray()))))
+            );
         }
     }
 }

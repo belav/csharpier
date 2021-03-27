@@ -54,12 +54,14 @@ namespace CSharpier.Playground.Controllers
                 this.webHostEnvironment.ContentRootPath,
                 "App_Data",
                 "Uploads",
-                content.CalculateHash() + ".cs");
+                content.CalculateHash() + ".cs"
+            );
             new FileInfo(filePath).EnsureDirectoryExists();
             this.WriteAllText(filePath, content);
             var result = new CodeFormatter().Format(
                 content,
-                new Options { IncludeAST = true, IncludeDocTree = true,  });
+                new Options { IncludeAST = true, IncludeDocTree = true,  }
+            );
 
             var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
             this.WriteAllText(formattedFilePath, result.Code);
@@ -77,7 +79,8 @@ namespace CSharpier.Playground.Controllers
         private FormatError ConvertError(Diagnostic diagnostic)
         {
             var lineSpan = diagnostic.Location.SourceTree.GetLineSpan(
-                diagnostic.Location.SourceSpan);
+                diagnostic.Location.SourceSpan
+            );
             return new FormatError
             {
                 LineSpan = lineSpan,
@@ -108,7 +111,8 @@ namespace CSharpier.Playground.Controllers
         {
             var processStartInfo = new ProcessStartInfo(
                 pathToExe,
-                args)
+                args
+            )
             {
                 UseShellExecute = false,
                 RedirectStandardError = true,
@@ -122,7 +126,8 @@ namespace CSharpier.Playground.Controllers
             process.WaitForExit();
 
             this.logger.LogInformation(
-                "Output from '" + pathToExe + " " + args + "' was: " + Environment.NewLine + output);
+                "Output from '" + pathToExe + " " + args + "' was: " + Environment.NewLine + output
+            );
 
             return output;
         }

@@ -15,9 +15,12 @@ namespace CSharpier
                         this.PrintSeparatedSyntaxList(
                             node.Parameters,
                             this.PrintParameterSyntax,
-                            Line))
+                            Line
+                        )
+                    )
                     : null,
-                this.PrintSyntaxToken(node.CloseParenToken));
+                this.PrintSyntaxToken(node.CloseParenToken)
+            );
         }
     }
 }

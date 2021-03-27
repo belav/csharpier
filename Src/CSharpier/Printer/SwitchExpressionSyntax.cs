@@ -25,15 +25,23 @@ namespace CSharpier
                                     o.WhenClause != null
                                         ? Concat(
                                             this.Print(o.WhenClause),
-                                            SpaceIfNoPreviousComment)
+                                            SpaceIfNoPreviousComment
+                                        )
                                         : null,
                                     this.PrintSyntaxToken(
                                         o.EqualsGreaterThanToken,
-                                        " "),
-                                    this.Print(o.Expression)),
-                                HardLine))),
-                    HardLine),
-                this.PrintSyntaxToken(node.CloseBraceToken));
+                                        " "
+                                    ),
+                                    this.Print(o.Expression)
+                                ),
+                                HardLine
+                            )
+                        )
+                    ),
+                    HardLine
+                ),
+                this.PrintSyntaxToken(node.CloseBraceToken)
+            );
         }
     }
 }

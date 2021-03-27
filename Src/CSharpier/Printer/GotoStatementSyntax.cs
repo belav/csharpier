@@ -17,7 +17,8 @@ namespace CSharpier
                     : null,
                 this.PrintSyntaxToken(node.CaseOrDefaultKeyword),
                 expression,
-                this.PrintSyntaxToken(node.SemicolonToken));
+                this.PrintSyntaxToken(node.SemicolonToken)
+            );
         }
     }
 }

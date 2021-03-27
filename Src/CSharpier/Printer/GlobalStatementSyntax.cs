@@ -10,7 +10,8 @@ namespace CSharpier
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
                 this.PrintModifiers(node.Modifiers),
-                this.Print(node.Statement));
+                this.Print(node.Statement)
+            );
         }
     }
 }

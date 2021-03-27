@@ -16,8 +16,12 @@ namespace CSharpier
                         this.PrintSyntaxToken(
                             orderingNode.AscendingOrDescendingKeyword,
                             null,
-                            " ")),
-                    null));
+                            " "
+                        )
+                    ),
+                    null
+                )
+            );
         }
     }
 }

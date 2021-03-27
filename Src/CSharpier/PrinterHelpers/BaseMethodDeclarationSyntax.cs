@@ -32,7 +32,8 @@ namespace CSharpier
                     returnType = methodDeclarationSyntax.ReturnType;
                     explicitInterfaceSpecifier = methodDeclarationSyntax.ExplicitInterfaceSpecifier;
                     identifier = this.PrintSyntaxToken(
-                        methodDeclarationSyntax.Identifier);
+                        methodDeclarationSyntax.Identifier
+                    );
                     typeParameterList = methodDeclarationSyntax.TypeParameterList;
                     constraintClauses = methodDeclarationSyntax.ConstraintClauses;
                 }
@@ -47,7 +48,8 @@ namespace CSharpier
                 modifiers = localFunctionStatementSyntax.Modifiers;
                 returnType = localFunctionStatementSyntax.ReturnType;
                 identifier = this.PrintSyntaxToken(
-                    localFunctionStatementSyntax.Identifier);
+                    localFunctionStatementSyntax.Identifier
+                );
                 typeParameterList = localFunctionStatementSyntax.TypeParameterList;
                 parameterList = localFunctionStatementSyntax.ParameterList;
                 constraintClauses = localFunctionStatementSyntax.ConstraintClauses;
@@ -62,7 +64,8 @@ namespace CSharpier
             if (attributeLists.HasValue)
             {
                 parts.Push(
-                    this.PrintAttributeLists(node, attributeLists.Value));
+                    this.PrintAttributeLists(node, attributeLists.Value)
+                );
             }
             if (modifiers.HasValue)
             {
@@ -80,7 +83,8 @@ namespace CSharpier
             {
                 parts.Push(
                     this.Print(explicitInterfaceSpecifier.Name),
-                    this.PrintSyntaxToken(explicitInterfaceSpecifier.DotToken));
+                    this.PrintSyntaxToken(explicitInterfaceSpecifier.DotToken)
+                );
             }
 
             if (identifier != null)
@@ -95,11 +99,14 @@ namespace CSharpier
                 parts.Push(
                     this.PrintSyntaxToken(
                         conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword,
-                        " "),
+                        " "
+                    ),
                     this.PrintSyntaxToken(
                         conversionOperatorDeclarationSyntax.OperatorKeyword,
-                        " "),
-                    this.Print(conversionOperatorDeclarationSyntax.Type));
+                        " "
+                    ),
+                    this.Print(conversionOperatorDeclarationSyntax.Type)
+                );
             }
             else if (node is OperatorDeclarationSyntax operatorDeclarationSyntax)
             {
@@ -108,15 +115,19 @@ namespace CSharpier
                     SpaceIfNoPreviousComment,
                     this.PrintSyntaxToken(
                         operatorDeclarationSyntax.OperatorKeyword,
-                        " "),
+                        " "
+                    ),
                     this.PrintSyntaxToken(
-                        operatorDeclarationSyntax.OperatorToken));
+                        operatorDeclarationSyntax.OperatorToken
+                    )
+                );
             }
 
             if (typeParameterList != null)
             {
                 parts.Push(
-                    this.PrintTypeParameterListSyntax(typeParameterList));
+                    this.PrintTypeParameterListSyntax(typeParameterList)
+                );
             }
 
             if (parameterList != null)
@@ -134,7 +145,8 @@ namespace CSharpier
                 if (expressionBody != null)
                 {
                     parts.Push(
-                        this.PrintArrowExpressionClauseSyntax(expressionBody));
+                        this.PrintArrowExpressionClauseSyntax(expressionBody)
+                    );
                 }
             }
 

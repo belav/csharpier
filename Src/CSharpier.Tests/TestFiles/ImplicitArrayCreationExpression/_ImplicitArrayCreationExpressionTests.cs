@@ -10,14 +10,16 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "ImplicitArrayCreationExpression",
-                "BasicImplicitArrayCreationExpression");
+                "BasicImplicitArrayCreationExpression"
+            );
         }
         [Test]
         public void ImplicityArrayWithCommas()
         {
             this.RunTest(
                 "ImplicitArrayCreationExpression",
-                "ImplicityArrayWithCommas");
+                "ImplicityArrayWithCommas"
+            );
         }
     }
 }

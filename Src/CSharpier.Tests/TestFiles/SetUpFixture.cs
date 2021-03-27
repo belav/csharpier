@@ -19,7 +19,8 @@ namespace CSharpier.Tests.TestFiles
                     var leftTitle = Path.GetFileName(temp);
                     var rightTitle = Path.GetFileName(target);
                     return $"/u /wr /e \"{temp}\" \"{target}\" /dl \"{leftTitle}\" /dr \"{rightTitle}\"";
-                });
+                }
+            );
         }
     }
 }

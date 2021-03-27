@@ -10,21 +10,24 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "ConstructorDeclaration",
-                "BasicConstructorDeclaration");
+                "BasicConstructorDeclaration"
+            );
         }
         [Test]
         public void ConstructorDeclarationComments()
         {
             this.RunTest(
                 "ConstructorDeclaration",
-                "ConstructorDeclarationComments");
+                "ConstructorDeclarationComments"
+            );
         }
         [Test]
         public void ConstructorDeclarationWithInitializer()
         {
             this.RunTest(
                 "ConstructorDeclaration",
-                "ConstructorDeclarationWithInitializer");
+                "ConstructorDeclarationWithInitializer"
+            );
         }
         [Test]
         public void ConstructorWithParameters()

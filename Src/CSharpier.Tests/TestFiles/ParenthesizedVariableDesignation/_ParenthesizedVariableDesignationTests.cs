@@ -10,7 +10,8 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "ParenthesizedVariableDesignation",
-                "BasicParenthesizedVariableDesignation");
+                "BasicParenthesizedVariableDesignation"
+            );
         }
     }
 }

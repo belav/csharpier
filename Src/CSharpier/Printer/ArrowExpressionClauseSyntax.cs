@@ -11,7 +11,9 @@ namespace CSharpier
                 Indent(
                     " ",
                     this.PrintSyntaxToken(node.ArrowToken, Line),
-                    this.Print(node.Expression)));
+                    this.Print(node.Expression)
+                )
+            );
         }
     }
 }

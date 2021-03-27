@@ -12,38 +12,51 @@ namespace CSharpier
                 node.PositionalPatternClause != null
                     ? Concat(
                         this.PrintSyntaxToken(
-                            node.PositionalPatternClause.OpenParenToken),
+                            node.PositionalPatternClause.OpenParenToken
+                        ),
                         this.PrintSeparatedSyntaxList(
                             node.PositionalPatternClause.Subpatterns,
                             subpatternNode => Concat(
                                 subpatternNode.NameColon != null
                                     ? this.PrintNameColonSyntax(
-                                        subpatternNode.NameColon)
+                                        subpatternNode.NameColon
+                                    )
                                     : "",
-                                this.Print(subpatternNode.Pattern)),
-                            " "),
+                                this.Print(subpatternNode.Pattern)
+                            ),
+                            " "
+                        ),
                         this.PrintSyntaxToken(
-                            node.PositionalPatternClause.CloseParenToken))
+                            node.PositionalPatternClause.CloseParenToken
+                        )
+                    )
                     : "",
                 node.PropertyPatternClause != null
                     ? Concat(
                         " ",
                         this.PrintSyntaxToken(
                             node.PropertyPatternClause.OpenBraceToken,
-                            " "),
+                            " "
+                        ),
                         this.PrintSeparatedSyntaxList(
                             node.PropertyPatternClause.Subpatterns,
                             subpatternNode => Concat(
                                 this.PrintNameColonSyntax(
-                                    subpatternNode.NameColon),
-                                this.Print(subpatternNode.Pattern)),
-                            " "),
+                                    subpatternNode.NameColon
+                                ),
+                                this.Print(subpatternNode.Pattern)
+                            ),
+                            " "
+                        ),
                         SpaceIfNoPreviousComment,
                         this.PrintSyntaxToken(
                             node.PropertyPatternClause.CloseBraceToken,
-                            " "))
+                            " "
+                        )
+                    )
                     : "",
-                node.Designation != null ? this.Print(node.Designation) : "");
+                node.Designation != null ? this.Print(node.Designation) : ""
+            );
         }
     }
 }

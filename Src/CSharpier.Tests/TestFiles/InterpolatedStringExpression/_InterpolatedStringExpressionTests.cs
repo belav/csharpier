@@ -10,7 +10,8 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "InterpolatedStringExpression",
-                "BasicInterpolatedStringExpression");
+                "BasicInterpolatedStringExpression"
+            );
         }
         [Test]
         public void Interpolation()
@@ -22,14 +23,16 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "InterpolatedStringExpression",
-                "InterpolationShouldNotBreakLines");
+                "InterpolationShouldNotBreakLines"
+            );
         }
         [Test]
         public void InterpolationWithAlignmentAndFormat()
         {
             this.RunTest(
                 "InterpolatedStringExpression",
-                "InterpolationWithAlignmentAndFormat");
+                "InterpolationWithAlignmentAndFormat"
+            );
         }
     }
 }

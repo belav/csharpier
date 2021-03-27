@@ -9,7 +9,8 @@ namespace CSharpier
             return Concat(
                 this.Print(node.Type),
                 " ",
-                this.Print(node.Designation));
+                this.Print(node.Designation)
+            );
         }
     }
 }

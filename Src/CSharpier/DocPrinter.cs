@@ -22,7 +22,8 @@ namespace CSharpier
             return this.GenerateIndent(
                 indent,
                 new IndentType { Type = "indent" },
-                options);
+                options
+            );
         }
 
         // TODO 2 there is more going on here with dedent and number/string align
@@ -204,7 +205,8 @@ namespace CSharpier
                                         Indent = ind,
                                         Mode = mode,
                                         Doc = concat.Parts[i]
-                                    });
+                                    }
+                                );
                             }
                             break;
                         case IndentDoc indent:
@@ -214,7 +216,8 @@ namespace CSharpier
                                     Indent = MakeIndent(ind, options),
                                     Mode = mode,
                                     Doc = indent.Contents
-                                });
+                                }
+                            );
                             break;
                         case Group group:
                             if (mustBeFlat && group.Break)
@@ -231,7 +234,8 @@ namespace CSharpier
                                         : mode,
                                     Doc = group.Contents,
 
-                                });
+                                }
+                            );
                             break;
                         case LineDoc line:
                             switch (mode)
@@ -276,7 +280,8 @@ namespace CSharpier
                     Indent = this.RootIndent(),
                     Mode = PrintMode.MODE_BREAK,
 
-                });
+                }
+            );
 
             var output = new StringBuilder();
             var shouldRemeasure = false;
@@ -293,7 +298,8 @@ namespace CSharpier
                         Doc = doc,
                         Mode = printMode,
                         Indent = indent
-                    });
+                    }
+                );
             }
             while (currentStack.Count > 0)
             {
@@ -330,7 +336,8 @@ namespace CSharpier
                         Push(
                             indentBuilder.Contents,
                             command.Mode,
-                            MakeIndent(command.Indent, options));
+                            MakeIndent(command.Indent, options)
+                        );
                         break;
                     case Group group:
                         switch (command.Mode)
@@ -343,7 +350,8 @@ namespace CSharpier
                                         group.Break
                                             ? PrintMode.MODE_BREAK
                                             : PrintMode.MODE_FLAT,
-                                        command.Indent);
+                                        command.Indent
+                                    );
                                     break;
                                 }
 
@@ -371,7 +379,8 @@ namespace CSharpier
                                     Push(
                                         group.Contents,
                                         PrintMode.MODE_BREAK,
-                                        command.Indent);
+                                        command.Indent
+                                    );
                                 }
                                 break;
                         }
@@ -448,7 +457,8 @@ namespace CSharpier
                                     {
                                         Trim(output);
                                         output.Append(
-                                            newLine + command.Indent.Value);
+                                            newLine + command.Indent.Value
+                                        );
                                         position = command.Indent.Length;
                                     }
 
@@ -474,7 +484,8 @@ namespace CSharpier
                         }
 
                         output.Append(
-                            command.Indent.Value + leadingComment.Comment + newLine + command.Indent.Value);
+                            command.Indent.Value + leadingComment.Comment + newLine + command.Indent.Value
+                        );
                         position = command.Indent.Length;
                         newLineNextStringValue = false;
                         skipNextNewLine = false;
@@ -496,7 +507,8 @@ namespace CSharpier
                         Push(
                             forceFlat.Contents,
                             PrintMode.MODE_FLAT,
-                            command.Indent);
+                            command.Indent
+                        );
                         break;
                     default:
                         throw new Exception("didn't handle " + command.Doc);

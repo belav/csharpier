@@ -16,7 +16,8 @@ namespace CSharpier
                 this.Print(node.ParameterList),
                 this.Print(node.Body),
                 this.Print(node.ExpressionBody),
-                this.PrintSyntaxToken(node.SemicolonToken));
+                this.PrintSyntaxToken(node.SemicolonToken)
+            );
         }
     }
 }

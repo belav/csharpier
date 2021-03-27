@@ -7,10 +7,13 @@ namespace Worker
     public class GeneratePrinterSwitch
     {
         [Test]
+        [Ignore(
+                "Run this manually if you need to regenerate the Printer.generated.cs file")]
         public void DoWork()
         {
             var rootDirectory = new DirectoryInfo(
-                Directory.GetCurrentDirectory());
+                Directory.GetCurrentDirectory()
+            );
             while (rootDirectory.Name != "Src")
             {
                 rootDirectory = rootDirectory.Parent;
@@ -43,16 +46,18 @@ namespace CSharpier
             depth++;
             try {
                 switch (syntaxNode)
-                {");
+                {"
+            );
 
             var csharpDirectory = Path.Combine(
                 rootDirectory.FullName,
-                "CSharpier/Printer");
+                "CSharpier/Printer"
+            );
             foreach (var file in new DirectoryInfo(csharpDirectory).GetFiles())
             {
                 var name = file.Name.Replace(".cs", "");
-                var camelCaseName = name[0].ToString().ToLower() + name.Substring(
-                    1);
+                var camelCaseName =
+                    name[0].ToString().ToLower() + name.Substring(1);
                 output.AppendLine($@"                    case {name} {camelCaseName}:
                         return this.Print{name}({camelCaseName});");
             }
@@ -69,11 +74,13 @@ namespace CSharpier
             }
         }
     }
-}");
+}"
+            );
 
             File.WriteAllText(
                 csharpDirectory + ".generated.cs",
-                output.ToString());
+                output.ToString()
+            );
         }
     }
 }

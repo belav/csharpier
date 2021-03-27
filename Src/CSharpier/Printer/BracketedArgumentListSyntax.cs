@@ -16,9 +16,13 @@ namespace CSharpier
                         this.PrintSeparatedSyntaxList(
                             node.Arguments,
                             this.Print,
-                            Line))),
+                            Line
+                        )
+                    )
+                ),
                 SoftLine,
-                this.PrintSyntaxToken(node.CloseBracketToken));
+                this.PrintSyntaxToken(node.CloseBracketToken)
+            );
         }
     }
 }
