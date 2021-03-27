@@ -9,19 +9,14 @@ namespace CSharpier
     {
         private Indent RootIndent()
         {
-            return new Indent
-            {
-                Value = "",
-                Length = 0,
-                Queue = new List<IndentType>()
-            };
+            return new Indent("", 0, new List<IndentType>());
         }
 
         private Indent MakeIndent(Indent indent, Options options)
         {
             return this.GenerateIndent(
                 indent,
-                new IndentType { Type = "indent" },
+                new IndentType("indent", 0),
                 options
             );
         }
@@ -121,21 +116,15 @@ namespace CSharpier
 
                 resetLast();
             }
-            ;
 
             void resetLast()
             {
                 lastTabs = 0;
                 lastSpaces = 0;
             }
-            ;
-            return new Indent
-            {
-                // TODO 2 in prettier this has a ...ind
-                Value = value,
-                Length = length,
-                Queue = queue
-            };
+
+            // TODO 2 in prettier this has a ...ind
+            return new Indent(value, length, queue);
         }
 
         private bool Fits(
@@ -185,7 +174,7 @@ namespace CSharpier
                         width -= GetStringWidth(stringDoc.Value);
                     }
                 }
-                else if (doc != null)
+                else if (doc != Doc.Null)
                 {
                     switch (doc)
                     {
@@ -200,23 +189,17 @@ namespace CSharpier
                             for (var i = concat.Parts.Count - 1; i >= 0; i--)
                             {
                                 cmds.Push(
-                                    new PrintCommand
-                                    {
-                                        Indent = ind,
-                                        Mode = mode,
-                                        Doc = concat.Parts[i]
-                                    }
+                                    new PrintCommand(ind, mode, concat.Parts[i])
                                 );
                             }
                             break;
                         case IndentDoc indent:
                             cmds.Push(
-                                new PrintCommand
-                                {
-                                    Indent = MakeIndent(ind, options),
-                                    Mode = mode,
-                                    Doc = indent.Contents
-                                }
+                                new PrintCommand(
+                                    MakeIndent(ind, options),
+                                    mode,
+                                    indent.Contents
+                                )
                             );
                             break;
                         case Group group:
@@ -226,15 +209,11 @@ namespace CSharpier
                             }
 
                             cmds.Push(
-                                new PrintCommand
-                                {
-                                    Indent = ind,
-                                    Mode = group.Break
-                                        ? PrintMode.MODE_BREAK
-                                        : mode,
-                                    Doc = group.Contents,
-
-                                }
+                                new PrintCommand(
+                                    ind,
+                                    group.Break ? PrintMode.MODE_BREAK : mode,
+                                    group.Contents
+                                )
                             );
                             break;
                         case LineDoc line:
@@ -259,12 +238,7 @@ namespace CSharpier
                             break;
                         case ForceFlat flat:
                             cmds.Push(
-                                new PrintCommand
-                                {
-                                    Indent = ind,
-                                    Mode = mode,
-                                    Doc = flat.Contents
-                                }
+                                new PrintCommand(ind, mode, flat.Contents)
                             );
                             break;
                         case SpaceIfNoPreviousComment:
@@ -273,7 +247,7 @@ namespace CSharpier
                             break;
                         default:
                             throw new Exception(
-                                "Can't handle " + doc.GetType()
+                                "Can't handle " + doc?.GetType()
                             );
                     }
                 }
@@ -292,13 +266,11 @@ namespace CSharpier
 
             var currentStack = new Stack<PrintCommand>();
             currentStack.Push(
-                new PrintCommand
-                {
-                    Doc = document,
-                    Indent = this.RootIndent(),
-                    Mode = PrintMode.MODE_BREAK,
-
-                }
+                new PrintCommand(
+                    this.RootIndent(),
+                    PrintMode.MODE_BREAK,
+                    document
+                )
             );
 
             var output = new StringBuilder();
@@ -310,19 +282,12 @@ namespace CSharpier
 
             void Push(Doc doc, PrintMode printMode, Indent indent)
             {
-                currentStack.Push(
-                    new PrintCommand
-                    {
-                        Doc = doc,
-                        Mode = printMode,
-                        Indent = indent
-                    }
-                );
+                currentStack.Push(new PrintCommand(indent, printMode, doc));
             }
             while (currentStack.Count > 0)
             {
                 var command = currentStack.Pop();
-                if (command.Doc == null)
+                if (command.Doc == Doc.Null)
                 {
                     continue;
                 }
@@ -376,12 +341,11 @@ namespace CSharpier
                                 goto case PrintMode.MODE_BREAK;
                             case PrintMode.MODE_BREAK:
                                 shouldRemeasure = false;
-                                var next = new PrintCommand
-                                {
-                                    Indent = command.Indent,
-                                    Mode = PrintMode.MODE_FLAT,
-                                    Doc = group.Contents
-                                };
+                                var next = new PrintCommand(
+                                    command.Indent,
+                                    PrintMode.MODE_FLAT,
+                                    group.Contents
+                                );
 
                                 var rem = width - position;
 
@@ -593,18 +557,9 @@ namespace CSharpier
         //
         //     return trimCount;
         // }
-        private class IndentType
-        {
-            public string Type { get; set; }
-            public int Number { get; set; }
-        }
+        private record IndentType(string Type, int Number);
 
-        private class PrintCommand
-        {
-            public Indent Indent { get; set; }
-            public PrintMode Mode { get; set; }
-            public Doc Doc { get; set; }
-        }
+        private record PrintCommand(Indent Indent, PrintMode Mode, Doc Doc);
 
         private enum PrintMode
         {
@@ -613,11 +568,6 @@ namespace CSharpier
             MODE_FORCEFLAT
         }
 
-        private class Indent
-        {
-            public string Value { get; set; }
-            public int Length { get; set; }
-            public List<IndentType> Queue { get; set; }
-        }
+        private record Indent(string Value, int Length, List<IndentType> Queue);
     }
 }

@@ -37,10 +37,14 @@ namespace CSharpier
                 ),
                 cancellationToken: cancellationToken
             );
-            var rootNode =
-                await syntaxTree.GetRootAsync(
-                    cancellationToken
-                ) as CompilationUnitSyntax;
+            var syntaxNode = await syntaxTree.GetRootAsync(cancellationToken);
+            if (!(syntaxNode is CompilationUnitSyntax rootNode))
+            {
+                throw new Exception(
+                    "Root was not CompilationUnitSyntax, it was " + syntaxNode.GetType()
+                );
+            }
+
             var diagnostics = syntaxTree.GetDiagnostics(cancellationToken)
                 .Where(
                     o => o.Severity == DiagnosticSeverity.Error
@@ -53,7 +57,9 @@ namespace CSharpier
                 {
                     Code = code,
                     Errors = diagnostics,
-                    AST = options.IncludeAST ? this.PrintAST(rootNode) : null
+                    AST = options.IncludeAST
+                        ? this.PrintAST(rootNode)
+                        : string.Empty
                 };
             }
 
@@ -66,8 +72,10 @@ namespace CSharpier
                     Code = formattedCode,
                     DocTree = options.IncludeDocTree
                         ? this.PrintDocTree(document, "")
-                        : null,
-                    AST = options.IncludeAST ? this.PrintAST(rootNode) : null
+                        : string.Empty,
+                    AST = options.IncludeAST
+                        ? this.PrintAST(rootNode)
+                        : string.Empty
                 };
             }
             catch (InTooDeepException)
@@ -94,12 +102,10 @@ namespace CSharpier
 
         private string PrintDocTree(Doc document, string indent)
         {
-            if (document == null)
-            {
-                return indent + "null";
-            }
             switch (document)
             {
+                case NullDoc:
+                    return indent + "Doc.Null";
                 case StringDoc stringDoc:
                     return indent + "\"" + stringDoc.Value?.Replace(
                         "\"",
@@ -150,7 +156,7 @@ namespace CSharpier
                                 ? "HardLine"
                                 : "SoftLine");
                 case BreakParent breakParent:
-                    return null;
+                    return "";
                 case ForceFlat forceFlat:
                     return indent + "ForceFlat(" + Environment.NewLine + this.PrintDocTree(
                         forceFlat.Contents,
@@ -184,11 +190,12 @@ namespace CSharpier
 
     public class CSharpierResult
     {
-        public string Code { get; set; }
-        public string DocTree { get; set; }
-        public string AST { get; set; }
+        public string Code { get; set; } = string.Empty;
+        public string DocTree { get; set; } = string.Empty;
+        public string AST { get; set; } = string.Empty;
         public IEnumerable<Diagnostic> Errors { get; set; } =
             Enumerable.Empty<Diagnostic>();
-        public string FailureMessage { get; set; }
+
+        public string FailureMessage { get; set; } = string.Empty;
     }
 }

@@ -59,7 +59,7 @@ namespace CSharpier
 
             if (!result.IsInvalid)
             {
-                return null;
+                return string.Empty;
             }
 
             var message =
@@ -230,17 +230,17 @@ namespace CSharpier
         private CompareResult Compare(
             SyntaxToken originalToken,
             SyntaxToken formattedToken,
-            SyntaxNode originalNode,
-            SyntaxNode formattedNode)
+            SyntaxNode? originalNode,
+            SyntaxNode? formattedNode)
         {
             if (originalToken.Text != formattedToken.Text)
             {
                 return NotEqual(
                     originalToken.RawKind == 0
-                        ? originalNode.Span
+                        ? originalNode?.Span
                         : originalToken.Span,
                     formattedToken.RawKind == 0
-                        ? formattedNode.Span
+                        ? formattedNode?.Span
                         : formattedToken.Span
                 );
             }

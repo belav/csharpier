@@ -19,7 +19,7 @@ namespace CSharpier
                             " "
                         )
                     ),
-                    null
+                    Doc.Null
                 )
             );
         }

@@ -5,7 +5,7 @@ namespace CSharpier
 {
     public partial class SyntaxNodeJsonWriter
     {
-        private static string WriteBoolean(string name, bool value)
+        private static string? WriteBoolean(string name, bool value)
         {
             if (value)
             {
@@ -15,7 +15,7 @@ namespace CSharpier
             return null;
         }
 
-        private static string WriteString(string name, string value)
+        private static string? WriteString(string name, string value)
         {
             if (!string.IsNullOrEmpty(value))
             {
@@ -25,7 +25,7 @@ namespace CSharpier
             return null;
         }
 
-        private static string WriteInt(string name, int value)
+        private static string? WriteInt(string name, int value)
         {
             if (value != 0)
             {
@@ -35,7 +35,7 @@ namespace CSharpier
             return null;
         }
 
-        private static string GetNodeType(Type type)
+        private static string? GetNodeType(Type type)
         {
             var name = type.Name;
             if (name.EndsWith("Syntax"))

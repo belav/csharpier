@@ -9,7 +9,7 @@ namespace CSharpier
     {
         public static void EnsureDirectoryExists(this FileInfo fileInfo)
         {
-            fileInfo.Directory.EnsureExists();
+            fileInfo.Directory?.EnsureExists();
         }
 
         public static void EnsureExists(this DirectoryInfo directoryInfo)

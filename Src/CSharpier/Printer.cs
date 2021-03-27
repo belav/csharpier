@@ -53,12 +53,12 @@ namespace CSharpier
 
         public static Doc Concat(Parts parts)
         {
-            return new Concat { Parts = CleanParts(parts) };
+            return new Concat(CleanParts(parts));
         }
 
         public static Doc Concat(params Doc[] parts)
         {
-            return new Concat { Parts = CleanParts(parts) };
+            return new Concat(CleanParts(parts));
         }
 
         public static List<Doc> CleanParts(IEnumerable<Doc> parts)
@@ -167,7 +167,7 @@ namespace CSharpier
                 }
             }
 
-            return parts.Count == 0 ? null : Concat(parts);
+            return parts.Count == 0 ? Doc.Null : Concat(parts);
         }
 
         private Doc PrintAttributeLists(
@@ -176,7 +176,7 @@ namespace CSharpier
         {
             if (attributeLists.Count == 0)
             {
-                return null;
+                return Doc.Null;
             }
 
             var parts = new Parts();
@@ -203,7 +203,7 @@ namespace CSharpier
         {
             if (modifiers.Count == 0)
             {
-                return null;
+                return Doc.Null;
             }
 
             var parts = new Parts();
@@ -223,7 +223,7 @@ namespace CSharpier
 
             if (constraintClausesList.Count == 0)
             {
-                return null;
+                return Doc.Null;
             }
 
 

@@ -20,7 +20,7 @@ namespace CSharpier
 
             parts.Push(
                 Indent(
-                    node.Attributes.Count > 1 ? SoftLine : null,
+                    node.Attributes.Count > 1 ? SoftLine : Doc.Null,
                     this.PrintSeparatedSyntaxList(
                         node.Attributes,
                         attributeNode =>
@@ -45,12 +45,12 @@ namespace CSharpier
                                                 ? this.PrintNameEqualsSyntax(
                                                     attributeArgumentNode.NameEquals
                                                 )
-                                                : null,
+                                                : Doc.Null,
                                             attributeArgumentNode.NameColon != null
                                                 ? this.PrintNameColonSyntax(
                                                     attributeArgumentNode.NameColon
                                                 )
-                                                : null,
+                                                : Doc.Null,
                                             this.Print(
                                                 attributeArgumentNode.Expression
                                             )
@@ -69,7 +69,7 @@ namespace CSharpier
             );
 
             parts.Push(
-                node.Attributes.Count > 1 ? SoftLine : null,
+                node.Attributes.Count > 1 ? SoftLine : Doc.Null,
                 this.PrintSyntaxToken(node.CloseBracketToken)
             );
 

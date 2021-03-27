@@ -148,7 +148,7 @@ namespace CSharpier
 
         private static async Task DoWork(
             string file,
-            string path,
+            string? path,
             bool validate,
             bool check,
             CancellationToken cancellationToken)
@@ -178,7 +178,7 @@ namespace CSharpier
 
             string GetPath()
             {
-                return PadToSize(file.Substring(path.Length));
+                return PadToSize(file.Substring(path?.Length ?? 0));
             }
 
             try

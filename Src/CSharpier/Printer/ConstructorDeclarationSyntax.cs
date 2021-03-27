@@ -13,11 +13,13 @@ namespace CSharpier
                 this.PrintModifiers(node.Modifiers),
                 this.PrintSyntaxToken(node.Identifier),
                 this.PrintParameterListSyntax(node.ParameterList),
-                node.Initializer != null ? this.Print(node.Initializer) : null,
-                this.PrintBlockSyntax(node.Body),
+                node.Initializer != null
+                    ? this.Print(node.Initializer)
+                    : Doc.Null,
+                node.Body != null ? this.PrintBlockSyntax(node.Body) : Doc.Null,
                 node.ExpressionBody != null
                     ? this.PrintArrowExpressionClauseSyntax(node.ExpressionBody)
-                    : null,
+                    : Doc.Null,
                 this.PrintSyntaxToken(node.SemicolonToken)
             );
         }

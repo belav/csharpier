@@ -11,7 +11,7 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.UsingKeyword, " "),
                 this.PrintSyntaxToken(node.StaticKeyword, " "),
                 node.Alias == null
-                    ? null
+                    ? Doc.Null
                     : this.PrintNameEqualsSyntax(node.Alias),
                 this.Print(node.Name),
                 this.PrintSyntaxToken(node.SemicolonToken)

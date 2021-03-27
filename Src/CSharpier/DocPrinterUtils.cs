@@ -5,7 +5,7 @@ namespace CSharpier
 {
     public static class DocPrinterUtils
     {
-        private static Doc traverseDocOnExitStackMarker = new Doc();
+        private static readonly Doc traverseDocOnExitStackMarker = new();
 
         public static void PropagateBreaks(Doc document)
         {

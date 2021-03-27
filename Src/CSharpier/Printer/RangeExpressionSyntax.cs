@@ -7,9 +7,13 @@ namespace CSharpier
         private Doc PrintRangeExpressionSyntax(RangeExpressionSyntax node)
         {
             return Concat(
-                node.LeftOperand != null ? this.Print(node.LeftOperand) : null,
+                node.LeftOperand != null
+                    ? this.Print(node.LeftOperand)
+                    : Doc.Null,
                 this.PrintSyntaxToken(node.OperatorToken),
-                node.RightOperand != null ? this.Print(node.RightOperand) : null
+                node.RightOperand != null
+                    ? this.Print(node.RightOperand)
+                    : Doc.Null
             );
         }
     }

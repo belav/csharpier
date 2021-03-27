@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintOmittedArraySizeExpressionSyntax(
             OmittedArraySizeExpressionSyntax node)
         {
-            return null;
+            return Doc.Null;
         }
     }
 }

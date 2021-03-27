@@ -14,7 +14,7 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.GotoKeyword),
                 node.CaseOrDefaultKeyword.RawKind != 0
                     ? SpaceIfNoPreviousComment
-                    : null,
+                    : Doc.Null,
                 this.PrintSyntaxToken(node.CaseOrDefaultKeyword),
                 expression,
                 this.PrintSyntaxToken(node.SemicolonToken)

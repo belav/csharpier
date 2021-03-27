@@ -9,12 +9,12 @@ namespace CSharpier
         private Doc PrintBasePropertyDeclarationSyntax(
             BasePropertyDeclarationSyntax node)
         {
-            EqualsValueClauseSyntax initializer = null;
-            ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifierSyntax =
+            EqualsValueClauseSyntax? initializer = null;
+            ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifierSyntax =
                 null;
-            Doc identifier = null;
-            Doc eventKeyword = null;
-            ArrowExpressionClauseSyntax expressionBody = null;
+            Doc identifier = Doc.Null;
+            Doc eventKeyword = Doc.Null;
+            ArrowExpressionClauseSyntax? expressionBody = null;
             SyntaxToken? semicolonToken = null;
 
             if (node is PropertyDeclarationSyntax propertyDeclarationSyntax)
@@ -113,15 +113,15 @@ namespace CSharpier
                                 explicitInterfaceSpecifierSyntax.DotToken
                             )
                         )
-                        : null,
+                        : Doc.Null,
                     identifier,
                     contents,
                     initializer != null
                         ? this.PrintEqualsValueClauseSyntax(initializer)
-                        : null,
+                        : Doc.Null,
                     semicolonToken.HasValue
                         ? this.PrintSyntaxToken(semicolonToken.Value)
-                        : null
+                        : Doc.Null
                 )
             );
         }
