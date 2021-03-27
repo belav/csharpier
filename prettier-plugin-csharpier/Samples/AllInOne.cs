@@ -675,24 +675,33 @@ namespace Comments.XmlComments.UndocumentedKeywords
         public partial void method()
         {
             int?[] a = new int?[5]; /*[] bug*/
- // YES []
+
+            // YES []
             int[] var = { 1, 2, 3, 4, 5 }; /*,;*/
+
 
             int i = a[i]; /*[]*/
 
+
             Foo<T> f = new Foo<int>(); /*<> ()*/
 
+
             f.method(); /*().*/
+
             i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
             bool b = true & false | true ^ false; /*& | ^*/
 
+
             b = !b; /*!*/
+
             i = ~i; /*~i*/
             b = i < i && i > i; /*< && >*/
             int? ii = 5; /*? bug*/
- // NO ?
+
+            // NO ?
             int f = true ? 1 : 0; /*? :*/
- // YES :
+
+            // YES :
             i++; /*++*/
             i--; /*--*/
             b = true && false || true; /*&& ||*/
@@ -711,6 +720,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             i <<= i; /*<<=*/
             i >>= i; /*>>=*/
             object s = x => x + 1; /*=>*/
+
 
             double d = .3;
             Point point;
