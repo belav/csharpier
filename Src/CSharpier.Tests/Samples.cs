@@ -49,11 +49,6 @@ namespace CSharpier.Tests
                 result.DocTree,
                 Encoding.UTF8
             );
-            File.WriteAllText(
-                file.Replace(".cst", ".json"),
-                result.AST,
-                Encoding.UTF8
-            );
         }
     }
 }

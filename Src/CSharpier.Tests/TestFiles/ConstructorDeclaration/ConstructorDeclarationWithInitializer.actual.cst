@@ -1,5 +1,0 @@
-﻿public class BasicClass
-{
-    public BasicClass()
-        : base() { }
-}
