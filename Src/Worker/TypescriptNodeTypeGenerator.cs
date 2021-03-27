@@ -31,7 +31,7 @@ namespace Worker
                 typeof(CSharpSyntaxNode).IsAssignableFrom(o)).OrderBy(
                 o => o.Name).ToList();
 
-            var fileName = rootRepositoryFolder.FullName + @"\prettier-plugin-csharpier\src\Printer\NodeTypes.ts";
+            var fileName = rootRepositoryFolder.FullName + "/prettier-plugin-csharpier/src/Printer/NodeTypes.ts";
 
             using (var file = new StreamWriter(fileName, false))
             {

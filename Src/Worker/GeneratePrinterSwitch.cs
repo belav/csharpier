@@ -47,7 +47,7 @@ namespace CSharpier
 
             var csharpDirectory = Path.Combine(
                 rootDirectory.FullName,
-                @"CSharpier\Printer");
+                "CSharpier/Printer");
             foreach (var file in new DirectoryInfo(csharpDirectory).GetFiles())
             {
                 var name = file.Name.Replace(".cs", "");

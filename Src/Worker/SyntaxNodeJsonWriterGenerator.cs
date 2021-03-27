@@ -27,7 +27,7 @@ namespace Worker
                 o => !o.IsAbstract &&
                 typeof(CSharpSyntaxNode).IsAssignableFrom(o)).ToList();
 
-            var fileName = directory.FullName + @"\CSharpier.Parser\SyntaxNodeJsonWriter.generated.cs";
+            var fileName = directory.FullName + "/CSharpier.Parser/SyntaxNodeJsonWriter.generated.cs";
             using (var file = new StreamWriter(fileName, false))
             {
                 file.WriteLine("using System.Collections.Generic;");
