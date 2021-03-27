@@ -6,32 +6,11 @@ namespace CSharpier.Tests.TestFiles
     public class InterpolatedStringExpressionTests : BaseTest
     {
         [Test]
-        public void BasicInterpolatedStringExpression()
+        public void InterpolatedStringExpressions()
         {
             this.RunTest(
                 "InterpolatedStringExpression",
-                "BasicInterpolatedStringExpression"
-            );
-        }
-        [Test]
-        public void Interpolation()
-        {
-            this.RunTest("InterpolatedStringExpression", "Interpolation");
-        }
-        [Test]
-        public void InterpolationShouldNotBreakLines()
-        {
-            this.RunTest(
-                "InterpolatedStringExpression",
-                "InterpolationShouldNotBreakLines"
-            );
-        }
-        [Test]
-        public void InterpolationWithAlignmentAndFormat()
-        {
-            this.RunTest(
-                "InterpolatedStringExpression",
-                "InterpolationWithAlignmentAndFormat"
+                "InterpolatedStringExpressions"
             );
         }
     }

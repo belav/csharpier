@@ -229,6 +229,43 @@ namespace CSharpier.Tests
         }
 
         [Test]
+        public void ForceFlat_Bug()
+        {
+            var doc = Group(
+                ForceFlat(
+                    Concat(
+                        "1111111111",
+                        " ",
+                        "1111111111",
+                        " ",
+                        "1111111111",
+                        " ",
+                        "1111111111",
+                        " ",
+                        "1111111111"
+                    )
+                ),
+                Line,
+                ForceFlat(
+                    Concat(
+                        "1111111111",
+                        " ",
+                        "1111111111",
+                        " ",
+                        "1111111111",
+                        " ",
+                        "1111111111",
+                        " ",
+                        "1111111111"
+                    )
+                )
+            );
+
+            var result = this.Print(doc);
+            result.Should().Be($"1111111111 1111111111 1111111111 1111111111 1111111111{NewLine}1111111111 1111111111 1111111111 1111111111 1111111111");
+        }
+
+        [Test]
         public void Scratch()
         {
             var doc = "";

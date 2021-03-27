@@ -1,0 +1,17 @@
+public class ClassName
+{
+    public string Test = $"test";
+
+    public string TwoValues = $"{SomeValue}{SomeOtherValue}";
+
+    public string ForceFlatInString = $"{SomeValue}{CallSomeLongMethodWithBiParameters(jlkasdfkljasdflkaskdf, jkasdflkjasdfsdkaljfasdkjf)}";
+
+    public string Test2 = CallSomeLongMethodWithBiParameters($"some super long interpolated string with some substitions like {jkasdflkjasdfsdkaljfasdkjf}", $"another long interpolated string with some substitions like {jlkasdfkljasdflkaskdf}");
+
+    void AlignmentAndFormat()
+    {
+        var s1 = $"x {1, -2:d}";
+        var s2 = $"x {1, -2}";
+        var s3 = $"x {1:d}";
+    }
+}
