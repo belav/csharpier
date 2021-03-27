@@ -597,7 +597,8 @@ namespace ConsoleApplication1
         public void Constants()
         {
             int i = 1 + 2 + 3 + 5;
-            global::System.String s = "a" + (System.String)"a" + "a" + "a" + "a" + "A";
+            global::System.String s =
+                "a" + (System.String)"a" + "a" + "a" + "a" + "A";
         }
 
         public void ConstructedType()
@@ -759,7 +760,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
         // Expression bodies on method-like members
         public Point Move(int dx, int dy) => new Point(x + dx, y + dy);
         public static Complex operator +(Complex a, Complex b) => a.Add(b);
-        public static implicit operator string(Person p) => p.First + " " + p.Last;
+        public static implicit operator string(Person p) =>
+            p.First + " " + p.Last;
         public void Print() => Console.WriteLine(First + " " + Last);
 
         // Expression bodies on property-like function members

@@ -1,4 +1,4 @@
-public class ClassName
+﻿public class ClassName
 {
     public string Test = $"test";
 

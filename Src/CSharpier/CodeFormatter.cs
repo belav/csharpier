@@ -101,7 +101,7 @@ namespace CSharpier
             switch (document)
             {
                 case StringDoc stringDoc:
-                    return indent + "\"" + stringDoc.Value.Replace(
+                    return indent + "\"" + stringDoc.Value?.Replace(
                         "\"",
                         "\\\""
                     ) + "\"";

@@ -229,7 +229,7 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void ForceFlat_Bug()
+        public void ForceFlat_Should_Be_Included_In_Fits_Logic_Of_Printer()
         {
             var doc = Group(
                 ForceFlat(
