@@ -4,20 +4,30 @@ using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CSharpier;
 using UtfUnknown;
 
 namespace CSharpier
 {
     class Program
     {
+        // TODO 0 why does that weird file in roslyn fail validation?
+        // also what about the files that fail to compile?
+        //path = +="roslyn";
+        // TODO 0 lots fail to compile, codegen files should be excluded perhaps?
+        //path += "spnetcore";
+        // TODO 0 stackoverflows, probably because of the ridiculous testing files that are in there, and c# thinks there is a stackoverflow because the stack is so large, and looks like it is repeating.
+        // actually it looks like runtime has tests that will fail in recursive tree walkers
+        // see https://github.com/dotnet/runtime/blob/master/src/tests/JIT/Regression/JitBlue/GitHub_10215/GitHub_10215.cs
+        // TODO 0 also some weird "failures" due to trivia moving lines, although the compiled code would be the same
+        //path += "runtime";
+        //path += "AspNetWebStack";
         private static int sourceLost;
         private static int exceptionsFormatting;
         private static int exceptionsValidatingSource;
         private static int files;
+        private static int unformattedFiles;
 
         static async Task<int> Main(string[] args)
         {
@@ -34,6 +44,7 @@ namespace CSharpier
         public static async Task<int> Run(
             string directoryOrFile,
             bool fast,
+            bool check,
             CancellationToken cancellationToken)
         {
             var fullStopwatch = Stopwatch.StartNew();
@@ -53,6 +64,7 @@ namespace CSharpier
                     directoryOrFile,
                     Path.GetDirectoryName(directoryOrFile),
                     validate,
+                    check,
                     cancellationToken
                 );
             }
@@ -68,6 +80,7 @@ namespace CSharpier
                             o,
                             directoryOrFile,
                             validate,
+                            check,
                             cancellationToken
                         )
                     )
@@ -115,34 +128,28 @@ namespace CSharpier
                 );
             }
 
+            if (check)
+            {
+                Console.WriteLine(
+                    PadToSize("files that were not formatted: ", 80) + ReversePad(
+                        unformattedFiles + "  "
+                    )
+                );
+
+                if (unformattedFiles > 0)
+                {
+                    return 1;
+                }
+            }
+
             return 0;
-        }
-
-        private static string GetTestingPath()
-        {
-            //var path = "C:\\temp\\clifiles";
-            var path = @"c:\Projects\formattingTests\";
-            //path += "Newtonsoft.Json";
-            path += "insite-commerce-prettier";
-
-            // TODO 0 why does that weird file in roslyn fail validation?
-            // also what about the files that fail to compile?
-            //path = +="roslyn";
-            // TODO 0 lots fail to compile, codegen files should be excluded perhaps?
-            //path += "spnetcore";
-            // TODO 0 stackoverflows, probably because of the ridiculous testing files that are in there, and c# thinks there is a stackoverflow because the stack is so large, and looks like it is repeating.
-            // actually it looks like runtime has tests that will fail in recursive tree walkers
-            // see https://github.com/dotnet/runtime/blob/master/src/tests/JIT/Regression/JitBlue/GitHub_10215/GitHub_10215.cs
-            // TODO 0 also some weird "failures" due to trivia moving lines, although the compiled code would be the same
-            //path += "runtime";
-            //path += "AspNetWebStack";
-            return path;
         }
 
         private static async Task DoWork(
             string file,
             string path,
             bool validate,
+            bool check,
             CancellationToken cancellationToken)
         {
             if (
@@ -244,11 +251,23 @@ namespace CSharpier
                 }
             }
 
+            if (check)
+            {
+                if (result.Code != code)
+                {
+                    Console.WriteLine(GetPath() + " - was not formatted");
+                    Interlocked.Increment(ref unformattedFiles);
+                }
+            }
+
             cancellationToken.ThrowIfCancellationRequested();
             Interlocked.Increment(ref files);
 
-            // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
-            File.WriteAllText(file, result.Code, encoding);
+            if (!check)
+            {
+                // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
+                File.WriteAllText(file, result.Code, encoding);
+            }
         }
 
         private static string PadToSize(string value, int size = 120)

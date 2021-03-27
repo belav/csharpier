@@ -10,6 +10,7 @@ namespace CSharpier
         internal delegate Task<int> Handler(
             string directory,
             bool validate,
+            bool check,
             CancellationToken cancellationToken);
 
         public static RootCommand Create()
@@ -23,6 +24,10 @@ namespace CSharpier
                     Arity = ArgumentArity.ZeroOrOne,
                     Description = "A path to a directory containing files to format or a file to format. If a path is not specified the current directory is used"
                 }.LegalFilePathsOnly(),
+                new Option(
+                    new[] { "--check", "-c" },
+                    "Check that files are formatted. Will not write any changes."
+                ),
                 new Option(
                     new[] { "--fast", "-f" },
                     "Skip comparing syntax tree of formatted file to original file to validate changes."
