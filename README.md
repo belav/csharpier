@@ -94,6 +94,7 @@ Arguments:
   <directory>    A path to a directory containing files to format. If a path is not specified the current directory is used
 
 Options:
+  -c, --check       Check that files are formatted. Will not write any changes.
   -f, --fast    Skip comparing syntax tree of formatted file to original file to validate changes.
   --version         Show version information
   -?, -h, --help    Show help and usage information
@@ -103,6 +104,10 @@ Options:
 ### \<directory\>
 Currently CSharpier only supports being passed a directory to recursively scan for .cs files.
 If a directory is not supplied, it will use the current directory.
+
+### --check
+Used to check if your files are already formatted. Outputs any files that have not already been formatted. 
+This will return exit code 1 if there are unformatted files which is useful for CI pipelines.
 
 ### --fast
 CSharpier validates the changes it makes to a file. 
