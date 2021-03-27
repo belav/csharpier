@@ -158,6 +158,7 @@ namespace CSharpier
                 || file.EndsWith(".cshtml.cs")
                 || file.ContainsIgnoreCase("\\obj\\")
                 || file.ContainsIgnoreCase("/obj/")
+                || file.EndsWithIgnoreCase("AllInOne.cs")
             )
             {
                 return;
