@@ -18,8 +18,8 @@ namespace Worker
 
         public static Type[] Types = { typeof(TextSpan), typeof(SyntaxTree) };
 
-        public static Dictionary<Type, string[]> PropertiesByType = new Dictionary<Type,
-            string[]>
+        public static Dictionary<Type,
+            string[]> PropertiesByType = new Dictionary<Type, string[]>
         {
             { typeof(PropertyDeclarationSyntax), new[] { "semicolon" } },
             { typeof(IndexerDeclarationSyntax), new[] { "semicolon" } },

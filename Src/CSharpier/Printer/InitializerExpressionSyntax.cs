@@ -22,9 +22,13 @@ namespace CSharpier
                         this.PrintSeparatedSyntaxList(
                             node.Expressions,
                             this.Print,
-                            Line))),
+                            Line
+                        )
+                    )
+                ),
                 Line,
-                this.PrintSyntaxToken(node.CloseBraceToken));
+                this.PrintSyntaxToken(node.CloseBraceToken)
+            );
             return node.Parent is not ObjectCreationExpressionSyntax
                 ? Group(result)
                 : result;

@@ -11,7 +11,8 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Declaration),
                 this.PrintSyntaxToken(node.CloseParenToken),
-                this.Print(node.Statement));
+                this.Print(node.Statement)
+            );
         }
     }
 }

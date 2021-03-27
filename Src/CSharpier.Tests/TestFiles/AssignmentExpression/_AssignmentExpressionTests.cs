@@ -10,7 +10,8 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "AssignmentExpression",
-                "AssignmentExpressionComments");
+                "AssignmentExpressionComments"
+            );
         }
         [Test]
         public void BasicAssignmentExpression()

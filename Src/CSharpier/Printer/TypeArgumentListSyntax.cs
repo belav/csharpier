@@ -13,8 +13,11 @@ namespace CSharpier
                     this.PrintSeparatedSyntaxList(
                         node.Arguments,
                         this.Print,
-                        Line)),
-                this.PrintSyntaxToken(node.GreaterThanToken));
+                        Line
+                    )
+                ),
+                this.PrintSyntaxToken(node.GreaterThanToken)
+            );
         }
     }
 }

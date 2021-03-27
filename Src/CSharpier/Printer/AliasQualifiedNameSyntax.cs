@@ -9,7 +9,8 @@ namespace CSharpier
             return Concat(
                 this.Print(node.Alias),
                 this.PrintSyntaxToken(node.ColonColonToken),
-                this.Print(node.Name));
+                this.Print(node.Name)
+            );
         }
     }
 }

@@ -14,9 +14,12 @@ namespace CSharpier
                     this.PrintSeparatedSyntaxList(
                         node.Variables,
                         this.Print,
-                        Line),
-                    SoftLine),
-                this.PrintSyntaxToken(node.CloseParenToken));
+                        Line
+                    ),
+                    SoftLine
+                ),
+                this.PrintSyntaxToken(node.CloseParenToken)
+            );
         }
     }
 }

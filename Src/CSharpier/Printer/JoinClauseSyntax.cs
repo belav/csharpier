@@ -21,8 +21,10 @@ namespace CSharpier
                     ? Concat(
                         SpaceIfNoPreviousComment,
                         this.PrintSyntaxToken(node.Into.IntoKeyword, " "),
-                        this.PrintSyntaxToken(node.Into.Identifier))
-                    : null);
+                        this.PrintSyntaxToken(node.Into.Identifier)
+                    )
+                    : null
+            );
         }
     }
 }

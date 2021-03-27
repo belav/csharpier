@@ -15,7 +15,8 @@ namespace CSharpier
                     ? this.PrintVariableDeclarationSyntax(node.Declaration)
                     : null,
                 node.Expression != null ? this.Print(node.Expression) : null,
-                this.PrintSyntaxToken(node.CloseParenToken));
+                this.PrintSyntaxToken(node.CloseParenToken)
+            );
             var statement = this.Print(node.Statement);
             if (node.Statement is UsingStatementSyntax)
             {

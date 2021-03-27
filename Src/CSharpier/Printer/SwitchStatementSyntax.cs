@@ -13,8 +13,11 @@ namespace CSharpier
                     Indent(
                         Concat(
                             HardLine,
-                            Join(HardLine, node.Sections.Select(this.Print)))),
-                    HardLine);
+                            Join(HardLine, node.Sections.Select(this.Print))
+                        )
+                    ),
+                    HardLine
+                );
             return Group(
                 this.PrintSyntaxToken(node.SwitchKeyword, " "),
                 this.PrintSyntaxToken(node.OpenParenToken),
@@ -23,7 +26,8 @@ namespace CSharpier
                 Line,
                 this.PrintSyntaxToken(node.OpenBraceToken),
                 sections,
-                this.PrintSyntaxToken(node.CloseBraceToken));
+                this.PrintSyntaxToken(node.CloseBraceToken)
+            );
         }
     }
 }

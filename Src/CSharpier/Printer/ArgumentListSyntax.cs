@@ -15,10 +15,13 @@ namespace CSharpier
                         this.PrintSeparatedSyntaxList(
                             node.Arguments,
                             this.PrintArgumentSyntax,
-                            Line))
+                            Line
+                        )
+                    )
                     : null,
                 node.Arguments.Any() ? SoftLine : null,
-                this.PrintSyntaxToken(node.CloseParenToken));
+                this.PrintSyntaxToken(node.CloseParenToken)
+            );
 
             return node.Parent is not ObjectCreationExpressionSyntax
                 ? Group(result)

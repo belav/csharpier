@@ -117,7 +117,9 @@ namespace CSharpier
                     parts.Push(
                         LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
-                            CommentType.SingleLine));
+                            CommentType.SingleLine
+                        )
+                    );
                 }
                 else if (
                     trivia.Kind() == SyntaxKind.MultiLineCommentTrivia
@@ -127,13 +129,16 @@ namespace CSharpier
                     parts.Push(
                         LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
-                            CommentType.MultiLine));
+                            CommentType.MultiLine
+                        )
+                    );
                 }
                 else if (trivia.Kind() == SyntaxKind.DisabledTextTrivia)
                 {
                     parts.Push(
                         LiteralLine,
-                        trivia.ToString().TrimEnd('\n', '\r'));
+                        trivia.ToString().TrimEnd('\n', '\r')
+                    );
                 }
                 else if (
                     trivia.Kind() == SyntaxKind.IfDirectiveTrivia
@@ -163,7 +168,9 @@ namespace CSharpier
                     var triviaText = trivia.ToString();
                     if (
                         x > 0
-                        && leadingTrivia[x - 1].Kind() == SyntaxKind.WhitespaceTrivia
+                        && leadingTrivia[
+                            x - 1
+                        ].Kind() == SyntaxKind.WhitespaceTrivia
                     )
                     {
                         triviaText = leadingTrivia[x - 1] + triviaText;
@@ -197,7 +204,9 @@ namespace CSharpier
                     parts.Push(
                         TrailingComment(
                             trivia.ToString(),
-                            CommentType.SingleLine));
+                            CommentType.SingleLine
+                        )
+                    );
                 }
                 else if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
                 {

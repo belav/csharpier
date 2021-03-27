@@ -10,7 +10,8 @@ namespace CSharpier
         {
             return Concat(
                 this.Print(node.Type),
-                this.PrintArgumentListSyntax(node.ArgumentList));
+                this.PrintArgumentListSyntax(node.ArgumentList)
+            );
         }
     }
 }

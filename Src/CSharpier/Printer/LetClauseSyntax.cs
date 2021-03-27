@@ -10,7 +10,8 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.LetKeyword, " "),
                 this.PrintSyntaxToken(node.Identifier, " "),
                 this.PrintSyntaxToken(node.EqualsToken, " "),
-                this.Print(node.Expression));
+                this.Print(node.Expression)
+            );
         }
     }
 }

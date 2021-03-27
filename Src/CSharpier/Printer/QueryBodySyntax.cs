@@ -20,7 +20,8 @@ namespace CSharpier
                 // TODO 1 indent when there is a group by before the into?
                 parts.Push(
                     " ",
-                    this.PrintQueryContinuationSyntax(node.Continuation));
+                    this.PrintQueryContinuationSyntax(node.Continuation)
+                );
             }
 
             return Concat(parts);

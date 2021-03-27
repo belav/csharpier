@@ -16,7 +16,8 @@ namespace CSharpier
                     this.Print(node.Declaration.Type),
                     node.Declaration.Identifier.RawKind != 0 ? " " : null,
                     this.PrintSyntaxToken(node.Declaration.Identifier),
-                    this.PrintSyntaxToken(node.Declaration.CloseParenToken));
+                    this.PrintSyntaxToken(node.Declaration.CloseParenToken)
+                );
             }
 
             if (node.Filter != null)
@@ -26,7 +27,8 @@ namespace CSharpier
                     this.PrintSyntaxToken(node.Filter.WhenKeyword, " "),
                     this.PrintSyntaxToken(node.Filter.OpenParenToken),
                     this.Print(node.Filter.FilterExpression),
-                    this.PrintSyntaxToken(node.Filter.CloseParenToken));
+                    this.PrintSyntaxToken(node.Filter.CloseParenToken)
+                );
             }
 
             parts.Push(this.PrintBlockSyntax(node.Block));

@@ -28,22 +28,28 @@ namespace CSharpier
                         Join(
                             HardLine,
                             node.Externs.Select(
-                                this.PrintExternAliasDirectiveSyntax)),
-                        HardLine);
+                                this.PrintExternAliasDirectiveSyntax
+                            )
+                        ),
+                        HardLine
+                    );
                 }
                 if (hasUsing)
                 {
                     innerParts.Push(
                         Join(
                             HardLine,
-                            node.Usings.Select(this.PrintUsingDirectiveSyntax)),
-                        HardLine);
+                            node.Usings.Select(this.PrintUsingDirectiveSyntax)
+                        ),
+                        HardLine
+                    );
                 }
                 if (hasMembers)
                 {
                     innerParts.Push(
                         Join(HardLine, node.Members.Select(this.Print)),
-                        HardLine);
+                        HardLine
+                    );
                 }
 
                 innerParts.RemoveAt(innerParts.Count - 1);
@@ -61,7 +67,9 @@ namespace CSharpier
                     Indent(Concat(innerParts)),
                     hasMembers || hasUsing || hasExterns ? HardLine : null,
                     this.PrintSyntaxToken(node.CloseBraceToken),
-                    this.PrintSyntaxToken(node.SemicolonToken)));
+                    this.PrintSyntaxToken(node.SemicolonToken)
+                )
+            );
             return Concat(parts);
         }
     }

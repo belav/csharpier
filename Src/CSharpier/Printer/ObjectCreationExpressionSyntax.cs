@@ -15,7 +15,8 @@ namespace CSharpier
                     : "",
                 node.Initializer != null
                     ? this.PrintInitializerExpressionSyntax(node.Initializer)
-                    : "");
+                    : ""
+            );
         }
     }
 }

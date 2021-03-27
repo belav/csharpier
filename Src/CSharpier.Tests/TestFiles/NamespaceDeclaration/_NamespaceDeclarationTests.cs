@@ -20,7 +20,8 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "NamespaceDeclaration",
-                "NamespaceWithMultipleClasses");
+                "NamespaceWithMultipleClasses"
+            );
         }
         [Test]
         public void NamespaceWithUsingAndClass()

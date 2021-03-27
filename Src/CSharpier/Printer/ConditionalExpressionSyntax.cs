@@ -15,7 +15,9 @@ namespace CSharpier
                     this.Print(node.WhenTrue),
                     Line,
                     this.PrintSyntaxToken(node.ColonToken, " "),
-                    this.Print(node.WhenFalse)));
+                    this.Print(node.WhenFalse)
+                )
+            );
         }
     }
 }

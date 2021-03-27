@@ -12,7 +12,8 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.ExternKeyword, " "),
                 this.PrintSyntaxToken(node.AliasKeyword, " "),
                 this.PrintSyntaxToken(node.Identifier),
-                this.PrintSyntaxToken(node.SemicolonToken));
+                this.PrintSyntaxToken(node.SemicolonToken)
+            );
         }
     }
 }

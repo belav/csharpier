@@ -10,14 +10,16 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest(
                 "ParenthesizedLambdaExpression",
-                "AsyncAwaitParaenthesizedLambdaExpression");
+                "AsyncAwaitParaenthesizedLambdaExpression"
+            );
         }
         [Test]
         public void BasicParenthesizedLambdaExpression()
         {
             this.RunTest(
                 "ParenthesizedLambdaExpression",
-                "BasicParenthesizedLambdaExpression");
+                "BasicParenthesizedLambdaExpression"
+            );
         }
     }
 }

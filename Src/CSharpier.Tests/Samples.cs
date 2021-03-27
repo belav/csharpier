@@ -33,20 +33,24 @@ namespace CSharpier.Tests
             var stopwatch = Stopwatch.StartNew();
             var result = new CodeFormatter().Format(
                 code,
-                new Options { IncludeDocTree = true, IncludeAST = true,  });
+                new Options { IncludeDocTree = true, IncludeAST = true,  }
+            );
 
             File.WriteAllText(
                 file.Replace(".cst", ".Formatted.cst"),
                 result.Code,
-                Encoding.UTF8);
+                Encoding.UTF8
+            );
             File.WriteAllText(
                 file.Replace(".cst", ".doctree.txt"),
                 result.DocTree,
-                Encoding.UTF8);
+                Encoding.UTF8
+            );
             File.WriteAllText(
                 file.Replace(".cst", ".json"),
                 result.AST,
-                Encoding.UTF8);
+                Encoding.UTF8
+            );
         }
     }
 }

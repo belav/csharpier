@@ -15,9 +15,12 @@ namespace CSharpier
                     this.PrintSeparatedSyntaxList(
                         node.Initializers,
                         this.PrintAnonymousObjectMemberDeclaratorSyntax,
-                        Line)),
+                        Line
+                    )
+                ),
                 Line,
-                this.PrintSyntaxToken(node.CloseBraceToken));
+                this.PrintSyntaxToken(node.CloseBraceToken)
+            );
         }
     }
 }

@@ -16,7 +16,8 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.IfKeyword, " "),
                 this.PrintSyntaxToken(node.OpenParenToken),
                 Group(Indent(SoftLine, this.Print(node.Condition)), SoftLine),
-                this.PrintSyntaxToken(node.CloseParenToken));
+                this.PrintSyntaxToken(node.CloseParenToken)
+            );
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {

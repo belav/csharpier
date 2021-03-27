@@ -12,8 +12,10 @@ namespace CSharpier
                 this.PrintSeparatedSyntaxList(
                     node.Parameters,
                     this.PrintParameterSyntax,
-                    " "),
-                this.PrintSyntaxToken(node.CloseBracketToken));
+                    " "
+                ),
+                this.PrintSyntaxToken(node.CloseBracketToken)
+            );
         }
     }
 }

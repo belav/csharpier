@@ -20,7 +20,8 @@ namespace CSharpier.Playground
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<PlaygroundOptions>(
-                Configuration.GetSection(PlaygroundOptions.Position));
+                Configuration.GetSection(PlaygroundOptions.Position)
+            );
 
             services.AddControllersWithViews();
 
@@ -28,7 +29,8 @@ namespace CSharpier.Playground
                 configuration =>
                 {
                     configuration.RootPath = "ClientApp/build";
-                });
+                }
+            );
         }
 
         public void Configure(
@@ -60,8 +62,10 @@ namespace CSharpier.Playground
                 {
                     endpoints.MapControllerRoute(
                         name: "default",
-                        pattern: "{controller}/{action=Index}/{id?}");
-                });
+                        pattern: "{controller}/{action=Index}/{id?}"
+                    );
+                }
+            );
 
             app.UseSpa(
                 spa =>
@@ -72,7 +76,8 @@ namespace CSharpier.Playground
                     {
                         spa.UseReactDevelopmentServer(npmScript: "start");
                     }
-                });
+                }
+            );
         }
     }
 }

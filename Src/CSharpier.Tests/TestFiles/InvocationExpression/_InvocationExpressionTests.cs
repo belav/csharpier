@@ -8,9 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void InvocationExpressions()
         {
-            this.RunTest(
-                "InvocationExpression",
-                "InvocationExpressions");
+            this.RunTest("InvocationExpression", "InvocationExpressions");
         }
     }
 }

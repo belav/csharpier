@@ -12,7 +12,8 @@ namespace CSharpier
                 this.Print(node.Type),
                 node.Initializer != null
                     ? Concat(Line, this.Print(node.Initializer))
-                    : null);
+                    : null
+            );
         }
     }
 }

@@ -14,14 +14,14 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.TryKeyword),
                 this.PrintBlockSyntax(node.Block),
                 HardLine,
-                Join(
-                    HardLine,
-                    node.Catches.Select(this.PrintCatchClauseSyntax)));
+                Join(HardLine, node.Catches.Select(this.PrintCatchClauseSyntax))
+            );
             if (node.Finally != null)
             {
                 parts.Push(
                     HardLine,
-                    this.PrintFinallyClauseSyntax(node.Finally));
+                    this.PrintFinallyClauseSyntax(node.Finally)
+                );
             }
             return Concat(parts);
         }

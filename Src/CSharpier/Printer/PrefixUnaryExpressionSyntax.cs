@@ -9,7 +9,8 @@ namespace CSharpier
         {
             return Concat(
                 this.PrintSyntaxToken(node.OperatorToken),
-                this.Print(node.Operand));
+                this.Print(node.Operand)
+            );
         }
     }
 }

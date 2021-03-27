@@ -19,7 +19,8 @@ namespace CSharpier
 
             var parts = new Parts(
                 Line,
-                this.PrintSyntaxToken(node.OpenBraceToken));
+                this.PrintSyntaxToken(node.OpenBraceToken)
+            );
             if (node.Statements.Count > 0)
             {
                 parts.Push(
@@ -28,15 +29,21 @@ namespace CSharpier
                             statementSeparator,
                             Join(
                                 statementSeparator,
-                                node.Statements.Select(this.Print))),
-                        statementSeparator));
+                                node.Statements.Select(this.Print)
+                            )
+                        ),
+                        statementSeparator
+                    )
+                );
             }
 
             parts.Push(
                 this.PrintSyntaxToken(
                     node.CloseBraceToken,
                     null,
-                    node.Statements.Count == 0 ? " " : null));
+                    node.Statements.Count == 0 ? " " : null
+                )
+            );
             return Group(Concat(parts));
         }
     }

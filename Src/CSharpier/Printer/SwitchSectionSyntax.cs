@@ -23,7 +23,11 @@ namespace CSharpier
                             HardLine,
                             Join(
                                 HardLine,
-                                node.Statements.Select(this.Print).ToArray()))));
+                                node.Statements.Select(this.Print).ToArray()
+                            )
+                        )
+                    )
+                );
             }
             return Concat(parts);
         }

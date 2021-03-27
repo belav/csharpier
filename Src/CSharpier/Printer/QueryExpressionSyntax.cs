@@ -8,7 +8,8 @@ namespace CSharpier
         {
             return Concat(
                 this.PrintFromClauseSyntax(node.FromClause),
-                Indent(Concat(Line, this.PrintQueryBodySyntax(node.Body))));
+                Indent(Concat(Line, this.PrintQueryBodySyntax(node.Body)))
+            );
         }
     }
 }

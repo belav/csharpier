@@ -14,7 +14,8 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.YieldKeyword, " "),
                 this.PrintSyntaxToken(node.ReturnOrBreakKeyword),
                 expression,
-                this.PrintSyntaxToken(node.SemicolonToken));
+                this.PrintSyntaxToken(node.SemicolonToken)
+            );
         }
     }
 }

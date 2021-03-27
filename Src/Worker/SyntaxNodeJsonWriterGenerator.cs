@@ -12,9 +12,11 @@ namespace Worker
     [TestFixture]
     public class SyntaxNodeJsonWriterGenerator
     {
-        List<string> missingTypes = new List<string>();
+        readonly List<string> missingTypes = new();
 
         [Test]
+        [Ignore(
+                "Run this manually if you need to regenerate the SyntaxNodeJsonWriter.generated.cs file. Then run csharpier on the result")]
         public void DoWork()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
@@ -23,11 +25,15 @@ namespace Worker
                 directory = directory.Parent;
             }
 
-            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes().Where(
-                o => !o.IsAbstract &&
-                typeof(CSharpSyntaxNode).IsAssignableFrom(o)).ToList();
+            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
+                .Where(
+                    o => !o.IsAbstract
+                    && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
+                )
+                .ToList();
 
-            var fileName = directory.FullName + @"\CSharpier.Parser\SyntaxNodeJsonWriter.generated.cs";
+            var fileName =
+                directory.FullName + "/CSharpier/SyntaxNodeJsonWriter.generated.cs";
             using (var file = new StreamWriter(fileName, false))
             {
                 file.WriteLine("using System.Collections.Generic;");
@@ -38,7 +44,7 @@ namespace Worker
                 file.WriteLine("using Microsoft.CodeAnalysis.CSharp;");
                 file.WriteLine("using Microsoft.CodeAnalysis.CSharp.Syntax;");
                 file.WriteLine();
-                file.WriteLine("namespace CSharpier.Parser");
+                file.WriteLine("namespace CSharpier");
                 file.WriteLine("{");
                 file.WriteLine("    public partial class SyntaxNodeJsonWriter");
                 file.WriteLine("    {");
@@ -65,17 +71,14 @@ namespace Worker
                 file.WriteLine("}");
             }
 
-            File.Copy(
-                fileName,
-                fileName.Replace("CSharpier.Parser", "CSharpier"),
-                true);
-
             if (missingTypes.Any())
             {
                 throw new Exception(
                     Environment.NewLine + string.Join(
                         Environment.NewLine,
-                        missingTypes));
+                        missingTypes
+                    )
+                );
             }
         }
 
@@ -100,10 +103,10 @@ namespace Worker
                 var propertyType = propertyInfo.PropertyType;
 
                 if (
-                    Ignored.Properties.Contains(camelCaseName) ||
-                    Ignored.Types.Contains(propertyType) ||
-                    (Ignored.PropertiesByType.ContainsKey(type) &&
-                    Ignored.PropertiesByType[type].Contains(camelCaseName))
+                    Ignored.Properties.Contains(camelCaseName)
+                    || Ignored.Types.Contains(propertyType)
+                    || (Ignored.PropertiesByType.ContainsKey(type)
+                    && Ignored.PropertiesByType[type].Contains(camelCaseName))
                 )
                 {
                     continue;
@@ -122,9 +125,9 @@ namespace Worker
                     file.WriteLine($"            properties.Add(WriteInt(\"{camelCaseName}\", syntaxNode.{propertyName}));");
                 }
                 else if (
-                    typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType) ||
-                    propertyType == typeof(SyntaxToken) ||
-                    propertyType == typeof(SyntaxTrivia)
+                    typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType)
+                    || propertyType == typeof(SyntaxToken)
+                    || propertyType == typeof(SyntaxTrivia)
                 )
                 {
                     var methodName = "WriteSyntaxNode";
@@ -149,11 +152,11 @@ namespace Worker
                     file.WriteLine("            }");
                 }
                 else if (
-                    (propertyType.IsGenericType &&
-                    (propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>) ||
-                    propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>))) ||
-                    propertyType == typeof(SyntaxTokenList) ||
-                    propertyType == typeof(SyntaxTriviaList)
+                    (propertyType.IsGenericType
+                    && (propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>)
+                    || propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)))
+                    || propertyType == typeof(SyntaxTokenList)
+                    || propertyType == typeof(SyntaxTriviaList)
                 )
                 {
                     var methodName = "WriteSyntaxNode";
@@ -167,9 +170,8 @@ namespace Worker
                     }
                     else
                     {
-                        var genericArgument = propertyType.GetGenericArguments()[
-                            0
-                        ];
+                        var genericArgument =
+                            propertyType.GetGenericArguments()[0];
                         if (!genericArgument.IsAbstract)
                         {
                             methodName = "Write" + genericArgument.Name;
@@ -188,12 +190,17 @@ namespace Worker
                 else
                 {
                     missingTypes.Add(
-                        PadToSize(type.Name + "." + propertyName + ": ", 40) + propertyType);
+                        PadToSize(
+                            type.Name + "." + propertyName + ": ",
+                            40
+                        ) + propertyType
+                    );
                 }
             }
 
             file.WriteLine(
-                "            builder.Append(string.Join(\",\", properties.Where(o => o != null)));");
+                "            builder.Append(string.Join(\",\", properties.Where(o => o != null)));"
+            );
             file.WriteLine("            builder.Append(\"}\");");
             file.WriteLine("        }");
         }

@@ -11,7 +11,8 @@ namespace CSharpier
             if (node.ArgumentList != null)
             {
                 parts.Push(
-                    this.PrintBracketedArgumentListSyntax(node.ArgumentList));
+                    this.PrintBracketedArgumentListSyntax(node.ArgumentList)
+                );
             }
             if (node.Initializer != null)
             {
