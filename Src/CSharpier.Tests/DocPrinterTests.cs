@@ -102,7 +102,8 @@ namespace CSharpier.Tests
 
             var result = this.Print(doc);
 
-            result.Should().Be($"{longText}{NewLine}{longText}{NewLine}{longText}");
+            result.Should()
+                .Be($"{longText}{NewLine}{longText}{NewLine}{longText}");
         }
 
         [Test]
@@ -208,7 +209,10 @@ namespace CSharpier.Tests
 
             var result = this.Print(doc);
 
-            result.Should().Be($"lkjasdkfljalsjkdfkjlasdfjklakljsdfjkasdfkljsdafjk jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj");
+            result.Should()
+                .Be(
+                    $"lkjasdkfljalsjkdfkjlasdfjklakljsdfjkasdfkljsdafjk jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj"
+                );
         }
 
         [Test]
@@ -225,7 +229,10 @@ namespace CSharpier.Tests
                 )
             );
             var result = this.Print(doc);
-            result.Should().Be($"1 2{NewLine}1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111{NewLine}2");
+            result.Should()
+                .Be(
+                    $"1 2{NewLine}1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111{NewLine}2"
+                );
         }
 
         [Test]
@@ -262,7 +269,10 @@ namespace CSharpier.Tests
             );
 
             var result = this.Print(doc);
-            result.Should().Be($"1111111111 1111111111 1111111111 1111111111 1111111111{NewLine}1111111111 1111111111 1111111111 1111111111 1111111111");
+            result.Should()
+                .Be(
+                    $"1111111111 1111111111 1111111111 1111111111 1111111111{NewLine}1111111111 1111111111 1111111111 1111111111 1111111111"
+                );
         }
 
         [Test]

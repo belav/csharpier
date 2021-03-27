@@ -6,7 +6,9 @@ class ClassName
             async () =>
             {
                 return await new WebClient().DownloadStringTaskAsync(
-                    "http://example.com");
-            });
+                    "http://example.com"
+                );
+            }
+        );
     }
 }

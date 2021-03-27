@@ -108,7 +108,9 @@ namespace CSharpier
                     this.Print(conversionOperatorDeclarationSyntax.Type)
                 );
             }
-            else if (node is OperatorDeclarationSyntax operatorDeclarationSyntax)
+            else if (
+                node is OperatorDeclarationSyntax operatorDeclarationSyntax
+            )
             {
                 parts.Push(
                     this.Print(operatorDeclarationSyntax.ReturnType),

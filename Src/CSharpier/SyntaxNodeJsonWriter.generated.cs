@@ -25,7 +25,10 @@ namespace CSharpier
                     syntaxNode as QualifiedNameSyntax
                 );
             if (syntaxNode is GenericNameSyntax)
-                WriteGenericNameSyntax(builder, syntaxNode as GenericNameSyntax);
+                WriteGenericNameSyntax(
+                    builder,
+                    syntaxNode as GenericNameSyntax
+                );
             if (syntaxNode is TypeArgumentListSyntax)
                 WriteTypeArgumentListSyntax(
                     builder,
@@ -49,7 +52,10 @@ namespace CSharpier
                     syntaxNode as ArrayRankSpecifierSyntax
                 );
             if (syntaxNode is PointerTypeSyntax)
-                WritePointerTypeSyntax(builder, syntaxNode as PointerTypeSyntax);
+                WritePointerTypeSyntax(
+                    builder,
+                    syntaxNode as PointerTypeSyntax
+                );
             if (syntaxNode is FunctionPointerTypeSyntax)
                 WriteFunctionPointerTypeSyntax(
                     builder,
@@ -65,7 +71,9 @@ namespace CSharpier
                     builder,
                     syntaxNode as FunctionPointerCallingConventionSyntax
                 );
-            if (syntaxNode is FunctionPointerUnmanagedCallingConventionListSyntax)
+            if (
+                syntaxNode is FunctionPointerUnmanagedCallingConventionListSyntax
+            )
                 WriteFunctionPointerUnmanagedCallingConventionListSyntax(
                     builder,
                     syntaxNode as FunctionPointerUnmanagedCallingConventionListSyntax
@@ -337,7 +345,10 @@ namespace CSharpier
                     syntaxNode as JoinIntoClauseSyntax
                 );
             if (syntaxNode is WhereClauseSyntax)
-                WriteWhereClauseSyntax(builder, syntaxNode as WhereClauseSyntax);
+                WriteWhereClauseSyntax(
+                    builder,
+                    syntaxNode as WhereClauseSyntax
+                );
             if (syntaxNode is OrderByClauseSyntax)
                 WriteOrderByClauseSyntax(
                     builder,
@@ -351,7 +362,10 @@ namespace CSharpier
                     syntaxNode as SelectClauseSyntax
                 );
             if (syntaxNode is GroupClauseSyntax)
-                WriteGroupClauseSyntax(builder, syntaxNode as GroupClauseSyntax);
+                WriteGroupClauseSyntax(
+                    builder,
+                    syntaxNode as GroupClauseSyntax
+                );
             if (syntaxNode is QueryContinuationSyntax)
                 WriteQueryContinuationSyntax(
                     builder,
@@ -424,7 +438,10 @@ namespace CSharpier
                     syntaxNode as RelationalPatternSyntax
                 );
             if (syntaxNode is TypePatternSyntax)
-                WriteTypePatternSyntax(builder, syntaxNode as TypePatternSyntax);
+                WriteTypePatternSyntax(
+                    builder,
+                    syntaxNode as TypePatternSyntax
+                );
             if (syntaxNode is BinaryPatternSyntax)
                 WriteBinaryPatternSyntax(
                     builder,
@@ -553,7 +570,10 @@ namespace CSharpier
                     syntaxNode as WhileStatementSyntax
                 );
             if (syntaxNode is DoStatementSyntax)
-                WriteDoStatementSyntax(builder, syntaxNode as DoStatementSyntax);
+                WriteDoStatementSyntax(
+                    builder,
+                    syntaxNode as DoStatementSyntax
+                );
             if (syntaxNode is ForStatementSyntax)
                 WriteForStatementSyntax(
                     builder,
@@ -595,7 +615,10 @@ namespace CSharpier
                     syntaxNode as LockStatementSyntax
                 );
             if (syntaxNode is IfStatementSyntax)
-                WriteIfStatementSyntax(builder, syntaxNode as IfStatementSyntax);
+                WriteIfStatementSyntax(
+                    builder,
+                    syntaxNode as IfStatementSyntax
+                );
             if (syntaxNode is ElseClauseSyntax)
                 WriteElseClauseSyntax(builder, syntaxNode as ElseClauseSyntax);
             if (syntaxNode is SwitchStatementSyntax)
@@ -639,7 +662,10 @@ namespace CSharpier
                     syntaxNode as TryStatementSyntax
                 );
             if (syntaxNode is CatchClauseSyntax)
-                WriteCatchClauseSyntax(builder, syntaxNode as CatchClauseSyntax);
+                WriteCatchClauseSyntax(
+                    builder,
+                    syntaxNode as CatchClauseSyntax
+                );
             if (syntaxNode is CatchDeclarationSyntax)
                 WriteCatchDeclarationSyntax(
                     builder,
@@ -1078,13 +1104,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteBoolean("isVar", syntaxNode.IsVar));
@@ -1145,7 +1175,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Left != default(NameSyntax))
             {
@@ -1224,13 +1256,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.TypeArgumentList != default(TypeArgumentListSyntax))
             {
@@ -1239,7 +1275,9 @@ namespace CSharpier
                     typeArgumentListBuilder,
                     syntaxNode.TypeArgumentList
                 );
-                properties.Add($"\"typeArgumentList\":{typeArgumentListBuilder.ToString()}");
+                properties.Add(
+                    $"\"typeArgumentList\":{typeArgumentListBuilder.ToString()}"
+                );
             }
             properties.Add(
                 WriteBoolean(
@@ -1306,7 +1344,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
             {
@@ -1315,7 +1355,9 @@ namespace CSharpier
                     lessThanTokenBuilder,
                     syntaxNode.LessThanToken
                 );
-                properties.Add($"\"lessThanToken\":{lessThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"lessThanToken\":{lessThanTokenBuilder.ToString()}"
+                );
             }
             var arguments = new List<string>();
             foreach (var node in syntaxNode.Arguments)
@@ -1332,7 +1374,9 @@ namespace CSharpier
                     greaterThanTokenBuilder,
                     syntaxNode.GreaterThanToken
                 );
-                properties.Add($"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -1387,7 +1431,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Alias != default(IdentifierNameSyntax))
             {
@@ -1402,7 +1448,9 @@ namespace CSharpier
                     colonColonTokenBuilder,
                     syntaxNode.ColonColonToken
                 );
-                properties.Add($"\"colonColonToken\":{colonColonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonColonToken\":{colonColonTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Name != default(SimpleNameSyntax))
             {
@@ -1469,7 +1517,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
@@ -1535,13 +1585,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ElementType != default(TypeSyntax))
             {
                 var elementTypeBuilder = new StringBuilder();
                 WriteSyntaxNode(elementTypeBuilder, syntaxNode.ElementType);
-                properties.Add($"\"elementType\":{elementTypeBuilder.ToString()}");
+                properties.Add(
+                    $"\"elementType\":{elementTypeBuilder.ToString()}"
+                );
             }
             var rankSpecifiers = new List<string>();
             foreach (var node in syntaxNode.RankSpecifiers)
@@ -1550,7 +1604,9 @@ namespace CSharpier
                 WriteArrayRankSpecifierSyntax(innerBuilder, node);
                 rankSpecifiers.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"rankSpecifiers\":[{string.Join(",", rankSpecifiers)}]");
+            properties.Add(
+                $"\"rankSpecifiers\":[{string.Join(",", rankSpecifiers)}]"
+            );
             properties.Add(WriteBoolean("isVar", syntaxNode.IsVar));
             properties.Add(WriteBoolean("isUnmanaged", syntaxNode.IsUnmanaged));
             properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
@@ -1609,7 +1665,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
@@ -1618,7 +1676,9 @@ namespace CSharpier
                     openBracketTokenBuilder,
                     syntaxNode.OpenBracketToken
                 );
-                properties.Add($"\"openBracketToken\":{openBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBracketToken\":{openBracketTokenBuilder.ToString()}"
+                );
             }
             var sizes = new List<string>();
             foreach (var node in syntaxNode.Sizes)
@@ -1635,7 +1695,9 @@ namespace CSharpier
                     closeBracketTokenBuilder,
                     syntaxNode.CloseBracketToken
                 );
-                properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rank", syntaxNode.Rank));
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
@@ -1691,13 +1753,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ElementType != default(TypeSyntax))
             {
                 var elementTypeBuilder = new StringBuilder();
                 WriteSyntaxNode(elementTypeBuilder, syntaxNode.ElementType);
-                properties.Add($"\"elementType\":{elementTypeBuilder.ToString()}");
+                properties.Add(
+                    $"\"elementType\":{elementTypeBuilder.ToString()}"
+                );
             }
             if (syntaxNode.AsteriskToken != default(SyntaxToken))
             {
@@ -1706,7 +1772,9 @@ namespace CSharpier
                     asteriskTokenBuilder,
                     syntaxNode.AsteriskToken
                 );
-                properties.Add($"\"asteriskToken\":{asteriskTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"asteriskToken\":{asteriskTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isVar", syntaxNode.IsVar));
             properties.Add(WriteBoolean("isUnmanaged", syntaxNode.IsUnmanaged));
@@ -1766,7 +1834,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.DelegateKeyword != default(SyntaxToken))
             {
@@ -1775,7 +1845,9 @@ namespace CSharpier
                     delegateKeywordBuilder,
                     syntaxNode.DelegateKeyword
                 );
-                properties.Add($"\"delegateKeyword\":{delegateKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"delegateKeyword\":{delegateKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.AsteriskToken != default(SyntaxToken))
             {
@@ -1784,7 +1856,9 @@ namespace CSharpier
                     asteriskTokenBuilder,
                     syntaxNode.AsteriskToken
                 );
-                properties.Add($"\"asteriskToken\":{asteriskTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"asteriskToken\":{asteriskTokenBuilder.ToString()}"
+                );
             }
             if (
                 syntaxNode.CallingConvention != default(FunctionPointerCallingConventionSyntax)
@@ -1795,7 +1869,9 @@ namespace CSharpier
                     callingConventionBuilder,
                     syntaxNode.CallingConvention
                 );
-                properties.Add($"\"callingConvention\":{callingConventionBuilder.ToString()}");
+                properties.Add(
+                    $"\"callingConvention\":{callingConventionBuilder.ToString()}"
+                );
             }
             if (
                 syntaxNode.ParameterList != default(FunctionPointerParameterListSyntax)
@@ -1806,7 +1882,9 @@ namespace CSharpier
                     parameterListBuilder,
                     syntaxNode.ParameterList
                 );
-                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameterList\":{parameterListBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isVar", syntaxNode.IsVar));
             properties.Add(WriteBoolean("isUnmanaged", syntaxNode.IsUnmanaged));
@@ -1866,7 +1944,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
             {
@@ -1875,7 +1955,9 @@ namespace CSharpier
                     lessThanTokenBuilder,
                     syntaxNode.LessThanToken
                 );
-                properties.Add($"\"lessThanToken\":{lessThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"lessThanToken\":{lessThanTokenBuilder.ToString()}"
+                );
             }
             var parameters = new List<string>();
             foreach (var node in syntaxNode.Parameters)
@@ -1892,7 +1974,9 @@ namespace CSharpier
                     greaterThanTokenBuilder,
                     syntaxNode.GreaterThanToken
                 );
-                properties.Add($"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -1947,7 +2031,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ManagedOrUnmanagedKeyword != default(SyntaxToken))
             {
@@ -1956,7 +2042,9 @@ namespace CSharpier
                     managedOrUnmanagedKeywordBuilder,
                     syntaxNode.ManagedOrUnmanagedKeyword
                 );
-                properties.Add($"\"managedOrUnmanagedKeyword\":{managedOrUnmanagedKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"managedOrUnmanagedKeyword\":{managedOrUnmanagedKeywordBuilder.ToString()}"
+                );
             }
             if (
                 syntaxNode.UnmanagedCallingConventionList != default(FunctionPointerUnmanagedCallingConventionListSyntax)
@@ -1967,7 +2055,9 @@ namespace CSharpier
                     unmanagedCallingConventionListBuilder,
                     syntaxNode.UnmanagedCallingConventionList
                 );
-                properties.Add($"\"unmanagedCallingConventionList\":{unmanagedCallingConventionListBuilder.ToString()}");
+                properties.Add(
+                    $"\"unmanagedCallingConventionList\":{unmanagedCallingConventionListBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -2022,7 +2112,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
@@ -2031,7 +2123,9 @@ namespace CSharpier
                     openBracketTokenBuilder,
                     syntaxNode.OpenBracketToken
                 );
-                properties.Add($"\"openBracketToken\":{openBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBracketToken\":{openBracketTokenBuilder.ToString()}"
+                );
             }
             var callingConventions = new List<string>();
             foreach (var node in syntaxNode.CallingConventions)
@@ -2043,7 +2137,9 @@ namespace CSharpier
                 );
                 callingConventions.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"callingConventions\":[{string.Join(",", callingConventions)}]");
+            properties.Add(
+                $"\"callingConventions\":[{string.Join(",", callingConventions)}]"
+            );
             if (syntaxNode.CloseBracketToken != default(SyntaxToken))
             {
                 var closeBracketTokenBuilder = new StringBuilder();
@@ -2051,7 +2147,9 @@ namespace CSharpier
                     closeBracketTokenBuilder,
                     syntaxNode.CloseBracketToken
                 );
-                properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -2106,7 +2204,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(SyntaxToken))
             {
@@ -2167,13 +2267,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ElementType != default(TypeSyntax))
             {
                 var elementTypeBuilder = new StringBuilder();
                 WriteSyntaxNode(elementTypeBuilder, syntaxNode.ElementType);
-                properties.Add($"\"elementType\":{elementTypeBuilder.ToString()}");
+                properties.Add(
+                    $"\"elementType\":{elementTypeBuilder.ToString()}"
+                );
             }
             if (syntaxNode.QuestionToken != default(SyntaxToken))
             {
@@ -2182,7 +2286,9 @@ namespace CSharpier
                     questionTokenBuilder,
                     syntaxNode.QuestionToken
                 );
-                properties.Add($"\"questionToken\":{questionTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"questionToken\":{questionTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isVar", syntaxNode.IsVar));
             properties.Add(WriteBoolean("isUnmanaged", syntaxNode.IsUnmanaged));
@@ -2242,7 +2348,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -2251,7 +2359,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             var elements = new List<string>();
             foreach (var node in syntaxNode.Elements)
@@ -2268,7 +2378,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isVar", syntaxNode.IsVar));
             properties.Add(WriteBoolean("isUnmanaged", syntaxNode.IsUnmanaged));
@@ -2328,7 +2440,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -2340,7 +2454,9 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -2395,7 +2511,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OmittedTypeArgumentToken != default(SyntaxToken))
             {
@@ -2404,7 +2522,9 @@ namespace CSharpier
                     omittedTypeArgumentTokenBuilder,
                     syntaxNode.OmittedTypeArgumentToken
                 );
-                properties.Add($"\"omittedTypeArgumentToken\":{omittedTypeArgumentTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"omittedTypeArgumentToken\":{omittedTypeArgumentTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isVar", syntaxNode.IsVar));
             properties.Add(WriteBoolean("isUnmanaged", syntaxNode.IsUnmanaged));
@@ -2464,13 +2584,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.RefKeyword != default(SyntaxToken))
             {
                 var refKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(refKeywordBuilder, syntaxNode.RefKeyword);
-                properties.Add($"\"refKeyword\":{refKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"refKeyword\":{refKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ReadOnlyKeyword != default(SyntaxToken))
             {
@@ -2479,7 +2603,9 @@ namespace CSharpier
                     readOnlyKeywordBuilder,
                     syntaxNode.ReadOnlyKeyword
                 );
-                properties.Add($"\"readOnlyKeyword\":{readOnlyKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"readOnlyKeyword\":{readOnlyKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -2545,7 +2671,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -2554,13 +2682,17 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -2569,7 +2701,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -2624,7 +2758,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -2633,7 +2769,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             var arguments = new List<string>();
             foreach (var node in syntaxNode.Arguments)
@@ -2650,7 +2788,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -2705,7 +2845,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
@@ -2714,7 +2856,9 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Operand != default(ExpressionSyntax))
             {
@@ -2775,19 +2919,25 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.AwaitKeyword != default(SyntaxToken))
             {
                 var awaitKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(awaitKeywordBuilder, syntaxNode.AwaitKeyword);
-                properties.Add($"\"awaitKeyword\":{awaitKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"awaitKeyword\":{awaitKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -2842,7 +2992,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Operand != default(ExpressionSyntax))
             {
@@ -2857,7 +3009,9 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -2912,13 +3066,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
@@ -2927,7 +3085,9 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Name != default(SimpleNameSyntax))
             {
@@ -2988,13 +3148,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
@@ -3003,13 +3167,17 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.WhenNotNull != default(ExpressionSyntax))
             {
                 var whenNotNullBuilder = new StringBuilder();
                 WriteSyntaxNode(whenNotNullBuilder, syntaxNode.WhenNotNull);
-                properties.Add($"\"whenNotNull\":{whenNotNullBuilder.ToString()}");
+                properties.Add(
+                    $"\"whenNotNull\":{whenNotNullBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -3064,7 +3232,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
@@ -3073,7 +3243,9 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Name != default(SimpleNameSyntax))
             {
@@ -3134,7 +3306,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ArgumentList != default(BracketedArgumentListSyntax))
             {
@@ -3143,7 +3317,9 @@ namespace CSharpier
                     argumentListBuilder,
                     syntaxNode.ArgumentList
                 );
-                properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
+                properties.Add(
+                    $"\"argumentList\":{argumentListBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -3198,13 +3374,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LeftOperand != default(ExpressionSyntax))
             {
                 var leftOperandBuilder = new StringBuilder();
                 WriteSyntaxNode(leftOperandBuilder, syntaxNode.LeftOperand);
-                properties.Add($"\"leftOperand\":{leftOperandBuilder.ToString()}");
+                properties.Add(
+                    $"\"leftOperand\":{leftOperandBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
@@ -3213,13 +3393,17 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.RightOperand != default(ExpressionSyntax))
             {
                 var rightOperandBuilder = new StringBuilder();
                 WriteSyntaxNode(rightOperandBuilder, syntaxNode.RightOperand);
-                properties.Add($"\"rightOperand\":{rightOperandBuilder.ToString()}");
+                properties.Add(
+                    $"\"rightOperand\":{rightOperandBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -3274,7 +3458,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ArgumentList != default(BracketedArgumentListSyntax))
             {
@@ -3283,7 +3469,9 @@ namespace CSharpier
                     argumentListBuilder,
                     syntaxNode.ArgumentList
                 );
-                properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
+                properties.Add(
+                    $"\"argumentList\":{argumentListBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -3338,7 +3526,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Left != default(ExpressionSyntax))
             {
@@ -3353,7 +3543,9 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Right != default(ExpressionSyntax))
             {
@@ -3414,7 +3606,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Left != default(ExpressionSyntax))
             {
@@ -3429,7 +3623,9 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Right != default(ExpressionSyntax))
             {
@@ -3490,7 +3686,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Condition != default(ExpressionSyntax))
             {
@@ -3505,7 +3703,9 @@ namespace CSharpier
                     questionTokenBuilder,
                     syntaxNode.QuestionToken
                 );
-                properties.Add($"\"questionToken\":{questionTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"questionToken\":{questionTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.WhenTrue != default(ExpressionSyntax))
             {
@@ -3517,7 +3717,9 @@ namespace CSharpier
             {
                 var colonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
-                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonToken\":{colonTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.WhenFalse != default(ExpressionSyntax))
             {
@@ -3578,7 +3780,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Token != default(SyntaxToken))
             {
@@ -3639,7 +3843,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Token != default(SyntaxToken))
             {
@@ -3700,7 +3906,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Token != default(SyntaxToken))
             {
@@ -3761,7 +3969,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
@@ -3776,13 +3986,17 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -3791,7 +4005,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -3846,7 +4062,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
@@ -3861,13 +4079,17 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -3876,7 +4098,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -3931,7 +4155,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
@@ -3946,13 +4172,17 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Comma != default(SyntaxToken))
             {
@@ -3973,7 +4203,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4028,7 +4260,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
@@ -4043,13 +4277,17 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -4058,7 +4296,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4113,7 +4353,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
@@ -4128,7 +4370,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -4143,7 +4387,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4198,7 +4444,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
@@ -4213,7 +4461,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -4228,7 +4478,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4283,7 +4535,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
@@ -4298,7 +4552,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -4313,7 +4569,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4368,13 +4626,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ArgumentList != default(ArgumentListSyntax))
             {
@@ -4383,7 +4645,9 @@ namespace CSharpier
                     argumentListBuilder,
                     syntaxNode.ArgumentList
                 );
-                properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
+                properties.Add(
+                    $"\"argumentList\":{argumentListBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4438,13 +4702,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ArgumentList != default(BracketedArgumentListSyntax))
             {
@@ -4453,7 +4721,9 @@ namespace CSharpier
                     argumentListBuilder,
                     syntaxNode.ArgumentList
                 );
-                properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
+                properties.Add(
+                    $"\"argumentList\":{argumentListBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4508,7 +4778,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -4517,7 +4789,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             var arguments = new List<string>();
             foreach (var node in syntaxNode.Arguments)
@@ -4534,7 +4808,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4589,7 +4865,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
@@ -4598,7 +4876,9 @@ namespace CSharpier
                     openBracketTokenBuilder,
                     syntaxNode.OpenBracketToken
                 );
-                properties.Add($"\"openBracketToken\":{openBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBracketToken\":{openBracketTokenBuilder.ToString()}"
+                );
             }
             var arguments = new List<string>();
             foreach (var node in syntaxNode.Arguments)
@@ -4615,7 +4895,9 @@ namespace CSharpier
                     closeBracketTokenBuilder,
                     syntaxNode.CloseBracketToken
                 );
-                properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4670,7 +4952,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NameColon != default(NameColonSyntax))
             {
@@ -4685,13 +4969,17 @@ namespace CSharpier
                     refKindKeywordBuilder,
                     syntaxNode.RefKindKeyword
                 );
-                properties.Add($"\"refKindKeyword\":{refKindKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"refKindKeyword\":{refKindKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.RefOrOutKeyword != default(SyntaxToken))
             {
@@ -4700,7 +4988,9 @@ namespace CSharpier
                     refOrOutKeywordBuilder,
                     syntaxNode.RefOrOutKeyword
                 );
-                properties.Add($"\"refOrOutKeyword\":{refOrOutKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"refOrOutKeyword\":{refOrOutKeywordBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4755,7 +5045,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(IdentifierNameSyntax))
             {
@@ -4767,7 +5059,9 @@ namespace CSharpier
             {
                 var colonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
-                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonToken\":{colonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4822,7 +5116,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -4834,7 +5130,9 @@ namespace CSharpier
             {
                 var designationBuilder = new StringBuilder();
                 WriteSyntaxNode(designationBuilder, syntaxNode.Designation);
-                properties.Add($"\"designation\":{designationBuilder.ToString()}");
+                properties.Add(
+                    $"\"designation\":{designationBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4889,7 +5187,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -4898,7 +5198,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -4913,13 +5215,17 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -4974,7 +5280,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
@@ -4991,7 +5299,9 @@ namespace CSharpier
                     delegateKeywordBuilder,
                     syntaxNode.DelegateKeyword
                 );
-                properties.Add($"\"delegateKeyword\":{delegateKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"delegateKeyword\":{delegateKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ParameterList != default(ParameterListSyntax))
             {
@@ -5000,7 +5310,9 @@ namespace CSharpier
                     parameterListBuilder,
                     syntaxNode.ParameterList
                 );
-                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameterList\":{parameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Block != default(BlockSyntax))
             {
@@ -5015,13 +5327,17 @@ namespace CSharpier
                     expressionBodyBuilder,
                     syntaxNode.ExpressionBody
                 );
-                properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+                properties.Add(
+                    $"\"expressionBody\":{expressionBodyBuilder.ToString()}"
+                );
             }
             if (syntaxNode.AsyncKeyword != default(SyntaxToken))
             {
                 var asyncKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(asyncKeywordBuilder, syntaxNode.AsyncKeyword);
-                properties.Add($"\"asyncKeyword\":{asyncKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"asyncKeyword\":{asyncKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Body != default(CSharpSyntaxNode))
             {
@@ -5082,7 +5398,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
@@ -5102,7 +5420,9 @@ namespace CSharpier
             {
                 var arrowTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(arrowTokenBuilder, syntaxNode.ArrowToken);
-                properties.Add($"\"arrowToken\":{arrowTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"arrowToken\":{arrowTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Block != default(BlockSyntax))
             {
@@ -5117,13 +5437,17 @@ namespace CSharpier
                     expressionBodyBuilder,
                     syntaxNode.ExpressionBody
                 );
-                properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+                properties.Add(
+                    $"\"expressionBody\":{expressionBodyBuilder.ToString()}"
+                );
             }
             if (syntaxNode.AsyncKeyword != default(SyntaxToken))
             {
                 var asyncKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(asyncKeywordBuilder, syntaxNode.AsyncKeyword);
-                properties.Add($"\"asyncKeyword\":{asyncKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"asyncKeyword\":{asyncKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Body != default(CSharpSyntaxNode))
             {
@@ -5184,19 +5508,25 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.RefKeyword != default(SyntaxToken))
             {
                 var refKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(refKeywordBuilder, syntaxNode.RefKeyword);
-                properties.Add($"\"refKeyword\":{refKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"refKeyword\":{refKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -5251,7 +5581,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
@@ -5268,13 +5600,17 @@ namespace CSharpier
                     parameterListBuilder,
                     syntaxNode.ParameterList
                 );
-                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameterList\":{parameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ArrowToken != default(SyntaxToken))
             {
                 var arrowTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(arrowTokenBuilder, syntaxNode.ArrowToken);
-                properties.Add($"\"arrowToken\":{arrowTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"arrowToken\":{arrowTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Block != default(BlockSyntax))
             {
@@ -5289,13 +5625,17 @@ namespace CSharpier
                     expressionBodyBuilder,
                     syntaxNode.ExpressionBody
                 );
-                properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+                properties.Add(
+                    $"\"expressionBody\":{expressionBodyBuilder.ToString()}"
+                );
             }
             if (syntaxNode.AsyncKeyword != default(SyntaxToken))
             {
                 var asyncKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(asyncKeywordBuilder, syntaxNode.AsyncKeyword);
-                properties.Add($"\"asyncKeyword\":{asyncKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"asyncKeyword\":{asyncKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Body != default(CSharpSyntaxNode))
             {
@@ -5356,7 +5696,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
             {
@@ -5365,7 +5707,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var expressions = new List<string>();
             foreach (var node in syntaxNode.Expressions)
@@ -5374,7 +5718,9 @@ namespace CSharpier
                 WriteSyntaxNode(innerBuilder, node);
                 expressions.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"expressions\":[{string.Join(",", expressions)}]");
+            properties.Add(
+                $"\"expressions\":[{string.Join(",", expressions)}]"
+            );
             if (syntaxNode.CloseBraceToken != default(SyntaxToken))
             {
                 var closeBraceTokenBuilder = new StringBuilder();
@@ -5382,7 +5728,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -5437,13 +5785,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
             {
                 var newKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(newKeywordBuilder, syntaxNode.NewKeyword);
-                properties.Add($"\"newKeyword\":{newKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"newKeyword\":{newKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ArgumentList != default(ArgumentListSyntax))
             {
@@ -5452,7 +5804,9 @@ namespace CSharpier
                     argumentListBuilder,
                     syntaxNode.ArgumentList
                 );
-                properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
+                properties.Add(
+                    $"\"argumentList\":{argumentListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Initializer != default(InitializerExpressionSyntax))
             {
@@ -5461,7 +5815,9 @@ namespace CSharpier
                     initializerBuilder,
                     syntaxNode.Initializer
                 );
-                properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
+                properties.Add(
+                    $"\"initializer\":{initializerBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -5516,13 +5872,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
             {
                 var newKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(newKeywordBuilder, syntaxNode.NewKeyword);
-                properties.Add($"\"newKeyword\":{newKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"newKeyword\":{newKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -5537,7 +5897,9 @@ namespace CSharpier
                     argumentListBuilder,
                     syntaxNode.ArgumentList
                 );
-                properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
+                properties.Add(
+                    $"\"argumentList\":{argumentListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Initializer != default(InitializerExpressionSyntax))
             {
@@ -5546,7 +5908,9 @@ namespace CSharpier
                     initializerBuilder,
                     syntaxNode.Initializer
                 );
-                properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
+                properties.Add(
+                    $"\"initializer\":{initializerBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -5601,19 +5965,25 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.WithKeyword != default(SyntaxToken))
             {
                 var withKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(withKeywordBuilder, syntaxNode.WithKeyword);
-                properties.Add($"\"withKeyword\":{withKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"withKeyword\":{withKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Initializer != default(InitializerExpressionSyntax))
             {
@@ -5622,7 +5992,9 @@ namespace CSharpier
                     initializerBuilder,
                     syntaxNode.Initializer
                 );
-                properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
+                properties.Add(
+                    $"\"initializer\":{initializerBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -5677,19 +6049,25 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NameEquals != default(NameEqualsSyntax))
             {
                 var nameEqualsBuilder = new StringBuilder();
                 WriteNameEqualsSyntax(nameEqualsBuilder, syntaxNode.NameEquals);
-                properties.Add($"\"nameEquals\":{nameEqualsBuilder.ToString()}");
+                properties.Add(
+                    $"\"nameEquals\":{nameEqualsBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -5744,13 +6122,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
             {
                 var newKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(newKeywordBuilder, syntaxNode.NewKeyword);
-                properties.Add($"\"newKeyword\":{newKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"newKeyword\":{newKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
             {
@@ -5759,7 +6141,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var initializers = new List<string>();
             foreach (var node in syntaxNode.Initializers)
@@ -5768,7 +6152,9 @@ namespace CSharpier
                 WriteAnonymousObjectMemberDeclaratorSyntax(innerBuilder, node);
                 initializers.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"initializers\":[{string.Join(",", initializers)}]");
+            properties.Add(
+                $"\"initializers\":[{string.Join(",", initializers)}]"
+            );
             if (syntaxNode.CloseBraceToken != default(SyntaxToken))
             {
                 var closeBraceTokenBuilder = new StringBuilder();
@@ -5776,7 +6162,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -5831,13 +6219,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
             {
                 var newKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(newKeywordBuilder, syntaxNode.NewKeyword);
-                properties.Add($"\"newKeyword\":{newKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"newKeyword\":{newKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(ArrayTypeSyntax))
             {
@@ -5852,7 +6244,9 @@ namespace CSharpier
                     initializerBuilder,
                     syntaxNode.Initializer
                 );
-                properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
+                properties.Add(
+                    $"\"initializer\":{initializerBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -5907,13 +6301,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
             {
                 var newKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(newKeywordBuilder, syntaxNode.NewKeyword);
-                properties.Add($"\"newKeyword\":{newKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"newKeyword\":{newKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
@@ -5922,7 +6320,9 @@ namespace CSharpier
                     openBracketTokenBuilder,
                     syntaxNode.OpenBracketToken
                 );
-                properties.Add($"\"openBracketToken\":{openBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBracketToken\":{openBracketTokenBuilder.ToString()}"
+                );
             }
             var commas = new List<string>();
             foreach (var node in syntaxNode.Commas)
@@ -5939,7 +6339,9 @@ namespace CSharpier
                     closeBracketTokenBuilder,
                     syntaxNode.CloseBracketToken
                 );
-                properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Initializer != default(InitializerExpressionSyntax))
             {
@@ -5948,7 +6350,9 @@ namespace CSharpier
                     initializerBuilder,
                     syntaxNode.Initializer
                 );
-                properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
+                properties.Add(
+                    $"\"initializer\":{initializerBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -6003,7 +6407,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StackAllocKeyword != default(SyntaxToken))
             {
@@ -6012,7 +6418,9 @@ namespace CSharpier
                     stackAllocKeywordBuilder,
                     syntaxNode.StackAllocKeyword
                 );
-                properties.Add($"\"stackAllocKeyword\":{stackAllocKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"stackAllocKeyword\":{stackAllocKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -6027,7 +6435,9 @@ namespace CSharpier
                     initializerBuilder,
                     syntaxNode.Initializer
                 );
-                properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
+                properties.Add(
+                    $"\"initializer\":{initializerBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -6082,7 +6492,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StackAllocKeyword != default(SyntaxToken))
             {
@@ -6091,7 +6503,9 @@ namespace CSharpier
                     stackAllocKeywordBuilder,
                     syntaxNode.StackAllocKeyword
                 );
-                properties.Add($"\"stackAllocKeyword\":{stackAllocKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"stackAllocKeyword\":{stackAllocKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
@@ -6100,7 +6514,9 @@ namespace CSharpier
                     openBracketTokenBuilder,
                     syntaxNode.OpenBracketToken
                 );
-                properties.Add($"\"openBracketToken\":{openBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBracketToken\":{openBracketTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseBracketToken != default(SyntaxToken))
             {
@@ -6109,7 +6525,9 @@ namespace CSharpier
                     closeBracketTokenBuilder,
                     syntaxNode.CloseBracketToken
                 );
-                properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Initializer != default(InitializerExpressionSyntax))
             {
@@ -6118,7 +6536,9 @@ namespace CSharpier
                     initializerBuilder,
                     syntaxNode.Initializer
                 );
-                properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
+                properties.Add(
+                    $"\"initializer\":{initializerBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -6173,13 +6593,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.FromClause != default(FromClauseSyntax))
             {
                 var fromClauseBuilder = new StringBuilder();
                 WriteFromClauseSyntax(fromClauseBuilder, syntaxNode.FromClause);
-                properties.Add($"\"fromClause\":{fromClauseBuilder.ToString()}");
+                properties.Add(
+                    $"\"fromClause\":{fromClauseBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Body != default(QueryBodySyntax))
             {
@@ -6240,7 +6664,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var clauses = new List<string>();
             foreach (var node in syntaxNode.Clauses)
@@ -6254,7 +6680,9 @@ namespace CSharpier
             {
                 var selectOrGroupBuilder = new StringBuilder();
                 WriteSyntaxNode(selectOrGroupBuilder, syntaxNode.SelectOrGroup);
-                properties.Add($"\"selectOrGroup\":{selectOrGroupBuilder.ToString()}");
+                properties.Add(
+                    $"\"selectOrGroup\":{selectOrGroupBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Continuation != default(QueryContinuationSyntax))
             {
@@ -6263,7 +6691,9 @@ namespace CSharpier
                     continuationBuilder,
                     syntaxNode.Continuation
                 );
-                properties.Add($"\"continuation\":{continuationBuilder.ToString()}");
+                properties.Add(
+                    $"\"continuation\":{continuationBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -6318,13 +6748,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.FromKeyword != default(SyntaxToken))
             {
                 var fromKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(fromKeywordBuilder, syntaxNode.FromKeyword);
-                properties.Add($"\"fromKeyword\":{fromKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"fromKeyword\":{fromKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -6336,7 +6770,9 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.InKeyword != default(SyntaxToken))
             {
@@ -6348,7 +6784,9 @@ namespace CSharpier
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -6403,31 +6841,41 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LetKeyword != default(SyntaxToken))
             {
                 var letKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(letKeywordBuilder, syntaxNode.LetKeyword);
-                properties.Add($"\"letKeyword\":{letKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"letKeyword\":{letKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EqualsToken != default(SyntaxToken))
             {
                 var equalsTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(equalsTokenBuilder, syntaxNode.EqualsToken);
-                properties.Add($"\"equalsToken\":{equalsTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"equalsToken\":{equalsTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -6482,13 +6930,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.JoinKeyword != default(SyntaxToken))
             {
                 var joinKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(joinKeywordBuilder, syntaxNode.JoinKeyword);
-                properties.Add($"\"joinKeyword\":{joinKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"joinKeyword\":{joinKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -6500,7 +6952,9 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.InKeyword != default(SyntaxToken))
             {
@@ -6512,7 +6966,9 @@ namespace CSharpier
             {
                 var inExpressionBuilder = new StringBuilder();
                 WriteSyntaxNode(inExpressionBuilder, syntaxNode.InExpression);
-                properties.Add($"\"inExpression\":{inExpressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"inExpression\":{inExpressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OnKeyword != default(SyntaxToken))
             {
@@ -6527,7 +6983,9 @@ namespace CSharpier
                     leftExpressionBuilder,
                     syntaxNode.LeftExpression
                 );
-                properties.Add($"\"leftExpression\":{leftExpressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"leftExpression\":{leftExpressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EqualsKeyword != default(SyntaxToken))
             {
@@ -6536,7 +6994,9 @@ namespace CSharpier
                     equalsKeywordBuilder,
                     syntaxNode.EqualsKeyword
                 );
-                properties.Add($"\"equalsKeyword\":{equalsKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"equalsKeyword\":{equalsKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.RightExpression != default(ExpressionSyntax))
             {
@@ -6545,7 +7005,9 @@ namespace CSharpier
                     rightExpressionBuilder,
                     syntaxNode.RightExpression
                 );
-                properties.Add($"\"rightExpression\":{rightExpressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"rightExpression\":{rightExpressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Into != default(JoinIntoClauseSyntax))
             {
@@ -6606,19 +7068,25 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.IntoKeyword != default(SyntaxToken))
             {
                 var intoKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(intoKeywordBuilder, syntaxNode.IntoKeyword);
-                properties.Add($"\"intoKeyword\":{intoKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"intoKeyword\":{intoKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -6673,13 +7141,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.WhereKeyword != default(SyntaxToken))
             {
                 var whereKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(whereKeywordBuilder, syntaxNode.WhereKeyword);
-                properties.Add($"\"whereKeyword\":{whereKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"whereKeyword\":{whereKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Condition != default(ExpressionSyntax))
             {
@@ -6740,7 +7212,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OrderByKeyword != default(SyntaxToken))
             {
@@ -6749,7 +7223,9 @@ namespace CSharpier
                     orderByKeywordBuilder,
                     syntaxNode.OrderByKeyword
                 );
-                properties.Add($"\"orderByKeyword\":{orderByKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"orderByKeyword\":{orderByKeywordBuilder.ToString()}"
+                );
             }
             var orderings = new List<string>();
             foreach (var node in syntaxNode.Orderings)
@@ -6812,13 +7288,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.AscendingOrDescendingKeyword != default(SyntaxToken))
             {
@@ -6827,7 +7307,9 @@ namespace CSharpier
                     ascendingOrDescendingKeywordBuilder,
                     syntaxNode.AscendingOrDescendingKeyword
                 );
-                properties.Add($"\"ascendingOrDescendingKeyword\":{ascendingOrDescendingKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"ascendingOrDescendingKeyword\":{ascendingOrDescendingKeywordBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -6882,7 +7364,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.SelectKeyword != default(SyntaxToken))
             {
@@ -6891,13 +7375,17 @@ namespace CSharpier
                     selectKeywordBuilder,
                     syntaxNode.SelectKeyword
                 );
-                properties.Add($"\"selectKeyword\":{selectKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"selectKeyword\":{selectKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -6952,13 +7440,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.GroupKeyword != default(SyntaxToken))
             {
                 var groupKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(groupKeywordBuilder, syntaxNode.GroupKeyword);
-                properties.Add($"\"groupKeyword\":{groupKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"groupKeyword\":{groupKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.GroupExpression != default(ExpressionSyntax))
             {
@@ -6967,7 +7459,9 @@ namespace CSharpier
                     groupExpressionBuilder,
                     syntaxNode.GroupExpression
                 );
-                properties.Add($"\"groupExpression\":{groupExpressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"groupExpression\":{groupExpressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ByKeyword != default(SyntaxToken))
             {
@@ -6979,7 +7473,9 @@ namespace CSharpier
             {
                 var byExpressionBuilder = new StringBuilder();
                 WriteSyntaxNode(byExpressionBuilder, syntaxNode.ByExpression);
-                properties.Add($"\"byExpression\":{byExpressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"byExpression\":{byExpressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -7034,19 +7530,25 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.IntoKeyword != default(SyntaxToken))
             {
                 var intoKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(intoKeywordBuilder, syntaxNode.IntoKeyword);
-                properties.Add($"\"intoKeyword\":{intoKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"intoKeyword\":{intoKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Body != default(QueryBodySyntax))
             {
@@ -7107,7 +7609,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (
                 syntaxNode.OmittedArraySizeExpressionToken != default(SyntaxToken)
@@ -7118,7 +7622,9 @@ namespace CSharpier
                     omittedArraySizeExpressionTokenBuilder,
                     syntaxNode.OmittedArraySizeExpressionToken
                 );
-                properties.Add($"\"omittedArraySizeExpressionToken\":{omittedArraySizeExpressionTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"omittedArraySizeExpressionToken\":{omittedArraySizeExpressionTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -7173,7 +7679,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StringStartToken != default(SyntaxToken))
             {
@@ -7182,7 +7690,9 @@ namespace CSharpier
                     stringStartTokenBuilder,
                     syntaxNode.StringStartToken
                 );
-                properties.Add($"\"stringStartToken\":{stringStartTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"stringStartToken\":{stringStartTokenBuilder.ToString()}"
+                );
             }
             var contents = new List<string>();
             foreach (var node in syntaxNode.Contents)
@@ -7199,7 +7709,9 @@ namespace CSharpier
                     stringEndTokenBuilder,
                     syntaxNode.StringEndToken
                 );
-                properties.Add($"\"stringEndToken\":{stringEndTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"stringEndToken\":{stringEndTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -7254,13 +7766,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.IsKeyword != default(SyntaxToken))
             {
@@ -7327,19 +7843,25 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ThrowKeyword != default(SyntaxToken))
             {
                 var throwKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(throwKeywordBuilder, syntaxNode.ThrowKeyword);
-                properties.Add($"\"throwKeyword\":{throwKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"throwKeyword\":{throwKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -7394,13 +7916,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.WhenKeyword != default(SyntaxToken))
             {
                 var whenKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(whenKeywordBuilder, syntaxNode.WhenKeyword);
-                properties.Add($"\"whenKeyword\":{whenKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"whenKeyword\":{whenKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Condition != default(ExpressionSyntax))
             {
@@ -7461,7 +7987,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.UnderscoreToken != default(SyntaxToken))
             {
@@ -7470,7 +7998,9 @@ namespace CSharpier
                     underscoreTokenBuilder,
                     syntaxNode.UnderscoreToken
                 );
-                properties.Add($"\"underscoreToken\":{underscoreTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"underscoreToken\":{underscoreTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -7525,7 +8055,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -7537,7 +8069,9 @@ namespace CSharpier
             {
                 var designationBuilder = new StringBuilder();
                 WriteSyntaxNode(designationBuilder, syntaxNode.Designation);
-                properties.Add($"\"designation\":{designationBuilder.ToString()}");
+                properties.Add(
+                    $"\"designation\":{designationBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -7592,19 +8126,25 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.VarKeyword != default(SyntaxToken))
             {
                 var varKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(varKeywordBuilder, syntaxNode.VarKeyword);
-                properties.Add($"\"varKeyword\":{varKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"varKeyword\":{varKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Designation != default(VariableDesignationSyntax))
             {
                 var designationBuilder = new StringBuilder();
                 WriteSyntaxNode(designationBuilder, syntaxNode.Designation);
-                properties.Add($"\"designation\":{designationBuilder.ToString()}");
+                properties.Add(
+                    $"\"designation\":{designationBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -7659,7 +8199,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -7676,7 +8218,9 @@ namespace CSharpier
                     positionalPatternClauseBuilder,
                     syntaxNode.PositionalPatternClause
                 );
-                properties.Add($"\"positionalPatternClause\":{positionalPatternClauseBuilder.ToString()}");
+                properties.Add(
+                    $"\"positionalPatternClause\":{positionalPatternClauseBuilder.ToString()}"
+                );
             }
             if (
                 syntaxNode.PropertyPatternClause != default(PropertyPatternClauseSyntax)
@@ -7687,13 +8231,17 @@ namespace CSharpier
                     propertyPatternClauseBuilder,
                     syntaxNode.PropertyPatternClause
                 );
-                properties.Add($"\"propertyPatternClause\":{propertyPatternClauseBuilder.ToString()}");
+                properties.Add(
+                    $"\"propertyPatternClause\":{propertyPatternClauseBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Designation != default(VariableDesignationSyntax))
             {
                 var designationBuilder = new StringBuilder();
                 WriteSyntaxNode(designationBuilder, syntaxNode.Designation);
-                properties.Add($"\"designation\":{designationBuilder.ToString()}");
+                properties.Add(
+                    $"\"designation\":{designationBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -7748,7 +8296,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -7757,7 +8307,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             var subpatterns = new List<string>();
             foreach (var node in syntaxNode.Subpatterns)
@@ -7766,7 +8318,9 @@ namespace CSharpier
                 WriteSubpatternSyntax(innerBuilder, node);
                 subpatterns.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"subpatterns\":[{string.Join(",", subpatterns)}]");
+            properties.Add(
+                $"\"subpatterns\":[{string.Join(",", subpatterns)}]"
+            );
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
                 var closeParenTokenBuilder = new StringBuilder();
@@ -7774,7 +8328,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -7829,7 +8385,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
             {
@@ -7838,7 +8396,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var subpatterns = new List<string>();
             foreach (var node in syntaxNode.Subpatterns)
@@ -7847,7 +8407,9 @@ namespace CSharpier
                 WriteSubpatternSyntax(innerBuilder, node);
                 subpatterns.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"subpatterns\":[{string.Join(",", subpatterns)}]");
+            properties.Add(
+                $"\"subpatterns\":[{string.Join(",", subpatterns)}]"
+            );
             if (syntaxNode.CloseBraceToken != default(SyntaxToken))
             {
                 var closeBraceTokenBuilder = new StringBuilder();
@@ -7855,7 +8417,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -7910,7 +8474,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NameColon != default(NameColonSyntax))
             {
@@ -7977,13 +8543,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -8038,7 +8608,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -8047,7 +8619,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Pattern != default(PatternSyntax))
             {
@@ -8062,7 +8636,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -8117,7 +8693,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
@@ -8126,13 +8704,17 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -8187,7 +8769,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -8248,7 +8832,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Left != default(PatternSyntax))
             {
@@ -8263,7 +8849,9 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Right != default(PatternSyntax))
             {
@@ -8324,7 +8912,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
@@ -8333,7 +8923,9 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Pattern != default(PatternSyntax))
             {
@@ -8394,7 +8986,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.TextToken != default(SyntaxToken))
             {
@@ -8455,7 +9049,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
             {
@@ -8464,13 +9060,17 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (
                 syntaxNode.AlignmentClause != default(InterpolationAlignmentClauseSyntax)
@@ -8481,7 +9081,9 @@ namespace CSharpier
                     alignmentClauseBuilder,
                     syntaxNode.AlignmentClause
                 );
-                properties.Add($"\"alignmentClause\":{alignmentClauseBuilder.ToString()}");
+                properties.Add(
+                    $"\"alignmentClause\":{alignmentClauseBuilder.ToString()}"
+                );
             }
             if (
                 syntaxNode.FormatClause != default(InterpolationFormatClauseSyntax)
@@ -8492,7 +9094,9 @@ namespace CSharpier
                     formatClauseBuilder,
                     syntaxNode.FormatClause
                 );
-                properties.Add($"\"formatClause\":{formatClauseBuilder.ToString()}");
+                properties.Add(
+                    $"\"formatClause\":{formatClauseBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseBraceToken != default(SyntaxToken))
             {
@@ -8501,7 +9105,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -8556,13 +9162,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.CommaToken != default(SyntaxToken))
             {
                 var commaTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(commaTokenBuilder, syntaxNode.CommaToken);
-                properties.Add($"\"commaToken\":{commaTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"commaToken\":{commaTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Value != default(ExpressionSyntax))
             {
@@ -8623,13 +9233,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ColonToken != default(SyntaxToken))
             {
                 var colonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
-                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonToken\":{colonTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.FormatStringToken != default(SyntaxToken))
             {
@@ -8638,7 +9252,9 @@ namespace CSharpier
                     formatStringTokenBuilder,
                     syntaxNode.FormatStringToken
                 );
-                properties.Add($"\"formatStringToken\":{formatStringTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"formatStringToken\":{formatStringTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -8693,7 +9309,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -8702,7 +9320,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -8770,7 +9390,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -8779,7 +9401,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
             {
                 var openBraceTokenBuilder = new StringBuilder();
@@ -8787,7 +9411,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var statements = new List<string>();
             foreach (var node in syntaxNode.Statements)
@@ -8804,7 +9430,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -8859,7 +9487,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -8868,7 +9498,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -8881,22 +9513,30 @@ namespace CSharpier
             {
                 var returnTypeBuilder = new StringBuilder();
                 WriteSyntaxNode(returnTypeBuilder, syntaxNode.ReturnType);
-                properties.Add($"\"returnType\":{returnTypeBuilder.ToString()}");
+                properties.Add(
+                    $"\"returnType\":{returnTypeBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
-            if (syntaxNode.TypeParameterList != default(TypeParameterListSyntax))
+            if (
+                syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
+            )
             {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
                     syntaxNode.TypeParameterList
                 );
-                properties.Add($"\"typeParameterList\":{typeParameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"typeParameterList\":{typeParameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ParameterList != default(ParameterListSyntax))
             {
@@ -8905,7 +9545,9 @@ namespace CSharpier
                     parameterListBuilder,
                     syntaxNode.ParameterList
                 );
-                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameterList\":{parameterListBuilder.ToString()}"
+                );
             }
             var constraintClauses = new List<string>();
             foreach (var node in syntaxNode.ConstraintClauses)
@@ -8914,21 +9556,27 @@ namespace CSharpier
                 WriteTypeParameterConstraintClauseSyntax(innerBuilder, node);
                 constraintClauses.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            properties.Add(
+                $"\"constraintClauses\":[{string.Join(",", constraintClauses)}]"
+            );
             if (syntaxNode.Body != default(BlockSyntax))
             {
                 var bodyBuilder = new StringBuilder();
                 WriteBlockSyntax(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
-            if (syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax))
+            if (
+                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
+            )
             {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
                     syntaxNode.ExpressionBody
                 );
-                properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+                properties.Add(
+                    $"\"expressionBody\":{expressionBodyBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -8937,7 +9585,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -8992,7 +9642,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -9001,18 +9653,24 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.AwaitKeyword != default(SyntaxToken))
             {
                 var awaitKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(awaitKeywordBuilder, syntaxNode.AwaitKeyword);
-                properties.Add($"\"awaitKeyword\":{awaitKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"awaitKeyword\":{awaitKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.UsingKeyword != default(SyntaxToken))
             {
                 var usingKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(usingKeywordBuilder, syntaxNode.UsingKeyword);
-                properties.Add($"\"usingKeyword\":{usingKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"usingKeyword\":{usingKeywordBuilder.ToString()}"
+                );
             }
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
@@ -9029,7 +9687,9 @@ namespace CSharpier
                     declarationBuilder,
                     syntaxNode.Declaration
                 );
-                properties.Add($"\"declaration\":{declarationBuilder.ToString()}");
+                properties.Add(
+                    $"\"declaration\":{declarationBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -9038,7 +9698,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isConst", syntaxNode.IsConst));
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
@@ -9094,7 +9756,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -9163,13 +9827,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ArgumentList != default(BracketedArgumentListSyntax))
             {
@@ -9178,7 +9846,9 @@ namespace CSharpier
                     argumentListBuilder,
                     syntaxNode.ArgumentList
                 );
-                properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
+                properties.Add(
+                    $"\"argumentList\":{argumentListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Initializer != default(EqualsValueClauseSyntax))
             {
@@ -9187,7 +9857,9 @@ namespace CSharpier
                     initializerBuilder,
                     syntaxNode.Initializer
                 );
-                properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
+                properties.Add(
+                    $"\"initializer\":{initializerBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -9242,13 +9914,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.EqualsToken != default(SyntaxToken))
             {
                 var equalsTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(equalsTokenBuilder, syntaxNode.EqualsToken);
-                properties.Add($"\"equalsToken\":{equalsTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"equalsToken\":{equalsTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Value != default(ExpressionSyntax))
             {
@@ -9309,13 +9985,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -9370,7 +10050,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.UnderscoreToken != default(SyntaxToken))
             {
@@ -9379,7 +10061,9 @@ namespace CSharpier
                     underscoreTokenBuilder,
                     syntaxNode.UnderscoreToken
                 );
-                properties.Add($"\"underscoreToken\":{underscoreTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"underscoreToken\":{underscoreTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -9434,7 +10118,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -9443,7 +10129,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             var variables = new List<string>();
             foreach (var node in syntaxNode.Variables)
@@ -9460,7 +10148,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -9515,7 +10205,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -9524,12 +10216,16 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -9538,7 +10234,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(
                 WriteBoolean(
@@ -9599,7 +10297,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -9608,7 +10308,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
                 var semicolonTokenBuilder = new StringBuilder();
@@ -9616,7 +10318,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -9671,7 +10375,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -9680,18 +10386,24 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ColonToken != default(SyntaxToken))
             {
                 var colonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
-                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonToken\":{colonTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Statement != default(StatementSyntax))
             {
@@ -9752,7 +10464,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -9761,12 +10475,16 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.GotoKeyword != default(SyntaxToken))
             {
                 var gotoKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(gotoKeywordBuilder, syntaxNode.GotoKeyword);
-                properties.Add($"\"gotoKeyword\":{gotoKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"gotoKeyword\":{gotoKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CaseOrDefaultKeyword != default(SyntaxToken))
             {
@@ -9775,13 +10493,17 @@ namespace CSharpier
                     caseOrDefaultKeywordBuilder,
                     syntaxNode.CaseOrDefaultKeyword
                 );
-                properties.Add($"\"caseOrDefaultKeyword\":{caseOrDefaultKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"caseOrDefaultKeyword\":{caseOrDefaultKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -9790,7 +10512,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -9845,7 +10569,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -9854,12 +10580,16 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.BreakKeyword != default(SyntaxToken))
             {
                 var breakKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(breakKeywordBuilder, syntaxNode.BreakKeyword);
-                properties.Add($"\"breakKeyword\":{breakKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"breakKeyword\":{breakKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -9868,7 +10598,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -9923,7 +10655,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -9932,7 +10666,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.ContinueKeyword != default(SyntaxToken))
             {
                 var continueKeywordBuilder = new StringBuilder();
@@ -9940,7 +10676,9 @@ namespace CSharpier
                     continueKeywordBuilder,
                     syntaxNode.ContinueKeyword
                 );
-                properties.Add($"\"continueKeyword\":{continueKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"continueKeyword\":{continueKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -9949,7 +10687,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -10004,7 +10744,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -10013,7 +10755,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.ReturnKeyword != default(SyntaxToken))
             {
                 var returnKeywordBuilder = new StringBuilder();
@@ -10021,13 +10765,17 @@ namespace CSharpier
                     returnKeywordBuilder,
                     syntaxNode.ReturnKeyword
                 );
-                properties.Add($"\"returnKeyword\":{returnKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"returnKeyword\":{returnKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -10036,7 +10784,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -10091,7 +10841,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -10100,18 +10852,24 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.ThrowKeyword != default(SyntaxToken))
             {
                 var throwKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(throwKeywordBuilder, syntaxNode.ThrowKeyword);
-                properties.Add($"\"throwKeyword\":{throwKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"throwKeyword\":{throwKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -10120,7 +10878,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -10175,7 +10935,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -10184,12 +10946,16 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.YieldKeyword != default(SyntaxToken))
             {
                 var yieldKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(yieldKeywordBuilder, syntaxNode.YieldKeyword);
-                properties.Add($"\"yieldKeyword\":{yieldKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"yieldKeyword\":{yieldKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ReturnOrBreakKeyword != default(SyntaxToken))
             {
@@ -10198,13 +10964,17 @@ namespace CSharpier
                     returnOrBreakKeywordBuilder,
                     syntaxNode.ReturnOrBreakKeyword
                 );
-                properties.Add($"\"returnOrBreakKeyword\":{returnOrBreakKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"returnOrBreakKeyword\":{returnOrBreakKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -10213,7 +10983,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -10268,7 +11040,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -10277,12 +11051,16 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.WhileKeyword != default(SyntaxToken))
             {
                 var whileKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(whileKeywordBuilder, syntaxNode.WhileKeyword);
-                properties.Add($"\"whileKeyword\":{whileKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"whileKeyword\":{whileKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -10291,7 +11069,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Condition != default(ExpressionSyntax))
             {
@@ -10306,7 +11086,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Statement != default(StatementSyntax))
             {
@@ -10367,7 +11149,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -10376,7 +11160,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.DoKeyword != default(SyntaxToken))
             {
                 var doKeywordBuilder = new StringBuilder();
@@ -10393,7 +11179,9 @@ namespace CSharpier
             {
                 var whileKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(whileKeywordBuilder, syntaxNode.WhileKeyword);
-                properties.Add($"\"whileKeyword\":{whileKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"whileKeyword\":{whileKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -10402,7 +11190,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Condition != default(ExpressionSyntax))
             {
@@ -10417,7 +11207,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -10426,7 +11218,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -10481,7 +11275,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -10490,12 +11286,16 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.ForKeyword != default(SyntaxToken))
             {
                 var forKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(forKeywordBuilder, syntaxNode.ForKeyword);
-                properties.Add($"\"forKeyword\":{forKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"forKeyword\":{forKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -10504,7 +11304,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Declaration != default(VariableDeclarationSyntax))
             {
@@ -10513,7 +11315,9 @@ namespace CSharpier
                     declarationBuilder,
                     syntaxNode.Declaration
                 );
-                properties.Add($"\"declaration\":{declarationBuilder.ToString()}");
+                properties.Add(
+                    $"\"declaration\":{declarationBuilder.ToString()}"
+                );
             }
             var initializers = new List<string>();
             foreach (var node in syntaxNode.Initializers)
@@ -10522,7 +11326,9 @@ namespace CSharpier
                 WriteSyntaxNode(innerBuilder, node);
                 initializers.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"initializers\":[{string.Join(",", initializers)}]");
+            properties.Add(
+                $"\"initializers\":[{string.Join(",", initializers)}]"
+            );
             if (syntaxNode.FirstSemicolonToken != default(SyntaxToken))
             {
                 var firstSemicolonTokenBuilder = new StringBuilder();
@@ -10530,7 +11336,9 @@ namespace CSharpier
                     firstSemicolonTokenBuilder,
                     syntaxNode.FirstSemicolonToken
                 );
-                properties.Add($"\"firstSemicolonToken\":{firstSemicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"firstSemicolonToken\":{firstSemicolonTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Condition != default(ExpressionSyntax))
             {
@@ -10545,7 +11353,9 @@ namespace CSharpier
                     secondSemicolonTokenBuilder,
                     syntaxNode.SecondSemicolonToken
                 );
-                properties.Add($"\"secondSemicolonToken\":{secondSemicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"secondSemicolonToken\":{secondSemicolonTokenBuilder.ToString()}"
+                );
             }
             var incrementors = new List<string>();
             foreach (var node in syntaxNode.Incrementors)
@@ -10554,7 +11364,9 @@ namespace CSharpier
                 WriteSyntaxNode(innerBuilder, node);
                 incrementors.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"incrementors\":[{string.Join(",", incrementors)}]");
+            properties.Add(
+                $"\"incrementors\":[{string.Join(",", incrementors)}]"
+            );
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
                 var closeParenTokenBuilder = new StringBuilder();
@@ -10562,7 +11374,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Statement != default(StatementSyntax))
             {
@@ -10623,7 +11437,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -10632,12 +11448,16 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.AwaitKeyword != default(SyntaxToken))
             {
                 var awaitKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(awaitKeywordBuilder, syntaxNode.AwaitKeyword);
-                properties.Add($"\"awaitKeyword\":{awaitKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"awaitKeyword\":{awaitKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ForEachKeyword != default(SyntaxToken))
             {
@@ -10646,7 +11466,9 @@ namespace CSharpier
                     forEachKeywordBuilder,
                     syntaxNode.ForEachKeyword
                 );
-                properties.Add($"\"forEachKeyword\":{forEachKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"forEachKeyword\":{forEachKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -10655,7 +11477,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -10667,7 +11491,9 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.InKeyword != default(SyntaxToken))
             {
@@ -10679,7 +11505,9 @@ namespace CSharpier
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -10688,7 +11516,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Statement != default(StatementSyntax))
             {
@@ -10749,7 +11579,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -10758,12 +11590,16 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.AwaitKeyword != default(SyntaxToken))
             {
                 var awaitKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(awaitKeywordBuilder, syntaxNode.AwaitKeyword);
-                properties.Add($"\"awaitKeyword\":{awaitKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"awaitKeyword\":{awaitKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ForEachKeyword != default(SyntaxToken))
             {
@@ -10772,7 +11608,9 @@ namespace CSharpier
                     forEachKeywordBuilder,
                     syntaxNode.ForEachKeyword
                 );
-                properties.Add($"\"forEachKeyword\":{forEachKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"forEachKeyword\":{forEachKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -10781,7 +11619,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Variable != default(ExpressionSyntax))
             {
@@ -10799,7 +11639,9 @@ namespace CSharpier
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -10808,7 +11650,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Statement != default(StatementSyntax))
             {
@@ -10869,7 +11713,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -10878,18 +11724,24 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.AwaitKeyword != default(SyntaxToken))
             {
                 var awaitKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(awaitKeywordBuilder, syntaxNode.AwaitKeyword);
-                properties.Add($"\"awaitKeyword\":{awaitKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"awaitKeyword\":{awaitKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.UsingKeyword != default(SyntaxToken))
             {
                 var usingKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(usingKeywordBuilder, syntaxNode.UsingKeyword);
-                properties.Add($"\"usingKeyword\":{usingKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"usingKeyword\":{usingKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -10898,7 +11750,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Declaration != default(VariableDeclarationSyntax))
             {
@@ -10907,13 +11761,17 @@ namespace CSharpier
                     declarationBuilder,
                     syntaxNode.Declaration
                 );
-                properties.Add($"\"declaration\":{declarationBuilder.ToString()}");
+                properties.Add(
+                    $"\"declaration\":{declarationBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -10922,7 +11780,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Statement != default(StatementSyntax))
             {
@@ -10983,7 +11843,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -10992,12 +11854,16 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.FixedKeyword != default(SyntaxToken))
             {
                 var fixedKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(fixedKeywordBuilder, syntaxNode.FixedKeyword);
-                properties.Add($"\"fixedKeyword\":{fixedKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"fixedKeyword\":{fixedKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -11006,7 +11872,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Declaration != default(VariableDeclarationSyntax))
             {
@@ -11015,7 +11883,9 @@ namespace CSharpier
                     declarationBuilder,
                     syntaxNode.Declaration
                 );
-                properties.Add($"\"declaration\":{declarationBuilder.ToString()}");
+                properties.Add(
+                    $"\"declaration\":{declarationBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -11024,7 +11894,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Statement != default(StatementSyntax))
             {
@@ -11085,7 +11957,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -11094,7 +11968,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
                 var keywordBuilder = new StringBuilder();
@@ -11160,7 +12036,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -11169,7 +12047,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.UnsafeKeyword != default(SyntaxToken))
             {
                 var unsafeKeywordBuilder = new StringBuilder();
@@ -11177,7 +12057,9 @@ namespace CSharpier
                     unsafeKeywordBuilder,
                     syntaxNode.UnsafeKeyword
                 );
-                properties.Add($"\"unsafeKeyword\":{unsafeKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"unsafeKeyword\":{unsafeKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Block != default(BlockSyntax))
             {
@@ -11238,7 +12120,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -11247,12 +12131,16 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.LockKeyword != default(SyntaxToken))
             {
                 var lockKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(lockKeywordBuilder, syntaxNode.LockKeyword);
-                properties.Add($"\"lockKeyword\":{lockKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"lockKeyword\":{lockKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -11261,13 +12149,17 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -11276,7 +12168,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Statement != default(StatementSyntax))
             {
@@ -11337,7 +12231,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -11346,7 +12242,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.IfKeyword != default(SyntaxToken))
             {
                 var ifKeywordBuilder = new StringBuilder();
@@ -11360,7 +12258,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Condition != default(ExpressionSyntax))
             {
@@ -11375,7 +12275,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Statement != default(StatementSyntax))
             {
@@ -11442,13 +12344,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ElseKeyword != default(SyntaxToken))
             {
                 var elseKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(elseKeywordBuilder, syntaxNode.ElseKeyword);
-                properties.Add($"\"elseKeyword\":{elseKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"elseKeyword\":{elseKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Statement != default(StatementSyntax))
             {
@@ -11509,7 +12415,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -11518,7 +12426,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.SwitchKeyword != default(SyntaxToken))
             {
                 var switchKeywordBuilder = new StringBuilder();
@@ -11526,7 +12436,9 @@ namespace CSharpier
                     switchKeywordBuilder,
                     syntaxNode.SwitchKeyword
                 );
-                properties.Add($"\"switchKeyword\":{switchKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"switchKeyword\":{switchKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -11535,13 +12447,17 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -11550,7 +12466,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
             {
@@ -11559,7 +12477,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var sections = new List<string>();
             foreach (var node in syntaxNode.Sections)
@@ -11576,7 +12496,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -11631,7 +12553,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var labels = new List<string>();
             foreach (var node in syntaxNode.Labels)
@@ -11702,7 +12626,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
@@ -11720,13 +12646,17 @@ namespace CSharpier
             {
                 var whenClauseBuilder = new StringBuilder();
                 WriteWhenClauseSyntax(whenClauseBuilder, syntaxNode.WhenClause);
-                properties.Add($"\"whenClause\":{whenClauseBuilder.ToString()}");
+                properties.Add(
+                    $"\"whenClause\":{whenClauseBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ColonToken != default(SyntaxToken))
             {
                 var colonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
-                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonToken\":{colonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -11781,7 +12711,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
@@ -11799,7 +12731,9 @@ namespace CSharpier
             {
                 var colonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
-                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonToken\":{colonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -11854,7 +12788,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
             {
@@ -11866,7 +12802,9 @@ namespace CSharpier
             {
                 var colonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
-                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonToken\":{colonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -11921,7 +12859,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.GoverningExpression != default(ExpressionSyntax))
             {
@@ -11930,7 +12870,9 @@ namespace CSharpier
                     governingExpressionBuilder,
                     syntaxNode.GoverningExpression
                 );
-                properties.Add($"\"governingExpression\":{governingExpressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"governingExpression\":{governingExpressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SwitchKeyword != default(SyntaxToken))
             {
@@ -11939,7 +12881,9 @@ namespace CSharpier
                     switchKeywordBuilder,
                     syntaxNode.SwitchKeyword
                 );
-                properties.Add($"\"switchKeyword\":{switchKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"switchKeyword\":{switchKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
             {
@@ -11948,7 +12892,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var arms = new List<string>();
             foreach (var node in syntaxNode.Arms)
@@ -11965,7 +12911,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -12020,7 +12968,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Pattern != default(PatternSyntax))
             {
@@ -12032,7 +12982,9 @@ namespace CSharpier
             {
                 var whenClauseBuilder = new StringBuilder();
                 WriteWhenClauseSyntax(whenClauseBuilder, syntaxNode.WhenClause);
-                properties.Add($"\"whenClause\":{whenClauseBuilder.ToString()}");
+                properties.Add(
+                    $"\"whenClause\":{whenClauseBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EqualsGreaterThanToken != default(SyntaxToken))
             {
@@ -12041,13 +12993,17 @@ namespace CSharpier
                     equalsGreaterThanTokenBuilder,
                     syntaxNode.EqualsGreaterThanToken
                 );
-                properties.Add($"\"equalsGreaterThanToken\":{equalsGreaterThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"equalsGreaterThanToken\":{equalsGreaterThanTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -12102,7 +13058,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -12111,12 +13069,16 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.TryKeyword != default(SyntaxToken))
             {
                 var tryKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(tryKeywordBuilder, syntaxNode.TryKeyword);
-                properties.Add($"\"tryKeyword\":{tryKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"tryKeyword\":{tryKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Block != default(BlockSyntax))
             {
@@ -12191,13 +13153,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.CatchKeyword != default(SyntaxToken))
             {
                 var catchKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(catchKeywordBuilder, syntaxNode.CatchKeyword);
-                properties.Add($"\"catchKeyword\":{catchKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"catchKeyword\":{catchKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Declaration != default(CatchDeclarationSyntax))
             {
@@ -12206,7 +13172,9 @@ namespace CSharpier
                     declarationBuilder,
                     syntaxNode.Declaration
                 );
-                properties.Add($"\"declaration\":{declarationBuilder.ToString()}");
+                properties.Add(
+                    $"\"declaration\":{declarationBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Filter != default(CatchFilterClauseSyntax))
             {
@@ -12273,7 +13241,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -12282,7 +13252,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -12294,7 +13266,9 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -12303,7 +13277,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -12358,13 +13334,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.WhenKeyword != default(SyntaxToken))
             {
                 var whenKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(whenKeywordBuilder, syntaxNode.WhenKeyword);
-                properties.Add($"\"whenKeyword\":{whenKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"whenKeyword\":{whenKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -12373,7 +13353,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.FilterExpression != default(ExpressionSyntax))
             {
@@ -12382,7 +13364,9 @@ namespace CSharpier
                     filterExpressionBuilder,
                     syntaxNode.FilterExpression
                 );
-                properties.Add($"\"filterExpression\":{filterExpressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"filterExpression\":{filterExpressionBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -12391,7 +13375,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -12446,7 +13432,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.FinallyKeyword != default(SyntaxToken))
             {
@@ -12455,7 +13443,9 @@ namespace CSharpier
                     finallyKeywordBuilder,
                     syntaxNode.FinallyKeyword
                 );
-                properties.Add($"\"finallyKeyword\":{finallyKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"finallyKeyword\":{finallyKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Block != default(BlockSyntax))
             {
@@ -12516,7 +13506,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var externs = new List<string>();
             foreach (var node in syntaxNode.Externs)
@@ -12541,7 +13533,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var members = new List<string>();
             foreach (var node in syntaxNode.Members)
             {
@@ -12557,7 +13551,9 @@ namespace CSharpier
                     endOfFileTokenBuilder,
                     syntaxNode.EndOfFileToken
                 );
-                properties.Add($"\"endOfFileToken\":{endOfFileTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfFileToken\":{endOfFileTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -12612,7 +13608,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ExternKeyword != default(SyntaxToken))
             {
@@ -12621,19 +13619,25 @@ namespace CSharpier
                     externKeywordBuilder,
                     syntaxNode.ExternKeyword
                 );
-                properties.Add($"\"externKeyword\":{externKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"externKeyword\":{externKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.AliasKeyword != default(SyntaxToken))
             {
                 var aliasKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(aliasKeywordBuilder, syntaxNode.AliasKeyword);
-                properties.Add($"\"aliasKeyword\":{aliasKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"aliasKeyword\":{aliasKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -12642,7 +13646,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -12697,13 +13703,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.UsingKeyword != default(SyntaxToken))
             {
                 var usingKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(usingKeywordBuilder, syntaxNode.UsingKeyword);
-                properties.Add($"\"usingKeyword\":{usingKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"usingKeyword\":{usingKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.StaticKeyword != default(SyntaxToken))
             {
@@ -12712,7 +13722,9 @@ namespace CSharpier
                     staticKeywordBuilder,
                     syntaxNode.StaticKeyword
                 );
-                properties.Add($"\"staticKeyword\":{staticKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"staticKeyword\":{staticKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Alias != default(NameEqualsSyntax))
             {
@@ -12733,7 +13745,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -12788,7 +13802,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -12797,7 +13813,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -12813,7 +13831,9 @@ namespace CSharpier
                     namespaceKeywordBuilder,
                     syntaxNode.NamespaceKeyword
                 );
-                properties.Add($"\"namespaceKeyword\":{namespaceKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"namespaceKeyword\":{namespaceKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Name != default(NameSyntax))
             {
@@ -12828,7 +13848,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var externs = new List<string>();
             foreach (var node in syntaxNode.Externs)
@@ -12861,7 +13883,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -12870,7 +13894,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -12925,7 +13951,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
@@ -12934,7 +13962,9 @@ namespace CSharpier
                     openBracketTokenBuilder,
                     syntaxNode.OpenBracketToken
                 );
-                properties.Add($"\"openBracketToken\":{openBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBracketToken\":{openBracketTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Target != default(AttributeTargetSpecifierSyntax))
             {
@@ -12960,7 +13990,9 @@ namespace CSharpier
                     closeBracketTokenBuilder,
                     syntaxNode.CloseBracketToken
                 );
-                properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -13015,19 +14047,25 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ColonToken != default(SyntaxToken))
             {
                 var colonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
-                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonToken\":{colonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -13082,7 +14120,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(NameSyntax))
             {
@@ -13097,7 +14137,9 @@ namespace CSharpier
                     argumentListBuilder,
                     syntaxNode.ArgumentList
                 );
-                properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
+                properties.Add(
+                    $"\"argumentList\":{argumentListBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -13152,7 +14194,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -13161,7 +14205,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             var arguments = new List<string>();
             foreach (var node in syntaxNode.Arguments)
@@ -13178,7 +14224,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -13233,13 +14281,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NameEquals != default(NameEqualsSyntax))
             {
                 var nameEqualsBuilder = new StringBuilder();
                 WriteNameEqualsSyntax(nameEqualsBuilder, syntaxNode.NameEquals);
-                properties.Add($"\"nameEquals\":{nameEqualsBuilder.ToString()}");
+                properties.Add(
+                    $"\"nameEquals\":{nameEqualsBuilder.ToString()}"
+                );
             }
             if (syntaxNode.NameColon != default(NameColonSyntax))
             {
@@ -13251,7 +14303,9 @@ namespace CSharpier
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -13306,7 +14360,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(IdentifierNameSyntax))
             {
@@ -13318,7 +14374,9 @@ namespace CSharpier
             {
                 var equalsTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(equalsTokenBuilder, syntaxNode.EqualsToken);
-                properties.Add($"\"equalsToken\":{equalsTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"equalsToken\":{equalsTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -13373,7 +14431,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
             {
@@ -13382,7 +14442,9 @@ namespace CSharpier
                     lessThanTokenBuilder,
                     syntaxNode.LessThanToken
                 );
-                properties.Add($"\"lessThanToken\":{lessThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"lessThanToken\":{lessThanTokenBuilder.ToString()}"
+                );
             }
             var parameters = new List<string>();
             foreach (var node in syntaxNode.Parameters)
@@ -13399,7 +14461,9 @@ namespace CSharpier
                     greaterThanTokenBuilder,
                     syntaxNode.GreaterThanToken
                 );
-                properties.Add($"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -13454,7 +14518,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -13463,7 +14529,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             if (syntaxNode.VarianceKeyword != default(SyntaxToken))
             {
                 var varianceKeywordBuilder = new StringBuilder();
@@ -13471,13 +14539,17 @@ namespace CSharpier
                     varianceKeywordBuilder,
                     syntaxNode.VarianceKeyword
                 );
-                properties.Add($"\"varianceKeyword\":{varianceKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"varianceKeyword\":{varianceKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -13532,7 +14604,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -13541,7 +14615,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -13560,16 +14636,22 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
-            if (syntaxNode.TypeParameterList != default(TypeParameterListSyntax))
+            if (
+                syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
+            )
             {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
                     syntaxNode.TypeParameterList
                 );
-                properties.Add($"\"typeParameterList\":{typeParameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"typeParameterList\":{typeParameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.BaseList != default(BaseListSyntax))
             {
@@ -13584,7 +14666,9 @@ namespace CSharpier
                 WriteTypeParameterConstraintClauseSyntax(innerBuilder, node);
                 constraintClauses.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            properties.Add(
+                $"\"constraintClauses\":[{string.Join(",", constraintClauses)}]"
+            );
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
             {
                 var openBraceTokenBuilder = new StringBuilder();
@@ -13592,7 +14676,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var members = new List<string>();
             foreach (var node in syntaxNode.Members)
@@ -13609,7 +14695,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -13618,7 +14706,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
@@ -13674,7 +14764,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -13683,7 +14775,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -13702,16 +14796,22 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
-            if (syntaxNode.TypeParameterList != default(TypeParameterListSyntax))
+            if (
+                syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
+            )
             {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
                     syntaxNode.TypeParameterList
                 );
-                properties.Add($"\"typeParameterList\":{typeParameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"typeParameterList\":{typeParameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.BaseList != default(BaseListSyntax))
             {
@@ -13726,7 +14826,9 @@ namespace CSharpier
                 WriteTypeParameterConstraintClauseSyntax(innerBuilder, node);
                 constraintClauses.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            properties.Add(
+                $"\"constraintClauses\":[{string.Join(",", constraintClauses)}]"
+            );
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
             {
                 var openBraceTokenBuilder = new StringBuilder();
@@ -13734,7 +14836,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var members = new List<string>();
             foreach (var node in syntaxNode.Members)
@@ -13751,7 +14855,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -13760,7 +14866,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
@@ -13816,7 +14924,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -13825,7 +14935,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -13844,16 +14956,22 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
-            if (syntaxNode.TypeParameterList != default(TypeParameterListSyntax))
+            if (
+                syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
+            )
             {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
                     syntaxNode.TypeParameterList
                 );
-                properties.Add($"\"typeParameterList\":{typeParameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"typeParameterList\":{typeParameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.BaseList != default(BaseListSyntax))
             {
@@ -13868,7 +14986,9 @@ namespace CSharpier
                 WriteTypeParameterConstraintClauseSyntax(innerBuilder, node);
                 constraintClauses.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            properties.Add(
+                $"\"constraintClauses\":[{string.Join(",", constraintClauses)}]"
+            );
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
             {
                 var openBraceTokenBuilder = new StringBuilder();
@@ -13876,7 +14996,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var members = new List<string>();
             foreach (var node in syntaxNode.Members)
@@ -13893,7 +15015,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -13902,7 +15026,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
@@ -13958,7 +15084,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -13967,7 +15095,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -13986,16 +15116,22 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
-            if (syntaxNode.TypeParameterList != default(TypeParameterListSyntax))
+            if (
+                syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
+            )
             {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
                     syntaxNode.TypeParameterList
                 );
-                properties.Add($"\"typeParameterList\":{typeParameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"typeParameterList\":{typeParameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ParameterList != default(ParameterListSyntax))
             {
@@ -14004,7 +15140,9 @@ namespace CSharpier
                     parameterListBuilder,
                     syntaxNode.ParameterList
                 );
-                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameterList\":{parameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.BaseList != default(BaseListSyntax))
             {
@@ -14019,7 +15157,9 @@ namespace CSharpier
                 WriteTypeParameterConstraintClauseSyntax(innerBuilder, node);
                 constraintClauses.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            properties.Add(
+                $"\"constraintClauses\":[{string.Join(",", constraintClauses)}]"
+            );
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
             {
                 var openBraceTokenBuilder = new StringBuilder();
@@ -14027,7 +15167,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var members = new List<string>();
             foreach (var node in syntaxNode.Members)
@@ -14044,7 +15186,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -14053,7 +15197,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
@@ -14109,7 +15255,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -14118,7 +15266,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -14131,13 +15281,17 @@ namespace CSharpier
             {
                 var enumKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(enumKeywordBuilder, syntaxNode.EnumKeyword);
-                properties.Add($"\"enumKeyword\":{enumKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"enumKeyword\":{enumKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.BaseList != default(BaseListSyntax))
             {
@@ -14152,7 +15306,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var members = new List<string>();
             foreach (var node in syntaxNode.Members)
@@ -14169,7 +15325,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -14178,7 +15336,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -14233,7 +15393,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -14242,7 +15404,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -14258,28 +15422,38 @@ namespace CSharpier
                     delegateKeywordBuilder,
                     syntaxNode.DelegateKeyword
                 );
-                properties.Add($"\"delegateKeyword\":{delegateKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"delegateKeyword\":{delegateKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ReturnType != default(TypeSyntax))
             {
                 var returnTypeBuilder = new StringBuilder();
                 WriteSyntaxNode(returnTypeBuilder, syntaxNode.ReturnType);
-                properties.Add($"\"returnType\":{returnTypeBuilder.ToString()}");
+                properties.Add(
+                    $"\"returnType\":{returnTypeBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
-            if (syntaxNode.TypeParameterList != default(TypeParameterListSyntax))
+            if (
+                syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
+            )
             {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
                     syntaxNode.TypeParameterList
                 );
-                properties.Add($"\"typeParameterList\":{typeParameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"typeParameterList\":{typeParameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ParameterList != default(ParameterListSyntax))
             {
@@ -14288,7 +15462,9 @@ namespace CSharpier
                     parameterListBuilder,
                     syntaxNode.ParameterList
                 );
-                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameterList\":{parameterListBuilder.ToString()}"
+                );
             }
             var constraintClauses = new List<string>();
             foreach (var node in syntaxNode.ConstraintClauses)
@@ -14297,7 +15473,9 @@ namespace CSharpier
                 WriteTypeParameterConstraintClauseSyntax(innerBuilder, node);
                 constraintClauses.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            properties.Add(
+                $"\"constraintClauses\":[{string.Join(",", constraintClauses)}]"
+            );
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
                 var semicolonTokenBuilder = new StringBuilder();
@@ -14305,7 +15483,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
@@ -14361,7 +15541,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -14370,7 +15552,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -14383,7 +15567,9 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EqualsValue != default(EqualsValueClauseSyntax))
             {
@@ -14392,7 +15578,9 @@ namespace CSharpier
                     equalsValueBuilder,
                     syntaxNode.EqualsValue
                 );
-                properties.Add($"\"equalsValue\":{equalsValueBuilder.ToString()}");
+                properties.Add(
+                    $"\"equalsValue\":{equalsValueBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -14447,13 +15635,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ColonToken != default(SyntaxToken))
             {
                 var colonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
-                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonToken\":{colonTokenBuilder.ToString()}"
+                );
             }
             var types = new List<string>();
             foreach (var node in syntaxNode.Types)
@@ -14516,7 +15708,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -14577,7 +15771,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -14592,7 +15788,9 @@ namespace CSharpier
                     argumentListBuilder,
                     syntaxNode.ArgumentList
                 );
-                properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
+                properties.Add(
+                    $"\"argumentList\":{argumentListBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -14647,13 +15845,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.WhereKeyword != default(SyntaxToken))
             {
                 var whereKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(whereKeywordBuilder, syntaxNode.WhereKeyword);
-                properties.Add($"\"whereKeyword\":{whereKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"whereKeyword\":{whereKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Name != default(IdentifierNameSyntax))
             {
@@ -14665,7 +15867,9 @@ namespace CSharpier
             {
                 var colonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
-                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonToken\":{colonTokenBuilder.ToString()}"
+                );
             }
             var constraints = new List<string>();
             foreach (var node in syntaxNode.Constraints)
@@ -14674,7 +15878,9 @@ namespace CSharpier
                 WriteSyntaxNode(innerBuilder, node);
                 constraints.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"constraints\":[{string.Join(",", constraints)}]");
+            properties.Add(
+                $"\"constraints\":[{string.Join(",", constraints)}]"
+            );
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             properties.Add(
@@ -14728,13 +15934,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
             {
                 var newKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(newKeywordBuilder, syntaxNode.NewKeyword);
-                properties.Add($"\"newKeyword\":{newKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"newKeyword\":{newKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -14743,7 +15953,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.CloseParenToken != default(SyntaxToken))
             {
@@ -14752,7 +15964,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -14807,7 +16021,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ClassOrStructKeyword != default(SyntaxToken))
             {
@@ -14816,7 +16032,9 @@ namespace CSharpier
                     classOrStructKeywordBuilder,
                     syntaxNode.ClassOrStructKeyword
                 );
-                properties.Add($"\"classOrStructKeyword\":{classOrStructKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"classOrStructKeyword\":{classOrStructKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.QuestionToken != default(SyntaxToken))
             {
@@ -14825,7 +16043,9 @@ namespace CSharpier
                     questionTokenBuilder,
                     syntaxNode.QuestionToken
                 );
-                properties.Add($"\"questionToken\":{questionTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"questionToken\":{questionTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -14880,7 +16100,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -14941,7 +16163,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.DefaultKeyword != default(SyntaxToken))
             {
@@ -14950,7 +16174,9 @@ namespace CSharpier
                     defaultKeywordBuilder,
                     syntaxNode.DefaultKeyword
                 );
-                properties.Add($"\"defaultKeyword\":{defaultKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"defaultKeyword\":{defaultKeywordBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -15005,7 +16231,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -15014,7 +16242,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -15030,7 +16260,9 @@ namespace CSharpier
                     declarationBuilder,
                     syntaxNode.Declaration
                 );
-                properties.Add($"\"declaration\":{declarationBuilder.ToString()}");
+                properties.Add(
+                    $"\"declaration\":{declarationBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -15039,7 +16271,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -15094,7 +16328,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -15103,7 +16339,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -15116,7 +16354,9 @@ namespace CSharpier
             {
                 var eventKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(eventKeywordBuilder, syntaxNode.EventKeyword);
-                properties.Add($"\"eventKeyword\":{eventKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"eventKeyword\":{eventKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Declaration != default(VariableDeclarationSyntax))
             {
@@ -15125,7 +16365,9 @@ namespace CSharpier
                     declarationBuilder,
                     syntaxNode.Declaration
                 );
-                properties.Add($"\"declaration\":{declarationBuilder.ToString()}");
+                properties.Add(
+                    $"\"declaration\":{declarationBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -15134,7 +16376,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -15189,7 +16433,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(NameSyntax))
             {
@@ -15256,7 +16502,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -15265,7 +16513,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -15278,7 +16528,9 @@ namespace CSharpier
             {
                 var returnTypeBuilder = new StringBuilder();
                 WriteSyntaxNode(returnTypeBuilder, syntaxNode.ReturnType);
-                properties.Add($"\"returnType\":{returnTypeBuilder.ToString()}");
+                properties.Add(
+                    $"\"returnType\":{returnTypeBuilder.ToString()}"
+                );
             }
             if (
                 syntaxNode.ExplicitInterfaceSpecifier != default(ExplicitInterfaceSpecifierSyntax)
@@ -15289,22 +16541,30 @@ namespace CSharpier
                     explicitInterfaceSpecifierBuilder,
                     syntaxNode.ExplicitInterfaceSpecifier
                 );
-                properties.Add($"\"explicitInterfaceSpecifier\":{explicitInterfaceSpecifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"explicitInterfaceSpecifier\":{explicitInterfaceSpecifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
-            if (syntaxNode.TypeParameterList != default(TypeParameterListSyntax))
+            if (
+                syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
+            )
             {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
                     syntaxNode.TypeParameterList
                 );
-                properties.Add($"\"typeParameterList\":{typeParameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"typeParameterList\":{typeParameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ParameterList != default(ParameterListSyntax))
             {
@@ -15313,7 +16573,9 @@ namespace CSharpier
                     parameterListBuilder,
                     syntaxNode.ParameterList
                 );
-                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameterList\":{parameterListBuilder.ToString()}"
+                );
             }
             var constraintClauses = new List<string>();
             foreach (var node in syntaxNode.ConstraintClauses)
@@ -15322,21 +16584,27 @@ namespace CSharpier
                 WriteTypeParameterConstraintClauseSyntax(innerBuilder, node);
                 constraintClauses.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            properties.Add(
+                $"\"constraintClauses\":[{string.Join(",", constraintClauses)}]"
+            );
             if (syntaxNode.Body != default(BlockSyntax))
             {
                 var bodyBuilder = new StringBuilder();
                 WriteBlockSyntax(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
-            if (syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax))
+            if (
+                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
+            )
             {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
                     syntaxNode.ExpressionBody
                 );
-                properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+                properties.Add(
+                    $"\"expressionBody\":{expressionBodyBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -15345,7 +16613,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("arity", syntaxNode.Arity));
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
@@ -15401,7 +16671,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -15410,7 +16682,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -15423,7 +16697,9 @@ namespace CSharpier
             {
                 var returnTypeBuilder = new StringBuilder();
                 WriteSyntaxNode(returnTypeBuilder, syntaxNode.ReturnType);
-                properties.Add($"\"returnType\":{returnTypeBuilder.ToString()}");
+                properties.Add(
+                    $"\"returnType\":{returnTypeBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OperatorKeyword != default(SyntaxToken))
             {
@@ -15432,7 +16708,9 @@ namespace CSharpier
                     operatorKeywordBuilder,
                     syntaxNode.OperatorKeyword
                 );
-                properties.Add($"\"operatorKeyword\":{operatorKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorKeyword\":{operatorKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
@@ -15441,7 +16719,9 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ParameterList != default(ParameterListSyntax))
             {
@@ -15450,7 +16730,9 @@ namespace CSharpier
                     parameterListBuilder,
                     syntaxNode.ParameterList
                 );
-                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameterList\":{parameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Body != default(BlockSyntax))
             {
@@ -15458,14 +16740,18 @@ namespace CSharpier
                 WriteBlockSyntax(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
-            if (syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax))
+            if (
+                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
+            )
             {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
                     syntaxNode.ExpressionBody
                 );
-                properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+                properties.Add(
+                    $"\"expressionBody\":{expressionBodyBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -15474,7 +16760,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -15529,7 +16817,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -15538,7 +16828,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -15554,7 +16846,9 @@ namespace CSharpier
                     implicitOrExplicitKeywordBuilder,
                     syntaxNode.ImplicitOrExplicitKeyword
                 );
-                properties.Add($"\"implicitOrExplicitKeyword\":{implicitOrExplicitKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"implicitOrExplicitKeyword\":{implicitOrExplicitKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OperatorKeyword != default(SyntaxToken))
             {
@@ -15563,7 +16857,9 @@ namespace CSharpier
                     operatorKeywordBuilder,
                     syntaxNode.OperatorKeyword
                 );
-                properties.Add($"\"operatorKeyword\":{operatorKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorKeyword\":{operatorKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -15578,7 +16874,9 @@ namespace CSharpier
                     parameterListBuilder,
                     syntaxNode.ParameterList
                 );
-                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameterList\":{parameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Body != default(BlockSyntax))
             {
@@ -15586,14 +16884,18 @@ namespace CSharpier
                 WriteBlockSyntax(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
-            if (syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax))
+            if (
+                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
+            )
             {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
                     syntaxNode.ExpressionBody
                 );
-                properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+                properties.Add(
+                    $"\"expressionBody\":{expressionBodyBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -15602,7 +16904,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -15657,7 +16961,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -15666,7 +16972,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -15679,7 +16987,9 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ParameterList != default(ParameterListSyntax))
             {
@@ -15688,7 +16998,9 @@ namespace CSharpier
                     parameterListBuilder,
                     syntaxNode.ParameterList
                 );
-                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameterList\":{parameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Initializer != default(ConstructorInitializerSyntax))
             {
@@ -15697,7 +17009,9 @@ namespace CSharpier
                     initializerBuilder,
                     syntaxNode.Initializer
                 );
-                properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
+                properties.Add(
+                    $"\"initializer\":{initializerBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Body != default(BlockSyntax))
             {
@@ -15705,14 +17019,18 @@ namespace CSharpier
                 WriteBlockSyntax(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
-            if (syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax))
+            if (
+                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
+            )
             {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
                     syntaxNode.ExpressionBody
                 );
-                properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+                properties.Add(
+                    $"\"expressionBody\":{expressionBodyBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -15721,7 +17039,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -15776,13 +17096,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ColonToken != default(SyntaxToken))
             {
                 var colonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
-                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonToken\":{colonTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ThisOrBaseKeyword != default(SyntaxToken))
             {
@@ -15791,7 +17115,9 @@ namespace CSharpier
                     thisOrBaseKeywordBuilder,
                     syntaxNode.ThisOrBaseKeyword
                 );
-                properties.Add($"\"thisOrBaseKeyword\":{thisOrBaseKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"thisOrBaseKeyword\":{thisOrBaseKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ArgumentList != default(ArgumentListSyntax))
             {
@@ -15800,7 +17126,9 @@ namespace CSharpier
                     argumentListBuilder,
                     syntaxNode.ArgumentList
                 );
-                properties.Add($"\"argumentList\":{argumentListBuilder.ToString()}");
+                properties.Add(
+                    $"\"argumentList\":{argumentListBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -15855,7 +17183,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -15864,7 +17194,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -15877,13 +17209,17 @@ namespace CSharpier
             {
                 var tildeTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(tildeTokenBuilder, syntaxNode.TildeToken);
-                properties.Add($"\"tildeToken\":{tildeTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"tildeToken\":{tildeTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ParameterList != default(ParameterListSyntax))
             {
@@ -15892,7 +17228,9 @@ namespace CSharpier
                     parameterListBuilder,
                     syntaxNode.ParameterList
                 );
-                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameterList\":{parameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Body != default(BlockSyntax))
             {
@@ -15900,14 +17238,18 @@ namespace CSharpier
                 WriteBlockSyntax(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
-            if (syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax))
+            if (
+                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
+            )
             {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
                     syntaxNode.ExpressionBody
                 );
-                properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+                properties.Add(
+                    $"\"expressionBody\":{expressionBodyBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -15916,7 +17258,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -15971,7 +17315,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -15980,7 +17326,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -16004,13 +17352,17 @@ namespace CSharpier
                     explicitInterfaceSpecifierBuilder,
                     syntaxNode.ExplicitInterfaceSpecifier
                 );
-                properties.Add($"\"explicitInterfaceSpecifier\":{explicitInterfaceSpecifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"explicitInterfaceSpecifier\":{explicitInterfaceSpecifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.AccessorList != default(AccessorListSyntax))
             {
@@ -16019,16 +17371,22 @@ namespace CSharpier
                     accessorListBuilder,
                     syntaxNode.AccessorList
                 );
-                properties.Add($"\"accessorList\":{accessorListBuilder.ToString()}");
+                properties.Add(
+                    $"\"accessorList\":{accessorListBuilder.ToString()}"
+                );
             }
-            if (syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax))
+            if (
+                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
+            )
             {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
                     syntaxNode.ExpressionBody
                 );
-                properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+                properties.Add(
+                    $"\"expressionBody\":{expressionBodyBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Initializer != default(EqualsValueClauseSyntax))
             {
@@ -16037,7 +17395,9 @@ namespace CSharpier
                     initializerBuilder,
                     syntaxNode.Initializer
                 );
-                properties.Add($"\"initializer\":{initializerBuilder.ToString()}");
+                properties.Add(
+                    $"\"initializer\":{initializerBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -16046,7 +17406,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -16101,19 +17463,25 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ArrowToken != default(SyntaxToken))
             {
                 var arrowTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(arrowTokenBuilder, syntaxNode.ArrowToken);
-                properties.Add($"\"arrowToken\":{arrowTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"arrowToken\":{arrowTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Expression != default(ExpressionSyntax))
             {
                 var expressionBuilder = new StringBuilder();
                 WriteSyntaxNode(expressionBuilder, syntaxNode.Expression);
-                properties.Add($"\"expression\":{expressionBuilder.ToString()}");
+                properties.Add(
+                    $"\"expression\":{expressionBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -16168,7 +17536,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -16177,7 +17547,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -16190,7 +17562,9 @@ namespace CSharpier
             {
                 var eventKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(eventKeywordBuilder, syntaxNode.EventKeyword);
-                properties.Add($"\"eventKeyword\":{eventKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"eventKeyword\":{eventKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -16207,13 +17581,17 @@ namespace CSharpier
                     explicitInterfaceSpecifierBuilder,
                     syntaxNode.ExplicitInterfaceSpecifier
                 );
-                properties.Add($"\"explicitInterfaceSpecifier\":{explicitInterfaceSpecifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"explicitInterfaceSpecifier\":{explicitInterfaceSpecifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(SyntaxToken))
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.AccessorList != default(AccessorListSyntax))
             {
@@ -16222,7 +17600,9 @@ namespace CSharpier
                     accessorListBuilder,
                     syntaxNode.AccessorList
                 );
-                properties.Add($"\"accessorList\":{accessorListBuilder.ToString()}");
+                properties.Add(
+                    $"\"accessorList\":{accessorListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -16231,7 +17611,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -16286,7 +17668,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -16295,7 +17679,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -16319,22 +17705,30 @@ namespace CSharpier
                     explicitInterfaceSpecifierBuilder,
                     syntaxNode.ExplicitInterfaceSpecifier
                 );
-                properties.Add($"\"explicitInterfaceSpecifier\":{explicitInterfaceSpecifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"explicitInterfaceSpecifier\":{explicitInterfaceSpecifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ThisKeyword != default(SyntaxToken))
             {
                 var thisKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(thisKeywordBuilder, syntaxNode.ThisKeyword);
-                properties.Add($"\"thisKeyword\":{thisKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"thisKeyword\":{thisKeywordBuilder.ToString()}"
+                );
             }
-            if (syntaxNode.ParameterList != default(BracketedParameterListSyntax))
+            if (
+                syntaxNode.ParameterList != default(BracketedParameterListSyntax)
+            )
             {
                 var parameterListBuilder = new StringBuilder();
                 WriteBracketedParameterListSyntax(
                     parameterListBuilder,
                     syntaxNode.ParameterList
                 );
-                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameterList\":{parameterListBuilder.ToString()}"
+                );
             }
             if (syntaxNode.AccessorList != default(AccessorListSyntax))
             {
@@ -16343,16 +17737,22 @@ namespace CSharpier
                     accessorListBuilder,
                     syntaxNode.AccessorList
                 );
-                properties.Add($"\"accessorList\":{accessorListBuilder.ToString()}");
+                properties.Add(
+                    $"\"accessorList\":{accessorListBuilder.ToString()}"
+                );
             }
-            if (syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax))
+            if (
+                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
+            )
             {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
                     syntaxNode.ExpressionBody
                 );
-                properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+                properties.Add(
+                    $"\"expressionBody\":{expressionBodyBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -16361,7 +17761,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -16416,7 +17818,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
             {
@@ -16425,7 +17829,9 @@ namespace CSharpier
                     openBraceTokenBuilder,
                     syntaxNode.OpenBraceToken
                 );
-                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBraceToken\":{openBraceTokenBuilder.ToString()}"
+                );
             }
             var accessors = new List<string>();
             foreach (var node in syntaxNode.Accessors)
@@ -16442,7 +17848,9 @@ namespace CSharpier
                     closeBraceTokenBuilder,
                     syntaxNode.CloseBraceToken
                 );
-                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -16497,7 +17905,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -16506,7 +17916,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -16527,14 +17939,18 @@ namespace CSharpier
                 WriteBlockSyntax(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
-            if (syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax))
+            if (
+                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
+            )
             {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
                     syntaxNode.ExpressionBody
                 );
-                properties.Add($"\"expressionBody\":{expressionBodyBuilder.ToString()}");
+                properties.Add(
+                    $"\"expressionBody\":{expressionBodyBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -16543,7 +17959,9 @@ namespace CSharpier
                     semicolonTokenBuilder,
                     syntaxNode.SemicolonToken
                 );
-                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"semicolonToken\":{semicolonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -16598,7 +18016,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -16607,7 +18027,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             var parameters = new List<string>();
             foreach (var node in syntaxNode.Parameters)
@@ -16624,7 +18046,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -16679,7 +18103,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
@@ -16688,7 +18114,9 @@ namespace CSharpier
                     openBracketTokenBuilder,
                     syntaxNode.OpenBracketToken
                 );
-                properties.Add($"\"openBracketToken\":{openBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBracketToken\":{openBracketTokenBuilder.ToString()}"
+                );
             }
             var parameters = new List<string>();
             foreach (var node in syntaxNode.Parameters)
@@ -16705,7 +18133,9 @@ namespace CSharpier
                     closeBracketTokenBuilder,
                     syntaxNode.CloseBracketToken
                 );
-                properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -16760,7 +18190,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -16769,7 +18201,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -16788,7 +18222,9 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Default != default(EqualsValueClauseSyntax))
             {
@@ -16852,7 +18288,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -16861,7 +18299,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -16929,7 +18369,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
             foreach (var node in syntaxNode.AttributeLists)
@@ -16938,7 +18380,9 @@ namespace CSharpier
                 WriteAttributeListSyntax(innerBuilder, node);
                 attributeLists.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            properties.Add(
+                $"\"attributeLists\":[{string.Join(",", attributeLists)}]"
+            );
             var modifiers = new List<string>();
             foreach (var node in syntaxNode.Modifiers)
             {
@@ -17006,7 +18450,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var tokens = new List<string>();
             foreach (var node in syntaxNode.Tokens)
@@ -17069,7 +18515,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var content = new List<string>();
             foreach (var node in syntaxNode.Content)
@@ -17083,7 +18531,9 @@ namespace CSharpier
             {
                 var endOfCommentBuilder = new StringBuilder();
                 WriteSyntaxToken(endOfCommentBuilder, syntaxNode.EndOfComment);
-                properties.Add($"\"endOfComment\":{endOfCommentBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfComment\":{endOfCommentBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -17138,7 +18588,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -17199,7 +18651,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Container != default(TypeSyntax))
             {
@@ -17272,7 +18726,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(TypeSyntax))
             {
@@ -17287,7 +18743,9 @@ namespace CSharpier
                     parametersBuilder,
                     syntaxNode.Parameters
                 );
-                properties.Add($"\"parameters\":{parametersBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameters\":{parametersBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -17342,13 +18800,17 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ThisKeyword != default(SyntaxToken))
             {
                 var thisKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(thisKeywordBuilder, syntaxNode.ThisKeyword);
-                properties.Add($"\"thisKeyword\":{thisKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"thisKeyword\":{thisKeywordBuilder.ToString()}"
+                );
             }
             if (
                 syntaxNode.Parameters != default(CrefBracketedParameterListSyntax)
@@ -17359,7 +18821,9 @@ namespace CSharpier
                     parametersBuilder,
                     syntaxNode.Parameters
                 );
-                properties.Add($"\"parameters\":{parametersBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameters\":{parametersBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -17414,7 +18878,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorKeyword != default(SyntaxToken))
             {
@@ -17423,7 +18889,9 @@ namespace CSharpier
                     operatorKeywordBuilder,
                     syntaxNode.OperatorKeyword
                 );
-                properties.Add($"\"operatorKeyword\":{operatorKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorKeyword\":{operatorKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OperatorToken != default(SyntaxToken))
             {
@@ -17432,7 +18900,9 @@ namespace CSharpier
                     operatorTokenBuilder,
                     syntaxNode.OperatorToken
                 );
-                properties.Add($"\"operatorToken\":{operatorTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorToken\":{operatorTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Parameters != default(CrefParameterListSyntax))
             {
@@ -17441,7 +18911,9 @@ namespace CSharpier
                     parametersBuilder,
                     syntaxNode.Parameters
                 );
-                properties.Add($"\"parameters\":{parametersBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameters\":{parametersBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -17496,7 +18968,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ImplicitOrExplicitKeyword != default(SyntaxToken))
             {
@@ -17505,7 +18979,9 @@ namespace CSharpier
                     implicitOrExplicitKeywordBuilder,
                     syntaxNode.ImplicitOrExplicitKeyword
                 );
-                properties.Add($"\"implicitOrExplicitKeyword\":{implicitOrExplicitKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"implicitOrExplicitKeyword\":{implicitOrExplicitKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.OperatorKeyword != default(SyntaxToken))
             {
@@ -17514,7 +18990,9 @@ namespace CSharpier
                     operatorKeywordBuilder,
                     syntaxNode.OperatorKeyword
                 );
-                properties.Add($"\"operatorKeyword\":{operatorKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"operatorKeyword\":{operatorKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -17529,7 +19007,9 @@ namespace CSharpier
                     parametersBuilder,
                     syntaxNode.Parameters
                 );
-                properties.Add($"\"parameters\":{parametersBuilder.ToString()}");
+                properties.Add(
+                    $"\"parameters\":{parametersBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -17584,7 +19064,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
             {
@@ -17593,7 +19075,9 @@ namespace CSharpier
                     openParenTokenBuilder,
                     syntaxNode.OpenParenToken
                 );
-                properties.Add($"\"openParenToken\":{openParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openParenToken\":{openParenTokenBuilder.ToString()}"
+                );
             }
             var parameters = new List<string>();
             foreach (var node in syntaxNode.Parameters)
@@ -17610,7 +19094,9 @@ namespace CSharpier
                     closeParenTokenBuilder,
                     syntaxNode.CloseParenToken
                 );
-                properties.Add($"\"closeParenToken\":{closeParenTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeParenToken\":{closeParenTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -17665,7 +19151,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
             {
@@ -17674,7 +19162,9 @@ namespace CSharpier
                     openBracketTokenBuilder,
                     syntaxNode.OpenBracketToken
                 );
-                properties.Add($"\"openBracketToken\":{openBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"openBracketToken\":{openBracketTokenBuilder.ToString()}"
+                );
             }
             var parameters = new List<string>();
             foreach (var node in syntaxNode.Parameters)
@@ -17691,7 +19181,9 @@ namespace CSharpier
                     closeBracketTokenBuilder,
                     syntaxNode.CloseBracketToken
                 );
-                properties.Add($"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -17746,7 +19238,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.RefKindKeyword != default(SyntaxToken))
             {
@@ -17755,7 +19249,9 @@ namespace CSharpier
                     refKindKeywordBuilder,
                     syntaxNode.RefKindKeyword
                 );
-                properties.Add($"\"refKindKeyword\":{refKindKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"refKindKeyword\":{refKindKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Type != default(TypeSyntax))
             {
@@ -17770,7 +19266,9 @@ namespace CSharpier
                     refOrOutKeywordBuilder,
                     syntaxNode.RefOrOutKeyword
                 );
-                properties.Add($"\"refOrOutKeyword\":{refOrOutKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"refOrOutKeyword\":{refOrOutKeywordBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -17825,7 +19323,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StartTag != default(XmlElementStartTagSyntax))
             {
@@ -17903,7 +19403,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
             {
@@ -17912,7 +19414,9 @@ namespace CSharpier
                     lessThanTokenBuilder,
                     syntaxNode.LessThanToken
                 );
-                properties.Add($"\"lessThanToken\":{lessThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"lessThanToken\":{lessThanTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Name != default(XmlNameSyntax))
             {
@@ -17935,7 +19439,9 @@ namespace CSharpier
                     greaterThanTokenBuilder,
                     syntaxNode.GreaterThanToken
                 );
-                properties.Add($"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -17990,7 +19496,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanSlashToken != default(SyntaxToken))
             {
@@ -17999,7 +19507,9 @@ namespace CSharpier
                     lessThanSlashTokenBuilder,
                     syntaxNode.LessThanSlashToken
                 );
-                properties.Add($"\"lessThanSlashToken\":{lessThanSlashTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"lessThanSlashToken\":{lessThanSlashTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Name != default(XmlNameSyntax))
             {
@@ -18014,7 +19524,9 @@ namespace CSharpier
                     greaterThanTokenBuilder,
                     syntaxNode.GreaterThanToken
                 );
-                properties.Add($"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"greaterThanToken\":{greaterThanTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -18069,7 +19581,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
             {
@@ -18078,7 +19592,9 @@ namespace CSharpier
                     lessThanTokenBuilder,
                     syntaxNode.LessThanToken
                 );
-                properties.Add($"\"lessThanToken\":{lessThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"lessThanToken\":{lessThanTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Name != default(XmlNameSyntax))
             {
@@ -18101,7 +19617,9 @@ namespace CSharpier
                     slashGreaterThanTokenBuilder,
                     syntaxNode.SlashGreaterThanToken
                 );
-                properties.Add($"\"slashGreaterThanToken\":{slashGreaterThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"slashGreaterThanToken\":{slashGreaterThanTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -18156,7 +19674,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Prefix != default(XmlPrefixSyntax))
             {
@@ -18223,7 +19743,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Prefix != default(SyntaxToken))
             {
@@ -18235,7 +19757,9 @@ namespace CSharpier
             {
                 var colonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
-                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"colonToken\":{colonTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -18290,7 +19814,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(XmlNameSyntax))
             {
@@ -18302,7 +19828,9 @@ namespace CSharpier
             {
                 var equalsTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(equalsTokenBuilder, syntaxNode.EqualsToken);
-                properties.Add($"\"equalsToken\":{equalsTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"equalsToken\":{equalsTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.StartQuoteToken != default(SyntaxToken))
             {
@@ -18311,7 +19839,9 @@ namespace CSharpier
                     startQuoteTokenBuilder,
                     syntaxNode.StartQuoteToken
                 );
-                properties.Add($"\"startQuoteToken\":{startQuoteTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"startQuoteToken\":{startQuoteTokenBuilder.ToString()}"
+                );
             }
             var textTokens = new List<string>();
             foreach (var node in syntaxNode.TextTokens)
@@ -18328,7 +19858,9 @@ namespace CSharpier
                     endQuoteTokenBuilder,
                     syntaxNode.EndQuoteToken
                 );
-                properties.Add($"\"endQuoteToken\":{endQuoteTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endQuoteToken\":{endQuoteTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -18383,7 +19915,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(XmlNameSyntax))
             {
@@ -18395,7 +19929,9 @@ namespace CSharpier
             {
                 var equalsTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(equalsTokenBuilder, syntaxNode.EqualsToken);
-                properties.Add($"\"equalsToken\":{equalsTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"equalsToken\":{equalsTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.StartQuoteToken != default(SyntaxToken))
             {
@@ -18404,7 +19940,9 @@ namespace CSharpier
                     startQuoteTokenBuilder,
                     syntaxNode.StartQuoteToken
                 );
-                properties.Add($"\"startQuoteToken\":{startQuoteTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"startQuoteToken\":{startQuoteTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Cref != default(CrefSyntax))
             {
@@ -18419,7 +19957,9 @@ namespace CSharpier
                     endQuoteTokenBuilder,
                     syntaxNode.EndQuoteToken
                 );
-                properties.Add($"\"endQuoteToken\":{endQuoteTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endQuoteToken\":{endQuoteTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -18474,7 +20014,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(XmlNameSyntax))
             {
@@ -18486,7 +20028,9 @@ namespace CSharpier
             {
                 var equalsTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(equalsTokenBuilder, syntaxNode.EqualsToken);
-                properties.Add($"\"equalsToken\":{equalsTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"equalsToken\":{equalsTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.StartQuoteToken != default(SyntaxToken))
             {
@@ -18495,7 +20039,9 @@ namespace CSharpier
                     startQuoteTokenBuilder,
                     syntaxNode.StartQuoteToken
                 );
-                properties.Add($"\"startQuoteToken\":{startQuoteTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"startQuoteToken\":{startQuoteTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Identifier != default(IdentifierNameSyntax))
             {
@@ -18504,7 +20050,9 @@ namespace CSharpier
                     identifierBuilder,
                     syntaxNode.Identifier
                 );
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EndQuoteToken != default(SyntaxToken))
             {
@@ -18513,7 +20061,9 @@ namespace CSharpier
                     endQuoteTokenBuilder,
                     syntaxNode.EndQuoteToken
                 );
-                properties.Add($"\"endQuoteToken\":{endQuoteTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endQuoteToken\":{endQuoteTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -18568,7 +20118,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var textTokens = new List<string>();
             foreach (var node in syntaxNode.TextTokens)
@@ -18631,7 +20183,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StartCDataToken != default(SyntaxToken))
             {
@@ -18640,7 +20194,9 @@ namespace CSharpier
                     startCDataTokenBuilder,
                     syntaxNode.StartCDataToken
                 );
-                properties.Add($"\"startCDataToken\":{startCDataTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"startCDataToken\":{startCDataTokenBuilder.ToString()}"
+                );
             }
             var textTokens = new List<string>();
             foreach (var node in syntaxNode.TextTokens)
@@ -18657,7 +20213,9 @@ namespace CSharpier
                     endCDataTokenBuilder,
                     syntaxNode.EndCDataToken
                 );
-                properties.Add($"\"endCDataToken\":{endCDataTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endCDataToken\":{endCDataTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -18712,7 +20270,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (
                 syntaxNode.StartProcessingInstructionToken != default(SyntaxToken)
@@ -18723,7 +20283,9 @@ namespace CSharpier
                     startProcessingInstructionTokenBuilder,
                     syntaxNode.StartProcessingInstructionToken
                 );
-                properties.Add($"\"startProcessingInstructionToken\":{startProcessingInstructionTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"startProcessingInstructionToken\":{startProcessingInstructionTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Name != default(XmlNameSyntax))
             {
@@ -18739,14 +20301,18 @@ namespace CSharpier
                 textTokens.Add(innerBuilder.ToString());
             }
             properties.Add($"\"textTokens\":[{string.Join(",", textTokens)}]");
-            if (syntaxNode.EndProcessingInstructionToken != default(SyntaxToken))
+            if (
+                syntaxNode.EndProcessingInstructionToken != default(SyntaxToken)
+            )
             {
                 var endProcessingInstructionTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(
                     endProcessingInstructionTokenBuilder,
                     syntaxNode.EndProcessingInstructionToken
                 );
-                properties.Add($"\"endProcessingInstructionToken\":{endProcessingInstructionTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endProcessingInstructionToken\":{endProcessingInstructionTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -18801,7 +20367,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (
                 syntaxNode.LessThanExclamationMinusMinusToken != default(SyntaxToken)
@@ -18812,7 +20380,9 @@ namespace CSharpier
                     lessThanExclamationMinusMinusTokenBuilder,
                     syntaxNode.LessThanExclamationMinusMinusToken
                 );
-                properties.Add($"\"lessThanExclamationMinusMinusToken\":{lessThanExclamationMinusMinusTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"lessThanExclamationMinusMinusToken\":{lessThanExclamationMinusMinusTokenBuilder.ToString()}"
+                );
             }
             var textTokens = new List<string>();
             foreach (var node in syntaxNode.TextTokens)
@@ -18829,7 +20399,9 @@ namespace CSharpier
                     minusMinusGreaterThanTokenBuilder,
                     syntaxNode.MinusMinusGreaterThanToken
                 );
-                properties.Add($"\"minusMinusGreaterThanToken\":{minusMinusGreaterThanTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"minusMinusGreaterThanToken\":{minusMinusGreaterThanTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -18884,7 +20456,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -18911,7 +20485,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             properties.Add(WriteBoolean("branchTaken", syntaxNode.BranchTaken));
@@ -18925,7 +20501,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -18980,7 +20558,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -18992,7 +20572,9 @@ namespace CSharpier
             {
                 var elifKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(elifKeywordBuilder, syntaxNode.ElifKeyword);
-                properties.Add($"\"elifKeyword\":{elifKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"elifKeyword\":{elifKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Condition != default(ExpressionSyntax))
             {
@@ -19007,7 +20589,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             properties.Add(WriteBoolean("branchTaken", syntaxNode.BranchTaken));
@@ -19021,7 +20605,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -19076,7 +20662,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -19088,7 +20676,9 @@ namespace CSharpier
             {
                 var elseKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(elseKeywordBuilder, syntaxNode.ElseKeyword);
-                properties.Add($"\"elseKeyword\":{elseKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"elseKeyword\":{elseKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EndOfDirectiveToken != default(SyntaxToken))
             {
@@ -19097,7 +20687,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             properties.Add(WriteBoolean("branchTaken", syntaxNode.BranchTaken));
@@ -19108,7 +20700,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -19163,7 +20757,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -19175,7 +20771,9 @@ namespace CSharpier
             {
                 var endIfKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(endIfKeywordBuilder, syntaxNode.EndIfKeyword);
-                properties.Add($"\"endIfKeyword\":{endIfKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"endIfKeyword\":{endIfKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EndOfDirectiveToken != default(SyntaxToken))
             {
@@ -19184,7 +20782,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -19194,7 +20794,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -19249,7 +20851,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -19264,7 +20868,9 @@ namespace CSharpier
                     regionKeywordBuilder,
                     syntaxNode.RegionKeyword
                 );
-                properties.Add($"\"regionKeyword\":{regionKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"regionKeyword\":{regionKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EndOfDirectiveToken != default(SyntaxToken))
             {
@@ -19273,7 +20879,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -19283,7 +20891,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -19338,7 +20948,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -19353,7 +20965,9 @@ namespace CSharpier
                     endRegionKeywordBuilder,
                     syntaxNode.EndRegionKeyword
                 );
-                properties.Add($"\"endRegionKeyword\":{endRegionKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"endRegionKeyword\":{endRegionKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EndOfDirectiveToken != default(SyntaxToken))
             {
@@ -19362,7 +20976,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -19372,7 +20988,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -19427,7 +21045,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -19439,7 +21059,9 @@ namespace CSharpier
             {
                 var errorKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(errorKeywordBuilder, syntaxNode.ErrorKeyword);
-                properties.Add($"\"errorKeyword\":{errorKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"errorKeyword\":{errorKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EndOfDirectiveToken != default(SyntaxToken))
             {
@@ -19448,7 +21070,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -19458,7 +21082,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -19513,7 +21139,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -19528,7 +21156,9 @@ namespace CSharpier
                     warningKeywordBuilder,
                     syntaxNode.WarningKeyword
                 );
-                properties.Add($"\"warningKeyword\":{warningKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"warningKeyword\":{warningKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EndOfDirectiveToken != default(SyntaxToken))
             {
@@ -19537,7 +21167,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -19547,7 +21179,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -19602,7 +21236,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -19614,7 +21250,9 @@ namespace CSharpier
             {
                 var identifierBuilder = new StringBuilder();
                 WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
-                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+                properties.Add(
+                    $"\"identifier\":{identifierBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EndOfDirectiveToken != default(SyntaxToken))
             {
@@ -19623,7 +21261,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -19633,7 +21273,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -19688,7 +21330,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -19703,7 +21347,9 @@ namespace CSharpier
                     defineKeywordBuilder,
                     syntaxNode.DefineKeyword
                 );
-                properties.Add($"\"defineKeyword\":{defineKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"defineKeyword\":{defineKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Name != default(SyntaxToken))
             {
@@ -19718,7 +21364,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -19728,7 +21376,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -19783,7 +21433,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -19795,7 +21447,9 @@ namespace CSharpier
             {
                 var undefKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(undefKeywordBuilder, syntaxNode.UndefKeyword);
-                properties.Add($"\"undefKeyword\":{undefKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"undefKeyword\":{undefKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Name != default(SyntaxToken))
             {
@@ -19810,7 +21464,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -19820,7 +21476,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -19875,7 +21533,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -19887,7 +21547,9 @@ namespace CSharpier
             {
                 var lineKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(lineKeywordBuilder, syntaxNode.LineKeyword);
-                properties.Add($"\"lineKeyword\":{lineKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"lineKeyword\":{lineKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.Line != default(SyntaxToken))
             {
@@ -19908,7 +21570,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -19918,7 +21582,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -19973,7 +21639,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -19988,7 +21656,9 @@ namespace CSharpier
                     pragmaKeywordBuilder,
                     syntaxNode.PragmaKeyword
                 );
-                properties.Add($"\"pragmaKeyword\":{pragmaKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"pragmaKeyword\":{pragmaKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.WarningKeyword != default(SyntaxToken))
             {
@@ -19997,7 +21667,9 @@ namespace CSharpier
                     warningKeywordBuilder,
                     syntaxNode.WarningKeyword
                 );
-                properties.Add($"\"warningKeyword\":{warningKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"warningKeyword\":{warningKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.DisableOrRestoreKeyword != default(SyntaxToken))
             {
@@ -20006,7 +21678,9 @@ namespace CSharpier
                     disableOrRestoreKeywordBuilder,
                     syntaxNode.DisableOrRestoreKeyword
                 );
-                properties.Add($"\"disableOrRestoreKeyword\":{disableOrRestoreKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"disableOrRestoreKeyword\":{disableOrRestoreKeywordBuilder.ToString()}"
+                );
             }
             var errorCodes = new List<string>();
             foreach (var node in syntaxNode.ErrorCodes)
@@ -20023,7 +21697,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -20033,7 +21709,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -20088,7 +21766,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -20103,7 +21783,9 @@ namespace CSharpier
                     pragmaKeywordBuilder,
                     syntaxNode.PragmaKeyword
                 );
-                properties.Add($"\"pragmaKeyword\":{pragmaKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"pragmaKeyword\":{pragmaKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.ChecksumKeyword != default(SyntaxToken))
             {
@@ -20112,7 +21794,9 @@ namespace CSharpier
                     checksumKeywordBuilder,
                     syntaxNode.ChecksumKeyword
                 );
-                properties.Add($"\"checksumKeyword\":{checksumKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"checksumKeyword\":{checksumKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.File != default(SyntaxToken))
             {
@@ -20139,7 +21823,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -20149,7 +21835,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -20204,7 +21892,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -20219,7 +21909,9 @@ namespace CSharpier
                     referenceKeywordBuilder,
                     syntaxNode.ReferenceKeyword
                 );
-                properties.Add($"\"referenceKeyword\":{referenceKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"referenceKeyword\":{referenceKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.File != default(SyntaxToken))
             {
@@ -20234,7 +21926,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -20244,7 +21938,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -20299,7 +21995,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -20311,7 +22009,9 @@ namespace CSharpier
             {
                 var loadKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(loadKeywordBuilder, syntaxNode.LoadKeyword);
-                properties.Add($"\"loadKeyword\":{loadKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"loadKeyword\":{loadKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.File != default(SyntaxToken))
             {
@@ -20326,7 +22026,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -20336,7 +22038,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -20391,7 +22095,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -20406,7 +22112,9 @@ namespace CSharpier
                     exclamationTokenBuilder,
                     syntaxNode.ExclamationToken
                 );
-                properties.Add($"\"exclamationToken\":{exclamationTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"exclamationToken\":{exclamationTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EndOfDirectiveToken != default(SyntaxToken))
             {
@@ -20415,7 +22123,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -20425,7 +22135,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -20480,7 +22192,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
             {
@@ -20495,19 +22209,25 @@ namespace CSharpier
                     nullableKeywordBuilder,
                     syntaxNode.NullableKeyword
                 );
-                properties.Add($"\"nullableKeyword\":{nullableKeywordBuilder.ToString()}");
+                properties.Add(
+                    $"\"nullableKeyword\":{nullableKeywordBuilder.ToString()}"
+                );
             }
             if (syntaxNode.SettingToken != default(SyntaxToken))
             {
                 var settingTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(settingTokenBuilder, syntaxNode.SettingToken);
-                properties.Add($"\"settingToken\":{settingTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"settingToken\":{settingTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.TargetToken != default(SyntaxToken))
             {
                 var targetTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(targetTokenBuilder, syntaxNode.TargetToken);
-                properties.Add($"\"targetToken\":{targetTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"targetToken\":{targetTokenBuilder.ToString()}"
+                );
             }
             if (syntaxNode.EndOfDirectiveToken != default(SyntaxToken))
             {
@@ -20516,7 +22236,9 @@ namespace CSharpier
                     endOfDirectiveTokenBuilder,
                     syntaxNode.EndOfDirectiveToken
                 );
-                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
             if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
@@ -20526,7 +22248,9 @@ namespace CSharpier
                     directiveNameTokenBuilder,
                     syntaxNode.DirectiveNameToken
                 );
-                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+                properties.Add(
+                    $"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}"
+                );
             }
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -20581,7 +22305,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -20623,7 +22349,9 @@ namespace CSharpier
                 WriteSyntaxTrivia(innerBuilder, node);
                 leadingTrivia.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"leadingTrivia\":[{string.Join(",", leadingTrivia)}]");
+            properties.Add(
+                $"\"leadingTrivia\":[{string.Join(",", leadingTrivia)}]"
+            );
             var trailingTrivia = new List<string>();
             foreach (var node in syntaxNode.TrailingTrivia)
             {
@@ -20631,7 +22359,9 @@ namespace CSharpier
                 WriteSyntaxTrivia(innerBuilder, node);
                 trailingTrivia.Add(innerBuilder.ToString());
             }
-            properties.Add($"\"trailingTrivia\":[{string.Join(",", trailingTrivia)}]");
+            properties.Add(
+                $"\"trailingTrivia\":[{string.Join(",", trailingTrivia)}]"
+            );
             builder.Append(string.Join(",", properties.Where(o => o != null)));
             builder.Append("}");
         }
@@ -20641,7 +22371,9 @@ namespace CSharpier
         {
             builder.Append("{");
             var properties = new List<string>();
-            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add(
+                $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
+            );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             properties.Add(WriteString("text", syntaxNode.ToString()));
             properties.Add(WriteInt("rawKind", syntaxNode.RawKind));

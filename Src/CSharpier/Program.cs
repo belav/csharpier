@@ -131,9 +131,10 @@ namespace CSharpier
             if (check)
             {
                 Console.WriteLine(
-                    PadToSize("files that were not formatted: ", 80) + ReversePad(
-                        unformattedFiles + "  "
-                    )
+                    PadToSize(
+                        "files that were not formatted: ",
+                        80
+                    ) + ReversePad(unformattedFiles + "  ")
                 );
 
                 if (unformattedFiles > 0)
@@ -157,6 +158,7 @@ namespace CSharpier
                 || file.EndsWith(".cshtml.cs")
                 || file.ContainsIgnoreCase("\\obj\\")
                 || file.ContainsIgnoreCase("/obj/")
+                || file.EndsWithIgnoreCase("AllInOne.cs")
             )
             {
                 return;

@@ -16,9 +16,7 @@ class ClassName<T>
 }
 
 interface InterfaceName<T>
-    where T : class
-{ }
+    where T : class { }
 
 struct Struct<T>
-    where T : class
-{ }
+    where T : class { }
