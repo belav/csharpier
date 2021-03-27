@@ -155,7 +155,11 @@ namespace CSharpier
             TextSpan originalParentSpan,
             TextSpan newParentSpan)
         {
-            for (var x = 0; x < originalList.Count || x < formattedList.Count; x++)
+            for (
+                var x = 0;
+                x < originalList.Count
+                || x < formattedList.Count;
+                x++)
             {
                 if (x == originalList.Count)
                 {
@@ -263,8 +267,8 @@ namespace CSharpier
             SyntaxTrivia formattedTrivia)
         {
             if (
-                originalTrivia.ToString().TrimEnd() != formattedTrivia.ToString()
-                    .TrimEnd()
+                originalTrivia.ToString()
+                    .TrimEnd() != formattedTrivia.ToString().TrimEnd()
             )
             {
                 return NotEqual(originalTrivia.Span, formattedTrivia.Span);

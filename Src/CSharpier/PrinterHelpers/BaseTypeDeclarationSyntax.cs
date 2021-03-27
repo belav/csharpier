@@ -39,7 +39,9 @@ namespace CSharpier
                 {
                     keyword = classDeclarationSyntax.Keyword;
                 }
-                else if (node is StructDeclarationSyntax structDeclarationSyntax)
+                else if (
+                    node is StructDeclarationSyntax structDeclarationSyntax
+                )
                 {
                     keyword = structDeclarationSyntax.Keyword;
                 }
@@ -49,7 +51,9 @@ namespace CSharpier
                 {
                     keyword = interfaceDeclarationSyntax.Keyword;
                 }
-                else if (node is RecordDeclarationSyntax recordDeclarationSyntax)
+                else if (
+                    node is RecordDeclarationSyntax recordDeclarationSyntax
+                )
                 {
                     keyword = recordDeclarationSyntax.Keyword;
                     parameterList = recordDeclarationSyntax.ParameterList;

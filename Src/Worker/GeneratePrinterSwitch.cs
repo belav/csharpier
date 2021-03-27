@@ -7,7 +7,8 @@ namespace Worker
     public class GeneratePrinterSwitch
     {
         [Test]
-        [Ignore("Run this manually if you need to regenerate the Printer.generated.cs file. Then run csharpier on the result")]
+        [Ignore(
+                "Run this manually if you need to regenerate the Printer.generated.cs file. Then run csharpier on the result")]
         public void DoWork()
         {
             var rootDirectory = new DirectoryInfo(
@@ -57,8 +58,10 @@ namespace CSharpier
                 var name = file.Name.Replace(".cs", "");
                 var camelCaseName =
                     name[0].ToString().ToLower() + name.Substring(1);
-                output.AppendLine($@"                    case {name} {camelCaseName}:
-                        return this.Print{name}({camelCaseName});");
+                output.AppendLine(
+                    $@"                    case {name} {camelCaseName}:
+                        return this.Print{name}({camelCaseName});"
+                );
             }
 
             output.AppendLine(

@@ -64,7 +64,9 @@ namespace CSharpier.Tests.EncodingTests
             using var writer = new StreamWriter(stream, encoding);
             writer.Write(result.Code);
 
-            var actualDetectionResult = CharsetDetector.DetectFromFile(filePath);
+            var actualDetectionResult = CharsetDetector.DetectFromFile(
+                filePath
+            );
             var actualEncoding = actualDetectionResult.Detected.Encoding;
 
             encoding.Should().Be(actualEncoding);

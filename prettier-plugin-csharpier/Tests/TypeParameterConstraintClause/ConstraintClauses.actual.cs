@@ -3,5 +3,4 @@ class ClassName<N, C, T, TT, L>
     where C : class
     where T : IComparable
     where TT : IList<N>
-    where L : class, new()
-{ }
+    where L : class, new() { }

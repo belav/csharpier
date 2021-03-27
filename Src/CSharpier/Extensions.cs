@@ -48,7 +48,9 @@ namespace CSharpier
                 .ToLower();
         }
 
-        public static bool EqualsIgnoreCase(this string value, string otherValue)
+        public static bool EqualsIgnoreCase(
+            this string value,
+            string otherValue)
         {
             return string.Compare(
                 value,

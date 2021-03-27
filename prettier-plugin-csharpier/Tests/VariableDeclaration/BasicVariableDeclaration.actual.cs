@@ -2,6 +2,7 @@ class ClassName
 {
     void MethodName()
     {
-        int x = 0, y = 1;
+        int x = 0,
+            y = 1;
     }
 }

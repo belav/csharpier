@@ -2,7 +2,7 @@
 public class ClassName { }
 
 // other class
-class ClassName2 {}
+class ClassName2 { }
 
 // this
 public

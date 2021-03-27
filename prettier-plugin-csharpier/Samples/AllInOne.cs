@@ -1,4 +1,4 @@
-#error Error message
+﻿#error Error message
 #warning Warning message
 #pragma warning disable 414, 3021
 #pragma warning restore 3021
@@ -8,7 +8,6 @@
 #else
 #endif
 #undef foo
-
 extern alias Foo;
 
 using System;
@@ -25,9 +24,7 @@ using System.Diagnostics;
 #else
 using System.Diagnostics;
 #endif
-
 #region Region
-
     #region more
 using ConsoleApplication2.Test;
     #endregion
@@ -37,9 +34,7 @@ using Y = ABC.X<int>;
 using static System.Math;
 using static System.DayOfWeek;
 using static System.Linq.Enumerable;
-
 #endregion
-
 [assembly: System.Copyright(@"(C)""
 
 2009")]
@@ -69,7 +64,7 @@ namespace My
 
         public A(int foo)
         {
-        L:
+            L:
             {
                 int i = sizeof(int);
                 ++i;
@@ -85,21 +80,36 @@ namespace My
 
             var привет = local;
             var мир = local;
-            var local3 = 0, local4 = 1;
+            var local3 = 0,
+                local4 = 1;
             local3 = local4 = 1;
             var local5 = null as Action ?? null;
             var local6 = local5 is Action;
 
             var u = 1u;
             var U = 1U;
-            long hex = 0xBADC0DE, Hex = 0XDEADBEEF, l = -1L, L = 1L, l2 = 2l;
-            ulong ul = 1ul, Ul = 1Ul, uL = 1uL, UL = 1UL, lu = 1lu, Lu = 1Lu, lU = 1lU, LU = 1LU;
+            long hex = 0xBADC0DE,
+                Hex = 0XDEADBEEF,
+                l = -1L,
+                L = 1L,
+                l2 = 2l;
+            ulong ul = 1ul,
+                Ul = 1Ul,
+                uL = 1uL,
+                UL = 1UL,
+                lu = 1lu,
+                Lu = 1Lu,
+                lU = 1lU,
+                LU = 1LU;
             int minInt32Value = -2147483648;
             int minInt64Value = -9223372036854775808L;
 
             bool @bool;
             byte @byte;
-            char @char = 'c', \u0066 = '\u0066', hexchar = '\x0130', hexchar2 = (char)0xBAD;
+            char @char = 'c',
+                \u0066 = '\u0066',
+                hexchar = '\x0130',
+                hexchar2 = (char)0xBAD;
             string \U00000065 = "\U00000065";
             decimal @decimal = 1.44M;
             @decimal = 1.2m;
@@ -245,12 +255,14 @@ namespace My
                 process();
             using (var v = BeginScope())
             using (A a = new A())
-            using (A a = new A(), b = new A())
+            using (A a = new A(),
+                b = new A())
             using (BeginScope())
                 return;
             yield return this.items[3];
             yield break;
-            fixed (int* p = stackalloc int[100], q = &y)
+            fixed (int* p = stackalloc int[100],
+                q = &y)
             {
                 *intref = 1;
             }
@@ -289,9 +301,7 @@ namespace My
                 orderby g.Count() ascending
                 orderby g.Key descending
                 select new { Country = g.Key, CustCount = g.Count() };
-            query = from c in customers
-                select c into d
-                select d;
+            query = from c in customers select c into d select d;
         }
         ~A() { }
         private readonly int f1;
@@ -299,7 +309,12 @@ namespace My
         [NonExisting]
         [Foo::NonExisting(var, 5)]
         [CLSCompliant(false)]
-        [Obsolete, System.NonSerialized, NonSerialized, CLSCompliant(true || false & true)]
+        [
+            Obsolete,
+            System.NonSerialized,
+            NonSerialized,
+            CLSCompliant(true || false & true)
+        ]
         private volatile int f2;
         [return: Obsolete]
         [method: Obsolete]
@@ -407,10 +422,9 @@ namespace My
         }
 #else
         E,
-        }
+
+    }
 #endif
-
-
     public delegate void Delegate(object P);
     namespace Test
     {
@@ -426,7 +440,7 @@ namespace My
                 int אתר = 0;
                 while (++counter++ < --exponent--)
                 {
-                    result = result * number + +number+++++number;
+                    result = result * number + +number++++ + number;
                     yield return result;
                 }
             }
@@ -447,8 +461,10 @@ namespace My
                     async () =>
                     {
                         return await new WebClient().DownloadStringTaskAsync(
-                            "http://example.com");
-                    });
+                            "http://example.com"
+                        );
+                    }
+                );
             }
         }
     }
@@ -500,9 +516,7 @@ namespace ConsoleApplication1
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
 
-            var q = from i in new int[] { 1, 2, 3, 4 }
-                where i > 5
-                select i;
+            var q = from i in new int[] { 1, 2, 3, 4 } where i > 5 select i;
         }
 
         public static implicit operator Test(string s)
@@ -530,10 +544,11 @@ namespace ConsoleApplication1
             int? j = 6;
 
             Expression<Func<int>> e = () => i;
-            Expression<Func<bool, Action>> e2 = b => () =>
-            {
-                return;
-            };
+            Expression<Func<bool, Action>> e2 =
+                b => () =>
+                {
+                    return;
+                };
             Func<bool, bool> f = async delegate(bool a)
             {
                 return await !a;
@@ -572,7 +587,8 @@ namespace ConsoleApplication1
         public void Constants()
         {
             int i = 1 + 2 + 3 + 5;
-            global::System.String s = "a" + (System.String)"a" + "a" + "a" + "a" + "A";
+            global::System.String s =
+                "a" + (System.String)"a" + "a" + "a" + "a" + "A";
         }
 
         public void ConstructedType()
@@ -601,7 +617,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
     /// <seealso cref=" "/>
     /// <value></value>
     /// <typeparam name="T"></typeparam>
-    class /*///*/C<T>
+    class /*///*/
+    C<T>
     {
         void M<U>(T t, U u)
         {
@@ -609,20 +626,26 @@ namespace Comments.XmlComments.UndocumentedKeywords
             /* *** / */
             /* //
              */
-            /*s*///comment
+            /*s*/
+            //comment
             // /***/
-            /*s*/int /*s*/intValue = 0;
-            intValue = intValue /*s*/+ 1;
-            string strValue = /*s*/"hello";
-            /*s*/MyClass c = new MyClass();
-            string verbatimStr = /*s*/@"\\\\";
+            /*s*/
+            int /*s*/
+             intValue = 0;
+            intValue = intValue /*s*/  + 1;
+            string strValue = /*s*/ "hello";
+            /*s*/
+            MyClass c = new MyClass();
+            string verbatimStr = /*s*/ @"\\\\";
         }
     }
 
     //General Test F. Type a very long class name, verify colorization happens correctly only upto the correct size (118324)
-    class TestClassXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/*Scen8*/{ }
+    class TestClassXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX /*Scen8*/
+     { }
 
-    class TestClassXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX22/*Scen9*/{ }
+    class TestClassXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX22 /*Scen9*/
+     { }
 
     class yield
     {
@@ -651,18 +674,25 @@ namespace Comments.XmlComments.UndocumentedKeywords
 
         public partial void method()
         {
-            int?[] a = new int?[5]; /*[] bug*/ // YES []
+            int?[] a = new int?[5]; /*[] bug*/
+ // YES []
             int[] var = { 1, 2, 3, 4, 5 }; /*,;*/
+
             int i = a[i]; /*[]*/
+
             Foo<T> f = new Foo<int>(); /*<> ()*/
+
             f.method(); /*().*/
             i = i + i - i * i / i % i & i | i ^ i; /*+ - * / % & | ^*/
             bool b = true & false | true ^ false; /*& | ^*/
+
             b = !b; /*!*/
             i = ~i; /*~i*/
             b = i < i && i > i; /*< && >*/
-            int? ii = 5; /*? bug*/ // NO ?
-            int f = true ? 1 : 0; /*? :*/ // YES :
+            int? ii = 5; /*? bug*/
+ // NO ?
+            int f = true ? 1 : 0; /*? :*/
+ // YES :
             i++; /*++*/
             i--; /*--*/
             b = true && false || true; /*&& ||*/
@@ -671,7 +701,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
             b = i == i && i != i && i <= i && i >= i; /*= == && != <= >=*/
             i += 5.0; /*+=*/
             i -= i; /*-=*/
-            i *= i; /**=*/
+            i *= i;
+            /**=*/
             i /= i; /*/=*/
             i %= i; /*%=*/
             i &= i; /*&=*/
@@ -680,11 +711,13 @@ namespace Comments.XmlComments.UndocumentedKeywords
             i <<= i; /*<<=*/
             i >>= i; /*>>=*/
             object s = x => x + 1; /*=>*/
+
             double d = .3;
             Point point;
             unsafe
             {
-                Point* p = &point; /** &*/
+                Point* p = &point;
+                /** &*/
                 p->x = 10; /*->*/
             }
             IO::BinaryReader br = null;
@@ -717,7 +750,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
         // Expression bodies on method-like members
         public Point Move(int dx, int dy) => new Point(x + dx, y + dy);
         public static Complex operator +(Complex a, Complex b) => a.Add(b);
-        public static implicit operator string(Person p) => p.First + " " + p.Last;
+        public static implicit operator string(Person p) =>
+            p.First + " " + p.Last;
         public void Print() => Console.WriteLine(First + " " + Last);
 
         // Expression bodies on property-like function members
@@ -729,12 +763,12 @@ namespace Comments.XmlComments.UndocumentedKeywords
             // Using static
             WriteLine(Sqrt(3 * 3 + 4 * 4));
             WriteLine(Friday - Monday);
-            var range = Range(5, 17);                // Ok: not extension
+            var range = Range(5, 17); // Ok: not extension
             var even = range.Where(i => i % 2 == 0); // Ok
 
             // Null-conditional operators
             int? length = customers?.Length; // null if customers is null
-            Customer first = customers?[0];  // null if customers is null
+            Customer first = customers?[0]; // null if customers is null
             int length = customers?.Length ?? 0; // 0 if customers is null
             int? first = customers?[0]?.Orders?.Count();
             PropertyChanged?.Invoke(this, args);
@@ -742,7 +776,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             // String interpolation
             string s = $"{p.Name, 20} is {p.Age:D3} year{{s}} old #";
             s = $"{p.Name} is \"{p.Age} year{(p.Age == 1 ? "" : "s")} old";
-            s = $"{(p.Age == 2 ? $"{new Person { } }" : "")}";
+            s = $"{(p.Age == 2 ? $"{new Person {  }}" : "")}";
             s = $@"\{p.Name}
                                    ""\";
             s = $"Color [ R={func(b: 3):#0.##}, G={G:#0.##}, B={B:#0.##}, A={A:#0.##} ]";
@@ -768,11 +802,11 @@ namespace Comments.XmlComments.UndocumentedKeywords
             Resource res = null;
             try
             {
-                res = await Resource.OpenAsync();       // You could do this.
+                res = await Resource.OpenAsync(); // You could do this.
             }
             catch (ResourceException e)
             {
-                await Resource.LogAsync(res, e);         // Now you can do this …
+                await Resource.LogAsync(res, e); // Now you can do this …
             }
             finally
             {
@@ -786,7 +820,6 @@ namespace Comments.XmlComments.UndocumentedKeywords
 #line 2 "test.cs"
 #line default
 #line hidden
-
 class CSharp70
 {
     void PatternMatching(string arg, int b)
@@ -799,11 +832,11 @@ class CSharp70
                 break;
         }
 
-        (A<B,C> D, E<F,G> H) = e;
+        (A<B, C> D, E<F, G> H) = e;
 
         if (x?.y?.z is Type value2)
         {
-            // code using value
+        // code using value
         }
 
         if (expr is Type v)
@@ -902,7 +935,7 @@ class CSharp72
             // not OK!!
             foo(ref v1.X);
 
-            return ref (arr != null ? ref arr[0]: ref otherArr[0]);
+            return ref (arr != null ? ref arr[0] : ref otherArr[0]);
 
             Span<int> span = stackalloc int[1];
 
@@ -914,11 +947,11 @@ class CSharp72
         {
             if (condition)
             {
-                 return ref consequence;
+                return ref consequence;
             }
             else
             {
-                 return ref alternative;
+                return ref alternative;
             }
         }
     }
@@ -928,14 +961,8 @@ class CSharp72
 
     public void NonTrailingNamedArguments()
     {
-        DoSomething(
-            isEmployed: true,
-            name,
-            age); // currently CS1738, but would become legal
-        DoSomething(
-            true,
-            personName: name,
-            age); // currently CS1738, but would become legal
+        DoSomething(isEmployed: true, name, age); // currently CS1738, but would become legal
+        DoSomething(true, personName: name, age); // currently CS1738, but would become legal
         DoSomething(name, isEmployed: true, age); // remains illegal
         DoSomething(name, age, isEmployed: true); // remains illegal
         DoSomething(true, personAge: age, personName: name); // already legal
@@ -948,16 +975,15 @@ class CSharp72
 
     public void LeadingSeparator()
     {
-        var res = 0
-        + 123      // permitted in C# 1.0 and later
-        + 1_2_3    // permitted in C# 7.0 and later
-        + 0x1_2_3  // permitted in C# 7.0 and later
-        + 0b101    // binary literals added in C# 7.0
-        + 0b1_0_1  // permitted in C# 7.0 and later
-
-        // in C# 7.2, _ is permitted after the `0x` or `0b`
-        + 0x_1_2   // permitted in C# 7.2 and later
-        + 0b_1_0_1 // permitted in C# 7.2 and later
+        var res =
+            0 + 123 // permitted in C# 1.0 and later
+            + 1_2_3 // permitted in C# 7.0 and later
+            + 0x1_2_3 // permitted in C# 7.0 and later
+            + 0b101 // binary literals added in C# 7.0
+            + 0b1_0_1 // permitted in C# 7.0 and later
+            // in C# 7.2, _ is permitted after the `0x` or `0b`
+            + 0x_1_2 // permitted in C# 7.2 and later
+            + 0b_1_0_1 // permitted in C# 7.2 and later
         ;
     }
 }
@@ -985,16 +1011,16 @@ class CSharp73
 
     public void PatternBasedFixed()
     {
-        fixed(byte* ptr = byteArray)
+        fixed (byte* ptr = byteArray)
         {
-           // ptr is a native pointer to the first element of the array
-           // byteArray is protected from being moved/collected by the GC for the duration of this block
+        // ptr is a native pointer to the first element of the array
+        // byteArray is protected from being moved/collected by the GC for the duration of this block
         }
     }
 
     public void StackallocArrayInitializer()
     {
-        Span<int> a = stackalloc int[3];               // currently allowed
+        Span<int> a = stackalloc int[3]; // currently allowed
         Span<int> a = stackalloc int[3] { 1, 2, 3 };
         Span<int> a = stackalloc int[] { 1, 2, 3 };
         Span<int> a = stackalloc[] { 1, 2, 3 };
@@ -1002,7 +1028,8 @@ class CSharp73
 
     public void TupleEquality()
     {
-        (int, (int, int)) t1, t2;
+        (int, (int, int)) t1,
+            t2;
         var res = t1 == (1, (2, 3));
     }
 }
@@ -1050,23 +1077,13 @@ namespace CSharp80
         {
             var thirdItem = list[2]; // list[2]
             var lastItem = list[^1]; // list[Index.CreateFromEnd(1)]
-            var multiDimensional = list[
-                3,
-                ^2
-            ]; // list[3, Index.CreateFromEnd(2)]
+            var multiDimensional = list[3, ^2]; // list[3, Index.CreateFromEnd(2)]
 
-            var slice1 = list[
-                2..^3
-            ]; // list[Range.Create(2, Index.CreateFromEnd(3))]
-            var slice2 = list[
-                ..^3
-            ]; // list[Range.ToEnd(Index.CreateFromEnd(3))]
+            var slice1 = list[2..^3]; // list[Range.Create(2, Index.CreateFromEnd(3))]
+            var slice2 = list[..^3]; // list[Range.ToEnd(Index.CreateFromEnd(3))]
             var slice3 = list[2..]; // list[Range.FromStart(2)]
             var slice4 = list[..]; // list[Range.All]
-            var multiDimensional = list[
-                1..2,
-                ..
-            ]; // list[Range.Create(1, 2), Range.All]
+            var multiDimensional = list[1..2, ..]; // list[Range.Create(1, 2), Range.All]
         }
 
         void UsingDeclarators()
@@ -1127,4 +1144,3 @@ namespace CSharp80
         }
     }
 }
-
