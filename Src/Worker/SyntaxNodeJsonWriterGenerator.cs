@@ -15,8 +15,7 @@ namespace Worker
         readonly List<string> missingTypes = new();
 
         [Test]
-        [Ignore(
-                "Run this manually if you need to regenerate the SyntaxNodeJsonWriter.generated.cs file. Then run csharpier on the result")]
+        [Ignore("Run this manually if you need to regenerate the SyntaxNodeJsonWriter.generated.cs file. Then run csharpier on the result")]
         public void DoWork()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());

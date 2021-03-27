@@ -13,8 +13,7 @@ namespace Worker
     public class SyntaxNodeComparerGenerator
     {
         [Test]
-        [Ignore(
-                "Run manually to update SyntaxNodeComparerGenerator.generated.cs. Then run csharpier on the result")]
+        [Ignore("Run manually to update SyntaxNodeComparerGenerator.generated.cs. Then run csharpier on the result")]
         public void DoWork()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
