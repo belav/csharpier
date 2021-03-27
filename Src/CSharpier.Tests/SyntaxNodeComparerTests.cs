@@ -35,7 +35,7 @@ namespace Namespace { }
 
             var result = this.AreEqual(left, right);
 
-            result.Should().BeNull();
+            result.Should().BeEmpty();
         }
 
         [Test]
@@ -121,7 +121,7 @@ class Resources
 
             var result = this.AreEqual(left, right);
 
-            result.Should().BeNull();
+            result.Should().BeEmpty();
         }
 
 

@@ -22,37 +22,37 @@ namespace CSharpier
                 }
             }
 
-            return parts.Any() ? Concat(parts) : null;
+            return parts.Any() ? Concat(parts) : Doc.Null;
         }
 
         // TODO 0 multiline comments need lots of testing, formatting is real weird
         private Doc PrintSyntaxToken(
             SyntaxToken syntaxToken,
-            Doc afterTokenIfNoTrailing = null,
-            Doc beforeTokenIfNoLeading = null)
+            Doc? afterTokenIfNoTrailing = null,
+            Doc? beforeTokenIfNoLeading = null)
         {
             if (syntaxToken.RawKind == 0)
             {
-                return null;
+                return Doc.Null;
             }
 
             var parts = new Parts();
             var leadingTrivia = this.PrintLeadingTrivia(syntaxToken);
-            if (leadingTrivia != null)
+            if (leadingTrivia != Doc.Null)
             {
                 parts.Push(leadingTrivia);
             }
-            else
+            else if (beforeTokenIfNoLeading != null)
             {
                 parts.Push(beforeTokenIfNoLeading);
             }
             parts.Push(syntaxToken.Text);
             var trailingTrivia = this.PrintTrailingTrivia(syntaxToken);
-            if (trailingTrivia != null)
+            if (trailingTrivia != Doc.Null)
             {
                 parts.Push(trailingTrivia);
             }
-            else
+            else if (afterTokenIfNoTrailing != null)
             {
                 parts.Push(afterTokenIfNoTrailing);
             }
@@ -186,7 +186,7 @@ namespace CSharpier
                 parts.Push(HardLine);
             }
 
-            return parts.Count > 0 ? Concat(parts) : null;
+            return parts.Count > 0 ? Concat(parts) : Doc.Null;
         }
 
         private Doc PrintTrailingTrivia(SyntaxToken node)
@@ -214,7 +214,7 @@ namespace CSharpier
                 }
             }
 
-            return parts.Count > 0 ? Concat(parts) : null;
+            return parts.Count > 0 ? Concat(parts) : Doc.Null;
         }
     }
 }

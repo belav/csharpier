@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintOmittedTypeArgumentSyntax(
             OmittedTypeArgumentSyntax node)
         {
-            return null;
+            return Doc.Null;
         }
     }
 }

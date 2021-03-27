@@ -9,7 +9,7 @@ namespace CSharpier
         {
             if (node == null) // TODO 1 why is this being called?
             {
-                return null;
+                return Doc.Null;
             }
 
             var statementSeparator = node.Parent is AccessorDeclarationSyntax
@@ -41,7 +41,7 @@ namespace CSharpier
                 this.PrintSyntaxToken(
                     node.CloseBraceToken,
                     null,
-                    node.Statements.Count == 0 ? " " : null
+                    node.Statements.Count == 0 ? " " : Doc.Null
                 )
             );
             return Group(Concat(parts));

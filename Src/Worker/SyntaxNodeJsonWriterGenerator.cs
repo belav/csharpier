@@ -93,7 +93,7 @@ namespace Worker
             );
             file.WriteLine("        {");
             file.WriteLine("            builder.Append(\"{\");");
-            file.WriteLine("            var properties = new List<string>();");
+            file.WriteLine("            var properties = new List<string?>();");
             file.WriteLine(
                 $"            properties.Add($\"\\\"nodeType\\\":\\\"{{GetNodeType(syntaxNode.GetType())}}\\\"\");"
             );

@@ -11,14 +11,14 @@ namespace CSharpier
         {
             SyntaxList<AttributeListSyntax>? attributeLists = null;
             SyntaxTokenList? modifiers = null;
-            TypeSyntax returnType = null;
-            ExplicitInterfaceSpecifierSyntax explicitInterfaceSpecifier = null;
-            TypeParameterListSyntax typeParameterList = null;
-            Doc identifier = null;
+            TypeSyntax? returnType = null;
+            ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier = null;
+            TypeParameterListSyntax? typeParameterList = null;
+            Doc identifier = Doc.Null;
             var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
-            ParameterListSyntax parameterList = null;
-            BlockSyntax body = null;
-            ArrowExpressionClauseSyntax expressionBody = null;
+            ParameterListSyntax? parameterList = null;
+            BlockSyntax? body = null;
+            ArrowExpressionClauseSyntax? expressionBody = null;
             SyntaxToken? semicolonToken = null;
             if (node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax)
             {

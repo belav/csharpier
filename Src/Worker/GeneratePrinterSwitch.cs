@@ -7,8 +7,8 @@ namespace Worker
     public class GeneratePrinterSwitch
     {
         [Test]
-        [Ignore(
-                "Run this manually if you need to regenerate the Printer.generated.cs file. Then run csharpier on the result")]
+        // [Ignore(
+        //         "Run this manually if you need to regenerate the Printer.generated.cs file. Then run csharpier on the result")]
         public void DoWork()
         {
             var rootDirectory = new DirectoryInfo(
@@ -34,7 +34,7 @@ namespace CSharpier
         {
             if (syntaxNode == null)
             {
-                return null;
+                return Doc.Null;
             }
 
             // TODO 0 kill? runtime repo has files that will fail on deep recursion

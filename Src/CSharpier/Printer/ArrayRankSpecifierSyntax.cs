@@ -13,9 +13,9 @@ namespace CSharpier
                     ? this.PrintSeparatedSyntaxList(
                         node.Sizes,
                         this.Print,
-                        null
+                        Doc.Null
                     )
-                    : null,
+                    : Doc.Null,
                 this.PrintSyntaxToken(node.CloseBracketToken)
             );
         }

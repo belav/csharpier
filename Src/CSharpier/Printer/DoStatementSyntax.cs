@@ -10,7 +10,7 @@ namespace CSharpier
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.DoKeyword,
-                    node.Statement is not BlockSyntax ? " " : null
+                    node.Statement is not BlockSyntax ? " " : Doc.Null
                 ),
                 this.Print(node.Statement),
                 HardLine,

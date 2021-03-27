@@ -18,8 +18,8 @@ namespace CSharpier
                             Line
                         )
                     )
-                    : null,
-                node.Arguments.Any() ? SoftLine : null,
+                    : Doc.Null,
+                node.Arguments.Any() ? SoftLine : Doc.Null,
                 this.PrintSyntaxToken(node.CloseParenToken)
             );
 

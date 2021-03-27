@@ -10,20 +10,18 @@ namespace CSharpier
         private Doc PrintBaseTypeDeclarationSyntax(
             BaseTypeDeclarationSyntax node)
         {
-            ParameterListSyntax parameterList = null;
-            TypeParameterListSyntax typeParameterList = null;
-            var hasConstraintClauses = false;
+            ParameterListSyntax? parameterList = null;
+            TypeParameterListSyntax? typeParameterList = null;
             var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
             var hasMembers = false;
             SyntaxToken? keyword = null;
-            Doc members = null;
+            Doc members = Doc.Null;
             SyntaxToken? semicolonToken = null;
 
             if (node is TypeDeclarationSyntax typeDeclarationSyntax)
             {
                 typeParameterList = typeDeclarationSyntax.TypeParameterList;
                 constraintClauses = typeDeclarationSyntax.ConstraintClauses;
-                hasConstraintClauses = typeDeclarationSyntax.ConstraintClauses.Count > 0;
                 hasMembers = typeDeclarationSyntax.Members.Count > 0;
                 if (typeDeclarationSyntax.Members.Count > 0)
                 {

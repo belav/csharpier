@@ -11,7 +11,9 @@ namespace CSharpier
             return Concat(
                 this.PrintSyntaxToken(node.DelegateKeyword),
                 this.PrintSyntaxToken(node.AsteriskToken, " "),
-                this.PrintCallingConvention(node.CallingConvention),
+                node.CallingConvention != null
+                    ? this.PrintCallingConvention(node.CallingConvention)
+                    : Doc.Null,
                 this.PrintSyntaxToken(node.ParameterList.LessThanToken),
                 Indent(
                     Group(
@@ -34,11 +36,6 @@ namespace CSharpier
         private Doc PrintCallingConvention(
             FunctionPointerCallingConventionSyntax node)
         {
-            if (node == null)
-            {
-                return null;
-            }
-
             return Concat(
                 this.PrintSyntaxToken(node.ManagedOrUnmanagedKeyword),
                 node.UnmanagedCallingConventionList != null
@@ -55,7 +52,7 @@ namespace CSharpier
                             node.UnmanagedCallingConventionList.CloseBracketToken
                         )
                     )
-                    : null
+                    : Doc.Null
             );
         }
     }

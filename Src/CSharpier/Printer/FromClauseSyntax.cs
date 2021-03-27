@@ -8,7 +8,9 @@ namespace CSharpier
         {
             return Concat(
                 this.PrintSyntaxToken(node.FromKeyword, " "),
-                node.Type != null ? Concat(this.Print(node.Type), " ") : null,
+                node.Type != null
+                    ? Concat(this.Print(node.Type), " ")
+                    : Doc.Null,
                 this.PrintSyntaxToken(node.Identifier, " "),
                 this.PrintSyntaxToken(node.InKeyword, " "),
                 this.Print(node.Expression)

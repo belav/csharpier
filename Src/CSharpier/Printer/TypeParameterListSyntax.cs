@@ -9,7 +9,7 @@ namespace CSharpier
         {
             if (node.Parameters.Count == 0)
             {
-                return null;
+                return Doc.Null;
             }
             return Group(
                 this.PrintSyntaxToken(node.LessThanToken),

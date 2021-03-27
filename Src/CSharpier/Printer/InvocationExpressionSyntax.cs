@@ -7,11 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
 {
-    public class PrintedNode
-    {
-        public CSharpSyntaxNode Node { get; set; }
-        public Doc Doc { get; set; }
-    }
+    public record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
     public partial class Printer
     {
@@ -40,13 +36,12 @@ namespace CSharpier
                 {
                     Traverse(invocationExpressionSyntax.Expression);
                     printedNodes.Add(
-                        new PrintedNode
-                        {
-                            Doc = this.PrintArgumentListSyntax(
+                        new PrintedNode(
+                            invocationExpressionSyntax,
+                            this.PrintArgumentListSyntax(
                                 invocationExpressionSyntax.ArgumentList
-                            ),
-                            Node = invocationExpressionSyntax
-                        }
+                            )
+                        )
                     );
                 }
                 else if (
@@ -55,26 +50,21 @@ namespace CSharpier
                 {
                     Traverse(memberAccessExpressionSyntax.Expression);
                     printedNodes.Add(
-                        new PrintedNode
-                        {
-                            Doc = Concat(
+                        new PrintedNode(
+                            memberAccessExpressionSyntax,
+                            Concat(
                                 this.PrintSyntaxToken(
                                     memberAccessExpressionSyntax.OperatorToken
                                 ),
                                 this.Print(memberAccessExpressionSyntax.Name)
-                            ),
-                            Node = memberAccessExpressionSyntax
-                        }
+                            )
+                        )
                     );
                 }
                 else
                 {
                     printedNodes.Add(
-                        new PrintedNode
-                        {
-                            Doc = this.Print(expression),
-                            Node = expression
-                        }
+                        new PrintedNode(expression, this.Print(expression))
                     );
                 }
             }
@@ -164,7 +154,7 @@ namespace CSharpier
         {
             if (!groups.Any())
             {
-                return null;
+                return Doc.Null;
             }
 
             // TODO GH-7 softline here?

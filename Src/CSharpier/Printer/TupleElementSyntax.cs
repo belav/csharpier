@@ -10,7 +10,7 @@ namespace CSharpier
                 this.Print(node.Type),
                 node.Identifier.RawKind != 0
                     ? Concat(" ", this.PrintSyntaxToken(node.Identifier))
-                    : null
+                    : Doc.Null
             );
         }
     }

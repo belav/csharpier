@@ -8,11 +8,20 @@ namespace CSharpier
         {
             return new StringDoc(value);
         }
+
+        public static NullDoc Null { get; } = NullDoc.Instance;
+    }
+
+    public class NullDoc : Doc
+    {
+        public static NullDoc Instance { get; } = new NullDoc();
+
+        private NullDoc() { }
     }
 
     public class IndentDoc : Doc, IHasContents
     {
-        public Doc Contents { get; set; }
+        public Doc Contents { get; set; } = Doc.Null;
     }
 
     public class StringDoc : Doc
@@ -40,7 +49,7 @@ namespace CSharpier
 
     public class Group : Doc, IHasContents
     {
-        public Doc Contents { get; set; }
+        public Doc Contents { get; set; } = Doc.Null;
         public bool Break { get; set; }
         public bool ExpandedStates { get; set; }
     }
@@ -52,38 +61,43 @@ namespace CSharpier
     public class Concat : Doc
     {
         public List<Doc> Parts { get; set; }
+
+        public Concat(List<Doc> parts)
+        {
+            Parts = parts;
+        }
     }
 
     public class ForceFlat : Doc, IHasContents
     {
-        public Doc Contents { get; set; }
+        public Doc Contents { get; set; } = Doc.Null;
     }
 
     public class Align : Doc, IHasContents
     {
-        public Doc Contents { get; set; }
+        public Doc Contents { get; set; } = Doc.Null;
     }
 
     public class Fill : Doc, IHasContents
     {
-        public Doc Contents { get; set; }
+        public Doc Contents { get; set; } = Doc.Null;
     }
 
     public class LineSuffix : Doc, IHasContents
     {
-        public Doc Contents { get; set; }
+        public Doc Contents { get; set; } = Doc.Null;
     }
 
     public class LeadingComment : Doc
     {
         public CommentType Type { get; set; }
-        public string Comment { get; set; }
+        public string Comment { get; set; } = string.Empty;
     }
 
     public class TrailingComment : Doc
     {
         public CommentType Type { get; set; }
-        public string Comment { get; set; }
+        public string Comment { get; set; } = string.Empty;
     }
 
     public enum CommentType

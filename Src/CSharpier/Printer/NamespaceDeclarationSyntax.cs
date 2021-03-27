@@ -65,7 +65,7 @@ namespace CSharpier
                     Line,
                     this.PrintSyntaxToken(node.OpenBraceToken),
                     Indent(Concat(innerParts)),
-                    hasMembers || hasUsing || hasExterns ? HardLine : null,
+                    hasMembers || hasUsing || hasExterns ? HardLine : Doc.Null,
                     this.PrintSyntaxToken(node.CloseBraceToken),
                     this.PrintSyntaxToken(node.SemicolonToken)
                 )

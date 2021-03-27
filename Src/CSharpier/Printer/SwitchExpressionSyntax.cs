@@ -27,7 +27,7 @@ namespace CSharpier
                                             this.Print(o.WhenClause),
                                             SpaceIfNoPreviousComment
                                         )
-                                        : null,
+                                        : Doc.Null,
                                     this.PrintSyntaxToken(
                                         o.EqualsGreaterThanToken,
                                         " "

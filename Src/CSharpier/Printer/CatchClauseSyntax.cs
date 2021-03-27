@@ -14,7 +14,7 @@ namespace CSharpier
                     " ",
                     this.PrintSyntaxToken(node.Declaration.OpenParenToken),
                     this.Print(node.Declaration.Type),
-                    node.Declaration.Identifier.RawKind != 0 ? " " : null,
+                    node.Declaration.Identifier.RawKind != 0 ? " " : Doc.Null,
                     this.PrintSyntaxToken(node.Declaration.Identifier),
                     this.PrintSyntaxToken(node.Declaration.CloseParenToken)
                 );

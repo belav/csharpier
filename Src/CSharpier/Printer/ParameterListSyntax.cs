@@ -18,7 +18,7 @@ namespace CSharpier
                             Line
                         )
                     )
-                    : null,
+                    : Doc.Null,
                 this.PrintSyntaxToken(node.CloseParenToken)
             );
         }

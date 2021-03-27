@@ -23,7 +23,7 @@ namespace CSharpier
                         this.PrintSyntaxToken(node.Into.IntoKeyword, " "),
                         this.PrintSyntaxToken(node.Into.Identifier)
                     )
-                    : null
+                    : Doc.Null
             );
         }
     }

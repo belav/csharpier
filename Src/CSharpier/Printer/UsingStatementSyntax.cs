@@ -13,8 +13,10 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.OpenParenToken),
                 node.Declaration != null
                     ? this.PrintVariableDeclarationSyntax(node.Declaration)
-                    : null,
-                node.Expression != null ? this.Print(node.Expression) : null,
+                    : Doc.Null,
+                node.Expression != null
+                    ? this.Print(node.Expression)
+                    : Doc.Null,
                 this.PrintSyntaxToken(node.CloseParenToken)
             );
             var statement = this.Print(node.Statement);
