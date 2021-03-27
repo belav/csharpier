@@ -272,7 +272,9 @@ namespace CSharpier
                             width -= 1;
                             break;
                         default:
-                            throw new Exception("Can't handle " + doc.GetType());
+                            throw new Exception(
+                                "Can't handle " + doc.GetType()
+                            );
                     }
                 }
             }

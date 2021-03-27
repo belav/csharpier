@@ -1,9 +1,0 @@
-﻿public class BasicClass
-{
-    public BasicClass() { }
-
-    [Obsolete]
-    public BasicClass(string one) { }
-
-    public ClassName() => this.Value = 1;
-}

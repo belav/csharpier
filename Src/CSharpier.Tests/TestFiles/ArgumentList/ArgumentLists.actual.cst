@@ -1,9 +1,0 @@
-﻿public class ClassName
-{
-    public void MethodName()
-    {
-        this.Method(true);
-
-        this.NamedArguments(b: true, c: "false");
-    }
-}

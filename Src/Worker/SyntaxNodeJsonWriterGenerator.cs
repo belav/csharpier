@@ -49,11 +49,15 @@ namespace Worker
                 file.WriteLine("    public partial class SyntaxNodeJsonWriter");
                 file.WriteLine("    {");
 
-                file.WriteLine($"        public static void WriteSyntaxNode(StringBuilder builder, SyntaxNode syntaxNode)");
+                file.WriteLine(
+                    $"        public static void WriteSyntaxNode(StringBuilder builder, SyntaxNode syntaxNode)"
+                );
                 file.WriteLine("        {");
                 foreach (var syntaxNodeType in syntaxNodeTypes)
                 {
-                    file.WriteLine($"            if (syntaxNode is {syntaxNodeType.Name}) Write{syntaxNodeType.Name}(builder, syntaxNode as {syntaxNodeType.Name});");
+                    file.WriteLine(
+                        $"            if (syntaxNode is {syntaxNodeType.Name}) Write{syntaxNodeType.Name}(builder, syntaxNode as {syntaxNodeType.Name});"
+                    );
                 }
 
                 file.WriteLine("        }");
@@ -84,16 +88,24 @@ namespace Worker
 
         private void GenerateMethod(StreamWriter file, Type type)
         {
-            file.WriteLine($"        public static void Write{type.Name}(StringBuilder builder, {type.Name} syntaxNode)");
+            file.WriteLine(
+                $"        public static void Write{type.Name}(StringBuilder builder, {type.Name} syntaxNode)"
+            );
             file.WriteLine("        {");
             file.WriteLine("            builder.Append(\"{\");");
             file.WriteLine("            var properties = new List<string>();");
-            file.WriteLine($"            properties.Add($\"\\\"nodeType\\\":\\\"{{GetNodeType(syntaxNode.GetType())}}\\\"\");");
-            file.WriteLine($"            properties.Add($\"\\\"kind\\\":\\\"{{syntaxNode.Kind().ToString()}}\\\"\");");
+            file.WriteLine(
+                $"            properties.Add($\"\\\"nodeType\\\":\\\"{{GetNodeType(syntaxNode.GetType())}}\\\"\");"
+            );
+            file.WriteLine(
+                $"            properties.Add($\"\\\"kind\\\":\\\"{{syntaxNode.Kind().ToString()}}\\\"\");"
+            );
 
             if (type == typeof(SyntaxTrivia))
             {
-                file.WriteLine($"            properties.Add(WriteString(\"text\", syntaxNode.ToString()));");
+                file.WriteLine(
+                    $"            properties.Add(WriteString(\"text\", syntaxNode.ToString()));"
+                );
             }
 
             foreach (var propertyInfo in type.GetProperties())
@@ -114,15 +126,21 @@ namespace Worker
 
                 if (propertyType == typeof(bool))
                 {
-                    file.WriteLine($"            properties.Add(WriteBoolean(\"{camelCaseName}\", syntaxNode.{propertyName}));");
+                    file.WriteLine(
+                        $"            properties.Add(WriteBoolean(\"{camelCaseName}\", syntaxNode.{propertyName}));"
+                    );
                 }
                 else if (propertyType == typeof(string))
                 {
-                    file.WriteLine($"            properties.Add(WriteString(\"{camelCaseName}\", syntaxNode.{propertyName}));");
+                    file.WriteLine(
+                        $"            properties.Add(WriteString(\"{camelCaseName}\", syntaxNode.{propertyName}));"
+                    );
                 }
                 else if (propertyType == typeof(int))
                 {
-                    file.WriteLine($"            properties.Add(WriteInt(\"{camelCaseName}\", syntaxNode.{propertyName}));");
+                    file.WriteLine(
+                        $"            properties.Add(WriteInt(\"{camelCaseName}\", syntaxNode.{propertyName}));"
+                    );
                 }
                 else if (
                     typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType)
@@ -144,11 +162,19 @@ namespace Worker
                         methodName = "Write" + propertyType.Name;
                     }
 
-                    file.WriteLine($"            if (syntaxNode.{propertyName} != default({propertyType.Name}))");
+                    file.WriteLine(
+                        $"            if (syntaxNode.{propertyName} != default({propertyType.Name}))"
+                    );
                     file.WriteLine("            {");
-                    file.WriteLine($"                var {camelCaseName}Builder = new StringBuilder();");
-                    file.WriteLine($"                {methodName}({camelCaseName}Builder, syntaxNode.{propertyName});");
-                    file.WriteLine($"                properties.Add($\"\\\"{camelCaseName}\\\":{{{camelCaseName}Builder.ToString()}}\");");
+                    file.WriteLine(
+                        $"                var {camelCaseName}Builder = new StringBuilder();"
+                    );
+                    file.WriteLine(
+                        $"                {methodName}({camelCaseName}Builder, syntaxNode.{propertyName});"
+                    );
+                    file.WriteLine(
+                        $"                properties.Add($\"\\\"{camelCaseName}\\\":{{{camelCaseName}Builder.ToString()}}\");"
+                    );
                     file.WriteLine("            }");
                 }
                 else if (
@@ -178,14 +204,26 @@ namespace Worker
                         }
                     }
 
-                    file.WriteLine($"            var {camelCaseName} = new List<string>();");
-                    file.WriteLine($"            foreach(var node in syntaxNode.{propertyName})");
+                    file.WriteLine(
+                        $"            var {camelCaseName} = new List<string>();"
+                    );
+                    file.WriteLine(
+                        $"            foreach(var node in syntaxNode.{propertyName})"
+                    );
                     file.WriteLine("            {");
-                    file.WriteLine($"                var innerBuilder = new StringBuilder();");
-                    file.WriteLine($"                {methodName}(innerBuilder, node);");
-                    file.WriteLine($"                {camelCaseName}.Add(innerBuilder.ToString());");
+                    file.WriteLine(
+                        $"                var innerBuilder = new StringBuilder();"
+                    );
+                    file.WriteLine(
+                        $"                {methodName}(innerBuilder, node);"
+                    );
+                    file.WriteLine(
+                        $"                {camelCaseName}.Add(innerBuilder.ToString());"
+                    );
                     file.WriteLine("            }");
-                    file.WriteLine($"            properties.Add($\"\\\"{camelCaseName}\\\":[{{string.Join(\",\", {camelCaseName})}}]\");");
+                    file.WriteLine(
+                        $"            properties.Add($\"\\\"{camelCaseName}\\\":[{{string.Join(\",\", {camelCaseName})}}]\");"
+                    );
                 }
                 else
                 {

@@ -25,4 +25,4 @@ nupkg
 dist
 
 *.doctree.txt
-apiKey.txt
+*.actual.cst

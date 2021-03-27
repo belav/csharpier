@@ -27,7 +27,9 @@ namespace CSharpier
         public static Doc SoftLine =>
             new LineDoc { Type = LineDoc.LineType.Soft };
 
-        public static Doc LeadingComment(string comment, CommentType commentType)
+        public static Doc LeadingComment(
+            string comment,
+            CommentType commentType)
         {
             return new LeadingComment
             {
@@ -37,7 +39,9 @@ namespace CSharpier
             };
         }
 
-        public static Doc TrailingComment(string comment, CommentType commentType)
+        public static Doc TrailingComment(
+            string comment,
+            CommentType commentType)
         {
             return new TrailingComment
             {
@@ -82,7 +86,9 @@ namespace CSharpier
         {
             return new ForceFlat
             {
-                Contents = contents.Length == 0 ? contents[0] : Concat(contents),
+                Contents = contents.Length == 0
+                    ? contents[0]
+                    : Concat(contents),
 
             };
         }
@@ -124,7 +130,9 @@ namespace CSharpier
         {
             return new Group
             {
-                Contents = contents.Length == 1 ? contents[0] : Concat(contents),
+                Contents = contents.Length == 1
+                    ? contents[0]
+                    : Concat(contents),
 
             };
         }

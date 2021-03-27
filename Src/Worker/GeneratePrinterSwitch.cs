@@ -58,8 +58,10 @@ namespace CSharpier
                 var name = file.Name.Replace(".cs", "");
                 var camelCaseName =
                     name[0].ToString().ToLower() + name.Substring(1);
-                output.AppendLine($@"                    case {name} {camelCaseName}:
-                        return this.Print{name}({camelCaseName});");
+                output.AppendLine(
+                    $@"                    case {name} {camelCaseName}:
+                        return this.Print{name}({camelCaseName});"
+                );
             }
 
             output.AppendLine(

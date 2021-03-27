@@ -1,8 +1,0 @@
-﻿public class ClassName
-{
-    public string Value = true ? "yes" : "no";
-
-    public string Value = someLongCondition
-        ? "someLongValue"
-        : "someOtherLongValue";
-}
