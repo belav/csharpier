@@ -1,0 +1,23 @@
+name: Validate PR
+on:
+  pull_request:
+    branches: [ master ]
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+    name: Run Tests
+    steps:
+      -
+        uses: actions/checkout@v2
+      -
+        run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj
+  check_formatting:
+    runs-on: ubuntu-latest
+    name: Check Formatting
+    steps:
+      -
+        uses: actions/checkout@v2
+      -
+        run: |
+          dotnet tool install CSharpier --version 0.8.8
+          dotnet csharpier --check
