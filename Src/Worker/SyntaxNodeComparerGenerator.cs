@@ -12,9 +12,9 @@ namespace Worker
     [TestFixture]
     public class SyntaxNodeComparerGenerator
     {
-        List<string> missingTypes = new();
-
         [Test]
+        [Ignore(
+                "Run manually to update SyntaxNodeComparerGenerator.generated.cs. Then run csharpier on the result")]
         public void DoWork()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
@@ -90,16 +90,6 @@ namespace CSharpier
 
                 file.WriteLine("    }");
                 file.WriteLine("}");
-            }
-
-            if (missingTypes.Any())
-            {
-                throw new Exception(
-                    Environment.NewLine + string.Join(
-                        Environment.NewLine,
-                        missingTypes
-                    )
-                );
             }
         }
 

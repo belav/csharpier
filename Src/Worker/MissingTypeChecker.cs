@@ -11,8 +11,11 @@ namespace Worker
     public class MissingTypeChecker
     {
         [Test]
-        public void Blah()
+        [Ignore(
+                "This is used to produce a list of SyntaxNodes that do not exist in CSharpier/Printer/*.cs")]
+        public void DoWork()
         {
+            // See https://github.com/belav/csharpier/issues/29 for details about what was missing as of c#9
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
             while (directory.Name != "Src")
             {
@@ -20,14 +23,16 @@ namespace Worker
             }
 
             var files = Directory.GetFiles(
-                    Path.Combine(directory.FullName, "CSharpier/Printer"))
+                    Path.Combine(directory.FullName, "CSharpier/Printer")
+                )
                 .Select(Path.GetFileNameWithoutExtension)
                 .ToList();
-            
+
             var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
                 .Where(
                     o => !o.IsAbstract
-                    && typeof(CSharpSyntaxNode).IsAssignableFrom(o))
+                    && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
+                )
                 .ToList();
 
             var missingTypes = new List<Type>();

@@ -1,0 +1,13 @@
+name: Publish CSharpier
+on:
+  pull_request:
+    branches: [ master ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: test
+    steps:
+      -
+        uses: actions/checkout@v2
+      -
+        run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj
