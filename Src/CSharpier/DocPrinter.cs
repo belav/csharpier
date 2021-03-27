@@ -185,7 +185,7 @@ namespace CSharpier
                         width -= GetStringWidth(stringDoc.Value);
                     }
                 }
-                else
+                else if (doc != null)
                 {
                     switch (doc)
                     {
@@ -257,6 +257,22 @@ namespace CSharpier
                                     return true;
                             }
                             break;
+                        case ForceFlat flat:
+                            cmds.Push(
+                                new PrintCommand
+                                {
+                                    Indent = ind,
+                                    Mode = mode,
+                                    Doc = flat.Contents
+                                }
+                            );
+                            break;
+                        case SpaceIfNoPreviousComment:
+                            // TODO should this always be considered size one?
+                            width -= 1;
+                            break;
+                        default:
+                            throw new Exception("Can't handle " + doc.GetType());
                     }
                 }
             }
