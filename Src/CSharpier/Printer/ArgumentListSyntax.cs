@@ -1,4 +1,4 @@
-using System.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,25 +7,39 @@ namespace CSharpier
     {
         private Doc PrintArgumentListSyntax(ArgumentListSyntax node)
         {
-            var result = Concat(
-                this.PrintSyntaxToken(node.OpenParenToken),
-                node.Arguments.Any()
+            return node.Parent is not ObjectCreationExpressionSyntax
+                ? Group(
+                    PrintArgumentListLikeSyntax(
+                        node.OpenParenToken,
+                        node.Arguments,
+                        node.CloseParenToken
+                    )
+                )
+                : PrintArgumentListLikeSyntax(
+                    node.OpenParenToken,
+                    node.Arguments,
+                    node.CloseParenToken
+                );
+        }
+
+        private Doc PrintArgumentListLikeSyntax(
+            SyntaxToken openParenToken,
+            SeparatedSyntaxList<ArgumentSyntax> arguments,
+            SyntaxToken closeParenToken) =>
+            Concat(
+                this.PrintSyntaxToken(openParenToken),
+                arguments.Any()
                     ? Indent(
                         SoftLine,
                         this.PrintSeparatedSyntaxList(
-                            node.Arguments,
+                            arguments,
                             this.PrintArgumentSyntax,
                             Line
                         )
                     )
                     : Doc.Null,
-                node.Arguments.Any() ? SoftLine : Doc.Null,
-                this.PrintSyntaxToken(node.CloseParenToken)
+                arguments.Any() ? SoftLine : Doc.Null,
+                this.PrintSyntaxToken(closeParenToken)
             );
-
-            return node.Parent is not ObjectCreationExpressionSyntax
-                ? Group(result)
-                : result;
-        }
     }
 }
