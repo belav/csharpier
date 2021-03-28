@@ -5,10 +5,12 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintTupleExpressionSyntax(TupleExpressionSyntax node) =>
-            PrintArgumentListLikeSyntax(
-                node.OpenParenToken,
-                node.Arguments,
-                node.CloseParenToken
+            Group(
+                PrintArgumentListLikeSyntax(
+                    node.OpenParenToken,
+                    node.Arguments,
+                    node.CloseParenToken
+                )
             );
     }
 }
