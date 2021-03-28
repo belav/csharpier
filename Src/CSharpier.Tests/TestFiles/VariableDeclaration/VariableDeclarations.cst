@@ -10,13 +10,16 @@ class ClassName
             two = "two";
 
         // leading comment
-        var x = 0;
+        var leading = 0;
 
-        var y = 0; // trailing comment
+        var trailing = 0; // trailing comment
 
         // leading comment
-        bool b1;
+        bool leading2;
 
-        bool b2; // trailing comment
+        bool trailing2; // trailing comment
+        
+        var trailingMulti = 1; /* ensure no extra line after this */
+        var trailingMultiAfter = 2;
     }
 }

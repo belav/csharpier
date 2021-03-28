@@ -210,7 +210,13 @@ namespace CSharpier
                 }
                 else if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
                 {
-                    parts.Push(" ", trivia.ToString(), Line);
+                    parts.Push(
+                        " ",
+                        TrailingComment(
+                            trivia.ToString(),
+                            CommentType.MultiLine
+                        )
+                    );
                 }
             }
 
