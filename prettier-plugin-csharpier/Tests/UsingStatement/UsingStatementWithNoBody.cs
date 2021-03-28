@@ -1,8 +1,0 @@
-class ClassName
-{
-    void MethodName()
-    {
-        using (BeginScope())
-            return;
-    }
-}

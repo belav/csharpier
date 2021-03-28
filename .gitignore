@@ -2,6 +2,10 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 **/.idea/**/workspace.xml
 **/.idea/**/tasks.xml
 **/.idea/**/usage.statistics.xml
@@ -18,9 +22,6 @@ obj
 App_Data
 
 nupkg
-
-/prettier-plugin-csharpier/Samples/**/*.json
-/prettier-plugin-csharpier/Tests/**/*.json
 
 dist
 

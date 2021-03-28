@@ -11,7 +11,7 @@ namespace CSharpier
         {
             var result = Concat(
                 node.Kind() == SyntaxKind.ArrayInitializerExpression
-                    ? ""
+                    ? string.Empty
                     : node.Kind() == SyntaxKind.ComplexElementInitializerExpression
                         ? SoftLine
                         : Line,

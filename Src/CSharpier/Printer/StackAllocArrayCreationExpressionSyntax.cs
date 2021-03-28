@@ -15,7 +15,7 @@ namespace CSharpier
                         " ",
                         this.PrintInitializerExpressionSyntax(node.Initializer)
                     )
-                    : ""
+                    : string.Empty
             );
         }
     }

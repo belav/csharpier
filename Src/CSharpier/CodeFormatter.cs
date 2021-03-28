@@ -71,7 +71,7 @@ namespace CSharpier
                 {
                     Code = formattedCode,
                     DocTree = options.IncludeDocTree
-                        ? this.PrintDocTree(document, "")
+                        ? this.PrintDocTree(document, string.Empty)
                         : string.Empty,
                     AST = options.IncludeAST
                         ? this.PrintAST(rootNode)

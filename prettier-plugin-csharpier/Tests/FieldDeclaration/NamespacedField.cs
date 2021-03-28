@@ -1,4 +1,0 @@
-public class ClassName
-{
-    public System.Text.StringBuilder StringBuilder;
-}

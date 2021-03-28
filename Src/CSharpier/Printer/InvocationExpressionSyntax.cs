@@ -37,8 +37,8 @@ namespace CSharpier
                     Traverse(invocationExpressionSyntax.Expression);
                     printedNodes.Add(
                         new PrintedNode(
-                            invocationExpressionSyntax,
-                            this.PrintArgumentListSyntax(
+                            Node: invocationExpressionSyntax,
+                            Doc: this.PrintArgumentListSyntax(
                                 invocationExpressionSyntax.ArgumentList
                             )
                         )
@@ -51,8 +51,8 @@ namespace CSharpier
                     Traverse(memberAccessExpressionSyntax.Expression);
                     printedNodes.Add(
                         new PrintedNode(
-                            memberAccessExpressionSyntax,
-                            Concat(
+                            Node: memberAccessExpressionSyntax,
+                            Doc: Concat(
                                 this.PrintSyntaxToken(
                                     memberAccessExpressionSyntax.OperatorToken
                                 ),
@@ -64,7 +64,10 @@ namespace CSharpier
                 else
                 {
                     printedNodes.Add(
-                        new PrintedNode(expression, this.Print(expression))
+                        new PrintedNode(
+                            Node: expression,
+                            Doc: this.Print(expression)
+                        )
                     );
                 }
             }
@@ -72,8 +75,7 @@ namespace CSharpier
             Traverse(node);
 
             var groups = new List<List<Doc>>();
-            var currentGroup = new List<Doc>();
-            currentGroup.Add(printedNodes[0].Doc);
+            var currentGroup = new List<Doc> { printedNodes[0].Doc };
             var index = 1;
             for (; index < printedNodes.Count; index++)
             {
