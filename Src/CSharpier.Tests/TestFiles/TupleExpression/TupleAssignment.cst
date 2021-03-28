@@ -8,5 +8,7 @@ class ClassName
             GetAndAnalyzeNoteTexts(),
             _wordInfoCollectionManager.BuildWordMatcher()
         );
+
+        var (a, b) = await (c(), d());
     }
 }
