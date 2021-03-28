@@ -1,0 +1,32 @@
+using TaskTupleAwaiter;
+
+class ClassName
+{
+    // Normal wrapping example
+    void MethodName(string somevar)
+    {
+        switch (somevar)
+        {
+            case "foo":
+                var (noteTexts, matcher) = await(
+                    GetAndAnalyzeNoteTexts(),
+                    _wordInfoCollectionManager.BuildWordMatcher()
+                );
+                break;
+        }
+    }
+
+    // Extract from my project that caused the weird bug
+    public async Task OnActivityExecuting(Activity activity)
+    {   
+          switch (activity)
+          {   
+              case SyncAnki:
+                  var (noteTexts, matcher) = await(
+                      GetAndAnalyzeNoteTexts(),
+                      _wordInfoCollectionManager.BuildWordMatcher()
+                  );
+              break;
+          }
+    }
+}
