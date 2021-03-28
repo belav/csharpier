@@ -1,6 +1,0 @@
-extern alias Foo;
-
-namespace Namespace
-{
-    extern alias Bar;
-}

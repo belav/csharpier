@@ -1,4 +1,0 @@
-public class ClassName
-{
-    public void DoStuff(string one, string two) { }
-}

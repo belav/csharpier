@@ -1,7 +1,0 @@
-public class ClassName
-{
-    // leading comments
-    private static const string SomeName;
-
-    public SomeClass SomeName; // trailing comments
-}

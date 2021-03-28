@@ -21,7 +21,7 @@ namespace CSharpier
                                     ? this.PrintNameColonSyntax(
                                         subpatternNode.NameColon
                                     )
-                                    : "",
+                                    : string.Empty,
                                 this.Print(subpatternNode.Pattern)
                             ),
                             " "
@@ -30,7 +30,7 @@ namespace CSharpier
                             node.PositionalPatternClause.CloseParenToken
                         )
                     )
-                    : "",
+                    : string.Empty,
                 node.PropertyPatternClause != null
                     ? Concat(
                         " ",
@@ -56,8 +56,10 @@ namespace CSharpier
                             " "
                         )
                     )
-                    : "",
-                node.Designation != null ? this.Print(node.Designation) : ""
+                    : string.Empty,
+                node.Designation != null
+                    ? this.Print(node.Designation)
+                    : string.Empty
             );
         }
     }

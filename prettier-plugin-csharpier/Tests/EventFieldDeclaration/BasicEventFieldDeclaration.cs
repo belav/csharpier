@@ -1,4 +1,0 @@
-class ClassName
-{
-    public event EventHandler MyEvent = delegate { };
-}

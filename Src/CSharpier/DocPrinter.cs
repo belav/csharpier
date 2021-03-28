@@ -9,7 +9,7 @@ namespace CSharpier
     {
         private Indent RootIndent()
         {
-            return new Indent("", 0, new List<IndentType>());
+            return new Indent(string.Empty, 0, new List<IndentType>());
         }
 
         private Indent MakeIndent(Indent indent, Options options)
@@ -37,7 +37,7 @@ namespace CSharpier
                 queue.Add(newPart);
             }
 
-            var value = "";
+            var value = string.Empty;
             var length = 0;
             var lastTabs = 0;
 
@@ -502,7 +502,7 @@ namespace CSharpier
                 output.Append(newLine);
             }
 
-            return string.Join("", output);
+            return string.Join(string.Empty, output);
         }
 
         // TODO 1 in prettier this deals with unicode characters that are double width

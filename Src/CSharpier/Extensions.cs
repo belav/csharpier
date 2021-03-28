@@ -44,7 +44,7 @@ namespace CSharpier
             using var hasher = MD5.Create();
             var hashedBytes = hasher.ComputeHash(Encoding.UTF8.GetBytes(value));
             return BitConverter.ToString(hashedBytes)
-                .Replace("-", "")
+                .Replace("-", string.Empty)
                 .ToLower();
         }
 

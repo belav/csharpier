@@ -55,7 +55,7 @@ namespace CSharpier
             );
             foreach (var file in new DirectoryInfo(csharpDirectory).GetFiles())
             {
-                var name = file.Name.Replace(".cs", "");
+                var name = file.Name.Replace(".cs", string.Empty);
                 var camelCaseName =
                     name[0].ToString().ToLower() + name.Substring(1);
                 output.AppendLine(
