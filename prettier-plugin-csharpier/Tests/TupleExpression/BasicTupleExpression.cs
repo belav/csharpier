@@ -1,8 +1,0 @@
-class ClassName
-{
-    void MethodName()
-    {
-        (int, int) t1;
-        var res = t1 == (1, 2);
-    }
-}

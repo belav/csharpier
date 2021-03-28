@@ -40,7 +40,7 @@ namespace CSharpier
             return await rootCommand.InvokeAsync(args);
         }
 
-        // TODO if someone kills this process while running, I think it can leave files half written
+        // TODO look into https://github.com/dotnet/command-line-api/blob/main/docs/Your-first-app-with-System-CommandLine-DragonFruit.md the next time options are added
         public static async Task<int> Run(
             string directoryOrFile,
             bool fast,

@@ -61,7 +61,7 @@ namespace Worker
                 }
 
                 file.WriteLine("        }");
-                file.WriteLine("");
+                file.WriteLine();
 
                 foreach (var syntaxNodeType in syntaxNodeTypes)
                 {

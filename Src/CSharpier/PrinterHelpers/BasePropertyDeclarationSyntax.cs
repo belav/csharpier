@@ -50,7 +50,7 @@ namespace CSharpier
                 semicolonToken = eventDeclarationSyntax.SemicolonToken;
             }
 
-            Doc contents = "";
+            Doc contents = string.Empty;
             if (node.AccessorList != null)
             {
                 var separator = SpaceIfNoPreviousComment;

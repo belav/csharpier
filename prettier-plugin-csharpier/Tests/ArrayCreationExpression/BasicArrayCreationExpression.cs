@@ -1,4 +1,0 @@
-class ClassName
-{
-    int[] array = new int[5];
-}

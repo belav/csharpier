@@ -1,4 +1,0 @@
-public class ClassName
-{
-    public dynamic Value = new { Property = true };
-}

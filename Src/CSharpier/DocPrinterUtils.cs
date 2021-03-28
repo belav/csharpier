@@ -97,7 +97,7 @@ namespace CSharpier
                             concat.Parts[
                                 x
                             ] = lineDoc.Type == LineDoc.LineType.Soft
-                                ? ""
+                                ? string.Empty
                                 : " ";
                         }
 

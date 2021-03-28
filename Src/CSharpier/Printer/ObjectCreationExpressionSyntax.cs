@@ -12,10 +12,10 @@ namespace CSharpier
                 this.Print(node.Type),
                 node.ArgumentList != null
                     ? this.PrintArgumentListSyntax(node.ArgumentList)
-                    : "",
+                    : string.Empty,
                 node.Initializer != null
                     ? this.PrintInitializerExpressionSyntax(node.Initializer)
-                    : ""
+                    : string.Empty
             );
         }
     }

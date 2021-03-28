@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintIncompleteMemberSyntax(IncompleteMemberSyntax node)
         {
-            return ""; // TODO 1 figure this out
+            return string.Empty; // TODO 1 figure this out
         }
     }
 }
