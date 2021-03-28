@@ -18,7 +18,7 @@ class ClassName
         bool leading2;
 
         bool trailing2; // trailing comment
-        
+
         var trailingMulti = 1; /* ensure no extra line after this */
         var trailingMultiAfter = 2;
     }
