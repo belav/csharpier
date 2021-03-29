@@ -40,7 +40,7 @@ namespace CSharpier.Tests
             );
 
             File.WriteAllText(
-                file.Replace(".cst", ".Formatted.cst"),
+                file.Replace(".cst", ".actual.cst"),
                 result.Code,
                 Encoding.UTF8
             );
