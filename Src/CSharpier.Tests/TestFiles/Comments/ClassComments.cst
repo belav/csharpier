@@ -32,3 +32,6 @@ ClassName3 // more trailing
     // no
     readonly string Tester = "lajsdf";
 }
+
+/// single line doc comment
+class ClassName { }

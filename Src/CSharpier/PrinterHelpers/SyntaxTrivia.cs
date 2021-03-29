@@ -113,7 +113,10 @@ namespace CSharpier
                         LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
                             CommentType.SingleLine
-                        )
+                        ),
+                        trivia.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia
+                            ? HardLine
+                            : Doc.Null
                     );
                 }
                 else if (

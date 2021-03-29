@@ -700,7 +700,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             b = i == i && i != i && i <= i && i >= i; /*= == && != <= >=*/
             i += 5.0; /*+=*/
             i -= i; /*-=*/
-            i *= i; /**=*/
+            i *= i; /* *=*/
             i /= i; /*/=*/
             i %= i; /*%=*/
             i &= i; /*&=*/
@@ -713,7 +713,7 @@ namespace Comments.XmlComments.UndocumentedKeywords
             Point point;
             unsafe
             {
-                Point* p = &point; /** &*/
+                Point* p = &point; /* * &*/
                 p->x = 10; /*->*/
             }
             IO::BinaryReader br = null;
@@ -746,8 +746,8 @@ namespace Comments.XmlComments.UndocumentedKeywords
         // Expression bodies on method-like members
         public Point Move(int dx, int dy) => new Point(x + dx, y + dy);
         public static Complex operator +(Complex a, Complex b) => a.Add(b);
-        public static implicit operator string(Person p)
-            => p.First + " " + p.Last;
+        public static implicit operator string(Person p) =>
+            p.First + " " + p.Last;
         public void Print() => Console.WriteLine(First + " " + Last);
 
         // Expression bodies on property-like function members
@@ -834,7 +834,7 @@ class CSharp70
                 break;
         }
 
-        (A<B,C> D, E<F,G> H) = e;
+        (A<B, C> D, E<F, G> H) = e;
 
         if (x?.y?.z is Type value2)
         {
