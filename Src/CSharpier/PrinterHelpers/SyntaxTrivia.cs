@@ -65,20 +65,23 @@ namespace CSharpier
             return this.PrintLeadingTrivia(syntaxToken.LeadingTrivia);
         }
 
+        // LiteralLines are a little odd because they trim any new line immediately before them. The reason is as follows.
+        // namespace Namespace
+        // {                   - HardLine                           - if the LiteralLine below didn't trim this HardLine, then we'd end up inserting a blank line between this and #pragma
+        // #pragma             - LiteralLine, #pragma               - The HardLine above could come from any of a number of different PrintNode methods                   
+        // 
+        // #region Region      - LiteralLine, #region, HardLine     - we end each directive with a hardLine to ensure we get a double hardLine in this situation
+        //                     - HardLine                           - this hardLine is trimmed by the literalLine below, but the extra hardline above ensures
+        // #region Nested      - LiteralLine, #region, HardLine     - we still keep the blank line between the regions
+        // 
+        // #pragma             - LiteralLine, #pragma, HardLine
+        // #pragma             - LiteralLine, #pragma, Hardline     - And this LiteralLine trims the extra HardLine above to ensure we don't get an extra blank line 
         private Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia)
         {
             var parts = new Parts();
 
-            // we don't print any new lines until we run into a comment or directive, the PrintNewLines method takes care of printing the initial new lines for a given node
-            // we also print double HardLines in some cases with directives. That's because a LiteralLine currently trims the previous new line it finds
-            // If it doesn't, we end up adding extra lines in some situations
-            // namespace Namespace
-            // {                   - HardLine                               - if we didn't trim this HardLine, then we'd end up inserting a blank line between this and #pragma
-            // #pragma             - LiteralLine, #pragma                   
-            // vs
-            // #region Region      - LiteralLine, #region, HardLine         - we end each directive with a hardline to ensure we get a double hardline in this situation
-            //                     - HardLine                               - so the literal line trims this hardline, but we retain the newline between the region directives
-            // #region Nested      - LiteralLine, #region, HardLine         - because of the double hardline.
+            // we don't print any new lines until we run into a comment or directive
+            // the PrintExtraNewLines method takes care of printing the initial new lines for a given node
             var printNewLines = false;
 
             for (var x = 0; x < leadingTrivia.Count; x++)
