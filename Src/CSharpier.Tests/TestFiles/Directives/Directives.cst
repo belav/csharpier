@@ -11,6 +11,11 @@
 #endif
 #undef foo
 #line 6
+#region Region
+using static System.Linq.Enumerable;
+
+#endregion
+
 class ClassName { }
 
 public class ClassName
@@ -45,4 +50,5 @@ class ClassName { }
     #endregion Nested
 
 #endregion
+
 

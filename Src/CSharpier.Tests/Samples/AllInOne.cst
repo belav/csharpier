@@ -85,21 +85,36 @@ namespace My
 
             var привет = local;
             var мир = local;
-            var local3 = 0, local4 = 1;
+            var local3 = 0,
+                local4 = 1;
             local3 = local4 = 1;
             var local5 = null as Action ?? null;
             var local6 = local5 is Action;
 
             var u = 1u;
             var U = 1U;
-            long hex = 0xBADC0DE, Hex = 0XDEADBEEF, l = -1L, L = 1L, l2 = 2l;
-            ulong ul = 1ul, Ul = 1Ul, uL = 1uL, UL = 1UL, lu = 1lu, Lu = 1Lu, lU = 1lU, LU = 1LU;
+            long hex = 0xBADC0DE,
+                Hex = 0XDEADBEEF,
+                l = -1L,
+                L = 1L,
+                l2 = 2l;
+            ulong ul = 1ul,
+                Ul = 1Ul,
+                uL = 1uL,
+                UL = 1UL,
+                lu = 1lu,
+                Lu = 1Lu,
+                lU = 1lU,
+                LU = 1LU;
             int minInt32Value = -2147483648;
             int minInt64Value = -9223372036854775808L;
 
             bool @bool;
             byte @byte;
-            char @char = 'c', \u0066 = '\u0066', hexchar = '\x0130', hexchar2 = (char)0xBAD;
+            char @char = 'c',
+                \u0066 = '\u0066',
+                hexchar = '\x0130',
+                hexchar2 = (char)0xBAD;
             string \U00000065 = "\U00000065";
             decimal @decimal = 1.44M;
             @decimal = 1.2m;
@@ -299,9 +314,7 @@ namespace My
                 orderby g.Count() ascending
                 orderby g.Key descending
                 select new { Country = g.Key, CustCount = g.Count() };
-            query = from c in customers
-                select c into d
-                select d;
+            query = from c in customers select c into d select d;
         }
         ~A() { }
         private readonly int f1;
@@ -309,7 +322,12 @@ namespace My
         [NonExisting]
         [Foo::NonExisting(var, 5)]
         [CLSCompliant(false)]
-        [Obsolete, System.NonSerialized, NonSerialized, CLSCompliant(true || false & true)]
+        [
+            Obsolete,
+            System.NonSerialized,
+            NonSerialized,
+            CLSCompliant(true || false & true)
+        ]
         private volatile int f2;
         [return: Obsolete]
         [method: Obsolete]
@@ -512,9 +530,7 @@ namespace ConsoleApplication1
             var x = new Boo.Bar<int>.Foo<object>();
             x.Method<string, string>(" ", 5, new object());
 
-            var q = from i in new int[] { 1, 2, 3, 4 }
-                where i > 5
-                select i;
+            var q = from i in new int[] { 1, 2, 3, 4 } where i > 5 select i;
         }
 
         public static implicit operator Test(string s)
@@ -584,7 +600,8 @@ namespace ConsoleApplication1
         public void Constants()
         {
             int i = 1 + 2 + 3 + 5;
-            global::System.String s = "a" + (System.String)"a" + "a" + "a" + "a" + "A";
+            global::System.String s =
+                "a" + (System.String)"a" + "a" + "a" + "a" + "A";
         }
 
         public void ConstructedType()
