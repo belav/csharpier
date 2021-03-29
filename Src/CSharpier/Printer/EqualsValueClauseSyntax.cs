@@ -8,6 +8,10 @@ namespace CSharpier
         {
             var separator = Line;
             if (node.Parent is PropertyDeclarationSyntax) { }
+            else if (node.Value is QueryExpressionSyntax)
+            {
+                separator = Doc.Null;
+            }
             else if (
                 node.Value is AnonymousObjectCreationExpressionSyntax
                 || node.Value is AnonymousMethodExpressionSyntax
@@ -17,7 +21,6 @@ namespace CSharpier
                 || node.Value is ParenthesizedLambdaExpressionSyntax
                 || node.Value is InvocationExpressionSyntax
                 || node.Value is SwitchExpressionSyntax
-                || node.Value is QueryExpressionSyntax
             )
             {
                 separator = SpaceIfNoPreviousComment;
