@@ -38,7 +38,7 @@ namespace CSharpier
                 cancellationToken: cancellationToken
             );
             var syntaxNode = await syntaxTree.GetRootAsync(cancellationToken);
-            if (!(syntaxNode is CompilationUnitSyntax rootNode))
+            if (syntaxNode is not CompilationUnitSyntax rootNode)
             {
                 throw new Exception(
                     "Root was not CompilationUnitSyntax, it was " + syntaxNode.GetType()
