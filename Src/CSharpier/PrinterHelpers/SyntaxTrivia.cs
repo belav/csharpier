@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
 {
@@ -62,13 +63,20 @@ namespace CSharpier
 
         private Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
         {
-            return this.PrintLeadingTrivia(syntaxToken.LeadingTrivia);
+            var addExtraIndent =
+                syntaxToken.Kind() == SyntaxKind.CloseBraceToken;
+            return this.PrintLeadingTrivia(
+                syntaxToken.LeadingTrivia,
+                addExtraIndent
+            );
         }
 
         // TODO 1 probably ditch this, but leave it around for now
         private readonly Stack<bool> printNewLinesInLeadingTrivia = new();
 
-        private Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia)
+        private Doc PrintLeadingTrivia(
+            SyntaxTriviaList leadingTrivia,
+            bool addExtraIndent = false)
         {
             var parts = new Parts();
 
@@ -117,7 +125,8 @@ namespace CSharpier
                     parts.Push(
                         LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
-                            CommentType.SingleLine
+                            CommentType.SingleLine,
+                            addExtraIndent
                         )
                     );
                 }
@@ -129,7 +138,8 @@ namespace CSharpier
                     parts.Push(
                         LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
-                            CommentType.MultiLine
+                            CommentType.MultiLine,
+                            addExtraIndent
                         )
                     );
                 }

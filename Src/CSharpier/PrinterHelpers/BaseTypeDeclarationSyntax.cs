@@ -116,10 +116,16 @@ namespace CSharpier
             }
             else if (node.OpenBraceToken.Kind() != SyntaxKind.None)
             {
+                Doc separator = " ";
+                if (node.CloseBraceToken.LeadingTrivia.Any())
+                {
+                    separator = Line;
+                }
+
                 parts.Push(
-                    " ",
+                    separator,
                     this.PrintSyntaxToken(node.OpenBraceToken),
-                    " ",
+                    separator,
                     this.PrintSyntaxToken(node.CloseBraceToken)
                 );
             }

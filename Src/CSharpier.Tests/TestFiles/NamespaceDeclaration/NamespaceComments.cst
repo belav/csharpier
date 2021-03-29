@@ -7,5 +7,5 @@ namespace // trailing keyword
 Namespace // trailing identifier
 // leading semi start
 { // trailing semi start
-// leading semi end
+    // leading semi end
 } // trailing semi end

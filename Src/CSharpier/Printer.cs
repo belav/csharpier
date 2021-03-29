@@ -29,13 +29,14 @@ namespace CSharpier
 
         public static Doc LeadingComment(
             string comment,
-            CommentType commentType)
+            CommentType commentType,
+            bool addExtraIndent)
         {
             return new LeadingComment
             {
                 Type = commentType,
                 Comment = comment,
-
+                AddExtraIndent = addExtraIndent
             };
         }
 

@@ -5,9 +5,15 @@ using System.Text;
 
 namespace CSharpier
 {
+    // a big chunk of the code in here is ported from prettier. The names and layout of the file were
+    // kept consistent with how they looked in prettier because not everything
+    // was ported over and porting over more code would be easier if this file looked basically the same
     public class DocPrinter
     {
-        private Indent RootIndent()
+        private string GenerateSingleIndent(Options options) =>
+            options.UseTabs ? "\t" : new string(' ', options.TabWidth);
+
+        private Indent RootIndent(Options options)
         {
             return new Indent(string.Empty, 0, new List<IndentType>());
         }
@@ -23,11 +29,11 @@ namespace CSharpier
 
         // TODO 2 there is more going on here with dedent and number/string align
         private Indent GenerateIndent(
-            Indent ind,
+            Indent indent,
             IndentType newPart,
             Options options)
         {
-            var queue = new List<IndentType>(ind.Queue);
+            var queue = new List<IndentType>(indent.Queue);
             if (newPart.Type == "dedent")
             {
                 queue.RemoveAt(queue.Count - 1);
@@ -47,18 +53,18 @@ namespace CSharpier
                 switch (part.Type)
                 {
                     case "indent":
-                        flush();
+                        Flush();
                         if (options.UseTabs)
                         {
-                            addTabs(1);
+                            AddTabs(1);
                         }
                         else
                         {
-                            addSpaces(options.TabWidth);
+                            AddSpaces(options.TabWidth);
                         }
                         break;
                     case "stringAlign":
-                        flush();
+                        Flush();
                         value += part.Number;
                         // TODO 2 huh? length += part.n.length;
                         break;
@@ -71,53 +77,53 @@ namespace CSharpier
                 }
             }
 
-            flushSpaces();
+            FlushSpaces();
 
-            void addTabs(int count)
+            void AddTabs(int count)
             {
                 value += new string('\t', count);
                 length += options.TabWidth * count;
             }
 
-            void addSpaces(int count)
+            void AddSpaces(int count)
             {
                 value += new string(' ', count);
                 length += count;
             }
 
-            void flush()
+            void Flush()
             {
                 if (options.UseTabs)
                 {
-                    flushTabs();
+                    FlushTabs();
                 }
                 else
                 {
-                    flushSpaces();
+                    FlushSpaces();
                 }
             }
 
-            void flushTabs()
+            void FlushTabs()
             {
                 if (lastTabs > 0)
                 {
-                    addTabs(lastTabs);
+                    AddTabs(lastTabs);
                 }
 
-                resetLast();
+                ResetLast();
             }
 
-            void flushSpaces()
+            void FlushSpaces()
             {
                 if (lastSpaces > 0)
                 {
-                    addSpaces(lastSpaces);
+                    AddSpaces(lastSpaces);
                 }
 
-                resetLast();
+                ResetLast();
             }
 
-            void resetLast()
+            void ResetLast()
             {
                 lastTabs = 0;
                 lastSpaces = 0;
@@ -267,7 +273,7 @@ namespace CSharpier
             var currentStack = new Stack<PrintCommand>();
             currentStack.Push(
                 new PrintCommand(
-                    this.RootIndent(),
+                    this.RootIndent(options),
                     PrintMode.MODE_BREAK,
                     document
                 )
@@ -463,6 +469,11 @@ namespace CSharpier
                         )
                         {
                             output.Append(newLine);
+                        }
+
+                        if (leadingComment.AddExtraIndent)
+                        {
+                            output.Append(GenerateSingleIndent(options));
                         }
 
                         output.Append(

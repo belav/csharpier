@@ -92,6 +92,7 @@ namespace CSharpier
     {
         public CommentType Type { get; set; }
         public string Comment { get; set; } = string.Empty;
+        public bool AddExtraIndent { get; set; }
     }
 
     public class TrailingComment : Doc
