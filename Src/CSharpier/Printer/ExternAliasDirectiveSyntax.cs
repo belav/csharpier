@@ -9,8 +9,14 @@ namespace CSharpier
         {
             return Concat(
                 this.PrintExtraNewLines(node),
-                this.PrintSyntaxToken(node.ExternKeyword, " "),
-                this.PrintSyntaxToken(node.AliasKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.ExternKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
+                this.PrintSyntaxToken(
+                    node.AliasKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.PrintSyntaxToken(node.Identifier),
                 this.PrintSyntaxToken(node.SemicolonToken)
             );

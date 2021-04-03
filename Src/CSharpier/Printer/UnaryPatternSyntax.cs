@@ -7,7 +7,10 @@ namespace CSharpier
         private Doc PrintUnaryPatternSyntax(UnaryPatternSyntax node)
         {
             return Concat(
-                this.PrintSyntaxToken(node.OperatorToken, " "),
+                this.PrintSyntaxToken(
+                    node.OperatorToken,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.Pattern)
             );
         }

@@ -17,7 +17,6 @@ namespace CSharpier
             parts.Push(this.Print(node.SelectOrGroup));
             if (node.Continuation != null)
             {
-                // TODO 1 indent when there is a group by before the into?
                 parts.Push(
                     " ",
                     this.PrintQueryContinuationSyntax(node.Continuation)

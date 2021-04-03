@@ -8,7 +8,10 @@ namespace CSharpier
             ObjectCreationExpressionSyntax node)
         {
             return Group(
-                this.PrintSyntaxToken(node.NewKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.NewKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.Type),
                 node.ArgumentList != null
                     ? this.PrintArgumentListSyntax(node.ArgumentList)

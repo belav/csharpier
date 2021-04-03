@@ -80,7 +80,12 @@ namespace CSharpier
             parts.Push(this.PrintModifiers(node.Modifiers));
             if (keyword != null)
             {
-                parts.Push(this.PrintSyntaxToken(keyword.Value, " "));
+                parts.Push(
+                    this.PrintSyntaxToken(
+                        keyword.Value,
+                        afterTokenIfNoTrailing: " "
+                    )
+                );
             }
 
             parts.Push(this.PrintSyntaxToken(node.Identifier));

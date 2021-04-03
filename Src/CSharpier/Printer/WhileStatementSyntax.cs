@@ -8,7 +8,10 @@ namespace CSharpier
         {
             return Concat(
                 this.PrintExtraNewLines(node),
-                this.PrintSyntaxToken(node.WhileKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.WhileKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.PrintSyntaxToken(node.OpenParenToken),
                 Group(Indent(SoftLine, this.Print(node.Condition))),
                 // TODO 1 maybe the close paraen should be on a new line, that would aid in difs for code reviews

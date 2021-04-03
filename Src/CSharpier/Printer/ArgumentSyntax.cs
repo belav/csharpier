@@ -12,7 +12,12 @@ namespace CSharpier
                 parts.Push(this.PrintNameColonSyntax(node.NameColon));
             }
 
-            parts.Push(this.PrintSyntaxToken(node.RefKindKeyword, " "));
+            parts.Push(
+                this.PrintSyntaxToken(
+                    node.RefKindKeyword,
+                    afterTokenIfNoTrailing: " "
+                )
+            );
             parts.Push(this.Print(node.Expression));
             return Concat(parts);
         }

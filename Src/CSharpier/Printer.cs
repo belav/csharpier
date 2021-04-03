@@ -209,7 +209,9 @@ namespace CSharpier
             var parts = new Parts();
             foreach (var modifier in modifiers)
             {
-                parts.Push(this.PrintSyntaxToken(modifier, " "));
+                parts.Push(
+                    this.PrintSyntaxToken(modifier, afterTokenIfNoTrailing: " ")
+                );
             }
 
             return Group(Concat(parts));

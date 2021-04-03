@@ -19,7 +19,10 @@ namespace CSharpier
                     HardLine
                 );
             return Group(
-                this.PrintSyntaxToken(node.SwitchKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.SwitchKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Expression),
                 this.PrintSyntaxToken(node.CloseParenToken),

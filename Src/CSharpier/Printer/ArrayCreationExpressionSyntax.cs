@@ -8,7 +8,10 @@ namespace CSharpier
             ArrayCreationExpressionSyntax node)
         {
             return Group(
-                this.PrintSyntaxToken(node.NewKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.NewKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.Type),
                 node.Initializer != null
                     ? Concat(Line, this.Print(node.Initializer))

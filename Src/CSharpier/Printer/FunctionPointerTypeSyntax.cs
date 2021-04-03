@@ -10,7 +10,10 @@ namespace CSharpier
         {
             return Concat(
                 this.PrintSyntaxToken(node.DelegateKeyword),
-                this.PrintSyntaxToken(node.AsteriskToken, " "),
+                this.PrintSyntaxToken(
+                    node.AsteriskToken,
+                    afterTokenIfNoTrailing: " "
+                ),
                 node.CallingConvention != null
                     ? this.PrintCallingConvention(node.CallingConvention)
                     : Doc.Null,

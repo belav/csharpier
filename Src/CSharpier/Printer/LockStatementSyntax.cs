@@ -7,7 +7,10 @@ namespace CSharpier
         private Doc PrintLockStatementSyntax(LockStatementSyntax node)
         {
             var parts = new Parts(
-                this.PrintSyntaxToken(node.LockKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.LockKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Expression),
                 this.PrintSyntaxToken(node.CloseParenToken)

@@ -7,10 +7,16 @@ namespace CSharpier
         private Doc PrintGroupClauseSyntax(GroupClauseSyntax node)
         {
             return Concat(
-                this.PrintSyntaxToken(node.GroupKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.GroupKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.GroupExpression),
                 SpaceIfNoPreviousComment,
-                this.PrintSyntaxToken(node.ByKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.ByKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.ByExpression)
             );
         }

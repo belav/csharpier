@@ -11,7 +11,10 @@ namespace CSharpier
                 this.PrintModifiers(node.Modifiers),
                 this.PrintParameterListSyntax(node.ParameterList),
                 SpaceIfNoPreviousComment,
-                this.PrintSyntaxToken(node.ArrowToken, " ")
+                this.PrintSyntaxToken(
+                    node.ArrowToken,
+                    afterTokenIfNoTrailing: " "
+                )
             );
             if (node.ExpressionBody != null)
             {

@@ -13,7 +13,10 @@ namespace CSharpier
             if (node.AlignmentClause != null)
             {
                 parts.Push(
-                    this.PrintSyntaxToken(node.AlignmentClause.CommaToken, " "),
+                    this.PrintSyntaxToken(
+                        node.AlignmentClause.CommaToken,
+                        afterTokenIfNoTrailing: " "
+                    ),
                     this.Print(node.AlignmentClause.Value)
                 );
             }

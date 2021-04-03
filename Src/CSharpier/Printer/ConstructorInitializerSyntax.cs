@@ -9,7 +9,10 @@ namespace CSharpier
         {
             return Indent(
                 HardLine,
-                this.PrintSyntaxToken(node.ColonToken, " "),
+                this.PrintSyntaxToken(
+                    node.ColonToken,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.PrintSyntaxToken(node.ThisOrBaseKeyword),
                 this.PrintArgumentListSyntax(node.ArgumentList)
             );

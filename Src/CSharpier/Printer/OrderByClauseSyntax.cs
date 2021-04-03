@@ -8,7 +8,10 @@ namespace CSharpier
         private Doc PrintOrderByClauseSyntax(OrderByClauseSyntax node)
         {
             return Concat(
-                this.PrintSyntaxToken(node.OrderByKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.OrderByKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.PrintSeparatedSyntaxList(
                     node.Orderings,
                     orderingNode => Concat(

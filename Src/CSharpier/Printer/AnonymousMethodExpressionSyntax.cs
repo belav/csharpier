@@ -8,7 +8,12 @@ namespace CSharpier
             AnonymousMethodExpressionSyntax node)
         {
             var parts = new Parts();
-            parts.Push(this.PrintSyntaxToken(node.AsyncKeyword, " "));
+            parts.Push(
+                this.PrintSyntaxToken(
+                    node.AsyncKeyword,
+                    afterTokenIfNoTrailing: " "
+                )
+            );
             parts.Push(this.PrintSyntaxToken(node.DelegateKeyword));
             if (node.ParameterList != null)
             {

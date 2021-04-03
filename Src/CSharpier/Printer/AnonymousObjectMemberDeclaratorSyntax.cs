@@ -11,10 +11,16 @@ namespace CSharpier
             if (node.NameEquals != null)
             {
                 parts.Push(
-                    this.PrintSyntaxToken(node.NameEquals.Name.Identifier, " ")
+                    this.PrintSyntaxToken(
+                        node.NameEquals.Name.Identifier,
+                        afterTokenIfNoTrailing: " "
+                    )
                 );
                 parts.Push(
-                    this.PrintSyntaxToken(node.NameEquals.EqualsToken, " ")
+                    this.PrintSyntaxToken(
+                        node.NameEquals.EqualsToken,
+                        afterTokenIfNoTrailing: " "
+                    )
                 );
             }
             parts.Push(this.Print(node.Expression));

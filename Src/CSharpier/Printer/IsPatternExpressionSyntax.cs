@@ -10,7 +10,10 @@ namespace CSharpier
             return Concat(
                 this.Print(node.Expression),
                 SpaceIfNoPreviousComment,
-                this.PrintSyntaxToken(node.IsKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.IsKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.Pattern)
             );
         }

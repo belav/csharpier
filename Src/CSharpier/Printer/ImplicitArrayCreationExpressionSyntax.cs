@@ -14,7 +14,10 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.NewKeyword),
                 this.PrintSyntaxToken(node.OpenBracketToken),
                 Concat(commas),
-                this.PrintSyntaxToken(node.CloseBracketToken, " "),
+                this.PrintSyntaxToken(
+                    node.CloseBracketToken,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.Initializer)
             );
         }

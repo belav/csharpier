@@ -11,10 +11,16 @@ namespace CSharpier
                 Indent(
                     this.Print(node.Condition),
                     Line,
-                    this.PrintSyntaxToken(node.QuestionToken, " "),
+                    this.PrintSyntaxToken(
+                        node.QuestionToken,
+                        afterTokenIfNoTrailing: " "
+                    ),
                     this.Print(node.WhenTrue),
                     Line,
-                    this.PrintSyntaxToken(node.ColonToken, " "),
+                    this.PrintSyntaxToken(
+                        node.ColonToken,
+                        afterTokenIfNoTrailing: " "
+                    ),
                     this.Print(node.WhenFalse)
                 )
             );
