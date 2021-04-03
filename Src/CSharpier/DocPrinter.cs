@@ -43,7 +43,7 @@ namespace CSharpier
                 queue.Add(newPart);
             }
 
-            var value = string.Empty;
+            var value = new StringBuilder();
             var length = 0;
             var lastTabs = 0;
 
@@ -63,11 +63,11 @@ namespace CSharpier
                             AddSpaces(options.TabWidth);
                         }
                         break;
-                    case "stringAlign":
-                        Flush();
-                        value += part.Number;
-                        // TODO 2 huh? length += part.n.length;
-                        break;
+                    // case "stringAlign":
+                    //     Flush();
+                    //     value += part.Number;
+                    //     // TODO 2 huh? length += part.n.length;
+                    //     break;
                     case "numberAlign":
                         lastTabs += 1;
                         // TODO 2 huh? lastSpaces += part.n;
@@ -81,13 +81,13 @@ namespace CSharpier
 
             void AddTabs(int count)
             {
-                value += new string('\t', count);
+                value.Append('\t', count);
                 length += options.TabWidth * count;
             }
 
             void AddSpaces(int count)
             {
-                value += new string(' ', count);
+                value.Append(' ', count);
                 length += count;
             }
 
@@ -130,7 +130,7 @@ namespace CSharpier
             }
 
             // TODO 2 in prettier this has a ...ind
-            return new Indent(value, length, queue);
+            return new Indent(value.ToString(), length, queue);
         }
 
         private static bool Fits(
