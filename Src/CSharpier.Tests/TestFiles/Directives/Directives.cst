@@ -1,5 +1,6 @@
 #error Error message
-#warning Warning message
+#warning Warning new line test
+
 #pragma warning disable 414, 3021
 #pragma warning restore 3021
 #pragma checksum "file.txt" "{00000000-0000-0000-0000-000000000000}" "2453"
@@ -10,6 +11,11 @@
 #endif
 #undef foo
 #line 6
+#region Region
+using static System.Linq.Enumerable;
+
+#endregion
+
 class ClassName { }
 
 public class ClassName
@@ -36,3 +42,13 @@ namespace Namespace
         void MethodName() { }
     }
 }
+
+#region Region
+
+    #region Nested
+class ClassName { }
+    #endregion Nested
+
+#endregion
+
+

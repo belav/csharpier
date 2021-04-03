@@ -37,11 +37,13 @@ namespace CSharpier
             }
 
             var finalTrivia = this.PrintLeadingTrivia(
-                node.EndOfFileToken.LeadingTrivia
+                node.EndOfFileToken.LeadingTrivia,
+                includeInitialNewLines: true
             );
-            if (finalTrivia != null)
+            if (finalTrivia != Doc.Null)
             {
-                parts.Push(finalTrivia);
+                // even though we include the initialNewLines above, a literalLine from directives trims the hardline, so add an extra one here
+                parts.Push(HardLine, finalTrivia);
             }
 
             return Concat(parts);

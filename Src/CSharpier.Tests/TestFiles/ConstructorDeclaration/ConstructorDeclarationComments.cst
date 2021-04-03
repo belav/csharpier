@@ -5,7 +5,7 @@ public class BasicClass
 
     // leading with line
     public // trailing public
-    // leading identifier  
+    // leading identifier
     BasicClass // trailing identifier
     (int x) { } // trailing comments1
 

@@ -16,7 +16,7 @@ namespace CSharpier
         {
             return this.GenerateIndent(
                 indent,
-                new IndentType("indent", 0),
+                newPart: new IndentType("indent", 0),
                 options
             );
         }
@@ -405,10 +405,6 @@ namespace CSharpier
                                 {
                                     if (output.Length > 0)
                                     {
-                                        // if we have to undo this, another option I was considering was modifying NamespaceDeclarationSyntax
-                                        // when joining things with HardLines there, if the first item in each thing was a LiteralLine, skip the HardLine
-                                        // the problem with that approach is we'd have to make that same change in other places, but maybe
-                                        // there aren't a ton of those places.
                                         Trim(output);
                                         if (newLine.Length == 2)
                                         {
@@ -424,7 +420,6 @@ namespace CSharpier
                                                 output.Length -= 1;
                                             }
                                         }
-
                                         output.Append(newLine);
                                         position = 0;
                                     }
@@ -466,7 +461,7 @@ namespace CSharpier
                         }
 
                         output.Append(
-                            command.Indent.Value + leadingComment.Comment + newLine + command.Indent.Value
+                            command.Indent.Value + leadingComment.Comment
                         );
                         position = command.Indent.Length;
                         newLineNextStringValue = false;
