@@ -11,11 +11,6 @@ namespace CSharpier.Tests.TestFiles
             this.RunTest("Comments", "ClassComments");
         }
         [Test]
-        public void LeadingAndTrailingComments()
-        {
-            this.RunTest("Comments", "LeadingAndTrailingComments");
-        }
-        [Test]
         public void MethodComments()
         {
             this.RunTest("Comments", "MethodComments");

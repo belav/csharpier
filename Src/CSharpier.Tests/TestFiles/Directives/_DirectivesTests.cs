@@ -10,10 +10,5 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest("Directives", "Directives");
         }
-        [Test]
-        public void Regions()
-        {
-            this.RunTest("Directives", "Regions");
-        }
     }
 }

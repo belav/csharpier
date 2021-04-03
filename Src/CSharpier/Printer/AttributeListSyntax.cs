@@ -9,6 +9,11 @@ namespace CSharpier
         private Doc PrintAttributeListSyntax(AttributeListSyntax node)
         {
             var parts = new Parts();
+            if (node.Parent is CompilationUnitSyntax)
+            {
+                parts.Push(this.PrintExtraNewLines(node));
+            }
+
             parts.Push(this.PrintSyntaxToken(node.OpenBracketToken));
             if (node.Target != null)
             {

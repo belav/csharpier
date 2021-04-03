@@ -78,49 +78,44 @@ namespace CSharpier
             return printedTrivia;
         }
 
-        // TODO 1 probably ditch this, but leave it around for now
-        private readonly Stack<bool> printNewLinesInLeadingTrivia = new();
-
-        private Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia)
+        // LiteralLines are a little odd because they trim any new line immediately before them. The reason is as follows.
+        // namespace Namespace
+        // {                   - HardLine                           - if the LiteralLine below didn't trim this HardLine, then we'd end up inserting a blank line between this and #pragma
+        // #pragma             - LiteralLine, #pragma               - The HardLine above could come from a number of different PrintNode methods                   
+        // 
+        // #region Region      - LiteralLine, #region, HardLine     - we end each directive with a hardLine to ensure we get a double hardLine in this situation
+        //                     - HardLine                           - this hardLine is trimmed by the literalLine below, but the extra hardline above ensures
+        // #region Nested      - LiteralLine, #region, HardLine     - we still keep the blank line between the regions
+        // 
+        // #pragma             - LiteralLine, #pragma, HardLine
+        // #pragma             - LiteralLine, #pragma, Hardline     - And this LiteralLine trims the extra HardLine above to ensure we don't get an extra blank line
+        private Doc PrintLeadingTrivia(
+            SyntaxTriviaList leadingTrivia,
+            bool includeInitialNewLines = false)
         {
             var parts = new Parts();
 
-            this.printNewLinesInLeadingTrivia.TryPeek(out var doNewLines);
+            // we don't print any new lines until we run into a comment or directive
+            // the PrintExtraNewLines method takes care of printing the initial new lines for a given node
+            var printNewLines = includeInitialNewLines;
 
-            var hadDirective = false;
             for (var x = 0; x < leadingTrivia.Count; x++)
             {
                 var trivia = leadingTrivia[x];
 
-                if (doNewLines && trivia.Kind() == SyntaxKind.EndOfLineTrivia)
+                if (
+                    printNewLines
+                    && trivia.Kind() == SyntaxKind.EndOfLineTrivia
+                )
                 {
-                    SyntaxKind? kind = null;
-                    if (x < leadingTrivia.Count - 1)
-                    {
-                        kind = leadingTrivia[x + 1].Kind();
-                    }
-                    // TODO 0 this may screw up with regions that aren't at the beginning of the line? should we deal with new lines/trivia between things differently??
-                    if (
-                        !kind.HasValue
-                        || kind == SyntaxKind.SingleLineCommentTrivia
-                        || kind == SyntaxKind.EndOfLineTrivia
-                        || kind == SyntaxKind.WhitespaceTrivia
-                    )
-                    {
-                        parts.Push(HardLine);
-                    }
+                    parts.Push(HardLine);
                 }
                 if (
                     trivia.Kind() != SyntaxKind.EndOfLineTrivia
                     && trivia.Kind() != SyntaxKind.WhitespaceTrivia
                 )
                 {
-                    if (doNewLines)
-                    {
-                        doNewLines = false;
-                        this.printNewLinesInLeadingTrivia.Pop();
-                        this.printNewLinesInLeadingTrivia.Push(false);
-                    }
+                    printNewLines = true;
                 }
                 if (
                     trivia.Kind() == SyntaxKind.SingleLineCommentTrivia
@@ -131,7 +126,10 @@ namespace CSharpier
                         LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
                             CommentType.SingleLine
-                        )
+                        ),
+                        trivia.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia
+                            ? HardLine
+                            : Doc.Null
                     );
                 }
                 else if (
@@ -168,10 +166,7 @@ namespace CSharpier
                     || trivia.Kind() == SyntaxKind.NullableDirectiveTrivia
                 )
                 {
-                    hadDirective = true;
-                    // GH-22 the problem is that we have a hardline followed by a literalline. What we really mean by literalLine is, add a line and dedent if this isn't preceded by a hardline.... I think
-                    // we should probably figure out better new lines for directives, because that could affect this.
-                    parts.Push(LiteralLine, trivia.ToString());
+                    parts.Push(LiteralLine, trivia.ToString(), HardLine);
                 }
                 else if (
                     trivia.Kind() == SyntaxKind.RegionDirectiveTrivia
@@ -189,14 +184,8 @@ namespace CSharpier
                         triviaText = leadingTrivia[x - 1] + triviaText;
                     }
 
-                    hadDirective = true;
-                    parts.Push(LiteralLine, triviaText);
+                    parts.Push(LiteralLine, triviaText, HardLine);
                 }
-            }
-
-            if (hadDirective)
-            {
-                parts.Push(HardLine);
             }
 
             return parts.Count > 0 ? Concat(parts) : Doc.Null;

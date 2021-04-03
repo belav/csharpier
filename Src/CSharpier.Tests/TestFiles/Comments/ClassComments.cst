@@ -1,3 +1,9 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ClassComments.cst" company="CSharpier">
+//   NewLineAfterThis
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 // public class
 public class ClassName { }
 
@@ -26,3 +32,6 @@ ClassName3 // more trailing
     // no
     readonly string Tester = "lajsdf";
 }
+
+/// single line doc comment
+class ClassName { }

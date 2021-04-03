@@ -1,0 +1,7 @@
+#region Region
+using static System.Linq.Enumerable;
+
+#endregion
+[assembly: System.Copyright(@"(C)""
+
+2009")]
