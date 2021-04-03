@@ -8,7 +8,10 @@ namespace CSharpier
         {
             // TODO 1 should all " " turn into spaceIfNoPreviousComment? Maybe we just make a type for space and make it do that?
             return Concat(
-                this.PrintSyntaxToken(node.RefKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.RefKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.Expression)
             );
         }

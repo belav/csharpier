@@ -10,7 +10,10 @@ namespace CSharpier
             return Group(
                 Indent(
                     Line,
-                    this.PrintSyntaxToken(node.ColonToken, " "),
+                    this.PrintSyntaxToken(
+                        node.ColonToken,
+                        afterTokenIfNoTrailing: " "
+                    ),
                     Indent(
                         this.PrintSeparatedSyntaxList(
                             node.Types,

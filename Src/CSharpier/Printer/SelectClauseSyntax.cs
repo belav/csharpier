@@ -7,7 +7,10 @@ namespace CSharpier
         private Doc PrintSelectClauseSyntax(SelectClauseSyntax node)
         {
             return Concat(
-                this.PrintSyntaxToken(node.SelectKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.SelectKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.Expression)
             );
         }

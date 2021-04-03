@@ -8,7 +8,10 @@ namespace CSharpier
             StackAllocArrayCreationExpressionSyntax node)
         {
             return Concat(
-                this.PrintSyntaxToken(node.StackAllocKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.StackAllocKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.Type),
                 node.Initializer != null
                     ? Concat(

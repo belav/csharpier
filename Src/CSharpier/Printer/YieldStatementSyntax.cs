@@ -11,7 +11,10 @@ namespace CSharpier
                 : string.Empty;
             return Concat(
                 this.PrintExtraNewLines(node),
-                this.PrintSyntaxToken(node.YieldKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.YieldKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.PrintSyntaxToken(node.ReturnOrBreakKeyword),
                 expression,
                 this.PrintSyntaxToken(node.SemicolonToken)

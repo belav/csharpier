@@ -9,10 +9,16 @@ namespace CSharpier
             TypeParameterConstraintClauseSyntax node)
         {
             return Group(
-                this.PrintSyntaxToken(node.WhereKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.WhereKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.Name),
                 SpaceIfNoPreviousComment,
-                this.PrintSyntaxToken(node.ColonToken, " "),
+                this.PrintSyntaxToken(
+                    node.ColonToken,
+                    afterTokenIfNoTrailing: " "
+                ),
                 Indent(
                     this.PrintSeparatedSyntaxList(
                         node.Constraints,

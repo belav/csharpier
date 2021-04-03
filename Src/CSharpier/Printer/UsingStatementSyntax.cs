@@ -8,8 +8,14 @@ namespace CSharpier
         {
             var parts = new Parts(
                 this.PrintExtraNewLines(node),
-                this.PrintSyntaxToken(node.AwaitKeyword, " "),
-                this.PrintSyntaxToken(node.UsingKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.AwaitKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
+                this.PrintSyntaxToken(
+                    node.UsingKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.PrintSyntaxToken(node.OpenParenToken),
                 node.Declaration != null
                     ? this.PrintVariableDeclarationSyntax(node.Declaration)

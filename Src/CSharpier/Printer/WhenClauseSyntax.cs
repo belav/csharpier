@@ -7,7 +7,10 @@ namespace CSharpier
         private Doc PrintWhenClauseSyntax(WhenClauseSyntax node)
         {
             return Concat(
-                this.PrintSyntaxToken(node.WhenKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.WhenKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.Condition)
             );
         }

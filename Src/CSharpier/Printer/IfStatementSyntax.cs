@@ -13,7 +13,10 @@ namespace CSharpier
                 parts.Push(this.PrintExtraNewLines(node));
             }
             parts.Push(
-                this.PrintSyntaxToken(node.IfKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.IfKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.PrintSyntaxToken(node.OpenParenToken),
                 Group(Indent(SoftLine, this.Print(node.Condition)), SoftLine),
                 this.PrintSyntaxToken(node.CloseParenToken)

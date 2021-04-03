@@ -10,7 +10,7 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.Keyword),
                 this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Expression),
-                this.PrintSyntaxToken(node.Comma, " "),
+                this.PrintSyntaxToken(node.Comma, afterTokenIfNoTrailing: " "),
                 this.Print(node.Type),
                 this.PrintSyntaxToken(node.CloseParenToken)
             );

@@ -14,7 +14,10 @@ namespace CSharpier
                 ),
                 this.Print(node.Statement),
                 HardLine,
-                this.PrintSyntaxToken(node.WhileKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.WhileKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Condition),
                 this.PrintSyntaxToken(node.CloseParenToken),

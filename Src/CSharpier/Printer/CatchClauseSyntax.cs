@@ -24,7 +24,10 @@ namespace CSharpier
             {
                 parts.Push(
                     " ",
-                    this.PrintSyntaxToken(node.Filter.WhenKeyword, " "),
+                    this.PrintSyntaxToken(
+                        node.Filter.WhenKeyword,
+                        afterTokenIfNoTrailing: " "
+                    ),
                     this.PrintSyntaxToken(node.Filter.OpenParenToken),
                     this.Print(node.Filter.FilterExpression),
                     this.PrintSyntaxToken(node.Filter.CloseParenToken)

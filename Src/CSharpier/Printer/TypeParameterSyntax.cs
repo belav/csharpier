@@ -8,7 +8,10 @@ namespace CSharpier
         {
             return Concat(
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintSyntaxToken(node.VarianceKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.VarianceKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.PrintSyntaxToken(node.Identifier)
             );
         }

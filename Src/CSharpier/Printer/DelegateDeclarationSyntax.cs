@@ -11,7 +11,12 @@ namespace CSharpier
             parts.Push(this.PrintExtraNewLines(node));
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
             parts.Push(this.PrintModifiers(node.Modifiers));
-            parts.Push(this.PrintSyntaxToken(node.DelegateKeyword, " "));
+            parts.Push(
+                this.PrintSyntaxToken(
+                    node.DelegateKeyword,
+                    afterTokenIfNoTrailing: " "
+                )
+            );
             parts.Push(this.Print(node.ReturnType));
             parts.Push(" ", this.PrintSyntaxToken(node.Identifier));
             if (node.TypeParameterList != null)

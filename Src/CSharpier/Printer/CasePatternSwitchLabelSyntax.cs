@@ -9,7 +9,10 @@ namespace CSharpier
         {
             var parts = new Parts();
             parts.Push(
-                this.PrintSyntaxToken(node.Keyword, " "),
+                this.PrintSyntaxToken(
+                    node.Keyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.Pattern)
             );
             if (node.WhenClause != null)

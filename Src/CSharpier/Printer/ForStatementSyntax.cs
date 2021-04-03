@@ -9,7 +9,10 @@ namespace CSharpier
         {
             var parts = new Parts(
                 this.PrintExtraNewLines(node),
-                this.PrintSyntaxToken(node.ForKeyword, " "),
+                this.PrintSyntaxToken(
+                    node.ForKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.PrintSyntaxToken(node.OpenParenToken)
             );
             var innerGroup = new Parts();

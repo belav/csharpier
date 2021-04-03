@@ -7,9 +7,18 @@ namespace CSharpier
         private Doc PrintLetClauseSyntax(LetClauseSyntax node)
         {
             return Concat(
-                this.PrintSyntaxToken(node.LetKeyword, " "),
-                this.PrintSyntaxToken(node.Identifier, " "),
-                this.PrintSyntaxToken(node.EqualsToken, " "),
+                this.PrintSyntaxToken(
+                    node.LetKeyword,
+                    afterTokenIfNoTrailing: " "
+                ),
+                this.PrintSyntaxToken(
+                    node.Identifier,
+                    afterTokenIfNoTrailing: " "
+                ),
+                this.PrintSyntaxToken(
+                    node.EqualsToken,
+                    afterTokenIfNoTrailing: " "
+                ),
                 this.Print(node.Expression)
             );
         }

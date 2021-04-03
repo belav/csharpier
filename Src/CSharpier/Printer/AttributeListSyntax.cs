@@ -14,7 +14,10 @@ namespace CSharpier
             {
                 parts.Push(
                     this.PrintSyntaxToken(node.Target.Identifier),
-                    this.PrintSyntaxToken(node.Target.ColonToken, " ")
+                    this.PrintSyntaxToken(
+                        node.Target.ColonToken,
+                        afterTokenIfNoTrailing: " "
+                    )
                 );
             }
 
