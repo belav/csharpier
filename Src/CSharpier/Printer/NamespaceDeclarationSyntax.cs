@@ -12,10 +12,7 @@ namespace CSharpier
             parts.Push(this.PrintExtraNewLines(node));
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
             parts.Push(this.PrintModifiers(node.Modifiers));
-            parts.Push(
-                this.PrintSyntaxToken(node.NamespaceKeyword),
-                afterTokenIfNoTrailing: " "
-            );
+            parts.Push(this.PrintSyntaxToken(node.NamespaceKeyword), " ");
             parts.Push(this.Print(node.Name));
 
             var innerParts = new Parts();
