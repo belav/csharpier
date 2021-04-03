@@ -63,20 +63,25 @@ namespace CSharpier
 
         private Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
         {
-            var addExtraIndent =
-                syntaxToken.Kind() == SyntaxKind.CloseBraceToken;
-            return this.PrintLeadingTrivia(
-                syntaxToken.LeadingTrivia,
-                addExtraIndent
+            var printedTrivia = this.PrintLeadingTrivia(
+                syntaxToken.LeadingTrivia
             );
+
+            if (
+                printedTrivia != Doc.Null
+                && syntaxToken.Kind() == SyntaxKind.CloseBraceToken
+            )
+            {
+                return Indent(printedTrivia);
+            }
+
+            return printedTrivia;
         }
 
         // TODO 1 probably ditch this, but leave it around for now
         private readonly Stack<bool> printNewLinesInLeadingTrivia = new();
 
-        private Doc PrintLeadingTrivia(
-            SyntaxTriviaList leadingTrivia,
-            bool addExtraIndent = false)
+        private Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia)
         {
             var parts = new Parts();
 
@@ -125,8 +130,7 @@ namespace CSharpier
                     parts.Push(
                         LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
-                            CommentType.SingleLine,
-                            addExtraIndent
+                            CommentType.SingleLine
                         )
                     );
                 }
@@ -138,8 +142,7 @@ namespace CSharpier
                     parts.Push(
                         LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
-                            CommentType.MultiLine,
-                            addExtraIndent
+                            CommentType.MultiLine
                         )
                     );
                 }

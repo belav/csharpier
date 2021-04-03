@@ -66,7 +66,7 @@ namespace CSharpier
             try
             {
                 var document = new Printer().Print(rootNode);
-                var formattedCode = new DocPrinter().Print(document, options);
+                var formattedCode = DocPrinter.Print(document, options);
                 return new CSharpierResult
                 {
                     Code = formattedCode,

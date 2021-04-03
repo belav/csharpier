@@ -29,15 +29,9 @@ namespace CSharpier
 
         public static Doc LeadingComment(
             string comment,
-            CommentType commentType,
-            bool addExtraIndent)
+            CommentType commentType)
         {
-            return new LeadingComment
-            {
-                Type = commentType,
-                Comment = comment,
-                AddExtraIndent = addExtraIndent
-            };
+            return new LeadingComment { Type = commentType, Comment = comment };
         }
 
         public static Doc TrailingComment(

@@ -10,25 +10,21 @@ namespace CSharpier
     // was ported over and porting over more code would be easier if this file looked basically the same
     public class DocPrinter
     {
-        private string GenerateSingleIndent(Options options) =>
+        private static string GenerateSingleIndent(Options options) =>
             options.UseTabs ? "\t" : new string(' ', options.TabWidth);
 
-        private Indent RootIndent(Options options)
+        private static Indent RootIndent(Options options)
         {
             return new Indent(string.Empty, 0, new List<IndentType>());
         }
 
-        private Indent MakeIndent(Indent indent, Options options)
+        private static Indent MakeIndent(Indent indent, Options options)
         {
-            return this.GenerateIndent(
-                indent,
-                new IndentType("indent", 0),
-                options
-            );
+            return GenerateIndent(indent, new IndentType("indent", 0), options);
         }
 
         // TODO 2 there is more going on here with dedent and number/string align
-        private Indent GenerateIndent(
+        private static Indent GenerateIndent(
             Indent indent,
             IndentType newPart,
             Options options)
@@ -133,7 +129,7 @@ namespace CSharpier
             return new Indent(value, length, queue);
         }
 
-        private bool Fits(
+        private static bool Fits(
             PrintCommand next,
             Stack<PrintCommand> restCommands,
             int width,
@@ -262,7 +258,7 @@ namespace CSharpier
             return false;
         }
 
-        public string Print(Doc document, Options options)
+        public static string Print(Doc document, Options options)
         {
             DocPrinterUtils.PropagateBreaks(document);
 
@@ -273,7 +269,7 @@ namespace CSharpier
             var currentStack = new Stack<PrintCommand>();
             currentStack.Push(
                 new PrintCommand(
-                    this.RootIndent(options),
+                    RootIndent(options),
                     PrintMode.MODE_BREAK,
                     document
                 )
@@ -282,6 +278,7 @@ namespace CSharpier
             var output = new StringBuilder();
             var shouldRemeasure = false;
             var newLineNextStringValue = false;
+            var indentNextStringValue = true;
             var skipNextNewLine = false;
 
             var lineSuffix = new List<PrintCommand>();
@@ -311,6 +308,13 @@ namespace CSharpier
                             output.Append(newLine + command.Indent.Value);
                             position = command.Indent.Length;
                             newLineNextStringValue = false;
+                            indentNextStringValue = false;
+                        }
+                        else if (indentNextStringValue)
+                        {
+                            output.Append(command.Indent.Value);
+                            position = command.Indent.Length;
+                            indentNextStringValue = false;
                         }
                         output.Append(stringDoc.Value);
                         position += GetStringWidth(stringDoc.Value);
@@ -471,15 +475,11 @@ namespace CSharpier
                             output.Append(newLine);
                         }
 
-                        if (leadingComment.AddExtraIndent)
-                        {
-                            output.Append(GenerateSingleIndent(options));
-                        }
-
                         output.Append(
-                            command.Indent.Value + leadingComment.Comment + newLine + command.Indent.Value
+                            command.Indent.Value + leadingComment.Comment + newLine
                         );
                         position = command.Indent.Length;
+                        indentNextStringValue = true;
                         newLineNextStringValue = false;
                         skipNextNewLine = false;
                         break;
@@ -517,12 +517,12 @@ namespace CSharpier
         }
 
         // TODO 1 in prettier this deals with unicode characters that are double width
-        private int GetStringWidth(string value)
+        private static int GetStringWidth(string value)
         {
             return value.Length;
         }
 
-        private void Trim(StringBuilder stringBuilder)
+        private static void Trim(StringBuilder stringBuilder)
         {
             if (stringBuilder.Length == 0)
             {

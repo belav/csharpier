@@ -117,6 +117,29 @@ namespace CSharpier.Tests
         }
 
         [Test]
+        public void LeadingComment_Works_With_Indent()
+        {
+            var doc = Concat(
+                "1",
+                Line,
+                Indent(LeadingComment("// indent", CommentType.SingleLine)),
+                "2"
+            );
+
+            var result = this.Print(doc);
+
+            result.Should().Be($"1{NewLine}    // indent{NewLine}2");
+        }
+
+        [Test]
+        public void LiteralLine_Indent_Something()
+        {
+            var doc = Concat(Indent(LiteralLine, "#warning", HardLine), "1");
+            var result = this.Print(doc);
+            result.Should().Be($"#warning{NewLine}1");
+        }
+
+        [Test]
         public void Two_Indents_With_Hardline()
         {
             var doc = Concat(
@@ -285,8 +308,7 @@ namespace CSharpier.Tests
 
         private string Print(Doc doc)
         {
-            return new DocPrinter().Print(doc, new Options())
-                .TrimEnd('\r', '\n');
+            return DocPrinter.Print(doc, new Options()).TrimEnd('\r', '\n');
         }
 
         public static Doc HardLine => Printer.HardLine;
@@ -326,6 +348,13 @@ namespace CSharpier.Tests
         public static Doc ForceFlat(params Doc[] parts)
         {
             return Printer.ForceFlat(parts);
+        }
+
+        public static Doc LeadingComment(
+            string comment,
+            CommentType commentType)
+        {
+            return Printer.LeadingComment(comment, commentType);
         }
     }
 }
