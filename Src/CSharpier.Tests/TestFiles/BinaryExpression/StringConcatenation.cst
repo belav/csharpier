@@ -1,0 +1,11 @@
+class TestClass
+{
+    void TestMethod()
+    {
+        var someVar = "a string" + thatIsJust(shortEnough) + "to not wrap";
+        var someLongVariableName =
+            "a really loooooooooooooooong string"
+            + someMethodCall("with long args")
+            + "really long string";
+    }
+}
