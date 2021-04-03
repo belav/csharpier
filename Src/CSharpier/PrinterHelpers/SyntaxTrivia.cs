@@ -63,19 +63,17 @@ namespace CSharpier
 
         private Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
         {
+            var indentTrivia = syntaxToken.Kind() == SyntaxKind.CloseBraceToken;
+
             var printedTrivia = this.PrintLeadingTrivia(
-                syntaxToken.LeadingTrivia
+                syntaxToken.LeadingTrivia,
+                skipLastHardline: indentTrivia
             );
 
-            if (
-                printedTrivia != Doc.Null
-                && syntaxToken.Kind() == SyntaxKind.CloseBraceToken
-            )
-            {
-                return Indent(printedTrivia);
-            }
-
-            return printedTrivia;
+            return indentTrivia
+                && printedTrivia != Doc.Null
+                ? Concat(Indent(printedTrivia), HardLine)
+                : printedTrivia;
         }
 
         // LiteralLines are a little odd because they trim any new line immediately before them. The reason is as follows.
@@ -91,7 +89,8 @@ namespace CSharpier
         // #pragma             - LiteralLine, #pragma, Hardline     - And this LiteralLine trims the extra HardLine above to ensure we don't get an extra blank line
         private Doc PrintLeadingTrivia(
             SyntaxTriviaList leadingTrivia,
-            bool includeInitialNewLines = false)
+            bool includeInitialNewLines = false,
+            bool skipLastHardline = false)
         {
             var parts = new Parts();
 
@@ -186,6 +185,11 @@ namespace CSharpier
 
                     parts.Push(LiteralLine, triviaText, HardLine);
                 }
+            }
+
+            if (skipLastHardline && parts.Any() && parts.Last().IsHardLine())
+            {
+                parts.RemoveAt(parts.Count - 1);
             }
 
             return parts.Count > 0 ? Concat(parts) : Doc.Null;

@@ -173,11 +173,11 @@ namespace CSharpier
                         indent + "    "
                     ) + ")";
                 case LeadingComment leadingComment:
-                    return indent + "LeadingComment(" + leadingComment.Comment + ", CommentType." + (leadingComment.Type == CommentType.SingleLine
+                    return indent + "LeadingComment(\"" + leadingComment.Comment + "\", CommentType." + (leadingComment.Type == CommentType.SingleLine
                         ? "SingleLine"
                         : "MultiLine") + ")";
                 case TrailingComment trailingComment:
-                    return indent + "TrailingComment(" + trailingComment.Comment + ", CommentType." + (trailingComment.Type == CommentType.SingleLine
+                    return indent + "TrailingComment(\"" + trailingComment.Comment + "\", CommentType." + (trailingComment.Type == CommentType.SingleLine
                         ? "SingleLine"
                         : "MultiLine") + ")";
                 case SpaceIfNoPreviousComment spaceIfNoPreviousComment:

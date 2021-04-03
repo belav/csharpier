@@ -117,29 +117,6 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void LeadingComment_Works_With_Indent()
-        {
-            var doc = Concat(
-                "1",
-                Line,
-                Indent(LeadingComment("// indent", CommentType.SingleLine)),
-                "2"
-            );
-
-            var result = this.Print(doc);
-
-            result.Should().Be($"1{NewLine}    // indent{NewLine}2");
-        }
-
-        [Test]
-        public void LiteralLine_Indent_Something()
-        {
-            var doc = Concat(Indent(LiteralLine, "#warning", HardLine), "1");
-            var result = this.Print(doc);
-            result.Should().Be($"#warning{NewLine}1");
-        }
-
-        [Test]
         public void Two_Indents_With_Hardline()
         {
             var doc = Concat(

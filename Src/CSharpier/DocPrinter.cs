@@ -282,7 +282,6 @@ namespace CSharpier
             var output = new StringBuilder();
             var shouldRemeasure = false;
             var newLineNextStringValue = false;
-            var indentNextStringValue = true;
             var skipNextNewLine = false;
 
             var lineSuffix = new List<PrintCommand>();
@@ -312,13 +311,6 @@ namespace CSharpier
                             output.Append(newLine + command.Indent.Value);
                             position = command.Indent.Length;
                             newLineNextStringValue = false;
-                            indentNextStringValue = false;
-                        }
-                        else if (indentNextStringValue)
-                        {
-                            output.Append(command.Indent.Value);
-                            position = command.Indent.Length;
-                            indentNextStringValue = false;
                         }
                         output.Append(stringDoc.Value);
                         position += GetStringWidth(stringDoc.Value);
@@ -478,7 +470,6 @@ namespace CSharpier
                             command.Indent.Value + leadingComment.Comment
                         );
                         position = command.Indent.Length;
-                        indentNextStringValue = true;
                         newLineNextStringValue = false;
                         skipNextNewLine = false;
                         break;
