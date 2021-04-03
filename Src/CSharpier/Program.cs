@@ -168,6 +168,11 @@ namespace CSharpier
 
             using var reader = new StreamReader(file);
             var code = await reader.ReadToEndAsync();
+            if (code.Length == 0)
+            {
+                return;
+            }
+
             var detectionResult = CharsetDetector.DetectFromFile(file);
             var encoding = detectionResult.Detected.Encoding;
             reader.Close();
