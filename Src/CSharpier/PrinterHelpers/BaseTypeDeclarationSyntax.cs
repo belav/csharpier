@@ -121,10 +121,14 @@ namespace CSharpier
             }
             else if (node.OpenBraceToken.Kind() != SyntaxKind.None)
             {
+                var separator = node.CloseBraceToken.LeadingTrivia.Any()
+                    ? Line
+                    : " ";
+
                 parts.Push(
-                    " ",
+                    separator,
                     this.PrintSyntaxToken(node.OpenBraceToken),
-                    " ",
+                    separator,
                     this.PrintSyntaxToken(node.CloseBraceToken)
                 );
             }

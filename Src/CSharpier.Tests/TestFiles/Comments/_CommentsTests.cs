@@ -15,5 +15,10 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest("Comments", "MethodComments");
         }
+        [Test]
+        public void SpecialCases()
+        {
+            this.RunTest("Comments", "SpecialCases");
+        }
     }
 }

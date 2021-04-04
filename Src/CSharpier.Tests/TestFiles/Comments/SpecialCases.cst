@@ -1,0 +1,38 @@
+class ClassName
+{
+    void MethodName()
+    {
+        if (true)
+        {
+            // indent
+        }
+        while (true)
+        {
+            // indent
+        }
+
+        var x = new SomeClass
+        {
+            Property1 = true
+            // indent
+        };
+    }
+
+    void MethodName()
+    {
+        // indent
+    }
+}
+
+class ClassName3
+{
+    // indent
+}
+
+namespace NameSpace
+{
+    class ClassName2
+    {
+        // indent
+    }
+}

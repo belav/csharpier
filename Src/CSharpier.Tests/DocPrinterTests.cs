@@ -285,8 +285,7 @@ namespace CSharpier.Tests
 
         private string Print(Doc doc)
         {
-            return new DocPrinter().Print(doc, new Options())
-                .TrimEnd('\r', '\n');
+            return DocPrinter.Print(doc, new Options()).TrimEnd('\r', '\n');
         }
 
         public static Doc HardLine => Printer.HardLine;
@@ -326,6 +325,13 @@ namespace CSharpier.Tests
         public static Doc ForceFlat(params Doc[] parts)
         {
             return Printer.ForceFlat(parts);
+        }
+
+        public static Doc LeadingComment(
+            string comment,
+            CommentType commentType)
+        {
+            return Printer.LeadingComment(comment, commentType);
         }
     }
 }

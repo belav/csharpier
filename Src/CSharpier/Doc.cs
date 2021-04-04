@@ -1,9 +1,16 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpier
 {
     public class Doc
     {
+        public bool IsHardLine()
+        {
+            return this is Concat concat
+            && concat.Parts.FirstOrDefault() is LineDoc { Type: LineDoc.LineType.Hard } ;
+        }
+
         public static implicit operator Doc(string value)
         {
             return new StringDoc(value);

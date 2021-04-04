@@ -5,29 +5,31 @@ using System.Text;
 
 namespace CSharpier
 {
-    public class DocPrinter
+    // a big chunk of the code in here is ported from prettier. The names and layout of the file were
+    // kept consistent with how they looked in prettier because not everything
+    // was ported over and porting over more code would be easier if this file looked basically the same
+    public static class DocPrinter
     {
-        private Indent RootIndent()
+        private static Indent RootIndent()
         {
             return new Indent(string.Empty, 0, new List<IndentType>());
         }
 
-        private Indent MakeIndent(Indent indent, Options options)
+        private static Indent MakeIndent(Indent indent, Options options)
         {
-            return this.GenerateIndent(
+            return GenerateIndent(
                 indent,
                 newPart: new IndentType("indent", 0),
                 options
             );
         }
 
-        // TODO 2 there is more going on here with dedent and number/string align
-        private Indent GenerateIndent(
-            Indent ind,
+        private static Indent GenerateIndent(
+            Indent indent,
             IndentType newPart,
             Options options)
         {
-            var queue = new List<IndentType>(ind.Queue);
+            var queue = new List<IndentType>(indent.Queue);
             if (newPart.Type == "dedent")
             {
                 queue.RemoveAt(queue.Count - 1);
@@ -37,7 +39,7 @@ namespace CSharpier
                 queue.Add(newPart);
             }
 
-            var value = string.Empty;
+            var value = new StringBuilder();
             var length = 0;
             var lastTabs = 0;
 
@@ -47,87 +49,78 @@ namespace CSharpier
                 switch (part.Type)
                 {
                     case "indent":
-                        flush();
+                        Flush();
                         if (options.UseTabs)
                         {
-                            addTabs(1);
+                            AddTabs(1);
                         }
                         else
                         {
-                            addSpaces(options.TabWidth);
+                            AddSpaces(options.TabWidth);
                         }
-                        break;
-                    case "stringAlign":
-                        flush();
-                        value += part.Number;
-                        // TODO 2 huh? length += part.n.length;
-                        break;
-                    case "numberAlign":
-                        lastTabs += 1;
-                        // TODO 2 huh? lastSpaces += part.n;
                         break;
                     default:
                         throw new Exception(part.Type);
                 }
             }
 
-            flushSpaces();
+            FlushSpaces();
 
-            void addTabs(int count)
+            void AddTabs(int count)
             {
-                value += new string('\t', count);
+                value.Append('\t', count);
                 length += options.TabWidth * count;
             }
 
-            void addSpaces(int count)
+            void AddSpaces(int count)
             {
-                value += new string(' ', count);
+                value.Append(' ', count);
                 length += count;
             }
 
-            void flush()
+            void Flush()
             {
                 if (options.UseTabs)
                 {
-                    flushTabs();
+                    FlushTabs();
                 }
                 else
                 {
-                    flushSpaces();
+                    FlushSpaces();
                 }
             }
 
-            void flushTabs()
+            void FlushTabs()
             {
                 if (lastTabs > 0)
                 {
-                    addTabs(lastTabs);
+                    AddTabs(lastTabs);
                 }
 
-                resetLast();
+                ResetLast();
             }
 
-            void flushSpaces()
+            void FlushSpaces()
             {
                 if (lastSpaces > 0)
                 {
-                    addSpaces(lastSpaces);
+                    AddSpaces(lastSpaces);
                 }
 
-                resetLast();
+                ResetLast();
             }
 
-            void resetLast()
+            void ResetLast()
             {
                 lastTabs = 0;
                 lastSpaces = 0;
             }
 
             // TODO 2 in prettier this has a ...ind
-            return new Indent(value, length, queue);
+            return new Indent(value.ToString(), length, queue);
         }
 
-        private bool Fits(
+        private static bool Fits(
             PrintCommand next,
             Stack<PrintCommand> restCommands,
             int width,
@@ -256,7 +249,7 @@ namespace CSharpier
             return false;
         }
 
-        public string Print(Doc document, Options options)
+        public static string Print(Doc document, Options options)
         {
             DocPrinterUtils.PropagateBreaks(document);
 
@@ -266,11 +259,7 @@ namespace CSharpier
 
             var currentStack = new Stack<PrintCommand>();
             currentStack.Push(
-                new PrintCommand(
-                    this.RootIndent(),
-                    PrintMode.MODE_BREAK,
-                    document
-                )
+                new PrintCommand(RootIndent(), PrintMode.MODE_BREAK, document)
             );
 
             var output = new StringBuilder();
@@ -501,12 +490,12 @@ namespace CSharpier
         }
 
         // TODO 1 in prettier this deals with unicode characters that are double width
-        private int GetStringWidth(string value)
+        private static int GetStringWidth(string value)
         {
             return value.Length;
         }
 
-        private void Trim(StringBuilder stringBuilder)
+        private static void Trim(StringBuilder stringBuilder)
         {
             if (stringBuilder.Length == 0)
             {

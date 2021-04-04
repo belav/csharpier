@@ -31,12 +31,7 @@ namespace CSharpier
             string comment,
             CommentType commentType)
         {
-            return new LeadingComment
-            {
-                Type = commentType,
-                Comment = comment,
-
-            };
+            return new LeadingComment { Type = commentType, Comment = comment };
         }
 
         public static Doc TrailingComment(
