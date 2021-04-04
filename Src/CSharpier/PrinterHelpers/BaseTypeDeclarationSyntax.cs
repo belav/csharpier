@@ -111,6 +111,8 @@ namespace CSharpier
 
             if (hasMembers)
             {
+                DocUtilities.RemoveInitialDoubleHardLine(members);
+
                 parts.Push(
                     HardLine,
                     this.PrintSyntaxToken(node.OpenBraceToken),

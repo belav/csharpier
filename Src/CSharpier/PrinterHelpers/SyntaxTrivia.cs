@@ -16,6 +16,8 @@ namespace CSharpier
                 if (leadingTrivia.Kind() == SyntaxKind.EndOfLineTrivia)
                 {
                     parts.Push(HardLine);
+                    // ensures we only print a single new line
+                    break;
                 }
                 else if (leadingTrivia.Kind() != SyntaxKind.WhitespaceTrivia)
                 {
@@ -187,7 +189,7 @@ namespace CSharpier
                 }
             }
 
-            if (skipLastHardline && parts.Any() && parts.Last().IsHardLine())
+            if (skipLastHardline && parts.Any() && parts.Last() is HardLine)
             {
                 parts.RemoveAt(parts.Count - 1);
             }

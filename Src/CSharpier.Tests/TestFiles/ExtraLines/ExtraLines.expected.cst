@@ -1,0 +1,20 @@
+﻿namespace Namespace
+{
+    public class RemovesLineBefore { }
+
+    public class RemovesDoubledLines { }
+}
+
+public class ClassName
+{
+    public int RemoveLineBefore;
+
+    public int RemoveDoubleLines;
+
+    public void MethodName()
+    {
+        var removeLineBefore = 1;
+
+        var removeDoubleLines = 2;
+    }
+}

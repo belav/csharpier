@@ -10,83 +10,33 @@ namespace CSharpier
     // https://devblogs.microsoft.com/dotnet/introducing-c-source-generators/
     public partial class Printer
     {
-        private static Doc BreakParent => new BreakParent();
-
-        // TODO 0 maybe all spaces should be this instead?
         public static Doc SpaceIfNoPreviousComment =>
-            new SpaceIfNoPreviousComment();
-        public static Doc HardLine =>
-            Concat(new LineDoc { Type = LineDoc.LineType.Hard }, BreakParent);
-        public static Doc LiteralLine =>
-            Concat(
-                new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true },
-                BreakParent
-            );
-        public static Doc Line =>
-            new LineDoc { Type = LineDoc.LineType.Normal };
-        public static Doc SoftLine =>
-            new LineDoc { Type = LineDoc.LineType.Soft };
+            Docs.SpaceIfNoPreviousComment;
+
+        public static Doc HardLine => Docs.HardLine;
+
+        public static Doc LiteralLine => Docs.LiteralLine;
+
+        public static Doc Line => Docs.Line;
+
+        public static Doc SoftLine => Docs.SoftLine;
 
         public static Doc LeadingComment(
             string comment,
-            CommentType commentType)
-        {
-            return new LeadingComment { Type = commentType, Comment = comment };
-        }
+            CommentType commentType) =>
+            Docs.LeadingComment(comment, commentType);
 
         public static Doc TrailingComment(
             string comment,
-            CommentType commentType)
-        {
-            return new TrailingComment
-            {
-                Type = commentType,
-                Comment = comment,
+            CommentType commentType) =>
+            Docs.TrailingComment(comment, commentType);
 
-            };
-        }
+        public static Doc Concat(Parts parts) => Docs.Concat(parts.ToArray());
 
-        public static Doc Concat(Parts parts)
-        {
-            return new Concat(CleanParts(parts));
-        }
+        public static Doc Concat(params Doc[] parts) => Docs.Concat(parts);
 
-        public static Doc Concat(params Doc[] parts)
-        {
-            return new Concat(CleanParts(parts));
-        }
-
-        public static List<Doc> CleanParts(IEnumerable<Doc> parts)
-        {
-            return parts.ToList();
-#if DEBUG
-            var newParts = new List<Doc>();
-            foreach (var doc in parts)
-            {
-                if (doc is Concat concat)
-                {
-                    newParts.AddRange(CleanParts(concat.Parts));
-                }
-                else if (doc != null)
-                {
-                    newParts.Add(doc);
-                }
-            }
-            return newParts;
-#endif
-            return parts.ToList();
-        }
-
-        public static Doc ForceFlat(params Doc[] contents)
-        {
-            return new ForceFlat
-            {
-                Contents = contents.Length == 0
-                    ? contents[0]
-                    : Concat(contents),
-
-            };
-        }
+        public static Doc ForceFlat(params Doc[] contents) =>
+            Docs.ForceFlat(contents);
 
         public static Doc Join(Doc separator, IEnumerable<Doc> array)
         {
@@ -112,33 +62,16 @@ namespace CSharpier
             return Concat(parts);
         }
 
-        public static Doc Group(Parts parts)
-        {
-            return new Group
-            {
-                Contents = parts.Count == 1 ? parts[0] : Concat(parts),
+        public static Doc Group(Parts parts) => Docs.Group(parts.ToArray());
 
-            };
-        }
+        public static Doc Group(List<Doc> contents) => Docs.Group(contents);
 
-        public static Doc Group(params Doc[] contents)
-        {
-            return new Group
-            {
-                Contents = contents.Length == 1
-                    ? contents[0]
-                    : Concat(contents),
+        public static Doc Group(params Doc[] contents) => Docs.Group(contents);
 
-            };
-        }
+        public static Doc Indent(Parts parts) => Docs.Indent(parts.ToArray());
 
-        public static Doc Indent(params Doc[] contents)
-        {
-            return new IndentDoc
-            {
-                Contents = contents.Length == 1 ? contents[0] : Concat(contents)
-            };
-        }
+        public static Doc Indent(params Doc[] contents) =>
+            Docs.Indent(contents);
 
         private Doc PrintSeparatedSyntaxList<T>(
             SeparatedSyntaxList<T> list,

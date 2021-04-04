@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -17,34 +18,31 @@ namespace CSharpier
                 ? Line
                 : HardLine;
 
-            var parts = new Parts(
+            var parts = new List<Doc>
+            {
                 Line,
                 this.PrintSyntaxToken(node.OpenBraceToken)
-            );
+            };
             if (node.Statements.Count > 0)
             {
-                parts.Push(
-                    Concat(
-                        Indent(
-                            statementSeparator,
-                            Join(
-                                statementSeparator,
-                                node.Statements.Select(this.Print)
-                            )
-                        ),
-                        statementSeparator
-                    )
+                var innerParts = Indent(
+                    statementSeparator,
+                    Join(statementSeparator, node.Statements.Select(this.Print))
                 );
+
+                DocUtilities.RemoveInitialDoubleHardLine(innerParts);
+
+                parts.Add(Concat(innerParts, statementSeparator));
             }
 
-            parts.Push(
+            parts.Add(
                 this.PrintSyntaxToken(
                     node.CloseBraceToken,
                     null,
                     node.Statements.Count == 0 ? " " : Doc.Null
                 )
             );
-            return Group(Concat(parts));
+            return Group(parts);
         }
     }
 }

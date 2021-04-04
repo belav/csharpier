@@ -5,18 +5,24 @@ namespace CSharpier
 {
     public class Doc
     {
-        public bool IsHardLine()
-        {
-            return this is Concat concat
-            && concat.Parts.FirstOrDefault() is LineDoc { Type: LineDoc.LineType.Hard } ;
-        }
-
         public static implicit operator Doc(string value)
         {
             return new StringDoc(value);
         }
 
         public static NullDoc Null { get; } = NullDoc.Instance;
+    }
+
+    public class HardLine : Concat
+    {
+        public HardLine()
+            : base(
+                new List<Doc>
+                {
+                    new LineDoc { Type = LineDoc.LineType.Hard },
+                    new BreakParent()
+                }
+            ) { }
     }
 
     public class NullDoc : Doc
@@ -80,17 +86,8 @@ namespace CSharpier
         public Doc Contents { get; set; } = Doc.Null;
     }
 
+    // should possibly be used by ternary operator
     public class Align : Doc, IHasContents
-    {
-        public Doc Contents { get; set; } = Doc.Null;
-    }
-
-    public class Fill : Doc, IHasContents
-    {
-        public Doc Contents { get; set; } = Doc.Null;
-    }
-
-    public class LineSuffix : Doc, IHasContents
     {
         public Doc Contents { get; set; } = Doc.Null;
     }

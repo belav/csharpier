@@ -18,7 +18,7 @@ namespace CSharpier
             switch (document)
             {
                 case NullDoc:
-                    return indent + "Doc.Null";
+                    return indent + "Docs.Null";
                 case StringDoc stringDoc:
                     return indent + "\"" + stringDoc.Value?.Replace(
                         "\"",
@@ -32,11 +32,11 @@ namespace CSharpier
                     )
                     {
                         return indent + (line.IsLiteral
-                            ? "LiteralLine"
-                            : "HardLine");
+                            ? "Docs.LiteralLine"
+                            : "Docs.HardLine");
                     }
 
-                    var result = indent + "Concat(";
+                    var result = indent + "Docs.Concat(";
                     if (concat.Parts.Count > 0)
                     {
                         result += Environment.NewLine;
@@ -58,35 +58,35 @@ namespace CSharpier
                     return result;
                 case LineDoc lineDoc:
                     return indent + (lineDoc.IsLiteral
-                        ? "LiteralLine"
+                        ? "Docs.LiteralLine"
                         : lineDoc.Type == LineDoc.LineType.Normal
-                            ? "Line"
+                            ? "Docs.Line"
                             : lineDoc.Type == LineDoc.LineType.Hard
-                                ? "HardLine"
-                                : "SoftLine");
+                                ? "Docs.HardLine"
+                                : "Docs.SoftLine");
                 case BreakParent:
                     return "";
                 case ForceFlat forceFlat:
-                    return indent + "ForceFlat(" + Environment.NewLine + PrintDocTree(
+                    return indent + "Docs.ForceFlat(" + Environment.NewLine + PrintDocTree(
                         forceFlat.Contents,
                         indent + "    "
                     ) + ")";
                 case IndentDoc indentDoc:
-                    return indent + "Indent(" + Environment.NewLine + PrintDocTree(
+                    return indent + "Docs.Indent(" + Environment.NewLine + PrintDocTree(
                         indentDoc.Contents,
                         indent + "    "
                     ) + ")";
                 case Group group:
-                    return indent + "Group(" + Environment.NewLine + PrintDocTree(
+                    return indent + "Docs.Group(" + Environment.NewLine + PrintDocTree(
                         group.Contents,
                         indent + "    "
                     ) + ")";
                 case LeadingComment leadingComment:
-                    return $"{indent}LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
+                    return $"{indent}Docs.LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
                 case TrailingComment trailingComment:
-                    return $"{indent}TrailingComment(\"{trailingComment.Comment}\", CommentType.{(trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
+                    return $"{indent}Docs.TrailingComment(\"{trailingComment.Comment}\", CommentType.{(trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
                 case SpaceIfNoPreviousComment:
-                    return indent + "SpaceIfNoPreviousComment";
+                    return indent + "Docs.SpaceIfNoPreviousComment";
                 default:
                     throw new Exception("Can't handle " + document);
             }
