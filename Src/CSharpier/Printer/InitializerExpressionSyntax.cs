@@ -17,13 +17,11 @@ namespace CSharpier
                         : Line,
                 this.PrintSyntaxToken(node.OpenBraceToken),
                 Indent(
-                    Concat(
-                        Line,
-                        this.PrintSeparatedSyntaxList(
-                            node.Expressions,
-                            this.Print,
-                            Line
-                        )
+                    Line,
+                    this.PrintSeparatedSyntaxList(
+                        node.Expressions,
+                        this.Print,
+                        Line
                     )
                 ),
                 Line,
