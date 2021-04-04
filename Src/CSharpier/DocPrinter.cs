@@ -8,12 +8,9 @@ namespace CSharpier
     // a big chunk of the code in here is ported from prettier. The names and layout of the file were
     // kept consistent with how they looked in prettier because not everything
     // was ported over and porting over more code would be easier if this file looked basically the same
-    public class DocPrinter
+    public static class DocPrinter
     {
-        private static string GenerateSingleIndent(Options options) =>
-            options.UseTabs ? "\t" : new string(' ', options.TabWidth);
-
-        private static Indent RootIndent(Options options)
+        private static Indent RootIndent()
         {
             return new Indent(string.Empty, 0, new List<IndentType>());
         }
@@ -27,7 +24,6 @@ namespace CSharpier
             );
         }
 
-        // TODO 2 there is more going on here with dedent and number/string align
         private static Indent GenerateIndent(
             Indent indent,
             IndentType newPart,
@@ -62,15 +58,6 @@ namespace CSharpier
                         {
                             AddSpaces(options.TabWidth);
                         }
-                        break;
-                    // case "stringAlign":
-                    //     Flush();
-                    //     value += part.Number;
-                    //     // TODO 2 huh? length += part.n.length;
-                    //     break;
-                    case "numberAlign":
-                        lastTabs += 1;
-                        // TODO 2 huh? lastSpaces += part.n;
                         break;
                     default:
                         throw new Exception(part.Type);
@@ -272,11 +259,7 @@ namespace CSharpier
 
             var currentStack = new Stack<PrintCommand>();
             currentStack.Push(
-                new PrintCommand(
-                    RootIndent(options),
-                    PrintMode.MODE_BREAK,
-                    document
-                )
+                new PrintCommand(RootIndent(), PrintMode.MODE_BREAK, document)
             );
 
             var output = new StringBuilder();
