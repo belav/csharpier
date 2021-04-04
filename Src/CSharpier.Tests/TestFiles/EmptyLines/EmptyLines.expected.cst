@@ -3,6 +3,8 @@
     public class RemovesLineBefore { }
 
     public class RemovesDoubledLines { }
+
+    public class RemoveTrailingLine { }
 }
 
 public class ClassName
@@ -16,5 +18,9 @@ public class ClassName
         var removeLineBefore = 1;
 
         var removeDoubleLines = 2;
+
+        var removeTrailingLine = 3;
     }
+
+    public int RemoveTrailingLine;
 }

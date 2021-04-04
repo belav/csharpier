@@ -3,12 +3,12 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests.TestFiles
 {
-    public class ExtraLinesTests : BaseTest
+    public class EmptyLineTests : BaseTest
     {
         [Test]
-        public void ExtraLines()
+        public void EmptyLines()
         {
-            this.RunTest("ExtraLines", "ExtraLines");
+            this.RunTest("EmptyLines", "EmptyLines");
         }
     }
 }
