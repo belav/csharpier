@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintReturnStatementSyntax(ReturnStatementSyntax node)
         {
-            return Concat(
+            return Docs.Group(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.ReturnKeyword,
@@ -14,8 +15,8 @@ namespace CSharpier
                 ),
                 node.Expression != null
                     ? this.Print(node.Expression)
-                    : Doc.Null,
-                this.PrintSyntaxToken(node.SemicolonToken)
+                    : Docs.Null,
+                SyntaxTokens.Print(node.SemicolonToken)
             );
         }
     }

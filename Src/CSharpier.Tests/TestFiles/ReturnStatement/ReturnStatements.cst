@@ -1,0 +1,25 @@
+class ClassName
+{
+    void EmptyReturn()
+    {
+        return;
+    }
+
+    bool ReturnBinaryExpression()
+    {
+        return someOther || otherValue;
+    }
+
+    bool ReturnLongBinaryExpression()
+    {
+        return someValueThatIsLongAndForcesALineBreak
+        || otherValueThatIsLongAndForcesALineBreak;
+    }
+
+    string LongMethodCallWithParameter()
+    {
+        return CallSomeLongMethodThatIndentsInsideOfItAndSeeWhatHappens(
+            "SomeLongerValue"
+        );
+    }
+}

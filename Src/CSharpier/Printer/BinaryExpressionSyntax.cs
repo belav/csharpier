@@ -11,11 +11,11 @@ namespace CSharpier
             var useLine =
                 node.OperatorToken.Kind() is SyntaxKind.BarBarToken or SyntaxKind.BarToken or SyntaxKind.AmpersandAmpersandToken or SyntaxKind.AmpersandToken or SyntaxKind.PlusToken;
 
-            return Concat(
+            return Docs.Concat(
                 this.Print(node.Left),
-                useLine ? Line : SpaceIfNoPreviousComment,
+                useLine ? Docs.Line : Docs.SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(node.OperatorToken),
-                SpaceIfNoPreviousComment,
+                Docs.SpaceIfNoPreviousComment,
                 this.Print(node.Right)
             );
         }

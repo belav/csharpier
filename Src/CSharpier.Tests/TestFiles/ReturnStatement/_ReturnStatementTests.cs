@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ReturnStatementTests : BaseTest
     {
         [Test]
-        public void EmptyReturn()
+        public void ReturnStatements()
         {
-            this.RunTest("ReturnStatement", "EmptyReturn");
+            this.RunTest("ReturnStatement", "ReturnStatements");
         }
     }
 }
