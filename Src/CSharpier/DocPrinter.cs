@@ -8,6 +8,7 @@ namespace CSharpier
     // a big chunk of the code in here is ported from prettier. The names and layout of the file were
     // kept consistent with how they looked in prettier because not everything
     // was ported over and porting over more code would be easier if this file looked basically the same
+    // taken from prettier 2.2.1 or so
     public static class DocPrinter
     {
         private static Indent RootIndent()

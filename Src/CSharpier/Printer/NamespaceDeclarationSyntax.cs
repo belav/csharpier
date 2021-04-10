@@ -8,12 +8,14 @@ namespace CSharpier
         private Doc PrintNamespaceDeclarationSyntax(
             NamespaceDeclarationSyntax node)
         {
-            var parts = new Parts();
-            parts.Push(this.PrintExtraNewLines(node));
-            parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
-            parts.Push(this.PrintModifiers(node.Modifiers));
-            parts.Push(this.PrintSyntaxToken(node.NamespaceKeyword), " ");
-            parts.Push(this.Print(node.Name));
+            var parts = new Parts(
+                this.PrintExtraNewLines(node),
+                this.PrintAttributeLists(node, node.AttributeLists),
+                this.PrintModifiers(node.Modifiers),
+                this.PrintSyntaxToken(node.NamespaceKeyword),
+                " ",
+                this.Print(node.Name)
+            );
 
             var innerParts = new Parts();
             var hasMembers = node.Members.Count > 0;
@@ -59,12 +61,13 @@ namespace CSharpier
                 innerParts.Push(" ");
             }
 
+            DocUtilities.RemoveInitialDoubleHardLine(innerParts);
 
             parts.Push(
                 Group(
                     Line,
                     this.PrintSyntaxToken(node.OpenBraceToken),
-                    Indent(Concat(innerParts)),
+                    Indent(innerParts),
                     hasMembers || hasUsing || hasExterns ? HardLine : Doc.Null,
                     this.PrintSyntaxToken(node.CloseBraceToken),
                     this.PrintSyntaxToken(node.SemicolonToken)
