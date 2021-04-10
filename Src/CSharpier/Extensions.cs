@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -90,6 +91,15 @@ namespace CSharpier
         {
             return value == null
             || string.IsNullOrEmpty(value.Trim());
+        }
+
+        public static void Add(this List<Doc> list, params Doc[] values)
+        {
+            if (values.Length == 1 && values[0] == Docs.Null)
+            {
+                return;
+            }
+            list.AddRange(values);
         }
     }
 }
