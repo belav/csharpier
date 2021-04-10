@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintForEachStatementSyntax(ForEachStatementSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.AwaitKeyword,
@@ -28,7 +29,7 @@ namespace CSharpier
                     afterTokenIfNoTrailing: " "
                 ),
                 this.Print(node.Expression),
-                this.PrintSyntaxToken(node.CloseParenToken),
+                SyntaxTokens.Print(node.CloseParenToken),
                 this.Print(node.Statement)
             );
         }

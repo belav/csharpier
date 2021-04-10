@@ -1,4 +1,5 @@
 using System.Linq;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -36,7 +37,7 @@ namespace CSharpier
                 parts.Push(Join(HardLine, node.Members.Select(this.Print)));
             }
 
-            var finalTrivia = this.PrintLeadingTrivia(
+            var finalTrivia = SyntaxTokens.PrintLeadingTrivia(
                 node.EndOfFileToken.LeadingTrivia,
                 includeInitialNewLines: true
             );
