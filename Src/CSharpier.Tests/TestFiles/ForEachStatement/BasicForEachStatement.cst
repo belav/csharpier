@@ -6,5 +6,12 @@ public class ClassName
         {
             x = 1;
         }
+
+        foreach (var x in this.SomeMethodCall()
+            .SomeChainedCall()
+            .AnotherChainedCall())
+        {
+            break;
+        }
     }
 }
