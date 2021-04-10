@@ -2,7 +2,10 @@ public class ClassName
 {
     public void MethodName()
     {
-        if (true) { }
+        if (true)
+        {
+            return;
+        }
 
         if (true == false) { }
 
@@ -13,7 +16,9 @@ public class ClassName
             && longerStatementName
             && evenLongerStatementName
             && superLongStatementName
-        ) { }
+        ) {
+            return;
+        }
 
         if (true)
             DoSoemthing();

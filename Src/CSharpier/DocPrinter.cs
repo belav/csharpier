@@ -11,6 +11,9 @@ namespace CSharpier
     // taken from prettier 2.2.1 or so
     public static class DocPrinter
     {
+        [ThreadStatic]
+        private static Dictionary<string, PrintMode>? groupModeMap;
+
         private static Indent RootIndent()
         {
             return new Indent(string.Empty, 0, new List<IndentType>());
@@ -131,30 +134,30 @@ namespace CSharpier
             var commandsAsArray = restCommands.Reverse().ToArray();
             var restIdx = commandsAsArray.Length;
             var returnFalseIfMoreStringsFound = false;
-            var cmds = new Stack<PrintCommand>();
-            cmds.Push(next);
+            var commands = new Stack<PrintCommand>();
+            commands.Push(next);
             // `out` is only used for width counting because `trim` requires to look
             // backwards for space characters.
             var output = new StringBuilder();
             while (width >= 0)
             {
-                if (cmds.Count == 0)
+                if (commands.Count == 0)
                 {
                     if (restIdx == 0)
                     {
                         return true;
                     }
 
-                    cmds.Push(commandsAsArray[restIdx - 1]);
+                    commands.Push(commandsAsArray[restIdx - 1]);
 
                     restIdx--;
                     continue;
                 }
 
-                var command = cmds.Pop();
-                var ind = command.Indent;
-                var mode = command.Mode;
-                var doc = command.Doc;
+                var currentCommand = commands.Pop();
+                var ind = currentCommand.Indent;
+                var mode = currentCommand.Mode;
+                var doc = currentCommand.Doc;
 
                 if (doc is StringDoc stringDoc)
                 {
@@ -182,13 +185,13 @@ namespace CSharpier
                         case Concat concat:
                             for (var i = concat.Parts.Count - 1; i >= 0; i--)
                             {
-                                cmds.Push(
+                                commands.Push(
                                     new PrintCommand(ind, mode, concat.Parts[i])
                                 );
                             }
                             break;
                         case IndentDoc indent:
-                            cmds.Push(
+                            commands.Push(
                                 new PrintCommand(
                                     MakeIndent(ind, options),
                                     mode,
@@ -202,11 +205,31 @@ namespace CSharpier
                                 return false;
                             }
 
-                            cmds.Push(
+                            var groupMode = @group.Break
+                                ? PrintMode.MODE_BREAK
+                                : mode;
+                            commands.Push(
+                                new PrintCommand(ind, groupMode, group.Contents)
+                            );
+
+                            if (group.GroupId != null)
+                            {
+                                groupModeMap![group.GroupId] = groupMode;
+                            }
+                            break;
+                        case IfBreak ifBreak:
+                            var ifBreakMode = ifBreak.GroupId != null
+                                && groupModeMap!.ContainsKey(ifBreak.GroupId)
+                                ? groupModeMap[ifBreak.GroupId]
+                                : currentCommand.Mode;
+                            var contents = ifBreakMode == PrintMode.MODE_BREAK
+                                ? ifBreak.BreakContents
+                                : ifBreak.FlatContents;
+                            commands.Push(
                                 new PrintCommand(
-                                    ind,
-                                    group.Break ? PrintMode.MODE_BREAK : mode,
-                                    group.Contents
+                                    currentCommand.Indent,
+                                    currentCommand.Mode,
+                                    contents
                                 )
                             );
                             break;
@@ -231,7 +254,7 @@ namespace CSharpier
                             }
                             break;
                         case ForceFlat flat:
-                            cmds.Push(
+                            commands.Push(
                                 new PrintCommand(ind, mode, flat.Contents)
                             );
                             break;
@@ -252,6 +275,8 @@ namespace CSharpier
 
         public static string Print(Doc document, Options options)
         {
+            groupModeMap = new Dictionary<string, PrintMode>();
+
             DocPrinterUtils.PropagateBreaks(document);
 
             var width = options.Width;
@@ -356,6 +381,23 @@ namespace CSharpier
                                 }
                                 break;
                         }
+
+                        if (group.GroupId != null)
+                        {
+                            groupModeMap[
+                                group.GroupId
+                            ] = currentStack.Peek().Mode;
+                        }
+                        break;
+                    case IfBreak ifBreak:
+                        var groupMode = ifBreak.GroupId != null
+                            && groupModeMap.ContainsKey(ifBreak.GroupId)
+                            ? groupModeMap[ifBreak.GroupId]
+                            : command.Mode;
+                        var contents = groupMode == PrintMode.MODE_BREAK
+                            ? ifBreak.BreakContents
+                            : ifBreak.FlatContents;
+                        Push(contents, command.Mode, command.Indent);
                         break;
                     case LineDoc line:
                         switch (command.Mode)

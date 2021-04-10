@@ -1,43 +1,52 @@
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
 {
     public partial class Printer
     {
-        // TODO 1 the conditions in if statement should be formatted!
         private Doc PrintIfStatementSyntax(IfStatementSyntax node)
         {
-            var parts = new Parts();
+            var docs = new List<Doc>();
             if (!(node.Parent is ElseClauseSyntax))
             {
-                parts.Push(this.PrintExtraNewLines(node));
+                docs.Add(this.PrintExtraNewLines(node));
             }
-            parts.Push(
+
+            var groupId = GroupIdGenerator.GenerateGroupIdFor(node);
+
+            docs.Add(
                 this.PrintSyntaxToken(
                     node.IfKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
                 this.PrintSyntaxToken(node.OpenParenToken),
-                Group(Indent(SoftLine, this.Print(node.Condition)), SoftLine),
+                Docs.GroupWithId(
+                    groupId,
+                    Docs.Indent(Docs.SoftLine, this.Print(node.Condition)),
+                    Docs.SoftLine
+                ),
                 this.PrintSyntaxToken(node.CloseParenToken)
             );
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {
-                parts.Push(statement);
+                docs.Add(statement);
             }
             else
             {
                 // TODO 1 force braces here? make an option?
-                parts.Push(Indent(Concat(HardLine, statement)));
+                docs.Add(Docs.Indent(Docs.Concat(Docs.HardLine, statement)));
             }
 
             if (node.Else != null)
             {
-                parts.Push(HardLine, this.Print(node.Else));
+                docs.Add(Docs.HardLine, this.Print(node.Else));
             }
 
-            return Concat(parts);
+            GroupIdGenerator.RemoveGroupIdFor(node);
+
+            return Docs.Concat(docs);
         }
     }
 }

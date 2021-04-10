@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,41 +9,60 @@ namespace CSharpier
     {
         private Doc PrintBlockSyntax(BlockSyntax node)
         {
-            if (node == null) // TODO 1 why is this being called?
-            {
-                return Doc.Null;
-            }
-
-            var statementSeparator = node.Parent is AccessorDeclarationSyntax
+            Doc statementSeparator = node.Parent is AccessorDeclarationSyntax
                 && node.Statements.Count <= 1
-                ? Line
-                : HardLine;
+                ? Docs.Line
+                : Docs.HardLine;
 
-            var parts = new List<Doc>
+            /* TODO 0 other possible node types that could get this block syntax formatting
+            AccessorDeclaration
+            AnonymousMethodExpression
+            CatchClause
+            CheckedStatement
+            ConstructorDeclaration
+            ConversionOperatorDeclaration
+            DestructorDeclaration
+            LocalFunctionStatement
+            MethodDeclaration
+            OperatorDeclaration
+            ParenthesizedLambdaExpression
+            SimpleLambdaExpression
+            UnsafeStatement
+            */
+            var keepBracesOnPreviousLineIfBreak =
+                node.Parent is IfStatementSyntax or WhileStatementSyntax or ForEachStatementSyntax or UsingStatementSyntax;
+
+            var docs = new List<Doc>
             {
-                Line,
-                this.PrintSyntaxToken(node.OpenBraceToken)
+                keepBracesOnPreviousLineIfBreak
+                    ? Docs.IfBreak(
+                        " ",
+                        Docs.Line,
+                        GroupIdGenerator.GroupIdFor(node.Parent!)
+                    )
+                    : Docs.Line,
+                SyntaxTokens.Print(node.OpenBraceToken)
             };
             if (node.Statements.Count > 0)
             {
-                var innerParts = Indent(
+                var innerDoc = Docs.Indent(
                     statementSeparator,
                     Join(statementSeparator, node.Statements.Select(this.Print))
                 );
 
-                DocUtilities.RemoveInitialDoubleHardLine(innerParts);
+                DocUtilities.RemoveInitialDoubleHardLine(innerDoc);
 
-                parts.Add(Concat(innerParts, statementSeparator));
+                docs.Add(Docs.Concat(innerDoc, statementSeparator));
             }
 
-            parts.Add(
+            docs.Add(
                 this.PrintSyntaxToken(
                     node.CloseBraceToken,
                     null,
-                    node.Statements.Count == 0 ? " " : Doc.Null
+                    node.Statements.Count == 0 ? " " : Docs.Null
                 )
             );
-            return Group(parts);
+            return Docs.Group(docs);
         }
     }
 }

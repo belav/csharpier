@@ -16,11 +16,7 @@ namespace CSharpier
         public static HardLine HardLine => new();
 
         // TODO all of the Line types can probably turn into proper classes, and be the same instance by type
-        public static Doc LiteralLine =>
-            Concat(
-                new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true },
-                BreakParent
-            );
+        public static LiteralLine LiteralLine => new();
 
         public static LineDoc Line => new() { Type = LineDoc.LineType.Normal };
 
@@ -71,6 +67,13 @@ namespace CSharpier
             };
         }
 
+        public static Group GroupWithId(string groupId, params Doc[] contents)
+        {
+            var group = Group(contents);
+            group.GroupId = groupId;
+            return group;
+        }
+
         public static Group Group(params Doc[] contents)
         {
             return new()
@@ -87,6 +90,20 @@ namespace CSharpier
             return new()
             {
                 Contents = contents.Length == 1 ? contents[0] : Concat(contents)
+            };
+        }
+
+        public static IfBreak IfBreak(
+            Doc breakContents,
+            Doc flatContents,
+            string? groupId = null)
+        {
+            return new IfBreak()
+            {
+                FlatContents = flatContents,
+                BreakContents = breakContents,
+                GroupId = groupId,
+
             };
         }
 

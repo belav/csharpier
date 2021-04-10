@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,18 +7,27 @@ namespace CSharpier
     {
         private Doc PrintWhileStatementSyntax(WhileStatementSyntax node)
         {
-            return Concat(
+            var groupId = GroupIdGenerator.GenerateGroupIdFor(node);
+
+            var result = Docs.Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.WhileKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSyntaxToken(node.OpenParenToken),
-                Group(Indent(SoftLine, this.Print(node.Condition))),
-                // TODO 1 maybe the close paraen should be on a new line, that would aid in difs for code reviews
-                this.PrintSyntaxToken(node.CloseParenToken),
+                SyntaxTokens.Print(node.OpenParenToken),
+                Docs.GroupWithId(
+                    groupId,
+                    Docs.Indent(Docs.SoftLine, this.Print(node.Condition)),
+                    Docs.SoftLine
+                ),
+                SyntaxTokens.Print(node.CloseParenToken),
                 this.Print(node.Statement)
             );
+
+            GroupIdGenerator.RemoveGroupIdFor(node);
+
+            return result;
         }
     }
 }

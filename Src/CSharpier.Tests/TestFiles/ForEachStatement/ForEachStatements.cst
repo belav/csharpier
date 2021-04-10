@@ -9,8 +9,8 @@ public class ClassName
 
         foreach (var x in this.SomeMethodCall()
             .SomeChainedCall()
-            .AnotherChainedCall())
-        {
+            .AnotherChainedCall()
+        ) {
             break;
         }
     }

@@ -7,7 +7,9 @@ namespace CSharpier
     {
         private Doc PrintForEachStatementSyntax(ForEachStatementSyntax node)
         {
-            return Docs.Concat(
+            var groupId = GroupIdGenerator.GenerateGroupIdFor(node);
+
+            var result = Docs.Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.AwaitKeyword,
@@ -28,10 +30,18 @@ namespace CSharpier
                     node.InKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.Print(node.Expression),
+                Docs.GroupWithId(
+                    groupId,
+                    this.Print(node.Expression),
+                    Docs.SoftLine
+                ),
                 SyntaxTokens.Print(node.CloseParenToken),
                 this.Print(node.Statement)
             );
+
+            GroupIdGenerator.RemoveGroupIdFor(node);
+
+            return result;
         }
     }
 }

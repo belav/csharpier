@@ -1,0 +1,38 @@
+class ClassName
+{
+    void MethodName()
+    {
+        using (var x = BeginScope())
+        {
+            return;
+        }
+
+        await using (var x = BeginScope())
+        {
+            return;
+        }
+
+        using (var x = BeginScope())
+        using (var y = BeginScope())
+        {
+            return;
+        }
+
+        using (BeginScope())
+        {
+            return;
+        }
+
+        using (BeginScope())
+            return;
+
+        using (BeginScope()
+            .LongerMethod()
+            .MakeThisThingChain()
+            .MaybeNow()
+            .OrNow()
+        ) {
+            return;
+        }
+    }
+}
