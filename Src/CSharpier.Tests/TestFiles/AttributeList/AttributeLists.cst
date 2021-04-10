@@ -47,7 +47,7 @@ class ClassName
     class ClassTwo { }
 
     [BigLongAttributeWhatHappensHmmmmmmmmmmmmmmmmmmmmmmmmmmmmm(
-            "11111111111111111111111111",
-            "22222222222222222222222222")]
+        "11111111111111111111111111",
+        "22222222222222222222222222")]
     void LongAttribute() { }
 }

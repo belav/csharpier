@@ -13,7 +13,7 @@ namespace CSharpier
 
         public void Push(params Doc[] value)
         {
-            if (value.Length == 1 && value[0] == null)
+            if (value.Length == 1 && value[0] == Docs.Null)
             {
                 return;
             }

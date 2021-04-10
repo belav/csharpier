@@ -14,6 +14,7 @@
 **/.idea/**/misc.xml
 **/.idea/**/encodings.xml
 **/.idea/**/applicationhost.config
+**/.idea/**/watcherTasks.xml
 
 node_modules
 bin
