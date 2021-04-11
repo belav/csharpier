@@ -8,7 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void BasicConditionalExpression()
         {
-            this.RunTest("ConditionalExpression", "BasicConditionalExpression");
+            this.RunTest("ConditionalExpression", "ConditionalExpressions");
         }
     }
 }
