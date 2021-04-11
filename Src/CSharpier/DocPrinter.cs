@@ -125,55 +125,66 @@ namespace CSharpier
         }
 
         private static bool Fits(
-            PrintCommand next,
-            Stack<PrintCommand> restCommands,
+            PrintCommand nextCommand,
+            IEnumerable<PrintCommand> remainingCommands,
             int width,
             Options options,
             bool mustBeFlat = false)
         {
-            var commandsAsArray = restCommands.Reverse().ToArray();
-            var restIdx = commandsAsArray.Length;
+            var remainingCommandsAsArray = remainingCommands.Reverse()
+                .ToArray();
+            var remainingIndex = remainingCommandsAsArray.Length;
             var returnFalseIfMoreStringsFound = false;
-            var commands = new Stack<PrintCommand>();
-            commands.Push(next);
+            var currentStack = new Stack<PrintCommand>();
+            currentStack.Push(nextCommand);
+
+            void Push(Doc doc, PrintMode printMode, Indent indent)
+            {
+                currentStack.Push(new PrintCommand(indent, printMode, doc));
+            }
+
             // `out` is only used for width counting because `trim` requires to look
             // backwards for space characters.
             var output = new StringBuilder();
             while (width >= 0)
             {
-                if (commands.Count == 0)
+                if (currentStack.Count == 0)
                 {
-                    if (restIdx == 0)
+                    if (remainingIndex == 0)
                     {
                         return true;
                     }
 
-                    commands.Push(commandsAsArray[restIdx - 1]);
+                    currentStack.Push(
+                        remainingCommandsAsArray[remainingIndex - 1]
+                    );
 
-                    restIdx--;
+                    remainingIndex--;
                     continue;
                 }
 
-                var currentCommand = commands.Pop();
-                var ind = currentCommand.Indent;
-                var mode = currentCommand.Mode;
-                var doc = currentCommand.Doc;
+                var (
+                    currentIndent,
+                    currentMode,
+                    currentDoc
+                    ) = currentStack.Pop();
 
-                if (doc is StringDoc stringDoc)
+                if (currentDoc is StringDoc stringDoc)
                 {
-                    if (stringDoc.Value != null)
+                    if (stringDoc.Value == null)
                     {
-                        if (returnFalseIfMoreStringsFound)
-                        {
-                            return false;
-                        }
-                        output.Append(stringDoc.Value);
-                        width -= GetStringWidth(stringDoc.Value);
+                        continue;
                     }
+                    if (returnFalseIfMoreStringsFound)
+                    {
+                        return false;
+                    }
+                    output.Append(stringDoc.Value);
+                    width -= GetStringWidth(stringDoc.Value);
                 }
-                else if (doc != Doc.Null)
+                else if (currentDoc != Doc.Null)
                 {
-                    switch (doc)
+                    switch (currentDoc)
                     {
                         case LeadingComment:
                         case TrailingComment:
@@ -185,18 +196,18 @@ namespace CSharpier
                         case Concat concat:
                             for (var i = concat.Parts.Count - 1; i >= 0; i--)
                             {
-                                commands.Push(
-                                    new PrintCommand(ind, mode, concat.Parts[i])
+                                Push(
+                                    concat.Parts[i],
+                                    currentMode,
+                                    currentIndent
                                 );
                             }
                             break;
                         case IndentDoc indent:
-                            commands.Push(
-                                new PrintCommand(
-                                    MakeIndent(ind, options),
-                                    mode,
-                                    indent.Contents
-                                )
+                            Push(
+                                indent.Contents,
+                                currentMode,
+                                MakeIndent(currentIndent, options)
                             );
                             break;
                         case Group group:
@@ -205,12 +216,11 @@ namespace CSharpier
                                 return false;
                             }
 
-                            var groupMode = @group.Break
+                            var groupMode = group.Break
                                 ? PrintMode.MODE_BREAK
-                                : mode;
-                            commands.Push(
-                                new PrintCommand(ind, groupMode, group.Contents)
-                            );
+                                : currentMode;
+
+                            Push(group.Contents, groupMode, currentIndent);
 
                             if (group.GroupId != null)
                             {
@@ -221,42 +231,36 @@ namespace CSharpier
                             var ifBreakMode = ifBreak.GroupId != null
                                 && groupModeMap!.ContainsKey(ifBreak.GroupId)
                                 ? groupModeMap[ifBreak.GroupId]
-                                : currentCommand.Mode;
+                                : currentMode;
+
                             var contents = ifBreakMode == PrintMode.MODE_BREAK
                                 ? ifBreak.BreakContents
                                 : ifBreak.FlatContents;
-                            commands.Push(
-                                new PrintCommand(
-                                    currentCommand.Indent,
-                                    currentCommand.Mode,
-                                    contents
-                                )
-                            );
+
+                            Push(contents, currentMode, currentIndent);
                             break;
                         case LineDoc line:
-                            switch (mode)
+                            switch (currentMode)
                             {
                                 case PrintMode.MODE_FLAT:
-                                    if (line.Type != LineDoc.LineType.Hard)
+                                case PrintMode.MODE_FORCEFLAT:
+                                    if (line.Type == LineDoc.LineType.Hard)
                                     {
-                                        if (line.Type != LineDoc.LineType.Soft)
-                                        {
-                                            output.Append(" ");
-
-                                            width -= 1;
-                                        }
-                                        break;
+                                        return true;
                                     }
+                                    if (line.Type != LineDoc.LineType.Soft)
+                                    {
+                                        output.Append(" ");
 
-                                    return true;
+                                        width -= 1;
+                                    }
+                                    break;
                                 case PrintMode.MODE_BREAK:
                                     return true;
                             }
                             break;
                         case ForceFlat flat:
-                            commands.Push(
-                                new PrintCommand(ind, mode, flat.Contents)
-                            );
+                            Push(flat.Contents, currentMode, currentIndent);
                             break;
                         case SpaceIfNoPreviousComment:
                             // TODO should this always be considered size one?
@@ -264,7 +268,7 @@ namespace CSharpier
                             break;
                         default:
                             throw new Exception(
-                                "Can't handle " + doc?.GetType()
+                                "Can't handle " + currentDoc.GetType()
                             );
                     }
                 }
@@ -341,6 +345,7 @@ namespace CSharpier
                         switch (command.Mode)
                         {
                             case PrintMode.MODE_FLAT:
+                            case PrintMode.MODE_FORCEFLAT:
                                 if (!shouldRemeasure)
                                 {
                                     Push(
@@ -403,13 +408,14 @@ namespace CSharpier
                         switch (command.Mode)
                         {
                             case PrintMode.MODE_FLAT:
+                            case PrintMode.MODE_FORCEFLAT:
                                 if (line.Type == LineDoc.LineType.Soft)
                                 {
                                     break;
                                 }
                                 else if (line.Type == LineDoc.LineType.Normal)
                                 {
-                                    output.Append(" ");
+                                    output.Append(' ');
                                     position += 1;
                                     break;
                                 }
