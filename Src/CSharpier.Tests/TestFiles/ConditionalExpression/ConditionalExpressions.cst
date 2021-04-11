@@ -1,0 +1,20 @@
+public class ClassName
+{
+    public string Value = true ? "yes" : "no";
+
+    public string Value = someLongCondition
+        ? "someLongValue"
+        : "someOtherLongValue";
+
+    public bool CloseParenIndents = someCondition
+        ? this.SomeMethodCallThatIsLonger(
+                someLongValue,
+                someLongValue,
+                someLongValue
+            )
+        : this.SomeMethodCallThatIsLonger(
+                someLongValue,
+                someLongValue,
+                someLongValue
+            );
+}
