@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,13 +7,13 @@ namespace CSharpier
     {
         private Doc PrintCaseSwitchLabelSyntax(CaseSwitchLabelSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(
                     node.Keyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.Print(node.Value),
-                this.PrintSyntaxToken(node.ColonToken)
+                Docs.Group(this.Print(node.Value)),
+                SyntaxTokens.Print(node.ColonToken)
             );
         }
     }
