@@ -3,9 +3,19 @@ class TestClass
     void TestMethod()
     {
         var someVar = "a string" + thatIsJust(shortEnough) + "to not wrap";
+
+        // leaving these next two ugly for now because binary expressions are complicated and this seems to be the lesser of two evils
         var someLongVariableName =
-            "a really loooooooooooooooong string"
-            + someMethodCall("with long args")
-            + "really long string";
+            "a long string with just concatenation" + "will break this way" + "because of reasons";
+
+        var someLongVariableName =
+            "a really loooooooooooooooong string" + someMethodCall(
+                "with long args"
+            ) + "really long string";
+
+        CallSomeLongMethodWithStringConcatenationThatShouldNotBreak(
+            csharpDirectory + ".generated.cs",
+            output.ToString()
+        );
     }
 }
