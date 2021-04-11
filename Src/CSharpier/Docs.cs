@@ -37,14 +37,14 @@ namespace CSharpier
             return new() { Type = commentType, Comment = comment,  };
         }
 
-        public static Concat Concat(List<Doc> parts)
+        public static Concat Concat(List<Doc> contents)
         {
-            return new(CleanParts(parts));
+            return new(CleanParts(contents));
         }
 
-        public static Concat Concat(params Doc[] parts)
+        public static Concat Concat(params Doc[] contents)
         {
-            return new(CleanParts(parts.ToList()));
+            return new(CleanParts(contents.ToList()));
         }
 
         public static ForceFlat ForceFlat(params Doc[] contents)
@@ -91,6 +91,11 @@ namespace CSharpier
             {
                 Contents = contents.Length == 1 ? contents[0] : Concat(contents)
             };
+        }
+
+        public static IndentDoc Indent(List<Doc> contents)
+        {
+            return new() { Contents = Concat(contents) };
         }
 
         public static IfBreak IfBreak(

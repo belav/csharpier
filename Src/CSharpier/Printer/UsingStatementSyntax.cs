@@ -1,3 +1,4 @@
+using System;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintUsingStatementSyntax(UsingStatementSyntax node)
         {
-            var groupId = GroupIdGenerator.GenerateGroupIdFor(node);
+            var groupId = Guid.NewGuid().ToString();
 
             var parts = new Parts(
                 this.PrintExtraNewLines(node),
@@ -31,21 +32,25 @@ namespace CSharpier
                 ),
                 this.PrintSyntaxToken(node.CloseParenToken)
             );
-            var statement = this.Print(node.Statement);
             if (node.Statement is UsingStatementSyntax)
             {
-                parts.Push(HardLine, statement);
+                parts.Push(HardLine, this.Print(node.Statement));
             }
-            else if (node.Statement is BlockSyntax)
+            else if (node.Statement is BlockSyntax blockSyntax)
             {
-                parts.Push(statement);
+                parts.Push(
+                    this.PrintBlockSyntaxWithConditionalSpace(
+                        blockSyntax,
+                        groupId
+                    )
+                );
             }
             else
             {
-                parts.Push(Indent(Concat(HardLine, statement)));
+                parts.Push(
+                    Indent(Concat(HardLine, this.Print(node.Statement)))
+                );
             }
-
-            GroupIdGenerator.RemoveGroupIdFor(node);
 
             return Concat(parts);
         }

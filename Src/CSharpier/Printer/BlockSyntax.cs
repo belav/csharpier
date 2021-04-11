@@ -9,6 +9,19 @@ namespace CSharpier
     {
         private Doc PrintBlockSyntax(BlockSyntax node)
         {
+            return this.PrintBlockSyntax(node, null);
+        }
+
+        private Doc PrintBlockSyntaxWithConditionalSpace(
+            BlockSyntax node,
+            string groupId)
+        {
+            return this.PrintBlockSyntax(node, groupId);
+        }
+
+        // TODO this should really be private so it can't be used by anything but the two methods above
+        private Doc PrintBlockSyntax(BlockSyntax node, string? groupId)
+        {
             Doc statementSeparator = node.Parent is AccessorDeclarationSyntax
                 && node.Statements.Count <= 1
                 ? Docs.Line
@@ -22,6 +35,7 @@ namespace CSharpier
             ConstructorDeclaration
             ConversionOperatorDeclaration
             DestructorDeclaration
+            FixedStatement
             LocalFunctionStatement
             MethodDeclaration
             OperatorDeclaration
@@ -29,17 +43,10 @@ namespace CSharpier
             SimpleLambdaExpression
             UnsafeStatement
             */
-            var keepBracesOnPreviousLineIfBreak =
-                node.Parent is IfStatementSyntax or WhileStatementSyntax or ForEachStatementSyntax or UsingStatementSyntax;
-
             var docs = new List<Doc>
             {
-                keepBracesOnPreviousLineIfBreak
-                    ? Docs.IfBreak(
-                        " ",
-                        Docs.Line,
-                        GroupIdGenerator.GroupIdFor(node.Parent!)
-                    )
+                groupId != null
+                    ? Docs.IfBreak(" ", Docs.Line, groupId)
                     : Docs.Line,
                 SyntaxTokens.Print(node.OpenBraceToken)
             };

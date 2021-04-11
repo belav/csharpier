@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -13,7 +14,7 @@ namespace CSharpier
                 docs.Add(this.PrintExtraNewLines(node));
             }
 
-            var groupId = GroupIdGenerator.GenerateGroupIdFor(node);
+            var groupId = Guid.NewGuid().ToString();
 
             docs.Add(
                 this.PrintSyntaxToken(
@@ -28,23 +29,29 @@ namespace CSharpier
                 ),
                 this.PrintSyntaxToken(node.CloseParenToken)
             );
-            var statement = this.Print(node.Statement);
-            if (node.Statement is BlockSyntax)
+            if (node.Statement is BlockSyntax blockSyntax)
             {
-                docs.Add(statement);
+                docs.Add(
+                    this.PrintBlockSyntaxWithConditionalSpace(
+                        blockSyntax,
+                        groupId
+                    )
+                );
             }
             else
             {
                 // TODO 1 force braces here? make an option?
-                docs.Add(Docs.Indent(Docs.Concat(Docs.HardLine, statement)));
+                docs.Add(
+                    Docs.Indent(
+                        Docs.Concat(Docs.HardLine, this.Print(node.Statement))
+                    )
+                );
             }
 
             if (node.Else != null)
             {
                 docs.Add(Docs.HardLine, this.Print(node.Else));
             }
-
-            GroupIdGenerator.RemoveGroupIdFor(node);
 
             return Docs.Concat(docs);
         }

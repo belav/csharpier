@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,71 +10,86 @@ namespace CSharpier
     {
         private Doc PrintForStatementSyntax(ForStatementSyntax node)
         {
-            var parts = new Parts(
+            var groupId = Guid.NewGuid().ToString();
+
+            var docs = new List<Doc>
+            {
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.ForKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSyntaxToken(node.OpenParenToken)
-            );
-            var innerGroup = new Parts();
-            innerGroup.Push(SoftLine);
+                SyntaxTokens.Print(node.OpenParenToken)
+            };
+
+            var innerGroup = new List<Doc> { Docs.SoftLine };
             if (node.Declaration != null)
             {
-                innerGroup.Push(
+                innerGroup.Add(
                     this.PrintVariableDeclarationSyntax(node.Declaration)
                 );
             }
-            innerGroup.Push(
+            innerGroup.Add(
                 this.PrintSeparatedSyntaxList(
                     node.Initializers,
                     this.Print,
                     " "
                 )
             );
-            innerGroup.Push(this.PrintSyntaxToken(node.FirstSemicolonToken));
+            innerGroup.Add(SyntaxTokens.Print(node.FirstSemicolonToken));
             if (node.Condition != null)
             {
-                innerGroup.Push(Line, this.Print(node.Condition));
+                innerGroup.Add(Docs.Line, this.Print(node.Condition));
             }
             else
             {
-                innerGroup.Push(SoftLine);
+                innerGroup.Add(Docs.SoftLine);
             }
 
-            innerGroup.Push(this.PrintSyntaxToken(node.SecondSemicolonToken));
+            innerGroup.Add(this.PrintSyntaxToken(node.SecondSemicolonToken));
             if (node.Incrementors.Any())
             {
-                innerGroup.Push(Line);
+                innerGroup.Add(Docs.Line);
             }
             else
             {
-                innerGroup.Push(SoftLine);
+                innerGroup.Add(Docs.SoftLine);
             }
-            innerGroup.Push(
-                Indent(
+            innerGroup.Add(
+                Docs.Indent(
                     this.PrintSeparatedSyntaxList(
                         node.Incrementors,
                         this.Print,
-                        Line
+                        Docs.Line
                     )
                 )
             );
-            parts.Push(Group(Indent(innerGroup.ToArray())));
-            parts.Push(this.PrintSyntaxToken(node.CloseParenToken));
-            var statement = this.Print(node.Statement);
-            if (node.Statement is BlockSyntax)
+            docs.Add(
+                Docs.GroupWithId(
+                    groupId,
+                    Docs.Indent(innerGroup),
+                    Docs.SoftLine
+                )
+            );
+            docs.Add(this.PrintSyntaxToken(node.CloseParenToken));
+            if (node.Statement is BlockSyntax blockSyntax)
             {
-                parts.Push(statement);
+                docs.Add(
+                    this.PrintBlockSyntaxWithConditionalSpace(
+                        blockSyntax,
+                        groupId
+                    )
+                );
             }
             else
             {
                 // TODO 1 force braces? we do in if and else
-                parts.Push(Indent(Concat(HardLine, statement)));
+                docs.Add(
+                    Docs.Indent(Docs.HardLine, this.Print(node.Statement))
+                );
             }
 
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

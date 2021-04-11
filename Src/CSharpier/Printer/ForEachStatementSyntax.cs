@@ -1,3 +1,4 @@
+using System;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -7,7 +8,7 @@ namespace CSharpier
     {
         private Doc PrintForEachStatementSyntax(ForEachStatementSyntax node)
         {
-            var groupId = GroupIdGenerator.GenerateGroupIdFor(node);
+            var groupId = Guid.NewGuid().ToString();
 
             var result = Docs.Concat(
                 this.PrintExtraNewLines(node),
@@ -36,10 +37,13 @@ namespace CSharpier
                     Docs.SoftLine
                 ),
                 SyntaxTokens.Print(node.CloseParenToken),
-                this.Print(node.Statement)
+                node.Statement is BlockSyntax blockSyntax
+                    ? this.PrintBlockSyntaxWithConditionalSpace(
+                        blockSyntax,
+                        groupId
+                    )
+                    : this.Print(node.Statement)
             );
-
-            GroupIdGenerator.RemoveGroupIdFor(node);
 
             return result;
         }
