@@ -8,7 +8,7 @@ namespace CSharpier
         {
             return Concat(
                 this.Print(node.Left),
-                SpaceIfNoPreviousComment,
+                Docs.Line,
                 this.PrintSyntaxToken(
                     node.OperatorToken,
                     afterTokenIfNoTrailing: " "
