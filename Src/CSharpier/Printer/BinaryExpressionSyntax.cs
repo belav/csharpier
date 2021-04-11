@@ -8,8 +8,9 @@ namespace CSharpier
     {
         private Doc PrintBinaryExpressionSyntax(BinaryExpressionSyntax node)
         {
+            // TODO see prettier/src/language-js/print/binaryish.js for what we really need to do in here
             var useLine =
-                node.OperatorToken.Kind() is SyntaxKind.BarBarToken or SyntaxKind.BarToken or SyntaxKind.AmpersandAmpersandToken or SyntaxKind.AmpersandToken or SyntaxKind.PlusToken;
+                node.OperatorToken.Kind() is SyntaxKind.BarBarToken or SyntaxKind.BarToken or SyntaxKind.AmpersandAmpersandToken or SyntaxKind.AmpersandToken;
 
             return Docs.Concat(
                 this.Print(node.Left),
