@@ -1,0 +1,57 @@
+public class ClassName
+{
+    public void DoStuff() { }
+
+    public void LongMethodNameForceLineBreak(
+        string oneoneoneoneoneoneoneoneone,
+        string twotwotwotwotwotwotwotwo,
+        string threethreethreethreethreethree
+    ) {
+        return;
+    }
+
+    public void LongMethodNameForceLineBreakasdfasdfasfasdf(
+        string one,
+        string two,
+        string three
+    ) { }
+
+    public void DoStuff(
+        // leading
+        string one, // trailing
+        string two,
+        string three
+    ) {
+        var x = 0;
+    }
+
+    public void DoStuff(string one, string two) { }
+
+    public void DoStuff()
+    {
+        DoStuff();
+        DoStuff();
+    }
+
+    private Doc MethodWithParameters(
+        SomeClass one,
+        SomeClass two,
+        SomeClass three
+    ) => CallSomethingElseWithALongNameThatForcesABreak(one, two, three);
+
+    private Doc ShortMethod() => Method();
+
+    private Doc ShortishMethod(SomeClass one) =>
+        CallSomeOtherLongMethodSoThatItBreaks(one);
+
+    private Doc MethodWithParameters(
+        SomeClass one,
+        SomeClass two,
+        SomeClass three
+    ) => CallSomething(one, two, three);
+}
+
+class ExplicitInterfaceSpecifier : IDisposable
+{
+    void IDisposable.Dispose() { }
+}

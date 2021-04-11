@@ -7,10 +7,10 @@ namespace CSharpier
         private Doc PrintArrowExpressionClauseSyntax(
             ArrowExpressionClauseSyntax node)
         {
-            return Group(
-                Indent(
+            return Docs.Group(
+                Docs.Indent(
                     " ",
-                    this.PrintSyntaxToken(node.ArrowToken, Line),
+                    this.PrintSyntaxToken(node.ArrowToken, Docs.Line),
                     this.Print(node.Expression)
                 )
             );

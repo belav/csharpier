@@ -10,13 +10,16 @@ namespace CSharpier
             return Group(
                 this.PrintSyntaxToken(node.OpenParenToken),
                 node.Parameters.Count > 0
-                    ? Indent(
-                        SoftLine,
-                        this.PrintSeparatedSyntaxList(
-                            node.Parameters,
-                            this.PrintParameterSyntax,
-                            Line
-                        )
+                    ? Docs.Concat(
+                        Docs.Indent(
+                            Docs.SoftLine,
+                            this.PrintSeparatedSyntaxList(
+                                node.Parameters,
+                                this.PrintParameterSyntax,
+                                Line
+                            )
+                        ),
+                        Docs.SoftLine
                     )
                     : Doc.Null,
                 this.PrintSyntaxToken(node.CloseParenToken)

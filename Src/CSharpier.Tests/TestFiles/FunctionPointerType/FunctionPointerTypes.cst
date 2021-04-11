@@ -13,12 +13,13 @@ class ClassName
             int,
             NativeMethods.REQUEST_NOTIFICATION_STATUS> asyncCallback,
         delegate* unmanaged<IntPtr, void> requestsDrainedHandler,
-        IntPtr pvRequestContext)
-    {
+        IntPtr pvRequestContext
+    ) {
         return;
     }
 
     public static extern unsafe int InvokeCallbackFuncPtr_Inline_NoGCTransition(
         delegate* unmanaged[Cdecl]<int, int> cb,
-        int* n);
+        int* n
+    );
 }
