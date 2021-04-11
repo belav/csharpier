@@ -1,4 +1,5 @@
 using System.Linq;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,29 +8,35 @@ namespace CSharpier
     {
         private Doc PrintSwitchStatementSyntax(SwitchStatementSyntax node)
         {
-            var sections = node.Sections.Count == 0
+            Doc sections = node.Sections.Count == 0
                 ? " "
-                : Concat(
-                    Indent(
-                        Concat(
-                            HardLine,
-                            Join(HardLine, node.Sections.Select(this.Print))
+                : Docs.Concat(
+                    Docs.Indent(
+                        Docs.Concat(
+                            Docs.HardLine,
+                            Join(
+                                Docs.HardLine,
+                                node.Sections.Select(this.Print)
+                            )
                         )
                     ),
-                    HardLine
+                    Docs.HardLine
                 );
-            return Group(
-                this.PrintSyntaxToken(
-                    node.SwitchKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
-                this.PrintSyntaxToken(node.OpenParenToken),
-                this.Print(node.Expression),
-                this.PrintSyntaxToken(node.CloseParenToken),
-                Line,
-                this.PrintSyntaxToken(node.OpenBraceToken),
-                sections,
-                this.PrintSyntaxToken(node.CloseBraceToken)
+            return Docs.Concat(
+                this.PrintExtraNewLines(node),
+                Docs.Group(
+                    this.PrintSyntaxToken(
+                        node.SwitchKeyword,
+                        afterTokenIfNoTrailing: " "
+                    ),
+                    SyntaxTokens.Print(node.OpenParenToken),
+                    this.Print(node.Expression),
+                    SyntaxTokens.Print(node.CloseParenToken),
+                    Docs.Line,
+                    SyntaxTokens.Print(node.OpenBraceToken),
+                    sections,
+                    SyntaxTokens.Print(node.CloseBraceToken)
+                )
             );
         }
     }
