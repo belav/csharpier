@@ -6,14 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class IsPatternExpressionTests : BaseTest
     {
         [Test]
-        public void BasicIsPatternExpression()
+        public void IsPatternExpressions()
         {
-            this.RunTest("IsPatternExpression", "BasicIsPatternExpression");
-        }
-        [Test]
-        public void RecursivePattern()
-        {
-            this.RunTest("IsPatternExpression", "RecursivePattern");
+            this.RunTest("IsPatternExpression", "IsPatternExpressions");
         }
     }
 }

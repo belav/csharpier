@@ -7,14 +7,14 @@ namespace CSharpier
         private Doc PrintIsPatternExpressionSyntax(
             IsPatternExpressionSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.Print(node.Expression),
-                SpaceIfNoPreviousComment,
+                Docs.SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(
                     node.IsKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.Print(node.Pattern)
+                Docs.Indent(this.Print(node.Pattern))
             );
         }
     }

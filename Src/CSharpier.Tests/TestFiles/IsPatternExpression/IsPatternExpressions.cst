@@ -23,5 +23,17 @@ class ClassName
         }
 
         Debug.Assert(result is Exception or IPAddress[] or IPHostEntry);
+
+        if (expr is string { Length: 5 } s)
+        {
+            return;
+        }
+
+        var useLine =
+            node.OperatorToken.Kind() is SyntaxKind.BarBarToken
+                or SyntaxKind.BarToken
+                or SyntaxKind.AmpersandAmpersandToken
+                or SyntaxKind.AmpersandToken
+                or SyntaxKind.PlusToken;
     }
 }
