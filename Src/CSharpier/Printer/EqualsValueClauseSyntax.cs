@@ -7,7 +7,10 @@ namespace CSharpier
         private Doc PrintEqualsValueClauseSyntax(EqualsValueClauseSyntax node)
         {
             var separator = Line;
-            if (node.Parent is PropertyDeclarationSyntax) { }
+            if (node.Parent is PropertyDeclarationSyntax)
+            {
+            // keeping line
+            }
             else if (node.Value is QueryExpressionSyntax)
             {
                 separator = Doc.Null;

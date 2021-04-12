@@ -3,6 +3,7 @@ class ClassName
     void MethodName()
     {
         var query1 = from c in customers select c;
+        query1 = from c in customers select c into d select d;
 
         var query2 = from Customer c in customers select c;
 

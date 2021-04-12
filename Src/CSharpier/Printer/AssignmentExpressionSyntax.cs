@@ -11,7 +11,7 @@ namespace CSharpier
                 this.Print(node.Left),
                 " ",
                 this.PrintSyntaxToken(node.OperatorToken),
-                " ",
+                node.Right is QueryExpressionSyntax ? Docs.Null : " ",
                 this.Print(node.Right)
             );
         }

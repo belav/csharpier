@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,22 +10,34 @@ namespace CSharpier
         private Doc PrintAnonymousMethodExpressionSyntax(
             AnonymousMethodExpressionSyntax node)
         {
-            var parts = new Parts();
-            parts.Push(
+            var docs = new List<Doc>();
+            docs.Add(
                 this.PrintSyntaxToken(
                     node.AsyncKeyword,
                     afterTokenIfNoTrailing: " "
-                )
+                ),
+                SyntaxTokens.Print(node.DelegateKeyword)
             );
-            parts.Push(this.PrintSyntaxToken(node.DelegateKeyword));
+
+            string? groupId = null;
             if (node.ParameterList != null)
             {
-                parts.Push(this.PrintParameterListSyntax(node.ParameterList));
+                groupId = Guid.NewGuid().ToString();
+                docs.Add(
+                    this.PrintParameterListSyntax(node.ParameterList, groupId)
+                );
             }
-            // TODO 2 when will ExpressionBody ever exist? I can't find it in testing.
-            parts.Push(this.PrintBlockSyntax(node.Block));
 
-            return Concat(parts);
+            docs.Add(
+                groupId == null
+                    ? this.PrintBlockSyntax(node.Block)
+                    : this.PrintBlockSyntaxWithConditionalSpace(
+                        node.Block,
+                        groupId
+                    )
+            );
+
+            return Docs.Concat(docs);
         }
     }
 }

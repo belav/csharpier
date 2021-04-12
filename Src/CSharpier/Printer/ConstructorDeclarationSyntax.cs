@@ -1,3 +1,5 @@
+using System;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,20 +9,27 @@ namespace CSharpier
         private Doc PrintConstructorDeclarationSyntax(
             ConstructorDeclarationSyntax node)
         {
-            return Group(
+            var groupId = Guid.NewGuid().ToString();
+
+            return Docs.Group(
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
                 this.PrintModifiers(node.Modifiers),
-                this.PrintSyntaxToken(node.Identifier),
-                this.PrintParameterListSyntax(node.ParameterList),
+                SyntaxTokens.Print(node.Identifier),
+                this.PrintParameterListSyntax(node.ParameterList, groupId),
                 node.Initializer != null
                     ? this.Print(node.Initializer)
-                    : Doc.Null,
-                node.Body != null ? this.PrintBlockSyntax(node.Body) : Doc.Null,
+                    : Docs.Null,
+                node.Body != null
+                    ? this.PrintBlockSyntaxWithConditionalSpace(
+                        node.Body,
+                        groupId
+                    )
+                    : Docs.Null,
                 node.ExpressionBody != null
                     ? this.PrintArrowExpressionClauseSyntax(node.ExpressionBody)
-                    : Doc.Null,
-                this.PrintSyntaxToken(node.SemicolonToken)
+                    : Docs.Null,
+                SyntaxTokens.Print(node.SemicolonToken)
             );
         }
     }

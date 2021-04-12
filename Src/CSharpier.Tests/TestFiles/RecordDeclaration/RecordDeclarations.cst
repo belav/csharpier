@@ -8,8 +8,8 @@ record MostlyWeeklyTemperature(
     double monday,
     double thursday,
     double friday,
-    double sunday)
-{
+    double sunday
+) {
     public double Mean => (monday + monday + thursday + friday + sunday) / 5.0;
 }
 

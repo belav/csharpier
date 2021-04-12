@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class UnsafeStatementTests : BaseTest
     {
         [Test]
-        public void BasicUnsafeStatement()
+        public void UnsafeStatements()
         {
-            this.RunTest("UnsafeStatement", "BasicUnsafeStatement");
+            this.RunTest("UnsafeStatement", "UnsafeStatements");
         }
     }
 }

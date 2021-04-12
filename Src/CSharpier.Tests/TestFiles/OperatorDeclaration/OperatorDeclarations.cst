@@ -1,0 +1,14 @@
+class ClassName
+{
+    static Complex operator +(Complex a, Complex b)
+    {
+        return a.Add(b);
+    }
+
+    static Complex operator -(
+        Complex someOverlyLongNameToForceBreak,
+        Complex someOverlyLongNameToForceBreak2
+    ) {
+        return a.Add(b);
+    }
+}

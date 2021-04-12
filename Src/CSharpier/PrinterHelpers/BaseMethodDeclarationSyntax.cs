@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,12 +17,14 @@ namespace CSharpier
             TypeSyntax? returnType = null;
             ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier = null;
             TypeParameterListSyntax? typeParameterList = null;
-            Doc identifier = Doc.Null;
+            Doc identifier = Docs.Null;
             var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
             ParameterListSyntax? parameterList = null;
             BlockSyntax? body = null;
             ArrowExpressionClauseSyntax? expressionBody = null;
             SyntaxToken? semicolonToken = null;
+            var groupId = Guid.NewGuid().ToString();
+
             if (node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax)
             {
                 attributeLists = baseMethodDeclarationSyntax.AttributeLists;
@@ -47,7 +52,7 @@ namespace CSharpier
                 attributeLists = localFunctionStatementSyntax.AttributeLists;
                 modifiers = localFunctionStatementSyntax.Modifiers;
                 returnType = localFunctionStatementSyntax.ReturnType;
-                identifier = this.PrintSyntaxToken(
+                identifier = SyntaxTokens.Print(
                     localFunctionStatementSyntax.Identifier
                 );
                 typeParameterList = localFunctionStatementSyntax.TypeParameterList;
@@ -58,45 +63,42 @@ namespace CSharpier
                 semicolonToken = localFunctionStatementSyntax.SemicolonToken;
             }
 
-            var parts = new Parts();
-            parts.Push(this.PrintExtraNewLines(node));
+            var parts = new List<Doc>();
+            parts.Add(this.PrintExtraNewLines(node));
 
             if (attributeLists.HasValue)
             {
-                parts.Push(
-                    this.PrintAttributeLists(node, attributeLists.Value)
-                );
+                parts.Add(this.PrintAttributeLists(node, attributeLists.Value));
             }
             if (modifiers.HasValue)
             {
-                parts.Push(this.PrintModifiers(modifiers.Value));
+                parts.Add(this.PrintModifiers(modifiers.Value));
             }
 
             if (returnType != null)
             {
                 // TODO 1 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow? that may get complicated
-                parts.Push(this.Print(returnType));
-                parts.Push(SpaceIfNoPreviousComment);
+                parts.Add(this.Print(returnType), SpaceIfNoPreviousComment);
             }
 
             if (explicitInterfaceSpecifier != null)
             {
-                parts.Push(
+                parts.Add(
                     this.Print(explicitInterfaceSpecifier.Name),
                     this.PrintSyntaxToken(explicitInterfaceSpecifier.DotToken)
                 );
             }
 
-            if (identifier != null)
+            if (identifier != Docs.Null)
             {
-                parts.Push(identifier);
+                parts.Add(identifier);
             }
 
             if (
                 node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax
             )
             {
-                parts.Push(
+                parts.Add(
                     this.PrintSyntaxToken(
                         conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword,
                         " "
@@ -112,7 +114,7 @@ namespace CSharpier
                 node is OperatorDeclarationSyntax operatorDeclarationSyntax
             )
             {
-                parts.Push(
+                parts.Add(
                     this.Print(operatorDeclarationSyntax.ReturnType),
                     SpaceIfNoPreviousComment,
                     this.PrintSyntaxToken(
@@ -127,26 +129,28 @@ namespace CSharpier
 
             if (typeParameterList != null)
             {
-                parts.Push(
-                    this.PrintTypeParameterListSyntax(typeParameterList)
-                );
+                parts.Add(this.PrintTypeParameterListSyntax(typeParameterList));
             }
 
             if (parameterList != null)
             {
-                parts.Push(this.PrintParameterListSyntax(parameterList));
+                parts.Add(
+                    this.PrintParameterListSyntax(parameterList, groupId)
+                );
             }
 
-            parts.Push(this.PrintConstraintClauses(node, constraintClauses));
+            parts.Add(this.PrintConstraintClauses(node, constraintClauses));
             if (body != null)
             {
-                parts.Push(this.PrintBlockSyntax(body));
+                parts.Add(
+                    this.PrintBlockSyntaxWithConditionalSpace(body, groupId)
+                );
             }
             else
             {
                 if (expressionBody != null)
                 {
-                    parts.Push(
+                    parts.Add(
                         this.PrintArrowExpressionClauseSyntax(expressionBody)
                     );
                 }
@@ -154,10 +158,10 @@ namespace CSharpier
 
             if (semicolonToken.HasValue)
             {
-                parts.Push(this.PrintSyntaxToken(semicolonToken.Value));
+                parts.Add(this.PrintSyntaxToken(semicolonToken.Value));
             }
 
-            return Concat(parts);
+            return Docs.Concat(parts);
         }
     }
 }

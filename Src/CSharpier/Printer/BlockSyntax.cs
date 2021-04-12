@@ -27,22 +27,6 @@ namespace CSharpier
                 ? Docs.Line
                 : Docs.HardLine;
 
-            /* TODO 0 other possible node types that could get this block syntax formatting
-            AccessorDeclaration
-            AnonymousMethodExpression
-            CatchClause
-            CheckedStatement
-            ConstructorDeclaration
-            ConversionOperatorDeclaration
-            DestructorDeclaration
-            FixedStatement
-            LocalFunctionStatement
-            MethodDeclaration
-            OperatorDeclaration
-            ParenthesizedLambdaExpression
-            SimpleLambdaExpression
-            UnsafeStatement
-            */
             var docs = new List<Doc>
             {
                 groupId != null

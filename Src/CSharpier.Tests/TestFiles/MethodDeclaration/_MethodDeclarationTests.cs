@@ -6,37 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class MethodDeclarationTests : BaseTest
     {
         [Test]
-        public void BasicMethod()
+        public void MethodDeclarations()
         {
-            this.RunTest("MethodDeclaration", "BasicMethod");
-        }
-        [Test]
-        public void ExplicitlyInterfaceSpecifierMethod()
-        {
-            this.RunTest(
-                "MethodDeclaration",
-                "ExplicitlyInterfaceSpecifierMethod"
-            );
-        }
-        [Test]
-        public void LongMethodWithParameters()
-        {
-            this.RunTest("MethodDeclaration", "LongMethodWithParameters");
-        }
-        [Test]
-        public void MethodComments()
-        {
-            this.RunTest("MethodDeclaration", "MethodComments");
-        }
-        [Test]
-        public void MethodWithParameters()
-        {
-            this.RunTest("MethodDeclaration", "MethodWithParameters");
-        }
-        [Test]
-        public void MethodWithStatements()
-        {
-            this.RunTest("MethodDeclaration", "MethodWithStatements");
+            this.RunTest("MethodDeclaration", "MethodDeclarations");
         }
     }
 }

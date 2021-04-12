@@ -1,22 +1,27 @@
-using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
 {
     public partial class Printer
     {
-        private Doc PrintParameterListSyntax(ParameterListSyntax node)
+        private Doc PrintParameterListSyntax(
+            ParameterListSyntax node,
+            string? groupId = null)
         {
-            return Group(
+            return Docs.GroupWithId(
+                groupId ?? string.Empty,
                 this.PrintSyntaxToken(node.OpenParenToken),
                 node.Parameters.Count > 0
-                    ? Indent(
-                        SoftLine,
-                        this.PrintSeparatedSyntaxList(
-                            node.Parameters,
-                            this.PrintParameterSyntax,
-                            Line
-                        )
+                    ? Docs.Concat(
+                        Docs.Indent(
+                            Docs.SoftLine,
+                            this.PrintSeparatedSyntaxList(
+                                node.Parameters,
+                                this.PrintParameterSyntax,
+                                Line
+                            )
+                        ),
+                        Docs.SoftLine
                     )
                     : Doc.Null,
                 this.PrintSyntaxToken(node.CloseParenToken)
