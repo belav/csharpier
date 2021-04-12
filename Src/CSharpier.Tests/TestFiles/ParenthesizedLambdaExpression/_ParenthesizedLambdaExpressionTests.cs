@@ -6,19 +6,11 @@ namespace CSharpier.Tests.TestFiles
     public class ParenthesizedLambdaExpressionTests : BaseTest
     {
         [Test]
-        public void AsyncAwaitParaenthesizedLambdaExpression()
+        public void ParenthesizedLambdaExpressions()
         {
             this.RunTest(
                 "ParenthesizedLambdaExpression",
-                "AsyncAwaitParaenthesizedLambdaExpression"
-            );
-        }
-        [Test]
-        public void BasicParenthesizedLambdaExpression()
-        {
-            this.RunTest(
-                "ParenthesizedLambdaExpression",
-                "BasicParenthesizedLambdaExpression"
+                "ParenthesizedLambdaExpressions"
             );
         }
     }

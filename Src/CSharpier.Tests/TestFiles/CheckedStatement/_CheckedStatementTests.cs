@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class CheckedStatementTests : BaseTest
     {
         [Test]
-        public void BasicCheckedStatement()
+        public void CheckedStatements()
         {
-            this.RunTest("CheckedStatement", "BasicCheckedStatement");
+            this.RunTest("CheckedStatement", "CheckedStatements");
         }
     }
 }

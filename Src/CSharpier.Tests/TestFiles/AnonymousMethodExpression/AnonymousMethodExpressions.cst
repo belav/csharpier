@@ -1,0 +1,23 @@
+class ClassName
+{
+    void MethodName()
+    {
+        Func<bool, bool> f = delegate(bool a)
+        {
+            return !a;
+        };
+
+        Func<bool, bool> f = async delegate(bool a)
+        {
+            return await !a;
+        };
+
+        Func<bool, bool> f = delegate(
+            string longName,
+            string longerName,
+            string longeeeeeeestName
+        ) {
+            return !a;
+        };
+    }
+}

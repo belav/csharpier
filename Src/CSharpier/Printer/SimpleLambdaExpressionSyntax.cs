@@ -7,15 +7,14 @@ namespace CSharpier
         private Doc PrintSimpleLambdaExpressionSyntax(
             SimpleLambdaExpressionSyntax node)
         {
-            return Concat(
+            return Docs.Group(
                 this.PrintModifiers(node.Modifiers),
                 this.Print(node.Parameter),
                 SpaceIfNoPreviousComment,
-                this.PrintSyntaxToken(
-                    node.ArrowToken,
-                    afterTokenIfNoTrailing: " "
-                ),
-                this.Print(node.Body)
+                this.PrintSyntaxToken(node.ArrowToken),
+                node.Body is BlockSyntax blockSyntax
+                    ? this.PrintBlockSyntax(blockSyntax)
+                    : Docs.Indent(Docs.Line, this.Print(node.Body))
             );
         }
     }

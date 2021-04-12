@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -17,6 +18,7 @@ namespace CSharpier
             SyntaxToken? keyword = null;
             Doc members = Doc.Null;
             SyntaxToken? semicolonToken = null;
+            string? groupId = null;
 
             if (node is TypeDeclarationSyntax typeDeclarationSyntax)
             {
@@ -54,6 +56,7 @@ namespace CSharpier
                 )
                 {
                     keyword = recordDeclarationSyntax.Keyword;
+                    groupId = Guid.NewGuid().ToString();
                     parameterList = recordDeclarationSyntax.ParameterList;
                 }
 
@@ -92,7 +95,9 @@ namespace CSharpier
 
             if (parameterList != null)
             {
-                parts.Push(this.PrintParameterListSyntax(parameterList));
+                parts.Push(
+                    this.PrintParameterListSyntax(parameterList, groupId)
+                );
             }
 
             if (typeParameterList != null)
@@ -114,10 +119,12 @@ namespace CSharpier
                 DocUtilities.RemoveInitialDoubleHardLine(members);
 
                 parts.Push(
-                    HardLine,
+                    groupId != null
+                        ? Docs.IfBreak(" ", Docs.Line, groupId)
+                        : Docs.HardLine,
                     this.PrintSyntaxToken(node.OpenBraceToken),
                     members,
-                    HardLine,
+                    Docs.HardLine,
                     this.PrintSyntaxToken(node.CloseBraceToken)
                 );
             }

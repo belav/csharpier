@@ -1,0 +1,25 @@
+public class ClassName
+{
+    public void MethodName()
+    {
+        this.Where(() => true);
+        this.Where(async () => true);
+        this.Where(static () => true);
+        this.Where(async static () => true);
+        this.SomeMethod(
+            (
+                a11111111111111111111111111111,
+                b222222222222222222222222222222
+            ) => someLongNameThatWillDoStuff
+        );
+
+        var task = Task.Factory.StartNew(
+            async () =>
+            {
+                return await new WebClient().DownloadStringTaskAsync(
+                    "http://example.com"
+                );
+            }
+        );
+    }
+}

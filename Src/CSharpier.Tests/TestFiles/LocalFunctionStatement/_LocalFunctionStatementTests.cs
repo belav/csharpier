@@ -6,12 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class LocalFunctionStatementTests : BaseTest
     {
         [Test]
-        public void BasicLocalFunctionStatement()
+        public void LocalFunctionStatements()
         {
-            this.RunTest(
-                "LocalFunctionStatement",
-                "BasicLocalFunctionStatement"
-            );
+            this.RunTest("LocalFunctionStatement", "LocalFunctionStatements");
         }
     }
 }

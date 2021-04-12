@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class OperatorDeclarationTests : BaseTest
     {
         [Test]
-        public void BasicOperatorDeclaration()
+        public void OperatorDeclarations()
         {
-            this.RunTest("OperatorDeclaration", "BasicOperatorDeclaration");
+            this.RunTest("OperatorDeclaration", "OperatorDeclarations");
         }
     }
 }

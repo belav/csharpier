@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,8 +7,8 @@ namespace CSharpier
     {
         private Doc PrintCheckedStatementSyntax(CheckedStatementSyntax node)
         {
-            return Concat(
-                this.PrintSyntaxToken(node.Keyword),
+            return Docs.Concat(
+                SyntaxTokens.Print(node.Keyword),
                 this.PrintBlockSyntax(node.Block)
             );
         }

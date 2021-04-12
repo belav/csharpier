@@ -6,17 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class DestructorDeclarationTests : BaseTest
     {
         [Test]
-        public void BasicDestructorDeclaration()
+        public void DestructorDeclarations()
         {
-            this.RunTest("DestructorDeclaration", "BasicDestructorDeclaration");
-        }
-        [Test]
-        public void DestructorDeclarationWithExpressionBody()
-        {
-            this.RunTest(
-                "DestructorDeclaration",
-                "DestructorDeclarationWithExpressionBody"
-            );
+            this.RunTest("DestructorDeclaration", "DestructorDeclarations");
         }
     }
 }

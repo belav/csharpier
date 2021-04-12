@@ -1,6 +1,0 @@
-class ClassName
-{
-    ~ClassName() => OnDipose();
-
-    public void OnDispose() { }
-}

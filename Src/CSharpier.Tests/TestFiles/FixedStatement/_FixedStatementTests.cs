@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class FixedStatementTests : BaseTest
     {
         [Test]
-        public void BasicFixedStatement()
+        public void FixedStatements()
         {
-            this.RunTest("FixedStatement", "BasicFixedStatement");
+            this.RunTest("FixedStatement", "FixedStatements");
         }
     }
 }

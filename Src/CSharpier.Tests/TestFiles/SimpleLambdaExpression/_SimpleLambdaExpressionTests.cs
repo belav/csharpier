@@ -6,12 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class SimpleLambdaExpressionTests : BaseTest
     {
         [Test]
-        public void BasicSimpleLambdaExpression()
+        public void SimpleLambdaExpressions()
         {
-            this.RunTest(
-                "SimpleLambdaExpression",
-                "BasicSimpleLambdaExpression"
-            );
+            this.RunTest("SimpleLambdaExpression", "SimpleLambdaExpressions");
         }
     }
 }
