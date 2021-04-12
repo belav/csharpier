@@ -12,7 +12,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         // There are a ton of edge cases that are not yet handled
         public static Doc Print(BinaryExpressionSyntax node)
         {
-            return Docs.Group(PrintStuff(node));
+            return Docs.Group(PrintBinaryExpression(node));
         }
 
         // TODO 0 kill? runtime repo has files that will fail on deep recursion
@@ -26,7 +26,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             && three != four
             && five != six
          */
-        private static List<Doc> PrintStuff(SyntaxNode node)
+        private static List<Doc> PrintBinaryExpression(SyntaxNode node)
         {
             if (depth > 200)
             {
@@ -56,7 +56,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         )
                     )
                     {
-                        parts.AddRange(PrintStuff(left));
+                        parts.AddRange(PrintBinaryExpression(left));
                     }
                     else
                     {
@@ -101,7 +101,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         }
 
         // this was just thrown together to get the tests we currently have working
-        // it is missing lot of operators
+        // it is missing a lot of operators
         private static int GetPrecedence(SyntaxToken syntaxToken)
         {
             switch (syntaxToken.Kind())
