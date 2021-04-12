@@ -1,4 +1,6 @@
 using System;
+using CSharpier.SyntaxPrinter;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -78,9 +80,7 @@ namespace CSharpier
                     case BaseListSyntax baseListSyntax:
                         return this.PrintBaseListSyntax(baseListSyntax);
                     case BinaryExpressionSyntax binaryExpressionSyntax:
-                        return this.PrintBinaryExpressionSyntax(
-                            binaryExpressionSyntax
-                        );
+                        return BinaryExpression.Print(binaryExpressionSyntax);
                     case BinaryPatternSyntax binaryPatternSyntax:
                         return this.PrintBinaryPatternSyntax(
                             binaryPatternSyntax
