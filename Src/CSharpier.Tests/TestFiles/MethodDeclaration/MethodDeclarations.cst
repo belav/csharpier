@@ -16,6 +16,11 @@ public class ClassName
         string three
     ) { }
 
+    public void ReallyLongMethodNameWithoutAnyParametersShouldNewLineBrace111111()
+    {
+        return;
+    }
+
     public void DoStuff(
         // leading
         string one, // trailing
