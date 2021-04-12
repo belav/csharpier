@@ -7,17 +7,17 @@ namespace CSharpier
     {
         private Doc PrintRecursivePatternSyntax(RecursivePatternSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 node.Type != null ? this.Print(node.Type) : Doc.Null,
                 node.PositionalPatternClause != null
-                    ? Concat(
+                    ? Docs.Concat(
                             this.PrintSyntaxToken(
                                 node.PositionalPatternClause.OpenParenToken
                             ),
                             this.PrintSeparatedSyntaxList(
                                 node.PositionalPatternClause.Subpatterns,
                                 subpatternNode =>
-                                    Concat(
+                                    Docs.Concat(
                                         subpatternNode.NameColon != null
                                             ? this.PrintNameColonSyntax(
                                                     subpatternNode.NameColon
@@ -33,7 +33,7 @@ namespace CSharpier
                         )
                     : string.Empty,
                 node.PropertyPatternClause != null
-                    ? Concat(
+                    ? Docs.Concat(
                             " ",
                             this.PrintSyntaxToken(
                                 node.PropertyPatternClause.OpenBraceToken,
@@ -42,7 +42,7 @@ namespace CSharpier
                             this.PrintSeparatedSyntaxList(
                                 node.PropertyPatternClause.Subpatterns,
                                 subpatternNode =>
-                                    Concat(
+                                    Docs.Concat(
                                         subpatternNode.NameColon != null
                                             ? this.PrintNameColonSyntax(
                                                     subpatternNode.NameColon
@@ -52,7 +52,7 @@ namespace CSharpier
                                     ),
                                 " "
                             ),
-                            SpaceIfNoPreviousComment,
+                            Docs.SpaceIfNoPreviousComment,
                             this.PrintSyntaxToken(
                                 node.PropertyPatternClause.CloseBraceToken,
                                 " "

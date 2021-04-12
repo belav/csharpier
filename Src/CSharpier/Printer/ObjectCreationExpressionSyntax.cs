@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintObjectCreationExpressionSyntax(
             ObjectCreationExpressionSyntax node
         ) {
-            return Group(
+            return Docs.Group(
                 this.PrintSyntaxToken(
                     node.NewKeyword,
                     afterTokenIfNoTrailing: " "

@@ -46,7 +46,7 @@ namespace CSharpier
                             this.PrintSeparatedSyntaxList(
                                 attributeNode.ArgumentList.Arguments,
                                 attributeArgumentNode =>
-                                    Concat(
+                                    Docs.Concat(
                                         attributeArgumentNode.NameEquals != null
                                             ? this.PrintNameEqualsSyntax(
                                                     attributeArgumentNode.NameEquals
@@ -83,7 +83,7 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.CloseBracketToken)
             );
 
-            return Group(docs);
+            return Docs.Group(docs);
         }
     }
 }

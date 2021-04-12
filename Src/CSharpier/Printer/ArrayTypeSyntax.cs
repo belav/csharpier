@@ -7,9 +7,9 @@ namespace CSharpier
     {
         private Doc PrintArrayTypeSyntax(ArrayTypeSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.Print(node.ElementType),
-                Concat(node.RankSpecifiers.Select(this.Print).ToArray())
+                Docs.Concat(node.RankSpecifiers.Select(this.Print).ToArray())
             );
         }
     }

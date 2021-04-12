@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,25 +8,26 @@ namespace CSharpier
         private Doc PrintParenthesizedLambdaExpressionSyntax(
             ParenthesizedLambdaExpressionSyntax node
         ) {
-            var parts = new Parts(
+            var docs = new List<Doc>
+            {
                 this.PrintModifiers(node.Modifiers),
                 this.PrintParameterListSyntax(node.ParameterList),
-                SpaceIfNoPreviousComment,
+                Docs.SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(
                     node.ArrowToken,
                     afterTokenIfNoTrailing: " "
                 )
-            );
+            };
             if (node.ExpressionBody != null)
             {
-                parts.Push(this.Print(node.ExpressionBody));
+                docs.Add(this.Print(node.ExpressionBody));
             }
             else if (node.Block != null)
             {
-                parts.Push(this.PrintBlockSyntax(node.Block));
+                docs.Add(this.PrintBlockSyntax(node.Block));
             }
 
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

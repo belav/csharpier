@@ -6,9 +6,9 @@ namespace CSharpier
     {
         private Doc PrintWithExpressionSyntax(WithExpressionSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.Print(node.Expression),
-                SpaceIfNoPreviousComment,
+                Docs.SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(
                     node.WithKeyword,
                     afterTokenIfNoTrailing: " "

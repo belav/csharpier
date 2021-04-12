@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintRefValueExpressionSyntax(
             RefValueExpressionSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.Keyword),
                 this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Expression),

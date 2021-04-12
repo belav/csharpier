@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintTypeParameterSyntax(TypeParameterSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintAttributeLists(node, node.AttributeLists),
                 this.PrintSyntaxToken(
                     node.VarianceKeyword,

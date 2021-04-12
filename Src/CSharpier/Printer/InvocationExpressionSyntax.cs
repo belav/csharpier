@@ -50,7 +50,7 @@ namespace CSharpier
                     printedNodes.Add(
                         new PrintedNode(
                             Node: memberAccessExpressionSyntax,
-                            Doc: Concat(
+                            Doc: Docs.Concat(
                                 this.PrintSyntaxToken(
                                     memberAccessExpressionSyntax.OperatorToken
                                 ),
@@ -135,11 +135,11 @@ namespace CSharpier
             var cutoff = 3;
             if (groups.Count < cutoff)
             {
-                return Group(groups.SelectMany(o => o).ToArray());
+                return Docs.Group(groups.SelectMany(o => o).ToArray());
             }
 
-            return Concat(
-                Group(groups[0].ToArray()),
+            return Docs.Concat(
+                Docs.Group(groups[0].ToArray()),
                 PrintIndentedGroup(groups.Skip(1))
             );
         }
@@ -157,8 +157,13 @@ namespace CSharpier
             }
 
             // TODO GH-7 softline here?
-            return Indent(
-                Group(Join(SoftLine, groups.Select(o => Group(o.ToArray()))))
+            return Docs.Indent(
+                Docs.Group(
+                    Join(
+                        Docs.SoftLine,
+                        groups.Select(o => Docs.Group(o.ToArray()))
+                    )
+                )
             );
         }
     }

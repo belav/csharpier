@@ -6,12 +6,12 @@ namespace CSharpier
     {
         private Doc PrintQueryContinuationSyntax(QueryContinuationSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(
                     node.IntoKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSyntaxToken(node.Identifier, Line),
+                this.PrintSyntaxToken(node.Identifier, Docs.Line),
                 this.PrintQueryBodySyntax(node.Body)
             );
         }

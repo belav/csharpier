@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -32,7 +33,7 @@ namespace CSharpier
             ) {
                 expressionBody = indexerDeclarationSyntax.ExpressionBody;
                 explicitInterfaceSpecifierSyntax = indexerDeclarationSyntax.ExplicitInterfaceSpecifier;
-                identifier = Concat(
+                identifier = Docs.Concat(
                     this.PrintSyntaxToken(indexerDeclarationSyntax.ThisKeyword),
                     this.Print(indexerDeclarationSyntax.ParameterList)
                 );
@@ -54,7 +55,7 @@ namespace CSharpier
             Doc contents = string.Empty;
             if (node.AccessorList != null)
             {
-                var separator = SpaceIfNoPreviousComment;
+                Doc separator = Docs.SpaceIfNoPreviousComment;
                 if (
                     node.AccessorList.Accessors.Any(
                         o =>
@@ -64,15 +65,15 @@ namespace CSharpier
                             || o.AttributeLists.Any()
                     )
                 ) {
-                    separator = Line;
+                    separator = Docs.Line;
                 }
 
-                contents = Group(
-                    Concat(
+                contents = Docs.Group(
+                    Docs.Concat(
                         separator,
                         this.PrintSyntaxToken(node.AccessorList.OpenBraceToken),
-                        Group(
-                            Indent(
+                        Docs.Group(
+                            Docs.Indent(
                                 node.AccessorList.Accessors.Select(
                                         o =>
                                             this.PrintAccessorDeclarationSyntax(
@@ -90,25 +91,25 @@ namespace CSharpier
             }
             else if (expressionBody != null)
             {
-                contents = Concat(
+                contents = Docs.Concat(
                     this.PrintArrowExpressionClauseSyntax(expressionBody)
                 );
             }
 
-            var parts = new Parts();
+            var docs = new List<Doc>();
 
-            parts.Push(this.PrintExtraNewLines(node));
-            parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
+            docs.Add(this.PrintExtraNewLines(node));
+            docs.Add(this.PrintAttributeLists(node, node.AttributeLists));
 
-            return Group(
-                Concat(
-                    Concat(parts),
+            return Docs.Group(
+                Docs.Concat(
+                    Docs.Concat(docs),
                     this.PrintModifiers(node.Modifiers),
                     eventKeyword,
                     this.Print(node.Type),
                     " ",
                     explicitInterfaceSpecifierSyntax != null
-                        ? Concat(
+                        ? Docs.Concat(
                                 this.Print(
                                     explicitInterfaceSpecifierSyntax.Name
                                 ),
@@ -133,38 +134,38 @@ namespace CSharpier
             AccessorDeclarationSyntax node,
             Doc separator
         ) {
-            var parts = new Parts();
+            var docs = new List<Doc>();
             if (
                 node.Modifiers.Count > 0
                 || node.AttributeLists.Count > 0
                 || node.Body != null
                 || node.ExpressionBody != null
             ) {
-                parts.Push(HardLine);
+                docs.Add(Docs.HardLine);
             }
             else
             {
-                parts.Push(separator);
+                docs.Add(separator);
             }
 
-            parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
-            parts.Push(this.PrintModifiers(node.Modifiers));
-            parts.Push(this.PrintSyntaxToken(node.Keyword));
+            docs.Add(this.PrintAttributeLists(node, node.AttributeLists));
+            docs.Add(this.PrintModifiers(node.Modifiers));
+            docs.Add(this.PrintSyntaxToken(node.Keyword));
 
             if (node.Body != null)
             {
-                parts.Push(this.PrintBlockSyntax(node.Body));
+                docs.Add(this.PrintBlockSyntax(node.Body));
             }
             else if (node.ExpressionBody != null)
             {
-                parts.Push(
+                docs.Add(
                     this.PrintArrowExpressionClauseSyntax(node.ExpressionBody)
                 );
             }
 
-            parts.Push(this.PrintSyntaxToken(node.SemicolonToken));
+            docs.Add(this.PrintSyntaxToken(node.SemicolonToken));
 
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

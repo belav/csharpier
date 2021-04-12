@@ -7,7 +7,7 @@ namespace CSharpier
     {
         public static NullDoc Null { get; } = NullDoc.Instance;
 
-        private static Doc BreakParent => new BreakParent();
+        public static Doc BreakParent => new BreakParent();
 
         // TODO 0 maybe all spaces should be this instead? but if we ditch leading/trailing comments, this won't work anymore
         public static SpaceIfNoPreviousComment SpaceIfNoPreviousComment =>
@@ -39,12 +39,12 @@ namespace CSharpier
 
         public static Concat Concat(List<Doc> contents)
         {
-            return new(CleanParts(contents));
+            return new(CleanContents(contents));
         }
 
         public static Concat Concat(params Doc[] contents)
         {
-            return new(CleanParts(contents.ToList()));
+            return new(CleanContents(contents.ToList()));
         }
 
         public static ForceFlat ForceFlat(params Doc[] contents)
@@ -111,25 +111,25 @@ namespace CSharpier
         // can be used to clean up the doc tree, ideally we would change our printing process
         // to not have the deeply nested Concats, but that's a large change
         // only allowed when in debug because it does slow things down a bit
-        private static List<Doc> CleanParts(List<Doc> parts)
+        private static List<Doc> CleanContents(List<Doc> contents)
         {
-            return parts;
+            return contents;
 #if DEBUG
-            var newParts = new List<Doc>();
-            foreach (var doc in parts)
+            var newDocs = new List<Doc>();
+            foreach (var doc in contents)
             {
                 if (doc is Concat concat)
                 {
-                    newParts.AddRange(CleanParts(concat.Parts));
+                    newDocs.AddRange(CleanContents(concat.Contents));
                 }
                 else if (doc != Docs.Null)
                 {
-                    newParts.Add(doc);
+                    newDocs.Add(doc);
                 }
             }
-            return newParts;
+            return newDocs;
 #endif
-            return parts;
+            return contents;
         }
     }
 }

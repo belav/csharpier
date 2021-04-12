@@ -9,19 +9,19 @@ namespace CSharpier
         {
             if (node.Parameters.Count == 0)
             {
-                return Doc.Null;
+                return Docs.Null;
             }
-            return Group(
+            return Docs.Group(
                 this.PrintSyntaxToken(node.LessThanToken),
-                Indent(
-                    SoftLine,
+                Docs.Indent(
+                    Docs.SoftLine,
                     this.PrintSeparatedSyntaxList(
                         node.Parameters,
                         this.PrintTypeParameterSyntax,
-                        Line
+                        Docs.Line
                     )
                 ),
-                SoftLine,
+                Docs.SoftLine,
                 this.PrintSyntaxToken(node.GreaterThanToken)
             );
         }

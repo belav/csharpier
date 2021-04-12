@@ -7,18 +7,18 @@ namespace CSharpier
         private Doc PrintAnonymousObjectCreationExpressionSyntax(
             AnonymousObjectCreationExpressionSyntax node
         ) {
-            return Group(
-                this.PrintSyntaxToken(node.NewKeyword, Line),
+            return Docs.Group(
+                this.PrintSyntaxToken(node.NewKeyword, Docs.Line),
                 this.PrintSyntaxToken(node.OpenBraceToken),
-                Indent(
-                    Line,
+                Docs.Indent(
+                    Docs.Line,
                     this.PrintSeparatedSyntaxList(
                         node.Initializers,
                         this.PrintAnonymousObjectMemberDeclaratorSyntax,
-                        Line
+                        Docs.Line
                     )
                 ),
-                Line,
+                Docs.Line,
                 this.PrintSyntaxToken(node.CloseBraceToken)
             );
         }

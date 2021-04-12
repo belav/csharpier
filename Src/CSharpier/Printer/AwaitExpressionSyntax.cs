@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintAwaitExpressionSyntax(AwaitExpressionSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(
                     node.AwaitKeyword,
                     afterTokenIfNoTrailing: " "

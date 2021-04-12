@@ -52,7 +52,7 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            concat.Parts.Should().BeEquivalentTo(Docs.HardLine);
+            concat.Contents.Should().BeEquivalentTo(Docs.HardLine);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            concat.Parts.Should().ContainSingle();
+            concat.Contents.Should().ContainSingle();
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            concat.Parts.Should().BeEquivalentTo(Docs.HardLine);
+            concat.Contents.Should().BeEquivalentTo(Docs.HardLine);
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            concat.Parts.Should().ContainSingle();
+            concat.Contents.Should().ContainSingle();
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            concat.Parts.Should().HaveCount(2);
+            concat.Contents.Should().HaveCount(2);
         }
 
         [Test]

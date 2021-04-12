@@ -10,19 +10,19 @@ namespace CSharpier
             SeparatedSyntaxList<ArgumentSyntax> arguments,
             SyntaxToken closeParenToken
         ) =>
-            Concat(
+            Docs.Concat(
                 this.PrintSyntaxToken(openParenToken),
                 arguments.Any()
-                    ? Indent(
-                            SoftLine,
+                    ? Docs.Indent(
+                            Docs.SoftLine,
                             this.PrintSeparatedSyntaxList(
                                 arguments,
                                 this.PrintArgumentSyntax,
-                                Line
+                                Docs.Line
                             )
                         )
                     : Doc.Null,
-                arguments.Any() ? SoftLine : Doc.Null,
+                arguments.Any() ? Docs.SoftLine : Doc.Null,
                 this.PrintSyntaxToken(closeParenToken)
             );
     }

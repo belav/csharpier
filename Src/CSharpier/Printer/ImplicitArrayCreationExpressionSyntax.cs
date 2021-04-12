@@ -10,10 +10,10 @@ namespace CSharpier
         ) {
             var commas = node.Commas.Select(o => this.PrintSyntaxToken(o))
                 .ToArray();
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.NewKeyword),
                 this.PrintSyntaxToken(node.OpenBracketToken),
-                Concat(commas),
+                Docs.Concat(commas),
                 this.PrintSyntaxToken(
                     node.CloseBracketToken,
                     afterTokenIfNoTrailing: " "

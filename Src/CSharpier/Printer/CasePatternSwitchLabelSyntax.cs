@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,8 +8,8 @@ namespace CSharpier
         private Doc PrintCasePatternSwitchLabelSyntax(
             CasePatternSwitchLabelSyntax node
         ) {
-            var parts = new Parts();
-            parts.Push(
+            var docs = new List<Doc>();
+            docs.Add(
                 this.PrintSyntaxToken(
                     node.Keyword,
                     afterTokenIfNoTrailing: " "
@@ -17,10 +18,10 @@ namespace CSharpier
             );
             if (node.WhenClause != null)
             {
-                parts.Push(" ", this.Print(node.WhenClause));
+                docs.Add(" ", this.Print(node.WhenClause));
             }
-            parts.Push(this.PrintSyntaxToken(node.ColonToken));
-            return Concat(parts);
+            docs.Add(this.PrintSyntaxToken(node.ColonToken));
+            return Docs.Concat(docs);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintForEachVariableStatementSyntax(
             ForEachVariableStatementSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.AwaitKeyword,

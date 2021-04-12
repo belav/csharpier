@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -7,30 +8,29 @@ namespace CSharpier
     {
         private Doc PrintSwitchSectionSyntax(SwitchSectionSyntax node)
         {
-            var parts = new Parts(
-                Join(HardLine, node.Labels.Select(this.Print))
-            );
+            var docs = new List<Doc>
+            {
+                Join(Docs.HardLine, node.Labels.Select(this.Print))
+            };
             if (
                 node.Statements.Count == 1
                 && node.Statements[0] is BlockSyntax blockSyntax
             ) {
-                parts.Push(this.PrintBlockSyntax(blockSyntax));
+                docs.Add(this.PrintBlockSyntax(blockSyntax));
             }
             else
             {
-                parts.Push(
-                    Indent(
-                        Concat(
-                            HardLine,
-                            Join(
-                                HardLine,
-                                node.Statements.Select(this.Print).ToArray()
-                            )
+                docs.Add(
+                    Docs.Indent(
+                        Docs.HardLine,
+                        Join(
+                            Docs.HardLine,
+                            node.Statements.Select(this.Print).ToArray()
                         )
                     )
                 );
             }
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             depth++;
             try
             {
-                var parts = new List<Doc>();
+                var docs = new List<Doc>();
                 if (node is BinaryExpressionSyntax binaryExpressionSyntax)
                 {
                     // Put all operators with the same precedence level in the same
@@ -54,16 +54,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             left.OperatorToken
                         )
                     ) {
-                        parts.AddRange(PrintBinaryExpression(left));
+                        docs.AddRange(PrintBinaryExpression(left));
                     }
                     else
                     {
-                        parts.Add(
+                        docs.Add(
                             SyntaxNodes.Print(binaryExpressionSyntax.Left)
                         );
                     }
 
-                    parts.Add(
+                    docs.Add(
                         Docs.Line,
                         SyntaxTokens.Print(
                             binaryExpressionSyntax.OperatorToken
@@ -74,10 +74,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 }
                 else
                 {
-                    parts.Add(Docs.Group(SyntaxNodes.Print(node)));
+                    docs.Add(Docs.Group(SyntaxNodes.Print(node)));
                 }
 
-                return parts;
+                return docs;
             }
 
             finally

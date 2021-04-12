@@ -6,14 +6,14 @@ namespace CSharpier
     {
         private Doc PrintEqualsValueClauseSyntax(EqualsValueClauseSyntax node)
         {
-            var separator = Line;
+            Doc separator = Docs.Line;
             if (node.Parent is PropertyDeclarationSyntax)
             {
                 // keeping line
             }
             else if (node.Value is QueryExpressionSyntax)
             {
-                separator = Doc.Null;
+                separator = Docs.Null;
             }
             else if (
                 node.Value is AnonymousObjectCreationExpressionSyntax
@@ -25,18 +25,18 @@ namespace CSharpier
                 || node.Value is InvocationExpressionSyntax
                 || node.Value is SwitchExpressionSyntax
             ) {
-                separator = SpaceIfNoPreviousComment;
+                separator = Docs.SpaceIfNoPreviousComment;
             }
 
-            var result = Group(
-                SpaceIfNoPreviousComment,
+            Doc result = Docs.Group(
+                Docs.SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(node.EqualsToken, separator),
                 this.Print(node.Value)
             );
 
             if (separator is LineDoc)
             {
-                result = Indent(result);
+                result = Docs.Indent(result);
             }
 
             return result;

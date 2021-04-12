@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintPrefixUnaryExpressionSyntax(
             PrefixUnaryExpressionSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.OperatorToken),
                 this.Print(node.Operand)
             );

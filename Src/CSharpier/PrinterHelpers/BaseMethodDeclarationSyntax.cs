@@ -63,27 +63,26 @@ namespace CSharpier
                 semicolonToken = localFunctionStatementSyntax.SemicolonToken;
             }
 
-            var parts = new List<Doc>();
-            parts.Add(this.PrintExtraNewLines(node));
+            var docs = new List<Doc> { this.PrintExtraNewLines(node) };
 
             if (attributeLists.HasValue)
             {
-                parts.Add(this.PrintAttributeLists(node, attributeLists.Value));
+                docs.Add(this.PrintAttributeLists(node, attributeLists.Value));
             }
             if (modifiers.HasValue)
             {
-                parts.Add(this.PrintModifiers(modifiers.Value));
+                docs.Add(this.PrintModifiers(modifiers.Value));
             }
 
             if (returnType != null)
             {
                 // TODO 1 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow? that may get complicated
-                parts.Add(this.Print(returnType), SpaceIfNoPreviousComment);
+                docs.Add(this.Print(returnType), Docs.SpaceIfNoPreviousComment);
             }
 
             if (explicitInterfaceSpecifier != null)
             {
-                parts.Add(
+                docs.Add(
                     this.Print(explicitInterfaceSpecifier.Name),
                     this.PrintSyntaxToken(explicitInterfaceSpecifier.DotToken)
                 );
@@ -91,13 +90,13 @@ namespace CSharpier
 
             if (identifier != Docs.Null)
             {
-                parts.Add(identifier);
+                docs.Add(identifier);
             }
 
             if (
                 node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax
             ) {
-                parts.Add(
+                docs.Add(
                     this.PrintSyntaxToken(
                         conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword,
                         " "
@@ -112,9 +111,9 @@ namespace CSharpier
             else if (
                 node is OperatorDeclarationSyntax operatorDeclarationSyntax
             ) {
-                parts.Add(
+                docs.Add(
                     this.Print(operatorDeclarationSyntax.ReturnType),
-                    SpaceIfNoPreviousComment,
+                    Docs.SpaceIfNoPreviousComment,
                     this.PrintSyntaxToken(
                         operatorDeclarationSyntax.OperatorKeyword,
                         " "
@@ -127,7 +126,7 @@ namespace CSharpier
 
             if (typeParameterList != null)
             {
-                parts.Add(this.PrintTypeParameterListSyntax(typeParameterList));
+                docs.Add(this.PrintTypeParameterListSyntax(typeParameterList));
             }
 
             if (parameterList != null)
@@ -138,15 +137,13 @@ namespace CSharpier
                 {
                     groupId = Guid.NewGuid().ToString();
                 }
-                parts.Add(
-                    this.PrintParameterListSyntax(parameterList, groupId)
-                );
+                docs.Add(this.PrintParameterListSyntax(parameterList, groupId));
             }
 
-            parts.Add(this.PrintConstraintClauses(node, constraintClauses));
+            docs.Add(this.PrintConstraintClauses(node, constraintClauses));
             if (body != null)
             {
-                parts.Add(
+                docs.Add(
                     groupId != null
                         ? this.PrintBlockSyntaxWithConditionalSpace(
                                 body,
@@ -159,7 +156,7 @@ namespace CSharpier
             {
                 if (expressionBody != null)
                 {
-                    parts.Add(
+                    docs.Add(
                         this.PrintArrowExpressionClauseSyntax(expressionBody)
                     );
                 }
@@ -167,10 +164,10 @@ namespace CSharpier
 
             if (semicolonToken.HasValue)
             {
-                parts.Add(this.PrintSyntaxToken(semicolonToken.Value));
+                docs.Add(this.PrintSyntaxToken(semicolonToken.Value));
             }
 
-            return Docs.Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

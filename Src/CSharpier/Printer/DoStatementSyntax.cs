@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,14 +7,14 @@ namespace CSharpier
     {
         private Doc PrintDoStatementSyntax(DoStatementSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.DoKeyword,
-                    node.Statement is not BlockSyntax ? " " : Doc.Null
+                    node.Statement is not BlockSyntax ? " " : Docs.Null
                 ),
-                this.Print(node.Statement),
-                HardLine,
+                SyntaxNodes.Print(node.Statement),
+                Docs.HardLine,
                 this.PrintSyntaxToken(
                     node.WhileKeyword,
                     afterTokenIfNoTrailing: " "

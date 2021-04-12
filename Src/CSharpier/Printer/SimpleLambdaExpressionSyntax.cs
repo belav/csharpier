@@ -10,7 +10,7 @@ namespace CSharpier
             return Docs.Group(
                 this.PrintModifiers(node.Modifiers),
                 this.Print(node.Parameter),
-                SpaceIfNoPreviousComment,
+                Docs.SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(node.ArrowToken),
                 node.Body is BlockSyntax blockSyntax
                     ? this.PrintBlockSyntax(blockSyntax)

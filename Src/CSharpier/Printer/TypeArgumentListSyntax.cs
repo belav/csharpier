@@ -7,13 +7,13 @@ namespace CSharpier
     {
         private Doc PrintTypeArgumentListSyntax(TypeArgumentListSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.LessThanToken),
-                Indent(
+                Docs.Indent(
                     this.PrintSeparatedSyntaxList(
                         node.Arguments,
                         this.Print,
-                        Line
+                        Docs.Line
                     )
                 ),
                 this.PrintSyntaxToken(node.GreaterThanToken)

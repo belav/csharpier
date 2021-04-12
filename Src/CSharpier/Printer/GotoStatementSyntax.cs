@@ -6,15 +6,15 @@ namespace CSharpier
     {
         private Doc PrintGotoStatementSyntax(GotoStatementSyntax node)
         {
-            var expression = node.Expression != null
-                ? Concat(" ", this.Print(node.Expression))
+            Doc expression = node.Expression != null
+                ? Docs.Concat(" ", this.Print(node.Expression))
                 : string.Empty;
-            return Concat(
+            return Docs.Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(node.GotoKeyword),
                 node.CaseOrDefaultKeyword.RawKind != 0
-                    ? SpaceIfNoPreviousComment
-                    : Doc.Null,
+                    ? Docs.SpaceIfNoPreviousComment
+                    : Docs.Null,
                 this.PrintSyntaxToken(node.CaseOrDefaultKeyword),
                 expression,
                 this.PrintSyntaxToken(node.SemicolonToken)

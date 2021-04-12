@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintNameColonSyntax(NameColonSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.Name.Identifier),
                 this.PrintSyntaxToken(
                     node.ColonToken,

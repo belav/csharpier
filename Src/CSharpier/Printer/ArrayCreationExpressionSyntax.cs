@@ -7,14 +7,14 @@ namespace CSharpier
         private Doc PrintArrayCreationExpressionSyntax(
             ArrayCreationExpressionSyntax node
         ) {
-            return Group(
+            return Docs.Group(
                 this.PrintSyntaxToken(
                     node.NewKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
                 this.Print(node.Type),
                 node.Initializer != null
-                    ? Concat(Line, this.Print(node.Initializer))
+                    ? Docs.Concat(Docs.Line, this.Print(node.Initializer))
                     : Doc.Null
             );
         }

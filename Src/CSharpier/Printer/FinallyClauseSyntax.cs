@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintFinallyClauseSyntax(FinallyClauseSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.FinallyKeyword),
                 this.Print(node.Block)
             );

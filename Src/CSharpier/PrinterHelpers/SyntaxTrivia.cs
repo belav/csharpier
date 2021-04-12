@@ -12,12 +12,12 @@ namespace CSharpier
         // TODO where does this belong? It is kinda sorta related to syntax tokens, because leading trivia comes from them
         private Doc PrintExtraNewLines(CSharpSyntaxNode node)
         {
-            var parts = new Parts();
+            var docs = new List<Doc>();
             foreach (var leadingTrivia in node.GetLeadingTrivia())
             {
                 if (leadingTrivia.Kind() == SyntaxKind.EndOfLineTrivia)
                 {
-                    parts.Push(HardLine);
+                    docs.Add(Docs.HardLine);
                     // ensures we only print a single new line
                     break;
                 }
@@ -27,7 +27,7 @@ namespace CSharpier
                 }
             }
 
-            return parts.Any() ? Concat(parts) : Doc.Null;
+            return docs.Any() ? Docs.Concat(docs) : Doc.Null;
         }
 
         // TODO 0 multiline comments need lots of testing, formatting is real weird

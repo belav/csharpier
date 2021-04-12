@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintArgumentListSyntax(ArgumentListSyntax node)
         {
             return node.Parent is not ObjectCreationExpressionSyntax
-                ? Group(
+                ? Docs.Group(
                         PrintArgumentListLikeSyntax(
                             node.OpenParenToken,
                             node.Arguments,

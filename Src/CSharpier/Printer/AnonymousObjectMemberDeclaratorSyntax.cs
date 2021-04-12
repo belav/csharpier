@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,24 +8,24 @@ namespace CSharpier
         private Doc PrintAnonymousObjectMemberDeclaratorSyntax(
             AnonymousObjectMemberDeclaratorSyntax node
         ) {
-            var parts = new Parts();
+            var docs = new List<Doc>();
             if (node.NameEquals != null)
             {
-                parts.Push(
+                docs.Add(
                     this.PrintSyntaxToken(
                         node.NameEquals.Name.Identifier,
                         afterTokenIfNoTrailing: " "
                     )
                 );
-                parts.Push(
+                docs.Add(
                     this.PrintSyntaxToken(
                         node.NameEquals.EqualsToken,
                         afterTokenIfNoTrailing: " "
                     )
                 );
             }
-            parts.Push(this.Print(node.Expression));
-            return Concat(parts);
+            docs.Add(this.Print(node.Expression));
+            return Docs.Concat(docs);
         }
     }
 }
