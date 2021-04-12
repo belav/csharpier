@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
@@ -21,7 +23,8 @@ namespace Worker
             var output = new StringBuilder();
 
             output.AppendLine(
-                @"using System;
+                @"using CSharpier.SyntaxPrinter.SyntaxNodes;
+using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -49,19 +52,46 @@ namespace CSharpier
                 {"
             );
 
-            var csharpDirectory = Path.Combine(
+            var oldFiles = Path.Combine(
                 rootDirectory.FullName,
                 "CSharpier/Printer"
             );
-            foreach (var file in new DirectoryInfo(csharpDirectory).GetFiles())
+            var nodes = new List<(string name, bool isNew)>();
+            foreach (var file in new DirectoryInfo(oldFiles).GetFiles())
             {
-                var name = file.Name.Replace(".cs", string.Empty);
+                nodes.Add((file.Name.Replace(".cs", string.Empty), false));
+            }
+
+            var newFiles = Path.Combine(
+                rootDirectory.FullName,
+                "CSharpier/SyntaxPrinter/Nodes"
+            );
+            foreach (var file in new DirectoryInfo(newFiles).GetFiles())
+            {
+                nodes.Add(
+                    (file.Name.Replace(".cs", string.Empty) + "Syntax", true)
+                );
+            }
+
+            foreach (var (name, isNew) in nodes.OrderBy(o => o.name))
+            {
                 var camelCaseName =
                     name[0].ToString().ToLower() + name.Substring(1);
                 output.AppendLine(
-                    $@"                    case {name} {camelCaseName}:
-                        return this.Print{name}({camelCaseName});"
+                    $"                    case {name} {camelCaseName}:"
                 );
+                if (isNew)
+                {
+                    output.AppendLine(
+                        $"                        return {name.Replace("Syntax", string.Empty)}.Print({camelCaseName});"
+                    );
+                }
+                else
+                {
+                    output.AppendLine(
+                        $"                        return this.Print{name}({camelCaseName});"
+                    );
+                }
             }
 
             output.AppendLine(
@@ -79,10 +109,7 @@ namespace CSharpier
 }"
             );
 
-            File.WriteAllText(
-                csharpDirectory + ".generated.cs",
-                output.ToString()
-            );
+            File.WriteAllText(oldFiles + ".generated.cs", output.ToString());
         }
     }
 }

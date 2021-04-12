@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using CSharpier.SyntaxPrinter;
 
 namespace CSharpier
 {
@@ -10,6 +11,11 @@ namespace CSharpier
     // https://devblogs.microsoft.com/dotnet/introducing-c-source-generators/
     public partial class Printer
     {
+        public Printer()
+        {
+            SyntaxNodes.Initialize(this);
+        }
+
         public static Doc SpaceIfNoPreviousComment =>
             Docs.SpaceIfNoPreviousComment;
 
