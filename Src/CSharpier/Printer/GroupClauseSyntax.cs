@@ -6,13 +6,13 @@ namespace CSharpier
     {
         private Doc PrintGroupClauseSyntax(GroupClauseSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(
                     node.GroupKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
                 this.Print(node.GroupExpression),
-                SpaceIfNoPreviousComment,
+                Docs.SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(
                     node.ByKeyword,
                     afterTokenIfNoTrailing: " "

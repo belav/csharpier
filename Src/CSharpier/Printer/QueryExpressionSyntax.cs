@@ -6,10 +6,10 @@ namespace CSharpier
     {
         private Doc PrintQueryExpressionSyntax(QueryExpressionSyntax node)
         {
-            return Indent(
-                Line,
+            return Docs.Indent(
+                Docs.Line,
                 this.PrintFromClauseSyntax(node.FromClause),
-                Line,
+                Docs.Line,
                 this.PrintQueryBodySyntax(node.Body)
             );
         }

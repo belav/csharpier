@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintRangeExpressionSyntax(RangeExpressionSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 node.LeftOperand != null
                     ? this.Print(node.LeftOperand)
                     : Doc.Null,

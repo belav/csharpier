@@ -7,18 +7,18 @@ namespace CSharpier
     {
         private Doc PrintBaseListSyntax(BaseListSyntax node)
         {
-            return Group(
-                Indent(
-                    Line,
+            return Docs.Group(
+                Docs.Indent(
+                    Docs.Line,
                     this.PrintSyntaxToken(
                         node.ColonToken,
                         afterTokenIfNoTrailing: " "
                     ),
-                    Indent(
+                    Docs.Indent(
                         this.PrintSeparatedSyntaxList(
                             node.Types,
                             this.Print,
-                            Line
+                            Docs.Line
                         )
                     )
                 )

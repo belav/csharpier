@@ -97,11 +97,11 @@ namespace CSharpier
 
     public class Concat : Doc
     {
-        public List<Doc> Parts { get; set; }
+        public List<Doc> Contents { get; set; }
 
-        public Concat(List<Doc> parts)
+        public Concat(List<Doc> contents)
         {
-            Parts = parts;
+            Contents = contents;
         }
     }
 

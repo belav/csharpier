@@ -8,7 +8,7 @@ namespace CSharpier
         private Doc PrintArrayRankSpecifierSyntax(
             ArrayRankSpecifierSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.OpenBracketToken),
                 node.Sizes.Any()
                     ? this.PrintSeparatedSyntaxList(

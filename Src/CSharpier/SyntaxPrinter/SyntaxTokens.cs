@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -23,28 +24,28 @@ namespace CSharpier.SyntaxPrinter
                 return Doc.Null;
             }
 
-            var parts = new Parts();
+            var docs = new List<Doc>();
             var leadingTrivia = PrintLeadingTrivia(syntaxToken);
             if (leadingTrivia != Doc.Null)
             {
-                parts.Push(leadingTrivia);
+                docs.Add(leadingTrivia);
             }
             else if (beforeTokenIfNoLeading != null)
             {
-                parts.Push(beforeTokenIfNoLeading);
+                docs.Add(beforeTokenIfNoLeading);
             }
-            parts.Push(syntaxToken.Text);
+            docs.Add(syntaxToken.Text);
             var trailingTrivia = PrintTrailingTrivia(syntaxToken);
             if (trailingTrivia != Doc.Null)
             {
-                parts.Push(trailingTrivia);
+                docs.Add(trailingTrivia);
             }
             else if (afterTokenIfNoTrailing != null)
             {
-                parts.Push(afterTokenIfNoTrailing);
+                docs.Add(afterTokenIfNoTrailing);
             }
 
-            return Docs.Concat(parts);
+            return Docs.Concat(docs);
         }
 
         private static Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
@@ -77,7 +78,7 @@ namespace CSharpier.SyntaxPrinter
             bool includeInitialNewLines = false,
             bool skipLastHardline = false
         ) {
-            var parts = new Parts();
+            var docs = new List<Doc>();
 
             // we don't print any new lines until we run into a comment or directive
             // the PrintExtraNewLines method takes care of printing the initial new lines for a given node
@@ -90,7 +91,7 @@ namespace CSharpier.SyntaxPrinter
                 if (
                     printNewLines && trivia.Kind() == SyntaxKind.EndOfLineTrivia
                 ) {
-                    parts.Push(Docs.HardLine);
+                    docs.Add(Docs.HardLine);
                 }
                 if (
                     trivia.Kind() != SyntaxKind.EndOfLineTrivia
@@ -103,7 +104,7 @@ namespace CSharpier.SyntaxPrinter
                     || trivia.Kind()
                     == SyntaxKind.SingleLineDocumentationCommentTrivia
                 ) {
-                    parts.Push(
+                    docs.Add(
                         Docs.LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
                             CommentType.SingleLine
@@ -119,7 +120,7 @@ namespace CSharpier.SyntaxPrinter
                     || trivia.Kind()
                     == SyntaxKind.MultiLineDocumentationCommentTrivia
                 ) {
-                    parts.Push(
+                    docs.Add(
                         Docs.LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
                             CommentType.MultiLine
@@ -128,7 +129,7 @@ namespace CSharpier.SyntaxPrinter
                 }
                 else if (trivia.Kind() == SyntaxKind.DisabledTextTrivia)
                 {
-                    parts.Push(
+                    docs.Add(
                         Docs.LiteralLine,
                         trivia.ToString().TrimEnd('\n', '\r')
                     );
@@ -147,7 +148,7 @@ namespace CSharpier.SyntaxPrinter
                     || trivia.Kind() == SyntaxKind.UndefDirectiveTrivia
                     || trivia.Kind() == SyntaxKind.NullableDirectiveTrivia
                 ) {
-                    parts.Push(
+                    docs.Add(
                         Docs.LiteralLine,
                         trivia.ToString(),
                         Docs.HardLine
@@ -166,16 +167,16 @@ namespace CSharpier.SyntaxPrinter
                         triviaText = leadingTrivia[x - 1] + triviaText;
                     }
 
-                    parts.Push(Docs.LiteralLine, triviaText, Docs.HardLine);
+                    docs.Add(Docs.LiteralLine, triviaText, Docs.HardLine);
                 }
             }
 
-            if (skipLastHardline && parts.Any() && parts.Last() is HardLine)
+            if (skipLastHardline && docs.Any() && docs.Last() is HardLine)
             {
-                parts.RemoveAt(parts.Count - 1);
+                docs.RemoveAt(docs.Count - 1);
             }
 
-            return parts.Count > 0 ? Docs.Concat(parts) : Doc.Null;
+            return docs.Count > 0 ? Docs.Concat(docs) : Doc.Null;
         }
 
         private static Doc PrintTrailingTrivia(SyntaxToken node)
@@ -186,12 +187,12 @@ namespace CSharpier.SyntaxPrinter
         private static Doc PrintTrailingTrivia(
             SyntaxTriviaList trailingTrivia
         ) {
-            var parts = new Parts();
+            var docs = new List<Doc>();
             foreach (var trivia in trailingTrivia)
             {
                 if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
                 {
-                    parts.Push(
+                    docs.Add(
                         Docs.TrailingComment(
                             trivia.ToString(),
                             CommentType.SingleLine
@@ -200,7 +201,7 @@ namespace CSharpier.SyntaxPrinter
                 }
                 else if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
                 {
-                    parts.Push(
+                    docs.Add(
                         " ",
                         Docs.TrailingComment(
                             trivia.ToString(),
@@ -210,7 +211,7 @@ namespace CSharpier.SyntaxPrinter
                 }
             }
 
-            return parts.Count > 0 ? Docs.Concat(parts) : Docs.Null;
+            return docs.Count > 0 ? Docs.Concat(docs) : Docs.Null;
         }
     }
 }

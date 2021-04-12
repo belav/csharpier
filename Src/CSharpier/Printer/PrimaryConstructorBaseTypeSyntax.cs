@@ -8,7 +8,7 @@ namespace CSharpier
         private Doc PrintPrimaryConstructorBaseTypeSyntax(
             PrimaryConstructorBaseTypeSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.Print(node.Type),
                 this.PrintArgumentListSyntax(node.ArgumentList)
             );

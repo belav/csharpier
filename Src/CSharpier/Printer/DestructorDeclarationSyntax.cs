@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintDestructorDeclarationSyntax(
             DestructorDeclarationSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
                 this.PrintModifiers(node.Modifiers),

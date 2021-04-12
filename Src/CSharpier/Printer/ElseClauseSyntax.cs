@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,23 +7,26 @@ namespace CSharpier
     {
         private Doc PrintElseClauseSyntax(ElseClauseSyntax node)
         {
-            var parts = new Parts(this.PrintSyntaxToken(node.ElseKeyword));
+            var docs = new List<Doc>
+            {
+                this.PrintSyntaxToken(node.ElseKeyword)
+            };
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {
-                parts.Push(statement);
+                docs.Add(statement);
             }
             else if (node.Statement is IfStatementSyntax)
             {
-                parts.Push(" ", statement);
+                docs.Add(" ", statement);
             }
             else
             {
                 // TODO 1 force braces here?
-                parts.Push(Indent(Concat(HardLine, statement)));
+                docs.Add(Docs.Indent(Docs.HardLine, statement));
             }
 
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

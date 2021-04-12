@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintGenericNameSyntax(GenericNameSyntax node)
         {
-            return Group(
+            return Docs.Group(
                 this.PrintSyntaxToken(node.Identifier),
                 this.Print(node.TypeArgumentList)
             );

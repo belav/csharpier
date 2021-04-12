@@ -6,10 +6,10 @@ namespace CSharpier
     {
         private Doc PrintTupleElementSyntax(TupleElementSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.Print(node.Type),
                 node.Identifier.RawKind != 0
-                    ? Concat(" ", this.PrintSyntaxToken(node.Identifier))
+                    ? Docs.Concat(" ", this.PrintSyntaxToken(node.Identifier))
                     : Doc.Null
             );
         }

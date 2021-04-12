@@ -194,10 +194,13 @@ namespace CSharpier
                             }
                             break;
                         case Concat concat:
-                            for (var i = concat.Parts.Count - 1; i >= 0; i--)
-                            {
+                            for (
+                                var i = concat.Contents.Count - 1;
+                                i >= 0;
+                                i--
+                            ) {
                                 Push(
-                                    concat.Parts[i],
+                                    concat.Contents[i],
                                     currentMode,
                                     currentIndent
                                 );
@@ -329,9 +332,13 @@ namespace CSharpier
                         position += GetStringWidth(stringDoc.Value);
                         break;
                     case Concat concat:
-                        for (var x = concat.Parts.Count - 1; x >= 0; x--)
+                        for (var x = concat.Contents.Count - 1; x >= 0; x--)
                         {
-                            Push(concat.Parts[x], command.Mode, command.Indent);
+                            Push(
+                                concat.Contents[x],
+                                command.Mode,
+                                command.Indent
+                            );
                         }
                         break;
                     case IndentDoc indentBuilder:

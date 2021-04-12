@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,21 +8,22 @@ namespace CSharpier
     {
         private Doc PrintLabeledStatementSyntax(LabeledStatementSyntax node)
         {
-            var parts = new Parts(
+            var docs = new List<Doc>
+            {
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
                 this.PrintSyntaxToken(node.Identifier),
                 this.PrintSyntaxToken(node.ColonToken)
-            );
+            };
             if (node.Statement is BlockSyntax blockSyntax)
             {
-                parts.Push(this.PrintBlockSyntax(blockSyntax));
+                docs.Add(this.PrintBlockSyntax(blockSyntax));
             }
             else
             {
-                parts.Push(HardLine, this.Print(node.Statement));
+                docs.Add(Docs.HardLine, SyntaxNodes.Print(node.Statement));
             }
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintNullableTypeSyntax(NullableTypeSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.Print(node.ElementType),
                 this.PrintSyntaxToken(node.QuestionToken)
             );

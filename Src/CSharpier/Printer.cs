@@ -16,37 +16,9 @@ namespace CSharpier
             SyntaxNodes.Initialize(this);
         }
 
-        public static Doc SpaceIfNoPreviousComment =>
-            Docs.SpaceIfNoPreviousComment;
-
-        public static Doc HardLine => Docs.HardLine;
-
-        public static Doc LiteralLine => Docs.LiteralLine;
-
-        public static Doc Line => Docs.Line;
-
-        public static Doc SoftLine => Docs.SoftLine;
-
-        public static Doc LeadingComment(
-            string comment,
-            CommentType commentType
-        ) => Docs.LeadingComment(comment, commentType);
-
-        public static Doc TrailingComment(
-            string comment,
-            CommentType commentType
-        ) => Docs.TrailingComment(comment, commentType);
-
-        public static Doc Concat(Parts parts) => Docs.Concat(parts.ToArray());
-
-        public static Doc Concat(params Doc[] parts) => Docs.Concat(parts);
-
-        public static Doc ForceFlat(params Doc[] contents) =>
-            Docs.ForceFlat(contents);
-
         public static Doc Join(Doc separator, IEnumerable<Doc> array)
         {
-            var parts = new Parts();
+            var docs = new List<Doc>();
 
             var list = array.ToList();
 
@@ -59,25 +31,14 @@ namespace CSharpier
             {
                 if (x != 0)
                 {
-                    parts.Push(separator);
+                    docs.Add(separator);
                 }
 
-                parts.Push(list[x]);
+                docs.Add(list[x]);
             }
 
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
-
-        public static Doc Group(Parts parts) => Docs.Group(parts.ToArray());
-
-        public static Doc Group(List<Doc> contents) => Docs.Group(contents);
-
-        public static Doc Group(params Doc[] contents) => Docs.Group(contents);
-
-        public static Doc Indent(Parts parts) => Docs.Indent(parts.ToArray());
-
-        public static Doc Indent(params Doc[] contents) =>
-            Docs.Indent(contents);
 
         private Doc PrintSeparatedSyntaxList<T>(
             SeparatedSyntaxList<T> list,
@@ -85,10 +46,10 @@ namespace CSharpier
             Doc afterSeparator
         )
             where T : SyntaxNode {
-            var parts = new Parts();
+            var docs = new List<Doc>();
             for (var x = 0; x < list.Count; x++)
             {
-                parts.Push(printFunc(list[x]));
+                docs.Add(printFunc(list[x]));
 
                 if (x >= list.SeparatorCount)
                 {
@@ -97,7 +58,7 @@ namespace CSharpier
 
                 var isTrailingSeparator = x == list.Count - 1;
 
-                parts.Push(
+                docs.Add(
                     this.PrintSyntaxToken(
                         list.GetSeparator(x),
                         !isTrailingSeparator ? afterSeparator : null
@@ -105,7 +66,7 @@ namespace CSharpier
                 );
             }
 
-            return parts.Count == 0 ? Doc.Null : Concat(parts);
+            return docs.Count == 0 ? Doc.Null : Docs.Concat(docs);
         }
 
         private Doc PrintAttributeLists(
@@ -117,12 +78,12 @@ namespace CSharpier
                 return Doc.Null;
             }
 
-            var parts = new Parts();
-            var separator = node is TypeParameterSyntax
+            var docs = new List<Doc>();
+            Doc separator = node is TypeParameterSyntax
                 || node is ParameterSyntax
-                ? Line
-                : HardLine;
-            parts.Push(
+                ? Docs.Line
+                : Docs.HardLine;
+            docs.Add(
                 Join(
                     separator,
                     attributeLists.Select(this.PrintAttributeListSyntax)
@@ -131,10 +92,10 @@ namespace CSharpier
 
             if (!(node is ParameterSyntax))
             {
-                parts.Push(separator);
+                docs.Add(separator);
             }
 
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
 
         private Doc PrintModifiers(SyntaxTokenList modifiers)
@@ -144,15 +105,16 @@ namespace CSharpier
                 return Doc.Null;
             }
 
-            var parts = new Parts();
-            foreach (var modifier in modifiers)
-            {
-                parts.Push(
-                    this.PrintSyntaxToken(modifier, afterTokenIfNoTrailing: " ")
-                );
-            }
+            var docs = modifiers.Select(
+                    modifier =>
+                        this.PrintSyntaxToken(
+                            modifier,
+                            afterTokenIfNoTrailing: " "
+                        )
+                )
+                .ToList();
 
-            return Group(Concat(parts));
+            return Docs.Group(Docs.Concat(docs));
         }
 
         private Doc PrintConstraintClauses(
@@ -166,32 +128,35 @@ namespace CSharpier
                 return Doc.Null;
             }
 
-            var parts = new Parts(
-                Indent(
-                    HardLine,
+            var docs = new List<Doc>
+            {
+                Docs.Indent(
+                    Docs.HardLine,
                     Join(
-                        HardLine,
+                        Docs.HardLine,
                         constraintClausesList.Select(
                             this.PrintTypeParameterConstraintClauseSyntax
                         )
                     )
                 )
-            );
+            };
 
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
 
         private Doc PrintBaseFieldDeclarationSyntax(
             BaseFieldDeclarationSyntax node
         ) {
-            var parts = new Parts();
-            parts.Push(this.PrintExtraNewLines(node));
-            parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
-            parts.Push(this.PrintModifiers(node.Modifiers));
+            var docs = new List<Doc>
+            {
+                this.PrintExtraNewLines(node),
+                this.PrintAttributeLists(node, node.AttributeLists),
+                this.PrintModifiers(node.Modifiers)
+            };
             if (
                 node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax
             ) {
-                parts.Push(
+                docs.Add(
                     this.PrintSyntaxToken(
                         eventFieldDeclarationSyntax.EventKeyword,
                         " "
@@ -199,9 +164,9 @@ namespace CSharpier
                 );
             }
 
-            parts.Push(this.Print(node.Declaration));
-            parts.Push(this.PrintSyntaxToken(node.SemicolonToken));
-            return Concat(parts);
+            docs.Add(this.Print(node.Declaration));
+            docs.Add(this.PrintSyntaxToken(node.SemicolonToken));
+            return Docs.Concat(docs);
         }
     }
 }

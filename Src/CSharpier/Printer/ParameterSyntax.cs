@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,21 +7,23 @@ namespace CSharpier
     {
         private Doc PrintParameterSyntax(ParameterSyntax node)
         {
-            var parts = new Parts();
-            parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
-            parts.Push(this.PrintModifiers(node.Modifiers));
+            var docs = new List<Doc>
+            {
+                this.PrintAttributeLists(node, node.AttributeLists),
+                this.PrintModifiers(node.Modifiers)
+            };
             if (node.Type != null)
             {
-                parts.Push(this.Print(node.Type), SpaceIfNoPreviousComment);
+                docs.Add(this.Print(node.Type), Docs.SpaceIfNoPreviousComment);
             }
 
-            parts.Push(this.PrintSyntaxToken(node.Identifier));
+            docs.Add(this.PrintSyntaxToken(node.Identifier));
             if (node.Default != null)
             {
-                parts.Push(this.PrintEqualsValueClauseSyntax(node.Default));
+                docs.Add(this.PrintEqualsValueClauseSyntax(node.Default));
             }
 
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

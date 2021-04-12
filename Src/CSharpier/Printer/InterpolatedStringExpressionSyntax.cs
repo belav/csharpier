@@ -8,9 +8,9 @@ namespace CSharpier
         private Doc PrintInterpolatedStringExpressionSyntax(
             InterpolatedStringExpressionSyntax node
         ) {
-            return ForceFlat(
+            return Docs.ForceFlat(
                 this.PrintSyntaxToken(node.StringStartToken),
-                Concat(node.Contents.Select(this.Print).ToArray()),
+                Docs.Concat(node.Contents.Select(this.Print).ToArray()),
                 this.PrintSyntaxToken(node.StringEndToken)
             );
         }

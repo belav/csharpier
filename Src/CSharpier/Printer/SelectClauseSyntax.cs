@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintSelectClauseSyntax(SelectClauseSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(
                     node.SelectKeyword,
                     afterTokenIfNoTrailing: " "

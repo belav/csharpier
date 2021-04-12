@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -27,10 +28,10 @@ namespace CSharpier
                 hasMembers = typeDeclarationSyntax.Members.Count > 0;
                 if (typeDeclarationSyntax.Members.Count > 0)
                 {
-                    members = Indent(
-                        HardLine,
+                    members = Docs.Indent(
+                        Docs.HardLine,
                         Join(
-                            HardLine,
+                            Docs.HardLine,
                             typeDeclarationSyntax.Members.Select(this.Print)
                         )
                     );
@@ -61,12 +62,12 @@ namespace CSharpier
             }
             else if (node is EnumDeclarationSyntax enumDeclarationSyntax)
             {
-                members = Indent(
-                    HardLine,
+                members = Docs.Indent(
+                    Docs.HardLine,
                     this.PrintSeparatedSyntaxList(
                         enumDeclarationSyntax.Members,
                         this.PrintEnumMemberDeclarationSyntax,
-                        HardLine
+                        Docs.HardLine
                     )
                 );
                 hasMembers = enumDeclarationSyntax.Members.Count > 0;
@@ -74,13 +75,15 @@ namespace CSharpier
                 semicolonToken = enumDeclarationSyntax.SemicolonToken;
             }
 
-            var parts = new Parts();
-            parts.Push(this.PrintExtraNewLines(node));
-            parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
-            parts.Push(this.PrintModifiers(node.Modifiers));
+            var docs = new List<Doc>
+            {
+                this.PrintExtraNewLines(node),
+                this.PrintAttributeLists(node, node.AttributeLists),
+                this.PrintModifiers(node.Modifiers)
+            };
             if (keyword != null)
             {
-                parts.Push(
+                docs.Add(
                     this.PrintSyntaxToken(
                         keyword.Value,
                         afterTokenIfNoTrailing: " "
@@ -88,34 +91,30 @@ namespace CSharpier
                 );
             }
 
-            parts.Push(this.PrintSyntaxToken(node.Identifier));
+            docs.Add(this.PrintSyntaxToken(node.Identifier));
 
             if (parameterList != null)
             {
-                parts.Push(
-                    this.PrintParameterListSyntax(parameterList, groupId)
-                );
+                docs.Add(this.PrintParameterListSyntax(parameterList, groupId));
             }
 
             if (typeParameterList != null)
             {
-                parts.Push(
-                    this.PrintTypeParameterListSyntax(typeParameterList)
-                );
+                docs.Add(this.PrintTypeParameterListSyntax(typeParameterList));
             }
 
             if (node.BaseList != null)
             {
-                parts.Push(this.PrintBaseListSyntax(node.BaseList));
+                docs.Add(this.PrintBaseListSyntax(node.BaseList));
             }
 
-            parts.Push(this.PrintConstraintClauses(node, constraintClauses));
+            docs.Add(this.PrintConstraintClauses(node, constraintClauses));
 
             if (hasMembers)
             {
                 DocUtilities.RemoveInitialDoubleHardLine(members);
 
-                parts.Push(
+                docs.Add(
                     groupId != null
                         ? Docs.IfBreak(" ", Docs.Line, groupId)
                         : Docs.HardLine,
@@ -127,11 +126,11 @@ namespace CSharpier
             }
             else if (node.OpenBraceToken.Kind() != SyntaxKind.None)
             {
-                var separator = node.CloseBraceToken.LeadingTrivia.Any()
-                    ? Line
+                Doc separator = node.CloseBraceToken.LeadingTrivia.Any()
+                    ? Docs.Line
                     : " ";
 
-                parts.Push(
+                docs.Add(
                     separator,
                     this.PrintSyntaxToken(node.OpenBraceToken),
                     separator,
@@ -141,10 +140,10 @@ namespace CSharpier
 
             if (semicolonToken.HasValue)
             {
-                parts.Push(this.PrintSyntaxToken(semicolonToken.Value));
+                docs.Add(this.PrintSyntaxToken(semicolonToken.Value));
             }
 
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

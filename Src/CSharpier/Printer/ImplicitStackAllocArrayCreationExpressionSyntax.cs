@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintImplicitStackAllocArrayCreationExpressionSyntax(
             ImplicitStackAllocArrayCreationExpressionSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.StackAllocKeyword),
                 this.PrintSyntaxToken(node.OpenBracketToken),
                 this.PrintSyntaxToken(

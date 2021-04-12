@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintPointerTypeSyntax(PointerTypeSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.Print(node.ElementType),
                 this.PrintSyntaxToken(node.AsteriskToken)
             );

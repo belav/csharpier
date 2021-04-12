@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintLocalDeclarationStatementSyntax(
             LocalDeclarationStatementSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.AwaitKeyword,

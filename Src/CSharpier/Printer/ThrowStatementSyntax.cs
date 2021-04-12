@@ -6,10 +6,10 @@ namespace CSharpier
     {
         private Doc PrintThrowStatementSyntax(ThrowStatementSyntax node)
         {
-            var expression = node.Expression != null
-                ? Concat(" ", this.Print(node.Expression))
+            Doc expression = node.Expression != null
+                ? Docs.Concat(" ", this.Print(node.Expression))
                 : string.Empty;
-            return Concat(
+            return Docs.Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(node.ThrowKeyword),
                 expression,

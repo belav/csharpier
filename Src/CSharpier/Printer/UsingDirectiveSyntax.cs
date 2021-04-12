@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintUsingDirectiveSyntax(UsingDirectiveSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.UsingKeyword,

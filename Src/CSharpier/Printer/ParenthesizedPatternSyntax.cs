@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintParenthesizedPatternSyntax(
             ParenthesizedPatternSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Pattern),
                 this.PrintSyntaxToken(node.CloseParenToken)

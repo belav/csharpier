@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintCastExpressionSyntax(CastExpressionSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Type),
                 this.PrintSyntaxToken(node.CloseParenToken),

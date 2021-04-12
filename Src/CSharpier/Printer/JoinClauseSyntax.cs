@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintJoinClauseSyntax(JoinClauseSyntax node)
         {
-            return Group(
+            return Docs.Group(
                 this.PrintSyntaxToken(
                     node.JoinKeyword,
                     afterTokenIfNoTrailing: " "
@@ -20,29 +20,29 @@ namespace CSharpier
                     afterTokenIfNoTrailing: " "
                 ),
                 this.Print(node.InExpression),
-                Indent(
-                    Line,
+                Docs.Indent(
+                    Docs.Line,
                     this.PrintSyntaxToken(
                         node.OnKeyword,
                         afterTokenIfNoTrailing: " "
                     ),
                     this.Print(node.LeftExpression),
-                    SpaceIfNoPreviousComment,
+                    Docs.SpaceIfNoPreviousComment,
                     this.PrintSyntaxToken(
                         node.EqualsKeyword,
                         afterTokenIfNoTrailing: " "
                     ),
                     this.Print(node.RightExpression),
                     node.Into != null
-                        ? Concat(
-                                Line,
+                        ? Docs.Concat(
+                                Docs.Line,
                                 this.PrintSyntaxToken(
                                     node.Into.IntoKeyword,
                                     afterTokenIfNoTrailing: " "
                                 ),
                                 this.PrintSyntaxToken(node.Into.Identifier)
                             )
-                        : Doc.Null
+                        : Docs.Null
                 )
             );
         }

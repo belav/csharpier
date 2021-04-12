@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintBracketedParameterListSyntax(
             BracketedParameterListSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.OpenBracketToken),
                 this.PrintSeparatedSyntaxList(
                     node.Parameters,

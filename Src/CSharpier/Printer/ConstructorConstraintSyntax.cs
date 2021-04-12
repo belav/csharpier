@@ -7,7 +7,7 @@ namespace CSharpier
         private Doc PrintConstructorConstraintSyntax(
             ConstructorConstraintSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.NewKeyword),
                 this.PrintSyntaxToken(node.OpenParenToken),
                 this.PrintSyntaxToken(node.CloseParenToken)

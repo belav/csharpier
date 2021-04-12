@@ -8,7 +8,7 @@ namespace CSharpier
             ImplicitObjectCreationExpressionSyntax node
         ) {
             // TODO 1 more tests for this?
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.NewKeyword),
                 this.PrintArgumentListSyntax(node.ArgumentList),
                 this.Print(node.Initializer)

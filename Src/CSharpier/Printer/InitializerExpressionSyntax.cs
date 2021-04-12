@@ -9,27 +9,27 @@ namespace CSharpier
         private Doc PrintInitializerExpressionSyntax(
             InitializerExpressionSyntax node
         ) {
-            var result = Concat(
+            var result = Docs.Concat(
                 node.Kind() == SyntaxKind.ArrayInitializerExpression
                     ? string.Empty
                     : node.Kind()
                             == SyntaxKind.ComplexElementInitializerExpression
-                            ? SoftLine
-                            : Line,
+                            ? Docs.SoftLine
+                            : Docs.Line,
                 this.PrintSyntaxToken(node.OpenBraceToken),
-                Indent(
-                    Line,
+                Docs.Indent(
+                    Docs.Line,
                     this.PrintSeparatedSyntaxList(
                         node.Expressions,
                         this.Print,
-                        Line
+                        Docs.Line
                     )
                 ),
-                Line,
+                Docs.Line,
                 this.PrintSyntaxToken(node.CloseBraceToken)
             );
             return node.Parent is not ObjectCreationExpressionSyntax
-                ? Group(result)
+                ? Docs.Group(result)
                 : result;
         }
     }

@@ -101,7 +101,7 @@ namespace CSharpier
                     }
                 case Concat concat:
                     RemoveInitialDoubleHardLine(
-                        concat.Parts,
+                        concat.Contents,
                         ref removeNextHardLine
                     );
                     return;

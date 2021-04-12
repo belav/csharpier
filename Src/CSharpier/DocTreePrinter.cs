@@ -37,15 +37,17 @@ namespace CSharpier
                     return indent + "Docs.LiteralLine";
                 case Concat concat:
                     var result = indent + "Docs.Concat(";
-                    if (concat.Parts.Count > 0)
+                    if (concat.Contents.Count > 0)
                     {
                         result += newLine;
                     }
-                    for (var x = 0; x < concat.Parts.Count; x++)
+                    for (var x = 0; x < concat.Contents.Count; x++)
                     {
-                        var printResult = PrintIndentedDocTree(concat.Parts[x]);
+                        var printResult = PrintIndentedDocTree(
+                            concat.Contents[x]
+                        );
                         result += printResult;
-                        if (x < concat.Parts.Count - 1)
+                        if (x < concat.Contents.Count - 1)
                         {
                             result += "," + newLine;
                         }

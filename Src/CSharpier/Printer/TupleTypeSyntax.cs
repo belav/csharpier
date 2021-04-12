@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintTupleTypeSyntax(TupleTypeSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.OpenParenToken),
                 this.PrintSeparatedSyntaxList(node.Elements, this.Print, " "),
                 this.PrintSyntaxToken(node.CloseParenToken)

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -8,72 +9,75 @@ namespace CSharpier
         private Doc PrintNamespaceDeclarationSyntax(
             NamespaceDeclarationSyntax node
         ) {
-            var parts = new Parts(
+            var docs = new List<Doc>
+            {
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
                 this.PrintModifiers(node.Modifiers),
                 this.PrintSyntaxToken(node.NamespaceKeyword),
                 " ",
                 this.Print(node.Name)
-            );
+            };
 
-            var innerParts = new Parts();
+            var innerDocs = new List<Doc>();
             var hasMembers = node.Members.Count > 0;
             var hasUsing = node.Usings.Count > 0;
             var hasExterns = node.Externs.Count > 0;
             if (hasMembers || hasUsing || hasExterns)
             {
-                innerParts.Push(HardLine);
+                innerDocs.Add(Docs.HardLine);
                 if (hasExterns)
                 {
-                    innerParts.Push(
+                    innerDocs.Add(
                         Join(
-                            HardLine,
+                            Docs.HardLine,
                             node.Externs.Select(
                                 this.PrintExternAliasDirectiveSyntax
                             )
                         ),
-                        HardLine
+                        Docs.HardLine
                     );
                 }
                 if (hasUsing)
                 {
-                    innerParts.Push(
+                    innerDocs.Add(
                         Join(
-                            HardLine,
+                            Docs.HardLine,
                             node.Usings.Select(this.PrintUsingDirectiveSyntax)
                         ),
-                        HardLine
+                        Docs.HardLine
                     );
                 }
                 if (hasMembers)
                 {
-                    innerParts.Push(
-                        Join(HardLine, node.Members.Select(this.Print)),
-                        HardLine
+                    innerDocs.Add(
+                        Join(Docs.HardLine, node.Members.Select(this.Print)),
+                        Docs.HardLine
                     );
                 }
 
-                innerParts.RemoveAt(innerParts.Count - 1);
+                innerDocs.RemoveAt(innerDocs.Count - 1);
             }
             else
             {
-                innerParts.Push(" ");
+                innerDocs.Add(" ");
             }
 
-            DocUtilities.RemoveInitialDoubleHardLine(innerParts);
+            DocUtilities.RemoveInitialDoubleHardLine(innerDocs);
 
-            parts.Push(
-                Group(
-                    Line,
+            docs.Add(
+                Docs.Group(
+                    Docs.Line,
                     this.PrintSyntaxToken(node.OpenBraceToken),
-                    Indent(innerParts),
-                    hasMembers || hasUsing || hasExterns ? HardLine : Doc.Null,
+                    Docs.Indent(innerDocs),
+                    hasMembers || hasUsing || hasExterns
+                        ? Docs.HardLine
+                        : Docs.Null,
                     this.PrintSyntaxToken(node.CloseBraceToken),
                     this.PrintSyntaxToken(node.SemicolonToken)
                 )
             );
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

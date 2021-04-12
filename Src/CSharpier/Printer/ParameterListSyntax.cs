@@ -18,7 +18,7 @@ namespace CSharpier
                                 this.PrintSeparatedSyntaxList(
                                     node.Parameters,
                                     this.PrintParameterSyntax,
-                                    Line
+                                    Docs.Line
                                 )
                             ),
                             Docs.SoftLine

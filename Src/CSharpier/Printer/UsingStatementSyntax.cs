@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +10,8 @@ namespace CSharpier
         {
             var groupId = Guid.NewGuid().ToString();
 
-            var parts = new Parts(
+            var docs = new List<Doc>
+            {
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.AwaitKeyword,
@@ -31,14 +33,14 @@ namespace CSharpier
                     Docs.SoftLine
                 ),
                 this.PrintSyntaxToken(node.CloseParenToken)
-            );
+            };
             if (node.Statement is UsingStatementSyntax)
             {
-                parts.Push(HardLine, this.Print(node.Statement));
+                docs.Add(Docs.HardLine, this.Print(node.Statement));
             }
             else if (node.Statement is BlockSyntax blockSyntax)
             {
-                parts.Push(
+                docs.Add(
                     this.PrintBlockSyntaxWithConditionalSpace(
                         blockSyntax,
                         groupId
@@ -47,12 +49,12 @@ namespace CSharpier
             }
             else
             {
-                parts.Push(
-                    Indent(Concat(HardLine, this.Print(node.Statement)))
+                docs.Add(
+                    Docs.Indent(Docs.HardLine, this.Print(node.Statement))
                 );
             }
 
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

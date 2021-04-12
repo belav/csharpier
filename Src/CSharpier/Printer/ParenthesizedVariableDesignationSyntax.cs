@@ -7,16 +7,16 @@ namespace CSharpier
         private Doc PrintParenthesizedVariableDesignationSyntax(
             ParenthesizedVariableDesignationSyntax node
         ) {
-            return Group(
+            return Docs.Group(
                 this.PrintSyntaxToken(node.OpenParenToken),
-                Indent(
-                    SoftLine,
+                Docs.Indent(
+                    Docs.SoftLine,
                     this.PrintSeparatedSyntaxList(
                         node.Variables,
                         this.Print,
-                        Line
+                        Docs.Line
                     ),
-                    SoftLine
+                    Docs.SoftLine
                 ),
                 this.PrintSyntaxToken(node.CloseParenToken)
             );

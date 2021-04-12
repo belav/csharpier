@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -7,23 +8,25 @@ namespace CSharpier
     {
         private Doc PrintQueryBodySyntax(QueryBodySyntax node)
         {
-            var parts = new Parts();
-            parts.Push(Join(Line, node.Clauses.Select(this.Print)));
+            var docs = new List<Doc>
+            {
+                Join(Docs.Line, node.Clauses.Select(this.Print))
+            };
             if (node.Clauses.Count > 0)
             {
-                parts.Push(Line);
+                docs.Add(Docs.Line);
             }
 
-            parts.Push(this.Print(node.SelectOrGroup));
+            docs.Add(this.Print(node.SelectOrGroup));
             if (node.Continuation != null)
             {
-                parts.Push(
+                docs.Add(
                     " ",
                     this.PrintQueryContinuationSyntax(node.Continuation)
                 );
             }
 
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

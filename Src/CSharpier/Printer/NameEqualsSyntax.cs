@@ -6,9 +6,9 @@ namespace CSharpier
     {
         private Doc PrintNameEqualsSyntax(NameEqualsSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.Print(node.Name),
-                SpaceIfNoPreviousComment,
+                Docs.SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(
                     node.EqualsToken,
                     afterTokenIfNoTrailing: " "

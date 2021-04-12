@@ -7,39 +7,37 @@ namespace CSharpier
     {
         private Doc PrintSwitchExpressionSyntax(SwitchExpressionSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.Print(node.GoverningExpression),
-                SpaceIfNoPreviousComment,
+                Docs.SpaceIfNoPreviousComment,
                 this.PrintSyntaxToken(node.SwitchKeyword),
-                HardLine,
+                Docs.HardLine,
                 this.PrintSyntaxToken(node.OpenBraceToken),
-                Group(
-                    Indent(
-                        Concat(
-                            HardLine,
-                            this.PrintSeparatedSyntaxList(
-                                node.Arms,
-                                o =>
-                                    Concat(
-                                        this.Print(o.Pattern),
-                                        SpaceIfNoPreviousComment,
-                                        o.WhenClause != null
-                                            ? Concat(
-                                                    this.Print(o.WhenClause),
-                                                    SpaceIfNoPreviousComment
-                                                )
-                                            : Doc.Null,
-                                        this.PrintSyntaxToken(
-                                            o.EqualsGreaterThanToken,
-                                            " "
-                                        ),
-                                        this.Print(o.Expression)
+                Docs.Group(
+                    Docs.Indent(
+                        Docs.HardLine,
+                        this.PrintSeparatedSyntaxList(
+                            node.Arms,
+                            o =>
+                                Docs.Concat(
+                                    this.Print(o.Pattern),
+                                    Docs.SpaceIfNoPreviousComment,
+                                    o.WhenClause != null
+                                        ? Docs.Concat(
+                                                this.Print(o.WhenClause),
+                                                Docs.SpaceIfNoPreviousComment
+                                            )
+                                        : Docs.Null,
+                                    this.PrintSyntaxToken(
+                                        o.EqualsGreaterThanToken,
+                                        " "
                                     ),
-                                HardLine
-                            )
+                                    this.Print(o.Expression)
+                                ),
+                            Docs.HardLine
                         )
                     ),
-                    HardLine
+                    Docs.HardLine
                 ),
                 this.PrintSyntaxToken(node.CloseBraceToken)
             );

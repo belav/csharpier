@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,11 +7,11 @@ namespace CSharpier
     {
         private Doc PrintCatchClauseSyntax(CatchClauseSyntax node)
         {
-            var parts = new Parts();
-            parts.Push(this.PrintSyntaxToken(node.CatchKeyword));
+            var docs = new List<Doc>();
+            docs.Add(this.PrintSyntaxToken(node.CatchKeyword));
             if (node.Declaration != null)
             {
-                parts.Push(
+                docs.Add(
                     " ",
                     this.PrintSyntaxToken(node.Declaration.OpenParenToken),
                     this.Print(node.Declaration.Type),
@@ -22,7 +23,7 @@ namespace CSharpier
 
             if (node.Filter != null)
             {
-                parts.Push(
+                docs.Add(
                     " ",
                     this.PrintSyntaxToken(
                         node.Filter.WhenKeyword,
@@ -34,8 +35,8 @@ namespace CSharpier
                 );
             }
 
-            parts.Push(this.PrintBlockSyntax(node.Block));
-            return Concat(parts);
+            docs.Add(this.PrintBlockSyntax(node.Block));
+            return Docs.Concat(docs);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintOrderByClauseSyntax(OrderByClauseSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(
                     node.OrderByKeyword,
                     afterTokenIfNoTrailing: " "
@@ -15,7 +15,7 @@ namespace CSharpier
                 this.PrintSeparatedSyntaxList(
                     node.Orderings,
                     orderingNode =>
-                        Concat(
+                        Docs.Concat(
                             this.Print(orderingNode.Expression),
                             this.PrintSyntaxToken(
                                 orderingNode.AscendingOrDescendingKeyword,

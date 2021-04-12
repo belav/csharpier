@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,7 +7,8 @@ namespace CSharpier
     {
         private Doc PrintLockStatementSyntax(LockStatementSyntax node)
         {
-            var parts = new Parts(
+            var docs = new List<Doc>
+            {
                 this.PrintSyntaxToken(
                     node.LockKeyword,
                     afterTokenIfNoTrailing: " "
@@ -14,18 +16,18 @@ namespace CSharpier
                 this.PrintSyntaxToken(node.OpenParenToken),
                 this.Print(node.Expression),
                 this.PrintSyntaxToken(node.CloseParenToken)
-            );
+            };
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {
-                parts.Push(statement);
+                docs.Add(statement);
             }
             else
             {
-                parts.Push(Indent(Concat(HardLine, statement)));
+                docs.Add(Docs.Indent(Docs.HardLine, statement));
             }
 
-            return Concat(parts);
+            return Docs.Concat(docs);
         }
     }
 }

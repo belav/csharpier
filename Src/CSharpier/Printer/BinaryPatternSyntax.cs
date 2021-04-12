@@ -6,7 +6,7 @@ namespace CSharpier
     {
         private Doc PrintBinaryPatternSyntax(BinaryPatternSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.Print(node.Left),
                 Docs.Line,
                 this.PrintSyntaxToken(

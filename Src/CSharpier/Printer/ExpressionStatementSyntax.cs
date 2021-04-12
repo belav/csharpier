@@ -8,7 +8,7 @@ namespace CSharpier
         private Doc PrintExpressionStatementSyntax(
             ExpressionStatementSyntax node
         ) {
-            return Group(
+            return Docs.Group(
                 this.PrintExtraNewLines(node),
                 this.Print(node.Expression),
                 this.PrintSyntaxToken(node.SemicolonToken)

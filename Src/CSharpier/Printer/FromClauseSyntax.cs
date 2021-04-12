@@ -6,13 +6,13 @@ namespace CSharpier
     {
         private Doc PrintFromClauseSyntax(FromClauseSyntax node)
         {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(
                     node.FromKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
                 node.Type != null
-                    ? Concat(this.Print(node.Type), " ")
+                    ? Docs.Concat(this.Print(node.Type), " ")
                     : Doc.Null,
                 this.PrintSyntaxToken(
                     node.Identifier,

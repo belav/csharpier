@@ -7,8 +7,8 @@ namespace CSharpier
         private Doc PrintConstructorInitializerSyntax(
             ConstructorInitializerSyntax node
         ) {
-            return Indent(
-                HardLine,
+            return Docs.Indent(
+                Docs.HardLine,
                 this.PrintSyntaxToken(
                     node.ColonToken,
                     afterTokenIfNoTrailing: " "

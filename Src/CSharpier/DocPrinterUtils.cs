@@ -85,18 +85,19 @@ namespace CSharpier
                 if (doc is Concat concat)
                 {
                     // push onto stack in reverse order so they are processed in the original order
-                    for (var x = concat.Parts.Count - 1; x >= 0; --x)
+                    for (var x = concat.Contents.Count - 1; x >= 0; --x)
                     {
                         if (
-                            forceFlat > 0 && concat.Parts[x] is LineDoc lineDoc
+                            forceFlat > 0
+                            && concat.Contents[x] is LineDoc lineDoc
                         ) {
-                            concat.Parts[x] = lineDoc.Type
+                            concat.Contents[x] = lineDoc.Type
                                 == LineDoc.LineType.Soft
                                 ? string.Empty
                                 : " ";
                         }
 
-                        docsStack.Push(concat.Parts[x]);
+                        docsStack.Push(concat.Contents[x]);
                     }
                 }
 

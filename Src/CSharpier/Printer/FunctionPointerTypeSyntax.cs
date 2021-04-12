@@ -8,7 +8,7 @@ namespace CSharpier
         private Doc PrintFunctionPointerTypeSyntax(
             FunctionPointerTypeSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.DelegateKeyword),
                 this.PrintSyntaxToken(
                     node.AsteriskToken,
@@ -16,15 +16,15 @@ namespace CSharpier
                 ),
                 node.CallingConvention != null
                     ? this.PrintCallingConvention(node.CallingConvention)
-                    : Doc.Null,
+                    : Docs.Null,
                 this.PrintSyntaxToken(node.ParameterList.LessThanToken),
-                Indent(
-                    Group(
-                        SoftLine,
+                Docs.Indent(
+                    Docs.Group(
+                        Docs.SoftLine,
                         this.PrintSeparatedSyntaxList(
                             node.ParameterList.Parameters,
                             o =>
-                                Concat(
+                                Docs.Concat(
                                     this.PrintAttributeLists(
                                         o,
                                         o.AttributeLists
@@ -32,7 +32,7 @@ namespace CSharpier
                                     this.PrintModifiers(o.Modifiers),
                                     this.Print(o.Type)
                                 ),
-                            Line
+                            Docs.Line
                         )
                     )
                 ),
@@ -43,10 +43,10 @@ namespace CSharpier
         private Doc PrintCallingConvention(
             FunctionPointerCallingConventionSyntax node
         ) {
-            return Concat(
+            return Docs.Concat(
                 this.PrintSyntaxToken(node.ManagedOrUnmanagedKeyword),
                 node.UnmanagedCallingConventionList != null
-                    ? Concat(
+                    ? Docs.Concat(
                             this.PrintSyntaxToken(
                                 node.UnmanagedCallingConventionList.OpenBracketToken
                             ),
@@ -59,7 +59,7 @@ namespace CSharpier
                                 node.UnmanagedCallingConventionList.CloseBracketToken
                             )
                         )
-                    : Doc.Null
+                    : Docs.Null
             );
         }
     }
