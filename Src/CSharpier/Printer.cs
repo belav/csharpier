@@ -29,13 +29,13 @@ namespace CSharpier
 
         public static Doc LeadingComment(
             string comment,
-            CommentType commentType) =>
-            Docs.LeadingComment(comment, commentType);
+            CommentType commentType
+        ) => Docs.LeadingComment(comment, commentType);
 
         public static Doc TrailingComment(
             string comment,
-            CommentType commentType) =>
-            Docs.TrailingComment(comment, commentType);
+            CommentType commentType
+        ) => Docs.TrailingComment(comment, commentType);
 
         public static Doc Concat(Parts parts) => Docs.Concat(parts.ToArray());
 
@@ -82,9 +82,9 @@ namespace CSharpier
         private Doc PrintSeparatedSyntaxList<T>(
             SeparatedSyntaxList<T> list,
             Func<T, Doc> printFunc,
-            Doc afterSeparator)
-            where T : SyntaxNode
-        {
+            Doc afterSeparator
+        )
+            where T : SyntaxNode {
             var parts = new Parts();
             for (var x = 0; x < list.Count; x++)
             {
@@ -110,8 +110,8 @@ namespace CSharpier
 
         private Doc PrintAttributeLists(
             SyntaxNode node,
-            SyntaxList<AttributeListSyntax> attributeLists)
-        {
+            SyntaxList<AttributeListSyntax> attributeLists
+        ) {
             if (attributeLists.Count == 0)
             {
                 return Doc.Null;
@@ -157,15 +157,14 @@ namespace CSharpier
 
         private Doc PrintConstraintClauses(
             SyntaxNode node,
-            IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses)
-        {
+            IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses
+        ) {
             var constraintClausesList = constraintClauses.ToList();
 
             if (constraintClausesList.Count == 0)
             {
                 return Doc.Null;
             }
-
 
             var parts = new Parts(
                 Indent(
@@ -183,14 +182,15 @@ namespace CSharpier
         }
 
         private Doc PrintBaseFieldDeclarationSyntax(
-            BaseFieldDeclarationSyntax node)
-        {
+            BaseFieldDeclarationSyntax node
+        ) {
             var parts = new Parts();
             parts.Push(this.PrintExtraNewLines(node));
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
             parts.Push(this.PrintModifiers(node.Modifiers));
-            if (node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax)
-            {
+            if (
+                node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax
+            ) {
                 parts.Push(
                     this.PrintSyntaxToken(
                         eventFieldDeclarationSyntax.EventKeyword,

@@ -11,51 +11,53 @@ namespace CSharpier
                 node.Type != null ? this.Print(node.Type) : Doc.Null,
                 node.PositionalPatternClause != null
                     ? Concat(
-                        this.PrintSyntaxToken(
-                            node.PositionalPatternClause.OpenParenToken
-                        ),
-                        this.PrintSeparatedSyntaxList(
-                            node.PositionalPatternClause.Subpatterns,
-                            subpatternNode => Concat(
-                                subpatternNode.NameColon != null
-                                    ? this.PrintNameColonSyntax(
-                                        subpatternNode.NameColon
-                                    )
-                                    : string.Empty,
-                                this.Print(subpatternNode.Pattern)
+                            this.PrintSyntaxToken(
+                                node.PositionalPatternClause.OpenParenToken
                             ),
-                            " "
-                        ),
-                        this.PrintSyntaxToken(
-                            node.PositionalPatternClause.CloseParenToken
+                            this.PrintSeparatedSyntaxList(
+                                node.PositionalPatternClause.Subpatterns,
+                                subpatternNode =>
+                                    Concat(
+                                        subpatternNode.NameColon != null
+                                            ? this.PrintNameColonSyntax(
+                                                    subpatternNode.NameColon
+                                                )
+                                            : string.Empty,
+                                        this.Print(subpatternNode.Pattern)
+                                    ),
+                                " "
+                            ),
+                            this.PrintSyntaxToken(
+                                node.PositionalPatternClause.CloseParenToken
+                            )
                         )
-                    )
                     : string.Empty,
                 node.PropertyPatternClause != null
                     ? Concat(
-                        " ",
-                        this.PrintSyntaxToken(
-                            node.PropertyPatternClause.OpenBraceToken,
-                            " "
-                        ),
-                        this.PrintSeparatedSyntaxList(
-                            node.PropertyPatternClause.Subpatterns,
-                            subpatternNode => Concat(
-                                subpatternNode.NameColon != null
-                                    ? this.PrintNameColonSyntax(
-                                        subpatternNode.NameColon
-                                    )
-                                    : Doc.Null,
-                                this.Print(subpatternNode.Pattern)
+                            " ",
+                            this.PrintSyntaxToken(
+                                node.PropertyPatternClause.OpenBraceToken,
+                                " "
                             ),
-                            " "
-                        ),
-                        SpaceIfNoPreviousComment,
-                        this.PrintSyntaxToken(
-                            node.PropertyPatternClause.CloseBraceToken,
-                            " "
+                            this.PrintSeparatedSyntaxList(
+                                node.PropertyPatternClause.Subpatterns,
+                                subpatternNode =>
+                                    Concat(
+                                        subpatternNode.NameColon != null
+                                            ? this.PrintNameColonSyntax(
+                                                    subpatternNode.NameColon
+                                                )
+                                            : Doc.Null,
+                                        this.Print(subpatternNode.Pattern)
+                                    ),
+                                " "
+                            ),
+                            SpaceIfNoPreviousComment,
+                            this.PrintSyntaxToken(
+                                node.PropertyPatternClause.CloseBraceToken,
+                                " "
+                            )
                         )
-                    )
                     : string.Empty,
                 node.Designation != null
                     ? this.Print(node.Designation)

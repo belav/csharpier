@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintDelegateDeclarationSyntax(
-            DelegateDeclarationSyntax node)
-        {
+            DelegateDeclarationSyntax node
+        ) {
             var parts = new Parts();
             parts.Push(this.PrintExtraNewLines(node));
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));

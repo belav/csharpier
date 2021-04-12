@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintEnumMemberDeclarationSyntax(
-            EnumMemberDeclarationSyntax node)
-        {
+            EnumMemberDeclarationSyntax node
+        ) {
             var parts = new Parts();
             parts.Push(this.PrintAttributeLists(node, node.AttributeLists));
             parts.Push(this.PrintModifiers(node.Modifiers));

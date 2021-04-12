@@ -45,19 +45,22 @@ namespace CSharpier
                             Docs.SoftLine,
                             this.PrintSeparatedSyntaxList(
                                 attributeNode.ArgumentList.Arguments,
-                                attributeArgumentNode => Concat(
-                                    attributeArgumentNode.NameEquals != null
-                                        ? this.PrintNameEqualsSyntax(
-                                            attributeArgumentNode.NameEquals
+                                attributeArgumentNode =>
+                                    Concat(
+                                        attributeArgumentNode.NameEquals != null
+                                            ? this.PrintNameEqualsSyntax(
+                                                    attributeArgumentNode.NameEquals
+                                                )
+                                            : Doc.Null,
+                                        attributeArgumentNode.NameColon != null
+                                            ? this.PrintNameColonSyntax(
+                                                    attributeArgumentNode.NameColon
+                                                )
+                                            : Doc.Null,
+                                        this.Print(
+                                            attributeArgumentNode.Expression
                                         )
-                                        : Doc.Null,
-                                    attributeArgumentNode.NameColon != null
-                                        ? this.PrintNameColonSyntax(
-                                            attributeArgumentNode.NameColon
-                                        )
-                                        : Doc.Null,
-                                    this.Print(attributeArgumentNode.Expression)
-                                ),
+                                    ),
                                 Docs.Line
                             ),
                             this.PrintSyntaxToken(

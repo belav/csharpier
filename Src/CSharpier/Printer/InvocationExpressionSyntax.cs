@@ -12,8 +12,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintInvocationExpressionSyntax(
-            InvocationExpressionSyntax node)
-        {
+            InvocationExpressionSyntax node
+        ) {
             var printedNodes = new List<PrintedNode>();
 
             void Traverse(ExpressionSyntax expression)
@@ -32,8 +32,7 @@ namespace CSharpier
                 */
                 if (
                     expression is InvocationExpressionSyntax invocationExpressionSyntax
-                )
-                {
+                ) {
                     Traverse(invocationExpressionSyntax.Expression);
                     printedNodes.Add(
                         new PrintedNode(
@@ -46,8 +45,7 @@ namespace CSharpier
                 }
                 else if (
                     expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax
-                )
-                {
+                ) {
                     Traverse(memberAccessExpressionSyntax.Expression);
                     printedNodes.Add(
                         new PrintedNode(
@@ -105,8 +103,7 @@ namespace CSharpier
                 if (
                     hasSeenInvocationExpression
                     && IsMemberish(printedNodes[index].Node)
-                )
-                {
+                ) {
                     // [0] should be appended at the end of the group instead of the
                     // beginning of the next one
                     // if (printedNodes[i].node.computed && isNumericLiteral(printedNodes[i].node.property)) {
@@ -123,11 +120,11 @@ namespace CSharpier
                     hasSeenInvocationExpression = true;
                 }
                 currentGroup.Add(printedNodes[index].Doc);
-            // if (printedNodes[i].node.comments && printedNodes[i].node.comments.some(comment => comment.trailing)) {
-            //     groups.push(currentGroup);
-            //     currentGroup = [];
-            //     hasSeenCallExpression = false;
-            // }
+                // if (printedNodes[i].node.comments && printedNodes[i].node.comments.some(comment => comment.trailing)) {
+                //     groups.push(currentGroup);
+                //     currentGroup = [];
+                //     hasSeenCallExpression = false;
+                // }
             }
 
             if (currentGroup.Any())

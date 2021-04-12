@@ -12,7 +12,7 @@ namespace Worker
     {
         [Test]
         [Ignore(
-                "This is used to produce a list of SyntaxNodes that do not exist in CSharpier/Printer/*.cs")]
+            "This is used to produce a list of SyntaxNodes that do not exist in CSharpier/Printer/*.cs")]
         public void DoWork()
         {
             // See https://github.com/belav/csharpier/issues/29 for details about what was missing as of c#9
@@ -30,8 +30,9 @@ namespace Worker
 
             var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
                 .Where(
-                    o => !o.IsAbstract
-                    && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
+                    o =>
+                        !o.IsAbstract
+                        && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
                 )
                 .ToList();
 

@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintExternAliasDirectiveSyntax(
-            ExternAliasDirectiveSyntax node)
-        {
+            ExternAliasDirectiveSyntax node
+        ) {
             return Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(

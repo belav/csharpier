@@ -14,8 +14,8 @@ namespace CSharpier
 
         private static void RemoveInitialDoubleHardLine(
             List<Doc> docs,
-            ref bool removeNextHardLine)
-        {
+            ref bool removeNextHardLine
+        ) {
             var x = 0;
             while (x < docs.Count)
             {
@@ -47,7 +47,6 @@ namespace CSharpier
             return;
         }
 
-
         public static void RemoveInitialDoubleHardLine(Doc doc)
         {
             var removeNextHardLine = false;
@@ -56,8 +55,8 @@ namespace CSharpier
 
         private static void RemoveInitialDoubleHardLine(
             Doc doc,
-            ref bool removeNextHardLine)
-        {
+            ref bool removeNextHardLine
+        ) {
             switch (doc)
             {
                 case StringDoc:

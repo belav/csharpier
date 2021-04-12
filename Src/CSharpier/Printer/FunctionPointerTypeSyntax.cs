@@ -6,8 +6,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintFunctionPointerTypeSyntax(
-            FunctionPointerTypeSyntax node)
-        {
+            FunctionPointerTypeSyntax node
+        ) {
             return Concat(
                 this.PrintSyntaxToken(node.DelegateKeyword),
                 this.PrintSyntaxToken(
@@ -23,11 +23,15 @@ namespace CSharpier
                         SoftLine,
                         this.PrintSeparatedSyntaxList(
                             node.ParameterList.Parameters,
-                            o => Concat(
-                                this.PrintAttributeLists(o, o.AttributeLists),
-                                this.PrintModifiers(o.Modifiers),
-                                this.Print(o.Type)
-                            ),
+                            o =>
+                                Concat(
+                                    this.PrintAttributeLists(
+                                        o,
+                                        o.AttributeLists
+                                    ),
+                                    this.PrintModifiers(o.Modifiers),
+                                    this.Print(o.Type)
+                                ),
                             Line
                         )
                     )
@@ -37,24 +41,24 @@ namespace CSharpier
         }
 
         private Doc PrintCallingConvention(
-            FunctionPointerCallingConventionSyntax node)
-        {
+            FunctionPointerCallingConventionSyntax node
+        ) {
             return Concat(
                 this.PrintSyntaxToken(node.ManagedOrUnmanagedKeyword),
                 node.UnmanagedCallingConventionList != null
                     ? Concat(
-                        this.PrintSyntaxToken(
-                            node.UnmanagedCallingConventionList.OpenBracketToken
-                        ),
-                        this.PrintSeparatedSyntaxList(
-                            node.UnmanagedCallingConventionList.CallingConventions,
-                            o => this.PrintSyntaxToken(o.Name),
-                            " "
-                        ),
-                        this.PrintSyntaxToken(
-                            node.UnmanagedCallingConventionList.CloseBracketToken
+                            this.PrintSyntaxToken(
+                                node.UnmanagedCallingConventionList.OpenBracketToken
+                            ),
+                            this.PrintSeparatedSyntaxList(
+                                node.UnmanagedCallingConventionList.CallingConventions,
+                                o => this.PrintSyntaxToken(o.Name),
+                                " "
+                            ),
+                            this.PrintSyntaxToken(
+                                node.UnmanagedCallingConventionList.CloseBracketToken
+                            )
                         )
-                    )
                     : Doc.Null
             );
         }

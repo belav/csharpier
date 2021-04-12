@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintLocalFunctionStatementSyntax(
-            LocalFunctionStatementSyntax node)
-        {
+            LocalFunctionStatementSyntax node
+        ) {
             return this.PrintBaseMethodDeclarationSyntax(node);
         }
     }

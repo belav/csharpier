@@ -6,8 +6,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintMemberAccessExpressionSyntax(
-            MemberAccessExpressionSyntax node)
-        {
+            MemberAccessExpressionSyntax node
+        ) {
             return Concat(
                 this.Print(node.Expression),
                 this.PrintSyntaxToken(node.OperatorToken),

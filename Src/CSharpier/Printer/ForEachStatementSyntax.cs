@@ -39,9 +39,9 @@ namespace CSharpier
                 SyntaxTokens.Print(node.CloseParenToken),
                 node.Statement is BlockSyntax blockSyntax
                     ? this.PrintBlockSyntaxWithConditionalSpace(
-                        blockSyntax,
-                        groupId
-                    )
+                            blockSyntax,
+                            groupId
+                        )
                     : this.Print(node.Statement)
             );
 

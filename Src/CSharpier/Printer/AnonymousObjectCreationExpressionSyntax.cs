@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintAnonymousObjectCreationExpressionSyntax(
-            AnonymousObjectCreationExpressionSyntax node)
-        {
+            AnonymousObjectCreationExpressionSyntax node
+        ) {
             return Group(
                 this.PrintSyntaxToken(node.NewKeyword, Line),
                 this.PrintSyntaxToken(node.OpenBraceToken),

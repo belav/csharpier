@@ -35,8 +35,8 @@ namespace CSharpier
         private Doc PrintSyntaxToken(
             SyntaxToken syntaxToken,
             Doc? afterTokenIfNoTrailing = null,
-            Doc? beforeTokenIfNoLeading = null)
-        {
+            Doc? beforeTokenIfNoLeading = null
+        ) {
             return SyntaxTokens.PrintSyntaxToken(
                 syntaxToken,
                 afterTokenIfNoTrailing,

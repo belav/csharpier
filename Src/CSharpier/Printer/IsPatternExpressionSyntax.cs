@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintIsPatternExpressionSyntax(
-            IsPatternExpressionSyntax node)
-        {
+            IsPatternExpressionSyntax node
+        ) {
             return Docs.Concat(
                 this.Print(node.Expression),
                 Docs.SpaceIfNoPreviousComment,

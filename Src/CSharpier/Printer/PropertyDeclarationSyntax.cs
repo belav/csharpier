@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintPropertyDeclarationSyntax(
-            PropertyDeclarationSyntax node)
-        {
+            PropertyDeclarationSyntax node
+        ) {
             return this.PrintBasePropertyDeclarationSyntax(node);
         }
     }

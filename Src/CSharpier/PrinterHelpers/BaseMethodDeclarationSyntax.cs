@@ -25,8 +25,9 @@ namespace CSharpier
             SyntaxToken? semicolonToken = null;
             string? groupId = null;
 
-            if (node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax)
-            {
+            if (
+                node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax
+            ) {
                 attributeLists = baseMethodDeclarationSyntax.AttributeLists;
                 modifiers = baseMethodDeclarationSyntax.Modifiers;
                 parameterList = baseMethodDeclarationSyntax.ParameterList;
@@ -47,8 +48,7 @@ namespace CSharpier
             }
             else if (
                 node is LocalFunctionStatementSyntax localFunctionStatementSyntax
-            )
-            {
+            ) {
                 attributeLists = localFunctionStatementSyntax.AttributeLists;
                 modifiers = localFunctionStatementSyntax.Modifiers;
                 returnType = localFunctionStatementSyntax.ReturnType;
@@ -96,8 +96,7 @@ namespace CSharpier
 
             if (
                 node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax
-            )
-            {
+            ) {
                 parts.Add(
                     this.PrintSyntaxToken(
                         conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword,
@@ -112,8 +111,7 @@ namespace CSharpier
             }
             else if (
                 node is OperatorDeclarationSyntax operatorDeclarationSyntax
-            )
-            {
+            ) {
                 parts.Add(
                     this.Print(operatorDeclarationSyntax.ReturnType),
                     SpaceIfNoPreviousComment,
@@ -151,9 +149,9 @@ namespace CSharpier
                 parts.Add(
                     groupId != null
                         ? this.PrintBlockSyntaxWithConditionalSpace(
-                            body,
-                            groupId
-                        )
+                                body,
+                                groupId
+                            )
                         : this.PrintBlockSyntax(body)
                 );
             }

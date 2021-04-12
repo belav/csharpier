@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintParenthesizedLambdaExpressionSyntax(
-            ParenthesizedLambdaExpressionSyntax node)
-        {
+            ParenthesizedLambdaExpressionSyntax node
+        ) {
             var parts = new Parts(
                 this.PrintModifiers(node.Modifiers),
                 this.PrintParameterListSyntax(node.ParameterList),

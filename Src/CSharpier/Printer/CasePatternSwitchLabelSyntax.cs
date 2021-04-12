@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintCasePatternSwitchLabelSyntax(
-            CasePatternSwitchLabelSyntax node)
-        {
+            CasePatternSwitchLabelSyntax node
+        ) {
             var parts = new Parts();
             parts.Push(
                 this.PrintSyntaxToken(

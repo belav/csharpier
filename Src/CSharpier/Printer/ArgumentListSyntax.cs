@@ -8,17 +8,17 @@ namespace CSharpier
         {
             return node.Parent is not ObjectCreationExpressionSyntax
                 ? Group(
-                    PrintArgumentListLikeSyntax(
+                        PrintArgumentListLikeSyntax(
+                            node.OpenParenToken,
+                            node.Arguments,
+                            node.CloseParenToken
+                        )
+                    )
+                : PrintArgumentListLikeSyntax(
                         node.OpenParenToken,
                         node.Arguments,
                         node.CloseParenToken
-                    )
-                )
-                : PrintArgumentListLikeSyntax(
-                    node.OpenParenToken,
-                    node.Arguments,
-                    node.CloseParenToken
-                );
+                    );
         }
     }
 }

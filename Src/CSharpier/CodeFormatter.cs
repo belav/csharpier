@@ -27,8 +27,8 @@ namespace CSharpier
         public async Task<CSharpierResult> FormatAsync(
             string code,
             Options options,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var syntaxTree = CSharpSyntaxTree.ParseText(
                 code,
                 new CSharpParseOptions(
@@ -41,14 +41,16 @@ namespace CSharpier
             if (syntaxNode is not CompilationUnitSyntax rootNode)
             {
                 throw new Exception(
-                    "Root was not CompilationUnitSyntax, it was " + syntaxNode.GetType()
+                    "Root was not CompilationUnitSyntax, it was "
+                    + syntaxNode.GetType()
                 );
             }
 
             var diagnostics = syntaxTree.GetDiagnostics(cancellationToken)
                 .Where(
-                    o => o.Severity == DiagnosticSeverity.Error
-                    && o.Id != "CS1029"
+                    o =>
+                        o.Severity == DiagnosticSeverity.Error
+                        && o.Id != "CS1029"
                 )
                 .ToList();
             if (diagnostics.Any())

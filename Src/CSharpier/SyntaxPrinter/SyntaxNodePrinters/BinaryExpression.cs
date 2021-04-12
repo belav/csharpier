@@ -36,7 +36,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             depth++;
             try
             {
-
                 var parts = new List<Doc>();
                 if (node is BinaryExpressionSyntax binaryExpressionSyntax)
                 {
@@ -54,8 +53,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             binaryExpressionSyntax.OperatorToken,
                             left.OperatorToken
                         )
-                    )
-                    {
+                    ) {
                         parts.AddRange(PrintBinaryExpression(left));
                     }
                     else
@@ -90,8 +88,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
         private static bool ShouldFlatten(
             SyntaxToken parentToken,
-            SyntaxToken nodeToken)
-        {
+            SyntaxToken nodeToken
+        ) {
             if (GetPrecedence(parentToken) != GetPrecedence(nodeToken))
             {
                 return false;

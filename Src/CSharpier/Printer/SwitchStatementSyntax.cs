@@ -11,17 +11,17 @@ namespace CSharpier
             Doc sections = node.Sections.Count == 0
                 ? " "
                 : Docs.Concat(
-                    Docs.Indent(
-                        Docs.Concat(
-                            Docs.HardLine,
-                            Join(
+                        Docs.Indent(
+                            Docs.Concat(
                                 Docs.HardLine,
-                                node.Sections.Select(this.Print)
+                                Join(
+                                    Docs.HardLine,
+                                    node.Sections.Select(this.Print)
+                                )
                             )
-                        )
-                    ),
-                    Docs.HardLine
-                );
+                        ),
+                        Docs.HardLine
+                    );
             return Docs.Concat(
                 this.PrintExtraNewLines(node),
                 Docs.Group(

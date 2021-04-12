@@ -5,8 +5,9 @@ namespace CSharpier
 {
     public partial class Printer
     {
-        private Doc PrintVariableDeclaratorSyntax(VariableDeclaratorSyntax node)
-        {
+        private Doc PrintVariableDeclaratorSyntax(
+            VariableDeclaratorSyntax node
+        ) {
             var parts = new Parts(this.PrintSyntaxToken(node.Identifier));
             if (node.ArgumentList != null)
             {

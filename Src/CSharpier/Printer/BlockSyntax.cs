@@ -14,8 +14,8 @@ namespace CSharpier
 
         private Doc PrintBlockSyntaxWithConditionalSpace(
             BlockSyntax node,
-            string groupId)
-        {
+            string groupId
+        ) {
             return this.PrintBlockSyntax(node, groupId);
         }
 

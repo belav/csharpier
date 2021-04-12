@@ -7,8 +7,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintBasePropertyDeclarationSyntax(
-            BasePropertyDeclarationSyntax node)
-        {
+            BasePropertyDeclarationSyntax node
+        ) {
             EqualsValueClauseSyntax? initializer = null;
             ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifierSyntax =
                 null;
@@ -27,8 +27,9 @@ namespace CSharpier
                 );
                 semicolonToken = propertyDeclarationSyntax.SemicolonToken;
             }
-            else if (node is IndexerDeclarationSyntax indexerDeclarationSyntax)
-            {
+            else if (
+                node is IndexerDeclarationSyntax indexerDeclarationSyntax
+            ) {
                 expressionBody = indexerDeclarationSyntax.ExpressionBody;
                 explicitInterfaceSpecifierSyntax = indexerDeclarationSyntax.ExplicitInterfaceSpecifier;
                 identifier = Concat(
@@ -56,13 +57,13 @@ namespace CSharpier
                 var separator = SpaceIfNoPreviousComment;
                 if (
                     node.AccessorList.Accessors.Any(
-                        o => o.Body != null
-                        || o.ExpressionBody != null
-                        || o.Modifiers.Any()
-                        || o.AttributeLists.Any()
+                        o =>
+                            o.Body != null
+                            || o.ExpressionBody != null
+                            || o.Modifiers.Any()
+                            || o.AttributeLists.Any()
                     )
-                )
-                {
+                ) {
                     separator = Line;
                 }
 
@@ -73,10 +74,11 @@ namespace CSharpier
                         Group(
                             Indent(
                                 node.AccessorList.Accessors.Select(
-                                        o => this.PrintAccessorDeclarationSyntax(
-                                            o,
-                                            separator
-                                        )
+                                        o =>
+                                            this.PrintAccessorDeclarationSyntax(
+                                                o,
+                                                separator
+                                            )
                                     )
                                     .ToArray()
                             )
@@ -93,7 +95,6 @@ namespace CSharpier
                 );
             }
 
-
             var parts = new Parts();
 
             parts.Push(this.PrintExtraNewLines(node));
@@ -108,11 +109,13 @@ namespace CSharpier
                     " ",
                     explicitInterfaceSpecifierSyntax != null
                         ? Concat(
-                            this.Print(explicitInterfaceSpecifierSyntax.Name),
-                            this.PrintSyntaxToken(
-                                explicitInterfaceSpecifierSyntax.DotToken
+                                this.Print(
+                                    explicitInterfaceSpecifierSyntax.Name
+                                ),
+                                this.PrintSyntaxToken(
+                                    explicitInterfaceSpecifierSyntax.DotToken
+                                )
                             )
-                        )
                         : Doc.Null,
                     identifier,
                     contents,
@@ -128,16 +131,15 @@ namespace CSharpier
 
         private Doc PrintAccessorDeclarationSyntax(
             AccessorDeclarationSyntax node,
-            Doc separator)
-        {
+            Doc separator
+        ) {
             var parts = new Parts();
             if (
                 node.Modifiers.Count > 0
                 || node.AttributeLists.Count > 0
                 || node.Body != null
                 || node.ExpressionBody != null
-            )
-            {
+            ) {
                 parts.Push(HardLine);
             }
             else

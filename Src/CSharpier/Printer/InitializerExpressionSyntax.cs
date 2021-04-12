@@ -7,14 +7,15 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintInitializerExpressionSyntax(
-            InitializerExpressionSyntax node)
-        {
+            InitializerExpressionSyntax node
+        ) {
             var result = Concat(
                 node.Kind() == SyntaxKind.ArrayInitializerExpression
                     ? string.Empty
-                    : node.Kind() == SyntaxKind.ComplexElementInitializerExpression
-                        ? SoftLine
-                        : Line,
+                    : node.Kind()
+                            == SyntaxKind.ComplexElementInitializerExpression
+                            ? SoftLine
+                            : Line,
                 this.PrintSyntaxToken(node.OpenBraceToken),
                 Indent(
                     Line,

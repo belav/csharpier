@@ -27,10 +27,10 @@ namespace CSharpier
                 case NullDoc:
                     return indent + "Docs.Null";
                 case StringDoc stringDoc:
-                    return indent + "\"" + stringDoc.Value?.Replace(
-                        "\"",
-                        "\\\""
-                    ) + "\"";
+                    return indent
+                    + "\""
+                    + stringDoc.Value?.Replace("\"", "\\\"")
+                    + "\"";
                 case HardLine:
                     return indent + "Docs.HardLine";
                 case LiteralLine:
@@ -54,19 +54,24 @@ namespace CSharpier
                     result += ")";
                     return result;
                 case LineDoc lineDoc:
-                    return indent + (lineDoc.Type == LineDoc.LineType.Normal
+                    return indent
+                    + (lineDoc.Type == LineDoc.LineType.Normal
                         ? "Docs.Line"
                         : "Docs.SoftLine");
                 case BreakParent:
                     return "";
                 case ForceFlat forceFlat:
-                    return indent + "Docs.ForceFlat(" + newLine + PrintIndentedDocTree(
-                        forceFlat.Contents
-                    ) + ")";
+                    return indent
+                    + "Docs.ForceFlat("
+                    + newLine
+                    + PrintIndentedDocTree(forceFlat.Contents)
+                    + ")";
                 case IndentDoc indentDoc:
-                    return indent + "Docs.Indent(" + newLine + PrintIndentedDocTree(
-                        indentDoc.Contents
-                    ) + ")";
+                    return indent
+                    + "Docs.Indent("
+                    + newLine
+                    + PrintIndentedDocTree(indentDoc.Contents)
+                    + ")";
                 case Group group:
                     return @$"{indent}Docs.Group{(group.GroupId != null ? "WithId" : string.Empty)}(
 {(group.GroupId != null ? $"{nextIndent}\"{group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents)})";

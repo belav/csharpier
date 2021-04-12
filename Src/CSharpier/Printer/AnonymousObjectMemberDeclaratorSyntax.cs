@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintAnonymousObjectMemberDeclaratorSyntax(
-            AnonymousObjectMemberDeclaratorSyntax node)
-        {
+            AnonymousObjectMemberDeclaratorSyntax node
+        ) {
             var parts = new Parts();
             if (node.NameEquals != null)
             {

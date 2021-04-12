@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintConditionalExpressionSyntax(
-            ConditionalExpressionSyntax node)
-        {
+            ConditionalExpressionSyntax node
+        ) {
             return Docs.Group(
                 Docs.Indent(
                     this.Print(node.Condition),

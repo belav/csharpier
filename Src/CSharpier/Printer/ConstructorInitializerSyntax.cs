@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintConstructorInitializerSyntax(
-            ConstructorInitializerSyntax node)
-        {
+            ConstructorInitializerSyntax node
+        ) {
             return Indent(
                 HardLine,
                 this.PrintSyntaxToken(

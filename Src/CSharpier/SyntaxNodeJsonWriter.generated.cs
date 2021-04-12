@@ -12,8 +12,8 @@ namespace CSharpier
     {
         public static void WriteSyntaxNode(
             StringBuilder builder,
-            SyntaxNode syntaxNode)
-        {
+            SyntaxNode syntaxNode
+        ) {
             if (syntaxNode is IdentifierNameSyntax)
                 WriteIdentifierNameSyntax(
                     builder,
@@ -72,16 +72,19 @@ namespace CSharpier
                     syntaxNode as FunctionPointerCallingConventionSyntax
                 );
             if (
-                syntaxNode is FunctionPointerUnmanagedCallingConventionListSyntax
+                syntaxNode
+                is FunctionPointerUnmanagedCallingConventionListSyntax
             )
                 WriteFunctionPointerUnmanagedCallingConventionListSyntax(
                     builder,
-                    syntaxNode as FunctionPointerUnmanagedCallingConventionListSyntax
+                    syntaxNode
+                    as FunctionPointerUnmanagedCallingConventionListSyntax
                 );
             if (syntaxNode is FunctionPointerUnmanagedCallingConventionSyntax)
                 WriteFunctionPointerUnmanagedCallingConventionSyntax(
                     builder,
-                    syntaxNode as FunctionPointerUnmanagedCallingConventionSyntax
+                    syntaxNode
+                    as FunctionPointerUnmanagedCallingConventionSyntax
                 );
             if (syntaxNode is NullableTypeSyntax)
                 WriteNullableTypeSyntax(
@@ -324,7 +327,8 @@ namespace CSharpier
             if (syntaxNode is ImplicitStackAllocArrayCreationExpressionSyntax)
                 WriteImplicitStackAllocArrayCreationExpressionSyntax(
                     builder,
-                    syntaxNode as ImplicitStackAllocArrayCreationExpressionSyntax
+                    syntaxNode
+                    as ImplicitStackAllocArrayCreationExpressionSyntax
                 );
             if (syntaxNode is QueryExpressionSyntax)
                 WriteQueryExpressionSyntax(
@@ -1100,8 +1104,8 @@ namespace CSharpier
 
         public static void WriteIdentifierNameSyntax(
             StringBuilder builder,
-            IdentifierNameSyntax syntaxNode)
-        {
+            IdentifierNameSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -1171,8 +1175,8 @@ namespace CSharpier
         }
         public static void WriteQualifiedNameSyntax(
             StringBuilder builder,
-            QualifiedNameSyntax syntaxNode)
-        {
+            QualifiedNameSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -1252,8 +1256,8 @@ namespace CSharpier
         }
         public static void WriteGenericNameSyntax(
             StringBuilder builder,
-            GenericNameSyntax syntaxNode)
-        {
+            GenericNameSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -1268,8 +1272,9 @@ namespace CSharpier
                     $"\"identifier\":{identifierBuilder.ToString()}"
                 );
             }
-            if (syntaxNode.TypeArgumentList != default(TypeArgumentListSyntax))
-            {
+            if (
+                syntaxNode.TypeArgumentList != default(TypeArgumentListSyntax)
+            ) {
                 var typeArgumentListBuilder = new StringBuilder();
                 WriteTypeArgumentListSyntax(
                     typeArgumentListBuilder,
@@ -1340,8 +1345,8 @@ namespace CSharpier
         }
         public static void WriteTypeArgumentListSyntax(
             StringBuilder builder,
-            TypeArgumentListSyntax syntaxNode)
-        {
+            TypeArgumentListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -1427,8 +1432,8 @@ namespace CSharpier
         }
         public static void WriteAliasQualifiedNameSyntax(
             StringBuilder builder,
-            AliasQualifiedNameSyntax syntaxNode)
-        {
+            AliasQualifiedNameSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -1513,8 +1518,8 @@ namespace CSharpier
         }
         public static void WritePredefinedTypeSyntax(
             StringBuilder builder,
-            PredefinedTypeSyntax syntaxNode)
-        {
+            PredefinedTypeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -1581,8 +1586,8 @@ namespace CSharpier
         }
         public static void WriteArrayTypeSyntax(
             StringBuilder builder,
-            ArrayTypeSyntax syntaxNode)
-        {
+            ArrayTypeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -1661,8 +1666,8 @@ namespace CSharpier
         }
         public static void WriteArrayRankSpecifierSyntax(
             StringBuilder builder,
-            ArrayRankSpecifierSyntax syntaxNode)
-        {
+            ArrayRankSpecifierSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -1749,8 +1754,8 @@ namespace CSharpier
         }
         public static void WritePointerTypeSyntax(
             StringBuilder builder,
-            PointerTypeSyntax syntaxNode)
-        {
+            PointerTypeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -1830,8 +1835,8 @@ namespace CSharpier
         }
         public static void WriteFunctionPointerTypeSyntax(
             StringBuilder builder,
-            FunctionPointerTypeSyntax syntaxNode)
-        {
+            FunctionPointerTypeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -1861,9 +1866,9 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.CallingConvention != default(FunctionPointerCallingConventionSyntax)
-            )
-            {
+                syntaxNode.CallingConvention
+                != default(FunctionPointerCallingConventionSyntax)
+            ) {
                 var callingConventionBuilder = new StringBuilder();
                 WriteFunctionPointerCallingConventionSyntax(
                     callingConventionBuilder,
@@ -1874,9 +1879,9 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.ParameterList != default(FunctionPointerParameterListSyntax)
-            )
-            {
+                syntaxNode.ParameterList
+                != default(FunctionPointerParameterListSyntax)
+            ) {
                 var parameterListBuilder = new StringBuilder();
                 WriteFunctionPointerParameterListSyntax(
                     parameterListBuilder,
@@ -1940,8 +1945,8 @@ namespace CSharpier
         }
         public static void WriteFunctionPointerParameterListSyntax(
             StringBuilder builder,
-            FunctionPointerParameterListSyntax syntaxNode)
-        {
+            FunctionPointerParameterListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2027,8 +2032,8 @@ namespace CSharpier
         }
         public static void WriteFunctionPointerCallingConventionSyntax(
             StringBuilder builder,
-            FunctionPointerCallingConventionSyntax syntaxNode)
-        {
+            FunctionPointerCallingConventionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2047,9 +2052,9 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.UnmanagedCallingConventionList != default(FunctionPointerUnmanagedCallingConventionListSyntax)
-            )
-            {
+                syntaxNode.UnmanagedCallingConventionList
+                != default(FunctionPointerUnmanagedCallingConventionListSyntax)
+            ) {
                 var unmanagedCallingConventionListBuilder = new StringBuilder();
                 WriteFunctionPointerUnmanagedCallingConventionListSyntax(
                     unmanagedCallingConventionListBuilder,
@@ -2108,8 +2113,8 @@ namespace CSharpier
         }
         public static void WriteFunctionPointerUnmanagedCallingConventionListSyntax(
             StringBuilder builder,
-            FunctionPointerUnmanagedCallingConventionListSyntax syntaxNode)
-        {
+            FunctionPointerUnmanagedCallingConventionListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2200,8 +2205,8 @@ namespace CSharpier
         }
         public static void WriteFunctionPointerUnmanagedCallingConventionSyntax(
             StringBuilder builder,
-            FunctionPointerUnmanagedCallingConventionSyntax syntaxNode)
-        {
+            FunctionPointerUnmanagedCallingConventionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2263,8 +2268,8 @@ namespace CSharpier
         }
         public static void WriteNullableTypeSyntax(
             StringBuilder builder,
-            NullableTypeSyntax syntaxNode)
-        {
+            NullableTypeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2344,8 +2349,8 @@ namespace CSharpier
         }
         public static void WriteTupleTypeSyntax(
             StringBuilder builder,
-            TupleTypeSyntax syntaxNode)
-        {
+            TupleTypeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2436,8 +2441,8 @@ namespace CSharpier
         }
         public static void WriteTupleElementSyntax(
             StringBuilder builder,
-            TupleElementSyntax syntaxNode)
-        {
+            TupleElementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2507,8 +2512,8 @@ namespace CSharpier
         }
         public static void WriteOmittedTypeArgumentSyntax(
             StringBuilder builder,
-            OmittedTypeArgumentSyntax syntaxNode)
-        {
+            OmittedTypeArgumentSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2580,8 +2585,8 @@ namespace CSharpier
         }
         public static void WriteRefTypeSyntax(
             StringBuilder builder,
-            RefTypeSyntax syntaxNode)
-        {
+            RefTypeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2667,8 +2672,8 @@ namespace CSharpier
         }
         public static void WriteParenthesizedExpressionSyntax(
             StringBuilder builder,
-            ParenthesizedExpressionSyntax syntaxNode)
-        {
+            ParenthesizedExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2754,8 +2759,8 @@ namespace CSharpier
         }
         public static void WriteTupleExpressionSyntax(
             StringBuilder builder,
-            TupleExpressionSyntax syntaxNode)
-        {
+            TupleExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2841,8 +2846,8 @@ namespace CSharpier
         }
         public static void WritePrefixUnaryExpressionSyntax(
             StringBuilder builder,
-            PrefixUnaryExpressionSyntax syntaxNode)
-        {
+            PrefixUnaryExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2915,8 +2920,8 @@ namespace CSharpier
         }
         public static void WriteAwaitExpressionSyntax(
             StringBuilder builder,
-            AwaitExpressionSyntax syntaxNode)
-        {
+            AwaitExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -2988,8 +2993,8 @@ namespace CSharpier
         }
         public static void WritePostfixUnaryExpressionSyntax(
             StringBuilder builder,
-            PostfixUnaryExpressionSyntax syntaxNode)
-        {
+            PostfixUnaryExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -3062,8 +3067,8 @@ namespace CSharpier
         }
         public static void WriteMemberAccessExpressionSyntax(
             StringBuilder builder,
-            MemberAccessExpressionSyntax syntaxNode)
-        {
+            MemberAccessExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -3144,8 +3149,8 @@ namespace CSharpier
         }
         public static void WriteConditionalAccessExpressionSyntax(
             StringBuilder builder,
-            ConditionalAccessExpressionSyntax syntaxNode)
-        {
+            ConditionalAccessExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -3228,8 +3233,8 @@ namespace CSharpier
         }
         public static void WriteMemberBindingExpressionSyntax(
             StringBuilder builder,
-            MemberBindingExpressionSyntax syntaxNode)
-        {
+            MemberBindingExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -3302,16 +3307,17 @@ namespace CSharpier
         }
         public static void WriteElementBindingExpressionSyntax(
             StringBuilder builder,
-            ElementBindingExpressionSyntax syntaxNode)
-        {
+            ElementBindingExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
                 $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
             );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
-            if (syntaxNode.ArgumentList != default(BracketedArgumentListSyntax))
-            {
+            if (
+                syntaxNode.ArgumentList != default(BracketedArgumentListSyntax)
+            ) {
                 var argumentListBuilder = new StringBuilder();
                 WriteBracketedArgumentListSyntax(
                     argumentListBuilder,
@@ -3370,8 +3376,8 @@ namespace CSharpier
         }
         public static void WriteRangeExpressionSyntax(
             StringBuilder builder,
-            RangeExpressionSyntax syntaxNode)
-        {
+            RangeExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -3454,16 +3460,17 @@ namespace CSharpier
         }
         public static void WriteImplicitElementAccessSyntax(
             StringBuilder builder,
-            ImplicitElementAccessSyntax syntaxNode)
-        {
+            ImplicitElementAccessSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
                 $"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\""
             );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
-            if (syntaxNode.ArgumentList != default(BracketedArgumentListSyntax))
-            {
+            if (
+                syntaxNode.ArgumentList != default(BracketedArgumentListSyntax)
+            ) {
                 var argumentListBuilder = new StringBuilder();
                 WriteBracketedArgumentListSyntax(
                     argumentListBuilder,
@@ -3522,8 +3529,8 @@ namespace CSharpier
         }
         public static void WriteBinaryExpressionSyntax(
             StringBuilder builder,
-            BinaryExpressionSyntax syntaxNode)
-        {
+            BinaryExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -3602,8 +3609,8 @@ namespace CSharpier
         }
         public static void WriteAssignmentExpressionSyntax(
             StringBuilder builder,
-            AssignmentExpressionSyntax syntaxNode)
-        {
+            AssignmentExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -3682,8 +3689,8 @@ namespace CSharpier
         }
         public static void WriteConditionalExpressionSyntax(
             StringBuilder builder,
-            ConditionalExpressionSyntax syntaxNode)
-        {
+            ConditionalExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -3776,8 +3783,8 @@ namespace CSharpier
         }
         public static void WriteThisExpressionSyntax(
             StringBuilder builder,
-            ThisExpressionSyntax syntaxNode)
-        {
+            ThisExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -3839,8 +3846,8 @@ namespace CSharpier
         }
         public static void WriteBaseExpressionSyntax(
             StringBuilder builder,
-            BaseExpressionSyntax syntaxNode)
-        {
+            BaseExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -3902,8 +3909,8 @@ namespace CSharpier
         }
         public static void WriteLiteralExpressionSyntax(
             StringBuilder builder,
-            LiteralExpressionSyntax syntaxNode)
-        {
+            LiteralExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -3965,8 +3972,8 @@ namespace CSharpier
         }
         public static void WriteMakeRefExpressionSyntax(
             StringBuilder builder,
-            MakeRefExpressionSyntax syntaxNode)
-        {
+            MakeRefExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -4058,8 +4065,8 @@ namespace CSharpier
         }
         public static void WriteRefTypeExpressionSyntax(
             StringBuilder builder,
-            RefTypeExpressionSyntax syntaxNode)
-        {
+            RefTypeExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -4151,8 +4158,8 @@ namespace CSharpier
         }
         public static void WriteRefValueExpressionSyntax(
             StringBuilder builder,
-            RefValueExpressionSyntax syntaxNode)
-        {
+            RefValueExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -4256,8 +4263,8 @@ namespace CSharpier
         }
         public static void WriteCheckedExpressionSyntax(
             StringBuilder builder,
-            CheckedExpressionSyntax syntaxNode)
-        {
+            CheckedExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -4349,8 +4356,8 @@ namespace CSharpier
         }
         public static void WriteDefaultExpressionSyntax(
             StringBuilder builder,
-            DefaultExpressionSyntax syntaxNode)
-        {
+            DefaultExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -4440,8 +4447,8 @@ namespace CSharpier
         }
         public static void WriteTypeOfExpressionSyntax(
             StringBuilder builder,
-            TypeOfExpressionSyntax syntaxNode)
-        {
+            TypeOfExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -4531,8 +4538,8 @@ namespace CSharpier
         }
         public static void WriteSizeOfExpressionSyntax(
             StringBuilder builder,
-            SizeOfExpressionSyntax syntaxNode)
-        {
+            SizeOfExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -4622,8 +4629,8 @@ namespace CSharpier
         }
         public static void WriteInvocationExpressionSyntax(
             StringBuilder builder,
-            InvocationExpressionSyntax syntaxNode)
-        {
+            InvocationExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -4698,8 +4705,8 @@ namespace CSharpier
         }
         public static void WriteElementAccessExpressionSyntax(
             StringBuilder builder,
-            ElementAccessExpressionSyntax syntaxNode)
-        {
+            ElementAccessExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -4714,8 +4721,9 @@ namespace CSharpier
                     $"\"expression\":{expressionBuilder.ToString()}"
                 );
             }
-            if (syntaxNode.ArgumentList != default(BracketedArgumentListSyntax))
-            {
+            if (
+                syntaxNode.ArgumentList != default(BracketedArgumentListSyntax)
+            ) {
                 var argumentListBuilder = new StringBuilder();
                 WriteBracketedArgumentListSyntax(
                     argumentListBuilder,
@@ -4774,8 +4782,8 @@ namespace CSharpier
         }
         public static void WriteArgumentListSyntax(
             StringBuilder builder,
-            ArgumentListSyntax syntaxNode)
-        {
+            ArgumentListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -4861,8 +4869,8 @@ namespace CSharpier
         }
         public static void WriteBracketedArgumentListSyntax(
             StringBuilder builder,
-            BracketedArgumentListSyntax syntaxNode)
-        {
+            BracketedArgumentListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -4948,8 +4956,8 @@ namespace CSharpier
         }
         public static void WriteArgumentSyntax(
             StringBuilder builder,
-            ArgumentSyntax syntaxNode)
-        {
+            ArgumentSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -5041,8 +5049,8 @@ namespace CSharpier
         }
         public static void WriteNameColonSyntax(
             StringBuilder builder,
-            NameColonSyntax syntaxNode)
-        {
+            NameColonSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -5112,8 +5120,8 @@ namespace CSharpier
         }
         public static void WriteDeclarationExpressionSyntax(
             StringBuilder builder,
-            DeclarationExpressionSyntax syntaxNode)
-        {
+            DeclarationExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -5183,8 +5191,8 @@ namespace CSharpier
         }
         public static void WriteCastExpressionSyntax(
             StringBuilder builder,
-            CastExpressionSyntax syntaxNode)
-        {
+            CastExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -5276,8 +5284,8 @@ namespace CSharpier
         }
         public static void WriteAnonymousMethodExpressionSyntax(
             StringBuilder builder,
-            AnonymousMethodExpressionSyntax syntaxNode)
-        {
+            AnonymousMethodExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -5394,8 +5402,8 @@ namespace CSharpier
         }
         public static void WriteSimpleLambdaExpressionSyntax(
             StringBuilder builder,
-            SimpleLambdaExpressionSyntax syntaxNode)
-        {
+            SimpleLambdaExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -5504,8 +5512,8 @@ namespace CSharpier
         }
         public static void WriteRefExpressionSyntax(
             StringBuilder builder,
-            RefExpressionSyntax syntaxNode)
-        {
+            RefExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -5577,8 +5585,8 @@ namespace CSharpier
         }
         public static void WriteParenthesizedLambdaExpressionSyntax(
             StringBuilder builder,
-            ParenthesizedLambdaExpressionSyntax syntaxNode)
-        {
+            ParenthesizedLambdaExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -5692,8 +5700,8 @@ namespace CSharpier
         }
         public static void WriteInitializerExpressionSyntax(
             StringBuilder builder,
-            InitializerExpressionSyntax syntaxNode)
-        {
+            InitializerExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -5781,8 +5789,8 @@ namespace CSharpier
         }
         public static void WriteImplicitObjectCreationExpressionSyntax(
             StringBuilder builder,
-            ImplicitObjectCreationExpressionSyntax syntaxNode)
-        {
+            ImplicitObjectCreationExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -5808,8 +5816,9 @@ namespace CSharpier
                     $"\"argumentList\":{argumentListBuilder.ToString()}"
                 );
             }
-            if (syntaxNode.Initializer != default(InitializerExpressionSyntax))
-            {
+            if (
+                syntaxNode.Initializer != default(InitializerExpressionSyntax)
+            ) {
                 var initializerBuilder = new StringBuilder();
                 WriteInitializerExpressionSyntax(
                     initializerBuilder,
@@ -5868,8 +5877,8 @@ namespace CSharpier
         }
         public static void WriteObjectCreationExpressionSyntax(
             StringBuilder builder,
-            ObjectCreationExpressionSyntax syntaxNode)
-        {
+            ObjectCreationExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -5901,8 +5910,9 @@ namespace CSharpier
                     $"\"argumentList\":{argumentListBuilder.ToString()}"
                 );
             }
-            if (syntaxNode.Initializer != default(InitializerExpressionSyntax))
-            {
+            if (
+                syntaxNode.Initializer != default(InitializerExpressionSyntax)
+            ) {
                 var initializerBuilder = new StringBuilder();
                 WriteInitializerExpressionSyntax(
                     initializerBuilder,
@@ -5961,8 +5971,8 @@ namespace CSharpier
         }
         public static void WriteWithExpressionSyntax(
             StringBuilder builder,
-            WithExpressionSyntax syntaxNode)
-        {
+            WithExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -5985,8 +5995,9 @@ namespace CSharpier
                     $"\"withKeyword\":{withKeywordBuilder.ToString()}"
                 );
             }
-            if (syntaxNode.Initializer != default(InitializerExpressionSyntax))
-            {
+            if (
+                syntaxNode.Initializer != default(InitializerExpressionSyntax)
+            ) {
                 var initializerBuilder = new StringBuilder();
                 WriteInitializerExpressionSyntax(
                     initializerBuilder,
@@ -6045,8 +6056,8 @@ namespace CSharpier
         }
         public static void WriteAnonymousObjectMemberDeclaratorSyntax(
             StringBuilder builder,
-            AnonymousObjectMemberDeclaratorSyntax syntaxNode)
-        {
+            AnonymousObjectMemberDeclaratorSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -6118,8 +6129,8 @@ namespace CSharpier
         }
         public static void WriteAnonymousObjectCreationExpressionSyntax(
             StringBuilder builder,
-            AnonymousObjectCreationExpressionSyntax syntaxNode)
-        {
+            AnonymousObjectCreationExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -6215,8 +6226,8 @@ namespace CSharpier
         }
         public static void WriteArrayCreationExpressionSyntax(
             StringBuilder builder,
-            ArrayCreationExpressionSyntax syntaxNode)
-        {
+            ArrayCreationExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -6237,8 +6248,9 @@ namespace CSharpier
                 WriteArrayTypeSyntax(typeBuilder, syntaxNode.Type);
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
-            if (syntaxNode.Initializer != default(InitializerExpressionSyntax))
-            {
+            if (
+                syntaxNode.Initializer != default(InitializerExpressionSyntax)
+            ) {
                 var initializerBuilder = new StringBuilder();
                 WriteInitializerExpressionSyntax(
                     initializerBuilder,
@@ -6297,8 +6309,8 @@ namespace CSharpier
         }
         public static void WriteImplicitArrayCreationExpressionSyntax(
             StringBuilder builder,
-            ImplicitArrayCreationExpressionSyntax syntaxNode)
-        {
+            ImplicitArrayCreationExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -6343,8 +6355,9 @@ namespace CSharpier
                     $"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}"
                 );
             }
-            if (syntaxNode.Initializer != default(InitializerExpressionSyntax))
-            {
+            if (
+                syntaxNode.Initializer != default(InitializerExpressionSyntax)
+            ) {
                 var initializerBuilder = new StringBuilder();
                 WriteInitializerExpressionSyntax(
                     initializerBuilder,
@@ -6403,8 +6416,8 @@ namespace CSharpier
         }
         public static void WriteStackAllocArrayCreationExpressionSyntax(
             StringBuilder builder,
-            StackAllocArrayCreationExpressionSyntax syntaxNode)
-        {
+            StackAllocArrayCreationExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -6428,8 +6441,9 @@ namespace CSharpier
                 WriteSyntaxNode(typeBuilder, syntaxNode.Type);
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
-            if (syntaxNode.Initializer != default(InitializerExpressionSyntax))
-            {
+            if (
+                syntaxNode.Initializer != default(InitializerExpressionSyntax)
+            ) {
                 var initializerBuilder = new StringBuilder();
                 WriteInitializerExpressionSyntax(
                     initializerBuilder,
@@ -6488,8 +6502,8 @@ namespace CSharpier
         }
         public static void WriteImplicitStackAllocArrayCreationExpressionSyntax(
             StringBuilder builder,
-            ImplicitStackAllocArrayCreationExpressionSyntax syntaxNode)
-        {
+            ImplicitStackAllocArrayCreationExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -6529,8 +6543,9 @@ namespace CSharpier
                     $"\"closeBracketToken\":{closeBracketTokenBuilder.ToString()}"
                 );
             }
-            if (syntaxNode.Initializer != default(InitializerExpressionSyntax))
-            {
+            if (
+                syntaxNode.Initializer != default(InitializerExpressionSyntax)
+            ) {
                 var initializerBuilder = new StringBuilder();
                 WriteInitializerExpressionSyntax(
                     initializerBuilder,
@@ -6589,8 +6604,8 @@ namespace CSharpier
         }
         public static void WriteQueryExpressionSyntax(
             StringBuilder builder,
-            QueryExpressionSyntax syntaxNode)
-        {
+            QueryExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -6660,8 +6675,8 @@ namespace CSharpier
         }
         public static void WriteQueryBodySyntax(
             StringBuilder builder,
-            QueryBodySyntax syntaxNode)
-        {
+            QueryBodySyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -6676,8 +6691,9 @@ namespace CSharpier
                 clauses.Add(innerBuilder.ToString());
             }
             properties.Add($"\"clauses\":[{string.Join(",", clauses)}]");
-            if (syntaxNode.SelectOrGroup != default(SelectOrGroupClauseSyntax))
-            {
+            if (
+                syntaxNode.SelectOrGroup != default(SelectOrGroupClauseSyntax)
+            ) {
                 var selectOrGroupBuilder = new StringBuilder();
                 WriteSyntaxNode(selectOrGroupBuilder, syntaxNode.SelectOrGroup);
                 properties.Add(
@@ -6744,8 +6760,8 @@ namespace CSharpier
         }
         public static void WriteFromClauseSyntax(
             StringBuilder builder,
-            FromClauseSyntax syntaxNode)
-        {
+            FromClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -6837,8 +6853,8 @@ namespace CSharpier
         }
         public static void WriteLetClauseSyntax(
             StringBuilder builder,
-            LetClauseSyntax syntaxNode)
-        {
+            LetClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -6926,8 +6942,8 @@ namespace CSharpier
         }
         public static void WriteJoinClauseSyntax(
             StringBuilder builder,
-            JoinClauseSyntax syntaxNode)
-        {
+            JoinClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7064,8 +7080,8 @@ namespace CSharpier
         }
         public static void WriteJoinIntoClauseSyntax(
             StringBuilder builder,
-            JoinIntoClauseSyntax syntaxNode)
-        {
+            JoinIntoClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7137,8 +7153,8 @@ namespace CSharpier
         }
         public static void WriteWhereClauseSyntax(
             StringBuilder builder,
-            WhereClauseSyntax syntaxNode)
-        {
+            WhereClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7208,8 +7224,8 @@ namespace CSharpier
         }
         public static void WriteOrderByClauseSyntax(
             StringBuilder builder,
-            OrderByClauseSyntax syntaxNode)
-        {
+            OrderByClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7284,8 +7300,8 @@ namespace CSharpier
         }
         public static void WriteOrderingSyntax(
             StringBuilder builder,
-            OrderingSyntax syntaxNode)
-        {
+            OrderingSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7300,8 +7316,9 @@ namespace CSharpier
                     $"\"expression\":{expressionBuilder.ToString()}"
                 );
             }
-            if (syntaxNode.AscendingOrDescendingKeyword != default(SyntaxToken))
-            {
+            if (
+                syntaxNode.AscendingOrDescendingKeyword != default(SyntaxToken)
+            ) {
                 var ascendingOrDescendingKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(
                     ascendingOrDescendingKeywordBuilder,
@@ -7360,8 +7377,8 @@ namespace CSharpier
         }
         public static void WriteSelectClauseSyntax(
             StringBuilder builder,
-            SelectClauseSyntax syntaxNode)
-        {
+            SelectClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7436,8 +7453,8 @@ namespace CSharpier
         }
         public static void WriteGroupClauseSyntax(
             StringBuilder builder,
-            GroupClauseSyntax syntaxNode)
-        {
+            GroupClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7526,8 +7543,8 @@ namespace CSharpier
         }
         public static void WriteQueryContinuationSyntax(
             StringBuilder builder,
-            QueryContinuationSyntax syntaxNode)
-        {
+            QueryContinuationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7605,8 +7622,8 @@ namespace CSharpier
         }
         public static void WriteOmittedArraySizeExpressionSyntax(
             StringBuilder builder,
-            OmittedArraySizeExpressionSyntax syntaxNode)
-        {
+            OmittedArraySizeExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7614,9 +7631,9 @@ namespace CSharpier
             );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (
-                syntaxNode.OmittedArraySizeExpressionToken != default(SyntaxToken)
-            )
-            {
+                syntaxNode.OmittedArraySizeExpressionToken
+                != default(SyntaxToken)
+            ) {
                 var omittedArraySizeExpressionTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(
                     omittedArraySizeExpressionTokenBuilder,
@@ -7675,8 +7692,8 @@ namespace CSharpier
         }
         public static void WriteInterpolatedStringExpressionSyntax(
             StringBuilder builder,
-            InterpolatedStringExpressionSyntax syntaxNode)
-        {
+            InterpolatedStringExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7762,8 +7779,8 @@ namespace CSharpier
         }
         public static void WriteIsPatternExpressionSyntax(
             StringBuilder builder,
-            IsPatternExpressionSyntax syntaxNode)
-        {
+            IsPatternExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7839,8 +7856,8 @@ namespace CSharpier
         }
         public static void WriteThrowExpressionSyntax(
             StringBuilder builder,
-            ThrowExpressionSyntax syntaxNode)
-        {
+            ThrowExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7912,8 +7929,8 @@ namespace CSharpier
         }
         public static void WriteWhenClauseSyntax(
             StringBuilder builder,
-            WhenClauseSyntax syntaxNode)
-        {
+            WhenClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -7983,8 +8000,8 @@ namespace CSharpier
         }
         public static void WriteDiscardPatternSyntax(
             StringBuilder builder,
-            DiscardPatternSyntax syntaxNode)
-        {
+            DiscardPatternSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8051,8 +8068,8 @@ namespace CSharpier
         }
         public static void WriteDeclarationPatternSyntax(
             StringBuilder builder,
-            DeclarationPatternSyntax syntaxNode)
-        {
+            DeclarationPatternSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8122,8 +8139,8 @@ namespace CSharpier
         }
         public static void WriteVarPatternSyntax(
             StringBuilder builder,
-            VarPatternSyntax syntaxNode)
-        {
+            VarPatternSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8195,8 +8212,8 @@ namespace CSharpier
         }
         public static void WriteRecursivePatternSyntax(
             StringBuilder builder,
-            RecursivePatternSyntax syntaxNode)
-        {
+            RecursivePatternSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8210,9 +8227,9 @@ namespace CSharpier
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
             if (
-                syntaxNode.PositionalPatternClause != default(PositionalPatternClauseSyntax)
-            )
-            {
+                syntaxNode.PositionalPatternClause
+                != default(PositionalPatternClauseSyntax)
+            ) {
                 var positionalPatternClauseBuilder = new StringBuilder();
                 WritePositionalPatternClauseSyntax(
                     positionalPatternClauseBuilder,
@@ -8223,9 +8240,9 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.PropertyPatternClause != default(PropertyPatternClauseSyntax)
-            )
-            {
+                syntaxNode.PropertyPatternClause
+                != default(PropertyPatternClauseSyntax)
+            ) {
                 var propertyPatternClauseBuilder = new StringBuilder();
                 WritePropertyPatternClauseSyntax(
                     propertyPatternClauseBuilder,
@@ -8292,8 +8309,8 @@ namespace CSharpier
         }
         public static void WritePositionalPatternClauseSyntax(
             StringBuilder builder,
-            PositionalPatternClauseSyntax syntaxNode)
-        {
+            PositionalPatternClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8381,8 +8398,8 @@ namespace CSharpier
         }
         public static void WritePropertyPatternClauseSyntax(
             StringBuilder builder,
-            PropertyPatternClauseSyntax syntaxNode)
-        {
+            PropertyPatternClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8470,8 +8487,8 @@ namespace CSharpier
         }
         public static void WriteSubpatternSyntax(
             StringBuilder builder,
-            SubpatternSyntax syntaxNode)
-        {
+            SubpatternSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8539,8 +8556,8 @@ namespace CSharpier
         }
         public static void WriteConstantPatternSyntax(
             StringBuilder builder,
-            ConstantPatternSyntax syntaxNode)
-        {
+            ConstantPatternSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8604,8 +8621,8 @@ namespace CSharpier
         }
         public static void WriteParenthesizedPatternSyntax(
             StringBuilder builder,
-            ParenthesizedPatternSyntax syntaxNode)
-        {
+            ParenthesizedPatternSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8689,8 +8706,8 @@ namespace CSharpier
         }
         public static void WriteRelationalPatternSyntax(
             StringBuilder builder,
-            RelationalPatternSyntax syntaxNode)
-        {
+            RelationalPatternSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8765,8 +8782,8 @@ namespace CSharpier
         }
         public static void WriteTypePatternSyntax(
             StringBuilder builder,
-            TypePatternSyntax syntaxNode)
-        {
+            TypePatternSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8828,8 +8845,8 @@ namespace CSharpier
         }
         public static void WriteBinaryPatternSyntax(
             StringBuilder builder,
-            BinaryPatternSyntax syntaxNode)
-        {
+            BinaryPatternSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8908,8 +8925,8 @@ namespace CSharpier
         }
         public static void WriteUnaryPatternSyntax(
             StringBuilder builder,
-            UnaryPatternSyntax syntaxNode)
-        {
+            UnaryPatternSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -8982,8 +8999,8 @@ namespace CSharpier
         }
         public static void WriteInterpolatedStringTextSyntax(
             StringBuilder builder,
-            InterpolatedStringTextSyntax syntaxNode)
-        {
+            InterpolatedStringTextSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -9045,8 +9062,8 @@ namespace CSharpier
         }
         public static void WriteInterpolationSyntax(
             StringBuilder builder,
-            InterpolationSyntax syntaxNode)
-        {
+            InterpolationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -9073,9 +9090,9 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.AlignmentClause != default(InterpolationAlignmentClauseSyntax)
-            )
-            {
+                syntaxNode.AlignmentClause
+                != default(InterpolationAlignmentClauseSyntax)
+            ) {
                 var alignmentClauseBuilder = new StringBuilder();
                 WriteInterpolationAlignmentClauseSyntax(
                     alignmentClauseBuilder,
@@ -9086,9 +9103,9 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.FormatClause != default(InterpolationFormatClauseSyntax)
-            )
-            {
+                syntaxNode.FormatClause
+                != default(InterpolationFormatClauseSyntax)
+            ) {
                 var formatClauseBuilder = new StringBuilder();
                 WriteInterpolationFormatClauseSyntax(
                     formatClauseBuilder,
@@ -9158,8 +9175,8 @@ namespace CSharpier
         }
         public static void WriteInterpolationAlignmentClauseSyntax(
             StringBuilder builder,
-            InterpolationAlignmentClauseSyntax syntaxNode)
-        {
+            InterpolationAlignmentClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -9229,8 +9246,8 @@ namespace CSharpier
         }
         public static void WriteInterpolationFormatClauseSyntax(
             StringBuilder builder,
-            InterpolationFormatClauseSyntax syntaxNode)
-        {
+            InterpolationFormatClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -9305,8 +9322,8 @@ namespace CSharpier
         }
         public static void WriteGlobalStatementSyntax(
             StringBuilder builder,
-            GlobalStatementSyntax syntaxNode)
-        {
+            GlobalStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -9386,8 +9403,8 @@ namespace CSharpier
         }
         public static void WriteBlockSyntax(
             StringBuilder builder,
-            BlockSyntax syntaxNode)
-        {
+            BlockSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -9483,8 +9500,8 @@ namespace CSharpier
         }
         public static void WriteLocalFunctionStatementSyntax(
             StringBuilder builder,
-            LocalFunctionStatementSyntax syntaxNode)
-        {
+            LocalFunctionStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -9527,8 +9544,7 @@ namespace CSharpier
             }
             if (
                 syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
-            )
-            {
+            ) {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
@@ -9566,9 +9582,9 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
-            )
-            {
+                syntaxNode.ExpressionBody
+                != default(ArrowExpressionClauseSyntax)
+            ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
@@ -9638,8 +9654,8 @@ namespace CSharpier
         }
         public static void WriteLocalDeclarationStatementSyntax(
             StringBuilder builder,
-            LocalDeclarationStatementSyntax syntaxNode)
-        {
+            LocalDeclarationStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -9752,8 +9768,8 @@ namespace CSharpier
         }
         public static void WriteVariableDeclarationSyntax(
             StringBuilder builder,
-            VariableDeclarationSyntax syntaxNode)
-        {
+            VariableDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -9823,8 +9839,8 @@ namespace CSharpier
         }
         public static void WriteVariableDeclaratorSyntax(
             StringBuilder builder,
-            VariableDeclaratorSyntax syntaxNode)
-        {
+            VariableDeclaratorSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -9839,8 +9855,9 @@ namespace CSharpier
                     $"\"identifier\":{identifierBuilder.ToString()}"
                 );
             }
-            if (syntaxNode.ArgumentList != default(BracketedArgumentListSyntax))
-            {
+            if (
+                syntaxNode.ArgumentList != default(BracketedArgumentListSyntax)
+            ) {
                 var argumentListBuilder = new StringBuilder();
                 WriteBracketedArgumentListSyntax(
                     argumentListBuilder,
@@ -9910,8 +9927,8 @@ namespace CSharpier
         }
         public static void WriteEqualsValueClauseSyntax(
             StringBuilder builder,
-            EqualsValueClauseSyntax syntaxNode)
-        {
+            EqualsValueClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -9981,8 +9998,8 @@ namespace CSharpier
         }
         public static void WriteSingleVariableDesignationSyntax(
             StringBuilder builder,
-            SingleVariableDesignationSyntax syntaxNode)
-        {
+            SingleVariableDesignationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -10046,8 +10063,8 @@ namespace CSharpier
         }
         public static void WriteDiscardDesignationSyntax(
             StringBuilder builder,
-            DiscardDesignationSyntax syntaxNode)
-        {
+            DiscardDesignationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -10114,8 +10131,8 @@ namespace CSharpier
         }
         public static void WriteParenthesizedVariableDesignationSyntax(
             StringBuilder builder,
-            ParenthesizedVariableDesignationSyntax syntaxNode)
-        {
+            ParenthesizedVariableDesignationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -10201,8 +10218,8 @@ namespace CSharpier
         }
         public static void WriteExpressionStatementSyntax(
             StringBuilder builder,
-            ExpressionStatementSyntax syntaxNode)
-        {
+            ExpressionStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -10293,8 +10310,8 @@ namespace CSharpier
         }
         public static void WriteEmptyStatementSyntax(
             StringBuilder builder,
-            EmptyStatementSyntax syntaxNode)
-        {
+            EmptyStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -10371,8 +10388,8 @@ namespace CSharpier
         }
         public static void WriteLabeledStatementSyntax(
             StringBuilder builder,
-            LabeledStatementSyntax syntaxNode)
-        {
+            LabeledStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -10460,8 +10477,8 @@ namespace CSharpier
         }
         public static void WriteGotoStatementSyntax(
             StringBuilder builder,
-            GotoStatementSyntax syntaxNode)
-        {
+            GotoStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -10565,8 +10582,8 @@ namespace CSharpier
         }
         public static void WriteBreakStatementSyntax(
             StringBuilder builder,
-            BreakStatementSyntax syntaxNode)
-        {
+            BreakStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -10651,8 +10668,8 @@ namespace CSharpier
         }
         public static void WriteContinueStatementSyntax(
             StringBuilder builder,
-            ContinueStatementSyntax syntaxNode)
-        {
+            ContinueStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -10740,8 +10757,8 @@ namespace CSharpier
         }
         public static void WriteReturnStatementSyntax(
             StringBuilder builder,
-            ReturnStatementSyntax syntaxNode)
-        {
+            ReturnStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -10837,8 +10854,8 @@ namespace CSharpier
         }
         public static void WriteThrowStatementSyntax(
             StringBuilder builder,
-            ThrowStatementSyntax syntaxNode)
-        {
+            ThrowStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -10931,8 +10948,8 @@ namespace CSharpier
         }
         public static void WriteYieldStatementSyntax(
             StringBuilder builder,
-            YieldStatementSyntax syntaxNode)
-        {
+            YieldStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -11036,8 +11053,8 @@ namespace CSharpier
         }
         public static void WriteWhileStatementSyntax(
             StringBuilder builder,
-            WhileStatementSyntax syntaxNode)
-        {
+            WhileStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -11145,8 +11162,8 @@ namespace CSharpier
         }
         public static void WriteDoStatementSyntax(
             StringBuilder builder,
-            DoStatementSyntax syntaxNode)
-        {
+            DoStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -11271,8 +11288,8 @@ namespace CSharpier
         }
         public static void WriteForStatementSyntax(
             StringBuilder builder,
-            ForStatementSyntax syntaxNode)
-        {
+            ForStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -11433,8 +11450,8 @@ namespace CSharpier
         }
         public static void WriteForEachStatementSyntax(
             StringBuilder builder,
-            ForEachStatementSyntax syntaxNode)
-        {
+            ForEachStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -11575,8 +11592,8 @@ namespace CSharpier
         }
         public static void WriteForEachVariableStatementSyntax(
             StringBuilder builder,
-            ForEachVariableStatementSyntax syntaxNode)
-        {
+            ForEachVariableStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -11709,8 +11726,8 @@ namespace CSharpier
         }
         public static void WriteUsingStatementSyntax(
             StringBuilder builder,
-            UsingStatementSyntax syntaxNode)
-        {
+            UsingStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -11839,8 +11856,8 @@ namespace CSharpier
         }
         public static void WriteFixedStatementSyntax(
             StringBuilder builder,
-            FixedStatementSyntax syntaxNode)
-        {
+            FixedStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -11953,8 +11970,8 @@ namespace CSharpier
         }
         public static void WriteCheckedStatementSyntax(
             StringBuilder builder,
-            CheckedStatementSyntax syntaxNode)
-        {
+            CheckedStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -12032,8 +12049,8 @@ namespace CSharpier
         }
         public static void WriteUnsafeStatementSyntax(
             StringBuilder builder,
-            UnsafeStatementSyntax syntaxNode)
-        {
+            UnsafeStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -12116,8 +12133,8 @@ namespace CSharpier
         }
         public static void WriteLockStatementSyntax(
             StringBuilder builder,
-            LockStatementSyntax syntaxNode)
-        {
+            LockStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -12227,8 +12244,8 @@ namespace CSharpier
         }
         public static void WriteIfStatementSyntax(
             StringBuilder builder,
-            IfStatementSyntax syntaxNode)
-        {
+            IfStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -12340,8 +12357,8 @@ namespace CSharpier
         }
         public static void WriteElseClauseSyntax(
             StringBuilder builder,
-            ElseClauseSyntax syntaxNode)
-        {
+            ElseClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -12411,8 +12428,8 @@ namespace CSharpier
         }
         public static void WriteSwitchStatementSyntax(
             StringBuilder builder,
-            SwitchStatementSyntax syntaxNode)
-        {
+            SwitchStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -12549,8 +12566,8 @@ namespace CSharpier
         }
         public static void WriteSwitchSectionSyntax(
             StringBuilder builder,
-            SwitchSectionSyntax syntaxNode)
-        {
+            SwitchSectionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -12622,8 +12639,8 @@ namespace CSharpier
         }
         public static void WriteCasePatternSwitchLabelSyntax(
             StringBuilder builder,
-            CasePatternSwitchLabelSyntax syntaxNode)
-        {
+            CasePatternSwitchLabelSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -12707,8 +12724,8 @@ namespace CSharpier
         }
         public static void WriteCaseSwitchLabelSyntax(
             StringBuilder builder,
-            CaseSwitchLabelSyntax syntaxNode)
-        {
+            CaseSwitchLabelSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -12784,8 +12801,8 @@ namespace CSharpier
         }
         public static void WriteDefaultSwitchLabelSyntax(
             StringBuilder builder,
-            DefaultSwitchLabelSyntax syntaxNode)
-        {
+            DefaultSwitchLabelSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -12855,8 +12872,8 @@ namespace CSharpier
         }
         public static void WriteSwitchExpressionSyntax(
             StringBuilder builder,
-            SwitchExpressionSyntax syntaxNode)
-        {
+            SwitchExpressionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -12964,8 +12981,8 @@ namespace CSharpier
         }
         public static void WriteSwitchExpressionArmSyntax(
             StringBuilder builder,
-            SwitchExpressionArmSyntax syntaxNode)
-        {
+            SwitchExpressionArmSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -13054,8 +13071,8 @@ namespace CSharpier
         }
         public static void WriteTryStatementSyntax(
             StringBuilder builder,
-            TryStatementSyntax syntaxNode)
-        {
+            TryStatementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -13149,8 +13166,8 @@ namespace CSharpier
         }
         public static void WriteCatchClauseSyntax(
             StringBuilder builder,
-            CatchClauseSyntax syntaxNode)
-        {
+            CatchClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -13237,8 +13254,8 @@ namespace CSharpier
         }
         public static void WriteCatchDeclarationSyntax(
             StringBuilder builder,
-            CatchDeclarationSyntax syntaxNode)
-        {
+            CatchDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -13330,8 +13347,8 @@ namespace CSharpier
         }
         public static void WriteCatchFilterClauseSyntax(
             StringBuilder builder,
-            CatchFilterClauseSyntax syntaxNode)
-        {
+            CatchFilterClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -13428,8 +13445,8 @@ namespace CSharpier
         }
         public static void WriteFinallyClauseSyntax(
             StringBuilder builder,
-            FinallyClauseSyntax syntaxNode)
-        {
+            FinallyClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -13502,8 +13519,8 @@ namespace CSharpier
         }
         public static void WriteCompilationUnitSyntax(
             StringBuilder builder,
-            CompilationUnitSyntax syntaxNode)
-        {
+            CompilationUnitSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -13604,8 +13621,8 @@ namespace CSharpier
         }
         public static void WriteExternAliasDirectiveSyntax(
             StringBuilder builder,
-            ExternAliasDirectiveSyntax syntaxNode)
-        {
+            ExternAliasDirectiveSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -13699,8 +13716,8 @@ namespace CSharpier
         }
         public static void WriteUsingDirectiveSyntax(
             StringBuilder builder,
-            UsingDirectiveSyntax syntaxNode)
-        {
+            UsingDirectiveSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -13798,8 +13815,8 @@ namespace CSharpier
         }
         public static void WriteNamespaceDeclarationSyntax(
             StringBuilder builder,
-            NamespaceDeclarationSyntax syntaxNode)
-        {
+            NamespaceDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -13947,8 +13964,8 @@ namespace CSharpier
         }
         public static void WriteAttributeListSyntax(
             StringBuilder builder,
-            AttributeListSyntax syntaxNode)
-        {
+            AttributeListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -14043,8 +14060,8 @@ namespace CSharpier
         }
         public static void WriteAttributeTargetSpecifierSyntax(
             StringBuilder builder,
-            AttributeTargetSpecifierSyntax syntaxNode)
-        {
+            AttributeTargetSpecifierSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -14116,8 +14133,8 @@ namespace CSharpier
         }
         public static void WriteAttributeSyntax(
             StringBuilder builder,
-            AttributeSyntax syntaxNode)
-        {
+            AttributeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -14130,8 +14147,9 @@ namespace CSharpier
                 WriteSyntaxNode(nameBuilder, syntaxNode.Name);
                 properties.Add($"\"name\":{nameBuilder.ToString()}");
             }
-            if (syntaxNode.ArgumentList != default(AttributeArgumentListSyntax))
-            {
+            if (
+                syntaxNode.ArgumentList != default(AttributeArgumentListSyntax)
+            ) {
                 var argumentListBuilder = new StringBuilder();
                 WriteAttributeArgumentListSyntax(
                     argumentListBuilder,
@@ -14190,8 +14208,8 @@ namespace CSharpier
         }
         public static void WriteAttributeArgumentListSyntax(
             StringBuilder builder,
-            AttributeArgumentListSyntax syntaxNode)
-        {
+            AttributeArgumentListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -14277,8 +14295,8 @@ namespace CSharpier
         }
         public static void WriteAttributeArgumentSyntax(
             StringBuilder builder,
-            AttributeArgumentSyntax syntaxNode)
-        {
+            AttributeArgumentSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -14356,8 +14374,8 @@ namespace CSharpier
         }
         public static void WriteNameEqualsSyntax(
             StringBuilder builder,
-            NameEqualsSyntax syntaxNode)
-        {
+            NameEqualsSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -14427,8 +14445,8 @@ namespace CSharpier
         }
         public static void WriteTypeParameterListSyntax(
             StringBuilder builder,
-            TypeParameterListSyntax syntaxNode)
-        {
+            TypeParameterListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -14514,8 +14532,8 @@ namespace CSharpier
         }
         public static void WriteTypeParameterSyntax(
             StringBuilder builder,
-            TypeParameterSyntax syntaxNode)
-        {
+            TypeParameterSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -14600,8 +14618,8 @@ namespace CSharpier
         }
         public static void WriteClassDeclarationSyntax(
             StringBuilder builder,
-            ClassDeclarationSyntax syntaxNode)
-        {
+            ClassDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -14642,8 +14660,7 @@ namespace CSharpier
             }
             if (
                 syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
-            )
-            {
+            ) {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
@@ -14760,8 +14777,8 @@ namespace CSharpier
         }
         public static void WriteStructDeclarationSyntax(
             StringBuilder builder,
-            StructDeclarationSyntax syntaxNode)
-        {
+            StructDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -14802,8 +14819,7 @@ namespace CSharpier
             }
             if (
                 syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
-            )
-            {
+            ) {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
@@ -14920,8 +14936,8 @@ namespace CSharpier
         }
         public static void WriteInterfaceDeclarationSyntax(
             StringBuilder builder,
-            InterfaceDeclarationSyntax syntaxNode)
-        {
+            InterfaceDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -14962,8 +14978,7 @@ namespace CSharpier
             }
             if (
                 syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
-            )
-            {
+            ) {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
@@ -15080,8 +15095,8 @@ namespace CSharpier
         }
         public static void WriteRecordDeclarationSyntax(
             StringBuilder builder,
-            RecordDeclarationSyntax syntaxNode)
-        {
+            RecordDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -15122,8 +15137,7 @@ namespace CSharpier
             }
             if (
                 syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
-            )
-            {
+            ) {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
@@ -15251,8 +15265,8 @@ namespace CSharpier
         }
         public static void WriteEnumDeclarationSyntax(
             StringBuilder builder,
-            EnumDeclarationSyntax syntaxNode)
-        {
+            EnumDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -15389,8 +15403,8 @@ namespace CSharpier
         }
         public static void WriteDelegateDeclarationSyntax(
             StringBuilder builder,
-            DelegateDeclarationSyntax syntaxNode)
-        {
+            DelegateDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -15444,8 +15458,7 @@ namespace CSharpier
             }
             if (
                 syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
-            )
-            {
+            ) {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
@@ -15537,8 +15550,8 @@ namespace CSharpier
         }
         public static void WriteEnumMemberDeclarationSyntax(
             StringBuilder builder,
-            EnumMemberDeclarationSyntax syntaxNode)
-        {
+            EnumMemberDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -15631,8 +15644,8 @@ namespace CSharpier
         }
         public static void WriteBaseListSyntax(
             StringBuilder builder,
-            BaseListSyntax syntaxNode)
-        {
+            BaseListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -15704,8 +15717,8 @@ namespace CSharpier
         }
         public static void WriteSimpleBaseTypeSyntax(
             StringBuilder builder,
-            SimpleBaseTypeSyntax syntaxNode)
-        {
+            SimpleBaseTypeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -15767,8 +15780,8 @@ namespace CSharpier
         }
         public static void WritePrimaryConstructorBaseTypeSyntax(
             StringBuilder builder,
-            PrimaryConstructorBaseTypeSyntax syntaxNode)
-        {
+            PrimaryConstructorBaseTypeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -15841,8 +15854,8 @@ namespace CSharpier
         }
         public static void WriteTypeParameterConstraintClauseSyntax(
             StringBuilder builder,
-            TypeParameterConstraintClauseSyntax syntaxNode)
-        {
+            TypeParameterConstraintClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -15930,8 +15943,8 @@ namespace CSharpier
         }
         public static void WriteConstructorConstraintSyntax(
             StringBuilder builder,
-            ConstructorConstraintSyntax syntaxNode)
-        {
+            ConstructorConstraintSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -16017,8 +16030,8 @@ namespace CSharpier
         }
         public static void WriteClassOrStructConstraintSyntax(
             StringBuilder builder,
-            ClassOrStructConstraintSyntax syntaxNode)
-        {
+            ClassOrStructConstraintSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -16096,8 +16109,8 @@ namespace CSharpier
         }
         public static void WriteTypeConstraintSyntax(
             StringBuilder builder,
-            TypeConstraintSyntax syntaxNode)
-        {
+            TypeConstraintSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -16159,8 +16172,8 @@ namespace CSharpier
         }
         public static void WriteDefaultConstraintSyntax(
             StringBuilder builder,
-            DefaultConstraintSyntax syntaxNode)
-        {
+            DefaultConstraintSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -16227,8 +16240,8 @@ namespace CSharpier
         }
         public static void WriteFieldDeclarationSyntax(
             StringBuilder builder,
-            FieldDeclarationSyntax syntaxNode)
-        {
+            FieldDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -16324,8 +16337,8 @@ namespace CSharpier
         }
         public static void WriteEventFieldDeclarationSyntax(
             StringBuilder builder,
-            EventFieldDeclarationSyntax syntaxNode)
-        {
+            EventFieldDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -16429,8 +16442,8 @@ namespace CSharpier
         }
         public static void WriteExplicitInterfaceSpecifierSyntax(
             StringBuilder builder,
-            ExplicitInterfaceSpecifierSyntax syntaxNode)
-        {
+            ExplicitInterfaceSpecifierSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -16498,8 +16511,8 @@ namespace CSharpier
         }
         public static void WriteMethodDeclarationSyntax(
             StringBuilder builder,
-            MethodDeclarationSyntax syntaxNode)
-        {
+            MethodDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -16533,9 +16546,9 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.ExplicitInterfaceSpecifier != default(ExplicitInterfaceSpecifierSyntax)
-            )
-            {
+                syntaxNode.ExplicitInterfaceSpecifier
+                != default(ExplicitInterfaceSpecifierSyntax)
+            ) {
                 var explicitInterfaceSpecifierBuilder = new StringBuilder();
                 WriteExplicitInterfaceSpecifierSyntax(
                     explicitInterfaceSpecifierBuilder,
@@ -16555,8 +16568,7 @@ namespace CSharpier
             }
             if (
                 syntaxNode.TypeParameterList != default(TypeParameterListSyntax)
-            )
-            {
+            ) {
                 var typeParameterListBuilder = new StringBuilder();
                 WriteTypeParameterListSyntax(
                     typeParameterListBuilder,
@@ -16594,9 +16606,9 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
-            )
-            {
+                syntaxNode.ExpressionBody
+                != default(ArrowExpressionClauseSyntax)
+            ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
@@ -16667,8 +16679,8 @@ namespace CSharpier
         }
         public static void WriteOperatorDeclarationSyntax(
             StringBuilder builder,
-            OperatorDeclarationSyntax syntaxNode)
-        {
+            OperatorDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -16741,9 +16753,9 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
-            )
-            {
+                syntaxNode.ExpressionBody
+                != default(ArrowExpressionClauseSyntax)
+            ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
@@ -16813,8 +16825,8 @@ namespace CSharpier
         }
         public static void WriteConversionOperatorDeclarationSyntax(
             StringBuilder builder,
-            ConversionOperatorDeclarationSyntax syntaxNode)
-        {
+            ConversionOperatorDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -16885,9 +16897,9 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
-            )
-            {
+                syntaxNode.ExpressionBody
+                != default(ArrowExpressionClauseSyntax)
+            ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
@@ -16957,8 +16969,8 @@ namespace CSharpier
         }
         public static void WriteConstructorDeclarationSyntax(
             StringBuilder builder,
-            ConstructorDeclarationSyntax syntaxNode)
-        {
+            ConstructorDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -17002,8 +17014,9 @@ namespace CSharpier
                     $"\"parameterList\":{parameterListBuilder.ToString()}"
                 );
             }
-            if (syntaxNode.Initializer != default(ConstructorInitializerSyntax))
-            {
+            if (
+                syntaxNode.Initializer != default(ConstructorInitializerSyntax)
+            ) {
                 var initializerBuilder = new StringBuilder();
                 WriteConstructorInitializerSyntax(
                     initializerBuilder,
@@ -17020,9 +17033,9 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
-            )
-            {
+                syntaxNode.ExpressionBody
+                != default(ArrowExpressionClauseSyntax)
+            ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
@@ -17092,8 +17105,8 @@ namespace CSharpier
         }
         public static void WriteConstructorInitializerSyntax(
             StringBuilder builder,
-            ConstructorInitializerSyntax syntaxNode)
-        {
+            ConstructorInitializerSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -17179,8 +17192,8 @@ namespace CSharpier
         }
         public static void WriteDestructorDeclarationSyntax(
             StringBuilder builder,
-            DestructorDeclarationSyntax syntaxNode)
-        {
+            DestructorDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -17239,9 +17252,9 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
-            )
-            {
+                syntaxNode.ExpressionBody
+                != default(ArrowExpressionClauseSyntax)
+            ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
@@ -17311,8 +17324,8 @@ namespace CSharpier
         }
         public static void WritePropertyDeclarationSyntax(
             StringBuilder builder,
-            PropertyDeclarationSyntax syntaxNode)
-        {
+            PropertyDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -17344,9 +17357,9 @@ namespace CSharpier
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExplicitInterfaceSpecifier != default(ExplicitInterfaceSpecifierSyntax)
-            )
-            {
+                syntaxNode.ExplicitInterfaceSpecifier
+                != default(ExplicitInterfaceSpecifierSyntax)
+            ) {
                 var explicitInterfaceSpecifierBuilder = new StringBuilder();
                 WriteExplicitInterfaceSpecifierSyntax(
                     explicitInterfaceSpecifierBuilder,
@@ -17376,9 +17389,9 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
-            )
-            {
+                syntaxNode.ExpressionBody
+                != default(ArrowExpressionClauseSyntax)
+            ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
@@ -17459,8 +17472,8 @@ namespace CSharpier
         }
         public static void WriteArrowExpressionClauseSyntax(
             StringBuilder builder,
-            ArrowExpressionClauseSyntax syntaxNode)
-        {
+            ArrowExpressionClauseSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -17532,8 +17545,8 @@ namespace CSharpier
         }
         public static void WriteEventDeclarationSyntax(
             StringBuilder builder,
-            EventDeclarationSyntax syntaxNode)
-        {
+            EventDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -17573,9 +17586,9 @@ namespace CSharpier
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExplicitInterfaceSpecifier != default(ExplicitInterfaceSpecifierSyntax)
-            )
-            {
+                syntaxNode.ExplicitInterfaceSpecifier
+                != default(ExplicitInterfaceSpecifierSyntax)
+            ) {
                 var explicitInterfaceSpecifierBuilder = new StringBuilder();
                 WriteExplicitInterfaceSpecifierSyntax(
                     explicitInterfaceSpecifierBuilder,
@@ -17664,8 +17677,8 @@ namespace CSharpier
         }
         public static void WriteIndexerDeclarationSyntax(
             StringBuilder builder,
-            IndexerDeclarationSyntax syntaxNode)
-        {
+            IndexerDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -17697,9 +17710,9 @@ namespace CSharpier
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExplicitInterfaceSpecifier != default(ExplicitInterfaceSpecifierSyntax)
-            )
-            {
+                syntaxNode.ExplicitInterfaceSpecifier
+                != default(ExplicitInterfaceSpecifierSyntax)
+            ) {
                 var explicitInterfaceSpecifierBuilder = new StringBuilder();
                 WriteExplicitInterfaceSpecifierSyntax(
                     explicitInterfaceSpecifierBuilder,
@@ -17718,9 +17731,9 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.ParameterList != default(BracketedParameterListSyntax)
-            )
-            {
+                syntaxNode.ParameterList
+                != default(BracketedParameterListSyntax)
+            ) {
                 var parameterListBuilder = new StringBuilder();
                 WriteBracketedParameterListSyntax(
                     parameterListBuilder,
@@ -17742,9 +17755,9 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
-            )
-            {
+                syntaxNode.ExpressionBody
+                != default(ArrowExpressionClauseSyntax)
+            ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
@@ -17814,8 +17827,8 @@ namespace CSharpier
         }
         public static void WriteAccessorListSyntax(
             StringBuilder builder,
-            AccessorListSyntax syntaxNode)
-        {
+            AccessorListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -17901,8 +17914,8 @@ namespace CSharpier
         }
         public static void WriteAccessorDeclarationSyntax(
             StringBuilder builder,
-            AccessorDeclarationSyntax syntaxNode)
-        {
+            AccessorDeclarationSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -17940,9 +17953,9 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody != default(ArrowExpressionClauseSyntax)
-            )
-            {
+                syntaxNode.ExpressionBody
+                != default(ArrowExpressionClauseSyntax)
+            ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
                     expressionBodyBuilder,
@@ -18012,8 +18025,8 @@ namespace CSharpier
         }
         public static void WriteParameterListSyntax(
             StringBuilder builder,
-            ParameterListSyntax syntaxNode)
-        {
+            ParameterListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -18099,8 +18112,8 @@ namespace CSharpier
         }
         public static void WriteBracketedParameterListSyntax(
             StringBuilder builder,
-            BracketedParameterListSyntax syntaxNode)
-        {
+            BracketedParameterListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -18186,8 +18199,8 @@ namespace CSharpier
         }
         public static void WriteParameterSyntax(
             StringBuilder builder,
-            ParameterSyntax syntaxNode)
-        {
+            ParameterSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -18284,8 +18297,8 @@ namespace CSharpier
         }
         public static void WriteFunctionPointerParameterSyntax(
             StringBuilder builder,
-            FunctionPointerParameterSyntax syntaxNode)
-        {
+            FunctionPointerParameterSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -18365,8 +18378,8 @@ namespace CSharpier
         }
         public static void WriteIncompleteMemberSyntax(
             StringBuilder builder,
-            IncompleteMemberSyntax syntaxNode)
-        {
+            IncompleteMemberSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -18446,8 +18459,8 @@ namespace CSharpier
         }
         public static void WriteSkippedTokensTriviaSyntax(
             StringBuilder builder,
-            SkippedTokensTriviaSyntax syntaxNode)
-        {
+            SkippedTokensTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -18511,8 +18524,8 @@ namespace CSharpier
         }
         public static void WriteDocumentationCommentTriviaSyntax(
             StringBuilder builder,
-            DocumentationCommentTriviaSyntax syntaxNode)
-        {
+            DocumentationCommentTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -18584,8 +18597,8 @@ namespace CSharpier
         }
         public static void WriteTypeCrefSyntax(
             StringBuilder builder,
-            TypeCrefSyntax syntaxNode)
-        {
+            TypeCrefSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -18647,8 +18660,8 @@ namespace CSharpier
         }
         public static void WriteQualifiedCrefSyntax(
             StringBuilder builder,
-            QualifiedCrefSyntax syntaxNode)
-        {
+            QualifiedCrefSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -18722,8 +18735,8 @@ namespace CSharpier
         }
         public static void WriteNameMemberCrefSyntax(
             StringBuilder builder,
-            NameMemberCrefSyntax syntaxNode)
-        {
+            NameMemberCrefSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -18796,8 +18809,8 @@ namespace CSharpier
         }
         public static void WriteIndexerMemberCrefSyntax(
             StringBuilder builder,
-            IndexerMemberCrefSyntax syntaxNode)
-        {
+            IndexerMemberCrefSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -18813,9 +18826,9 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.Parameters != default(CrefBracketedParameterListSyntax)
-            )
-            {
+                syntaxNode.Parameters
+                != default(CrefBracketedParameterListSyntax)
+            ) {
                 var parametersBuilder = new StringBuilder();
                 WriteCrefBracketedParameterListSyntax(
                     parametersBuilder,
@@ -18874,8 +18887,8 @@ namespace CSharpier
         }
         public static void WriteOperatorMemberCrefSyntax(
             StringBuilder builder,
-            OperatorMemberCrefSyntax syntaxNode)
-        {
+            OperatorMemberCrefSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -18964,8 +18977,8 @@ namespace CSharpier
         }
         public static void WriteConversionOperatorMemberCrefSyntax(
             StringBuilder builder,
-            ConversionOperatorMemberCrefSyntax syntaxNode)
-        {
+            ConversionOperatorMemberCrefSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -19060,8 +19073,8 @@ namespace CSharpier
         }
         public static void WriteCrefParameterListSyntax(
             StringBuilder builder,
-            CrefParameterListSyntax syntaxNode)
-        {
+            CrefParameterListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -19147,8 +19160,8 @@ namespace CSharpier
         }
         public static void WriteCrefBracketedParameterListSyntax(
             StringBuilder builder,
-            CrefBracketedParameterListSyntax syntaxNode)
-        {
+            CrefBracketedParameterListSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -19234,8 +19247,8 @@ namespace CSharpier
         }
         public static void WriteCrefParameterSyntax(
             StringBuilder builder,
-            CrefParameterSyntax syntaxNode)
-        {
+            CrefParameterSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -19319,8 +19332,8 @@ namespace CSharpier
         }
         public static void WriteXmlElementSyntax(
             StringBuilder builder,
-            XmlElementSyntax syntaxNode)
-        {
+            XmlElementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -19399,8 +19412,8 @@ namespace CSharpier
         }
         public static void WriteXmlElementStartTagSyntax(
             StringBuilder builder,
-            XmlElementStartTagSyntax syntaxNode)
-        {
+            XmlElementStartTagSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -19492,8 +19505,8 @@ namespace CSharpier
         }
         public static void WriteXmlElementEndTagSyntax(
             StringBuilder builder,
-            XmlElementEndTagSyntax syntaxNode)
-        {
+            XmlElementEndTagSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -19577,8 +19590,8 @@ namespace CSharpier
         }
         public static void WriteXmlEmptyElementSyntax(
             StringBuilder builder,
-            XmlEmptyElementSyntax syntaxNode)
-        {
+            XmlEmptyElementSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -19670,8 +19683,8 @@ namespace CSharpier
         }
         public static void WriteXmlNameSyntax(
             StringBuilder builder,
-            XmlNameSyntax syntaxNode)
-        {
+            XmlNameSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -19739,8 +19752,8 @@ namespace CSharpier
         }
         public static void WriteXmlPrefixSyntax(
             StringBuilder builder,
-            XmlPrefixSyntax syntaxNode)
-        {
+            XmlPrefixSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -19810,8 +19823,8 @@ namespace CSharpier
         }
         public static void WriteXmlTextAttributeSyntax(
             StringBuilder builder,
-            XmlTextAttributeSyntax syntaxNode)
-        {
+            XmlTextAttributeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -19911,8 +19924,8 @@ namespace CSharpier
         }
         public static void WriteXmlCrefAttributeSyntax(
             StringBuilder builder,
-            XmlCrefAttributeSyntax syntaxNode)
-        {
+            XmlCrefAttributeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -20010,8 +20023,8 @@ namespace CSharpier
         }
         public static void WriteXmlNameAttributeSyntax(
             StringBuilder builder,
-            XmlNameAttributeSyntax syntaxNode)
-        {
+            XmlNameAttributeSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -20114,8 +20127,8 @@ namespace CSharpier
         }
         public static void WriteXmlTextSyntax(
             StringBuilder builder,
-            XmlTextSyntax syntaxNode)
-        {
+            XmlTextSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -20179,8 +20192,8 @@ namespace CSharpier
         }
         public static void WriteXmlCDataSectionSyntax(
             StringBuilder builder,
-            XmlCDataSectionSyntax syntaxNode)
-        {
+            XmlCDataSectionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -20266,8 +20279,8 @@ namespace CSharpier
         }
         public static void WriteXmlProcessingInstructionSyntax(
             StringBuilder builder,
-            XmlProcessingInstructionSyntax syntaxNode)
-        {
+            XmlProcessingInstructionSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -20275,9 +20288,9 @@ namespace CSharpier
             );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (
-                syntaxNode.StartProcessingInstructionToken != default(SyntaxToken)
-            )
-            {
+                syntaxNode.StartProcessingInstructionToken
+                != default(SyntaxToken)
+            ) {
                 var startProcessingInstructionTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(
                     startProcessingInstructionTokenBuilder,
@@ -20303,8 +20316,7 @@ namespace CSharpier
             properties.Add($"\"textTokens\":[{string.Join(",", textTokens)}]");
             if (
                 syntaxNode.EndProcessingInstructionToken != default(SyntaxToken)
-            )
-            {
+            ) {
                 var endProcessingInstructionTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(
                     endProcessingInstructionTokenBuilder,
@@ -20363,8 +20375,8 @@ namespace CSharpier
         }
         public static void WriteXmlCommentSyntax(
             StringBuilder builder,
-            XmlCommentSyntax syntaxNode)
-        {
+            XmlCommentSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -20372,9 +20384,9 @@ namespace CSharpier
             );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (
-                syntaxNode.LessThanExclamationMinusMinusToken != default(SyntaxToken)
-            )
-            {
+                syntaxNode.LessThanExclamationMinusMinusToken
+                != default(SyntaxToken)
+            ) {
                 var lessThanExclamationMinusMinusTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(
                     lessThanExclamationMinusMinusTokenBuilder,
@@ -20452,8 +20464,8 @@ namespace CSharpier
         }
         public static void WriteIfDirectiveTriviaSyntax(
             StringBuilder builder,
-            IfDirectiveTriviaSyntax syntaxNode)
-        {
+            IfDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -20554,8 +20566,8 @@ namespace CSharpier
         }
         public static void WriteElifDirectiveTriviaSyntax(
             StringBuilder builder,
-            ElifDirectiveTriviaSyntax syntaxNode)
-        {
+            ElifDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -20658,8 +20670,8 @@ namespace CSharpier
         }
         public static void WriteElseDirectiveTriviaSyntax(
             StringBuilder builder,
-            ElseDirectiveTriviaSyntax syntaxNode)
-        {
+            ElseDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -20753,8 +20765,8 @@ namespace CSharpier
         }
         public static void WriteEndIfDirectiveTriviaSyntax(
             StringBuilder builder,
-            EndIfDirectiveTriviaSyntax syntaxNode)
-        {
+            EndIfDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -20847,8 +20859,8 @@ namespace CSharpier
         }
         public static void WriteRegionDirectiveTriviaSyntax(
             StringBuilder builder,
-            RegionDirectiveTriviaSyntax syntaxNode)
-        {
+            RegionDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -20944,8 +20956,8 @@ namespace CSharpier
         }
         public static void WriteEndRegionDirectiveTriviaSyntax(
             StringBuilder builder,
-            EndRegionDirectiveTriviaSyntax syntaxNode)
-        {
+            EndRegionDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -21041,8 +21053,8 @@ namespace CSharpier
         }
         public static void WriteErrorDirectiveTriviaSyntax(
             StringBuilder builder,
-            ErrorDirectiveTriviaSyntax syntaxNode)
-        {
+            ErrorDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -21135,8 +21147,8 @@ namespace CSharpier
         }
         public static void WriteWarningDirectiveTriviaSyntax(
             StringBuilder builder,
-            WarningDirectiveTriviaSyntax syntaxNode)
-        {
+            WarningDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -21232,8 +21244,8 @@ namespace CSharpier
         }
         public static void WriteBadDirectiveTriviaSyntax(
             StringBuilder builder,
-            BadDirectiveTriviaSyntax syntaxNode)
-        {
+            BadDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -21326,8 +21338,8 @@ namespace CSharpier
         }
         public static void WriteDefineDirectiveTriviaSyntax(
             StringBuilder builder,
-            DefineDirectiveTriviaSyntax syntaxNode)
-        {
+            DefineDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -21429,8 +21441,8 @@ namespace CSharpier
         }
         public static void WriteUndefDirectiveTriviaSyntax(
             StringBuilder builder,
-            UndefDirectiveTriviaSyntax syntaxNode)
-        {
+            UndefDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -21529,8 +21541,8 @@ namespace CSharpier
         }
         public static void WriteLineDirectiveTriviaSyntax(
             StringBuilder builder,
-            LineDirectiveTriviaSyntax syntaxNode)
-        {
+            LineDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -21635,8 +21647,8 @@ namespace CSharpier
         }
         public static void WritePragmaWarningDirectiveTriviaSyntax(
             StringBuilder builder,
-            PragmaWarningDirectiveTriviaSyntax syntaxNode)
-        {
+            PragmaWarningDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -21762,8 +21774,8 @@ namespace CSharpier
         }
         public static void WritePragmaChecksumDirectiveTriviaSyntax(
             StringBuilder builder,
-            PragmaChecksumDirectiveTriviaSyntax syntaxNode)
-        {
+            PragmaChecksumDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -21888,8 +21900,8 @@ namespace CSharpier
         }
         public static void WriteReferenceDirectiveTriviaSyntax(
             StringBuilder builder,
-            ReferenceDirectiveTriviaSyntax syntaxNode)
-        {
+            ReferenceDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -21991,8 +22003,8 @@ namespace CSharpier
         }
         public static void WriteLoadDirectiveTriviaSyntax(
             StringBuilder builder,
-            LoadDirectiveTriviaSyntax syntaxNode)
-        {
+            LoadDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -22091,8 +22103,8 @@ namespace CSharpier
         }
         public static void WriteShebangDirectiveTriviaSyntax(
             StringBuilder builder,
-            ShebangDirectiveTriviaSyntax syntaxNode)
-        {
+            ShebangDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -22188,8 +22200,8 @@ namespace CSharpier
         }
         public static void WriteNullableDirectiveTriviaSyntax(
             StringBuilder builder,
-            NullableDirectiveTriviaSyntax syntaxNode)
-        {
+            NullableDirectiveTriviaSyntax syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -22301,8 +22313,8 @@ namespace CSharpier
         }
         public static void WriteSyntaxToken(
             StringBuilder builder,
-            SyntaxToken syntaxNode)
-        {
+            SyntaxToken syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(
@@ -22367,8 +22379,8 @@ namespace CSharpier
         }
         public static void WriteSyntaxTrivia(
             StringBuilder builder,
-            SyntaxTrivia syntaxNode)
-        {
+            SyntaxTrivia syntaxNode
+        ) {
             builder.Append("{");
             var properties = new List<string>();
             properties.Add(

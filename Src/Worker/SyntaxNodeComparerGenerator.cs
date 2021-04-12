@@ -14,7 +14,7 @@ namespace Worker
     {
         [Test]
         [Ignore(
-                "Run manually to update SyntaxNodeComparerGenerator.generated.cs. Then run csharpier on the result")]
+            "Run manually to update SyntaxNodeComparerGenerator.generated.cs. Then run csharpier on the result")]
         public void DoWork()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
@@ -25,13 +25,15 @@ namespace Worker
 
             var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
                 .Where(
-                    o => !o.IsAbstract
-                    && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
+                    o =>
+                        !o.IsAbstract
+                        && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
                 )
                 .ToList();
 
             var fileName =
-                directory.FullName + "/CSharpier/SyntaxNodeComparer.generated.cs";
+                directory.FullName
+                + "/CSharpier/SyntaxNodeComparer.generated.cs";
             using (var file = new StreamWriter(fileName, false))
             {
                 file.WriteLine(
@@ -69,8 +71,8 @@ namespace CSharpier
                 foreach (var syntaxNodeType in syntaxNodeTypes)
                 {
                     var lowerCaseName =
-                        syntaxNodeType.Name[0].ToString()
-                            .ToLower() + syntaxNodeType.Name.Substring(1);
+                        syntaxNodeType.Name[0].ToString().ToLower()
+                        + syntaxNodeType.Name.Substring(1);
                     file.WriteLine(
                         $@"                case {syntaxNodeType.Name} {lowerCaseName}:
                     return this.Compare{syntaxNodeType.Name}({lowerCaseName}, formattedNode as {syntaxNodeType.Name});"
@@ -115,8 +117,7 @@ namespace CSharpier
                     || propertyName == "ParentTrivia"
                     || propertyName == "Arity"
                     || propertyName == "SpanStart"
-                )
-                {
+                ) {
                     continue;
                 }
 
@@ -128,16 +129,14 @@ namespace CSharpier
                     || Ignored.Types.Contains(propertyType)
                     || (Ignored.PropertiesByType.ContainsKey(type)
                     && Ignored.PropertiesByType[type].Contains(camelCaseName))
-                )
-                {
+                ) {
                     continue;
                 }
 
                 if (
                     propertyType == typeof(bool)
                     || propertyType == typeof(Int32)
-                )
-                {
+                ) {
                     file.WriteLine(
                         $@"            if (originalNode.{propertyName} != formattedNode.{propertyName}) return NotEqual(originalNode, formattedNode);"
                     );
@@ -162,8 +161,7 @@ namespace CSharpier
                 }
                 else if (
                     typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType)
-                )
-                {
+                ) {
                     file.WriteLine(
                         $"            originalStack.Push(originalNode.{propertyName});"
                     );
@@ -174,9 +172,9 @@ namespace CSharpier
                 else if (
                     propertyType == typeof(SyntaxTokenList)
                     || (propertyType.IsGenericType
-                    && propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>))
-                )
-                {
+                    && propertyType.GetGenericTypeDefinition()
+                    == typeof(SyntaxList<>))
+                ) {
                     var compare = propertyType == typeof(SyntaxTokenList)
                         ? "Compare"
                         : "null";
@@ -189,9 +187,9 @@ namespace CSharpier
                 }
                 else if (
                     propertyType.IsGenericType
-                    && propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)
-                )
-                {
+                    && propertyType.GetGenericTypeDefinition()
+                    == typeof(SeparatedSyntaxList<>)
+                ) {
                     file.WriteLine(
                         $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, null, o => o.Span, originalNode.Span, formattedNode.Span);"
                     );

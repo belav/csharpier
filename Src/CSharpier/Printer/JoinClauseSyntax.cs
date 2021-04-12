@@ -35,13 +35,13 @@ namespace CSharpier
                     this.Print(node.RightExpression),
                     node.Into != null
                         ? Concat(
-                            Line,
-                            this.PrintSyntaxToken(
-                                node.Into.IntoKeyword,
-                                afterTokenIfNoTrailing: " "
-                            ),
-                            this.PrintSyntaxToken(node.Into.Identifier)
-                        )
+                                Line,
+                                this.PrintSyntaxToken(
+                                    node.Into.IntoKeyword,
+                                    afterTokenIfNoTrailing: " "
+                                ),
+                                this.PrintSyntaxToken(node.Into.Identifier)
+                            )
                         : Doc.Null
                 )
             );

@@ -8,18 +8,19 @@ namespace CSharpier
         private Doc PrintArgumentListLikeSyntax(
             SyntaxToken openParenToken,
             SeparatedSyntaxList<ArgumentSyntax> arguments,
-            SyntaxToken closeParenToken) =>
+            SyntaxToken closeParenToken
+        ) =>
             Concat(
                 this.PrintSyntaxToken(openParenToken),
                 arguments.Any()
                     ? Indent(
-                        SoftLine,
-                        this.PrintSeparatedSyntaxList(
-                            arguments,
-                            this.PrintArgumentSyntax,
-                            Line
+                            SoftLine,
+                            this.PrintSeparatedSyntaxList(
+                                arguments,
+                                this.PrintArgumentSyntax,
+                                Line
+                            )
                         )
-                    )
                     : Doc.Null,
                 arguments.Any() ? SoftLine : Doc.Null,
                 this.PrintSyntaxToken(closeParenToken)

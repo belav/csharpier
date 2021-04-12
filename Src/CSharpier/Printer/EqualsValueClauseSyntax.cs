@@ -9,7 +9,7 @@ namespace CSharpier
             var separator = Line;
             if (node.Parent is PropertyDeclarationSyntax)
             {
-            // keeping line
+                // keeping line
             }
             else if (node.Value is QueryExpressionSyntax)
             {
@@ -24,8 +24,7 @@ namespace CSharpier
                 || node.Value is ParenthesizedLambdaExpressionSyntax
                 || node.Value is InvocationExpressionSyntax
                 || node.Value is SwitchExpressionSyntax
-            )
-            {
+            ) {
                 separator = SpaceIfNoPreviousComment;
             }
 

@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintEventFieldDeclarationSyntax(
-            EventFieldDeclarationSyntax node)
-        {
+            EventFieldDeclarationSyntax node
+        ) {
             return this.PrintBaseFieldDeclarationSyntax(node);
         }
     }

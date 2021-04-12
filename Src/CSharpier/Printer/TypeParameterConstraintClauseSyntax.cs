@@ -6,8 +6,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintTypeParameterConstraintClauseSyntax(
-            TypeParameterConstraintClauseSyntax node)
-        {
+            TypeParameterConstraintClauseSyntax node
+        ) {
             return Group(
                 this.PrintSyntaxToken(
                     node.WhereKeyword,

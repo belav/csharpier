@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintOmittedTypeArgumentSyntax(
-            OmittedTypeArgumentSyntax node)
-        {
+            OmittedTypeArgumentSyntax node
+        ) {
             return Doc.Null;
         }
     }

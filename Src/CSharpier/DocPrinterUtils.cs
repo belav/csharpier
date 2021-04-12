@@ -87,11 +87,11 @@ namespace CSharpier
                     // push onto stack in reverse order so they are processed in the original order
                     for (var x = concat.Parts.Count - 1; x >= 0; --x)
                     {
-                        if (forceFlat > 0 && concat.Parts[x] is LineDoc lineDoc)
-                        {
-                            concat.Parts[
-                                x
-                            ] = lineDoc.Type == LineDoc.LineType.Soft
+                        if (
+                            forceFlat > 0 && concat.Parts[x] is LineDoc lineDoc
+                        ) {
+                            concat.Parts[x] = lineDoc.Type
+                                == LineDoc.LineType.Soft
                                 ? string.Empty
                                 : " ";
                         }

@@ -14,14 +14,15 @@ namespace CSharpier
                 ),
                 this.PrintSeparatedSyntaxList(
                     node.Orderings,
-                    orderingNode => Concat(
-                        this.Print(orderingNode.Expression),
-                        this.PrintSyntaxToken(
-                            orderingNode.AscendingOrDescendingKeyword,
-                            null,
-                            " "
-                        )
-                    ),
+                    orderingNode =>
+                        Concat(
+                            this.Print(orderingNode.Expression),
+                            this.PrintSyntaxToken(
+                                orderingNode.AscendingOrDescendingKeyword,
+                                null,
+                                " "
+                            )
+                        ),
                     Doc.Null
                 )
             );

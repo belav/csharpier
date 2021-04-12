@@ -6,8 +6,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintNamespaceDeclarationSyntax(
-            NamespaceDeclarationSyntax node)
-        {
+            NamespaceDeclarationSyntax node
+        ) {
             var parts = new Parts(
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
