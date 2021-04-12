@@ -4,8 +4,9 @@ namespace CSharpier
 {
     public partial class Printer
     {
-        private Doc PrintRefValueExpressionSyntax(RefValueExpressionSyntax node)
-        {
+        private Doc PrintRefValueExpressionSyntax(
+            RefValueExpressionSyntax node
+        ) {
             return Concat(
                 this.PrintSyntaxToken(node.Keyword),
                 this.PrintSyntaxToken(node.OpenParenToken),

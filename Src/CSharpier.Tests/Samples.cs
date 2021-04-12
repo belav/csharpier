@@ -36,7 +36,7 @@ namespace CSharpier.Tests
             var stopwatch = Stopwatch.StartNew();
             var result = new CodeFormatter().Format(
                 code,
-                new Options { IncludeDocTree = true, IncludeAST = true,  }
+                new Options { IncludeDocTree = true, IncludeAST = true, }
             );
 
             File.WriteAllText(

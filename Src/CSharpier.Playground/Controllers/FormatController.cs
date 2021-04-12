@@ -40,8 +40,8 @@ namespace CSharpier.Playground.Controllers
         public FormatController(
             IWebHostEnvironment webHostEnvironment,
             ILogger<FormatController> logger,
-            IOptions<PlaygroundOptions> options)
-        {
+            IOptions<PlaygroundOptions> options
+        ) {
             this.webHostEnvironment = webHostEnvironment;
             this.logger = logger;
             this.options = options.Value;
@@ -60,7 +60,7 @@ namespace CSharpier.Playground.Controllers
             this.WriteAllText(filePath, content);
             var result = new CodeFormatter().Format(
                 content,
-                new Options { IncludeAST = true, IncludeDocTree = true,  }
+                new Options { IncludeAST = true, IncludeDocTree = true, }
             );
 
             var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
@@ -72,7 +72,6 @@ namespace CSharpier.Playground.Controllers
                 Json = result.AST,
                 Doc = result.DocTree,
                 Errors = result.Errors.Select(ConvertError).ToList(),
-
             };
         }
 
@@ -85,7 +84,6 @@ namespace CSharpier.Playground.Controllers
             {
                 LineSpan = lineSpan,
                 Description = diagnostic.ToString(),
-
             };
         }
 
@@ -107,8 +105,8 @@ namespace CSharpier.Playground.Controllers
         public string ExecuteApplication(
             string pathToExe,
             string workingDirectory,
-            string args)
-        {
+            string args
+        ) {
             var processStartInfo = new ProcessStartInfo(
                 pathToExe,
                 args
@@ -126,7 +124,13 @@ namespace CSharpier.Playground.Controllers
             process.WaitForExit();
 
             this.logger.LogInformation(
-                "Output from '" + pathToExe + " " + args + "' was: " + Environment.NewLine + output
+                "Output from '"
+                + pathToExe
+                + " "
+                + args
+                + "' was: "
+                + Environment.NewLine
+                + output
             );
 
             return output;

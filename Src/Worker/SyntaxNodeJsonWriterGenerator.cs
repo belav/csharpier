@@ -16,7 +16,7 @@ namespace Worker
 
         [Test]
         [Ignore(
-                "Run this manually if you need to regenerate the SyntaxNodeJsonWriter.generated.cs file. Then run csharpier on the result")]
+            "Run this manually if you need to regenerate the SyntaxNodeJsonWriter.generated.cs file. Then run csharpier on the result")]
         public void DoWork()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
@@ -27,13 +27,15 @@ namespace Worker
 
             var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
                 .Where(
-                    o => !o.IsAbstract
-                    && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
+                    o =>
+                        !o.IsAbstract
+                        && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
                 )
                 .ToList();
 
             var fileName =
-                directory.FullName + "/CSharpier/SyntaxNodeJsonWriter.generated.cs";
+                directory.FullName
+                + "/CSharpier/SyntaxNodeJsonWriter.generated.cs";
             using (var file = new StreamWriter(fileName, false))
             {
                 file.WriteLine("using System.Collections.Generic;");
@@ -78,10 +80,8 @@ namespace Worker
             if (missingTypes.Any())
             {
                 throw new Exception(
-                    Environment.NewLine + string.Join(
-                        Environment.NewLine,
-                        missingTypes
-                    )
+                    Environment.NewLine
+                    + string.Join(Environment.NewLine, missingTypes)
                 );
             }
         }
@@ -119,8 +119,7 @@ namespace Worker
                     || Ignored.Types.Contains(propertyType)
                     || (Ignored.PropertiesByType.ContainsKey(type)
                     && Ignored.PropertiesByType[type].Contains(camelCaseName))
-                )
-                {
+                ) {
                     continue;
                 }
 
@@ -146,8 +145,7 @@ namespace Worker
                     typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType)
                     || propertyType == typeof(SyntaxToken)
                     || propertyType == typeof(SyntaxTrivia)
-                )
-                {
+                ) {
                     var methodName = "WriteSyntaxNode";
                     if (propertyType == typeof(SyntaxToken))
                     {
@@ -179,12 +177,13 @@ namespace Worker
                 }
                 else if (
                     (propertyType.IsGenericType
-                    && (propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>)
-                    || propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)))
+                    && (propertyType.GetGenericTypeDefinition()
+                    == typeof(SyntaxList<>)
+                    || propertyType.GetGenericTypeDefinition()
+                    == typeof(SeparatedSyntaxList<>)))
                     || propertyType == typeof(SyntaxTokenList)
                     || propertyType == typeof(SyntaxTriviaList)
-                )
-                {
+                ) {
                     var methodName = "WriteSyntaxNode";
                     if (propertyType == typeof(SyntaxTokenList))
                     {
@@ -228,10 +227,8 @@ namespace Worker
                 else
                 {
                     missingTypes.Add(
-                        PadToSize(
-                            type.Name + "." + propertyName + ": ",
-                            40
-                        ) + propertyType
+                        PadToSize(type.Name + "." + propertyName + ": ", 40)
+                        + propertyType
                     );
                 }
             }

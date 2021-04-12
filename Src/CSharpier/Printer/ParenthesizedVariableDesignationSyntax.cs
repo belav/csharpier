@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintParenthesizedVariableDesignationSyntax(
-            ParenthesizedVariableDesignationSyntax node)
-        {
+            ParenthesizedVariableDesignationSyntax node
+        ) {
             return Group(
                 this.PrintSyntaxToken(node.OpenParenToken),
                 Indent(

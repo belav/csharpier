@@ -34,7 +34,8 @@ namespace CSharpier
             catch (Exception ex)
             {
                 throw new Exception(
-                    "It was not possible to create the path " + directoryInfo.FullName,
+                    "It was not possible to create the path "
+                    + directoryInfo.FullName,
                     ex
                 );
             }
@@ -51,26 +52,27 @@ namespace CSharpier
 
         public static bool EqualsIgnoreCase(
             this string value,
-            string otherValue)
-        {
+            string otherValue
+        ) {
             return string.Compare(
                 value,
                 otherValue,
                 StringComparison.OrdinalIgnoreCase
-            ) == 0;
+            )
+            == 0;
         }
 
         public static bool ContainsIgnoreCase(
             this string value,
-            string otherValue)
-        {
+            string otherValue
+        ) {
             return value.ToLower().Contains(otherValue.ToLower());
         }
 
         public static bool StartsWithIgnoreCase(
             this string value,
-            string otherValue)
-        {
+            string otherValue
+        ) {
             return value.StartsWith(
                 otherValue,
                 StringComparison.OrdinalIgnoreCase
@@ -79,8 +81,8 @@ namespace CSharpier
 
         public static bool EndsWithIgnoreCase(
             this string value,
-            string otherValue)
-        {
+            string otherValue
+        ) {
             return value.EndsWith(
                 otherValue,
                 StringComparison.OrdinalIgnoreCase
@@ -89,8 +91,7 @@ namespace CSharpier
 
         public static bool IsBlank(this string value)
         {
-            return value == null
-            || string.IsNullOrEmpty(value.Trim());
+            return value == null || string.IsNullOrEmpty(value.Trim());
         }
 
         public static void Add(this List<Doc> list, params Doc[] values)

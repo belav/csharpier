@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintLocalDeclarationStatementSyntax(
-            LocalDeclarationStatementSyntax node)
-        {
+            LocalDeclarationStatementSyntax node
+        ) {
             return Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(

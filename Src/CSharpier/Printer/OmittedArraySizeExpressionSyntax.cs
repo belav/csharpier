@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintOmittedArraySizeExpressionSyntax(
-            OmittedArraySizeExpressionSyntax node)
-        {
+            OmittedArraySizeExpressionSyntax node
+        ) {
             return Doc.Null;
         }
     }

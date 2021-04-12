@@ -8,8 +8,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintAnonymousMethodExpressionSyntax(
-            AnonymousMethodExpressionSyntax node)
-        {
+            AnonymousMethodExpressionSyntax node
+        ) {
             var docs = new List<Doc>();
             docs.Add(
                 this.PrintSyntaxToken(
@@ -32,9 +32,9 @@ namespace CSharpier
                 groupId == null
                     ? this.PrintBlockSyntax(node.Block)
                     : this.PrintBlockSyntaxWithConditionalSpace(
-                        node.Block,
-                        groupId
-                    )
+                            node.Block,
+                            groupId
+                        )
             );
 
             return Docs.Concat(docs);

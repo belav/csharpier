@@ -217,8 +217,7 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void Long_Statement_With_Line_Should_Not_Break_Unrelated_Group()
-        {
+        public void Long_Statement_With_Line_Should_Not_Break_Unrelated_Group() {
             var doc = Concat(
                 "1",
                 Group(Line, Concat("2")),
@@ -297,8 +296,7 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void IfBreak_Should_Print_Break_Contents_When_Group_Does_Not_Fit()
-        {
+        public void IfBreak_Should_Print_Break_Contents_When_Group_Does_Not_Fit() {
             var doc = Docs.Group(
                 "another",
                 Docs.Line,
@@ -311,8 +309,7 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void IfBreak_Should_Print_Flat_Contents_When_GroupId_Does_Not_Break()
-        {
+        public void IfBreak_Should_Print_Flat_Contents_When_GroupId_Does_Not_Break() {
             var doc = Docs.Concat(
                 Docs.GroupWithId("1", "1"),
                 Docs.IfBreak("break", "flat", "1")
@@ -392,8 +389,8 @@ namespace CSharpier.Tests
 
         public static Doc LeadingComment(
             string comment,
-            CommentType commentType)
-        {
+            CommentType commentType
+        ) {
             return Printer.LeadingComment(comment, commentType);
         }
     }

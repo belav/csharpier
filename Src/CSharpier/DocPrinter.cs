@@ -31,8 +31,8 @@ namespace CSharpier
         private static Indent GenerateIndent(
             Indent indent,
             IndentType newPart,
-            Options options)
-        {
+            Options options
+        ) {
             var queue = new List<IndentType>(indent.Queue);
             if (newPart.Type == "dedent")
             {
@@ -129,8 +129,8 @@ namespace CSharpier
             IEnumerable<PrintCommand> remainingCommands,
             int width,
             Options options,
-            bool mustBeFlat = false)
-        {
+            bool mustBeFlat = false
+        ) {
             var remainingCommandsAsArray = remainingCommands.Reverse()
                 .ToArray();
             var remainingIndex = remainingCommandsAsArray.Length;
@@ -372,8 +372,7 @@ namespace CSharpier
                                 if (
                                     !group.Break
                                     && Fits(next, currentStack, rem, options)
-                                )
-                                {
+                                ) {
                                     currentStack.Push(next);
                                 }
                                 else
@@ -468,8 +467,7 @@ namespace CSharpier
                                         (!newLineNextStringValue
                                         || !skipNextNewLine)
                                         && output.Length > 0
-                                    )
-                                    {
+                                    ) {
                                         Trim(output);
                                         output.Append(
                                             newLine + command.Indent.Value
@@ -490,11 +488,9 @@ namespace CSharpier
                     case LeadingComment leadingComment:
                         Trim(output);
                         if (
-                            (output.Length != 0
-                            && output[^1] != '\n')
+                            (output.Length != 0 && output[^1] != '\n')
                             || newLineNextStringValue
-                        )
-                        {
+                        ) {
                             output.Append(newLine);
                         }
 

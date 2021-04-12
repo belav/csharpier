@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintArrayCreationExpressionSyntax(
-            ArrayCreationExpressionSyntax node)
-        {
+            ArrayCreationExpressionSyntax node
+        ) {
             return Group(
                 this.PrintSyntaxToken(
                     node.NewKeyword,

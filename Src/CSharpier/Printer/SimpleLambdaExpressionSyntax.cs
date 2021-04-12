@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintSimpleLambdaExpressionSyntax(
-            SimpleLambdaExpressionSyntax node)
-        {
+            SimpleLambdaExpressionSyntax node
+        ) {
             return Docs.Group(
                 this.PrintModifiers(node.Modifiers),
                 this.Print(node.Parameter),

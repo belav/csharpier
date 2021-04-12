@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintDestructorDeclarationSyntax(
-            DestructorDeclarationSyntax node)
-        {
+            DestructorDeclarationSyntax node
+        ) {
             return Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),

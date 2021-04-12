@@ -6,8 +6,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintImplicitArrayCreationExpressionSyntax(
-            ImplicitArrayCreationExpressionSyntax node)
-        {
+            ImplicitArrayCreationExpressionSyntax node
+        ) {
             var commas = node.Commas.Select(o => this.PrintSyntaxToken(o))
                 .ToArray();
             return Concat(

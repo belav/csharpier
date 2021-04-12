@@ -124,7 +124,6 @@ class Resources
             result.Should().BeEmpty();
         }
 
-
         [Test]
         public void MissingSemiColon()
         {

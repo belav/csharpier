@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintAssignmentExpressionSyntax(
-            AssignmentExpressionSyntax node)
-        {
+            AssignmentExpressionSyntax node
+        ) {
             return Concat(
                 this.Print(node.Left),
                 " ",

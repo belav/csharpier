@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintInterfaceDeclarationSyntax(
-            InterfaceDeclarationSyntax node)
-        {
+            InterfaceDeclarationSyntax node
+        ) {
             return this.PrintBaseTypeDeclarationSyntax(node);
         }
     }

@@ -4,8 +4,9 @@ namespace CSharpier
 {
     public partial class Printer
     {
-        private Doc PrintDiscardDesignationSyntax(DiscardDesignationSyntax node)
-        {
+        private Doc PrintDiscardDesignationSyntax(
+            DiscardDesignationSyntax node
+        ) {
             return this.PrintSyntaxToken(node.UnderscoreToken);
         }
     }

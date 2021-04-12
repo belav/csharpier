@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintClassOrStructConstraintSyntax(
-            ClassOrStructConstraintSyntax node)
-        {
+            ClassOrStructConstraintSyntax node
+        ) {
             return Concat(
                 this.PrintSyntaxToken(node.ClassOrStructKeyword),
                 this.PrintSyntaxToken(node.QuestionToken)

@@ -25,16 +25,16 @@ namespace CSharpier
 
         public static LeadingComment LeadingComment(
             string comment,
-            CommentType commentType)
-        {
+            CommentType commentType
+        ) {
             return new() { Type = commentType, Comment = comment };
         }
 
         public static TrailingComment TrailingComment(
             string comment,
-            CommentType commentType)
-        {
-            return new() { Type = commentType, Comment = comment,  };
+            CommentType commentType
+        ) {
+            return new() { Type = commentType, Comment = comment, };
         }
 
         public static Concat Concat(List<Doc> contents)
@@ -54,7 +54,6 @@ namespace CSharpier
                 Contents = contents.Length == 0
                     ? contents[0]
                     : Concat(contents),
-
             };
         }
 
@@ -63,7 +62,6 @@ namespace CSharpier
             return new()
             {
                 Contents = contents.Count == 1 ? contents[0] : Concat(contents),
-
             };
         }
 
@@ -81,7 +79,6 @@ namespace CSharpier
                 Contents = contents.Length == 1
                     ? contents[0]
                     : Concat(contents),
-
             };
         }
 
@@ -101,14 +98,13 @@ namespace CSharpier
         public static IfBreak IfBreak(
             Doc breakContents,
             Doc flatContents,
-            string? groupId = null)
-        {
+            string? groupId = null
+        ) {
             return new IfBreak()
             {
                 FlatContents = flatContents,
                 BreakContents = breakContents,
                 GroupId = groupId,
-
             };
         }
 

@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintArrowExpressionClauseSyntax(
-            ArrowExpressionClauseSyntax node)
-        {
+            ArrowExpressionClauseSyntax node
+        ) {
             return Docs.Group(
                 Docs.Indent(
                     " ",

@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintStackAllocArrayCreationExpressionSyntax(
-            StackAllocArrayCreationExpressionSyntax node)
-        {
+            StackAllocArrayCreationExpressionSyntax node
+        ) {
             return Concat(
                 this.PrintSyntaxToken(
                     node.StackAllocKeyword,
@@ -15,9 +15,11 @@ namespace CSharpier
                 this.Print(node.Type),
                 node.Initializer != null
                     ? Concat(
-                        " ",
-                        this.PrintInitializerExpressionSyntax(node.Initializer)
-                    )
+                            " ",
+                            this.PrintInitializerExpressionSyntax(
+                                node.Initializer
+                            )
+                        )
                     : string.Empty
             );
         }

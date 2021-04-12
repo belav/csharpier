@@ -6,8 +6,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintBracketedArgumentListSyntax(
-            BracketedArgumentListSyntax node)
-        {
+            BracketedArgumentListSyntax node
+        ) {
             return Group(
                 this.PrintSyntaxToken(node.OpenBracketToken),
                 Indent(

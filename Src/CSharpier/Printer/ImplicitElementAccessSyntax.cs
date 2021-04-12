@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintImplicitElementAccessSyntax(
-            ImplicitElementAccessSyntax node)
-        {
+            ImplicitElementAccessSyntax node
+        ) {
             return this.Print(node.ArgumentList);
         }
     }

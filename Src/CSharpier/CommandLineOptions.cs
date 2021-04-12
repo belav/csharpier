@@ -11,7 +11,8 @@ namespace CSharpier
             string directory,
             bool validate,
             bool check,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken
+        );
 
         public static RootCommand Create()
         {

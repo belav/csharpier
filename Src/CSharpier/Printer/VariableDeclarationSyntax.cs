@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintVariableDeclarationSyntax(
-            VariableDeclarationSyntax node)
-        {
+            VariableDeclarationSyntax node
+        ) {
             var innerParts = Concat(
                 this.PrintSeparatedSyntaxList(
                     node.Variables,

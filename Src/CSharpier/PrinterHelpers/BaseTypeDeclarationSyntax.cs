@@ -9,8 +9,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintBaseTypeDeclarationSyntax(
-            BaseTypeDeclarationSyntax node)
-        {
+            BaseTypeDeclarationSyntax node
+        ) {
             ParameterListSyntax? parameterList = null;
             TypeParameterListSyntax? typeParameterList = null;
             var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
@@ -41,20 +41,17 @@ namespace CSharpier
                 }
                 else if (
                     node is StructDeclarationSyntax structDeclarationSyntax
-                )
-                {
+                ) {
                     keyword = structDeclarationSyntax.Keyword;
                 }
                 else if (
                     node is InterfaceDeclarationSyntax interfaceDeclarationSyntax
-                )
-                {
+                ) {
                     keyword = interfaceDeclarationSyntax.Keyword;
                 }
                 else if (
                     node is RecordDeclarationSyntax recordDeclarationSyntax
-                )
-                {
+                ) {
                     keyword = recordDeclarationSyntax.Keyword;
                     groupId = Guid.NewGuid().ToString();
                     parameterList = recordDeclarationSyntax.ParameterList;

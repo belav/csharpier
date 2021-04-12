@@ -13,8 +13,7 @@ namespace CSharpier
             if (
                 node.Statements.Count == 1
                 && node.Statements[0] is BlockSyntax blockSyntax
-            )
-            {
+            ) {
                 parts.Push(this.PrintBlockSyntax(blockSyntax));
             }
             else

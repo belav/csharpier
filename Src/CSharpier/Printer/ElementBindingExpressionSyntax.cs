@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintElementBindingExpressionSyntax(
-            ElementBindingExpressionSyntax node)
-        {
+            ElementBindingExpressionSyntax node
+        ) {
             return this.Print(node.ArgumentList);
         }
     }

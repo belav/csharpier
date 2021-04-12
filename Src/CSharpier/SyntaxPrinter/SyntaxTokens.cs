@@ -16,8 +16,8 @@ namespace CSharpier.SyntaxPrinter
         public static Doc PrintSyntaxToken(
             SyntaxToken syntaxToken,
             Doc? afterTokenIfNoTrailing = null,
-            Doc? beforeTokenIfNoLeading = null)
-        {
+            Doc? beforeTokenIfNoLeading = null
+        ) {
             if (syntaxToken.RawKind == 0)
             {
                 return Doc.Null;
@@ -56,8 +56,7 @@ namespace CSharpier.SyntaxPrinter
                 skipLastHardline: indentTrivia
             );
 
-            return indentTrivia
-                && printedTrivia != Doc.Null
+            return indentTrivia && printedTrivia != Doc.Null
                 ? Docs.Concat(Docs.Indent(printedTrivia), Docs.HardLine)
                 : printedTrivia;
         }
@@ -65,19 +64,19 @@ namespace CSharpier.SyntaxPrinter
         // LiteralLines are a little odd because they trim any new line immediately before them. The reason is as follows.
         // namespace Namespace
         // {                   - HardLine                           - if the LiteralLine below didn't trim this HardLine, then we'd end up inserting a blank line between this and #pragma
-        // #pragma             - LiteralLine, #pragma               - The HardLine above could come from a number of different PrintNode methods                   
-        // 
+        // #pragma             - LiteralLine, #pragma               - The HardLine above could come from a number of different PrintNode methods
+        //
         // #region Region      - LiteralLine, #region, HardLine     - we end each directive with a hardLine to ensure we get a double hardLine in this situation
         //                     - HardLine                           - this hardLine is trimmed by the literalLine below, but the extra hardline above ensures
         // #region Nested      - LiteralLine, #region, HardLine     - we still keep the blank line between the regions
-        // 
+        //
         // #pragma             - LiteralLine, #pragma, HardLine
         // #pragma             - LiteralLine, #pragma, Hardline     - And this LiteralLine trims the extra HardLine above to ensure we don't get an extra blank line
         public static Doc PrintLeadingTrivia( // make this private eventually, figure out if we can ditch the special case for CompilationUnitSyntax
             SyntaxTriviaList leadingTrivia,
             bool includeInitialNewLines = false,
-            bool skipLastHardline = false)
-        {
+            bool skipLastHardline = false
+        ) {
             var parts = new Parts();
 
             // we don't print any new lines until we run into a comment or directive
@@ -89,39 +88,37 @@ namespace CSharpier.SyntaxPrinter
                 var trivia = leadingTrivia[x];
 
                 if (
-                    printNewLines
-                    && trivia.Kind() == SyntaxKind.EndOfLineTrivia
-                )
-                {
+                    printNewLines && trivia.Kind() == SyntaxKind.EndOfLineTrivia
+                ) {
                     parts.Push(Docs.HardLine);
                 }
                 if (
                     trivia.Kind() != SyntaxKind.EndOfLineTrivia
                     && trivia.Kind() != SyntaxKind.WhitespaceTrivia
-                )
-                {
+                ) {
                     printNewLines = true;
                 }
                 if (
                     trivia.Kind() == SyntaxKind.SingleLineCommentTrivia
-                    || trivia.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia
-                )
-                {
+                    || trivia.Kind()
+                    == SyntaxKind.SingleLineDocumentationCommentTrivia
+                ) {
                     parts.Push(
                         Docs.LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
                             CommentType.SingleLine
                         ),
-                        trivia.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia
+                        trivia.Kind()
+                            == SyntaxKind.SingleLineDocumentationCommentTrivia
                             ? Docs.HardLine
                             : Doc.Null
                     );
                 }
                 else if (
                     trivia.Kind() == SyntaxKind.MultiLineCommentTrivia
-                    || trivia.Kind() == SyntaxKind.MultiLineDocumentationCommentTrivia
-                )
-                {
+                    || trivia.Kind()
+                    == SyntaxKind.MultiLineDocumentationCommentTrivia
+                ) {
                     parts.Push(
                         Docs.LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
@@ -149,8 +146,7 @@ namespace CSharpier.SyntaxPrinter
                     || trivia.Kind() == SyntaxKind.DefineDirectiveTrivia
                     || trivia.Kind() == SyntaxKind.UndefDirectiveTrivia
                     || trivia.Kind() == SyntaxKind.NullableDirectiveTrivia
-                )
-                {
+                ) {
                     parts.Push(
                         Docs.LiteralLine,
                         trivia.ToString(),
@@ -160,16 +156,13 @@ namespace CSharpier.SyntaxPrinter
                 else if (
                     trivia.Kind() == SyntaxKind.RegionDirectiveTrivia
                     || trivia.Kind() == SyntaxKind.EndRegionDirectiveTrivia
-                )
-                {
+                ) {
                     var triviaText = trivia.ToString();
                     if (
                         x > 0
-                        && leadingTrivia[
-                            x - 1
-                        ].Kind() == SyntaxKind.WhitespaceTrivia
-                    )
-                    {
+                        && leadingTrivia[x - 1].Kind()
+                        == SyntaxKind.WhitespaceTrivia
+                    ) {
                         triviaText = leadingTrivia[x - 1] + triviaText;
                     }
 
@@ -190,8 +183,9 @@ namespace CSharpier.SyntaxPrinter
             return PrintTrailingTrivia(node.TrailingTrivia);
         }
 
-        private static Doc PrintTrailingTrivia(SyntaxTriviaList trailingTrivia)
-        {
+        private static Doc PrintTrailingTrivia(
+            SyntaxTriviaList trailingTrivia
+        ) {
             var parts = new Parts();
             foreach (var trivia in trailingTrivia)
             {

@@ -7,8 +7,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintConstructorDeclarationSyntax(
-            ConstructorDeclarationSyntax node)
-        {
+            ConstructorDeclarationSyntax node
+        ) {
             var groupId = Guid.NewGuid().ToString();
 
             return Docs.Group(
@@ -22,9 +22,9 @@ namespace CSharpier
                     : Docs.Null,
                 node.Body != null
                     ? this.PrintBlockSyntaxWithConditionalSpace(
-                        node.Body,
-                        groupId
-                    )
+                            node.Body,
+                            groupId
+                        )
                     : Docs.Null,
                 node.ExpressionBody != null
                     ? this.PrintArrowExpressionClauseSyntax(node.ExpressionBody)

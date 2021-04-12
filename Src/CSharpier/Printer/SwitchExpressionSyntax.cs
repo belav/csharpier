@@ -19,21 +19,22 @@ namespace CSharpier
                             HardLine,
                             this.PrintSeparatedSyntaxList(
                                 node.Arms,
-                                o => Concat(
-                                    this.Print(o.Pattern),
-                                    SpaceIfNoPreviousComment,
-                                    o.WhenClause != null
-                                        ? Concat(
-                                            this.Print(o.WhenClause),
-                                            SpaceIfNoPreviousComment
-                                        )
-                                        : Doc.Null,
-                                    this.PrintSyntaxToken(
-                                        o.EqualsGreaterThanToken,
-                                        " "
+                                o =>
+                                    Concat(
+                                        this.Print(o.Pattern),
+                                        SpaceIfNoPreviousComment,
+                                        o.WhenClause != null
+                                            ? Concat(
+                                                    this.Print(o.WhenClause),
+                                                    SpaceIfNoPreviousComment
+                                                )
+                                            : Doc.Null,
+                                        this.PrintSyntaxToken(
+                                            o.EqualsGreaterThanToken,
+                                            " "
+                                        ),
+                                        this.Print(o.Expression)
                                     ),
-                                    this.Print(o.Expression)
-                                ),
                                 HardLine
                             )
                         )

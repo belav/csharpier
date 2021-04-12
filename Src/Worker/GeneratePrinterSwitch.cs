@@ -10,7 +10,7 @@ namespace Worker
     {
         [Test]
         [Ignore(
-                "Run this manually if you need to regenerate the Printer.generated.cs file. Then run csharpier on the result")]
+            "Run this manually if you need to regenerate the Printer.generated.cs file. Then run csharpier on the result")]
         public void DoWork()
         {
             var rootDirectory = new DirectoryInfo(

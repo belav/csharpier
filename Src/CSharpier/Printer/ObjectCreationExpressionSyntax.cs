@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintObjectCreationExpressionSyntax(
-            ObjectCreationExpressionSyntax node)
-        {
+            ObjectCreationExpressionSyntax node
+        ) {
             return Group(
                 this.PrintSyntaxToken(
                     node.NewKeyword,

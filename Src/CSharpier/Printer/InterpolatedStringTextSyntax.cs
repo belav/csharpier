@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintInterpolatedStringTextSyntax(
-            InterpolatedStringTextSyntax node)
-        {
+            InterpolatedStringTextSyntax node
+        ) {
             return this.PrintSyntaxToken(node.TextToken);
         }
     }

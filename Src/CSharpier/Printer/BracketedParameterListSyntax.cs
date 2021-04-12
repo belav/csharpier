@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintBracketedParameterListSyntax(
-            BracketedParameterListSyntax node)
-        {
+            BracketedParameterListSyntax node
+        ) {
             return Concat(
                 this.PrintSyntaxToken(node.OpenBracketToken),
                 this.PrintSeparatedSyntaxList(

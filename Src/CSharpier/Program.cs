@@ -46,8 +46,8 @@ namespace CSharpier
             string directoryOrFile,
             bool fast,
             bool check,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             var fullStopwatch = Stopwatch.StartNew();
 
             // TODO 1 Configuration.cs from data.entities
@@ -77,13 +77,14 @@ namespace CSharpier
                         SearchOption.AllDirectories
                     )
                     .Select(
-                        o => DoWork(
-                            o,
-                            directoryOrFile,
-                            validate,
-                            check,
-                            cancellationToken
-                        )
+                        o =>
+                            DoWork(
+                                o,
+                                directoryOrFile,
+                                validate,
+                                check,
+                                cancellationToken
+                            )
                     )
                     .ToArray();
                 try
@@ -100,9 +101,8 @@ namespace CSharpier
             }
 
             Console.WriteLine(
-                PadToSize("total time: ", 80) + ReversePad(
-                    fullStopwatch.ElapsedMilliseconds + "ms"
-                )
+                PadToSize("total time: ", 80)
+                + ReversePad(fullStopwatch.ElapsedMilliseconds + "ms")
             );
             Console.WriteLine(
                 PadToSize("total files: ", 80) + ReversePad(files + "  ")
@@ -110,32 +110,30 @@ namespace CSharpier
             if (validate)
             {
                 Console.WriteLine(
-                    PadToSize(
-                        "files that failed syntax tree validation: ",
-                        80
-                    ) + ReversePad(sourceLost + "  ")
+                    PadToSize("files that failed syntax tree validation: ", 80)
+                    + ReversePad(sourceLost + "  ")
                 );
                 Console.WriteLine(
                     PadToSize(
                         "files that threw exceptions while formatting: ",
                         80
-                    ) + ReversePad(exceptionsFormatting + "  ")
+                    )
+                    + ReversePad(exceptionsFormatting + "  ")
                 );
                 Console.WriteLine(
                     PadToSize(
                         "files that threw exceptions while validating syntax tree: ",
                         80
-                    ) + ReversePad(exceptionsValidatingSource + "  ")
+                    )
+                    + ReversePad(exceptionsValidatingSource + "  ")
                 );
             }
 
             if (check)
             {
                 Console.WriteLine(
-                    PadToSize(
-                        "files that were not formatted: ",
-                        80
-                    ) + ReversePad(unformattedFiles + "  ")
+                    PadToSize("files that were not formatted: ", 80)
+                    + ReversePad(unformattedFiles + "  ")
                 );
 
                 if (unformattedFiles > 0)
@@ -152,16 +150,15 @@ namespace CSharpier
             string? path,
             bool validate,
             bool check,
-            CancellationToken cancellationToken)
-        {
+            CancellationToken cancellationToken
+        ) {
             if (
                 file.EndsWith(".g.cs")
                 || file.EndsWith(".cshtml.cs")
                 || file.ContainsIgnoreCase("\\obj\\")
                 || file.ContainsIgnoreCase("/obj/")
                 || file.EndsWithIgnoreCase("AllInOne.cs")
-            )
-            {
+            ) {
                 return;
             }
 
@@ -179,7 +176,9 @@ namespace CSharpier
             if (encoding == null)
             {
                 Console.WriteLine(
-                    GetPath() + " - unable to detect file encoding. Defaulting to " + Encoding.Default
+                    GetPath()
+                    + " - unable to detect file encoding. Defaulting to "
+                    + Encoding.Default
                 );
             }
             reader.Close();
@@ -217,7 +216,6 @@ namespace CSharpier
                 Interlocked.Increment(ref exceptionsFormatting);
                 return;
             }
-
 
             if (result.Errors.Any())
             {
@@ -260,7 +258,11 @@ namespace CSharpier
                 {
                     Interlocked.Increment(ref exceptionsValidatingSource);
                     Console.WriteLine(
-                        GetPath() + " - failed with exception during syntax tree validation" + Environment.NewLine + ex.Message + ex.StackTrace
+                        GetPath()
+                        + " - failed with exception during syntax tree validation"
+                        + Environment.NewLine
+                        + ex.Message
+                        + ex.StackTrace
                     );
                 }
             }

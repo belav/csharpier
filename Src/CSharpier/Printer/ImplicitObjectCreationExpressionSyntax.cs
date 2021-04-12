@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintImplicitObjectCreationExpressionSyntax(
-            ImplicitObjectCreationExpressionSyntax node)
-        {
+            ImplicitObjectCreationExpressionSyntax node
+        ) {
             // TODO 1 more tests for this?
             return Concat(
                 this.PrintSyntaxToken(node.NewKeyword),

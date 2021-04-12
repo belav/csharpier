@@ -5,8 +5,8 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintForEachVariableStatementSyntax(
-            ForEachVariableStatementSyntax node)
-        {
+            ForEachVariableStatementSyntax node
+        ) {
             return Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
