@@ -4,6 +4,7 @@ using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UtfUnknown;
@@ -174,7 +175,13 @@ namespace CSharpier
             }
 
             var detectionResult = CharsetDetector.DetectFromFile(file);
-            var encoding = detectionResult.Detected.Encoding;
+            var encoding = detectionResult?.Detected?.Encoding;
+            if (encoding == null)
+            {
+                Console.WriteLine(
+                    GetPath() + " - unable to detect file encoding. Defaulting to " + Encoding.Default
+                );
+            }
             reader.Close();
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -273,7 +280,11 @@ namespace CSharpier
             if (!check)
             {
                 // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
-                File.WriteAllText(file, result.Code, encoding);
+                File.WriteAllText(
+                    file,
+                    result.Code,
+                    encoding ?? Encoding.Default
+                );
             }
         }
 
