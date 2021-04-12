@@ -23,7 +23,7 @@ namespace CSharpier
             BlockSyntax? body = null;
             ArrowExpressionClauseSyntax? expressionBody = null;
             SyntaxToken? semicolonToken = null;
-            var groupId = Guid.NewGuid().ToString();
+            string? groupId = null;
 
             if (node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax)
             {
@@ -134,6 +134,12 @@ namespace CSharpier
 
             if (parameterList != null)
             {
+                // if there are no parameters, but there is a super long method name, a groupId
+                // will cause SpaceBrace when it isn't wanted.
+                if (parameterList.Parameters.Count > 0)
+                {
+                    groupId = Guid.NewGuid().ToString();
+                }
                 parts.Add(
                     this.PrintParameterListSyntax(parameterList, groupId)
                 );
@@ -143,7 +149,12 @@ namespace CSharpier
             if (body != null)
             {
                 parts.Add(
-                    this.PrintBlockSyntaxWithConditionalSpace(body, groupId)
+                    groupId != null
+                        ? this.PrintBlockSyntaxWithConditionalSpace(
+                            body,
+                            groupId
+                        )
+                        : this.PrintBlockSyntax(body)
                 );
             }
             else
