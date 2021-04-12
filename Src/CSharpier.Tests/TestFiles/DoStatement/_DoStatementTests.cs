@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class DoStatementTests : BaseTest
     {
         [Test]
-        public void BasicDoStatement()
+        public void DoStatements()
         {
-            this.RunTest("DoStatement", "BasicDoStatement");
+            this.RunTest("DoStatement", "DoStatements");
         }
     }
 }

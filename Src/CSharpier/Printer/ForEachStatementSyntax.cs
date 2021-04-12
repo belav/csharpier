@@ -1,3 +1,4 @@
+using System;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -7,7 +8,9 @@ namespace CSharpier
     {
         private Doc PrintForEachStatementSyntax(ForEachStatementSyntax node)
         {
-            return Docs.Concat(
+            var groupId = Guid.NewGuid().ToString();
+
+            var result = Docs.Concat(
                 this.PrintExtraNewLines(node),
                 this.PrintSyntaxToken(
                     node.AwaitKeyword,
@@ -28,10 +31,21 @@ namespace CSharpier
                     node.InKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.Print(node.Expression),
+                Docs.GroupWithId(
+                    groupId,
+                    this.Print(node.Expression),
+                    Docs.SoftLine
+                ),
                 SyntaxTokens.Print(node.CloseParenToken),
-                this.Print(node.Statement)
+                node.Statement is BlockSyntax blockSyntax
+                    ? this.PrintBlockSyntaxWithConditionalSpace(
+                        blockSyntax,
+                        groupId
+                    )
+                    : this.Print(node.Statement)
             );
+
+            return result;
         }
     }
 }

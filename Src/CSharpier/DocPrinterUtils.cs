@@ -18,12 +18,7 @@ namespace CSharpier
                 if (groupStack.Count > 0)
                 {
                     var parentGroup = groupStack.Peek();
-                    // Breaks are not propagated through conditional groups because
-                    // the user is expected to manually handle what breaks.
-                    if (!parentGroup.ExpandedStates)
-                    {
-                        parentGroup.Break = true;
-                    }
+                    parentGroup.Break = true;
                 }
             }
 

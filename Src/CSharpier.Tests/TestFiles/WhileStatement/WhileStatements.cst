@@ -15,8 +15,8 @@ class ClassName
         while (
             directoryInfo.Name != "Test"
             && directoryInfo.Parent != null
-            && someLongCondition == "test")
-        {
+            && someLongCondition == "test"
+        ) {
             directoryInfo = directoryInfo.Parent;
         }
     }

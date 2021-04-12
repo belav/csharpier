@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,22 @@ namespace CSharpier
         public static NullDoc Null { get; } = NullDoc.Instance;
     }
 
+    public class LiteralLine : Concat
+    {
+        public LiteralLine()
+            : base(
+                new List<Doc>
+                {
+                    new LineDoc
+                    {
+                        Type = LineDoc.LineType.Hard,
+                        IsLiteral = true
+                    },
+                    new BreakParent()
+                }
+            ) { }
+    }
+
     public class HardLine : Concat
     {
         public HardLine()
@@ -23,6 +40,13 @@ namespace CSharpier
                     new BreakParent()
                 }
             ) { }
+    }
+
+    public class IfBreak : Doc
+    {
+        public Doc FlatContents { get; set; } = Docs.Null;
+        public Doc BreakContents { get; set; } = Docs.Null;
+        public string? GroupId { get; set; }
     }
 
     public class NullDoc : Doc
@@ -64,7 +88,7 @@ namespace CSharpier
     {
         public Doc Contents { get; set; } = Doc.Null;
         public bool Break { get; set; }
-        public bool ExpandedStates { get; set; }
+        public string? GroupId { get; set; }
     }
 
     public class BreakParent : Doc { }

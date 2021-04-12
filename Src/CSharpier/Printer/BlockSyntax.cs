@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,41 +9,67 @@ namespace CSharpier
     {
         private Doc PrintBlockSyntax(BlockSyntax node)
         {
-            if (node == null) // TODO 1 why is this being called?
-            {
-                return Doc.Null;
-            }
+            return this.PrintBlockSyntax(node, null);
+        }
 
-            var statementSeparator = node.Parent is AccessorDeclarationSyntax
+        private Doc PrintBlockSyntaxWithConditionalSpace(
+            BlockSyntax node,
+            string groupId)
+        {
+            return this.PrintBlockSyntax(node, groupId);
+        }
+
+        // TODO this should really be private so it can't be used by anything but the two methods above
+        private Doc PrintBlockSyntax(BlockSyntax node, string? groupId)
+        {
+            Doc statementSeparator = node.Parent is AccessorDeclarationSyntax
                 && node.Statements.Count <= 1
-                ? Line
-                : HardLine;
+                ? Docs.Line
+                : Docs.HardLine;
 
-            var parts = new List<Doc>
+            /* TODO 0 other possible node types that could get this block syntax formatting
+            AccessorDeclaration
+            AnonymousMethodExpression
+            CatchClause
+            CheckedStatement
+            ConstructorDeclaration
+            ConversionOperatorDeclaration
+            DestructorDeclaration
+            FixedStatement
+            LocalFunctionStatement
+            MethodDeclaration
+            OperatorDeclaration
+            ParenthesizedLambdaExpression
+            SimpleLambdaExpression
+            UnsafeStatement
+            */
+            var docs = new List<Doc>
             {
-                Line,
-                this.PrintSyntaxToken(node.OpenBraceToken)
+                groupId != null
+                    ? Docs.IfBreak(" ", Docs.Line, groupId)
+                    : Docs.Line,
+                SyntaxTokens.Print(node.OpenBraceToken)
             };
             if (node.Statements.Count > 0)
             {
-                var innerParts = Indent(
+                var innerDoc = Docs.Indent(
                     statementSeparator,
                     Join(statementSeparator, node.Statements.Select(this.Print))
                 );
 
-                DocUtilities.RemoveInitialDoubleHardLine(innerParts);
+                DocUtilities.RemoveInitialDoubleHardLine(innerDoc);
 
-                parts.Add(Concat(innerParts, statementSeparator));
+                docs.Add(Docs.Concat(innerDoc, statementSeparator));
             }
 
-            parts.Add(
+            docs.Add(
                 this.PrintSyntaxToken(
                     node.CloseBraceToken,
                     null,
-                    node.Statements.Count == 0 ? " " : Doc.Null
+                    node.Statements.Count == 0 ? " " : Docs.Null
                 )
             );
-            return Group(parts);
+            return Docs.Group(docs);
         }
     }
 }

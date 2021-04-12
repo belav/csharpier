@@ -6,14 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ElseStatementTests : BaseTest
     {
         [Test]
-        public void BasicElse()
+        public void ElseStatements()
         {
-            this.RunTest("ElseStatement", "BasicElse");
-        }
-        [Test]
-        public void ElseIf()
-        {
-            this.RunTest("ElseStatement", "ElseIf");
+            this.RunTest("ElseStatement", "ElseStatements");
         }
     }
 }

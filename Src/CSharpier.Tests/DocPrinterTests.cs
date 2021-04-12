@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -276,6 +277,67 @@ namespace CSharpier.Tests
         }
 
         [Test]
+        public void IfBreak_Should_Print_Flat_Contents()
+        {
+            var doc = Docs.Group(Docs.IfBreak("break", "flat"));
+
+            var result = this.Print(doc);
+
+            result.Should().Be("flat");
+        }
+
+        [Test]
+        public void IfBreak_Should_Print_Break_Contents()
+        {
+            var doc = Docs.Group(Docs.HardLine, Docs.IfBreak("break", "flat"));
+
+            var result = this.Print(doc);
+
+            result.Should().Be("break");
+        }
+
+        [Test]
+        public void IfBreak_Should_Print_Break_Contents_When_Group_Does_Not_Fit()
+        {
+            var doc = Docs.Group(
+                "another",
+                Docs.Line,
+                Docs.IfBreak("break", "flat")
+            );
+
+            var result = this.Print(doc, 10);
+
+            result.Should().Be($"another{NewLine}break");
+        }
+
+        [Test]
+        public void IfBreak_Should_Print_Flat_Contents_When_GroupId_Does_Not_Break()
+        {
+            var doc = Docs.Concat(
+                Docs.GroupWithId("1", "1"),
+                Docs.IfBreak("break", "flat", "1")
+            );
+
+            var result = this.Print(doc);
+
+            result.Should().Be("1flat");
+        }
+
+        [Test]
+        public void IfBreak_Should_Print_Break_Contents_When_GroupId_Breaks()
+        {
+            var doc = Docs.Concat(
+                "1",
+                Docs.GroupWithId("hl", Docs.HardLine),
+                Docs.IfBreak("break", "flat", "hl")
+            );
+
+            var result = this.Print(doc);
+
+            result.Should().Be($"1{NewLine}break");
+        }
+
+        [Test]
         public void Scratch()
         {
             var doc = "";
@@ -283,9 +345,10 @@ namespace CSharpier.Tests
             result.Should().Be("");
         }
 
-        private string Print(Doc doc)
+        private string Print(Doc doc, int width = 80)
         {
-            return DocPrinter.Print(doc, new Options()).TrimEnd('\r', '\n');
+            return DocPrinter.Print(doc, new Options { Width = width })
+                .TrimEnd('\r', '\n');
         }
 
         public static Doc HardLine => Printer.HardLine;
