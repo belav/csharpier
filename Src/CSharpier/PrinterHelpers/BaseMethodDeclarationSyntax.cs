@@ -149,9 +149,9 @@ namespace CSharpier
                 parts.Add(
                     groupId != null
                         ? this.PrintBlockSyntaxWithConditionalSpace(
-                            body,
-                            groupId
-                        )
+                                body,
+                                groupId
+                            )
                         : this.PrintBlockSyntax(body)
                 );
             }
