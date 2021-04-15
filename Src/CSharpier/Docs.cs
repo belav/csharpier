@@ -10,10 +10,6 @@ namespace CSharpier
 
         public static Doc BreakParent => new BreakParent();
 
-        // TODO 0 maybe all spaces should be this instead? but if we ditch leading/trailing comments, this won't work anymore
-        public static SpaceIfNoPreviousComment SpaceIfNoPreviousComment =>
-            new();
-
         public static HardLine HardLine => new();
 
         // TODO all of the Line types can probably turn into proper classes, and be the same instance by type
@@ -103,7 +99,7 @@ namespace CSharpier
             Doc flatContents,
             string? groupId = null
         ) {
-            return new IfBreak()
+            return new()
             {
                 FlatContents = flatContents,
                 BreakContents = breakContents,

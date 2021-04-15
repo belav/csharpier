@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -56,7 +57,7 @@ namespace CSharpier
             Doc contents = string.Empty;
             if (node.AccessorList != null)
             {
-                Doc separator = Docs.SpaceIfNoPreviousComment;
+                Doc separator = " ";
                 if (
                     node.AccessorList.Accessors.Any(
                         o =>

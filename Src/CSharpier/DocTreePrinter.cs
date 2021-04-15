@@ -76,8 +76,6 @@ namespace CSharpier
                     return $"{indent}Docs.LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
                 case TrailingComment trailingComment:
                     return $"{indent}Docs.TrailingComment(\"{trailingComment.Comment}\", CommentType.{(trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
-                case SpaceIfNoPreviousComment:
-                    return indent + "Docs.SpaceIfNoPreviousComment";
                 case IfBreak ifBreak:
                     return @$"{indent}Docs.IfBreak
 {PrintIndentedDocTree(ifBreak.BreakContents)},

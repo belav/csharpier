@@ -1,3 +1,4 @@
+using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -11,7 +12,7 @@ namespace CSharpier
             return Docs.Group(
                 this.PrintModifiers(node.Modifiers),
                 this.Print(node.Parameter),
-                Docs.SpaceIfNoPreviousComment,
+                " ",
                 SyntaxTokens.Print(node.ArrowToken),
                 node.Body is BlockSyntax blockSyntax
                     ? this.PrintBlockSyntax(blockSyntax)

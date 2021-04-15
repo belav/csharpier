@@ -16,4 +16,17 @@ public class ClassName
   
     void //other trailing
     MethodName4() { }
+    
+    void TrailingCommentTest() // shouldn't space before the next brace
+    {
+        return;
+    }
+    
+    void TrailingCommentWithParameters(
+        string oasdflkjasdfljkaksjdfasjdkfjslakdf,
+        string ljasdfjklaskldfkalsfjkasdf
+    ) // shouldn't space before the next brace
+    {
+        return;
+    }
 }

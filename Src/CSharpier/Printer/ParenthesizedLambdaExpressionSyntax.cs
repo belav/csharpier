@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -12,7 +13,7 @@ namespace CSharpier
             {
                 this.PrintModifiers(node.Modifiers),
                 this.PrintParameterListSyntax(node.ParameterList),
-                Docs.SpaceIfNoPreviousComment,
+                " ",
                 this.PrintSyntaxToken(
                     node.ArrowToken,
                     afterTokenIfNoTrailing: " "

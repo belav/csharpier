@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -77,7 +78,7 @@ namespace CSharpier
             if (returnType != null)
             {
                 // TODO 1 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow? that may get complicated
-                docs.Add(this.Print(returnType), Docs.SpaceIfNoPreviousComment);
+                docs.Add(this.Print(returnType), " ");
             }
 
             if (explicitInterfaceSpecifier != null)
@@ -113,7 +114,7 @@ namespace CSharpier
             ) {
                 docs.Add(
                     this.Print(operatorDeclarationSyntax.ReturnType),
-                    Docs.SpaceIfNoPreviousComment,
+                    " ",
                     this.PrintSyntaxToken(
                         operatorDeclarationSyntax.OperatorKeyword,
                         " "

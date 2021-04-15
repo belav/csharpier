@@ -259,10 +259,6 @@ namespace CSharpier
                         case ForceFlat flat:
                             Push(flat.Contents, currentMode, currentIndent);
                             break;
-                        case SpaceIfNoPreviousComment:
-                            // TODO should this always be considered size one?
-                            remainingWidth -= 1;
-                            break;
                         default:
                             throw new Exception(
                                 "Can't handle " + currentDoc.GetType()
@@ -312,6 +308,16 @@ namespace CSharpier
                         {
                             break;
                         }
+
+                        // I don't understand exactly why, but this ensures we don't print extra spaces after a trailing comment
+                        if (
+                            newLineNextStringValue
+                            && skipNextNewLine
+                            && stringDoc.Value == " "
+                        ) {
+                            break;
+                        }
+
                         if (newLineNextStringValue)
                         {
                             // TODO 1 new line stuff
@@ -484,12 +490,6 @@ namespace CSharpier
                         currentWidth = command.Indent.Length;
                         newLineNextStringValue = true;
                         skipNextNewLine = true;
-                        break;
-                    case SpaceIfNoPreviousComment:
-                        if (!newLineNextStringValue)
-                        {
-                            Push(" ", command.Mode, command.Indent);
-                        }
                         break;
                     case ForceFlat forceFlat:
                         Push(

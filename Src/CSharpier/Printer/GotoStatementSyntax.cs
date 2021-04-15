@@ -1,3 +1,4 @@
+using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -13,9 +14,7 @@ namespace CSharpier
             return Docs.Concat(
                 this.PrintExtraNewLines(node),
                 SyntaxTokens.Print(node.GotoKeyword),
-                node.CaseOrDefaultKeyword.RawKind != 0
-                    ? Docs.SpaceIfNoPreviousComment
-                    : Docs.Null,
+                node.CaseOrDefaultKeyword.RawKind != 0 ? " " : Docs.Null,
                 SyntaxTokens.Print(node.CaseOrDefaultKeyword),
                 expression,
                 SyntaxTokens.Print(node.SemicolonToken)

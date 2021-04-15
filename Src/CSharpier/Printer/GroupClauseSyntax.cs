@@ -1,3 +1,4 @@
+using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -12,7 +13,7 @@ namespace CSharpier
                     afterTokenIfNoTrailing: " "
                 ),
                 this.Print(node.GroupExpression),
-                Docs.SpaceIfNoPreviousComment,
+                " ",
                 this.PrintSyntaxToken(
                     node.ByKeyword,
                     afterTokenIfNoTrailing: " "
