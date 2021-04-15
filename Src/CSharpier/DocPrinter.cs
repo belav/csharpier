@@ -294,8 +294,6 @@ namespace CSharpier
             var newLineNextStringValue = false;
             var skipNextNewLine = false;
 
-            var lineSuffix = new List<PrintCommand>();
-
             void Push(Doc doc, PrintMode printMode, Indent indent)
             {
                 currentStack.Push(new PrintCommand(indent, printMode, doc));
@@ -432,38 +430,10 @@ namespace CSharpier
                                 shouldRemeasure = true;
                                 goto case PrintMode.MODE_BREAK;
                             case PrintMode.MODE_BREAK:
-                                if (lineSuffix.Any())
-                                {
-                                    currentStack.Push(command);
-                                    lineSuffix.Reverse();
-                                    foreach (var otherCommand in lineSuffix)
-                                    {
-                                        currentStack.Push(otherCommand);
-                                    }
-
-                                    lineSuffix.Clear();
-                                    break;
-                                }
-
                                 if (line.IsLiteral)
                                 {
                                     if (output.Length > 0)
                                     {
-                                        TrimOutput(output);
-                                        if (newLine.Length == 2)
-                                        {
-                                            if (output[^2] == '\r')
-                                            {
-                                                output.Length -= 2;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (output[^1] == '\n')
-                                            {
-                                                output.Length -= 1;
-                                            }
-                                        }
                                         output.Append(newLine);
                                         currentWidth = 0;
                                     }

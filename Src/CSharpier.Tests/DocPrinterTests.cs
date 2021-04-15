@@ -203,28 +203,26 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void HardLine_LiteralLine_Skips_HardLine_And_Trims()
+        public void LiteralLine_Does_Not_Trim_Output_Or_Indent_Next_Line()
         {
             var doc = Docs.Concat(
-                "{",
-                Docs.Indent(Docs.HardLine, Docs.LiteralLine, "noindent"),
-                Docs.HardLine,
-                "}"
+                "(",
+                Docs.Indent(
+                    Docs.HardLine,
+                    "1",
+                    " ",
+                    Docs.LiteralLine,
+                    "2",
+                    Docs.HardLine,
+                    "3"
+                ),
+                ")"
             );
 
-            var result = this.Print(doc);
-
-            result.Should().Be($"{{{NewLine}noindent{NewLine}}}");
-        }
-
-        [Test]
-        public void HardLine_LiteralLine_Skips_HardLine()
-        {
-            var doc = Docs.Concat("1", Docs.HardLine, Docs.LiteralLine, "2");
-
-            var result = this.Print(doc);
-
-            result.Should().Be($"1{NewLine}2");
+            this.PrintedDocShouldBe(
+                doc,
+                $"({NewLine}    1 {NewLine}2{NewLine}    3)"
+            );
         }
 
         [Test]

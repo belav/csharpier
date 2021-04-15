@@ -1,4 +1,5 @@
 using System;
+using CSharpier.DocTypes;
 
 namespace CSharpier
 {
@@ -62,18 +63,12 @@ namespace CSharpier
                         : "Docs.SoftLine");
                 case BreakParent:
                     return "";
+                case Trim:
+                    return "Docs.Trim";
                 case ForceFlat forceFlat:
-                    return indent
-                    + "Docs.ForceFlat("
-                    + newLine
-                    + PrintIndentedDocTree(forceFlat.Contents)
-                    + ")";
+                    return $"{indent}Docs.ForceFlat({newLine}{PrintIndentedDocTree(forceFlat.Contents)})";
                 case IndentDoc indentDoc:
-                    return indent
-                    + "Docs.Indent("
-                    + newLine
-                    + PrintIndentedDocTree(indentDoc.Contents)
-                    + ")";
+                    return $"{indent}Docs.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents)})";
                 case Group group:
                     return @$"{indent}Docs.Group{(group.GroupId != null ? "WithId" : string.Empty)}(
 {(group.GroupId != null ? $"{nextIndent}\"{group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents)})";

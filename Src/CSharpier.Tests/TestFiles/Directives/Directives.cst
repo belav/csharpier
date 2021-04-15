@@ -20,8 +20,16 @@ class ClassName { }
 
 public class ClassName
 {
-    void MethodName()
+    void MethodWithOnlyDisabled()
     {
+#if DEBUG
+        Console.WriteLine("Rosyln does not parse this because DEBUG is not defined");
+#endif
+    }
+
+    void MethodWithDisabledAfterAnotherStatement()
+    {
+        var x = 1;
 #if DEBUG
         Console.WriteLine("Rosyln does not parse this because DEBUG is not defined");
 #endif

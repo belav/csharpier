@@ -1,4 +1,0 @@
-#region HardToReproduceWithOtherCodeAround
-class ClassName { }
-
-#endregion

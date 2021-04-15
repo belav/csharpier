@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
@@ -57,17 +58,6 @@ namespace CSharpier.SyntaxPrinter
                 : printedTrivia;
         }
 
-        // LiteralLines are a little odd because they trim any new line immediately before them. The reason is as follows.
-        // namespace Namespace
-        // {                   - HardLine                           - if the LiteralLine below didn't trim this HardLine, then we'd end up inserting a blank line between this and #pragma
-        // #pragma             - LiteralLine, #pragma               - The HardLine above could come from a number of different PrintNode methods
-        //
-        // #region Region      - LiteralLine, #region, HardLine     - we end each directive with a hardLine to ensure we get a double hardLine in this situation
-        //                     - HardLine                           - this hardLine is trimmed by the literalLine below, but the extra hardline above ensures
-        // #region Nested      - LiteralLine, #region, HardLine     - we still keep the blank line between the regions
-        //
-        // #pragma             - LiteralLine, #pragma, HardLine
-        // #pragma             - LiteralLine, #pragma, Hardline     - And this LiteralLine trims the extra HardLine above to ensure we don't get an extra blank line
         public static Doc PrintLeadingTrivia( // make this private eventually, figure out if we can ditch the special case for CompilationUnitSyntax
             SyntaxTriviaList leadingTrivia,
             bool includeInitialNewLines = false,
@@ -118,17 +108,23 @@ namespace CSharpier.SyntaxPrinter
                 else if (kind == SyntaxKind.DisabledTextTrivia)
                 {
                     docs.Add(
-                        Docs.LiteralLine,
-                        trivia.ToString().TrimEnd('\n', '\r')
+                        Docs.Trim,
+                        trivia.ToString().TrimEnd('\n', '\r'),
+                        Docs.HardLine
                     );
                 }
                 else if (IsDirective(kind))
                 {
-                    docs.Add(
-                        Docs.LiteralLine,
-                        trivia.ToString(),
-                        Docs.HardLine
-                    );
+                    // handles the case of a method that only contains #if DEBUG
+                    if (
+                        kind == SyntaxKind.IfDirectiveTrivia
+                        && trivia.Token.Kind() == SyntaxKind.CloseBraceToken
+                        && trivia.Token.Parent is BlockSyntax blockSyntax
+                        && blockSyntax.Statements.Count == 0
+                    ) {
+                        docs.Add(Docs.HardLine);
+                    }
+                    docs.Add(Docs.Trim, trivia.ToString(), Docs.HardLine);
                 }
                 else if (IsRegion(kind))
                 {
@@ -141,7 +137,7 @@ namespace CSharpier.SyntaxPrinter
                         triviaText = leadingTrivia[x - 1] + triviaText;
                     }
 
-                    docs.Add(Docs.LiteralLine, triviaText, Docs.HardLine);
+                    docs.Add(Docs.Trim, triviaText, Docs.HardLine);
                 }
             }
 
