@@ -362,12 +362,67 @@ namespace CSharpier.Tests
             result.Should().Be($"1{NewLine}break");
         }
 
+        [TestCase(" ")]
+        [TestCase("   ")]
+        public void Trim_Should_Trim_Current_Line(string indent)
+        {
+            var doc = Docs.Concat($"1{indent}", Docs.Trim);
+
+            PrintedDocShouldBe(doc, "1");
+        }
+
+        [TestCase("1")]
+        [TestCase("")]
+        public void Trim_Should_Not_Trim_NonWhitespace(string value)
+        {
+            var doc = Docs.Concat(value, Docs.Trim);
+
+            PrintedDocShouldBe(doc, value);
+        }
+
+        [Test]
+        public void Trim_Should_Trim_Indentation()
+        {
+            var doc = Docs.Concat(
+                "{",
+                Docs.Indent(
+                    Docs.HardLine,
+                    "1",
+                    Docs.HardLine,
+                    Docs.Trim,
+                    "#if"
+                ),
+                Docs.HardLine,
+                "}"
+            );
+
+            PrintedDocShouldBe(doc, $"{{{NewLine}    1{NewLine}#if{NewLine}}}");
+        }
+
+        [Test]
+        public void Trim_Should_Not_Affect_Fits()
+        {
+            var doc = Docs.Group("test    ", Docs.Trim, Docs.Line, "test");
+
+            PrintedDocShouldBe(doc, "test test", 10);
+        }
+
         [Test]
         public void Scratch()
         {
             var doc = "";
             var result = this.Print(doc);
             result.Should().Be("");
+        }
+
+        private void PrintedDocShouldBe(
+            Doc doc,
+            string expected,
+            int width = 80
+        ) {
+            var result = this.Print(doc, width);
+
+            result.Should().Be(expected);
         }
 
         private string Print(Doc doc, int width = 80)

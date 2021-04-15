@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.DocTypes;
 
 namespace CSharpier
 {
@@ -19,6 +20,8 @@ namespace CSharpier
         public static LiteralLine LiteralLine => new();
 
         public static LineDoc Line => new() { Type = LineDoc.LineType.Normal };
+
+        public static Trim Trim => Trim.Instance;
 
         public static LineDoc SoftLine =>
             new() { Type = LineDoc.LineType.Soft };
