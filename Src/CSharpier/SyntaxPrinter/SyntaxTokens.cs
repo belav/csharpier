@@ -82,39 +82,32 @@ namespace CSharpier.SyntaxPrinter
             for (var x = 0; x < leadingTrivia.Count; x++)
             {
                 var trivia = leadingTrivia[x];
+                var kind = trivia.Kind();
 
-                if (
-                    printNewLines && trivia.Kind() == SyntaxKind.EndOfLineTrivia
-                ) {
+                if (printNewLines && kind == SyntaxKind.EndOfLineTrivia)
+                {
                     docs.Add(Docs.HardLine);
                 }
                 if (
-                    trivia.Kind() != SyntaxKind.EndOfLineTrivia
-                    && trivia.Kind() != SyntaxKind.WhitespaceTrivia
+                    kind != SyntaxKind.EndOfLineTrivia
+                    && kind != SyntaxKind.WhitespaceTrivia
                 ) {
                     printNewLines = true;
                 }
-                if (
-                    trivia.Kind() == SyntaxKind.SingleLineCommentTrivia
-                    || trivia.Kind()
-                    == SyntaxKind.SingleLineDocumentationCommentTrivia
-                ) {
+                if (IsSingleLineComment(kind))
+                {
                     docs.Add(
                         Docs.LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
                             CommentType.SingleLine
                         ),
-                        trivia.Kind()
-                            == SyntaxKind.SingleLineDocumentationCommentTrivia
+                        kind == SyntaxKind.SingleLineDocumentationCommentTrivia
                             ? Docs.HardLine
                             : Doc.Null
                     );
                 }
-                else if (
-                    trivia.Kind() == SyntaxKind.MultiLineCommentTrivia
-                    || trivia.Kind()
-                    == SyntaxKind.MultiLineDocumentationCommentTrivia
-                ) {
+                else if (IsMultiLineComment(kind))
+                {
                     docs.Add(
                         Docs.LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
@@ -122,37 +115,23 @@ namespace CSharpier.SyntaxPrinter
                         )
                     );
                 }
-                else if (trivia.Kind() == SyntaxKind.DisabledTextTrivia)
+                else if (kind == SyntaxKind.DisabledTextTrivia)
                 {
                     docs.Add(
                         Docs.LiteralLine,
                         trivia.ToString().TrimEnd('\n', '\r')
                     );
                 }
-                else if (
-                    trivia.Kind() == SyntaxKind.IfDirectiveTrivia
-                    || trivia.Kind() == SyntaxKind.ElseDirectiveTrivia
-                    || trivia.Kind() == SyntaxKind.ElifDirectiveTrivia
-                    || trivia.Kind() == SyntaxKind.EndIfDirectiveTrivia
-                    || trivia.Kind() == SyntaxKind.LineDirectiveTrivia
-                    || trivia.Kind() == SyntaxKind.ErrorDirectiveTrivia
-                    || trivia.Kind() == SyntaxKind.WarningDirectiveTrivia
-                    || trivia.Kind() == SyntaxKind.PragmaWarningDirectiveTrivia
-                    || trivia.Kind() == SyntaxKind.PragmaChecksumDirectiveTrivia
-                    || trivia.Kind() == SyntaxKind.DefineDirectiveTrivia
-                    || trivia.Kind() == SyntaxKind.UndefDirectiveTrivia
-                    || trivia.Kind() == SyntaxKind.NullableDirectiveTrivia
-                ) {
+                else if (IsDirective(kind))
+                {
                     docs.Add(
                         Docs.LiteralLine,
                         trivia.ToString(),
                         Docs.HardLine
                     );
                 }
-                else if (
-                    trivia.Kind() == SyntaxKind.RegionDirectiveTrivia
-                    || trivia.Kind() == SyntaxKind.EndRegionDirectiveTrivia
-                ) {
+                else if (IsRegion(kind))
+                {
                     var triviaText = trivia.ToString();
                     if (
                         x > 0
@@ -173,6 +152,32 @@ namespace CSharpier.SyntaxPrinter
 
             return docs.Count > 0 ? Docs.Concat(docs) : Doc.Null;
         }
+
+        private static bool IsSingleLineComment(SyntaxKind kind) =>
+            kind == SyntaxKind.SingleLineDocumentationCommentTrivia
+            || kind == SyntaxKind.SingleLineCommentTrivia;
+
+        private static bool IsMultiLineComment(SyntaxKind kind) =>
+            kind == SyntaxKind.MultiLineCommentTrivia
+            || kind == SyntaxKind.MultiLineDocumentationCommentTrivia;
+
+        private static bool IsDirective(SyntaxKind kind) =>
+            kind == SyntaxKind.IfDirectiveTrivia
+            || kind == SyntaxKind.ElseDirectiveTrivia
+            || kind == SyntaxKind.ElifDirectiveTrivia
+            || kind == SyntaxKind.EndIfDirectiveTrivia
+            || kind == SyntaxKind.LineDirectiveTrivia
+            || kind == SyntaxKind.ErrorDirectiveTrivia
+            || kind == SyntaxKind.WarningDirectiveTrivia
+            || kind == SyntaxKind.PragmaWarningDirectiveTrivia
+            || kind == SyntaxKind.PragmaChecksumDirectiveTrivia
+            || kind == SyntaxKind.DefineDirectiveTrivia
+            || kind == SyntaxKind.UndefDirectiveTrivia
+            || kind == SyntaxKind.NullableDirectiveTrivia;
+
+        private static bool IsRegion(SyntaxKind kind) =>
+            kind == SyntaxKind.RegionDirectiveTrivia
+            || kind == SyntaxKind.EndRegionDirectiveTrivia;
 
         private static Doc PrintTrailingTrivia(SyntaxToken node)
         {
