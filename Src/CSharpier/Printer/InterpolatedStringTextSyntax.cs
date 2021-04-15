@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,7 +9,7 @@ namespace CSharpier
         private Doc PrintInterpolatedStringTextSyntax(
             InterpolatedStringTextSyntax node
         ) {
-            return this.PrintSyntaxToken(node.TextToken);
+            return SyntaxTokens.Print(node.TextToken);
         }
     }
 }

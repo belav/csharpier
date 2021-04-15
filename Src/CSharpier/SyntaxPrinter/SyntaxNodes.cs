@@ -1,4 +1,5 @@
 using System;
+using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis;
 
 namespace CSharpier.SyntaxPrinter
@@ -15,7 +16,7 @@ namespace CSharpier.SyntaxPrinter
 
         public static Doc Print(SyntaxNode node)
         {
-            return printer.Print(node);
+            return printer!.Print(node);
         }
     }
 }

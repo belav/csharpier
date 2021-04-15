@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -14,11 +16,11 @@ namespace CSharpier
                 docs.Add(this.PrintExtraNewLines(node));
             }
 
-            docs.Add(this.PrintSyntaxToken(node.OpenBracketToken));
+            docs.Add(SyntaxTokens.Print(node.OpenBracketToken));
             if (node.Target != null)
             {
                 docs.Add(
-                    this.PrintSyntaxToken(node.Target.Identifier),
+                    SyntaxTokens.Print(node.Target.Identifier),
                     this.PrintSyntaxToken(
                         node.Target.ColonToken,
                         afterTokenIfNoTrailing: " "
@@ -80,7 +82,7 @@ namespace CSharpier
 
             docs.Add(
                 node.Attributes.Count > 1 ? Docs.SoftLine : Docs.Null,
-                this.PrintSyntaxToken(node.CloseBracketToken)
+                SyntaxTokens.Print(node.CloseBracketToken)
             );
 
             return Docs.Group(docs);

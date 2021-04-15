@@ -1,4 +1,5 @@
 using System.Linq;
+using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -52,7 +53,7 @@ namespace CSharpier
                                     ),
                                 " "
                             ),
-                            Docs.SpaceIfNoPreviousComment,
+                            " ",
                             this.PrintSyntaxToken(
                                 node.PropertyPatternClause.CloseBraceToken,
                                 " "

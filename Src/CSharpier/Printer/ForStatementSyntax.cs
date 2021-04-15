@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -46,7 +47,7 @@ namespace CSharpier
                 innerGroup.Add(Docs.SoftLine);
             }
 
-            innerGroup.Add(this.PrintSyntaxToken(node.SecondSemicolonToken));
+            innerGroup.Add(SyntaxTokens.Print(node.SecondSemicolonToken));
             if (node.Incrementors.Any())
             {
                 innerGroup.Add(Docs.Line);
@@ -71,7 +72,7 @@ namespace CSharpier
                     Docs.SoftLine
                 )
             );
-            docs.Add(this.PrintSyntaxToken(node.CloseParenToken));
+            docs.Add(SyntaxTokens.Print(node.CloseParenToken));
             if (node.Statement is BlockSyntax blockSyntax)
             {
                 docs.Add(

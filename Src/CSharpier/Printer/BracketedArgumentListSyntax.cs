@@ -1,4 +1,6 @@
 using System.Linq;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +11,7 @@ namespace CSharpier
             BracketedArgumentListSyntax node
         ) {
             return Docs.Group(
-                this.PrintSyntaxToken(node.OpenBracketToken),
+                SyntaxTokens.Print(node.OpenBracketToken),
                 Docs.Indent(
                     Docs.SoftLine,
                     this.PrintSeparatedSyntaxList(
@@ -19,7 +21,7 @@ namespace CSharpier
                     )
                 ),
                 Docs.SoftLine,
-                this.PrintSyntaxToken(node.CloseBracketToken)
+                SyntaxTokens.Print(node.CloseBracketToken)
             );
         }
     }

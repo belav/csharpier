@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -19,7 +21,7 @@ namespace CSharpier
                 ),
                 this.PrintModifiers(node.Modifiers),
                 this.PrintVariableDeclarationSyntax(node.Declaration),
-                this.PrintSyntaxToken(node.SemicolonToken)
+                SyntaxTokens.Print(node.SemicolonToken)
             );
         }
     }

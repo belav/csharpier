@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,8 +10,8 @@ namespace CSharpier
             ImplicitStackAllocArrayCreationExpressionSyntax node
         ) {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.StackAllocKeyword),
-                this.PrintSyntaxToken(node.OpenBracketToken),
+                SyntaxTokens.Print(node.StackAllocKeyword),
+                SyntaxTokens.Print(node.OpenBracketToken),
                 this.PrintSyntaxToken(
                     node.CloseBracketToken,
                     afterTokenIfNoTrailing: " "

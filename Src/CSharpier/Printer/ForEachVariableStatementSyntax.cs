@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -17,7 +19,7 @@ namespace CSharpier
                     node.ForEachKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSyntaxToken(node.OpenParenToken),
+                SyntaxTokens.Print(node.OpenParenToken),
                 this.Print(node.Variable),
                 " ",
                 this.PrintSyntaxToken(
@@ -25,7 +27,7 @@ namespace CSharpier
                     afterTokenIfNoTrailing: " "
                 ),
                 this.Print(node.Expression),
-                this.PrintSyntaxToken(node.CloseParenToken),
+                SyntaxTokens.Print(node.CloseParenToken),
                 this.Print(node.Statement)
             );
         }

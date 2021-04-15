@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using CSharpier.SyntaxPrinter;
@@ -165,7 +166,7 @@ namespace CSharpier
             }
 
             docs.Add(this.Print(node.Declaration));
-            docs.Add(this.PrintSyntaxToken(node.SemicolonToken));
+            docs.Add(SyntaxTokens.Print(node.SemicolonToken));
             return Docs.Concat(docs);
         }
     }

@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -10,7 +12,7 @@ namespace CSharpier
         ) {
             return Docs.GroupWithId(
                 groupId ?? string.Empty,
-                this.PrintSyntaxToken(node.OpenParenToken),
+                SyntaxTokens.Print(node.OpenParenToken),
                 node.Parameters.Count > 0
                     ? Docs.Concat(
                             Docs.Indent(
@@ -24,7 +26,7 @@ namespace CSharpier
                             Docs.SoftLine
                         )
                     : Doc.Null,
-                this.PrintSyntaxToken(node.CloseParenToken)
+                SyntaxTokens.Print(node.CloseParenToken)
             );
         }
     }

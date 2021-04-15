@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,8 +10,8 @@ namespace CSharpier
             ClassOrStructConstraintSyntax node
         ) {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.ClassOrStructKeyword),
-                this.PrintSyntaxToken(node.QuestionToken)
+                SyntaxTokens.Print(node.ClassOrStructKeyword),
+                SyntaxTokens.Print(node.QuestionToken)
             );
         }
     }

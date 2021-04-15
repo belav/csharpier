@@ -1,3 +1,4 @@
+using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -19,7 +20,7 @@ namespace CSharpier
 
             return Docs.Concat(
                 this.Print(node.Type),
-                Docs.SpaceIfNoPreviousComment,
+                " ",
                 node.Variables.Count > 1 ? Docs.Indent(docs) : docs
             );
         }

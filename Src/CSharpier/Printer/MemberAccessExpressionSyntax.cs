@@ -1,4 +1,6 @@
 using System;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -10,7 +12,7 @@ namespace CSharpier
         ) {
             return Docs.Concat(
                 this.Print(node.Expression),
-                this.PrintSyntaxToken(node.OperatorToken),
+                SyntaxTokens.Print(node.OperatorToken),
                 this.Print(node.Name)
             );
         }

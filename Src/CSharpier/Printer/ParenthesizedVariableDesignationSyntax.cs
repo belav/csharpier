@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,7 +10,7 @@ namespace CSharpier
             ParenthesizedVariableDesignationSyntax node
         ) {
             return Docs.Group(
-                this.PrintSyntaxToken(node.OpenParenToken),
+                SyntaxTokens.Print(node.OpenParenToken),
                 Docs.Indent(
                     Docs.SoftLine,
                     this.PrintSeparatedSyntaxList(
@@ -18,7 +20,7 @@ namespace CSharpier
                     ),
                     Docs.SoftLine
                 ),
-                this.PrintSyntaxToken(node.CloseParenToken)
+                SyntaxTokens.Print(node.CloseParenToken)
             );
         }
     }

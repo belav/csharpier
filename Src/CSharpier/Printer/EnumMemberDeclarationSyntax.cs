@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -12,7 +14,7 @@ namespace CSharpier
             {
                 this.PrintAttributeLists(node, node.AttributeLists),
                 this.PrintModifiers(node.Modifiers),
-                this.PrintSyntaxToken(node.Identifier)
+                SyntaxTokens.Print(node.Identifier)
             };
             if (node.EqualsValue != null)
             {

@@ -1,4 +1,5 @@
 using System.Linq;
+using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -17,10 +18,9 @@ namespace CSharpier
                     orderingNode =>
                         Docs.Concat(
                             this.Print(orderingNode.Expression),
+                            " ",
                             this.PrintSyntaxToken(
-                                orderingNode.AscendingOrDescendingKeyword,
-                                null,
-                                " "
+                                orderingNode.AscendingOrDescendingKeyword
                             )
                         ),
                     Doc.Null

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -19,14 +21,14 @@ namespace CSharpier
                 )
             );
             docs.Add(this.Print(node.ReturnType));
-            docs.Add(" ", this.PrintSyntaxToken(node.Identifier));
+            docs.Add(" ", SyntaxTokens.Print(node.Identifier));
             if (node.TypeParameterList != null)
             {
                 docs.Add(this.Print(node.TypeParameterList));
             }
             docs.Add(this.Print(node.ParameterList));
             docs.Add(this.PrintConstraintClauses(node, node.ConstraintClauses));
-            docs.Add(this.PrintSyntaxToken(node.SemicolonToken));
+            docs.Add(SyntaxTokens.Print(node.SemicolonToken));
             return Docs.Concat(docs);
         }
     }

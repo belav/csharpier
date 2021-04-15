@@ -1,4 +1,6 @@
 using System.Linq;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -12,7 +14,7 @@ namespace CSharpier
                 return Docs.Null;
             }
             return Docs.Group(
-                this.PrintSyntaxToken(node.LessThanToken),
+                SyntaxTokens.Print(node.LessThanToken),
                 Docs.Indent(
                     Docs.SoftLine,
                     this.PrintSeparatedSyntaxList(
@@ -22,7 +24,7 @@ namespace CSharpier
                     )
                 ),
                 Docs.SoftLine,
-                this.PrintSyntaxToken(node.GreaterThanToken)
+                SyntaxTokens.Print(node.GreaterThanToken)
             );
         }
     }

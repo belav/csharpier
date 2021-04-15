@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,8 +9,8 @@ namespace CSharpier
         private Doc PrintContinueStatementSyntax(ContinueStatementSyntax node)
         {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.ContinueKeyword),
-                this.PrintSyntaxToken(node.SemicolonToken)
+                SyntaxTokens.Print(node.ContinueKeyword),
+                SyntaxTokens.Print(node.SemicolonToken)
             );
         }
     }

@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using CSharpier.DocTypes;
+;
 
 namespace CSharpier
 {
@@ -126,16 +129,16 @@ namespace CSharpier
 
         private static bool Fits(
             PrintCommand nextCommand,
-            IEnumerable<PrintCommand> remainingCommands,
-            int width,
+            Stack<PrintCommand> remainingCommands,
+            int remainingWidth,
             Options options,
             bool mustBeFlat = false
         ) {
-            var remainingCommandsAsArray = remainingCommands.Reverse()
-                .ToArray();
-            var remainingIndex = remainingCommandsAsArray.Length;
             var returnFalseIfMoreStringsFound = false;
-            var currentStack = new Stack<PrintCommand>();
+            var currentStack = new Stack<PrintCommand>(
+                // reverse the existing stack because otherwise we push them on in the order they pop off
+                remainingCommands.Reverse()
+            );
             currentStack.Push(nextCommand);
 
             void Push(Doc doc, PrintMode printMode, Indent indent)
@@ -143,24 +146,12 @@ namespace CSharpier
                 currentStack.Push(new PrintCommand(indent, printMode, doc));
             }
 
-            // `out` is only used for width counting because `trim` requires to look
-            // backwards for space characters.
             var output = new StringBuilder();
-            while (width >= 0)
+            while (remainingWidth >= 0)
             {
                 if (currentStack.Count == 0)
                 {
-                    if (remainingIndex == 0)
-                    {
-                        return true;
-                    }
-
-                    currentStack.Push(
-                        remainingCommandsAsArray[remainingIndex - 1]
-                    );
-
-                    remainingIndex--;
-                    continue;
+                    return true;
                 }
 
                 var (
@@ -180,7 +171,7 @@ namespace CSharpier
                         return false;
                     }
                     output.Append(stringDoc.Value);
-                    width -= GetStringWidth(stringDoc.Value);
+                    remainingWidth -= GetStringWidth(stringDoc.Value);
                 }
                 else if (currentDoc != Doc.Null)
                 {
@@ -212,6 +203,9 @@ namespace CSharpier
                                 currentMode,
                                 MakeIndent(currentIndent, options)
                             );
+                            break;
+                        case Trim:
+                            remainingWidth += TrimOutput(output);
                             break;
                         case Group group:
                             if (mustBeFlat && group.Break)
@@ -255,7 +249,7 @@ namespace CSharpier
                                     {
                                         output.Append(" ");
 
-                                        width -= 1;
+                                        remainingWidth -= 1;
                                     }
                                     break;
                                 case PrintMode.MODE_BREAK:
@@ -264,10 +258,6 @@ namespace CSharpier
                             break;
                         case ForceFlat flat:
                             Push(flat.Contents, currentMode, currentIndent);
-                            break;
-                        case SpaceIfNoPreviousComment:
-                            // TODO should this always be considered size one?
-                            width -= 1;
                             break;
                         default:
                             throw new Exception(
@@ -286,9 +276,9 @@ namespace CSharpier
 
             DocPrinterUtils.PropagateBreaks(document);
 
-            var width = options.Width;
+            var allowedWidth = options.Width;
             var newLine = Environment.NewLine; // TODO 1 options
-            var position = 0;
+            var currentWidth = 0;
 
             var currentStack = new Stack<PrintCommand>();
             currentStack.Push(
@@ -299,8 +289,6 @@ namespace CSharpier
             var shouldRemeasure = false;
             var newLineNextStringValue = false;
             var skipNextNewLine = false;
-
-            var lineSuffix = new List<PrintCommand>();
 
             void Push(Doc doc, PrintMode printMode, Indent indent)
             {
@@ -320,16 +308,26 @@ namespace CSharpier
                         {
                             break;
                         }
+
+                        // I don't understand exactly why, but this ensures we don't print extra spaces after a trailing comment
+                        if (
+                            newLineNextStringValue
+                            && skipNextNewLine
+                            && stringDoc.Value == " "
+                        ) {
+                            break;
+                        }
+
                         if (newLineNextStringValue)
                         {
                             // TODO 1 new line stuff
-                            Trim(output);
+                            TrimOutput(output);
                             output.Append(newLine + command.Indent.Value);
-                            position = command.Indent.Length;
+                            currentWidth = command.Indent.Length;
                             newLineNextStringValue = false;
                         }
                         output.Append(stringDoc.Value);
-                        position += GetStringWidth(stringDoc.Value);
+                        currentWidth += GetStringWidth(stringDoc.Value);
                         break;
                     case Concat concat:
                         for (var x = concat.Contents.Count - 1; x >= 0; x--)
@@ -347,6 +345,9 @@ namespace CSharpier
                             command.Mode,
                             MakeIndent(command.Indent, options)
                         );
+                        break;
+                    case Trim:
+                        currentWidth -= TrimOutput(output);
                         break;
                     case Group group:
                         switch (command.Mode)
@@ -374,11 +375,14 @@ namespace CSharpier
                                     group.Contents
                                 );
 
-                                var rem = width - position;
-
                                 if (
                                     !group.Break
-                                    && Fits(next, currentStack, rem, options)
+                                    && Fits(
+                                        next,
+                                        currentStack,
+                                        allowedWidth - currentWidth,
+                                        options
+                                    )
                                 ) {
                                     currentStack.Push(next);
                                 }
@@ -422,7 +426,7 @@ namespace CSharpier
                                 else if (line.Type == LineDoc.LineType.Normal)
                                 {
                                     output.Append(' ');
-                                    position += 1;
+                                    currentWidth += 1;
                                     break;
                                 }
 
@@ -432,40 +436,12 @@ namespace CSharpier
                                 shouldRemeasure = true;
                                 goto case PrintMode.MODE_BREAK;
                             case PrintMode.MODE_BREAK:
-                                if (lineSuffix.Any())
-                                {
-                                    currentStack.Push(command);
-                                    lineSuffix.Reverse();
-                                    foreach (var otherCommand in lineSuffix)
-                                    {
-                                        currentStack.Push(otherCommand);
-                                    }
-
-                                    lineSuffix.Clear();
-                                    break;
-                                }
-
                                 if (line.IsLiteral)
                                 {
                                     if (output.Length > 0)
                                     {
-                                        Trim(output);
-                                        if (newLine.Length == 2)
-                                        {
-                                            if (output[^2] == '\r')
-                                            {
-                                                output.Length -= 2;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (output[^1] == '\n')
-                                            {
-                                                output.Length -= 1;
-                                            }
-                                        }
                                         output.Append(newLine);
-                                        position = 0;
+                                        currentWidth = 0;
                                     }
                                 }
                                 else
@@ -475,11 +451,11 @@ namespace CSharpier
                                         || !skipNextNewLine)
                                         && output.Length > 0
                                     ) {
-                                        Trim(output);
+                                        TrimOutput(output);
                                         output.Append(
                                             newLine + command.Indent.Value
                                         );
-                                        position = command.Indent.Length;
+                                        currentWidth = command.Indent.Length;
                                     }
 
                                     if (skipNextNewLine)
@@ -493,7 +469,7 @@ namespace CSharpier
                     case BreakParent:
                         break;
                     case LeadingComment leadingComment:
-                        Trim(output);
+                        TrimOutput(output);
                         if (
                             (output.Length != 0 && output[^1] != '\n')
                             || newLineNextStringValue
@@ -504,22 +480,16 @@ namespace CSharpier
                         output.Append(
                             command.Indent.Value + leadingComment.Comment
                         );
-                        position = command.Indent.Length;
+                        currentWidth = command.Indent.Length;
                         newLineNextStringValue = false;
                         skipNextNewLine = false;
                         break;
                     case TrailingComment trailingComment:
-                        Trim(output);
+                        TrimOutput(output);
                         output.Append(" " + trailingComment.Comment);
-                        position = command.Indent.Length;
+                        currentWidth = command.Indent.Length;
                         newLineNextStringValue = true;
                         skipNextNewLine = true;
-                        break;
-                    case SpaceIfNoPreviousComment:
-                        if (!newLineNextStringValue)
-                        {
-                            Push(" ", command.Mode, command.Indent);
-                        }
                         break;
                     case ForceFlat forceFlat:
                         Push(
@@ -547,23 +517,26 @@ namespace CSharpier
             return value.Length;
         }
 
-        private static void Trim(StringBuilder stringBuilder)
+        private static int TrimOutput(StringBuilder stringBuilder)
         {
             if (stringBuilder.Length == 0)
             {
-                return;
+                return 0;
             }
 
-            var i = stringBuilder.Length - 1;
-            for (; i >= 0; i--)
+            var trimmed = 0;
+            for (; trimmed <= stringBuilder.Length; trimmed++)
             {
-                if (stringBuilder[i] != ' ' && stringBuilder[i] != '\t')
-                {
+                if (
+                    stringBuilder[^(trimmed + 1)] != ' '
+                    && stringBuilder[^(trimmed + 1)] != '\t'
+                ) {
                     break;
                 }
             }
 
-            stringBuilder.Length = i + 1;
+            stringBuilder.Length = stringBuilder.Length - trimmed;
+            return trimmed;
         }
 
         // // TODO 2 does the above method do the same thing as this method?

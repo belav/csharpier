@@ -1,4 +1,6 @@
 using System.Linq;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -16,7 +18,7 @@ namespace CSharpier
                             == SyntaxKind.ComplexElementInitializerExpression
                             ? Docs.SoftLine
                             : Docs.Line,
-                this.PrintSyntaxToken(node.OpenBraceToken),
+                SyntaxTokens.Print(node.OpenBraceToken),
                 Docs.Indent(
                     Docs.Line,
                     this.PrintSeparatedSyntaxList(
@@ -26,7 +28,7 @@ namespace CSharpier
                     )
                 ),
                 Docs.Line,
-                this.PrintSyntaxToken(node.CloseBraceToken)
+                SyntaxTokens.Print(node.CloseBraceToken)
             );
             return node.Parent is not ObjectCreationExpressionSyntax
                 ? Docs.Group(result)

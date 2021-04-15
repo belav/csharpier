@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -15,9 +17,9 @@ namespace CSharpier
                     node.YieldKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSyntaxToken(node.ReturnOrBreakKeyword),
+                SyntaxTokens.Print(node.ReturnOrBreakKeyword),
                 expression,
-                this.PrintSyntaxToken(node.SemicolonToken)
+                SyntaxTokens.Print(node.SemicolonToken)
             );
         }
     }

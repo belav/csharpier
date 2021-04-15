@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -12,8 +13,8 @@ namespace CSharpier
             {
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintSyntaxToken(node.Identifier),
-                this.PrintSyntaxToken(node.ColonToken)
+                SyntaxTokens.Print(node.Identifier),
+                SyntaxTokens.Print(node.ColonToken)
             };
             if (node.Statement is BlockSyntax blockSyntax)
             {

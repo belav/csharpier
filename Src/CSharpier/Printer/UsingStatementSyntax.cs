@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -21,7 +23,7 @@ namespace CSharpier
                     node.UsingKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSyntaxToken(node.OpenParenToken),
+                SyntaxTokens.Print(node.OpenParenToken),
                 Docs.GroupWithId(
                     groupId,
                     node.Declaration != null
@@ -32,7 +34,7 @@ namespace CSharpier
                         : Doc.Null,
                     Docs.SoftLine
                 ),
-                this.PrintSyntaxToken(node.CloseParenToken)
+                SyntaxTokens.Print(node.CloseParenToken)
             };
             if (node.Statement is UsingStatementSyntax)
             {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -47,11 +48,8 @@ namespace CSharpier
             }
 
             docs.Add(
-                this.PrintSyntaxToken(
-                    node.CloseBraceToken,
-                    null,
-                    node.Statements.Count == 0 ? " " : Docs.Null
-                )
+                node.Statements.Count == 0 ? " " : Docs.Null,
+                SyntaxTokens.Print(node.CloseBraceToken)
             );
             return Docs.Group(docs);
         }

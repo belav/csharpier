@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.DocTypes;
 
 namespace CSharpier
 {
@@ -9,16 +10,14 @@ namespace CSharpier
 
         public static Doc BreakParent => new BreakParent();
 
-        // TODO 0 maybe all spaces should be this instead? but if we ditch leading/trailing comments, this won't work anymore
-        public static SpaceIfNoPreviousComment SpaceIfNoPreviousComment =>
-            new();
-
         public static HardLine HardLine => new();
 
         // TODO all of the Line types can probably turn into proper classes, and be the same instance by type
         public static LiteralLine LiteralLine => new();
 
         public static LineDoc Line => new() { Type = LineDoc.LineType.Normal };
+
+        public static Trim Trim => Trim.Instance;
 
         public static LineDoc SoftLine =>
             new() { Type = LineDoc.LineType.Soft };
@@ -100,7 +99,7 @@ namespace CSharpier
             Doc flatContents,
             string? groupId = null
         ) {
-            return new IfBreak()
+            return new()
             {
                 FlatContents = flatContents,
                 BreakContents = breakContents,

@@ -1,4 +1,6 @@
 using System.Linq;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,7 +10,7 @@ namespace CSharpier
         private Doc PrintTypeArgumentListSyntax(TypeArgumentListSyntax node)
         {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.LessThanToken),
+                SyntaxTokens.Print(node.LessThanToken),
                 Docs.Indent(
                     this.PrintSeparatedSyntaxList(
                         node.Arguments,
@@ -16,7 +18,7 @@ namespace CSharpier
                         Docs.Line
                     )
                 ),
-                this.PrintSyntaxToken(node.GreaterThanToken)
+                SyntaxTokens.Print(node.GreaterThanToken)
             );
         }
     }

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -12,7 +14,7 @@ namespace CSharpier
             {
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintSyntaxToken(node.TryKeyword),
+                SyntaxTokens.Print(node.TryKeyword),
                 this.PrintBlockSyntax(node.Block),
                 Docs.HardLine,
                 Join(

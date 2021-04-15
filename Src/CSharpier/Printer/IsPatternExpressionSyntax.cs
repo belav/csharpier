@@ -1,3 +1,4 @@
+using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +10,7 @@ namespace CSharpier
         ) {
             return Docs.Concat(
                 this.Print(node.Expression),
-                Docs.SpaceIfNoPreviousComment,
+                " ",
                 this.PrintSyntaxToken(
                     node.IsKeyword,
                     afterTokenIfNoTrailing: " "

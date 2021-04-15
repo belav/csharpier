@@ -34,17 +34,14 @@ namespace CSharpier.Playground.Controllers
     {
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly ILogger logger;
-        private readonly PlaygroundOptions options;
 
         // ReSharper disable once SuggestBaseTypeForParameter
         public FormatController(
             IWebHostEnvironment webHostEnvironment,
-            ILogger<FormatController> logger,
-            IOptions<PlaygroundOptions> options
+            ILogger<FormatController> logger
         ) {
             this.webHostEnvironment = webHostEnvironment;
             this.logger = logger;
-            this.options = options.Value;
         }
 
         [HttpPost]

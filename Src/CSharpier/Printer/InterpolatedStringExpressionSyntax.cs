@@ -1,4 +1,6 @@
 using System.Linq;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,9 +11,9 @@ namespace CSharpier
             InterpolatedStringExpressionSyntax node
         ) {
             return Docs.ForceFlat(
-                this.PrintSyntaxToken(node.StringStartToken),
+                SyntaxTokens.Print(node.StringStartToken),
                 Docs.Concat(node.Contents.Select(this.Print).ToArray()),
-                this.PrintSyntaxToken(node.StringEndToken)
+                SyntaxTokens.Print(node.StringEndToken)
             );
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -34,13 +35,11 @@ namespace CSharpier
         // TODO get rid of this after we figure out what SyntaxTokens is really gonna look like
         private Doc PrintSyntaxToken(
             SyntaxToken syntaxToken,
-            Doc? afterTokenIfNoTrailing = null,
-            Doc? beforeTokenIfNoLeading = null
+            Doc? afterTokenIfNoTrailing = null
         ) {
             return SyntaxTokens.PrintSyntaxToken(
                 syntaxToken,
-                afterTokenIfNoTrailing,
-                beforeTokenIfNoLeading
+                afterTokenIfNoTrailing
             );
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using CSharpier.DocTypes;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -13,7 +14,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Concat("1", "2", "3");
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be("123");
         }
@@ -23,7 +24,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Concat("1", Docs.HardLine, "3");
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be($"1{NewLine}3");
         }
@@ -33,7 +34,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Concat("1", Docs.Line, "3");
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be($"1{NewLine}3");
         }
@@ -43,7 +44,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Group(Docs.Concat("1", Docs.Line, "3"));
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be("1 3");
         }
@@ -53,7 +54,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Group(Docs.Concat("1", Docs.HardLine, "3"));
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be($"1{NewLine}3");
         }
@@ -65,7 +66,7 @@ namespace CSharpier.Tests
                 Docs.Concat("1", Docs.Line, "2", Docs.HardLine, "3")
             );
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be($"1{NewLine}2{NewLine}3");
         }
@@ -84,7 +85,7 @@ namespace CSharpier.Tests
                 )
             );
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be($"1{NewLine}2{NewLine}3");
         }
@@ -109,7 +110,7 @@ namespace CSharpier.Tests
                 )
             );
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be($"0{NewLine}    1{NewLine}    2{NewLine}    3");
         }
@@ -122,7 +123,7 @@ namespace CSharpier.Tests
                 Docs.Concat(longText, Docs.Line, longText, Docs.Line, longText)
             );
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should()
                 .Be($"{longText}{NewLine}{longText}{NewLine}{longText}");
@@ -136,7 +137,7 @@ namespace CSharpier.Tests
                 Docs.Indent(Docs.Concat(Docs.HardLine, "1", Docs.HardLine, "2"))
             );
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be($"0{NewLine}    1{NewLine}    2");
         }
@@ -153,7 +154,7 @@ namespace CSharpier.Tests
                 )
             );
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be($"0{NewLine}    1{NewLine}{NewLine}    2");
         }
@@ -163,7 +164,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Concat(Docs.HardLine, "1");
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be($"1");
         }
@@ -173,7 +174,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Concat(Docs.LiteralLine, "1");
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be($"1");
         }
@@ -183,7 +184,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.ForceFlat("1", Docs.HardLine, "2");
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be("1 2");
         }
@@ -197,34 +198,32 @@ namespace CSharpier.Tests
                 "}"
             );
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be($"{{{NewLine}    indent{NewLine}}}");
         }
 
         [Test]
-        public void HardLine_LiteralLine_Skips_HardLine_And_Trims()
+        public void LiteralLine_Does_Not_Trim_Output_Or_Indent_Next_Line()
         {
             var doc = Docs.Concat(
-                "{",
-                Docs.Indent(Docs.HardLine, Docs.LiteralLine, "noindent"),
-                Docs.HardLine,
-                "}"
+                "(",
+                Docs.Indent(
+                    Docs.HardLine,
+                    "1",
+                    " ",
+                    Docs.LiteralLine,
+                    "2",
+                    Docs.HardLine,
+                    "3"
+                ),
+                ")"
             );
 
-            var result = this.Print(doc);
-
-            result.Should().Be($"{{{NewLine}noindent{NewLine}}}");
-        }
-
-        [Test]
-        public void HardLine_LiteralLine_Skips_HardLine()
-        {
-            var doc = Docs.Concat("1", Docs.HardLine, Docs.LiteralLine, "2");
-
-            var result = this.Print(doc);
-
-            result.Should().Be($"1{NewLine}2");
+            PrintedDocShouldBe(
+                doc,
+                $"({NewLine}    1 {NewLine}2{NewLine}    3)"
+            );
         }
 
         [Test]
@@ -236,7 +235,7 @@ namespace CSharpier.Tests
                 "jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj"
             );
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should()
                 .Be(
@@ -256,7 +255,7 @@ namespace CSharpier.Tests
                     "2"
                 )
             );
-            var result = this.Print(doc);
+            var result = Print(doc);
             result.Should()
                 .Be(
                     $"1 2{NewLine}1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111{NewLine}2"
@@ -296,7 +295,7 @@ namespace CSharpier.Tests
                 )
             );
 
-            var result = this.Print(doc);
+            var result = Print(doc);
             result.Should()
                 .Be(
                     $"1111111111 1111111111 1111111111 1111111111 1111111111{NewLine}1111111111 1111111111 1111111111 1111111111 1111111111"
@@ -308,7 +307,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Group(Docs.IfBreak("break", "flat"));
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be("flat");
         }
@@ -318,7 +317,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Group(Docs.HardLine, Docs.IfBreak("break", "flat"));
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be("break");
         }
@@ -331,7 +330,7 @@ namespace CSharpier.Tests
                 Docs.IfBreak("break", "flat")
             );
 
-            var result = this.Print(doc, 10);
+            var result = Print(doc, 10);
 
             result.Should().Be($"another{NewLine}break");
         }
@@ -343,7 +342,7 @@ namespace CSharpier.Tests
                 Docs.IfBreak("break", "flat", "1")
             );
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be("1flat");
         }
@@ -357,20 +356,101 @@ namespace CSharpier.Tests
                 Docs.IfBreak("break", "flat", "hl")
             );
 
-            var result = this.Print(doc);
+            var result = Print(doc);
 
             result.Should().Be($"1{NewLine}break");
+        }
+
+        [TestCase(" ")]
+        [TestCase("   ")]
+        public void Trim_Should_Trim_Current_Line(string indent)
+        {
+            var doc = Docs.Concat($"1{indent}", Docs.Trim);
+
+            PrintedDocShouldBe(doc, "1");
+        }
+
+        [TestCase("1")]
+        [TestCase("")]
+        public void Trim_Should_Not_Trim_NonWhitespace(string value)
+        {
+            var doc = Docs.Concat(value, Docs.Trim);
+
+            PrintedDocShouldBe(doc, value);
+        }
+
+        [Test]
+        public void Trim_Should_Trim_Indentation()
+        {
+            var doc = Docs.Concat(
+                "{",
+                Docs.Indent(
+                    Docs.HardLine,
+                    "1",
+                    Docs.HardLine,
+                    Docs.Trim,
+                    "#if"
+                ),
+                Docs.HardLine,
+                "}"
+            );
+
+            PrintedDocShouldBe(doc, $"{{{NewLine}    1{NewLine}#if{NewLine}}}");
+        }
+
+        [Test]
+        public void Trim_Should_Not_Affect_Fits()
+        {
+            var doc = Docs.Group("test    ", Docs.Trim, Docs.Line, "test");
+
+            PrintedDocShouldBe(doc, "test test", 10);
+        }
+
+        [Test]
+        public void TrailingComment_Does_Not_Get_Extra_Space()
+        {
+            var doc = Docs.Concat(
+                "x",
+                Docs.TrailingComment("// comment", CommentType.SingleLine),
+                " ",
+                "y"
+            );
+
+            PrintedDocShouldBe(doc, $"x // comment{NewLine}y");
+        }
+
+        [Test]
+        public void TrailingComment_Does_Not_Get_Extra_Space_From_Line()
+        {
+            var doc = Docs.Group(
+                "x",
+                Docs.TrailingComment("// comment", CommentType.SingleLine),
+                Docs.Line,
+                "y"
+            );
+
+            PrintedDocShouldBe(doc, $"x // comment{NewLine}y");
         }
 
         [Test]
         public void Scratch()
         {
             var doc = "";
-            var result = this.Print(doc);
+            var result = Print(doc);
             result.Should().Be("");
         }
 
-        private string Print(Doc doc, int width = 80)
+        private static void PrintedDocShouldBe(
+            Doc doc,
+            string expected,
+            int width = 80
+        ) {
+            var result = Print(doc, width);
+
+            result.Should().Be(expected);
+        }
+
+        private static string Print(Doc doc, int width = 80)
         {
             return DocPrinter.Print(doc, new Options { Width = width })
                 .TrimEnd('\r', '\n');

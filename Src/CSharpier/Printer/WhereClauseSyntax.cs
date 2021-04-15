@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,7 +9,7 @@ namespace CSharpier
         private Doc PrintWhereClauseSyntax(WhereClauseSyntax node)
         {
             return Docs.Group(
-                this.PrintSyntaxToken(node.WhereKeyword),
+                SyntaxTokens.Print(node.WhereKeyword),
                 Docs.Indent(Docs.Line, this.Print(node.Condition))
             );
         }

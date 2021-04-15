@@ -1,4 +1,6 @@
 using System.Linq;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +11,7 @@ namespace CSharpier
             FunctionPointerTypeSyntax node
         ) {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.DelegateKeyword),
+                SyntaxTokens.Print(node.DelegateKeyword),
                 this.PrintSyntaxToken(
                     node.AsteriskToken,
                     afterTokenIfNoTrailing: " "
@@ -17,7 +19,7 @@ namespace CSharpier
                 node.CallingConvention != null
                     ? this.PrintCallingConvention(node.CallingConvention)
                     : Docs.Null,
-                this.PrintSyntaxToken(node.ParameterList.LessThanToken),
+                SyntaxTokens.Print(node.ParameterList.LessThanToken),
                 Docs.Indent(
                     Docs.Group(
                         Docs.SoftLine,
@@ -36,7 +38,7 @@ namespace CSharpier
                         )
                     )
                 ),
-                this.PrintSyntaxToken(node.ParameterList.GreaterThanToken)
+                SyntaxTokens.Print(node.ParameterList.GreaterThanToken)
             );
         }
 
@@ -44,7 +46,7 @@ namespace CSharpier
             FunctionPointerCallingConventionSyntax node
         ) {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.ManagedOrUnmanagedKeyword),
+                SyntaxTokens.Print(node.ManagedOrUnmanagedKeyword),
                 node.UnmanagedCallingConventionList != null
                     ? Docs.Concat(
                             this.PrintSyntaxToken(
@@ -52,7 +54,7 @@ namespace CSharpier
                             ),
                             this.PrintSeparatedSyntaxList(
                                 node.UnmanagedCallingConventionList.CallingConventions,
-                                o => this.PrintSyntaxToken(o.Name),
+                                o => SyntaxTokens.Print(o.Name),
                                 " "
                             ),
                             this.PrintSyntaxToken(

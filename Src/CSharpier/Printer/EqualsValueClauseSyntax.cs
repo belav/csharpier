@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -25,11 +27,11 @@ namespace CSharpier
                 || node.Value is InvocationExpressionSyntax
                 || node.Value is SwitchExpressionSyntax
             ) {
-                separator = Docs.SpaceIfNoPreviousComment;
+                separator = " ";
             }
 
             Doc result = Docs.Group(
-                Docs.SpaceIfNoPreviousComment,
+                " ",
                 this.PrintSyntaxToken(node.EqualsToken, separator),
                 this.Print(node.Value)
             );

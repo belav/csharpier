@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,7 +8,7 @@ namespace CSharpier
     {
         private Doc PrintEmptyStatementSyntax(EmptyStatementSyntax node)
         {
-            return this.PrintSyntaxToken(node.SemicolonToken);
+            return SyntaxTokens.Print(node.SemicolonToken);
         }
     }
 }

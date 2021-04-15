@@ -1,4 +1,6 @@
 using System.Linq;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,11 +10,10 @@ namespace CSharpier
         private Doc PrintImplicitArrayCreationExpressionSyntax(
             ImplicitArrayCreationExpressionSyntax node
         ) {
-            var commas = node.Commas.Select(o => this.PrintSyntaxToken(o))
-                .ToArray();
+            var commas = node.Commas.Select(SyntaxTokens.Print).ToArray();
             return Docs.Concat(
-                this.PrintSyntaxToken(node.NewKeyword),
-                this.PrintSyntaxToken(node.OpenBracketToken),
+                SyntaxTokens.Print(node.NewKeyword),
+                SyntaxTokens.Print(node.OpenBracketToken),
                 Docs.Concat(commas),
                 this.PrintSyntaxToken(
                     node.CloseBracketToken,

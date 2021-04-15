@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,8 +10,8 @@ namespace CSharpier
             DefaultSwitchLabelSyntax node
         ) {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.Keyword),
-                this.PrintSyntaxToken(node.ColonToken)
+                SyntaxTokens.Print(node.Keyword),
+                SyntaxTokens.Print(node.ColonToken)
             );
         }
     }

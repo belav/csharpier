@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -13,9 +15,9 @@ namespace CSharpier
                     node.LockKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSyntaxToken(node.OpenParenToken),
+                SyntaxTokens.Print(node.OpenParenToken),
                 this.Print(node.Expression),
-                this.PrintSyntaxToken(node.CloseParenToken)
+                SyntaxTokens.Print(node.CloseParenToken)
             };
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)

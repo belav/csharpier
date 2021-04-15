@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +11,7 @@ namespace CSharpier
         ) {
             // TODO 1 more tests for this?
             return Docs.Concat(
-                this.PrintSyntaxToken(node.NewKeyword),
+                SyntaxTokens.Print(node.NewKeyword),
                 this.PrintArgumentListSyntax(node.ArgumentList),
                 this.Print(node.Initializer)
             );

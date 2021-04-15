@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -91,7 +93,7 @@ namespace CSharpier
                 );
             }
 
-            docs.Add(this.PrintSyntaxToken(node.Identifier));
+            docs.Add(SyntaxTokens.Print(node.Identifier));
 
             if (parameterList != null)
             {
@@ -118,10 +120,10 @@ namespace CSharpier
                     groupId != null
                         ? Docs.IfBreak(" ", Docs.Line, groupId)
                         : Docs.HardLine,
-                    this.PrintSyntaxToken(node.OpenBraceToken),
+                    SyntaxTokens.Print(node.OpenBraceToken),
                     members,
                     Docs.HardLine,
-                    this.PrintSyntaxToken(node.CloseBraceToken)
+                    SyntaxTokens.Print(node.CloseBraceToken)
                 );
             }
             else if (node.OpenBraceToken.Kind() != SyntaxKind.None)
@@ -132,15 +134,15 @@ namespace CSharpier
 
                 docs.Add(
                     separator,
-                    this.PrintSyntaxToken(node.OpenBraceToken),
+                    SyntaxTokens.Print(node.OpenBraceToken),
                     separator,
-                    this.PrintSyntaxToken(node.CloseBraceToken)
+                    SyntaxTokens.Print(node.CloseBraceToken)
                 );
             }
 
             if (semicolonToken.HasValue)
             {
-                docs.Add(this.PrintSyntaxToken(semicolonToken.Value));
+                docs.Add(SyntaxTokens.Print(semicolonToken.Value));
             }
 
             return Docs.Concat(docs);

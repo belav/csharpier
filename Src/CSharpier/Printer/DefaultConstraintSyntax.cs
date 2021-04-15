@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,7 +9,7 @@ namespace CSharpier
         // TODO 0 look into things that aren't covered by unit tests
         private Doc PrintDefaultConstraintSyntax(DefaultConstraintSyntax node)
         {
-            return this.PrintSyntaxToken(node.DefaultKeyword);
+            return SyntaxTokens.Print(node.DefaultKeyword);
         }
     }
 }

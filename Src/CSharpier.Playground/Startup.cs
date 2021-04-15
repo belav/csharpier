@@ -19,10 +19,6 @@ namespace CSharpier.Playground
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<PlaygroundOptions>(
-                Configuration.GetSection(PlaygroundOptions.Position)
-            );
-
             services.AddControllersWithViews();
 
             services.AddSpaStaticFiles(

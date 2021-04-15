@@ -1,3 +1,5 @@
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,7 +9,7 @@ namespace CSharpier
         private Doc PrintNameColonSyntax(NameColonSyntax node)
         {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.Name.Identifier),
+                SyntaxTokens.Print(node.Name.Identifier),
                 this.PrintSyntaxToken(
                     node.ColonToken,
                     afterTokenIfNoTrailing: " "
