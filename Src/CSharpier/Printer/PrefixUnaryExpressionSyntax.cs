@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,7 +9,7 @@ namespace CSharpier
             PrefixUnaryExpressionSyntax node
         ) {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.OperatorToken),
+                SyntaxTokens.Print(node.OperatorToken),
                 this.Print(node.Operand)
             );
         }

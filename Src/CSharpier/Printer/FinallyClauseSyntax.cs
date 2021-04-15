@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,7 +8,7 @@ namespace CSharpier
         private Doc PrintFinallyClauseSyntax(FinallyClauseSyntax node)
         {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.FinallyKeyword),
+                SyntaxTokens.Print(node.FinallyKeyword),
                 this.Print(node.Block)
             );
         }

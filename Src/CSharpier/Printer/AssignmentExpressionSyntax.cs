@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -10,7 +11,7 @@ namespace CSharpier
             return Docs.Concat(
                 this.Print(node.Left),
                 " ",
-                this.PrintSyntaxToken(node.OperatorToken),
+                SyntaxTokens.Print(node.OperatorToken),
                 node.Right is QueryExpressionSyntax ? Docs.Null : " ",
                 this.Print(node.Right)
             );

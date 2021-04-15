@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintIdentifierNameSyntax(IdentifierNameSyntax node)
         {
-            return this.PrintSyntaxToken(node.Identifier);
+            return SyntaxTokens.Print(node.Identifier);
         }
     }
 }

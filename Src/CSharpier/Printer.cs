@@ -165,7 +165,7 @@ namespace CSharpier
             }
 
             docs.Add(this.Print(node.Declaration));
-            docs.Add(this.PrintSyntaxToken(node.SemicolonToken));
+            docs.Add(SyntaxTokens.Print(node.SemicolonToken));
             return Docs.Concat(docs);
         }
     }

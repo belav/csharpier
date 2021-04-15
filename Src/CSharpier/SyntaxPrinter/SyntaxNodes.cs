@@ -15,7 +15,7 @@ namespace CSharpier.SyntaxPrinter
 
         public static Doc Print(SyntaxNode node)
         {
-            return printer.Print(node);
+            return printer!.Print(node);
         }
     }
 }

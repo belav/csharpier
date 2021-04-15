@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -20,7 +21,7 @@ namespace CSharpier
             {
                 docs.Add(" ", this.Print(node.WhenClause));
             }
-            docs.Add(this.PrintSyntaxToken(node.ColonToken));
+            docs.Add(SyntaxTokens.Print(node.ColonToken));
             return Docs.Concat(docs);
         }
     }

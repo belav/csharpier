@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -11,13 +12,13 @@ namespace CSharpier
                 : string.Empty;
             return Docs.Concat(
                 this.PrintExtraNewLines(node),
-                this.PrintSyntaxToken(node.GotoKeyword),
+                SyntaxTokens.Print(node.GotoKeyword),
                 node.CaseOrDefaultKeyword.RawKind != 0
                     ? Docs.SpaceIfNoPreviousComment
                     : Docs.Null,
-                this.PrintSyntaxToken(node.CaseOrDefaultKeyword),
+                SyntaxTokens.Print(node.CaseOrDefaultKeyword),
                 expression,
-                this.PrintSyntaxToken(node.SemicolonToken)
+                SyntaxTokens.Print(node.SemicolonToken)
             );
         }
     }

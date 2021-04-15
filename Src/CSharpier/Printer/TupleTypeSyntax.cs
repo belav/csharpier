@@ -1,4 +1,5 @@
 using System.Linq;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,9 +9,9 @@ namespace CSharpier
         private Doc PrintTupleTypeSyntax(TupleTypeSyntax node)
         {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.OpenParenToken),
+                SyntaxTokens.Print(node.OpenParenToken),
                 this.PrintSeparatedSyntaxList(node.Elements, this.Print, " "),
-                this.PrintSyntaxToken(node.CloseParenToken)
+                SyntaxTokens.Print(node.CloseParenToken)
             );
         }
     }

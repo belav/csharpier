@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,13 +9,13 @@ namespace CSharpier
             BracketedParameterListSyntax node
         ) {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.OpenBracketToken),
+                SyntaxTokens.Print(node.OpenBracketToken),
                 this.PrintSeparatedSyntaxList(
                     node.Parameters,
                     this.PrintParameterSyntax,
                     " "
                 ),
-                this.PrintSyntaxToken(node.CloseBracketToken)
+                SyntaxTokens.Print(node.CloseBracketToken)
             );
         }
     }

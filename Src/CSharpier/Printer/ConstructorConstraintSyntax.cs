@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,9 +9,9 @@ namespace CSharpier
             ConstructorConstraintSyntax node
         ) {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.NewKeyword),
-                this.PrintSyntaxToken(node.OpenParenToken),
-                this.PrintSyntaxToken(node.CloseParenToken)
+                SyntaxTokens.Print(node.NewKeyword),
+                SyntaxTokens.Print(node.OpenParenToken),
+                SyntaxTokens.Print(node.CloseParenToken)
             );
         }
     }

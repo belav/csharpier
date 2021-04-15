@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +10,7 @@ namespace CSharpier
             return Docs.Concat(
                 this.Print(node.Type),
                 node.Identifier.RawKind != 0
-                    ? Docs.Concat(" ", this.PrintSyntaxToken(node.Identifier))
+                    ? Docs.Concat(" ", SyntaxTokens.Print(node.Identifier))
                     : Doc.Null
             );
         }

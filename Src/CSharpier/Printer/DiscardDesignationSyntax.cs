@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,7 +8,7 @@ namespace CSharpier
         private Doc PrintDiscardDesignationSyntax(
             DiscardDesignationSyntax node
         ) {
-            return this.PrintSyntaxToken(node.UnderscoreToken);
+            return SyntaxTokens.Print(node.UnderscoreToken);
         }
     }
 }

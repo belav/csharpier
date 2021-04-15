@@ -1,4 +1,5 @@
 using System.Linq;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -10,9 +11,9 @@ namespace CSharpier
             return Docs.Concat(
                 this.Print(node.GoverningExpression),
                 Docs.SpaceIfNoPreviousComment,
-                this.PrintSyntaxToken(node.SwitchKeyword),
+                SyntaxTokens.Print(node.SwitchKeyword),
                 Docs.HardLine,
-                this.PrintSyntaxToken(node.OpenBraceToken),
+                SyntaxTokens.Print(node.OpenBraceToken),
                 Docs.Group(
                     Docs.Indent(
                         Docs.HardLine,
@@ -39,7 +40,7 @@ namespace CSharpier
                     ),
                     Docs.HardLine
                 ),
-                this.PrintSyntaxToken(node.CloseBraceToken)
+                SyntaxTokens.Print(node.CloseBraceToken)
             );
         }
     }

@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -20,7 +21,7 @@ namespace CSharpier
                     ? Doc.Null
                     : this.PrintNameEqualsSyntax(node.Alias),
                 this.Print(node.Name),
-                this.PrintSyntaxToken(node.SemicolonToken)
+                SyntaxTokens.Print(node.SemicolonToken)
             );
         }
     }

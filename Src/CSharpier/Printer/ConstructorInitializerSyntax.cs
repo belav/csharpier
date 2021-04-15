@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -13,7 +14,7 @@ namespace CSharpier
                     node.ColonToken,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSyntaxToken(node.ThisOrBaseKeyword),
+                SyntaxTokens.Print(node.ThisOrBaseKeyword),
                 this.PrintArgumentListSyntax(node.ArgumentList)
             );
         }

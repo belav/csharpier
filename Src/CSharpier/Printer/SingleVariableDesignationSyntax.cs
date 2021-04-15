@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,7 +8,7 @@ namespace CSharpier
         private Doc PrintSingleVariableDesignationSyntax(
             SingleVariableDesignationSyntax node
         ) {
-            return this.PrintSyntaxToken(node.Identifier);
+            return SyntaxTokens.Print(node.Identifier);
         }
     }
 }

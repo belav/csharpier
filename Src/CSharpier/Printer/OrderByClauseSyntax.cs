@@ -17,10 +17,9 @@ namespace CSharpier
                     orderingNode =>
                         Docs.Concat(
                             this.Print(orderingNode.Expression),
+                            " ",
                             this.PrintSyntaxToken(
-                                orderingNode.AscendingOrDescendingKeyword,
-                                null,
-                                " "
+                                orderingNode.AscendingOrDescendingKeyword
                             )
                         ),
                     Doc.Null

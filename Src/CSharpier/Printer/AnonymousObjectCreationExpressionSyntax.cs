@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +10,7 @@ namespace CSharpier
         ) {
             return Docs.Group(
                 this.PrintSyntaxToken(node.NewKeyword, Docs.Line),
-                this.PrintSyntaxToken(node.OpenBraceToken),
+                SyntaxTokens.Print(node.OpenBraceToken),
                 Docs.Indent(
                     Docs.Line,
                     this.PrintSeparatedSyntaxList(
@@ -19,7 +20,7 @@ namespace CSharpier
                     )
                 ),
                 Docs.Line,
-                this.PrintSyntaxToken(node.CloseBraceToken)
+                SyntaxTokens.Print(node.CloseBraceToken)
             );
         }
     }

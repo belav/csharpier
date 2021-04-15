@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -40,7 +41,7 @@ namespace CSharpier
                                     node.Into.IntoKeyword,
                                     afterTokenIfNoTrailing: " "
                                 ),
-                                this.PrintSyntaxToken(node.Into.Identifier)
+                                SyntaxTokens.Print(node.Into.Identifier)
                             )
                         : Docs.Null
                 )

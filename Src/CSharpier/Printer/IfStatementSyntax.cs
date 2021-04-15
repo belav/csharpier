@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -21,13 +22,13 @@ namespace CSharpier
                     node.IfKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSyntaxToken(node.OpenParenToken),
+                SyntaxTokens.Print(node.OpenParenToken),
                 Docs.GroupWithId(
                     groupId,
                     Docs.Indent(Docs.SoftLine, this.Print(node.Condition)),
                     Docs.SoftLine
                 ),
-                this.PrintSyntaxToken(node.CloseParenToken)
+                SyntaxTokens.Print(node.CloseParenToken)
             );
             if (node.Statement is BlockSyntax blockSyntax)
             {

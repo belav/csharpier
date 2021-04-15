@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,7 +9,7 @@ namespace CSharpier
         {
             return Docs.Concat(
                 this.Print(node.ElementType),
-                this.PrintSyntaxToken(node.QuestionToken)
+                SyntaxTokens.Print(node.QuestionToken)
             );
         }
     }

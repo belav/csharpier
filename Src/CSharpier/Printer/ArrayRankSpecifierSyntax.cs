@@ -1,4 +1,5 @@
 using System.Linq;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +10,7 @@ namespace CSharpier
             ArrayRankSpecifierSyntax node
         ) {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.OpenBracketToken),
+                SyntaxTokens.Print(node.OpenBracketToken),
                 node.Sizes.Any()
                     ? this.PrintSeparatedSyntaxList(
                             node.Sizes,
@@ -17,7 +18,7 @@ namespace CSharpier
                             Doc.Null
                         )
                     : Doc.Null,
-                this.PrintSyntaxToken(node.CloseBracketToken)
+                SyntaxTokens.Print(node.CloseBracketToken)
             );
         }
     }

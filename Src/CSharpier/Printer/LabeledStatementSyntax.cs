@@ -12,8 +12,8 @@ namespace CSharpier
             {
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintSyntaxToken(node.Identifier),
-                this.PrintSyntaxToken(node.ColonToken)
+                SyntaxTokens.Print(node.Identifier),
+                SyntaxTokens.Print(node.ColonToken)
             };
             if (node.Statement is BlockSyntax blockSyntax)
             {

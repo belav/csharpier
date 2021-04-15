@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -17,7 +18,7 @@ namespace CSharpier
                 docs.Add(this.Print(node.Type), Docs.SpaceIfNoPreviousComment);
             }
 
-            docs.Add(this.PrintSyntaxToken(node.Identifier));
+            docs.Add(SyntaxTokens.Print(node.Identifier));
             if (node.Default != null)
             {
                 docs.Add(this.PrintEqualsValueClauseSyntax(node.Default));

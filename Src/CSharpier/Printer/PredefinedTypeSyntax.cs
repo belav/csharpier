@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -6,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintPredefinedTypeSyntax(PredefinedTypeSyntax node)
         {
-            return this.PrintSyntaxToken(node.Keyword);
+            return SyntaxTokens.Print(node.Keyword);
         }
     }
 }

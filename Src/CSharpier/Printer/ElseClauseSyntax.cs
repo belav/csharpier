@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,10 +8,7 @@ namespace CSharpier
     {
         private Doc PrintElseClauseSyntax(ElseClauseSyntax node)
         {
-            var docs = new List<Doc>
-            {
-                this.PrintSyntaxToken(node.ElseKeyword)
-            };
+            var docs = new List<Doc> { SyntaxTokens.Print(node.ElseKeyword) };
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {

@@ -84,7 +84,7 @@ namespace CSharpier
             {
                 docs.Add(
                     this.Print(explicitInterfaceSpecifier.Name),
-                    this.PrintSyntaxToken(explicitInterfaceSpecifier.DotToken)
+                    SyntaxTokens.Print(explicitInterfaceSpecifier.DotToken)
                 );
             }
 
@@ -164,7 +164,7 @@ namespace CSharpier
 
             if (semicolonToken.HasValue)
             {
-                docs.Add(this.PrintSyntaxToken(semicolonToken.Value));
+                docs.Add(SyntaxTokens.Print(semicolonToken.Value));
             }
 
             return Docs.Concat(docs);

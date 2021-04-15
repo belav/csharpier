@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -34,7 +35,7 @@ namespace CSharpier
                 expressionBody = indexerDeclarationSyntax.ExpressionBody;
                 explicitInterfaceSpecifierSyntax = indexerDeclarationSyntax.ExplicitInterfaceSpecifier;
                 identifier = Docs.Concat(
-                    this.PrintSyntaxToken(indexerDeclarationSyntax.ThisKeyword),
+                    SyntaxTokens.Print(indexerDeclarationSyntax.ThisKeyword),
                     this.Print(indexerDeclarationSyntax.ParameterList)
                 );
                 semicolonToken = indexerDeclarationSyntax.SemicolonToken;
@@ -71,7 +72,7 @@ namespace CSharpier
                 contents = Docs.Group(
                     Docs.Concat(
                         separator,
-                        this.PrintSyntaxToken(node.AccessorList.OpenBraceToken),
+                        SyntaxTokens.Print(node.AccessorList.OpenBraceToken),
                         Docs.Group(
                             Docs.Indent(
                                 node.AccessorList.Accessors.Select(
@@ -85,7 +86,7 @@ namespace CSharpier
                             )
                         ),
                         separator,
-                        this.PrintSyntaxToken(node.AccessorList.CloseBraceToken)
+                        SyntaxTokens.Print(node.AccessorList.CloseBraceToken)
                     )
                 );
             }
@@ -124,7 +125,7 @@ namespace CSharpier
                         ? this.PrintEqualsValueClauseSyntax(initializer)
                         : Doc.Null,
                     semicolonToken.HasValue
-                        ? this.PrintSyntaxToken(semicolonToken.Value)
+                        ? SyntaxTokens.Print(semicolonToken.Value)
                         : Doc.Null
                 )
             );
@@ -150,7 +151,7 @@ namespace CSharpier
 
             docs.Add(this.PrintAttributeLists(node, node.AttributeLists));
             docs.Add(this.PrintModifiers(node.Modifiers));
-            docs.Add(this.PrintSyntaxToken(node.Keyword));
+            docs.Add(SyntaxTokens.Print(node.Keyword));
 
             if (node.Body != null)
             {
@@ -163,7 +164,7 @@ namespace CSharpier
                 );
             }
 
-            docs.Add(this.PrintSyntaxToken(node.SemicolonToken));
+            docs.Add(SyntaxTokens.Print(node.SemicolonToken));
 
             return Docs.Concat(docs);
         }

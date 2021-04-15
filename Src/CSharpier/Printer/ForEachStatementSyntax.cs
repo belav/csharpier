@@ -20,7 +20,7 @@ namespace CSharpier
                     node.ForEachKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSyntaxToken(node.OpenParenToken),
+                SyntaxTokens.Print(node.OpenParenToken),
                 this.Print(node.Type),
                 " ",
                 this.PrintSyntaxToken(

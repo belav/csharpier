@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -17,8 +18,8 @@ namespace CSharpier
                     node.AliasKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSyntaxToken(node.Identifier),
-                this.PrintSyntaxToken(node.SemicolonToken)
+                SyntaxTokens.Print(node.Identifier),
+                SyntaxTokens.Print(node.SemicolonToken)
             );
         }
     }

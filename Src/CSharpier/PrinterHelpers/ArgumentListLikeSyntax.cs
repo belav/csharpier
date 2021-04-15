@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -11,7 +12,7 @@ namespace CSharpier
             SyntaxToken closeParenToken
         ) =>
             Docs.Concat(
-                this.PrintSyntaxToken(openParenToken),
+                SyntaxTokens.Print(openParenToken),
                 arguments.Any()
                     ? Docs.Indent(
                             Docs.SoftLine,
@@ -23,7 +24,7 @@ namespace CSharpier
                         )
                     : Doc.Null,
                 arguments.Any() ? Docs.SoftLine : Doc.Null,
-                this.PrintSyntaxToken(closeParenToken)
+                SyntaxTokens.Print(closeParenToken)
             );
     }
 }

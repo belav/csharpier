@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +10,7 @@ namespace CSharpier
         {
             var docs = new List<Doc>
             {
-                this.PrintSyntaxToken(node.OpenBraceToken),
+                SyntaxTokens.Print(node.OpenBraceToken),
                 this.Print(node.Expression)
             };
             if (node.AlignmentClause != null)
@@ -25,12 +26,12 @@ namespace CSharpier
             if (node.FormatClause != null)
             {
                 docs.Add(
-                    this.PrintSyntaxToken(node.FormatClause.ColonToken),
-                    this.PrintSyntaxToken(node.FormatClause.FormatStringToken)
+                    SyntaxTokens.Print(node.FormatClause.ColonToken),
+                    SyntaxTokens.Print(node.FormatClause.FormatStringToken)
                 );
             }
 
-            docs.Add(this.PrintSyntaxToken(node.CloseBraceToken));
+            docs.Add(SyntaxTokens.Print(node.CloseBraceToken));
             return Docs.Concat(docs);
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -14,7 +15,7 @@ namespace CSharpier
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
                 this.PrintModifiers(node.Modifiers),
-                this.PrintSyntaxToken(node.NamespaceKeyword),
+                SyntaxTokens.Print(node.NamespaceKeyword),
                 " ",
                 this.Print(node.Name)
             };
@@ -68,13 +69,13 @@ namespace CSharpier
             docs.Add(
                 Docs.Group(
                     Docs.Line,
-                    this.PrintSyntaxToken(node.OpenBraceToken),
+                    SyntaxTokens.Print(node.OpenBraceToken),
                     Docs.Indent(innerDocs),
                     hasMembers || hasUsing || hasExterns
                         ? Docs.HardLine
                         : Docs.Null,
-                    this.PrintSyntaxToken(node.CloseBraceToken),
-                    this.PrintSyntaxToken(node.SemicolonToken)
+                    SyntaxTokens.Print(node.CloseBraceToken),
+                    SyntaxTokens.Print(node.SemicolonToken)
                 )
             );
             return Docs.Concat(docs);

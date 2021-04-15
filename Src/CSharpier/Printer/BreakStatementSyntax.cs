@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,8 +8,8 @@ namespace CSharpier
         private Doc PrintBreakStatementSyntax(BreakStatementSyntax node)
         {
             return Docs.Concat(
-                this.PrintSyntaxToken(node.BreakKeyword),
-                this.PrintSyntaxToken(node.SemicolonToken)
+                SyntaxTokens.Print(node.BreakKeyword),
+                SyntaxTokens.Print(node.SemicolonToken)
             );
         }
     }

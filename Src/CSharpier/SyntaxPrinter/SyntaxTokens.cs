@@ -16,8 +16,7 @@ namespace CSharpier.SyntaxPrinter
         // actually if we change how comments/directives print, maybe we don't need the before/after tokens
         public static Doc PrintSyntaxToken(
             SyntaxToken syntaxToken,
-            Doc? afterTokenIfNoTrailing = null,
-            Doc? beforeTokenIfNoLeading = null
+            Doc? afterTokenIfNoTrailing = null
         ) {
             if (syntaxToken.RawKind == 0)
             {
@@ -29,10 +28,6 @@ namespace CSharpier.SyntaxPrinter
             if (leadingTrivia != Doc.Null)
             {
                 docs.Add(leadingTrivia);
-            }
-            else if (beforeTokenIfNoLeading != null)
-            {
-                docs.Add(beforeTokenIfNoLeading);
             }
             docs.Add(syntaxToken.Text);
             var trailingTrivia = PrintTrailingTrivia(syntaxToken);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +10,7 @@ namespace CSharpier
         private Doc PrintVariableDeclaratorSyntax(
             VariableDeclaratorSyntax node
         ) {
-            var docs = new List<Doc> { this.PrintSyntaxToken(node.Identifier) };
+            var docs = new List<Doc> { SyntaxTokens.Print(node.Identifier) };
             if (node.ArgumentList != null)
             {
                 docs.Add(

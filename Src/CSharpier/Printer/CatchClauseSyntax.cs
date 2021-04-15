@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,16 +9,16 @@ namespace CSharpier
         private Doc PrintCatchClauseSyntax(CatchClauseSyntax node)
         {
             var docs = new List<Doc>();
-            docs.Add(this.PrintSyntaxToken(node.CatchKeyword));
+            docs.Add(SyntaxTokens.Print(node.CatchKeyword));
             if (node.Declaration != null)
             {
                 docs.Add(
                     " ",
-                    this.PrintSyntaxToken(node.Declaration.OpenParenToken),
+                    SyntaxTokens.Print(node.Declaration.OpenParenToken),
                     this.Print(node.Declaration.Type),
                     node.Declaration.Identifier.RawKind != 0 ? " " : Doc.Null,
-                    this.PrintSyntaxToken(node.Declaration.Identifier),
-                    this.PrintSyntaxToken(node.Declaration.CloseParenToken)
+                    SyntaxTokens.Print(node.Declaration.Identifier),
+                    SyntaxTokens.Print(node.Declaration.CloseParenToken)
                 );
             }
 
@@ -29,9 +30,9 @@ namespace CSharpier
                         node.Filter.WhenKeyword,
                         afterTokenIfNoTrailing: " "
                     ),
-                    this.PrintSyntaxToken(node.Filter.OpenParenToken),
+                    SyntaxTokens.Print(node.Filter.OpenParenToken),
                     this.Print(node.Filter.FilterExpression),
-                    this.PrintSyntaxToken(node.Filter.CloseParenToken)
+                    SyntaxTokens.Print(node.Filter.CloseParenToken)
                 );
             }
 
