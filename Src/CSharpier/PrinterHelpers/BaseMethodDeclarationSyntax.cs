@@ -72,13 +72,13 @@ namespace CSharpier
             }
             if (modifiers.HasValue)
             {
-                docs.Add(this.PrintModifiers(modifiers.Value));
+                this.PrintModifiers(modifiers.Value, docs);
             }
 
             if (returnType != null)
             {
-                // TODO 1 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow? that may get complicated
-                docs.Add(this.Print(returnType), " ");
+                this.Print(returnType, docs);
+                docs.Add(" ");
             }
 
             if (explicitInterfaceSpecifier != null)
@@ -165,7 +165,7 @@ namespace CSharpier
 
             if (semicolonToken.HasValue)
             {
-                docs.Add(SyntaxTokens.Print(semicolonToken.Value));
+                SyntaxTokens.Print(semicolonToken.Value, docs);
             }
 
             return Docs.Concat(docs);

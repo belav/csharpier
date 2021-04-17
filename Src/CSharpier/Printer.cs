@@ -70,6 +70,32 @@ namespace CSharpier
             return docs.Count == 0 ? Doc.Null : Docs.Concat(docs);
         }
 
+        private void PrintSeparatedSyntaxList<T>(
+            SeparatedSyntaxList<T> list,
+            Func<T, Doc> printFunc,
+            Doc afterSeparator,
+            IList<Doc> docs
+        )
+            where T : SyntaxNode {
+            for (var x = 0; x < list.Count; x++)
+            {
+                docs.Add(printFunc(list[x]));
+
+                if (x >= list.SeparatorCount)
+                {
+                    continue;
+                }
+
+                var isTrailingSeparator = x == list.Count - 1;
+
+                SyntaxTokens.Print(list.GetSeparator(x), docs);
+                if (!isTrailingSeparator)
+                {
+                    docs.Add(afterSeparator);
+                }
+            }
+        }
+
         private Doc PrintAttributeLists(
             SyntaxNode node,
             SyntaxList<AttributeListSyntax> attributeLists
@@ -97,6 +123,25 @@ namespace CSharpier
             }
 
             return Docs.Concat(docs);
+        }
+
+        private void PrintModifiers(
+            SyntaxTokenList modifiers,
+            IList<Doc> docs
+        ) {
+            if (modifiers.Count == 0)
+            {
+                return;
+            }
+
+            var innerDocs = new List<Doc>();
+            foreach (var modifier in modifiers)
+            {
+                SyntaxTokens.Print(modifier, innerDocs);
+                innerDocs.Add(" ");
+            }
+
+            docs.Add(Docs.Group(innerDocs));
         }
 
         private Doc PrintModifiers(SyntaxTokenList modifiers)

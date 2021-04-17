@@ -32,9 +32,10 @@ namespace CSharpier
             {
                 groupId != null
                     ? Docs.IfBreak(" ", Docs.Line, groupId)
-                    : Docs.Line,
-                SyntaxTokens.Print(node.OpenBraceToken)
+                    : Docs.Line
             };
+            SyntaxTokens.Print(node.OpenBraceToken, docs);
+
             if (node.Statements.Count > 0)
             {
                 var innerDoc = Docs.Indent(
@@ -44,13 +45,16 @@ namespace CSharpier
 
                 DocUtilities.RemoveInitialDoubleHardLine(innerDoc);
 
-                docs.Add(Docs.Concat(innerDoc, statementSeparator));
+                docs.Add(innerDoc, statementSeparator);
             }
 
-            docs.Add(
-                node.Statements.Count == 0 ? " " : Docs.Null,
-                SyntaxTokens.Print(node.CloseBraceToken)
-            );
+            if (node.Statements.Count == 0)
+            {
+                docs.Add(" ");
+            }
+
+            SyntaxTokens.Print(node.CloseBraceToken, docs);
+
             return Docs.Group(docs);
         }
     }

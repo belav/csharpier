@@ -81,19 +81,17 @@ namespace CSharpier
             {
                 this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintModifiers(node.Modifiers)
             };
+
+            this.PrintModifiers(node.Modifiers, docs);
+
             if (keyword != null)
             {
-                docs.Add(
-                    this.PrintSyntaxToken(
-                        keyword.Value,
-                        afterTokenIfNoTrailing: " "
-                    )
-                );
+                SyntaxTokens.Print(keyword.Value, docs);
+                docs.Add(" ");
             }
 
-            docs.Add(SyntaxTokens.Print(node.Identifier));
+            SyntaxTokens.Print(node.Identifier, docs);
 
             if (parameterList != null)
             {
@@ -119,12 +117,12 @@ namespace CSharpier
                 docs.Add(
                     groupId != null
                         ? Docs.IfBreak(" ", Docs.Line, groupId)
-                        : Docs.HardLine,
-                    SyntaxTokens.Print(node.OpenBraceToken),
-                    members,
-                    Docs.HardLine,
-                    SyntaxTokens.Print(node.CloseBraceToken)
+                        : Docs.HardLine
                 );
+
+                SyntaxTokens.Print(node.OpenBraceToken, docs);
+                docs.Add(members, Docs.HardLine);
+                SyntaxTokens.Print(node.CloseBraceToken, docs);
             }
             else if (node.OpenBraceToken.Kind() != SyntaxKind.None)
             {
@@ -142,7 +140,7 @@ namespace CSharpier
 
             if (semicolonToken.HasValue)
             {
-                docs.Add(SyntaxTokens.Print(semicolonToken.Value));
+                SyntaxTokens.Print(semicolonToken.Value, docs);
             }
 
             return Docs.Concat(docs);

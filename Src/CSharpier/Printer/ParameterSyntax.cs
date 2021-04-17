@@ -16,10 +16,11 @@ namespace CSharpier
             };
             if (node.Type != null)
             {
-                docs.Add(this.Print(node.Type), " ");
+                this.Print(node.Type, docs);
+                docs.Add(" ");
             }
 
-            docs.Add(SyntaxTokens.Print(node.Identifier));
+            SyntaxTokens.Print(node.Identifier, docs);
             if (node.Default != null)
             {
                 docs.Add(this.PrintEqualsValueClauseSyntax(node.Default));

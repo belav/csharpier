@@ -1,15 +1,4 @@
-    public class FunctionParameter : EntityBase
-    {
-        public Function Function
-        
-        [Required]
-        [UniqueIndex(AdditionalColumns = nameof(Name))]
-        public Guid FunctionId { get; set; }
-        
-        public string Name { get; set; }
-        
-        public override string GetDisplayName()
-        {
-            return this.Name;
-        
+public class ClassName {
+    public void LongUglyMethod(string longParameter1, string longParameter2, string longParameter3) { 
     }
+}

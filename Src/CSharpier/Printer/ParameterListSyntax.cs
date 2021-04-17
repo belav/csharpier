@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -10,24 +12,24 @@ namespace CSharpier
             ParameterListSyntax node,
             string? groupId = null
         ) {
-            return Docs.GroupWithId(
-                groupId ?? string.Empty,
-                SyntaxTokens.Print(node.OpenParenToken),
-                node.Parameters.Count > 0
-                    ? Docs.Concat(
-                            Docs.Indent(
-                                Docs.SoftLine,
-                                this.PrintSeparatedSyntaxList(
-                                    node.Parameters,
-                                    this.PrintParameterSyntax,
-                                    Docs.Line
-                                )
-                            ),
-                            Docs.SoftLine
-                        )
-                    : Doc.Null,
-                SyntaxTokens.Print(node.CloseParenToken)
-            );
+            var docs = new List<Doc>();
+            SyntaxTokens.Print(node.OpenParenToken, docs);
+            if (node.Parameters.Count > 0)
+            {
+                var innerDocs = new List<Doc> { Docs.SoftLine };
+                this.PrintSeparatedSyntaxList(
+                    node.Parameters,
+                    this.PrintParameterSyntax,
+                    Docs.Line,
+                    innerDocs
+                );
+
+                docs.Add(Docs.Indent(innerDocs));
+                docs.Add(Docs.SoftLine);
+            }
+            SyntaxTokens.Print(node.CloseParenToken, docs);
+
+            return Docs.GroupWithId(groupId ?? string.Empty, docs);
         }
     }
 }

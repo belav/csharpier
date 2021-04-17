@@ -56,19 +56,26 @@ namespace CSharpier
             };
         }
 
+        public static Group GroupWithId(string groupId, params Doc[] contents)
+        {
+            var group = Group(contents);
+            group.GroupId = groupId;
+            return group;
+        }
+
+        public static Group GroupWithId(string groupId, List<Doc> contents)
+        {
+            var group = Group(contents);
+            group.GroupId = groupId;
+            return group;
+        }
+
         public static Group Group(List<Doc> contents)
         {
             return new()
             {
                 Contents = contents.Count == 1 ? contents[0] : Concat(contents),
             };
-        }
-
-        public static Group GroupWithId(string groupId, params Doc[] contents)
-        {
-            var group = Group(contents);
-            group.GroupId = groupId;
-            return group;
         }
 
         public static Group Group(params Doc[] contents)

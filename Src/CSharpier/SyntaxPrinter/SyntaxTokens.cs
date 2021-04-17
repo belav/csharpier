@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
@@ -9,6 +10,11 @@ namespace CSharpier.SyntaxPrinter
 {
     public class SyntaxTokens
     {
+        public static void Print(SyntaxToken syntaxToken, IList<Doc> docs)
+        {
+            docs.Add(syntaxToken.Text);
+        }
+
         public static Doc Print(SyntaxToken syntaxToken)
         {
             return PrintSyntaxToken(syntaxToken);
