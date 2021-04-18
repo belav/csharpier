@@ -43,8 +43,7 @@ namespace CSharpier
             // TODO 1 CurrencyDto.cs from data.entities
             if (string.IsNullOrEmpty(directoryOrFile))
             {
-                directoryOrFile = @"C:\Projects\csharpier-repos\AutoMapper\src\UnitTests";
-                //directoryOrFile = Directory.GetCurrentDirectory();
+                directoryOrFile = Directory.GetCurrentDirectory();
             }
 
             var validate = !fast;
