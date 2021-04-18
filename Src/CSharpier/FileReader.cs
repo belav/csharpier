@@ -38,19 +38,17 @@ namespace CSharpier
                     cancellationToken
                 );
 
-            return new FileReaderResult
-            {
-                Encoding = encoding,
-                DefaultedEncoding = defaultedEncoding,
-                FileContents = fileContents
-            };
+            return new FileReaderResult(
+                encoding,
+                fileContents,
+                defaultedEncoding
+            );
         }
     }
 
-    public class FileReaderResult
-    {
-        public Encoding Encoding { get; init; }
-        public string FileContents { get; init; }
-        public bool DefaultedEncoding { get; init; }
-    }
+    public record FileReaderResult(
+        Encoding Encoding,
+        string FileContents,
+        bool DefaultedEncoding
+    );
 }
