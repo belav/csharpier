@@ -31,36 +31,53 @@ namespace CSharpier.Tests.TestFileTests
                 folderName,
                 fileName + ".cst"
             );
-            var code = File.ReadAllText(filePath);
+            var fileReaderResult =
+                FileReader.ReadFile(filePath, CancellationToken.None).Result;
 
             var formatter = new CodeFormatter();
-            var result = formatter.Format(code, new Options());
+            var result = formatter.Format(
+                fileReaderResult.FileContents,
+                new Options()
+            );
 
             var actualFilePath = filePath.Replace(".cst", ".actual.cst");
-            File.WriteAllText(actualFilePath, result.Code, Encoding.UTF8);
+            File.WriteAllText(
+                actualFilePath,
+                result.Code,
+                fileReaderResult.Encoding
+            );
 
             var filePathToChange = filePath;
             var expectedFilePath = actualFilePath.Replace(
                 ".actual.",
                 ".expected."
             );
+
+            var expectedCode = fileReaderResult.FileContents;
+
             if (File.Exists(expectedFilePath))
             {
-                code = File.ReadAllText(expectedFilePath, Encoding.UTF8);
+                expectedCode = File.ReadAllText(
+                    expectedFilePath,
+                    Encoding.UTF8
+                );
                 filePathToChange = expectedFilePath;
             }
 
             var comparer = new SyntaxNodeComparer(
-                code,
+                expectedCode,
                 result.Code,
                 CancellationToken.None
             );
 
-            if (result.Code != code && !BuildServerDetector.Detected)
+            result.Errors.Should().BeEmpty();
+            result.FailureMessage.Should().BeEmpty();
+
+            if (result.Code != expectedCode && !BuildServerDetector.Detected)
             {
                 DiffRunner.Launch(filePathToChange, actualFilePath);
             }
-            result.Code.Should().Be(code);
+            result.Code.Should().Be(expectedCode);
 
             var compareResult = comparer.CompareSource();
             compareResult.Should().BeNullOrEmpty();

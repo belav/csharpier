@@ -1,21 +1,22 @@
 public class ClassName
 {
-    private static const string SomeName;
+    private static const string SomeName = "1";
     public SomeClass SomeName;
 
     private string SomeFieldWithSadsfasdfasdfasdfuperLongNameYeahMan =
         "kljasdfkljasdklfkjlasdfkjaskdlfasasdfasdfasdfasdfdfksdf";
 
-    private static readonly Regex FrontEndResourceRelativePathRegex =
-        new Regex(
-            @".*?/Themes/.*?/.*?/(.*)",
-            RegexOptions.Compiled |
-            RegexOptions.CultureInvariant |
-            RegexOptions.IgnoreCase);
+    private static readonly Regex FrontEndResourceRelativePathRegex = new Regex(
+        @".*?/Themes/.*?/.*?/(.*)",
+        RegexOptions.Compiled
+        | RegexOptions.CultureInvariant
+        | RegexOptions.IgnoreCase
+    );
 
     private SomeObject SomeLongerName = new SomeObject(
         "lkjasdflkjasdfkljaskldjf",
-        "klasldkfaksdfasdfkjasdklf")
+        "klasldkfaksdfasdfkjasdklf"
+    )
     {
         Property1 = 1,
         Property2 = 2
