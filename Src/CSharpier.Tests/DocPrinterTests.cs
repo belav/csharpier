@@ -14,9 +14,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Concat("1", "2", "3");
 
-            var result = Print(doc);
-
-            result.Should().Be("123");
+            PrintedDocShouldBe(doc, "123");
         }
 
         [Test]
@@ -24,9 +22,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Concat("1", Docs.HardLine, "3");
 
-            var result = Print(doc);
-
-            result.Should().Be($"1{NewLine}3");
+            PrintedDocShouldBe(doc, $"1{NewLine}3");
         }
 
         [Test]
@@ -34,9 +30,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Concat("1", Docs.Line, "3");
 
-            var result = Print(doc);
-
-            result.Should().Be($"1{NewLine}3");
+            PrintedDocShouldBe(doc, $"1{NewLine}3");
         }
 
         [Test]
@@ -44,9 +38,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Group(Docs.Concat("1", Docs.Line, "3"));
 
-            var result = Print(doc);
-
-            result.Should().Be("1 3");
+            PrintedDocShouldBe(doc, "1 3");
         }
 
         [Test]
@@ -54,9 +46,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Group(Docs.Concat("1", Docs.HardLine, "3"));
 
-            var result = Print(doc);
-
-            result.Should().Be($"1{NewLine}3");
+            PrintedDocShouldBe(doc, $"1{NewLine}3");
         }
 
         [Test]
@@ -66,9 +56,7 @@ namespace CSharpier.Tests
                 Docs.Concat("1", Docs.Line, "2", Docs.HardLine, "3")
             );
 
-            var result = Print(doc);
-
-            result.Should().Be($"1{NewLine}2{NewLine}3");
+            PrintedDocShouldBe(doc, $"1{NewLine}2{NewLine}3");
         }
 
         [Test]
@@ -85,9 +73,7 @@ namespace CSharpier.Tests
                 )
             );
 
-            var result = Print(doc);
-
-            result.Should().Be($"1{NewLine}2{NewLine}3");
+            PrintedDocShouldBe(doc, $"1{NewLine}2{NewLine}3");
         }
 
         [Test]
@@ -110,9 +96,10 @@ namespace CSharpier.Tests
                 )
             );
 
-            var result = Print(doc);
-
-            result.Should().Be($"0{NewLine}    1{NewLine}    2{NewLine}    3");
+            PrintedDocShouldBe(
+                doc,
+                $"0{NewLine}    1{NewLine}    2{NewLine}    3"
+            );
         }
 
         [Test]
@@ -123,10 +110,10 @@ namespace CSharpier.Tests
                 Docs.Concat(longText, Docs.Line, longText, Docs.Line, longText)
             );
 
-            var result = Print(doc);
-
-            result.Should()
-                .Be($"{longText}{NewLine}{longText}{NewLine}{longText}");
+            PrintedDocShouldBe(
+                doc,
+                $"{longText}{NewLine}{longText}{NewLine}{longText}"
+            );
         }
 
         [Test]
@@ -137,9 +124,7 @@ namespace CSharpier.Tests
                 Docs.Indent(Docs.Concat(Docs.HardLine, "1", Docs.HardLine, "2"))
             );
 
-            var result = Print(doc);
-
-            result.Should().Be($"0{NewLine}    1{NewLine}    2");
+            PrintedDocShouldBe(doc, $"0{NewLine}    1{NewLine}    2");
         }
 
         [Test]
@@ -154,9 +139,7 @@ namespace CSharpier.Tests
                 )
             );
 
-            var result = Print(doc);
-
-            result.Should().Be($"0{NewLine}    1{NewLine}{NewLine}    2");
+            PrintedDocShouldBe(doc, $"0{NewLine}    1{NewLine}{NewLine}    2");
         }
 
         [Test]
@@ -164,9 +147,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Concat(Docs.HardLine, "1");
 
-            var result = Print(doc);
-
-            result.Should().Be($"1");
+            PrintedDocShouldBe(doc, "1");
         }
 
         [Test]
@@ -174,9 +155,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Concat(Docs.LiteralLine, "1");
 
-            var result = Print(doc);
-
-            result.Should().Be($"1");
+            PrintedDocShouldBe(doc, $"1");
         }
 
         [Test]
@@ -184,9 +163,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.ForceFlat("1", Docs.HardLine, "2");
 
-            var result = Print(doc);
-
-            result.Should().Be("1 2");
+            PrintedDocShouldBe(doc, "1 2");
         }
 
         [Test]
@@ -198,9 +175,7 @@ namespace CSharpier.Tests
                 "}"
             );
 
-            var result = Print(doc);
-
-            result.Should().Be($"{{{NewLine}    indent{NewLine}}}");
+            PrintedDocShouldBe(doc, $"{{{NewLine}    indent{NewLine}}}");
         }
 
         [Test]
@@ -235,12 +210,10 @@ namespace CSharpier.Tests
                 "jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj"
             );
 
-            var result = Print(doc);
-
-            result.Should()
-                .Be(
-                    $"lkjasdkfljalsjkdfkjlasdfjklakljsdfjkasdfkljsdafjk jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj"
-                );
+            PrintedDocShouldBe(
+                doc,
+                $"lkjasdkfljalsjkdfkjlasdfjklakljsdfjkasdfkljsdafjk jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj"
+            );
         }
 
         [Test]
@@ -255,11 +228,10 @@ namespace CSharpier.Tests
                     "2"
                 )
             );
-            var result = Print(doc);
-            result.Should()
-                .Be(
-                    $"1 2{NewLine}1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111{NewLine}2"
-                );
+            PrintedDocShouldBe(
+                doc,
+                $"1 2{NewLine}1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111{NewLine}2"
+            );
         }
 
         [Test]
@@ -295,11 +267,10 @@ namespace CSharpier.Tests
                 )
             );
 
-            var result = Print(doc);
-            result.Should()
-                .Be(
-                    $"1111111111 1111111111 1111111111 1111111111 1111111111{NewLine}1111111111 1111111111 1111111111 1111111111 1111111111"
-                );
+            PrintedDocShouldBe(
+                doc,
+                $"1111111111 1111111111 1111111111 1111111111 1111111111{NewLine}1111111111 1111111111 1111111111 1111111111 1111111111"
+            );
         }
 
         [Test]
@@ -307,9 +278,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Group(Docs.IfBreak("break", "flat"));
 
-            var result = Print(doc);
-
-            result.Should().Be("flat");
+            PrintedDocShouldBe(doc, "flat");
         }
 
         [Test]
@@ -317,9 +286,7 @@ namespace CSharpier.Tests
         {
             var doc = Docs.Group(Docs.HardLine, Docs.IfBreak("break", "flat"));
 
-            var result = Print(doc);
-
-            result.Should().Be("break");
+            PrintedDocShouldBe(doc, "break");
         }
 
         [Test]
@@ -330,9 +297,7 @@ namespace CSharpier.Tests
                 Docs.IfBreak("break", "flat")
             );
 
-            var result = Print(doc, 10);
-
-            result.Should().Be($"another{NewLine}break");
+            PrintedDocShouldBe(doc, $"another{NewLine}break", 10);
         }
 
         [Test]
@@ -342,9 +307,7 @@ namespace CSharpier.Tests
                 Docs.IfBreak("break", "flat", "1")
             );
 
-            var result = Print(doc);
-
-            result.Should().Be("1flat");
+            PrintedDocShouldBe(doc, "1flat");
         }
 
         [Test]
@@ -356,9 +319,7 @@ namespace CSharpier.Tests
                 Docs.IfBreak("break", "flat", "hl")
             );
 
-            var result = Print(doc);
-
-            result.Should().Be($"1{NewLine}break");
+            PrintedDocShouldBe(doc, $"1{NewLine}break");
         }
 
         [TestCase(" ")]
@@ -430,6 +391,33 @@ namespace CSharpier.Tests
             );
 
             PrintedDocShouldBe(doc, $"x // comment{NewLine}y");
+        }
+
+        [Test]
+        public void HardLineIfNoPreviousLine_Should_Insert_Line_If_There_Isnt_One() {
+            var doc = Docs.Concat("1", Docs.HardLineIfNoPreviousLine, "2");
+
+            PrintedDocShouldBe(doc, $"1{NewLine}2");
+        }
+
+        [Test]
+        public void HardLineIfNoPreviousLine_Should_Not_Insert_Line_If_There_Is_One() {
+            var doc = Docs.Concat(
+                "1",
+                Docs.HardLine,
+                Docs.HardLineIfNoPreviousLine,
+                "2"
+            );
+
+            PrintedDocShouldBe(doc, $"1{NewLine}2");
+        }
+
+        [Test]
+        public void HardLineIfNoPreviousLine_Does_Not_Blow_Up()
+        {
+            var doc = Docs.Concat(Docs.HardLineIfNoPreviousLine, "1");
+
+            PrintedDocShouldBe(doc, "1");
         }
 
         [Test]

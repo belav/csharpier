@@ -6,6 +6,7 @@ namespace CSharpier
 {
     public partial class Printer
     {
+        // TODO 0 where is this used? I changed it and nothing broke
         private Doc PrintConstructorInitializerSyntax(
             ConstructorInitializerSyntax node
         ) {

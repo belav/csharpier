@@ -22,6 +22,9 @@ namespace CSharpier
         public static LineDoc SoftLine =>
             new() { Type = LineDoc.LineType.Soft };
 
+        public static HardLineIfNoPreviousLine HardLineIfNoPreviousLine =>
+            new();
+
         public static LeadingComment LeadingComment(
             string comment,
             CommentType commentType

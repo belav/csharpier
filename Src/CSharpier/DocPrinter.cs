@@ -434,6 +434,14 @@ namespace CSharpier
                                 shouldRemeasure = true;
                                 goto case PrintMode.MODE_BREAK;
                             case PrintMode.MODE_BREAK:
+                                if (
+                                    line.Squash
+                                    && output.Length > 0
+                                    && output[^1] == '\n'
+                                ) {
+                                    break;
+                                }
+
                                 if (line.IsLiteral)
                                 {
                                     if (output.Length > 0)
@@ -537,33 +545,6 @@ namespace CSharpier
             return trimmed;
         }
 
-        // // TODO 2 does the above method do the same thing as this method?
-        // private int Trim(List<string> output)
-        // {
-        //     if (output.Count == 0)
-        //     {
-        //         return 0;
-        //     }
-        //
-        //     var trimCount = 0;
-        //
-        //     // Trim whitespace at the end of line
-        //     while (output.Count > 0 && Regex.IsMatch(output[^1], "^[\\t ]*$"))
-        //     {
-        //         trimCount += output[^1].Length;
-        //         output.RemoveAt(output.Count - 1);
-        //     }
-        //
-        //     if (output.Count > 0)
-        //     {
-        //         var trimmed = output[^1];
-        //         trimmed = Regex.Replace(trimmed, "[\\t ]*$", "");
-        //         trimCount += output[^1].Length - trimmed.Length;
-        //         output[^1] = trimmed;
-        //     }
-        //
-        //     return trimCount;
-        // }
         private record IndentType(string Type, int Number);
 
         private record PrintCommand(Indent Indent, PrintMode Mode, Doc Doc);
