@@ -32,10 +32,8 @@ namespace CSharpier.Tests
                 directory.FullName,
                 $"Samples/{fileName}.cst"
             );
-            var code = File.ReadAllText(
-                @"C:\Projects\csharpier-repos\AutoMapper\src\UnitTests\Internationalization.cs"
-            );
-            var stopwatch = Stopwatch.StartNew();
+
+            var code = File.ReadAllText(file);
             var result = new CodeFormatter().Format(
                 code,
                 new Options { IncludeDocTree = true, IncludeAST = true, }
