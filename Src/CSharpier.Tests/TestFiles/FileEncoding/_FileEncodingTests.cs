@@ -10,7 +10,10 @@ namespace CSharpier.Tests.TestFiles
         {
             this.RunTest("FileEncoding", "Ansi");
         }
+
         [Test]
+        [Ignore(
+            "This fails on github actions because of line encodings. But if they are changed it fails on windows due to line endings. See #115")]
         public void USC2LEBOM()
         {
             this.RunTest("FileEncoding", "USC2LEBOM");
