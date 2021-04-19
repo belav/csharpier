@@ -66,7 +66,7 @@ namespace CSharpier
                 case BreakParent:
                     return "";
                 case Trim:
-                    return "Docs.Trim";
+                    return $"{indent}Docs.Trim";
                 case ForceFlat forceFlat:
                     return $"{indent}Docs.ForceFlat({newLine}{PrintIndentedDocTree(forceFlat.Contents)})";
                 case IndentDoc indentDoc:
