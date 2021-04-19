@@ -4,15 +4,16 @@ CSharpier is an opinionated code formatter for c#. It uses Roslyn to parse your 
 ### Work In Progress
 CSharpier is currently in alpha and I'd be hesitant to recommend using it on production code.
   - It has been tested against a large number of public repositories to validate that the changes it makes do not lose any syntax but there is a possibility it will break your code.
+    - This process has been automated and runs each time code is pushed.
   - The rules it uses to format code are not yet finalized and some of the results are ugly.
   - The rules it uses to format your code will change over time.
   - There are currently no options exposed for formatting.
   - The options for what files it should format are limited.
 
-I'm currently using CSharpier to format some small projects I'm working on and I've only run into a few of critical bugs since releasing it in alpha.
-  - One bug dealt with file encoding, and would save some files with an incorrect encoding - this resulted in files that would not compile.
-  - Support for formatting a Record type's primary constructor was missing. CSharpier reported the missing type and did not format the file.
-  - CSharpier had a bug where it would insert an extra new line on each format of a file.
+I'm currently using CSharpier to format some small projects I'm working on and this is the list of critical bugs since releasing it in alpha.
+  - There have been a couple of issues related to less common file encodings. One causing lose of source and one resulting in csharpier not formatting a file.
+  - There have been a few bugs that resulted in lose of code or code changing in a way that it no longer compiled.
+  - There have been a couple of bugs related to extra new lines being added.
   - If the CSharpier process was canceled while running, it would potentially leave a file half written.
 
 I encourage you to try it out on your own code and report any bugs, code that doesn't format well, or opinions on how you think the formatting should change. If you can live with the fact that the formatting will be changing over time, it is reasonably safe to use.
@@ -88,21 +89,23 @@ Formatting will take longer, but csharpier will validate the formatted syntax tr
 
 ```console
 Usage:
-  dotnet-csharpier [options] [<directory>]
+  dotnet-csharpier [options] [<directoryOrFile>]
 
 Arguments:
-  <directory>    A path to a directory containing files to format. If a path is not specified the current directory is used
+  <directoryOrFile>    A path to a directory containing files to format or a file to format. If a path is not specified the current directory is used
 
 Options:
-  -c, --check       Check that files are formatted. Will not write any changes.
-  -f, --fast    Skip comparing syntax tree of formatted file to original file to validate changes.
+  --check           Check that files are formatted. Will not write any changes.
+  --fast            Skip comparing syntax tree of formatted file to original file to validate changes.
+  --skip-write      Skip writing changes. Generally used for testing to ensure csharpier doesn't throw any errors or cause syntax tree validation failures.
   --version         Show version information
   -?, -h, --help    Show help and usage information
 
+
 ```
 
-### \<directory\>
-Currently CSharpier only supports being passed a directory to recursively scan for .cs files.
+### \<directoryOrFile\>
+Currently CSharpier only supports being passed a directory to recursively scan for .cs files or a single file to format.
 If a directory is not supplied, it will use the current directory.
 
 ### --check
