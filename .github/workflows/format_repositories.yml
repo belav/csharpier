@@ -8,10 +8,10 @@ jobs:
         with:
           path: csharpier
       -
-      uses: actions/checkout@v2
-      with:
-        repository: belav/csharpier-repos
-        path: csharpier
+        uses: actions/checkout@v2
+        with:
+          repository: belav/csharpier-repos
+          path: csharpier
       -
         run: dotnet build csharpier/Src/CSharpier/CSharpier.csproj -c release
       -
