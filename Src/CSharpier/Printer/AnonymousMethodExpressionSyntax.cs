@@ -11,14 +11,11 @@ namespace CSharpier
         private Doc PrintAnonymousMethodExpressionSyntax(
             AnonymousMethodExpressionSyntax node
         ) {
-            var docs = new List<Doc>();
-            docs.Add(
-                this.PrintSyntaxToken(
-                    node.AsyncKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
+            var docs = new List<Doc>
+            {
+                this.PrintModifiers(node.Modifiers),
                 SyntaxTokens.Print(node.DelegateKeyword)
-            );
+            };
 
             string? groupId = null;
             if (node.ParameterList != null)
