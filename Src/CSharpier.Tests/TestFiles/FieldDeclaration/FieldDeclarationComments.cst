@@ -1,7 +1,7 @@
 public class ClassName
 {
     // leading comments
-    private static const string SomeName;
+    private static const string SomeName = "1";
 
     public SomeClass SomeName; // trailing comments
 }

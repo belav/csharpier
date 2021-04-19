@@ -6,7 +6,7 @@ class ClassName
         {
             1 => 100,
             2 => 200,
-            3 when false => 300
+            3 when false => 300,
             _ => throw new global::System.Exception()
         };
     }

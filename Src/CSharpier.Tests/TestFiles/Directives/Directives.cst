@@ -59,4 +59,11 @@ class ClassName { }
 
 #endregion
 
+#if DIRECTIVES_AROUND_MODIFIERS_BREAK_CORRECTLY
+public
+#else
+internal
+#endif
+static class ConditionallyPublic { }
+
 

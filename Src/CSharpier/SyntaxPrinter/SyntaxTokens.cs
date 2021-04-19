@@ -125,7 +125,12 @@ namespace CSharpier.SyntaxPrinter
                     ) {
                         docs.Add(Docs.HardLine);
                     }
-                    docs.Add(Docs.Trim, trivia.ToString(), Docs.HardLine);
+                    docs.Add(
+                        Docs.Trim,
+                        Docs.HardLineIfNoPreviousLine,
+                        trivia.ToString(),
+                        Docs.HardLine
+                    );
                 }
                 else if (IsRegion(kind))
                 {

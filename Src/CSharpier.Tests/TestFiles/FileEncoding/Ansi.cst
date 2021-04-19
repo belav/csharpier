@@ -1,0 +1,4 @@
+public class AnsiCharacters
+{
+    public string ∆ше;
+}

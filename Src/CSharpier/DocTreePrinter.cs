@@ -32,6 +32,8 @@ namespace CSharpier
                     + "\""
                     + stringDoc.Value?.Replace("\"", "\\\"")
                     + "\"";
+                case HardLineIfNoPreviousLine:
+                    return indent + "Docs.HardLineIfNoPreviousLine";
                 case HardLine:
                     return indent + "Docs.HardLine";
                 case LiteralLine:

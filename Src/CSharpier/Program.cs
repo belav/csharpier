@@ -13,17 +13,6 @@ namespace CSharpier
 {
     class Program
     {
-        // TODO 0 why does that weird file in roslyn fail validation?
-        // also what about the files that fail to compile?
-        //path = +="roslyn";
-        // TODO 0 lots fail to compile, codegen files should be excluded perhaps?
-        //path += "spnetcore";
-        // TODO 0 stackoverflows, probably because of the ridiculous testing files that are in there, and c# thinks there is a stackoverflow because the stack is so large, and looks like it is repeating.
-        // actually it looks like runtime has tests that will fail in recursive tree walkers
-        // see https://github.com/dotnet/runtime/blob/master/src/tests/JIT/Regression/JitBlue/GitHub_10215/GitHub_10215.cs
-        // TODO 0 also some weird "failures" due to trivia moving lines, although the compiled code would be the same
-        //path += "runtime";
-        //path += "AspNetWebStack";
         private static int sourceLost;
         private static int exceptionsFormatting;
         private static int exceptionsValidatingSource;
@@ -164,24 +153,18 @@ namespace CSharpier
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            using var reader = new StreamReader(file);
-            var code = await reader.ReadToEndAsync();
-            if (code.Length == 0)
+            var fileReaderResult =
+                await FileReader.ReadFile(file, cancellationToken);
+            if (fileReaderResult.FileContents.Length == 0)
             {
                 return;
             }
-
-            var detectionResult = CharsetDetector.DetectFromFile(file);
-            var encoding = detectionResult?.Detected?.Encoding;
-            if (encoding == null)
+            if (fileReaderResult.DefaultedEncoding)
             {
                 Console.WriteLine(
-                    GetPath()
-                    + " - unable to detect file encoding. Defaulting to "
-                    + Encoding.Default
+                    $"{GetPath()} - unable to detect file encoding. Defaulting to {fileReaderResult.Encoding}"
                 );
             }
-            reader.Close();
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -195,7 +178,7 @@ namespace CSharpier
             try
             {
                 result = await new CodeFormatter().FormatAsync(
-                    code,
+                    fileReaderResult.FileContents,
                     new Options(),
                     cancellationToken
                 );
@@ -234,7 +217,7 @@ namespace CSharpier
             if (validate)
             {
                 var syntaxNodeComparer = new SyntaxNodeComparer(
-                    code,
+                    fileReaderResult.FileContents,
                     result.Code,
                     cancellationToken
                 );
@@ -269,7 +252,7 @@ namespace CSharpier
 
             if (check)
             {
-                if (result.Code != code)
+                if (result.Code != fileReaderResult.FileContents)
                 {
                     Console.WriteLine(GetPath() + " - was not formatted");
                     Interlocked.Increment(ref unformattedFiles);
@@ -282,11 +265,7 @@ namespace CSharpier
             if (!check)
             {
                 // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
-                File.WriteAllText(
-                    file,
-                    result.Code,
-                    encoding ?? Encoding.Default
-                );
+                File.WriteAllText(file, result.Code, fileReaderResult.Encoding);
             }
         }
 
