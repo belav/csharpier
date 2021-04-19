@@ -66,4 +66,14 @@ internal
 #endif
 static class ConditionallyPublic { }
 
+class IndentWithRegionEdgeCase
+{
+    string RegionsIndentAndNewLineProperly =
+        #region one
+        @"using System;"
+        #endregion one
+    ;
+}
+
+
 
