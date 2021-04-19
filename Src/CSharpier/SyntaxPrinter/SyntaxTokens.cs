@@ -132,10 +132,9 @@ namespace CSharpier.SyntaxPrinter
                         && trivia.Token.Parent is BlockSyntax blockSyntax
                         && blockSyntax.Statements.Count == 0
                     ) {
-                        docs.Add(Docs.HardLine);
+                        docs.Add(Docs.HardLineIfNoPreviousLine);
                     }
                     docs.Add(
-                        Docs.Trim,
                         Docs.HardLineIfNoPreviousLine,
                         Docs.Trim,
                         trivia.ToString(),
@@ -154,7 +153,6 @@ namespace CSharpier.SyntaxPrinter
                     }
 
                     docs.Add(
-                        Docs.Trim,
                         Docs.HardLineIfNoPreviousLine,
                         Docs.Trim,
                         triviaText,

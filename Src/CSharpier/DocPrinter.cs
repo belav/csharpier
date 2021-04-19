@@ -439,7 +439,7 @@ namespace CSharpier
                                 if (
                                     line.Squash
                                     && output.Length > 0
-                                    && output[^1] == '\n'
+                                    && EndsWithNewLineAndWhitespace(output)
                                 ) {
                                     break;
                                 }
@@ -523,6 +523,29 @@ namespace CSharpier
         private static int GetStringWidth(string value)
         {
             return value.Length;
+        }
+
+        private static bool EndsWithNewLineAndWhitespace(
+            StringBuilder stringBuilder
+        ) {
+            for (var index = 1; index <= stringBuilder.Length; index++)
+            {
+                var next = stringBuilder[^index];
+                if (next == ' ' || next == '\t')
+                {
+                    continue;
+                }
+                else if (next == '\n')
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return false;
         }
 
         private static int TrimOutput(StringBuilder stringBuilder)

@@ -394,7 +394,7 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void HardLineIfNoPreviousLine_Should_Insert_Line_If_There_Isnt_One() {
+        public void HardLineIfNoPreviousLine_Should_Insert_Line_If_There_Is_Not_One() {
             var doc = Docs.Concat("1", Docs.HardLineIfNoPreviousLine, "2");
 
             PrintedDocShouldBe(doc, $"1{NewLine}2");
@@ -418,6 +418,20 @@ namespace CSharpier.Tests
             var doc = Docs.Concat(Docs.HardLineIfNoPreviousLine, "1");
 
             PrintedDocShouldBe(doc, "1");
+        }
+
+        [Test]
+        public void HardLineIfNoPreviousLine_Should_Not_Insert_After_Indented_HardLine() {
+            var doc = Docs.Concat(
+                Docs.Indent(
+                    "1",
+                    Docs.HardLine,
+                    Docs.HardLineIfNoPreviousLine,
+                    "2"
+                )
+            );
+
+            PrintedDocShouldBe(doc, $"1{NewLine}    2");
         }
 
         [Test]
