@@ -128,6 +128,7 @@ namespace CSharpier.SyntaxPrinter
                     docs.Add(
                         Docs.Trim,
                         Docs.HardLineIfNoPreviousLine,
+                        Docs.Trim,
                         trivia.ToString(),
                         Docs.HardLine
                     );
@@ -143,7 +144,13 @@ namespace CSharpier.SyntaxPrinter
                         triviaText = leadingTrivia[x - 1] + triviaText;
                     }
 
-                    docs.Add(Docs.Trim, triviaText, Docs.HardLine);
+                    docs.Add(
+                        Docs.Trim,
+                        Docs.HardLineIfNoPreviousLine,
+                        Docs.Trim,
+                        triviaText,
+                        Docs.HardLine
+                    );
                 }
             }
 
