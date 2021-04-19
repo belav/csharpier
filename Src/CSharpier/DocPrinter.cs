@@ -257,6 +257,8 @@ namespace CSharpier
                         case ForceFlat flat:
                             Push(flat.Contents, currentMode, currentIndent);
                             break;
+                        case BreakParent:
+                            break;
                         default:
                             throw new Exception(
                                 "Can't handle " + currentDoc.GetType()

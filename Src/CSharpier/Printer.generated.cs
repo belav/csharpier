@@ -1,9 +1,8 @@
 using System;
-using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
-using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 namespace CSharpier
 {
@@ -14,7 +13,7 @@ namespace CSharpier
         {
             if (syntaxNode == null)
             {
-                return Doc.Null;
+                return Docs.Null;
             }
 
             // TODO 0 kill? runtime repo has files that will fail on deep recursion
@@ -325,7 +324,7 @@ namespace CSharpier
                             interfaceDeclarationSyntax
                         );
                     case InterpolatedStringExpressionSyntax interpolatedStringExpressionSyntax:
-                        return this.PrintInterpolatedStringExpressionSyntax(
+                        return InterpolatedStringExpression.Print(
                             interpolatedStringExpressionSyntax
                         );
                     case InterpolatedStringTextSyntax interpolatedStringTextSyntax:

@@ -28,8 +28,8 @@ class ClassName
 
         for (
             var laksdflasdjfkaskdlfklasdfkljasdf = 0;
-            laksdflasdjfkaskdlfklasdfkljasdf
-            < laksdflasdjfkaskdlfklasdfkljasdf + 1;
+            laksdflasdjfkaskdlfklasdfkljasdf <
+            laksdflasdjfkaskdlfklasdfkljasdf + 1;
             laksdflasdjfkaskdlfklasdfkljasdf++
         ) {
             break;
@@ -38,8 +38,8 @@ class ClassName
         for (
             var laksdflasdjfkaskdlfklasdfkljasdf = 0,
                 lkasdfkjlasjldkfljaskdflkasdfljkasdfljk = 1;
-            laksdflasdjfkaskdlfklasdfkljasdf
-            < laksdflasdjfkaskdlfklasdfkljasdf + 1;
+            laksdflasdjfkaskdlfklasdfkljasdf <
+            laksdflasdjfkaskdlfklasdfkljasdf + 1;
             laksdflasdjfkaskdlfklasdfkljasdf++,
                 lkasdfkjlasjldkfljaskdflkasdfljkasdfljk
         ) {

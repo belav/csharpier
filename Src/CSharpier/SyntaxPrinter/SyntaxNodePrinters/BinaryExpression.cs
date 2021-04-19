@@ -65,11 +65,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     }
 
                     docs.Add(
-                        Docs.Line,
+                        " ",
                         SyntaxTokens.Print(
                             binaryExpressionSyntax.OperatorToken
                         ),
-                        " ",
+                        Docs.Line,
                         SyntaxNodes.Print(binaryExpressionSyntax.Right)
                     );
                 }

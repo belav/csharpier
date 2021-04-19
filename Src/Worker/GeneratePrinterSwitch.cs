@@ -27,6 +27,8 @@ namespace Worker
 using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 namespace CSharpier
 {
@@ -64,7 +66,7 @@ namespace CSharpier
 
             var newFiles = Path.Combine(
                 rootDirectory.FullName,
-                "CSharpier/SyntaxPrinter/Nodes"
+                "CSharpier/SyntaxPrinter/SyntaxNodePrinters"
             );
             foreach (var file in new DirectoryInfo(newFiles).GetFiles())
             {

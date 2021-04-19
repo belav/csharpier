@@ -2,6 +2,11 @@ public class ClassName
 {
     public string Test = $"test";
 
+    public string LeadingCommentWithInterpolatedString =
+        $"one" +
+        // comment stays on this line
+        $"two";
+
     public string TwoValues = $"{SomeValue}{SomeOtherValue}";
 
     public string ForceFlatInString =
