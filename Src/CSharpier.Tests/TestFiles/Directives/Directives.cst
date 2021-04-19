@@ -66,13 +66,23 @@ internal
 #endif
 static class ConditionallyPublic { }
 
-class IndentWithRegionEdgeCase
+class EdgeCases
 {
     string RegionsIndentAndNewLineProperly =
         #region one
         @"using System;"
         #endregion one
     ;
+
+    void MethodWithNestedIfsDoesNotGetExtraLineBreak()
+    {
+#if DEBUG
+        var x = 1;
+#if NO_EXTRA_BREAK_ABOVE_ME
+        x = 2;
+#endif
+#endif
+    }
 }
 
 

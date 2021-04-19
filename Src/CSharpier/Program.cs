@@ -269,6 +269,19 @@ namespace CSharpier
             }
         }
 
+        private static bool IgnoreFile(string filePath)
+        {
+            var normalizedFilePath = filePath.Replace("\\", "/");
+
+            return normalizedFilePath.EndsWith(".g.cs")
+            || normalizedFilePath.EndsWith(".cshtml.cs")
+            || normalizedFilePath.ContainsIgnoreCase("/obj/")
+            // can't format because of #121
+            || normalizedFilePath.EndsWith(
+                "efcore/test/Microsoft.Data.Sqlite.Tests/TestUtilities/SqliteTestFramework.cs"
+            );
+        }
+
         private static string PadToSize(string value, int size = 120)
         {
             while (value.Length < size)
