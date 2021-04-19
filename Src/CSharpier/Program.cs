@@ -13,7 +13,7 @@ namespace CSharpier
 {
     class Program
     {
-        private static int sourceLost;
+        private static int failedSyntaxTreeValidation;
         private static int exceptionsFormatting;
         private static int exceptionsValidatingSource;
         private static int files;
@@ -31,6 +31,7 @@ namespace CSharpier
         }
 
         // TODO look into https://github.com/dotnet/command-line-api/blob/main/docs/Your-first-app-with-System-CommandLine-DragonFruit.md the next time options are added
+        // TODO creating a class for this and passing in options would mean we don't have to pass around so many parameters
         public static async Task<int> Run(
             string directoryOrFile,
             bool fast,
@@ -89,49 +90,67 @@ namespace CSharpier
                 }
             }
 
+            PrintResults(fullStopwatch, validate, check);
+
+            return ReturnExitCode(check);
+        }
+
+        private static void PrintResults(
+            Stopwatch stopwatch,
+            bool validate,
+            bool check
+        ) {
             Console.WriteLine(
                 PadToSize("total time: ", 80)
-                + ReversePad(fullStopwatch.ElapsedMilliseconds + "ms")
+                + ReversePad(stopwatch.ElapsedMilliseconds + "ms")
             );
-            Console.WriteLine(
-                PadToSize("total files: ", 80) + ReversePad(files + "  ")
-            );
+            PrintResultLine("Total files", files);
+
             if (validate)
             {
-                Console.WriteLine(
-                    PadToSize("files that failed syntax tree validation: ", 80)
-                    + ReversePad(sourceLost + "  ")
+                PrintResultLine(
+                    "Failed syntax tree validation",
+                    failedSyntaxTreeValidation
                 );
-                Console.WriteLine(
-                    PadToSize(
-                        "files that threw exceptions while formatting: ",
-                        80
-                    )
-                    + ReversePad(exceptionsFormatting + "  ")
+
+                PrintResultLine(
+                    "Threw exceptions while formatting: ",
+                    exceptionsFormatting
                 );
-                Console.WriteLine(
-                    PadToSize(
-                        "files that threw exceptions while validating syntax tree: ",
-                        80
-                    )
-                    + ReversePad(exceptionsValidatingSource + "  ")
+                PrintResultLine(
+                    "files that threw exceptions while validating syntax tree: ",
+                    exceptionsValidatingSource
                 );
             }
 
             if (check)
             {
-                Console.WriteLine(
-                    PadToSize("files that were not formatted: ", 80)
-                    + ReversePad(unformattedFiles + "  ")
+                PrintResultLine(
+                    "files that were not formatted",
+                    unformattedFiles
                 );
+            }
+        }
 
-                if (unformattedFiles > 0)
-                {
-                    return 1;
-                }
+        private static int ReturnExitCode(bool check)
+        {
+            if (
+                (check && unformattedFiles > 0)
+                || failedSyntaxTreeValidation > 0
+                || exceptionsFormatting > 0
+                || exceptionsValidatingSource > 0
+            ) {
+                return 1;
             }
 
             return 0;
+        }
+
+        private static void PrintResultLine(string message, int count)
+        {
+            Console.WriteLine(
+                PadToSize(message + ": ", 80) + ReversePad(count + "  ")
+            );
         }
 
         private static async Task DoWork(
@@ -141,13 +160,8 @@ namespace CSharpier
             bool check,
             CancellationToken cancellationToken
         ) {
-            if (
-                file.EndsWith(".g.cs")
-                || file.EndsWith(".cshtml.cs")
-                || file.ContainsIgnoreCase("\\obj\\")
-                || file.ContainsIgnoreCase("/obj/")
-                || file.EndsWithIgnoreCase("AllInOne.cs")
-            ) {
+            if (IgnoreFile(file))
+            {
                 return;
             }
 
@@ -230,7 +244,7 @@ namespace CSharpier
                         );
                     if (!string.IsNullOrEmpty(failure))
                     {
-                        Interlocked.Increment(ref sourceLost);
+                        Interlocked.Increment(ref failedSyntaxTreeValidation);
                         Console.WriteLine(
                             GetPath() + " - failed syntax tree validation"
                         );

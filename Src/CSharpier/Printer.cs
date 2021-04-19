@@ -110,7 +110,7 @@ namespace CSharpier
                     modifier =>
                         this.PrintSyntaxToken(
                             modifier,
-                            afterTokenIfNoTrailing: " "
+                            afterTokenIfNoTrailing: ""
                         )
                 )
                 .ToList();
