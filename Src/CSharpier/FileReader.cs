@@ -14,12 +14,13 @@ namespace CSharpier
         }
 
         public static async Task<FileReaderResult> ReadFile(
-            string file,
+            string filePath,
             CancellationToken cancellationToken
         ) {
             var defaultedEncoding = false;
 
-            var detectionResult = CharsetDetector.DetectFromFile(file);
+            await using FileStream fileStream = File.OpenRead(filePath);
+            var detectionResult = CharsetDetector.DetectFromStream(fileStream);
             var encoding = detectionResult?.Detected?.Encoding;
             if (encoding == null)
             {
@@ -27,16 +28,19 @@ namespace CSharpier
                 encoding = Encoding.Default;
             }
 
-            var fileContents =
-                await File.ReadAllTextAsync(
-                    file,
-                        // this fixes an issue with ANSI encoded files like csharpier-repos\AutoMapper\src\UnitTests\Internationalization.cs
-                        encoding.CodePage
-                        == 852
-                        ? Encoding.GetEncoding(1252)
-                        : encoding,
-                    cancellationToken
-                );
+            fileStream.Seek(0, SeekOrigin.Begin);
+
+            // this fixes an issue with ANSI encoded files like csharpier-repos\AutoMapper\src\UnitTests\Internationalization.cs
+            var encodingToRead = encoding.CodePage == 852
+                ? Encoding.GetEncoding(1252)
+                : encoding;
+
+            using var streamReader = new StreamReader(
+                fileStream,
+                encodingToRead
+            );
+
+            var fileContents = await streamReader.ReadToEndAsync();
 
             return new FileReaderResult(
                 encoding,
