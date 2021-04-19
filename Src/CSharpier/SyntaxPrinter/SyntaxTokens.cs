@@ -19,11 +19,18 @@ namespace CSharpier.SyntaxPrinter
             return PrintSyntaxToken(syntaxToken);
         }
 
+        public static Doc PrintWithSuffix(
+            SyntaxToken syntaxToken,
+            Doc suffixDoc
+        ) {
+            return PrintSyntaxToken(syntaxToken, suffixDoc);
+        }
+
         // TODO long term make this private, and expose methods for Print, PrintWithAfterToken, PrintWithBeforeToken (not the real names, we can do better!)
         // actually if we change how comments/directives print, maybe we don't need the before/after tokens
         public static Doc PrintSyntaxToken(
             SyntaxToken syntaxToken,
-            Doc? afterTokenIfNoTrailing = null,
+            Doc? suffixDoc = null,
             bool skipLeadingTrivia = false
         ) {
             if (syntaxToken.RawKind == 0)
@@ -46,9 +53,10 @@ namespace CSharpier.SyntaxPrinter
             {
                 docs.Add(trailingTrivia);
             }
-            else if (afterTokenIfNoTrailing != null)
+
+            if (suffixDoc != null)
             {
-                docs.Add(afterTokenIfNoTrailing);
+                docs.Add(suffixDoc);
             }
 
             return Docs.Concat(docs);

@@ -7,11 +7,30 @@ public class ClassName
             x = 1;
         }
 
-        foreach (var x in this.SomeMethodCall()
-            .SomeChainedCall()
-            .AnotherChainedCall()
+        foreach (
+            var x in this.SomeMethodCall()
+                .SomeChainedCall()
+                .AnotherChainedCall()
         ) {
             break;
+        }
+
+        foreach (
+            var entityDefinition in this.EntityDefinitionRepository.GetList()
+        ) {
+            return;
+        }
+
+        foreach (var entityDefinition in EntityDefinitionRepository.GetList())
+        {
+            return;
+        }
+
+        foreach (
+            var x // trailing
+            in y
+        ) {
+            return;
         }
     }
 }

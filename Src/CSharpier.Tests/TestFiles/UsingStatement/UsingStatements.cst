@@ -26,13 +26,21 @@ class ClassName
         using (BeginScope())
             return;
 
-        using (BeginScope()
-            .LongerMethod()
-            .MakeThisThingChain()
-            .MaybeNow()
-            .OrNow()
+        using (
+            BeginScope()
+                .LongerMethod()
+                .MakeThisThingChain()
+                .MaybeNow()
+                .OrReallyNow()
+        ) {
+            return;
+        }
+
+        using (
+            var response = await this.SomethingThatIs(JustLongEnoughhhhhhh)
         ) {
             return;
         }
     }
 }
+
