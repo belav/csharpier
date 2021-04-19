@@ -36,6 +36,11 @@ class ClassName
             return;
         }
 
+        using (var response = await this.SomethingThatIs(JustTooShort))
+        {
+            return;
+        }
+
         using (
             var response = await this.SomethingThatIs(JustLongEnoughhhhhhh)
         ) {
