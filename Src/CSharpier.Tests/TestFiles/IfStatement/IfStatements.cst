@@ -12,10 +12,10 @@ public class ClassName
         if (true && false) { }
 
         if (
-            longStatementName
-            && longerStatementName
-            && evenLongerStatementName
-            && superLongStatementName
+            longStatementName &&
+            longerStatementName &&
+            evenLongerStatementName &&
+            superLongStatementName
         ) {
             return;
         }

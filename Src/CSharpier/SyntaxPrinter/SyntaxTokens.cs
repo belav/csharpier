@@ -9,6 +9,11 @@ namespace CSharpier.SyntaxPrinter
 {
     public class SyntaxTokens
     {
+        public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken)
+        {
+            return PrintSyntaxToken(syntaxToken, null, skipLeadingTrivia: true);
+        }
+
         public static Doc Print(SyntaxToken syntaxToken)
         {
             return PrintSyntaxToken(syntaxToken);
@@ -18,7 +23,8 @@ namespace CSharpier.SyntaxPrinter
         // actually if we change how comments/directives print, maybe we don't need the before/after tokens
         public static Doc PrintSyntaxToken(
             SyntaxToken syntaxToken,
-            Doc? afterTokenIfNoTrailing = null
+            Doc? afterTokenIfNoTrailing = null,
+            bool skipLeadingTrivia = false
         ) {
             if (syntaxToken.RawKind == 0)
             {
@@ -26,10 +32,13 @@ namespace CSharpier.SyntaxPrinter
             }
 
             var docs = new List<Doc>();
-            var leadingTrivia = PrintLeadingTrivia(syntaxToken);
-            if (leadingTrivia != Doc.Null)
+            if (!skipLeadingTrivia)
             {
-                docs.Add(leadingTrivia);
+                var leadingTrivia = PrintLeadingTrivia(syntaxToken);
+                if (leadingTrivia != Doc.Null)
+                {
+                    docs.Add(leadingTrivia);
+                }
             }
             docs.Add(syntaxToken.Text);
             var trailingTrivia = PrintTrailingTrivia(syntaxToken);
@@ -45,7 +54,7 @@ namespace CSharpier.SyntaxPrinter
             return Docs.Concat(docs);
         }
 
-        private static Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
+        public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
         {
             var indentTrivia = syntaxToken.Kind() == SyntaxKind.CloseBraceToken;
 

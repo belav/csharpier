@@ -49,6 +49,14 @@ namespace CSharpier
             return new(CleanContents(contents.ToList()));
         }
 
+        public static ForceFlat ForceFlat(List<Doc> contents)
+        {
+            return new()
+            {
+                Contents = contents.Count == 0 ? contents[0] : Concat(contents),
+            };
+        }
+
         public static ForceFlat ForceFlat(params Doc[] contents)
         {
             return new()
