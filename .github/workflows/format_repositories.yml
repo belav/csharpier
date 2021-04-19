@@ -1,4 +1,7 @@
 name: Format Repositories
+on:
+  push:
+    branches: [ master ]
 jobs:
   format_repositories:
     runs-on: ubuntu-latest
