@@ -19,7 +19,7 @@ namespace CSharpier
         ) {
             var defaultedEncoding = false;
 
-            await using FileStream fileStream = File.OpenRead(filePath);
+            using FileStream fileStream = File.OpenRead(filePath);
             var detectionResult = CharsetDetector.DetectFromStream(fileStream);
             var encoding = detectionResult?.Detected?.Encoding;
             if (encoding == null)
@@ -40,7 +40,7 @@ namespace CSharpier
                 encodingToRead
             );
 
-            var fileContents = await streamReader.ReadToEndAsync();
+            var fileContents = streamReader.ReadToEnd();
 
             return new FileReaderResult(
                 encoding,
