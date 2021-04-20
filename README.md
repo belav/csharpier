@@ -9,14 +9,9 @@ CSharpier is currently in alpha and I'd be hesitant to recommend using it on pro
   - The rules it uses to format your code will change over time.
   - There are currently no options exposed for formatting.
   - The options for what files it should format are limited.
+  - There have been a handful of critical bugs that resulted in a lose of source code since it has entered alpha.
 
-I'm currently using CSharpier to format some small projects I'm working on and this is the list of critical bugs since releasing it in alpha.
-  - There have been a couple of issues related to less common file encodings. One causing lose of source and one resulting in csharpier not formatting a file.
-  - There have been a few bugs that resulted in lose of code or code changing in a way that it no longer compiled.
-  - There have been a couple of bugs related to extra new lines being added.
-  - If the CSharpier process was canceled while running, it would potentially leave a file half written.
-
-I encourage you to try it out on your own code and report any bugs, code that doesn't format well, or opinions on how you think the formatting should change. If you can live with the fact that the formatting will be changing over time, it is reasonably safe to use.
+I encourage you to try it out on your own code and report any bugs, code that doesn't format well, or opinions on how you think the formatting should change. If you can live with the fact that the formatting will be changing over time, it is reasonably safe to use. In addition to a steadily growing set of unit tests; csharpier is tested against ~60k c# files from a range of public repositories to validate it does not result in the lose of any source code. 
 
 ### Features
   - It is fast. It can format a solution of ~11,000 files in ~30 seconds.
