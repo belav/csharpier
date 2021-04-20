@@ -13,28 +13,22 @@ namespace CSharpier
 
             var result = Docs.Concat(
                 this.PrintExtraNewLines(node),
-                this.PrintSyntaxToken(
-                    node.AwaitKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
-                this.PrintSyntaxToken(
-                    node.ForEachKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
-                SyntaxTokens.Print(node.OpenParenToken),
-                this.Print(node.Type),
+                SyntaxTokens.PrintWithSuffix(node.AwaitKeyword, " "),
+                SyntaxTokens.Print(node.ForEachKeyword),
                 " ",
-                this.PrintSyntaxToken(
-                    node.Identifier,
-                    afterTokenIfNoTrailing: " "
-                ),
-                this.PrintSyntaxToken(
-                    node.InKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
+                SyntaxTokens.Print(node.OpenParenToken),
                 Docs.GroupWithId(
                     groupId,
-                    this.Print(node.Expression),
+                    Docs.Indent(
+                        Docs.SoftLine,
+                        SyntaxNodes.Print(node.Type),
+                        " ",
+                        SyntaxTokens.Print(node.Identifier),
+                        " ",
+                        SyntaxTokens.Print(node.InKeyword),
+                        " ",
+                        SyntaxNodes.Print(node.Expression)
+                    ),
                     Docs.SoftLine
                 ),
                 SyntaxTokens.Print(node.CloseParenToken),
@@ -43,7 +37,7 @@ namespace CSharpier
                             blockSyntax,
                             groupId
                         )
-                    : this.Print(node.Statement)
+                    : SyntaxNodes.Print(node.Statement)
             );
 
             return result;

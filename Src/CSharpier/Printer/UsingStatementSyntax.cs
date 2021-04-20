@@ -15,30 +15,30 @@ namespace CSharpier
             var docs = new List<Doc>
             {
                 this.PrintExtraNewLines(node),
-                this.PrintSyntaxToken(
-                    node.AwaitKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
-                this.PrintSyntaxToken(
-                    node.UsingKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
+                SyntaxTokens.PrintWithSuffix(node.AwaitKeyword, " "),
+                SyntaxTokens.Print(node.UsingKeyword),
+                " ",
                 SyntaxTokens.Print(node.OpenParenToken),
                 Docs.GroupWithId(
                     groupId,
-                    node.Declaration != null
-                        ? this.PrintVariableDeclarationSyntax(node.Declaration)
-                        : Doc.Null,
-                    node.Expression != null
-                        ? this.Print(node.Expression)
-                        : Doc.Null,
+                    Docs.Indent(
+                        Docs.SoftLine,
+                        node.Declaration != null
+                            ? this.PrintVariableDeclarationSyntax(
+                                    node.Declaration
+                                )
+                            : Doc.Null,
+                        node.Expression != null
+                            ? this.Print(node.Expression)
+                            : Doc.Null
+                    ),
                     Docs.SoftLine
                 ),
                 SyntaxTokens.Print(node.CloseParenToken)
             };
             if (node.Statement is UsingStatementSyntax)
             {
-                docs.Add(Docs.HardLine, this.Print(node.Statement));
+                docs.Add(Docs.HardLine, SyntaxNodes.Print(node.Statement));
             }
             else if (node.Statement is BlockSyntax blockSyntax)
             {
@@ -52,7 +52,10 @@ namespace CSharpier
             else
             {
                 docs.Add(
-                    Docs.Indent(Docs.HardLine, this.Print(node.Statement))
+                    Docs.Indent(
+                        Docs.HardLine,
+                        SyntaxNodes.Print(node.Statement)
+                    )
                 );
             }
 
