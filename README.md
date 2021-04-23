@@ -9,7 +9,7 @@ CSharpier is currently in alpha and I'd be hesitant to recommend using it on pro
   - The rules it uses to format your code will change over time.
   - There are currently no options exposed for formatting.
   - The options for what files it should format are limited.
-  - There have been a handful of critical bugs that resulted in a lose of source code since it has entered alpha.
+  - There have been a handful of critical bugs that resulted in a loss of source code since it has entered alpha.
 
 I encourage you to try it out on your own code and report any bugs, code that doesn't format well, or opinions on how you think the formatting should change. If you can live with the fact that the formatting will be changing over time, it is reasonably safe to use. In addition to a steadily growing set of unit tests; csharpier is tested against ~60k c# files from a range of public repositories to validate it does not result in the lose of any source code. 
 
