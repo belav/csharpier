@@ -31,8 +31,8 @@ namespace Worker
             var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
                 .Where(
                     o =>
-                        !o.IsAbstract
-                        && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
+                        !o.IsAbstract &&
+                        typeof(CSharpSyntaxNode).IsAssignableFrom(o)
                 )
                 .ToList();
 

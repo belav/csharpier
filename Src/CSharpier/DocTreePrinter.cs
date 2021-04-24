@@ -28,10 +28,10 @@ namespace CSharpier
                 case NullDoc:
                     return indent + "Docs.Null";
                 case StringDoc stringDoc:
-                    return indent
-                    + "\""
-                    + stringDoc.Value?.Replace("\"", "\\\"")
-                    + "\"";
+                    return indent +
+                    "\"" +
+                    stringDoc.Value?.Replace("\"", "\\\"") +
+                    "\"";
                 case HardLineIfNoPreviousLine:
                     return indent + "Docs.HardLineIfNoPreviousLine";
                 case HardLine:
@@ -59,8 +59,8 @@ namespace CSharpier
                     result += ")";
                     return result;
                 case LineDoc lineDoc:
-                    return indent
-                    + (lineDoc.Type == LineDoc.LineType.Normal
+                    return indent +
+                    (lineDoc.Type == LineDoc.LineType.Normal
                         ? "Docs.Line"
                         : "Docs.SoftLine");
                 case BreakParent:

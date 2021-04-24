@@ -72,19 +72,19 @@ namespace CSharpier
                     syntaxNode as FunctionPointerCallingConventionSyntax
                 );
             if (
-                syntaxNode
-                is FunctionPointerUnmanagedCallingConventionListSyntax
+                syntaxNode is
+                FunctionPointerUnmanagedCallingConventionListSyntax
             )
                 WriteFunctionPointerUnmanagedCallingConventionListSyntax(
                     builder,
-                    syntaxNode
-                    as FunctionPointerUnmanagedCallingConventionListSyntax
+                    syntaxNode as
+                    FunctionPointerUnmanagedCallingConventionListSyntax
                 );
             if (syntaxNode is FunctionPointerUnmanagedCallingConventionSyntax)
                 WriteFunctionPointerUnmanagedCallingConventionSyntax(
                     builder,
-                    syntaxNode
-                    as FunctionPointerUnmanagedCallingConventionSyntax
+                    syntaxNode as
+                    FunctionPointerUnmanagedCallingConventionSyntax
                 );
             if (syntaxNode is NullableTypeSyntax)
                 WriteNullableTypeSyntax(
@@ -327,8 +327,8 @@ namespace CSharpier
             if (syntaxNode is ImplicitStackAllocArrayCreationExpressionSyntax)
                 WriteImplicitStackAllocArrayCreationExpressionSyntax(
                     builder,
-                    syntaxNode
-                    as ImplicitStackAllocArrayCreationExpressionSyntax
+                    syntaxNode as
+                    ImplicitStackAllocArrayCreationExpressionSyntax
                 );
             if (syntaxNode is QueryExpressionSyntax)
                 WriteQueryExpressionSyntax(
@@ -1866,8 +1866,8 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.CallingConvention
-                != default(FunctionPointerCallingConventionSyntax)
+                syntaxNode.CallingConvention !=
+                default(FunctionPointerCallingConventionSyntax)
             ) {
                 var callingConventionBuilder = new StringBuilder();
                 WriteFunctionPointerCallingConventionSyntax(
@@ -1879,8 +1879,8 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.ParameterList
-                != default(FunctionPointerParameterListSyntax)
+                syntaxNode.ParameterList !=
+                default(FunctionPointerParameterListSyntax)
             ) {
                 var parameterListBuilder = new StringBuilder();
                 WriteFunctionPointerParameterListSyntax(
@@ -2052,8 +2052,8 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.UnmanagedCallingConventionList
-                != default(FunctionPointerUnmanagedCallingConventionListSyntax)
+                syntaxNode.UnmanagedCallingConventionList !=
+                default(FunctionPointerUnmanagedCallingConventionListSyntax)
             ) {
                 var unmanagedCallingConventionListBuilder = new StringBuilder();
                 WriteFunctionPointerUnmanagedCallingConventionListSyntax(
@@ -7631,8 +7631,8 @@ namespace CSharpier
             );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (
-                syntaxNode.OmittedArraySizeExpressionToken
-                != default(SyntaxToken)
+                syntaxNode.OmittedArraySizeExpressionToken !=
+                default(SyntaxToken)
             ) {
                 var omittedArraySizeExpressionTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(
@@ -8227,8 +8227,8 @@ namespace CSharpier
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
             if (
-                syntaxNode.PositionalPatternClause
-                != default(PositionalPatternClauseSyntax)
+                syntaxNode.PositionalPatternClause !=
+                default(PositionalPatternClauseSyntax)
             ) {
                 var positionalPatternClauseBuilder = new StringBuilder();
                 WritePositionalPatternClauseSyntax(
@@ -8240,8 +8240,8 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.PropertyPatternClause
-                != default(PropertyPatternClauseSyntax)
+                syntaxNode.PropertyPatternClause !=
+                default(PropertyPatternClauseSyntax)
             ) {
                 var propertyPatternClauseBuilder = new StringBuilder();
                 WritePropertyPatternClauseSyntax(
@@ -9090,8 +9090,8 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.AlignmentClause
-                != default(InterpolationAlignmentClauseSyntax)
+                syntaxNode.AlignmentClause !=
+                default(InterpolationAlignmentClauseSyntax)
             ) {
                 var alignmentClauseBuilder = new StringBuilder();
                 WriteInterpolationAlignmentClauseSyntax(
@@ -9103,8 +9103,8 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.FormatClause
-                != default(InterpolationFormatClauseSyntax)
+                syntaxNode.FormatClause !=
+                default(InterpolationFormatClauseSyntax)
             ) {
                 var formatClauseBuilder = new StringBuilder();
                 WriteInterpolationFormatClauseSyntax(
@@ -9582,8 +9582,8 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody
-                != default(ArrowExpressionClauseSyntax)
+                syntaxNode.ExpressionBody !=
+                default(ArrowExpressionClauseSyntax)
             ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
@@ -16546,8 +16546,8 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.ExplicitInterfaceSpecifier
-                != default(ExplicitInterfaceSpecifierSyntax)
+                syntaxNode.ExplicitInterfaceSpecifier !=
+                default(ExplicitInterfaceSpecifierSyntax)
             ) {
                 var explicitInterfaceSpecifierBuilder = new StringBuilder();
                 WriteExplicitInterfaceSpecifierSyntax(
@@ -16606,8 +16606,8 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody
-                != default(ArrowExpressionClauseSyntax)
+                syntaxNode.ExpressionBody !=
+                default(ArrowExpressionClauseSyntax)
             ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
@@ -16753,8 +16753,8 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody
-                != default(ArrowExpressionClauseSyntax)
+                syntaxNode.ExpressionBody !=
+                default(ArrowExpressionClauseSyntax)
             ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
@@ -16897,8 +16897,8 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody
-                != default(ArrowExpressionClauseSyntax)
+                syntaxNode.ExpressionBody !=
+                default(ArrowExpressionClauseSyntax)
             ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
@@ -17033,8 +17033,8 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody
-                != default(ArrowExpressionClauseSyntax)
+                syntaxNode.ExpressionBody !=
+                default(ArrowExpressionClauseSyntax)
             ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
@@ -17252,8 +17252,8 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody
-                != default(ArrowExpressionClauseSyntax)
+                syntaxNode.ExpressionBody !=
+                default(ArrowExpressionClauseSyntax)
             ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
@@ -17357,8 +17357,8 @@ namespace CSharpier
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExplicitInterfaceSpecifier
-                != default(ExplicitInterfaceSpecifierSyntax)
+                syntaxNode.ExplicitInterfaceSpecifier !=
+                default(ExplicitInterfaceSpecifierSyntax)
             ) {
                 var explicitInterfaceSpecifierBuilder = new StringBuilder();
                 WriteExplicitInterfaceSpecifierSyntax(
@@ -17389,8 +17389,8 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.ExpressionBody
-                != default(ArrowExpressionClauseSyntax)
+                syntaxNode.ExpressionBody !=
+                default(ArrowExpressionClauseSyntax)
             ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
@@ -17586,8 +17586,8 @@ namespace CSharpier
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExplicitInterfaceSpecifier
-                != default(ExplicitInterfaceSpecifierSyntax)
+                syntaxNode.ExplicitInterfaceSpecifier !=
+                default(ExplicitInterfaceSpecifierSyntax)
             ) {
                 var explicitInterfaceSpecifierBuilder = new StringBuilder();
                 WriteExplicitInterfaceSpecifierSyntax(
@@ -17710,8 +17710,8 @@ namespace CSharpier
                 properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExplicitInterfaceSpecifier
-                != default(ExplicitInterfaceSpecifierSyntax)
+                syntaxNode.ExplicitInterfaceSpecifier !=
+                default(ExplicitInterfaceSpecifierSyntax)
             ) {
                 var explicitInterfaceSpecifierBuilder = new StringBuilder();
                 WriteExplicitInterfaceSpecifierSyntax(
@@ -17731,8 +17731,8 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.ParameterList
-                != default(BracketedParameterListSyntax)
+                syntaxNode.ParameterList !=
+                default(BracketedParameterListSyntax)
             ) {
                 var parameterListBuilder = new StringBuilder();
                 WriteBracketedParameterListSyntax(
@@ -17755,8 +17755,8 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.ExpressionBody
-                != default(ArrowExpressionClauseSyntax)
+                syntaxNode.ExpressionBody !=
+                default(ArrowExpressionClauseSyntax)
             ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
@@ -17953,8 +17953,8 @@ namespace CSharpier
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
             if (
-                syntaxNode.ExpressionBody
-                != default(ArrowExpressionClauseSyntax)
+                syntaxNode.ExpressionBody !=
+                default(ArrowExpressionClauseSyntax)
             ) {
                 var expressionBodyBuilder = new StringBuilder();
                 WriteArrowExpressionClauseSyntax(
@@ -18826,8 +18826,8 @@ namespace CSharpier
                 );
             }
             if (
-                syntaxNode.Parameters
-                != default(CrefBracketedParameterListSyntax)
+                syntaxNode.Parameters !=
+                default(CrefBracketedParameterListSyntax)
             ) {
                 var parametersBuilder = new StringBuilder();
                 WriteCrefBracketedParameterListSyntax(
@@ -20288,8 +20288,8 @@ namespace CSharpier
             );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (
-                syntaxNode.StartProcessingInstructionToken
-                != default(SyntaxToken)
+                syntaxNode.StartProcessingInstructionToken !=
+                default(SyntaxToken)
             ) {
                 var startProcessingInstructionTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(
@@ -20384,8 +20384,8 @@ namespace CSharpier
             );
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (
-                syntaxNode.LessThanExclamationMinusMinusToken
-                != default(SyntaxToken)
+                syntaxNode.LessThanExclamationMinusMinusToken !=
+                default(SyntaxToken)
             ) {
                 var lessThanExclamationMinusMinusTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(

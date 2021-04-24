@@ -63,15 +63,15 @@ namespace CSharpier
             }
 
             var message =
-                "    Original: "
-                + GetLine(
+                "    Original: " +
+                GetLine(
                     result.OriginalSpan,
                     this.OriginalSyntaxTree,
                     this.OriginalSourceCode
                 );
 
-            message += "    Formatted: "
-            + GetLine(result.NewSpan, this.NewSyntaxTree, this.NewSourceCode);
+            message += "    Formatted: " +
+            GetLine(result.NewSpan, this.NewSyntaxTree, this.NewSourceCode);
             return message;
         }
 
@@ -172,8 +172,8 @@ namespace CSharpier
                 }
 
                 if (
-                    originalList[x] is SyntaxNode originalNode
-                    && formattedList[x] is SyntaxNode formattedNode
+                    originalList[x] is SyntaxNode originalNode &&
+                    formattedList[x] is SyntaxNode formattedNode
                 ) {
                     originalStack.Push(originalNode);
                     formattedStack.Push(formattedNode);
@@ -263,8 +263,8 @@ namespace CSharpier
             SyntaxTrivia formattedTrivia
         ) {
             if (
-                originalTrivia.ToString().TrimEnd()
-                != formattedTrivia.ToString().TrimEnd()
+                originalTrivia.ToString().TrimEnd() !=
+                formattedTrivia.ToString().TrimEnd()
             ) {
                 return NotEqual(originalTrivia.Span, formattedTrivia.Span);
             }
@@ -278,14 +278,14 @@ namespace CSharpier
         ) {
             var cleanedOriginal = originalList.Where(
                     o =>
-                        o.Kind() != SyntaxKind.EndOfLineTrivia
-                        && o.Kind() != SyntaxKind.WhitespaceTrivia
+                        o.Kind() != SyntaxKind.EndOfLineTrivia &&
+                        o.Kind() != SyntaxKind.WhitespaceTrivia
                 )
                 .ToList();
             var cleanedFormatted = formattedList.Where(
                     o =>
-                        o.Kind() != SyntaxKind.EndOfLineTrivia
-                        && o.Kind() != SyntaxKind.WhitespaceTrivia
+                        o.Kind() != SyntaxKind.EndOfLineTrivia &&
+                        o.Kind() != SyntaxKind.WhitespaceTrivia
                 )
                 .ToList();
             var result = CompareLists(

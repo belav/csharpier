@@ -97,8 +97,8 @@ namespace CSharpier.SyntaxPrinter
                     docs.Add(Docs.HardLine);
                 }
                 if (
-                    kind != SyntaxKind.EndOfLineTrivia
-                    && kind != SyntaxKind.WhitespaceTrivia
+                    kind != SyntaxKind.EndOfLineTrivia &&
+                    kind != SyntaxKind.WhitespaceTrivia
                 ) {
                     printNewLines = true;
                 }
@@ -135,10 +135,10 @@ namespace CSharpier.SyntaxPrinter
                 {
                     // handles the case of a method that only contains #if DEBUG
                     if (
-                        kind == SyntaxKind.IfDirectiveTrivia
-                        && trivia.Token.Kind() == SyntaxKind.CloseBraceToken
-                        && trivia.Token.Parent is BlockSyntax blockSyntax
-                        && blockSyntax.Statements.Count == 0
+                        kind == SyntaxKind.IfDirectiveTrivia &&
+                        trivia.Token.Kind() == SyntaxKind.CloseBraceToken &&
+                        trivia.Token.Parent is BlockSyntax blockSyntax &&
+                        blockSyntax.Statements.Count == 0
                     ) {
                         docs.Add(Docs.HardLineIfNoPreviousLine);
                     }
@@ -153,9 +153,9 @@ namespace CSharpier.SyntaxPrinter
                 {
                     var triviaText = trivia.ToString();
                     if (
-                        x > 0
-                        && leadingTrivia[x - 1].Kind()
-                        == SyntaxKind.WhitespaceTrivia
+                        x > 0 &&
+                        leadingTrivia[x - 1].Kind() ==
+                        SyntaxKind.WhitespaceTrivia
                     ) {
                         triviaText = leadingTrivia[x - 1] + triviaText;
                     }
@@ -178,30 +178,30 @@ namespace CSharpier.SyntaxPrinter
         }
 
         private static bool IsSingleLineComment(SyntaxKind kind) =>
-            kind == SyntaxKind.SingleLineDocumentationCommentTrivia
-            || kind == SyntaxKind.SingleLineCommentTrivia;
+            kind == SyntaxKind.SingleLineDocumentationCommentTrivia ||
+            kind == SyntaxKind.SingleLineCommentTrivia;
 
         private static bool IsMultiLineComment(SyntaxKind kind) =>
-            kind == SyntaxKind.MultiLineCommentTrivia
-            || kind == SyntaxKind.MultiLineDocumentationCommentTrivia;
+            kind == SyntaxKind.MultiLineCommentTrivia ||
+            kind == SyntaxKind.MultiLineDocumentationCommentTrivia;
 
         private static bool IsDirective(SyntaxKind kind) =>
-            kind == SyntaxKind.IfDirectiveTrivia
-            || kind == SyntaxKind.ElseDirectiveTrivia
-            || kind == SyntaxKind.ElifDirectiveTrivia
-            || kind == SyntaxKind.EndIfDirectiveTrivia
-            || kind == SyntaxKind.LineDirectiveTrivia
-            || kind == SyntaxKind.ErrorDirectiveTrivia
-            || kind == SyntaxKind.WarningDirectiveTrivia
-            || kind == SyntaxKind.PragmaWarningDirectiveTrivia
-            || kind == SyntaxKind.PragmaChecksumDirectiveTrivia
-            || kind == SyntaxKind.DefineDirectiveTrivia
-            || kind == SyntaxKind.UndefDirectiveTrivia
-            || kind == SyntaxKind.NullableDirectiveTrivia;
+            kind == SyntaxKind.IfDirectiveTrivia ||
+            kind == SyntaxKind.ElseDirectiveTrivia ||
+            kind == SyntaxKind.ElifDirectiveTrivia ||
+            kind == SyntaxKind.EndIfDirectiveTrivia ||
+            kind == SyntaxKind.LineDirectiveTrivia ||
+            kind == SyntaxKind.ErrorDirectiveTrivia ||
+            kind == SyntaxKind.WarningDirectiveTrivia ||
+            kind == SyntaxKind.PragmaWarningDirectiveTrivia ||
+            kind == SyntaxKind.PragmaChecksumDirectiveTrivia ||
+            kind == SyntaxKind.DefineDirectiveTrivia ||
+            kind == SyntaxKind.UndefDirectiveTrivia ||
+            kind == SyntaxKind.NullableDirectiveTrivia;
 
         private static bool IsRegion(SyntaxKind kind) =>
-            kind == SyntaxKind.RegionDirectiveTrivia
-            || kind == SyntaxKind.EndRegionDirectiveTrivia;
+            kind == SyntaxKind.RegionDirectiveTrivia ||
+            kind == SyntaxKind.EndRegionDirectiveTrivia;
 
         private static Doc PrintTrailingTrivia(SyntaxToken node)
         {

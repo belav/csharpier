@@ -223,8 +223,8 @@ namespace CSharpier
                             }
                             break;
                         case IfBreak ifBreak:
-                            var ifBreakMode = ifBreak.GroupId != null
-                                && groupModeMap!.ContainsKey(ifBreak.GroupId)
+                            var ifBreakMode = ifBreak.GroupId != null &&
+                                groupModeMap!.ContainsKey(ifBreak.GroupId)
                                 ? groupModeMap[ifBreak.GroupId]
                                 : currentMode;
 
@@ -311,9 +311,9 @@ namespace CSharpier
 
                         // I don't understand exactly why, but this ensures we don't print extra spaces after a trailing comment
                         if (
-                            newLineNextStringValue
-                            && skipNextNewLine
-                            && stringDoc.Value == " "
+                            newLineNextStringValue &&
+                            skipNextNewLine &&
+                            stringDoc.Value == " "
                         ) {
                             break;
                         }
@@ -376,8 +376,8 @@ namespace CSharpier
                                 );
 
                                 if (
-                                    !group.Break
-                                    && Fits(
+                                    !group.Break &&
+                                    Fits(
                                         next,
                                         currentStack,
                                         allowedWidth - currentWidth,
@@ -405,8 +405,8 @@ namespace CSharpier
                         }
                         break;
                     case IfBreak ifBreak:
-                        var groupMode = ifBreak.GroupId != null
-                            && groupModeMap.ContainsKey(ifBreak.GroupId)
+                        var groupMode = ifBreak.GroupId != null &&
+                            groupModeMap.ContainsKey(ifBreak.GroupId)
                             ? groupModeMap[ifBreak.GroupId]
                             : command.Mode;
                         var contents = groupMode == PrintMode.MODE_BREAK
@@ -437,9 +437,9 @@ namespace CSharpier
                                 goto case PrintMode.MODE_BREAK;
                             case PrintMode.MODE_BREAK:
                                 if (
-                                    line.Squash
-                                    && output.Length > 0
-                                    && EndsWithNewLineAndWhitespace(output)
+                                    line.Squash &&
+                                    output.Length > 0 &&
+                                    EndsWithNewLineAndWhitespace(output)
                                 ) {
                                     break;
                                 }
@@ -455,9 +455,9 @@ namespace CSharpier
                                 else
                                 {
                                     if (
-                                        (!newLineNextStringValue
-                                        || !skipNextNewLine)
-                                        && output.Length > 0
+                                        (!newLineNextStringValue ||
+                                        !skipNextNewLine) &&
+                                        output.Length > 0
                                     ) {
                                         TrimOutput(output);
                                         output.Append(
@@ -479,8 +479,8 @@ namespace CSharpier
                     case LeadingComment leadingComment:
                         TrimOutput(output);
                         if (
-                            (output.Length != 0 && output[^1] != '\n')
-                            || newLineNextStringValue
+                            (output.Length != 0 && output[^1] != '\n') ||
+                            newLineNextStringValue
                         ) {
                             output.Append(newLine);
                         }
@@ -559,8 +559,8 @@ namespace CSharpier
             for (; trimmed <= stringBuilder.Length; trimmed++)
             {
                 if (
-                    stringBuilder[^(trimmed + 1)] != ' '
-                    && stringBuilder[^(trimmed + 1)] != '\t'
+                    stringBuilder[^(trimmed + 1)] != ' ' &&
+                    stringBuilder[^(trimmed + 1)] != '\t'
                 ) {
                     break;
                 }

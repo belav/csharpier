@@ -198,11 +198,11 @@ namespace CSharpier
                 {
                     Interlocked.Increment(ref this.ExceptionsValidatingSource);
                     Console.WriteLine(
-                        GetPath(file)
-                        + " - failed with exception during syntax tree validation"
-                        + Environment.NewLine
-                        + ex.Message
-                        + ex.StackTrace
+                        GetPath(file) +
+                        " - failed with exception during syntax tree validation" +
+                        Environment.NewLine +
+                        ex.Message +
+                        ex.StackTrace
                     );
                 }
             }
@@ -234,8 +234,8 @@ namespace CSharpier
         private void PrintResults()
         {
             Console.WriteLine(
-                PadToSize("total time: ", 80)
-                + ReversePad(Stopwatch.ElapsedMilliseconds + "ms")
+                PadToSize("total time: ", 80) +
+                ReversePad(Stopwatch.ElapsedMilliseconds + "ms")
             );
             PrintResultLine("Total files", Files);
 
@@ -268,10 +268,10 @@ namespace CSharpier
         private int ReturnExitCode()
         {
             if (
-                (Check && UnformattedFiles > 0)
-                || FailedSyntaxTreeValidation > 0
-                || ExceptionsFormatting > 0
-                || ExceptionsValidatingSource > 0
+                (Check && UnformattedFiles > 0) ||
+                FailedSyntaxTreeValidation > 0 ||
+                ExceptionsFormatting > 0 ||
+                ExceptionsValidatingSource > 0
             ) {
                 return 1;
             }
@@ -299,9 +299,9 @@ namespace CSharpier
                 return true;
             }
 
-            return normalizedFilePath.EndsWith(".g.cs")
-            || normalizedFilePath.EndsWith(".cshtml.cs")
-            || normalizedFilePath.ContainsIgnoreCase("/obj/");
+            return normalizedFilePath.EndsWith(".g.cs") ||
+            normalizedFilePath.EndsWith(".cshtml.cs") ||
+            normalizedFilePath.ContainsIgnoreCase("/obj/");
         }
 
         private static string PadToSize(string value, int size = 120)

@@ -28,14 +28,14 @@ namespace Worker
             var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
                 .Where(
                     o =>
-                        !o.IsAbstract
-                        && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
+                        !o.IsAbstract &&
+                        typeof(CSharpSyntaxNode).IsAssignableFrom(o)
                 )
                 .ToList();
 
             var fileName =
-                directory.FullName
-                + "/CSharpier/SyntaxNodeJsonWriter.generated.cs";
+                directory.FullName +
+                "/CSharpier/SyntaxNodeJsonWriter.generated.cs";
             using (var file = new StreamWriter(fileName, false))
             {
                 file.WriteLine("using System.Collections.Generic;");
@@ -80,8 +80,8 @@ namespace Worker
             if (missingTypes.Any())
             {
                 throw new Exception(
-                    Environment.NewLine
-                    + string.Join(Environment.NewLine, missingTypes)
+                    Environment.NewLine +
+                    string.Join(Environment.NewLine, missingTypes)
                 );
             }
         }
@@ -115,10 +115,10 @@ namespace Worker
                 var propertyType = propertyInfo.PropertyType;
 
                 if (
-                    Ignored.Properties.Contains(camelCaseName)
-                    || Ignored.Types.Contains(propertyType)
-                    || (Ignored.PropertiesByType.ContainsKey(type)
-                    && Ignored.PropertiesByType[type].Contains(camelCaseName))
+                    Ignored.Properties.Contains(camelCaseName) ||
+                    Ignored.Types.Contains(propertyType) ||
+                    (Ignored.PropertiesByType.ContainsKey(type) &&
+                    Ignored.PropertiesByType[type].Contains(camelCaseName))
                 ) {
                     continue;
                 }
@@ -142,9 +142,9 @@ namespace Worker
                     );
                 }
                 else if (
-                    typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType)
-                    || propertyType == typeof(SyntaxToken)
-                    || propertyType == typeof(SyntaxTrivia)
+                    typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType) ||
+                    propertyType == typeof(SyntaxToken) ||
+                    propertyType == typeof(SyntaxTrivia)
                 ) {
                     var methodName = "WriteSyntaxNode";
                     if (propertyType == typeof(SyntaxToken))
@@ -176,13 +176,13 @@ namespace Worker
                     file.WriteLine("            }");
                 }
                 else if (
-                    (propertyType.IsGenericType
-                    && (propertyType.GetGenericTypeDefinition()
-                    == typeof(SyntaxList<>)
-                    || propertyType.GetGenericTypeDefinition()
-                    == typeof(SeparatedSyntaxList<>)))
-                    || propertyType == typeof(SyntaxTokenList)
-                    || propertyType == typeof(SyntaxTriviaList)
+                    (propertyType.IsGenericType &&
+                    (propertyType.GetGenericTypeDefinition() ==
+                    typeof(SyntaxList<>) ||
+                    propertyType.GetGenericTypeDefinition() ==
+                    typeof(SeparatedSyntaxList<>))) ||
+                    propertyType == typeof(SyntaxTokenList) ||
+                    propertyType == typeof(SyntaxTriviaList)
                 ) {
                     var methodName = "WriteSyntaxNode";
                     if (propertyType == typeof(SyntaxTokenList))
@@ -227,8 +227,8 @@ namespace Worker
                 else
                 {
                     missingTypes.Add(
-                        PadToSize(type.Name + "." + propertyName + ": ", 40)
-                        + propertyType
+                        PadToSize(type.Name + "." + propertyName + ": ", 40) +
+                        propertyType
                     );
                 }
             }

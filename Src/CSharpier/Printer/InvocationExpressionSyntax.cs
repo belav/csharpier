@@ -102,8 +102,8 @@ namespace CSharpier
             for (; index < printedNodes.Count; index++)
             {
                 if (
-                    hasSeenInvocationExpression
-                    && IsMemberish(printedNodes[index].Node)
+                    hasSeenInvocationExpression &&
+                    IsMemberish(printedNodes[index].Node)
                 ) {
                     // [0] should be appended at the end of the group instead of the
                     // beginning of the next one

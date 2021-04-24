@@ -26,14 +26,14 @@ namespace Worker
             var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
                 .Where(
                     o =>
-                        !o.IsAbstract
-                        && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
+                        !o.IsAbstract &&
+                        typeof(CSharpSyntaxNode).IsAssignableFrom(o)
                 )
                 .ToList();
 
             var fileName =
-                directory.FullName
-                + "/CSharpier/SyntaxNodeComparer.generated.cs";
+                directory.FullName +
+                "/CSharpier/SyntaxNodeComparer.generated.cs";
             using (var file = new StreamWriter(fileName, false))
             {
                 file.WriteLine(
@@ -71,8 +71,8 @@ namespace CSharpier
                 foreach (var syntaxNodeType in syntaxNodeTypes)
                 {
                     var lowerCaseName =
-                        syntaxNodeType.Name[0].ToString().ToLower()
-                        + syntaxNodeType.Name.Substring(1);
+                        syntaxNodeType.Name[0].ToString().ToLower() +
+                        syntaxNodeType.Name.Substring(1);
                     file.WriteLine(
                         $@"                case {syntaxNodeType.Name} {lowerCaseName}:
                     return this.Compare{syntaxNodeType.Name}({lowerCaseName}, formattedNode as {syntaxNodeType.Name});"
@@ -110,13 +110,15 @@ namespace CSharpier
                 var propertyName = propertyInfo.Name;
 
                 if (
-                    propertyName == "Language"
-                    || propertyName == "Parent"
-                    || propertyName == "HasLeadingTrivia" // we modify/remove whitespace and new lines so we can't look at these properties.
-                    || propertyName == "HasTrailingTrivia"
-                    || propertyName == "ParentTrivia"
-                    || propertyName == "Arity"
-                    || propertyName == "SpanStart"
+                    propertyName == "Language" ||
+                    propertyName == "Parent" ||
+                    propertyName ==
+                    "HasLeadingTrivia" // we modify/remove whitespace and new lines so we can't look at these properties.
+                    ||
+                    propertyName == "HasTrailingTrivia" ||
+                    propertyName == "ParentTrivia" ||
+                    propertyName == "Arity" ||
+                    propertyName == "SpanStart"
                 ) {
                     continue;
                 }
@@ -125,17 +127,17 @@ namespace CSharpier
                 var propertyType = propertyInfo.PropertyType;
 
                 if (
-                    Ignored.Properties.Contains(camelCaseName)
-                    || Ignored.Types.Contains(propertyType)
-                    || (Ignored.PropertiesByType.ContainsKey(type)
-                    && Ignored.PropertiesByType[type].Contains(camelCaseName))
+                    Ignored.Properties.Contains(camelCaseName) ||
+                    Ignored.Types.Contains(propertyType) ||
+                    (Ignored.PropertiesByType.ContainsKey(type) &&
+                    Ignored.PropertiesByType[type].Contains(camelCaseName))
                 ) {
                     continue;
                 }
 
                 if (
-                    propertyType == typeof(bool)
-                    || propertyType == typeof(Int32)
+                    propertyType == typeof(bool) ||
+                    propertyType == typeof(Int32)
                 ) {
                     file.WriteLine(
                         $@"            if (originalNode.{propertyName} != formattedNode.{propertyName}) return NotEqual(originalNode, formattedNode);"
@@ -170,10 +172,10 @@ namespace CSharpier
                     );
                 }
                 else if (
-                    propertyType == typeof(SyntaxTokenList)
-                    || (propertyType.IsGenericType
-                    && propertyType.GetGenericTypeDefinition()
-                    == typeof(SyntaxList<>))
+                    propertyType == typeof(SyntaxTokenList) ||
+                    (propertyType.IsGenericType &&
+                    propertyType.GetGenericTypeDefinition() ==
+                    typeof(SyntaxList<>))
                 ) {
                     var compare = propertyType == typeof(SyntaxTokenList)
                         ? "Compare"
@@ -186,9 +188,9 @@ namespace CSharpier
                     );
                 }
                 else if (
-                    propertyType.IsGenericType
-                    && propertyType.GetGenericTypeDefinition()
-                    == typeof(SeparatedSyntaxList<>)
+                    propertyType.IsGenericType &&
+                    propertyType.GetGenericTypeDefinition() ==
+                    typeof(SeparatedSyntaxList<>)
                 ) {
                     file.WriteLine(
                         $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, null, o => o.Span, originalNode.Span, formattedNode.Span);"
