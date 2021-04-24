@@ -163,7 +163,9 @@ namespace CSharpier
             if (!result.FailureMessage.IsBlank())
             {
                 Interlocked.Increment(ref this.Files);
-                Console.WriteLine(GetPath(file) + " - " + result.FailureMessage);
+                Console.WriteLine(
+                    GetPath(file) + " - " + result.FailureMessage
+                );
                 return;
             }
 
@@ -228,7 +230,7 @@ namespace CSharpier
         {
             return PadToSize(file.Substring(this.RootPath.Length));
         }
-        
+
         private void PrintResults()
         {
             Console.WriteLine(
