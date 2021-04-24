@@ -35,8 +35,8 @@ namespace CSharpier
             catch (Exception ex)
             {
                 throw new Exception(
-                    "It was not possible to create the path "
-                    + directoryInfo.FullName,
+                    "It was not possible to create the path " +
+                    directoryInfo.FullName,
                     ex
                 );
             }
@@ -59,8 +59,8 @@ namespace CSharpier
                 value,
                 otherValue,
                 StringComparison.OrdinalIgnoreCase
-            )
-            == 0;
+            ) ==
+            0;
         }
 
         public static bool ContainsIgnoreCase(

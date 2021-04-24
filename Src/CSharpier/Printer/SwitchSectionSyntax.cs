@@ -14,8 +14,8 @@ namespace CSharpier
                 Join(Docs.HardLine, node.Labels.Select(this.Print))
             };
             if (
-                node.Statements.Count == 1
-                && node.Statements[0] is BlockSyntax blockSyntax
+                node.Statements.Count == 1 &&
+                node.Statements[0] is BlockSyntax blockSyntax
             ) {
                 docs.Add(this.PrintBlockSyntax(blockSyntax));
             }

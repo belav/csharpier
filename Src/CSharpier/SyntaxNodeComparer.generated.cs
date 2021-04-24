@@ -92,14 +92,14 @@ namespace CSharpier
                 case FunctionPointerUnmanagedCallingConventionListSyntax functionPointerUnmanagedCallingConventionListSyntax:
                     return this.CompareFunctionPointerUnmanagedCallingConventionListSyntax(
                         functionPointerUnmanagedCallingConventionListSyntax,
-                        formattedNode
-                        as FunctionPointerUnmanagedCallingConventionListSyntax
+                        formattedNode as
+                        FunctionPointerUnmanagedCallingConventionListSyntax
                     );
                 case FunctionPointerUnmanagedCallingConventionSyntax functionPointerUnmanagedCallingConventionSyntax:
                     return this.CompareFunctionPointerUnmanagedCallingConventionSyntax(
                         functionPointerUnmanagedCallingConventionSyntax,
-                        formattedNode
-                        as FunctionPointerUnmanagedCallingConventionSyntax
+                        formattedNode as
+                        FunctionPointerUnmanagedCallingConventionSyntax
                     );
                 case NullableTypeSyntax nullableTypeSyntax:
                     return this.CompareNullableTypeSyntax(
@@ -354,8 +354,8 @@ namespace CSharpier
                 case ImplicitStackAllocArrayCreationExpressionSyntax implicitStackAllocArrayCreationExpressionSyntax:
                     return this.CompareImplicitStackAllocArrayCreationExpressionSyntax(
                         implicitStackAllocArrayCreationExpressionSyntax,
-                        formattedNode
-                        as ImplicitStackAllocArrayCreationExpressionSyntax
+                        formattedNode as
+                        ImplicitStackAllocArrayCreationExpressionSyntax
                     );
                 case QueryExpressionSyntax queryExpressionSyntax:
                     return this.CompareQueryExpressionSyntax(
@@ -1222,33 +1222,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -1285,33 +1285,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -1332,8 +1332,8 @@ namespace CSharpier
             originalStack.Push(originalNode.TypeArgumentList);
             formattedStack.Push(formattedNode.TypeArgumentList);
             if (
-                originalNode.IsUnboundGenericName
-                != formattedNode.IsUnboundGenericName
+                originalNode.IsUnboundGenericName !=
+                formattedNode.IsUnboundGenericName
             )
                 return NotEqual(originalNode, formattedNode);
             if (originalNode.IsVar != formattedNode.IsVar)
@@ -1351,33 +1351,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -1428,33 +1428,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -1491,33 +1491,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -1550,33 +1550,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -1613,33 +1613,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -1692,33 +1692,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -1753,33 +1753,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -1824,33 +1824,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -1901,33 +1901,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -1952,33 +1952,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2029,33 +2029,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2078,33 +2078,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2139,33 +2139,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2226,33 +2226,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2277,33 +2277,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2336,33 +2336,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2405,33 +2405,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2464,33 +2464,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2541,33 +2541,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2592,33 +2592,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2643,33 +2643,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2694,33 +2694,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2747,33 +2747,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2800,33 +2800,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2851,33 +2851,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2894,33 +2894,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2947,33 +2947,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -2990,33 +2990,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3043,33 +3043,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3096,33 +3096,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3159,33 +3159,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3208,33 +3208,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3257,33 +3257,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3306,33 +3306,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3373,33 +3373,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3440,33 +3440,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3517,33 +3517,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3584,33 +3584,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3651,33 +3651,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3718,33 +3718,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3785,33 +3785,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3830,33 +3830,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3875,33 +3875,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -3952,33 +3952,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4029,33 +4029,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4090,33 +4090,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4141,33 +4141,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4186,33 +4186,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4247,33 +4247,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4322,33 +4322,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4397,33 +4397,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4448,33 +4448,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4523,33 +4523,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4600,33 +4600,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4653,33 +4653,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4708,33 +4708,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4761,33 +4761,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4806,33 +4806,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4891,33 +4891,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -4944,33 +4944,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5021,33 +5021,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5074,33 +5074,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5141,33 +5141,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5186,33 +5186,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5241,33 +5241,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5310,33 +5310,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5377,33 +5377,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5468,33 +5468,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5525,33 +5525,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5576,33 +5576,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5645,33 +5645,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5696,33 +5696,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5747,33 +5747,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5808,33 +5808,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5867,33 +5867,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5916,33 +5916,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -5983,33 +5983,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6036,33 +6036,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6087,33 +6087,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6138,33 +6138,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6187,33 +6187,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6232,33 +6232,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6283,33 +6283,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6332,33 +6332,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6409,33 +6409,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6486,33 +6486,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6531,33 +6531,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6574,33 +6574,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6633,33 +6633,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6684,33 +6684,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6727,33 +6727,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6780,33 +6780,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6831,33 +6831,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6880,33 +6880,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6943,33 +6943,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -6994,33 +6994,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7051,33 +7051,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7114,33 +7114,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7191,33 +7191,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7288,33 +7288,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7377,33 +7377,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7440,33 +7440,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7493,33 +7493,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7544,33 +7544,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7593,33 +7593,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7642,33 +7642,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7719,33 +7719,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7776,8 +7776,8 @@ namespace CSharpier
             if (result.IsInvalid)
                 return result;
             if (
-                originalNode.AllowsAnyExpression
-                != formattedNode.AllowsAnyExpression
+                originalNode.AllowsAnyExpression !=
+                formattedNode.AllowsAnyExpression
             )
                 return NotEqual(originalNode, formattedNode);
             if (originalNode.RawKind != formattedNode.RawKind)
@@ -7785,33 +7785,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7844,33 +7844,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7913,33 +7913,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -7990,33 +7990,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -8057,33 +8057,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -8124,33 +8124,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -8193,33 +8193,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -8262,33 +8262,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -8339,33 +8339,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -8418,33 +8418,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -8513,33 +8513,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -8650,33 +8650,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -8755,33 +8755,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -8852,33 +8852,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -8941,33 +8941,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9020,33 +9020,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9081,33 +9081,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9142,33 +9142,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9221,33 +9221,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9302,33 +9302,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9353,33 +9353,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9456,33 +9456,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9517,33 +9517,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9578,33 +9578,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9637,33 +9637,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9694,33 +9694,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9781,33 +9781,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9836,33 +9836,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9909,33 +9909,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -9964,33 +9964,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10031,33 +10031,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10098,33 +10098,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10149,33 +10149,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10238,33 +10238,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10311,33 +10311,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10380,33 +10380,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10505,33 +10505,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10584,33 +10584,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10641,33 +10641,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10686,33 +10686,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10763,33 +10763,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10810,33 +10810,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10861,33 +10861,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -10938,33 +10938,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -11005,33 +11005,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -11130,33 +11130,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -11255,33 +11255,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -11380,33 +11380,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -11507,33 +11507,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -11630,33 +11630,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -11731,33 +11731,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -11802,33 +11802,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -11871,33 +11871,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -11914,33 +11914,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -11959,33 +11959,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12038,33 +12038,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12103,33 +12103,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12160,33 +12160,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12203,33 +12203,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12252,33 +12252,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12323,33 +12323,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12402,33 +12402,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12453,33 +12453,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12552,33 +12552,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12645,33 +12645,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12738,33 +12738,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12823,33 +12823,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12882,33 +12882,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -12973,33 +12973,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13060,33 +13060,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13111,33 +13111,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13202,33 +13202,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13289,33 +13289,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13356,33 +13356,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13437,33 +13437,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13514,33 +13514,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13591,33 +13591,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13664,33 +13664,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13727,33 +13727,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13790,33 +13790,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13841,33 +13841,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13900,33 +13900,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13943,33 +13943,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -13996,33 +13996,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14041,33 +14041,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14092,33 +14092,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14151,33 +14151,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14212,33 +14212,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14289,33 +14289,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14366,33 +14366,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14425,33 +14425,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14480,33 +14480,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14549,33 +14549,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14608,33 +14608,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14677,33 +14677,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14728,33 +14728,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14785,33 +14785,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14862,33 +14862,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -14931,33 +14931,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15000,33 +15000,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15051,33 +15051,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15118,33 +15118,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15187,33 +15187,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15254,33 +15254,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15335,33 +15335,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15416,33 +15416,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15493,33 +15493,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15568,33 +15568,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15643,33 +15643,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15718,33 +15718,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15793,33 +15793,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15868,33 +15868,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -15943,33 +15943,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -16026,33 +16026,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -16109,33 +16109,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -16200,33 +16200,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -16311,33 +16311,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -16418,33 +16418,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -16501,33 +16501,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -16584,33 +16584,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -16659,33 +16659,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;
@@ -16750,33 +16750,33 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing)
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.IsStructuredTrivia
-                != formattedNode.IsStructuredTrivia
+                originalNode.IsStructuredTrivia !=
+                formattedNode.IsStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.HasStructuredTrivia
-                != formattedNode.HasStructuredTrivia
+                originalNode.HasStructuredTrivia !=
+                formattedNode.HasStructuredTrivia
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsSkippedText
-                != formattedNode.ContainsSkippedText
+                originalNode.ContainsSkippedText !=
+                formattedNode.ContainsSkippedText
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDirectives
-                != formattedNode.ContainsDirectives
+                originalNode.ContainsDirectives !=
+                formattedNode.ContainsDirectives
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsDiagnostics
-                != formattedNode.ContainsDiagnostics
+                originalNode.ContainsDiagnostics !=
+                formattedNode.ContainsDiagnostics
             )
                 return NotEqual(originalNode, formattedNode);
             if (
-                originalNode.ContainsAnnotations
-                != formattedNode.ContainsAnnotations
+                originalNode.ContainsAnnotations !=
+                formattedNode.ContainsAnnotations
             )
                 return NotEqual(originalNode, formattedNode);
             return Equal;

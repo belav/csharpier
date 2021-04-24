@@ -80,8 +80,8 @@ namespace CSharpier
             }
 
             var docs = new List<Doc>();
-            Doc separator = node is TypeParameterSyntax
-                || node is ParameterSyntax
+            Doc separator = node is TypeParameterSyntax ||
+                node is ParameterSyntax
                 ? Docs.Line
                 : Docs.HardLine;
             docs.Add(

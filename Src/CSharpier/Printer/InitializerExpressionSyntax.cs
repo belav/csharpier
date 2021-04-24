@@ -14,8 +14,8 @@ namespace CSharpier
             var result = Docs.Concat(
                 node.Kind() == SyntaxKind.ArrayInitializerExpression
                     ? string.Empty
-                    : node.Kind()
-                            == SyntaxKind.ComplexElementInitializerExpression
+                    : node.Kind() ==
+                            SyntaxKind.ComplexElementInitializerExpression
                             ? Docs.SoftLine
                             : Docs.Line,
                 SyntaxTokens.Print(node.OpenBraceToken),

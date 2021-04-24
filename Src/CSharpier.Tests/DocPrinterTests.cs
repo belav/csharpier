@@ -217,7 +217,8 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void Long_Statement_With_Line_Should_Not_Break_Unrelated_Group() {
+        public void Long_Statement_With_Line_Should_Not_Break_Unrelated_Group()
+        {
             var doc = Docs.Concat(
                 "1",
                 Docs.Group(Docs.Line, Docs.Concat("2")),
@@ -290,7 +291,8 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void IfBreak_Should_Print_Break_Contents_When_Group_Does_Not_Fit() {
+        public void IfBreak_Should_Print_Break_Contents_When_Group_Does_Not_Fit()
+        {
             var doc = Docs.Group(
                 "another",
                 Docs.Line,
@@ -301,7 +303,8 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void IfBreak_Should_Print_Flat_Contents_When_GroupId_Does_Not_Break() {
+        public void IfBreak_Should_Print_Flat_Contents_When_GroupId_Does_Not_Break()
+        {
             var doc = Docs.Concat(
                 Docs.GroupWithId("1", "1"),
                 Docs.IfBreak("break", "flat", "1")
@@ -394,14 +397,16 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void HardLineIfNoPreviousLine_Should_Insert_Line_If_There_Is_Not_One() {
+        public void HardLineIfNoPreviousLine_Should_Insert_Line_If_There_Is_Not_One()
+        {
             var doc = Docs.Concat("1", Docs.HardLineIfNoPreviousLine, "2");
 
             PrintedDocShouldBe(doc, $"1{NewLine}2");
         }
 
         [Test]
-        public void HardLineIfNoPreviousLine_Should_Not_Insert_Line_If_There_Is_One() {
+        public void HardLineIfNoPreviousLine_Should_Not_Insert_Line_If_There_Is_One()
+        {
             var doc = Docs.Concat(
                 "1",
                 Docs.HardLine,
@@ -421,7 +426,8 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void HardLineIfNoPreviousLine_Should_Not_Insert_After_Indented_HardLine() {
+        public void HardLineIfNoPreviousLine_Should_Not_Insert_After_Indented_HardLine()
+        {
             var doc = Docs.Concat(
                 Docs.Indent(
                     "1",

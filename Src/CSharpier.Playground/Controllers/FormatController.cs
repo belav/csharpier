@@ -121,13 +121,13 @@ namespace CSharpier.Playground.Controllers
             process.WaitForExit();
 
             this.logger.LogInformation(
-                "Output from '"
-                + pathToExe
-                + " "
-                + args
-                + "' was: "
-                + Environment.NewLine
-                + output
+                "Output from '" +
+                pathToExe +
+                " " +
+                args +
+                "' was: " +
+                Environment.NewLine +
+                output
             );
 
             return output;

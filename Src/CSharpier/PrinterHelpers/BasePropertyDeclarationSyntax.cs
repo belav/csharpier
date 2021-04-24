@@ -61,10 +61,10 @@ namespace CSharpier
                 if (
                     node.AccessorList.Accessors.Any(
                         o =>
-                            o.Body != null
-                            || o.ExpressionBody != null
-                            || o.Modifiers.Any()
-                            || o.AttributeLists.Any()
+                            o.Body != null ||
+                            o.ExpressionBody != null ||
+                            o.Modifiers.Any() ||
+                            o.AttributeLists.Any()
                     )
                 ) {
                     separator = Docs.Line;
@@ -138,10 +138,10 @@ namespace CSharpier
         ) {
             var docs = new List<Doc>();
             if (
-                node.Modifiers.Count > 0
-                || node.AttributeLists.Count > 0
-                || node.Body != null
-                || node.ExpressionBody != null
+                node.Modifiers.Count > 0 ||
+                node.AttributeLists.Count > 0 ||
+                node.Body != null ||
+                node.ExpressionBody != null
             ) {
                 docs.Add(Docs.HardLine);
             }

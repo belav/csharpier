@@ -89,11 +89,11 @@ namespace CSharpier
                     for (var x = concat.Contents.Count - 1; x >= 0; --x)
                     {
                         if (
-                            forceFlat > 0
-                            && concat.Contents[x] is LineDoc lineDoc
+                            forceFlat > 0 &&
+                            concat.Contents[x] is LineDoc lineDoc
                         ) {
-                            concat.Contents[x] = lineDoc.Type
-                                == LineDoc.LineType.Soft
+                            concat.Contents[x] = lineDoc.Type ==
+                                LineDoc.LineType.Soft
                                 ? string.Empty
                                 : " ";
                         }

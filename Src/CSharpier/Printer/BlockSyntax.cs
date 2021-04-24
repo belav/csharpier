@@ -23,8 +23,8 @@ namespace CSharpier
         // TODO this should really be private so it can't be used by anything but the two methods above
         private Doc PrintBlockSyntax(BlockSyntax node, string? groupId)
         {
-            Doc statementSeparator = node.Parent is AccessorDeclarationSyntax
-                && node.Statements.Count <= 1
+            Doc statementSeparator = node.Parent is AccessorDeclarationSyntax &&
+                node.Statements.Count <= 1
                 ? Docs.Line
                 : Docs.HardLine;
 
