@@ -1,18 +1,22 @@
-﻿param (
+﻿# This is used to create PRs against a number of forked public repos so that csharpier can be run against them
+# and the formatting reviewed before releasing csharpier
+# Long term this process can probably go away, but for now it is a good way to find edge cases or bugs that are introduced
+
+param (
     [string]$version
 )
 
-# aspnetcore          check
-# AspNetWebStack      check
-# AutoMapper          check
-# command-line-api    check
-# Core                check
-# efcore              check
-# format              check
-# insite-commerce     check
-# moq4                check
-# Newtonsoft.Json     check
-# roslyn              check
+# aspnetcore          
+# AspNetWebStack      
+# AutoMapper          
+# command-line-api    
+# Core                
+# efcore              
+# format              
+# insite-commerce     
+# moq4                
+# Newtonsoft.Json     
+# roslyn              
 # runtime             
 
 if ($version -eq "") {
