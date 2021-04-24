@@ -1,6 +1,6 @@
 ﻿# This is used to create PRs against a number of forked public repos so that csharpier can be run against them
 # and the formatting reviewed before releasing csharpier
-# Long term this process can probably go away, but for now it is a good way to find edge cases or bugs that are introduced
+# Long term this process can probably go away, but for now it is a tolerable way to find edge cases or bugs that are introduced
 
 param (
     [string]$version
