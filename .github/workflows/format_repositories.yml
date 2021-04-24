@@ -6,16 +6,12 @@ jobs:
   format_repositories:
     runs-on: ubuntu-latest
     steps:
-      -
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           path: csharpier
-      -
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           repository: belav/csharpier-repos
           path: csharpier-repos
-      -
-        run: dotnet build csharpier/Src/CSharpier/CSharpier.csproj -c release
-      -
-        run: dotnet csharpier/Src/CSharpier/bin/release/net5.0/dotnet-csharpier.dll csharpier-repos --skip-write
+      - run: dotnet build csharpier/Src/CSharpier/CSharpier.csproj -c release
+      - run: dotnet csharpier/Src/CSharpier/bin/release/net5.0/dotnet-csharpier.dll csharpier-repos --skip-write

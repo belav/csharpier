@@ -7,7 +7,7 @@
 /contentModel.xml
 /.idea.CSharpier.iml
 # Datasource local storage ignored files
-/../../../../../../../:\Projects\csharpier\CSharpier\.idea\.idea.CSharpier\.idea/dataSources/
+/dataSources/
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/

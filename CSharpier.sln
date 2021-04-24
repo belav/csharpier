@@ -1,12 +1,30 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Playground", "CSharpier.Playground\CSharpier.Playground.csproj", "{E7F03E73-82C7-4DB2-AF20-F25C45231A72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Playground", "Src\CSharpier.Playground\CSharpier.Playground.csproj", "{E7F03E73-82C7-4DB2-AF20-F25C45231A72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier", "CSharpier\CSharpier.csproj", "{F1DE8719-9961-4F83-8BE6-34639C96DA5E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier", "Src\CSharpier\CSharpier.csproj", "{F1DE8719-9961-4F83-8BE6-34639C96DA5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests", "CSharpier.Tests\CSharpier.Tests.csproj", "{A77E4297-FAA5-40AB-9856-ECF72AF5D859}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests", "Src\CSharpier.Tests\CSharpier.Tests.csproj", "{A77E4297-FAA5-40AB-9856-ECF72AF5D859}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worker", "Worker\Worker.csproj", "{CF32D239-2A27-4F46-8945-8B7B9A2C8774}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worker", "Src\Worker\Worker.csproj", "{CF32D239-2A27-4F46-8945-8B7B9A2C8774}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{51C3E932-8A7B-4004-AA94-2AF89619B6F4}"
+ProjectSection(SolutionItems) = preProject
+	.gitignore = .gitignore
+	CheckVersion.txt = CheckVersion.txt
+	LICENSE = LICENSE
+	README.md = README.md
+	Scripts\CreateReviewCodePRs.ps1 = Scripts\CreateReviewCodePRs.ps1
+	CONTRIBUTING.md = CONTRIBUTING.md
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{176BB0EA-B72B-4ACA-82AE-C16A732BE023}"
+ProjectSection(SolutionItems) = preProject
+				.github\workflows\format_repositories.yml = .github\workflows\format_repositories.yml
+	.github\workflows\nuget_publish.yml = .github\workflows\nuget_publish.yml
+	.github\workflows\playground_publish.yml = .github\workflows\playground_publish.yml
+	.github\workflows\validatePR.yml = .github\workflows\validatePR.yml
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -7,21 +7,16 @@ jobs:
     runs-on: ubuntu-latest
     name: Run Tests
     steps:
-      -
-        uses: actions/checkout@v2
-      -
-        run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj
+      - uses: actions/checkout@v2
+      - run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj
   check_formatting:
     runs-on: ubuntu-latest
     name: Check Formatting
     steps:
-      -
-        uses: actions/checkout@v2
-      -
-        run: |
+      - uses: actions/checkout@v2
+      - run: |
           VERSION=$(cat CheckVersion.txt)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-      -
-        run: |
+      - run: |
           dotnet tool install -g CSharpier --version ${{ env.VERSION }}
           dotnet csharpier --check

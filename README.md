@@ -147,6 +147,8 @@ An example of CSharpier finding a file that failed validation.
     * Output paths to refresh: $FilePath$
     * Advanced Options - Auto-save edited files...: This should probably be off otherwise if you pause while coding csharpier will reformat the file as is.
 
-## Development
-See [Development Readme](Src/README.md)
+## Contributing
+See [Development Readme](CONTRIBUTING.md)  
+Join Us [![Discord](https://img.shields.io/badge/Discord-chat?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/HfAKGEZQcX)
+
 
