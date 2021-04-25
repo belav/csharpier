@@ -12,125 +12,126 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace CSharpier.Playground.Controllers
+namespace CSharpier.Playground.Controllers {
+
+public class FormatResult
 {
-    public class FormatResult
+  public string Code { get; set; }
+  public string Json { get; set; }
+  public string Doc { get; set; }
+  public List<FormatError> Errors { get; set; }
+}
+
+public class FormatError
+{
+  public FileLinePositionSpan LineSpan { get; set; }
+  public string Description { get; set; }
+}
+
+[ApiController]
+[Route("[controller]")]
+public class FormatController : ControllerBase
+{
+  private readonly IWebHostEnvironment webHostEnvironment;
+  private readonly ILogger logger;
+
+  // ReSharper disable once SuggestBaseTypeForParameter
+  public FormatController(
+    IWebHostEnvironment webHostEnvironment,
+    ILogger<FormatController> logger
+  ) {
+    this.webHostEnvironment = webHostEnvironment;
+    this.logger = logger;
+  }
+
+  [HttpPost]
+  public FormatResult Post([FromBody]string content)
+  {
+    var filePath = Path.Combine(
+      this.webHostEnvironment.ContentRootPath,
+      "App_Data",
+      "Uploads",
+      content.CalculateHash() + ".cs"
+    );
+    new FileInfo(filePath).EnsureDirectoryExists();
+    this.WriteAllText(filePath, content);
+    var result = new CodeFormatter().Format(
+      content,
+      new Options { IncludeAST = true, IncludeDocTree = true, }
+    );
+
+    var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
+    this.WriteAllText(formattedFilePath, result.Code);
+
+    return new FormatResult
     {
-        public string Code { get; set; }
-        public string Json { get; set; }
-        public string Doc { get; set; }
-        public List<FormatError> Errors { get; set; }
-    }
+      Code = result.Code,
+      Json = result.AST,
+      Doc = result.DocTree,
+      Errors = result.Errors.Select(ConvertError).ToList(),
+    };
+  }
 
-    public class FormatError
+  private FormatError ConvertError(Diagnostic diagnostic)
+  {
+    var lineSpan = diagnostic.Location.SourceTree.GetLineSpan(
+      diagnostic.Location.SourceSpan
+    );
+    return new FormatError
     {
-        public FileLinePositionSpan LineSpan { get; set; }
-        public string Description { get; set; }
-    }
+      LineSpan = lineSpan,
+      Description = diagnostic.ToString(),
+    };
+  }
 
-    [ApiController]
-    [Route("[controller]")]
-    public class FormatController : ControllerBase
+  private string ReadAllText(string filePath)
+  {
+    return System.IO.File.ReadAllText(filePath);
+  }
+
+  private void WriteAllText(string filePath, string content)
+  {
+    System.IO.File.WriteAllText(filePath, content, Encoding.UTF8);
+  }
+
+  private bool Exists(string filePath)
+  {
+    return System.IO.File.Exists(filePath);
+  }
+
+  public string ExecuteApplication(
+    string pathToExe,
+    string workingDirectory,
+    string args
+  ) {
+    var processStartInfo = new ProcessStartInfo(
+      pathToExe,
+      args
+    )
     {
-        private readonly IWebHostEnvironment webHostEnvironment;
-        private readonly ILogger logger;
+      UseShellExecute = false,
+      RedirectStandardError = true,
+      WindowStyle = ProcessWindowStyle.Hidden,
+      WorkingDirectory = workingDirectory,
+      CreateNoWindow = true
+    };
 
-        // ReSharper disable once SuggestBaseTypeForParameter
-        public FormatController(
-            IWebHostEnvironment webHostEnvironment,
-            ILogger<FormatController> logger
-        ) {
-            this.webHostEnvironment = webHostEnvironment;
-            this.logger = logger;
-        }
+    var process = Process.Start(processStartInfo);
+    var output = process.StandardError.ReadToEnd();
+    process.WaitForExit();
 
-        [HttpPost]
-        public FormatResult Post([FromBody]string content)
-        {
-            var filePath = Path.Combine(
-                this.webHostEnvironment.ContentRootPath,
-                "App_Data",
-                "Uploads",
-                content.CalculateHash() + ".cs"
-            );
-            new FileInfo(filePath).EnsureDirectoryExists();
-            this.WriteAllText(filePath, content);
-            var result = new CodeFormatter().Format(
-                content,
-                new Options { IncludeAST = true, IncludeDocTree = true, }
-            );
+    this.logger.LogInformation(
+      "Output from '" +
+      pathToExe +
+      " " +
+      args +
+      "' was: " +
+      Environment.NewLine +
+      output
+    );
 
-            var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
-            this.WriteAllText(formattedFilePath, result.Code);
+    return output;
+  }
+}
 
-            return new FormatResult
-            {
-                Code = result.Code,
-                Json = result.AST,
-                Doc = result.DocTree,
-                Errors = result.Errors.Select(ConvertError).ToList(),
-            };
-        }
-
-        private FormatError ConvertError(Diagnostic diagnostic)
-        {
-            var lineSpan = diagnostic.Location.SourceTree.GetLineSpan(
-                diagnostic.Location.SourceSpan
-            );
-            return new FormatError
-            {
-                LineSpan = lineSpan,
-                Description = diagnostic.ToString(),
-            };
-        }
-
-        private string ReadAllText(string filePath)
-        {
-            return System.IO.File.ReadAllText(filePath);
-        }
-
-        private void WriteAllText(string filePath, string content)
-        {
-            System.IO.File.WriteAllText(filePath, content, Encoding.UTF8);
-        }
-
-        private bool Exists(string filePath)
-        {
-            return System.IO.File.Exists(filePath);
-        }
-
-        public string ExecuteApplication(
-            string pathToExe,
-            string workingDirectory,
-            string args
-        ) {
-            var processStartInfo = new ProcessStartInfo(
-                pathToExe,
-                args
-            )
-            {
-                UseShellExecute = false,
-                RedirectStandardError = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                WorkingDirectory = workingDirectory,
-                CreateNoWindow = true
-            };
-
-            var process = Process.Start(processStartInfo);
-            var output = process.StandardError.ReadToEnd();
-            process.WaitForExit();
-
-            this.logger.LogInformation(
-                "Output from '" +
-                pathToExe +
-                " " +
-                args +
-                "' was: " +
-                Environment.NewLine +
-                output
-            );
-
-            return output;
-        }
-    }
 }

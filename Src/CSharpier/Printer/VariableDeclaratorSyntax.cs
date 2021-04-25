@@ -4,25 +4,23 @@ using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
+  private Doc PrintVariableDeclaratorSyntax(VariableDeclaratorSyntax node)
+  {
+    var docs = new List<Doc> { SyntaxTokens.Print(node.Identifier) };
+    if (node.ArgumentList != null)
     {
-        private Doc PrintVariableDeclaratorSyntax(
-            VariableDeclaratorSyntax node
-        ) {
-            var docs = new List<Doc> { SyntaxTokens.Print(node.Identifier) };
-            if (node.ArgumentList != null)
-            {
-                docs.Add(
-                    this.PrintBracketedArgumentListSyntax(node.ArgumentList)
-                );
-            }
-            if (node.Initializer != null)
-            {
-                docs.Add(this.PrintEqualsValueClauseSyntax(node.Initializer));
-            }
-            return Docs.Concat(docs);
-        }
+      docs.Add(this.PrintBracketedArgumentListSyntax(node.ArgumentList));
     }
+    if (node.Initializer != null)
+    {
+      docs.Add(this.PrintEqualsValueClauseSyntax(node.Initializer));
+    }
+    return Docs.Concat(docs);
+  }
+}
+
 }

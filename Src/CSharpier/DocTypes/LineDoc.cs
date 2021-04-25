@@ -1,16 +1,17 @@
-namespace CSharpier.DocTypes
-{
-    public class LineDoc : Doc
-    {
-        public enum LineType
-        {
-            Normal,
-            Hard,
-            Soft
-        }
+namespace CSharpier.DocTypes {
 
-        public LineType Type { get; set; }
-        public bool IsLiteral { get; set; }
-        public bool Squash { get; set; }
-    }
+public class LineDoc : Doc
+{
+  public enum LineType
+  {
+    Normal,
+    Hard,
+    Soft
+  }
+
+  public LineType Type { get; set; }
+  public bool IsLiteral { get; set; }
+  public bool Squash { get; set; }
+}
+
 }

@@ -3,110 +3,105 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using CSharpier.DocTypes;
 
-namespace CSharpier
+namespace CSharpier {
+
+public static class DocUtilities
 {
-    public static class DocUtilities
+  public static void RemoveInitialDoubleHardLine(List<Doc> docs)
+  {
+    var removeNextHardLine = false;
+    RemoveInitialDoubleHardLine(docs, ref removeNextHardLine);
+  }
+
+  private static void RemoveInitialDoubleHardLine(
+    List<Doc> docs,
+    ref bool removeNextHardLine
+  ) {
+    var x = 0;
+    while (x < docs.Count)
     {
-        public static void RemoveInitialDoubleHardLine(List<Doc> docs)
+      var doc = docs[x];
+
+      if (doc == Docs.Null)
+      {
+        docs.RemoveAt(x);
+      }
+      else if (doc is HardLine)
+      {
+        if (removeNextHardLine)
         {
-            var removeNextHardLine = false;
-            RemoveInitialDoubleHardLine(docs, ref removeNextHardLine);
+          docs.RemoveAt(x);
+          return;
         }
 
-        private static void RemoveInitialDoubleHardLine(
-            List<Doc> docs,
-            ref bool removeNextHardLine
-        ) {
-            var x = 0;
-            while (x < docs.Count)
+        removeNextHardLine = true;
+      }
+      else
+      {
+        RemoveInitialDoubleHardLine(doc, ref removeNextHardLine);
+        return;
+      }
+
+      x++;
+    }
+
+    return;
+  }
+
+  public static void RemoveInitialDoubleHardLine(Doc doc)
+  {
+    var removeNextHardLine = false;
+    RemoveInitialDoubleHardLine(doc, ref removeNextHardLine);
+  }
+
+  private static void RemoveInitialDoubleHardLine(
+    Doc doc,
+    ref bool removeNextHardLine
+  ) {
+    switch (doc)
+    {
+      case StringDoc:
+        return;
+      case IndentDoc indentDoc:
+        switch (indentDoc.Contents)
+        {
+          case HardLine:
+            if (removeNextHardLine)
             {
-                var doc = docs[x];
-
-                if (doc == Docs.Null)
-                {
-                    docs.RemoveAt(x);
-                }
-                else if (doc is HardLine)
-                {
-                    if (removeNextHardLine)
-                    {
-                        docs.RemoveAt(x);
-                        return;
-                    }
-
-                    removeNextHardLine = true;
-                }
-                else
-                {
-                    RemoveInitialDoubleHardLine(doc, ref removeNextHardLine);
-                    return;
-                }
-
-                x++;
+              indentDoc.Contents = Docs.Null;
+              return;
             }
 
+            removeNextHardLine = true;
+            return;
+          default:
+            RemoveInitialDoubleHardLine(
+              indentDoc.Contents,
+              ref removeNextHardLine
+            );
             return;
         }
-
-        public static void RemoveInitialDoubleHardLine(Doc doc)
+      case Group group:
+        switch (group.Contents)
         {
-            var removeNextHardLine = false;
-            RemoveInitialDoubleHardLine(doc, ref removeNextHardLine);
-        }
-
-        private static void RemoveInitialDoubleHardLine(
-            Doc doc,
-            ref bool removeNextHardLine
-        ) {
-            switch (doc)
+          case HardLine:
+            if (removeNextHardLine)
             {
-                case StringDoc:
-                    return;
-                case IndentDoc indentDoc:
-                    switch (indentDoc.Contents)
-                    {
-                        case HardLine:
-                            if (removeNextHardLine)
-                            {
-                                indentDoc.Contents = Docs.Null;
-                                return;
-                            }
-
-                            removeNextHardLine = true;
-                            return;
-                        default:
-                            RemoveInitialDoubleHardLine(
-                                indentDoc.Contents,
-                                ref removeNextHardLine
-                            );
-                            return;
-                    }
-                case Group group:
-                    switch (group.Contents)
-                    {
-                        case HardLine:
-                            if (removeNextHardLine)
-                            {
-                                group.Contents = Docs.Null;
-                                return;
-                            }
-
-                            removeNextHardLine = true;
-                            return;
-                        default:
-                            RemoveInitialDoubleHardLine(
-                                group.Contents,
-                                ref removeNextHardLine
-                            );
-                            return;
-                    }
-                case Concat concat:
-                    RemoveInitialDoubleHardLine(
-                        concat.Contents,
-                        ref removeNextHardLine
-                    );
-                    return;
+              group.Contents = Docs.Null;
+              return;
             }
+
+            removeNextHardLine = true;
+            return;
+          default:
+            RemoveInitialDoubleHardLine(group.Contents, ref removeNextHardLine);
+            return;
         }
+      case Concat concat:
+        RemoveInitialDoubleHardLine(concat.Contents, ref removeNextHardLine);
+        return;
     }
+  }
+}
+
 }

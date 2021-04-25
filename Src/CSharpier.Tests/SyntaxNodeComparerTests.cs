@@ -4,45 +4,45 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 
-namespace CSharpier.Tests
+namespace CSharpier.Tests {
+
+public class SyntaxNodeComparerTests
 {
-    public class SyntaxNodeComparerTests
-    {
-        [Test]
-        public void Class_Not_Equal_Namespace()
-        {
-            var left = "class ClassName { }";
-            var right = @"namespace Namespace { }";
+  [Test]
+  public void Class_Not_Equal_Namespace()
+  {
+    var left = "class ClassName { }";
+    var right = @"namespace Namespace { }";
 
-            var result = this.AreEqual(left, right);
+    var result = this.AreEqual(left, right);
 
-            result.Should()
-                .Be(
-                    @"    Original: Around Line 0
+    result.Should()
+      .Be(
+        @"    Original: Around Line 0
 class ClassName { }
     Formatted: Around Line 0
 namespace Namespace { }
 "
-                );
-        }
+      );
+  }
 
-        [Test]
-        public void Class_Not_Equal_Class_Different_Whitespace()
-        {
-            var left = "class ClassName { }";
-            var right = @"class ClassName {
+  [Test]
+  public void Class_Not_Equal_Class_Different_Whitespace()
+  {
+    var left = "class ClassName { }";
+    var right = @"class ClassName {
 }";
 
-            var result = this.AreEqual(left, right);
+    var result = this.AreEqual(left, right);
 
-            result.Should().BeEmpty();
-        }
+    result.Should().BeEmpty();
+  }
 
-        [Test]
-        public void MissingAttribute()
-        {
-            var left =
-                @"class Resources
+  [Test]
+  public void MissingAttribute()
+  {
+    var left =
+      @"class Resources
 {
     [Obsolete]
     public Resources()
@@ -50,17 +50,17 @@ namespace Namespace { }
     }
 }
 ";
-            var right = @"class Resources
+    var right = @"class Resources
 {
     public Resources() { }
 }
 ";
 
-            var result = this.AreEqual(left, right);
+    var result = this.AreEqual(left, right);
 
-            result.Should()
-                .Be(
-                    @"    Original: Around Line 2
+    result.Should()
+      .Be(
+        @"    Original: Around Line 2
 class Resources
 {
     [Obsolete]
@@ -74,14 +74,14 @@ class Resources
     public Resources() { }
 }
 "
-                );
-        }
+      );
+  }
 
-        [Test]
-        public void SeperatedSyntaxLists()
-        {
-            var left =
-                @"namespace Insite.Automated.Core
+  [Test]
+  public void SeperatedSyntaxLists()
+  {
+    var left =
+      @"namespace Insite.Automated.Core
 {
     using System;
 
@@ -100,8 +100,8 @@ class Resources
     }
 }";
 
-            var right =
-                @"namespace Insite.Automated.Core
+    var right =
+      @"namespace Insite.Automated.Core
 {
     using System;
 
@@ -119,29 +119,29 @@ class Resources
 }
 ";
 
-            var result = this.AreEqual(left, right);
+    var result = this.AreEqual(left, right);
 
-            result.Should().BeEmpty();
-        }
+    result.Should().BeEmpty();
+  }
 
-        [Test]
-        public void MissingSemiColon()
-        {
-            var left = @"public enum Enum
+  [Test]
+  public void MissingSemiColon()
+  {
+    var left = @"public enum Enum
 {
     Integer,
     String,
 };";
-            var right = @"public enum Enum
+    var right = @"public enum Enum
 {
     Integer,
     String,
 }";
-            var result = this.AreEqual(left, right);
+    var result = this.AreEqual(left, right);
 
-            result.Should()
-                .Be(
-                    @"    Original: Around Line 4
+    result.Should()
+      .Be(
+        @"    Original: Around Line 4
     Integer,
     String,
 };
@@ -152,16 +152,17 @@ public enum Enum
     String,
 }
 "
-                );
-        }
+      );
+  }
 
-        private string AreEqual(string left, string right)
-        {
-            return new SyntaxNodeComparer(
-                left,
-                right,
-                CancellationToken.None
-            ).CompareSource();
-        }
-    }
+  private string AreEqual(string left, string right)
+  {
+    return new SyntaxNodeComparer(
+      left,
+      right,
+      CancellationToken.None
+    ).CompareSource();
+  }
+}
+
 }

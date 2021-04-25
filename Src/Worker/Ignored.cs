@@ -4,26 +4,27 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Worker
+namespace Worker {
+
+public static class Ignored
 {
-    public static class Ignored
-    {
-        public static string[] Properties = {
-            "language",
-            "parent",
-            "parentTrivia",
-            "spanStart",
-        };
+  public static string[] Properties = {
+    "language",
+    "parent",
+    "parentTrivia",
+    "spanStart",
+  };
 
-        public static Type[] Types = { typeof(TextSpan), typeof(SyntaxTree) };
+  public static Type[] Types = { typeof(TextSpan), typeof(SyntaxTree) };
 
-        public static Dictionary<Type,
-            string[]> PropertiesByType = new Dictionary<Type, string[]>
-        {
-            { typeof(PropertyDeclarationSyntax), new[] { "semicolon" } },
-            { typeof(IndexerDeclarationSyntax), new[] { "semicolon" } },
-            { typeof(SyntaxTrivia), new[] { "token" } },
-            { typeof(SyntaxToken), new[] { "value", "valueText" } },
-        };
-    }
+  public static Dictionary<Type,
+    string[]> PropertiesByType = new Dictionary<Type, string[]>
+  {
+    { typeof(PropertyDeclarationSyntax), new[] { "semicolon" } },
+    { typeof(IndexerDeclarationSyntax), new[] { "semicolon" } },
+    { typeof(SyntaxTrivia), new[] { "token" } },
+    { typeof(SyntaxToken), new[] { "value", "valueText" } },
+  };
+}
+
 }

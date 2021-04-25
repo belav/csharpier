@@ -1,14 +1,15 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class LabeledStatementTests : BaseTest
 {
-    public class LabeledStatementTests : BaseTest
-    {
-        [Test]
-        public void BasicLabeledStatement()
-        {
-            this.RunTest("LabeledStatement", "BasicLabeledStatement");
-        }
-    }
+  [Test]
+  public void BasicLabeledStatement()
+  {
+    this.RunTest("LabeledStatement", "BasicLabeledStatement");
+  }
+}
+
 }

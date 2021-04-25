@@ -2,28 +2,22 @@ using System.Linq;
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintBaseListSyntax(BaseListSyntax node)
-        {
-            return Docs.Group(
-                Docs.Indent(
-                    Docs.Line,
-                    this.PrintSyntaxToken(
-                        node.ColonToken,
-                        afterTokenIfNoTrailing: " "
-                    ),
-                    Docs.Indent(
-                        this.PrintSeparatedSyntaxList(
-                            node.Types,
-                            this.Print,
-                            Docs.Line
-                        )
-                    )
-                )
-            );
-        }
-    }
+  private Doc PrintBaseListSyntax(BaseListSyntax node)
+  {
+    return Docs.Group(
+      Docs.Indent(
+        Docs.Line,
+        this.PrintSyntaxToken(node.ColonToken, afterTokenIfNoTrailing: " "),
+        Docs.Indent(
+          this.PrintSeparatedSyntaxList(node.Types, this.Print, Docs.Line)
+        )
+      )
+    );
+  }
+}
+
 }

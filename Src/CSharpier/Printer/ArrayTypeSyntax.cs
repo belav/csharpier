@@ -2,16 +2,17 @@ using System.Linq;
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintArrayTypeSyntax(ArrayTypeSyntax node)
-        {
-            return Docs.Concat(
-                this.Print(node.ElementType),
-                Docs.Concat(node.RankSpecifiers.Select(this.Print).ToArray())
-            );
-        }
-    }
+  private Doc PrintArrayTypeSyntax(ArrayTypeSyntax node)
+  {
+    return Docs.Concat(
+      this.Print(node.ElementType),
+      Docs.Concat(node.RankSpecifiers.Select(this.Print).ToArray())
+    );
+  }
+}
+
 }

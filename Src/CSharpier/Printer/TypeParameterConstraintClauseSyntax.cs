@@ -2,32 +2,23 @@ using System.Linq;
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintTypeParameterConstraintClauseSyntax(
-            TypeParameterConstraintClauseSyntax node
-        ) {
-            return Docs.Group(
-                this.PrintSyntaxToken(
-                    node.WhereKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
-                this.Print(node.Name),
-                " ",
-                this.PrintSyntaxToken(
-                    node.ColonToken,
-                    afterTokenIfNoTrailing: " "
-                ),
-                Docs.Indent(
-                    this.PrintSeparatedSyntaxList(
-                        node.Constraints,
-                        this.Print,
-                        Docs.Line
-                    )
-                )
-            );
-        }
-    }
+  private Doc PrintTypeParameterConstraintClauseSyntax(
+    TypeParameterConstraintClauseSyntax node
+  ) {
+    return Docs.Group(
+      this.PrintSyntaxToken(node.WhereKeyword, afterTokenIfNoTrailing: " "),
+      this.Print(node.Name),
+      " ",
+      this.PrintSyntaxToken(node.ColonToken, afterTokenIfNoTrailing: " "),
+      Docs.Indent(
+        this.PrintSeparatedSyntaxList(node.Constraints, this.Print, Docs.Line)
+      )
+    );
+  }
+}
+
 }

@@ -1,6 +1,7 @@
 using System;
 
-namespace CSharpier
-{
-    public class InTooDeepException : Exception { }
+namespace CSharpier {
+
+public class InTooDeepException : Exception { }
+
 }

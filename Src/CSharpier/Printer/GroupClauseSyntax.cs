@@ -1,25 +1,20 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintGroupClauseSyntax(GroupClauseSyntax node)
-        {
-            return Docs.Concat(
-                this.PrintSyntaxToken(
-                    node.GroupKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
-                this.Print(node.GroupExpression),
-                " ",
-                this.PrintSyntaxToken(
-                    node.ByKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
-                this.Print(node.ByExpression)
-            );
-        }
-    }
+  private Doc PrintGroupClauseSyntax(GroupClauseSyntax node)
+  {
+    return Docs.Concat(
+      this.PrintSyntaxToken(node.GroupKeyword, afterTokenIfNoTrailing: " "),
+      this.Print(node.GroupExpression),
+      " ",
+      this.PrintSyntaxToken(node.ByKeyword, afterTokenIfNoTrailing: " "),
+      this.Print(node.ByExpression)
+    );
+  }
+}
+
 }

@@ -1,14 +1,15 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class DirectivesTests : BaseTest
 {
-    public class DirectivesTests : BaseTest
-    {
-        [Test]
-        public void Directives()
-        {
-            this.RunTest("Directives", "Directives");
-        }
-    }
+  [Test]
+  public void Directives()
+  {
+    this.RunTest("Directives", "Directives");
+  }
+}
+
 }

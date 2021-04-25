@@ -1,17 +1,18 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class ParenthesizedVariableDesignationTests : BaseTest
 {
-    public class ParenthesizedVariableDesignationTests : BaseTest
-    {
-        [Test]
-        public void BasicParenthesizedVariableDesignation()
-        {
-            this.RunTest(
-                "ParenthesizedVariableDesignation",
-                "BasicParenthesizedVariableDesignation"
-            );
-        }
-    }
+  [Test]
+  public void BasicParenthesizedVariableDesignation()
+  {
+    this.RunTest(
+      "ParenthesizedVariableDesignation",
+      "BasicParenthesizedVariableDesignation"
+    );
+  }
+}
+
 }

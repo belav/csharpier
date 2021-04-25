@@ -1,14 +1,15 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintLocalFunctionStatementSyntax(
-            LocalFunctionStatementSyntax node
-        ) {
-            return this.PrintBaseMethodDeclarationSyntax(node);
-        }
-    }
+  private Doc PrintLocalFunctionStatementSyntax(
+    LocalFunctionStatementSyntax node
+  ) {
+    return this.PrintBaseMethodDeclarationSyntax(node);
+  }
+}
+
 }

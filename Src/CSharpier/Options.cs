@@ -1,11 +1,12 @@
-namespace CSharpier
+namespace CSharpier {
+
+public class Options
 {
-    public class Options
-    {
-        public bool IncludeAST { get; set; }
-        public bool IncludeDocTree { get; set; }
-        public bool UseTabs { get; set; }
-        public int TabWidth { get; set; } = 4;
-        public int Width { get; set; } = 80;
-    }
+  public bool IncludeAST { get; set; }
+  public bool IncludeDocTree { get; set; }
+  public bool UseTabs { get; set; }
+  public int TabWidth { get; set; } = 2;
+  public int Width { get; set; } = 80;
+}
+
 }

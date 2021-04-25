@@ -1,17 +1,18 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class ParenthesizedLambdaExpressionTests : BaseTest
 {
-    public class ParenthesizedLambdaExpressionTests : BaseTest
-    {
-        [Test]
-        public void ParenthesizedLambdaExpressions()
-        {
-            this.RunTest(
-                "ParenthesizedLambdaExpression",
-                "ParenthesizedLambdaExpressions"
-            );
-        }
-    }
+  [Test]
+  public void ParenthesizedLambdaExpressions()
+  {
+    this.RunTest(
+      "ParenthesizedLambdaExpression",
+      "ParenthesizedLambdaExpressions"
+    );
+  }
+}
+
 }

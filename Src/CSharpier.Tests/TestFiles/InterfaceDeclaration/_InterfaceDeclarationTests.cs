@@ -1,29 +1,30 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class InterfaceDeclarationTests : BaseTest
 {
-    public class InterfaceDeclarationTests : BaseTest
-    {
-        [Test]
-        public void BasicInterfaceDeclaration()
-        {
-            this.RunTest("InterfaceDeclaration", "BasicInterfaceDeclaration");
-        }
-        [Test]
-        public void InterfaceWithBaseList()
-        {
-            this.RunTest("InterfaceDeclaration", "InterfaceWithBaseList");
-        }
-        [Test]
-        public void InterfaceWithMethod()
-        {
-            this.RunTest("InterfaceDeclaration", "InterfaceWithMethod");
-        }
-        [Test]
-        public void InterfaceWithTypeParameters()
-        {
-            this.RunTest("InterfaceDeclaration", "InterfaceWithTypeParameters");
-        }
-    }
+  [Test]
+  public void BasicInterfaceDeclaration()
+  {
+    this.RunTest("InterfaceDeclaration", "BasicInterfaceDeclaration");
+  }
+  [Test]
+  public void InterfaceWithBaseList()
+  {
+    this.RunTest("InterfaceDeclaration", "InterfaceWithBaseList");
+  }
+  [Test]
+  public void InterfaceWithMethod()
+  {
+    this.RunTest("InterfaceDeclaration", "InterfaceWithMethod");
+  }
+  [Test]
+  public void InterfaceWithTypeParameters()
+  {
+    this.RunTest("InterfaceDeclaration", "InterfaceWithTypeParameters");
+  }
+}
+
 }

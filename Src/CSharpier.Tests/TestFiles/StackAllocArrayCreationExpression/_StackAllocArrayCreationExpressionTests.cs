@@ -1,17 +1,18 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class StackAllocArrayCreationExpressionTests : BaseTest
 {
-    public class StackAllocArrayCreationExpressionTests : BaseTest
-    {
-        [Test]
-        public void BasicStackAllocArrayCreationExpression()
-        {
-            this.RunTest(
-                "StackAllocArrayCreationExpression",
-                "BasicStackAllocArrayCreationExpression"
-            );
-        }
-    }
+  [Test]
+  public void BasicStackAllocArrayCreationExpression()
+  {
+    this.RunTest(
+      "StackAllocArrayCreationExpression",
+      "BasicStackAllocArrayCreationExpression"
+    );
+  }
+}
+
 }

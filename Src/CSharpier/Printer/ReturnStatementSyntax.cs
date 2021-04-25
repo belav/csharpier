@@ -2,23 +2,22 @@ using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintReturnStatementSyntax(ReturnStatementSyntax node)
-        {
-            return Docs.Group(
-                this.PrintExtraNewLines(node),
-                this.PrintSyntaxToken(
-                    node.ReturnKeyword,
-                    node.Expression != null ? " " : Doc.Null
-                ),
-                node.Expression != null
-                    ? this.Print(node.Expression)
-                    : Docs.Null,
-                SyntaxTokens.Print(node.SemicolonToken)
-            );
-        }
-    }
+  private Doc PrintReturnStatementSyntax(ReturnStatementSyntax node)
+  {
+    return Docs.Group(
+      this.PrintExtraNewLines(node),
+      this.PrintSyntaxToken(
+        node.ReturnKeyword,
+        node.Expression != null ? " " : Doc.Null
+      ),
+      node.Expression != null ? this.Print(node.Expression) : Docs.Null,
+      SyntaxTokens.Print(node.SemicolonToken)
+    );
+  }
+}
+
 }

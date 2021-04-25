@@ -2,13 +2,14 @@ using System.Linq;
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintRecordDeclarationSyntax(RecordDeclarationSyntax node)
-        {
-            return this.PrintBaseTypeDeclarationSyntax(node);
-        }
-    }
+  private Doc PrintRecordDeclarationSyntax(RecordDeclarationSyntax node)
+  {
+    return this.PrintBaseTypeDeclarationSyntax(node);
+  }
+}
+
 }

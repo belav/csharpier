@@ -1,20 +1,21 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintArrowExpressionClauseSyntax(
-            ArrowExpressionClauseSyntax node
-        ) {
-            return Docs.Group(
-                Docs.Indent(
-                    " ",
-                    this.PrintSyntaxToken(node.ArrowToken, Docs.Line),
-                    this.Print(node.Expression)
-                )
-            );
-        }
-    }
+  private Doc PrintArrowExpressionClauseSyntax(
+    ArrowExpressionClauseSyntax node
+  ) {
+    return Docs.Group(
+      Docs.Indent(
+        " ",
+        this.PrintSyntaxToken(node.ArrowToken, Docs.Line),
+        this.Print(node.Expression)
+      )
+    );
+  }
+}
+
 }

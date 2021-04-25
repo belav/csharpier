@@ -1,14 +1,14 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintOmittedTypeArgumentSyntax(
-            OmittedTypeArgumentSyntax node
-        ) {
-            return Doc.Null;
-        }
-    }
+  private Doc PrintOmittedTypeArgumentSyntax(OmittedTypeArgumentSyntax node)
+  {
+    return Doc.Null;
+  }
+}
+
 }

@@ -1,14 +1,15 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class MethodDeclarationTests : BaseTest
 {
-    public class MethodDeclarationTests : BaseTest
-    {
-        [Test]
-        public void MethodDeclarations()
-        {
-            this.RunTest("MethodDeclaration", "MethodDeclarations");
-        }
-    }
+  [Test]
+  public void MethodDeclarations()
+  {
+    this.RunTest("MethodDeclaration", "MethodDeclarations");
+  }
+}
+
 }

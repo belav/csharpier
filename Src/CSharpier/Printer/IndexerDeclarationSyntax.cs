@@ -1,14 +1,14 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintIndexerDeclarationSyntax(
-            IndexerDeclarationSyntax node
-        ) {
-            return this.PrintBasePropertyDeclarationSyntax(node);
-        }
-    }
+  private Doc PrintIndexerDeclarationSyntax(IndexerDeclarationSyntax node)
+  {
+    return this.PrintBasePropertyDeclarationSyntax(node);
+  }
+}
+
 }

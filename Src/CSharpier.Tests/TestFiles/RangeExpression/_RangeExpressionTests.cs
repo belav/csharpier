@@ -1,14 +1,15 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class RangeExpressionTests : BaseTest
 {
-    public class RangeExpressionTests : BaseTest
-    {
-        [Test]
-        public void BasicRangeExpression()
-        {
-            this.RunTest("RangeExpression", "BasicRangeExpression");
-        }
-    }
+  [Test]
+  public void BasicRangeExpression()
+  {
+    this.RunTest("RangeExpression", "BasicRangeExpression");
+  }
+}
+
 }

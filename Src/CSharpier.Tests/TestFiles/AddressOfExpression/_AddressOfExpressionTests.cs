@@ -1,14 +1,15 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class AddressOfExpressionTests : BaseTest
 {
-    public class AddressOfExpressionTests : BaseTest
-    {
-        [Test]
-        public void BasicAddressOfExpression()
-        {
-            this.RunTest("AddressOfExpression", "BasicAddressOfExpression");
-        }
-    }
+  [Test]
+  public void BasicAddressOfExpression()
+  {
+    this.RunTest("AddressOfExpression", "BasicAddressOfExpression");
+  }
+}
+
 }

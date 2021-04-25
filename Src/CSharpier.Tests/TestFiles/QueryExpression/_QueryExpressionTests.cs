@@ -1,14 +1,15 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class QueryExpressionTests : BaseTest
 {
-    public class QueryExpressionTests : BaseTest
-    {
-        [Test]
-        public void QueryExpressions()
-        {
-            this.RunTest("QueryExpression", "QueryExpressions");
-        }
-    }
+  [Test]
+  public void QueryExpressions()
+  {
+    this.RunTest("QueryExpression", "QueryExpressions");
+  }
+}
+
 }

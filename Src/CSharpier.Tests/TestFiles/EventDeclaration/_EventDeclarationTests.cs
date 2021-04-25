@@ -1,14 +1,15 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class EventDeclarationTests : BaseTest
 {
-    public class EventDeclarationTests : BaseTest
-    {
-        [Test]
-        public void BasicEventDeclaration()
-        {
-            this.RunTest("EventDeclaration", "BasicEventDeclaration");
-        }
-    }
+  [Test]
+  public void BasicEventDeclaration()
+  {
+    this.RunTest("EventDeclaration", "BasicEventDeclaration");
+  }
+}
+
 }

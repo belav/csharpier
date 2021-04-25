@@ -1,14 +1,15 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class ClassDeclarationTests : BaseTest
 {
-    public class ClassDeclarationTests : BaseTest
-    {
-        [Test]
-        public void ClassDeclarations()
-        {
-            this.RunTest("ClassDeclaration", "ClassDeclarations");
-        }
-    }
+  [Test]
+  public void ClassDeclarations()
+  {
+    this.RunTest("ClassDeclaration", "ClassDeclarations");
+  }
+}
+
 }

@@ -1,14 +1,15 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class AliasQualifiedNameTests : BaseTest
 {
-    public class AliasQualifiedNameTests : BaseTest
-    {
-        [Test]
-        public void BasicAliasQualifiedName()
-        {
-            this.RunTest("AliasQualifiedName", "BasicAliasQualifiedName");
-        }
-    }
+  [Test]
+  public void BasicAliasQualifiedName()
+  {
+    this.RunTest("AliasQualifiedName", "BasicAliasQualifiedName");
+  }
+}
+
 }

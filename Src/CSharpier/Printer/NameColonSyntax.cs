@@ -2,19 +2,17 @@ using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintNameColonSyntax(NameColonSyntax node)
-        {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.Name.Identifier),
-                this.PrintSyntaxToken(
-                    node.ColonToken,
-                    afterTokenIfNoTrailing: " "
-                )
-            );
-        }
-    }
+  private Doc PrintNameColonSyntax(NameColonSyntax node)
+  {
+    return Docs.Concat(
+      SyntaxTokens.Print(node.Name.Identifier),
+      this.PrintSyntaxToken(node.ColonToken, afterTokenIfNoTrailing: " ")
+    );
+  }
+}
+
 }

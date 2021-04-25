@@ -1,12 +1,13 @@
-namespace CSharpier.DocTypes
-{
-    public class StringDoc : Doc
-    {
-        public string Value { get; set; }
+namespace CSharpier.DocTypes {
 
-        public StringDoc(string value)
-        {
-            this.Value = value;
-        }
-    }
+public class StringDoc : Doc
+{
+  public string Value { get; set; }
+
+  public StringDoc(string value)
+  {
+    this.Value = value;
+  }
+}
+
 }

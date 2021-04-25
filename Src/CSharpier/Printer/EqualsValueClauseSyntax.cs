@@ -2,46 +2,47 @@ using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
+  private Doc PrintEqualsValueClauseSyntax(EqualsValueClauseSyntax node)
+  {
+    Doc separator = Docs.Line;
+    if (node.Parent is PropertyDeclarationSyntax)
     {
-        private Doc PrintEqualsValueClauseSyntax(EqualsValueClauseSyntax node)
-        {
-            Doc separator = Docs.Line;
-            if (node.Parent is PropertyDeclarationSyntax)
-            {
-                // keeping line
-            }
-            else if (node.Value is QueryExpressionSyntax)
-            {
-                separator = Docs.Null;
-            }
-            else if (
-                node.Value is AnonymousObjectCreationExpressionSyntax ||
-                node.Value is AnonymousMethodExpressionSyntax ||
-                node.Value is ConditionalExpressionSyntax ||
-                node.Value is ObjectCreationExpressionSyntax ||
-                node.Value is InitializerExpressionSyntax ||
-                node.Value is ParenthesizedLambdaExpressionSyntax ||
-                node.Value is InvocationExpressionSyntax ||
-                node.Value is SwitchExpressionSyntax
-            ) {
-                separator = " ";
-            }
-
-            Doc result = Docs.Group(
-                " ",
-                this.PrintSyntaxToken(node.EqualsToken, separator),
-                this.Print(node.Value)
-            );
-
-            if (separator is LineDoc)
-            {
-                result = Docs.Indent(result);
-            }
-
-            return result;
-        }
+      // keeping line
     }
+    else if (node.Value is QueryExpressionSyntax)
+    {
+      separator = Docs.Null;
+    }
+    else if (
+      node.Value is AnonymousObjectCreationExpressionSyntax ||
+      node.Value is AnonymousMethodExpressionSyntax ||
+      node.Value is ConditionalExpressionSyntax ||
+      node.Value is ObjectCreationExpressionSyntax ||
+      node.Value is InitializerExpressionSyntax ||
+      node.Value is ParenthesizedLambdaExpressionSyntax ||
+      node.Value is InvocationExpressionSyntax ||
+      node.Value is SwitchExpressionSyntax
+    ) {
+      separator = " ";
+    }
+
+    Doc result = Docs.Group(
+      " ",
+      this.PrintSyntaxToken(node.EqualsToken, separator),
+      this.Print(node.Value)
+    );
+
+    if (separator is LineDoc)
+    {
+      result = Docs.Indent(result);
+    }
+
+    return result;
+  }
+}
+
 }

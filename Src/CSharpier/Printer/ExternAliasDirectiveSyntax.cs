@@ -2,26 +2,20 @@ using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintExternAliasDirectiveSyntax(
-            ExternAliasDirectiveSyntax node
-        ) {
-            return Docs.Concat(
-                this.PrintExtraNewLines(node),
-                this.PrintSyntaxToken(
-                    node.ExternKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
-                this.PrintSyntaxToken(
-                    node.AliasKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
-                SyntaxTokens.Print(node.Identifier),
-                SyntaxTokens.Print(node.SemicolonToken)
-            );
-        }
-    }
+  private Doc PrintExternAliasDirectiveSyntax(ExternAliasDirectiveSyntax node)
+  {
+    return Docs.Concat(
+      this.PrintExtraNewLines(node),
+      this.PrintSyntaxToken(node.ExternKeyword, afterTokenIfNoTrailing: " "),
+      this.PrintSyntaxToken(node.AliasKeyword, afterTokenIfNoTrailing: " "),
+      SyntaxTokens.Print(node.Identifier),
+      SyntaxTokens.Print(node.SemicolonToken)
+    );
+  }
+}
+
 }

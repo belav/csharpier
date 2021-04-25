@@ -1,17 +1,15 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class PostIncrementExpressionTests : BaseTest
 {
-    public class PostIncrementExpressionTests : BaseTest
-    {
-        [Test]
-        public void BasicPostIncrementExpression()
-        {
-            this.RunTest(
-                "PostIncrementExpression",
-                "BasicPostIncrementExpression"
-            );
-        }
-    }
+  [Test]
+  public void BasicPostIncrementExpression()
+  {
+    this.RunTest("PostIncrementExpression", "BasicPostIncrementExpression");
+  }
+}
+
 }

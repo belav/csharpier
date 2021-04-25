@@ -2,20 +2,18 @@ using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintCaseSwitchLabelSyntax(CaseSwitchLabelSyntax node)
-        {
-            return Docs.Concat(
-                this.PrintSyntaxToken(
-                    node.Keyword,
-                    afterTokenIfNoTrailing: " "
-                ),
-                Docs.Group(this.Print(node.Value)),
-                SyntaxTokens.Print(node.ColonToken)
-            );
-        }
-    }
+  private Doc PrintCaseSwitchLabelSyntax(CaseSwitchLabelSyntax node)
+  {
+    return Docs.Concat(
+      this.PrintSyntaxToken(node.Keyword, afterTokenIfNoTrailing: " "),
+      Docs.Group(this.Print(node.Value)),
+      SyntaxTokens.Print(node.ColonToken)
+    );
+  }
+}
+
 }

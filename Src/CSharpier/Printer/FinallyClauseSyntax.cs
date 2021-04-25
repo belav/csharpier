@@ -2,16 +2,17 @@ using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintFinallyClauseSyntax(FinallyClauseSyntax node)
-        {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.FinallyKeyword),
-                this.Print(node.Block)
-            );
-        }
-    }
+  private Doc PrintFinallyClauseSyntax(FinallyClauseSyntax node)
+  {
+    return Docs.Concat(
+      SyntaxTokens.Print(node.FinallyKeyword),
+      this.Print(node.Block)
+    );
+  }
+}
+
 }

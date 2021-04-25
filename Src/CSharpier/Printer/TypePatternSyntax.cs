@@ -1,13 +1,14 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintTypePatternSyntax(TypePatternSyntax node)
-        {
-            return this.Print(node.Type);
-        }
-    }
+  private Doc PrintTypePatternSyntax(TypePatternSyntax node)
+  {
+    return this.Print(node.Type);
+  }
+}
+
 }

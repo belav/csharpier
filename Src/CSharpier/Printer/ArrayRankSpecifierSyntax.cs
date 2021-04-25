@@ -3,24 +3,20 @@ using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier {
+
+public partial class Printer
 {
-    public partial class Printer
-    {
-        private Doc PrintArrayRankSpecifierSyntax(
-            ArrayRankSpecifierSyntax node
-        ) {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.OpenBracketToken),
-                node.Sizes.Any()
-                    ? this.PrintSeparatedSyntaxList(
-                            node.Sizes,
-                            this.Print,
-                            Doc.Null
-                        )
-                    : Doc.Null,
-                SyntaxTokens.Print(node.CloseBracketToken)
-            );
-        }
-    }
+  private Doc PrintArrayRankSpecifierSyntax(ArrayRankSpecifierSyntax node)
+  {
+    return Docs.Concat(
+      SyntaxTokens.Print(node.OpenBracketToken),
+      node.Sizes.Any()
+        ? this.PrintSeparatedSyntaxList(node.Sizes, this.Print, Doc.Null)
+        : Doc.Null,
+      SyntaxTokens.Print(node.CloseBracketToken)
+    );
+  }
+}
+
 }

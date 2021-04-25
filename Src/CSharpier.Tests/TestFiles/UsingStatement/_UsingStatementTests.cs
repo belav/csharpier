@@ -1,14 +1,15 @@
 using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles {
+
+public class UsingStatementTests : BaseTest
 {
-    public class UsingStatementTests : BaseTest
-    {
-        [Test]
-        public void UsingStatements()
-        {
-            this.RunTest("UsingStatement", "UsingStatements");
-        }
-    }
+  [Test]
+  public void UsingStatements()
+  {
+    this.RunTest("UsingStatement", "UsingStatements");
+  }
+}
+
 }
