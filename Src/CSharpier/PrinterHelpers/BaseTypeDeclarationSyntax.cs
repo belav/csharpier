@@ -11,7 +11,6 @@ namespace CSharpier
 {
     public partial class Printer
     {
-        // TODO partial - These "NodeLike" Prints can't go in SyntaxNodePrinters, because of auto generated code. Maybe they just go next to the other Utility like functions?
         private Doc PrintBaseTypeDeclarationSyntax(
             BaseTypeDeclarationSyntax node
         ) {
