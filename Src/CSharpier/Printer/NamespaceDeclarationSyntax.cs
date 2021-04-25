@@ -13,9 +13,9 @@ namespace CSharpier
         ) {
             var docs = new List<Doc>
             {
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintModifiers(node.Modifiers),
+                Modifiers.Print(node.Modifiers),
                 SyntaxTokens.Print(node.NamespaceKeyword),
                 " ",
                 this.Print(node.Name)
@@ -31,7 +31,7 @@ namespace CSharpier
                 if (hasExterns)
                 {
                     innerDocs.Add(
-                        Join(
+                        Docs.Join(
                             Docs.HardLine,
                             node.Externs.Select(
                                 this.PrintExternAliasDirectiveSyntax
@@ -43,7 +43,7 @@ namespace CSharpier
                 if (hasUsing)
                 {
                     innerDocs.Add(
-                        Join(
+                        Docs.Join(
                             Docs.HardLine,
                             node.Usings.Select(this.PrintUsingDirectiveSyntax)
                         ),
@@ -53,7 +53,10 @@ namespace CSharpier
                 if (hasMembers)
                 {
                     innerDocs.Add(
-                        Join(Docs.HardLine, node.Members.Select(this.Print)),
+                        Docs.Join(
+                            Docs.HardLine,
+                            node.Members.Select(this.Print)
+                        ),
                         Docs.HardLine
                     );
                 }

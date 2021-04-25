@@ -12,12 +12,12 @@ namespace CSharpier
         {
             var docs = new List<Doc>
             {
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
                 SyntaxTokens.Print(node.TryKeyword),
                 this.PrintBlockSyntax(node.Block),
                 Docs.HardLine,
-                Join(
+                Docs.Join(
                     Docs.HardLine,
                     node.Catches.Select(this.PrintCatchClauseSyntax)
                 )

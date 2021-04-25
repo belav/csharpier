@@ -11,7 +11,7 @@ namespace CSharpier
         ) {
             return Docs.Concat(
                 SyntaxTokens.Print(node.OpenBracketToken),
-                this.PrintSeparatedSyntaxList(
+                SeparatedSyntaxList.Print(
                     node.Parameters,
                     this.PrintParameterSyntax,
                     " "

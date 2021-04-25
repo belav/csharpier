@@ -1,4 +1,5 @@
 using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +10,7 @@ namespace CSharpier
             VariableDeclarationSyntax node
         ) {
             var docs = Docs.Concat(
-                this.PrintSeparatedSyntaxList(
+                SeparatedSyntaxList.Print(
                     node.Variables,
                     this.PrintVariableDeclaratorSyntax,
                     node.Parent is ForStatementSyntax

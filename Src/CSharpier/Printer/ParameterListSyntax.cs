@@ -17,7 +17,7 @@ namespace CSharpier
                     ? Docs.Concat(
                             Docs.Indent(
                                 Docs.SoftLine,
-                                this.PrintSeparatedSyntaxList(
+                                SeparatedSyntaxList.Print(
                                     node.Parameters,
                                     this.PrintParameterSyntax,
                                     Docs.Line

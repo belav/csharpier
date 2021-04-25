@@ -1,5 +1,6 @@
 using System.Linq;
 using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -15,7 +16,7 @@ namespace CSharpier
                             this.PrintSyntaxToken(
                                 node.PositionalPatternClause.OpenParenToken
                             ),
-                            this.PrintSeparatedSyntaxList(
+                            SeparatedSyntaxList.Print(
                                 node.PositionalPatternClause.Subpatterns,
                                 subpatternNode =>
                                     Docs.Concat(
@@ -40,7 +41,7 @@ namespace CSharpier
                                 node.PropertyPatternClause.OpenBraceToken,
                                 " "
                             ),
-                            this.PrintSeparatedSyntaxList(
+                            SeparatedSyntaxList.Print(
                                 node.PropertyPatternClause.Subpatterns,
                                 subpatternNode =>
                                     Docs.Concat(

@@ -13,7 +13,7 @@ namespace CSharpier
             var docs = new List<Doc>
             {
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintModifiers(node.Modifiers),
+                Modifiers.Print(node.Modifiers),
                 SyntaxTokens.Print(node.Identifier)
             };
             if (node.EqualsValue != null)

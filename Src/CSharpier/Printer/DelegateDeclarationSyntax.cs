@@ -11,9 +11,9 @@ namespace CSharpier
             DelegateDeclarationSyntax node
         ) {
             var docs = new List<Doc>();
-            docs.Add(this.PrintExtraNewLines(node));
+            docs.Add(ExtraNewLines.Print(node));
             docs.Add(this.PrintAttributeLists(node, node.AttributeLists));
-            docs.Add(this.PrintModifiers(node.Modifiers));
+            docs.Add(Modifiers.Print(node.Modifiers));
             docs.Add(
                 this.PrintSyntaxToken(
                     node.DelegateKeyword,
@@ -27,7 +27,7 @@ namespace CSharpier
                 docs.Add(this.Print(node.TypeParameterList));
             }
             docs.Add(this.Print(node.ParameterList));
-            docs.Add(this.PrintConstraintClauses(node, node.ConstraintClauses));
+            docs.Add(this.PrintConstraintClauses(node.ConstraintClauses));
             docs.Add(SyntaxTokens.Print(node.SemicolonToken));
             return Docs.Concat(docs);
         }

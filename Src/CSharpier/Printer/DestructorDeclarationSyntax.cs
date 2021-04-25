@@ -10,9 +10,9 @@ namespace CSharpier
             DestructorDeclarationSyntax node
         ) {
             return Docs.Concat(
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintModifiers(node.Modifiers),
+                Modifiers.Print(node.Modifiers),
                 SyntaxTokens.Print(node.TildeToken),
                 SyntaxTokens.Print(node.Identifier),
                 this.Print(node.ParameterList),

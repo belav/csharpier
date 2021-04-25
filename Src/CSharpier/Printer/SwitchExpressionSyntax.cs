@@ -18,7 +18,7 @@ namespace CSharpier
                 Docs.Group(
                     Docs.Indent(
                         Docs.HardLine,
-                        this.PrintSeparatedSyntaxList(
+                        SeparatedSyntaxList.Print(
                             node.Arms,
                             o =>
                                 Docs.Concat(

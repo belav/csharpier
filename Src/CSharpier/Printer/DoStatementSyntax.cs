@@ -9,7 +9,7 @@ namespace CSharpier
         private Doc PrintDoStatementSyntax(DoStatementSyntax node)
         {
             return Docs.Concat(
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.DoKeyword,
                     node.Statement is not BlockSyntax ? " " : Docs.Null

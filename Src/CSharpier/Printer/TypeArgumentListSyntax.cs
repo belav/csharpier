@@ -12,7 +12,7 @@ namespace CSharpier
             return Docs.Concat(
                 SyntaxTokens.Print(node.LessThanToken),
                 Docs.Indent(
-                    this.PrintSeparatedSyntaxList(
+                    SeparatedSyntaxList.Print(
                         node.Arguments,
                         this.Print,
                         Docs.Line

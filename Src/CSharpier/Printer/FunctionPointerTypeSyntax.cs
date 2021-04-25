@@ -23,7 +23,7 @@ namespace CSharpier
                 Docs.Indent(
                     Docs.Group(
                         Docs.SoftLine,
-                        this.PrintSeparatedSyntaxList(
+                        SeparatedSyntaxList.Print(
                             node.ParameterList.Parameters,
                             o =>
                                 Docs.Concat(
@@ -31,7 +31,7 @@ namespace CSharpier
                                         o,
                                         o.AttributeLists
                                     ),
-                                    this.PrintModifiers(o.Modifiers),
+                                    Modifiers.Print(o.Modifiers),
                                     this.Print(o.Type)
                                 ),
                             Docs.Line
@@ -52,7 +52,7 @@ namespace CSharpier
                             this.PrintSyntaxToken(
                                 node.UnmanagedCallingConventionList.OpenBracketToken
                             ),
-                            this.PrintSeparatedSyntaxList(
+                            SeparatedSyntaxList.Print(
                                 node.UnmanagedCallingConventionList.CallingConventions,
                                 o => SyntaxTokens.Print(o.Name),
                                 " "

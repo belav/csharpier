@@ -1,5 +1,6 @@
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +10,7 @@ namespace CSharpier
         private Doc PrintUsingDirectiveSyntax(UsingDirectiveSyntax node)
         {
             return Docs.Concat(
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.UsingKeyword,
                     afterTokenIfNoTrailing: " "
@@ -18,9 +19,7 @@ namespace CSharpier
                     node.StaticKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                node.Alias == null
-                    ? Doc.Null
-                    : this.PrintNameEqualsSyntax(node.Alias),
+                node.Alias == null ? Doc.Null : NameEquals.Print(node.Alias),
                 this.Print(node.Name),
                 SyntaxTokens.Print(node.SemicolonToken)
             );

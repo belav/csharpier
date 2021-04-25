@@ -13,9 +13,9 @@ namespace CSharpier
             var groupId = Guid.NewGuid().ToString();
 
             return Docs.Group(
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintModifiers(node.Modifiers),
+                Modifiers.Print(node.Modifiers),
                 SyntaxTokens.Print(node.Identifier),
                 this.PrintParameterListSyntax(node.ParameterList, groupId),
                 node.Initializer != null

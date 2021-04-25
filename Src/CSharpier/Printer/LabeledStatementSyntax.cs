@@ -11,7 +11,7 @@ namespace CSharpier
         {
             var docs = new List<Doc>
             {
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
                 SyntaxTokens.Print(node.Identifier),
                 SyntaxTokens.Print(node.ColonToken)

@@ -100,13 +100,13 @@ namespace CSharpier
 
             var docs = new List<Doc>();
 
-            docs.Add(this.PrintExtraNewLines(node));
+            docs.Add(ExtraNewLines.Print(node));
             docs.Add(this.PrintAttributeLists(node, node.AttributeLists));
 
             return Docs.Group(
                 Docs.Concat(
                     Docs.Concat(docs),
-                    this.PrintModifiers(node.Modifiers),
+                    Modifiers.Print(node.Modifiers),
                     eventKeyword,
                     this.Print(node.Type),
                     " ",
@@ -151,7 +151,7 @@ namespace CSharpier
             }
 
             docs.Add(this.PrintAttributeLists(node, node.AttributeLists));
-            docs.Add(this.PrintModifiers(node.Modifiers));
+            docs.Add(Modifiers.Print(node.Modifiers));
             docs.Add(SyntaxTokens.Print(node.Keyword));
 
             if (node.Body != null)

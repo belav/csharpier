@@ -1,5 +1,6 @@
 using System.Linq;
 using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -13,7 +14,7 @@ namespace CSharpier
                     node.OrderByKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSeparatedSyntaxList(
+                SeparatedSyntaxList.Print(
                     node.Orderings,
                     orderingNode =>
                         Docs.Concat(

@@ -17,7 +17,7 @@ namespace CSharpier
                 SyntaxTokens.Print(node.LessThanToken),
                 Docs.Indent(
                     Docs.SoftLine,
-                    this.PrintSeparatedSyntaxList(
+                    SeparatedSyntaxList.Print(
                         node.Parameters,
                         this.PrintTypeParameterSyntax,
                         Docs.Line

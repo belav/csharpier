@@ -17,7 +17,7 @@ namespace CSharpier
                 arguments.Any()
                     ? Docs.Indent(
                             Docs.SoftLine,
-                            this.PrintSeparatedSyntaxList(
+                            SeparatedSyntaxList.Print(
                                 arguments,
                                 this.PrintArgumentSyntax,
                                 Docs.Line

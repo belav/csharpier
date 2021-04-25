@@ -13,7 +13,7 @@ namespace CSharpier
                 SyntaxTokens.Print(node.OpenParenToken),
                 Docs.Indent(
                     Docs.SoftLine,
-                    this.PrintSeparatedSyntaxList(
+                    SeparatedSyntaxList.Print(
                         node.Variables,
                         this.Print,
                         Docs.Line

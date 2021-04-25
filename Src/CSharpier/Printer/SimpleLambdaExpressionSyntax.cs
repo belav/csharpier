@@ -10,7 +10,7 @@ namespace CSharpier
             SimpleLambdaExpressionSyntax node
         ) {
             return Docs.Group(
-                this.PrintModifiers(node.Modifiers),
+                Modifiers.Print(node.Modifiers),
                 this.Print(node.Parameter),
                 " ",
                 SyntaxTokens.Print(node.ArrowToken),

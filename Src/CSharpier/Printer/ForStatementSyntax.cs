@@ -15,7 +15,7 @@ namespace CSharpier
 
             var docs = new List<Doc>
             {
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.ForKeyword,
                     afterTokenIfNoTrailing: " "
@@ -31,11 +31,7 @@ namespace CSharpier
                 );
             }
             innerGroup.Add(
-                this.PrintSeparatedSyntaxList(
-                    node.Initializers,
-                    this.Print,
-                    " "
-                )
+                SeparatedSyntaxList.Print(node.Initializers, this.Print, " ")
             );
             innerGroup.Add(SyntaxTokens.Print(node.FirstSemicolonToken));
             if (node.Condition != null)
@@ -58,7 +54,7 @@ namespace CSharpier
             }
             innerGroup.Add(
                 Docs.Indent(
-                    this.PrintSeparatedSyntaxList(
+                    SeparatedSyntaxList.Print(
                         node.Incrementors,
                         this.Print,
                         Docs.Line

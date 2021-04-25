@@ -13,7 +13,7 @@ namespace CSharpier
             return Docs.Concat(
                 SyntaxTokens.Print(node.OpenBracketToken),
                 node.Sizes.Any()
-                    ? this.PrintSeparatedSyntaxList(
+                    ? SeparatedSyntaxList.Print(
                             node.Sizes,
                             this.Print,
                             Doc.Null

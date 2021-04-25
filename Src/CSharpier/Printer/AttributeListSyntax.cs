@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -13,7 +14,7 @@ namespace CSharpier
             var docs = new List<Doc>();
             if (node.Parent is CompilationUnitSyntax)
             {
-                docs.Add(this.PrintExtraNewLines(node));
+                docs.Add(ExtraNewLines.Print(node));
             }
 
             docs.Add(SyntaxTokens.Print(node.OpenBracketToken));
@@ -21,14 +22,11 @@ namespace CSharpier
             {
                 docs.Add(
                     SyntaxTokens.Print(node.Target.Identifier),
-                    this.PrintSyntaxToken(
-                        node.Target.ColonToken,
-                        afterTokenIfNoTrailing: " "
-                    )
+                    SyntaxTokens.PrintWithSuffix(node.Target.ColonToken, " ")
                 );
             }
 
-            var printSeparatedSyntaxList = this.PrintSeparatedSyntaxList(
+            var printSeparatedSyntaxList = SeparatedSyntaxList.Print(
                 node.Attributes,
                 attributeNode =>
                 {
@@ -40,17 +38,17 @@ namespace CSharpier
 
                     return Docs.Group(
                         name,
-                        this.PrintSyntaxToken(
+                        SyntaxTokens.Print(
                             attributeNode.ArgumentList.OpenParenToken
                         ),
                         Docs.Indent(
                             Docs.SoftLine,
-                            this.PrintSeparatedSyntaxList(
+                            SeparatedSyntaxList.Print(
                                 attributeNode.ArgumentList.Arguments,
                                 attributeArgumentNode =>
                                     Docs.Concat(
                                         attributeArgumentNode.NameEquals != null
-                                            ? this.PrintNameEqualsSyntax(
+                                            ? NameEquals.Print(
                                                     attributeArgumentNode.NameEquals
                                                 )
                                             : Doc.Null,
@@ -65,7 +63,7 @@ namespace CSharpier
                                     ),
                                 Docs.Line
                             ),
-                            this.PrintSyntaxToken(
+                            SyntaxTokens.Print(
                                 attributeNode.ArgumentList.CloseParenToken
                             )
                         )

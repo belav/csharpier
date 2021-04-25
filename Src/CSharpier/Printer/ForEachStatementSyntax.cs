@@ -12,7 +12,7 @@ namespace CSharpier
             var groupId = Guid.NewGuid().ToString();
 
             var result = Docs.Concat(
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 SyntaxTokens.PrintWithSuffix(node.AwaitKeyword, " "),
                 SyntaxTokens.Print(node.ForEachKeyword),
                 " ",

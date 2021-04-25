@@ -11,7 +11,7 @@ namespace CSharpier
         {
             return Docs.Concat(
                 SyntaxTokens.Print(node.OpenParenToken),
-                this.PrintSeparatedSyntaxList(node.Elements, this.Print, " "),
+                SeparatedSyntaxList.Print(node.Elements, this.Print, " "),
                 SyntaxTokens.Print(node.CloseParenToken)
             );
         }

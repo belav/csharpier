@@ -39,7 +39,10 @@ namespace CSharpier
             {
                 var innerDoc = Docs.Indent(
                     statementSeparator,
-                    Join(statementSeparator, node.Statements.Select(this.Print))
+                    Docs.Join(
+                        statementSeparator,
+                        node.Statements.Select(this.Print)
+                    )
                 );
 
                 DocUtilities.RemoveInitialDoubleHardLine(innerDoc);

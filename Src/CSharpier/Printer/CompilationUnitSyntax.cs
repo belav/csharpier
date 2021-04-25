@@ -14,7 +14,7 @@ namespace CSharpier
             if (node.Externs.Count > 0)
             {
                 docs.Add(
-                    Join(
+                    Docs.Join(
                         Docs.HardLine,
                         node.Externs.Select(
                             this.PrintExternAliasDirectiveSyntax
@@ -26,7 +26,7 @@ namespace CSharpier
             if (node.Usings.Count > 0)
             {
                 docs.Add(
-                    Join(
+                    Docs.Join(
                         Docs.HardLine,
                         node.Usings.Select(this.PrintUsingDirectiveSyntax)
                     ),
@@ -36,7 +36,9 @@ namespace CSharpier
             docs.Add(this.PrintAttributeLists(node, node.AttributeLists));
             if (node.Members.Count > 0)
             {
-                docs.Add(Join(Docs.HardLine, node.Members.Select(this.Print)));
+                docs.Add(
+                    Docs.Join(Docs.HardLine, node.Members.Select(this.Print))
+                );
             }
 
             var finalTrivia = SyntaxTokens.PrintLeadingTrivia(

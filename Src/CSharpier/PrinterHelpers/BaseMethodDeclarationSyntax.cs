@@ -11,6 +11,11 @@ namespace CSharpier
 {
     public partial class Printer
     {
+        // TODO partial - The three BaseX files in here can probably go in SyntaxNodePrinters. They are all abstract types
+        // so I believe if we are generating the code correctly they will work fine.
+        // The only weird one is this one, because it also needs to accept a LocalFunctionStatementSyntax
+        // I think we can just add a LocalFunctionStatement.Print class/method that pass the node into BaseMethodDeclaration.Print
+        // and this will continue to accept CSharpSyntaxNode
         private Doc PrintBaseMethodDeclarationSyntax(CSharpSyntaxNode node)
         {
             SyntaxList<AttributeListSyntax>? attributeLists = null;
@@ -64,7 +69,7 @@ namespace CSharpier
                 semicolonToken = localFunctionStatementSyntax.SemicolonToken;
             }
 
-            var docs = new List<Doc> { this.PrintExtraNewLines(node) };
+            var docs = new List<Doc> { ExtraNewLines.Print(node) };
 
             if (attributeLists.HasValue)
             {
@@ -72,7 +77,7 @@ namespace CSharpier
             }
             if (modifiers.HasValue)
             {
-                docs.Add(this.PrintModifiers(modifiers.Value));
+                docs.Add(Modifiers.Print(modifiers.Value));
             }
 
             if (returnType != null)
@@ -141,7 +146,7 @@ namespace CSharpier
                 docs.Add(this.PrintParameterListSyntax(parameterList, groupId));
             }
 
-            docs.Add(this.PrintConstraintClauses(node, constraintClauses));
+            docs.Add(this.PrintConstraintClauses(constraintClauses));
             if (body != null)
             {
                 docs.Add(

@@ -10,7 +10,7 @@ namespace CSharpier
             ExternAliasDirectiveSyntax node
         ) {
             return Docs.Concat(
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.ExternKeyword,
                     afterTokenIfNoTrailing: " "

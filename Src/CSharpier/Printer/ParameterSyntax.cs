@@ -12,7 +12,7 @@ namespace CSharpier
             var docs = new List<Doc>
             {
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintModifiers(node.Modifiers)
+                Modifiers.Print(node.Modifiers)
             };
             if (node.Type != null)
             {

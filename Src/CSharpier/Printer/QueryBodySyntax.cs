@@ -11,7 +11,7 @@ namespace CSharpier
         {
             var docs = new List<Doc>
             {
-                Join(Docs.Line, node.Clauses.Select(this.Print))
+                Docs.Join(Docs.Line, node.Clauses.Select(this.Print))
             };
             if (node.Clauses.Count > 0)
             {

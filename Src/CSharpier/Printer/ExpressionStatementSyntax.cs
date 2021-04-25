@@ -11,7 +11,7 @@ namespace CSharpier
             ExpressionStatementSyntax node
         ) {
             return Docs.Group(
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 this.Print(node.Expression),
                 SyntaxTokens.Print(node.SemicolonToken)
             );

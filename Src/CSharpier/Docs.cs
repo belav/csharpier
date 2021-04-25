@@ -49,6 +49,30 @@ namespace CSharpier
             return new(CleanContents(contents.ToList()));
         }
 
+        public static Doc Join(Doc separator, IEnumerable<Doc> array)
+        {
+            var docs = new List<Doc>();
+
+            var list = array.ToList();
+
+            if (list.Count == 1)
+            {
+                return list[0];
+            }
+
+            for (var x = 0; x < list.Count; x++)
+            {
+                if (x != 0)
+                {
+                    docs.Add(separator);
+                }
+
+                docs.Add(list[x]);
+            }
+
+            return Concat(docs);
+        }
+
         public static ForceFlat ForceFlat(List<Doc> contents)
         {
             return new()

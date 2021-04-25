@@ -13,7 +13,7 @@ namespace CSharpier
             var docs = new List<Doc>();
             if (!(node.Parent is ElseClauseSyntax))
             {
-                docs.Add(this.PrintExtraNewLines(node));
+                docs.Add(ExtraNewLines.Print(node));
             }
 
             var groupId = Guid.NewGuid().ToString();

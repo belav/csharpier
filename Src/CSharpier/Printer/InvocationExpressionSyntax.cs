@@ -160,7 +160,7 @@ namespace CSharpier
             // TODO GH-7 softline here?
             return Docs.Indent(
                 Docs.Group(
-                    Join(
+                    Docs.Join(
                         Docs.SoftLine,
                         groups.Select(o => Docs.Group(o.ToArray()))
                     )

@@ -9,7 +9,7 @@ namespace CSharpier
         private Doc PrintReturnStatementSyntax(ReturnStatementSyntax node)
         {
             return Docs.Group(
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.ReturnKeyword,
                     node.Expression != null ? " " : Doc.Null

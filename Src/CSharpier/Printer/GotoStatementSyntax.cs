@@ -12,7 +12,7 @@ namespace CSharpier
                 ? Docs.Concat(" ", this.Print(node.Expression))
                 : string.Empty;
             return Docs.Concat(
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 SyntaxTokens.Print(node.GotoKeyword),
                 node.CaseOrDefaultKeyword.RawKind != 0 ? " " : Docs.Null,
                 SyntaxTokens.Print(node.CaseOrDefaultKeyword),

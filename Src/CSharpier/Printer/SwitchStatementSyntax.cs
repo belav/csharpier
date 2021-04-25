@@ -15,7 +15,7 @@ namespace CSharpier
                         Docs.Indent(
                             Docs.Concat(
                                 Docs.HardLine,
-                                Join(
+                                Docs.Join(
                                     Docs.HardLine,
                                     node.Sections.Select(this.Print)
                                 )
@@ -24,7 +24,7 @@ namespace CSharpier
                         Docs.HardLine
                     );
             return Docs.Concat(
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 Docs.Group(
                     this.PrintSyntaxToken(
                         node.SwitchKeyword,

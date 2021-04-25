@@ -21,7 +21,7 @@ namespace CSharpier
                 SyntaxTokens.Print(node.OpenBraceToken),
                 Docs.Indent(
                     Docs.Line,
-                    this.PrintSeparatedSyntaxList(
+                    SeparatedSyntaxList.Print(
                         node.Expressions,
                         this.Print,
                         Docs.Line

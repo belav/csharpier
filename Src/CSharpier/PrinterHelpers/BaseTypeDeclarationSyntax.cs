@@ -11,6 +11,7 @@ namespace CSharpier
 {
     public partial class Printer
     {
+        // TODO partial - These "NodeLike" Prints can't go in SyntaxNodePrinters, because of auto generated code. Maybe they just go next to the other Utility like functions?
         private Doc PrintBaseTypeDeclarationSyntax(
             BaseTypeDeclarationSyntax node
         ) {
@@ -32,7 +33,7 @@ namespace CSharpier
                 {
                     members = Docs.Indent(
                         Docs.HardLine,
-                        Join(
+                        Docs.Join(
                             Docs.HardLine,
                             typeDeclarationSyntax.Members.Select(this.Print)
                         )
@@ -66,7 +67,7 @@ namespace CSharpier
             {
                 members = Docs.Indent(
                     Docs.HardLine,
-                    this.PrintSeparatedSyntaxList(
+                    SeparatedSyntaxList.Print(
                         enumDeclarationSyntax.Members,
                         this.PrintEnumMemberDeclarationSyntax,
                         Docs.HardLine
@@ -79,9 +80,9 @@ namespace CSharpier
 
             var docs = new List<Doc>
             {
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintModifiers(node.Modifiers)
+                Modifiers.Print(node.Modifiers)
             };
             if (keyword != null)
             {
@@ -110,7 +111,7 @@ namespace CSharpier
                 docs.Add(this.PrintBaseListSyntax(node.BaseList));
             }
 
-            docs.Add(this.PrintConstraintClauses(node, constraintClauses));
+            docs.Add(this.PrintConstraintClauses(constraintClauses));
 
             if (hasMembers)
             {

@@ -14,7 +14,7 @@ namespace CSharpier
 
             var docs = new List<Doc>
             {
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 SyntaxTokens.PrintWithSuffix(node.AwaitKeyword, " "),
                 SyntaxTokens.Print(node.UsingKeyword),
                 " ",
