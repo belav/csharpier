@@ -57,7 +57,12 @@ namespace CSharpier.Playground.Controllers
             this.WriteAllText(filePath, content);
             var result = new CodeFormatter().Format(
                 content,
-                new Options { IncludeAST = true, IncludeDocTree = true, }
+                new Options
+                {
+                    IncludeAST = true,
+                    IncludeDocTree = true,
+                    Width = Options.TestingWidth
+                }
             );
 
             var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");

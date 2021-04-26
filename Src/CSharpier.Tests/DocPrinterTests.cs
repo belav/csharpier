@@ -451,14 +451,14 @@ namespace CSharpier.Tests
         private static void PrintedDocShouldBe(
             Doc doc,
             string expected,
-            int width = 80
+            int width = Options.TestingWidth
         ) {
             var result = Print(doc, width);
 
             result.Should().Be(expected);
         }
 
-        private static string Print(Doc doc, int width = 80)
+        private static string Print(Doc doc, int width = Options.TestingWidth)
         {
             return DocPrinter.Print(
                     doc,
