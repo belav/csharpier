@@ -5,14 +5,14 @@ class TestClass
         var someVar = "a string" + thatIsJust(shortEnough) + "to not wrap";
 
         var someLongVariableName =
-            "a long string with just concatenation" +
-            "will break this way" +
-            "because of reasons";
+            "a long string with just concatenation"
+            + "will break this way"
+            + "because of reasons";
 
         var someLongVariableName =
-            "a really loooooooooooooooong string" +
-            someMethodCall("with long args") +
-            "really long string";
+            "a really loooooooooooooooong string"
+            + someMethodCall("with long args")
+            + "really long string";
 
         CallSomeLongMethodWithStringConcatenationThatShouldNotBreak(
             csharpDirectory + ".generated.cs",
