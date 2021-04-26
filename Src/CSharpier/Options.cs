@@ -7,6 +7,6 @@ namespace CSharpier
         public bool UseTabs { get; init; }
         public int TabWidth { get; init; } = 4;
         public int Width { get; init; } = 100;
-        public string EndOfLine { get; set; } = "\n";
+        public string EndOfLine { get; init; } = "\n";
     }
 }
