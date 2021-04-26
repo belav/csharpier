@@ -13,8 +13,9 @@ class ClassName
         }
 
         if (
-            MethodKind is not (MethodKind.Ordinary
-                or MethodKind.LocalFunction)
+            MethodKind
+                is not (MethodKind.Ordinary
+                    or MethodKind.LocalFunction)
         ) {
             return;
         }
@@ -32,11 +33,12 @@ class ClassName
         }
 
         var useLine =
-            node.OperatorToken.Kind() is SyntaxKind.BarBarToken
-                or SyntaxKind.BarToken
-                or SyntaxKind.AmpersandAmpersandToken
-                or SyntaxKind.AmpersandToken
-                or SyntaxKind.PlusToken;
+            node.OperatorToken.Kind()
+                is SyntaxKind.BarBarToken
+                    or SyntaxKind.BarToken
+                    or SyntaxKind.AmpersandAmpersandToken
+                    or SyntaxKind.AmpersandToken
+                    or SyntaxKind.PlusToken;
 
         if (
             Nullable.GetUnderlyingType111111111111111(typeof(T))
