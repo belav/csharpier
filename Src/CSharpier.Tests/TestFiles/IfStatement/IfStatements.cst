@@ -34,5 +34,22 @@ public class ClassName
         if (true || false) { }
 
         if (true && (true || false)) { }
+
+        if (exactly80 || moreTextToMakeItWork1111111111111111111111111111111111)
+        {
+            return;
+        }
+
+        // leading comment doesn't break differently
+        if (exactly80 || moreTextToMakeItWork1111111111111111111111111111111111)
+        {
+            return;
+        }
+
+        if (
+            justOver80 || moreTextToMakeItWork1111111111111111111111111111111112
+        ) {
+            return;
+        }
     }
 }

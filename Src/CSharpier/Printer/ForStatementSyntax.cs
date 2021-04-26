@@ -64,6 +64,7 @@ namespace CSharpier
             docs.Add(
                 Doc.GroupWithId(groupId, Doc.Indent(innerGroup), Doc.SoftLine)
             );
+
             docs.Add(Token.Print(node.CloseParenToken));
             if (node.Statement is BlockSyntax blockSyntax)
             {

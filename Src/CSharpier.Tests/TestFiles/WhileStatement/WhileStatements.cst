@@ -19,5 +19,22 @@ class ClassName
         ) {
             directoryInfo = directoryInfo.Parent;
         }
+
+        while (exactly80 || moreTextToMakeItWork1111111111111111111111111111111)
+        {
+            return;
+        }
+
+        // leading comment doesn't break differently
+        while (exactly80 || moreTextToMakeItWork1111111111111111111111111111111)
+        {
+            return;
+        }
+
+        while (
+            justOver80 || moreTextToMakeItWork1111111111111111111111111111112
+        ) {
+            return;
+        }
     }
 }
