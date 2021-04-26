@@ -37,5 +37,13 @@ class ClassName
                 or SyntaxKind.AmpersandAmpersandToken
                 or SyntaxKind.AmpersandToken
                 or SyntaxKind.PlusToken;
+
+        if (
+            Nullable.GetUnderlyingType111111111111111(typeof(T))
+                is Type innerType
+            && innerType.IsEnum
+        ) {
+            return;
+        }
     }
 }
