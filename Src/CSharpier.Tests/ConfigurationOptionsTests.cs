@@ -1,0 +1,220 @@
+using System.IO.Abstractions.TestingHelpers;
+using FluentAssertions;
+using NUnit.Framework;
+
+namespace CSharpier.Tests
+{
+    [TestFixture]
+    public class ConfigurationOptionsTests
+    {
+        private MockFileSystem fileSystem;
+
+        [SetUp]
+        public void SetUp()
+        {
+            this.fileSystem = new MockFileSystem();
+        }
+
+        [Test]
+        public void Should_Return_Default_Options_With_Empty_Json()
+        {
+            WhenThereExists("c:/test/.csharpierrc", "{}");
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            ShouldHaveDefaultOptions(result);
+        }
+
+        [Test]
+        public void Should_Return_Default_Options_With_No_File()
+        {
+            var result = CreateConfigurationOptions("c:/test");
+
+            ShouldHaveDefaultOptions(result);
+        }
+
+        [Test]
+        public void Should_Return_Json_Extension_Options()
+        {
+            WhenThereExists(
+                "c:/test/.csharpierrc.json",
+                "{ \"printWidth\": 10 }"
+            );
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.PrintWidth.Should().Be(10);
+        }
+
+        [TestCase("yaml")]
+        [TestCase("yml")]
+        public void Should_Return_Yaml_Extension_Options(string extension)
+        {
+            WhenThereExists(
+                $"c:/test/.csharpierrc.{extension}",
+                "printWidth: 10"
+            );
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.PrintWidth.Should().Be(10);
+        }
+
+        [TestCase("{ \"printWidth\": 10 }")]
+        [TestCase("printWidth: 10")]
+        public void Should_Read_ExtensionLess_File(string contents)
+        {
+            WhenThereExists($"c:/test/.csharpierrc", contents);
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.PrintWidth.Should().Be(10);
+        }
+
+        [Test]
+        public void Should_Prefer_No_Extension()
+        {
+            WhenThereExists("c:/test/.csharpierrc", "{ \"printWidth\": 1 }");
+
+            WhenThereExists(
+                "c:/test/.csharpierrc.json",
+                "{ \"printWidth\": 2 }"
+            );
+            WhenThereExists("c:/test/.csharpierrc.yaml", "printWidth: 3");
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.PrintWidth.Should().Be(1);
+        }
+
+        [Test]
+        public void Should_Return_PrintWidth_With_Json()
+        {
+            WhenThereExists("c:/test/.csharpierrc", "{ \"printWidth\": 10 }");
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.PrintWidth.Should().Be(10);
+        }
+
+        [Test]
+        public void Should_Return_TabWidth_With_Json()
+        {
+            WhenThereExists("c:/test/.csharpierrc", "{ \"tabWidth\": 10 }");
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.TabWidth.Should().Be(10);
+        }
+
+        [Test]
+        public void Should_Return_UseTabs_With_Json()
+        {
+            WhenThereExists("c:/test/.csharpierrc", "{ \"useTabs\": true }");
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.UseTabs.Should().BeTrue();
+        }
+
+        [Test]
+        public void Should_Return_Exclude_With_Json()
+        {
+            WhenThereExists(
+                "c:/test/.csharpierrc",
+                "{ \"exclude\": [\"src\\\\ignoreFile.cs\"] }"
+            );
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.Exclude.Should().Contain("src/ignoreFile.cs");
+        }
+
+        [Test]
+        public void Should_Return_EndOfLine_With_Json()
+        {
+            WhenThereExists(
+                "c:/test/.csharpierrc",
+                "{ \"endOfLine\": \"crlf\" }"
+            );
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.EndOfLine.Should().Be("crlf");
+        }
+
+        [Test]
+        public void Should_Return_PrintWidth_With_Yaml()
+        {
+            WhenThereExists("c:/test/.csharpierrc", "printWidth: 10");
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.PrintWidth.Should().Be(10);
+        }
+
+        [Test]
+        public void Should_Return_TabWidth_With_Yaml()
+        {
+            WhenThereExists("c:/test/.csharpierrc", "tabWidth: 10");
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.TabWidth.Should().Be(10);
+        }
+
+        [Test]
+        public void Should_Return_UseTabs_With_Yaml()
+        {
+            WhenThereExists("c:/test/.csharpierrc", "useTabs: true");
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.UseTabs.Should().BeTrue();
+        }
+
+        [Test]
+        public void Should_Return_Exclude_With_Yaml()
+        {
+            WhenThereExists(
+                "c:/test/.csharpierrc",
+                "exclude:\n  - src\\ignoreFile.cs"
+            );
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.Exclude.Should().Contain("src/ignoreFile.cs");
+        }
+
+        [Test]
+        public void Should_Return_EndOfLine_With_Yaml()
+        {
+            WhenThereExists("c:/test/.csharpierrc", "endOfLine: crlf");
+
+            var result = CreateConfigurationOptions("c:/test");
+
+            result.EndOfLine.Should().Be("crlf");
+        }
+
+        private void ShouldHaveDefaultOptions(
+            ConfigurationOptions configurationOptions
+        ) {
+            configurationOptions.Exclude.Should().BeEmpty();
+            configurationOptions.PrintWidth.Should().Be(100);
+            configurationOptions.TabWidth.Should().Be(4);
+            configurationOptions.UseTabs.Should().BeFalse();
+            configurationOptions.EndOfLine.Should().Be("lf");
+        }
+
+        private ConfigurationOptions CreateConfigurationOptions(
+            string rootPath
+        ) {
+            return ConfigurationOptions.Create(rootPath, fileSystem);
+        }
+
+        private void WhenThereExists(string path, string contents)
+        {
+            this.fileSystem.AddFile(path, new MockFileData(contents));
+        }
+    }
+}

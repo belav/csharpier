@@ -37,7 +37,7 @@ namespace CSharpier.Tests.TestFileTests
             var formatter = new CodeFormatter();
             var result = formatter.Format(
                 fileReaderResult.FileContents,
-                new Options()
+                new Options() { Width = 80, EndOfLine = "\r\n" }
             );
 
             var actualFilePath = filePath.Replace(".cst", ".actual.cst");

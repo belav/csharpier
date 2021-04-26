@@ -460,7 +460,16 @@ namespace CSharpier.Tests
 
         private static string Print(Doc doc, int width = 80)
         {
-            return DocPrinter.Print(doc, new Options { Width = width })
+            return DocPrinter.Print(
+                    doc,
+                    // TODO if we could use auto now, this wouldn't be needed
+                    // or maybe all the tests get converted to lf
+                    new Options
+                    {
+                        Width = width,
+                        EndOfLine = "\r\n"
+                    }
+                )
                 .TrimEnd('\r', '\n');
         }
     }
