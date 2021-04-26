@@ -13,17 +13,7 @@ namespace CSharpier
         {
             var groupId = Guid.NewGuid().ToString();
 
-            var docs = new List<Doc>
-            {
-                ExtraNewLines.Print(node),
-                this.PrintSyntaxToken(
-                    node.ForKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
-                Token.Print(node.OpenParenToken)
-            };
-
-            var innerGroup = new List<Doc> { Doc.SoftLine };
+            var innerGroup = new List<Doc> { Docs.SoftLine };
             if (node.Declaration != null)
             {
                 innerGroup.Add(
@@ -61,11 +51,25 @@ namespace CSharpier
                     )
                 )
             );
-            docs.Add(
-                Doc.GroupWithId(groupId, Doc.Indent(innerGroup), Doc.SoftLine)
-            );
 
-            docs.Add(Token.Print(node.CloseParenToken));
+            var docs = new List<Doc>
+            {
+                this.PrintExtraNewLines(node),
+                SyntaxTokens.PrintLeadingTrivia(node.ForKeyword),
+                Docs.Group(
+                    SyntaxTokens.PrintWithoutLeadingTrivia(node.ForKeyword),
+                    " ",
+                    SyntaxTokens.Print(node.OpenParenToken),
+                    Docs.GroupWithId(
+                        groupId,
+                        Docs.Indent(innerGroup),
+                        Docs.SoftLine
+                    ),
+                    SyntaxTokens.Print(node.CloseParenToken),
+                    Docs.IfBreak(Docs.Null, Docs.SoftLine)
+                )
+            };
+
             if (node.Statement is BlockSyntax blockSyntax)
             {
                 docs.Add(

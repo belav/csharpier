@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -12,31 +13,44 @@ namespace CSharpier
         {
             var groupId = Guid.NewGuid().ToString();
 
-            // TODO 80
+            var leadingTrivia = node.AwaitKeyword.Kind() != SyntaxKind.None
+                ? SyntaxTokens.PrintLeadingTrivia(node.AwaitKeyword)
+                : SyntaxTokens.PrintLeadingTrivia(node.UsingKeyword);
 
             var docs = new List<Doc>
             {
-                ExtraNewLines.Print(node),
-                Token.PrintWithSuffix(node.AwaitKeyword, " "),
-                Token.Print(node.UsingKeyword),
-                " ",
-                Token.Print(node.OpenParenToken),
-                Doc.GroupWithId(
-                    groupId,
-                    Doc.Indent(
-                        Doc.SoftLine,
-                        node.Declaration != null
-                            ? this.PrintVariableDeclarationSyntax(
-                                    node.Declaration
-                                )
-                            : Doc.Null,
-                        node.Expression != null
-                            ? this.Print(node.Expression)
-                            : Doc.Null
+                this.PrintExtraNewLines(node),
+                leadingTrivia,
+                Docs.Group(
+                    SyntaxTokens.PrintWithoutLeadingTrivia(node.AwaitKeyword),
+                    node.AwaitKeyword.Kind() != SyntaxKind.None
+                        ? " "
+                        : Docs.Null,
+                    node.AwaitKeyword.Kind() == SyntaxKind.None
+                        ? SyntaxTokens.PrintWithoutLeadingTrivia(
+                                node.UsingKeyword
+                            )
+                        : SyntaxTokens.Print(node.UsingKeyword),
+                    " ",
+                    SyntaxTokens.Print(node.OpenParenToken),
+                    Docs.GroupWithId(
+                        groupId,
+                        Docs.Indent(
+                            Docs.SoftLine,
+                            node.Declaration != null
+                                ? this.PrintVariableDeclarationSyntax(
+                                        node.Declaration
+                                    )
+                                : Doc.Null,
+                            node.Expression != null
+                                ? this.Print(node.Expression)
+                                : Doc.Null
+                        ),
+                        Docs.SoftLine
                     ),
-                    Doc.SoftLine
-                ),
-                Token.Print(node.CloseParenToken)
+                    SyntaxTokens.Print(node.CloseParenToken),
+                    Docs.IfBreak(Docs.Null, Docs.SoftLine)
+                )
             };
             if (node.Statement is UsingStatementSyntax)
             {

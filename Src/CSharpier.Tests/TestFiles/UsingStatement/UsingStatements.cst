@@ -36,14 +36,34 @@ class ClassName
             return;
         }
 
-        using (var response = await this.SomethingThatIs(JustTooShort))
+        using (var x = SomeMethodCallThatHitsExactly80_______________________())
+        {
+            return;
+        }
+
+        // leading comment doesn't break differently
+        using (var x = SomeMethodCallThatHitsExactly80_______________________())
+        {
+            return;
+        }
+
+        // leading comment doesn't break differently
+        await using (var x = SomeMethodCallThatHitsExactly80_________________())
         {
             return;
         }
 
         using (
-            var response = await this.SomethingThatIs(JustLongEnoughhhhhhh)
+            var x = SomeMethodCallThatIsJustOver80_________________________()
         ) {
+            return;
+        }
+
+        // leading await
+        await
+        // leading using
+        using (var y = Something())
+        {
             return;
         }
     }

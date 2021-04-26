@@ -45,5 +45,24 @@ class ClassName
         ) {
             break;
         }
+
+        for (y = 0; y < exactly80_________________________________________; y++)
+        {
+            break;
+        }
+
+        // leading comment doesn't break differently
+        for (y = 0; y < exactly80_________________________________________; y++)
+        {
+            break;
+        }
+
+        for (
+            y = 0;
+            y < justOver80_________________________________________;
+            y++
+        ) {
+            break;
+        }
     }
 }

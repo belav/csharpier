@@ -12,12 +12,15 @@ namespace CSharpier
         ) {
             var groupId = Guid.NewGuid().ToString();
 
-            return Doc.Group(
-                ExtraNewLines.Print(node),
+            return Docs.Group(
+                this.PrintExtraNewLines(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                Modifiers.Print(node.Modifiers),
-                Token.Print(node.Identifier),
-                this.PrintParameterListSyntax(node.ParameterList, groupId),
+                Docs.Group(
+                    this.PrintModifiers(node.Modifiers),
+                    SyntaxTokens.Print(node.Identifier),
+                    this.PrintParameterListSyntax(node.ParameterList, groupId),
+                    Docs.IfBreak(Docs.Null, Docs.SoftLine)
+                ),
                 node.Initializer != null
                     ? this.Print(node.Initializer)
                     : Doc.Null,
