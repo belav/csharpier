@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintRefTypeSyntax(RefTypeSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.PrintSyntaxToken(
                     node.RefKeyword,
                     afterTokenIfNoTrailing: " "

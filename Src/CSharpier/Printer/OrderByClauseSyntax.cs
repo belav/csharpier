@@ -1,5 +1,6 @@
 using System.Linq;
 using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,15 +9,15 @@ namespace CSharpier
     {
         private Doc PrintOrderByClauseSyntax(OrderByClauseSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.PrintSyntaxToken(
                     node.OrderByKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSeparatedSyntaxList(
+                SeparatedSyntaxList.Print(
                     node.Orderings,
                     orderingNode =>
-                        Docs.Concat(
+                        Doc.Concat(
                             this.Print(orderingNode.Expression),
                             " ",
                             this.PrintSyntaxToken(

@@ -11,11 +11,11 @@ namespace CSharpier
         {
             var docs = new List<Doc>
             {
-                Join(Docs.Line, node.Clauses.Select(this.Print))
+                Doc.Join(Doc.Line, node.Clauses.Select(this.Print))
             };
             if (node.Clauses.Count > 0)
             {
-                docs.Add(Docs.Line);
+                docs.Add(Doc.Line);
             }
 
             docs.Add(this.Print(node.SelectOrGroup));
@@ -27,7 +27,7 @@ namespace CSharpier
                 );
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

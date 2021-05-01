@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintUnaryPatternSyntax(UnaryPatternSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.PrintSyntaxToken(
                     node.OperatorToken,
                     afterTokenIfNoTrailing: " "

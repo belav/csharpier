@@ -10,16 +10,16 @@ namespace CSharpier
         private Doc PrintCatchClauseSyntax(CatchClauseSyntax node)
         {
             var docs = new List<Doc>();
-            docs.Add(SyntaxTokens.Print(node.CatchKeyword));
+            docs.Add(Token.Print(node.CatchKeyword));
             if (node.Declaration != null)
             {
                 docs.Add(
                     " ",
-                    SyntaxTokens.Print(node.Declaration.OpenParenToken),
+                    Token.Print(node.Declaration.OpenParenToken),
                     this.Print(node.Declaration.Type),
                     node.Declaration.Identifier.RawKind != 0 ? " " : Doc.Null,
-                    SyntaxTokens.Print(node.Declaration.Identifier),
-                    SyntaxTokens.Print(node.Declaration.CloseParenToken)
+                    Token.Print(node.Declaration.Identifier),
+                    Token.Print(node.Declaration.CloseParenToken)
                 );
             }
 
@@ -31,14 +31,14 @@ namespace CSharpier
                         node.Filter.WhenKeyword,
                         afterTokenIfNoTrailing: " "
                     ),
-                    SyntaxTokens.Print(node.Filter.OpenParenToken),
+                    Token.Print(node.Filter.OpenParenToken),
                     this.Print(node.Filter.FilterExpression),
-                    SyntaxTokens.Print(node.Filter.CloseParenToken)
+                    Token.Print(node.Filter.CloseParenToken)
                 );
             }
 
             docs.Add(this.PrintBlockSyntax(node.Block));
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

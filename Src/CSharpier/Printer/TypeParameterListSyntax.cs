@@ -11,20 +11,20 @@ namespace CSharpier
         {
             if (node.Parameters.Count == 0)
             {
-                return Docs.Null;
+                return Doc.Null;
             }
-            return Docs.Group(
-                SyntaxTokens.Print(node.LessThanToken),
-                Docs.Indent(
-                    Docs.SoftLine,
-                    this.PrintSeparatedSyntaxList(
+            return Doc.Group(
+                Token.Print(node.LessThanToken),
+                Doc.Indent(
+                    Doc.SoftLine,
+                    SeparatedSyntaxList.Print(
                         node.Parameters,
                         this.PrintTypeParameterSyntax,
-                        Docs.Line
+                        Doc.Line
                     )
                 ),
-                Docs.SoftLine,
-                SyntaxTokens.Print(node.GreaterThanToken)
+                Doc.SoftLine,
+                Token.Print(node.GreaterThanToken)
             );
         }
     }

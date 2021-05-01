@@ -9,7 +9,7 @@ namespace CSharpier
     {
         private Doc PrintElseClauseSyntax(ElseClauseSyntax node)
         {
-            var docs = new List<Doc> { SyntaxTokens.Print(node.ElseKeyword) };
+            var docs = new List<Doc> { Token.Print(node.ElseKeyword) };
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
             {
@@ -22,10 +22,10 @@ namespace CSharpier
             else
             {
                 // TODO 1 force braces here?
-                docs.Add(Docs.Indent(Docs.HardLine, statement));
+                docs.Add(Doc.Indent(Doc.HardLine, statement));
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

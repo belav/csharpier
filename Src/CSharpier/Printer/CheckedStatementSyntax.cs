@@ -8,8 +8,8 @@ namespace CSharpier
     {
         private Doc PrintCheckedStatementSyntax(CheckedStatementSyntax node)
         {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.Keyword),
+            return Doc.Concat(
+                Token.Print(node.Keyword),
                 this.PrintBlockSyntax(node.Block)
             );
         }

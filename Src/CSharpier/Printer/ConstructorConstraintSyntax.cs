@@ -9,10 +9,10 @@ namespace CSharpier
         private Doc PrintConstructorConstraintSyntax(
             ConstructorConstraintSyntax node
         ) {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.NewKeyword),
-                SyntaxTokens.Print(node.OpenParenToken),
-                SyntaxTokens.Print(node.CloseParenToken)
+            return Doc.Concat(
+                Token.Print(node.NewKeyword),
+                Token.Print(node.OpenParenToken),
+                Token.Print(node.CloseParenToken)
             );
         }
     }

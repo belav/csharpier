@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintVarPatternSyntax(VarPatternSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.PrintSyntaxToken(
                     node.VarKeyword,
                     afterTokenIfNoTrailing: " "

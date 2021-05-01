@@ -8,12 +8,12 @@ namespace CSharpier
     {
         private Doc PrintQueryContinuationSyntax(QueryContinuationSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.PrintSyntaxToken(
                     node.IntoKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintSyntaxToken(node.Identifier, Docs.Line),
+                this.PrintSyntaxToken(node.Identifier, Doc.Line),
                 this.PrintQueryBodySyntax(node.Body)
             );
         }

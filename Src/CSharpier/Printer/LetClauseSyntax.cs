@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintLetClauseSyntax(LetClauseSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.PrintSyntaxToken(
                     node.LetKeyword,
                     afterTokenIfNoTrailing: " "

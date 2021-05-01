@@ -97,7 +97,7 @@ namespace CSharpier
 
         public static void Add(this List<Doc> list, params Doc[] values)
         {
-            if (values.Length == 1 && values[0] == Docs.Null)
+            if (values.Length == 1 && values[0] == Doc.Null)
             {
                 return;
             }

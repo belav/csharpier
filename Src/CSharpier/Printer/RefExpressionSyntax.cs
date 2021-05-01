@@ -8,7 +8,7 @@ namespace CSharpier
         private Doc PrintRefExpressionSyntax(RefExpressionSyntax node)
         {
             // TODO 1 should all " " turn into spaceIfNoPreviousComment? Maybe we just make a type for space and make it do that?
-            return Docs.Concat(
+            return Doc.Concat(
                 this.PrintSyntaxToken(
                     node.RefKeyword,
                     afterTokenIfNoTrailing: " "

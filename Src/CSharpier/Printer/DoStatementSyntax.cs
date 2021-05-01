@@ -8,22 +8,22 @@ namespace CSharpier
     {
         private Doc PrintDoStatementSyntax(DoStatementSyntax node)
         {
-            return Docs.Concat(
-                this.PrintExtraNewLines(node),
+            return Doc.Concat(
+                ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.DoKeyword,
-                    node.Statement is not BlockSyntax ? " " : Docs.Null
+                    node.Statement is not BlockSyntax ? " " : Doc.Null
                 ),
-                SyntaxNodes.Print(node.Statement),
-                Docs.HardLine,
+                Node.Print(node.Statement),
+                Doc.HardLine,
                 this.PrintSyntaxToken(
                     node.WhileKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                SyntaxTokens.Print(node.OpenParenToken),
+                Token.Print(node.OpenParenToken),
                 this.Print(node.Condition),
-                SyntaxTokens.Print(node.CloseParenToken),
-                SyntaxTokens.Print(node.SemicolonToken)
+                Token.Print(node.CloseParenToken),
+                Token.Print(node.SemicolonToken)
             );
         }
     }

@@ -26,7 +26,7 @@ namespace CSharpier
                 );
             }
             docs.Add(this.Print(node.Expression));
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

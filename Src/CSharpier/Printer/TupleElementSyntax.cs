@@ -8,10 +8,10 @@ namespace CSharpier
     {
         private Doc PrintTupleElementSyntax(TupleElementSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.Print(node.Type),
                 node.Identifier.RawKind != 0
-                    ? Docs.Concat(" ", SyntaxTokens.Print(node.Identifier))
+                    ? Doc.Concat(" ", Token.Print(node.Identifier))
                     : Doc.Null
             );
         }

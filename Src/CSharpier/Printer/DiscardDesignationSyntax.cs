@@ -9,7 +9,7 @@ namespace CSharpier
         private Doc PrintDiscardDesignationSyntax(
             DiscardDesignationSyntax node
         ) {
-            return SyntaxTokens.Print(node.UnderscoreToken);
+            return Token.Print(node.UnderscoreToken);
         }
     }
 }

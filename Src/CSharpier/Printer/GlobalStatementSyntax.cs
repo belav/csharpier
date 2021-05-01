@@ -1,4 +1,5 @@
 using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -7,10 +8,10 @@ namespace CSharpier
     {
         private Doc PrintGlobalStatementSyntax(GlobalStatementSyntax node)
         {
-            return Docs.Concat(
-                this.PrintExtraNewLines(node),
+            return Doc.Concat(
+                ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintModifiers(node.Modifiers),
+                Modifiers.Print(node.Modifiers),
                 this.Print(node.Statement)
             );
         }

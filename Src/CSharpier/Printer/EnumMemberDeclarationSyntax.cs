@@ -13,14 +13,14 @@ namespace CSharpier
             var docs = new List<Doc>
             {
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintModifiers(node.Modifiers),
-                SyntaxTokens.Print(node.Identifier)
+                Modifiers.Print(node.Modifiers),
+                Token.Print(node.Identifier)
             };
             if (node.EqualsValue != null)
             {
                 docs.Add(this.PrintEqualsValueClauseSyntax(node.EqualsValue));
             }
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

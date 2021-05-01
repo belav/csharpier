@@ -13,7 +13,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         // There are a ton of edge cases that are not yet handled
         public static Doc Print(BinaryExpressionSyntax node)
         {
-            return Docs.Group(PrintBinaryExpression(node));
+            return Doc.Group(PrintBinaryExpression(node));
         }
 
         // TODO 0 kill? runtime repo has files that will fail on deep recursion
@@ -59,23 +59,19 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     }
                     else
                     {
-                        docs.Add(
-                            SyntaxNodes.Print(binaryExpressionSyntax.Left)
-                        );
+                        docs.Add(Node.Print(binaryExpressionSyntax.Left));
                     }
 
                     docs.Add(
-                        Docs.Line,
-                        SyntaxTokens.Print(
-                            binaryExpressionSyntax.OperatorToken
-                        ),
+                        Doc.Line,
+                        Token.Print(binaryExpressionSyntax.OperatorToken),
                         " ",
-                        SyntaxNodes.Print(binaryExpressionSyntax.Right)
+                        Node.Print(binaryExpressionSyntax.Right)
                     );
                 }
                 else
                 {
-                    docs.Add(Docs.Group(SyntaxNodes.Print(node)));
+                    docs.Add(Doc.Group(Node.Print(node)));
                 }
 
                 return docs;

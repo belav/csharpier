@@ -8,9 +8,9 @@ namespace CSharpier
     {
         private Doc PrintBreakStatementSyntax(BreakStatementSyntax node)
         {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.BreakKeyword),
-                SyntaxTokens.Print(node.SemicolonToken)
+            return Doc.Concat(
+                Token.Print(node.BreakKeyword),
+                Token.Print(node.SemicolonToken)
             );
         }
     }

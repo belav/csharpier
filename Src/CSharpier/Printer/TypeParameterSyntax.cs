@@ -8,13 +8,13 @@ namespace CSharpier
     {
         private Doc PrintTypeParameterSyntax(TypeParameterSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.PrintAttributeLists(node, node.AttributeLists),
                 this.PrintSyntaxToken(
                     node.VarianceKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                SyntaxTokens.Print(node.Identifier)
+                Token.Print(node.Identifier)
             );
         }
     }

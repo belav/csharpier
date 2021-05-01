@@ -1,3 +1,4 @@
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -13,7 +14,7 @@ namespace CSharpier
         {
             if (syntaxNode == null)
             {
-                return Docs.Null;
+                return Doc.Null;
             }
 
             // TODO 0 kill? runtime repo has files that will fail on deep recursion
@@ -386,7 +387,7 @@ namespace CSharpier
                     case NameColonSyntax nameColonSyntax:
                         return this.PrintNameColonSyntax(nameColonSyntax);
                     case NameEqualsSyntax nameEqualsSyntax:
-                        return this.PrintNameEqualsSyntax(nameEqualsSyntax);
+                        return NameEquals.Print(nameEqualsSyntax);
                     case NamespaceDeclarationSyntax namespaceDeclarationSyntax:
                         return this.PrintNamespaceDeclarationSyntax(
                             namespaceDeclarationSyntax

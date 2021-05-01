@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintWithExpressionSyntax(WithExpressionSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.Print(node.Expression),
                 " ",
                 this.PrintSyntaxToken(

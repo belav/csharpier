@@ -8,8 +8,8 @@ namespace CSharpier
     {
         private Doc PrintUnsafeStatementSyntax(UnsafeStatementSyntax node)
         {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.UnsafeKeyword),
+            return Doc.Concat(
+                Token.Print(node.UnsafeKeyword),
                 this.Print(node.Block)
             );
         }
