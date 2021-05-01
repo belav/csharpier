@@ -5,6 +5,7 @@ using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using CSharpier.SyntaxPrinter;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 namespace CSharpier
 {
@@ -12,12 +13,8 @@ namespace CSharpier
     // https://devblogs.microsoft.com/dotnet/introducing-c-source-generators/
     public partial class Printer
     {
-        public Printer()
-        {
-            Node.Initialize(this);
-        }
-
-        private Doc PrintAttributeLists(
+        // TODO Partial
+        public Doc PrintAttributeLists(
             SyntaxNode node,
             SyntaxList<AttributeListSyntax> attributeLists
         ) {
@@ -32,10 +29,7 @@ namespace CSharpier
                 ? Doc.Line
                 : Doc.HardLine;
             docs.Add(
-                Doc.Join(
-                    separator,
-                    attributeLists.Select(this.PrintAttributeListSyntax)
-                )
+                Doc.Join(separator, attributeLists.Select(AttributeList.Print))
             );
 
             if (!(node is ParameterSyntax))
@@ -46,7 +40,8 @@ namespace CSharpier
             return Doc.Concat(docs);
         }
 
-        private Doc PrintConstraintClauses(
+        // TODO Partial
+        public Doc PrintConstraintClauses(
             IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses
         ) {
             var constraintClausesList = constraintClauses.ToList();
@@ -63,7 +58,7 @@ namespace CSharpier
                     Doc.Join(
                         Doc.HardLine,
                         constraintClausesList.Select(
-                            this.PrintTypeParameterConstraintClauseSyntax
+                            TypeParameterConstraintClause.Print
                         )
                     )
                 )
@@ -72,7 +67,7 @@ namespace CSharpier
             return Doc.Concat(docs);
         }
 
-        private Doc PrintBaseFieldDeclarationSyntax(
+        public Doc PrintBaseFieldDeclarationSyntax(
             BaseFieldDeclarationSyntax node
         ) {
             var docs = new List<Doc>

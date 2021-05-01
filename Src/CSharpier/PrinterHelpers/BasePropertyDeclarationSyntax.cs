@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -9,7 +10,7 @@ namespace CSharpier
 {
     public partial class Printer
     {
-        private Doc PrintBasePropertyDeclarationSyntax(
+        public Doc PrintBasePropertyDeclarationSyntax(
             BasePropertyDeclarationSyntax node
         ) {
             EqualsValueClauseSyntax? initializer = null;
@@ -25,9 +26,7 @@ namespace CSharpier
                 expressionBody = propertyDeclarationSyntax.ExpressionBody;
                 initializer = propertyDeclarationSyntax.Initializer;
                 explicitInterfaceSpecifierSyntax = propertyDeclarationSyntax.ExplicitInterfaceSpecifier;
-                identifier = this.PrintSyntaxToken(
-                    propertyDeclarationSyntax.Identifier
-                );
+                identifier = Token.Print(propertyDeclarationSyntax.Identifier);
                 semicolonToken = propertyDeclarationSyntax.SemicolonToken;
             }
             else if (
@@ -37,20 +36,18 @@ namespace CSharpier
                 explicitInterfaceSpecifierSyntax = indexerDeclarationSyntax.ExplicitInterfaceSpecifier;
                 identifier = Doc.Concat(
                     Token.Print(indexerDeclarationSyntax.ThisKeyword),
-                    this.Print(indexerDeclarationSyntax.ParameterList)
+                    Node.Print(indexerDeclarationSyntax.ParameterList)
                 );
                 semicolonToken = indexerDeclarationSyntax.SemicolonToken;
             }
             else if (node is EventDeclarationSyntax eventDeclarationSyntax)
             {
-                eventKeyword = this.PrintSyntaxToken(
+                eventKeyword = Token.Print(
                     eventDeclarationSyntax.EventKeyword,
                     " "
                 );
                 explicitInterfaceSpecifierSyntax = eventDeclarationSyntax.ExplicitInterfaceSpecifier;
-                identifier = this.PrintSyntaxToken(
-                    eventDeclarationSyntax.Identifier
-                );
+                identifier = Token.Print(eventDeclarationSyntax.Identifier);
                 semicolonToken = eventDeclarationSyntax.SemicolonToken;
             }
 
@@ -78,7 +75,7 @@ namespace CSharpier
                             Doc.Indent(
                                 node.AccessorList.Accessors.Select(
                                         o =>
-                                            this.PrintAccessorDeclarationSyntax(
+                                            PrintAccessorDeclarationSyntax(
                                                 o,
                                                 separator
                                             )
@@ -94,7 +91,7 @@ namespace CSharpier
             else if (expressionBody != null)
             {
                 contents = Doc.Concat(
-                    this.PrintArrowExpressionClauseSyntax(expressionBody)
+                    ArrowExpressionClause.Print(expressionBody)
                 );
             }
 
@@ -108,14 +105,14 @@ namespace CSharpier
                     Doc.Concat(docs),
                     Modifiers.Print(node.Modifiers),
                     eventKeyword,
-                    this.Print(node.Type),
+                    Node.Print(node.Type),
                     " ",
                     explicitInterfaceSpecifierSyntax != null
                         ? Doc.Concat(
-                                this.Print(
+                                Node.Print(
                                     explicitInterfaceSpecifierSyntax.Name
                                 ),
-                                this.PrintSyntaxToken(
+                                Token.Print(
                                     explicitInterfaceSpecifierSyntax.DotToken
                                 )
                             )
@@ -123,7 +120,7 @@ namespace CSharpier
                     identifier,
                     contents,
                     initializer != null
-                        ? this.PrintEqualsValueClauseSyntax(initializer)
+                        ? EqualsValueClause.Print(initializer)
                         : Doc.Null,
                     semicolonToken.HasValue
                         ? Token.Print(semicolonToken.Value)
@@ -156,13 +153,11 @@ namespace CSharpier
 
             if (node.Body != null)
             {
-                docs.Add(this.PrintBlockSyntax(node.Body));
+                docs.Add(Block.Print(node.Body));
             }
             else if (node.ExpressionBody != null)
             {
-                docs.Add(
-                    this.PrintArrowExpressionClauseSyntax(node.ExpressionBody)
-                );
+                docs.Add(ArrowExpressionClause.Print(node.ExpressionBody));
             }
 
             docs.Add(Token.Print(node.SemicolonToken));

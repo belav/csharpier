@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -67,7 +68,7 @@ namespace CSharpier
 
             try
             {
-                var document = new Printer().Print(rootNode);
+                var document = Node.Print(rootNode);
                 var formattedCode = DocPrinter.Print(document, options);
                 return new CSharpierResult
                 {

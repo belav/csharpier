@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,7 +12,7 @@ namespace CSharpier
 {
     public partial class Printer
     {
-        private Doc PrintBaseTypeDeclarationSyntax(
+        public Doc PrintBaseTypeDeclarationSyntax(
             BaseTypeDeclarationSyntax node
         ) {
             ParameterListSyntax? parameterList = null;
@@ -34,7 +35,7 @@ namespace CSharpier
                         Doc.HardLine,
                         Doc.Join(
                             Doc.HardLine,
-                            typeDeclarationSyntax.Members.Select(this.Print)
+                            typeDeclarationSyntax.Members.Select(Node.Print)
                         )
                     );
                 }
@@ -68,7 +69,7 @@ namespace CSharpier
                     Doc.HardLine,
                     SeparatedSyntaxList.Print(
                         enumDeclarationSyntax.Members,
-                        this.PrintEnumMemberDeclarationSyntax,
+                        EnumMemberDeclaration.Print,
                         Doc.HardLine
                     )
                 );
@@ -85,29 +86,24 @@ namespace CSharpier
             };
             if (keyword != null)
             {
-                docs.Add(
-                    this.PrintSyntaxToken(
-                        keyword.Value,
-                        afterTokenIfNoTrailing: " "
-                    )
-                );
+                docs.Add(Token.Print(keyword.Value, " "));
             }
 
             docs.Add(Token.Print(node.Identifier));
 
             if (parameterList != null)
             {
-                docs.Add(this.PrintParameterListSyntax(parameterList, groupId));
+                docs.Add(ParameterList.Print(parameterList, groupId));
             }
 
             if (typeParameterList != null)
             {
-                docs.Add(this.PrintTypeParameterListSyntax(typeParameterList));
+                docs.Add(TypeParameterList.Print(typeParameterList));
             }
 
             if (node.BaseList != null)
             {
-                docs.Add(this.PrintBaseListSyntax(node.BaseList));
+                docs.Add(BaseList.Print(node.BaseList));
             }
 
             docs.Add(this.PrintConstraintClauses(constraintClauses));

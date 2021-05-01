@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -16,7 +17,7 @@ namespace CSharpier
         // The only weird one is this one, because it also needs to accept a LocalFunctionStatementSyntax
         // I think we can just add a LocalFunctionStatement.Print class/method that pass the node into BaseMethodDeclaration.Print
         // and this will continue to accept CSharpSyntaxNode
-        private Doc PrintBaseMethodDeclarationSyntax(CSharpSyntaxNode node)
+        public Doc PrintBaseMethodDeclarationSyntax(CSharpSyntaxNode node)
         {
             SyntaxList<AttributeListSyntax>? attributeLists = null;
             SyntaxTokenList? modifiers = null;
@@ -43,7 +44,7 @@ namespace CSharpier
                 {
                     returnType = methodDeclarationSyntax.ReturnType;
                     explicitInterfaceSpecifier = methodDeclarationSyntax.ExplicitInterfaceSpecifier;
-                    identifier = this.PrintSyntaxToken(
+                    identifier = Token.Print(
                         methodDeclarationSyntax.Identifier
                     );
                     typeParameterList = methodDeclarationSyntax.TypeParameterList;
@@ -83,13 +84,13 @@ namespace CSharpier
             if (returnType != null)
             {
                 // TODO 1 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow? that may get complicated
-                docs.Add(this.Print(returnType), " ");
+                docs.Add(Node.Print(returnType), " ");
             }
 
             if (explicitInterfaceSpecifier != null)
             {
                 docs.Add(
-                    this.Print(explicitInterfaceSpecifier.Name),
+                    Node.Print(explicitInterfaceSpecifier.Name),
                     Token.Print(explicitInterfaceSpecifier.DotToken)
                 );
             }
@@ -103,36 +104,31 @@ namespace CSharpier
                 node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax
             ) {
                 docs.Add(
-                    this.PrintSyntaxToken(
+                    Token.Print(
                         conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword,
                         " "
                     ),
-                    this.PrintSyntaxToken(
+                    Token.Print(
                         conversionOperatorDeclarationSyntax.OperatorKeyword,
                         " "
                     ),
-                    this.Print(conversionOperatorDeclarationSyntax.Type)
+                    Node.Print(conversionOperatorDeclarationSyntax.Type)
                 );
             }
             else if (
                 node is OperatorDeclarationSyntax operatorDeclarationSyntax
             ) {
                 docs.Add(
-                    this.Print(operatorDeclarationSyntax.ReturnType),
+                    Node.Print(operatorDeclarationSyntax.ReturnType),
                     " ",
-                    this.PrintSyntaxToken(
-                        operatorDeclarationSyntax.OperatorKeyword,
-                        " "
-                    ),
-                    this.PrintSyntaxToken(
-                        operatorDeclarationSyntax.OperatorToken
-                    )
+                    Token.Print(operatorDeclarationSyntax.OperatorKeyword, " "),
+                    Token.Print(operatorDeclarationSyntax.OperatorToken)
                 );
             }
 
             if (typeParameterList != null)
             {
-                docs.Add(this.PrintTypeParameterListSyntax(typeParameterList));
+                docs.Add(TypeParameterList.Print(typeParameterList));
             }
 
             if (parameterList != null)
@@ -143,7 +139,7 @@ namespace CSharpier
                 {
                     groupId = Guid.NewGuid().ToString();
                 }
-                docs.Add(this.PrintParameterListSyntax(parameterList, groupId));
+                docs.Add(ParameterList.Print(parameterList, groupId));
             }
 
             docs.Add(this.PrintConstraintClauses(constraintClauses));
@@ -151,20 +147,15 @@ namespace CSharpier
             {
                 docs.Add(
                     groupId != null
-                        ? this.PrintBlockSyntaxWithConditionalSpace(
-                                body,
-                                groupId
-                            )
-                        : this.PrintBlockSyntax(body)
+                        ? Block.PrintWithConditionalSpace(body, groupId)
+                        : Block.Print(body)
                 );
             }
             else
             {
                 if (expressionBody != null)
                 {
-                    docs.Add(
-                        this.PrintArrowExpressionClauseSyntax(expressionBody)
-                    );
+                    docs.Add(ArrowExpressionClause.Print(expressionBody));
                 }
             }
 

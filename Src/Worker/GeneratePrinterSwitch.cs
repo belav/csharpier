@@ -9,11 +9,9 @@ namespace Worker
     public class GeneratePrinterSwitch
     {
         [Test]
-        // TODO partial - convert this to a source generator. It will be annoying to rerun it after every file move
-        // when we do, make sure it validates what it is doing. When I moved a file and left the "Syntax" suffix on it, this unit test created
-        // code that didn't compile
-        // [Ignore(
-        //     "Run this manually if you need to regenerate the Printer.generated.cs file. Then run csharpier on the result")]
+        [Ignore(
+            @"This is outdated. We may eventually want to bring it back when c# 10 comes out or convert it to a source generator
+It should be operating on Node.cs going forward")]
         public void DoWork()
         {
             var rootDirectory = new DirectoryInfo(

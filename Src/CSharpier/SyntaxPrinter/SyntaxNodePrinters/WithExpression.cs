@@ -1,0 +1,18 @@
+using CSharpier.DocTypes;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+{
+    public static class WithExpression
+    {
+        public static Doc Print(WithExpressionSyntax node)
+        {
+            return Doc.Concat(
+                Node.Print(node.Expression),
+                " ",
+                Token.PrintWithSuffix(node.WithKeyword, " "),
+                Node.Print(node.Initializer)
+            );
+        }
+    }
+}

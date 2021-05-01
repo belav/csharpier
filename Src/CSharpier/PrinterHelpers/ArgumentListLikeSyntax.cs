@@ -1,5 +1,6 @@
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -7,7 +8,8 @@ namespace CSharpier
 {
     public partial class Printer
     {
-        private Doc PrintArgumentListLikeSyntax(
+        // TODO partial
+        public Doc PrintArgumentListLikeSyntax(
             SyntaxToken openParenToken,
             SeparatedSyntaxList<ArgumentSyntax> arguments,
             SyntaxToken closeParenToken
@@ -19,7 +21,7 @@ namespace CSharpier
                             Doc.SoftLine,
                             SeparatedSyntaxList.Print(
                                 arguments,
-                                this.PrintArgumentSyntax,
+                                Argument.Print,
                                 Doc.Line
                             )
                         )
