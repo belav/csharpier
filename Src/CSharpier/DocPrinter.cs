@@ -277,7 +277,7 @@ namespace CSharpier
             DocPrinterUtils.PropagateBreaks(document);
 
             var allowedWidth = options.Width;
-            var newLine = Environment.NewLine; // TODO 1 options
+            var newLine = options.EndOfLine;
             var currentWidth = 0;
 
             var currentStack = new Stack<PrintCommand>();

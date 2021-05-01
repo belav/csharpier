@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace CSharpier
         protected readonly Stopwatch Stopwatch;
 
         protected readonly ConfigurationOptions ConfigurationOptions;
+        protected readonly Options Options;
 
         private CommandLineFormatter(
             string rootPath,
@@ -30,7 +32,24 @@ namespace CSharpier
             bool skipWrite
         ) {
             this.RootPath = rootPath;
-            this.ConfigurationOptions = ConfigurationOptions.Create(rootPath);
+            this.ConfigurationOptions = ConfigurationOptions.Create(
+                rootPath,
+                new FileSystem()
+            );
+            this.Options = new Options
+            {
+                TabWidth = this.ConfigurationOptions.TabWidth,
+                UseTabs = this.ConfigurationOptions.UseTabs,
+                Width = this.ConfigurationOptions.PrintWidth,
+                EndOfLine = this.ConfigurationOptions.EndOfLine == "lf"
+                    ? "\n"
+                    : this.ConfigurationOptions.EndOfLine == "crlf"
+                            ? "\r\n"
+                            : throw new Exception(
+                                    "Unhandled value from EndOfLine options " +
+                                    this.ConfigurationOptions.EndOfLine
+                                )
+            };
             this.Check = check;
             this.Validate = !fast;
             this.SkipWrite = skipWrite;
@@ -132,7 +151,7 @@ namespace CSharpier
             {
                 result = await new CodeFormatter().FormatAsync(
                     fileReaderResult.FileContents,
-                    new Options(),
+                    this.Options,
                     cancellationToken
                 );
             }
