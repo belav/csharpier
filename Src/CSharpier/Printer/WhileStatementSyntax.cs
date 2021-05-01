@@ -10,20 +10,20 @@ namespace CSharpier
         private Doc PrintWhileStatementSyntax(WhileStatementSyntax node)
         {
             var groupId = Guid.NewGuid().ToString();
-            var result = Docs.Concat(
-                this.PrintExtraNewLines(node),
-                SyntaxTokens.PrintLeadingTrivia(node.WhileKeyword),
-                Docs.Group(
-                    SyntaxTokens.PrintWithoutLeadingTrivia(node.WhileKeyword),
+            var result = Doc.Concat(
+                ExtraNewLines.Print(node),
+                Token.PrintLeadingTrivia(node.WhileKeyword),
+                Doc.Group(
+                    Token.PrintWithoutLeadingTrivia(node.WhileKeyword),
                     " ",
-                    SyntaxTokens.Print(node.OpenParenToken),
-                    Docs.GroupWithId(
+                    Token.Print(node.OpenParenToken),
+                    Doc.GroupWithId(
                         groupId,
-                        Docs.Indent(Docs.SoftLine, this.Print(node.Condition)),
-                        Docs.SoftLine
+                        Doc.Indent(Doc.SoftLine, this.Print(node.Condition)),
+                        Doc.SoftLine
                     ),
-                    SyntaxTokens.Print(node.CloseParenToken),
-                    Docs.IfBreak(Docs.Null, Docs.SoftLine)
+                    Token.Print(node.CloseParenToken),
+                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
                 ),
                 node.Statement is BlockSyntax blockSyntax
                     ? this.PrintBlockSyntaxWithConditionalSpace(

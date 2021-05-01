@@ -19,18 +19,18 @@ namespace CSharpier
             var groupId = Guid.NewGuid().ToString();
 
             docs.Add(
-                SyntaxTokens.PrintLeadingTrivia(node.IfKeyword),
-                Docs.Group(
-                    SyntaxTokens.PrintWithoutLeadingTrivia(node.IfKeyword),
+                Token.PrintLeadingTrivia(node.IfKeyword),
+                Doc.Group(
+                    Token.PrintWithoutLeadingTrivia(node.IfKeyword),
                     " ",
-                    SyntaxTokens.Print(node.OpenParenToken),
-                    Docs.GroupWithId(
+                    Token.Print(node.OpenParenToken),
+                    Doc.GroupWithId(
                         groupId,
-                        Docs.Indent(Docs.SoftLine, this.Print(node.Condition)),
-                        Docs.SoftLine
+                        Doc.Indent(Doc.SoftLine, this.Print(node.Condition)),
+                        Doc.SoftLine
                     ),
-                    SyntaxTokens.Print(node.CloseParenToken),
-                    Docs.IfBreak(Docs.Null, Docs.SoftLine)
+                    Token.Print(node.CloseParenToken),
+                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
                 )
             );
             if (node.Statement is BlockSyntax blockSyntax)

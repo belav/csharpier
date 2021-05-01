@@ -14,29 +14,27 @@ namespace CSharpier
             var groupId = Guid.NewGuid().ToString();
 
             var leadingTrivia = node.AwaitKeyword.Kind() != SyntaxKind.None
-                ? SyntaxTokens.PrintLeadingTrivia(node.AwaitKeyword)
-                : SyntaxTokens.PrintLeadingTrivia(node.UsingKeyword);
+                ? Token.PrintLeadingTrivia(node.AwaitKeyword)
+                : Token.PrintLeadingTrivia(node.UsingKeyword);
 
             var docs = new List<Doc>
             {
-                this.PrintExtraNewLines(node),
+                ExtraNewLines.Print(node),
                 leadingTrivia,
-                Docs.Group(
-                    SyntaxTokens.PrintWithoutLeadingTrivia(node.AwaitKeyword),
+                Doc.Group(
+                    Token.PrintWithoutLeadingTrivia(node.AwaitKeyword),
                     node.AwaitKeyword.Kind() != SyntaxKind.None
                         ? " "
-                        : Docs.Null,
+                        : Doc.Null,
                     node.AwaitKeyword.Kind() == SyntaxKind.None
-                        ? SyntaxTokens.PrintWithoutLeadingTrivia(
-                                node.UsingKeyword
-                            )
-                        : SyntaxTokens.Print(node.UsingKeyword),
+                        ? Token.PrintWithoutLeadingTrivia(node.UsingKeyword)
+                        : Token.Print(node.UsingKeyword),
                     " ",
-                    SyntaxTokens.Print(node.OpenParenToken),
-                    Docs.GroupWithId(
+                    Token.Print(node.OpenParenToken),
+                    Doc.GroupWithId(
                         groupId,
-                        Docs.Indent(
-                            Docs.SoftLine,
+                        Doc.Indent(
+                            Doc.SoftLine,
                             node.Declaration != null
                                 ? this.PrintVariableDeclarationSyntax(
                                         node.Declaration
@@ -46,10 +44,10 @@ namespace CSharpier
                                 ? this.Print(node.Expression)
                                 : Doc.Null
                         ),
-                        Docs.SoftLine
+                        Doc.SoftLine
                     ),
-                    SyntaxTokens.Print(node.CloseParenToken),
-                    Docs.IfBreak(Docs.Null, Docs.SoftLine)
+                    Token.Print(node.CloseParenToken),
+                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
                 )
             };
             if (node.Statement is UsingStatementSyntax)

@@ -13,8 +13,9 @@ class ClassName
         }
 
         if (
-            MethodKind is not (MethodKind.Ordinary
-                or MethodKind.LocalFunctionn)
+            MethodKind
+                is not (MethodKind.Ordinary
+                    or MethodKind.LocalFunctionn)
         ) {
             return;
         }

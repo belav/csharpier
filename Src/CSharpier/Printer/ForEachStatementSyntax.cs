@@ -13,40 +13,38 @@ namespace CSharpier
             var groupId = Guid.NewGuid().ToString();
 
             var leadingTrivia = node.AwaitKeyword.Kind() != SyntaxKind.None
-                ? SyntaxTokens.PrintLeadingTrivia(node.AwaitKeyword)
-                : SyntaxTokens.PrintLeadingTrivia(node.ForEachKeyword);
+                ? Token.PrintLeadingTrivia(node.AwaitKeyword)
+                : Token.PrintLeadingTrivia(node.ForEachKeyword);
 
-            var docs = Docs.Concat(
-                this.PrintExtraNewLines(node),
+            var docs = Doc.Concat(
+                ExtraNewLines.Print(node),
                 leadingTrivia,
-                Docs.Group(
-                    SyntaxTokens.PrintWithoutLeadingTrivia(node.AwaitKeyword),
+                Doc.Group(
+                    Token.PrintWithoutLeadingTrivia(node.AwaitKeyword),
                     node.AwaitKeyword.Kind() != SyntaxKind.None
                         ? " "
-                        : Docs.Null,
+                        : Doc.Null,
                     node.AwaitKeyword.Kind() == SyntaxKind.None
-                        ? SyntaxTokens.PrintWithoutLeadingTrivia(
-                                node.ForEachKeyword
-                            )
-                        : SyntaxTokens.Print(node.ForEachKeyword),
+                        ? Token.PrintWithoutLeadingTrivia(node.ForEachKeyword)
+                        : Token.Print(node.ForEachKeyword),
                     " ",
-                    SyntaxTokens.Print(node.OpenParenToken),
-                    Docs.GroupWithId(
+                    Token.Print(node.OpenParenToken),
+                    Doc.GroupWithId(
                         groupId,
-                        Docs.Indent(
-                            Docs.SoftLine,
-                            SyntaxNodes.Print(node.Type),
+                        Doc.Indent(
+                            Doc.SoftLine,
+                            Node.Print(node.Type),
                             " ",
-                            SyntaxTokens.Print(node.Identifier),
+                            Token.Print(node.Identifier),
                             " ",
-                            SyntaxTokens.Print(node.InKeyword),
+                            Token.Print(node.InKeyword),
                             " ",
-                            SyntaxNodes.Print(node.Expression)
+                            Node.Print(node.Expression)
                         ),
-                        Docs.SoftLine
+                        Doc.SoftLine
                     ),
-                    SyntaxTokens.Print(node.CloseParenToken),
-                    Docs.IfBreak(Docs.Null, Docs.SoftLine)
+                    Token.Print(node.CloseParenToken),
+                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
                 ),
                 node.Statement is BlockSyntax blockSyntax
                     ? this.PrintBlockSyntaxWithConditionalSpace(

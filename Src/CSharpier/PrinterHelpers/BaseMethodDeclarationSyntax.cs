@@ -80,7 +80,7 @@ namespace CSharpier
 
             if (modifiers.HasValue)
             {
-                declarationGroup.Add(this.PrintModifiers(modifiers.Value));
+                declarationGroup.Add(Modifiers.Print(modifiers.Value));
             }
 
             if (returnType != null)
@@ -151,12 +151,12 @@ namespace CSharpier
                 declarationGroup.Add(
                     this.PrintParameterListSyntax(parameterList, groupId)
                 );
-                declarationGroup.Add(Docs.IfBreak(Docs.Null, Docs.SoftLine));
+                declarationGroup.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine));
             }
 
-            docs.Add(Docs.Group(declarationGroup));
+            docs.Add(Doc.Group(declarationGroup));
 
-            docs.Add(this.PrintConstraintClauses(node, constraintClauses));
+            docs.Add(this.PrintConstraintClauses(constraintClauses));
             if (body != null)
             {
                 docs.Add(
@@ -183,7 +183,7 @@ namespace CSharpier
                 docs.Add(Token.Print(semicolonToken.Value));
             }
 
-            return Docs.Group(docs);
+            return Doc.Group(docs);
         }
     }
 }

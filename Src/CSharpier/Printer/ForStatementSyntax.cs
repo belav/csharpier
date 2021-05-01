@@ -13,7 +13,7 @@ namespace CSharpier
         {
             var groupId = Guid.NewGuid().ToString();
 
-            var innerGroup = new List<Doc> { Docs.SoftLine };
+            var innerGroup = new List<Doc> { Doc.SoftLine };
             if (node.Declaration != null)
             {
                 innerGroup.Add(
@@ -54,19 +54,19 @@ namespace CSharpier
 
             var docs = new List<Doc>
             {
-                this.PrintExtraNewLines(node),
-                SyntaxTokens.PrintLeadingTrivia(node.ForKeyword),
-                Docs.Group(
-                    SyntaxTokens.PrintWithoutLeadingTrivia(node.ForKeyword),
+                ExtraNewLines.Print(node),
+                Token.PrintLeadingTrivia(node.ForKeyword),
+                Doc.Group(
+                    Token.PrintWithoutLeadingTrivia(node.ForKeyword),
                     " ",
-                    SyntaxTokens.Print(node.OpenParenToken),
-                    Docs.GroupWithId(
+                    Token.Print(node.OpenParenToken),
+                    Doc.GroupWithId(
                         groupId,
-                        Docs.Indent(innerGroup),
-                        Docs.SoftLine
+                        Doc.Indent(innerGroup),
+                        Doc.SoftLine
                     ),
-                    SyntaxTokens.Print(node.CloseParenToken),
-                    Docs.IfBreak(Docs.Null, Docs.SoftLine)
+                    Token.Print(node.CloseParenToken),
+                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
                 )
             };
 
