@@ -13,7 +13,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var docs = new List<Doc>
             {
                 ExtraNewLines.Print(node),
-                new Printer().PrintAttributeLists(node, node.AttributeLists),
+                AttributeLists.Print(node, node.AttributeLists),
                 Modifiers.Print(node.Modifiers),
                 Token.Print(node.NamespaceKeyword),
                 " ",

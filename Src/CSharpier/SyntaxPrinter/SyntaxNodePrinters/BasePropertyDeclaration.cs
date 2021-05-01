@@ -1,18 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
-using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public partial class Printer
+    public static class BasePropertyDeclaration
     {
-        public Doc PrintBasePropertyDeclarationSyntax(
-            BasePropertyDeclarationSyntax node
-        ) {
+        public static Doc Print(BasePropertyDeclarationSyntax node)
+        {
             EqualsValueClauseSyntax? initializer = null;
             ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifierSyntax =
                 null;
@@ -98,7 +95,7 @@ namespace CSharpier
             var docs = new List<Doc>();
 
             docs.Add(ExtraNewLines.Print(node));
-            docs.Add(this.PrintAttributeLists(node, node.AttributeLists));
+            docs.Add(AttributeLists.Print(node, node.AttributeLists));
 
             return Doc.Group(
                 Doc.Concat(
@@ -129,7 +126,7 @@ namespace CSharpier
             );
         }
 
-        private Doc PrintAccessorDeclarationSyntax(
+        private static Doc PrintAccessorDeclarationSyntax(
             AccessorDeclarationSyntax node,
             Doc separator
         ) {
@@ -147,7 +144,7 @@ namespace CSharpier
                 docs.Add(separator);
             }
 
-            docs.Add(this.PrintAttributeLists(node, node.AttributeLists));
+            docs.Add(AttributeLists.Print(node, node.AttributeLists));
             docs.Add(Modifiers.Print(node.Modifiers));
             docs.Add(Token.Print(node.Keyword));
 

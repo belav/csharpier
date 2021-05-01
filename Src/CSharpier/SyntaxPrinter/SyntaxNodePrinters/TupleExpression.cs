@@ -7,7 +7,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(TupleExpressionSyntax node) =>
             Doc.Group(
-                new Printer().PrintArgumentListLikeSyntax(
+                ArgumentListLike.Print(
                     node.OpenParenToken,
                     node.Arguments,
                     node.CloseParenToken

@@ -2,19 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
-using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public partial class Printer
+    public static class BaseTypeDeclaration
     {
-        public Doc PrintBaseTypeDeclarationSyntax(
-            BaseTypeDeclarationSyntax node
-        ) {
+        public static Doc Print(BaseTypeDeclarationSyntax node)
+        {
             ParameterListSyntax? parameterList = null;
             TypeParameterListSyntax? typeParameterList = null;
             var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
@@ -81,7 +78,7 @@ namespace CSharpier
             var docs = new List<Doc>
             {
                 ExtraNewLines.Print(node),
-                this.PrintAttributeLists(node, node.AttributeLists),
+                AttributeLists.Print(node, node.AttributeLists),
                 Modifiers.Print(node.Modifiers)
             };
             if (keyword != null)
@@ -106,7 +103,7 @@ namespace CSharpier
                 docs.Add(BaseList.Print(node.BaseList));
             }
 
-            docs.Add(this.PrintConstraintClauses(constraintClauses));
+            docs.Add(ConstraintClauses.Print(constraintClauses));
 
             if (hasMembers)
             {

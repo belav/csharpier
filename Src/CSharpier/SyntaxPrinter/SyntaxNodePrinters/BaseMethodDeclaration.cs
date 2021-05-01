@@ -2,22 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
-using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public partial class Printer
+    public static class BaseMethodDeclaration
     {
         // TODO partial - The three BaseX files in here can probably go in SyntaxNodePrinters. They are all abstract types
         // so I believe if we are generating the code correctly they will work fine.
         // The only weird one is this one, because it also needs to accept a LocalFunctionStatementSyntax
         // I think we can just add a LocalFunctionStatement.Print class/method that pass the node into BaseMethodDeclaration.Print
         // and this will continue to accept CSharpSyntaxNode
-        public Doc PrintBaseMethodDeclarationSyntax(CSharpSyntaxNode node)
+        public static Doc Print(CSharpSyntaxNode node)
         {
             SyntaxList<AttributeListSyntax>? attributeLists = null;
             SyntaxTokenList? modifiers = null;
@@ -50,6 +48,21 @@ namespace CSharpier
                     typeParameterList = methodDeclarationSyntax.TypeParameterList;
                     constraintClauses = methodDeclarationSyntax.ConstraintClauses;
                 }
+                else if (
+                    node is DestructorDeclarationSyntax destructorDeclarationSyntax
+                ) {
+                    identifier = Doc.Concat(
+                        Token.Print(destructorDeclarationSyntax.TildeToken),
+                        Token.Print(destructorDeclarationSyntax.Identifier)
+                    );
+                }
+                else if (
+                    node is ConstructorDeclarationSyntax constructorDeclarationSyntax
+                ) {
+                    identifier = Token.Print(
+                        constructorDeclarationSyntax.Identifier
+                    );
+                }
 
                 semicolonToken = baseMethodDeclarationSyntax.SemicolonToken;
             }
@@ -74,7 +87,7 @@ namespace CSharpier
 
             if (attributeLists.HasValue)
             {
-                docs.Add(this.PrintAttributeLists(node, attributeLists.Value));
+                docs.Add(AttributeLists.Print(node, attributeLists.Value));
             }
 
             var declarationGroup = new List<Doc>();
@@ -107,7 +120,7 @@ namespace CSharpier
                 node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax
             ) {
                 declarationGroup.Add(
-                    this.PrintSyntaxToken(
+                    Token.PrintWithSuffix(
                         conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword,
                         " "
                     ),
@@ -152,7 +165,7 @@ namespace CSharpier
 
             docs.Add(Doc.Group(declarationGroup));
 
-            docs.Add(this.PrintConstraintClauses(constraintClauses));
+            docs.Add(ConstraintClauses.Print(constraintClauses));
             if (body != null)
             {
                 docs.Add(

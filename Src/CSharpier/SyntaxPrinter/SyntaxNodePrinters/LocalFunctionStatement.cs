@@ -7,7 +7,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(LocalFunctionStatementSyntax node)
         {
-            return new Printer().PrintBaseMethodDeclarationSyntax(node);
+            return BaseMethodDeclaration.Print(node);
         }
     }
 }

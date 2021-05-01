@@ -31,9 +31,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Doc.HardLine
                 );
             }
-            docs.Add(
-                new Printer().PrintAttributeLists(node, node.AttributeLists)
-            );
+            docs.Add(AttributeLists.Print(node, node.AttributeLists));
             if (node.Members.Count > 0)
             {
                 docs.Add(

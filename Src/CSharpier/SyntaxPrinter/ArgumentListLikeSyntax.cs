@@ -1,15 +1,13 @@
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier.SyntaxPrinter
 {
-    public partial class Printer
+    public static class ArgumentListLike
     {
-        // TODO partial
-        public Doc PrintArgumentListLikeSyntax(
+        public static Doc Print(
             SyntaxToken openParenToken,
             SeparatedSyntaxList<ArgumentSyntax> arguments,
             SyntaxToken closeParenToken

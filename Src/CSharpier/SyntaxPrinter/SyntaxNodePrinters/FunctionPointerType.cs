@@ -23,10 +23,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             node.ParameterList.Parameters,
                             o =>
                                 Doc.Concat(
-                                    new Printer().PrintAttributeLists(
-                                        o,
-                                        o.AttributeLists
-                                    ),
+                                    AttributeLists.Print(o, o.AttributeLists),
                                     Modifiers.Print(o.Modifiers),
                                     Node.Print(o.Type)
                                 ),

@@ -9,9 +9,6 @@ namespace Worker
     public class GeneratePrinterSwitch
     {
         [Test]
-        [Ignore(
-            @"This is outdated. We may eventually want to bring it back when c# 10 comes out or convert it to a source generator
-It should be operating on Node.cs going forward")]
         public void DoWork()
         {
             var rootDirectory = new DirectoryInfo(
@@ -24,19 +21,21 @@ It should be operating on Node.cs going forward")]
             var output = new StringBuilder();
 
             output.AppendLine(
-                @"using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+                @"
 using System;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier.SyntaxPrinter
 {
-    public partial class Printer
+    public static class Node
     {
-        private int depth = 0;
-        public Doc Print(SyntaxNode syntaxNode)
+        [ThreadStatic]
+        private static int depth;
+
+        public static Doc Print(SyntaxNode syntaxNode)
         {
             if (syntaxNode == null)
             {
@@ -48,53 +47,34 @@ namespace CSharpier
             {
                 throw new InTooDeepException();
             }
-            
+
             depth++;
-            try {
+            try
+            {
                 switch (syntaxNode)
                 {"
             );
 
-            var oldFiles = Path.Combine(
-                rootDirectory.FullName,
-                "CSharpier/Printer"
-            );
-            var nodes = new List<(string name, bool isNew)>();
-            foreach (var file in new DirectoryInfo(oldFiles).GetFiles())
-            {
-                nodes.Add((file.Name.Replace(".cs", string.Empty), false));
-            }
-
+            var nodes = new List<string>();
             var newFiles = Path.Combine(
                 rootDirectory.FullName,
                 "CSharpier/SyntaxPrinter/SyntaxNodePrinters"
             );
             foreach (var file in new DirectoryInfo(newFiles).GetFiles())
             {
-                nodes.Add(
-                    (file.Name.Replace(".cs", string.Empty) + "Syntax", true)
-                );
+                nodes.Add(file.Name.Replace(".cs", string.Empty) + "Syntax");
             }
 
-            foreach (var (name, isNew) in nodes.OrderBy(o => o.name))
+            foreach (var name in nodes.OrderBy(o => o))
             {
                 var camelCaseName =
                     name[0].ToString().ToLower() + name.Substring(1);
                 output.AppendLine(
                     $"                    case {name} {camelCaseName}:"
                 );
-                if (isNew)
-                {
-                    output.AppendLine(
-                        $"                        return {name.Replace("Syntax", string.Empty)}.Print({camelCaseName});"
-                    );
-                }
-                else
-                {
-                    output.AppendLine(
-                        $"                        return this.Print{name}({camelCaseName});"
-                    );
-                }
+                output.AppendLine(
+                    $"                        return {name.Replace("Syntax", string.Empty)}.Print({camelCaseName});"
+                );
             }
 
             output.AppendLine(
@@ -112,7 +92,13 @@ namespace CSharpier
 }"
             );
 
-            File.WriteAllText(oldFiles + ".generated.cs", output.ToString());
+            File.WriteAllText(
+                Path.Combine(
+                    rootDirectory.FullName,
+                    "CSharpier/SyntaxPrinter/Node.cs"
+                ),
+                output.ToString()
+            );
         }
     }
 }

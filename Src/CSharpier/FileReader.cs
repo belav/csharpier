@@ -13,7 +13,9 @@ namespace CSharpier
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
+#pragma warning disable 1998
         public static async Task<FileReaderResult> ReadFile(
+#pragma warning restore 1998
             string filePath,
             CancellationToken cancellationToken
         ) {

@@ -10,7 +10,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Concat(
                 ExtraNewLines.Print(node),
-                new Printer().PrintAttributeLists(node, node.AttributeLists),
+                AttributeLists.Print(node, node.AttributeLists),
                 Modifiers.Print(node.Modifiers),
                 Node.Print(node.Statement)
             );

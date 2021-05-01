@@ -9,13 +9,13 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return node.Parent is not ObjectCreationExpressionSyntax
                 ? Doc.Group(
-                        new Printer().PrintArgumentListLikeSyntax(
+                        ArgumentListLike.Print(
                             node.OpenParenToken,
                             node.Arguments,
                             node.CloseParenToken
                         )
                     )
-                : new Printer().PrintArgumentListLikeSyntax(
+                : ArgumentListLike.Print(
                         node.OpenParenToken,
                         node.Arguments,
                         node.CloseParenToken

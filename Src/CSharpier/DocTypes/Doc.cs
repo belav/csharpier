@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace CSharpier.DocTypes
@@ -151,6 +152,7 @@ namespace CSharpier.DocTypes
         // only allowed when in debug because it does slow things down a bit
         private static List<Doc> CleanContents(List<Doc> contents)
         {
+#pragma warning disable 0162
             return contents;
 #if DEBUG
             var newDocs = new List<Doc>();
@@ -168,6 +170,7 @@ namespace CSharpier.DocTypes
             return newDocs;
 #endif
             return contents;
+#pragma warning restore 0162
         }
     }
 

@@ -72,6 +72,15 @@ namespace CSharpier
                 ? Path.GetDirectoryName(directoryOrFile)
                 : directoryOrFile;
 
+            if (rootPath == null)
+            {
+                throw new Exception(
+                    "The path of " +
+                    directoryOrFile +
+                    " does not appear to point to a directory or a file."
+                );
+            }
+
             var commandLineFormatter = new CommandLineFormatter(
                 rootPath,
                 check,

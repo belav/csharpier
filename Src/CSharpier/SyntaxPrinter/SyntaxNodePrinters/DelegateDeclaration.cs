@@ -12,7 +12,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var docs = new List<Doc>
             {
                 ExtraNewLines.Print(node),
-                new Printer().PrintAttributeLists(node, node.AttributeLists),
+                AttributeLists.Print(node, node.AttributeLists),
                 Modifiers.Print(node.Modifiers),
                 Token.Print(node.DelegateKeyword, " "),
                 Node.Print(node.ReturnType),
@@ -24,7 +24,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
             docs.Add(
                 Node.Print(node.ParameterList),
-                new Printer().PrintConstraintClauses(node.ConstraintClauses),
+                ConstraintClauses.Print(node.ConstraintClauses),
                 Token.Print(node.SemicolonToken)
             );
             return Doc.Concat(docs);

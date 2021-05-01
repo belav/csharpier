@@ -73,8 +73,24 @@ namespace CSharpier.SyntaxPrinter
                         return AwaitExpression.Print(awaitExpressionSyntax);
                     case BaseExpressionSyntax baseExpressionSyntax:
                         return BaseExpression.Print(baseExpressionSyntax);
+                    case BaseFieldDeclarationSyntax baseFieldDeclarationSyntax:
+                        return BaseFieldDeclaration.Print(
+                            baseFieldDeclarationSyntax
+                        );
                     case BaseListSyntax baseListSyntax:
                         return BaseList.Print(baseListSyntax);
+                    case BaseMethodDeclarationSyntax baseMethodDeclarationSyntax:
+                        return BaseMethodDeclaration.Print(
+                            baseMethodDeclarationSyntax
+                        );
+                    case BasePropertyDeclarationSyntax basePropertyDeclarationSyntax:
+                        return BasePropertyDeclaration.Print(
+                            basePropertyDeclarationSyntax
+                        );
+                    case BaseTypeDeclarationSyntax baseTypeDeclarationSyntax:
+                        return BaseTypeDeclaration.Print(
+                            baseTypeDeclarationSyntax
+                        );
                     case BinaryExpressionSyntax binaryExpressionSyntax:
                         return BinaryExpression.Print(binaryExpressionSyntax);
                     case BinaryPatternSyntax binaryPatternSyntax:
@@ -105,8 +121,6 @@ namespace CSharpier.SyntaxPrinter
                         return CheckedExpression.Print(checkedExpressionSyntax);
                     case CheckedStatementSyntax checkedStatementSyntax:
                         return CheckedStatement.Print(checkedStatementSyntax);
-                    case ClassDeclarationSyntax classDeclarationSyntax:
-                        return ClassDeclaration.Print(classDeclarationSyntax);
                     case ClassOrStructConstraintSyntax classOrStructConstraintSyntax:
                         return ClassOrStructConstraint.Print(
                             classOrStructConstraintSyntax
@@ -127,20 +141,12 @@ namespace CSharpier.SyntaxPrinter
                         return ConstructorConstraint.Print(
                             constructorConstraintSyntax
                         );
-                    case ConstructorDeclarationSyntax constructorDeclarationSyntax:
-                        return ConstructorDeclaration.Print(
-                            constructorDeclarationSyntax
-                        );
                     case ConstructorInitializerSyntax constructorInitializerSyntax:
                         return ConstructorInitializer.Print(
                             constructorInitializerSyntax
                         );
                     case ContinueStatementSyntax continueStatementSyntax:
                         return ContinueStatement.Print(continueStatementSyntax);
-                    case ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax:
-                        return ConversionOperatorDeclaration.Print(
-                            conversionOperatorDeclarationSyntax
-                        );
                     case DeclarationExpressionSyntax declarationExpressionSyntax:
                         return DeclarationExpression.Print(
                             declarationExpressionSyntax
@@ -160,10 +166,6 @@ namespace CSharpier.SyntaxPrinter
                     case DelegateDeclarationSyntax delegateDeclarationSyntax:
                         return DelegateDeclaration.Print(
                             delegateDeclarationSyntax
-                        );
-                    case DestructorDeclarationSyntax destructorDeclarationSyntax:
-                        return DestructorDeclaration.Print(
-                            destructorDeclarationSyntax
                         );
                     case DiscardDesignationSyntax discardDesignationSyntax:
                         return DiscardDesignation.Print(
@@ -185,20 +187,12 @@ namespace CSharpier.SyntaxPrinter
                         return ElseClause.Print(elseClauseSyntax);
                     case EmptyStatementSyntax emptyStatementSyntax:
                         return EmptyStatement.Print(emptyStatementSyntax);
-                    case EnumDeclarationSyntax enumDeclarationSyntax:
-                        return EnumDeclaration.Print(enumDeclarationSyntax);
                     case EnumMemberDeclarationSyntax enumMemberDeclarationSyntax:
                         return EnumMemberDeclaration.Print(
                             enumMemberDeclarationSyntax
                         );
                     case EqualsValueClauseSyntax equalsValueClauseSyntax:
                         return EqualsValueClause.Print(equalsValueClauseSyntax);
-                    case EventDeclarationSyntax eventDeclarationSyntax:
-                        return EventDeclaration.Print(eventDeclarationSyntax);
-                    case EventFieldDeclarationSyntax eventFieldDeclarationSyntax:
-                        return EventFieldDeclaration.Print(
-                            eventFieldDeclarationSyntax
-                        );
                     case ExpressionStatementSyntax expressionStatementSyntax:
                         return ExpressionStatement.Print(
                             expressionStatementSyntax
@@ -207,8 +201,6 @@ namespace CSharpier.SyntaxPrinter
                         return ExternAliasDirective.Print(
                             externAliasDirectiveSyntax
                         );
-                    case FieldDeclarationSyntax fieldDeclarationSyntax:
-                        return FieldDeclaration.Print(fieldDeclarationSyntax);
                     case FinallyClauseSyntax finallyClauseSyntax:
                         return FinallyClause.Print(finallyClauseSyntax);
                     case FixedStatementSyntax fixedStatementSyntax:
@@ -257,17 +249,9 @@ namespace CSharpier.SyntaxPrinter
                         );
                     case IncompleteMemberSyntax incompleteMemberSyntax:
                         return IncompleteMember.Print(incompleteMemberSyntax);
-                    case IndexerDeclarationSyntax indexerDeclarationSyntax:
-                        return IndexerDeclaration.Print(
-                            indexerDeclarationSyntax
-                        );
                     case InitializerExpressionSyntax initializerExpressionSyntax:
                         return InitializerExpression.Print(
                             initializerExpressionSyntax
-                        );
-                    case InterfaceDeclarationSyntax interfaceDeclarationSyntax:
-                        return InterfaceDeclaration.Print(
-                            interfaceDeclarationSyntax
                         );
                     case InterpolatedStringExpressionSyntax interpolatedStringExpressionSyntax:
                         return InterpolatedStringExpression.Print(
@@ -315,8 +299,6 @@ namespace CSharpier.SyntaxPrinter
                         return MemberBindingExpression.Print(
                             memberBindingExpressionSyntax
                         );
-                    case MethodDeclarationSyntax methodDeclarationSyntax:
-                        return MethodDeclaration.Print(methodDeclarationSyntax);
                     case NameColonSyntax nameColonSyntax:
                         return NameColon.Print(nameColonSyntax);
                     case NameEqualsSyntax nameEqualsSyntax:
@@ -338,10 +320,6 @@ namespace CSharpier.SyntaxPrinter
                     case OmittedTypeArgumentSyntax omittedTypeArgumentSyntax:
                         return OmittedTypeArgument.Print(
                             omittedTypeArgumentSyntax
-                        );
-                    case OperatorDeclarationSyntax operatorDeclarationSyntax:
-                        return OperatorDeclaration.Print(
-                            operatorDeclarationSyntax
                         );
                     case OrderByClauseSyntax orderByClauseSyntax:
                         return OrderByClause.Print(orderByClauseSyntax);
@@ -381,10 +359,6 @@ namespace CSharpier.SyntaxPrinter
                         return PrimaryConstructorBaseType.Print(
                             primaryConstructorBaseTypeSyntax
                         );
-                    case PropertyDeclarationSyntax propertyDeclarationSyntax:
-                        return PropertyDeclaration.Print(
-                            propertyDeclarationSyntax
-                        );
                     case QualifiedNameSyntax qualifiedNameSyntax:
                         return QualifiedName.Print(qualifiedNameSyntax);
                     case QueryBodySyntax queryBodySyntax:
@@ -395,8 +369,6 @@ namespace CSharpier.SyntaxPrinter
                         return QueryExpression.Print(queryExpressionSyntax);
                     case RangeExpressionSyntax rangeExpressionSyntax:
                         return RangeExpression.Print(rangeExpressionSyntax);
-                    case RecordDeclarationSyntax recordDeclarationSyntax:
-                        return RecordDeclaration.Print(recordDeclarationSyntax);
                     case RecursivePatternSyntax recursivePatternSyntax:
                         return RecursivePattern.Print(recursivePatternSyntax);
                     case RefExpressionSyntax refExpressionSyntax:
@@ -431,8 +403,6 @@ namespace CSharpier.SyntaxPrinter
                         return StackAllocArrayCreationExpression.Print(
                             stackAllocArrayCreationExpressionSyntax
                         );
-                    case StructDeclarationSyntax structDeclarationSyntax:
-                        return StructDeclaration.Print(structDeclarationSyntax);
                     case SwitchExpressionSyntax switchExpressionSyntax:
                         return SwitchExpression.Print(switchExpressionSyntax);
                     case SwitchSectionSyntax switchSectionSyntax:
