@@ -1,4 +1,5 @@
 using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,13 +10,12 @@ namespace CSharpier
             IsPatternExpressionSyntax node
         ) {
             return Doc.Concat(
-                this.Print(node.Expression),
-                " ",
-                this.PrintSyntaxToken(
-                    node.IsKeyword,
-                    afterTokenIfNoTrailing: " "
-                ),
-                Doc.Indent(this.Print(node.Pattern))
+                Node.Print(node.Expression),
+                Doc.Indent(
+                    Doc.Line,
+                    Token.PrintWithSuffix(node.IsKeyword, " "),
+                    Doc.Indent(this.Print(node.Pattern))
+                )
             );
         }
     }
