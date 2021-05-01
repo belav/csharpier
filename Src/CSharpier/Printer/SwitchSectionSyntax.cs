@@ -11,7 +11,7 @@ namespace CSharpier
         {
             var docs = new List<Doc>
             {
-                Join(Docs.HardLine, node.Labels.Select(this.Print))
+                Doc.Join(Doc.HardLine, node.Labels.Select(this.Print))
             };
             if (
                 node.Statements.Count == 1 &&
@@ -22,16 +22,16 @@ namespace CSharpier
             else
             {
                 docs.Add(
-                    Docs.Indent(
-                        Docs.HardLine,
-                        Join(
-                            Docs.HardLine,
+                    Doc.Indent(
+                        Doc.HardLine,
+                        Doc.Join(
+                            Doc.HardLine,
                             node.Statements.Select(this.Print).ToArray()
                         )
                     )
                 );
             }
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace CSharpier
         private Doc PrintElementAccessExpressionSyntax(
             ElementAccessExpressionSyntax node
         ) {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.Print(node.Expression),
                 this.Print(node.ArgumentList)
             );

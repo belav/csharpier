@@ -8,8 +8,8 @@ namespace CSharpier
     {
         private Doc PrintFinallyClauseSyntax(FinallyClauseSyntax node)
         {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.FinallyKeyword),
+            return Doc.Concat(
+                Token.Print(node.FinallyKeyword),
                 this.Print(node.Block)
             );
         }

@@ -9,8 +9,8 @@ namespace CSharpier
         private Doc PrintLocalDeclarationStatementSyntax(
             LocalDeclarationStatementSyntax node
         ) {
-            return Docs.Concat(
-                this.PrintExtraNewLines(node),
+            return Doc.Concat(
+                ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.AwaitKeyword,
                     afterTokenIfNoTrailing: " "
@@ -19,9 +19,9 @@ namespace CSharpier
                     node.UsingKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                this.PrintModifiers(node.Modifiers),
+                Modifiers.Print(node.Modifiers),
                 this.PrintVariableDeclarationSyntax(node.Declaration),
-                SyntaxTokens.Print(node.SemicolonToken)
+                Token.Print(node.SemicolonToken)
             );
         }
     }

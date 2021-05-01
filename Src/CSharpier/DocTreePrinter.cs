@@ -26,20 +26,20 @@ namespace CSharpier
             switch (document)
             {
                 case NullDoc:
-                    return indent + "Docs.Null";
+                    return indent + "Doc.Null";
                 case StringDoc stringDoc:
                     return indent +
                     "\"" +
                     stringDoc.Value?.Replace("\"", "\\\"") +
                     "\"";
                 case HardLineIfNoPreviousLine:
-                    return indent + "Docs.HardLineIfNoPreviousLine";
+                    return indent + "Doc.HardLineIfNoPreviousLine";
                 case HardLine:
-                    return indent + "Docs.HardLine";
+                    return indent + "Doc.HardLine";
                 case LiteralLine:
-                    return indent + "Docs.LiteralLine";
+                    return indent + "Doc.LiteralLine";
                 case Concat concat:
-                    var result = indent + "Docs.Concat(";
+                    var result = indent + "Doc.Concat(";
                     if (concat.Contents.Count > 0)
                     {
                         result += newLine;
@@ -61,25 +61,25 @@ namespace CSharpier
                 case LineDoc lineDoc:
                     return indent +
                     (lineDoc.Type == LineDoc.LineType.Normal
-                        ? "Docs.Line"
-                        : "Docs.SoftLine");
+                        ? "Doc.Line"
+                        : "Doc.SoftLine");
                 case BreakParent:
                     return "";
                 case Trim:
-                    return $"{indent}Docs.Trim";
+                    return $"{indent}Doc.Trim";
                 case ForceFlat forceFlat:
-                    return $"{indent}Docs.ForceFlat({newLine}{PrintIndentedDocTree(forceFlat.Contents)})";
+                    return $"{indent}Doc.ForceFlat({newLine}{PrintIndentedDocTree(forceFlat.Contents)})";
                 case IndentDoc indentDoc:
-                    return $"{indent}Docs.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents)})";
+                    return $"{indent}Doc.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents)})";
                 case Group group:
-                    return @$"{indent}Docs.Group{(group.GroupId != null ? "WithId" : string.Empty)}(
+                    return @$"{indent}Doc.Group{(group.GroupId != null ? "WithId" : string.Empty)}(
 {(group.GroupId != null ? $"{nextIndent}\"{group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents)})";
                 case LeadingComment leadingComment:
-                    return $"{indent}Docs.LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
+                    return $"{indent}Doc.LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
                 case TrailingComment trailingComment:
-                    return $"{indent}Docs.TrailingComment(\"{trailingComment.Comment}\", CommentType.{(trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
+                    return $"{indent}Doc.TrailingComment(\"{trailingComment.Comment}\", CommentType.{(trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
                 case IfBreak ifBreak:
-                    return @$"{indent}Docs.IfBreak
+                    return @$"{indent}Doc.IfBreak
 {PrintIndentedDocTree(ifBreak.BreakContents)},
 {PrintIndentedDocTree(ifBreak.FlatContents)},
 {nextIndent}""{ifBreak.GroupId}"")";

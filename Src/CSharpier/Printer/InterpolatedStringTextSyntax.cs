@@ -9,7 +9,7 @@ namespace CSharpier
         private Doc PrintInterpolatedStringTextSyntax(
             InterpolatedStringTextSyntax node
         ) {
-            return SyntaxTokens.Print(node.TextToken);
+            return Token.Print(node.TextToken);
         }
     }
 }

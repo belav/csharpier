@@ -8,8 +8,8 @@ namespace CSharpier
     {
         private Doc PrintGenericNameSyntax(GenericNameSyntax node)
         {
-            return Docs.Group(
-                SyntaxTokens.Print(node.Identifier),
+            return Doc.Group(
+                Token.Print(node.Identifier),
                 this.Print(node.TypeArgumentList)
             );
         }

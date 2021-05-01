@@ -8,9 +8,9 @@ namespace CSharpier
     {
         private Doc PrintNullableTypeSyntax(NullableTypeSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.Print(node.ElementType),
-                SyntaxTokens.Print(node.QuestionToken)
+                Token.Print(node.QuestionToken)
             );
         }
     }

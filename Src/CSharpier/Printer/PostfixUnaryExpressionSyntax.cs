@@ -9,9 +9,9 @@ namespace CSharpier
         private Doc PrintPostfixUnaryExpressionSyntax(
             PostfixUnaryExpressionSyntax node
         ) {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.Print(node.Operand),
-                SyntaxTokens.Print(node.OperatorToken)
+                Token.Print(node.OperatorToken)
             );
         }
     }

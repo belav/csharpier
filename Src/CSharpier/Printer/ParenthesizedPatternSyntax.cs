@@ -9,10 +9,10 @@ namespace CSharpier
         private Doc PrintParenthesizedPatternSyntax(
             ParenthesizedPatternSyntax node
         ) {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.OpenParenToken),
+            return Doc.Concat(
+                Token.Print(node.OpenParenToken),
                 this.Print(node.Pattern),
-                SyntaxTokens.Print(node.CloseParenToken)
+                Token.Print(node.CloseParenToken)
             );
         }
     }

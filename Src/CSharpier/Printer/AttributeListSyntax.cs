@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -13,22 +14,19 @@ namespace CSharpier
             var docs = new List<Doc>();
             if (node.Parent is CompilationUnitSyntax)
             {
-                docs.Add(this.PrintExtraNewLines(node));
+                docs.Add(ExtraNewLines.Print(node));
             }
 
-            docs.Add(SyntaxTokens.Print(node.OpenBracketToken));
+            docs.Add(Token.Print(node.OpenBracketToken));
             if (node.Target != null)
             {
                 docs.Add(
-                    SyntaxTokens.Print(node.Target.Identifier),
-                    this.PrintSyntaxToken(
-                        node.Target.ColonToken,
-                        afterTokenIfNoTrailing: " "
-                    )
+                    Token.Print(node.Target.Identifier),
+                    Token.PrintWithSuffix(node.Target.ColonToken, " ")
                 );
             }
 
-            var printSeparatedSyntaxList = this.PrintSeparatedSyntaxList(
+            var printSeparatedSyntaxList = SeparatedSyntaxList.Print(
                 node.Attributes,
                 attributeNode =>
                 {
@@ -38,19 +36,17 @@ namespace CSharpier
                         return name;
                     }
 
-                    return Docs.Group(
+                    return Doc.Group(
                         name,
-                        this.PrintSyntaxToken(
-                            attributeNode.ArgumentList.OpenParenToken
-                        ),
-                        Docs.Indent(
-                            Docs.SoftLine,
-                            this.PrintSeparatedSyntaxList(
+                        Token.Print(attributeNode.ArgumentList.OpenParenToken),
+                        Doc.Indent(
+                            Doc.SoftLine,
+                            SeparatedSyntaxList.Print(
                                 attributeNode.ArgumentList.Arguments,
                                 attributeArgumentNode =>
-                                    Docs.Concat(
+                                    Doc.Concat(
                                         attributeArgumentNode.NameEquals != null
-                                            ? this.PrintNameEqualsSyntax(
+                                            ? NameEquals.Print(
                                                     attributeArgumentNode.NameEquals
                                                 )
                                             : Doc.Null,
@@ -63,29 +59,29 @@ namespace CSharpier
                                             attributeArgumentNode.Expression
                                         )
                                     ),
-                                Docs.Line
+                                Doc.Line
                             ),
-                            this.PrintSyntaxToken(
+                            Token.Print(
                                 attributeNode.ArgumentList.CloseParenToken
                             )
                         )
                     );
                 },
-                Docs.Line
+                Doc.Line
             );
 
             docs.Add(
                 node.Attributes.Count > 1
-                    ? Docs.Indent(Docs.SoftLine, printSeparatedSyntaxList)
+                    ? Doc.Indent(Doc.SoftLine, printSeparatedSyntaxList)
                     : printSeparatedSyntaxList
             );
 
             docs.Add(
-                node.Attributes.Count > 1 ? Docs.SoftLine : Docs.Null,
-                SyntaxTokens.Print(node.CloseBracketToken)
+                node.Attributes.Count > 1 ? Doc.SoftLine : Doc.Null,
+                Token.Print(node.CloseBracketToken)
             );
 
-            return Docs.Group(docs);
+            return Doc.Group(docs);
         }
     }
 }

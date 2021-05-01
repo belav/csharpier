@@ -9,7 +9,7 @@ namespace CSharpier
         // TODO 0 look into things that aren't covered by unit tests
         private Doc PrintDefaultConstraintSyntax(DefaultConstraintSyntax node)
         {
-            return SyntaxTokens.Print(node.DefaultKeyword);
+            return Token.Print(node.DefaultKeyword);
         }
     }
 }

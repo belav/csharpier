@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public class SyntaxTokens
+    public class Token
     {
         public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken)
         {
@@ -59,7 +59,7 @@ namespace CSharpier.SyntaxPrinter
                 docs.Add(suffixDoc);
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
 
         public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
@@ -72,7 +72,7 @@ namespace CSharpier.SyntaxPrinter
             );
 
             return indentTrivia && printedTrivia != Doc.Null
-                ? Docs.Concat(Docs.Indent(printedTrivia), Docs.HardLine)
+                ? Doc.Concat(Doc.Indent(printedTrivia), Doc.HardLine)
                 : printedTrivia;
         }
 
@@ -94,7 +94,7 @@ namespace CSharpier.SyntaxPrinter
 
                 if (printNewLines && kind == SyntaxKind.EndOfLineTrivia)
                 {
-                    docs.Add(Docs.HardLine);
+                    docs.Add(Doc.HardLine);
                 }
                 if (
                     kind != SyntaxKind.EndOfLineTrivia &&
@@ -105,19 +105,19 @@ namespace CSharpier.SyntaxPrinter
                 if (IsSingleLineComment(kind))
                 {
                     docs.Add(
-                        Docs.LeadingComment(
+                        Doc.LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
                             CommentType.SingleLine
                         ),
                         kind == SyntaxKind.SingleLineDocumentationCommentTrivia
-                            ? Docs.HardLine
+                            ? Doc.HardLine
                             : Doc.Null
                     );
                 }
                 else if (IsMultiLineComment(kind))
                 {
                     docs.Add(
-                        Docs.LeadingComment(
+                        Doc.LeadingComment(
                             trivia.ToFullString().TrimEnd('\n', '\r'),
                             CommentType.MultiLine
                         )
@@ -126,9 +126,9 @@ namespace CSharpier.SyntaxPrinter
                 else if (kind == SyntaxKind.DisabledTextTrivia)
                 {
                     docs.Add(
-                        Docs.Trim,
+                        Doc.Trim,
                         trivia.ToString().TrimEnd('\n', '\r'),
-                        Docs.HardLine
+                        Doc.HardLine
                     );
                 }
                 else if (IsDirective(kind))
@@ -140,13 +140,13 @@ namespace CSharpier.SyntaxPrinter
                         trivia.Token.Parent is BlockSyntax blockSyntax &&
                         blockSyntax.Statements.Count == 0
                     ) {
-                        docs.Add(Docs.HardLineIfNoPreviousLine);
+                        docs.Add(Doc.HardLineIfNoPreviousLine);
                     }
                     docs.Add(
-                        Docs.HardLineIfNoPreviousLine,
-                        Docs.Trim,
+                        Doc.HardLineIfNoPreviousLine,
+                        Doc.Trim,
                         trivia.ToString(),
-                        Docs.HardLine
+                        Doc.HardLine
                     );
                 }
                 else if (IsRegion(kind))
@@ -161,10 +161,10 @@ namespace CSharpier.SyntaxPrinter
                     }
 
                     docs.Add(
-                        Docs.HardLineIfNoPreviousLine,
-                        Docs.Trim,
+                        Doc.HardLineIfNoPreviousLine,
+                        Doc.Trim,
                         triviaText,
-                        Docs.HardLine
+                        Doc.HardLine
                     );
                 }
             }
@@ -174,7 +174,7 @@ namespace CSharpier.SyntaxPrinter
                 docs.RemoveAt(docs.Count - 1);
             }
 
-            return docs.Count > 0 ? Docs.Concat(docs) : Doc.Null;
+            return docs.Count > 0 ? Doc.Concat(docs) : Doc.Null;
         }
 
         private static bool IsSingleLineComment(SyntaxKind kind) =>
@@ -217,7 +217,7 @@ namespace CSharpier.SyntaxPrinter
                 if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
                 {
                     docs.Add(
-                        Docs.TrailingComment(
+                        Doc.TrailingComment(
                             trivia.ToString(),
                             CommentType.SingleLine
                         )
@@ -227,7 +227,7 @@ namespace CSharpier.SyntaxPrinter
                 {
                     docs.Add(
                         " ",
-                        Docs.TrailingComment(
+                        Doc.TrailingComment(
                             trivia.ToString(),
                             CommentType.MultiLine
                         )
@@ -235,7 +235,7 @@ namespace CSharpier.SyntaxPrinter
                 }
             }
 
-            return docs.Count > 0 ? Docs.Concat(docs) : Docs.Null;
+            return docs.Count > 0 ? Doc.Concat(docs) : Doc.Null;
         }
     }
 }

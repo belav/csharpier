@@ -14,15 +14,15 @@ namespace CSharpier
 
             var docs = new List<Doc>
             {
-                this.PrintExtraNewLines(node),
-                SyntaxTokens.PrintWithSuffix(node.AwaitKeyword, " "),
-                SyntaxTokens.Print(node.UsingKeyword),
+                ExtraNewLines.Print(node),
+                Token.PrintWithSuffix(node.AwaitKeyword, " "),
+                Token.Print(node.UsingKeyword),
                 " ",
-                SyntaxTokens.Print(node.OpenParenToken),
-                Docs.GroupWithId(
+                Token.Print(node.OpenParenToken),
+                Doc.GroupWithId(
                     groupId,
-                    Docs.Indent(
-                        Docs.SoftLine,
+                    Doc.Indent(
+                        Doc.SoftLine,
                         node.Declaration != null
                             ? this.PrintVariableDeclarationSyntax(
                                     node.Declaration
@@ -32,13 +32,13 @@ namespace CSharpier
                             ? this.Print(node.Expression)
                             : Doc.Null
                     ),
-                    Docs.SoftLine
+                    Doc.SoftLine
                 ),
-                SyntaxTokens.Print(node.CloseParenToken)
+                Token.Print(node.CloseParenToken)
             };
             if (node.Statement is UsingStatementSyntax)
             {
-                docs.Add(Docs.HardLine, SyntaxNodes.Print(node.Statement));
+                docs.Add(Doc.HardLine, Node.Print(node.Statement));
             }
             else if (node.Statement is BlockSyntax blockSyntax)
             {
@@ -51,15 +51,10 @@ namespace CSharpier
             }
             else
             {
-                docs.Add(
-                    Docs.Indent(
-                        Docs.HardLine,
-                        SyntaxNodes.Print(node.Statement)
-                    )
-                );
+                docs.Add(Doc.Indent(Doc.HardLine, Node.Print(node.Statement)));
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

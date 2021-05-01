@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -11,7 +12,7 @@ namespace CSharpier
         ) {
             var docs = new List<Doc>
             {
-                this.PrintModifiers(node.Modifiers),
+                Modifiers.Print(node.Modifiers),
                 this.PrintParameterListSyntax(node.ParameterList),
                 " ",
                 this.PrintSyntaxToken(
@@ -28,7 +29,7 @@ namespace CSharpier
                 docs.Add(this.PrintBlockSyntax(node.Block));
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

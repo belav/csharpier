@@ -8,7 +8,7 @@ namespace CSharpier
     {
         private Doc PrintDiscardPatternSyntax(DiscardPatternSyntax node)
         {
-            return SyntaxTokens.Print(node.UnderscoreToken);
+            return Token.Print(node.UnderscoreToken);
         }
     }
 }

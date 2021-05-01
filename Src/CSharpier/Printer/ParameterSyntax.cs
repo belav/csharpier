@@ -12,20 +12,20 @@ namespace CSharpier
             var docs = new List<Doc>
             {
                 this.PrintAttributeLists(node, node.AttributeLists),
-                this.PrintModifiers(node.Modifiers)
+                Modifiers.Print(node.Modifiers)
             };
             if (node.Type != null)
             {
                 docs.Add(this.Print(node.Type), " ");
             }
 
-            docs.Add(SyntaxTokens.Print(node.Identifier));
+            docs.Add(Token.Print(node.Identifier));
             if (node.Default != null)
             {
                 docs.Add(this.PrintEqualsValueClauseSyntax(node.Default));
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

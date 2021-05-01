@@ -8,11 +8,11 @@ namespace CSharpier
     {
         private Doc PrintRangeExpressionSyntax(RangeExpressionSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 node.LeftOperand != null
                     ? this.Print(node.LeftOperand)
                     : Doc.Null,
-                SyntaxTokens.Print(node.OperatorToken),
+                Token.Print(node.OperatorToken),
                 node.RightOperand != null
                     ? this.Print(node.RightOperand)
                     : Doc.Null

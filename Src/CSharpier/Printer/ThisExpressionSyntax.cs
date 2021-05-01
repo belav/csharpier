@@ -8,7 +8,7 @@ namespace CSharpier
     {
         private Doc PrintThisExpressionSyntax(ThisExpressionSyntax node)
         {
-            return SyntaxTokens.Print(node.Token);
+            return Token.Print(node.Token);
         }
     }
 }

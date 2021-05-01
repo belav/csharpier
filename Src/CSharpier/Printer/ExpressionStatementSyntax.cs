@@ -10,10 +10,10 @@ namespace CSharpier
         private Doc PrintExpressionStatementSyntax(
             ExpressionStatementSyntax node
         ) {
-            return Docs.Group(
-                this.PrintExtraNewLines(node),
+            return Doc.Group(
+                ExtraNewLines.Print(node),
                 this.Print(node.Expression),
-                SyntaxTokens.Print(node.SemicolonToken)
+                Token.Print(node.SemicolonToken)
             );
         }
     }

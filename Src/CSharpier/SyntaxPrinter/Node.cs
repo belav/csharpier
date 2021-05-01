@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public static class SyntaxNodes
+    public static class Node
     {
         [ThreadStatic]
         private static Printer? printer;

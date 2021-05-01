@@ -10,18 +10,18 @@ namespace CSharpier
         private Doc PrintBracketedArgumentListSyntax(
             BracketedArgumentListSyntax node
         ) {
-            return Docs.Group(
-                SyntaxTokens.Print(node.OpenBracketToken),
-                Docs.Indent(
-                    Docs.SoftLine,
-                    this.PrintSeparatedSyntaxList(
+            return Doc.Group(
+                Token.Print(node.OpenBracketToken),
+                Doc.Indent(
+                    Doc.SoftLine,
+                    SeparatedSyntaxList.Print(
                         node.Arguments,
                         this.Print,
-                        Docs.Line
+                        Doc.Line
                     )
                 ),
-                Docs.SoftLine,
-                SyntaxTokens.Print(node.CloseBracketToken)
+                Doc.SoftLine,
+                Token.Print(node.CloseBracketToken)
             );
         }
     }

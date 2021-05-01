@@ -9,8 +9,11 @@ namespace Worker
     public class GeneratePrinterSwitch
     {
         [Test]
-        [Ignore(
-            "Run this manually if you need to regenerate the Printer.generated.cs file. Then run csharpier on the result")]
+        // TODO partial - convert this to a source generator. It will be annoying to rerun it after every file move
+        // when we do, make sure it validates what it is doing. When I moved a file and left the "Syntax" suffix on it, this unit test created
+        // code that didn't compile
+        // [Ignore(
+        //     "Run this manually if you need to regenerate the Printer.generated.cs file. Then run csharpier on the result")]
         public void DoWork()
         {
             var rootDirectory = new DirectoryInfo(
@@ -23,7 +26,7 @@ namespace Worker
             var output = new StringBuilder();
 
             output.AppendLine(
-                @"using CSharpier.SyntaxPrinter.SyntaxNodes;
+                @"using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

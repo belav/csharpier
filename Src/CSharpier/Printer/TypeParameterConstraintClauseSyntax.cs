@@ -1,5 +1,6 @@
 using System.Linq;
 using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -9,7 +10,7 @@ namespace CSharpier
         private Doc PrintTypeParameterConstraintClauseSyntax(
             TypeParameterConstraintClauseSyntax node
         ) {
-            return Docs.Group(
+            return Doc.Group(
                 this.PrintSyntaxToken(
                     node.WhereKeyword,
                     afterTokenIfNoTrailing: " "
@@ -20,11 +21,11 @@ namespace CSharpier
                     node.ColonToken,
                     afterTokenIfNoTrailing: " "
                 ),
-                Docs.Indent(
-                    this.PrintSeparatedSyntaxList(
+                Doc.Indent(
+                    SeparatedSyntaxList.Print(
                         node.Constraints,
                         this.Print,
-                        Docs.Line
+                        Doc.Line
                     )
                 )
             );

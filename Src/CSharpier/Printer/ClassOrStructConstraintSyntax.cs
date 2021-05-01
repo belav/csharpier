@@ -9,9 +9,9 @@ namespace CSharpier
         private Doc PrintClassOrStructConstraintSyntax(
             ClassOrStructConstraintSyntax node
         ) {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.ClassOrStructKeyword),
-                SyntaxTokens.Print(node.QuestionToken)
+            return Doc.Concat(
+                Token.Print(node.ClassOrStructKeyword),
+                Token.Print(node.QuestionToken)
             );
         }
     }

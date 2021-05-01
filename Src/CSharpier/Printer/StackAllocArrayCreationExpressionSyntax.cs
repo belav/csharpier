@@ -8,14 +8,14 @@ namespace CSharpier
         private Doc PrintStackAllocArrayCreationExpressionSyntax(
             StackAllocArrayCreationExpressionSyntax node
         ) {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.PrintSyntaxToken(
                     node.StackAllocKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
                 this.Print(node.Type),
                 node.Initializer != null
-                    ? Docs.Concat(
+                    ? Doc.Concat(
                             " ",
                             this.PrintInitializerExpressionSyntax(
                                 node.Initializer

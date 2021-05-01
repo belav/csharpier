@@ -8,9 +8,9 @@ namespace CSharpier
     {
         private Doc PrintQualifiedNameSyntax(QualifiedNameSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.Print(node.Left),
-                SyntaxTokens.Print(node.DotToken),
+                Token.Print(node.DotToken),
                 this.Print(node.Right)
             );
         }

@@ -6,7 +6,7 @@ namespace CSharpier
     public partial class Printer
     {
         private Doc PrintTupleExpressionSyntax(TupleExpressionSyntax node) =>
-            Docs.Group(
+            Doc.Group(
                 PrintArgumentListLikeSyntax(
                     node.OpenParenToken,
                     node.Arguments,

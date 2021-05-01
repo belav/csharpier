@@ -9,10 +9,10 @@ namespace CSharpier
     {
         private Doc PrintTupleTypeSyntax(TupleTypeSyntax node)
         {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.OpenParenToken),
-                this.PrintSeparatedSyntaxList(node.Elements, this.Print, " "),
-                SyntaxTokens.Print(node.CloseParenToken)
+            return Doc.Concat(
+                Token.Print(node.OpenParenToken),
+                SeparatedSyntaxList.Print(node.Elements, this.Print, " "),
+                Token.Print(node.CloseParenToken)
             );
         }
     }

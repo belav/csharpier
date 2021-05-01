@@ -10,58 +10,58 @@ namespace CSharpier
         private Doc PrintFunctionPointerTypeSyntax(
             FunctionPointerTypeSyntax node
         ) {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.DelegateKeyword),
+            return Doc.Concat(
+                Token.Print(node.DelegateKeyword),
                 this.PrintSyntaxToken(
                     node.AsteriskToken,
                     afterTokenIfNoTrailing: " "
                 ),
                 node.CallingConvention != null
                     ? this.PrintCallingConvention(node.CallingConvention)
-                    : Docs.Null,
-                SyntaxTokens.Print(node.ParameterList.LessThanToken),
-                Docs.Indent(
-                    Docs.Group(
-                        Docs.SoftLine,
-                        this.PrintSeparatedSyntaxList(
+                    : Doc.Null,
+                Token.Print(node.ParameterList.LessThanToken),
+                Doc.Indent(
+                    Doc.Group(
+                        Doc.SoftLine,
+                        SeparatedSyntaxList.Print(
                             node.ParameterList.Parameters,
                             o =>
-                                Docs.Concat(
+                                Doc.Concat(
                                     this.PrintAttributeLists(
                                         o,
                                         o.AttributeLists
                                     ),
-                                    this.PrintModifiers(o.Modifiers),
+                                    Modifiers.Print(o.Modifiers),
                                     this.Print(o.Type)
                                 ),
-                            Docs.Line
+                            Doc.Line
                         )
                     )
                 ),
-                SyntaxTokens.Print(node.ParameterList.GreaterThanToken)
+                Token.Print(node.ParameterList.GreaterThanToken)
             );
         }
 
         private Doc PrintCallingConvention(
             FunctionPointerCallingConventionSyntax node
         ) {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.ManagedOrUnmanagedKeyword),
+            return Doc.Concat(
+                Token.Print(node.ManagedOrUnmanagedKeyword),
                 node.UnmanagedCallingConventionList != null
-                    ? Docs.Concat(
+                    ? Doc.Concat(
                             this.PrintSyntaxToken(
                                 node.UnmanagedCallingConventionList.OpenBracketToken
                             ),
-                            this.PrintSeparatedSyntaxList(
+                            SeparatedSyntaxList.Print(
                                 node.UnmanagedCallingConventionList.CallingConventions,
-                                o => SyntaxTokens.Print(o.Name),
+                                o => Token.Print(o.Name),
                                 " "
                             ),
                             this.PrintSyntaxToken(
                                 node.UnmanagedCallingConventionList.CloseBracketToken
                             )
                         )
-                    : Docs.Null
+                    : Doc.Null
             );
         }
     }

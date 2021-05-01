@@ -9,8 +9,8 @@ namespace CSharpier
         private Doc PrintExternAliasDirectiveSyntax(
             ExternAliasDirectiveSyntax node
         ) {
-            return Docs.Concat(
-                this.PrintExtraNewLines(node),
+            return Doc.Concat(
+                ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.ExternKeyword,
                     afterTokenIfNoTrailing: " "
@@ -19,8 +19,8 @@ namespace CSharpier
                     node.AliasKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                SyntaxTokens.Print(node.Identifier),
-                SyntaxTokens.Print(node.SemicolonToken)
+                Token.Print(node.Identifier),
+                Token.Print(node.SemicolonToken)
             );
         }
     }

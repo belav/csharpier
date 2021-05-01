@@ -9,14 +9,14 @@ namespace CSharpier
         private Doc PrintBracketedParameterListSyntax(
             BracketedParameterListSyntax node
         ) {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.OpenBracketToken),
-                this.PrintSeparatedSyntaxList(
+            return Doc.Concat(
+                Token.Print(node.OpenBracketToken),
+                SeparatedSyntaxList.Print(
                     node.Parameters,
                     this.PrintParameterSyntax,
                     " "
                 ),
-                SyntaxTokens.Print(node.CloseBracketToken)
+                Token.Print(node.CloseBracketToken)
             );
         }
     }

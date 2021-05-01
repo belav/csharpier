@@ -11,33 +11,33 @@ namespace CSharpier
         {
             var groupId = Guid.NewGuid().ToString();
 
-            var result = Docs.Concat(
-                this.PrintExtraNewLines(node),
-                SyntaxTokens.PrintWithSuffix(node.AwaitKeyword, " "),
-                SyntaxTokens.Print(node.ForEachKeyword),
+            var result = Doc.Concat(
+                ExtraNewLines.Print(node),
+                Token.PrintWithSuffix(node.AwaitKeyword, " "),
+                Token.Print(node.ForEachKeyword),
                 " ",
-                SyntaxTokens.Print(node.OpenParenToken),
-                Docs.GroupWithId(
+                Token.Print(node.OpenParenToken),
+                Doc.GroupWithId(
                     groupId,
-                    Docs.Indent(
-                        Docs.SoftLine,
-                        SyntaxNodes.Print(node.Type),
+                    Doc.Indent(
+                        Doc.SoftLine,
+                        Node.Print(node.Type),
                         " ",
-                        SyntaxTokens.Print(node.Identifier),
+                        Token.Print(node.Identifier),
                         " ",
-                        SyntaxTokens.Print(node.InKeyword),
+                        Token.Print(node.InKeyword),
                         " ",
-                        SyntaxNodes.Print(node.Expression)
+                        Node.Print(node.Expression)
                     ),
-                    Docs.SoftLine
+                    Doc.SoftLine
                 ),
-                SyntaxTokens.Print(node.CloseParenToken),
+                Token.Print(node.CloseParenToken),
                 node.Statement is BlockSyntax blockSyntax
                     ? this.PrintBlockSyntaxWithConditionalSpace(
                             blockSyntax,
                             groupId
                         )
-                    : SyntaxNodes.Print(node.Statement)
+                    : Node.Print(node.Statement)
             );
 
             return result;

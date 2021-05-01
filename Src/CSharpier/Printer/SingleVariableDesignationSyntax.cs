@@ -9,7 +9,7 @@ namespace CSharpier
         private Doc PrintSingleVariableDesignationSyntax(
             SingleVariableDesignationSyntax node
         ) {
-            return SyntaxTokens.Print(node.Identifier);
+            return Token.Print(node.Identifier);
         }
     }
 }

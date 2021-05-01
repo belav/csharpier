@@ -9,8 +9,8 @@ namespace CSharpier
     {
         private Doc PrintRelationalPatternSyntax(RelationalPatternSyntax node)
         {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.OperatorToken),
+            return Doc.Concat(
+                Token.Print(node.OperatorToken),
                 " ",
                 this.Print(node.Expression)
             );

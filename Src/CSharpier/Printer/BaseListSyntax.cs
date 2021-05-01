@@ -1,5 +1,6 @@
 using System.Linq;
 using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
@@ -8,18 +9,18 @@ namespace CSharpier
     {
         private Doc PrintBaseListSyntax(BaseListSyntax node)
         {
-            return Docs.Group(
-                Docs.Indent(
-                    Docs.Line,
+            return Doc.Group(
+                Doc.Indent(
+                    Doc.Line,
                     this.PrintSyntaxToken(
                         node.ColonToken,
                         afterTokenIfNoTrailing: " "
                     ),
-                    Docs.Indent(
-                        this.PrintSeparatedSyntaxList(
+                    Doc.Indent(
+                        SeparatedSyntaxList.Print(
                             node.Types,
                             this.Print,
-                            Docs.Line
+                            Doc.Line
                         )
                     )
                 )

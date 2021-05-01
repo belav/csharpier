@@ -11,16 +11,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             var docs = new List<Doc>
             {
-                SyntaxTokens.PrintWithoutLeadingTrivia(node.StringStartToken)
+                Token.PrintWithoutLeadingTrivia(node.StringStartToken)
             };
 
-            docs.AddRange(node.Contents.Select(SyntaxNodes.Print));
-            docs.Add(SyntaxTokens.Print(node.StringEndToken));
+            docs.AddRange(node.Contents.Select(Node.Print));
+            docs.Add(Token.Print(node.StringEndToken));
 
-            return Docs.Concat(
+            return Doc.Concat(
                 // pull out the leading trivia so it doesn't get forced flat
-                SyntaxTokens.PrintLeadingTrivia(node.StringStartToken),
-                Docs.ForceFlat(docs)
+                Token.PrintLeadingTrivia(node.StringStartToken),
+                Doc.ForceFlat(docs)
             );
         }
     }

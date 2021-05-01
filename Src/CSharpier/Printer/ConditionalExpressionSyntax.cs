@@ -8,21 +8,21 @@ namespace CSharpier
         private Doc PrintConditionalExpressionSyntax(
             ConditionalExpressionSyntax node
         ) {
-            return Docs.Group(
-                Docs.Indent(
+            return Doc.Group(
+                Doc.Indent(
                     this.Print(node.Condition),
-                    Docs.Line,
+                    Doc.Line,
                     this.PrintSyntaxToken(
                         node.QuestionToken,
                         afterTokenIfNoTrailing: " "
                     ),
-                    Docs.Indent(this.Print(node.WhenTrue)),
-                    Docs.Line,
+                    Doc.Indent(this.Print(node.WhenTrue)),
+                    Doc.Line,
                     this.PrintSyntaxToken(
                         node.ColonToken,
                         afterTokenIfNoTrailing: " "
                     ),
-                    Docs.Indent(this.Print(node.WhenFalse))
+                    Doc.Indent(this.Print(node.WhenFalse))
                 )
             );
         }

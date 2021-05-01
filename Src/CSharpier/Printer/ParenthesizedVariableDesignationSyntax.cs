@@ -9,18 +9,18 @@ namespace CSharpier
         private Doc PrintParenthesizedVariableDesignationSyntax(
             ParenthesizedVariableDesignationSyntax node
         ) {
-            return Docs.Group(
-                SyntaxTokens.Print(node.OpenParenToken),
-                Docs.Indent(
-                    Docs.SoftLine,
-                    this.PrintSeparatedSyntaxList(
+            return Doc.Group(
+                Token.Print(node.OpenParenToken),
+                Doc.Indent(
+                    Doc.SoftLine,
+                    SeparatedSyntaxList.Print(
                         node.Variables,
                         this.Print,
-                        Docs.Line
+                        Doc.Line
                     ),
-                    Docs.SoftLine
+                    Doc.SoftLine
                 ),
-                SyntaxTokens.Print(node.CloseParenToken)
+                Token.Print(node.CloseParenToken)
             );
         }
     }

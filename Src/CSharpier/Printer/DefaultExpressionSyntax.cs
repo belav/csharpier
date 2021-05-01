@@ -8,11 +8,11 @@ namespace CSharpier
     {
         private Doc PrintDefaultExpressionSyntax(DefaultExpressionSyntax node)
         {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.Keyword),
-                SyntaxTokens.Print(node.OpenParenToken),
+            return Doc.Concat(
+                Token.Print(node.Keyword),
+                Token.Print(node.OpenParenToken),
                 this.Print(node.Type),
-                SyntaxTokens.Print(node.CloseParenToken)
+                Token.Print(node.CloseParenToken)
             );
         }
     }

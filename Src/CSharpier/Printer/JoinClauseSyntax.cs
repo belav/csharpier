@@ -8,7 +8,7 @@ namespace CSharpier
     {
         private Doc PrintJoinClauseSyntax(JoinClauseSyntax node)
         {
-            return Docs.Group(
+            return Doc.Group(
                 this.PrintSyntaxToken(
                     node.JoinKeyword,
                     afterTokenIfNoTrailing: " "
@@ -22,8 +22,8 @@ namespace CSharpier
                     afterTokenIfNoTrailing: " "
                 ),
                 this.Print(node.InExpression),
-                Docs.Indent(
-                    Docs.Line,
+                Doc.Indent(
+                    Doc.Line,
                     this.PrintSyntaxToken(
                         node.OnKeyword,
                         afterTokenIfNoTrailing: " "
@@ -36,15 +36,15 @@ namespace CSharpier
                     ),
                     this.Print(node.RightExpression),
                     node.Into != null
-                        ? Docs.Concat(
-                                Docs.Line,
+                        ? Doc.Concat(
+                                Doc.Line,
                                 this.PrintSyntaxToken(
                                     node.Into.IntoKeyword,
                                     afterTokenIfNoTrailing: " "
                                 ),
-                                SyntaxTokens.Print(node.Into.Identifier)
+                                Token.Print(node.Into.Identifier)
                             )
-                        : Docs.Null
+                        : Doc.Null
                 )
             );
         }

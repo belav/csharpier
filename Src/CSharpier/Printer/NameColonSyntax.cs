@@ -8,8 +8,8 @@ namespace CSharpier
     {
         private Doc PrintNameColonSyntax(NameColonSyntax node)
         {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.Name.Identifier),
+            return Doc.Concat(
+                Token.Print(node.Name.Identifier),
                 this.PrintSyntaxToken(
                     node.ColonToken,
                     afterTokenIfNoTrailing: " "

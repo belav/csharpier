@@ -10,13 +10,13 @@ namespace CSharpier
         private Doc PrintConstructorInitializerSyntax(
             ConstructorInitializerSyntax node
         ) {
-            return Docs.Indent(
-                Docs.HardLine,
+            return Doc.Indent(
+                Doc.HardLine,
                 this.PrintSyntaxToken(
                     node.ColonToken,
                     afterTokenIfNoTrailing: " "
                 ),
-                SyntaxTokens.Print(node.ThisOrBaseKeyword),
+                Token.Print(node.ThisOrBaseKeyword),
                 this.PrintArgumentListSyntax(node.ArgumentList)
             );
         }

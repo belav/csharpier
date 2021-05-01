@@ -11,7 +11,7 @@ namespace CSharpier
         {
             var docs = new List<Doc>
             {
-                SyntaxTokens.Print(node.OpenBraceToken),
+                Token.Print(node.OpenBraceToken),
                 this.Print(node.Expression)
             };
             if (node.AlignmentClause != null)
@@ -27,13 +27,13 @@ namespace CSharpier
             if (node.FormatClause != null)
             {
                 docs.Add(
-                    SyntaxTokens.Print(node.FormatClause.ColonToken),
-                    SyntaxTokens.Print(node.FormatClause.FormatStringToken)
+                    Token.Print(node.FormatClause.ColonToken),
+                    Token.Print(node.FormatClause.FormatStringToken)
                 );
             }
 
-            docs.Add(SyntaxTokens.Print(node.CloseBraceToken));
-            return Docs.Concat(docs);
+            docs.Add(Token.Print(node.CloseBraceToken));
+            return Doc.Concat(docs);
         }
     }
 }

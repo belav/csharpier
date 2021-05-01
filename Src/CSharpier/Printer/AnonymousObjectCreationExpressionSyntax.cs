@@ -9,19 +9,19 @@ namespace CSharpier
         private Doc PrintAnonymousObjectCreationExpressionSyntax(
             AnonymousObjectCreationExpressionSyntax node
         ) {
-            return Docs.Group(
-                this.PrintSyntaxToken(node.NewKeyword, Docs.Line),
-                SyntaxTokens.Print(node.OpenBraceToken),
-                Docs.Indent(
-                    Docs.Line,
-                    this.PrintSeparatedSyntaxList(
+            return Doc.Group(
+                this.PrintSyntaxToken(node.NewKeyword, Doc.Line),
+                Token.Print(node.OpenBraceToken),
+                Doc.Indent(
+                    Doc.Line,
+                    SeparatedSyntaxList.Print(
                         node.Initializers,
                         this.PrintAnonymousObjectMemberDeclaratorSyntax,
-                        Docs.Line
+                        Doc.Line
                     )
                 ),
-                Docs.Line,
-                SyntaxTokens.Print(node.CloseBraceToken)
+                Doc.Line,
+                Token.Print(node.CloseBraceToken)
             );
         }
     }

@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintGroupClauseSyntax(GroupClauseSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.PrintSyntaxToken(
                     node.GroupKeyword,
                     afterTokenIfNoTrailing: " "
