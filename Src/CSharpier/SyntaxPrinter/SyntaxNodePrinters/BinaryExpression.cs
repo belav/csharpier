@@ -63,9 +63,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     }
 
                     docs.Add(
-                        " ",
-                        Token.Print(binaryExpressionSyntax.OperatorToken),
                         Doc.Line,
+                        Token.Print(
+                            binaryExpressionSyntax.OperatorToken
+                        ),
+                        " ",
                         Node.Print(binaryExpressionSyntax.Right)
                     );
                 }
