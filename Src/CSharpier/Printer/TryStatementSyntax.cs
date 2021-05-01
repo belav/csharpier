@@ -14,22 +14,22 @@ namespace CSharpier
             {
                 ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                SyntaxTokens.Print(node.TryKeyword),
+                Token.Print(node.TryKeyword),
                 this.PrintBlockSyntax(node.Block),
-                Docs.HardLine,
-                Docs.Join(
-                    Docs.HardLine,
+                Doc.HardLine,
+                Doc.Join(
+                    Doc.HardLine,
                     node.Catches.Select(this.PrintCatchClauseSyntax)
                 )
             };
             if (node.Finally != null)
             {
                 docs.Add(
-                    Docs.HardLine,
+                    Doc.HardLine,
                     this.PrintFinallyClauseSyntax(node.Finally)
                 );
             }
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

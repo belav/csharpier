@@ -11,19 +11,19 @@ namespace CSharpier
         {
             var groupId = Guid.NewGuid().ToString();
 
-            var result = Docs.Concat(
+            var result = Doc.Concat(
                 ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.WhileKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                SyntaxTokens.Print(node.OpenParenToken),
-                Docs.GroupWithId(
+                Token.Print(node.OpenParenToken),
+                Doc.GroupWithId(
                     groupId,
-                    Docs.Indent(Docs.SoftLine, this.Print(node.Condition)),
-                    Docs.SoftLine
+                    Doc.Indent(Doc.SoftLine, this.Print(node.Condition)),
+                    Doc.SoftLine
                 ),
-                SyntaxTokens.Print(node.CloseParenToken),
+                Token.Print(node.CloseParenToken),
                 node.Statement is BlockSyntax blockSyntax
                     ? this.PrintBlockSyntaxWithConditionalSpace(
                             blockSyntax,

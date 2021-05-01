@@ -9,7 +9,7 @@ namespace CSharpier
         private Doc PrintForEachVariableStatementSyntax(
             ForEachVariableStatementSyntax node
         ) {
-            return Docs.Concat(
+            return Doc.Concat(
                 ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.AwaitKeyword,
@@ -19,7 +19,7 @@ namespace CSharpier
                     node.ForEachKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                SyntaxTokens.Print(node.OpenParenToken),
+                Token.Print(node.OpenParenToken),
                 this.Print(node.Variable),
                 " ",
                 this.PrintSyntaxToken(
@@ -27,7 +27,7 @@ namespace CSharpier
                     afterTokenIfNoTrailing: " "
                 ),
                 this.Print(node.Expression),
-                SyntaxTokens.Print(node.CloseParenToken),
+                Token.Print(node.CloseParenToken),
                 this.Print(node.Statement)
             );
         }

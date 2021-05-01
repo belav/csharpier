@@ -8,7 +8,7 @@ namespace CSharpier
     {
         private Doc PrintEmptyStatementSyntax(EmptyStatementSyntax node)
         {
-            return SyntaxTokens.Print(node.SemicolonToken);
+            return Token.Print(node.SemicolonToken);
         }
     }
 }

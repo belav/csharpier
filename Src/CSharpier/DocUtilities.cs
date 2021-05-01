@@ -22,7 +22,7 @@ namespace CSharpier
             {
                 var doc = docs[x];
 
-                if (doc == Docs.Null)
+                if (doc == Doc.Null)
                 {
                     docs.RemoveAt(x);
                 }
@@ -68,7 +68,7 @@ namespace CSharpier
                         case HardLine:
                             if (removeNextHardLine)
                             {
-                                indentDoc.Contents = Docs.Null;
+                                indentDoc.Contents = Doc.Null;
                                 return;
                             }
 
@@ -87,7 +87,7 @@ namespace CSharpier
                         case HardLine:
                             if (removeNextHardLine)
                             {
-                                group.Contents = Docs.Null;
+                                group.Contents = Doc.Null;
                                 return;
                             }
 

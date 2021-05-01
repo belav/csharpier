@@ -7,10 +7,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(NameEqualsSyntax node)
         {
-            return Docs.Concat(
-                SyntaxNodes.Print(node.Name),
+            return Doc.Concat(
+                Node.Print(node.Name),
                 " ",
-                SyntaxTokens.PrintWithSuffix(node.EqualsToken, " ")
+                Token.PrintWithSuffix(node.EqualsToken, " ")
             );
         }
     }

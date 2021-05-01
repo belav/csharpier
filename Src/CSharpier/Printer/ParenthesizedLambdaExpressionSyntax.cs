@@ -29,7 +29,7 @@ namespace CSharpier
                 docs.Add(this.PrintBlockSyntax(node.Block));
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

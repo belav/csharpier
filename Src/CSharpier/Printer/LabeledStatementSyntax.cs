@@ -13,8 +13,8 @@ namespace CSharpier
             {
                 ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                SyntaxTokens.Print(node.Identifier),
-                SyntaxTokens.Print(node.ColonToken)
+                Token.Print(node.Identifier),
+                Token.Print(node.ColonToken)
             };
             if (node.Statement is BlockSyntax blockSyntax)
             {
@@ -22,9 +22,9 @@ namespace CSharpier
             }
             else
             {
-                docs.Add(Docs.HardLine, SyntaxNodes.Print(node.Statement));
+                docs.Add(Doc.HardLine, Node.Print(node.Statement));
             }
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

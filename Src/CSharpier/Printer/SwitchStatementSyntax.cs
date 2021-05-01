@@ -11,32 +11,32 @@ namespace CSharpier
         {
             Doc sections = node.Sections.Count == 0
                 ? " "
-                : Docs.Concat(
-                        Docs.Indent(
-                            Docs.Concat(
-                                Docs.HardLine,
-                                Docs.Join(
-                                    Docs.HardLine,
+                : Doc.Concat(
+                        Doc.Indent(
+                            Doc.Concat(
+                                Doc.HardLine,
+                                Doc.Join(
+                                    Doc.HardLine,
                                     node.Sections.Select(this.Print)
                                 )
                             )
                         ),
-                        Docs.HardLine
+                        Doc.HardLine
                     );
-            return Docs.Concat(
+            return Doc.Concat(
                 ExtraNewLines.Print(node),
-                Docs.Group(
+                Doc.Group(
                     this.PrintSyntaxToken(
                         node.SwitchKeyword,
                         afterTokenIfNoTrailing: " "
                     ),
-                    SyntaxTokens.Print(node.OpenParenToken),
+                    Token.Print(node.OpenParenToken),
                     this.Print(node.Expression),
-                    SyntaxTokens.Print(node.CloseParenToken),
-                    Docs.Line,
-                    SyntaxTokens.Print(node.OpenBraceToken),
+                    Token.Print(node.CloseParenToken),
+                    Doc.Line,
+                    Token.Print(node.OpenBraceToken),
                     sections,
-                    SyntaxTokens.Print(node.CloseBraceToken)
+                    Token.Print(node.CloseBraceToken)
                 )
             );
         }

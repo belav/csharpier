@@ -23,7 +23,7 @@ namespace CSharpier
             TypeSyntax? returnType = null;
             ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier = null;
             TypeParameterListSyntax? typeParameterList = null;
-            Doc identifier = Docs.Null;
+            Doc identifier = Doc.Null;
             var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
             ParameterListSyntax? parameterList = null;
             BlockSyntax? body = null;
@@ -58,7 +58,7 @@ namespace CSharpier
                 attributeLists = localFunctionStatementSyntax.AttributeLists;
                 modifiers = localFunctionStatementSyntax.Modifiers;
                 returnType = localFunctionStatementSyntax.ReturnType;
-                identifier = SyntaxTokens.Print(
+                identifier = Token.Print(
                     localFunctionStatementSyntax.Identifier
                 );
                 typeParameterList = localFunctionStatementSyntax.TypeParameterList;
@@ -90,11 +90,11 @@ namespace CSharpier
             {
                 docs.Add(
                     this.Print(explicitInterfaceSpecifier.Name),
-                    SyntaxTokens.Print(explicitInterfaceSpecifier.DotToken)
+                    Token.Print(explicitInterfaceSpecifier.DotToken)
                 );
             }
 
-            if (identifier != Docs.Null)
+            if (identifier != Doc.Null)
             {
                 docs.Add(identifier);
             }
@@ -170,10 +170,10 @@ namespace CSharpier
 
             if (semicolonToken.HasValue)
             {
-                docs.Add(SyntaxTokens.Print(semicolonToken.Value));
+                docs.Add(Token.Print(semicolonToken.Value));
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

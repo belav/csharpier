@@ -9,9 +9,9 @@ namespace CSharpier
         private Doc PrintConditionalAccessExpressionSyntax(
             ConditionalAccessExpressionSyntax node
         ) {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.Print(node.Expression),
-                SyntaxTokens.Print(node.OperatorToken),
+                Token.Print(node.OperatorToken),
                 this.Print(node.WhenNotNull)
             );
         }

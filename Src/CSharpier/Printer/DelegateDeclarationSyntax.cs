@@ -21,15 +21,15 @@ namespace CSharpier
                 )
             );
             docs.Add(this.Print(node.ReturnType));
-            docs.Add(" ", SyntaxTokens.Print(node.Identifier));
+            docs.Add(" ", Token.Print(node.Identifier));
             if (node.TypeParameterList != null)
             {
                 docs.Add(this.Print(node.TypeParameterList));
             }
             docs.Add(this.Print(node.ParameterList));
             docs.Add(this.PrintConstraintClauses(node.ConstraintClauses));
-            docs.Add(SyntaxTokens.Print(node.SemicolonToken));
-            return Docs.Concat(docs);
+            docs.Add(Token.Print(node.SemicolonToken));
+            return Doc.Concat(docs);
         }
     }
 }

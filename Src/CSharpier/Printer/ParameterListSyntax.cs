@@ -10,23 +10,23 @@ namespace CSharpier
             ParameterListSyntax node,
             string? groupId = null
         ) {
-            return Docs.GroupWithId(
+            return Doc.GroupWithId(
                 groupId ?? string.Empty,
-                SyntaxTokens.Print(node.OpenParenToken),
+                Token.Print(node.OpenParenToken),
                 node.Parameters.Count > 0
-                    ? Docs.Concat(
-                            Docs.Indent(
-                                Docs.SoftLine,
+                    ? Doc.Concat(
+                            Doc.Indent(
+                                Doc.SoftLine,
                                 SeparatedSyntaxList.Print(
                                     node.Parameters,
                                     this.PrintParameterSyntax,
-                                    Docs.Line
+                                    Doc.Line
                                 )
                             ),
-                            Docs.SoftLine
+                            Doc.SoftLine
                         )
                     : Doc.Null,
-                SyntaxTokens.Print(node.CloseParenToken)
+                Token.Print(node.CloseParenToken)
             );
         }
     }

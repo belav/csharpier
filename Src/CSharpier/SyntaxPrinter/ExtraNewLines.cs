@@ -14,7 +14,7 @@ namespace CSharpier.SyntaxPrinter
             {
                 if (leadingTrivia.Kind() == SyntaxKind.EndOfLineTrivia)
                 {
-                    docs.Add(Docs.HardLine);
+                    docs.Add(Doc.HardLine);
                     // ensures we only print a single new line
                     break;
                 }
@@ -24,7 +24,7 @@ namespace CSharpier.SyntaxPrinter
                 }
             }
 
-            return docs.Any() ? Docs.Concat(docs) : Doc.Null;
+            return docs.Any() ? Doc.Concat(docs) : Doc.Null;
         }
     }
 }

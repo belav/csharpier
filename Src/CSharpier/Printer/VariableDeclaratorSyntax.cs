@@ -11,7 +11,7 @@ namespace CSharpier
         private Doc PrintVariableDeclaratorSyntax(
             VariableDeclaratorSyntax node
         ) {
-            var docs = new List<Doc> { SyntaxTokens.Print(node.Identifier) };
+            var docs = new List<Doc> { Token.Print(node.Identifier) };
             if (node.ArgumentList != null)
             {
                 docs.Add(
@@ -22,7 +22,7 @@ namespace CSharpier
             {
                 docs.Add(this.PrintEqualsValueClauseSyntax(node.Initializer));
             }
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

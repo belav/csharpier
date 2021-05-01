@@ -8,7 +8,7 @@ namespace CSharpier
         private Doc PrintDeclarationPatternSyntax(
             DeclarationPatternSyntax node
         ) {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.Print(node.Type),
                 " ",
                 this.Print(node.Designation)

@@ -9,17 +9,17 @@ namespace CSharpier
     {
         private Doc PrintRecursivePatternSyntax(RecursivePatternSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 node.Type != null ? this.Print(node.Type) : Doc.Null,
                 node.PositionalPatternClause != null
-                    ? Docs.Concat(
+                    ? Doc.Concat(
                             this.PrintSyntaxToken(
                                 node.PositionalPatternClause.OpenParenToken
                             ),
                             SeparatedSyntaxList.Print(
                                 node.PositionalPatternClause.Subpatterns,
                                 subpatternNode =>
-                                    Docs.Concat(
+                                    Doc.Concat(
                                         subpatternNode.NameColon != null
                                             ? this.PrintNameColonSyntax(
                                                     subpatternNode.NameColon
@@ -35,7 +35,7 @@ namespace CSharpier
                         )
                     : string.Empty,
                 node.PropertyPatternClause != null
-                    ? Docs.Concat(
+                    ? Doc.Concat(
                             " ",
                             this.PrintSyntaxToken(
                                 node.PropertyPatternClause.OpenBraceToken,
@@ -44,7 +44,7 @@ namespace CSharpier
                             SeparatedSyntaxList.Print(
                                 node.PropertyPatternClause.Subpatterns,
                                 subpatternNode =>
-                                    Docs.Concat(
+                                    Doc.Concat(
                                         subpatternNode.NameColon != null
                                             ? this.PrintNameColonSyntax(
                                                     subpatternNode.NameColon

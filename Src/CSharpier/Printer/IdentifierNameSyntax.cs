@@ -8,7 +8,7 @@ namespace CSharpier
     {
         private Doc PrintIdentifierNameSyntax(IdentifierNameSyntax node)
         {
-            return SyntaxTokens.Print(node.Identifier);
+            return Token.Print(node.Identifier);
         }
     }
 }

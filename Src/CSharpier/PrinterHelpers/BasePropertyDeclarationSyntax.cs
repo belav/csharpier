@@ -35,8 +35,8 @@ namespace CSharpier
             ) {
                 expressionBody = indexerDeclarationSyntax.ExpressionBody;
                 explicitInterfaceSpecifierSyntax = indexerDeclarationSyntax.ExplicitInterfaceSpecifier;
-                identifier = Docs.Concat(
-                    SyntaxTokens.Print(indexerDeclarationSyntax.ThisKeyword),
+                identifier = Doc.Concat(
+                    Token.Print(indexerDeclarationSyntax.ThisKeyword),
                     this.Print(indexerDeclarationSyntax.ParameterList)
                 );
                 semicolonToken = indexerDeclarationSyntax.SemicolonToken;
@@ -67,15 +67,15 @@ namespace CSharpier
                             o.AttributeLists.Any()
                     )
                 ) {
-                    separator = Docs.Line;
+                    separator = Doc.Line;
                 }
 
-                contents = Docs.Group(
-                    Docs.Concat(
+                contents = Doc.Group(
+                    Doc.Concat(
                         separator,
-                        SyntaxTokens.Print(node.AccessorList.OpenBraceToken),
-                        Docs.Group(
-                            Docs.Indent(
+                        Token.Print(node.AccessorList.OpenBraceToken),
+                        Doc.Group(
+                            Doc.Indent(
                                 node.AccessorList.Accessors.Select(
                                         o =>
                                             this.PrintAccessorDeclarationSyntax(
@@ -87,13 +87,13 @@ namespace CSharpier
                             )
                         ),
                         separator,
-                        SyntaxTokens.Print(node.AccessorList.CloseBraceToken)
+                        Token.Print(node.AccessorList.CloseBraceToken)
                     )
                 );
             }
             else if (expressionBody != null)
             {
-                contents = Docs.Concat(
+                contents = Doc.Concat(
                     this.PrintArrowExpressionClauseSyntax(expressionBody)
                 );
             }
@@ -103,15 +103,15 @@ namespace CSharpier
             docs.Add(ExtraNewLines.Print(node));
             docs.Add(this.PrintAttributeLists(node, node.AttributeLists));
 
-            return Docs.Group(
-                Docs.Concat(
-                    Docs.Concat(docs),
+            return Doc.Group(
+                Doc.Concat(
+                    Doc.Concat(docs),
                     Modifiers.Print(node.Modifiers),
                     eventKeyword,
                     this.Print(node.Type),
                     " ",
                     explicitInterfaceSpecifierSyntax != null
-                        ? Docs.Concat(
+                        ? Doc.Concat(
                                 this.Print(
                                     explicitInterfaceSpecifierSyntax.Name
                                 ),
@@ -126,7 +126,7 @@ namespace CSharpier
                         ? this.PrintEqualsValueClauseSyntax(initializer)
                         : Doc.Null,
                     semicolonToken.HasValue
-                        ? SyntaxTokens.Print(semicolonToken.Value)
+                        ? Token.Print(semicolonToken.Value)
                         : Doc.Null
                 )
             );
@@ -143,7 +143,7 @@ namespace CSharpier
                 node.Body != null ||
                 node.ExpressionBody != null
             ) {
-                docs.Add(Docs.HardLine);
+                docs.Add(Doc.HardLine);
             }
             else
             {
@@ -152,7 +152,7 @@ namespace CSharpier
 
             docs.Add(this.PrintAttributeLists(node, node.AttributeLists));
             docs.Add(Modifiers.Print(node.Modifiers));
-            docs.Add(SyntaxTokens.Print(node.Keyword));
+            docs.Add(Token.Print(node.Keyword));
 
             if (node.Body != null)
             {
@@ -165,9 +165,9 @@ namespace CSharpier
                 );
             }
 
-            docs.Add(SyntaxTokens.Print(node.SemicolonToken));
+            docs.Add(Token.Print(node.SemicolonToken));
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

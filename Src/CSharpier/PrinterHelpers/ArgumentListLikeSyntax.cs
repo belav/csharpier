@@ -12,20 +12,20 @@ namespace CSharpier
             SeparatedSyntaxList<ArgumentSyntax> arguments,
             SyntaxToken closeParenToken
         ) =>
-            Docs.Concat(
-                SyntaxTokens.Print(openParenToken),
+            Doc.Concat(
+                Token.Print(openParenToken),
                 arguments.Any()
-                    ? Docs.Indent(
-                            Docs.SoftLine,
+                    ? Doc.Indent(
+                            Doc.SoftLine,
                             SeparatedSyntaxList.Print(
                                 arguments,
                                 this.PrintArgumentSyntax,
-                                Docs.Line
+                                Doc.Line
                             )
                         )
                     : Doc.Null,
-                arguments.Any() ? Docs.SoftLine : Doc.Null,
-                SyntaxTokens.Print(closeParenToken)
+                arguments.Any() ? Doc.SoftLine : Doc.Null,
+                Token.Print(closeParenToken)
             );
     }
 }

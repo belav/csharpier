@@ -9,16 +9,16 @@ namespace CSharpier
     {
         private Doc PrintTypeArgumentListSyntax(TypeArgumentListSyntax node)
         {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.LessThanToken),
-                Docs.Indent(
+            return Doc.Concat(
+                Token.Print(node.LessThanToken),
+                Doc.Indent(
                     SeparatedSyntaxList.Print(
                         node.Arguments,
                         this.Print,
-                        Docs.Line
+                        Doc.Line
                     )
                 ),
-                SyntaxTokens.Print(node.GreaterThanToken)
+                Token.Print(node.GreaterThanToken)
             );
         }
     }

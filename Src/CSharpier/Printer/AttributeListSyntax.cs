@@ -17,12 +17,12 @@ namespace CSharpier
                 docs.Add(ExtraNewLines.Print(node));
             }
 
-            docs.Add(SyntaxTokens.Print(node.OpenBracketToken));
+            docs.Add(Token.Print(node.OpenBracketToken));
             if (node.Target != null)
             {
                 docs.Add(
-                    SyntaxTokens.Print(node.Target.Identifier),
-                    SyntaxTokens.PrintWithSuffix(node.Target.ColonToken, " ")
+                    Token.Print(node.Target.Identifier),
+                    Token.PrintWithSuffix(node.Target.ColonToken, " ")
                 );
             }
 
@@ -36,17 +36,15 @@ namespace CSharpier
                         return name;
                     }
 
-                    return Docs.Group(
+                    return Doc.Group(
                         name,
-                        SyntaxTokens.Print(
-                            attributeNode.ArgumentList.OpenParenToken
-                        ),
-                        Docs.Indent(
-                            Docs.SoftLine,
+                        Token.Print(attributeNode.ArgumentList.OpenParenToken),
+                        Doc.Indent(
+                            Doc.SoftLine,
                             SeparatedSyntaxList.Print(
                                 attributeNode.ArgumentList.Arguments,
                                 attributeArgumentNode =>
-                                    Docs.Concat(
+                                    Doc.Concat(
                                         attributeArgumentNode.NameEquals != null
                                             ? NameEquals.Print(
                                                     attributeArgumentNode.NameEquals
@@ -61,29 +59,29 @@ namespace CSharpier
                                             attributeArgumentNode.Expression
                                         )
                                     ),
-                                Docs.Line
+                                Doc.Line
                             ),
-                            SyntaxTokens.Print(
+                            Token.Print(
                                 attributeNode.ArgumentList.CloseParenToken
                             )
                         )
                     );
                 },
-                Docs.Line
+                Doc.Line
             );
 
             docs.Add(
                 node.Attributes.Count > 1
-                    ? Docs.Indent(Docs.SoftLine, printSeparatedSyntaxList)
+                    ? Doc.Indent(Doc.SoftLine, printSeparatedSyntaxList)
                     : printSeparatedSyntaxList
             );
 
             docs.Add(
-                node.Attributes.Count > 1 ? Docs.SoftLine : Docs.Null,
-                SyntaxTokens.Print(node.CloseBracketToken)
+                node.Attributes.Count > 1 ? Doc.SoftLine : Doc.Null,
+                Token.Print(node.CloseBracketToken)
             );
 
-            return Docs.Group(docs);
+            return Doc.Group(docs);
         }
     }
 }

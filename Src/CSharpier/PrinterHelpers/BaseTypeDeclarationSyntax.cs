@@ -30,10 +30,10 @@ namespace CSharpier
                 hasMembers = typeDeclarationSyntax.Members.Count > 0;
                 if (typeDeclarationSyntax.Members.Count > 0)
                 {
-                    members = Docs.Indent(
-                        Docs.HardLine,
-                        Docs.Join(
-                            Docs.HardLine,
+                    members = Doc.Indent(
+                        Doc.HardLine,
+                        Doc.Join(
+                            Doc.HardLine,
                             typeDeclarationSyntax.Members.Select(this.Print)
                         )
                     );
@@ -64,12 +64,12 @@ namespace CSharpier
             }
             else if (node is EnumDeclarationSyntax enumDeclarationSyntax)
             {
-                members = Docs.Indent(
-                    Docs.HardLine,
+                members = Doc.Indent(
+                    Doc.HardLine,
                     SeparatedSyntaxList.Print(
                         enumDeclarationSyntax.Members,
                         this.PrintEnumMemberDeclarationSyntax,
-                        Docs.HardLine
+                        Doc.HardLine
                     )
                 );
                 hasMembers = enumDeclarationSyntax.Members.Count > 0;
@@ -93,7 +93,7 @@ namespace CSharpier
                 );
             }
 
-            docs.Add(SyntaxTokens.Print(node.Identifier));
+            docs.Add(Token.Print(node.Identifier));
 
             if (parameterList != null)
             {
@@ -118,34 +118,34 @@ namespace CSharpier
 
                 docs.Add(
                     groupId != null
-                        ? Docs.IfBreak(" ", Docs.Line, groupId)
-                        : Docs.HardLine,
-                    SyntaxTokens.Print(node.OpenBraceToken),
+                        ? Doc.IfBreak(" ", Doc.Line, groupId)
+                        : Doc.HardLine,
+                    Token.Print(node.OpenBraceToken),
                     members,
-                    Docs.HardLine,
-                    SyntaxTokens.Print(node.CloseBraceToken)
+                    Doc.HardLine,
+                    Token.Print(node.CloseBraceToken)
                 );
             }
             else if (node.OpenBraceToken.Kind() != SyntaxKind.None)
             {
                 Doc separator = node.CloseBraceToken.LeadingTrivia.Any()
-                    ? Docs.Line
+                    ? Doc.Line
                     : " ";
 
                 docs.Add(
                     separator,
-                    SyntaxTokens.Print(node.OpenBraceToken),
+                    Token.Print(node.OpenBraceToken),
                     separator,
-                    SyntaxTokens.Print(node.CloseBraceToken)
+                    Token.Print(node.CloseBraceToken)
                 );
             }
 
             if (semicolonToken.HasValue)
             {
-                docs.Add(SyntaxTokens.Print(semicolonToken.Value));
+                docs.Add(Token.Print(semicolonToken.Value));
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

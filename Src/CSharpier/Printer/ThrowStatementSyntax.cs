@@ -9,13 +9,13 @@ namespace CSharpier
         private Doc PrintThrowStatementSyntax(ThrowStatementSyntax node)
         {
             Doc expression = node.Expression != null
-                ? Docs.Concat(" ", this.Print(node.Expression))
+                ? Doc.Concat(" ", this.Print(node.Expression))
                 : string.Empty;
-            return Docs.Concat(
+            return Doc.Concat(
                 ExtraNewLines.Print(node),
-                SyntaxTokens.Print(node.ThrowKeyword),
+                Token.Print(node.ThrowKeyword),
                 expression,
-                SyntaxTokens.Print(node.SemicolonToken)
+                Token.Print(node.SemicolonToken)
             );
         }
     }

@@ -14,7 +14,7 @@ namespace CSharpier
     {
         public Printer()
         {
-            SyntaxNodes.Initialize(this);
+            Node.Initialize(this);
         }
 
         private Doc PrintAttributeLists(
@@ -29,10 +29,10 @@ namespace CSharpier
             var docs = new List<Doc>();
             Doc separator = node is TypeParameterSyntax ||
                 node is ParameterSyntax
-                ? Docs.Line
-                : Docs.HardLine;
+                ? Doc.Line
+                : Doc.HardLine;
             docs.Add(
-                Docs.Join(
+                Doc.Join(
                     separator,
                     attributeLists.Select(this.PrintAttributeListSyntax)
                 )
@@ -43,7 +43,7 @@ namespace CSharpier
                 docs.Add(separator);
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
 
         private Doc PrintConstraintClauses(
@@ -58,10 +58,10 @@ namespace CSharpier
 
             var docs = new List<Doc>
             {
-                Docs.Indent(
-                    Docs.HardLine,
-                    Docs.Join(
-                        Docs.HardLine,
+                Doc.Indent(
+                    Doc.HardLine,
+                    Doc.Join(
+                        Doc.HardLine,
                         constraintClausesList.Select(
                             this.PrintTypeParameterConstraintClauseSyntax
                         )
@@ -69,7 +69,7 @@ namespace CSharpier
                 )
             };
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
 
         private Doc PrintBaseFieldDeclarationSyntax(
@@ -85,16 +85,16 @@ namespace CSharpier
                 node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax
             ) {
                 docs.Add(
-                    SyntaxTokens.PrintWithSuffix(
+                    Token.PrintWithSuffix(
                         eventFieldDeclarationSyntax.EventKeyword,
                         " "
                     )
                 );
             }
 
-            docs.Add(SyntaxNodes.Print(node.Declaration));
-            docs.Add(SyntaxTokens.Print(node.SemicolonToken));
-            return Docs.Concat(docs);
+            docs.Add(Node.Print(node.Declaration));
+            docs.Add(Token.Print(node.SemicolonToken));
+            return Doc.Concat(docs);
         }
     }
 }

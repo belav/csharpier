@@ -9,15 +9,15 @@ namespace CSharpier
         private Doc PrintGotoStatementSyntax(GotoStatementSyntax node)
         {
             Doc expression = node.Expression != null
-                ? Docs.Concat(" ", this.Print(node.Expression))
+                ? Doc.Concat(" ", this.Print(node.Expression))
                 : string.Empty;
-            return Docs.Concat(
+            return Doc.Concat(
                 ExtraNewLines.Print(node),
-                SyntaxTokens.Print(node.GotoKeyword),
-                node.CaseOrDefaultKeyword.RawKind != 0 ? " " : Docs.Null,
-                SyntaxTokens.Print(node.CaseOrDefaultKeyword),
+                Token.Print(node.GotoKeyword),
+                node.CaseOrDefaultKeyword.RawKind != 0 ? " " : Doc.Null,
+                Token.Print(node.CaseOrDefaultKeyword),
                 expression,
-                SyntaxTokens.Print(node.SemicolonToken)
+                Token.Print(node.SemicolonToken)
             );
         }
     }

@@ -16,10 +16,7 @@ namespace CSharpier
             SyntaxToken syntaxToken,
             Doc? afterTokenIfNoTrailing = null
         ) {
-            return SyntaxTokens.PrintSyntaxToken(
-                syntaxToken,
-                afterTokenIfNoTrailing
-            );
+            return Token.PrintSyntaxToken(syntaxToken, afterTokenIfNoTrailing);
         }
     }
 }

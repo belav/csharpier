@@ -8,9 +8,9 @@ namespace CSharpier
     {
         private Doc PrintContinueStatementSyntax(ContinueStatementSyntax node)
         {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.ContinueKeyword),
-                SyntaxTokens.Print(node.SemicolonToken)
+            return Doc.Concat(
+                Token.Print(node.ContinueKeyword),
+                Token.Print(node.SemicolonToken)
             );
         }
     }

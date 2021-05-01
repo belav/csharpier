@@ -8,13 +8,13 @@ namespace CSharpier
     {
         private Doc PrintCaseSwitchLabelSyntax(CaseSwitchLabelSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.PrintSyntaxToken(
                     node.Keyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                Docs.Group(this.Print(node.Value)),
-                SyntaxTokens.Print(node.ColonToken)
+                Doc.Group(this.Print(node.Value)),
+                Token.Print(node.ColonToken)
             );
         }
     }

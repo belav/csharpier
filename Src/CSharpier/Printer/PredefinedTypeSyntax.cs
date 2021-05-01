@@ -8,7 +8,7 @@ namespace CSharpier
     {
         private Doc PrintPredefinedTypeSyntax(PredefinedTypeSyntax node)
         {
-            return SyntaxTokens.Print(node.Keyword);
+            return Token.Print(node.Keyword);
         }
     }
 }

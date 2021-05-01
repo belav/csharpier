@@ -14,13 +14,13 @@ namespace CSharpier
             {
                 this.PrintAttributeLists(node, node.AttributeLists),
                 Modifiers.Print(node.Modifiers),
-                SyntaxTokens.Print(node.Identifier)
+                Token.Print(node.Identifier)
             };
             if (node.EqualsValue != null)
             {
                 docs.Add(this.PrintEqualsValueClauseSyntax(node.EqualsValue));
             }
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

@@ -25,21 +25,21 @@ namespace CSharpier
         {
             Doc statementSeparator = node.Parent is AccessorDeclarationSyntax &&
                 node.Statements.Count <= 1
-                ? Docs.Line
-                : Docs.HardLine;
+                ? Doc.Line
+                : Doc.HardLine;
 
             var docs = new List<Doc>
             {
                 groupId != null
-                    ? Docs.IfBreak(" ", Docs.Line, groupId)
-                    : Docs.Line,
-                SyntaxTokens.Print(node.OpenBraceToken)
+                    ? Doc.IfBreak(" ", Doc.Line, groupId)
+                    : Doc.Line,
+                Token.Print(node.OpenBraceToken)
             };
             if (node.Statements.Count > 0)
             {
-                var innerDoc = Docs.Indent(
+                var innerDoc = Doc.Indent(
                     statementSeparator,
-                    Docs.Join(
+                    Doc.Join(
                         statementSeparator,
                         node.Statements.Select(this.Print)
                     )
@@ -47,14 +47,14 @@ namespace CSharpier
 
                 DocUtilities.RemoveInitialDoubleHardLine(innerDoc);
 
-                docs.Add(Docs.Concat(innerDoc, statementSeparator));
+                docs.Add(Doc.Concat(innerDoc, statementSeparator));
             }
 
             docs.Add(
-                node.Statements.Count == 0 ? " " : Docs.Null,
-                SyntaxTokens.Print(node.CloseBraceToken)
+                node.Statements.Count == 0 ? " " : Doc.Null,
+                Token.Print(node.CloseBraceToken)
             );
-            return Docs.Group(docs);
+            return Doc.Group(docs);
         }
     }
 }

@@ -9,11 +9,11 @@ namespace CSharpier
         private Doc PrintAssignmentExpressionSyntax(
             AssignmentExpressionSyntax node
         ) {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.Print(node.Left),
                 " ",
-                SyntaxTokens.Print(node.OperatorToken),
-                node.Right is QueryExpressionSyntax ? Docs.Null : " ",
+                Token.Print(node.OperatorToken),
+                node.Right is QueryExpressionSyntax ? Doc.Null : " ",
                 this.Print(node.Right)
             );
         }

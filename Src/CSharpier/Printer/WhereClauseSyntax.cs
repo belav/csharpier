@@ -8,9 +8,9 @@ namespace CSharpier
     {
         private Doc PrintWhereClauseSyntax(WhereClauseSyntax node)
         {
-            return Docs.Group(
-                SyntaxTokens.Print(node.WhereKeyword),
-                Docs.Indent(Docs.Line, this.Print(node.Condition))
+            return Doc.Group(
+                Token.Print(node.WhereKeyword),
+                Doc.Indent(Doc.Line, this.Print(node.Condition))
             );
         }
     }

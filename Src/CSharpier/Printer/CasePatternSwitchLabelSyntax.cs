@@ -22,8 +22,8 @@ namespace CSharpier
             {
                 docs.Add(" ", this.Print(node.WhenClause));
             }
-            docs.Add(SyntaxTokens.Print(node.ColonToken));
-            return Docs.Concat(docs);
+            docs.Add(Token.Print(node.ColonToken));
+            return Doc.Concat(docs);
         }
     }
 }

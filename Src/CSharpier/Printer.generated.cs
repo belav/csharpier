@@ -14,7 +14,7 @@ namespace CSharpier
         {
             if (syntaxNode == null)
             {
-                return Docs.Null;
+                return Doc.Null;
             }
 
             // TODO 0 kill? runtime repo has files that will fail on deep recursion

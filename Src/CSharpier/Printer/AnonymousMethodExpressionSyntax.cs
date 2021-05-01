@@ -14,7 +14,7 @@ namespace CSharpier
             var docs = new List<Doc>
             {
                 Modifiers.Print(node.Modifiers),
-                SyntaxTokens.Print(node.DelegateKeyword)
+                Token.Print(node.DelegateKeyword)
             };
 
             string? groupId = null;
@@ -35,7 +35,7 @@ namespace CSharpier
                         )
             );
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

@@ -15,9 +15,9 @@ namespace CSharpier
                     node.LockKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                SyntaxTokens.Print(node.OpenParenToken),
+                Token.Print(node.OpenParenToken),
                 this.Print(node.Expression),
-                SyntaxTokens.Print(node.CloseParenToken)
+                Token.Print(node.CloseParenToken)
             };
             var statement = this.Print(node.Statement);
             if (node.Statement is BlockSyntax)
@@ -26,10 +26,10 @@ namespace CSharpier
             }
             else
             {
-                docs.Add(Docs.Indent(Docs.HardLine, statement));
+                docs.Add(Doc.Indent(Doc.HardLine, statement));
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

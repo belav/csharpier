@@ -9,7 +9,7 @@ namespace CSharpier
     {
         private Doc PrintUsingDirectiveSyntax(UsingDirectiveSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.UsingKeyword,
@@ -21,7 +21,7 @@ namespace CSharpier
                 ),
                 node.Alias == null ? Doc.Null : NameEquals.Print(node.Alias),
                 this.Print(node.Name),
-                SyntaxTokens.Print(node.SemicolonToken)
+                Token.Print(node.SemicolonToken)
             );
         }
     }

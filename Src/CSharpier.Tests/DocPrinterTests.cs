@@ -12,7 +12,7 @@ namespace CSharpier.Tests
         [Test]
         public void Basic_Concat()
         {
-            var doc = Docs.Concat("1", "2", "3");
+            var doc = Doc.Concat("1", "2", "3");
 
             PrintedDocShouldBe(doc, "123");
         }
@@ -20,7 +20,7 @@ namespace CSharpier.Tests
         [Test]
         public void Concat_With_Hardline()
         {
-            var doc = Docs.Concat("1", Docs.HardLine, "3");
+            var doc = Doc.Concat("1", Doc.HardLine, "3");
 
             PrintedDocShouldBe(doc, $"1{NewLine}3");
         }
@@ -28,7 +28,7 @@ namespace CSharpier.Tests
         [Test]
         public void Concat_With_Line()
         {
-            var doc = Docs.Concat("1", Docs.Line, "3");
+            var doc = Doc.Concat("1", Doc.Line, "3");
 
             PrintedDocShouldBe(doc, $"1{NewLine}3");
         }
@@ -36,7 +36,7 @@ namespace CSharpier.Tests
         [Test]
         public void Group_With_Line()
         {
-            var doc = Docs.Group(Docs.Concat("1", Docs.Line, "3"));
+            var doc = Doc.Group(Doc.Concat("1", Doc.Line, "3"));
 
             PrintedDocShouldBe(doc, "1 3");
         }
@@ -44,7 +44,7 @@ namespace CSharpier.Tests
         [Test]
         public void Group_With_HardLine()
         {
-            var doc = Docs.Group(Docs.Concat("1", Docs.HardLine, "3"));
+            var doc = Doc.Group(Doc.Concat("1", Doc.HardLine, "3"));
 
             PrintedDocShouldBe(doc, $"1{NewLine}3");
         }
@@ -52,8 +52,8 @@ namespace CSharpier.Tests
         [Test]
         public void Group_With_Line_And_Hardline()
         {
-            var doc = Docs.Group(
-                Docs.Concat("1", Docs.Line, "2", Docs.HardLine, "3")
+            var doc = Doc.Group(
+                Doc.Concat("1", Doc.Line, "2", Doc.HardLine, "3")
             );
 
             PrintedDocShouldBe(doc, $"1{NewLine}2{NewLine}3");
@@ -62,15 +62,8 @@ namespace CSharpier.Tests
         [Test]
         public void Group_With_Line_And_BreakParent()
         {
-            var doc = Docs.Group(
-                Docs.Concat(
-                    "1",
-                    Docs.Line,
-                    "2",
-                    Docs.Line,
-                    "3",
-                    Docs.BreakParent
-                )
+            var doc = Doc.Group(
+                Doc.Concat("1", Doc.Line, "2", Doc.Line, "3", Doc.BreakParent)
             );
 
             PrintedDocShouldBe(doc, $"1{NewLine}2{NewLine}3");
@@ -79,18 +72,18 @@ namespace CSharpier.Tests
         [Test]
         public void Indent_With_BreakParent()
         {
-            var doc = Docs.Concat(
+            var doc = Doc.Concat(
                 "0",
-                Docs.Group(
-                    Docs.Indent(
-                        Docs.Concat(
-                            Docs.SoftLine,
+                Doc.Group(
+                    Doc.Indent(
+                        Doc.Concat(
+                            Doc.SoftLine,
                             "1",
-                            Docs.Line,
+                            Doc.Line,
                             "2",
-                            Docs.Line,
+                            Doc.Line,
                             "3",
-                            Docs.BreakParent
+                            Doc.BreakParent
                         )
                     )
                 )
@@ -106,8 +99,8 @@ namespace CSharpier.Tests
         public void Large_Group_Concat_With_Line()
         {
             const string longText = "LongTextLongTextLongTextLongText";
-            var doc = Docs.Group(
-                Docs.Concat(longText, Docs.Line, longText, Docs.Line, longText)
+            var doc = Doc.Group(
+                Doc.Concat(longText, Doc.Line, longText, Doc.Line, longText)
             );
 
             PrintedDocShouldBe(
@@ -119,9 +112,9 @@ namespace CSharpier.Tests
         [Test]
         public void Indent_With_Hardline()
         {
-            var doc = Docs.Concat(
+            var doc = Doc.Concat(
                 "0",
-                Docs.Indent(Docs.Concat(Docs.HardLine, "1", Docs.HardLine, "2"))
+                Doc.Indent(Doc.Concat(Doc.HardLine, "1", Doc.HardLine, "2"))
             );
 
             PrintedDocShouldBe(doc, $"0{NewLine}    1{NewLine}    2");
@@ -130,12 +123,12 @@ namespace CSharpier.Tests
         [Test]
         public void Two_Indents_With_Hardline()
         {
-            var doc = Docs.Concat(
+            var doc = Doc.Concat(
                 "0",
-                Docs.Concat(
-                    Docs.Indent(Docs.Concat(Docs.HardLine, "1")),
-                    Docs.HardLine,
-                    Docs.Indent(Docs.Concat(Docs.HardLine, "2"))
+                Doc.Concat(
+                    Doc.Indent(Doc.Concat(Doc.HardLine, "1")),
+                    Doc.HardLine,
+                    Doc.Indent(Doc.Concat(Doc.HardLine, "2"))
                 )
             );
 
@@ -145,7 +138,7 @@ namespace CSharpier.Tests
         [Test]
         public void Lines_Removed_From_Beginning()
         {
-            var doc = Docs.Concat(Docs.HardLine, "1");
+            var doc = Doc.Concat(Doc.HardLine, "1");
 
             PrintedDocShouldBe(doc, "1");
         }
@@ -153,7 +146,7 @@ namespace CSharpier.Tests
         [Test]
         public void Literal_Lines_Removed_From_Beginning()
         {
-            var doc = Docs.Concat(Docs.LiteralLine, "1");
+            var doc = Doc.Concat(Doc.LiteralLine, "1");
 
             PrintedDocShouldBe(doc, $"1");
         }
@@ -161,7 +154,7 @@ namespace CSharpier.Tests
         [Test]
         public void ForceFlat_Prevents_Breaking()
         {
-            var doc = Docs.ForceFlat("1", Docs.HardLine, "2");
+            var doc = Doc.ForceFlat("1", Doc.HardLine, "2");
 
             PrintedDocShouldBe(doc, "1 2");
         }
@@ -169,9 +162,9 @@ namespace CSharpier.Tests
         [Test]
         public void LiteralLine_Trims_Space()
         {
-            var doc = Docs.Concat(
+            var doc = Doc.Concat(
                 "{",
-                Docs.Indent(Docs.HardLine, "indent", Docs.LiteralLine),
+                Doc.Indent(Doc.HardLine, "indent", Doc.LiteralLine),
                 "}"
             );
 
@@ -181,15 +174,15 @@ namespace CSharpier.Tests
         [Test]
         public void LiteralLine_Does_Not_Trim_Output_Or_Indent_Next_Line()
         {
-            var doc = Docs.Concat(
+            var doc = Doc.Concat(
                 "(",
-                Docs.Indent(
-                    Docs.HardLine,
+                Doc.Indent(
+                    Doc.HardLine,
                     "1",
                     " ",
-                    Docs.LiteralLine,
+                    Doc.LiteralLine,
                     "2",
-                    Docs.HardLine,
+                    Doc.HardLine,
                     "3"
                 ),
                 ")"
@@ -204,9 +197,9 @@ namespace CSharpier.Tests
         [Test]
         public void ForceFlat_Prevents_Breaking_With_Long_Content()
         {
-            var doc = Docs.ForceFlat(
+            var doc = Doc.ForceFlat(
                 "lkjasdkfljalsjkdfkjlasdfjklakljsdfjkasdfkljsdafjk",
-                Docs.Line,
+                Doc.Line,
                 "jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj"
             );
 
@@ -219,13 +212,13 @@ namespace CSharpier.Tests
         [Test]
         public void Long_Statement_With_Line_Should_Not_Break_Unrelated_Group()
         {
-            var doc = Docs.Concat(
+            var doc = Doc.Concat(
                 "1",
-                Docs.Group(Docs.Line, Docs.Concat("2")),
-                Docs.HardLine,
-                Docs.Concat(
+                Doc.Group(Doc.Line, Doc.Concat("2")),
+                Doc.HardLine,
+                Doc.Concat(
                     "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
-                    Docs.Line,
+                    Doc.Line,
                     "2"
                 )
             );
@@ -238,9 +231,9 @@ namespace CSharpier.Tests
         [Test]
         public void ForceFlat_Should_Be_Included_In_Fits_Logic_Of_Printer()
         {
-            var doc = Docs.Group(
-                Docs.ForceFlat(
-                    Docs.Concat(
+            var doc = Doc.Group(
+                Doc.ForceFlat(
+                    Doc.Concat(
                         "1111111111",
                         " ",
                         "1111111111",
@@ -252,9 +245,9 @@ namespace CSharpier.Tests
                         "1111111111"
                     )
                 ),
-                Docs.Line,
-                Docs.ForceFlat(
-                    Docs.Concat(
+                Doc.Line,
+                Doc.ForceFlat(
+                    Doc.Concat(
                         "1111111111",
                         " ",
                         "1111111111",
@@ -277,7 +270,7 @@ namespace CSharpier.Tests
         [Test]
         public void IfBreak_Should_Print_Flat_Contents()
         {
-            var doc = Docs.Group(Docs.IfBreak("break", "flat"));
+            var doc = Doc.Group(Doc.IfBreak("break", "flat"));
 
             PrintedDocShouldBe(doc, "flat");
         }
@@ -285,7 +278,7 @@ namespace CSharpier.Tests
         [Test]
         public void IfBreak_Should_Print_Break_Contents()
         {
-            var doc = Docs.Group(Docs.HardLine, Docs.IfBreak("break", "flat"));
+            var doc = Doc.Group(Doc.HardLine, Doc.IfBreak("break", "flat"));
 
             PrintedDocShouldBe(doc, "break");
         }
@@ -293,10 +286,10 @@ namespace CSharpier.Tests
         [Test]
         public void IfBreak_Should_Print_Break_Contents_When_Group_Does_Not_Fit()
         {
-            var doc = Docs.Group(
+            var doc = Doc.Group(
                 "another",
-                Docs.Line,
-                Docs.IfBreak("break", "flat")
+                Doc.Line,
+                Doc.IfBreak("break", "flat")
             );
 
             PrintedDocShouldBe(doc, $"another{NewLine}break", 10);
@@ -305,9 +298,9 @@ namespace CSharpier.Tests
         [Test]
         public void IfBreak_Should_Print_Flat_Contents_When_GroupId_Does_Not_Break()
         {
-            var doc = Docs.Concat(
-                Docs.GroupWithId("1", "1"),
-                Docs.IfBreak("break", "flat", "1")
+            var doc = Doc.Concat(
+                Doc.GroupWithId("1", "1"),
+                Doc.IfBreak("break", "flat", "1")
             );
 
             PrintedDocShouldBe(doc, "1flat");
@@ -316,10 +309,10 @@ namespace CSharpier.Tests
         [Test]
         public void IfBreak_Should_Print_Break_Contents_When_GroupId_Breaks()
         {
-            var doc = Docs.Concat(
+            var doc = Doc.Concat(
                 "1",
-                Docs.GroupWithId("hl", Docs.HardLine),
-                Docs.IfBreak("break", "flat", "hl")
+                Doc.GroupWithId("hl", Doc.HardLine),
+                Doc.IfBreak("break", "flat", "hl")
             );
 
             PrintedDocShouldBe(doc, $"1{NewLine}break");
@@ -329,7 +322,7 @@ namespace CSharpier.Tests
         [TestCase("   ")]
         public void Trim_Should_Trim_Current_Line(string indent)
         {
-            var doc = Docs.Concat($"1{indent}", Docs.Trim);
+            var doc = Doc.Concat($"1{indent}", Doc.Trim);
 
             PrintedDocShouldBe(doc, "1");
         }
@@ -338,7 +331,7 @@ namespace CSharpier.Tests
         [TestCase("")]
         public void Trim_Should_Not_Trim_NonWhitespace(string value)
         {
-            var doc = Docs.Concat(value, Docs.Trim);
+            var doc = Doc.Concat(value, Doc.Trim);
 
             PrintedDocShouldBe(doc, value);
         }
@@ -346,16 +339,10 @@ namespace CSharpier.Tests
         [Test]
         public void Trim_Should_Trim_Indentation()
         {
-            var doc = Docs.Concat(
+            var doc = Doc.Concat(
                 "{",
-                Docs.Indent(
-                    Docs.HardLine,
-                    "1",
-                    Docs.HardLine,
-                    Docs.Trim,
-                    "#if"
-                ),
-                Docs.HardLine,
+                Doc.Indent(Doc.HardLine, "1", Doc.HardLine, Doc.Trim, "#if"),
+                Doc.HardLine,
                 "}"
             );
 
@@ -365,7 +352,7 @@ namespace CSharpier.Tests
         [Test]
         public void Trim_Should_Not_Affect_Fits()
         {
-            var doc = Docs.Group("test    ", Docs.Trim, Docs.Line, "test");
+            var doc = Doc.Group("test    ", Doc.Trim, Doc.Line, "test");
 
             PrintedDocShouldBe(doc, "test test", 10);
         }
@@ -373,9 +360,9 @@ namespace CSharpier.Tests
         [Test]
         public void TrailingComment_Does_Not_Get_Extra_Space()
         {
-            var doc = Docs.Concat(
+            var doc = Doc.Concat(
                 "x",
-                Docs.TrailingComment("// comment", CommentType.SingleLine),
+                Doc.TrailingComment("// comment", CommentType.SingleLine),
                 " ",
                 "y"
             );
@@ -386,10 +373,10 @@ namespace CSharpier.Tests
         [Test]
         public void TrailingComment_Does_Not_Get_Extra_Space_From_Line()
         {
-            var doc = Docs.Group(
+            var doc = Doc.Group(
                 "x",
-                Docs.TrailingComment("// comment", CommentType.SingleLine),
-                Docs.Line,
+                Doc.TrailingComment("// comment", CommentType.SingleLine),
+                Doc.Line,
                 "y"
             );
 
@@ -399,7 +386,7 @@ namespace CSharpier.Tests
         [Test]
         public void HardLineIfNoPreviousLine_Should_Insert_Line_If_There_Is_Not_One()
         {
-            var doc = Docs.Concat("1", Docs.HardLineIfNoPreviousLine, "2");
+            var doc = Doc.Concat("1", Doc.HardLineIfNoPreviousLine, "2");
 
             PrintedDocShouldBe(doc, $"1{NewLine}2");
         }
@@ -407,10 +394,10 @@ namespace CSharpier.Tests
         [Test]
         public void HardLineIfNoPreviousLine_Should_Not_Insert_Line_If_There_Is_One()
         {
-            var doc = Docs.Concat(
+            var doc = Doc.Concat(
                 "1",
-                Docs.HardLine,
-                Docs.HardLineIfNoPreviousLine,
+                Doc.HardLine,
+                Doc.HardLineIfNoPreviousLine,
                 "2"
             );
 
@@ -420,7 +407,7 @@ namespace CSharpier.Tests
         [Test]
         public void HardLineIfNoPreviousLine_Does_Not_Blow_Up()
         {
-            var doc = Docs.Concat(Docs.HardLineIfNoPreviousLine, "1");
+            var doc = Doc.Concat(Doc.HardLineIfNoPreviousLine, "1");
 
             PrintedDocShouldBe(doc, "1");
         }
@@ -428,13 +415,8 @@ namespace CSharpier.Tests
         [Test]
         public void HardLineIfNoPreviousLine_Should_Not_Insert_After_Indented_HardLine()
         {
-            var doc = Docs.Concat(
-                Docs.Indent(
-                    "1",
-                    Docs.HardLine,
-                    Docs.HardLineIfNoPreviousLine,
-                    "2"
-                )
+            var doc = Doc.Concat(
+                Doc.Indent("1", Doc.HardLine, Doc.HardLineIfNoPreviousLine, "2")
             );
 
             PrintedDocShouldBe(doc, $"1{NewLine}    2");

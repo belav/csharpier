@@ -5,17 +5,6 @@ using Microsoft.CodeAnalysis;
 
 namespace CSharpier.SyntaxPrinter
 {
-    // TODO partial
-    // this conflicts with the Roslyn type name but hasn't caused issues
-    // but maybe it should be SeparatedSyntaxLists
-    // these files aren't currently consistent with if they are pluralized or not.
-    // if we go all plural it would look like
-    // BinaryExpressions.Print
-    // SeparatedSyntaxLists.Print
-    // etc
-    // if we ditch the plural we would run into the following which conflict with Roslyn type names
-    // SeparatedSyntaxList.Print
-    // SyntaxToken.Print
     public static class SeparatedSyntaxList
     {
         public static Doc Print<T>(
@@ -36,14 +25,14 @@ namespace CSharpier.SyntaxPrinter
 
                 var isTrailingSeparator = x == list.Count - 1;
 
-                docs.Add(SyntaxTokens.Print(list.GetSeparator(x)));
+                docs.Add(Token.Print(list.GetSeparator(x)));
                 if (!isTrailingSeparator)
                 {
                     docs.Add(afterSeparator);
                 }
             }
 
-            return docs.Count == 0 ? Doc.Null : Docs.Concat(docs);
+            return docs.Count == 0 ? Doc.Null : Doc.Concat(docs);
         }
     }
 }

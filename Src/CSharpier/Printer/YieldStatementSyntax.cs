@@ -9,17 +9,17 @@ namespace CSharpier
         private Doc PrintYieldStatementSyntax(YieldStatementSyntax node)
         {
             Doc expression = node.Expression != null
-                ? Docs.Concat(" ", this.Print(node.Expression))
+                ? Doc.Concat(" ", this.Print(node.Expression))
                 : string.Empty;
-            return Docs.Concat(
+            return Doc.Concat(
                 ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.YieldKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                SyntaxTokens.Print(node.ReturnOrBreakKeyword),
+                Token.Print(node.ReturnOrBreakKeyword),
                 expression,
-                SyntaxTokens.Print(node.SemicolonToken)
+                Token.Print(node.SemicolonToken)
             );
         }
     }

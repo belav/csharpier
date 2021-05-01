@@ -20,10 +20,10 @@ namespace CSharpier
                     node.ForKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                SyntaxTokens.Print(node.OpenParenToken)
+                Token.Print(node.OpenParenToken)
             };
 
-            var innerGroup = new List<Doc> { Docs.SoftLine };
+            var innerGroup = new List<Doc> { Doc.SoftLine };
             if (node.Declaration != null)
             {
                 innerGroup.Add(
@@ -33,42 +33,38 @@ namespace CSharpier
             innerGroup.Add(
                 SeparatedSyntaxList.Print(node.Initializers, this.Print, " ")
             );
-            innerGroup.Add(SyntaxTokens.Print(node.FirstSemicolonToken));
+            innerGroup.Add(Token.Print(node.FirstSemicolonToken));
             if (node.Condition != null)
             {
-                innerGroup.Add(Docs.Line, this.Print(node.Condition));
+                innerGroup.Add(Doc.Line, this.Print(node.Condition));
             }
             else
             {
-                innerGroup.Add(Docs.SoftLine);
+                innerGroup.Add(Doc.SoftLine);
             }
 
-            innerGroup.Add(SyntaxTokens.Print(node.SecondSemicolonToken));
+            innerGroup.Add(Token.Print(node.SecondSemicolonToken));
             if (node.Incrementors.Any())
             {
-                innerGroup.Add(Docs.Line);
+                innerGroup.Add(Doc.Line);
             }
             else
             {
-                innerGroup.Add(Docs.SoftLine);
+                innerGroup.Add(Doc.SoftLine);
             }
             innerGroup.Add(
-                Docs.Indent(
+                Doc.Indent(
                     SeparatedSyntaxList.Print(
                         node.Incrementors,
                         this.Print,
-                        Docs.Line
+                        Doc.Line
                     )
                 )
             );
             docs.Add(
-                Docs.GroupWithId(
-                    groupId,
-                    Docs.Indent(innerGroup),
-                    Docs.SoftLine
-                )
+                Doc.GroupWithId(groupId, Doc.Indent(innerGroup), Doc.SoftLine)
             );
-            docs.Add(SyntaxTokens.Print(node.CloseParenToken));
+            docs.Add(Token.Print(node.CloseParenToken));
             if (node.Statement is BlockSyntax blockSyntax)
             {
                 docs.Add(
@@ -81,12 +77,10 @@ namespace CSharpier
             else
             {
                 // TODO 1 force braces? we do in if and else
-                docs.Add(
-                    Docs.Indent(Docs.HardLine, this.Print(node.Statement))
-                );
+                docs.Add(Doc.Indent(Doc.HardLine, this.Print(node.Statement)));
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

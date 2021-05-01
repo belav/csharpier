@@ -9,39 +9,39 @@ namespace CSharpier
     {
         private Doc PrintSwitchExpressionSyntax(SwitchExpressionSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.Print(node.GoverningExpression),
                 " ",
-                SyntaxTokens.Print(node.SwitchKeyword),
-                Docs.HardLine,
-                SyntaxTokens.Print(node.OpenBraceToken),
-                Docs.Group(
-                    Docs.Indent(
-                        Docs.HardLine,
+                Token.Print(node.SwitchKeyword),
+                Doc.HardLine,
+                Token.Print(node.OpenBraceToken),
+                Doc.Group(
+                    Doc.Indent(
+                        Doc.HardLine,
                         SeparatedSyntaxList.Print(
                             node.Arms,
                             o =>
-                                Docs.Concat(
+                                Doc.Concat(
                                     this.Print(o.Pattern),
                                     " ",
                                     o.WhenClause != null
-                                        ? Docs.Concat(
+                                        ? Doc.Concat(
                                                 this.Print(o.WhenClause),
                                                 " "
                                             )
-                                        : Docs.Null,
+                                        : Doc.Null,
                                     this.PrintSyntaxToken(
                                         o.EqualsGreaterThanToken,
                                         " "
                                     ),
                                     this.Print(o.Expression)
                                 ),
-                            Docs.HardLine
+                            Doc.HardLine
                         )
                     ),
-                    Docs.HardLine
+                    Doc.HardLine
                 ),
-                SyntaxTokens.Print(node.CloseBraceToken)
+                Token.Print(node.CloseBraceToken)
             );
         }
     }

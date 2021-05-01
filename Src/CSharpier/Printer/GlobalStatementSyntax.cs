@@ -8,7 +8,7 @@ namespace CSharpier
     {
         private Doc PrintGlobalStatementSyntax(GlobalStatementSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
                 Modifiers.Print(node.Modifiers),

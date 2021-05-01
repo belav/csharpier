@@ -9,14 +9,14 @@ namespace CSharpier
         private Doc PrintSimpleLambdaExpressionSyntax(
             SimpleLambdaExpressionSyntax node
         ) {
-            return Docs.Group(
+            return Doc.Group(
                 Modifiers.Print(node.Modifiers),
                 this.Print(node.Parameter),
                 " ",
-                SyntaxTokens.Print(node.ArrowToken),
+                Token.Print(node.ArrowToken),
                 node.Body is BlockSyntax blockSyntax
                     ? this.PrintBlockSyntax(blockSyntax)
-                    : Docs.Indent(Docs.Line, this.Print(node.Body))
+                    : Doc.Indent(Doc.Line, this.Print(node.Body))
             );
         }
     }

@@ -9,9 +9,9 @@ namespace CSharpier
         private Doc PrintAliasQualifiedNameSyntax(
             AliasQualifiedNameSyntax node
         ) {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.Print(node.Alias),
-                SyntaxTokens.Print(node.ColonColonToken),
+                Token.Print(node.ColonColonToken),
                 this.Print(node.Name)
             );
         }

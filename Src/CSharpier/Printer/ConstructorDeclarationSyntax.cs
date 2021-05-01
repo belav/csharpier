@@ -12,25 +12,25 @@ namespace CSharpier
         ) {
             var groupId = Guid.NewGuid().ToString();
 
-            return Docs.Group(
+            return Doc.Group(
                 ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
                 Modifiers.Print(node.Modifiers),
-                SyntaxTokens.Print(node.Identifier),
+                Token.Print(node.Identifier),
                 this.PrintParameterListSyntax(node.ParameterList, groupId),
                 node.Initializer != null
                     ? this.Print(node.Initializer)
-                    : Docs.Null,
+                    : Doc.Null,
                 node.Body != null
                     ? this.PrintBlockSyntaxWithConditionalSpace(
                             node.Body,
                             groupId
                         )
-                    : Docs.Null,
+                    : Doc.Null,
                 node.ExpressionBody != null
                     ? this.PrintArrowExpressionClauseSyntax(node.ExpressionBody)
-                    : Docs.Null,
-                SyntaxTokens.Print(node.SemicolonToken)
+                    : Doc.Null,
+                Token.Print(node.SemicolonToken)
             );
         }
     }

@@ -10,9 +10,9 @@ namespace CSharpier
         private Doc PrintMemberAccessExpressionSyntax(
             MemberAccessExpressionSyntax node
         ) {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.Print(node.Expression),
-                SyntaxTokens.Print(node.OperatorToken),
+                Token.Print(node.OperatorToken),
                 this.Print(node.Name)
             );
         }

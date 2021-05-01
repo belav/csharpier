@@ -9,9 +9,9 @@ namespace CSharpier
         private Doc PrintDefaultSwitchLabelSyntax(
             DefaultSwitchLabelSyntax node
         ) {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.Keyword),
-                SyntaxTokens.Print(node.ColonToken)
+            return Doc.Concat(
+                Token.Print(node.Keyword),
+                Token.Print(node.ColonToken)
             );
         }
     }

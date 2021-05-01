@@ -23,13 +23,13 @@ namespace CSharpier
                     node.IfKeyword,
                     afterTokenIfNoTrailing: " "
                 ),
-                SyntaxTokens.Print(node.OpenParenToken),
-                Docs.GroupWithId(
+                Token.Print(node.OpenParenToken),
+                Doc.GroupWithId(
                     groupId,
-                    Docs.Indent(Docs.SoftLine, this.Print(node.Condition)),
-                    Docs.SoftLine
+                    Doc.Indent(Doc.SoftLine, this.Print(node.Condition)),
+                    Doc.SoftLine
                 ),
-                SyntaxTokens.Print(node.CloseParenToken)
+                Token.Print(node.CloseParenToken)
             );
             if (node.Statement is BlockSyntax blockSyntax)
             {
@@ -44,18 +44,18 @@ namespace CSharpier
             {
                 // TODO 1 force braces here? make an option?
                 docs.Add(
-                    Docs.Indent(
-                        Docs.Concat(Docs.HardLine, this.Print(node.Statement))
+                    Doc.Indent(
+                        Doc.Concat(Doc.HardLine, this.Print(node.Statement))
                     )
                 );
             }
 
             if (node.Else != null)
             {
-                docs.Add(Docs.HardLine, this.Print(node.Else));
+                docs.Add(Doc.HardLine, this.Print(node.Else));
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

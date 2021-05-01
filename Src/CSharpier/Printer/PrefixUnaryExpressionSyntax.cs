@@ -9,8 +9,8 @@ namespace CSharpier
         private Doc PrintPrefixUnaryExpressionSyntax(
             PrefixUnaryExpressionSyntax node
         ) {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.OperatorToken),
+            return Doc.Concat(
+                Token.Print(node.OperatorToken),
                 this.Print(node.Operand)
             );
         }

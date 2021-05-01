@@ -19,13 +19,13 @@ namespace CSharpier
                 docs.Add(this.Print(node.Type), " ");
             }
 
-            docs.Add(SyntaxTokens.Print(node.Identifier));
+            docs.Add(Token.Print(node.Identifier));
             if (node.Default != null)
             {
                 docs.Add(this.PrintEqualsValueClauseSyntax(node.Default));
             }
 
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

@@ -14,11 +14,11 @@ namespace CSharpier.SyntaxPrinter
             }
 
             var docs = modifiers.Select(
-                    modifier => SyntaxTokens.PrintWithSuffix(modifier, " ")
+                    modifier => Token.PrintWithSuffix(modifier, " ")
                 )
                 .ToList();
 
-            return Docs.Group(Docs.Concat(docs));
+            return Doc.Group(Doc.Concat(docs));
         }
     }
 }

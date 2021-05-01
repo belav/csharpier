@@ -7,7 +7,7 @@ namespace CSharpier
     {
         private Doc PrintThrowExpressionSyntax(ThrowExpressionSyntax node)
         {
-            return Docs.Concat(
+            return Doc.Concat(
                 this.PrintSyntaxToken(
                     node.ThrowKeyword,
                     afterTokenIfNoTrailing: " "

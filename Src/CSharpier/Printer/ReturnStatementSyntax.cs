@@ -8,7 +8,7 @@ namespace CSharpier
     {
         private Doc PrintReturnStatementSyntax(ReturnStatementSyntax node)
         {
-            return Docs.Group(
+            return Doc.Group(
                 ExtraNewLines.Print(node),
                 this.PrintSyntaxToken(
                     node.ReturnKeyword,
@@ -16,8 +16,8 @@ namespace CSharpier
                 ),
                 node.Expression != null
                     ? this.Print(node.Expression)
-                    : Docs.Null,
-                SyntaxTokens.Print(node.SemicolonToken)
+                    : Doc.Null,
+                Token.Print(node.SemicolonToken)
             );
         }
     }

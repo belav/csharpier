@@ -16,7 +16,7 @@ namespace CSharpier
                 ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
                 Modifiers.Print(node.Modifiers),
-                SyntaxTokens.Print(node.NamespaceKeyword),
+                Token.Print(node.NamespaceKeyword),
                 " ",
                 this.Print(node.Name)
             };
@@ -27,37 +27,34 @@ namespace CSharpier
             var hasExterns = node.Externs.Count > 0;
             if (hasMembers || hasUsing || hasExterns)
             {
-                innerDocs.Add(Docs.HardLine);
+                innerDocs.Add(Doc.HardLine);
                 if (hasExterns)
                 {
                     innerDocs.Add(
-                        Docs.Join(
-                            Docs.HardLine,
+                        Doc.Join(
+                            Doc.HardLine,
                             node.Externs.Select(
                                 this.PrintExternAliasDirectiveSyntax
                             )
                         ),
-                        Docs.HardLine
+                        Doc.HardLine
                     );
                 }
                 if (hasUsing)
                 {
                     innerDocs.Add(
-                        Docs.Join(
-                            Docs.HardLine,
+                        Doc.Join(
+                            Doc.HardLine,
                             node.Usings.Select(this.PrintUsingDirectiveSyntax)
                         ),
-                        Docs.HardLine
+                        Doc.HardLine
                     );
                 }
                 if (hasMembers)
                 {
                     innerDocs.Add(
-                        Docs.Join(
-                            Docs.HardLine,
-                            node.Members.Select(this.Print)
-                        ),
-                        Docs.HardLine
+                        Doc.Join(Doc.HardLine, node.Members.Select(this.Print)),
+                        Doc.HardLine
                     );
                 }
 
@@ -71,18 +68,18 @@ namespace CSharpier
             DocUtilities.RemoveInitialDoubleHardLine(innerDocs);
 
             docs.Add(
-                Docs.Group(
-                    Docs.Line,
-                    SyntaxTokens.Print(node.OpenBraceToken),
-                    Docs.Indent(innerDocs),
+                Doc.Group(
+                    Doc.Line,
+                    Token.Print(node.OpenBraceToken),
+                    Doc.Indent(innerDocs),
                     hasMembers || hasUsing || hasExterns
-                        ? Docs.HardLine
-                        : Docs.Null,
-                    SyntaxTokens.Print(node.CloseBraceToken),
-                    SyntaxTokens.Print(node.SemicolonToken)
+                        ? Doc.HardLine
+                        : Doc.Null,
+                    Token.Print(node.CloseBraceToken),
+                    Token.Print(node.SemicolonToken)
                 )
             );
-            return Docs.Concat(docs);
+            return Doc.Concat(docs);
         }
     }
 }

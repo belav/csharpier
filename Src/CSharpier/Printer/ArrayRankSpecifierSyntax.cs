@@ -10,8 +10,8 @@ namespace CSharpier
         private Doc PrintArrayRankSpecifierSyntax(
             ArrayRankSpecifierSyntax node
         ) {
-            return Docs.Concat(
-                SyntaxTokens.Print(node.OpenBracketToken),
+            return Doc.Concat(
+                Token.Print(node.OpenBracketToken),
                 node.Sizes.Any()
                     ? SeparatedSyntaxList.Print(
                             node.Sizes,
@@ -19,7 +19,7 @@ namespace CSharpier
                             Doc.Null
                         )
                     : Doc.Null,
-                SyntaxTokens.Print(node.CloseBracketToken)
+                Token.Print(node.CloseBracketToken)
             );
         }
     }
