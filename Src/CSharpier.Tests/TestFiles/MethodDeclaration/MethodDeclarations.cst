@@ -60,3 +60,21 @@ class ExplicitInterfaceSpecifier : IDisposable
 {
     void IDisposable.Dispose() { }
 }
+
+namespace SomeNamespace
+{
+    public class ClassName
+    {
+        public void Exactly80(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            return;
+        }
+
+        public void JustOver80(
+            IApplicationBuilder app,
+            IWebHostEnvironment envvv
+        ) {
+            return;
+        }
+    }
+}

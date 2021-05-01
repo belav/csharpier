@@ -16,20 +16,40 @@ public class ClassName
         }
 
         foreach (
-            var entityDefinition in this.EntityDefinitionRepository.GetList()
+            var x // trailing
+            in y
         ) {
             return;
         }
 
-        foreach (var entityDefinition in EntityDefinitionRepository.GetList())
+        foreach (var exactly80 in Something____________________________________)
+        {
+            return;
+        }
+
+        // leading comment doesn't break differently
+        foreach (var exactly80 in Something____________________________________)
+        {
+            return;
+        }
+
+        // leading comment doesn't break differently
+        await foreach (var exactly80 in Something______________________________)
         {
             return;
         }
 
         foreach (
-            var x // trailing
-            in y
+            var justOver80 in Something____________________________________
         ) {
+            return;
+        }
+
+        // leading await
+        await
+        // leading using
+        foreach (var y in Something())
+        {
             return;
         }
     }

@@ -75,20 +75,23 @@ namespace CSharpier
             {
                 docs.Add(this.PrintAttributeLists(node, attributeLists.Value));
             }
+
+            var declarationGroup = new List<Doc>();
+
             if (modifiers.HasValue)
             {
-                docs.Add(Modifiers.Print(modifiers.Value));
+                declarationGroup.Add(Modifiers.Print(modifiers.Value));
             }
 
             if (returnType != null)
             {
                 // TODO 1 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow? that may get complicated
-                docs.Add(this.Print(returnType), " ");
+                declarationGroup.Add(this.Print(returnType), " ");
             }
 
             if (explicitInterfaceSpecifier != null)
             {
-                docs.Add(
+                declarationGroup.Add(
                     this.Print(explicitInterfaceSpecifier.Name),
                     Token.Print(explicitInterfaceSpecifier.DotToken)
                 );
@@ -96,13 +99,13 @@ namespace CSharpier
 
             if (identifier != Doc.Null)
             {
-                docs.Add(identifier);
+                declarationGroup.Add(identifier);
             }
 
             if (
                 node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax
             ) {
-                docs.Add(
+                declarationGroup.Add(
                     this.PrintSyntaxToken(
                         conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword,
                         " "
@@ -117,7 +120,7 @@ namespace CSharpier
             else if (
                 node is OperatorDeclarationSyntax operatorDeclarationSyntax
             ) {
-                docs.Add(
+                declarationGroup.Add(
                     this.Print(operatorDeclarationSyntax.ReturnType),
                     " ",
                     this.PrintSyntaxToken(
@@ -132,7 +135,9 @@ namespace CSharpier
 
             if (typeParameterList != null)
             {
-                docs.Add(this.PrintTypeParameterListSyntax(typeParameterList));
+                declarationGroup.Add(
+                    this.PrintTypeParameterListSyntax(typeParameterList)
+                );
             }
 
             if (parameterList != null)
@@ -143,8 +148,13 @@ namespace CSharpier
                 {
                     groupId = Guid.NewGuid().ToString();
                 }
-                docs.Add(this.PrintParameterListSyntax(parameterList, groupId));
+                declarationGroup.Add(
+                    this.PrintParameterListSyntax(parameterList, groupId)
+                );
+                declarationGroup.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine));
             }
+
+            docs.Add(Doc.Group(declarationGroup));
 
             docs.Add(this.PrintConstraintClauses(constraintClauses));
             if (body != null)
@@ -173,7 +183,7 @@ namespace CSharpier
                 docs.Add(Token.Print(semicolonToken.Value));
             }
 
-            return Doc.Concat(docs);
+            return Doc.Group(docs);
         }
     }
 }

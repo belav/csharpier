@@ -15,9 +15,12 @@ namespace CSharpier
             return Doc.Group(
                 ExtraNewLines.Print(node),
                 this.PrintAttributeLists(node, node.AttributeLists),
-                Modifiers.Print(node.Modifiers),
-                Token.Print(node.Identifier),
-                this.PrintParameterListSyntax(node.ParameterList, groupId),
+                Doc.Group(
+                    Modifiers.Print(node.Modifiers),
+                    Token.Print(node.Identifier),
+                    this.PrintParameterListSyntax(node.ParameterList, groupId),
+                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
+                ),
                 node.Initializer != null
                     ? this.Print(node.Initializer)
                     : Doc.Null,

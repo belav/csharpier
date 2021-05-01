@@ -15,7 +15,7 @@ class ClassName
         if (
             MethodKind
                 is not (MethodKind.Ordinary
-                    or MethodKind.LocalFunction)
+                    or MethodKind.LocalFunctionn)
         ) {
             return;
         }

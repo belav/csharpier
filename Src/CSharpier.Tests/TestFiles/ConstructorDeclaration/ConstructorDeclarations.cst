@@ -6,4 +6,16 @@ public class BasicClass
     public BasicClass(string one) { }
 
     public ClassName() => this.Value = 1;
+
+    public BasicClass(string one, string exactly80_____________________________)
+    {
+        return;
+    }
+
+    public BasicClass(
+        int two,
+        string justOver80________________________________
+    ) {
+        return;
+    }
 }

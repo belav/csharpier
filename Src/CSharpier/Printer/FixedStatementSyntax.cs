@@ -13,17 +13,19 @@ namespace CSharpier
 
             return Doc.Concat(
                 ExtraNewLines.Print(node),
-                this.PrintSyntaxToken(
-                    node.FixedKeyword,
-                    afterTokenIfNoTrailing: " "
+                Token.PrintLeadingTrivia(node.FixedKeyword),
+                Doc.Group(
+                    Token.PrintWithoutLeadingTrivia(node.FixedKeyword),
+                    " ",
+                    Token.Print(node.OpenParenToken),
+                    Doc.GroupWithId(
+                        groupId,
+                        Doc.Indent(Doc.SoftLine, Node.Print(node.Declaration)),
+                        Doc.SoftLine
+                    ),
+                    Token.Print(node.CloseParenToken),
+                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
                 ),
-                Token.Print(node.OpenParenToken),
-                Doc.GroupWithId(
-                    groupId,
-                    Doc.Indent(Doc.SoftLine, Node.Print(node.Declaration)),
-                    Doc.SoftLine
-                ),
-                Token.Print(node.CloseParenToken),
                 node.Statement is BlockSyntax blockSyntax
                     ? this.PrintBlockSyntaxWithConditionalSpace(
                             blockSyntax,
