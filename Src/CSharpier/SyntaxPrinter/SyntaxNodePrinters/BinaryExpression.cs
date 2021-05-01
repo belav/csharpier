@@ -64,9 +64,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
                     docs.Add(
                         Doc.Line,
-                        Token.Print(
-                            binaryExpressionSyntax.OperatorToken
-                        ),
+                        Token.Print(binaryExpressionSyntax.OperatorToken),
                         " ",
                         Node.Print(binaryExpressionSyntax.Right)
                     );
