@@ -19,14 +19,19 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var groupId = Guid.NewGuid().ToString();
 
             docs.Add(
-                Token.Print(node.IfKeyword, " "),
-                Token.Print(node.OpenParenToken),
-                Doc.GroupWithId(
-                    groupId,
-                    Doc.Indent(Doc.SoftLine, Node.Print(node.Condition)),
-                    Doc.SoftLine
-                ),
-                Token.Print(node.CloseParenToken)
+                Token.PrintLeadingTrivia(node.IfKeyword),
+                Doc.Group(
+                    Token.PrintWithoutLeadingTrivia(node.IfKeyword),
+                    " ",
+                    Token.Print(node.OpenParenToken),
+                    Doc.GroupWithId(
+                        groupId,
+                        Doc.Indent(Doc.SoftLine, Node.Print(node.Condition)),
+                        Doc.SoftLine
+                    ),
+                    Token.Print(node.CloseParenToken),
+                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
+                )
             );
             if (node.Statement is BlockSyntax blockSyntax)
             {

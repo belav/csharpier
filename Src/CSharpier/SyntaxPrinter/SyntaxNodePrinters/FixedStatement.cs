@@ -13,14 +13,19 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             return Doc.Concat(
                 ExtraNewLines.Print(node),
-                Token.Print(node.FixedKeyword, " "),
-                Token.Print(node.OpenParenToken),
-                Doc.GroupWithId(
-                    groupId,
-                    Doc.Indent(Doc.SoftLine, Node.Print(node.Declaration)),
-                    Doc.SoftLine
+                Token.PrintLeadingTrivia(node.FixedKeyword),
+                Doc.Group(
+                    Token.PrintWithoutLeadingTrivia(node.FixedKeyword),
+                    " ",
+                    Token.Print(node.OpenParenToken),
+                    Doc.GroupWithId(
+                        groupId,
+                        Doc.Indent(Doc.SoftLine, Node.Print(node.Declaration)),
+                        Doc.SoftLine
+                    ),
+                    Token.Print(node.CloseParenToken),
+                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
                 ),
-                Token.Print(node.CloseParenToken),
                 node.Statement is BlockSyntax blockSyntax
                     ? Block.PrintWithConditionalSpace(blockSyntax, groupId)
                     : Node.Print(node.Statement)

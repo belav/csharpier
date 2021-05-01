@@ -13,5 +13,22 @@ class ClassName
         ) {
             *intref = 1;
         }
+
+        fixed (int* exactly80____________________________ = stackalloc int[100])
+        {
+            return;
+        }
+
+        // leading comment doesn't break differently
+        fixed (int* exactly80____________________________ = stackalloc int[100])
+        {
+            return;
+        }
+
+        fixed (
+            int* justOver80____________________________ = stackalloc int[100]
+        ) {
+            return;
+        }
     }
 }
