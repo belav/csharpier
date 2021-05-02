@@ -19,3 +19,12 @@ public class BasicClass
         return;
     }
 }
+
+public class Initializers : BasicClass
+{
+    public Initializers()
+        : this(true) { }
+
+    public Initializers(string value)
+        : base(value) { }
+}

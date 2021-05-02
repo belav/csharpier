@@ -25,6 +25,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             Doc identifier = Doc.Null;
             var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
             ParameterListSyntax? parameterList = null;
+            ConstructorInitializerSyntax? constructorInitializer = null;
             BlockSyntax? body = null;
             ArrowExpressionClauseSyntax? expressionBody = null;
             SyntaxToken? semicolonToken = null;
@@ -62,6 +63,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     identifier = Token.Print(
                         constructorDeclarationSyntax.Identifier
                     );
+                    constructorInitializer = constructorDeclarationSyntax.Initializer;
                 }
 
                 semicolonToken = baseMethodDeclarationSyntax.SemicolonToken;
@@ -161,6 +163,13 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     ParameterList.Print(parameterList, groupId)
                 );
                 declarationGroup.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine));
+            }
+
+            if (constructorInitializer != null)
+            {
+                declarationGroup.Add(
+                    ConstructorInitializer.Print(constructorInitializer)
+                );
             }
 
             docs.Add(Doc.Group(declarationGroup));
