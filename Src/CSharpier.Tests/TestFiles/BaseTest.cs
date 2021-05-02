@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.IO.Abstractions;
 using System.Text;
 using System.Threading;
 using DiffEngine;
@@ -33,7 +34,11 @@ namespace CSharpier.Tests.TestFileTests
                 fileName + ".cst"
             );
             var fileReaderResult =
-                FileReader.ReadFile(filePath, CancellationToken.None).Result;
+                FileReader.ReadFile(
+                    filePath,
+                    new FileSystem(),
+                    CancellationToken.None
+                ).Result;
 
             var formatter = new CodeFormatter();
             var result = formatter.Format(

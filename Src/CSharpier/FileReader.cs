@@ -1,4 +1,5 @@
 using System.IO;
+using System.IO.Abstractions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,11 +18,12 @@ namespace CSharpier
         public static async Task<FileReaderResult> ReadFile(
 #pragma warning restore 1998
             string filePath,
+            IFileSystem fileSystem,
             CancellationToken cancellationToken
         ) {
             var defaultedEncoding = false;
 
-            using FileStream fileStream = File.OpenRead(filePath);
+            using var fileStream = fileSystem.File.OpenRead(filePath);
             var detectionResult = CharsetDetector.DetectFromStream(fileStream);
             var encoding = detectionResult?.Detected?.Encoding;
             if (encoding == null)

@@ -12,24 +12,10 @@ namespace CSharpier
 {
     public class ConfigurationFileOptions
     {
-        public HashSet<string> Exclude { get; }
-        public int PrintWidth { get; set; } = 100;
-        public int TabWidth { get; set; } = 4;
-        public bool UseTabs { get; set; }
-        public string EndOfLine { get; set; } = "lf";
-
-        public ConfigurationFileOptions(string[]? exclude)
-        {
-            if (exclude != null)
-            {
-                this.Exclude = exclude.Select(o => o.Replace("\\", "/"))
-                    .ToHashSet();
-            }
-            else
-            {
-                this.Exclude = new HashSet<string>();
-            }
-        }
+        public int PrintWidth { get; init; } = 100;
+        public int TabWidth { get; init; } = 4;
+        public bool UseTabs { get; init; }
+        public string EndOfLine { get; init; } = "lf";
 
         public static ConfigurationFileOptions Create(
             string rootPath,
@@ -49,19 +35,9 @@ namespace CSharpier
                     )
                     .Build();
 
-                var tempOptions = deserializer.Deserialize<YamlConfigurationOptions>(
+                return deserializer.Deserialize<ConfigurationFileOptions>(
                     fileSystem.File.ReadAllText(path)
                 );
-
-                return new ConfigurationFileOptions(
-                    tempOptions.Exclude
-                )
-                {
-                    PrintWidth = tempOptions.PrintWidth,
-                    TabWidth = tempOptions.TabWidth,
-                    UseTabs = tempOptions.UseTabs,
-                    EndOfLine = tempOptions.EndOfLine
-                };
             }
 
             var potentialPath = fileSystem.Path.Combine(
@@ -98,18 +74,7 @@ namespace CSharpier
                 return ReadYaml(yamlExtensionPath);
             }
 
-            return new ConfigurationFileOptions(null);
-        }
-
-        // we can get rid of this ugly thing when exclude goes away
-        // trying to get YamlDotNet to use the constructor for ConfigurationOptions wasn't going well
-        private class YamlConfigurationOptions
-        {
-            public string[]? Exclude { get; set; }
-            public int PrintWidth { get; set; } = 100;
-            public int TabWidth { get; set; } = 4;
-            public bool UseTabs { get; set; }
-            public string EndOfLine { get; set; } = "lf";
+            return new ConfigurationFileOptions();
         }
     }
 }
