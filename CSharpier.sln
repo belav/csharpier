@@ -21,10 +21,16 @@ EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{176BB0EA-B72B-4ACA-82AE-C16A732BE023}"
 ProjectSection(SolutionItems) = preProject
-				.github\workflows\format_repositories.yml = .github\workflows\format_repositories.yml
+    .github\workflows\format_repositories.yml = .github\workflows\format_repositories.yml
 	.github\workflows\nuget_publish.yml = .github\workflows\nuget_publish.yml
 	.github\workflows\playground_publish.yml = .github\workflows\playground_publish.yml
 	.github\workflows\validatePR.yml = .github\workflows\validatePR.yml
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{62DCCDB3-45D3-4236-B34A-E01618028BFE}"
+ProjectSection(SolutionItems) = preProject
+    Scripts/RunLinuxTests.ps1 = Scripts/RunLinuxTests.ps1
+    Scripts/CreateReviewCodePRs.ps1 = Scripts/CreateReviewCodePRs.ps1
 EndProjectSection
 EndProject
 Global
