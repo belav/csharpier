@@ -1,0 +1,2 @@
+# running this seems to screw up the nuget restore, but provides a way to figure out why a test is failing on linux while working on windows.
+docker run --rm -v ${pwd}:/app -e "NormalizeLineEndings=1" -w /app/tests mcr.microsoft.com/dotnet/sdk:5.0 dotnet test /app/Src/CSharpier.Tests/CSharpier.Tests.csproj --logger:trx

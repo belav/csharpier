@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
-using System.CommandLine;
-using System.Configuration;
+using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
@@ -28,9 +28,9 @@ namespace CSharpier.Tests
         [Test]
         public void Format_Writes_Failed_To_Compile()
         {
-            WhenThereExists("c:/test/Invalid.cs", "asdfasfasdf");
+            WhenThereExists("Invalid.cs", "asdfasfasdf");
 
-            var result = this.Format("c:/test");
+            var result = this.Format();
 
             result.lines.First()
                 .Should()
@@ -40,10 +40,10 @@ namespace CSharpier.Tests
         [Test]
         public void Format_Writes_File()
         {
-            const string unformattedFilePath = "c:/test/Unformatted.cs";
+            const string unformattedFilePath = "Unformatted.cs";
             WhenThereExists(unformattedFilePath, UnformattedClass);
 
-            this.Format("c:/test");
+            this.Format();
 
             this.GetFileContent(unformattedFilePath)
                 .Should()
@@ -53,10 +53,10 @@ namespace CSharpier.Tests
         [Test]
         public void Format_Supports_Skip_Write()
         {
-            const string unformattedFilePath = "c:/test/Unformatted.cs";
+            const string unformattedFilePath = "Unformatted.cs";
             WhenThereExists(unformattedFilePath, UnformattedClass);
 
-            this.Format("c:/test", skipWrite: true);
+            this.Format(skipWrite: true);
 
             this.GetFileContent(unformattedFilePath)
                 .Should()
@@ -66,10 +66,10 @@ namespace CSharpier.Tests
         [Test]
         public void Format_Checks_Unformatted_File()
         {
-            const string unformattedFilePath = "c:/test/Unformatted.cs";
+            const string unformattedFilePath = "Unformatted.cs";
             WhenThereExists(unformattedFilePath, UnformattedClass);
 
-            var (exitCode, lines) = this.Format("c:/test", check: true);
+            var (exitCode, lines) = this.Format(check: true);
 
             exitCode.Should().Be(1);
             this.GetFileContent(unformattedFilePath)
@@ -83,10 +83,10 @@ namespace CSharpier.Tests
         [Test]
         public void Format_Checks_Formatted_File()
         {
-            const string formattedFilePath = "c:/test/Formatted.cs";
+            const string formattedFilePath = "Formatted.cs";
             WhenThereExists(formattedFilePath, FormattedClass);
 
-            var (exitCode, lines) = this.Format("c:/test", check: true);
+            var (exitCode, lines) = this.Format(check: true);
 
             exitCode.Should().Be(0);
         }
@@ -98,10 +98,10 @@ namespace CSharpier.Tests
         [TestCase("TestFile.g.i.cs")]
         public void Format_Skips_Generated_Files(string fileName)
         {
-            var unformattedFilePath = $"c:/test/{fileName}";
+            var unformattedFilePath = fileName;
             WhenThereExists(unformattedFilePath, UnformattedClass);
 
-            var (_, lines) = this.Format("c:/test");
+            var (_, lines) = this.Format();
 
             lines.Should().Contain("Total files: 0 ");
         }
@@ -119,11 +119,11 @@ namespace CSharpier.Tests
             string fileName,
             string ignoreContents
         ) {
-            var unformattedFilePath = $"c:/test/{fileName}";
+            var unformattedFilePath = fileName;
             WhenThereExists(unformattedFilePath, UnformattedClass);
-            WhenThereExists("c:/test/.csharpierignore", ignoreContents);
+            WhenThereExists(".csharpierignore", ignoreContents);
 
-            var (_, lines) = this.Format("c:/test");
+            var (_, lines) = this.Format();
 
             lines.FirstOrDefault(o => o.StartsWith("Total files"))
                 .Should()
@@ -133,24 +133,29 @@ namespace CSharpier.Tests
         [Test]
         public void Ignore_Reports_Errors()
         {
-            WhenThereExists("c:/test/.csharpierignore", @"\Src\Uploads\*.cs");
+            WhenThereExists(".csharpierignore", @"\Src\Uploads\*.cs");
 
-            var (exitCode, lines) = this.Format("c:/test");
+            var (exitCode, lines) = this.Format();
 
             exitCode.Should().Be(1);
             lines.Should()
                 .Contain(
-                    "The .csharpierignore file at c:/test/.csharpierignore could not be parsed due to the following line:"
+                    $"The .csharpierignore file at {GetRootPath()}/.csharpierignore could not be parsed due to the following line:"
                 );
             // our testing code replaces the \ with /
             lines.Should().Contain("/Src/Uploads/*.cs");
         }
 
         private (int exitCode, IList<string> lines) Format(
-            string rootPath,
+            string rootPath = null,
             bool skipWrite = false,
             bool check = false
         ) {
+            if (rootPath == null)
+            {
+                rootPath = GetRootPath();
+            }
+
             var commandLineFormatter = new TestableCommandLineFormatter(
                 rootPath,
                 new CommandLineOptions
@@ -169,13 +174,20 @@ namespace CSharpier.Tests
             );
         }
 
+        private string GetRootPath()
+        {
+            return OperatingSystem.IsWindows() ? "c:/test" : "/Test";
+        }
+
         private string GetFileContent(string path)
         {
+            path = Path.Combine(GetRootPath(), path);
             return this.fileSystem.File.ReadAllText(path);
         }
 
         private void WhenThereExists(string path, string contents)
         {
+            path = Path.Combine(GetRootPath(), path);
             this.fileSystem.AddFile(path, new MockFileData(contents));
         }
 

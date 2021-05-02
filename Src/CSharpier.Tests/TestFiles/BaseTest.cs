@@ -74,6 +74,14 @@ namespace CSharpier.Tests.TestFileTests
                 filePathToChange = expectedFilePath;
             }
 
+            if (
+                Environment.GetEnvironmentVariable("NormalizeLineEndings") !=
+                null
+            ) {
+                expectedCode = expectedCode.Replace("\r\n", "\n");
+                result.Code = result.Code.Replace("\r\n", "\n");
+            }
+
             var comparer = new SyntaxNodeComparer(
                 expectedCode,
                 result.Code,
