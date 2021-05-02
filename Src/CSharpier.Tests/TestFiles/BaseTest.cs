@@ -40,7 +40,7 @@ namespace CSharpier.Tests.TestFileTests
                 fileReaderResult.FileContents,
                 new PrinterOptions()
                 {
-                    Width = PrinterOptions.TestingWidth,
+                    Width = PrinterOptions.WidthUsedByTests,
                     EndOfLine = Environment.NewLine
                 }
             );
