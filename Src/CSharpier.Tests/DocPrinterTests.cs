@@ -10,6 +10,14 @@ namespace CSharpier.Tests
         private static string NewLine = System.Environment.NewLine;
 
         [Test]
+        public void Lines_Allowed()
+        {
+            var doc = Doc.Concat(Doc.HardLine, "1");
+
+            PrintedDocShouldBe(doc, $"{NewLine}1");
+        }
+
+        [Test]
         public void Basic_Concat()
         {
             var doc = Doc.Concat("1", "2", "3");
@@ -140,7 +148,7 @@ namespace CSharpier.Tests
         {
             var doc = Doc.Concat(Doc.HardLine, "1");
 
-            PrintedDocShouldBe(doc, "1");
+            PrintedDocShouldBe(doc, "1", trimInitialLines: true);
         }
 
         [Test]
@@ -280,7 +288,7 @@ namespace CSharpier.Tests
         {
             var doc = Doc.Group(Doc.HardLine, Doc.IfBreak("break", "flat"));
 
-            PrintedDocShouldBe(doc, "break");
+            PrintedDocShouldBe(doc, $"{NewLine}break");
         }
 
         [Test]
@@ -409,7 +417,7 @@ namespace CSharpier.Tests
         {
             var doc = Doc.Concat(Doc.HardLineIfNoPreviousLine, "1");
 
-            PrintedDocShouldBe(doc, "1");
+            PrintedDocShouldBe(doc, $"{NewLine}1");
         }
 
         [Test]
@@ -433,21 +441,26 @@ namespace CSharpier.Tests
         private static void PrintedDocShouldBe(
             Doc doc,
             string expected,
-            int width = Options.TestingWidth
+            int width = Options.TestingWidth,
+            bool trimInitialLines = false
         ) {
-            var result = Print(doc, width);
+            var result = Print(doc, width, trimInitialLines);
 
             result.Should().Be(expected);
         }
 
-        private static string Print(Doc doc, int width = Options.TestingWidth)
-        {
+        private static string Print(
+            Doc doc,
+            int width = Options.TestingWidth,
+            bool trimInitialLines = false
+        ) {
             return DocPrinter.Print(
                     doc,
                     new Options
                     {
                         Width = width,
-                        EndOfLine = Environment.NewLine
+                        EndOfLine = Environment.NewLine,
+                        TrimInitialLines = trimInitialLines,
                     }
                 )
                 .TrimEnd('\r', '\n');

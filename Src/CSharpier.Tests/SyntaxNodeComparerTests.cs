@@ -39,6 +39,34 @@ namespace Namespace { }
         }
 
         [Test]
+        [Ignore("#160")]
+        public void Constructor_Missing_Base()
+        {
+            var left =
+                @"public class ConstructorWithBase
+{
+    public ConstructorWithBase(string value)
+        : base(value)
+    {
+        return;
+    }
+}";
+            var right =
+                @"public class ConstructorWithBase
+{
+    public ConstructorWithBase(string value)
+    {
+        return;
+    }
+}
+";
+
+            var result = this.AreEqual(left, right);
+
+            result.Should().BeEmpty();
+        }
+
+        [Test]
         public void MissingAttribute()
         {
             var left =

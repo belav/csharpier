@@ -457,7 +457,8 @@ namespace CSharpier
                                     if (
                                         (!newLineNextStringValue ||
                                         !skipNextNewLine) &&
-                                        output.Length > 0
+                                        (!options.TrimInitialLines ||
+                                        output.Length > 0)
                                     ) {
                                         TrimOutput(output);
                                         output.Append(
