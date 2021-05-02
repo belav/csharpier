@@ -20,19 +20,21 @@ namespace CSharpier
             return new Indent(string.Empty, 0, new List<IndentType>());
         }
 
-        private static Indent MakeIndent(Indent indent, Options options)
-        {
+        private static Indent MakeIndent(
+            Indent indent,
+            PrinterOptions printerOptions
+        ) {
             return GenerateIndent(
                 indent,
                 newPart: new IndentType("indent", 0),
-                options
+                printerOptions
             );
         }
 
         private static Indent GenerateIndent(
             Indent indent,
             IndentType newPart,
-            Options options
+            PrinterOptions printerOptions
         ) {
             var queue = new List<IndentType>(indent.Queue);
             if (newPart.Type == "dedent")
@@ -55,13 +57,13 @@ namespace CSharpier
                 {
                     case "indent":
                         Flush();
-                        if (options.UseTabs)
+                        if (printerOptions.UseTabs)
                         {
                             AddTabs(1);
                         }
                         else
                         {
-                            AddSpaces(options.TabWidth);
+                            AddSpaces(printerOptions.TabWidth);
                         }
                         break;
                     default:
@@ -74,7 +76,7 @@ namespace CSharpier
             void AddTabs(int count)
             {
                 value.Append('\t', count);
-                length += options.TabWidth * count;
+                length += printerOptions.TabWidth * count;
             }
 
             void AddSpaces(int count)
@@ -85,7 +87,7 @@ namespace CSharpier
 
             void Flush()
             {
-                if (options.UseTabs)
+                if (printerOptions.UseTabs)
                 {
                     FlushTabs();
                 }
@@ -129,7 +131,7 @@ namespace CSharpier
             PrintCommand nextCommand,
             Stack<PrintCommand> remainingCommands,
             int remainingWidth,
-            Options options,
+            PrinterOptions printerOptions,
             bool mustBeFlat = false
         ) {
             var returnFalseIfMoreStringsFound = false;
@@ -199,7 +201,7 @@ namespace CSharpier
                             Push(
                                 indent.Contents,
                                 currentMode,
-                                MakeIndent(currentIndent, options)
+                                MakeIndent(currentIndent, printerOptions)
                             );
                             break;
                         case Trim:
@@ -270,14 +272,16 @@ namespace CSharpier
             return false;
         }
 
-        public static string Print(Doc document, Options options)
-        {
+        public static string Print(
+            Doc document,
+            PrinterOptions printerOptions
+        ) {
             groupModeMap = new Dictionary<string, PrintMode>();
 
             DocPrinterUtils.PropagateBreaks(document);
 
-            var allowedWidth = options.Width;
-            var newLine = options.EndOfLine;
+            var allowedWidth = printerOptions.Width;
+            var newLine = printerOptions.EndOfLine;
             var currentWidth = 0;
 
             var currentStack = new Stack<PrintCommand>();
@@ -343,7 +347,7 @@ namespace CSharpier
                         Push(
                             indentBuilder.Contents,
                             command.Mode,
-                            MakeIndent(command.Indent, options)
+                            MakeIndent(command.Indent, printerOptions)
                         );
                         break;
                     case Trim:
@@ -381,7 +385,7 @@ namespace CSharpier
                                         next,
                                         currentStack,
                                         allowedWidth - currentWidth,
-                                        options
+                                        printerOptions
                                     )
                                 ) {
                                     currentStack.Push(next);
@@ -457,7 +461,7 @@ namespace CSharpier
                                     if (
                                         (!newLineNextStringValue ||
                                         !skipNextNewLine) &&
-                                        (!options.TrimInitialLines ||
+                                        (!printerOptions.TrimInitialLines ||
                                         output.Length > 0)
                                     ) {
                                         TrimOutput(output);

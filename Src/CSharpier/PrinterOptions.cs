@@ -1,6 +1,6 @@
 namespace CSharpier
 {
-    public class Options
+    public class PrinterOptions
     {
         public bool IncludeAST { get; init; }
         public bool IncludeDocTree { get; init; }

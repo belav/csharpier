@@ -441,7 +441,7 @@ namespace CSharpier.Tests
         private static void PrintedDocShouldBe(
             Doc doc,
             string expected,
-            int width = Options.TestingWidth,
+            int width = PrinterOptions.TestingWidth,
             bool trimInitialLines = false
         ) {
             var result = Print(doc, width, trimInitialLines);
@@ -451,12 +451,12 @@ namespace CSharpier.Tests
 
         private static string Print(
             Doc doc,
-            int width = Options.TestingWidth,
+            int width = PrinterOptions.TestingWidth,
             bool trimInitialLines = false
         ) {
             return DocPrinter.Print(
                     doc,
-                    new Options
+                    new PrinterOptions
                     {
                         Width = width,
                         EndOfLine = Environment.NewLine,

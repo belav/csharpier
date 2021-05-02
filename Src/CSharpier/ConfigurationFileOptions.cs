@@ -10,7 +10,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace CSharpier
 {
-    public class ConfigurationOptions
+    public class ConfigurationFileOptions
     {
         public HashSet<string> Exclude { get; }
         public int PrintWidth { get; set; } = 100;
@@ -18,7 +18,7 @@ namespace CSharpier
         public bool UseTabs { get; set; }
         public string EndOfLine { get; set; } = "lf";
 
-        public ConfigurationOptions(string[]? exclude)
+        public ConfigurationFileOptions(string[]? exclude)
         {
             if (exclude != null)
             {
@@ -31,18 +31,18 @@ namespace CSharpier
             }
         }
 
-        public static ConfigurationOptions Create(
+        public static ConfigurationFileOptions Create(
             string rootPath,
             IFileSystem fileSystem
         ) {
-            ConfigurationOptions ReadJson(string path)
+            ConfigurationFileOptions ReadJson(string path)
             {
-                return JsonConvert.DeserializeObject<ConfigurationOptions>(
+                return JsonConvert.DeserializeObject<ConfigurationFileOptions>(
                     fileSystem.File.ReadAllText(path)
                 );
             }
 
-            ConfigurationOptions ReadYaml(string path)
+            ConfigurationFileOptions ReadYaml(string path)
             {
                 var deserializer = new DeserializerBuilder().WithNamingConvention(
                         CamelCaseNamingConvention.Instance
@@ -53,7 +53,7 @@ namespace CSharpier
                     fileSystem.File.ReadAllText(path)
                 );
 
-                return new ConfigurationOptions(
+                return new ConfigurationFileOptions(
                     tempOptions.Exclude
                 )
                 {
@@ -98,7 +98,7 @@ namespace CSharpier
                 return ReadYaml(yamlExtensionPath);
             }
 
-            return new ConfigurationOptions(null);
+            return new ConfigurationFileOptions(null);
         }
 
         // we can get rid of this ugly thing when exclude goes away

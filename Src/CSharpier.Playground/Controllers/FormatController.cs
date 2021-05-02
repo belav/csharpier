@@ -57,11 +57,11 @@ namespace CSharpier.Playground.Controllers
             this.WriteAllText(filePath, content);
             var result = new CodeFormatter().Format(
                 content,
-                new Options
+                new PrinterOptions
                 {
                     IncludeAST = true,
                     IncludeDocTree = true,
-                    Width = Options.TestingWidth
+                    Width = PrinterOptions.TestingWidth
                 }
             );
 
