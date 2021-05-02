@@ -71,6 +71,8 @@ namespace CSharpier
                                 )
             };
 
+            // TODO most parameters should probably be combined into an object
+            // TODO also the entry point should just be a static method call, hide the constructor and the other call
             var commandLineFormatter = new CommandLineFormatter(
                 rootPath,
                 check,
