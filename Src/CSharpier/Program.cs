@@ -1,5 +1,9 @@
+using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.IO;
+using System.IO.Abstractions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CSharpier
@@ -16,10 +20,71 @@ namespace CSharpier
             var rootCommand = CommandLineOptions.Create();
 
             rootCommand.Handler = CommandHandler.Create(
-                new CommandLineOptions.Handler(CommandLineFormatter.Run)
+                new CommandLineOptions.Handler(Run)
             );
 
             return await rootCommand.InvokeAsync(args);
+        }
+
+        public static async Task<int> Run(
+            string directoryOrFile,
+            bool check,
+            bool fast,
+            bool skipWrite,
+            CancellationToken cancellationToken
+        ) {
+            if (string.IsNullOrEmpty(directoryOrFile))
+            {
+                directoryOrFile = Directory.GetCurrentDirectory();
+            }
+
+            var rootPath = File.Exists(directoryOrFile)
+                ? Path.GetDirectoryName(directoryOrFile)
+                : directoryOrFile;
+
+            if (rootPath == null)
+            {
+                throw new Exception(
+                    "The path of " +
+                    directoryOrFile +
+                    " does not appear to point to a directory or a file."
+                );
+            }
+
+            var configurationFileOptions = ConfigurationFileOptions.Create(
+                rootPath,
+                new FileSystem()
+            );
+
+            var printerOptions = new PrinterOptions
+            {
+                TabWidth = configurationFileOptions.TabWidth,
+                UseTabs = configurationFileOptions.UseTabs,
+                Width = configurationFileOptions.PrintWidth,
+                EndOfLine = configurationFileOptions.EndOfLine == "lf"
+                    ? "\n"
+                    : configurationFileOptions.EndOfLine == "crlf"
+                            ? "\r\n"
+                            : throw new Exception(
+                                    "Unhandled value from EndOfLine options " +
+                                    configurationFileOptions.EndOfLine
+                                )
+            };
+
+            // TODO most parameters should probably be combined into an object
+            // TODO also the entry point should just be a static method call, hide the constructor and the other call
+            var commandLineFormatter = new CommandLineFormatter(
+                rootPath,
+                check,
+                fast,
+                skipWrite,
+                configurationFileOptions.Exclude,
+                printerOptions
+            );
+            return await commandLineFormatter.Format(
+                directoryOrFile,
+                cancellationToken
+            );
         }
     }
 }

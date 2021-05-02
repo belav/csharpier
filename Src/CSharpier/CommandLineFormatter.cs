@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions;
@@ -16,84 +17,36 @@ namespace CSharpier
         protected int Files;
         protected int UnformattedFiles;
 
+        protected readonly Stopwatch Stopwatch;
+
         protected readonly string RootPath;
         protected readonly bool Validate;
         protected readonly bool Check;
         protected readonly bool SkipWrite;
-        protected readonly Stopwatch Stopwatch;
 
-        protected readonly ConfigurationOptions ConfigurationOptions;
-        protected readonly Options Options;
+        // TODO this is going away
+        protected readonly HashSet<string> Exclude;
 
-        private CommandLineFormatter(
+        protected readonly PrinterOptions PrinterOptions;
+
+        public CommandLineFormatter(
             string rootPath,
             bool check,
             bool fast,
-            bool skipWrite
+            bool skipWrite,
+            HashSet<string> exclude,
+            PrinterOptions printerOptions
         ) {
             this.RootPath = rootPath;
-            this.ConfigurationOptions = ConfigurationOptions.Create(
-                rootPath,
-                new FileSystem()
-            );
-            this.Options = new Options
-            {
-                TabWidth = this.ConfigurationOptions.TabWidth,
-                UseTabs = this.ConfigurationOptions.UseTabs,
-                Width = this.ConfigurationOptions.PrintWidth,
-                EndOfLine = this.ConfigurationOptions.EndOfLine == "lf"
-                    ? "\n"
-                    : this.ConfigurationOptions.EndOfLine == "crlf"
-                            ? "\r\n"
-                            : throw new Exception(
-                                    "Unhandled value from EndOfLine options " +
-                                    this.ConfigurationOptions.EndOfLine
-                                )
-            };
+            this.PrinterOptions = printerOptions;
             this.Check = check;
             this.Validate = !fast;
             this.SkipWrite = skipWrite;
+            this.Exclude = exclude;
             this.Stopwatch = Stopwatch.StartNew();
         }
 
-        public static async Task<int> Run(
-            string directoryOrFile,
-            bool check,
-            bool fast,
-            bool skipWrite,
-            CancellationToken cancellationToken
-        ) {
-            if (string.IsNullOrEmpty(directoryOrFile))
-            {
-                directoryOrFile = Directory.GetCurrentDirectory();
-            }
-
-            var rootPath = File.Exists(directoryOrFile)
-                ? Path.GetDirectoryName(directoryOrFile)
-                : directoryOrFile;
-
-            if (rootPath == null)
-            {
-                throw new Exception(
-                    "The path of " +
-                    directoryOrFile +
-                    " does not appear to point to a directory or a file."
-                );
-            }
-
-            var commandLineFormatter = new CommandLineFormatter(
-                rootPath,
-                check,
-                fast,
-                skipWrite
-            );
-            return await commandLineFormatter.Format(
-                directoryOrFile,
-                cancellationToken
-            );
-        }
-
-        private async Task<int> Format(
+        public async Task<int> Format(
             string directoryOrFile,
             CancellationToken cancellationToken
         ) {
@@ -160,7 +113,7 @@ namespace CSharpier
             {
                 result = await new CodeFormatter().FormatAsync(
                     fileReaderResult.FileContents,
-                    this.Options,
+                    this.PrinterOptions,
                     cancellationToken
                 );
             }
@@ -318,18 +271,15 @@ namespace CSharpier
         // when we implement include/exclude/ignore for real, look into using that
         private bool IgnoreFile(string filePath)
         {
-            var normalizedFilePath = filePath.Replace("\\", "/")
-                .Substring(this.RootPath.Length + 1);
-
-            if (
-                this.ConfigurationOptions.Exclude.Contains(normalizedFilePath)
-            ) {
+            if (GeneratedCodeUtilities.IsGeneratedCodeFile(filePath))
+            {
                 return true;
             }
 
-            return normalizedFilePath.EndsWith(".g.cs") ||
-            normalizedFilePath.EndsWith(".cshtml.cs") ||
-            normalizedFilePath.ContainsIgnoreCase("/obj/");
+            var normalizedFilePath = filePath.Replace("\\", "/")
+                .Substring(this.RootPath.Length + 1);
+
+            return this.Exclude.Contains(normalizedFilePath);
         }
 
         private static string PadToSize(string value, int size = 120)

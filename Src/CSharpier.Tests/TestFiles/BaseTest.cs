@@ -38,9 +38,9 @@ namespace CSharpier.Tests.TestFileTests
             var formatter = new CodeFormatter();
             var result = formatter.Format(
                 fileReaderResult.FileContents,
-                new Options()
+                new PrinterOptions()
                 {
-                    Width = Options.TestingWidth,
+                    Width = PrinterOptions.WidthUsedByTests,
                     EndOfLine = Environment.NewLine
                 }
             );

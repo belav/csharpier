@@ -36,7 +36,7 @@ namespace CSharpier.Tests
             var code = File.ReadAllText(file);
             var result = new CodeFormatter().Format(
                 code,
-                new Options { IncludeDocTree = true, IncludeAST = true, }
+                new PrinterOptions { IncludeDocTree = true, IncludeAST = true, }
             );
 
             File.WriteAllText(

@@ -1,6 +1,6 @@
 namespace CSharpier
 {
-    public class Options
+    public class PrinterOptions
     {
         public bool IncludeAST { get; init; }
         public bool IncludeDocTree { get; init; }
@@ -10,6 +10,6 @@ namespace CSharpier
         public string EndOfLine { get; init; } = "\n";
         public bool TrimInitialLines { get; init; } = true;
 
-        public const int TestingWidth = 80;
+        public const int WidthUsedByTests = 80;
     }
 }

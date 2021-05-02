@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace CSharpier.Tests
 {
     [TestFixture]
-    public class ConfigurationOptionsTests
+    public class ConfigurationFileOptionsTests
     {
         private MockFileSystem fileSystem;
 
@@ -197,19 +197,19 @@ namespace CSharpier.Tests
         }
 
         private void ShouldHaveDefaultOptions(
-            ConfigurationOptions configurationOptions
+            ConfigurationFileOptions configurationFileOptions
         ) {
-            configurationOptions.Exclude.Should().BeEmpty();
-            configurationOptions.PrintWidth.Should().Be(100);
-            configurationOptions.TabWidth.Should().Be(4);
-            configurationOptions.UseTabs.Should().BeFalse();
-            configurationOptions.EndOfLine.Should().Be("lf");
+            configurationFileOptions.Exclude.Should().BeEmpty();
+            configurationFileOptions.PrintWidth.Should().Be(100);
+            configurationFileOptions.TabWidth.Should().Be(4);
+            configurationFileOptions.UseTabs.Should().BeFalse();
+            configurationFileOptions.EndOfLine.Should().Be("lf");
         }
 
-        private ConfigurationOptions CreateConfigurationOptions(
+        private ConfigurationFileOptions CreateConfigurationOptions(
             string rootPath
         ) {
-            return ConfigurationOptions.Create(rootPath, fileSystem);
+            return ConfigurationFileOptions.Create(rootPath, fileSystem);
         }
 
         private void WhenThereExists(string path, string contents)
