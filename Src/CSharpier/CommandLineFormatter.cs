@@ -40,21 +40,16 @@ namespace CSharpier
             this.Stopwatch = Stopwatch.StartNew();
             this.FileSystem = fileSystem;
             this.Ignore = new global::Ignore.Ignore();
-
-            var ignoreFilePath = Path.Combine(
-                this.RootPath,
-                ".csharpierignore"
-            );
-            if (this.FileSystem.File.Exists(ignoreFilePath))
-            {
-                this.Ignore.Add(
-                    this.FileSystem.File.ReadAllLines(ignoreFilePath)
-                );
-            }
         }
 
         public async Task<int> Format(CancellationToken cancellationToken)
         {
+            var ignoreExitCode = await this.ParseIgnoreFile(cancellationToken);
+            if (ignoreExitCode != 0)
+            {
+                return ignoreExitCode;
+            }
+
             if (
                 this.FileSystem.File.Exists(
                     this.CommandLineOptions.DirectoryOrFile
@@ -90,6 +85,41 @@ namespace CSharpier
             PrintResults();
 
             return ReturnExitCode();
+        }
+
+        private async Task<int> ParseIgnoreFile(
+            CancellationToken cancellationToken
+        ) {
+            var ignoreFilePath = Path.Combine(
+                this.RootPath,
+                ".csharpierignore"
+            );
+            if (this.FileSystem.File.Exists(ignoreFilePath))
+            {
+                foreach (
+                    var line in await this.FileSystem.File.ReadAllLinesAsync(
+                        ignoreFilePath,
+                        cancellationToken
+                    )
+                ) {
+                    try
+                    {
+                        this.Ignore.Add(line);
+                    }
+                    catch (Exception ex)
+                    {
+                        WriteLine(
+                            "The .csharpierignore file at " +
+                            ignoreFilePath +
+                            " could not be parsed due to the following line:"
+                        );
+                        WriteLine(line);
+                        return 1;
+                    }
+                }
+            }
+
+            return 0;
         }
 
         private async Task FormatFile(

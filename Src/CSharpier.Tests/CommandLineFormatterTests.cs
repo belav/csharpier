@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.CommandLine;
+using System.Configuration;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
@@ -111,6 +112,9 @@ namespace CSharpier.Tests
         [TestCase("Debug/Logs/File.cs", "**/Logs")]
         [TestCase("Debug/Logs/File.cs", "Logs/")]
         [TestCase("Debug/Logs/File.cs", "Debug/Logs/File.cs")]
+        [TestCase(
+            @"\Src\CSharpier.Playground\App_Data\Uploads\f45e11a81b926de2af29459af6974bb8.cs",
+            "Uploads/")]
         public void File_In_Ignore_Skips_Formatting(
             string fileName,
             string ignoreContents
@@ -124,6 +128,22 @@ namespace CSharpier.Tests
             lines.FirstOrDefault(o => o.StartsWith("Total files"))
                 .Should()
                 .Be("Total files: 0 ");
+        }
+
+        [Test]
+        public void Ignore_Reports_Errors()
+        {
+            WhenThereExists("c:/test/.csharpierignore", @"\Src\Uploads\*.cs");
+
+            var (exitCode, lines) = this.Format("c:/test");
+
+            exitCode.Should().Be(1);
+            lines.Should()
+                .Contain(
+                    "The .csharpierignore file at c:/test/.csharpierignore could not be parsed due to the following line:"
+                );
+            // our testing code replaces the \ with /
+            lines.Should().Contain("/Src/Uploads/*.cs");
         }
 
         private (int exitCode, IList<string> lines) Format(
