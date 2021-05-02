@@ -38,6 +38,14 @@ namespace CSharpier
                 directoryOrFile = Directory.GetCurrentDirectory();
             }
 
+            var commandLineOptions = new CommandLineOptions
+            {
+                DirectoryOrFile = directoryOrFile,
+                Check = check,
+                Fast = fast,
+                SkipWrite = skipWrite
+            };
+
             var rootPath = File.Exists(directoryOrFile)
                 ? Path.GetDirectoryName(directoryOrFile)
                 : directoryOrFile;
@@ -75,16 +83,11 @@ namespace CSharpier
             // TODO also the entry point should just be a static method call, hide the constructor and the other call
             var commandLineFormatter = new CommandLineFormatter(
                 rootPath,
-                check,
-                fast,
-                skipWrite,
-                configurationFileOptions.Exclude,
-                printerOptions
+                commandLineOptions,
+                printerOptions,
+                new FileSystem()
             );
-            return await commandLineFormatter.Format(
-                directoryOrFile,
-                cancellationToken
-            );
+            return await commandLineFormatter.Format(cancellationToken);
         }
     }
 }

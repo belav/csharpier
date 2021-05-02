@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
@@ -16,14 +17,14 @@ namespace CSharpier.Tests
 
             var result = this.AreEqual(left, right);
 
-            result.Should()
-                .Be(
-                    @"    Original: Around Line 0
+            ResultShouldBe(
+                result,
+                @"    Original: Around Line 0
 class ClassName { }
     Formatted: Around Line 0
 namespace Namespace { }
 "
-                );
+            );
         }
 
         [Test]
@@ -86,9 +87,9 @@ namespace Namespace { }
 
             var result = this.AreEqual(left, right);
 
-            result.Should()
-                .Be(
-                    @"    Original: Around Line 2
+            ResultShouldBe(
+                result,
+                @"    Original: Around Line 2
 class Resources
 {
     [Obsolete]
@@ -102,7 +103,7 @@ class Resources
     public Resources() { }
 }
 "
-                );
+            );
         }
 
         [Test]
@@ -167,9 +168,9 @@ class Resources
 }";
             var result = this.AreEqual(left, right);
 
-            result.Should()
-                .Be(
-                    @"    Original: Around Line 4
+            ResultShouldBe(
+                result,
+                @"    Original: Around Line 4
     Integer,
     String,
 };
@@ -180,16 +181,37 @@ public enum Enum
     String,
 }
 "
-                );
+            );
+        }
+
+        private void ResultShouldBe(string result, string be)
+        {
+            if (
+                Environment.GetEnvironmentVariable("NormalizeLineEndings") !=
+                null
+            ) {
+                be = be.Replace("\r\n", "\n");
+            }
+
+            result.Should().Be(be);
         }
 
         private string AreEqual(string left, string right)
         {
-            return new SyntaxNodeComparer(
+            var result = new SyntaxNodeComparer(
                 left,
                 right,
                 CancellationToken.None
             ).CompareSource();
+
+            if (
+                Environment.GetEnvironmentVariable("NormalizeLineEndings") !=
+                null
+            ) {
+                result = result.Replace("\r\n", "\n");
+            }
+
+            return result;
         }
     }
 }

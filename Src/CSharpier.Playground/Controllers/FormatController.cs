@@ -61,7 +61,7 @@ namespace CSharpier.Playground.Controllers
                 {
                     IncludeAST = true,
                     IncludeDocTree = true,
-                    Width = PrinterOptions.TestingWidth
+                    Width = PrinterOptions.WidthUsedByTests
                 }
             );
 

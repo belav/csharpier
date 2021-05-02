@@ -118,19 +118,6 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void Should_Return_Exclude_With_Json()
-        {
-            WhenThereExists(
-                "c:/test/.csharpierrc",
-                "{ \"exclude\": [\"src\\\\ignoreFile.cs\"] }"
-            );
-
-            var result = CreateConfigurationOptions("c:/test");
-
-            result.Exclude.Should().Contain("src/ignoreFile.cs");
-        }
-
-        [Test]
         public void Should_Return_EndOfLine_With_Json()
         {
             WhenThereExists(
@@ -174,19 +161,6 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void Should_Return_Exclude_With_Yaml()
-        {
-            WhenThereExists(
-                "c:/test/.csharpierrc",
-                "exclude:\n  - src\\ignoreFile.cs"
-            );
-
-            var result = CreateConfigurationOptions("c:/test");
-
-            result.Exclude.Should().Contain("src/ignoreFile.cs");
-        }
-
-        [Test]
         public void Should_Return_EndOfLine_With_Yaml()
         {
             WhenThereExists("c:/test/.csharpierrc", "endOfLine: crlf");
@@ -199,7 +173,6 @@ namespace CSharpier.Tests
         private void ShouldHaveDefaultOptions(
             ConfigurationFileOptions configurationFileOptions
         ) {
-            configurationFileOptions.Exclude.Should().BeEmpty();
             configurationFileOptions.PrintWidth.Should().Be(100);
             configurationFileOptions.TabWidth.Should().Be(4);
             configurationFileOptions.UseTabs.Should().BeFalse();

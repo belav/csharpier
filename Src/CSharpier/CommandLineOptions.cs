@@ -5,8 +5,13 @@ using System.Threading.Tasks;
 
 namespace CSharpier
 {
-    public static class CommandLineOptions
+    public class CommandLineOptions
     {
+        public string DirectoryOrFile { get; init; } = string.Empty;
+        public bool Check { get; init; }
+        public bool Fast { get; init; }
+        public bool SkipWrite { get; init; }
+
         internal delegate Task<int> Handler(
             string directoryOrFile,
             bool check,
