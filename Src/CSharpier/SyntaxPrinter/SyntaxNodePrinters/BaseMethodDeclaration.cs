@@ -94,9 +94,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             var declarationGroup = new List<Doc>();
 
-            var modifiersHasLeadingTrivia =
-                modifiers.HasValue && modifiers.Value.Count > 0;
-
             if (modifiers.HasValue)
             {
                 declarationGroup.Add(
@@ -106,7 +103,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (returnType != null)
             {
-                if (!modifiersHasLeadingTrivia)
+                if (!(modifiers.HasValue && modifiers.Value.Count > 0))
                 {
                     Token.ShouldSkipNextLeadingTrivia = true;
                 }
@@ -182,7 +179,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 );
             }
 
-            if (modifiersHasLeadingTrivia)
+            if (modifiers.HasValue && modifiers.Value.Count > 0)
             {
                 docs.Add(Token.PrintLeadingTrivia(modifiers.Value[0]));
             }

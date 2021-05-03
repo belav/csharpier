@@ -8,7 +8,7 @@ jobs:
     name: Run Tests
     steps:
       - uses: actions/checkout@v2
-      - run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj
+      - run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj -c release
   check_formatting:
     runs-on: ubuntu-latest
     name: Check Formatting
