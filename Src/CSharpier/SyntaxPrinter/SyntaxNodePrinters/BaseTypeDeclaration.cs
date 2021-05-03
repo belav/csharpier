@@ -107,6 +107,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (hasMembers)
             {
+                Console.WriteLine(DocTreePrinter.Print(members));
                 DocUtilities.RemoveInitialDoubleHardLine(members);
 
                 docs.Add(

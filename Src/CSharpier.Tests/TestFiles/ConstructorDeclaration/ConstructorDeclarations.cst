@@ -28,3 +28,17 @@ public class Initializers : BasicClass
     public Initializers(string value)
         : base(value) { }
 }
+
+public class Exactly80
+{
+    public Exactly80(int lajsfaskdlfklasdfklskadlfklsdfkasdkfjaskdfkdfdddd)
+    {
+        return;
+    }
+
+    // leading comments don't affect this
+    public Exactly80(string lajsfaskdlfklasdfklskadlfklsdfkasdkfjaskdfkdfd)
+    {
+        return;
+    }
+}

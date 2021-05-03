@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using CSharpier.DocTypes;
 
-namespace CSharpier
+namespace CSharpier.DocTypes
 {
     public static class DocUtilities
     {
@@ -25,6 +22,7 @@ namespace CSharpier
                 if (doc == Doc.Null)
                 {
                     docs.RemoveAt(x);
+                    break;
                 }
                 else if (doc is HardLine)
                 {

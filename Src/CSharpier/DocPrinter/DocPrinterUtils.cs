@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using CSharpier.DocTypes;
 
-namespace CSharpier
+namespace CSharpier.DocPrinter
 {
     public static class DocPrinterUtils
     {
-        private static readonly Doc traverseDocOnExitStackMarker = new();
+        private static readonly Doc TraverseDocOnExitStackMarker = new();
 
         public static void PropagateBreaks(Doc document)
         {
@@ -69,14 +68,14 @@ namespace CSharpier
             {
                 var doc = docsStack.Pop();
 
-                if (doc == traverseDocOnExitStackMarker)
+                if (doc == TraverseDocOnExitStackMarker)
                 {
                     OnExit(docsStack.Pop());
                     continue;
                 }
 
                 docsStack.Push(doc);
-                docsStack.Push(traverseDocOnExitStackMarker);
+                docsStack.Push(TraverseDocOnExitStackMarker);
 
                 if (!OnEnter(doc))
                 {

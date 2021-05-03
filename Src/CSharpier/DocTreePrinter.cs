@@ -79,7 +79,7 @@ namespace CSharpier
                 case TrailingComment trailingComment:
                     return $"{indent}Doc.TrailingComment(\"{trailingComment.Comment}\", CommentType.{(trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
                 case IfBreak ifBreak:
-                    return @$"{indent}Doc.IfBreak
+                    return @$"{indent}Doc.IfBreak(
 {PrintIndentedDocTree(ifBreak.BreakContents)},
 {PrintIndentedDocTree(ifBreak.FlatContents)},
 {nextIndent}""{ifBreak.GroupId}"")";

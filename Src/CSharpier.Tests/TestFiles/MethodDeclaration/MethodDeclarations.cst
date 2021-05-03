@@ -70,6 +70,24 @@ namespace SomeNamespace
             return;
         }
 
+        // leading comments don't affect modifiers
+        public void Exactly80(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            return;
+        }
+
+        // leading comments don't affect void
+        void Exactly80(IApplicationBuilder app, IWebHostEnvironmentttttttt env)
+        {
+            return;
+        }
+
+        // leading comments don't affect type
+        IList<string> Exactly80(IApplicationBuilder app, IWebHostEnvironme env)
+        {
+            return;
+        }
+
         public void JustOver80(
             IApplicationBuilder app,
             IWebHostEnvironment envvv

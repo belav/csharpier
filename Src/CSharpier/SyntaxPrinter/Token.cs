@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
@@ -7,8 +8,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public class Token
+    public static class Token
     {
+        [ThreadStatic]
+        public static bool ShouldSkipNextLeadingTrivia;
+
         public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken)
         {
             return PrintSyntaxToken(syntaxToken, null, skipLeadingTrivia: true);
@@ -45,7 +49,7 @@ namespace CSharpier.SyntaxPrinter
             }
 
             var docs = new List<Doc>();
-            if (!skipLeadingTrivia)
+            if (!skipLeadingTrivia && !ShouldSkipNextLeadingTrivia)
             {
                 var leadingTrivia = PrintLeadingTrivia(syntaxToken);
                 if (leadingTrivia != Doc.Null)
@@ -53,6 +57,9 @@ namespace CSharpier.SyntaxPrinter
                     docs.Add(leadingTrivia);
                 }
             }
+
+            ShouldSkipNextLeadingTrivia = false;
+
             docs.Add(syntaxToken.Text);
             var trailingTrivia = PrintTrailingTrivia(syntaxToken);
             if (trailingTrivia != Doc.Null)
@@ -82,7 +89,7 @@ namespace CSharpier.SyntaxPrinter
                 : printedTrivia;
         }
 
-        public static Doc PrintLeadingTrivia( // make this private eventually, figure out if we can ditch the special case for CompilationUnitSyntax
+        public static Doc PrintLeadingTrivia(
             SyntaxTriviaList leadingTrivia,
             bool includeInitialNewLines = false,
             bool skipLastHardline = false
