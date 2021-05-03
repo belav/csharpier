@@ -6,15 +6,21 @@ namespace CSharpier.DocTypes
     {
         public bool SkipBreakIfFirstInGroup { get; init; }
 
-        public HardLine(bool skipBreakIfFirstInGroup = false)
+        public HardLine(
+            bool ifNoPreviousLine = false,
+            bool skipBreakIfFirstInGroup = false
+        )
             : base(
                 new List<Doc>
                 {
-                    new LineDoc { Type = LineDoc.LineType.Hard },
+                    new LineDoc
+                    {
+                        Type = LineDoc.LineType.Hard,
+                        Squash = ifNoPreviousLine
+                    },
                     new BreakParent(),
                 }
-            )
-        {
+            ) {
             SkipBreakIfFirstInGroup = skipBreakIfFirstInGroup;
         }
     }

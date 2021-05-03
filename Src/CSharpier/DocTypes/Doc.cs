@@ -16,13 +16,13 @@ namespace CSharpier.DocTypes
 
         public static HardLine HardLine => new();
 
-        public static HardLine HardLineSkipBreakIfFirstInGroup => new(true);
+        public static HardLine HardLineSkipBreakIfFirstInGroup =>
+            new(false, true);
 
-        public static HardLineIfNoPreviousLine HardLineIfNoPreviousLine =>
-            new();
+        public static HardLine HardLineIfNoPreviousLine => new(true);
 
-        public static HardLineIfNoPreviousLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup =>
-            new(true);
+        public static HardLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup =>
+            new(true, true);
 
         // TODO all of the Line types can probably turn into proper classes, and be the same instance by type
         public static LiteralLine LiteralLine => new();

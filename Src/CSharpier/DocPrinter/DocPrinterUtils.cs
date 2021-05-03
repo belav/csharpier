@@ -27,8 +27,7 @@ namespace CSharpier.DocPrinter
             bool OnEnter(Doc doc)
             {
                 if (
-                    (doc is HardLine { SkipBreakIfFirstInGroup: true }  ||
-                    doc is HardLineIfNoPreviousLine { SkipBreakIfFirstInGroup: true } ) &&
+                    doc is HardLine { SkipBreakIfFirstInGroup: true }  &&
                     newGroup
                 ) {
                     skipNextBreak = true;
