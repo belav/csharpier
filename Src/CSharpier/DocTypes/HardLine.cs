@@ -7,7 +7,7 @@ namespace CSharpier.DocTypes
         public bool SkipBreakIfFirstInGroup { get; init; }
 
         public HardLine(
-            bool ifNoPreviousLine = false,
+            bool squash = false,
             bool skipBreakIfFirstInGroup = false
         )
             : base(
@@ -16,7 +16,7 @@ namespace CSharpier.DocTypes
                     new LineDoc
                     {
                         Type = LineDoc.LineType.Hard,
-                        Squash = ifNoPreviousLine
+                        Squash = squash
                     },
                     new BreakParent(),
                 }

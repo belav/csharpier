@@ -14,7 +14,7 @@ namespace CSharpier.DocPrinter
             var alreadyVisitedSet = new HashSet<Group>();
             var groupStack = new Stack<Group>();
             var forceFlat = 0;
-            var newGroup = false;
+            var canSetSkipNextBreak = false;
             var skipNextBreak = false;
 
             void BreakParentGroup()
@@ -30,7 +30,7 @@ namespace CSharpier.DocPrinter
             {
                 if (
                     doc is HardLine { SkipBreakIfFirstInGroup: true }  &&
-                    newGroup
+                    canSetSkipNextBreak
                 ) {
                     skipNextBreak = true;
                     return true;
@@ -58,7 +58,7 @@ namespace CSharpier.DocPrinter
                 }
                 else if (doc is Group group)
                 {
-                    newGroup = true;
+                    canSetSkipNextBreak = true;
                     groupStack.Push(group);
                     if (alreadyVisitedSet.Contains(group))
                     {
@@ -67,9 +67,9 @@ namespace CSharpier.DocPrinter
 
                     alreadyVisitedSet.Add(group);
                 }
-                else if (doc is StringDoc { IsTrivia: false } )
+                else if (doc is StringDoc { IsDirective: false } )
                 {
-                    newGroup = false;
+                    canSetSkipNextBreak = false;
                     skipNextBreak = false;
                 }
 
@@ -84,7 +84,7 @@ namespace CSharpier.DocPrinter
                 }
                 else if (doc is Group)
                 {
-                    newGroup = false;
+                    canSetSkipNextBreak = false;
                     var group = groupStack.Pop();
                     if (group.Break)
                     {

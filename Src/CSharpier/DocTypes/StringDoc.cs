@@ -3,12 +3,12 @@ namespace CSharpier.DocTypes
     public class StringDoc : Doc
     {
         public string Value { get; set; }
-        public bool IsTrivia { get; set; }
+        public bool IsDirective { get; set; }
 
-        public StringDoc(string value, bool isTrivia = false)
+        public StringDoc(string value, bool isDirective = false)
         {
             this.Value = value;
-            this.IsTrivia = isTrivia;
+            this.IsDirective = isDirective;
         }
     }
 }
