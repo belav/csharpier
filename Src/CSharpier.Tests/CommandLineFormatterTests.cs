@@ -193,7 +193,7 @@ namespace CSharpier.Tests
 
         private class TestableCommandLineFormatter : CommandLineFormatter
         {
-            public IList<string> Lines = new List<string>();
+            public readonly IList<string> Lines = new List<string>();
 
             public TestableCommandLineFormatter(
                 string rootPath,
@@ -208,7 +208,7 @@ namespace CSharpier.Tests
                     fileSystem
                 ) { }
 
-            protected override void WriteLine(string? line = null)
+            protected override void WriteLine(string line = null)
             {
                 while (line != null && line.Contains("  "))
                 {
