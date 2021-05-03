@@ -1,0 +1,24 @@
+class ClassName
+{
+    int[] array = { 1, 2 };
+
+    int[] array = {
+        "jklasdfjlkakljsdfkjlasdfkjlasdkjlfasjklf",
+        "klaldsjkfljkasdfjklasjklfasdjf"
+    };
+
+    public IList<string> Value = new List<string> { "one", "two" };
+
+    Dictionary<int, string> dictionary = new Dictionary<int, string>
+    {
+        { 1, "one" },
+        { 2, "two" }
+    };
+
+    Dictionary<int, string> dictionary = new Dictionary<int, string>
+    {
+        // should break braces correctly
+        { 1, "one" },
+        { 2, "two" }
+    };
+}

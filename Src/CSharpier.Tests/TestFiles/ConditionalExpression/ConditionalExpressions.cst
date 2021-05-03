@@ -17,4 +17,31 @@ public class ClassName
                 someLongValue,
                 someLongValue
             );
+
+    void Method()
+    {
+        var fileContents = File.ReadAllText(
+            file,
+            // leading here should break parameters and GetEncoding should still group
+            encoding
+                ? File.GetEncodinggggggggggggggggggggg(1252)
+                : encodinggggggggggggggg,
+            cancellationToken
+        );
+
+        var fileContents = File.ReadAllText(
+            file,
+            // leading here should break parameters
+            encoding ? GetEncoding(1252) : encoding,
+            cancellationToken
+        );
+
+        var fileContents = File.ReadAllText(
+            file,
+            encoding
+                ? File.GetEncodinggggggggggggggg(1252)
+                : encodinggggggggggggggg,
+            cancellationToken
+        );
+    }
 }

@@ -1,13 +1,15 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using CSharpier.DocTypes;
 
 namespace CSharpier.DocPrinter
 {
-    public static class DocPrinterUtils
+    public static class PropagateBreaks
     {
         private static readonly Doc TraverseDocOnExitStackMarker = new();
 
-        public static void PropagateBreaks(Doc document)
+        public static void RunOn(Doc document)
         {
             var alreadyVisitedSet = new HashSet<Group>();
             var groupStack = new Stack<Group>();
@@ -45,6 +47,12 @@ namespace CSharpier.DocPrinter
                     }
                     else
                     {
+                        if (groupStack.Count > 1)
+                        {
+                            var nextGroup = groupStack.Pop();
+                            groupStack.Peek().Break = true;
+                            groupStack.Push(nextGroup);
+                        }
                         skipNextBreak = false;
                     }
                 }
@@ -62,6 +70,7 @@ namespace CSharpier.DocPrinter
                 else if (doc is StringDoc { IsTrivia: false } )
                 {
                     newGroup = false;
+                    skipNextBreak = false;
                 }
 
                 return true;
