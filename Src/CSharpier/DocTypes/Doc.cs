@@ -16,6 +16,14 @@ namespace CSharpier.DocTypes
 
         public static HardLine HardLine => new();
 
+        public static HardLine HardLineSkipBreakIfFirstInGroup => new(true);
+
+        public static HardLineIfNoPreviousLine HardLineIfNoPreviousLine =>
+            new();
+
+        public static HardLineIfNoPreviousLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup =>
+            new(true);
+
         // TODO all of the Line types can probably turn into proper classes, and be the same instance by type
         public static LiteralLine LiteralLine => new();
 
@@ -25,9 +33,6 @@ namespace CSharpier.DocTypes
 
         public static LineDoc SoftLine =>
             new() { Type = LineDoc.LineType.Soft };
-
-        public static HardLineIfNoPreviousLine HardLineIfNoPreviousLine =>
-            new();
 
         public static LeadingComment LeadingComment(
             string comment,
@@ -149,6 +154,11 @@ namespace CSharpier.DocTypes
                 BreakContents = breakContents,
                 GroupId = groupId,
             };
+        }
+
+        public static Doc Directive(string value)
+        {
+            return new StringDoc(value, true);
         }
     }
 

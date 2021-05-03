@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class BinaryExpressionTests : BaseTest
     {
         [Test]
-        public void StringConcatenation()
+        public void BinaryExpressions()
         {
-            this.RunTest("BinaryExpression", "StringConcatenation");
+            this.RunTest("BinaryExpression", "BinaryExpressions");
         }
     }
 }

@@ -4,13 +4,18 @@ namespace CSharpier.DocTypes
 {
     public class HardLine : Concat
     {
-        public HardLine()
+        public bool SkipBreakIfFirstInGroup { get; init; }
+
+        public HardLine(bool skipBreakIfFirstInGroup = false)
             : base(
                 new List<Doc>
                 {
                     new LineDoc { Type = LineDoc.LineType.Hard },
-                    new BreakParent()
+                    new BreakParent(),
                 }
-            ) { }
+            )
+        {
+            SkipBreakIfFirstInGroup = skipBreakIfFirstInGroup;
+        }
     }
 }

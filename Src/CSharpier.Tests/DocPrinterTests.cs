@@ -431,6 +431,60 @@ namespace CSharpier.Tests
         }
 
         [Test]
+        public void HardLineSkipBreakIfFirstInGroup_Should_Not_Break()
+        {
+            var doc = Doc.Group(
+                Doc.HardLineSkipBreakIfFirstInGroup,
+                "1",
+                Doc.Line,
+                "2"
+            );
+
+            PrintedDocShouldBe(doc, $"{NewLine}1 2");
+        }
+
+        [Test]
+        public void HardLineSkipBreakIfFirstInGroup_Twice_Should_Not_Break()
+        {
+            var doc = Doc.Group(
+                Doc.HardLineSkipBreakIfFirstInGroup,
+                Doc.HardLineSkipBreakIfFirstInGroup,
+                "1",
+                Doc.Line,
+                "2"
+            );
+
+            PrintedDocShouldBe(doc, $"{NewLine}{NewLine}1 2");
+        }
+
+        [Test]
+        public void HardLineIfNoPreviousLineSkipBreakIfFirstInGroup_Should_Not_Break()
+        {
+            var doc = Doc.Group(
+                Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
+                "1",
+                Doc.Line,
+                "2"
+            );
+
+            PrintedDocShouldBe(doc, $"{NewLine}1 2");
+        }
+
+        [Test]
+        public void Directive_Does_Not_Affect_FirstInGroup()
+        {
+            var doc = Doc.Group(
+                Doc.Directive("#pragma"),
+                Doc.HardLineSkipBreakIfFirstInGroup,
+                "1",
+                Doc.Line,
+                "2"
+            );
+
+            PrintedDocShouldBe(doc, $"#pragma{NewLine}1 2");
+        }
+
+        [Test]
         public void Scratch()
         {
             var doc = "";

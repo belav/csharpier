@@ -34,8 +34,12 @@ namespace CSharpier
                     "\"";
                 case HardLineIfNoPreviousLine:
                     return indent + "Doc.HardLineIfNoPreviousLine";
-                case HardLine:
-                    return indent + "Doc.HardLine";
+                case HardLine hardLine:
+                    return indent +
+                    "Doc.HardLine" +
+                    (hardLine.SkipBreakIfFirstInGroup
+                        ? "SkipBreakIfFirstInGroup"
+                        : string.Empty);
                 case LiteralLine:
                     return indent + "Doc.LiteralLine";
                 case Concat concat:

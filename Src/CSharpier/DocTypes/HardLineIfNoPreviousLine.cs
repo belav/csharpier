@@ -4,7 +4,9 @@ namespace CSharpier.DocTypes
 {
     public class HardLineIfNoPreviousLine : Concat
     {
-        public HardLineIfNoPreviousLine()
+        public bool SkipBreakIfFirstInGroup { get; init; }
+
+        public HardLineIfNoPreviousLine(bool skipBreakIfFirstInGroup = false)
             : base(
                 new List<Doc>
                 {
@@ -15,6 +17,9 @@ namespace CSharpier.DocTypes
                     },
                     new BreakParent()
                 }
-            ) { }
+            )
+        {
+            SkipBreakIfFirstInGroup = skipBreakIfFirstInGroup;
+        }
     }
 }

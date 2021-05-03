@@ -12,6 +12,8 @@ namespace CSharpier.DocPrinter
             var alreadyVisitedSet = new HashSet<Group>();
             var groupStack = new Stack<Group>();
             var forceFlat = 0;
+            var newGroup = false;
+            var skipNextBreak = false;
 
             void BreakParentGroup()
             {
@@ -24,16 +26,32 @@ namespace CSharpier.DocPrinter
 
             bool OnEnter(Doc doc)
             {
+                if (
+                    (doc is HardLine { SkipBreakIfFirstInGroup: true }  ||
+                    doc is HardLineIfNoPreviousLine { SkipBreakIfFirstInGroup: true } ) &&
+                    newGroup
+                ) {
+                    skipNextBreak = true;
+                    return true;
+                }
                 if (doc is ForceFlat)
                 {
                     forceFlat++;
                 }
                 if (doc is BreakParent && forceFlat == 0)
                 {
-                    BreakParentGroup();
+                    if (!skipNextBreak)
+                    {
+                        BreakParentGroup();
+                    }
+                    else
+                    {
+                        skipNextBreak = false;
+                    }
                 }
                 else if (doc is Group group)
                 {
+                    newGroup = true;
                     groupStack.Push(group);
                     if (alreadyVisitedSet.Contains(group))
                     {
@@ -41,6 +59,10 @@ namespace CSharpier.DocPrinter
                     }
 
                     alreadyVisitedSet.Add(group);
+                }
+                else if (doc is StringDoc { IsTrivia: false } )
+                {
+                    newGroup = false;
                 }
 
                 return true;
@@ -54,6 +76,7 @@ namespace CSharpier.DocPrinter
                 }
                 else if (doc is Group)
                 {
+                    newGroup = false;
                     var group = groupStack.Pop();
                     if (group.Break)
                     {
