@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using CSharpier.DocTypes;
 
-namespace CSharpier
+namespace CSharpier.DocPrinter
 {
     // a big chunk of the code in here is ported from prettier. The names and layout of the file were
     // kept consistent with how they looked in prettier because not everything
@@ -14,118 +14,6 @@ namespace CSharpier
     {
         [ThreadStatic]
         private static Dictionary<string, PrintMode>? groupModeMap;
-
-        private static Indent RootIndent()
-        {
-            return new Indent(string.Empty, 0, new List<IndentType>());
-        }
-
-        private static Indent MakeIndent(
-            Indent indent,
-            PrinterOptions printerOptions
-        ) {
-            return GenerateIndent(
-                indent,
-                newPart: new IndentType("indent", 0),
-                printerOptions
-            );
-        }
-
-        private static Indent GenerateIndent(
-            Indent indent,
-            IndentType newPart,
-            PrinterOptions printerOptions
-        ) {
-            var queue = new List<IndentType>(indent.Queue);
-            if (newPart.Type == "dedent")
-            {
-                queue.RemoveAt(queue.Count - 1);
-            }
-            else
-            {
-                queue.Add(newPart);
-            }
-
-            var value = new StringBuilder();
-            var length = 0;
-            var lastTabs = 0;
-
-            var lastSpaces = 0;
-            foreach (var part in queue)
-            {
-                switch (part.Type)
-                {
-                    case "indent":
-                        Flush();
-                        if (printerOptions.UseTabs)
-                        {
-                            AddTabs(1);
-                        }
-                        else
-                        {
-                            AddSpaces(printerOptions.TabWidth);
-                        }
-                        break;
-                    default:
-                        throw new Exception(part.Type);
-                }
-            }
-
-            FlushSpaces();
-
-            void AddTabs(int count)
-            {
-                value.Append('\t', count);
-                length += printerOptions.TabWidth * count;
-            }
-
-            void AddSpaces(int count)
-            {
-                value.Append(' ', count);
-                length += count;
-            }
-
-            void Flush()
-            {
-                if (printerOptions.UseTabs)
-                {
-                    FlushTabs();
-                }
-                else
-                {
-                    FlushSpaces();
-                }
-            }
-
-            void FlushTabs()
-            {
-                if (lastTabs > 0)
-                {
-                    AddTabs(lastTabs);
-                }
-
-                ResetLast();
-            }
-
-            void FlushSpaces()
-            {
-                if (lastSpaces > 0)
-                {
-                    AddSpaces(lastSpaces);
-                }
-
-                ResetLast();
-            }
-
-            void ResetLast()
-            {
-                lastTabs = 0;
-                lastSpaces = 0;
-            }
-
-            // TODO 2 in prettier this has a ...ind
-            return new Indent(value.ToString(), length, queue);
-        }
 
         private static bool Fits(
             PrintCommand nextCommand,
@@ -201,7 +89,10 @@ namespace CSharpier
                             Push(
                                 indent.Contents,
                                 currentMode,
-                                MakeIndent(currentIndent, printerOptions)
+                                IndentBuilder.Make(
+                                    currentIndent,
+                                    printerOptions
+                                )
                             );
                             break;
                         case Trim:
@@ -286,7 +177,11 @@ namespace CSharpier
 
             var currentStack = new Stack<PrintCommand>();
             currentStack.Push(
-                new PrintCommand(RootIndent(), PrintMode.MODE_BREAK, document)
+                new PrintCommand(
+                    IndentBuilder.MakeRoot(),
+                    PrintMode.MODE_BREAK,
+                    document
+                )
             );
 
             var output = new StringBuilder();
@@ -347,7 +242,7 @@ namespace CSharpier
                         Push(
                             indentBuilder.Contents,
                             command.Mode,
-                            MakeIndent(command.Indent, printerOptions)
+                            IndentBuilder.Make(command.Indent, printerOptions)
                         );
                         break;
                     case Trim:
@@ -575,8 +470,6 @@ namespace CSharpier
             return trimmed;
         }
 
-        private record IndentType(string Type, int Number);
-
         private record PrintCommand(Indent Indent, PrintMode Mode, Doc Doc);
 
         private enum PrintMode
@@ -585,7 +478,5 @@ namespace CSharpier
             MODE_BREAK,
             MODE_FORCEFLAT
         }
-
-        private record Indent(string Value, int Length, List<IndentType> Queue);
     }
 }

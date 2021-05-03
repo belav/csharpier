@@ -13,12 +13,26 @@ namespace CSharpier.SyntaxPrinter
                 return Doc.Null;
             }
 
-            var docs = modifiers.Select(
-                    modifier => Token.PrintWithSuffix(modifier, " ")
-                )
-                .ToList();
+            return Doc.Group(Doc.Join(" ", modifiers.Select(Token.Print)), " ");
+        }
 
-            return Doc.Group(Doc.Concat(docs));
+        public static Doc PrintWithoutLeadingTrivia(SyntaxTokenList modifiers)
+        {
+            if (modifiers.Count == 0)
+            {
+                return Doc.Null;
+            }
+
+            return Doc.Group(
+                Token.PrintWithoutLeadingTrivia(modifiers[0]),
+                " ",
+                modifiers.Count > 1
+                    ? Doc.Concat(
+                            modifiers.Skip(1)
+                                .Select(o => Token.PrintWithSuffix(o, " "))
+                        )
+                    : Doc.Null
+            );
         }
     }
 }

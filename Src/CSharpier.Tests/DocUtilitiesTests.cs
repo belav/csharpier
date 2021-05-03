@@ -157,5 +157,27 @@ namespace CSharpier.Tests
             doc.Should()
                 .BeEquivalentTo(Doc.Concat("1", Doc.HardLine, Doc.HardLine));
         }
+
+        [Test]
+        public void RemoveInitialDoubleHardLine_Work_With_Doc_Null_Before_String()
+        {
+            var doc = Doc.Concat(
+                Doc.HardLine,
+                Doc.Null,
+                "1",
+                Doc.HardLine,
+                "2"
+            );
+
+            DocUtilities.RemoveInitialDoubleHardLine(doc);
+
+            DocSerializer.Serialize(doc)
+                .Should()
+                .Be(
+                    DocSerializer.Serialize(
+                        Doc.Concat(Doc.HardLine, "1", Doc.HardLine, "2")
+                    )
+                );
+        }
     }
 }

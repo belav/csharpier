@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace CSharpier.DocTypes
@@ -46,12 +45,17 @@ namespace CSharpier.DocTypes
 
         public static Concat Concat(List<Doc> contents)
         {
-            return new(CleanContents(contents));
+            return new(contents);
+        }
+
+        public static Concat Concat(IEnumerable<Doc> contents)
+        {
+            return new(contents.ToList());
         }
 
         public static Concat Concat(params Doc[] contents)
         {
-            return new(CleanContents(contents.ToList()));
+            return new(contents.ToList());
         }
 
         public static Doc Join(Doc separator, IEnumerable<Doc> array)
@@ -145,32 +149,6 @@ namespace CSharpier.DocTypes
                 BreakContents = breakContents,
                 GroupId = groupId,
             };
-        }
-
-        // can be used to clean up the doc tree, ideally we would change our printing process
-        // to not have the deeply nested Concats, but that's a large change
-        // only allowed when in debug because it does slow things down a bit
-        private static List<Doc> CleanContents(List<Doc> contents)
-        {
-#pragma warning disable 0162
-            return contents;
-#if DEBUG
-            var newDocs = new List<Doc>();
-            foreach (var doc in contents)
-            {
-                if (doc is Concat concat)
-                {
-                    newDocs.AddRange(CleanContents(concat.Contents));
-                }
-                else if (doc != Doc.Null)
-                {
-                    newDocs.Add(doc);
-                }
-            }
-            return newDocs;
-#endif
-            return contents;
-#pragma warning restore 0162
         }
     }
 

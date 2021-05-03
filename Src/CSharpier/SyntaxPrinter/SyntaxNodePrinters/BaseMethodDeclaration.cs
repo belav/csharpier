@@ -94,15 +94,25 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             var declarationGroup = new List<Doc>();
 
+            var modifiersHasLeadingTrivia =
+                modifiers.HasValue && modifiers.Value.Count > 0;
+
             if (modifiers.HasValue)
             {
-                declarationGroup.Add(Modifiers.Print(modifiers.Value));
+                declarationGroup.Add(
+                    Modifiers.PrintWithoutLeadingTrivia(modifiers.Value)
+                );
             }
 
             if (returnType != null)
             {
-                // TODO 1 preprocessor stuff is going to be painful, because it doesn't parse some of it. Could we figure that out somehow? that may get complicated
+                if (!modifiersHasLeadingTrivia)
+                {
+                    Token.ShouldSkipNextLeadingTrivia = true;
+                }
+
                 declarationGroup.Add(Node.Print(returnType), " ");
+                Token.ShouldSkipNextLeadingTrivia = false;
             }
 
             if (explicitInterfaceSpecifier != null)
@@ -169,6 +179,17 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 declarationGroup.Add(
                     ConstructorInitializer.Print(constructorInitializer)
+                );
+            }
+
+            if (modifiersHasLeadingTrivia)
+            {
+                docs.Add(Token.PrintLeadingTrivia(modifiers.Value[0]));
+            }
+            else if (returnType != null)
+            {
+                docs.Add(
+                    Token.PrintLeadingTrivia(returnType.GetLeadingTrivia())
                 );
             }
 

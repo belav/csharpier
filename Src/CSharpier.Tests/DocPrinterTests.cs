@@ -454,7 +454,7 @@ namespace CSharpier.Tests
             int width = PrinterOptions.WidthUsedByTests,
             bool trimInitialLines = false
         ) {
-            return DocPrinter.Print(
+            return DocPrinter.DocPrinter.Print(
                     doc,
                     new PrinterOptions
                     {

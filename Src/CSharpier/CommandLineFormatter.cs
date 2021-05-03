@@ -114,6 +114,7 @@ namespace CSharpier
                             " could not be parsed due to the following line:"
                         );
                         WriteLine(line);
+                        WriteLine("Exception: " + ex.Message);
                         return 1;
                     }
                 }

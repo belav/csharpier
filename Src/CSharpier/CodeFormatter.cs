@@ -77,12 +77,15 @@ namespace CSharpier
             try
             {
                 var document = Node.Print(rootNode);
-                var formattedCode = DocPrinter.Print(document, printerOptions);
+                var formattedCode = DocPrinter.DocPrinter.Print(
+                    document,
+                    printerOptions
+                );
                 return new CSharpierResult
                 {
                     Code = formattedCode,
                     DocTree = printerOptions.IncludeDocTree
-                        ? DocTreePrinter.Print(document)
+                        ? DocSerializer.Serialize(document)
                         : string.Empty,
                     AST = printerOptions.IncludeAST
                         ? this.PrintAST(rootNode)
