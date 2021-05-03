@@ -1,17 +1,21 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using CSharpier.DocTypes;
 
 namespace CSharpier.DocPrinter
 {
-    public static class DocPrinterUtils
+    public static class PropagateBreaks
     {
         private static readonly Doc TraverseDocOnExitStackMarker = new();
 
-        public static void PropagateBreaks(Doc document)
+        public static void RunOn(Doc document)
         {
             var alreadyVisitedSet = new HashSet<Group>();
             var groupStack = new Stack<Group>();
             var forceFlat = 0;
+            var canSetSkipNextBreak = false;
+            var skipNextBreak = false;
 
             void BreakParentGroup()
             {
@@ -24,16 +28,37 @@ namespace CSharpier.DocPrinter
 
             bool OnEnter(Doc doc)
             {
+                if (
+                    doc is HardLine { SkipBreakIfFirstInGroup: true }  &&
+                    canSetSkipNextBreak
+                ) {
+                    skipNextBreak = true;
+                    return true;
+                }
                 if (doc is ForceFlat)
                 {
                     forceFlat++;
                 }
                 if (doc is BreakParent && forceFlat == 0)
                 {
-                    BreakParentGroup();
+                    if (!skipNextBreak)
+                    {
+                        BreakParentGroup();
+                    }
+                    else
+                    {
+                        if (groupStack.Count > 1)
+                        {
+                            var nextGroup = groupStack.Pop();
+                            groupStack.Peek().Break = true;
+                            groupStack.Push(nextGroup);
+                        }
+                        skipNextBreak = false;
+                    }
                 }
                 else if (doc is Group group)
                 {
+                    canSetSkipNextBreak = true;
                     groupStack.Push(group);
                     if (alreadyVisitedSet.Contains(group))
                     {
@@ -41,6 +66,11 @@ namespace CSharpier.DocPrinter
                     }
 
                     alreadyVisitedSet.Add(group);
+                }
+                else if (doc is StringDoc { IsDirective: false } )
+                {
+                    canSetSkipNextBreak = false;
+                    skipNextBreak = false;
                 }
 
                 return true;
@@ -54,6 +84,7 @@ namespace CSharpier.DocPrinter
                 }
                 else if (doc is Group)
                 {
+                    canSetSkipNextBreak = false;
                     var group = groupStack.Pop();
                     if (group.Break)
                     {

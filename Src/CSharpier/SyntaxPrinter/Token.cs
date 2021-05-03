@@ -121,7 +121,7 @@ namespace CSharpier.SyntaxPrinter
 
                 if (printNewLines && kind == SyntaxKind.EndOfLineTrivia)
                 {
-                    docs.Add(Doc.HardLine);
+                    docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
                 }
                 if (
                     kind != SyntaxKind.EndOfLineTrivia &&
@@ -160,20 +160,11 @@ namespace CSharpier.SyntaxPrinter
                 }
                 else if (IsDirective(kind))
                 {
-                    // handles the case of a method that only contains #if DEBUG
-                    if (
-                        kind == SyntaxKind.IfDirectiveTrivia &&
-                        trivia.Token.Kind() == SyntaxKind.CloseBraceToken &&
-                        trivia.Token.Parent is BlockSyntax blockSyntax &&
-                        blockSyntax.Statements.Count == 0
-                    ) {
-                        docs.Add(Doc.HardLineIfNoPreviousLine);
-                    }
                     docs.Add(
-                        Doc.HardLineIfNoPreviousLine,
+                        Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
                         Doc.Trim,
-                        trivia.ToString(),
-                        Doc.HardLine
+                        Doc.Directive(trivia.ToString()),
+                        Doc.HardLineSkipBreakIfFirstInGroup
                     );
                 }
                 else if (IsRegion(kind))
@@ -188,7 +179,7 @@ namespace CSharpier.SyntaxPrinter
                     }
 
                     docs.Add(
-                        Doc.HardLineIfNoPreviousLine,
+                        Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
                         Doc.Trim,
                         triviaText,
                         Doc.HardLine

@@ -169,7 +169,7 @@ namespace CSharpier.DocPrinter
         ) {
             groupModeMap = new Dictionary<string, PrintMode>();
 
-            DocPrinterUtils.PropagateBreaks(document);
+            PropagateBreaks.RunOn(document);
 
             var allowedWidth = printerOptions.Width;
             var newLine = printerOptions.EndOfLine;

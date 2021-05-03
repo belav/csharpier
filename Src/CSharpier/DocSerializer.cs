@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using CSharpier.DocTypes;
 
 namespace CSharpier
@@ -32,10 +33,15 @@ namespace CSharpier
                     "\"" +
                     stringDoc.Value?.Replace("\"", "\\\"") +
                     "\"";
-                case HardLineIfNoPreviousLine:
-                    return indent + "Doc.HardLineIfNoPreviousLine";
-                case HardLine:
-                    return indent + "Doc.HardLine";
+                case HardLine hardLine:
+                    return indent +
+                    "Doc.HardLine" +
+                    (hardLine.Contents.First() is LineDoc { Squash: true }
+                        ? "IfNoPreviousLine"
+                        : string.Empty) +
+                    (hardLine.SkipBreakIfFirstInGroup
+                        ? "SkipBreakIfFirstInGroup"
+                        : string.Empty);
                 case LiteralLine:
                     return indent + "Doc.LiteralLine";
                 case Concat concat:

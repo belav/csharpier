@@ -7,15 +7,17 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ConditionalExpressionSyntax node)
         {
-            return Doc.Group(
-                Doc.Indent(
-                    Node.Print(node.Condition),
-                    Doc.Line,
-                    Token.Print(node.QuestionToken, " "),
-                    Doc.Indent(Node.Print(node.WhenTrue)),
-                    Doc.Line,
-                    Token.Print(node.ColonToken, " "),
-                    Doc.Indent(Node.Print(node.WhenFalse))
+            return Doc.Concat(
+                Node.Print(node.Condition),
+                Doc.Group(
+                    Doc.Indent(
+                        Doc.Line,
+                        Token.Print(node.QuestionToken, " "),
+                        Doc.Indent(Node.Print(node.WhenTrue)),
+                        Doc.Line,
+                        Token.Print(node.ColonToken, " "),
+                        Doc.Indent(Node.Print(node.WhenFalse))
+                    )
                 )
             );
         }

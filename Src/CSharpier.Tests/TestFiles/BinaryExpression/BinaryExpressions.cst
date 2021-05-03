@@ -18,5 +18,18 @@ class TestClass
             csharpDirectory + ".generated.cs",
             output.ToString()
         );
+
+        var commentsDontBreakBinary =
+            // shouldn't break next line
+            true || false;
+
+        var commentsDontBreakBinary =
+            // shouldn't break next line
+            // shouldn't break next line
+            true || false;
+
+        var directivesDontBreakBinary =
+#pragma
+            true || false;
     }
 }
