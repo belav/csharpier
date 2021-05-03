@@ -39,9 +39,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 );
             }
 
-            var finalTrivia = Token.PrintLeadingTrivia(
-                node.EndOfFileToken.LeadingTrivia,
-                includeInitialNewLines: true
+            var finalTrivia = Token.PrintLeadingTriviaWithNewLines(
+                node.EndOfFileToken.LeadingTrivia
             );
             if (finalTrivia != Doc.Null)
             {

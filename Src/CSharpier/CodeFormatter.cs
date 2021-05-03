@@ -85,7 +85,7 @@ namespace CSharpier
                 {
                     Code = formattedCode,
                     DocTree = printerOptions.IncludeDocTree
-                        ? DocTreePrinter.Print(document)
+                        ? DocSerializer.Serialize(document)
                         : string.Empty,
                     AST = printerOptions.IncludeAST
                         ? this.PrintAST(rootNode)

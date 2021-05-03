@@ -171,10 +171,10 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            DocTreePrinter.Print(doc)
+            DocSerializer.Serialize(doc)
                 .Should()
                 .Be(
-                    DocTreePrinter.Print(
+                    DocSerializer.Serialize(
                         Doc.Concat(Doc.HardLine, "1", Doc.HardLine, "2")
                     )
                 );

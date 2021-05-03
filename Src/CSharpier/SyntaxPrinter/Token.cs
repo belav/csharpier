@@ -79,7 +79,7 @@ namespace CSharpier.SyntaxPrinter
         {
             var indentTrivia = syntaxToken.Kind() == SyntaxKind.CloseBraceToken;
 
-            var printedTrivia = PrintLeadingTrivia(
+            var printedTrivia = PrivatePrintLeadingTrivia(
                 syntaxToken.LeadingTrivia,
                 skipLastHardline: indentTrivia
             );
@@ -89,7 +89,21 @@ namespace CSharpier.SyntaxPrinter
                 : printedTrivia;
         }
 
-        public static Doc PrintLeadingTrivia(
+        public static Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia)
+        {
+            return PrivatePrintLeadingTrivia(leadingTrivia);
+        }
+
+        public static Doc PrintLeadingTriviaWithNewLines(
+            SyntaxTriviaList leadingTrivia
+        ) {
+            return PrivatePrintLeadingTrivia(
+                leadingTrivia,
+                includeInitialNewLines: true
+            );
+        }
+
+        private static Doc PrivatePrintLeadingTrivia(
             SyntaxTriviaList leadingTrivia,
             bool includeInitialNewLines = false,
             bool skipLastHardline = false
