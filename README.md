@@ -62,13 +62,7 @@ Formatting will take longer, but csharpier will validate the formatted syntax tr
 
 Run csharpier from the directory you wish to format.
 ```console
-# the first time running csharpier it is normally not possible to review all the changes it makes
-# and catch any instances of code being lost 
 dotnet csharpier
-
-# after a project has already been csharpiered, you can choose
-# to use the --fast flag to speed up formatting
-dotnet csharpier --fast
 ```
 
 ## Configuration
@@ -94,11 +88,11 @@ tabWidth: 4
 endOfLine: lf
 ```
 
-####Print Width
+#### Print Width
 Specify at what point the printer will wrap content. This is not a hard limit. Some lines will be shorter or longer.
 
 Default 100
-####Use Tabs
+#### Use Tabs
 Indent lines with tabs instead of spaces.
 
 Default false

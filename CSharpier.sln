@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{62DC
 ProjectSection(SolutionItems) = preProject
 				Scripts/RunLinuxTests.ps1 = Scripts/RunLinuxTests.ps1
 				Scripts/CreateReviewCodePRs.ps1 = Scripts/CreateReviewCodePRs.ps1
+				Scripts/ChangeLog.ps1 = Scripts/ChangeLog.ps1
+				Scripts/UpdateForkedRepos.ps1 = Scripts/UpdateForkedRepos.ps1
 EndProjectSection
 EndProject
 Global
