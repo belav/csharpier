@@ -8,10 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(NullableTypeSyntax node)
         {
-            return Doc.Concat(
-                Node.Print(node.ElementType),
-                Token.Print(node.QuestionToken)
-            );
+            return Doc.Concat(Node.Print(node.ElementType), Token.Print(node.QuestionToken));
         }
     }
 }

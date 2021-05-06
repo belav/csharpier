@@ -13,13 +13,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Doc.Indent(
                     Doc.Line,
                     Token.PrintWithSuffix(node.ColonToken, " "),
-                    Doc.Indent(
-                        SeparatedSyntaxList.Print(
-                            node.Types,
-                            Node.Print,
-                            Doc.Line
-                        )
-                    )
+                    Doc.Indent(SeparatedSyntaxList.Print(node.Types, Node.Print, Doc.Line))
                 )
             );
         }

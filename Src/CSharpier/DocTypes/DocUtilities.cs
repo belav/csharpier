@@ -10,10 +10,8 @@ namespace CSharpier.DocTypes
             RemoveInitialDoubleHardLine(docs, ref removeNextHardLine);
         }
 
-        private static void RemoveInitialDoubleHardLine(
-            List<Doc> docs,
-            ref bool removeNextHardLine
-        ) {
+        private static void RemoveInitialDoubleHardLine(List<Doc> docs, ref bool removeNextHardLine)
+        {
             var x = 0;
             while (x < docs.Count)
             {
@@ -52,10 +50,8 @@ namespace CSharpier.DocTypes
             RemoveInitialDoubleHardLine(doc, ref removeNextHardLine);
         }
 
-        private static void RemoveInitialDoubleHardLine(
-            Doc doc,
-            ref bool removeNextHardLine
-        ) {
+        private static void RemoveInitialDoubleHardLine(Doc doc, ref bool removeNextHardLine)
+        {
             switch (doc)
             {
                 case StringDoc:
@@ -73,10 +69,7 @@ namespace CSharpier.DocTypes
                             removeNextHardLine = true;
                             return;
                         default:
-                            RemoveInitialDoubleHardLine(
-                                indentDoc.Contents,
-                                ref removeNextHardLine
-                            );
+                            RemoveInitialDoubleHardLine(indentDoc.Contents, ref removeNextHardLine);
                             return;
                     }
                 case Group group:
@@ -92,17 +85,11 @@ namespace CSharpier.DocTypes
                             removeNextHardLine = true;
                             return;
                         default:
-                            RemoveInitialDoubleHardLine(
-                                group.Contents,
-                                ref removeNextHardLine
-                            );
+                            RemoveInitialDoubleHardLine(group.Contents, ref removeNextHardLine);
                             return;
                     }
                 case Concat concat:
-                    RemoveInitialDoubleHardLine(
-                        concat.Contents,
-                        ref removeNextHardLine
-                    );
+                    RemoveInitialDoubleHardLine(concat.Contents, ref removeNextHardLine);
                     return;
             }
         }

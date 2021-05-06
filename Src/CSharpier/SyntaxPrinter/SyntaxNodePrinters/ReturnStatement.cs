@@ -10,10 +10,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Group(
                 ExtraNewLines.Print(node),
-                Token.Print(
-                    node.ReturnKeyword,
-                    node.Expression != null ? " " : Doc.Null
-                ),
+                Token.Print(node.ReturnKeyword, node.Expression != null ? " " : Doc.Null),
                 node.Expression != null
                     ? node.Expression is BinaryExpressionSyntax
                             ? Doc.Indent(Node.Print(node.Expression))

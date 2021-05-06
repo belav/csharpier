@@ -16,13 +16,11 @@ namespace CSharpier.DocTypes
 
         public static HardLine HardLine => new();
 
-        public static HardLine HardLineSkipBreakIfFirstInGroup =>
-            new(false, true);
+        public static HardLine HardLineSkipBreakIfFirstInGroup => new(false, true);
 
         public static HardLine HardLineIfNoPreviousLine => new(true);
 
-        public static HardLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup =>
-            new(true, true);
+        public static HardLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup => new(true, true);
 
         // TODO all of the Line types can probably turn into proper classes, and be the same instance by type
         public static LiteralLine LiteralLine => new();
@@ -31,20 +29,15 @@ namespace CSharpier.DocTypes
 
         public static Trim Trim => Trim.Instance;
 
-        public static LineDoc SoftLine =>
-            new() { Type = LineDoc.LineType.Soft };
+        public static LineDoc SoftLine => new() { Type = LineDoc.LineType.Soft };
 
-        public static LeadingComment LeadingComment(
-            string comment,
-            CommentType commentType
-        ) {
+        public static LeadingComment LeadingComment(string comment, CommentType commentType)
+        {
             return new() { Type = commentType, Comment = comment };
         }
 
-        public static TrailingComment TrailingComment(
-            string comment,
-            CommentType commentType
-        ) {
+        public static TrailingComment TrailingComment(string comment, CommentType commentType)
+        {
             return new() { Type = commentType, Comment = comment, };
         }
 
@@ -89,28 +82,17 @@ namespace CSharpier.DocTypes
 
         public static ForceFlat ForceFlat(List<Doc> contents)
         {
-            return new()
-            {
-                Contents = contents.Count == 0 ? contents[0] : Concat(contents),
-            };
+            return new() { Contents = contents.Count == 0 ? contents[0] : Concat(contents), };
         }
 
         public static ForceFlat ForceFlat(params Doc[] contents)
         {
-            return new()
-            {
-                Contents = contents.Length == 0
-                    ? contents[0]
-                    : Concat(contents),
-            };
+            return new() { Contents = contents.Length == 0 ? contents[0] : Concat(contents), };
         }
 
         public static Group Group(List<Doc> contents)
         {
-            return new()
-            {
-                Contents = contents.Count == 1 ? contents[0] : Concat(contents),
-            };
+            return new() { Contents = contents.Count == 1 ? contents[0] : Concat(contents), };
         }
 
         public static Group GroupWithId(string groupId, params Doc[] contents)
@@ -122,20 +104,12 @@ namespace CSharpier.DocTypes
 
         public static Group Group(params Doc[] contents)
         {
-            return new()
-            {
-                Contents = contents.Length == 1
-                    ? contents[0]
-                    : Concat(contents),
-            };
+            return new() { Contents = contents.Length == 1 ? contents[0] : Concat(contents), };
         }
 
         public static IndentDoc Indent(params Doc[] contents)
         {
-            return new()
-            {
-                Contents = contents.Length == 1 ? contents[0] : Concat(contents)
-            };
+            return new() { Contents = contents.Length == 1 ? contents[0] : Concat(contents) };
         }
 
         public static IndentDoc Indent(List<Doc> contents)
@@ -143,11 +117,8 @@ namespace CSharpier.DocTypes
             return new() { Contents = Concat(contents) };
         }
 
-        public static IfBreak IfBreak(
-            Doc breakContents,
-            Doc flatContents,
-            string? groupId = null
-        ) {
+        public static IfBreak IfBreak(Doc breakContents, Doc flatContents, string? groupId = null)
+        {
             return new()
             {
                 FlatContents = flatContents,

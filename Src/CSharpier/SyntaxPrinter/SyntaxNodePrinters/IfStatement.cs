@@ -40,11 +40,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             else
             {
                 // TODO 1 force braces here? make an option?
-                docs.Add(
-                    Doc.Indent(
-                        Doc.Concat(Doc.HardLine, Node.Print(node.Statement))
-                    )
-                );
+                docs.Add(Doc.Indent(Doc.Concat(Doc.HardLine, Node.Print(node.Statement))));
             }
 
             if (node.Else != null)

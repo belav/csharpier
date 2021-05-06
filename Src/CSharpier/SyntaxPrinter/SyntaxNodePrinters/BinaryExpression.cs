@@ -49,11 +49,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     // precedence level and should be treated as a separate group, so
                     // print them normally.
                     if (
-                        binaryExpressionSyntax.Left is BinaryExpressionSyntax left &&
-                        ShouldFlatten(
-                            binaryExpressionSyntax.OperatorToken,
-                            left.OperatorToken
-                        )
+                        binaryExpressionSyntax.Left
+                            is BinaryExpressionSyntax left
+                        && ShouldFlatten(binaryExpressionSyntax.OperatorToken, left.OperatorToken)
                     ) {
                         docs.AddRange(PrintBinaryExpression(left));
                     }
@@ -83,10 +81,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
         }
 
-        private static bool ShouldFlatten(
-            SyntaxToken parentToken,
-            SyntaxToken nodeToken
-        ) {
+        private static bool ShouldFlatten(SyntaxToken parentToken, SyntaxToken nodeToken)
+        {
             if (GetPrecedence(parentToken) != GetPrecedence(nodeToken))
             {
                 return false;

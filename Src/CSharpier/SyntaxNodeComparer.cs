@@ -29,9 +29,7 @@ namespace CSharpier
             this.OriginalSourceCode = originalSourceCode;
             this.NewSourceCode = newSourceCode;
 
-            var cSharpParseOptions = new CSharpParseOptions(
-                LanguageVersion.CSharp9
-            );
+            var cSharpParseOptions = new CSharpParseOptions(LanguageVersion.CSharp9);
             this.OriginalSyntaxTree = CSharpSyntaxTree.ParseText(
                 this.OriginalSourceCode,
                 cSharpParseOptions,
@@ -49,9 +47,8 @@ namespace CSharpier
             return this.CompareSourceAsync(CancellationToken.None).Result;
         }
 
-        public async Task<string> CompareSourceAsync(
-            CancellationToken cancellationToken
-        ) {
+        public async Task<string> CompareSourceAsync(CancellationToken cancellationToken)
+        {
             var result = this.AreEqualIgnoringWhitespace(
                 await OriginalSyntaxTree.GetRootAsync(cancellationToken),
                 await NewSyntaxTree.GetRootAsync(cancellationToken)
@@ -63,32 +60,23 @@ namespace CSharpier
             }
 
             var message =
-                "    Original: " +
-                GetLine(
-                    result.OriginalSpan,
-                    this.OriginalSyntaxTree,
-                    this.OriginalSourceCode
-                );
+                "    Original: "
+                + GetLine(result.OriginalSpan, this.OriginalSyntaxTree, this.OriginalSourceCode);
 
-            message += "    Formatted: " +
-            GetLine(result.NewSpan, this.NewSyntaxTree, this.NewSourceCode);
+            message += "    Formatted: "
+            + GetLine(result.NewSpan, this.NewSyntaxTree, this.NewSourceCode);
             return message;
         }
 
-        private string GetLine(
-            TextSpan? textSpan,
-            SyntaxTree syntaxTree,
-            string source
-        ) {
+        private string GetLine(TextSpan? textSpan, SyntaxTree syntaxTree, string source)
+        {
             if (!textSpan.HasValue)
             {
                 return "Missing";
             }
 
-            var line =
-                syntaxTree.GetLineSpan(textSpan.Value).StartLinePosition.Line;
-            var endLine =
-                syntaxTree.GetLineSpan(textSpan.Value).EndLinePosition.Line;
+            var line = syntaxTree.GetLineSpan(textSpan.Value).StartLinePosition.Line;
+            var endLine = syntaxTree.GetLineSpan(textSpan.Value).EndLinePosition.Line;
 
             var result = "Around Line " + line + Environment.NewLine;
 
@@ -132,10 +120,7 @@ namespace CSharpier
             formattedStack.Push(formattedStart);
             while (originalStack.Count > 0)
             {
-                var result = this.Compare(
-                    originalStack.Pop(),
-                    formattedStack.Pop()
-                );
+                var result = this.Compare(originalStack.Pop(), formattedStack.Pop());
                 if (result.IsInvalid)
                 {
                     return result;
@@ -153,17 +138,11 @@ namespace CSharpier
             TextSpan originalParentSpan,
             TextSpan newParentSpan
         ) {
-            for (
-                var x = 0;
-                x < originalList.Count || x < formattedList.Count;
-                x++
-            ) {
+            for (var x = 0; x < originalList.Count || x < formattedList.Count; x++)
+            {
                 if (x == originalList.Count)
                 {
-                    return NotEqual(
-                        originalParentSpan,
-                        getSpan(formattedList[x])
-                    );
+                    return NotEqual(originalParentSpan, getSpan(formattedList[x]));
                 }
 
                 if (x == formattedList.Count)
@@ -172,8 +151,10 @@ namespace CSharpier
                 }
 
                 if (
-                    originalList[x] is SyntaxNode originalNode &&
-                    formattedList[x] is SyntaxNode formattedNode
+                    originalList[x]
+                        is SyntaxNode originalNode
+                    && formattedList[x]
+                        is SyntaxNode formattedNode
                 ) {
                     originalStack.Push(originalNode);
                     formattedStack.Push(formattedNode);
@@ -191,10 +172,8 @@ namespace CSharpier
             return Equal;
         }
 
-        private CompareResult NotEqual(
-            SyntaxNode originalNode,
-            SyntaxNode formattedNode
-        ) {
+        private CompareResult NotEqual(SyntaxNode originalNode, SyntaxNode formattedNode)
+        {
             return new()
             {
                 IsInvalid = true,
@@ -203,23 +182,14 @@ namespace CSharpier
             };
         }
 
-        private CompareResult NotEqual(
-            TextSpan? originalSpan,
-            TextSpan? formattedSpan
-        ) {
-            return new()
-            {
-                IsInvalid = true,
-                OriginalSpan = originalSpan,
-                NewSpan = formattedSpan
-            };
+        private CompareResult NotEqual(TextSpan? originalSpan, TextSpan? formattedSpan)
+        {
+            return new() { IsInvalid = true, OriginalSpan = originalSpan, NewSpan = formattedSpan };
         }
 
         // TODO this is used by compare lists, but then we don't have parents if one is missing
-        private CompareResult Compare(
-            SyntaxToken originalToken,
-            SyntaxToken formattedToken
-        ) {
+        private CompareResult Compare(SyntaxToken originalToken, SyntaxToken formattedToken)
+        {
             return Compare(originalToken, formattedToken, null, null);
         }
 
@@ -232,60 +202,44 @@ namespace CSharpier
             if (originalToken.Text != formattedToken.Text)
             {
                 return NotEqual(
-                    originalToken.RawKind == 0
-                        ? originalNode?.Span
-                        : originalToken.Span,
-                    formattedToken.RawKind == 0
-                        ? formattedNode?.Span
-                        : formattedToken.Span
+                    originalToken.RawKind == 0 ? originalNode?.Span : originalToken.Span,
+                    formattedToken.RawKind == 0 ? formattedNode?.Span : formattedToken.Span
                 );
             }
 
-            var result = this.Compare(
-                originalToken.LeadingTrivia,
-                formattedToken.LeadingTrivia
-            );
+            var result = this.Compare(originalToken.LeadingTrivia, formattedToken.LeadingTrivia);
             if (result.IsInvalid)
             {
                 return result;
             }
 
-            var result2 = this.Compare(
-                originalToken.TrailingTrivia,
-                formattedToken.TrailingTrivia
-            );
+            var result2 = this.Compare(originalToken.TrailingTrivia, formattedToken.TrailingTrivia);
 
             return result2.IsInvalid ? result2 : Equal;
         }
 
-        private CompareResult Compare(
-            SyntaxTrivia originalTrivia,
-            SyntaxTrivia formattedTrivia
-        ) {
-            if (
-                originalTrivia.ToString().TrimEnd() !=
-                formattedTrivia.ToString().TrimEnd()
-            ) {
+        private CompareResult Compare(SyntaxTrivia originalTrivia, SyntaxTrivia formattedTrivia)
+        {
+            if (originalTrivia.ToString().TrimEnd() != formattedTrivia.ToString().TrimEnd())
+            {
                 return NotEqual(originalTrivia.Span, formattedTrivia.Span);
             }
 
             return Equal;
         }
 
-        private CompareResult Compare(
-            SyntaxTriviaList originalList,
-            SyntaxTriviaList formattedList
-        ) {
+        private CompareResult Compare(SyntaxTriviaList originalList, SyntaxTriviaList formattedList)
+        {
             var cleanedOriginal = originalList.Where(
                     o =>
-                        o.Kind() != SyntaxKind.EndOfLineTrivia &&
-                        o.Kind() != SyntaxKind.WhitespaceTrivia
+                        o.Kind() != SyntaxKind.EndOfLineTrivia
+                        && o.Kind() != SyntaxKind.WhitespaceTrivia
                 )
                 .ToList();
             var cleanedFormatted = formattedList.Where(
                     o =>
-                        o.Kind() != SyntaxKind.EndOfLineTrivia &&
-                        o.Kind() != SyntaxKind.WhitespaceTrivia
+                        o.Kind() != SyntaxKind.EndOfLineTrivia
+                        && o.Kind() != SyntaxKind.WhitespaceTrivia
                 )
                 .ToList();
             var result = CompareLists(

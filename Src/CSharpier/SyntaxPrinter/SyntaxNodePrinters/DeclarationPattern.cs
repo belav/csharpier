@@ -7,11 +7,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(DeclarationPatternSyntax node)
         {
-            return Doc.Concat(
-                Node.Print(node.Type),
-                " ",
-                Node.Print(node.Designation)
-            );
+            return Doc.Concat(Node.Print(node.Type), " ", Node.Print(node.Designation));
         }
     }
 }

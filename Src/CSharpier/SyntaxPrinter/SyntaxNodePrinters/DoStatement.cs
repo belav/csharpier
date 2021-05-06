@@ -10,10 +10,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Concat(
                 ExtraNewLines.Print(node),
-                Token.Print(
-                    node.DoKeyword,
-                    node.Statement is not BlockSyntax ? " " : Doc.Null
-                ),
+                Token.Print(node.DoKeyword, node.Statement is not BlockSyntax ? " " : Doc.Null),
                 Node.Print(node.Statement),
                 Doc.HardLine,
                 Token.Print(node.WhileKeyword, " "),

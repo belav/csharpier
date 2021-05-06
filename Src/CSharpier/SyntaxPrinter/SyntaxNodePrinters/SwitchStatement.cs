@@ -15,10 +15,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         Doc.Indent(
                             Doc.Concat(
                                 Doc.HardLine,
-                                Doc.Join(
-                                    Doc.HardLine,
-                                    node.Sections.Select(Node.Print)
-                                )
+                                Doc.Join(Doc.HardLine, node.Sections.Select(Node.Print))
                             )
                         ),
                         Doc.HardLine

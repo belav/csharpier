@@ -28,10 +28,8 @@ namespace CSharpier.DocPrinter
 
             bool OnEnter(Doc doc)
             {
-                if (
-                    doc is HardLine { SkipBreakIfFirstInGroup: true }  &&
-                    canSetSkipNextBreak
-                ) {
+                if (doc is HardLine { SkipBreakIfFirstInGroup: true }  && canSetSkipNextBreak)
+                {
                     skipNextBreak = true;
                     return true;
                 }
@@ -118,12 +116,9 @@ namespace CSharpier.DocPrinter
                     // push onto stack in reverse order so they are processed in the original order
                     for (var x = concat.Contents.Count - 1; x >= 0; --x)
                     {
-                        if (
-                            forceFlat > 0 &&
-                            concat.Contents[x] is LineDoc lineDoc
-                        ) {
-                            concat.Contents[x] = lineDoc.Type ==
-                                LineDoc.LineType.Soft
+                        if (forceFlat > 0 && concat.Contents[x] is LineDoc lineDoc)
+                        {
+                            concat.Contents[x] = lineDoc.Type == LineDoc.LineType.Soft
                                 ? string.Empty
                                 : " ";
                         }

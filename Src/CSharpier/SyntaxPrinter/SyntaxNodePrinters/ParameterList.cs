@@ -6,10 +6,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
     public static class ParameterList
     {
-        public static Doc Print(
-            ParameterListSyntax node,
-            string? groupId = null
-        ) {
+        public static Doc Print(ParameterListSyntax node, string? groupId = null)
+        {
             return Doc.GroupWithId(
                 groupId ?? string.Empty,
                 Token.Print(node.OpenParenToken),

@@ -8,10 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void AnonymousMethodExpressions()
         {
-            this.RunTest(
-                "AnonymousMethodExpression",
-                "AnonymousMethodExpressions"
-            );
+            this.RunTest("AnonymousMethodExpression", "AnonymousMethodExpressions");
         }
     }
 }

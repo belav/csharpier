@@ -8,10 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(PointerTypeSyntax node)
         {
-            return Doc.Concat(
-                Node.Print(node.ElementType),
-                Token.Print(node.AsteriskToken)
-            );
+            return Doc.Concat(Node.Print(node.ElementType), Token.Print(node.AsteriskToken));
         }
     }
 }

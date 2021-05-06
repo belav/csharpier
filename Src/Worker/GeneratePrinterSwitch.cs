@@ -11,9 +11,7 @@ namespace Worker
         [Test]
         public void DoWork()
         {
-            var rootDirectory = new DirectoryInfo(
-                Directory.GetCurrentDirectory()
-            );
+            var rootDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
             while (rootDirectory.Name != "Src")
             {
                 rootDirectory = rootDirectory.Parent;
@@ -67,11 +65,8 @@ namespace CSharpier.SyntaxPrinter
 
             foreach (var name in nodes.OrderBy(o => o))
             {
-                var camelCaseName =
-                    name[0].ToString().ToLower() + name.Substring(1);
-                output.AppendLine(
-                    $"                    case {name} {camelCaseName}:"
-                );
+                var camelCaseName = name[0].ToString().ToLower() + name.Substring(1);
+                output.AppendLine($"                    case {name} {camelCaseName}:");
                 output.AppendLine(
                     $"                        return {name.Replace("Syntax", string.Empty)}.Print({camelCaseName});"
                 );
@@ -93,10 +88,7 @@ namespace CSharpier.SyntaxPrinter
             );
 
             File.WriteAllText(
-                Path.Combine(
-                    rootDirectory.FullName,
-                    "CSharpier/SyntaxPrinter/Node.cs"
-                ),
+                Path.Combine(rootDirectory.FullName, "CSharpier/SyntaxPrinter/Node.cs"),
                 output.ToString()
             );
         }

@@ -8,10 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(CheckedStatementSyntax node)
         {
-            return Doc.Concat(
-                Token.Print(node.Keyword),
-                Block.Print(node.Block)
-            );
+            return Doc.Concat(Token.Print(node.Keyword), Block.Print(node.Block));
         }
     }
 }

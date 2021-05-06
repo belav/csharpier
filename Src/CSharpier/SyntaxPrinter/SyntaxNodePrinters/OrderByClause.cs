@@ -17,9 +17,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         Doc.Concat(
                             Node.Print(orderingNode.Expression),
                             " ",
-                            Token.Print(
-                                orderingNode.AscendingOrDescendingKeyword
-                            )
+                            Token.Print(orderingNode.AscendingOrDescendingKeyword)
                         ),
                     Doc.Null
                 )

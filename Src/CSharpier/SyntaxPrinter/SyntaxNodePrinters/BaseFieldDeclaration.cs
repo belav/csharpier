@@ -14,21 +14,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 AttributeLists.Print(node, node.AttributeLists),
                 Modifiers.Print(node.Modifiers)
             };
-            if (
-                node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax
-            ) {
-                docs.Add(
-                    Token.PrintWithSuffix(
-                        eventFieldDeclarationSyntax.EventKeyword,
-                        " "
-                    )
-                );
+            if (node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax)
+            {
+                docs.Add(Token.PrintWithSuffix(eventFieldDeclarationSyntax.EventKeyword, " "));
             }
 
-            docs.Add(
-                Node.Print(node.Declaration),
-                Token.Print(node.SemicolonToken)
-            );
+            docs.Add(Node.Print(node.Declaration), Token.Print(node.SemicolonToken));
             return Doc.Concat(docs);
         }
     }

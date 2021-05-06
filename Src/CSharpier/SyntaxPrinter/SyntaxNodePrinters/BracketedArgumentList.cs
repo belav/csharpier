@@ -13,11 +13,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.Print(node.OpenBracketToken),
                 Doc.Indent(
                     Doc.SoftLine,
-                    SeparatedSyntaxList.Print(
-                        node.Arguments,
-                        Node.Print,
-                        Doc.Line
-                    )
+                    SeparatedSyntaxList.Print(node.Arguments, Node.Print, Doc.Line)
                 ),
                 Doc.SoftLine,
                 Token.Print(node.CloseBracketToken)

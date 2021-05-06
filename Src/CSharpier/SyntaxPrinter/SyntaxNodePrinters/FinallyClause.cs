@@ -8,10 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(FinallyClauseSyntax node)
         {
-            return Doc.Concat(
-                Token.Print(node.FinallyKeyword),
-                Node.Print(node.Block)
-            );
+            return Doc.Concat(Token.Print(node.FinallyKeyword), Node.Print(node.Block));
         }
     }
 }

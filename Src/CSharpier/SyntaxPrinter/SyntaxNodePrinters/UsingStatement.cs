@@ -23,9 +23,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 leadingTrivia,
                 Doc.Group(
                     Token.PrintWithoutLeadingTrivia(node.AwaitKeyword),
-                    node.AwaitKeyword.Kind() != SyntaxKind.None
-                        ? " "
-                        : Doc.Null,
+                    node.AwaitKeyword.Kind() != SyntaxKind.None ? " " : Doc.Null,
                     node.AwaitKeyword.Kind() == SyntaxKind.None
                         ? Token.PrintWithoutLeadingTrivia(node.UsingKeyword)
                         : Token.Print(node.UsingKeyword),
@@ -38,9 +36,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             node.Declaration != null
                                 ? VariableDeclaration.Print(node.Declaration)
                                 : Doc.Null,
-                            node.Expression != null
-                                ? Node.Print(node.Expression)
-                                : Doc.Null
+                            node.Expression != null ? Node.Print(node.Expression) : Doc.Null
                         ),
                         Doc.SoftLine
                     ),

@@ -35,8 +35,7 @@ namespace CSharpier
             catch (Exception ex)
             {
                 throw new Exception(
-                    "It was not possible to create the path " +
-                    directoryInfo.FullName,
+                    "It was not possible to create the path " + directoryInfo.FullName,
                     ex
                 );
             }
@@ -46,48 +45,27 @@ namespace CSharpier
         {
             using var hasher = MD5.Create();
             var hashedBytes = hasher.ComputeHash(Encoding.UTF8.GetBytes(value));
-            return BitConverter.ToString(hashedBytes)
-                .Replace("-", string.Empty)
-                .ToLower();
+            return BitConverter.ToString(hashedBytes).Replace("-", string.Empty).ToLower();
         }
 
-        public static bool EqualsIgnoreCase(
-            this string value,
-            string otherValue
-        ) {
-            return string.Compare(
-                value,
-                otherValue,
-                StringComparison.OrdinalIgnoreCase
-            ) ==
-            0;
+        public static bool EqualsIgnoreCase(this string value, string otherValue)
+        {
+            return string.Compare(value, otherValue, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
-        public static bool ContainsIgnoreCase(
-            this string value,
-            string otherValue
-        ) {
+        public static bool ContainsIgnoreCase(this string value, string otherValue)
+        {
             return value.ToLower().Contains(otherValue.ToLower());
         }
 
-        public static bool StartsWithIgnoreCase(
-            this string value,
-            string otherValue
-        ) {
-            return value.StartsWith(
-                otherValue,
-                StringComparison.OrdinalIgnoreCase
-            );
+        public static bool StartsWithIgnoreCase(this string value, string otherValue)
+        {
+            return value.StartsWith(otherValue, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool EndsWithIgnoreCase(
-            this string value,
-            string otherValue
-        ) {
-            return value.EndsWith(
-                otherValue,
-                StringComparison.OrdinalIgnoreCase
-            );
+        public static bool EndsWithIgnoreCase(this string value, string otherValue)
+        {
+            return value.EndsWith(otherValue, StringComparison.OrdinalIgnoreCase);
         }
 
         public static bool IsBlank(this string value)

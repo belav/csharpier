@@ -14,8 +14,7 @@ namespace CSharpier.Tests
     public class CommandLineFormatterTests
     {
         private MockFileSystem fileSystem;
-        private const string UnformattedClass =
-            "public class ClassName { public int Field; }";
+        private const string UnformattedClass = "public class ClassName { public int Field; }";
         private const string FormattedClass =
             "public class ClassName\n{\n    public int Field;\n}\n";
 
@@ -32,9 +31,7 @@ namespace CSharpier.Tests
 
             var result = this.Format();
 
-            result.lines.First()
-                .Should()
-                .Be(@"/Invalid.cs - failed to compile");
+            result.lines.First().Should().Be(@"/Invalid.cs - failed to compile");
         }
 
         [Test]
@@ -45,9 +42,7 @@ namespace CSharpier.Tests
 
             this.Format();
 
-            this.GetFileContent(unformattedFilePath)
-                .Should()
-                .Be(FormattedClass);
+            this.GetFileContent(unformattedFilePath).Should().Be(FormattedClass);
         }
 
         [Test]
@@ -58,9 +53,7 @@ namespace CSharpier.Tests
 
             this.Format(skipWrite: true);
 
-            this.GetFileContent(unformattedFilePath)
-                .Should()
-                .Be(UnformattedClass);
+            this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClass);
         }
 
         [Test]
@@ -72,12 +65,8 @@ namespace CSharpier.Tests
             var (exitCode, lines) = this.Format(check: true);
 
             exitCode.Should().Be(1);
-            this.GetFileContent(unformattedFilePath)
-                .Should()
-                .Be(UnformattedClass);
-            lines.First()
-                .Should()
-                .Contain(@"/Unformatted.cs - was not formatted");
+            this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClass);
+            lines.First().Should().Contain(@"/Unformatted.cs - was not formatted");
         }
 
         [Test]
@@ -115,19 +104,15 @@ namespace CSharpier.Tests
         [TestCase(
             @"\Src\CSharpier.Playground\App_Data\Uploads\f45e11a81b926de2af29459af6974bb8.cs",
             "Uploads/")]
-        public void File_In_Ignore_Skips_Formatting(
-            string fileName,
-            string ignoreContents
-        ) {
+        public void File_In_Ignore_Skips_Formatting(string fileName, string ignoreContents)
+        {
             var unformattedFilePath = fileName;
             WhenThereExists(unformattedFilePath, UnformattedClass);
             WhenThereExists(".csharpierignore", ignoreContents);
 
             var (_, lines) = this.Format();
 
-            lines.FirstOrDefault(o => o.StartsWith("Total files"))
-                .Should()
-                .Be("Total files: 0 ");
+            lines.FirstOrDefault(o => o.StartsWith("Total files")).Should().Be("Total files: 0 ");
         }
 
         [Test]
@@ -201,12 +186,7 @@ namespace CSharpier.Tests
                 PrinterOptions printerOptions,
                 IFileSystem fileSystem
             )
-                : base(
-                    rootPath,
-                    commandLineOptions,
-                    printerOptions,
-                    fileSystem
-                ) { }
+                : base(rootPath, commandLineOptions, printerOptions, fileSystem) { }
 
             protected override void WriteLine(string line = null)
             {

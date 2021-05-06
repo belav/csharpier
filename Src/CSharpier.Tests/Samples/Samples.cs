@@ -28,10 +28,7 @@ namespace CSharpier.Tests
                 directory = directory.Parent;
             }
 
-            var file = Path.Combine(
-                directory.FullName,
-                $"Samples/{fileName}.cst"
-            );
+            var file = Path.Combine(directory.FullName, $"Samples/{fileName}.cst");
 
             var code = File.ReadAllText(file);
             var result = new CodeFormatter().Format(
@@ -39,16 +36,8 @@ namespace CSharpier.Tests
                 new PrinterOptions { IncludeDocTree = true, IncludeAST = true, }
             );
 
-            File.WriteAllText(
-                file.Replace(".cst", ".actual.cst"),
-                result.Code,
-                Encoding.UTF8
-            );
-            File.WriteAllText(
-                file.Replace(".cst", ".doctree.txt"),
-                result.DocTree,
-                Encoding.UTF8
-            );
+            File.WriteAllText(file.Replace(".cst", ".actual.cst"), result.Code, Encoding.UTF8);
+            File.WriteAllText(file.Replace(".cst", ".doctree.txt"), result.DocTree, Encoding.UTF8);
         }
     }
 }

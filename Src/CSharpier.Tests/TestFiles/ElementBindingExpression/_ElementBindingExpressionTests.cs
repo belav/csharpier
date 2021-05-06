@@ -8,10 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void BasicElementBindingExpression()
         {
-            this.RunTest(
-                "ElementBindingExpression",
-                "BasicElementBindingExpression"
-            );
+            this.RunTest("ElementBindingExpression", "BasicElementBindingExpression");
         }
     }
 }

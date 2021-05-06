@@ -17,10 +17,8 @@ namespace CSharpier
         public bool UseTabs { get; init; }
         public string EndOfLine { get; init; } = "lf";
 
-        public static ConfigurationFileOptions Create(
-            string rootPath,
-            IFileSystem fileSystem
-        ) {
+        public static ConfigurationFileOptions Create(string rootPath, IFileSystem fileSystem)
+        {
             ConfigurationFileOptions ReadJson(string path)
             {
                 return JsonConvert.DeserializeObject<ConfigurationFileOptions>(
@@ -40,10 +38,7 @@ namespace CSharpier
                 );
             }
 
-            var potentialPath = fileSystem.Path.Combine(
-                rootPath,
-                ".csharpierrc"
-            );
+            var potentialPath = fileSystem.Path.Combine(rootPath, ".csharpierrc");
 
             if (fileSystem.File.Exists(potentialPath))
             {
@@ -62,8 +57,7 @@ namespace CSharpier
                 return ReadJson(jsonExtensionPath);
             }
 
-            var yamlExtensionPaths =
-                new[] { potentialPath + ".yaml", potentialPath + ".yml" };
+            var yamlExtensionPaths = new[] { potentialPath + ".yaml", potentialPath + ".yml" };
             foreach (var yamlExtensionPath in yamlExtensionPaths)
             {
                 if (!fileSystem.File.Exists(yamlExtensionPath))

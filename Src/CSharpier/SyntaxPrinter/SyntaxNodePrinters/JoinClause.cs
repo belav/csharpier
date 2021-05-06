@@ -23,10 +23,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     node.Into != null
                         ? Doc.Concat(
                                 Doc.Line,
-                                Token.PrintWithSuffix(
-                                    node.Into.IntoKeyword,
-                                    " "
-                                ),
+                                Token.PrintWithSuffix(node.Into.IntoKeyword, " "),
                                 Token.Print(node.Into.Identifier)
                             )
                         : Doc.Null

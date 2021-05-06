@@ -7,7 +7,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ArgumentListSyntax node)
         {
-            return node.Parent is not ObjectCreationExpressionSyntax
+            return node.Parent
+                is not ObjectCreationExpressionSyntax
                 ? Doc.Group(
                         ArgumentListLike.Print(
                             node.OpenParenToken,
@@ -15,11 +16,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             node.CloseParenToken
                         )
                     )
-                : ArgumentListLike.Print(
-                        node.OpenParenToken,
-                        node.Arguments,
-                        node.CloseParenToken
-                    );
+                : ArgumentListLike.Print(node.OpenParenToken, node.Arguments, node.CloseParenToken);
         }
     }
 }

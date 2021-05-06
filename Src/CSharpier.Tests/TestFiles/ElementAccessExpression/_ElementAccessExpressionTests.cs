@@ -8,10 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void BasicElementAccessExpression()
         {
-            this.RunTest(
-                "ElementAccessExpression",
-                "BasicElementAccessExpression"
-            );
+            this.RunTest("ElementAccessExpression", "BasicElementAccessExpression");
         }
     }
 }

@@ -8,10 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void BasicForEachVariableStatement()
         {
-            this.RunTest(
-                "ForEachVariableStatement",
-                "BasicForEachVariableStatement"
-            );
+            this.RunTest("ForEachVariableStatement", "BasicForEachVariableStatement");
         }
     }
 }

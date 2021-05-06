@@ -12,11 +12,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.Print(node.OpenParenToken),
                 Doc.Indent(
                     Doc.SoftLine,
-                    SeparatedSyntaxList.Print(
-                        node.Variables,
-                        Node.Print,
-                        Doc.Line
-                    ),
+                    SeparatedSyntaxList.Print(node.Variables, Node.Print, Doc.Line),
                     Doc.SoftLine
                 ),
                 Token.Print(node.CloseParenToken)

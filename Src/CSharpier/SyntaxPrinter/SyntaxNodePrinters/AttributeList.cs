@@ -46,24 +46,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                 attributeArgumentNode =>
                                     Doc.Concat(
                                         attributeArgumentNode.NameEquals != null
-                                            ? NameEquals.Print(
-                                                    attributeArgumentNode.NameEquals
-                                                )
+                                            ? NameEquals.Print(attributeArgumentNode.NameEquals)
                                             : Doc.Null,
                                         attributeArgumentNode.NameColon != null
-                                            ? NameColon.Print(
-                                                    attributeArgumentNode.NameColon
-                                                )
+                                            ? NameColon.Print(attributeArgumentNode.NameColon)
                                             : Doc.Null,
-                                        Node.Print(
-                                            attributeArgumentNode.Expression
-                                        )
+                                        Node.Print(attributeArgumentNode.Expression)
                                     ),
                                 Doc.Line
                             ),
-                            Token.Print(
-                                attributeNode.ArgumentList.CloseParenToken
-                            )
+                            Token.Print(attributeNode.ArgumentList.CloseParenToken)
                         )
                     );
                 },

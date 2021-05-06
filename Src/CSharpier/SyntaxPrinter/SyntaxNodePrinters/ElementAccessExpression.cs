@@ -7,10 +7,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ElementAccessExpressionSyntax node)
         {
-            return Doc.Concat(
-                Node.Print(node.Expression),
-                Node.Print(node.ArgumentList)
-            );
+            return Doc.Concat(Node.Print(node.Expression), Node.Print(node.ArgumentList));
         }
     }
 }

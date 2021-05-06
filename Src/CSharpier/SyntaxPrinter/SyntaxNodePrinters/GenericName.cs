@@ -8,10 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(GenericNameSyntax node)
         {
-            return Doc.Group(
-                Token.Print(node.Identifier),
-                Node.Print(node.TypeArgumentList)
-            );
+            return Doc.Group(Token.Print(node.Identifier), Node.Print(node.TypeArgumentList));
         }
     }
 }

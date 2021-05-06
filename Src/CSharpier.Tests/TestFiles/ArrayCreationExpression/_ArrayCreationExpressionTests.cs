@@ -8,18 +8,12 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void ArrayCreationWithInitializer()
         {
-            this.RunTest(
-                "ArrayCreationExpression",
-                "ArrayCreationWithInitializer"
-            );
+            this.RunTest("ArrayCreationExpression", "ArrayCreationWithInitializer");
         }
         [Test]
         public void BasicArrayCreationExpression()
         {
-            this.RunTest(
-                "ArrayCreationExpression",
-                "BasicArrayCreationExpression"
-            );
+            this.RunTest("ArrayCreationExpression", "BasicArrayCreationExpression");
         }
     }
 }
