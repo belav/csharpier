@@ -17,11 +17,7 @@ namespace CSharpier.SyntaxPrinter
                 arguments.Any()
                     ? Doc.Indent(
                             Doc.SoftLine,
-                            SeparatedSyntaxList.Print(
-                                arguments,
-                                Argument.Print,
-                                Doc.Line
-                            )
+                            SeparatedSyntaxList.Print(arguments, Argument.Print, Doc.Line)
                         )
                     : Doc.Null,
                 arguments.Any() ? Doc.SoftLine : Doc.Null,

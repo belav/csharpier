@@ -8,11 +8,7 @@ namespace CSharpier.DocTypes
             : base(
                 new List<Doc>
                 {
-                    new LineDoc
-                    {
-                        Type = LineDoc.LineType.Hard,
-                        IsLiteral = true
-                    },
+                    new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true },
                     new BreakParent()
                 }
             ) { }

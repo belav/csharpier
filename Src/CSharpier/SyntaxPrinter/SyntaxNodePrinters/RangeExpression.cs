@@ -9,13 +9,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(RangeExpressionSyntax node)
         {
             return Doc.Concat(
-                node.LeftOperand != null
-                    ? Node.Print(node.LeftOperand)
-                    : Doc.Null,
+                node.LeftOperand != null ? Node.Print(node.LeftOperand) : Doc.Null,
                 Token.Print(node.OperatorToken),
-                node.RightOperand != null
-                    ? Node.Print(node.RightOperand)
-                    : Doc.Null
+                node.RightOperand != null ? Node.Print(node.RightOperand) : Doc.Null
             );
         }
     }

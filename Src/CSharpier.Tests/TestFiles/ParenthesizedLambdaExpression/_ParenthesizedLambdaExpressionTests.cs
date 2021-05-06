@@ -8,10 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void ParenthesizedLambdaExpressions()
         {
-            this.RunTest(
-                "ParenthesizedLambdaExpression",
-                "ParenthesizedLambdaExpressions"
-            );
+            this.RunTest("ParenthesizedLambdaExpression", "ParenthesizedLambdaExpressions");
         }
     }
 }

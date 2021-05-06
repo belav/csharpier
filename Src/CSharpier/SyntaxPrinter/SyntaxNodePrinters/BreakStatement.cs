@@ -8,10 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(BreakStatementSyntax node)
         {
-            return Doc.Concat(
-                Token.Print(node.BreakKeyword),
-                Token.Print(node.SemicolonToken)
-            );
+            return Doc.Concat(Token.Print(node.BreakKeyword), Token.Print(node.SemicolonToken));
         }
     }
 }

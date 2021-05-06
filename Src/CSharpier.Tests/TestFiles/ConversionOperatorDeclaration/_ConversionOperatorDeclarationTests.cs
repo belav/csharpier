@@ -8,10 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void ConversionOperatorDeclarations()
         {
-            this.RunTest(
-                "ConversionOperatorDeclaration",
-                "ConversionOperatorDeclarations"
-            );
+            this.RunTest("ConversionOperatorDeclaration", "ConversionOperatorDeclarations");
         }
     }
 }

@@ -9,9 +9,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Concat(
                 Token.Print(node.FromKeyword, " "),
-                node.Type != null
-                    ? Doc.Concat(Node.Print(node.Type), " ")
-                    : Doc.Null,
+                node.Type != null ? Doc.Concat(Node.Print(node.Type), " ") : Doc.Null,
                 Token.Print(node.Identifier, " "),
                 Token.Print(node.InKeyword, " "),
                 Node.Print(node.Expression)

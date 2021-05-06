@@ -82,11 +82,7 @@ namespace CSharpier.Playground.Controllers
             var lineSpan = diagnostic.Location.SourceTree.GetLineSpan(
                 diagnostic.Location.SourceSpan
             );
-            return new FormatError
-            {
-                LineSpan = lineSpan,
-                Description = diagnostic.ToString(),
-            };
+            return new FormatError { LineSpan = lineSpan, Description = diagnostic.ToString(), };
         }
 
         private string ReadAllText(string filePath)
@@ -104,11 +100,8 @@ namespace CSharpier.Playground.Controllers
             return System.IO.File.Exists(filePath);
         }
 
-        public string ExecuteApplication(
-            string pathToExe,
-            string workingDirectory,
-            string args
-        ) {
+        public string ExecuteApplication(string pathToExe, string workingDirectory, string args)
+        {
             var processStartInfo = new ProcessStartInfo(
                 pathToExe,
                 args
@@ -126,13 +119,7 @@ namespace CSharpier.Playground.Controllers
             process.WaitForExit();
 
             this.logger.LogInformation(
-                "Output from '" +
-                pathToExe +
-                " " +
-                args +
-                "' was: " +
-                Environment.NewLine +
-                output
+                "Output from '" + pathToExe + " " + args + "' was: " + Environment.NewLine + output
             );
 
             return output;

@@ -30,20 +30,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 if (hasExterns)
                 {
                     innerDocs.Add(
-                        Doc.Join(
-                            Doc.HardLine,
-                            node.Externs.Select(ExternAliasDirective.Print)
-                        ),
+                        Doc.Join(Doc.HardLine, node.Externs.Select(ExternAliasDirective.Print)),
                         Doc.HardLine
                     );
                 }
                 if (hasUsing)
                 {
                     innerDocs.Add(
-                        Doc.Join(
-                            Doc.HardLine,
-                            node.Usings.Select(UsingDirective.Print)
-                        ),
+                        Doc.Join(Doc.HardLine, node.Usings.Select(UsingDirective.Print)),
                         Doc.HardLine
                     );
                 }
@@ -69,9 +63,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Doc.Line,
                     Token.Print(node.OpenBraceToken),
                     Doc.Indent(innerDocs),
-                    hasMembers || hasUsing || hasExterns
-                        ? Doc.HardLine
-                        : Doc.Null,
+                    hasMembers || hasUsing || hasExterns ? Doc.HardLine : Doc.Null,
                     Token.Print(node.CloseBraceToken),
                     Token.Print(node.SemicolonToken)
                 )

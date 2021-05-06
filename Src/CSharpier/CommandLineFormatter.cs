@@ -50,15 +50,9 @@ namespace CSharpier
                 return ignoreExitCode;
             }
 
-            if (
-                this.FileSystem.File.Exists(
-                    this.CommandLineOptions.DirectoryOrFile
-                )
-            ) {
-                await FormatFile(
-                    this.CommandLineOptions.DirectoryOrFile,
-                    cancellationToken
-                );
+            if (this.FileSystem.File.Exists(this.CommandLineOptions.DirectoryOrFile))
+            {
+                await FormatFile(this.CommandLineOptions.DirectoryOrFile, cancellationToken);
             }
             else
             {
@@ -87,13 +81,9 @@ namespace CSharpier
             return ReturnExitCode();
         }
 
-        private async Task<int> ParseIgnoreFile(
-            CancellationToken cancellationToken
-        ) {
-            var ignoreFilePath = Path.Combine(
-                this.RootPath,
-                ".csharpierignore"
-            );
+        private async Task<int> ParseIgnoreFile(CancellationToken cancellationToken)
+        {
+            var ignoreFilePath = Path.Combine(this.RootPath, ".csharpierignore");
             if (this.FileSystem.File.Exists(ignoreFilePath))
             {
                 foreach (
@@ -109,9 +99,9 @@ namespace CSharpier
                     catch (Exception ex)
                     {
                         WriteLine(
-                            "The .csharpierignore file at " +
-                            ignoreFilePath +
-                            " could not be parsed due to the following line:"
+                            "The .csharpierignore file at "
+                            + ignoreFilePath
+                            + " could not be parsed due to the following line:"
                         );
                         WriteLine(line);
                         WriteLine("Exception: " + ex.Message);
@@ -123,10 +113,8 @@ namespace CSharpier
             return 0;
         }
 
-        private async Task FormatFile(
-            string file,
-            CancellationToken cancellationToken
-        ) {
+        private async Task FormatFile(string file, CancellationToken cancellationToken)
+        {
             if (IgnoreFile(file))
             {
                 return;
@@ -135,11 +123,7 @@ namespace CSharpier
             cancellationToken.ThrowIfCancellationRequested();
 
             var fileReaderResult =
-                await FileReader.ReadFile(
-                    file,
-                    this.FileSystem,
-                    cancellationToken
-                );
+                await FileReader.ReadFile(file, this.FileSystem, cancellationToken);
             if (fileReaderResult.FileContents.Length == 0)
             {
                 return;
@@ -170,9 +154,7 @@ namespace CSharpier
             catch (Exception ex)
             {
                 Interlocked.Increment(ref this.Files);
-                WriteLine(
-                    GetPath(file) + " - threw exception while formatting"
-                );
+                WriteLine(GetPath(file) + " - threw exception while formatting");
                 WriteLine(ex.Message);
                 WriteLine(ex.StackTrace);
                 WriteLine();
@@ -204,18 +186,11 @@ namespace CSharpier
 
                 try
                 {
-                    var failure =
-                        await syntaxNodeComparer.CompareSourceAsync(
-                            cancellationToken
-                        );
+                    var failure = await syntaxNodeComparer.CompareSourceAsync(cancellationToken);
                     if (!string.IsNullOrEmpty(failure))
                     {
-                        Interlocked.Increment(
-                            ref this.FailedSyntaxTreeValidation
-                        );
-                        WriteLine(
-                            GetPath(file) + " - failed syntax tree validation"
-                        );
+                        Interlocked.Increment(ref this.FailedSyntaxTreeValidation);
+                        WriteLine(GetPath(file) + " - failed syntax tree validation");
                         WriteLine(failure);
                     }
                 }
@@ -223,11 +198,11 @@ namespace CSharpier
                 {
                     Interlocked.Increment(ref this.ExceptionsValidatingSource);
                     WriteLine(
-                        GetPath(file) +
-                        " - failed with exception during syntax tree validation" +
-                        Environment.NewLine +
-                        ex.Message +
-                        ex.StackTrace
+                        GetPath(file)
+                        + " - failed with exception during syntax tree validation"
+                        + Environment.NewLine
+                        + ex.Message
+                        + ex.StackTrace
                     );
                 }
             }
@@ -244,16 +219,10 @@ namespace CSharpier
             cancellationToken.ThrowIfCancellationRequested();
             Interlocked.Increment(ref this.Files);
 
-            if (
-                !this.CommandLineOptions.Check &&
-                !this.CommandLineOptions.SkipWrite
-            ) {
+            if (!this.CommandLineOptions.Check && !this.CommandLineOptions.SkipWrite)
+            {
                 // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
-                this.FileSystem.File.WriteAllText(
-                    file,
-                    result.Code,
-                    fileReaderResult.Encoding
-                );
+                this.FileSystem.File.WriteAllText(file, result.Code, fileReaderResult.Encoding);
             }
         }
 
@@ -265,22 +234,15 @@ namespace CSharpier
         private void PrintResults()
         {
             WriteLine(
-                PadToSize("total time: ", 80) +
-                ReversePad(Stopwatch.ElapsedMilliseconds + "ms")
+                PadToSize("total time: ", 80) + ReversePad(Stopwatch.ElapsedMilliseconds + "ms")
             );
             PrintResultLine("Total files", Files);
 
             if (!this.CommandLineOptions.Fast)
             {
-                PrintResultLine(
-                    "Failed syntax tree validation",
-                    FailedSyntaxTreeValidation
-                );
+                PrintResultLine("Failed syntax tree validation", FailedSyntaxTreeValidation);
 
-                PrintResultLine(
-                    "Threw exceptions while formatting",
-                    ExceptionsFormatting
-                );
+                PrintResultLine("Threw exceptions while formatting", ExceptionsFormatting);
                 PrintResultLine(
                     "files that threw exceptions while validating syntax tree",
                     ExceptionsValidatingSource
@@ -289,20 +251,17 @@ namespace CSharpier
 
             if (this.CommandLineOptions.Check)
             {
-                PrintResultLine(
-                    "files that were not formatted",
-                    UnformattedFiles
-                );
+                PrintResultLine("files that were not formatted", UnformattedFiles);
             }
         }
 
         private int ReturnExitCode()
         {
             if (
-                (this.CommandLineOptions.Check && UnformattedFiles > 0) ||
-                FailedSyntaxTreeValidation > 0 ||
-                ExceptionsFormatting > 0 ||
-                ExceptionsValidatingSource > 0
+                (this.CommandLineOptions.Check && UnformattedFiles > 0)
+                || FailedSyntaxTreeValidation > 0
+                || ExceptionsFormatting > 0
+                || ExceptionsValidatingSource > 0
             ) {
                 return 1;
             }
@@ -312,9 +271,7 @@ namespace CSharpier
 
         private void PrintResultLine(string message, int count)
         {
-            this.WriteLine(
-                PadToSize(message + ": ", 80) + ReversePad(count + "  ")
-            );
+            this.WriteLine(PadToSize(message + ": ", 80) + ReversePad(count + "  "));
         }
 
         // TODO this could be implemented with a https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.filesystemglobbing.matcher?view=dotnet-plat-ext-5.0

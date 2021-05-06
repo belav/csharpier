@@ -29,10 +29,8 @@ namespace CSharpier.SyntaxPrinter
             return PrintWithSuffix(syntaxToken, suffixDoc);
         }
 
-        public static Doc PrintWithSuffix(
-            SyntaxToken syntaxToken,
-            Doc suffixDoc
-        ) {
+        public static Doc PrintWithSuffix(SyntaxToken syntaxToken, Doc suffixDoc)
+        {
             return PrintSyntaxToken(syntaxToken, suffixDoc);
         }
 
@@ -94,13 +92,9 @@ namespace CSharpier.SyntaxPrinter
             return PrivatePrintLeadingTrivia(leadingTrivia);
         }
 
-        public static Doc PrintLeadingTriviaWithNewLines(
-            SyntaxTriviaList leadingTrivia
-        ) {
-            return PrivatePrintLeadingTrivia(
-                leadingTrivia,
-                includeInitialNewLines: true
-            );
+        public static Doc PrintLeadingTriviaWithNewLines(SyntaxTriviaList leadingTrivia)
+        {
+            return PrivatePrintLeadingTrivia(leadingTrivia, includeInitialNewLines: true);
         }
 
         private static Doc PrivatePrintLeadingTrivia(
@@ -123,10 +117,8 @@ namespace CSharpier.SyntaxPrinter
                 {
                     docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
                 }
-                if (
-                    kind != SyntaxKind.EndOfLineTrivia &&
-                    kind != SyntaxKind.WhitespaceTrivia
-                ) {
+                if (kind != SyntaxKind.EndOfLineTrivia && kind != SyntaxKind.WhitespaceTrivia)
+                {
                     printNewLines = true;
                 }
                 if (IsSingleLineComment(kind))
@@ -152,11 +144,7 @@ namespace CSharpier.SyntaxPrinter
                 }
                 else if (kind == SyntaxKind.DisabledTextTrivia)
                 {
-                    docs.Add(
-                        Doc.Trim,
-                        trivia.ToString().TrimEnd('\n', '\r'),
-                        Doc.HardLine
-                    );
+                    docs.Add(Doc.Trim, trivia.ToString().TrimEnd('\n', '\r'), Doc.HardLine);
                 }
                 else if (IsDirective(kind))
                 {
@@ -170,11 +158,8 @@ namespace CSharpier.SyntaxPrinter
                 else if (IsRegion(kind))
                 {
                     var triviaText = trivia.ToString();
-                    if (
-                        x > 0 &&
-                        leadingTrivia[x - 1].Kind() ==
-                        SyntaxKind.WhitespaceTrivia
-                    ) {
+                    if (x > 0 && leadingTrivia[x - 1].Kind() == SyntaxKind.WhitespaceTrivia)
+                    {
                         triviaText = leadingTrivia[x - 1] + triviaText;
                     }
 
@@ -196,60 +181,47 @@ namespace CSharpier.SyntaxPrinter
         }
 
         private static bool IsSingleLineComment(SyntaxKind kind) =>
-            kind == SyntaxKind.SingleLineDocumentationCommentTrivia ||
-            kind == SyntaxKind.SingleLineCommentTrivia;
+            kind == SyntaxKind.SingleLineDocumentationCommentTrivia
+            || kind == SyntaxKind.SingleLineCommentTrivia;
 
         private static bool IsMultiLineComment(SyntaxKind kind) =>
-            kind == SyntaxKind.MultiLineCommentTrivia ||
-            kind == SyntaxKind.MultiLineDocumentationCommentTrivia;
+            kind == SyntaxKind.MultiLineCommentTrivia
+            || kind == SyntaxKind.MultiLineDocumentationCommentTrivia;
 
         private static bool IsDirective(SyntaxKind kind) =>
-            kind == SyntaxKind.IfDirectiveTrivia ||
-            kind == SyntaxKind.ElseDirectiveTrivia ||
-            kind == SyntaxKind.ElifDirectiveTrivia ||
-            kind == SyntaxKind.EndIfDirectiveTrivia ||
-            kind == SyntaxKind.LineDirectiveTrivia ||
-            kind == SyntaxKind.ErrorDirectiveTrivia ||
-            kind == SyntaxKind.WarningDirectiveTrivia ||
-            kind == SyntaxKind.PragmaWarningDirectiveTrivia ||
-            kind == SyntaxKind.PragmaChecksumDirectiveTrivia ||
-            kind == SyntaxKind.DefineDirectiveTrivia ||
-            kind == SyntaxKind.UndefDirectiveTrivia ||
-            kind == SyntaxKind.NullableDirectiveTrivia;
+            kind == SyntaxKind.IfDirectiveTrivia
+            || kind == SyntaxKind.ElseDirectiveTrivia
+            || kind == SyntaxKind.ElifDirectiveTrivia
+            || kind == SyntaxKind.EndIfDirectiveTrivia
+            || kind == SyntaxKind.LineDirectiveTrivia
+            || kind == SyntaxKind.ErrorDirectiveTrivia
+            || kind == SyntaxKind.WarningDirectiveTrivia
+            || kind == SyntaxKind.PragmaWarningDirectiveTrivia
+            || kind == SyntaxKind.PragmaChecksumDirectiveTrivia
+            || kind == SyntaxKind.DefineDirectiveTrivia
+            || kind == SyntaxKind.UndefDirectiveTrivia
+            || kind == SyntaxKind.NullableDirectiveTrivia;
 
         private static bool IsRegion(SyntaxKind kind) =>
-            kind == SyntaxKind.RegionDirectiveTrivia ||
-            kind == SyntaxKind.EndRegionDirectiveTrivia;
+            kind == SyntaxKind.RegionDirectiveTrivia || kind == SyntaxKind.EndRegionDirectiveTrivia;
 
         private static Doc PrintTrailingTrivia(SyntaxToken node)
         {
             return PrintTrailingTrivia(node.TrailingTrivia);
         }
 
-        private static Doc PrintTrailingTrivia(
-            SyntaxTriviaList trailingTrivia
-        ) {
+        private static Doc PrintTrailingTrivia(SyntaxTriviaList trailingTrivia)
+        {
             var docs = new List<Doc>();
             foreach (var trivia in trailingTrivia)
             {
                 if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
                 {
-                    docs.Add(
-                        Doc.TrailingComment(
-                            trivia.ToString(),
-                            CommentType.SingleLine
-                        )
-                    );
+                    docs.Add(Doc.TrailingComment(trivia.ToString(), CommentType.SingleLine));
                 }
                 else if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
                 {
-                    docs.Add(
-                        " ",
-                        Doc.TrailingComment(
-                            trivia.ToString(),
-                            CommentType.MultiLine
-                        )
-                    );
+                    docs.Add(" ", Doc.TrailingComment(trivia.ToString(), CommentType.MultiLine));
                 }
             }
 

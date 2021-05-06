@@ -19,9 +19,7 @@ namespace CSharpier
         {
             var rootCommand = CommandLineOptions.Create();
 
-            rootCommand.Handler = CommandHandler.Create(
-                new CommandLineOptions.Handler(Run)
-            );
+            rootCommand.Handler = CommandHandler.Create(new CommandLineOptions.Handler(Run));
 
             return await rootCommand.InvokeAsync(args);
         }
@@ -53,9 +51,9 @@ namespace CSharpier
             if (rootPath == null)
             {
                 throw new Exception(
-                    "The path of " +
-                    directoryOrFile +
-                    " does not appear to point to a directory or a file."
+                    "The path of "
+                    + directoryOrFile
+                    + " does not appear to point to a directory or a file."
                 );
             }
 
@@ -74,8 +72,8 @@ namespace CSharpier
                     : configurationFileOptions.EndOfLine == "crlf"
                             ? "\r\n"
                             : throw new Exception(
-                                    "Unhandled value from EndOfLine options " +
-                                    configurationFileOptions.EndOfLine
+                                    "Unhandled value from EndOfLine options "
+                                    + configurationFileOptions.EndOfLine
                                 )
             };
 

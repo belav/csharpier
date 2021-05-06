@@ -10,11 +10,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Concat(
                 Token.Print(node.OpenBracketToken),
-                SeparatedSyntaxList.Print(
-                    node.Parameters,
-                    Parameter.Print,
-                    " "
-                ),
+                SeparatedSyntaxList.Print(node.Parameters, Parameter.Print, " "),
                 Token.Print(node.CloseBracketToken)
             );
         }

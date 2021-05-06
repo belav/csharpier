@@ -14,13 +14,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Node.Print(node.Name),
                 " ",
                 Token.Print(node.ColonToken, " "),
-                Doc.Indent(
-                    SeparatedSyntaxList.Print(
-                        node.Constraints,
-                        Node.Print,
-                        Doc.Line
-                    )
-                )
+                Doc.Indent(SeparatedSyntaxList.Print(node.Constraints, Node.Print, Doc.Line))
             );
         }
     }

@@ -35,28 +35,15 @@ namespace CSharpier
             fileStream.Seek(0, SeekOrigin.Begin);
 
             // this fixes an issue with ANSI encoded files like csharpier-repos\AutoMapper\src\UnitTests\Internationalization.cs
-            var encodingToRead = encoding.CodePage == 852
-                ? Encoding.GetEncoding(1252)
-                : encoding;
+            var encodingToRead = encoding.CodePage == 852 ? Encoding.GetEncoding(1252) : encoding;
 
-            using var streamReader = new StreamReader(
-                fileStream,
-                encodingToRead
-            );
+            using var streamReader = new StreamReader(fileStream, encodingToRead);
 
             var fileContents = streamReader.ReadToEnd();
 
-            return new FileReaderResult(
-                encoding,
-                fileContents,
-                defaultedEncoding
-            );
+            return new FileReaderResult(encoding, fileContents, defaultedEncoding);
         }
     }
 
-    public record FileReaderResult(
-        Encoding Encoding,
-        string FileContents,
-        bool DefaultedEncoding
-    );
+    public record FileReaderResult(Encoding Encoding, string FileContents, bool DefaultedEncoding);
 }

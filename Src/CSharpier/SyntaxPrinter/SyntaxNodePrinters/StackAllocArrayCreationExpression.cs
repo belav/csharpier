@@ -11,10 +11,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.Print(node.StackAllocKeyword, " "),
                 Node.Print(node.Type),
                 node.Initializer != null
-                    ? Doc.Concat(
-                            " ",
-                            InitializerExpression.Print(node.Initializer)
-                        )
+                    ? Doc.Concat(" ", InitializerExpression.Print(node.Initializer))
                     : string.Empty
             );
         }

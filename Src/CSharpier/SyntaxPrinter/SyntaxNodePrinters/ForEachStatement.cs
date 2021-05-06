@@ -21,9 +21,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 leadingTrivia,
                 Doc.Group(
                     Token.PrintWithoutLeadingTrivia(node.AwaitKeyword),
-                    node.AwaitKeyword.Kind() != SyntaxKind.None
-                        ? " "
-                        : Doc.Null,
+                    node.AwaitKeyword.Kind() != SyntaxKind.None ? " " : Doc.Null,
                     node.AwaitKeyword.Kind() == SyntaxKind.None
                         ? Token.PrintWithoutLeadingTrivia(node.ForEachKeyword)
                         : Token.Print(node.ForEachKeyword),
@@ -46,7 +44,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Token.Print(node.CloseParenToken),
                     Doc.IfBreak(Doc.Null, Doc.SoftLine)
                 ),
-                node.Statement is BlockSyntax blockSyntax
+                node.Statement
+                    is BlockSyntax blockSyntax
                     ? Block.PrintWithConditionalSpace(blockSyntax, groupId)
                     : Node.Print(node.Statement)
             );

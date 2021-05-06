@@ -25,10 +25,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                     Node.Print(o.Pattern),
                                     " ",
                                     o.WhenClause != null
-                                        ? Doc.Concat(
-                                                Node.Print(o.WhenClause),
-                                                " "
-                                            )
+                                        ? Doc.Concat(Node.Print(o.WhenClause), " ")
                                         : Doc.Null,
                                     Token.Print(o.EqualsGreaterThanToken, " "),
                                     Node.Print(o.Expression)

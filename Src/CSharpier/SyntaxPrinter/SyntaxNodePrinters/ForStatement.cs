@@ -18,9 +18,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 innerGroup.Add(VariableDeclaration.Print(node.Declaration));
             }
-            innerGroup.Add(
-                SeparatedSyntaxList.Print(node.Initializers, Node.Print, " ")
-            );
+            innerGroup.Add(SeparatedSyntaxList.Print(node.Initializers, Node.Print, " "));
             innerGroup.Add(Token.Print(node.FirstSemicolonToken));
             if (node.Condition != null)
             {
@@ -41,13 +39,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 innerGroup.Add(Doc.SoftLine);
             }
             innerGroup.Add(
-                Doc.Indent(
-                    SeparatedSyntaxList.Print(
-                        node.Incrementors,
-                        Node.Print,
-                        Doc.Line
-                    )
-                )
+                Doc.Indent(SeparatedSyntaxList.Print(node.Incrementors, Node.Print, Doc.Line))
             );
 
             var docs = new List<Doc>
@@ -58,11 +50,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Token.PrintWithoutLeadingTrivia(node.ForKeyword),
                     " ",
                     Token.Print(node.OpenParenToken),
-                    Doc.GroupWithId(
-                        groupId,
-                        Doc.Indent(innerGroup),
-                        Doc.SoftLine
-                    ),
+                    Doc.GroupWithId(groupId, Doc.Indent(innerGroup), Doc.SoftLine),
                     Token.Print(node.CloseParenToken),
                     Doc.IfBreak(Doc.Null, Doc.SoftLine)
                 )

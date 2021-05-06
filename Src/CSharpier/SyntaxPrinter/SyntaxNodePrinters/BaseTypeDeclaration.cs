@@ -30,29 +30,23 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 {
                     members = Doc.Indent(
                         Doc.HardLine,
-                        Doc.Join(
-                            Doc.HardLine,
-                            typeDeclarationSyntax.Members.Select(Node.Print)
-                        )
+                        Doc.Join(Doc.HardLine, typeDeclarationSyntax.Members.Select(Node.Print))
                     );
                 }
                 if (node is ClassDeclarationSyntax classDeclarationSyntax)
                 {
                     keyword = classDeclarationSyntax.Keyword;
                 }
-                else if (
-                    node is StructDeclarationSyntax structDeclarationSyntax
-                ) {
+                else if (node is StructDeclarationSyntax structDeclarationSyntax)
+                {
                     keyword = structDeclarationSyntax.Keyword;
                 }
-                else if (
-                    node is InterfaceDeclarationSyntax interfaceDeclarationSyntax
-                ) {
+                else if (node is InterfaceDeclarationSyntax interfaceDeclarationSyntax)
+                {
                     keyword = interfaceDeclarationSyntax.Keyword;
                 }
-                else if (
-                    node is RecordDeclarationSyntax recordDeclarationSyntax
-                ) {
+                else if (node is RecordDeclarationSyntax recordDeclarationSyntax)
+                {
                     keyword = recordDeclarationSyntax.Keyword;
                     groupId = Guid.NewGuid().ToString();
                     parameterList = recordDeclarationSyntax.ParameterList;
@@ -110,9 +104,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 DocUtilities.RemoveInitialDoubleHardLine(members);
 
                 docs.Add(
-                    groupId != null
-                        ? Doc.IfBreak(" ", Doc.Line, groupId)
-                        : Doc.HardLine,
+                    groupId != null ? Doc.IfBreak(" ", Doc.Line, groupId) : Doc.HardLine,
                     Token.Print(node.OpenBraceToken),
                     members,
                     Doc.HardLine,
@@ -121,9 +113,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
             else if (node.OpenBraceToken.Kind() != SyntaxKind.None)
             {
-                Doc separator = node.CloseBraceToken.LeadingTrivia.Any()
-                    ? Doc.Line
-                    : " ";
+                Doc separator = node.CloseBraceToken.LeadingTrivia.Any() ? Doc.Line : " ";
 
                 docs.Add(
                     separator,

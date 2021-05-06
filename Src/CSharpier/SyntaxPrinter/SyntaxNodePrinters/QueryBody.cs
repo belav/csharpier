@@ -9,10 +9,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(QueryBodySyntax node)
         {
-            var docs = new List<Doc>
-            {
-                Doc.Join(Doc.Line, node.Clauses.Select(Node.Print))
-            };
+            var docs = new List<Doc> { Doc.Join(Doc.Line, node.Clauses.Select(Node.Print)) };
             if (node.Clauses.Count > 0)
             {
                 docs.Add(Doc.Line);

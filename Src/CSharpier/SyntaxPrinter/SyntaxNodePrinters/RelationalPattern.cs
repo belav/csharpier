@@ -9,11 +9,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(RelationalPatternSyntax node)
         {
-            return Doc.Concat(
-                Token.Print(node.OperatorToken),
-                " ",
-                Node.Print(node.Expression)
-            );
+            return Doc.Concat(Token.Print(node.OperatorToken), " ", Node.Print(node.Expression));
         }
     }
 }

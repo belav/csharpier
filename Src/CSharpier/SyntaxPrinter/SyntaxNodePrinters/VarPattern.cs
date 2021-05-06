@@ -7,10 +7,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(VarPatternSyntax node)
         {
-            return Doc.Concat(
-                Token.Print(node.VarKeyword, " "),
-                Node.Print(node.Designation)
-            );
+            return Doc.Concat(Token.Print(node.VarKeyword, " "), Node.Print(node.Designation));
         }
     }
 }

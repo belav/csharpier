@@ -14,29 +14,21 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (node.Externs.Count > 0)
             {
                 docs.Add(
-                    Doc.Join(
-                        Doc.HardLine,
-                        node.Externs.Select(ExternAliasDirective.Print)
-                    ),
+                    Doc.Join(Doc.HardLine, node.Externs.Select(ExternAliasDirective.Print)),
                     Doc.HardLine
                 );
             }
             if (node.Usings.Count > 0)
             {
                 docs.Add(
-                    Doc.Join(
-                        Doc.HardLine,
-                        node.Usings.Select(UsingDirective.Print)
-                    ),
+                    Doc.Join(Doc.HardLine, node.Usings.Select(UsingDirective.Print)),
                     Doc.HardLine
                 );
             }
             docs.Add(AttributeLists.Print(node, node.AttributeLists));
             if (node.Members.Count > 0)
             {
-                docs.Add(
-                    Doc.Join(Doc.HardLine, node.Members.Select(Node.Print))
-                );
+                docs.Add(Doc.Join(Doc.HardLine, node.Members.Select(Node.Print)));
             }
 
             var finalTrivia = Token.PrintLeadingTriviaWithNewLines(

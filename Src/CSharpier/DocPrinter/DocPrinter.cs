@@ -42,11 +42,7 @@ namespace CSharpier.DocPrinter
                     return true;
                 }
 
-                var (
-                    currentIndent,
-                    currentMode,
-                    currentDoc
-                    ) = currentStack.Pop();
+                var (currentIndent, currentMode, currentDoc) = currentStack.Pop();
 
                 if (currentDoc is StringDoc stringDoc)
                 {
@@ -73,26 +69,16 @@ namespace CSharpier.DocPrinter
                             }
                             break;
                         case Concat concat:
-                            for (
-                                var i = concat.Contents.Count - 1;
-                                i >= 0;
-                                i--
-                            ) {
-                                Push(
-                                    concat.Contents[i],
-                                    currentMode,
-                                    currentIndent
-                                );
+                            for (var i = concat.Contents.Count - 1; i >= 0; i--)
+                            {
+                                Push(concat.Contents[i], currentMode, currentIndent);
                             }
                             break;
                         case IndentDoc indent:
                             Push(
                                 indent.Contents,
                                 currentMode,
-                                IndentBuilder.Make(
-                                    currentIndent,
-                                    printerOptions
-                                )
+                                IndentBuilder.Make(currentIndent, printerOptions)
                             );
                             break;
                         case Trim:
@@ -104,9 +90,7 @@ namespace CSharpier.DocPrinter
                                 return false;
                             }
 
-                            var groupMode = group.Break
-                                ? PrintMode.MODE_BREAK
-                                : currentMode;
+                            var groupMode = group.Break ? PrintMode.MODE_BREAK : currentMode;
 
                             Push(group.Contents, groupMode, currentIndent);
 
@@ -116,8 +100,8 @@ namespace CSharpier.DocPrinter
                             }
                             break;
                         case IfBreak ifBreak:
-                            var ifBreakMode = ifBreak.GroupId != null &&
-                                groupModeMap!.ContainsKey(ifBreak.GroupId)
+                            var ifBreakMode = ifBreak.GroupId != null
+                            && groupModeMap!.ContainsKey(ifBreak.GroupId)
                                 ? groupModeMap[ifBreak.GroupId]
                                 : currentMode;
 
@@ -153,9 +137,7 @@ namespace CSharpier.DocPrinter
                         case BreakParent:
                             break;
                         default:
-                            throw new Exception(
-                                "Can't handle " + currentDoc.GetType()
-                            );
+                            throw new Exception("Can't handle " + currentDoc.GetType());
                     }
                 }
             }
@@ -163,10 +145,8 @@ namespace CSharpier.DocPrinter
             return false;
         }
 
-        public static string Print(
-            Doc document,
-            PrinterOptions printerOptions
-        ) {
+        public static string Print(Doc document, PrinterOptions printerOptions)
+        {
             groupModeMap = new Dictionary<string, PrintMode>();
 
             PropagateBreaks.RunOn(document);
@@ -177,11 +157,7 @@ namespace CSharpier.DocPrinter
 
             var currentStack = new Stack<PrintCommand>();
             currentStack.Push(
-                new PrintCommand(
-                    IndentBuilder.MakeRoot(),
-                    PrintMode.MODE_BREAK,
-                    document
-                )
+                new PrintCommand(IndentBuilder.MakeRoot(), PrintMode.MODE_BREAK, document)
             );
 
             var output = new StringBuilder();
@@ -209,11 +185,8 @@ namespace CSharpier.DocPrinter
                         }
 
                         // I don't understand exactly why, but this ensures we don't print extra spaces after a trailing comment
-                        if (
-                            newLineNextStringValue &&
-                            skipNextNewLine &&
-                            stringDoc.Value == " "
-                        ) {
+                        if (newLineNextStringValue && skipNextNewLine && stringDoc.Value == " ")
+                        {
                             break;
                         }
 
@@ -231,11 +204,7 @@ namespace CSharpier.DocPrinter
                     case Concat concat:
                         for (var x = concat.Contents.Count - 1; x >= 0; x--)
                         {
-                            Push(
-                                concat.Contents[x],
-                                command.Mode,
-                                command.Indent
-                            );
+                            Push(concat.Contents[x], command.Mode, command.Indent);
                         }
                         break;
                     case IndentDoc indentBuilder:
@@ -257,9 +226,7 @@ namespace CSharpier.DocPrinter
                                 {
                                     Push(
                                         group.Contents,
-                                        group.Break
-                                            ? PrintMode.MODE_BREAK
-                                            : PrintMode.MODE_FLAT,
+                                        group.Break ? PrintMode.MODE_BREAK : PrintMode.MODE_FLAT,
                                         command.Indent
                                     );
                                     break;
@@ -275,8 +242,8 @@ namespace CSharpier.DocPrinter
                                 );
 
                                 if (
-                                    !group.Break &&
-                                    Fits(
+                                    !group.Break
+                                    && Fits(
                                         next,
                                         currentStack,
                                         allowedWidth - currentWidth,
@@ -287,25 +254,19 @@ namespace CSharpier.DocPrinter
                                 }
                                 else
                                 {
-                                    Push(
-                                        group.Contents,
-                                        PrintMode.MODE_BREAK,
-                                        command.Indent
-                                    );
+                                    Push(group.Contents, PrintMode.MODE_BREAK, command.Indent);
                                 }
                                 break;
                         }
 
                         if (group.GroupId != null)
                         {
-                            groupModeMap[
-                                group.GroupId
-                            ] = currentStack.Peek().Mode;
+                            groupModeMap[group.GroupId] = currentStack.Peek().Mode;
                         }
                         break;
                     case IfBreak ifBreak:
-                        var groupMode = ifBreak.GroupId != null &&
-                            groupModeMap.ContainsKey(ifBreak.GroupId)
+                        var groupMode = ifBreak.GroupId != null
+                        && groupModeMap.ContainsKey(ifBreak.GroupId)
                             ? groupModeMap[ifBreak.GroupId]
                             : command.Mode;
                         var contents = groupMode == PrintMode.MODE_BREAK
@@ -336,9 +297,9 @@ namespace CSharpier.DocPrinter
                                 goto case PrintMode.MODE_BREAK;
                             case PrintMode.MODE_BREAK:
                                 if (
-                                    line.Squash &&
-                                    output.Length > 0 &&
-                                    EndsWithNewLineAndWhitespace(output)
+                                    line.Squash
+                                    && output.Length > 0
+                                    && EndsWithNewLineAndWhitespace(output)
                                 ) {
                                     break;
                                 }
@@ -354,15 +315,11 @@ namespace CSharpier.DocPrinter
                                 else
                                 {
                                     if (
-                                        (!newLineNextStringValue ||
-                                        !skipNextNewLine) &&
-                                        (!printerOptions.TrimInitialLines ||
-                                        output.Length > 0)
+                                        (!newLineNextStringValue || !skipNextNewLine)
+                                        && (!printerOptions.TrimInitialLines || output.Length > 0)
                                     ) {
                                         TrimOutput(output);
-                                        output.Append(
-                                            newLine + command.Indent.Value
-                                        );
+                                        output.Append(newLine + command.Indent.Value);
                                         currentWidth = command.Indent.Length;
                                     }
 
@@ -378,16 +335,12 @@ namespace CSharpier.DocPrinter
                         break;
                     case LeadingComment leadingComment:
                         TrimOutput(output);
-                        if (
-                            (output.Length != 0 && output[^1] != '\n') ||
-                            newLineNextStringValue
-                        ) {
+                        if ((output.Length != 0 && output[^1] != '\n') || newLineNextStringValue)
+                        {
                             output.Append(newLine);
                         }
 
-                        output.Append(
-                            command.Indent.Value + leadingComment.Comment
-                        );
+                        output.Append(command.Indent.Value + leadingComment.Comment);
                         currentWidth = command.Indent.Length;
                         newLineNextStringValue = false;
                         skipNextNewLine = false;
@@ -400,11 +353,7 @@ namespace CSharpier.DocPrinter
                         skipNextNewLine = true;
                         break;
                     case ForceFlat forceFlat:
-                        Push(
-                            forceFlat.Contents,
-                            PrintMode.MODE_FLAT,
-                            command.Indent
-                        );
+                        Push(forceFlat.Contents, PrintMode.MODE_FLAT, command.Indent);
                         break;
                     default:
                         throw new Exception("didn't handle " + command.Doc);
@@ -425,9 +374,8 @@ namespace CSharpier.DocPrinter
             return value.Length;
         }
 
-        private static bool EndsWithNewLineAndWhitespace(
-            StringBuilder stringBuilder
-        ) {
+        private static bool EndsWithNewLineAndWhitespace(StringBuilder stringBuilder)
+        {
             for (var index = 1; index <= stringBuilder.Length; index++)
             {
                 var next = stringBuilder[^index];
@@ -458,10 +406,8 @@ namespace CSharpier.DocPrinter
             var trimmed = 0;
             for (; trimmed <= stringBuilder.Length; trimmed++)
             {
-                if (
-                    stringBuilder[^(trimmed + 1)] != ' ' &&
-                    stringBuilder[^(trimmed + 1)] != '\t'
-                ) {
+                if (stringBuilder[^(trimmed + 1)] != ' ' && stringBuilder[^(trimmed + 1)] != '\t')
+                {
                     break;
                 }
             }

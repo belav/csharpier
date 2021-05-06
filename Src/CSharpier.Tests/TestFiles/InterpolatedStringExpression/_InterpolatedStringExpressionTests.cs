@@ -8,10 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void InterpolatedStringExpressions()
         {
-            this.RunTest(
-                "InterpolatedStringExpression",
-                "InterpolatedStringExpressions"
-            );
+            this.RunTest("InterpolatedStringExpression", "InterpolatedStringExpressions");
         }
     }
 }

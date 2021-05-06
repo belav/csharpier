@@ -13,25 +13,18 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var result = Doc.Concat(
                 node.Kind() == SyntaxKind.ArrayInitializerExpression
                     ? string.Empty
-                    : node.Kind() ==
-                            SyntaxKind.ComplexElementInitializerExpression
+                    : node.Kind() == SyntaxKind.ComplexElementInitializerExpression
                             ? Doc.SoftLine
                             : Doc.Line,
                 Token.Print(node.OpenBraceToken),
                 Doc.Indent(
                     Doc.Line,
-                    SeparatedSyntaxList.Print(
-                        node.Expressions,
-                        Node.Print,
-                        Doc.Line
-                    )
+                    SeparatedSyntaxList.Print(node.Expressions, Node.Print, Doc.Line)
                 ),
                 Doc.Line,
                 Token.Print(node.CloseBraceToken)
             );
-            return node.Parent is not ObjectCreationExpressionSyntax
-                ? Doc.Group(result)
-                : result;
+            return node.Parent is not ObjectCreationExpressionSyntax ? Doc.Group(result) : result;
         }
     }
 }

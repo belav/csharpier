@@ -15,15 +15,9 @@ namespace CSharpier.DocPrinter
             return new Indent(string.Empty, 0, new List<IndentType>());
         }
 
-        public static Indent Make(
-            Indent indent,
-            PrinterOptions printerOptions
-        ) {
-            return GenerateIndent(
-                indent,
-                newPart: new IndentType("indent", 0),
-                printerOptions
-            );
+        public static Indent Make(Indent indent, PrinterOptions printerOptions)
+        {
+            return GenerateIndent(indent, newPart: new IndentType("indent", 0), printerOptions);
         }
 
         private static Indent GenerateIndent(

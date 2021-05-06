@@ -8,10 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void BasicPreIncrementExpression()
         {
-            this.RunTest(
-                "PreIncrementExpression",
-                "BasicPreIncrementExpression"
-            );
+            this.RunTest("PreIncrementExpression", "BasicPreIncrementExpression");
         }
     }
 }

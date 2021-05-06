@@ -8,10 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void BasicObjectCreationExpression()
         {
-            this.RunTest(
-                "ObjectCreationExpression",
-                "ObjectCreationExpressions"
-            );
+            this.RunTest("ObjectCreationExpression", "ObjectCreationExpressions");
         }
     }
 }

@@ -30,30 +30,24 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                   SimpleMemberAccessExpression
                   [this][.][DoSomething]
                 */
-                if (
-                    expression is InvocationExpressionSyntax invocationExpressionSyntax
-                ) {
+                if (expression is InvocationExpressionSyntax invocationExpressionSyntax)
+                {
                     Traverse(invocationExpressionSyntax.Expression);
                     printedNodes.Add(
                         new PrintedNode(
                             Node: invocationExpressionSyntax,
-                            Doc: ArgumentList.Print(
-                                invocationExpressionSyntax.ArgumentList
-                            )
+                            Doc: ArgumentList.Print(invocationExpressionSyntax.ArgumentList)
                         )
                     );
                 }
-                else if (
-                    expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax
-                ) {
+                else if (expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax)
+                {
                     Traverse(memberAccessExpressionSyntax.Expression);
                     printedNodes.Add(
                         new PrintedNode(
                             Node: memberAccessExpressionSyntax,
                             Doc: Doc.Concat(
-                                Token.Print(
-                                    memberAccessExpressionSyntax.OperatorToken
-                                ),
+                                Token.Print(memberAccessExpressionSyntax.OperatorToken),
                                 Node.Print(memberAccessExpressionSyntax.Name)
                             )
                         )
@@ -62,10 +56,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 else
                 {
                     printedNodes.Add(
-                        new PrintedNode(
-                            Node: expression,
-                            Doc: Node.Print(expression)
-                        )
+                        new PrintedNode(Node: expression, Doc: Node.Print(expression))
                     );
                 }
             }
@@ -100,10 +91,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var hasSeenInvocationExpression = false;
             for (; index < printedNodes.Count; index++)
             {
-                if (
-                    hasSeenInvocationExpression &&
-                    IsMemberish(printedNodes[index].Node)
-                ) {
+                if (hasSeenInvocationExpression && IsMemberish(printedNodes[index].Node))
+                {
                     // [0] should be appended at the end of the group instead of the
                     // beginning of the next one
                     // if (printedNodes[i].node.computed && isNumericLiteral(printedNodes[i].node.property)) {
@@ -138,10 +127,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 return Doc.Group(groups.SelectMany(o => o).ToArray());
             }
 
-            return Doc.Concat(
-                Doc.Group(groups[0].ToArray()),
-                PrintIndentedGroup(groups.Skip(1))
-            );
+            return Doc.Concat(Doc.Group(groups[0].ToArray()), PrintIndentedGroup(groups.Skip(1)));
         }
 
         private static bool IsMemberish(CSharpSyntaxNode node)
@@ -158,12 +144,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             // TODO GH-7 softline here?
             return Doc.Indent(
-                Doc.Group(
-                    Doc.Join(
-                        Doc.SoftLine,
-                        groups.Select(o => Doc.Group(o.ToArray()))
-                    )
-                )
+                Doc.Group(Doc.Join(Doc.SoftLine, groups.Select(o => Doc.Group(o.ToArray()))))
             );
         }
     }

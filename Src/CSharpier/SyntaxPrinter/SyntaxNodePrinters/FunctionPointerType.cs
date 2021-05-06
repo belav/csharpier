@@ -35,24 +35,19 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             );
         }
 
-        private static Doc PrintCallingConvention(
-            FunctionPointerCallingConventionSyntax node
-        ) {
+        private static Doc PrintCallingConvention(FunctionPointerCallingConventionSyntax node)
+        {
             return Doc.Concat(
                 Token.Print(node.ManagedOrUnmanagedKeyword),
                 node.UnmanagedCallingConventionList != null
                     ? Doc.Concat(
-                            Token.Print(
-                                node.UnmanagedCallingConventionList.OpenBracketToken
-                            ),
+                            Token.Print(node.UnmanagedCallingConventionList.OpenBracketToken),
                             SeparatedSyntaxList.Print(
                                 node.UnmanagedCallingConventionList.CallingConventions,
                                 o => Token.Print(o.Name),
                                 " "
                             ),
-                            Token.Print(
-                                node.UnmanagedCallingConventionList.CloseBracketToken
-                            )
+                            Token.Print(node.UnmanagedCallingConventionList.CloseBracketToken)
                         )
                     : Doc.Null
             );

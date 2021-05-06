@@ -16,9 +16,7 @@ namespace CSharpier.Tests.TestFileTests
         [SetUp]
         public void Setup()
         {
-            this.rootDirectory = new DirectoryInfo(
-                Directory.GetCurrentDirectory()
-            );
+            this.rootDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
             while (this.rootDirectory.Name != "CSharpier.Tests")
             {
                 this.rootDirectory = this.rootDirectory.Parent;
@@ -34,11 +32,7 @@ namespace CSharpier.Tests.TestFileTests
                 fileName + ".cst"
             );
             var fileReaderResult =
-                FileReader.ReadFile(
-                    filePath,
-                    new FileSystem(),
-                    CancellationToken.None
-                ).Result;
+                FileReader.ReadFile(filePath, new FileSystem(), CancellationToken.None).Result;
 
             var formatter = new CodeFormatter();
             var result = formatter.Format(
@@ -51,33 +45,21 @@ namespace CSharpier.Tests.TestFileTests
             );
 
             var actualFilePath = filePath.Replace(".cst", ".actual.cst");
-            File.WriteAllText(
-                actualFilePath,
-                result.Code,
-                fileReaderResult.Encoding
-            );
+            File.WriteAllText(actualFilePath, result.Code, fileReaderResult.Encoding);
 
             var filePathToChange = filePath;
-            var expectedFilePath = actualFilePath.Replace(
-                ".actual.",
-                ".expected."
-            );
+            var expectedFilePath = actualFilePath.Replace(".actual.", ".expected.");
 
             var expectedCode = fileReaderResult.FileContents;
 
             if (File.Exists(expectedFilePath))
             {
-                expectedCode = File.ReadAllText(
-                    expectedFilePath,
-                    Encoding.UTF8
-                );
+                expectedCode = File.ReadAllText(expectedFilePath, Encoding.UTF8);
                 filePathToChange = expectedFilePath;
             }
 
-            if (
-                Environment.GetEnvironmentVariable("NormalizeLineEndings") !=
-                null
-            ) {
+            if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
+            {
                 expectedCode = expectedCode.Replace("\r\n", "\n");
                 result.Code = result.Code.Replace("\r\n", "\n");
             }

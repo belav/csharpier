@@ -186,10 +186,8 @@ public enum Enum
 
         private void ResultShouldBe(string result, string be)
         {
-            if (
-                Environment.GetEnvironmentVariable("NormalizeLineEndings") !=
-                null
-            ) {
+            if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
+            {
                 be = be.Replace("\r\n", "\n");
             }
 
@@ -204,10 +202,8 @@ public enum Enum
                 CancellationToken.None
             ).CompareSource();
 
-            if (
-                Environment.GetEnvironmentVariable("NormalizeLineEndings") !=
-                null
-            ) {
+            if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
+            {
                 result = result.Replace("\r\n", "\n");
             }
 

@@ -9,14 +9,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(SwitchSectionSyntax node)
         {
-            var docs = new List<Doc>
+            var docs = new List<Doc> { Doc.Join(Doc.HardLine, node.Labels.Select(Node.Print)) };
+            if (node.Statements.Count == 1 && node.Statements[0] is BlockSyntax blockSyntax)
             {
-                Doc.Join(Doc.HardLine, node.Labels.Select(Node.Print))
-            };
-            if (
-                node.Statements.Count == 1 &&
-                node.Statements[0] is BlockSyntax blockSyntax
-            ) {
                 docs.Add(Block.Print(blockSyntax));
             }
             else
@@ -24,10 +19,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 docs.Add(
                     Doc.Indent(
                         Doc.HardLine,
-                        Doc.Join(
-                            Doc.HardLine,
-                            node.Statements.Select(Node.Print).ToArray()
-                        )
+                        Doc.Join(Doc.HardLine, node.Statements.Select(Node.Print).ToArray())
                     )
                 );
             }

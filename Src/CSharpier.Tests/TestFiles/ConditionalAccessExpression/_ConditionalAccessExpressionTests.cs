@@ -8,10 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void BasicConditionalAccessExpression()
         {
-            this.RunTest(
-                "ConditionalAccessExpression",
-                "BasicConditionalAccessExpression"
-            );
+            this.RunTest("ConditionalAccessExpression", "BasicConditionalAccessExpression");
         }
     }
 }

@@ -8,10 +8,7 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void BasicCasePatternSwitchLabel()
         {
-            this.RunTest(
-                "CasePatternSwitchLabel",
-                "BasicCasePatternSwitchLabel"
-            );
+            this.RunTest("CasePatternSwitchLabel", "BasicCasePatternSwitchLabel");
         }
     }
 }

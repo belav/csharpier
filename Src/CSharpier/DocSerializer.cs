@@ -29,19 +29,15 @@ namespace CSharpier
                 case NullDoc:
                     return indent + "Doc.Null";
                 case StringDoc stringDoc:
-                    return indent +
-                    "\"" +
-                    stringDoc.Value?.Replace("\"", "\\\"") +
-                    "\"";
+                    return indent + "\"" + stringDoc.Value?.Replace("\"", "\\\"") + "\"";
                 case HardLine hardLine:
-                    return indent +
-                    "Doc.HardLine" +
-                    (hardLine.Contents.First() is LineDoc { Squash: true }
-                        ? "IfNoPreviousLine"
-                        : string.Empty) +
-                    (hardLine.SkipBreakIfFirstInGroup
-                        ? "SkipBreakIfFirstInGroup"
-                        : string.Empty);
+                    return indent
+                        + "Doc.HardLine"
+                        + (hardLine.Contents.First()
+                            is LineDoc { Squash: true }  ? "IfNoPreviousLine" : string.Empty)
+                        + (hardLine.SkipBreakIfFirstInGroup
+                            ? "SkipBreakIfFirstInGroup"
+                            : string.Empty);
                 case LiteralLine:
                     return indent + "Doc.LiteralLine";
                 case Concat concat:
@@ -52,9 +48,7 @@ namespace CSharpier
                     }
                     for (var x = 0; x < concat.Contents.Count; x++)
                     {
-                        var printResult = PrintIndentedDocTree(
-                            concat.Contents[x]
-                        );
+                        var printResult = PrintIndentedDocTree(concat.Contents[x]);
                         result += printResult;
                         if (x < concat.Contents.Count - 1)
                         {
@@ -65,10 +59,8 @@ namespace CSharpier
                     result += ")";
                     return result;
                 case LineDoc lineDoc:
-                    return indent +
-                    (lineDoc.Type == LineDoc.LineType.Normal
-                        ? "Doc.Line"
-                        : "Doc.SoftLine");
+                    return indent
+                        + (lineDoc.Type == LineDoc.LineType.Normal ? "Doc.Line" : "Doc.SoftLine");
                 case BreakParent:
                     return "";
                 case Trim:

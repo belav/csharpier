@@ -9,10 +9,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(InterpolatedStringExpressionSyntax node)
         {
-            var docs = new List<Doc>
-            {
-                Token.PrintWithoutLeadingTrivia(node.StringStartToken)
-            };
+            var docs = new List<Doc> { Token.PrintWithoutLeadingTrivia(node.StringStartToken) };
 
             docs.AddRange(node.Contents.Select(Node.Print));
             docs.Add(Token.Print(node.StringEndToken));

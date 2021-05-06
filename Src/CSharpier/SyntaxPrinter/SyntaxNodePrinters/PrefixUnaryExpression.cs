@@ -8,10 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(PrefixUnaryExpressionSyntax node)
         {
-            return Doc.Concat(
-                Token.Print(node.OperatorToken),
-                Node.Print(node.Operand)
-            );
+            return Doc.Concat(Token.Print(node.OperatorToken), Node.Print(node.Operand));
         }
     }
 }

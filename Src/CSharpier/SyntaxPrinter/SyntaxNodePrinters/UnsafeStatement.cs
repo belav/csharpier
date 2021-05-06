@@ -8,10 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(UnsafeStatementSyntax node)
         {
-            return Doc.Concat(
-                Token.Print(node.UnsafeKeyword),
-                Node.Print(node.Block)
-            );
+            return Doc.Concat(Token.Print(node.UnsafeKeyword), Node.Print(node.Block));
         }
     }
 }

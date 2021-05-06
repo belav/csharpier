@@ -12,8 +12,7 @@ namespace CSharpier.Tests
             var formatter = new CodeFormatter();
             var result = formatter.Format(code, new PrinterOptions());
 
-            result.FailureMessage.Should()
-                .Be("We can't handle this deep of recursion yet.");
+            result.FailureMessage.Should().Be("We can't handle this deep of recursion yet.");
         }
 
         private string uglyLongConcatenatedString =

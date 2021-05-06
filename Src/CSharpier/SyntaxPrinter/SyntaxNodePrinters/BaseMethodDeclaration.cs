@@ -31,9 +31,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             SyntaxToken? semicolonToken = null;
             string? groupId = null;
 
-            if (
-                node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax
-            ) {
+            if (node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax)
+            {
                 attributeLists = baseMethodDeclarationSyntax.AttributeLists;
                 modifiers = baseMethodDeclarationSyntax.Modifiers;
                 parameterList = baseMethodDeclarationSyntax.ParameterList;
@@ -43,40 +42,31 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 {
                     returnType = methodDeclarationSyntax.ReturnType;
                     explicitInterfaceSpecifier = methodDeclarationSyntax.ExplicitInterfaceSpecifier;
-                    identifier = Token.Print(
-                        methodDeclarationSyntax.Identifier
-                    );
+                    identifier = Token.Print(methodDeclarationSyntax.Identifier);
                     typeParameterList = methodDeclarationSyntax.TypeParameterList;
                     constraintClauses = methodDeclarationSyntax.ConstraintClauses;
                 }
-                else if (
-                    node is DestructorDeclarationSyntax destructorDeclarationSyntax
-                ) {
+                else if (node is DestructorDeclarationSyntax destructorDeclarationSyntax)
+                {
                     identifier = Doc.Concat(
                         Token.Print(destructorDeclarationSyntax.TildeToken),
                         Token.Print(destructorDeclarationSyntax.Identifier)
                     );
                 }
-                else if (
-                    node is ConstructorDeclarationSyntax constructorDeclarationSyntax
-                ) {
-                    identifier = Token.Print(
-                        constructorDeclarationSyntax.Identifier
-                    );
+                else if (node is ConstructorDeclarationSyntax constructorDeclarationSyntax)
+                {
+                    identifier = Token.Print(constructorDeclarationSyntax.Identifier);
                     constructorInitializer = constructorDeclarationSyntax.Initializer;
                 }
 
                 semicolonToken = baseMethodDeclarationSyntax.SemicolonToken;
             }
-            else if (
-                node is LocalFunctionStatementSyntax localFunctionStatementSyntax
-            ) {
+            else if (node is LocalFunctionStatementSyntax localFunctionStatementSyntax)
+            {
                 attributeLists = localFunctionStatementSyntax.AttributeLists;
                 modifiers = localFunctionStatementSyntax.Modifiers;
                 returnType = localFunctionStatementSyntax.ReturnType;
-                identifier = Token.Print(
-                    localFunctionStatementSyntax.Identifier
-                );
+                identifier = Token.Print(localFunctionStatementSyntax.Identifier);
                 typeParameterList = localFunctionStatementSyntax.TypeParameterList;
                 parameterList = localFunctionStatementSyntax.ParameterList;
                 constraintClauses = localFunctionStatementSyntax.ConstraintClauses;
@@ -96,9 +86,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (modifiers.HasValue)
             {
-                declarationGroup.Add(
-                    Modifiers.PrintWithoutLeadingTrivia(modifiers.Value)
-                );
+                declarationGroup.Add(Modifiers.PrintWithoutLeadingTrivia(modifiers.Value));
             }
 
             if (returnType != null)
@@ -125,24 +113,19 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 declarationGroup.Add(identifier);
             }
 
-            if (
-                node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax
-            ) {
+            if (node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax)
+            {
                 declarationGroup.Add(
                     Token.PrintWithSuffix(
                         conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword,
                         " "
                     ),
-                    Token.Print(
-                        conversionOperatorDeclarationSyntax.OperatorKeyword,
-                        " "
-                    ),
+                    Token.Print(conversionOperatorDeclarationSyntax.OperatorKeyword, " "),
                     Node.Print(conversionOperatorDeclarationSyntax.Type)
                 );
             }
-            else if (
-                node is OperatorDeclarationSyntax operatorDeclarationSyntax
-            ) {
+            else if (node is OperatorDeclarationSyntax operatorDeclarationSyntax)
+            {
                 declarationGroup.Add(
                     Node.Print(operatorDeclarationSyntax.ReturnType),
                     " ",
@@ -153,9 +136,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (typeParameterList != null)
             {
-                declarationGroup.Add(
-                    TypeParameterList.Print(typeParameterList)
-                );
+                declarationGroup.Add(TypeParameterList.Print(typeParameterList));
             }
 
             if (parameterList != null)
@@ -166,17 +147,13 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 {
                     groupId = Guid.NewGuid().ToString();
                 }
-                declarationGroup.Add(
-                    ParameterList.Print(parameterList, groupId)
-                );
+                declarationGroup.Add(ParameterList.Print(parameterList, groupId));
                 declarationGroup.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine));
             }
 
             if (constructorInitializer != null)
             {
-                declarationGroup.Add(
-                    ConstructorInitializer.Print(constructorInitializer)
-                );
+                declarationGroup.Add(ConstructorInitializer.Print(constructorInitializer));
             }
 
             if (modifiers.HasValue && modifiers.Value.Count > 0)
@@ -185,9 +162,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
             else if (returnType != null)
             {
-                docs.Add(
-                    Token.PrintLeadingTrivia(returnType.GetLeadingTrivia())
-                );
+                docs.Add(Token.PrintLeadingTrivia(returnType.GetLeadingTrivia()));
             }
 
             docs.Add(Doc.Group(declarationGroup));

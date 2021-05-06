@@ -8,18 +8,12 @@ namespace CSharpier.Tests.TestFiles
         [Test]
         public void BasicImplicitArrayCreationExpression()
         {
-            this.RunTest(
-                "ImplicitArrayCreationExpression",
-                "BasicImplicitArrayCreationExpression"
-            );
+            this.RunTest("ImplicitArrayCreationExpression", "BasicImplicitArrayCreationExpression");
         }
         [Test]
         public void ImplicityArrayWithCommas()
         {
-            this.RunTest(
-                "ImplicitArrayCreationExpression",
-                "ImplicityArrayWithCommas"
-            );
+            this.RunTest("ImplicitArrayCreationExpression", "ImplicityArrayWithCommas");
         }
     }
 }

@@ -22,18 +22,12 @@ namespace Worker
                 directory = directory.Parent;
             }
 
-            var files = Directory.GetFiles(
-                    Path.Combine(directory.FullName, "CSharpier/Printer")
-                )
+            var files = Directory.GetFiles(Path.Combine(directory.FullName, "CSharpier/Printer"))
                 .Select(Path.GetFileNameWithoutExtension)
                 .ToList();
 
             var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
-                .Where(
-                    o =>
-                        !o.IsAbstract &&
-                        typeof(CSharpSyntaxNode).IsAssignableFrom(o)
-                )
+                .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o))
                 .ToList();
 
             var missingTypes = new List<Type>();

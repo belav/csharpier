@@ -11,13 +11,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Concat(
                 Token.Print(node.LessThanToken),
-                Doc.Indent(
-                    SeparatedSyntaxList.Print(
-                        node.Arguments,
-                        Node.Print,
-                        Doc.Line
-                    )
-                ),
+                Doc.Indent(SeparatedSyntaxList.Print(node.Arguments, Node.Print, Doc.Line)),
                 Token.Print(node.GreaterThanToken)
             );
         }

@@ -8,9 +8,8 @@ namespace CSharpier.SyntaxPrinter
 {
     public static class ConstraintClauses
     {
-        public static Doc Print(
-            IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses
-        ) {
+        public static Doc Print(IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses)
+        {
             var constraintClausesList = constraintClauses.ToList();
 
             if (constraintClausesList.Count == 0)
@@ -24,9 +23,7 @@ namespace CSharpier.SyntaxPrinter
                     Doc.HardLine,
                     Doc.Join(
                         Doc.HardLine,
-                        constraintClausesList.Select(
-                            TypeParameterConstraintClause.Print
-                        )
+                        constraintClausesList.Select(TypeParameterConstraintClause.Print)
                     )
                 )
             };
