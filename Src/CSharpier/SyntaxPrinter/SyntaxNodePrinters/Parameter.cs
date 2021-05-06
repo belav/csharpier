@@ -12,6 +12,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var docs = new List<Doc>
             {
                 AttributeLists.Print(node, node.AttributeLists),
+                node.AttributeLists.Any() ? Doc.Line : Doc.Null,
                 Modifiers.Print(node.Modifiers)
             };
             if (node.Type != null)
