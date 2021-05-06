@@ -77,7 +77,7 @@ JSON
    "printWidth": 100,
    "useTabs": false,
    "tabWidth": 4,
-   "endOfLine": "lf"
+   "endOfLine": "auto"
 }
 ```
 YAML
@@ -85,7 +85,7 @@ YAML
 printWidth: 100
 useTabs: false
 tabWidth: 4
-endOfLine: lf
+endOfLine: auto
 ```
 
 #### Print Width
@@ -103,7 +103,8 @@ Default 4
 #### End of Line
 Specify what type of line endings will be printed in files.
 Options
-- "lf" - Line feed only (\n) **Default**
+- "auto" - Detects which type of line ending to used based on the first one it encounters in the file **Default**
+- "lf" - Line feed only (\n)
 - "crlf" Carriage return and line feed (\r\n) 
 
 ### Ignoring Files

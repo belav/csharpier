@@ -1,3 +1,11 @@
+#0.9.2
+[diff](https://github.com/belav/csharpier/compare/0.9.1...0.9.2)
+
+- Support "auto" for endOfLine [#147](https://api.github.com/repos/belav/csharpier/issues/147)
+- Long Parameter Attribute should break after ending brace [#174](https://api.github.com/repos/belav/csharpier/issues/174)
+- Attribute on parameter should have space [#104](https://api.github.com/repos/belav/csharpier/issues/104)
+
+
 # 0.9.1
 
 [diff](https://github.com/belav/csharpier/compare/0.9.0...0.9.1)
