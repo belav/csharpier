@@ -481,12 +481,8 @@ namespace CSharpier.Tests
         ) {
             return DocPrinter.DocPrinter.Print(
                     doc,
-                    new PrinterOptions
-                    {
-                        Width = width,
-                        EndOfLine = Environment.NewLine,
-                        TrimInitialLines = trimInitialLines,
-                    }
+                    new PrinterOptions { Width = width, TrimInitialLines = trimInitialLines, },
+                    Environment.NewLine
                 )
                 .TrimEnd('\r', '\n');
         }

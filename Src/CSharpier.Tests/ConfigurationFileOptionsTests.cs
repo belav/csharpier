@@ -163,7 +163,7 @@ namespace CSharpier.Tests
             configurationFileOptions.PrintWidth.Should().Be(100);
             configurationFileOptions.TabWidth.Should().Be(4);
             configurationFileOptions.UseTabs.Should().BeFalse();
-            configurationFileOptions.EndOfLine.Should().Be("lf");
+            configurationFileOptions.EndOfLine.Should().Be("auto");
         }
 
         private ConfigurationFileOptions CreateConfigurationOptions(string rootPath)

@@ -7,9 +7,16 @@ namespace CSharpier
         public bool UseTabs { get; init; }
         public int TabWidth { get; init; } = 4;
         public int Width { get; init; } = 100;
-        public string EndOfLine { get; init; } = "\n";
+        public EndOfLine EndOfLine { get; init; } = EndOfLine.Auto;
         public bool TrimInitialLines { get; init; } = true;
 
         public const int WidthUsedByTests = 80;
+    }
+
+    public enum EndOfLine
+    {
+        Auto,
+        CRLF,
+        LF
     }
 }

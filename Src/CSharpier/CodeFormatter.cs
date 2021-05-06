@@ -60,7 +60,12 @@ namespace CSharpier
             try
             {
                 var document = Node.Print(rootNode);
-                var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions);
+                var lineEnding = GetLineEnding(code, printerOptions);
+                var formattedCode = DocPrinter.DocPrinter.Print(
+                    document,
+                    printerOptions,
+                    lineEnding
+                );
                 return new CSharpierResult
                 {
                     Code = formattedCode,
@@ -77,6 +82,26 @@ namespace CSharpier
                     FailureMessage = "We can't handle this deep of recursion yet."
                 };
             }
+        }
+
+        public static string GetLineEnding(string code, PrinterOptions printerOptions)
+        {
+            if (printerOptions.EndOfLine == EndOfLine.Auto)
+            {
+                var lineIndex = code.IndexOf('\n');
+                if (lineIndex <= 0)
+                {
+                    return "\n";
+                }
+                if (code[lineIndex - 1] == '\r')
+                {
+                    return "\r\n";
+                }
+
+                return "\n";
+            }
+
+            return printerOptions.EndOfLine == EndOfLine.CRLF ? "\r\n" : "\n";
         }
 
         private string PrintAST(CompilationUnitSyntax rootNode)
