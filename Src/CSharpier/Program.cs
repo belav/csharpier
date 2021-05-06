@@ -67,14 +67,16 @@ namespace CSharpier
                 TabWidth = configurationFileOptions.TabWidth,
                 UseTabs = configurationFileOptions.UseTabs,
                 Width = configurationFileOptions.PrintWidth,
-                EndOfLine = configurationFileOptions.EndOfLine == "lf"
-                    ? "\n"
-                    : configurationFileOptions.EndOfLine == "crlf"
-                            ? "\r\n"
-                            : throw new Exception(
-                                    "Unhandled value from EndOfLine options "
-                                    + configurationFileOptions.EndOfLine
-                                )
+                EndOfLine = configurationFileOptions.EndOfLine == "auto"
+                    ? EndOfLine.Auto
+                    : configurationFileOptions.EndOfLine == "lf"
+                            ? EndOfLine.LF
+                            : configurationFileOptions.EndOfLine == "crlf"
+                                    ? EndOfLine.CRLF
+                                    : throw new Exception(
+                                            "Unhandled value from EndOfLine options "
+                                            + configurationFileOptions.EndOfLine
+                                        )
             };
 
             // TODO most parameters should probably be combined into an object

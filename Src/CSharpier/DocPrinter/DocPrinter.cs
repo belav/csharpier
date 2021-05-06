@@ -145,14 +145,13 @@ namespace CSharpier.DocPrinter
             return false;
         }
 
-        public static string Print(Doc document, PrinterOptions printerOptions)
+        public static string Print(Doc document, PrinterOptions printerOptions, string endOfLine)
         {
             groupModeMap = new Dictionary<string, PrintMode>();
 
             PropagateBreaks.RunOn(document);
 
             var allowedWidth = printerOptions.Width;
-            var newLine = printerOptions.EndOfLine;
             var currentWidth = 0;
 
             var currentStack = new Stack<PrintCommand>();
@@ -194,7 +193,7 @@ namespace CSharpier.DocPrinter
                         {
                             // TODO 1 new line stuff
                             TrimOutput(output);
-                            output.Append(newLine + command.Indent.Value);
+                            output.Append(endOfLine + command.Indent.Value);
                             currentWidth = command.Indent.Length;
                             newLineNextStringValue = false;
                         }
@@ -308,7 +307,7 @@ namespace CSharpier.DocPrinter
                                 {
                                     if (output.Length > 0)
                                     {
-                                        output.Append(newLine);
+                                        output.Append(endOfLine);
                                         currentWidth = 0;
                                     }
                                 }
@@ -319,7 +318,7 @@ namespace CSharpier.DocPrinter
                                         && (!printerOptions.TrimInitialLines || output.Length > 0)
                                     ) {
                                         TrimOutput(output);
-                                        output.Append(newLine + command.Indent.Value);
+                                        output.Append(endOfLine + command.Indent.Value);
                                         currentWidth = command.Indent.Length;
                                     }
 
@@ -337,7 +336,7 @@ namespace CSharpier.DocPrinter
                         TrimOutput(output);
                         if ((output.Length != 0 && output[^1] != '\n') || newLineNextStringValue)
                         {
-                            output.Append(newLine);
+                            output.Append(endOfLine);
                         }
 
                         output.Append(command.Indent.Value + leadingComment.Comment);
@@ -362,7 +361,7 @@ namespace CSharpier.DocPrinter
 
             if (output.Length == 0 || output[^1] != '\n')
             {
-                output.Append(newLine);
+                output.Append(endOfLine);
             }
 
             return string.Join(string.Empty, output);
