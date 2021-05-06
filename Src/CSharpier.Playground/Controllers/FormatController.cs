@@ -45,7 +45,7 @@ namespace CSharpier.Playground.Controllers
         }
 
         [HttpPost]
-        public FormatResult Post([FromBody]string content)
+        public FormatResult Post([FromBody] string content)
         {
             var filePath = Path.Combine(
                 this.webHostEnvironment.ContentRootPath,
