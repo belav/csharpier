@@ -197,9 +197,7 @@ namespace CSharpier.DocPrinter
                             currentWidth = command.Indent.Length;
                             newLineNextStringValue = false;
                         }
-
                         output.Append(stringDoc.Value);
-
                         currentWidth += GetStringWidth(stringDoc.Value);
                         break;
                     case Concat concat:

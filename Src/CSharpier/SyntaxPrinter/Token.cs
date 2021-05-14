@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
@@ -63,7 +61,10 @@ namespace CSharpier.SyntaxPrinter
                 syntaxToken.Kind() == SyntaxKind.StringLiteralToken
                 && syntaxToken.Text.StartsWith("@")
             ) {
-                var lines = syntaxToken.Text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                var lines = syntaxToken.Text.Split(
+                    new[] { '\r', '\n' },
+                    StringSplitOptions.RemoveEmptyEntries
+                );
                 docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
             }
             else

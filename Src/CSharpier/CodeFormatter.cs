@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,31 +8,10 @@ using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 using Newtonsoft.Json;
 
 namespace CSharpier
 {
-    public static class LineEndings
-    {
-        private static ConcurrentDictionary<SyntaxTree, string> lineEndings = new();
-
-        public static void SetLineEnding(SyntaxTree syntaxTree, string value)
-        {
-            lineEndings[syntaxTree] = value;
-        }
-
-        public static string GetLineEnding(SyntaxTree syntaxTree)
-        {
-            return lineEndings[syntaxTree];
-        }
-
-        public static void RemoveLineEnding(SyntaxTree syntaxTree)
-        {
-            lineEndings.Remove(syntaxTree, out _);
-        }
-    }
-
     public class CodeFormatter
     {
         public CSharpierResult Format(string code, PrinterOptions printerOptions)
@@ -81,7 +58,6 @@ namespace CSharpier
             try
             {
                 var lineEnding = GetLineEnding(code, printerOptions);
-                LineEndings.SetLineEnding(syntaxTree, lineEnding);
 
                 var document = Node.Print(rootNode);
                 var formattedCode = DocPrinter.DocPrinter.Print(
@@ -89,7 +65,6 @@ namespace CSharpier
                     printerOptions,
                     lineEnding
                 );
-                LineEndings.RemoveLineEnding(syntaxTree);
                 return new CSharpierResult
                 {
                     Code = formattedCode,
