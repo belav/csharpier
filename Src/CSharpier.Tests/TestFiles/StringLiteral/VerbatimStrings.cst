@@ -1,24 +1,29 @@
-[assembly: System.Copyright(@"(C)""
+[assembly: System.Copyright(
+    @"(C)""
 2009")]
 class ClassName
 {
-    private string stayOnLine1 = @"one
+    private string stayOnLine1 =
+        @"one
 jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
 ";
 
-    private string stayOnLine2 = @"one
+    private string stayOnLine2 =
+        @"one
 two
 three
 four";
 
     private void MethodName()
     {
-        CallSomeLongMethod(@"one
+        CallSomeLongMethod(
+            @"one
 two
 three
 four
 jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
-");
+"
+        );
 
         CallSomeLongMethod(
             @"one
