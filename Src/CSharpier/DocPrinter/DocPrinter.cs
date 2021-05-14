@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CSharpier.DocTypes;
+using Newtonsoft.Json.Serialization;
 
 namespace CSharpier.DocPrinter
 {
@@ -122,7 +123,7 @@ namespace CSharpier.DocPrinter
                                     }
                                     if (line.Type != LineDoc.LineType.Soft)
                                     {
-                                        output.Append(" ");
+                                        output.Append(' ');
 
                                         remainingWidth -= 1;
                                     }
@@ -193,7 +194,7 @@ namespace CSharpier.DocPrinter
                         {
                             // TODO 1 new line stuff
                             TrimOutput(output);
-                            output.Append(endOfLine + command.Indent.Value);
+                            output.Append(endOfLine).Append(command.Indent.Value);
                             currentWidth = command.Indent.Length;
                             newLineNextStringValue = false;
                         }
@@ -318,7 +319,7 @@ namespace CSharpier.DocPrinter
                                         && (!printerOptions.TrimInitialLines || output.Length > 0)
                                     ) {
                                         TrimOutput(output);
-                                        output.Append(endOfLine + command.Indent.Value);
+                                        output.Append(endOfLine).Append(command.Indent.Value);
                                         currentWidth = command.Indent.Length;
                                     }
 
@@ -339,14 +340,14 @@ namespace CSharpier.DocPrinter
                             output.Append(endOfLine);
                         }
 
-                        output.Append(command.Indent.Value + leadingComment.Comment);
+                        output.Append(command.Indent.Value).Append(leadingComment.Comment);
                         currentWidth = command.Indent.Length;
                         newLineNextStringValue = false;
                         skipNextNewLine = false;
                         break;
                     case TrailingComment trailingComment:
                         TrimOutput(output);
-                        output.Append(" " + trailingComment.Comment);
+                        output.Append(' ').Append(trailingComment.Comment);
                         currentWidth = command.Indent.Length;
                         newLineNextStringValue = true;
                         skipNextNewLine = true;
