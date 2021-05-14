@@ -63,13 +63,8 @@ namespace CSharpier.SyntaxPrinter
                 syntaxToken.Kind() == SyntaxKind.StringLiteralToken
                 && syntaxToken.Text.StartsWith("@")
             ) {
-                // this is for option B, where we replace line endings here, and then replace them back in DocPrinter
-                // but that feels gross. But this also feels gross because of how we store/lookup the line ending.
-                // option B also just happens to fix the lineEndings affect printed output problem, but doesn't really fix it properly
-                // docs.Add(syntaxToken.Text.Replace("\r\n", "\n"));
-
-                var lineEnding = LineEndings.GetLineEnding(syntaxToken.SyntaxTree!);
-                docs.Add(Regex.Replace(syntaxToken.Text, @"\r\n?|\n", lineEnding));
+                var lines = syntaxToken.Text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
             }
             else
             {
