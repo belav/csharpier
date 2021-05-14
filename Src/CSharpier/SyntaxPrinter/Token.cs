@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -58,7 +59,22 @@ namespace CSharpier.SyntaxPrinter
 
             ShouldSkipNextLeadingTrivia = false;
 
-            docs.Add(syntaxToken.Text);
+            if (
+                syntaxToken.Kind() == SyntaxKind.StringLiteralToken
+                && syntaxToken.Text.StartsWith("@")
+            ) {
+                // this is for option B, where we replace line endings here, and then replace them back in DocPrinter
+                // but that feels gross. But this also feels gross because of how we store/lookup the line ending.
+                // option B also just happens to fix the lineEndings affect printed output problem, but doesn't really fix it properly
+                // docs.Add(syntaxToken.Text.Replace("\r\n", "\n"));
+
+                var lineEnding = LineEndings.GetLineEnding(syntaxToken.SyntaxTree!);
+                docs.Add(Regex.Replace(syntaxToken.Text, @"\r\n?|\n", lineEnding));
+            }
+            else
+            {
+                docs.Add(syntaxToken.Text);
+            }
             var trailingTrivia = PrintTrailingTrivia(syntaxToken);
             if (trailingTrivia != Doc.Null)
             {

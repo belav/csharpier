@@ -197,7 +197,19 @@ namespace CSharpier.DocPrinter
                             currentWidth = command.Indent.Length;
                             newLineNextStringValue = false;
                         }
+
+                        // Option B
+                        // if (endOfLine == "\r\n")
+                        // {
+                        //     output.Append(stringDoc.Value.Replace("\n", "\r\n"));
+                        // }
+                        // else
+                        // {
+                        //     output.Append(stringDoc.Value);
+                        // }
+
                         output.Append(stringDoc.Value);
+
                         currentWidth += GetStringWidth(stringDoc.Value);
                         break;
                     case Concat concat:
