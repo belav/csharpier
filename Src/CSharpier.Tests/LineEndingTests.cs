@@ -9,6 +9,7 @@ namespace CSharpier.Tests
         [Test]
         public void LineEndings_Should_Not_Affect_Printed_Output()
         {
+            // this is a verbatim string that is just the right size to format differently if it has \n vs \r\n in it
             var code =
                 @"class ClassName
 {
@@ -25,9 +26,6 @@ four"";
             var printerOptions = new PrinterOptions { EndOfLine = EndOfLine.Auto, Width = 80 };
             var lfResult = formatter.Format(codeWithLf, printerOptions);
             var crLfResult = formatter.Format(codeWithCrLf, printerOptions);
-
-            File.WriteAllText("c:/temp/lf.cs", lfResult.Code);
-            File.WriteAllText("c:/temp/crlf.cs", crLfResult.Code);
 
             lfResult.Code.Should().Be(crLfResult.Code.Replace("\r\n", "\n"));
         }
@@ -55,7 +53,8 @@ four"";
             string escapedNewLine,
             EndOfLine endOfLine
         ) {
-            var code = @$"class ClassName
+            var code =
+                @$"class ClassName
 {{
     string value = @""one{escapedNewLine}two"";
 }}

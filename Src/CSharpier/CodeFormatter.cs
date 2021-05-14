@@ -57,9 +57,8 @@ namespace CSharpier
 
             try
             {
-                var lineEnding = GetLineEnding(code, printerOptions);
-
                 var document = Node.Print(rootNode);
+                var lineEnding = GetLineEnding(code, printerOptions);
                 var formattedCode = DocPrinter.DocPrinter.Print(
                     document,
                     printerOptions,
