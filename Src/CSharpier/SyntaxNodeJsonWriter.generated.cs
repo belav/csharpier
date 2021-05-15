@@ -248,7 +248,7 @@ namespace CSharpier
         public static void WriteIdentifierNameSyntax(StringBuilder builder, IdentifierNameSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
@@ -278,7 +278,7 @@ namespace CSharpier
         public static void WriteQualifiedNameSyntax(StringBuilder builder, QualifiedNameSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Left != default(NameSyntax))
@@ -320,7 +320,7 @@ namespace CSharpier
         public static void WriteGenericNameSyntax(StringBuilder builder, GenericNameSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
@@ -357,7 +357,7 @@ namespace CSharpier
         public static void WriteTypeArgumentListSyntax(StringBuilder builder, TypeArgumentListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
@@ -395,7 +395,7 @@ namespace CSharpier
         public static void WriteAliasQualifiedNameSyntax(StringBuilder builder, AliasQualifiedNameSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Alias != default(IdentifierNameSyntax))
@@ -437,7 +437,7 @@ namespace CSharpier
         public static void WritePredefinedTypeSyntax(StringBuilder builder, PredefinedTypeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
@@ -466,7 +466,7 @@ namespace CSharpier
         public static void WriteArrayTypeSyntax(StringBuilder builder, ArrayTypeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ElementType != default(TypeSyntax))
@@ -503,7 +503,7 @@ namespace CSharpier
         public static void WriteArrayRankSpecifierSyntax(StringBuilder builder, ArrayRankSpecifierSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
@@ -542,7 +542,7 @@ namespace CSharpier
         public static void WritePointerTypeSyntax(StringBuilder builder, PointerTypeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ElementType != default(TypeSyntax))
@@ -577,7 +577,7 @@ namespace CSharpier
         public static void WriteFunctionPointerTypeSyntax(StringBuilder builder, FunctionPointerTypeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.DelegateKeyword != default(SyntaxToken))
@@ -624,7 +624,7 @@ namespace CSharpier
         public static void WriteFunctionPointerParameterListSyntax(StringBuilder builder, FunctionPointerParameterListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
@@ -662,7 +662,7 @@ namespace CSharpier
         public static void WriteFunctionPointerCallingConventionSyntax(StringBuilder builder, FunctionPointerCallingConventionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ManagedOrUnmanagedKeyword != default(SyntaxToken))
@@ -692,7 +692,7 @@ namespace CSharpier
         public static void WriteFunctionPointerUnmanagedCallingConventionListSyntax(StringBuilder builder, FunctionPointerUnmanagedCallingConventionListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
@@ -730,7 +730,7 @@ namespace CSharpier
         public static void WriteFunctionPointerUnmanagedCallingConventionSyntax(StringBuilder builder, FunctionPointerUnmanagedCallingConventionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(SyntaxToken))
@@ -754,7 +754,7 @@ namespace CSharpier
         public static void WriteNullableTypeSyntax(StringBuilder builder, NullableTypeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ElementType != default(TypeSyntax))
@@ -789,7 +789,7 @@ namespace CSharpier
         public static void WriteTupleTypeSyntax(StringBuilder builder, TupleTypeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
@@ -832,7 +832,7 @@ namespace CSharpier
         public static void WriteTupleElementSyntax(StringBuilder builder, TupleElementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
@@ -862,7 +862,7 @@ namespace CSharpier
         public static void WriteOmittedTypeArgumentSyntax(StringBuilder builder, OmittedTypeArgumentSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OmittedTypeArgumentToken != default(SyntaxToken))
@@ -891,7 +891,7 @@ namespace CSharpier
         public static void WriteRefTypeSyntax(StringBuilder builder, RefTypeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.RefKeyword != default(SyntaxToken))
@@ -932,7 +932,7 @@ namespace CSharpier
         public static void WriteParenthesizedExpressionSyntax(StringBuilder builder, ParenthesizedExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
@@ -968,7 +968,7 @@ namespace CSharpier
         public static void WriteTupleExpressionSyntax(StringBuilder builder, TupleExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
@@ -1006,7 +1006,7 @@ namespace CSharpier
         public static void WritePrefixUnaryExpressionSyntax(StringBuilder builder, PrefixUnaryExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorToken != default(SyntaxToken))
@@ -1036,7 +1036,7 @@ namespace CSharpier
         public static void WriteAwaitExpressionSyntax(StringBuilder builder, AwaitExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.AwaitKeyword != default(SyntaxToken))
@@ -1066,7 +1066,7 @@ namespace CSharpier
         public static void WritePostfixUnaryExpressionSyntax(StringBuilder builder, PostfixUnaryExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Operand != default(ExpressionSyntax))
@@ -1096,7 +1096,7 @@ namespace CSharpier
         public static void WriteMemberAccessExpressionSyntax(StringBuilder builder, MemberAccessExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
@@ -1132,7 +1132,7 @@ namespace CSharpier
         public static void WriteConditionalAccessExpressionSyntax(StringBuilder builder, ConditionalAccessExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
@@ -1168,7 +1168,7 @@ namespace CSharpier
         public static void WriteMemberBindingExpressionSyntax(StringBuilder builder, MemberBindingExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorToken != default(SyntaxToken))
@@ -1198,7 +1198,7 @@ namespace CSharpier
         public static void WriteElementBindingExpressionSyntax(StringBuilder builder, ElementBindingExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ArgumentList != default(BracketedArgumentListSyntax))
@@ -1222,7 +1222,7 @@ namespace CSharpier
         public static void WriteRangeExpressionSyntax(StringBuilder builder, RangeExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LeftOperand != default(ExpressionSyntax))
@@ -1258,7 +1258,7 @@ namespace CSharpier
         public static void WriteImplicitElementAccessSyntax(StringBuilder builder, ImplicitElementAccessSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ArgumentList != default(BracketedArgumentListSyntax))
@@ -1282,7 +1282,7 @@ namespace CSharpier
         public static void WriteBinaryExpressionSyntax(StringBuilder builder, BinaryExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Left != default(ExpressionSyntax))
@@ -1318,7 +1318,7 @@ namespace CSharpier
         public static void WriteAssignmentExpressionSyntax(StringBuilder builder, AssignmentExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Left != default(ExpressionSyntax))
@@ -1354,7 +1354,7 @@ namespace CSharpier
         public static void WriteConditionalExpressionSyntax(StringBuilder builder, ConditionalExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Condition != default(ExpressionSyntax))
@@ -1402,7 +1402,7 @@ namespace CSharpier
         public static void WriteThisExpressionSyntax(StringBuilder builder, ThisExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Token != default(SyntaxToken))
@@ -1426,7 +1426,7 @@ namespace CSharpier
         public static void WriteBaseExpressionSyntax(StringBuilder builder, BaseExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Token != default(SyntaxToken))
@@ -1450,7 +1450,7 @@ namespace CSharpier
         public static void WriteLiteralExpressionSyntax(StringBuilder builder, LiteralExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Token != default(SyntaxToken))
@@ -1474,7 +1474,7 @@ namespace CSharpier
         public static void WriteMakeRefExpressionSyntax(StringBuilder builder, MakeRefExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
@@ -1516,7 +1516,7 @@ namespace CSharpier
         public static void WriteRefTypeExpressionSyntax(StringBuilder builder, RefTypeExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
@@ -1558,7 +1558,7 @@ namespace CSharpier
         public static void WriteRefValueExpressionSyntax(StringBuilder builder, RefValueExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
@@ -1612,7 +1612,7 @@ namespace CSharpier
         public static void WriteCheckedExpressionSyntax(StringBuilder builder, CheckedExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
@@ -1654,7 +1654,7 @@ namespace CSharpier
         public static void WriteDefaultExpressionSyntax(StringBuilder builder, DefaultExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
@@ -1696,7 +1696,7 @@ namespace CSharpier
         public static void WriteTypeOfExpressionSyntax(StringBuilder builder, TypeOfExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
@@ -1738,7 +1738,7 @@ namespace CSharpier
         public static void WriteSizeOfExpressionSyntax(StringBuilder builder, SizeOfExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
@@ -1780,7 +1780,7 @@ namespace CSharpier
         public static void WriteInvocationExpressionSyntax(StringBuilder builder, InvocationExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
@@ -1810,7 +1810,7 @@ namespace CSharpier
         public static void WriteElementAccessExpressionSyntax(StringBuilder builder, ElementAccessExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
@@ -1840,7 +1840,7 @@ namespace CSharpier
         public static void WriteArgumentListSyntax(StringBuilder builder, ArgumentListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
@@ -1878,7 +1878,7 @@ namespace CSharpier
         public static void WriteBracketedArgumentListSyntax(StringBuilder builder, BracketedArgumentListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
@@ -1916,7 +1916,7 @@ namespace CSharpier
         public static void WriteArgumentSyntax(StringBuilder builder, ArgumentSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NameColon != default(NameColonSyntax))
@@ -1958,7 +1958,7 @@ namespace CSharpier
         public static void WriteNameColonSyntax(StringBuilder builder, NameColonSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(IdentifierNameSyntax))
@@ -1988,7 +1988,7 @@ namespace CSharpier
         public static void WriteDeclarationExpressionSyntax(StringBuilder builder, DeclarationExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
@@ -2018,7 +2018,7 @@ namespace CSharpier
         public static void WriteCastExpressionSyntax(StringBuilder builder, CastExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
@@ -2060,7 +2060,7 @@ namespace CSharpier
         public static void WriteAnonymousMethodExpressionSyntax(StringBuilder builder, AnonymousMethodExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var modifiers = new List<string>();
@@ -2122,7 +2122,7 @@ namespace CSharpier
         public static void WriteSimpleLambdaExpressionSyntax(StringBuilder builder, SimpleLambdaExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var modifiers = new List<string>();
@@ -2184,7 +2184,7 @@ namespace CSharpier
         public static void WriteRefExpressionSyntax(StringBuilder builder, RefExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.RefKeyword != default(SyntaxToken))
@@ -2214,7 +2214,7 @@ namespace CSharpier
         public static void WriteParenthesizedLambdaExpressionSyntax(StringBuilder builder, ParenthesizedLambdaExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var modifiers = new List<string>();
@@ -2276,7 +2276,7 @@ namespace CSharpier
         public static void WriteInitializerExpressionSyntax(StringBuilder builder, InitializerExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
@@ -2314,7 +2314,7 @@ namespace CSharpier
         public static void WriteImplicitObjectCreationExpressionSyntax(StringBuilder builder, ImplicitObjectCreationExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
@@ -2350,7 +2350,7 @@ namespace CSharpier
         public static void WriteObjectCreationExpressionSyntax(StringBuilder builder, ObjectCreationExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
@@ -2392,7 +2392,7 @@ namespace CSharpier
         public static void WriteWithExpressionSyntax(StringBuilder builder, WithExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
@@ -2428,7 +2428,7 @@ namespace CSharpier
         public static void WriteAnonymousObjectMemberDeclaratorSyntax(StringBuilder builder, AnonymousObjectMemberDeclaratorSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NameEquals != default(NameEqualsSyntax))
@@ -2458,7 +2458,7 @@ namespace CSharpier
         public static void WriteAnonymousObjectCreationExpressionSyntax(StringBuilder builder, AnonymousObjectCreationExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
@@ -2502,7 +2502,7 @@ namespace CSharpier
         public static void WriteArrayCreationExpressionSyntax(StringBuilder builder, ArrayCreationExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
@@ -2538,7 +2538,7 @@ namespace CSharpier
         public static void WriteImplicitArrayCreationExpressionSyntax(StringBuilder builder, ImplicitArrayCreationExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
@@ -2588,7 +2588,7 @@ namespace CSharpier
         public static void WriteStackAllocArrayCreationExpressionSyntax(StringBuilder builder, StackAllocArrayCreationExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StackAllocKeyword != default(SyntaxToken))
@@ -2624,7 +2624,7 @@ namespace CSharpier
         public static void WriteImplicitStackAllocArrayCreationExpressionSyntax(StringBuilder builder, ImplicitStackAllocArrayCreationExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StackAllocKeyword != default(SyntaxToken))
@@ -2666,7 +2666,7 @@ namespace CSharpier
         public static void WriteQueryExpressionSyntax(StringBuilder builder, QueryExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.FromClause != default(FromClauseSyntax))
@@ -2696,7 +2696,7 @@ namespace CSharpier
         public static void WriteQueryBodySyntax(StringBuilder builder, QueryBodySyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var clauses = new List<string>();
@@ -2734,7 +2734,7 @@ namespace CSharpier
         public static void WriteFromClauseSyntax(StringBuilder builder, FromClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.FromKeyword != default(SyntaxToken))
@@ -2782,7 +2782,7 @@ namespace CSharpier
         public static void WriteLetClauseSyntax(StringBuilder builder, LetClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LetKeyword != default(SyntaxToken))
@@ -2824,7 +2824,7 @@ namespace CSharpier
         public static void WriteJoinClauseSyntax(StringBuilder builder, JoinClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.JoinKeyword != default(SyntaxToken))
@@ -2902,7 +2902,7 @@ namespace CSharpier
         public static void WriteJoinIntoClauseSyntax(StringBuilder builder, JoinIntoClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.IntoKeyword != default(SyntaxToken))
@@ -2932,7 +2932,7 @@ namespace CSharpier
         public static void WriteWhereClauseSyntax(StringBuilder builder, WhereClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.WhereKeyword != default(SyntaxToken))
@@ -2962,7 +2962,7 @@ namespace CSharpier
         public static void WriteOrderByClauseSyntax(StringBuilder builder, OrderByClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OrderByKeyword != default(SyntaxToken))
@@ -2994,7 +2994,7 @@ namespace CSharpier
         public static void WriteOrderingSyntax(StringBuilder builder, OrderingSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
@@ -3024,7 +3024,7 @@ namespace CSharpier
         public static void WriteSelectClauseSyntax(StringBuilder builder, SelectClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.SelectKeyword != default(SyntaxToken))
@@ -3054,7 +3054,7 @@ namespace CSharpier
         public static void WriteGroupClauseSyntax(StringBuilder builder, GroupClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.GroupKeyword != default(SyntaxToken))
@@ -3096,7 +3096,7 @@ namespace CSharpier
         public static void WriteQueryContinuationSyntax(StringBuilder builder, QueryContinuationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.IntoKeyword != default(SyntaxToken))
@@ -3132,7 +3132,7 @@ namespace CSharpier
         public static void WriteOmittedArraySizeExpressionSyntax(StringBuilder builder, OmittedArraySizeExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OmittedArraySizeExpressionToken != default(SyntaxToken))
@@ -3156,7 +3156,7 @@ namespace CSharpier
         public static void WriteInterpolatedStringExpressionSyntax(StringBuilder builder, InterpolatedStringExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StringStartToken != default(SyntaxToken))
@@ -3194,7 +3194,7 @@ namespace CSharpier
         public static void WriteIsPatternExpressionSyntax(StringBuilder builder, IsPatternExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
@@ -3230,7 +3230,7 @@ namespace CSharpier
         public static void WriteThrowExpressionSyntax(StringBuilder builder, ThrowExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ThrowKeyword != default(SyntaxToken))
@@ -3260,7 +3260,7 @@ namespace CSharpier
         public static void WriteWhenClauseSyntax(StringBuilder builder, WhenClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.WhenKeyword != default(SyntaxToken))
@@ -3290,7 +3290,7 @@ namespace CSharpier
         public static void WriteDiscardPatternSyntax(StringBuilder builder, DiscardPatternSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.UnderscoreToken != default(SyntaxToken))
@@ -3314,7 +3314,7 @@ namespace CSharpier
         public static void WriteDeclarationPatternSyntax(StringBuilder builder, DeclarationPatternSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
@@ -3344,7 +3344,7 @@ namespace CSharpier
         public static void WriteVarPatternSyntax(StringBuilder builder, VarPatternSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.VarKeyword != default(SyntaxToken))
@@ -3374,7 +3374,7 @@ namespace CSharpier
         public static void WriteRecursivePatternSyntax(StringBuilder builder, RecursivePatternSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
@@ -3416,7 +3416,7 @@ namespace CSharpier
         public static void WritePositionalPatternClauseSyntax(StringBuilder builder, PositionalPatternClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
@@ -3454,7 +3454,7 @@ namespace CSharpier
         public static void WritePropertyPatternClauseSyntax(StringBuilder builder, PropertyPatternClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
@@ -3492,7 +3492,7 @@ namespace CSharpier
         public static void WriteSubpatternSyntax(StringBuilder builder, SubpatternSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NameColon != default(NameColonSyntax))
@@ -3522,7 +3522,7 @@ namespace CSharpier
         public static void WriteConstantPatternSyntax(StringBuilder builder, ConstantPatternSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Expression != default(ExpressionSyntax))
@@ -3546,7 +3546,7 @@ namespace CSharpier
         public static void WriteParenthesizedPatternSyntax(StringBuilder builder, ParenthesizedPatternSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
@@ -3582,7 +3582,7 @@ namespace CSharpier
         public static void WriteRelationalPatternSyntax(StringBuilder builder, RelationalPatternSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorToken != default(SyntaxToken))
@@ -3612,7 +3612,7 @@ namespace CSharpier
         public static void WriteTypePatternSyntax(StringBuilder builder, TypePatternSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
@@ -3636,7 +3636,7 @@ namespace CSharpier
         public static void WriteBinaryPatternSyntax(StringBuilder builder, BinaryPatternSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Left != default(PatternSyntax))
@@ -3672,7 +3672,7 @@ namespace CSharpier
         public static void WriteUnaryPatternSyntax(StringBuilder builder, UnaryPatternSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorToken != default(SyntaxToken))
@@ -3702,7 +3702,7 @@ namespace CSharpier
         public static void WriteInterpolatedStringTextSyntax(StringBuilder builder, InterpolatedStringTextSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.TextToken != default(SyntaxToken))
@@ -3726,7 +3726,7 @@ namespace CSharpier
         public static void WriteInterpolationSyntax(StringBuilder builder, InterpolationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
@@ -3774,7 +3774,7 @@ namespace CSharpier
         public static void WriteInterpolationAlignmentClauseSyntax(StringBuilder builder, InterpolationAlignmentClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.CommaToken != default(SyntaxToken))
@@ -3804,7 +3804,7 @@ namespace CSharpier
         public static void WriteInterpolationFormatClauseSyntax(StringBuilder builder, InterpolationFormatClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ColonToken != default(SyntaxToken))
@@ -3834,7 +3834,7 @@ namespace CSharpier
         public static void WriteGlobalStatementSyntax(StringBuilder builder, GlobalStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -3874,7 +3874,7 @@ namespace CSharpier
         public static void WriteBlockSyntax(StringBuilder builder, BlockSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -3920,7 +3920,7 @@ namespace CSharpier
         public static void WriteLocalFunctionStatementSyntax(StringBuilder builder, LocalFunctionStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4004,7 +4004,7 @@ namespace CSharpier
         public static void WriteLocalDeclarationStatementSyntax(StringBuilder builder, LocalDeclarationStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4063,7 +4063,7 @@ namespace CSharpier
         public static void WriteVariableDeclarationSyntax(StringBuilder builder, VariableDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
@@ -4095,7 +4095,7 @@ namespace CSharpier
         public static void WriteVariableDeclaratorSyntax(StringBuilder builder, VariableDeclaratorSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
@@ -4131,7 +4131,7 @@ namespace CSharpier
         public static void WriteEqualsValueClauseSyntax(StringBuilder builder, EqualsValueClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.EqualsToken != default(SyntaxToken))
@@ -4161,7 +4161,7 @@ namespace CSharpier
         public static void WriteSingleVariableDesignationSyntax(StringBuilder builder, SingleVariableDesignationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
@@ -4185,7 +4185,7 @@ namespace CSharpier
         public static void WriteDiscardDesignationSyntax(StringBuilder builder, DiscardDesignationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.UnderscoreToken != default(SyntaxToken))
@@ -4209,7 +4209,7 @@ namespace CSharpier
         public static void WriteParenthesizedVariableDesignationSyntax(StringBuilder builder, ParenthesizedVariableDesignationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
@@ -4247,7 +4247,7 @@ namespace CSharpier
         public static void WriteExpressionStatementSyntax(StringBuilder builder, ExpressionStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4286,7 +4286,7 @@ namespace CSharpier
         public static void WriteEmptyStatementSyntax(StringBuilder builder, EmptyStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4318,7 +4318,7 @@ namespace CSharpier
         public static void WriteLabeledStatementSyntax(StringBuilder builder, LabeledStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4362,7 +4362,7 @@ namespace CSharpier
         public static void WriteGotoStatementSyntax(StringBuilder builder, GotoStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4412,7 +4412,7 @@ namespace CSharpier
         public static void WriteBreakStatementSyntax(StringBuilder builder, BreakStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4450,7 +4450,7 @@ namespace CSharpier
         public static void WriteContinueStatementSyntax(StringBuilder builder, ContinueStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4488,7 +4488,7 @@ namespace CSharpier
         public static void WriteReturnStatementSyntax(StringBuilder builder, ReturnStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4532,7 +4532,7 @@ namespace CSharpier
         public static void WriteThrowStatementSyntax(StringBuilder builder, ThrowStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4576,7 +4576,7 @@ namespace CSharpier
         public static void WriteYieldStatementSyntax(StringBuilder builder, YieldStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4626,7 +4626,7 @@ namespace CSharpier
         public static void WriteWhileStatementSyntax(StringBuilder builder, WhileStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4682,7 +4682,7 @@ namespace CSharpier
         public static void WriteDoStatementSyntax(StringBuilder builder, DoStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4750,7 +4750,7 @@ namespace CSharpier
         public static void WriteForStatementSyntax(StringBuilder builder, ForStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4840,7 +4840,7 @@ namespace CSharpier
         public static void WriteForEachStatementSyntax(StringBuilder builder, ForEachStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4920,7 +4920,7 @@ namespace CSharpier
         public static void WriteForEachVariableStatementSyntax(StringBuilder builder, ForEachVariableStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -4994,7 +4994,7 @@ namespace CSharpier
         public static void WriteUsingStatementSyntax(StringBuilder builder, UsingStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -5062,7 +5062,7 @@ namespace CSharpier
         public static void WriteFixedStatementSyntax(StringBuilder builder, FixedStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -5118,7 +5118,7 @@ namespace CSharpier
         public static void WriteCheckedStatementSyntax(StringBuilder builder, CheckedStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -5156,7 +5156,7 @@ namespace CSharpier
         public static void WriteUnsafeStatementSyntax(StringBuilder builder, UnsafeStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -5194,7 +5194,7 @@ namespace CSharpier
         public static void WriteLockStatementSyntax(StringBuilder builder, LockStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -5250,7 +5250,7 @@ namespace CSharpier
         public static void WriteIfStatementSyntax(StringBuilder builder, IfStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -5312,7 +5312,7 @@ namespace CSharpier
         public static void WriteElseClauseSyntax(StringBuilder builder, ElseClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ElseKeyword != default(SyntaxToken))
@@ -5342,7 +5342,7 @@ namespace CSharpier
         public static void WriteSwitchStatementSyntax(StringBuilder builder, SwitchStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -5412,7 +5412,7 @@ namespace CSharpier
         public static void WriteSwitchSectionSyntax(StringBuilder builder, SwitchSectionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var labels = new List<string>();
@@ -5446,7 +5446,7 @@ namespace CSharpier
         public static void WriteCasePatternSwitchLabelSyntax(StringBuilder builder, CasePatternSwitchLabelSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
@@ -5488,7 +5488,7 @@ namespace CSharpier
         public static void WriteCaseSwitchLabelSyntax(StringBuilder builder, CaseSwitchLabelSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
@@ -5524,7 +5524,7 @@ namespace CSharpier
         public static void WriteDefaultSwitchLabelSyntax(StringBuilder builder, DefaultSwitchLabelSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Keyword != default(SyntaxToken))
@@ -5554,7 +5554,7 @@ namespace CSharpier
         public static void WriteSwitchExpressionSyntax(StringBuilder builder, SwitchExpressionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.GoverningExpression != default(ExpressionSyntax))
@@ -5604,7 +5604,7 @@ namespace CSharpier
         public static void WriteSwitchExpressionArmSyntax(StringBuilder builder, SwitchExpressionArmSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Pattern != default(PatternSyntax))
@@ -5646,7 +5646,7 @@ namespace CSharpier
         public static void WriteTryStatementSyntax(StringBuilder builder, TryStatementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -5698,7 +5698,7 @@ namespace CSharpier
         public static void WriteCatchClauseSyntax(StringBuilder builder, CatchClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.CatchKeyword != default(SyntaxToken))
@@ -5740,7 +5740,7 @@ namespace CSharpier
         public static void WriteCatchDeclarationSyntax(StringBuilder builder, CatchDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
@@ -5782,7 +5782,7 @@ namespace CSharpier
         public static void WriteCatchFilterClauseSyntax(StringBuilder builder, CatchFilterClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.WhenKeyword != default(SyntaxToken))
@@ -5824,7 +5824,7 @@ namespace CSharpier
         public static void WriteFinallyClauseSyntax(StringBuilder builder, FinallyClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.FinallyKeyword != default(SyntaxToken))
@@ -5854,7 +5854,7 @@ namespace CSharpier
         public static void WriteCompilationUnitSyntax(StringBuilder builder, CompilationUnitSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var externs = new List<string>();
@@ -5910,7 +5910,7 @@ namespace CSharpier
         public static void WriteExternAliasDirectiveSyntax(StringBuilder builder, ExternAliasDirectiveSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ExternKeyword != default(SyntaxToken))
@@ -5952,7 +5952,7 @@ namespace CSharpier
         public static void WriteUsingDirectiveSyntax(StringBuilder builder, UsingDirectiveSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.UsingKeyword != default(SyntaxToken))
@@ -6000,7 +6000,7 @@ namespace CSharpier
         public static void WriteNamespaceDeclarationSyntax(StringBuilder builder, NamespaceDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -6088,7 +6088,7 @@ namespace CSharpier
         public static void WriteAttributeListSyntax(StringBuilder builder, AttributeListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
@@ -6132,7 +6132,7 @@ namespace CSharpier
         public static void WriteAttributeTargetSpecifierSyntax(StringBuilder builder, AttributeTargetSpecifierSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Identifier != default(SyntaxToken))
@@ -6162,7 +6162,7 @@ namespace CSharpier
         public static void WriteAttributeSyntax(StringBuilder builder, AttributeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(NameSyntax))
@@ -6192,7 +6192,7 @@ namespace CSharpier
         public static void WriteAttributeArgumentListSyntax(StringBuilder builder, AttributeArgumentListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
@@ -6230,7 +6230,7 @@ namespace CSharpier
         public static void WriteAttributeArgumentSyntax(StringBuilder builder, AttributeArgumentSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NameEquals != default(NameEqualsSyntax))
@@ -6266,7 +6266,7 @@ namespace CSharpier
         public static void WriteNameEqualsSyntax(StringBuilder builder, NameEqualsSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(IdentifierNameSyntax))
@@ -6296,7 +6296,7 @@ namespace CSharpier
         public static void WriteTypeParameterListSyntax(StringBuilder builder, TypeParameterListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
@@ -6334,7 +6334,7 @@ namespace CSharpier
         public static void WriteTypeParameterSyntax(StringBuilder builder, TypeParameterSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -6372,7 +6372,7 @@ namespace CSharpier
         public static void WriteClassDeclarationSyntax(StringBuilder builder, ClassDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -6465,7 +6465,7 @@ namespace CSharpier
         public static void WriteStructDeclarationSyntax(StringBuilder builder, StructDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -6558,7 +6558,7 @@ namespace CSharpier
         public static void WriteInterfaceDeclarationSyntax(StringBuilder builder, InterfaceDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -6651,7 +6651,7 @@ namespace CSharpier
         public static void WriteRecordDeclarationSyntax(StringBuilder builder, RecordDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -6750,7 +6750,7 @@ namespace CSharpier
         public static void WriteEnumDeclarationSyntax(StringBuilder builder, EnumDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -6828,7 +6828,7 @@ namespace CSharpier
         public static void WriteDelegateDeclarationSyntax(StringBuilder builder, DelegateDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -6907,7 +6907,7 @@ namespace CSharpier
         public static void WriteEnumMemberDeclarationSyntax(StringBuilder builder, EnumMemberDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -6953,7 +6953,7 @@ namespace CSharpier
         public static void WriteBaseListSyntax(StringBuilder builder, BaseListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ColonToken != default(SyntaxToken))
@@ -6985,7 +6985,7 @@ namespace CSharpier
         public static void WriteSimpleBaseTypeSyntax(StringBuilder builder, SimpleBaseTypeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
@@ -7009,7 +7009,7 @@ namespace CSharpier
         public static void WritePrimaryConstructorBaseTypeSyntax(StringBuilder builder, PrimaryConstructorBaseTypeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
@@ -7039,7 +7039,7 @@ namespace CSharpier
         public static void WriteTypeParameterConstraintClauseSyntax(StringBuilder builder, TypeParameterConstraintClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.WhereKeyword != default(SyntaxToken))
@@ -7083,7 +7083,7 @@ namespace CSharpier
         public static void WriteConstructorConstraintSyntax(StringBuilder builder, ConstructorConstraintSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.NewKeyword != default(SyntaxToken))
@@ -7119,7 +7119,7 @@ namespace CSharpier
         public static void WriteClassOrStructConstraintSyntax(StringBuilder builder, ClassOrStructConstraintSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ClassOrStructKeyword != default(SyntaxToken))
@@ -7149,7 +7149,7 @@ namespace CSharpier
         public static void WriteTypeConstraintSyntax(StringBuilder builder, TypeConstraintSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
@@ -7173,7 +7173,7 @@ namespace CSharpier
         public static void WriteDefaultConstraintSyntax(StringBuilder builder, DefaultConstraintSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.DefaultKeyword != default(SyntaxToken))
@@ -7197,7 +7197,7 @@ namespace CSharpier
         public static void WriteFieldDeclarationSyntax(StringBuilder builder, FieldDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -7243,7 +7243,7 @@ namespace CSharpier
         public static void WriteEventFieldDeclarationSyntax(StringBuilder builder, EventFieldDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -7295,7 +7295,7 @@ namespace CSharpier
         public static void WriteExplicitInterfaceSpecifierSyntax(StringBuilder builder, ExplicitInterfaceSpecifierSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(NameSyntax))
@@ -7325,7 +7325,7 @@ namespace CSharpier
         public static void WriteMethodDeclarationSyntax(StringBuilder builder, MethodDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -7416,7 +7416,7 @@ namespace CSharpier
         public static void WriteOperatorDeclarationSyntax(StringBuilder builder, OperatorDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -7492,7 +7492,7 @@ namespace CSharpier
         public static void WriteConversionOperatorDeclarationSyntax(StringBuilder builder, ConversionOperatorDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -7568,7 +7568,7 @@ namespace CSharpier
         public static void WriteConstructorDeclarationSyntax(StringBuilder builder, ConstructorDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -7638,7 +7638,7 @@ namespace CSharpier
         public static void WriteConstructorInitializerSyntax(StringBuilder builder, ConstructorInitializerSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ColonToken != default(SyntaxToken))
@@ -7674,7 +7674,7 @@ namespace CSharpier
         public static void WriteDestructorDeclarationSyntax(StringBuilder builder, DestructorDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -7744,7 +7744,7 @@ namespace CSharpier
         public static void WritePropertyDeclarationSyntax(StringBuilder builder, PropertyDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -7820,7 +7820,7 @@ namespace CSharpier
         public static void WriteArrowExpressionClauseSyntax(StringBuilder builder, ArrowExpressionClauseSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ArrowToken != default(SyntaxToken))
@@ -7850,7 +7850,7 @@ namespace CSharpier
         public static void WriteEventDeclarationSyntax(StringBuilder builder, EventDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -7920,7 +7920,7 @@ namespace CSharpier
         public static void WriteIndexerDeclarationSyntax(StringBuilder builder, IndexerDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -7996,7 +7996,7 @@ namespace CSharpier
         public static void WriteAccessorListSyntax(StringBuilder builder, AccessorListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBraceToken != default(SyntaxToken))
@@ -8034,7 +8034,7 @@ namespace CSharpier
         public static void WriteAccessorDeclarationSyntax(StringBuilder builder, AccessorDeclarationSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -8092,7 +8092,7 @@ namespace CSharpier
         public static void WriteParameterListSyntax(StringBuilder builder, ParameterListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
@@ -8130,7 +8130,7 @@ namespace CSharpier
         public static void WriteBracketedParameterListSyntax(StringBuilder builder, BracketedParameterListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
@@ -8168,7 +8168,7 @@ namespace CSharpier
         public static void WriteParameterSyntax(StringBuilder builder, ParameterSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -8220,7 +8220,7 @@ namespace CSharpier
         public static void WriteFunctionPointerParameterSyntax(StringBuilder builder, FunctionPointerParameterSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -8260,7 +8260,7 @@ namespace CSharpier
         public static void WriteIncompleteMemberSyntax(StringBuilder builder, IncompleteMemberSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var attributeLists = new List<string>();
@@ -8300,7 +8300,7 @@ namespace CSharpier
         public static void WriteSkippedTokensTriviaSyntax(StringBuilder builder, SkippedTokensTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var tokens = new List<string>();
@@ -8326,7 +8326,7 @@ namespace CSharpier
         public static void WriteDocumentationCommentTriviaSyntax(StringBuilder builder, DocumentationCommentTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var content = new List<string>();
@@ -8358,7 +8358,7 @@ namespace CSharpier
         public static void WriteTypeCrefSyntax(StringBuilder builder, TypeCrefSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Type != default(TypeSyntax))
@@ -8382,7 +8382,7 @@ namespace CSharpier
         public static void WriteQualifiedCrefSyntax(StringBuilder builder, QualifiedCrefSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Container != default(TypeSyntax))
@@ -8418,7 +8418,7 @@ namespace CSharpier
         public static void WriteNameMemberCrefSyntax(StringBuilder builder, NameMemberCrefSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(TypeSyntax))
@@ -8448,7 +8448,7 @@ namespace CSharpier
         public static void WriteIndexerMemberCrefSyntax(StringBuilder builder, IndexerMemberCrefSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ThisKeyword != default(SyntaxToken))
@@ -8478,7 +8478,7 @@ namespace CSharpier
         public static void WriteOperatorMemberCrefSyntax(StringBuilder builder, OperatorMemberCrefSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OperatorKeyword != default(SyntaxToken))
@@ -8514,7 +8514,7 @@ namespace CSharpier
         public static void WriteConversionOperatorMemberCrefSyntax(StringBuilder builder, ConversionOperatorMemberCrefSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.ImplicitOrExplicitKeyword != default(SyntaxToken))
@@ -8556,7 +8556,7 @@ namespace CSharpier
         public static void WriteCrefParameterListSyntax(StringBuilder builder, CrefParameterListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenParenToken != default(SyntaxToken))
@@ -8594,7 +8594,7 @@ namespace CSharpier
         public static void WriteCrefBracketedParameterListSyntax(StringBuilder builder, CrefBracketedParameterListSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.OpenBracketToken != default(SyntaxToken))
@@ -8632,7 +8632,7 @@ namespace CSharpier
         public static void WriteCrefParameterSyntax(StringBuilder builder, CrefParameterSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.RefKindKeyword != default(SyntaxToken))
@@ -8668,7 +8668,7 @@ namespace CSharpier
         public static void WriteXmlElementSyntax(StringBuilder builder, XmlElementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StartTag != default(XmlElementStartTagSyntax))
@@ -8706,7 +8706,7 @@ namespace CSharpier
         public static void WriteXmlElementStartTagSyntax(StringBuilder builder, XmlElementStartTagSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
@@ -8750,7 +8750,7 @@ namespace CSharpier
         public static void WriteXmlElementEndTagSyntax(StringBuilder builder, XmlElementEndTagSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanSlashToken != default(SyntaxToken))
@@ -8786,7 +8786,7 @@ namespace CSharpier
         public static void WriteXmlEmptyElementSyntax(StringBuilder builder, XmlEmptyElementSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanToken != default(SyntaxToken))
@@ -8830,7 +8830,7 @@ namespace CSharpier
         public static void WriteXmlNameSyntax(StringBuilder builder, XmlNameSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Prefix != default(XmlPrefixSyntax))
@@ -8860,7 +8860,7 @@ namespace CSharpier
         public static void WriteXmlPrefixSyntax(StringBuilder builder, XmlPrefixSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Prefix != default(SyntaxToken))
@@ -8890,7 +8890,7 @@ namespace CSharpier
         public static void WriteXmlTextAttributeSyntax(StringBuilder builder, XmlTextAttributeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(XmlNameSyntax))
@@ -8940,7 +8940,7 @@ namespace CSharpier
         public static void WriteXmlCrefAttributeSyntax(StringBuilder builder, XmlCrefAttributeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(XmlNameSyntax))
@@ -8988,7 +8988,7 @@ namespace CSharpier
         public static void WriteXmlNameAttributeSyntax(StringBuilder builder, XmlNameAttributeSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.Name != default(XmlNameSyntax))
@@ -9036,7 +9036,7 @@ namespace CSharpier
         public static void WriteXmlTextSyntax(StringBuilder builder, XmlTextSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             var textTokens = new List<string>();
@@ -9062,7 +9062,7 @@ namespace CSharpier
         public static void WriteXmlCDataSectionSyntax(StringBuilder builder, XmlCDataSectionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StartCDataToken != default(SyntaxToken))
@@ -9100,7 +9100,7 @@ namespace CSharpier
         public static void WriteXmlProcessingInstructionSyntax(StringBuilder builder, XmlProcessingInstructionSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.StartProcessingInstructionToken != default(SyntaxToken))
@@ -9144,7 +9144,7 @@ namespace CSharpier
         public static void WriteXmlCommentSyntax(StringBuilder builder, XmlCommentSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.LessThanExclamationMinusMinusToken != default(SyntaxToken))
@@ -9182,7 +9182,7 @@ namespace CSharpier
         public static void WriteIfDirectiveTriviaSyntax(StringBuilder builder, IfDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9233,7 +9233,7 @@ namespace CSharpier
         public static void WriteElifDirectiveTriviaSyntax(StringBuilder builder, ElifDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9284,7 +9284,7 @@ namespace CSharpier
         public static void WriteElseDirectiveTriviaSyntax(StringBuilder builder, ElseDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9328,7 +9328,7 @@ namespace CSharpier
         public static void WriteEndIfDirectiveTriviaSyntax(StringBuilder builder, EndIfDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9371,7 +9371,7 @@ namespace CSharpier
         public static void WriteRegionDirectiveTriviaSyntax(StringBuilder builder, RegionDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9414,7 +9414,7 @@ namespace CSharpier
         public static void WriteEndRegionDirectiveTriviaSyntax(StringBuilder builder, EndRegionDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9457,7 +9457,7 @@ namespace CSharpier
         public static void WriteErrorDirectiveTriviaSyntax(StringBuilder builder, ErrorDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9500,7 +9500,7 @@ namespace CSharpier
         public static void WriteWarningDirectiveTriviaSyntax(StringBuilder builder, WarningDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9543,7 +9543,7 @@ namespace CSharpier
         public static void WriteBadDirectiveTriviaSyntax(StringBuilder builder, BadDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9586,7 +9586,7 @@ namespace CSharpier
         public static void WriteDefineDirectiveTriviaSyntax(StringBuilder builder, DefineDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9635,7 +9635,7 @@ namespace CSharpier
         public static void WriteUndefDirectiveTriviaSyntax(StringBuilder builder, UndefDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9684,7 +9684,7 @@ namespace CSharpier
         public static void WriteLineDirectiveTriviaSyntax(StringBuilder builder, LineDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9739,7 +9739,7 @@ namespace CSharpier
         public static void WritePragmaWarningDirectiveTriviaSyntax(StringBuilder builder, PragmaWarningDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9802,7 +9802,7 @@ namespace CSharpier
         public static void WritePragmaChecksumDirectiveTriviaSyntax(StringBuilder builder, PragmaChecksumDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9869,7 +9869,7 @@ namespace CSharpier
         public static void WriteReferenceDirectiveTriviaSyntax(StringBuilder builder, ReferenceDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9918,7 +9918,7 @@ namespace CSharpier
         public static void WriteLoadDirectiveTriviaSyntax(StringBuilder builder, LoadDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -9967,7 +9967,7 @@ namespace CSharpier
         public static void WriteShebangDirectiveTriviaSyntax(StringBuilder builder, ShebangDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -10010,7 +10010,7 @@ namespace CSharpier
         public static void WriteNullableDirectiveTriviaSyntax(StringBuilder builder, NullableDirectiveTriviaSyntax syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             if (syntaxNode.HashToken != default(SyntaxToken))
@@ -10065,7 +10065,7 @@ namespace CSharpier
         public static void WriteSyntaxToken(StringBuilder builder, SyntaxToken syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
@@ -10098,7 +10098,7 @@ namespace CSharpier
         public static void WriteSyntaxTrivia(StringBuilder builder, SyntaxTrivia syntaxNode)
         {
             builder.Append("{");
-            var properties = new List<string?>();
+            var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
             properties.Add(WriteString("text", syntaxNode.ToString()));
