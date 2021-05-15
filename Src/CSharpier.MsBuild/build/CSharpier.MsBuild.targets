@@ -1,0 +1,7 @@
+<Project>
+    <Target 
+        Name="CSharpierFormat"
+        BeforeTargets="Build">
+        <Error Text="Yolo" />
+    </Target>
+</Project>
