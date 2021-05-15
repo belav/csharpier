@@ -3,6 +3,8 @@
 2009")]
 class ClassName
 {
+    private string bothLineEndingsPersist = @"\r\n \n";
+
     private string stayOnLine1 =
         @"one
 jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
