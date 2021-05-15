@@ -47,5 +47,15 @@ class ClassName
         ) {
             return;
         }
+
+        if (x is Y { NoExtraSpaceAfterThisNextBrace: true } && newGroup)
+        {
+            return;
+        }
+
+        if (expr is { } noExtraSpaceBeforeOpenBrace)
+        {
+            return;
+        }
     }
 }
