@@ -30,7 +30,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     : string.Empty,
                 node.PropertyPatternClause != null
                     ? Doc.Concat(
-                        Token.PrintWithSuffix(node.PropertyPatternClause.OpenBraceToken, " "),
+                            Token.PrintWithSuffix(node.PropertyPatternClause.OpenBraceToken, " "),
                             SeparatedSyntaxList.Print(
                                 node.PropertyPatternClause.Subpatterns,
                                 subpatternNode =>
@@ -44,9 +44,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             ),
                             " ",
                             Token.Print(node.PropertyPatternClause.CloseBraceToken)
-                    )
+                        )
                     : string.Empty,
-                node.Designation != null ? Doc.Concat(" ", Node.Print(node.Designation)) : string.Empty
+                node.Designation != null
+                    ? Doc.Concat(" ", Node.Print(node.Designation))
+                    : string.Empty
             );
         }
     }
