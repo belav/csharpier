@@ -42,7 +42,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                     ),
                                 " "
                             ),
-                            " ",
+                            node.PropertyPatternClause.Subpatterns.Any() ? " " : Doc.Null,
                             Token.Print(node.PropertyPatternClause.CloseBraceToken)
                         )
                     : string.Empty,
