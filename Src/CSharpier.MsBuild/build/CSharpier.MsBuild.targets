@@ -1,7 +1,10 @@
 <Project>
+    <PropertyGroup>
+        <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/dotnet-csharpier.dll</CSharpierDllPath>
+    </PropertyGroup>
     <Target 
         Name="CSharpierFormat"
         BeforeTargets="Build">
-        <Error Text="Yolo $(NuGetPackageRoot)" />
+        <Exec Command="dotnet $(CSharpierDllPath)" />
     </Target>
 </Project>
