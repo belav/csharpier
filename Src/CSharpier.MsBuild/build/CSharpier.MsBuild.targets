@@ -2,6 +2,6 @@
     <Target 
         Name="CSharpierFormat"
         BeforeTargets="Build">
-        <Error Text="Yolo" />
+        <Error Text="Yolo $(NuGetPackageRoot)" />
     </Target>
 </Project>
