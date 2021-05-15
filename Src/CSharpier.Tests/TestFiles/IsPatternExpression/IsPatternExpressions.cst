@@ -52,5 +52,10 @@ class ClassName
         {
             return;
         }
+
+        if (expr is {  } noExtraSpaceBeforeOpenBrace)
+        {
+            return;
+        }
     }
 }

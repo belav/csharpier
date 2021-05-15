@@ -10,7 +10,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(RecursivePatternSyntax node)
         {
             return Doc.Concat(
-                node.Type != null ? Node.Print(node.Type) : Doc.Null,
+                node.Type != null ? Doc.Concat(Node.Print(node.Type), " ") : Doc.Null,
                 node.PositionalPatternClause != null
                     ? Doc.Concat(
                             Token.Print(node.PositionalPatternClause.OpenParenToken),
@@ -30,8 +30,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     : string.Empty,
                 node.PropertyPatternClause != null
                     ? Doc.Concat(
-                            " ",
-                            Token.PrintWithSuffix(node.PropertyPatternClause.OpenBraceToken, " "),
+                        Token.PrintWithSuffix(node.PropertyPatternClause.OpenBraceToken, " "),
                             SeparatedSyntaxList.Print(
                                 node.PropertyPatternClause.Subpatterns,
                                 subpatternNode =>
