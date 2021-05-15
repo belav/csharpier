@@ -11,9 +11,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(InitializerExpressionSyntax node)
         {
             var result = Doc.Concat(
-                node.Kind() is (SyntaxKind.ArrayInitializerExpression or SyntaxKind.ComplexElementInitializerExpression) 
-                    ? Doc.Null
-                    : Doc.Line,
+                node.Kind()
+                    is (SyntaxKind.ArrayInitializerExpression
+                        or SyntaxKind.ComplexElementInitializerExpression) ? Doc.Null : Doc.Line,
                 Token.Print(node.OpenBraceToken),
                 Doc.Indent(
                     Doc.Line,
