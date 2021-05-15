@@ -44,10 +44,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                 " "
                             ),
                             " ",
-                            Token.PrintWithSuffix(node.PropertyPatternClause.CloseBraceToken, " ")
-                        )
+                            Token.Print(node.PropertyPatternClause.CloseBraceToken)
+                    )
                     : string.Empty,
-                node.Designation != null ? Node.Print(node.Designation) : string.Empty
+                node.Designation != null ? Doc.Concat(" ", Node.Print(node.Designation)) : string.Empty
             );
         }
     }
