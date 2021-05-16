@@ -179,16 +179,8 @@ An example of CSharpier finding a file that failed validation.
             if (prefix.Span[^1] is not ':')
 ```
 
-## IDE Support
-### Rider
-1. Open Settings
-2. Tools - File Watchers
-3. Add New File Watcher
-    * File Type: C# File
-    * Program: dotnet
-    * Arguments: csharpier $FilePath$
-    * Output paths to refresh: $FilePath$
-    * Advanced Options - Auto-save edited files...: This should probably be off otherwise if you pause while coding csharpier will reformat the file as is.
+## More Documentation
+[Editors and CI/CD](Docs/EditorsAndCICD.md)
 
 ## Contributing
 See [Development Readme](CONTRIBUTING.md)  
