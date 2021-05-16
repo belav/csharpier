@@ -63,13 +63,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Doc.Concat(
                         separator,
                         Token.Print(node.AccessorList.OpenBraceToken),
-                        Doc.Group(
-                            Doc.Indent(
-                                node.AccessorList.Accessors.Select(
-                                        o => PrintAccessorDeclarationSyntax(o, separator)
-                                    )
-                                    .ToArray()
-                            )
+                        Doc.Indent(
+                            node.AccessorList.Accessors.Select(
+                                    o => PrintAccessorDeclarationSyntax(o, separator)
+                                )
+                                .ToArray()
                         ),
                         separator,
                         Token.Print(node.AccessorList.CloseBraceToken)
@@ -112,12 +110,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             Doc separator
         ) {
             var docs = new List<Doc>();
-            if (
-                node.Modifiers.Count > 0
-                || node.AttributeLists.Count > 0
-                || node.Body != null
-                || node.ExpressionBody != null
-            ) {
+            if (node.AttributeLists.Count > 0 || node.Body != null || node.ExpressionBody != null)
+            {
                 docs.Add(Doc.HardLine);
             }
             else
