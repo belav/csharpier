@@ -4,6 +4,11 @@
         <CSharpierOutputDir>../CSharpier/bin/Release/net5.0/publish</CSharpierOutputDir>
     </PropertyGroup>
 
+    <!--
+        Note: There's not <PackageReference /> here because that would cause msbuild to
+        make it a dependency in the output package, which causes all sorts of issues as
+        CSharpier is a net5.0 project, not a netstandard.
+    -->
     <Target Name="CheckCSharpierBuilt"
         BeforeTargets="Build"
         Condition="!(Exists($(CSharpierOutputDir)))">
