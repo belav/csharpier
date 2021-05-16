@@ -1,12 +1,13 @@
 <Project>
     <PropertyGroup>
         <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/dotnet-csharpier.dll</CSharpierDllPath>
+        <CSharpierArgs Condition="$(CSharpier_Check)">$(CSharpierArgs) --check</CSharpierArgs>
     </PropertyGroup>
 
     <!-- Target invokes the copy of csharpier from this package on the current project -->
     <Target 
         Name="CSharpierFormat"
         BeforeTargets="Build">
-        <Exec Command="dotnet $(CSharpierDllPath) $(MSBuildProjectDirectory)" />
+        <Exec Command="dotnet $(CSharpierDllPath) $(CSharpierArgs) $(MSBuildProjectDirectory)" />
     </Target>
 </Project>
