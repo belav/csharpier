@@ -1,10 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
-        <!--<NuspecProperties>configuration=$(Configuration)</NuspecProperties>-->
+        <CSharpierOutputDir>../CSharpier/bin/Release/net5.0/publish</CSharpierOutputDir>
     </PropertyGroup>
+
+    <Target Name="CheckCSharpierBuilt"
+        BeforeTargets="Build"
+        Condition="!(Exists($(CSharpierOutputDir)))">
+        <Error Text="Ensure csharpier has been built (published) in release configuration" />
+    </Target>
+
     <ItemGroup>
         <Content Include="build/*" PackagePath="build/" />
-        <Content Include="../CSharpier/bin/Release/net5.0/publish/**" PackagePath="tools/csharpier" />
+        <Content Include="$(CSharpierOutputDir)/**" PackagePath="tools/csharpier" />
     </ItemGroup>
 </Project>
