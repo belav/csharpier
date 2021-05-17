@@ -2,15 +2,12 @@ using System.Collections.Generic;
 
 namespace CSharpier.DocTypes
 {
-    public class LiteralLine : Concat
+    public class LiteralLine : LineDoc, IBreakParent
     {
         public LiteralLine()
-            : base(
-                new List<Doc>
-                {
-                    new LineDoc { Type = LineDoc.LineType.Hard, IsLiteral = true },
-                    new BreakParent()
-                }
-            ) { }
+        {
+            Type = LineType.Hard;
+            IsLiteral = true;
+        }
     }
 }

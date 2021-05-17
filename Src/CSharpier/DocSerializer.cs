@@ -33,8 +33,7 @@ namespace CSharpier
                 case HardLine hardLine:
                     return indent
                         + "Doc.HardLine"
-                        + (hardLine.Contents.First()
-                            is LineDoc { Squash: true }  ? "IfNoPreviousLine" : string.Empty)
+                        + (hardLine.Squash ? "IfNoPreviousLine" : string.Empty)
                         + (hardLine.SkipBreakIfFirstInGroup
                             ? "SkipBreakIfFirstInGroup"
                             : string.Empty);

@@ -14,6 +14,12 @@ two
 three
 ";
 
+    public void VerbatimNewlineInInterpolated()
+    {
+        return @$"{CallMethod(o => @"
+    IndentedAfterNewLine")}";
+    }
+
     private string stayOnLine1 =
         @"one
 jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
