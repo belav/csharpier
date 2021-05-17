@@ -1,8 +1,8 @@
 ﻿# this uses https://github.com/microsoft/PowerShellForGitHub
 # you'll need to Set-GitHubAuthentication first
 
-$versionNumber = "0.9.1"
-$previousVersionNumber = "0.9.0"
+$versionNumber = "0.9.3"
+$previousVersionNumber = "0.9.2"
 
 $repository = "https://github.com/belav/csharpier"
 
@@ -25,7 +25,8 @@ foreach ($issue in $issues) {
     if ($issue.title.ToLower().Contains("checklist")) {
         continue
     }
-    $content.AppendLine("- " + $issue.title + " [#" + $issue.number +"](" + $issue.url + ")")
+    
+    $content.AppendLine("- " + $issue.title + " [#" + $issue.number +"](" + $issue.html_url + ")")
 }
 
 Write-Output $content.ToString()

@@ -53,7 +53,8 @@ four"";
             string escapedNewLine,
             EndOfLine endOfLine
         ) {
-            var code = @$"class ClassName
+            var code =
+                @$"class ClassName
 {{
     string value = @""one{escapedNewLine}two"";
 }}
