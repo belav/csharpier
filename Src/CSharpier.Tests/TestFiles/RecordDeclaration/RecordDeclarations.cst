@@ -19,3 +19,5 @@ record RecordWithoutBody(string property);
 
 record LongerRecordNameWhatHappenssssssssssssssssssss(string x)
     : R4<string>(x) { }
+
+record GenericRecord<T>(T Result);

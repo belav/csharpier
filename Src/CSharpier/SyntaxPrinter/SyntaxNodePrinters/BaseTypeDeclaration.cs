@@ -82,14 +82,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             docs.Add(Token.Print(node.Identifier));
 
-            if (parameterList != null)
-            {
-                docs.Add(ParameterList.Print(parameterList, groupId));
-            }
-
             if (typeParameterList != null)
             {
                 docs.Add(TypeParameterList.Print(typeParameterList));
+            }
+
+            if (parameterList != null)
+            {
+                docs.Add(ParameterList.Print(parameterList, groupId));
             }
 
             if (node.BaseList != null)
