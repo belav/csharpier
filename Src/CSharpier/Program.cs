@@ -47,6 +47,7 @@ namespace CSharpier
             return await CommandLineFormatter.Format(
                 commandLineOptions,
                 new FileSystem(),
+                new SystemConsole(),
                 cancellationToken
             );
         }

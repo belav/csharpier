@@ -6,7 +6,6 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ignore = Ignore.Ignore;
 
 namespace CSharpier
 {
@@ -25,26 +24,30 @@ namespace CSharpier
         protected readonly CommandLineOptions CommandLineOptions;
         protected readonly PrinterOptions PrinterOptions;
         protected readonly IFileSystem FileSystem;
-
-        public global::Ignore.Ignore Ignore { get; init; }
+        protected readonly IConsole Console;
+        protected readonly IgnoreFile IgnoreFile;
 
         protected CommandLineFormatter(
             string baseDirectoryPath,
             CommandLineOptions commandLineOptions,
             PrinterOptions printerOptions,
-            IFileSystem fileSystem
+            IFileSystem fileSystem,
+            IConsole console,
+            IgnoreFile ignoreFile
         ) {
             this.BaseDirectoryPath = baseDirectoryPath;
             this.PrinterOptions = printerOptions;
             this.CommandLineOptions = commandLineOptions;
             this.Stopwatch = Stopwatch.StartNew();
             this.FileSystem = fileSystem;
-            this.Ignore = new global::Ignore.Ignore();
+            this.Console = console;
+            this.IgnoreFile = ignoreFile;
         }
 
         public static async Task<int> Format(
             CommandLineOptions commandLineOptions,
             IFileSystem fileSystem,
+            IConsole console,
             CancellationToken cancellationToken
         ) {
             var baseDirectoryPath = File.Exists(commandLineOptions.DirectoryOrFile)
@@ -63,6 +66,17 @@ namespace CSharpier
                 fileSystem
             );
 
+            var (ignoreFile, exitCode) = await CSharpier.IgnoreFile.Create(
+                baseDirectoryPath,
+                fileSystem,
+                console,
+                cancellationToken
+            );
+            if (exitCode != 0)
+            {
+                return exitCode;
+            }
+
             var printerOptions = new PrinterOptions
             {
                 TabWidth = configurationFileOptions.TabWidth,
@@ -75,19 +89,15 @@ namespace CSharpier
                 baseDirectoryPath,
                 commandLineOptions,
                 printerOptions,
-                fileSystem
+                fileSystem,
+                console,
+                ignoreFile!
             );
             return await commandLineFormatter.FormatFiles(cancellationToken);
         }
 
         public async Task<int> FormatFiles(CancellationToken cancellationToken)
         {
-            var ignoreExitCode = await this.ParseIgnoreFile(cancellationToken);
-            if (ignoreExitCode != 0)
-            {
-                return ignoreExitCode;
-            }
-
             if (this.FileSystem.File.Exists(this.CommandLineOptions.DirectoryOrFile))
             {
                 await FormatFile(this.CommandLineOptions.DirectoryOrFile, cancellationToken);
@@ -119,55 +129,9 @@ namespace CSharpier
             return ReturnExitCode();
         }
 
-        private async Task<int> ParseIgnoreFile(CancellationToken cancellationToken)
-        {
-            var directoryInfo = this.FileSystem.DirectoryInfo.FromDirectoryName(
-                this.BaseDirectoryPath
-            );
-            var ignoreFilePath = this.FileSystem.Path.Combine(
-                directoryInfo.FullName,
-                ".csharpierignore"
-            );
-            while (!this.FileSystem.File.Exists(ignoreFilePath))
-            {
-                directoryInfo = directoryInfo.Parent;
-                if (directoryInfo == null)
-                {
-                    return 0;
-                }
-                ignoreFilePath = this.FileSystem.Path.Combine(
-                    directoryInfo.FullName,
-                    ".csharpierignore"
-                );
-            }
-
-            foreach (
-                var line in await this.FileSystem.File.ReadAllLinesAsync(
-                    ignoreFilePath,
-                    cancellationToken
-                )
-            ) {
-                try
-                {
-                    this.Ignore.Add(line);
-                }
-                catch (Exception ex)
-                {
-                    WriteLine(
-                        $"The .csharpierignore file at {ignoreFilePath} could not be parsed due to the following line:"
-                    );
-                    WriteLine(line);
-                    WriteLine($"Exception: {ex.Message}");
-                    return 1;
-                }
-            }
-
-            return 0;
-        }
-
         private async Task FormatFile(string file, CancellationToken cancellationToken)
         {
-            if (IgnoreFile(file))
+            if (ShouldIgnoreFile(file))
             {
                 return;
             }
@@ -326,24 +290,15 @@ namespace CSharpier
             this.WriteLine(PadToSize(message + ": ", 80) + ReversePad(count + "  "));
         }
 
-        // TODO this could be implemented with a https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.filesystemglobbing.matcher?view=dotnet-plat-ext-5.0
-        // when we implement include/exclude/ignore for real, look into using that
-        private bool IgnoreFile(string filePath)
+        private bool ShouldIgnoreFile(string filePath)
         {
-            if (GeneratedCodeUtilities.IsGeneratedCodeFile(filePath))
-            {
-                return true;
-            }
-
-            var normalizedFilePath = filePath.Replace("\\", "/")
-                .Substring(this.BaseDirectoryPath.Length + 1);
-
-            return this.Ignore.IsIgnored(normalizedFilePath);
+            return GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
+                || this.IgnoreFile.IsIgnored(filePath);
         }
 
-        protected virtual void WriteLine(string? line = null)
+        protected void WriteLine(string? line = null)
         {
-            Console.WriteLine(line);
+            this.Console.WriteLine(line);
         }
 
         private static string PadToSize(string value, int size = 120)
