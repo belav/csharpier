@@ -14,8 +14,7 @@ namespace CSharpier.DocPrinter
             var alreadyVisitedSet = new HashSet<Group>();
             var groupStack = new Stack<Group>();
             var forceFlat = 0;
-            var canSetSkipNextBreak = false;
-            var skipNextBreak = false;
+            var canSkipBreak = false;
 
             void BreakParentGroup()
             {
@@ -28,22 +27,14 @@ namespace CSharpier.DocPrinter
 
             bool OnEnter(Doc doc)
             {
-                if (doc is HardLine { SkipBreakIfFirstInGroup: true }  && canSetSkipNextBreak)
-                {
-                    skipNextBreak = true;
-                    return true;
-                }
                 if (doc is ForceFlat)
                 {
                     forceFlat++;
                 }
-                if (doc is BreakParent && forceFlat == 0)
-                {
-                    if (!skipNextBreak)
-                    {
-                        BreakParentGroup();
-                    }
-                    else
+                if (
+                    doc is IBreakParent && (forceFlat == 0 || (forceFlat > 0 && doc is LiteralLine))
+                ) {
+                    if (doc is HardLine { SkipBreakIfFirstInGroup: true }  && canSkipBreak)
                     {
                         if (groupStack.Count > 1)
                         {
@@ -51,12 +42,15 @@ namespace CSharpier.DocPrinter
                             groupStack.Peek().Break = true;
                             groupStack.Push(nextGroup);
                         }
-                        skipNextBreak = false;
+                    }
+                    else
+                    {
+                        BreakParentGroup();
                     }
                 }
                 else if (doc is Group group)
                 {
-                    canSetSkipNextBreak = true;
+                    canSkipBreak = true;
                     groupStack.Push(group);
                     if (alreadyVisitedSet.Contains(group))
                     {
@@ -67,8 +61,7 @@ namespace CSharpier.DocPrinter
                 }
                 else if (doc is StringDoc { IsDirective: false } )
                 {
-                    canSetSkipNextBreak = false;
-                    skipNextBreak = false;
+                    canSkipBreak = false;
                 }
 
                 return true;
@@ -82,7 +75,7 @@ namespace CSharpier.DocPrinter
                 }
                 else if (doc is Group)
                 {
-                    canSetSkipNextBreak = false;
+                    canSkipBreak = false;
                     var group = groupStack.Pop();
                     if (group.Break)
                     {
@@ -116,8 +109,11 @@ namespace CSharpier.DocPrinter
                     // push onto stack in reverse order so they are processed in the original order
                     for (var x = concat.Contents.Count - 1; x >= 0; --x)
                     {
-                        if (forceFlat > 0 && concat.Contents[x] is LineDoc lineDoc)
-                        {
+                        if (
+                            forceFlat > 0
+                            && concat.Contents[x]
+                                is LineDoc { IsLiteral: false } lineDoc
+                        ) {
                             concat.Contents[x] = lineDoc.Type == LineDoc.LineType.Soft
                                 ? string.Empty
                                 : " ";
