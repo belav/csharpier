@@ -24,7 +24,7 @@ namespace CSharpier.Playground
             services.AddSpaStaticFiles(
                 configuration =>
                 {
-                    configuration.RootPath = "ClientApp/build";
+                    configuration.RootPath = "ClientApp/dist";
                 }
             );
         }

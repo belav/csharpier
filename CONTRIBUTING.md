@@ -5,6 +5,8 @@ There are a couple different ways of running CSharpier while developing it.
 From your IDE run the following in the /CSharpier/CSharpier.Playground directory
 ```bash
 dotnet watch run
+cd ClientApp
+npm run start
 ```
 - This should open the playground website at https://localhost:5001
 - Paste the code you want to format there and click format.
