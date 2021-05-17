@@ -1,25 +1,27 @@
-import React from "react";
+import React, { FC } from "react";
 import ReactJson, { CollapsedFieldProps } from "react-json-view";
 import styled from "styled-components";
 import { useAppContext } from "./AppContext";
+
+let lastTree;
+
+const shouldCollapse = (field: CollapsedFieldProps) => {
+    if (
+        field.name === "leadingTrivia" ||
+        field.name === "trailingTrivia" ||
+        (field.src as any).nodeType === "SyntaxToken"
+    ) {
+        return true;
+    }
+
+    return false;
+};
 
 export const SyntaxTree = () => {
     const { syntaxTree } = useAppContext();
     if (!syntaxTree) {
         return null;
     }
-
-    const shouldCollapse = (field: CollapsedFieldProps) => {
-        if (
-            field.name === "leadingTrivia" ||
-            field.name === "trailingTrivia" ||
-            (field.src as any).nodeType === "SyntaxToken"
-        ) {
-            return true;
-        }
-
-        return false;
-    };
 
     return (
         <ReactJsonStyle>

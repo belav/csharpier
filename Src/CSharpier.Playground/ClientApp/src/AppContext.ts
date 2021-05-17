@@ -62,7 +62,7 @@ export const useSetupAppContext = () => {
         },
         setFormattedCodeEditor: setFormattedCodeEditor,
     };
-}
+};
 
 const defaultCode = `public class ClassName {
     public string ShortPropertyName {
