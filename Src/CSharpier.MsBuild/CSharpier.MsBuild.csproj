@@ -1,7 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="../../CSharpier.Targets"/>
     <PropertyGroup>
-        <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
-        <CSharpierOutputDir>../CSharpier/bin/Release/net5.0/publish</CSharpierOutputDir>
+        <TargetFramework>net5.0</TargetFramework>
+        <PackageId>CSharpier.MsBuild</PackageId>
+        <CSharpierOutputDir>../CSharpier/bin/Release/net5.0</CSharpierOutputDir>
     </PropertyGroup>
 
     <!--
@@ -9,14 +11,16 @@
         make it a dependency in the output package, which causes all sorts of issues as
         CSharpier is a net5.0 project, not a netstandard.
     -->
-    <Target Name="CheckCSharpierBuilt"
-        BeforeTargets="Build"
-        Condition="!(Exists($(CSharpierOutputDir)))">
+    <Target Name="CheckCSharpierBuilt" BeforeTargets="Build" Condition="!(Exists($(CSharpierOutputDir)))">
         <Error Text="Ensure csharpier has been built (published) in release configuration" />
     </Target>
 
     <ItemGroup>
         <Content Include="build/*" PackagePath="build/" />
         <Content Include="$(CSharpierOutputDir)/**" PackagePath="tools/csharpier" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
     </ItemGroup>
 </Project>

@@ -15,10 +15,17 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v2
-      - name: publish on version change
+      - name: publish csharpier on version change
         id: publish_nuget
         uses: rohith/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: Src/CSharpier/CSharpier.csproj
           TAG_FORMAT: "*"
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+     - name: publish csharpier.msbuild on version change
+       id: publish_nuget
+       uses: rohith/publish-nuget@v2
+       with:
+         PROJECT_FILE_PATH: Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj
+         TAG_FORMAT: "*"
+         NUGET_KEY: ${{secrets.NUGET_API_KEY}}

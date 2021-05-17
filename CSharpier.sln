@@ -17,6 +17,7 @@ ProjectSection(SolutionItems) = preProject
 	CONTRIBUTING.md = CONTRIBUTING.md
 	CHANGELOG.md = CHANGELOG.md
 	.csharpierignore = .csharpierignore
+	CSharpier.Targets = CSharpier.Targets
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{176BB0EA-B72B-4ACA-82AE-C16A732BE023}"
@@ -34,6 +35,8 @@ ProjectSection(SolutionItems) = preProject
 				Scripts/ChangeLog.ps1 = Scripts/ChangeLog.ps1
 				Scripts/UpdateForkedRepos.ps1 = Scripts/UpdateForkedRepos.ps1
 EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.MsBuild", "Src\CSharpier.MsBuild\CSharpier.MsBuild.csproj", "{0BE7847E-368B-4EF8-B625-37D4B9B6464E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,5 +60,9 @@ Global
 		{CF32D239-2A27-4F46-8945-8B7B9A2C8774}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF32D239-2A27-4F46-8945-8B7B9A2C8774}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF32D239-2A27-4F46-8945-8B7B9A2C8774}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BE7847E-368B-4EF8-B625-37D4B9B6464E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BE7847E-368B-4EF8-B625-37D4B9B6464E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BE7847E-368B-4EF8-B625-37D4B9B6464E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BE7847E-368B-4EF8-B625-37D4B9B6464E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
