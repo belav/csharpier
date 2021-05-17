@@ -16,6 +16,8 @@ namespace CSharpier
             this.IgnoreBaseDirectoryPath = ignoreBaseDirectoryPath;
         }
 
+        private static bool reportedGood = false;
+
         public bool IsIgnored(string filePath)
         {
             try
@@ -23,14 +25,29 @@ namespace CSharpier
                 var normalizedFilePath = filePath.Replace("\\", "/")
                     .Substring(this.IgnoreBaseDirectoryPath.Length + 1);
 
+                if (!reportedGood)
+                {
+                    Console.WriteLine(
+                        "good ignore"
+                        + Environment.NewLine
+                        + "filePath: "
+                        + filePath
+                        + Environment.NewLine
+                        + "ignoreBaseDirectoryPath: "
+                        + IgnoreBaseDirectoryPath
+                    );
+                    reportedGood = true;
+                }
+
                 return this.Ignore.IsIgnored(normalizedFilePath);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(
-                    "Failed testing if "
+                    "Failed testing for ignore "
+                    + Environment.NewLine
+                    + "filePath: "
                     + filePath
-                    + " was ignored. "
                     + Environment.NewLine
                     + "ignoreBaseDirectoryPath: "
                     + this.IgnoreBaseDirectoryPath
