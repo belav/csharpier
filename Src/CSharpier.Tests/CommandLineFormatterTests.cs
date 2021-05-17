@@ -115,6 +115,21 @@ namespace CSharpier.Tests
             lines.FirstOrDefault(o => o.StartsWith("Total files")).Should().Be("Total files: 0 ");
         }
 
+        [TestCase("SubFolder/File.cs", "*.cs", "SubFolder")]
+        public void File_In_Ignore_Skips_Formatting(
+            string fileName,
+            string ignoreContents,
+            string rootPath
+        ) {
+            var unformattedFilePath = fileName;
+            WhenThereExists(unformattedFilePath, UnformattedClass);
+            WhenThereExists(".csharpierignore", ignoreContents);
+
+            var (_, lines) = this.Format(baseDirectoryPath: Path.Combine(GetRootPath(), rootPath));
+
+            lines.FirstOrDefault(o => o.StartsWith("Total files")).Should().Be("Total files: 0 ");
+        }
+
         [Test]
         public void Ignore_Reports_Errors()
         {
@@ -132,20 +147,20 @@ namespace CSharpier.Tests
         }
 
         private (int exitCode, IList<string> lines) Format(
-            string rootPath = null,
+            string baseDirectoryPath = null,
             bool skipWrite = false,
             bool check = false
         ) {
-            if (rootPath == null)
+            if (baseDirectoryPath == null)
             {
-                rootPath = GetRootPath();
+                baseDirectoryPath = GetRootPath();
             }
 
             var commandLineFormatter = new TestableCommandLineFormatter(
-                rootPath,
+                baseDirectoryPath,
                 new CommandLineOptions
                 {
-                    DirectoryOrFile = rootPath,
+                    DirectoryOrFile = baseDirectoryPath,
                     SkipWrite = skipWrite,
                     Check = check
                 },
@@ -154,7 +169,7 @@ namespace CSharpier.Tests
             );
 
             return (
-                commandLineFormatter.Format(CancellationToken.None).Result,
+                commandLineFormatter.FormatFiles(CancellationToken.None).Result,
                 commandLineFormatter.Lines
             );
         }
@@ -181,12 +196,12 @@ namespace CSharpier.Tests
             public readonly IList<string> Lines = new List<string>();
 
             public TestableCommandLineFormatter(
-                string rootPath,
+                string baseDirectoryPath,
                 CommandLineOptions commandLineOptions,
                 PrinterOptions printerOptions,
                 IFileSystem fileSystem
             )
-                : base(rootPath, commandLineOptions, printerOptions, fileSystem) { }
+                : base(baseDirectoryPath, commandLineOptions, printerOptions, fileSystem) { }
 
             protected override void WriteLine(string line = null)
             {
