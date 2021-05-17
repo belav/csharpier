@@ -5,6 +5,15 @@ class ClassName
 {
     private string bothLineEndingsPersist = @"\r\n \n";
 
+    private string emptyLines =
+        @"one
+
+two
+
+
+three
+";
+
     private string stayOnLine1 =
         @"one
 jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
