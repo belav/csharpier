@@ -15,8 +15,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          VERSION=$(cat CheckVersion.txt)
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-      - run: |
-          dotnet tool install -g CSharpier --version ${{ env.VERSION }}
+          dotnet tool restore
           dotnet csharpier --check

@@ -19,6 +19,10 @@ class ClassName
     {
         // should break braces correctly
         { 1, "one" },
-        { 2, "two" }
+        { 2, "two" },
+        {
+            3,
+            "ifThisIsReallyLongItShouldntInsertAnExtraLineAboveItttttttttttttttt"
+        }
     };
 }
