@@ -18,10 +18,29 @@ namespace CSharpier
 
         public bool IsIgnored(string filePath)
         {
-            var normalizedFilePath = filePath.Replace("\\", "/")
-                .Substring(this.IgnoreBaseDirectoryPath.Length + 1);
+            try
+            {
+                var normalizedFilePath = filePath.Replace("\\", "/")
+                    .Substring(this.IgnoreBaseDirectoryPath.Length + 1);
 
-            return this.Ignore.IsIgnored(normalizedFilePath);
+                return this.Ignore.IsIgnored(normalizedFilePath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(
+                    "Failed testing if "
+                    + filePath
+                    + " was ignored. "
+                    + Environment.NewLine
+                    + "ignoreBaseDirectoryPath: "
+                    + this.IgnoreBaseDirectoryPath
+                    + Environment.NewLine
+                    + "exception: "
+                    + ex.Message
+                );
+            }
+
+            return false;
         }
 
         public static async Task<(IgnoreFile?, int)> Create(
