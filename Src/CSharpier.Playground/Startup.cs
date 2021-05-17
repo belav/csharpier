@@ -24,7 +24,7 @@ namespace CSharpier.Playground
             services.AddSpaStaticFiles(
                 configuration =>
                 {
-                    configuration.RootPath = "ClientApp/build";
+                    configuration.RootPath = "ClientApp/dist";
                 }
             );
         }
@@ -70,7 +70,7 @@ namespace CSharpier.Playground
 
                     if (env.IsDevelopment())
                     {
-                        spa.UseReactDevelopmentServer(npmScript: "start");
+                        spa.UseProxyToSpaDevelopmentServer("http://localhost:5010");
                     }
                 }
             );
