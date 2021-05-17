@@ -115,7 +115,7 @@ namespace CSharpier.Tests
 
             var result = CreateConfigurationOptions("c:/test");
 
-            result.EndOfLine.Should().Be("crlf");
+            result.EndOfLine.Should().Be(EndOfLine.CRLF);
         }
 
         [Test]
@@ -155,7 +155,7 @@ namespace CSharpier.Tests
 
             var result = CreateConfigurationOptions("c:/test");
 
-            result.EndOfLine.Should().Be("crlf");
+            result.EndOfLine.Should().Be(EndOfLine.CRLF);
         }
 
         private void ShouldHaveDefaultOptions(ConfigurationFileOptions configurationFileOptions)
@@ -163,7 +163,7 @@ namespace CSharpier.Tests
             configurationFileOptions.PrintWidth.Should().Be(100);
             configurationFileOptions.TabWidth.Should().Be(4);
             configurationFileOptions.UseTabs.Should().BeFalse();
-            configurationFileOptions.EndOfLine.Should().Be("auto");
+            configurationFileOptions.EndOfLine.Should().Be(EndOfLine.Auto);
         }
 
         private ConfigurationFileOptions CreateConfigurationOptions(string rootPath)

@@ -1,0 +1,38 @@
+[assembly: System.Copyright(
+    @"(C)""
+2009")]
+class ClassName
+{
+    private string bothLineEndingsPersist = @"\r\n \n";
+
+    private string stayOnLine1 =
+        @"one
+jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
+";
+
+    private string stayOnLine2 =
+        @"one
+two
+three
+four";
+
+    private void MethodName()
+    {
+        CallSomeLongMethod(
+            @"one
+two
+three
+four
+jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
+"
+        );
+
+        CallSomeLongMethod(
+            @"one
+two
+three
+four",
+            "two"
+        );
+    }
+}

@@ -15,7 +15,7 @@ namespace CSharpier
         public int PrintWidth { get; init; } = 100;
         public int TabWidth { get; init; } = 4;
         public bool UseTabs { get; init; }
-        public string EndOfLine { get; init; } = "auto";
+        public EndOfLine EndOfLine { get; init; }
 
         public static ConfigurationFileOptions Create(string rootPath, IFileSystem fileSystem)
         {

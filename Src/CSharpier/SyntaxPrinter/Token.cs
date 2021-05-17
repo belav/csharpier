@@ -4,7 +4,6 @@ using System.Linq;
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
@@ -58,7 +57,20 @@ namespace CSharpier.SyntaxPrinter
 
             ShouldSkipNextLeadingTrivia = false;
 
-            docs.Add(syntaxToken.Text);
+            if (
+                syntaxToken.Kind() == SyntaxKind.StringLiteralToken
+                && syntaxToken.Text.StartsWith("@")
+            ) {
+                var lines = syntaxToken.Text.Split(
+                    new[] { '\r', '\n' },
+                    StringSplitOptions.RemoveEmptyEntries
+                );
+                docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
+            }
+            else
+            {
+                docs.Add(syntaxToken.Text);
+            }
             var trailingTrivia = PrintTrailingTrivia(syntaxToken);
             if (trailingTrivia != Doc.Null)
             {

@@ -40,6 +40,8 @@ ProjectSection(SolutionItems) = preProject
 				Docs/EditorsAndCICD.md = Docs/EditorsAndCICD.md
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Benchmarks", "Src\CSharpier.Benchmarks\CSharpier.Benchmarks.csproj", "{A338903F-69AD-4950-B827-8EE75F98B620}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,5 +64,9 @@ Global
 		{CF32D239-2A27-4F46-8945-8B7B9A2C8774}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF32D239-2A27-4F46-8945-8B7B9A2C8774}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF32D239-2A27-4F46-8945-8B7B9A2C8774}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A338903F-69AD-4950-B827-8EE75F98B620}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A338903F-69AD-4950-B827-8EE75F98B620}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A338903F-69AD-4950-B827-8EE75F98B620}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A338903F-69AD-4950-B827-8EE75F98B620}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
