@@ -61,10 +61,7 @@ namespace CSharpier.SyntaxPrinter
                 syntaxToken.Kind() == SyntaxKind.StringLiteralToken
                 && syntaxToken.Text.StartsWith("@")
             ) {
-                var lines = syntaxToken.Text.Split(
-                    new[] { '\r', '\n' },
-                    StringSplitOptions.RemoveEmptyEntries
-                );
+                var lines = syntaxToken.Text.Replace("\r", string.Empty).Split(new[] { '\n' });
                 docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
             }
             else
