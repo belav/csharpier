@@ -65,6 +65,20 @@ namespace CSharpier.Tests
             result.PrintWidth.Should().Be(10);
         }
 
+        [TestCase("", "printWidth: 10")]
+        [TestCase("", "{ \"printWidth\": 10 }")]
+        [TestCase(".yml", "printWidth: 10")]
+        [TestCase(".yaml", "printWidth: 10")]
+        [TestCase(".json", "{ \"printWidth\": 10 }")]
+        public void Should_Find_Configuration_In_Parent_Directory(string extension, string contents)
+        {
+            WhenThereExists($"c:/test/.csharpierrc{extension}", contents);
+
+            var result = CreateConfigurationOptions("c:/test/subfolder");
+
+            result.PrintWidth.Should().Be(10);
+        }
+
         [Test]
         public void Should_Prefer_No_Extension()
         {
@@ -166,9 +180,9 @@ namespace CSharpier.Tests
             configurationFileOptions.EndOfLine.Should().Be(EndOfLine.Auto);
         }
 
-        private ConfigurationFileOptions CreateConfigurationOptions(string rootPath)
+        private ConfigurationFileOptions CreateConfigurationOptions(string baseDirectoryPath)
         {
-            return ConfigurationFileOptions.Create(rootPath, fileSystem);
+            return ConfigurationFileOptions.Create(baseDirectoryPath, fileSystem);
         }
 
         private void WhenThereExists(string path, string contents)
