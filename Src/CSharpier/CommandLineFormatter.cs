@@ -6,7 +6,6 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ignore = Ignore.Ignore;
 
 namespace CSharpier
 {
@@ -20,36 +19,85 @@ namespace CSharpier
 
         protected readonly Stopwatch Stopwatch;
 
-        protected readonly string RootPath;
+        protected readonly string BaseDirectoryPath;
 
         protected readonly CommandLineOptions CommandLineOptions;
         protected readonly PrinterOptions PrinterOptions;
         protected readonly IFileSystem FileSystem;
+        protected readonly IConsole Console;
+        protected readonly IgnoreFile IgnoreFile;
 
-        public global::Ignore.Ignore Ignore { get; set; }
-
-        public CommandLineFormatter(
-            string rootPath,
+        protected CommandLineFormatter(
+            string baseDirectoryPath,
             CommandLineOptions commandLineOptions,
             PrinterOptions printerOptions,
-            IFileSystem fileSystem
+            IFileSystem fileSystem,
+            IConsole console,
+            IgnoreFile ignoreFile
         ) {
-            this.RootPath = rootPath;
+            this.BaseDirectoryPath = baseDirectoryPath;
             this.PrinterOptions = printerOptions;
             this.CommandLineOptions = commandLineOptions;
             this.Stopwatch = Stopwatch.StartNew();
             this.FileSystem = fileSystem;
-            this.Ignore = new global::Ignore.Ignore();
+            this.Console = console;
+            this.IgnoreFile = ignoreFile;
         }
 
-        public async Task<int> Format(CancellationToken cancellationToken)
-        {
-            var ignoreExitCode = await this.ParseIgnoreFile(cancellationToken);
-            if (ignoreExitCode != 0)
+        public static async Task<int> Format(
+            CommandLineOptions commandLineOptions,
+            IFileSystem fileSystem,
+            IConsole console,
+            CancellationToken cancellationToken
+        ) {
+            var baseDirectoryPath = File.Exists(commandLineOptions.DirectoryOrFile)
+                ? Path.GetDirectoryName(commandLineOptions.DirectoryOrFile)
+                : commandLineOptions.DirectoryOrFile;
+
+            if (baseDirectoryPath == null)
             {
-                return ignoreExitCode;
+                throw new Exception(
+                    $"The path of {commandLineOptions.DirectoryOrFile} does not appear to point to a directory or a file."
+                );
             }
 
+            var configurationFileOptions = ConfigurationFileOptions.Create(
+                baseDirectoryPath,
+                fileSystem
+            );
+
+            var (ignoreFile, exitCode) = await CSharpier.IgnoreFile.Create(
+                baseDirectoryPath,
+                fileSystem,
+                console,
+                cancellationToken
+            );
+            if (exitCode != 0)
+            {
+                return exitCode;
+            }
+
+            var printerOptions = new PrinterOptions
+            {
+                TabWidth = configurationFileOptions.TabWidth,
+                UseTabs = configurationFileOptions.UseTabs,
+                Width = configurationFileOptions.PrintWidth,
+                EndOfLine = configurationFileOptions.EndOfLine
+            };
+
+            var commandLineFormatter = new CommandLineFormatter(
+                baseDirectoryPath,
+                commandLineOptions,
+                printerOptions,
+                fileSystem,
+                console,
+                ignoreFile!
+            );
+            return await commandLineFormatter.FormatFiles(cancellationToken);
+        }
+
+        public async Task<int> FormatFiles(CancellationToken cancellationToken)
+        {
             if (this.FileSystem.File.Exists(this.CommandLineOptions.DirectoryOrFile))
             {
                 await FormatFile(this.CommandLineOptions.DirectoryOrFile, cancellationToken);
@@ -57,7 +105,7 @@ namespace CSharpier
             else
             {
                 var tasks = this.FileSystem.Directory.EnumerateFiles(
-                        this.RootPath,
+                        this.BaseDirectoryPath,
                         "*.cs",
                         SearchOption.AllDirectories
                     )
@@ -81,41 +129,9 @@ namespace CSharpier
             return ReturnExitCode();
         }
 
-        private async Task<int> ParseIgnoreFile(CancellationToken cancellationToken)
-        {
-            var ignoreFilePath = Path.Combine(this.RootPath, ".csharpierignore");
-            if (this.FileSystem.File.Exists(ignoreFilePath))
-            {
-                foreach (
-                    var line in await this.FileSystem.File.ReadAllLinesAsync(
-                        ignoreFilePath,
-                        cancellationToken
-                    )
-                ) {
-                    try
-                    {
-                        this.Ignore.Add(line);
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteLine(
-                            "The .csharpierignore file at "
-                            + ignoreFilePath
-                            + " could not be parsed due to the following line:"
-                        );
-                        WriteLine(line);
-                        WriteLine("Exception: " + ex.Message);
-                        return 1;
-                    }
-                }
-            }
-
-            return 0;
-        }
-
         private async Task FormatFile(string file, CancellationToken cancellationToken)
         {
-            if (IgnoreFile(file))
+            if (ShouldIgnoreFile(file))
             {
                 return;
             }
@@ -228,7 +244,7 @@ namespace CSharpier
 
         private string GetPath(string file)
         {
-            return PadToSize(file.Substring(this.RootPath.Length));
+            return PadToSize(file.Substring(this.BaseDirectoryPath.Length));
         }
 
         private void PrintResults()
@@ -274,24 +290,15 @@ namespace CSharpier
             this.WriteLine(PadToSize(message + ": ", 80) + ReversePad(count + "  "));
         }
 
-        // TODO this could be implemented with a https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.filesystemglobbing.matcher?view=dotnet-plat-ext-5.0
-        // when we implement include/exclude/ignore for real, look into using that
-        private bool IgnoreFile(string filePath)
+        private bool ShouldIgnoreFile(string filePath)
         {
-            if (GeneratedCodeUtilities.IsGeneratedCodeFile(filePath))
-            {
-                return true;
-            }
-
-            var normalizedFilePath = filePath.Replace("\\", "/")
-                .Substring(this.RootPath.Length + 1);
-
-            return this.Ignore.IsIgnored(normalizedFilePath);
+            return GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
+                || this.IgnoreFile.IsIgnored(filePath);
         }
 
-        protected virtual void WriteLine(string? line = null)
+        protected void WriteLine(string? line = null)
         {
-            Console.WriteLine(line);
+            this.Console.WriteLine(line);
         }
 
         private static string PadToSize(string value, int size = 120)

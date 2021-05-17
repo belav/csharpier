@@ -3,6 +3,8 @@ public class ClassName
     public string Property { get; set; }
     public string Interface.Property { get; set; }
 
+    string ShortModifiers { get; private set; }
+
     string PropertyWithModifiers
     {
         protected internal get;

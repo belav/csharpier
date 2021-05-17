@@ -19,9 +19,9 @@ namespace CSharpier.Tests
 
             ResultShouldBe(
                 result,
-                @"    Original: Around Line 0
+                @"----------------------------- Original: Around Line 0 -----------------------------
 class ClassName { }
-    Formatted: Around Line 0
+----------------------------- Formatted: Around Line 0 -----------------------------
 namespace Namespace { }
 "
             );
@@ -88,7 +88,7 @@ namespace Namespace { }
 
             ResultShouldBe(
                 result,
-                @"    Original: Around Line 2
+                @"----------------------------- Original: Around Line 2 -----------------------------
 class Resources
 {
     [Obsolete]
@@ -96,7 +96,7 @@ class Resources
     {
     }
 }
-    Formatted: Around Line 2
+----------------------------- Formatted: Around Line 2 -----------------------------
 class Resources
 {
     public Resources() { }
@@ -169,11 +169,11 @@ class Resources
 
             ResultShouldBe(
                 result,
-                @"    Original: Around Line 4
+                @"----------------------------- Original: Around Line 4 -----------------------------
     Integer,
     String,
 };
-    Formatted: Around Line 0
+----------------------------- Formatted: Around Line 0 -----------------------------
 public enum Enum
 {
     Integer,

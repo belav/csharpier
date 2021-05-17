@@ -44,50 +44,12 @@ namespace CSharpier
                 SkipWrite = skipWrite
             };
 
-            var rootPath = File.Exists(directoryOrFile)
-                ? Path.GetDirectoryName(directoryOrFile)
-                : directoryOrFile;
-
-            if (rootPath == null)
-            {
-                throw new Exception(
-                    "The path of "
-                    + directoryOrFile
-                    + " does not appear to point to a directory or a file."
-                );
-            }
-
-            var configurationFileOptions = ConfigurationFileOptions.Create(
-                rootPath,
-                new FileSystem()
-            );
-
-            var printerOptions = new PrinterOptions
-            {
-                TabWidth = configurationFileOptions.TabWidth,
-                UseTabs = configurationFileOptions.UseTabs,
-                Width = configurationFileOptions.PrintWidth,
-                EndOfLine = configurationFileOptions.EndOfLine == "auto"
-                    ? EndOfLine.Auto
-                    : configurationFileOptions.EndOfLine == "lf"
-                            ? EndOfLine.LF
-                            : configurationFileOptions.EndOfLine == "crlf"
-                                    ? EndOfLine.CRLF
-                                    : throw new Exception(
-                                            "Unhandled value from EndOfLine options "
-                                            + configurationFileOptions.EndOfLine
-                                        )
-            };
-
-            // TODO most parameters should probably be combined into an object
-            // TODO also the entry point should just be a static method call, hide the constructor and the other call
-            var commandLineFormatter = new CommandLineFormatter(
-                rootPath,
+            return await CommandLineFormatter.Format(
                 commandLineOptions,
-                printerOptions,
-                new FileSystem()
+                new FileSystem(),
+                new SystemConsole(),
+                cancellationToken
             );
-            return await commandLineFormatter.Format(cancellationToken);
         }
     }
 }
