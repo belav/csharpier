@@ -20,34 +20,36 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 ExtraNewLines.Print(node),
                 leadingTrivia,
                 Doc.Group(
-                    Token.PrintWithoutLeadingTrivia(node.AwaitKeyword),
-                    node.AwaitKeyword.Kind() != SyntaxKind.None ? " " : Doc.Null,
-                    node.AwaitKeyword.Kind() == SyntaxKind.None
-                        ? Token.PrintWithoutLeadingTrivia(node.ForEachKeyword)
-                        : Token.Print(node.ForEachKeyword),
-                    " ",
-                    Token.Print(node.OpenParenToken),
-                    Doc.GroupWithId(
-                        groupId,
-                        Doc.Indent(
-                            Doc.SoftLine,
-                            Node.Print(node.Type),
-                            " ",
-                            Token.Print(node.Identifier),
-                            " ",
-                            Token.Print(node.InKeyword),
-                            " ",
-                            Node.Print(node.Expression)
+                    Doc.Group(
+                        Token.PrintWithoutLeadingTrivia(node.AwaitKeyword),
+                        node.AwaitKeyword.Kind() != SyntaxKind.None ? " " : Doc.Null,
+                        node.AwaitKeyword.Kind() == SyntaxKind.None
+                            ? Token.PrintWithoutLeadingTrivia(node.ForEachKeyword)
+                            : Token.Print(node.ForEachKeyword),
+                        " ",
+                        Token.Print(node.OpenParenToken),
+                        Doc.GroupWithId(
+                            groupId,
+                            Doc.Indent(
+                                Doc.SoftLine,
+                                Node.Print(node.Type),
+                                " ",
+                                Token.Print(node.Identifier),
+                                " ",
+                                Token.Print(node.InKeyword),
+                                " ",
+                                Node.Print(node.Expression)
+                            ),
+                            Doc.SoftLine
                         ),
-                        Doc.SoftLine
+                        Token.Print(node.CloseParenToken),
+                        Doc.IfBreak(Doc.Null, Doc.SoftLine)
                     ),
-                    Token.Print(node.CloseParenToken),
-                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
-                ),
-                node.Statement
-                    is BlockSyntax blockSyntax
-                    ? Block.PrintWithConditionalSpace(blockSyntax, groupId)
-                    : Node.Print(node.Statement)
+                    node.Statement
+                        is BlockSyntax blockSyntax
+                        ? Block.PrintWithConditionalSpace(blockSyntax, groupId)
+                        : Doc.Indent(Doc.Line, Node.Print(node.Statement))
+                )
             );
 
             return docs;

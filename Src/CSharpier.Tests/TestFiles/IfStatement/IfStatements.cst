@@ -20,12 +20,25 @@ public class ClassName
             return;
         }
 
-        if (true)
-            DoSoemthing();
-        else if (false)
-            DoSomething();
+        if (true) DoSomething();
+        else if (false) DoSomething();
         else
             DoSomething;
+
+        if (someLongCondition != someOtherCondition)
+            DoSomeLongMethodCall111111111111();
+        else if (someLongCondition == someOtherCondition)
+            DoSomeLongMethodCall111111111111();
+        else
+            DoSomeLongMethodCall1111111111111111111111111111111111111111();
+
+        if (
+            longStatementName
+            && longerStatementName
+            && evenLongerStatementName
+            && superLongStatementName
+        )
+            return;
 
         if (!true) { }
 
