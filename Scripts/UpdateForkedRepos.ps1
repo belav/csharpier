@@ -11,9 +11,6 @@ $csharpierRepos = "C:\Projects\csharpierForkedRepos"
 $versionWithQuotes = "`"" + $version + "`"";
 
 foreach($folder in Get-ChildItem $csharpierRepos) {
-    if ($folder.FullName.Contains("aspnetcore")) {
-        continue
-    }
     Write-Output $folder.FullName
 
     Push-Location $folder.FullName
