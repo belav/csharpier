@@ -16,48 +16,22 @@ namespace CSharpier
             this.IgnoreBaseDirectoryPath = ignoreBaseDirectoryPath;
         }
 
-        private static bool reportedGood = false;
-
         public bool IsIgnored(string filePath)
         {
-            try
+            if (!filePath.StartsWith(this.IgnoreBaseDirectoryPath))
             {
-                var normalizedFilePath = filePath.Replace("\\", "/")
-                    .Substring(this.IgnoreBaseDirectoryPath.Length + 1);
-
-                if (!reportedGood)
-                {
-                    Console.WriteLine(
-                        "good ignore"
-                        + Environment.NewLine
-                        + "filePath: "
-                        + filePath
-                        + Environment.NewLine
-                        + "ignoreBaseDirectoryPath: "
-                        + IgnoreBaseDirectoryPath
-                    );
-                    reportedGood = true;
-                }
-
-                return this.Ignore.IsIgnored(normalizedFilePath);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(
-                    "Failed testing for ignore "
-                    + Environment.NewLine
-                    + "filePath: "
+                throw new Exception(
+                    "The filePath of "
                     + filePath
-                    + Environment.NewLine
-                    + "ignoreBaseDirectoryPath: "
+                    + " does not start with the ignoreBaseDirectoryPath of "
                     + this.IgnoreBaseDirectoryPath
-                    + Environment.NewLine
-                    + "exception: "
-                    + ex.Message
                 );
             }
 
-            return false;
+            var normalizedFilePath = filePath.Replace("\\", "/")
+                .Substring(this.IgnoreBaseDirectoryPath.Length + 1);
+
+            return this.Ignore.IsIgnored(normalizedFilePath);
         }
 
         public static async Task<(IgnoreFile?, int)> Create(
