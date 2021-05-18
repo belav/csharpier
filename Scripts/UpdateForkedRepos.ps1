@@ -14,8 +14,9 @@ foreach($folder in Get-ChildItem $csharpierRepos) {
     Write-Output $folder.FullName
 
     Push-Location $folder.FullName
-
-    #TODO a lot of the git commands look like they fail, but really succeed, wtf?
+    # TODO this should probably use a local verison of the tool, so the input version for sure matches
+    # but if we do that, we do need a prerelease version for the CreateReviewCodePRs.ps1
+    # TODO a lot of the git commands look like they fail, but really succeed, wtf?
     & git checkout main
     & git reset --hard
 
