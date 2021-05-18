@@ -6,7 +6,7 @@ const commonConfig = require("./common");
 
 module.exports = merge(commonConfig, {
     mode: "production",
-    entry: "./App.tsx",
+    entry: "./index.tsx",
     output: {
         filename: "js/bundle.[hash].min.js",
         path: resolve(__dirname, "../../dist"),

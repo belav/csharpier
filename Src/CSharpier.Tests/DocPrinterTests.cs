@@ -145,6 +145,22 @@ namespace CSharpier.Tests
         }
 
         [Test]
+        public void ForceFlat_Does_Not_Affect_Literal_Lines()
+        {
+            var doc = Doc.ForceFlat("1", Doc.LiteralLine, "2");
+
+            PrintedDocShouldBe(doc, $"1{NewLine}2");
+        }
+
+        [Test]
+        public void ForceFlat_With_Literal_String_Still_Breaks_Group()
+        {
+            var doc = Doc.Group(Doc.ForceFlat("1", Doc.LiteralLine, "2"), Doc.Line, "3");
+
+            PrintedDocShouldBe(doc, $"1{NewLine}2{NewLine}3");
+        }
+
+        [Test]
         public void LiteralLine_Trims_Space()
         {
             var doc = Doc.Concat("{", Doc.Indent(Doc.HardLine, "indent", Doc.LiteralLine), "}");
