@@ -38,6 +38,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{7C99AEA7-E608-40B5-9B2E-353B6E4C9DBE}"
 ProjectSection(SolutionItems) = preProject
 				Docs/EditorsAndCICD.md = Docs/EditorsAndCICD.md
+				Docs/Configuration.md = Docs/Configuration.md
+				Docs/CLI.md = Docs/CLI.md
+				Docs/Ignore.md = Docs/Ignore.md
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Benchmarks", "Src\CSharpier.Benchmarks\CSharpier.Benchmarks.csproj", "{A338903F-69AD-4950-B827-8EE75F98B620}"
