@@ -52,7 +52,7 @@ namespace CSharpier
             IConsole console,
             CancellationToken cancellationToken
         ) {
-            var results = new List<Result>();
+            var result = new CommandLineFormatterResult();
 
             foreach (var path in commandLineOptions.Paths)
             {
@@ -67,6 +67,7 @@ namespace CSharpier
                     );
                 }
 
+                // TODO write some tests, I am pretty sure options and ignore will be fine, but double check
                 var configurationFileOptions = ConfigurationFileOptions.Create(
                     baseDirectoryPath,
                     fileSystem
@@ -101,15 +102,23 @@ namespace CSharpier
                     ignoreFile!
                 );
 
-                results.Add(await commandLineFormatter.FormatFiles(cancellationToken));
+                var nextResult = await commandLineFormatter.FormatFiles(cancellationToken);
+                // TODO we could maybe pass a result into the FormatFiles method, but would that work with Interlocked.Increment ?
+                result.Files += nextResult.Files;
+                result.ElapsedMilliseconds += nextResult.ElapsedMilliseconds;
+                result.ExceptionsFormatting += nextResult.ExceptionsFormatting;
+                result.UnformattedFiles += nextResult.UnformattedFiles;
+                result.ExceptionsValidatingSource += nextResult.ExceptionsValidatingSource;
+                result.FailedSyntaxTreeValidation += nextResult.FailedSyntaxTreeValidation;
             }
 
-            PrintResults(results, console, commandLineOptions);
-            return ReturnExitCode(commandLineOptions, results);
+            ResultPrinter.PrintResults(result, console, commandLineOptions);
+            return ReturnExitCode(commandLineOptions, result);
         }
 
-        public async Task<Result> FormatFiles(CancellationToken cancellationToken)
-        {
+        public async Task<CommandLineFormatterResult> FormatFiles(
+            CancellationToken cancellationToken
+        ) {
             if (this.FileSystem.File.Exists(this.Path))
             {
                 await FormatFile(this.Path, cancellationToken);
@@ -136,7 +145,7 @@ namespace CSharpier
                 }
             }
 
-            return new Result
+            return new CommandLineFormatterResult
             {
                 FailedSyntaxTreeValidation = FailedSyntaxTreeValidation,
                 ExceptionsFormatting = ExceptionsFormatting,
@@ -262,69 +271,23 @@ namespace CSharpier
 
         private string GetPath(string file)
         {
-            return PadToSize(file.Substring(this.BaseDirectoryPath.Length));
-        }
-
-        private static void PrintResults(
-            IList<Result> results,
-            IConsole console,
-            CommandLineOptions commandLineOptions
-        ) {
-            console.WriteLine(
-                PadToSize("total time: ", 80)
-                + ReversePad(results.Sum(o => o.ElapsedMilliseconds) + "ms")
-            );
-            PrintResultLine("Total files", results.Sum(o => o.Files), console);
-
-            if (!commandLineOptions.Fast)
-            {
-                PrintResultLine(
-                    "Failed syntax tree validation",
-                    results.Sum(o => o.FailedSyntaxTreeValidation),
-                    console
-                );
-
-                PrintResultLine(
-                    "Threw exceptions while formatting",
-                    results.Sum(o => o.ExceptionsFormatting),
-                    console
-                );
-                PrintResultLine(
-                    "files that threw exceptions while validating syntax tree",
-                    results.Sum(o => o.ExceptionsValidatingSource),
-                    console
-                );
-            }
-
-            if (commandLineOptions.Check)
-            {
-                PrintResultLine(
-                    "files that were not formatted",
-                    results.Sum(o => o.UnformattedFiles),
-                    console
-                );
-            }
+            return ResultPrinter.PadToSize(file.Substring(this.BaseDirectoryPath.Length));
         }
 
         private static int ReturnExitCode(
             CommandLineOptions commandLineOptions,
-            IList<Result> results
+            CommandLineFormatterResult result
         ) {
             if (
-                (commandLineOptions.Check && results.Sum(o => o.UnformattedFiles) > 0)
-                || results.Sum(o => o.FailedSyntaxTreeValidation) > 0
-                || results.Sum(o => o.ExceptionsFormatting) > 0
-                || results.Sum(o => o.ExceptionsValidatingSource) > 0
+                (commandLineOptions.Check && result.UnformattedFiles > 0)
+                || result.FailedSyntaxTreeValidation > 0
+                || result.ExceptionsFormatting > 0
+                || result.ExceptionsValidatingSource > 0
             ) {
                 return 1;
             }
 
             return 0;
-        }
-
-        private static void PrintResultLine(string message, int count, IConsole console)
-        {
-            console.WriteLine(PadToSize(message + ": ", 80) + ReversePad(count + "  "));
         }
 
         private bool ShouldIgnoreFile(string filePath)
@@ -337,35 +300,15 @@ namespace CSharpier
         {
             this.Console.WriteLine(line);
         }
+    }
 
-        private static string PadToSize(string value, int size = 120)
-        {
-            while (value.Length < size)
-            {
-                value += " ";
-            }
-
-            return value;
-        }
-
-        private static string ReversePad(string value)
-        {
-            while (value.Length < 10)
-            {
-                value = " " + value;
-            }
-
-            return value;
-        }
-
-        public class Result
-        {
-            public int FailedSyntaxTreeValidation { get; set; }
-            public int ExceptionsFormatting { get; set; }
-            public int ExceptionsValidatingSource { get; set; }
-            public int Files { get; set; }
-            public int UnformattedFiles { get; set; }
-            public long ElapsedMilliseconds { get; set; }
-        }
+    public class CommandLineFormatterResult
+    {
+        public int FailedSyntaxTreeValidation { get; set; }
+        public int ExceptionsFormatting { get; set; }
+        public int ExceptionsValidatingSource { get; set; }
+        public int Files { get; set; }
+        public int UnformattedFiles { get; set; }
+        public long ElapsedMilliseconds { get; set; }
     }
 }
