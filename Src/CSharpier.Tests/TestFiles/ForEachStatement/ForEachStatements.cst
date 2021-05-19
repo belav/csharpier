@@ -52,5 +52,22 @@ public class ClassName
         {
             return;
         }
+
+        foreach (var x in y) CallSomething(x);
+
+        foreach (var someLongerNameThatMakesThis in BreakAndLongName)
+            CallSomething(x);
+
+        foreach (
+            var someLongerNameThatMakesThis in BreakInAnotherWay11111111111111111111
+        )
+            CallSomething(x);
+
+        foreach (var x in y)
+            switch (x)
+            {
+                case 1:
+                    return;
+            }
     }
 }
