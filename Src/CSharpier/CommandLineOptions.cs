@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,7 +7,7 @@ namespace CSharpier
 {
     public class CommandLineOptions
     {
-        public string[] Paths { get; init; } = new string[0];
+        public string[] DirectoryOrFilePaths { get; init; } = Array.Empty<string>();
         public bool Check { get; init; }
         public bool Fast { get; init; }
         public bool SkipWrite { get; init; }

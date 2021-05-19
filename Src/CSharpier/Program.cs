@@ -47,7 +47,7 @@ namespace CSharpier
 
             var commandLineOptions = new CommandLineOptions
             {
-                Paths = directoryOrFile.ToArray(),
+                DirectoryOrFilePaths = directoryOrFile.ToArray(),
                 Check = check,
                 Fast = fast,
                 SkipWrite = skipWrite

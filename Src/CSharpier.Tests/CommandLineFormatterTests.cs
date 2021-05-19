@@ -164,7 +164,7 @@ namespace CSharpier.Tests
                 CommandLineFormatter.Format(
                     new CommandLineOptions
                     {
-                        Paths = new[] { baseDirectoryPath },
+                        DirectoryOrFilePaths = new[] { baseDirectoryPath },
                         SkipWrite = skipWrite,
                         Check = check
                     },

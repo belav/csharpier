@@ -50,7 +50,7 @@ namespace CSharpier
             var stopwatch = Stopwatch.StartNew();
             var result = new CommandLineFormatterResult();
 
-            foreach (var path in commandLineOptions.Paths)
+            foreach (var path in commandLineOptions.DirectoryOrFilePaths)
             {
                 var baseDirectoryPath = fileSystem.File.Exists(path)
                     ? fileSystem.Path.GetDirectoryName(path)
