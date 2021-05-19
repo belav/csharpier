@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="../../CSharpier.Targets"/>
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
         <PackageId>CSharpier.MsBuild</PackageId>
         <CSharpierOutputDir>../CSharpier/bin/Release/net5.0</CSharpierOutputDir>
     </PropertyGroup>
 
     <!--
-        Note: There's not <PackageReference /> here because that would cause msbuild to
+        Note: There is no <ProjectReference /> here because that would cause msbuild to
         make it a dependency in the output package, which causes all sorts of issues as
-        CSharpier is a net5.0 project, not a netstandard.
+        CSharpier is a net5.0 project with <PackAsTool> and this is neither.
     -->
     <Target Name="CheckCSharpierBuilt" BeforeTargets="Build" Condition="!(Exists($(CSharpierOutputDir)))">
         <Error Text="Ensure csharpier has been built (published) in release configuration" />
@@ -18,9 +18,5 @@
     <ItemGroup>
         <Content Include="build/*" PackagePath="build/" />
         <Content Include="$(CSharpierOutputDir)/**" PackagePath="tools/csharpier" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
     </ItemGroup>
 </Project>
