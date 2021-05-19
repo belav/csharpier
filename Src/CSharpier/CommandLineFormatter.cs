@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions;
@@ -50,8 +49,8 @@ namespace CSharpier
             IConsole console,
             CancellationToken cancellationToken
         ) {
-            var baseDirectoryPath = File.Exists(commandLineOptions.DirectoryOrFile)
-                ? Path.GetDirectoryName(commandLineOptions.DirectoryOrFile)
+            var baseDirectoryPath = fileSystem.File.Exists(commandLineOptions.DirectoryOrFile)
+                ? fileSystem.Path.GetDirectoryName(commandLineOptions.DirectoryOrFile)
                 : commandLineOptions.DirectoryOrFile;
 
             if (baseDirectoryPath == null)

@@ -7,13 +7,37 @@ namespace CSharpier.Tests
     public class LineEndingTests
     {
         [Test]
-        public void LineEndings_Should_Not_Affect_Printed_Output()
+        public void LineEndings_Should_Not_Affect_Printed_Output_With_Verbatim_String()
         {
             // this is a verbatim string that is just the right size to format differently if it has \n vs \r\n in it
             var code =
                 @"class ClassName
 {
     private string blah = @""one11111111111111111111111111111111
+two
+three
+four"";
+}
+";
+            var codeWithLf = code.Replace("\r\n", "\n");
+            var codeWithCrLf = codeWithLf.Replace("\n", "\r\n");
+
+            var formatter = new CodeFormatter();
+            var printerOptions = new PrinterOptions { EndOfLine = EndOfLine.Auto, Width = 80 };
+            var lfResult = formatter.Format(codeWithLf, printerOptions);
+            var crLfResult = formatter.Format(codeWithCrLf, printerOptions);
+
+            lfResult.Code.Should().Be(crLfResult.Code.Replace("\r\n", "\n"));
+        }
+
+        [Test]
+        public void LineEndings_Should_Not_Affect_Printed_Output_With_Interpolated_String()
+        {
+            // this is a verbatim string that is just the right size to format differently if it has \n vs \r\n in it
+            var code =
+                @"class ClassName
+{
+    private string blah = @$""one1111111111111111111111111111111
 two
 three
 four"";
