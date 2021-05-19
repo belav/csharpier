@@ -70,7 +70,8 @@ namespace Namespace { }
         [Test]
         public void MissingAttribute()
         {
-            var left = @"class Resources
+            var left =
+                @"class Resources
 {
     [Obsolete]
     public Resources()

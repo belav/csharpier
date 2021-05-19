@@ -33,7 +33,7 @@ four"";
         [Test]
         public void LineEndings_Should_Not_Affect_Printed_Output_With_Interpolated_String()
         {
-            // this is a verbatim string that is just the right size to format differently if it has \n vs \r\n in it
+            // this is a interpolated verbatim string that is just the right size to format differently if it has \n vs \r\n in it
             var code =
                 @"class ClassName
 {
@@ -77,7 +77,8 @@ four"";
             string escapedNewLine,
             EndOfLine endOfLine
         ) {
-            var code = @$"class ClassName
+            var code =
+                @$"class ClassName
 {{
     string value = @""one{escapedNewLine}two"";
 }}
