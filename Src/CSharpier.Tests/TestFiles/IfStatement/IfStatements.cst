@@ -26,11 +26,11 @@ public class ClassName
             DoSomething;
 
         if (someLongCondition != someOtherCondition)
-            DoSomeLongMethodCall111111111111();
+            DoSomeLongMethodCall____________();
         else if (someLongCondition == someOtherCondition)
-            DoSomeLongMethodCall111111111111();
+            DoSomeLongMethodCall____________();
         else
-            DoSomeLongMethodCall1111111111111111111111111111111111111111();
+            DoSomeLongMethodCall________________________________________();
 
         if (
             longStatementName
@@ -48,19 +48,19 @@ public class ClassName
 
         if (true && (true || false)) { }
 
-        if (exactly80 || moreTextToMakeItWork1111111111111111111111111111111111)
+        if (exactly80 || moreTextToMakeItWork__________________________________)
         {
             return;
         }
 
         // leading comment doesn't break differently
-        if (exactly80 || moreTextToMakeItWork1111111111111111111111111111111111)
+        if (exactly80 || moreTextToMakeItWork__________________________________)
         {
             return;
         }
 
         if (
-            justOver80 || moreTextToMakeItWork1111111111111111111111111111111112
+            justOver80 || moreTextToMakeItWork__________________________________
         ) {
             return;
         }

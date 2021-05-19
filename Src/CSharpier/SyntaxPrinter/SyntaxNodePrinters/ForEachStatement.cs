@@ -22,8 +22,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Doc.Group(
                     Doc.Group(
                         Token.PrintWithoutLeadingTrivia(node.AwaitKeyword),
-                        node.AwaitKeyword.Kind() != SyntaxKind.None ? " " : Doc.Null,
-                        node.AwaitKeyword.Kind() == SyntaxKind.None
+                        node.AwaitKeyword.Kind()
+                            is not SyntaxKind.None ? " " : Doc.Null,
+                        node.AwaitKeyword.Kind() is SyntaxKind.None
                             ? Token.PrintWithoutLeadingTrivia(node.ForEachKeyword)
                             : Token.Print(node.ForEachKeyword),
                         " ",
