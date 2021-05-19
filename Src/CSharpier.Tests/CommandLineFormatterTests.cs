@@ -117,7 +117,7 @@ namespace CSharpier.Tests
 
         [TestCase("SubFolder/File.cs", "*.cs", "SubFolder")]
         [TestCase("SubFolder/File.cs", "SubFolder/File.cs", "SubFolder")]
-        public void File_In_Ignore_Skips_Formatting(
+        public void File_In_Ignore_Skips_Formatting_With_BaseDirectory(
             string fileName,
             string ignoreContents,
             string baseDirectory

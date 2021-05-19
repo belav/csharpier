@@ -60,11 +60,9 @@ namespace CSharpier
             }
 
             var message =
-                "----------------------------- Original: "
-                + GetLine(result.OriginalSpan, this.OriginalSyntaxTree, this.OriginalSourceCode);
+                $"----------------------------- Original: {GetLine(result.OriginalSpan, this.OriginalSyntaxTree, this.OriginalSourceCode)}";
 
-            message += "----------------------------- Formatted: "
-            + GetLine(result.NewSpan, this.NewSyntaxTree, this.NewSourceCode);
+            message += $"----------------------------- Formatted: {GetLine(result.NewSpan, this.NewSyntaxTree, this.NewSourceCode)}";
             return message;
         }
 
@@ -78,8 +76,7 @@ namespace CSharpier
             var line = syntaxTree.GetLineSpan(textSpan.Value).StartLinePosition.Line;
             var endLine = syntaxTree.GetLineSpan(textSpan.Value).EndLinePosition.Line;
 
-            var result =
-                "Around Line " + line + " -----------------------------" + Environment.NewLine;
+            var result = $"Around Line {line} -----------------------------{Environment.NewLine}";
 
             var stringReader = new StringReader(source);
             var x = 0;

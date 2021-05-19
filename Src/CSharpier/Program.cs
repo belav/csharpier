@@ -35,6 +35,10 @@ namespace CSharpier
             {
                 directoryOrFile = Directory.GetCurrentDirectory();
             }
+            else
+            {
+                directoryOrFile = Path.Combine(Directory.GetCurrentDirectory(), directoryOrFile);
+            }
 
             var commandLineOptions = new CommandLineOptions
             {

@@ -1,6 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Playground", "Src\CSharpier.Playground\CSharpier.Playground.csproj", "{E7F03E73-82C7-4DB2-AF20-F25C45231A72}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier", "Src\CSharpier\CSharpier.csproj", "{F1DE8719-9961-4F83-8BE6-34639C96DA5E}"
@@ -10,37 +9,39 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Worker", "Src\Worker\Worker.csproj", "{CF32D239-2A27-4F46-8945-8B7B9A2C8774}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{51C3E932-8A7B-4004-AA94-2AF89619B6F4}"
-	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-		LICENSE = LICENSE
-		README.md = README.md
-		CONTRIBUTING.md = CONTRIBUTING.md
-		CHANGELOG.md = CHANGELOG.md
-		.csharpierignore = .csharpierignore
-		.config\dotnet-tools.json = .config\dotnet-tools.json
-		CSharpier.Targets = CSharpier.Targets
-	EndProjectSection
+ProjectSection(SolutionItems) = preProject
+	.gitignore = .gitignore
+	LICENSE = LICENSE
+	README.md = README.md
+	CONTRIBUTING.md = CONTRIBUTING.md
+	CHANGELOG.md = CHANGELOG.md
+	.csharpierignore = .csharpierignore
+	.config\dotnet-tools.json = .config\dotnet-tools.json
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{176BB0EA-B72B-4ACA-82AE-C16A732BE023}"
-	ProjectSection(SolutionItems) = preProject
-		.github\workflows\format_repositories.yml = .github\workflows\format_repositories.yml
-		.github\workflows\nuget_publish.yml = .github\workflows\nuget_publish.yml
-		.github\workflows\playground_publish.yml = .github\workflows\playground_publish.yml
-		.github\workflows\validatePR.yml = .github\workflows\validatePR.yml
-	EndProjectSection
+ProjectSection(SolutionItems) = preProject
+				.github\workflows\format_repositories.yml = .github\workflows\format_repositories.yml
+	.github\workflows\nuget_publish.yml = .github\workflows\nuget_publish.yml
+	.github\workflows\playground_publish.yml = .github\workflows\playground_publish.yml
+	.github\workflows\validatePR.yml = .github\workflows\validatePR.yml
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{62DCCDB3-45D3-4236-B34A-E01618028BFE}"
-	ProjectSection(SolutionItems) = preProject
-		Scripts/RunLinuxTests.ps1 = Scripts/RunLinuxTests.ps1
-		Scripts/CreateReviewCodePRs.ps1 = Scripts/CreateReviewCodePRs.ps1
-		Scripts/ChangeLog.ps1 = Scripts/ChangeLog.ps1
-		Scripts/UpdateForkedRepos.ps1 = Scripts/UpdateForkedRepos.ps1
-	EndProjectSection
+ProjectSection(SolutionItems) = preProject
+				Scripts/RunLinuxTests.ps1 = Scripts/RunLinuxTests.ps1
+				Scripts/CreateReviewCodePRs.ps1 = Scripts/CreateReviewCodePRs.ps1
+				Scripts/ChangeLog.ps1 = Scripts/ChangeLog.ps1
+				Scripts/UpdateForkedRepos.ps1 = Scripts/UpdateForkedRepos.ps1
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{7C99AEA7-E608-40B5-9B2E-353B6E4C9DBE}"
-	ProjectSection(SolutionItems) = preProject
-		Docs/EditorsAndCICD.md = Docs/EditorsAndCICD.md
-	EndProjectSection
+ProjectSection(SolutionItems) = preProject
+				Docs/EditorsAndCICD.md = Docs/EditorsAndCICD.md
+				Docs/Configuration.md = Docs/Configuration.md
+				Docs/CLI.md = Docs/CLI.md
+				Docs/Ignore.md = Docs/Ignore.md
+EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Benchmarks", "Src\CSharpier.Benchmarks\CSharpier.Benchmarks.csproj", "{A338903F-69AD-4950-B827-8EE75F98B620}"
 EndProject

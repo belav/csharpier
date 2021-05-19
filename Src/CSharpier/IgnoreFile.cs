@@ -18,6 +18,16 @@ namespace CSharpier
 
         public bool IsIgnored(string filePath)
         {
+            if (!filePath.StartsWith(this.IgnoreBaseDirectoryPath))
+            {
+                throw new Exception(
+                    "The filePath of "
+                    + filePath
+                    + " does not start with the ignoreBaseDirectoryPath of "
+                    + this.IgnoreBaseDirectoryPath
+                );
+            }
+
             var normalizedFilePath = filePath.Replace("\\", "/")
                 .Substring(this.IgnoreBaseDirectoryPath.Length + 1);
 

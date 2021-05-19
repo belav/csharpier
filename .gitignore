@@ -25,6 +25,7 @@ App_Data
 nupkg
 
 dist
+publish
 
 *.doctree.txt
 *.actual.cst

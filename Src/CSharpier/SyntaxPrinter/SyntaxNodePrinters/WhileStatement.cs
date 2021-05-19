@@ -14,21 +14,23 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 ExtraNewLines.Print(node),
                 Token.PrintLeadingTrivia(node.WhileKeyword),
                 Doc.Group(
-                    Token.PrintWithoutLeadingTrivia(node.WhileKeyword),
-                    " ",
-                    Token.Print(node.OpenParenToken),
-                    Doc.GroupWithId(
-                        groupId,
-                        Doc.Indent(Doc.SoftLine, Node.Print(node.Condition)),
-                        Doc.SoftLine
+                    Doc.Group(
+                        Token.PrintWithoutLeadingTrivia(node.WhileKeyword),
+                        " ",
+                        Token.Print(node.OpenParenToken),
+                        Doc.GroupWithId(
+                            groupId,
+                            Doc.Indent(Doc.SoftLine, Node.Print(node.Condition)),
+                            Doc.SoftLine
+                        ),
+                        Token.Print(node.CloseParenToken),
+                        Doc.IfBreak(Doc.Null, Doc.SoftLine)
                     ),
-                    Token.Print(node.CloseParenToken),
-                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
-                ),
-                node.Statement
-                    is BlockSyntax blockSyntax
-                    ? Block.PrintWithConditionalSpace(blockSyntax, groupId)
-                    : Node.Print(node.Statement)
+                    node.Statement
+                        is BlockSyntax blockSyntax
+                        ? Block.PrintWithConditionalSpace(blockSyntax, groupId)
+                        : Doc.Indent(Doc.Line, Node.Print(node.Statement))
+                )
             );
 
             return result;

@@ -6,18 +6,18 @@ param (
     [string]$version
 )
 
-# aspnetcore          
-# AspNetWebStack      
+# aspnetcore
+# AspNetWebStack
 # AutoMapper          
 # command-line-api    
 # Core                
-# efcore              
+# efcore
 # format              
 # insite-commerce     
 # moq4                
 # Newtonsoft.Json     
-# roslyn              
-# runtime             
+# roslyn
+# runtime
 
 if ($version -eq "") {
     Write-Output "need version"
@@ -33,8 +33,6 @@ $versionWithQuotes = "`"" + $version + "`"";
 $prs = @()
 
 foreach($folder in Get-ChildItem $csharpierRepos) {
-    Write-Output $folder.FullName
-
     Push-Location $folder.FullName
 
     #TODO git writes to stderr or some stupid shit
