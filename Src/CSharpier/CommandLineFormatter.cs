@@ -20,7 +20,7 @@ namespace CSharpier
         protected readonly Stopwatch Stopwatch;
 
         protected readonly string BaseDirectoryPath;
-
+        protected readonly string Path;
         protected readonly CommandLineOptions CommandLineOptions;
         protected readonly PrinterOptions PrinterOptions;
         protected readonly IFileSystem FileSystem;
@@ -29,6 +29,7 @@ namespace CSharpier
 
         protected CommandLineFormatter(
             string baseDirectoryPath,
+            string path,
             CommandLineOptions commandLineOptions,
             PrinterOptions printerOptions,
             IFileSystem fileSystem,
@@ -36,6 +37,7 @@ namespace CSharpier
             IgnoreFile ignoreFile
         ) {
             this.BaseDirectoryPath = baseDirectoryPath;
+            this.Path = path;
             this.PrinterOptions = printerOptions;
             this.CommandLineOptions = commandLineOptions;
             this.Stopwatch = Stopwatch.StartNew();
@@ -50,62 +52,72 @@ namespace CSharpier
             IConsole console,
             CancellationToken cancellationToken
         ) {
-            var baseDirectoryPath = File.Exists(commandLineOptions.DirectoryOrFile)
-                ? Path.GetDirectoryName(commandLineOptions.DirectoryOrFile)
-                : commandLineOptions.DirectoryOrFile;
-
-            if (baseDirectoryPath == null)
+            foreach (var path in commandLineOptions.Paths)
             {
-                throw new Exception(
-                    $"The path of {commandLineOptions.DirectoryOrFile} does not appear to point to a directory or a file."
+                var baseDirectoryPath = fileSystem.File.Exists(path)
+                    ? fileSystem.Path.GetDirectoryName(path)
+                    : path;
+
+                if (baseDirectoryPath == null)
+                {
+                    throw new Exception(
+                        $"The path of {path} does not appear to point to a directory or a file."
+                    );
+                }
+
+                var configurationFileOptions = ConfigurationFileOptions.Create(
+                    baseDirectoryPath,
+                    fileSystem
                 );
+
+                var (ignoreFile, exitCode) = await IgnoreFile.Create(
+                    baseDirectoryPath,
+                    fileSystem,
+                    console,
+                    cancellationToken
+                );
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+
+                var printerOptions = new PrinterOptions
+                {
+                    TabWidth = configurationFileOptions.TabWidth,
+                    UseTabs = configurationFileOptions.UseTabs,
+                    Width = configurationFileOptions.PrintWidth,
+                    EndOfLine = configurationFileOptions.EndOfLine
+                };
+
+                var commandLineFormatter = new CommandLineFormatter(
+                    baseDirectoryPath,
+                    path,
+                    commandLineOptions,
+                    printerOptions,
+                    fileSystem,
+                    console,
+                    ignoreFile!
+                );
+                var result = await commandLineFormatter.FormatFiles(cancellationToken);
+                if (result != 0)
+                {
+                    return result;
+                }
             }
 
-            var configurationFileOptions = ConfigurationFileOptions.Create(
-                baseDirectoryPath,
-                fileSystem
-            );
-
-            var (ignoreFile, exitCode) = await CSharpier.IgnoreFile.Create(
-                baseDirectoryPath,
-                fileSystem,
-                console,
-                cancellationToken
-            );
-            if (exitCode != 0)
-            {
-                return exitCode;
-            }
-
-            var printerOptions = new PrinterOptions
-            {
-                TabWidth = configurationFileOptions.TabWidth,
-                UseTabs = configurationFileOptions.UseTabs,
-                Width = configurationFileOptions.PrintWidth,
-                EndOfLine = configurationFileOptions.EndOfLine
-            };
-
-            var commandLineFormatter = new CommandLineFormatter(
-                baseDirectoryPath,
-                commandLineOptions,
-                printerOptions,
-                fileSystem,
-                console,
-                ignoreFile!
-            );
-            return await commandLineFormatter.FormatFiles(cancellationToken);
+            return 0;
         }
 
         public async Task<int> FormatFiles(CancellationToken cancellationToken)
         {
-            if (this.FileSystem.File.Exists(this.CommandLineOptions.DirectoryOrFile))
+            if (this.FileSystem.File.Exists(this.Path))
             {
-                await FormatFile(this.CommandLineOptions.DirectoryOrFile, cancellationToken);
+                await FormatFile(this.Path, cancellationToken);
             }
             else
             {
                 var tasks = this.FileSystem.Directory.EnumerateFiles(
-                        this.BaseDirectoryPath,
+                        this.Path,
                         "*.cs",
                         SearchOption.AllDirectories
                     )

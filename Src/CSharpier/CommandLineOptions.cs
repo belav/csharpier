@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Threading;
@@ -7,13 +8,13 @@ namespace CSharpier
 {
     public class CommandLineOptions
     {
-        public string DirectoryOrFile { get; init; } = string.Empty;
+        public string[] Paths { get; init; } = new string[0];
         public bool Check { get; init; }
         public bool Fast { get; init; }
         public bool SkipWrite { get; init; }
 
         internal delegate Task<int> Handler(
-            string directoryOrFile,
+            string[] directoryOrFile,
             bool check,
             bool fast,
             bool skipWrite,
@@ -24,12 +25,12 @@ namespace CSharpier
         {
             var rootCommand = new RootCommand
             {
-                new Argument<string>(
+                new Argument<string[]>(
                     "directoryOrFile"
                 )
                 {
-                    Arity = ArgumentArity.ZeroOrOne,
-                    Description = "A path to a directory containing files to format or a file to format. If a path is not specified the current directory is used"
+                    Arity = ArgumentArity.ZeroOrMore,
+                    Description = "One or more paths to a directory containing files to format or a file to format. If a path is not specified the current directory is used"
                 }.LegalFilePathsOnly(),
                 new Option(
                     new[] { "--check" },

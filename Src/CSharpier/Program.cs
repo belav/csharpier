@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,24 +27,27 @@ namespace CSharpier
         }
 
         public static async Task<int> Run(
-            string directoryOrFile,
+            string[] directoryOrFile,
             bool check,
             bool fast,
             bool skipWrite,
             CancellationToken cancellationToken
         ) {
-            if (string.IsNullOrEmpty(directoryOrFile))
+            if (directoryOrFile is null or  { Length: 0 } )
             {
-                directoryOrFile = Directory.GetCurrentDirectory();
+                directoryOrFile = new[] { Directory.GetCurrentDirectory() };
             }
             else
             {
-                directoryOrFile = Path.Combine(Directory.GetCurrentDirectory(), directoryOrFile);
+                directoryOrFile = directoryOrFile.Select(
+                        o => Path.Combine(Directory.GetCurrentDirectory(), o)
+                    )
+                    .ToArray();
             }
 
             var commandLineOptions = new CommandLineOptions
             {
-                DirectoryOrFile = directoryOrFile,
+                Paths = directoryOrFile.ToArray(),
                 Check = check,
                 Fast = fast,
                 SkipWrite = skipWrite
