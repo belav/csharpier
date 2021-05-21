@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
@@ -58,8 +60,11 @@ namespace CSharpier.SyntaxPrinter
             ShouldSkipNextLeadingTrivia = false;
 
             if (
-                syntaxToken.Kind() == SyntaxKind.StringLiteralToken
-                && syntaxToken.Text.StartsWith("@")
+                (syntaxToken.Kind() == SyntaxKind.StringLiteralToken
+                && syntaxToken.Text.StartsWith("@"))
+                || (syntaxToken.Kind() == SyntaxKind.InterpolatedStringTextToken
+                && syntaxToken.Parent!.Parent
+                    is InterpolatedStringExpressionSyntax { StringStartToken:  { RawKind: (int)SyntaxKind.InterpolatedVerbatimStringStartToken }  } )
             ) {
                 var lines = syntaxToken.Text.Replace("\r", string.Empty).Split(new[] { '\n' });
                 docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
