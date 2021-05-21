@@ -43,22 +43,10 @@ namespace CSharpier
             CancellationToken cancellationToken
         ) {
             var ignore = new Ignore.Ignore();
-            var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
-            var ignoreFilePath = fileSystem.Path.Combine(
-                directoryInfo.FullName,
-                ".csharpierignore"
-            );
-            while (!fileSystem.File.Exists(ignoreFilePath))
+            var ignoreFilePath = FindIgnorePath(baseDirectoryPath, fileSystem);
+            if (ignoreFilePath == null)
             {
-                directoryInfo = directoryInfo.Parent;
-                if (directoryInfo == null)
-                {
-                    return new IgnoreFile(ignore, baseDirectoryPath);
-                }
-                ignoreFilePath = fileSystem.Path.Combine(
-                    directoryInfo.FullName,
-                    ".csharpierignore"
-                );
+                return new IgnoreFile(ignore, baseDirectoryPath);
             }
 
             foreach (
@@ -84,7 +72,27 @@ namespace CSharpier
                 }
             }
 
-            return new IgnoreFile(ignore, directoryInfo.FullName);
+            return new IgnoreFile(ignore, fileSystem.Path.GetDirectoryName(ignoreFilePath));
+        }
+
+        private static string? FindIgnorePath(string baseDirectoryPath, IFileSystem fileSystem)
+        {
+            var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
+            while (directoryInfo != null)
+            {
+                var ignoreFilePath = fileSystem.Path.Combine(
+                    directoryInfo.FullName,
+                    ".csharpierignore"
+                );
+                if (fileSystem.File.Exists(ignoreFilePath))
+                {
+                    return ignoreFilePath;
+                }
+
+                directoryInfo = directoryInfo.Parent;
+            }
+
+            return null;
         }
     }
 }
