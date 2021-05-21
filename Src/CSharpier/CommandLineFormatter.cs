@@ -62,21 +62,21 @@ namespace CSharpier
                     );
                 }
 
-                // TODO write some tests, I am pretty sure options and ignore will be fine, but double check
                 var configurationFileOptions = ConfigurationFileOptions.Create(
                     baseDirectoryPath,
                     fileSystem
                 );
 
-                var (ignoreFile, exitCode) = await IgnoreFile.Create(
-                    baseDirectoryPath,
-                    fileSystem,
-                    console,
-                    cancellationToken
-                );
-                if (exitCode != 0)
+                var ignoreFile =
+                    await IgnoreFile.Create(
+                        baseDirectoryPath,
+                        fileSystem,
+                        console,
+                        cancellationToken
+                    );
+                if (ignoreFile is null)
                 {
-                    return exitCode;
+                    return 1;
                 }
 
                 var printerOptions = new PrinterOptions

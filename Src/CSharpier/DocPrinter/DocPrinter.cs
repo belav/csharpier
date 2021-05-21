@@ -192,7 +192,6 @@ namespace CSharpier.DocPrinter
 
                         if (newLineNextStringValue)
                         {
-                            // TODO 1 new line stuff
                             TrimOutput(output);
                             output.Append(endOfLine).Append(command.Indent.Value);
                             currentWidth = command.Indent.Length;

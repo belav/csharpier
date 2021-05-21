@@ -21,7 +21,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
             else
             {
-                // TODO 1 force braces here?
                 docs.Add(Doc.Indent(Doc.HardLine, statement));
             }
 

@@ -127,8 +127,53 @@ namespace CSharpier.Tests
             WhenThereExists(".csharpierignore", ignoreContents);
 
             var (_, lines) = this.Format(
-                baseDirectoryPath: Path.Combine(GetRootPath(), baseDirectory)
+                directoryOrFilePaths: Path.Combine(GetRootPath(), baseDirectory)
             );
+
+            lines.FirstOrDefault(o => o.StartsWith("Total files")).Should().Be("Total files: 0 ");
+        }
+
+        [Test]
+        public void Multiple_Files_Should_Use_Root_Ignore()
+        {
+            var unformattedFilePath1 = "SubFolder/1/File1.cs";
+            var unformattedFilePath2 = "SubFolder/2/File2.cs";
+            WhenThereExists(unformattedFilePath1, UnformattedClass);
+            WhenThereExists(unformattedFilePath2, UnformattedClass);
+            WhenThereExists(".csharpierignore", "Subfolder/**/*.cs");
+
+            var (_, lines) = this.Format(
+                directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
+            );
+
+            lines.FirstOrDefault(o => o.StartsWith("Total files")).Should().Be("Total files: 0 ");
+        }
+
+        [Test]
+        public void Multiple_Files_Should_Use_Multiple_Ignores()
+        {
+            var unformattedFilePath1 = "SubFolder/1/File1.cs";
+            var unformattedFilePath2 = "SubFolder/2/File2.cs";
+            WhenThereExists(unformattedFilePath1, UnformattedClass);
+            WhenThereExists(unformattedFilePath2, UnformattedClass);
+            WhenThereExists("SubFolder/1/.csharpierignore", "File1.cs");
+            WhenThereExists("SubFolder/2/.csharpierignore", "File2.cs");
+
+            var (_, lines) = this.Format(
+                directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
+            );
+
+            lines.FirstOrDefault(o => o.StartsWith("Total files")).Should().Be("Total files: 0 ");
+        }
+
+        [Test]
+        public void Ignore_Should_Deal_With_Inconsistent_Slashes()
+        {
+            var unformattedFilePath1 = @"SubFolder\1\File1.cs";
+            WhenThereExists(unformattedFilePath1, UnformattedClass);
+            WhenThereExists("SubFolder/1/.csharpierignore", "File1.cs");
+
+            var (_, lines) = this.Format(directoryOrFilePaths: unformattedFilePath1);
 
             lines.FirstOrDefault(o => o.StartsWith("Total files")).Should().Be("Total files: 0 ");
         }
@@ -151,13 +196,20 @@ namespace CSharpier.Tests
         }
 
         private (int exitCode, IList<string> lines) Format(
-            string baseDirectoryPath = null,
             bool skipWrite = false,
-            bool check = false
+            bool check = false,
+            params string[] directoryOrFilePaths
         ) {
-            if (baseDirectoryPath == null)
+            if (directoryOrFilePaths.Length == 0)
             {
-                baseDirectoryPath = GetRootPath();
+                directoryOrFilePaths = new[] { GetRootPath() };
+            }
+            else
+            {
+                directoryOrFilePaths = directoryOrFilePaths.Select(
+                        o => this.fileSystem.Path.Combine(GetRootPath(), o)
+                    )
+                    .ToArray();
             }
 
             var fakeConsole = new TestConsole();
@@ -165,7 +217,7 @@ namespace CSharpier.Tests
                 CommandLineFormatter.Format(
                     new CommandLineOptions
                     {
-                        DirectoryOrFilePaths = new[] { baseDirectoryPath },
+                        DirectoryOrFilePaths = directoryOrFilePaths,
                         SkipWrite = skipWrite,
                         Check = check
                     },

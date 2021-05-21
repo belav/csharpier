@@ -112,7 +112,6 @@ namespace CSharpier.DocPrinter
                 lastSpaces = 0;
             }
 
-            // TODO 2 in prettier this has a ...ind
             return new Indent(value.ToString(), length, queue);
         }
     }
