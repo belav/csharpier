@@ -31,7 +31,7 @@ namespace CSharpier.Tests
 
             var result = this.Format();
 
-            result.lines.First().Should().Be(@"/Invalid.cs - failed to compile");
+            result.lines.First().Should().Contain(@"Invalid.cs - failed to compile");
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace CSharpier.Tests
 
             exitCode.Should().Be(1);
             this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClass);
-            lines.First().Should().Contain(@"/Unformatted.cs - was not formatted");
+            lines.First().Should().Contain(@"Unformatted.cs - was not formatted");
         }
 
         [Test]
@@ -140,13 +140,14 @@ namespace CSharpier.Tests
 
             var (exitCode, lines) = this.Format();
 
+            var path = this.fileSystem.Path.Combine(GetRootPath(), ".csharpierignore");
+
             exitCode.Should().Be(1);
             lines.Should()
                 .Contain(
-                    $"The .csharpierignore file at {GetRootPath()}/.csharpierignore could not be parsed due to the following line:"
+                    $"The .csharpierignore file at {path} could not be parsed due to the following line:"
                 );
-            // our testing code replaces the \ with /
-            lines.Should().Contain("/Src/Uploads/*.cs");
+            lines.Should().Contain(@"\Src\Uploads\*.cs");
         }
 
         private (int exitCode, IList<string> lines) Format(
@@ -178,18 +179,18 @@ namespace CSharpier.Tests
 
         private string GetRootPath()
         {
-            return OperatingSystem.IsWindows() ? "c:/test" : "/Test";
+            return OperatingSystem.IsWindows() ? @"c:\test" : "/Test";
         }
 
         private string GetFileContent(string path)
         {
-            path = Path.Combine(GetRootPath(), path);
+            path = this.fileSystem.Path.Combine(GetRootPath(), path);
             return this.fileSystem.File.ReadAllText(path);
         }
 
         private void WhenThereExists(string path, string contents)
         {
-            path = Path.Combine(GetRootPath(), path);
+            path = this.fileSystem.Path.Combine(GetRootPath(), path);
             this.fileSystem.AddFile(path, new MockFileData(contents));
         }
 
@@ -206,7 +207,7 @@ namespace CSharpier.Tests
 
                 if (line != null)
                 {
-                    this.Lines.Add(line.Replace("\\", "/"));
+                    this.Lines.Add(line);
                 }
             }
         }

@@ -19,29 +19,26 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var groupId = Guid.NewGuid().ToString();
 
             docs.Add(
-                Token.PrintLeadingTrivia(node.IfKeyword),
                 Doc.Group(
-                    Token.PrintWithoutLeadingTrivia(node.IfKeyword),
-                    " ",
-                    Token.Print(node.OpenParenToken),
-                    Doc.GroupWithId(
-                        groupId,
-                        Doc.Indent(Doc.SoftLine, Node.Print(node.Condition)),
-                        Doc.SoftLine
+                    Token.PrintLeadingTrivia(node.IfKeyword),
+                    Doc.Group(
+                        Token.PrintWithoutLeadingTrivia(node.IfKeyword),
+                        " ",
+                        Token.Print(node.OpenParenToken),
+                        Doc.GroupWithId(
+                            groupId,
+                            Doc.Indent(Doc.SoftLine, Node.Print(node.Condition)),
+                            Doc.SoftLine
+                        ),
+                        Token.Print(node.CloseParenToken),
+                        Doc.IfBreak(Doc.Null, Doc.SoftLine)
                     ),
-                    Token.Print(node.CloseParenToken),
-                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
+                    node.Statement
+                        is BlockSyntax blockSyntax
+                        ? Block.PrintWithConditionalSpace(blockSyntax, groupId)
+                        : Doc.Indent(Doc.Line, Node.Print(node.Statement))
                 )
             );
-            if (node.Statement is BlockSyntax blockSyntax)
-            {
-                docs.Add(Block.PrintWithConditionalSpace(blockSyntax, groupId));
-            }
-            else
-            {
-                // TODO 1 force braces here? make an option?
-                docs.Add(Doc.Indent(Doc.Concat(Doc.HardLine, Node.Print(node.Statement))));
-            }
 
             if (node.Else != null)
             {

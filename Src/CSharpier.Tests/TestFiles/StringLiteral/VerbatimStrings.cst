@@ -4,9 +4,19 @@
 class ClassName
 {
     private string bothLineEndingsPersist = @"\r\n \n";
+    private string interpolatedVersion = @$"\r\n \n";
 
     private string emptyLines =
         @"one
+
+two
+
+
+three
+";
+
+    private string interpolatedEmptyLines =
+        @$"one
 
 two
 
@@ -26,7 +36,18 @@ jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksd
 ";
 
     private string stayOnLine2 =
+        $@"one
+jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
+";
+
+    private string stayOnLine3 =
         @"one
+two
+three
+four";
+
+    private string stayOnLine4 =
+        @$"one
 two
 three
 four";
@@ -43,7 +64,24 @@ jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksd
         );
 
         CallSomeLongMethod(
+            $@"one
+two
+three
+four
+jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
+"
+        );
+
+        CallSomeLongMethod(
             @"one
+two
+three
+four",
+            "two"
+        );
+
+        CallSomeLongMethod(
+            $@"one
 two
 three
 four",

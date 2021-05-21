@@ -47,24 +47,20 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 ExtraNewLines.Print(node),
                 Token.PrintLeadingTrivia(node.ForKeyword),
                 Doc.Group(
-                    Token.PrintWithoutLeadingTrivia(node.ForKeyword),
-                    " ",
-                    Token.Print(node.OpenParenToken),
-                    Doc.GroupWithId(groupId, Doc.Indent(innerGroup), Doc.SoftLine),
-                    Token.Print(node.CloseParenToken),
-                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
+                    Doc.Group(
+                        Token.PrintWithoutLeadingTrivia(node.ForKeyword),
+                        " ",
+                        Token.Print(node.OpenParenToken),
+                        Doc.GroupWithId(groupId, Doc.Indent(innerGroup), Doc.SoftLine),
+                        Token.Print(node.CloseParenToken),
+                        Doc.IfBreak(Doc.Null, Doc.SoftLine)
+                    ),
+                    node.Statement
+                        is BlockSyntax blockSyntax
+                        ? Block.PrintWithConditionalSpace(blockSyntax, groupId)
+                        : Doc.Indent(Doc.Line, Node.Print(node.Statement))
                 )
             };
-
-            if (node.Statement is BlockSyntax blockSyntax)
-            {
-                docs.Add(Block.PrintWithConditionalSpace(blockSyntax, groupId));
-            }
-            else
-            {
-                // TODO 1 force braces? we do in if and else
-                docs.Add(Doc.Indent(Doc.HardLine, Node.Print(node.Statement)));
-            }
 
             return Doc.Concat(docs);
         }
