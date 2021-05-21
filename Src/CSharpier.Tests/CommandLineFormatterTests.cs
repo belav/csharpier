@@ -242,7 +242,7 @@ namespace CSharpier.Tests
 
         private void WhenThereExists(string path, string contents)
         {
-            path = this.fileSystem.Path.Combine(GetRootPath(), path);
+            path = this.fileSystem.Path.Combine(GetRootPath(), path).Replace("\\", "/");
             this.fileSystem.AddFile(path, new MockFileData(contents));
         }
 

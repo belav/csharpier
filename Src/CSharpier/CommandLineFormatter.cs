@@ -51,14 +51,15 @@ namespace CSharpier
 
             foreach (var path in commandLineOptions.DirectoryOrFilePaths)
             {
-                var baseDirectoryPath = fileSystem.File.Exists(path)
-                    ? fileSystem.Path.GetDirectoryName(path)
+                var normalizedPath = path.Replace("\\", "/");
+                var baseDirectoryPath = fileSystem.File.Exists(normalizedPath)
+                    ? fileSystem.Path.GetDirectoryName(normalizedPath)
                     : path;
 
                 if (baseDirectoryPath == null)
                 {
                     throw new Exception(
-                        $"The path of {path} does not appear to point to a directory or a file."
+                        $"The path of {normalizedPath} does not appear to point to a directory or a file."
                     );
                 }
 
@@ -89,7 +90,7 @@ namespace CSharpier
 
                 var commandLineFormatter = new CommandLineFormatter(
                     baseDirectoryPath,
-                    path,
+                    normalizedPath,
                     commandLineOptions,
                     printerOptions,
                     fileSystem,
