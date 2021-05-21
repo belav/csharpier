@@ -13,12 +13,12 @@ namespace CSharpier
         protected IgnoreFile(Ignore.Ignore ignore, string ignoreBaseDirectoryPath)
         {
             this.Ignore = ignore;
-            this.IgnoreBaseDirectoryPath = ignoreBaseDirectoryPath.Replace("\\", "/");
+            this.IgnoreBaseDirectoryPath = ignoreBaseDirectoryPath.Replace('\\', '/');
         }
 
         public bool IsIgnored(string filePath)
         {
-            var normalizedFilePath = filePath.Replace("\\", "/");
+            var normalizedFilePath = filePath.Replace('\\', '/');
             if (!normalizedFilePath.StartsWith(this.IgnoreBaseDirectoryPath))
             {
                 throw new Exception(

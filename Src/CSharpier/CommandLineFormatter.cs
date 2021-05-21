@@ -51,7 +51,7 @@ namespace CSharpier
 
             foreach (var path in commandLineOptions.DirectoryOrFilePaths)
             {
-                var normalizedPath = path.Replace("\\", "/");
+                var normalizedPath = path.Replace('\\', '/');
                 var baseDirectoryPath = fileSystem.File.Exists(normalizedPath)
                     ? fileSystem.Path.GetDirectoryName(normalizedPath)
                     : path;
