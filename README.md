@@ -55,14 +55,21 @@ public class ClassName
 ```
 
 ## Installation
+
 ```console
 dotnet tool install -g csharpier
 ```
 
-## Basic Usage
+### Basic Usage
 Run csharpier from the directory you wish to format.
 ```console
 dotnet csharpier
+```
+
+### MsBuild Package
+If you prefer to have csharpier run when a project is built, you can use the CSharpier.MSBuild nuget package
+```console
+Install-Package CShariper.MSBuild
 ```
 
 ## Documentation
@@ -70,7 +77,9 @@ dotnet csharpier
 [Configuration File](Docs/Configure.md)  
 [Editors and CI/CD](Docs/EditorsAndCICD.md)  
 [Ignoring Files](Docs/Ignore.md)  
-[ChangeLog](CHANGELOG.md)
+[ChangeLog](CHANGELOG.md)  
+[MSBuild Package](Docs/MSBuild.md)
+
 
 ## Contributing
 See [Development Readme](CONTRIBUTING.md)  
