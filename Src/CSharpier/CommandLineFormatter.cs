@@ -5,6 +5,7 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CSharpier.Utilities;
 
 namespace CSharpier
 {
@@ -235,6 +236,11 @@ namespace CSharpier
                 if (result.Code != fileReaderResult.FileContents)
                 {
                     WriteLine(GetPath(file) + " - was not formatted");
+                    StringDiffer.PrintDifference(
+                        result.Code,
+                        fileReaderResult.FileContents,
+                        this.Console
+                    );
                     Interlocked.Increment(ref this.Result.UnformattedFiles);
                 }
             }
