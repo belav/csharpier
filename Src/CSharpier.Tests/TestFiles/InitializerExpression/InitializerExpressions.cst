@@ -25,4 +25,18 @@ class ClassName
             "ifThisIsReallyLongItShouldntInsertAnExtraLineAboveItttttttttttttttt"
         }
     };
+
+    private SomeClass[,] someClass = {
+        // leading comment should not interfere with the next line breaking
+        {
+            longValue______________________________,
+            longValue______________________________,
+            longValue______________________________
+        },
+        {
+            longValue______________________________,
+            longValue______________________________,
+            longValue______________________________
+        }
+    };
 }

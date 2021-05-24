@@ -458,6 +458,45 @@ namespace CSharpier.Tests
         }
 
         [Test]
+        public void HardLineIfNoPreviousLineSkipBreakIfFirstInGroup_Should_Break_When_Does_Not_Fit()
+        {
+            var doc = Doc.Group(
+                Doc.HardLineSkipBreakIfFirstInGroup,
+                "someValue",
+                Doc.Line,
+                "someValue"
+            );
+            var result = Print(doc, 10);
+            result.Should()
+                .Be(
+                    @"
+someValue
+someValue"
+                );
+        }
+
+        [Test]
+        public void HardLineIfNoPreviousLineSkipBreakIfFirstInGroup_Should_Not_Break_With_Multiple_Comments()
+        {
+            var doc = Doc.Group(
+                Doc.LeadingComment("// shouldn't break next line", CommentType.SingleLine),
+                Doc.HardLineSkipBreakIfFirstInGroup,
+                Doc.LeadingComment("// shouldn't break next line", CommentType.SingleLine),
+                Doc.HardLineSkipBreakIfFirstInGroup,
+                "true",
+                Doc.Line,
+                "|| false"
+            );
+            var result = Print(doc);
+            result.Should()
+                .Be(
+                    @"// shouldn't break next line
+// shouldn't break next line
+true || false"
+                );
+        }
+
+        [Test]
         public void Directive_Does_Not_Affect_FirstInGroup()
         {
             var doc = Doc.Group(

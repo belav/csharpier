@@ -4,7 +4,7 @@ namespace CSharpier.DocTypes
 {
     public class HardLine : LineDoc, IBreakParent
     {
-        public bool SkipBreakIfFirstInGroup { get; init; }
+        public bool SkipBreakIfFirstInGroup { get; }
 
         public HardLine(bool squash = false, bool skipBreakIfFirstInGroup = false)
         {
