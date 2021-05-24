@@ -10,7 +10,7 @@ namespace CSharpier
 {
     public class CommandLineFormatter
     {
-        protected CommandLineFormatterResult Result;
+        protected readonly CommandLineFormatterResult Result;
 
         protected readonly string BaseDirectoryPath;
         protected readonly string Path;
@@ -95,7 +95,7 @@ namespace CSharpier
                     printerOptions,
                     fileSystem,
                     console,
-                    ignoreFile!,
+                    ignoreFile,
                     result
                 );
 
@@ -284,6 +284,7 @@ namespace CSharpier
 
     public class CommandLineFormatterResult
     {
+        // these are public fields so that Interlocked.Increment may be used on them.
         public int FailedSyntaxTreeValidation;
         public int ExceptionsFormatting;
         public int ExceptionsValidatingSource;

@@ -27,7 +27,7 @@ namespace CSharpier.Tests
         [Test]
         public void Format_Writes_Failed_To_Compile()
         {
-            WhenThereExists("Invalid.cs", "asdfasfasdf");
+            WhenAFileExists("Invalid.cs", "asdfasfasdf");
 
             var result = this.Format();
 
@@ -38,7 +38,7 @@ namespace CSharpier.Tests
         public void Format_Writes_File()
         {
             const string unformattedFilePath = "Unformatted.cs";
-            WhenThereExists(unformattedFilePath, UnformattedClass);
+            WhenAFileExists(unformattedFilePath, UnformattedClass);
 
             this.Format();
 
@@ -49,7 +49,7 @@ namespace CSharpier.Tests
         public void Format_Supports_Skip_Write()
         {
             const string unformattedFilePath = "Unformatted.cs";
-            WhenThereExists(unformattedFilePath, UnformattedClass);
+            WhenAFileExists(unformattedFilePath, UnformattedClass);
 
             this.Format(skipWrite: true);
 
@@ -60,7 +60,7 @@ namespace CSharpier.Tests
         public void Format_Checks_Unformatted_File()
         {
             const string unformattedFilePath = "Unformatted.cs";
-            WhenThereExists(unformattedFilePath, UnformattedClass);
+            WhenAFileExists(unformattedFilePath, UnformattedClass);
 
             var (exitCode, lines) = this.Format(check: true);
 
@@ -73,7 +73,7 @@ namespace CSharpier.Tests
         public void Format_Checks_Formatted_File()
         {
             const string formattedFilePath = "Formatted.cs";
-            WhenThereExists(formattedFilePath, FormattedClass);
+            WhenAFileExists(formattedFilePath, FormattedClass);
 
             var (exitCode, lines) = this.Format(check: true);
 
@@ -88,7 +88,7 @@ namespace CSharpier.Tests
         public void Format_Skips_Generated_Files(string fileName)
         {
             var unformattedFilePath = fileName;
-            WhenThereExists(unformattedFilePath, UnformattedClass);
+            WhenAFileExists(unformattedFilePath, UnformattedClass);
 
             var (_, lines) = this.Format();
 
@@ -107,8 +107,8 @@ namespace CSharpier.Tests
         public void File_In_Ignore_Skips_Formatting(string fileName, string ignoreContents)
         {
             var unformattedFilePath = fileName;
-            WhenThereExists(unformattedFilePath, UnformattedClass);
-            WhenThereExists(".csharpierignore", ignoreContents);
+            WhenAFileExists(unformattedFilePath, UnformattedClass);
+            WhenAFileExists(".csharpierignore", ignoreContents);
 
             var (_, lines) = this.Format();
 
@@ -123,8 +123,8 @@ namespace CSharpier.Tests
             string baseDirectory
         ) {
             var unformattedFilePath = fileName;
-            WhenThereExists(unformattedFilePath, UnformattedClass);
-            WhenThereExists(".csharpierignore", ignoreContents);
+            WhenAFileExists(unformattedFilePath, UnformattedClass);
+            WhenAFileExists(".csharpierignore", ignoreContents);
 
             var (_, lines) = this.Format(
                 directoryOrFilePaths: Path.Combine(GetRootPath(), baseDirectory)
@@ -138,9 +138,9 @@ namespace CSharpier.Tests
         {
             var unformattedFilePath1 = "SubFolder/1/File1.cs";
             var unformattedFilePath2 = "SubFolder/2/File2.cs";
-            WhenThereExists(unformattedFilePath1, UnformattedClass);
-            WhenThereExists(unformattedFilePath2, UnformattedClass);
-            WhenThereExists(".csharpierignore", "Subfolder/**/*.cs");
+            WhenAFileExists(unformattedFilePath1, UnformattedClass);
+            WhenAFileExists(unformattedFilePath2, UnformattedClass);
+            WhenAFileExists(".csharpierignore", "Subfolder/**/*.cs");
 
             var (_, lines) = this.Format(
                 directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
@@ -154,10 +154,10 @@ namespace CSharpier.Tests
         {
             var unformattedFilePath1 = "SubFolder/1/File1.cs";
             var unformattedFilePath2 = "SubFolder/2/File2.cs";
-            WhenThereExists(unformattedFilePath1, UnformattedClass);
-            WhenThereExists(unformattedFilePath2, UnformattedClass);
-            WhenThereExists("SubFolder/1/.csharpierignore", "File1.cs");
-            WhenThereExists("SubFolder/2/.csharpierignore", "File2.cs");
+            WhenAFileExists(unformattedFilePath1, UnformattedClass);
+            WhenAFileExists(unformattedFilePath2, UnformattedClass);
+            WhenAFileExists("SubFolder/1/.csharpierignore", "File1.cs");
+            WhenAFileExists("SubFolder/2/.csharpierignore", "File2.cs");
 
             var (_, lines) = this.Format(
                 directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
@@ -170,8 +170,8 @@ namespace CSharpier.Tests
         public void Ignore_Should_Deal_With_Inconsistent_Slashes()
         {
             var unformattedFilePath1 = @"SubFolder\1\File1.cs";
-            WhenThereExists(unformattedFilePath1, UnformattedClass);
-            WhenThereExists("SubFolder/1/.csharpierignore", "File1.cs");
+            WhenAFileExists(unformattedFilePath1, UnformattedClass);
+            WhenAFileExists("SubFolder/1/.csharpierignore", "File1.cs");
 
             var (_, lines) = this.Format(directoryOrFilePaths: unformattedFilePath1);
 
@@ -181,7 +181,7 @@ namespace CSharpier.Tests
         [Test]
         public void Ignore_Reports_Errors()
         {
-            WhenThereExists(".csharpierignore", @"\Src\Uploads\*.cs");
+            WhenAFileExists(".csharpierignore", @"\Src\Uploads\*.cs");
 
             var (exitCode, lines) = this.Format();
 
@@ -240,7 +240,7 @@ namespace CSharpier.Tests
             return this.fileSystem.File.ReadAllText(path);
         }
 
-        private void WhenThereExists(string path, string contents)
+        private void WhenAFileExists(string path, string contents)
         {
             path = this.fileSystem.Path.Combine(GetRootPath(), path).Replace('\\', '/');
             this.fileSystem.AddFile(path, new MockFileData(contents));

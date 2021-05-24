@@ -17,6 +17,8 @@ namespace CSharpier
         public bool UseTabs { get; init; }
         public EndOfLine EndOfLine { get; init; }
 
+        private static string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
+
         public static ConfigurationFileOptions Create(
             string baseDirectoryPath,
             IFileSystem fileSystem
@@ -30,11 +32,7 @@ namespace CSharpier
                         SearchOption.TopDirectoryOnly
                     )
                     .Where(
-                        o =>
-                            new[] { ".csharpierrc", ".json", ".yml", ".yaml" }.Contains(
-                                o.Extension,
-                                StringComparer.OrdinalIgnoreCase
-                            )
+                        o => validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase)
                     )
                     .OrderBy(o => o.Extension)
                     .FirstOrDefault();
