@@ -37,8 +37,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (finalTrivia != Doc.Null)
             {
                 // even though we include the initialNewLines above, a literalLine from directives trims the hardline, so add an extra one here
-                docs.Add(Doc.HardLine, finalTrivia);
+                docs.Add(Doc.HardLineIfNoPreviousLine, finalTrivia);
             }
+            docs.Add(Doc.HardLineIfNoPreviousLine);
 
             return Doc.Concat(docs);
         }
