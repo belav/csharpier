@@ -2,6 +2,9 @@ name: Format Repositories
 on:
   push:
     branches: [ master ]
+    paths:
+      - "Src/CSharpier/**/*"
+    
 jobs:
   format_repositories:
     runs-on: ubuntu-latest

@@ -9,11 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj -c release
-#  check_formatting:
-#    runs-on: ubuntu-latest
-#    name: Check Formatting
-#    steps:
-#      - uses: actions/checkout@v2
-#      - run: |
-#          dotnet tool restore
-#          dotnet csharpier --check
+  check_formatting:
+    runs-on: ubuntu-latest
+    name: Check Formatting
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          dotnet tool restore
+          dotnet csharpier --check
