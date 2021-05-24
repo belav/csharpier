@@ -12,11 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 ProjectSection(SolutionItems) = preProject
 	.gitignore = .gitignore
 	LICENSE = LICENSE
-	README.md = README.md
-	CONTRIBUTING.md = CONTRIBUTING.md
-	CHANGELOG.md = CHANGELOG.md
 	.csharpierignore = .csharpierignore
 	.config\dotnet-tools.json = .config\dotnet-tools.json
+	CSharpier.Build.props = CSharpier.Build.props
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{176BB0EA-B72B-4ACA-82AE-C16A732BE023}"
@@ -42,6 +40,9 @@ ProjectSection(SolutionItems) = preProject
 	Docs/CLI.md = Docs/CLI.md
 	Docs/Ignore.md = Docs/Ignore.md
 	Docs\MSBuild.md = Docs\MSBuild.md
+    README.md = README.md
+    CONTRIBUTING.md = CONTRIBUTING.md
+    CHANGELOG.md = CHANGELOG.md
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Benchmarks", "Src\CSharpier.Benchmarks\CSharpier.Benchmarks.csproj", "{A338903F-69AD-4950-B827-8EE75F98B620}"

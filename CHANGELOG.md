@@ -1,3 +1,12 @@
+# 0.9.4
+
+[diff](https://github.com/belav/csharpier/compare/0.9.3...0.9.4)
+
+- Interpolated verbatim string is not handling line endings [#221](https://github.com/belav/csharpier/issues/221)
+- CLI Support for multiple targets [#220](https://github.com/belav/csharpier/issues/220)
+- Add support for nuget package that inject msbuild step to run csharpier [#218](https://github.com/belav/csharpier/issues/218)
+- Loops without braces [#202](https://github.com/belav/csharpier/issues/202)
+
 # 0.9.3
 
 [diff](https://github.com/belav/csharpier/compare/0.9.2...0.9.3)
