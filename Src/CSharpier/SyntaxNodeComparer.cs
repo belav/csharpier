@@ -107,15 +107,15 @@ namespace CSharpier
             return result;
         }
 
-        private readonly Stack<SyntaxNode> originalStack = new();
-        private readonly Stack<SyntaxNode> formattedStack = new();
+        private readonly Stack<(SyntaxNode? node, SyntaxNode? parent)> originalStack = new();
+        private readonly Stack<(SyntaxNode? node, SyntaxNode? parent)> formattedStack = new();
 
         private CompareResult AreEqualIgnoringWhitespace(
             SyntaxNode originalStart,
             SyntaxNode formattedStart
         ) {
-            originalStack.Push(originalStart);
-            formattedStack.Push(formattedStart);
+            originalStack.Push((originalStart, originalStart));
+            formattedStack.Push((formattedStart, formattedStart));
             while (originalStack.Count > 0)
             {
                 var result = this.Compare(originalStack.Pop(), formattedStack.Pop());
@@ -154,8 +154,8 @@ namespace CSharpier
                     && formattedList[x]
                         is SyntaxNode formattedNode
                 ) {
-                    originalStack.Push(originalNode);
-                    formattedStack.Push(formattedNode);
+                    originalStack.Push((originalNode, originalNode.Parent));
+                    formattedStack.Push((formattedNode, formattedNode.Parent));
                 }
                 else
                 {
@@ -170,7 +170,7 @@ namespace CSharpier
             return Equal;
         }
 
-        private CompareResult NotEqual(SyntaxNode originalNode, SyntaxNode formattedNode)
+        private CompareResult NotEqual(SyntaxNode? originalNode, SyntaxNode? formattedNode)
         {
             return new()
             {

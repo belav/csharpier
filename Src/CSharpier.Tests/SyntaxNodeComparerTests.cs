@@ -41,7 +41,6 @@ namespace Namespace { }
         }
 
         [Test]
-        [Ignore("#160")]
         public void Constructor_Missing_Base()
         {
             var left =
@@ -65,7 +64,27 @@ namespace Namespace { }
 
             var result = this.AreEqual(left, right);
 
-            result.Should().BeEmpty();
+            result.Should()
+                .Be(
+                    @"----------------------------- Original: Around Line 2 -----------------------------
+public class ConstructorWithBase
+{
+    public ConstructorWithBase(string value)
+        : base(value)
+    {
+        return;
+    }
+}
+----------------------------- Formatted: Around Line 2 -----------------------------
+public class ConstructorWithBase
+{
+    public ConstructorWithBase(string value)
+    {
+        return;
+    }
+}
+"
+                );
         }
 
         [Test]
