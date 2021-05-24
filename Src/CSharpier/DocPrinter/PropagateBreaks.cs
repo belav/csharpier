@@ -34,7 +34,7 @@ namespace CSharpier.DocPrinter
                 if (
                     doc is IBreakParent && (forceFlat == 0 || (forceFlat > 0 && doc is LiteralLine))
                 ) {
-                    if (doc is HardLine { SkipBreakIfFirstInGroup: true }  && canSkipBreak)
+                    if (doc is HardLine { SkipBreakIfFirstInGroup: true } && canSkipBreak)
                     {
                         if (groupStack.Count > 1)
                         {
@@ -59,7 +59,7 @@ namespace CSharpier.DocPrinter
 
                     alreadyVisitedSet.Add(group);
                 }
-                else if (doc is StringDoc { IsDirective: false } )
+                else if (doc is StringDoc { IsDirective: false })
                 {
                     canSkipBreak = false;
                 }

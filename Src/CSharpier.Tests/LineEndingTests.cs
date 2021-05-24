@@ -60,7 +60,8 @@ four"";
             string newLine,
             EndOfLine endOfLine
         ) {
-            var code = @$"class ClassName
+            var code =
+                @$"class ClassName
 {{
     string value = @""one{newLine}two"";
 }}

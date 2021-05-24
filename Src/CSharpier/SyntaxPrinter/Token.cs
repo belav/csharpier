@@ -62,7 +62,7 @@ namespace CSharpier.SyntaxPrinter
                 && syntaxToken.Text.StartsWith("@"))
                 || (syntaxToken.Kind() == SyntaxKind.InterpolatedStringTextToken
                 && syntaxToken.Parent!.Parent
-                    is InterpolatedStringExpressionSyntax { StringStartToken:  { RawKind: (int)SyntaxKind.InterpolatedVerbatimStringStartToken }  } )
+                    is InterpolatedStringExpressionSyntax { StringStartToken: { RawKind: (int)SyntaxKind.InterpolatedVerbatimStringStartToken } })
             ) {
                 var lines = syntaxToken.Text.Replace("\r", string.Empty).Split(new[] { '\n' });
                 docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
