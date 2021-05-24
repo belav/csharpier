@@ -1,0 +1,10 @@
+<Project>
+    <PropertyGroup>
+        <!-- Setting default value here, so it can be overwritten by caller -->
+        <CSharpier_Check>false</CSharpier_Check>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <CSharpier_Check>true</CSharpier_Check>
+    </PropertyGroup>
+</Project>
