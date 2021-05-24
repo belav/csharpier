@@ -31,7 +31,8 @@ namespace Namespace { }
         public void Class_Not_Equal_Class_Different_Whitespace()
         {
             var left = "class ClassName { }";
-            var right = @"class ClassName {
+            var right =
+                @"class ClassName {
 }";
 
             var result = this.AreEqual(left, right);
@@ -79,7 +80,8 @@ namespace Namespace { }
     }
 }
 ";
-            var right = @"class Resources
+            var right =
+                @"class Resources
 {
     public Resources() { }
 }
@@ -156,12 +158,14 @@ class Resources
         [Test]
         public void MissingSemiColon()
         {
-            var left = @"public enum Enum
+            var left =
+                @"public enum Enum
 {
     Integer,
     String,
 };";
-            var right = @"public enum Enum
+            var right =
+                @"public enum Enum
 {
     Integer,
     String,

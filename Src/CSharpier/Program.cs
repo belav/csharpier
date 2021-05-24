@@ -33,7 +33,7 @@ namespace CSharpier
             bool skipWrite,
             CancellationToken cancellationToken
         ) {
-            if (directoryOrFile is null or  { Length: 0 } )
+            if (directoryOrFile is null or { Length: 0 })
             {
                 directoryOrFile = new[] { Directory.GetCurrentDirectory() };
             }
