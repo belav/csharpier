@@ -215,6 +215,7 @@ namespace CSharpier.DocPrinter
                         break;
                     case Trim:
                         currentWidth -= TrimOutput(output);
+                        newLineNextStringValue = false;
                         break;
                     case Group group:
                         switch (command.Mode)
