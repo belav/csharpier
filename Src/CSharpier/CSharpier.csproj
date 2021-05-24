@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="../../CSharpier.Targets"/>
+	<Import Project="../../CSharpier.Build.props"/>
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <PackageId>CSharpier</PackageId>

@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="../../CSharpier.Targets"/>
+    <Import Project="../../CSharpier.Build.props"/>
     <PropertyGroup>
         <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
         <PackageId>CSharpier.MsBuild</PackageId>
