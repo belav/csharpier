@@ -41,11 +41,21 @@ namespace CSharpier
 {
     public partial class SyntaxNodeComparer
     {
-        private CompareResult Compare(SyntaxNode originalNode, SyntaxNode formattedNode)
+        private CompareResult Compare(
+            (SyntaxNode originalNode, SyntaxNode originalParent) original,
+            (SyntaxNode formattedNode, SyntaxNode formattedParent) formatted
+        )
         {
+            var (originalNode, originalParent) = original;
+            var (formattedNode, formattedParent) = formatted;
             if (originalNode == null && formattedNode == null)
             {
                 return Equal;
+            }
+
+            if (originalNode == null || formattedNode == null)
+            {
+                return NotEqual(originalParent, formattedParent);
             }
 
             var type = originalNode?.GetType();
@@ -149,9 +159,11 @@ namespace CSharpier
                 }
                 else if (typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType))
                 {
-                    file.WriteLine($"            originalStack.Push(originalNode.{propertyName});");
                     file.WriteLine(
-                        $"            formattedStack.Push(formattedNode.{propertyName});"
+                        $"            originalStack.Push((originalNode.{propertyName}, originalNode));"
+                    );
+                    file.WriteLine(
+                        $"            formattedStack.Push((formattedNode.{propertyName}, formattedNode));"
                     );
                 }
                 else if (
