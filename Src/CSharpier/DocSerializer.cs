@@ -55,7 +55,7 @@ namespace CSharpier
                         }
                     }
 
-                    result += ")";
+                    result += newLine + indent + ")";
                     return result;
                 case LineDoc lineDoc:
                     return indent
@@ -67,10 +67,10 @@ namespace CSharpier
                 case ForceFlat forceFlat:
                     return $"{indent}Doc.ForceFlat({newLine}{PrintIndentedDocTree(forceFlat.Contents)})";
                 case IndentDoc indentDoc:
-                    return $"{indent}Doc.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents)})";
+                    return $"{indent}Doc.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents)}{newLine}{indent})";
                 case Group group:
                     return @$"{indent}Doc.Group{(group.GroupId != null ? "WithId" : string.Empty)}(
-{(group.GroupId != null ? $"{nextIndent}\"{group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents)})";
+{(group.GroupId != null ? $"{nextIndent}\"{group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents)}{newLine}{indent})";
                 case LeadingComment leadingComment:
                     return $"{indent}Doc.LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
                 case TrailingComment trailingComment:

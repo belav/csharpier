@@ -117,8 +117,15 @@ namespace CSharpier.DocPrinter
                             {
                                 case PrintMode.MODE_FLAT:
                                 case PrintMode.MODE_FORCEFLAT:
-                                    if (line.Type == LineDoc.LineType.Hard)
+                                    if (currentDoc is HardLine { SkipBreakIfFirstInGroup: true })
                                     {
+                                        returnFalseIfMoreStringsFound = false;
+                                    }
+                                    if (
+                                        line.Type == LineDoc.LineType.Hard
+                                        && currentDoc
+                                            is not HardLine { SkipBreakIfFirstInGroup: true }
+                                    ) {
                                         return true;
                                     }
                                     if (line.Type != LineDoc.LineType.Soft)
@@ -404,7 +411,7 @@ namespace CSharpier.DocPrinter
             }
 
             var trimmed = 0;
-            for (; trimmed <= stringBuilder.Length; trimmed++)
+            for (; trimmed < stringBuilder.Length; trimmed++)
             {
                 if (stringBuilder[^(trimmed + 1)] != ' ' && stringBuilder[^(trimmed + 1)] != '\t')
                 {
