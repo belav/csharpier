@@ -18,7 +18,7 @@ namespace CSharpier.Tests
         [Test]
         public void Should_Return_Default_Options_With_Empty_Json()
         {
-            WhenThereExists("c:/test/.csharpierrc", "{}");
+            WhenAFileExists("c:/test/.csharpierrc", "{}");
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -36,7 +36,7 @@ namespace CSharpier.Tests
         [Test]
         public void Should_Return_Json_Extension_Options()
         {
-            WhenThereExists("c:/test/.csharpierrc.json", "{ \"printWidth\": 10 }");
+            WhenAFileExists("c:/test/.csharpierrc.json", "{ \"printWidth\": 10 }");
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -47,7 +47,7 @@ namespace CSharpier.Tests
         [TestCase("yml")]
         public void Should_Return_Yaml_Extension_Options(string extension)
         {
-            WhenThereExists($"c:/test/.csharpierrc.{extension}", "printWidth: 10");
+            WhenAFileExists($"c:/test/.csharpierrc.{extension}", "printWidth: 10");
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -58,7 +58,7 @@ namespace CSharpier.Tests
         [TestCase("printWidth: 10")]
         public void Should_Read_ExtensionLess_File(string contents)
         {
-            WhenThereExists($"c:/test/.csharpierrc", contents);
+            WhenAFileExists($"c:/test/.csharpierrc", contents);
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -72,7 +72,7 @@ namespace CSharpier.Tests
         [TestCase(".json", "{ \"printWidth\": 10 }")]
         public void Should_Find_Configuration_In_Parent_Directory(string extension, string contents)
         {
-            WhenThereExists($"c:/test/.csharpierrc{extension}", contents);
+            WhenAFileExists($"c:/test/.csharpierrc{extension}", contents);
 
             var result = CreateConfigurationOptions("c:/test/subfolder");
 
@@ -82,10 +82,10 @@ namespace CSharpier.Tests
         [Test]
         public void Should_Prefer_No_Extension()
         {
-            WhenThereExists("c:/test/.csharpierrc", "{ \"printWidth\": 1 }");
+            WhenAFileExists("c:/test/.csharpierrc", "{ \"printWidth\": 1 }");
 
-            WhenThereExists("c:/test/.csharpierrc.json", "{ \"printWidth\": 2 }");
-            WhenThereExists("c:/test/.csharpierrc.yaml", "printWidth: 3");
+            WhenAFileExists("c:/test/.csharpierrc.json", "{ \"printWidth\": 2 }");
+            WhenAFileExists("c:/test/.csharpierrc.yaml", "printWidth: 3");
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -95,7 +95,7 @@ namespace CSharpier.Tests
         [Test]
         public void Should_Return_PrintWidth_With_Json()
         {
-            WhenThereExists("c:/test/.csharpierrc", "{ \"printWidth\": 10 }");
+            WhenAFileExists("c:/test/.csharpierrc", "{ \"printWidth\": 10 }");
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -105,7 +105,7 @@ namespace CSharpier.Tests
         [Test]
         public void Should_Return_TabWidth_With_Json()
         {
-            WhenThereExists("c:/test/.csharpierrc", "{ \"tabWidth\": 10 }");
+            WhenAFileExists("c:/test/.csharpierrc", "{ \"tabWidth\": 10 }");
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -115,7 +115,7 @@ namespace CSharpier.Tests
         [Test]
         public void Should_Return_UseTabs_With_Json()
         {
-            WhenThereExists("c:/test/.csharpierrc", "{ \"useTabs\": true }");
+            WhenAFileExists("c:/test/.csharpierrc", "{ \"useTabs\": true }");
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -125,7 +125,7 @@ namespace CSharpier.Tests
         [Test]
         public void Should_Return_EndOfLine_With_Json()
         {
-            WhenThereExists("c:/test/.csharpierrc", "{ \"endOfLine\": \"crlf\" }");
+            WhenAFileExists("c:/test/.csharpierrc", "{ \"endOfLine\": \"crlf\" }");
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -135,7 +135,7 @@ namespace CSharpier.Tests
         [Test]
         public void Should_Return_PrintWidth_With_Yaml()
         {
-            WhenThereExists("c:/test/.csharpierrc", "printWidth: 10");
+            WhenAFileExists("c:/test/.csharpierrc", "printWidth: 10");
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -145,7 +145,7 @@ namespace CSharpier.Tests
         [Test]
         public void Should_Return_TabWidth_With_Yaml()
         {
-            WhenThereExists("c:/test/.csharpierrc", "tabWidth: 10");
+            WhenAFileExists("c:/test/.csharpierrc", "tabWidth: 10");
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -155,7 +155,7 @@ namespace CSharpier.Tests
         [Test]
         public void Should_Return_UseTabs_With_Yaml()
         {
-            WhenThereExists("c:/test/.csharpierrc", "useTabs: true");
+            WhenAFileExists("c:/test/.csharpierrc", "useTabs: true");
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -165,7 +165,7 @@ namespace CSharpier.Tests
         [Test]
         public void Should_Return_EndOfLine_With_Yaml()
         {
-            WhenThereExists("c:/test/.csharpierrc", "endOfLine: crlf");
+            WhenAFileExists("c:/test/.csharpierrc", "endOfLine: crlf");
 
             var result = CreateConfigurationOptions("c:/test");
 
@@ -182,10 +182,11 @@ namespace CSharpier.Tests
 
         private ConfigurationFileOptions CreateConfigurationOptions(string baseDirectoryPath)
         {
+            this.fileSystem.AddDirectory(baseDirectoryPath);
             return ConfigurationFileOptions.Create(baseDirectoryPath, fileSystem);
         }
 
-        private void WhenThereExists(string path, string contents)
+        private void WhenAFileExists(string path, string contents)
         {
             this.fileSystem.AddFile(path, new MockFileData(contents));
         }

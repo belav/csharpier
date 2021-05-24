@@ -5,7 +5,7 @@ Usage:
   dotnet-csharpier [options] [<directoryOrFile>]
 
 Arguments:
-  <directoryOrFile>    A path to a directory containing files to format or a file to format. If a path is not specified the current directory is used
+  <directoryOrFile>    One or more paths to a directory containing files to format or a file to format. If a path is not specified the current directory is used
 
 Options:
   --check           Check that files are formatted. Will not write any changes.
@@ -17,9 +17,11 @@ Options:
 
 ```
 
-### \<directoryOrFile\>
-Currently CSharpier only supports being passed a directory to recursively scan for .cs files or a single file to format.
-If a directory is not supplied, it will use the current directory.
+### \[<directoryOrFile\>]
+If this is not supplied, then CSharpier will recursively format all files it finds starting from the current directory.  
+If a list of paths is supplied
+- if the path points to an existing file, CSharpier will format that file
+- if the path points to an existing directory, CSharpier will recursively format the contents of that directory
 
 ### --check
 Used to check if your files are already formatted. Outputs any files that have not already been formatted.

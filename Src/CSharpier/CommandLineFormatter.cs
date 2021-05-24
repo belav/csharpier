@@ -10,16 +10,10 @@ namespace CSharpier
 {
     public class CommandLineFormatter
     {
-        protected int FailedSyntaxTreeValidation;
-        protected int ExceptionsFormatting;
-        protected int ExceptionsValidatingSource;
-        protected int Files;
-        protected int UnformattedFiles;
-
-        protected readonly Stopwatch Stopwatch;
+        protected readonly CommandLineFormatterResult Result;
 
         protected readonly string BaseDirectoryPath;
-
+        protected readonly string Path;
         protected readonly CommandLineOptions CommandLineOptions;
         protected readonly PrinterOptions PrinterOptions;
         protected readonly IFileSystem FileSystem;
@@ -28,19 +22,22 @@ namespace CSharpier
 
         protected CommandLineFormatter(
             string baseDirectoryPath,
+            string path,
             CommandLineOptions commandLineOptions,
             PrinterOptions printerOptions,
             IFileSystem fileSystem,
             IConsole console,
-            IgnoreFile ignoreFile
+            IgnoreFile ignoreFile,
+            CommandLineFormatterResult result
         ) {
             this.BaseDirectoryPath = baseDirectoryPath;
+            this.Path = path;
             this.PrinterOptions = printerOptions;
             this.CommandLineOptions = commandLineOptions;
-            this.Stopwatch = Stopwatch.StartNew();
             this.FileSystem = fileSystem;
             this.Console = console;
             this.IgnoreFile = ignoreFile;
+            this.Result = result;
         }
 
         public static async Task<int> Format(
@@ -49,62 +46,77 @@ namespace CSharpier
             IConsole console,
             CancellationToken cancellationToken
         ) {
-            var baseDirectoryPath = fileSystem.File.Exists(commandLineOptions.DirectoryOrFile)
-                ? fileSystem.Path.GetDirectoryName(commandLineOptions.DirectoryOrFile)
-                : commandLineOptions.DirectoryOrFile;
+            var stopwatch = Stopwatch.StartNew();
+            var result = new CommandLineFormatterResult();
 
-            if (baseDirectoryPath == null)
+            foreach (var path in commandLineOptions.DirectoryOrFilePaths)
             {
-                throw new Exception(
-                    $"The path of {commandLineOptions.DirectoryOrFile} does not appear to point to a directory or a file."
+                var normalizedPath = path.Replace('\\', '/');
+                var baseDirectoryPath = fileSystem.File.Exists(normalizedPath)
+                    ? fileSystem.Path.GetDirectoryName(normalizedPath)
+                    : path;
+
+                if (baseDirectoryPath == null)
+                {
+                    throw new Exception(
+                        $"The path of {normalizedPath} does not appear to point to a directory or a file."
+                    );
+                }
+
+                var configurationFileOptions = ConfigurationFileOptions.Create(
+                    baseDirectoryPath,
+                    fileSystem
                 );
+
+                var ignoreFile =
+                    await IgnoreFile.Create(
+                        baseDirectoryPath,
+                        fileSystem,
+                        console,
+                        cancellationToken
+                    );
+                if (ignoreFile is null)
+                {
+                    return 1;
+                }
+
+                var printerOptions = new PrinterOptions
+                {
+                    TabWidth = configurationFileOptions.TabWidth,
+                    UseTabs = configurationFileOptions.UseTabs,
+                    Width = configurationFileOptions.PrintWidth,
+                    EndOfLine = configurationFileOptions.EndOfLine
+                };
+
+                var commandLineFormatter = new CommandLineFormatter(
+                    baseDirectoryPath,
+                    normalizedPath,
+                    commandLineOptions,
+                    printerOptions,
+                    fileSystem,
+                    console,
+                    ignoreFile,
+                    result
+                );
+
+                await commandLineFormatter.FormatFiles(cancellationToken);
             }
 
-            var configurationFileOptions = ConfigurationFileOptions.Create(
-                baseDirectoryPath,
-                fileSystem
-            );
-
-            var (ignoreFile, exitCode) = await CSharpier.IgnoreFile.Create(
-                baseDirectoryPath,
-                fileSystem,
-                console,
-                cancellationToken
-            );
-            if (exitCode != 0)
-            {
-                return exitCode;
-            }
-
-            var printerOptions = new PrinterOptions
-            {
-                TabWidth = configurationFileOptions.TabWidth,
-                UseTabs = configurationFileOptions.UseTabs,
-                Width = configurationFileOptions.PrintWidth,
-                EndOfLine = configurationFileOptions.EndOfLine
-            };
-
-            var commandLineFormatter = new CommandLineFormatter(
-                baseDirectoryPath,
-                commandLineOptions,
-                printerOptions,
-                fileSystem,
-                console,
-                ignoreFile!
-            );
-            return await commandLineFormatter.FormatFiles(cancellationToken);
+            result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+            ResultPrinter.PrintResults(result, console, commandLineOptions);
+            return ReturnExitCode(commandLineOptions, result);
         }
 
-        public async Task<int> FormatFiles(CancellationToken cancellationToken)
+        public async Task FormatFiles(CancellationToken cancellationToken)
         {
-            if (this.FileSystem.File.Exists(this.CommandLineOptions.DirectoryOrFile))
+            if (this.FileSystem.File.Exists(this.Path))
             {
-                await FormatFile(this.CommandLineOptions.DirectoryOrFile, cancellationToken);
+                await FormatFile(this.Path, cancellationToken);
             }
             else
             {
                 var tasks = this.FileSystem.Directory.EnumerateFiles(
-                        this.BaseDirectoryPath,
+                        this.Path,
                         "*.cs",
                         SearchOption.AllDirectories
                     )
@@ -122,10 +134,6 @@ namespace CSharpier
                     }
                 }
             }
-
-            PrintResults();
-
-            return ReturnExitCode();
         }
 
         private async Task FormatFile(string file, CancellationToken cancellationToken)
@@ -168,25 +176,25 @@ namespace CSharpier
             }
             catch (Exception ex)
             {
-                Interlocked.Increment(ref this.Files);
+                Interlocked.Increment(ref this.Result.Files);
                 WriteLine(GetPath(file) + " - threw exception while formatting");
                 WriteLine(ex.Message);
                 WriteLine(ex.StackTrace);
                 WriteLine();
-                Interlocked.Increment(ref this.ExceptionsFormatting);
+                Interlocked.Increment(ref this.Result.ExceptionsFormatting);
                 return;
             }
 
             if (result.Errors.Any())
             {
-                Interlocked.Increment(ref this.Files);
+                Interlocked.Increment(ref this.Result.Files);
                 WriteLine(GetPath(file) + " - failed to compile");
                 return;
             }
 
             if (!result.FailureMessage.IsBlank())
             {
-                Interlocked.Increment(ref this.Files);
+                Interlocked.Increment(ref this.Result.Files);
                 WriteLine(GetPath(file) + " - " + result.FailureMessage);
                 return;
             }
@@ -204,14 +212,14 @@ namespace CSharpier
                     var failure = await syntaxNodeComparer.CompareSourceAsync(cancellationToken);
                     if (!string.IsNullOrEmpty(failure))
                     {
-                        Interlocked.Increment(ref this.FailedSyntaxTreeValidation);
+                        Interlocked.Increment(ref this.Result.FailedSyntaxTreeValidation);
                         WriteLine(GetPath(file) + " - failed syntax tree validation");
                         WriteLine(failure);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Interlocked.Increment(ref this.ExceptionsValidatingSource);
+                    Interlocked.Increment(ref this.Result.ExceptionsValidatingSource);
                     WriteLine(
                         GetPath(file)
                         + " - failed with exception during syntax tree validation"
@@ -227,12 +235,12 @@ namespace CSharpier
                 if (result.Code != fileReaderResult.FileContents)
                 {
                     WriteLine(GetPath(file) + " - was not formatted");
-                    Interlocked.Increment(ref this.UnformattedFiles);
+                    Interlocked.Increment(ref this.Result.UnformattedFiles);
                 }
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            Interlocked.Increment(ref this.Files);
+            Interlocked.Increment(ref this.Result.Files);
 
             if (!this.CommandLineOptions.Check && !this.CommandLineOptions.SkipWrite)
             {
@@ -243,50 +251,23 @@ namespace CSharpier
 
         private string GetPath(string file)
         {
-            return PadToSize(file.Substring(this.BaseDirectoryPath.Length));
+            return ResultPrinter.PadToSize(file.Substring(this.BaseDirectoryPath.Length));
         }
 
-        private void PrintResults()
-        {
-            WriteLine(
-                PadToSize("total time: ", 80) + ReversePad(Stopwatch.ElapsedMilliseconds + "ms")
-            );
-            PrintResultLine("Total files", Files);
-
-            if (!this.CommandLineOptions.Fast)
-            {
-                PrintResultLine("Failed syntax tree validation", FailedSyntaxTreeValidation);
-
-                PrintResultLine("Threw exceptions while formatting", ExceptionsFormatting);
-                PrintResultLine(
-                    "files that threw exceptions while validating syntax tree",
-                    ExceptionsValidatingSource
-                );
-            }
-
-            if (this.CommandLineOptions.Check)
-            {
-                PrintResultLine("files that were not formatted", UnformattedFiles);
-            }
-        }
-
-        private int ReturnExitCode()
-        {
+        private static int ReturnExitCode(
+            CommandLineOptions commandLineOptions,
+            CommandLineFormatterResult result
+        ) {
             if (
-                (this.CommandLineOptions.Check && UnformattedFiles > 0)
-                || FailedSyntaxTreeValidation > 0
-                || ExceptionsFormatting > 0
-                || ExceptionsValidatingSource > 0
+                (commandLineOptions.Check && result.UnformattedFiles > 0)
+                || result.FailedSyntaxTreeValidation > 0
+                || result.ExceptionsFormatting > 0
+                || result.ExceptionsValidatingSource > 0
             ) {
                 return 1;
             }
 
             return 0;
-        }
-
-        private void PrintResultLine(string message, int count)
-        {
-            this.WriteLine(PadToSize(message + ": ", 80) + ReversePad(count + "  "));
         }
 
         private bool ShouldIgnoreFile(string filePath)
@@ -299,25 +280,16 @@ namespace CSharpier
         {
             this.Console.WriteLine(line);
         }
+    }
 
-        private static string PadToSize(string value, int size = 120)
-        {
-            while (value.Length < size)
-            {
-                value += " ";
-            }
-
-            return value;
-        }
-
-        private static string ReversePad(string value)
-        {
-            while (value.Length < 10)
-            {
-                value = " " + value;
-            }
-
-            return value;
-        }
+    public class CommandLineFormatterResult
+    {
+        // these are public fields so that Interlocked.Increment may be used on them.
+        public int FailedSyntaxTreeValidation;
+        public int ExceptionsFormatting;
+        public int ExceptionsValidatingSource;
+        public int Files;
+        public int UnformattedFiles;
+        public long ElapsedMilliseconds;
     }
 }

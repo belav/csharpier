@@ -10,11 +10,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
     public static class BaseMethodDeclaration
     {
-        // TODO partial - The three BaseX files in here can probably go in SyntaxNodePrinters. They are all abstract types
-        // so I believe if we are generating the code correctly they will work fine.
-        // The only weird one is this one, because it also needs to accept a LocalFunctionStatementSyntax
-        // I think we can just add a LocalFunctionStatement.Print class/method that pass the node into BaseMethodDeclaration.Print
-        // and this will continue to accept CSharpSyntaxNode
         public static Doc Print(CSharpSyntaxNode node)
         {
             SyntaxList<AttributeListSyntax>? attributeLists = null;

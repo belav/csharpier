@@ -7,18 +7,19 @@ namespace CSharpier
 {
     public class IgnoreFile
     {
-        protected global::Ignore.Ignore Ignore { get; }
+        protected Ignore.Ignore Ignore { get; }
         protected string IgnoreBaseDirectoryPath { get; }
 
-        protected IgnoreFile(global::Ignore.Ignore ignore, string ignoreBaseDirectoryPath)
+        protected IgnoreFile(Ignore.Ignore ignore, string ignoreBaseDirectoryPath)
         {
             this.Ignore = ignore;
-            this.IgnoreBaseDirectoryPath = ignoreBaseDirectoryPath;
+            this.IgnoreBaseDirectoryPath = ignoreBaseDirectoryPath.Replace('\\', '/');
         }
 
         public bool IsIgnored(string filePath)
         {
-            if (!filePath.StartsWith(this.IgnoreBaseDirectoryPath))
+            var normalizedFilePath = filePath.Replace('\\', '/');
+            if (!normalizedFilePath.StartsWith(this.IgnoreBaseDirectoryPath))
             {
                 throw new Exception(
                     "The filePath of "
@@ -28,35 +29,24 @@ namespace CSharpier
                 );
             }
 
-            var normalizedFilePath = filePath.Replace("\\", "/")
-                .Substring(this.IgnoreBaseDirectoryPath.Length + 1);
+            normalizedFilePath = normalizedFilePath.Substring(
+                this.IgnoreBaseDirectoryPath.Length + 1
+            );
 
             return this.Ignore.IsIgnored(normalizedFilePath);
         }
 
-        public static async Task<(IgnoreFile?, int)> Create(
+        public static async Task<IgnoreFile?> Create(
             string baseDirectoryPath,
             IFileSystem fileSystem,
             IConsole console,
             CancellationToken cancellationToken
         ) {
-            var ignore = new global::Ignore.Ignore();
-            var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
-            var ignoreFilePath = fileSystem.Path.Combine(
-                directoryInfo.FullName,
-                ".csharpierignore"
-            );
-            while (!fileSystem.File.Exists(ignoreFilePath))
+            var ignore = new Ignore.Ignore();
+            var ignoreFilePath = FindIgnorePath(baseDirectoryPath, fileSystem);
+            if (ignoreFilePath == null)
             {
-                directoryInfo = directoryInfo.Parent;
-                if (directoryInfo == null)
-                {
-                    return (new IgnoreFile(ignore, baseDirectoryPath), 0);
-                }
-                ignoreFilePath = fileSystem.Path.Combine(
-                    directoryInfo.FullName,
-                    ".csharpierignore"
-                );
+                return new IgnoreFile(ignore, baseDirectoryPath);
             }
 
             foreach (
@@ -78,11 +68,31 @@ namespace CSharpier
                     );
                     console.WriteLine(line);
                     console.WriteLine("Exception: " + ex.Message);
-                    return (null, 1);
+                    return null;
                 }
             }
 
-            return (new IgnoreFile(ignore, directoryInfo.FullName), 0);
+            return new IgnoreFile(ignore, fileSystem.Path.GetDirectoryName(ignoreFilePath));
+        }
+
+        private static string? FindIgnorePath(string baseDirectoryPath, IFileSystem fileSystem)
+        {
+            var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
+            while (directoryInfo != null)
+            {
+                var ignoreFilePath = fileSystem.Path.Combine(
+                    directoryInfo.FullName,
+                    ".csharpierignore"
+                );
+                if (fileSystem.File.Exists(ignoreFilePath))
+                {
+                    return ignoreFilePath;
+                }
+
+                directoryInfo = directoryInfo.Parent;
+            }
+
+            return null;
         }
     }
 }

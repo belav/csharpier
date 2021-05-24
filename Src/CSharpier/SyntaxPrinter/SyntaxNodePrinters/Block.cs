@@ -18,7 +18,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Print(node, groupId);
         }
 
-        // TODO this should really be private so it can't be used by anything but the two methods above
         private static Doc Print(BlockSyntax node, string? groupId)
         {
             Doc statementSeparator = node.Parent is AccessorDeclarationSyntax

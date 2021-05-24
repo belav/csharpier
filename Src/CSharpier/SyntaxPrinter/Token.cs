@@ -24,7 +24,7 @@ namespace CSharpier.SyntaxPrinter
             return PrintSyntaxToken(syntaxToken);
         }
 
-        // TODO partial kill
+        // TODO partial kill by replacing with PrintWithSuffix
         public static Doc Print(SyntaxToken syntaxToken, Doc suffixDoc)
         {
             return PrintWithSuffix(syntaxToken, suffixDoc);
@@ -35,9 +35,7 @@ namespace CSharpier.SyntaxPrinter
             return PrintSyntaxToken(syntaxToken, suffixDoc);
         }
 
-        // TODO long term make this private, and expose methods for Print, PrintWithAfterToken, PrintWithBeforeToken (not the real names, we can do better!)
-        // actually if we change how comments/directives print, maybe we don't need the before/after tokens
-        public static Doc PrintSyntaxToken(
+        private static Doc PrintSyntaxToken(
             SyntaxToken syntaxToken,
             Doc? suffixDoc = null,
             bool skipLeadingTrivia = false

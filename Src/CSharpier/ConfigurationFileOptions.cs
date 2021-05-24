@@ -17,68 +17,54 @@ namespace CSharpier
         public bool UseTabs { get; init; }
         public EndOfLine EndOfLine { get; init; }
 
+        private static string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
+
         public static ConfigurationFileOptions Create(
             string baseDirectoryPath,
             IFileSystem fileSystem
         ) {
-            while (true)
+            var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
+
+            while (directoryInfo is not null)
             {
-                var potentialPath = fileSystem.Path.Combine(baseDirectoryPath, ".csharpierrc");
+                var file = directoryInfo.EnumerateFiles(
+                        ".csharpierrc*",
+                        SearchOption.TopDirectoryOnly
+                    )
+                    .Where(
+                        o => validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase)
+                    )
+                    .OrderBy(o => o.Extension)
+                    .FirstOrDefault();
 
-                if (fileSystem.File.Exists(potentialPath))
+                if (file == null)
                 {
-                    var contents = fileSystem.File.ReadAllText(potentialPath);
-                    if (contents.TrimStart().StartsWith("{"))
-                    {
-                        return ReadJson(potentialPath, fileSystem);
-                    }
-
-                    return ReadYaml(potentialPath, fileSystem);
+                    directoryInfo = directoryInfo.Parent;
+                    continue;
                 }
 
-                var jsonExtensionPath = potentialPath + ".json";
-                if (fileSystem.File.Exists(jsonExtensionPath))
-                {
-                    return ReadJson(jsonExtensionPath, fileSystem);
-                }
-
-                var yamlExtensionPaths = new[] { potentialPath + ".yaml", potentialPath + ".yml" };
-                foreach (var yamlExtensionPath in yamlExtensionPaths)
-                {
-                    if (!fileSystem.File.Exists(yamlExtensionPath))
-                    {
-                        continue;
-                    }
-
-                    return ReadYaml(yamlExtensionPath, fileSystem);
-                }
-
-                var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
-                if (directoryInfo.Parent == null)
-                {
-                    return new ConfigurationFileOptions();
-                }
-                baseDirectoryPath = directoryInfo.Parent.FullName;
+                var contents = fileSystem.File.ReadAllText(file.FullName);
+                return contents.TrimStart().StartsWith("{")
+                    ? ReadJson(contents)
+                    : ReadYaml(contents);
             }
+
+            return new ConfigurationFileOptions();
         }
 
-        private static ConfigurationFileOptions ReadJson(string path, IFileSystem fileSystem)
+        private static ConfigurationFileOptions ReadJson(string contents)
         {
-            return JsonConvert.DeserializeObject<ConfigurationFileOptions>(
-                fileSystem.File.ReadAllText(path)
-            );
+            return JsonConvert.DeserializeObject<ConfigurationFileOptions>(contents);
         }
 
-        private static ConfigurationFileOptions ReadYaml(string path, IFileSystem fileSystem)
+        private static ConfigurationFileOptions ReadYaml(string contents)
         {
             var deserializer = new DeserializerBuilder().WithNamingConvention(
                     CamelCaseNamingConvention.Instance
                 )
                 .Build();
 
-            return deserializer.Deserialize<ConfigurationFileOptions>(
-                fileSystem.File.ReadAllText(path)
-            );
+            return deserializer.Deserialize<ConfigurationFileOptions>(contents);
         }
     }
 }
