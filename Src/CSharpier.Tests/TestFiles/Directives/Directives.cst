@@ -85,5 +85,4 @@ class EdgeCases
     }
 }
 
-
-
+// trivia at end of file should not get extra space in front of it
