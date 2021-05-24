@@ -20,6 +20,10 @@ class ClassName { }
 
 public class ClassName
 {
+    #region Trailing comment does not indent more than it should #endregion
+    private int x; // trailing comment
+    #endregion
+
     void MethodWithOnlyDisabled()
     {
 #if DEBUG

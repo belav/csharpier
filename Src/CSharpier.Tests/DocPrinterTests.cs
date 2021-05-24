@@ -363,6 +363,22 @@ namespace CSharpier.Tests
         }
 
         [Test]
+        public void TrailingComment_Does_Affect_Trim()
+        {
+            var doc = Doc.Concat(
+                Doc.TrailingComment("// trailing", CommentType.SingleLine),
+                Doc.HardLine,
+                Doc.Indent(
+                    Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
+                    Doc.Trim,
+                    "    #endregion"
+                )
+            );
+            var result = Print(doc);
+            result.Should().Be($" // trailing{NewLine}    #endregion");
+        }
+
+        [Test]
         public void HardLineIfNoPreviousLine_Should_Insert_Line_If_There_Is_Not_One()
         {
             var doc = Doc.Concat("1", Doc.HardLineIfNoPreviousLine, "2");
