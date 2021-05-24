@@ -45,12 +45,23 @@ namespace CSharpier
 
         public static string PadToSize(string value, int size = 120)
         {
+            if (value.Length >= size)
+            {
+                return value;
+            }
+
             return value + new string(' ', size - value.Length);
         }
 
         public static string ReversePad(string value)
         {
-            return new string(' ', 10 - value.Length) + value;
+            const int size = 10;
+            if (value.Length >= size)
+            {
+                return value;
+            }
+
+            return new string(' ', size - value.Length) + value;
         }
     }
 }
