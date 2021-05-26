@@ -121,13 +121,11 @@ namespace CSharpier.DocPrinter
                                     {
                                         returnFalseIfMoreStringsFound = false;
                                     }
-                                    if (
-                                        line.Type == LineDoc.LineType.Hard
-                                        && currentDoc
-                                            is not HardLine { SkipBreakIfFirstInGroup: true }
-                                    ) {
+                                    else if (line.Type == LineDoc.LineType.Hard)
+                                    {
                                         return true;
                                     }
+
                                     if (line.Type != LineDoc.LineType.Soft)
                                     {
                                         output.Append(' ');

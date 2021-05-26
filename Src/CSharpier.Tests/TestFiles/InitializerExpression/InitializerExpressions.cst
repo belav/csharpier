@@ -26,7 +26,7 @@ class ClassName
         }
     };
 
-    private SomeClass[,] someClass = {
+    private int[,] arrayInitializerWithoutSize = {
         // leading comment should not interfere with the next line breaking
         {
             longValue______________________________,
