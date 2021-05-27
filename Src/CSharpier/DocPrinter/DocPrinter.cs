@@ -18,32 +18,29 @@ namespace CSharpier.DocPrinter
 
         private static bool Fits(
             PrintCommand nextCommand,
-            Stack<PrintCommand> remainingCommands,
+            List<PrintCommand> remainingCommands,
             int remainingWidth,
             PrinterOptions printerOptions,
             bool mustBeFlat = false
         ) {
             var returnFalseIfMoreStringsFound = false;
-            var currentStack = new Stack<PrintCommand>(
-                // reverse the existing stack because otherwise we push them on in the order they pop off
-                remainingCommands.Reverse()
-            );
-            currentStack.Push(nextCommand);
+            var commandsToTest = new List<PrintCommand>(remainingCommands) { nextCommand };
 
             void Push(Doc doc, PrintMode printMode, Indent indent)
             {
-                currentStack.Push(new PrintCommand(indent, printMode, doc));
+                commandsToTest.Add(new PrintCommand(indent, printMode, doc));
             }
 
             var output = new StringBuilder();
             while (remainingWidth >= 0)
             {
-                if (currentStack.Count == 0)
+                if (commandsToTest.Count == 0)
                 {
                     return true;
                 }
 
-                var (currentIndent, currentMode, currentDoc) = currentStack.Pop();
+                var (currentIndent, currentMode, currentDoc) = commandsToTest[^1];
+                commandsToTest.RemoveAt(commandsToTest.Count - 1);
 
                 if (currentDoc is StringDoc stringDoc)
                 {
@@ -160,8 +157,9 @@ namespace CSharpier.DocPrinter
             var allowedWidth = printerOptions.Width;
             var currentWidth = 0;
 
-            var currentStack = new Stack<PrintCommand>();
-            currentStack.Push(
+            var remainingCommands = new List<PrintCommand>();
+
+            remainingCommands.Add(
                 new PrintCommand(IndentBuilder.MakeRoot(), PrintMode.MODE_BREAK, document)
             );
 
@@ -170,13 +168,14 @@ namespace CSharpier.DocPrinter
             var newLineNextStringValue = false;
             var skipNextNewLine = false;
 
-            void Push(Doc doc, PrintMode printMode, Indent indent)
+            void Add(Doc doc, PrintMode printMode, Indent indent)
             {
-                currentStack.Push(new PrintCommand(indent, printMode, doc));
+                remainingCommands.Add(new PrintCommand(indent, printMode, doc));
             }
-            while (currentStack.Count > 0)
+            while (remainingCommands.Count > 0)
             {
-                var command = currentStack.Pop();
+                var command = remainingCommands[^1];
+                remainingCommands.RemoveAt(remainingCommands.Count - 1);
                 if (command.Doc == Doc.Null)
                 {
                     continue;
@@ -210,11 +209,11 @@ namespace CSharpier.DocPrinter
                     case Concat concat:
                         for (var x = concat.Contents.Count - 1; x >= 0; x--)
                         {
-                            Push(concat.Contents[x], command.Mode, command.Indent);
+                            Add(concat.Contents[x], command.Mode, command.Indent);
                         }
                         break;
                     case IndentDoc indentBuilder:
-                        Push(
+                        Add(
                             indentBuilder.Contents,
                             command.Mode,
                             IndentBuilder.Make(command.Indent, printerOptions)
@@ -231,7 +230,7 @@ namespace CSharpier.DocPrinter
                             case PrintMode.MODE_FORCEFLAT:
                                 if (!shouldRemeasure)
                                 {
-                                    Push(
+                                    Add(
                                         group.Contents,
                                         group.Break ? PrintMode.MODE_BREAK : PrintMode.MODE_FLAT,
                                         command.Indent
@@ -252,23 +251,23 @@ namespace CSharpier.DocPrinter
                                     !group.Break
                                     && Fits(
                                         next,
-                                        currentStack,
+                                        remainingCommands,
                                         allowedWidth - currentWidth,
                                         printerOptions
                                     )
                                 ) {
-                                    currentStack.Push(next);
+                                    remainingCommands.Add(next);
                                 }
                                 else
                                 {
-                                    Push(group.Contents, PrintMode.MODE_BREAK, command.Indent);
+                                    Add(group.Contents, PrintMode.MODE_BREAK, command.Indent);
                                 }
                                 break;
                         }
 
                         if (group.GroupId != null)
                         {
-                            groupModeMap[group.GroupId] = currentStack.Peek().Mode;
+                            groupModeMap[group.GroupId] = remainingCommands[^1].Mode;
                         }
                         break;
                     case IfBreak ifBreak:
@@ -279,7 +278,7 @@ namespace CSharpier.DocPrinter
                         var contents = groupMode == PrintMode.MODE_BREAK
                             ? ifBreak.BreakContents
                             : ifBreak.FlatContents;
-                        Push(contents, command.Mode, command.Indent);
+                        Add(contents, command.Mode, command.Indent);
                         break;
                     case LineDoc line:
                         switch (command.Mode)
@@ -358,7 +357,7 @@ namespace CSharpier.DocPrinter
                         skipNextNewLine = true;
                         break;
                     case ForceFlat forceFlat:
-                        Push(forceFlat.Contents, PrintMode.MODE_FLAT, command.Indent);
+                        Add(forceFlat.Contents, PrintMode.MODE_FLAT, command.Indent);
                         break;
                     default:
                         throw new Exception("didn't handle " + command.Doc);
