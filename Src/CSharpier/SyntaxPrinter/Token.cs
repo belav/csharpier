@@ -158,28 +158,24 @@ namespace CSharpier.SyntaxPrinter
                 {
                     docs.Add(Doc.Trim, trivia.ToString().TrimEnd('\n', '\r'), Doc.HardLine);
                 }
-                else if (IsDirective(kind))
-                {
-                    docs.Add(
-                        Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
-                        Doc.Trim,
-                        Doc.Directive(trivia.ToString()),
-                        Doc.HardLineSkipBreakIfFirstInGroup
-                    );
-                }
-                else if (IsRegion(kind))
+                else if (IsDirective(kind) || IsRegion(kind))
                 {
                     var triviaText = trivia.ToString();
-                    if (x > 0 && leadingTrivia[x - 1].Kind() == SyntaxKind.WhitespaceTrivia)
-                    {
+                    if (
+                        IsRegion(kind)
+                        && x > 0
+                        && leadingTrivia[x - 1].Kind() == SyntaxKind.WhitespaceTrivia
+                    ) {
                         triviaText = leadingTrivia[x - 1] + triviaText;
                     }
 
                     docs.Add(
+                        // adding two of these to ensure we get a new line when a directive follows a trailing comment
+                        Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
                         Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
                         Doc.Trim,
-                        triviaText,
-                        Doc.HardLine
+                        Doc.Directive(triviaText),
+                        Doc.HardLineSkipBreakIfFirstInGroup
                     );
                 }
             }

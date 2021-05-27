@@ -189,7 +189,9 @@ namespace CSharpier.DocPrinter
                             break;
                         }
 
-                        // I don't understand exactly why, but this ensures we don't print extra spaces after a trailing comment
+                        // this ensures we don't print extra spaces after a trailing comment
+                        // newLineNextStringValue & skipNextNewLine are set to true when we print a trailing comment
+                        // when they are set we new line the next string we find. If we new line and then print a " " we end up with an extra space
                         if (newLineNextStringValue && skipNextNewLine && stringDoc.Value == " ")
                         {
                             break;
@@ -296,7 +298,7 @@ namespace CSharpier.DocPrinter
                                 }
 
                                 // This line was forced into the output even if we were in flattened mode, so we need to tell the next
-                                // group that no matter what, it needs to remeasure  because the previous measurement didn't accurately
+                                // group that no matter what, it needs to remeasure because the previous measurement didn't accurately
                                 // capture the entire expression (this is necessary for nested groups)
                                 shouldRemeasure = true;
                                 goto case PrintMode.MODE_BREAK;
@@ -319,10 +321,8 @@ namespace CSharpier.DocPrinter
                                 }
                                 else
                                 {
-                                    if (
-                                        (!newLineNextStringValue || !skipNextNewLine)
-                                        && (!printerOptions.TrimInitialLines || output.Length > 0)
-                                    ) {
+                                    if (!skipNextNewLine || !newLineNextStringValue)
+                                    {
                                         TrimOutput(output);
                                         output.Append(endOfLine).Append(command.Indent.Value);
                                         currentWidth = command.Indent.Length;
@@ -370,7 +370,13 @@ namespace CSharpier.DocPrinter
                 output.Append(endOfLine);
             }
 
-            return string.Join(string.Empty, output);
+            var result = output.ToString();
+            if (printerOptions.TrimInitialLines)
+            {
+                result = result.TrimStart('\n', '\r');
+            }
+
+            return result;
         }
 
         // TODO 1 in prettier this deals with unicode characters that are double width
