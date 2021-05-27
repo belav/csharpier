@@ -13,7 +13,13 @@ namespace Worker
             "parent",
             "parentTrivia",
             "spanStart",
-            "rawKind"
+            "rawKind",
+            "containsDiagnostics",
+            "containsDirectives",
+            "isStructuredTrivia",
+            "hasStructuredTrivia",
+            "containsSkippedText",
+            "containsAnnotations"
         };
 
         public static Type[] Types = { typeof(TextSpan), typeof(SyntaxTree) };
@@ -24,7 +30,7 @@ namespace Worker
                 { typeof(PropertyDeclarationSyntax), new[] { "semicolon" } },
                 { typeof(IndexerDeclarationSyntax), new[] { "semicolon" } },
                 { typeof(SyntaxTrivia), new[] { "token" } },
-                { typeof(SyntaxToken), new[] { "value", "valueText" } },
+                { typeof(SyntaxToken), new[] { "value", "valueText" } }
             };
     }
 }

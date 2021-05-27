@@ -29,7 +29,11 @@ namespace CSharpier
                 case NullDoc:
                     return indent + "Doc.Null";
                 case StringDoc stringDoc:
-                    return indent + "\"" + stringDoc.Value?.Replace("\"", "\\\"") + "\"";
+                    if (stringDoc.IsDirective)
+                    {
+                        return $"{indent}Doc.Directive({stringDoc.Value.Replace("\"", "\\\"")})";
+                    }
+                    return indent + "\"" + stringDoc.Value.Replace("\"", "\\\"") + "\"";
                 case HardLine hardLine:
                     return indent
                         + "Doc.HardLine"

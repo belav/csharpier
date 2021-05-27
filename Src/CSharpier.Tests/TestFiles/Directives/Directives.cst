@@ -24,6 +24,13 @@ public class ClassName
     private int x; // trailing comment here shouldn't give extra indent to the endregion after it
     #endregion
 
+    public bool SomeProperty =>
+#if !DEBUG
+        someValue
+        && // trailing comment with endif should work properly
+#endif
+        someOtherValue;
+
     void MethodWithOnlyDisabled()
     {
 #if DEBUG
