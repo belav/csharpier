@@ -10,12 +10,6 @@ class ClassName
         {
             // indent
         }
-
-        var x = new SomeClass
-        {
-            Property1 = true
-            // indent
-        };
     }
 
     void MethodName()

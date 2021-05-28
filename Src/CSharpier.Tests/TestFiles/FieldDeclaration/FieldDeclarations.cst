@@ -30,4 +30,27 @@ public class ClassName
         Property4 = false,
         Property5 = false
     };
+
+    // leading comments
+    private static const string SomeName = "1";
+
+    public SomeClass SomeName; // trailing comments
+
+    public System.Text.StringBuilder NamespacedField;
+    
+    public static Dictionary<Type, string> PropertiesByType
+        = new Dictionary<Type, string>();
+        
+    public static Dictionary<
+        SomeLongTypeName,
+        SomeOtherLongTypeName_______________________________
+    > PropertiesByType = new Dictionary<
+        SomeLongTypeName,
+        SomeOtherLongTypeName_______________________________
+    >();
+}
+
+struct S
+{
+    fixed int field[10];
 }

@@ -254,6 +254,7 @@ namespace CSharpier
                 && result.Code != fileReaderResult.FileContents
             ) {
                 // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
+                // ReSharper disable once MethodHasAsyncOverloadWithCancellation
                 this.FileSystem.File.WriteAllText(file, result.Code, fileReaderResult.Encoding);
             }
         }

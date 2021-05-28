@@ -18,14 +18,15 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 separator = Doc.Null;
             }
             else if (
-                node.Value is AnonymousObjectCreationExpressionSyntax
-                || node.Value is AnonymousMethodExpressionSyntax
-                || node.Value is ConditionalExpressionSyntax
-                || node.Value is ObjectCreationExpressionSyntax
-                || node.Value is InitializerExpressionSyntax
-                || node.Value is ParenthesizedLambdaExpressionSyntax
-                || node.Value is InvocationExpressionSyntax
-                || node.Value is SwitchExpressionSyntax
+                node.Value
+                    is AnonymousObjectCreationExpressionSyntax
+                        or AnonymousMethodExpressionSyntax
+                        or ConditionalExpressionSyntax
+                        or ObjectCreationExpressionSyntax
+                        or InitializerExpressionSyntax
+                        or ParenthesizedLambdaExpressionSyntax
+                        or InvocationExpressionSyntax
+                        or SwitchExpressionSyntax
             ) {
                 separator = " ";
             }

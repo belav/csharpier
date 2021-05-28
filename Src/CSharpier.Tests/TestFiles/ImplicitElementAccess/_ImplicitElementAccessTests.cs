@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ImplicitElementAccessTests : BaseTest
     {
         [Test]
-        public void BasicImplicitElementAccess()
+        public void ImplicitElementAccesses()
         {
-            this.RunTest("ImplicitElementAccess", "BasicImplicitElementAccess");
+            this.RunTest("ImplicitElementAccess", "ImplicitElementAccesses");
         }
     }
 }

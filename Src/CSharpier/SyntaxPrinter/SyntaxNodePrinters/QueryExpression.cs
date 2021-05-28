@@ -7,8 +7,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(QueryExpressionSyntax node)
         {
-            return Doc.Indent(
-                Doc.Line,
+            return Doc.Concat(
                 FromClause.Print(node.FromClause),
                 Doc.Line,
                 QueryBody.Print(node.Body)

@@ -6,14 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class SwitchExpressionTests : BaseTest
     {
         [Test]
-        public void BasicSwitchExpression()
+        public void SwitchExpressions()
         {
-            this.RunTest("SwitchExpression", "BasicSwitchExpression");
-        }
-        [Test]
-        public void SwitchWithRecursivePattern()
-        {
-            this.RunTest("SwitchExpression", "SwitchWithRecursivePattern");
+            this.RunTest("SwitchExpression", "SwitchExpressions");
         }
     }
 }
