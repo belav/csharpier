@@ -6,22 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class AnonymousObjectCreationExpressionTests : BaseTest
     {
         [Test]
-        public void BasicAnonymousObjectCreationExpression()
+        public void AnonymousObjectCreationExpressions()
         {
-            this.RunTest(
-                "AnonymousObjectCreationExpression",
-                "BasicAnonymousObjectCreationExpression"
-            );
-        }
-        [Test]
-        public void MultipleProperties()
-        {
-            this.RunTest("AnonymousObjectCreationExpression", "MultipleProperties");
-        }
-        [Test]
-        public void NoNames()
-        {
-            this.RunTest("AnonymousObjectCreationExpression", "NoNames");
+            this.RunTest("AnonymousObjectCreationExpression", "AnonymousObjectCreationExpressions");
         }
     }
 }

@@ -6,7 +6,7 @@ namespace CSharpier.Tests.TestFiles
     public class ConditionalExpressionTests : BaseTest
     {
         [Test]
-        public void BasicConditionalExpression()
+        public void ConditionalExpressions()
         {
             this.RunTest("ConditionalExpression", "ConditionalExpressions");
         }

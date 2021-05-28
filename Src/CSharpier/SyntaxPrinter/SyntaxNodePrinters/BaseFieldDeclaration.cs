@@ -19,7 +19,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 docs.Add(Token.PrintWithSuffix(eventFieldDeclarationSyntax.EventKeyword, " "));
             }
 
-            docs.Add(Node.Print(node.Declaration), Token.Print(node.SemicolonToken));
+            docs.Add(VariableDeclaration.Print(node.Declaration), Token.Print(node.SemicolonToken));
             return Doc.Concat(docs);
         }
     }

@@ -12,8 +12,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Node.Print(node.Left),
                 " ",
                 Token.Print(node.OperatorToken),
-                node.Right is QueryExpressionSyntax ? Doc.Null : " ",
-                Node.Print(node.Right)
+                node.Right is QueryExpressionSyntax
+                    ? Doc.Indent(Doc.Line, Node.Print(node.Right))
+                    : Doc.Concat(" ", Node.Print(node.Right))
             );
         }
     }

@@ -1,7 +1,15 @@
 class ClassName
 {
-    void MethodName()
+    int MethodName()
     {
+        return 1 switch
+        {
+            1 => 100,
+            2 => 200,
+            3 when false => 300,
+            _ => throw new global::System.Exception()
+        };
+
         var newState = (GetState(), action, hasKey) switch
         {
             (DoorState.Closed, Action.Open, _) => DoorState.Opened,

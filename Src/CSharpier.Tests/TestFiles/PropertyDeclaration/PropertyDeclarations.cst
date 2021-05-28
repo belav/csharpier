@@ -54,7 +54,9 @@ public class ClassName
         set;
     }
 
-    public virtual ICollection<SomeObject> SomeLongNameThatForcesALineBreak { get; set; } =
+    public virtual ICollection<
+        SomeObject
+    > SomeLongNameThatForcesALineBreak { get; set; } =
         new HashSet<SomeObject>();
 
     public Dictionary<string, string> Properties { get; set; } =
