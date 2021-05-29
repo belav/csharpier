@@ -15,7 +15,7 @@ namespace CSharpier
             return Serialize(document, string.Empty);
         }
 
-        // TODO this should really use a stringBuilder, but right now it is only used for dev work so not super urgent
+        // this is inefficient without a stringBuilder, but only used for dev work and changing it to use one isn't straightforward.
         private static string Serialize(Doc document, string indent)
         {
             var newLine = Environment.NewLine;
@@ -24,69 +24,56 @@ namespace CSharpier
             {
                 return Serialize(doc, nextIndent);
             }
-            switch (document)
-            {
-                case NullDoc:
-                    return indent + "Doc.Null";
-                case StringDoc stringDoc:
-                    if (stringDoc.IsDirective)
-                    {
-                        return $"{indent}Doc.Directive({stringDoc.Value.Replace("\"", "\\\"")})";
-                    }
-                    return indent + "\"" + stringDoc.Value.Replace("\"", "\\\"") + "\"";
-                case HardLine hardLine:
-                    return indent
-                        + "Doc.HardLine"
-                        + (hardLine.Squash ? "IfNoPreviousLine" : string.Empty)
-                        + (hardLine.SkipBreakIfFirstInGroup
-                            ? "SkipBreakIfFirstInGroup"
-                            : string.Empty);
-                case LiteralLine:
-                    return indent + "Doc.LiteralLine";
-                case Concat concat:
-                    var result = indent + "Doc.Concat(";
-                    if (concat.Contents.Count > 0)
-                    {
-                        result += newLine;
-                    }
-                    for (var x = 0; x < concat.Contents.Count; x++)
-                    {
-                        var printResult = PrintIndentedDocTree(concat.Contents[x]);
-                        result += printResult;
-                        if (x < concat.Contents.Count - 1)
-                        {
-                            result += "," + newLine;
-                        }
-                    }
 
-                    result += newLine + indent + ")";
-                    return result;
-                case LineDoc lineDoc:
-                    return indent
-                        + (lineDoc.Type == LineDoc.LineType.Normal ? "Doc.Line" : "Doc.SoftLine");
-                case BreakParent:
-                    return "";
-                case Trim:
-                    return $"{indent}Doc.Trim";
-                case ForceFlat forceFlat:
-                    return $"{indent}Doc.ForceFlat({newLine}{PrintIndentedDocTree(forceFlat.Contents)})";
-                case IndentDoc indentDoc:
-                    return $"{indent}Doc.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents)}{newLine}{indent})";
-                case Group group:
-                    return @$"{indent}Doc.Group{(group.GroupId != null ? "WithId" : string.Empty)}(
-{(group.GroupId != null ? $"{nextIndent}\"{group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents)}{newLine}{indent})";
-                case LeadingComment leadingComment:
-                    return $"{indent}Doc.LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
-                case TrailingComment trailingComment:
-                    return $"{indent}Doc.TrailingComment(\"{trailingComment.Comment}\", CommentType.{(trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})";
-                case IfBreak ifBreak:
-                    return @$"{indent}Doc.IfBreak(
+            string PrintConcat(Concat concatToPrint)
+            {
+                var result = indent + "Doc.Concat(";
+                if (concatToPrint.Contents.Count > 0)
+                {
+                    result += newLine;
+                }
+
+                for (var x = 0; x < concatToPrint.Contents.Count; x++)
+                {
+                    var printResult = PrintIndentedDocTree(concatToPrint.Contents[x]);
+                    result += printResult;
+                    if (x < concatToPrint.Contents.Count - 1)
+                    {
+                        result += "," + newLine;
+                    }
+                }
+
+                result += newLine + indent + ")";
+                return result;
+            }
+
+            return document switch
+            {
+                NullDoc => indent + "Doc.Null",
+                StringDoc { IsDirective: true } directive => $"{indent}Doc.Directive({directive.Value.Replace("\"", "\\\"")})",
+                StringDoc stringDoc => indent + "\"" + stringDoc.Value.Replace("\"", "\\\"") + "\"",
+                HardLine hardLine => indent
+                + "Doc.HardLine"
+                + (hardLine.Squash ? "IfNoPreviousLine" : string.Empty)
+                + (hardLine.SkipBreakIfFirstInGroup ? "SkipBreakIfFirstInGroup" : string.Empty),
+                LiteralLine => indent + "Doc.LiteralLine",
+                Concat concat => PrintConcat(concat),
+                LineDoc lineDoc => indent
+                + (lineDoc.Type == LineDoc.LineType.Normal ? "Doc.Line" : "Doc.SoftLine"),
+                BreakParent => "",
+                Trim => $"{indent}Doc.Trim",
+                ForceFlat forceFlat => $"{indent}Doc.ForceFlat({newLine}{PrintIndentedDocTree(forceFlat.Contents)})",
+                IndentDoc indentDoc => $"{indent}Doc.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents)}{newLine}{indent})",
+                Group group => @$"{indent}Doc.Group{(@group.GroupId != null ? "WithId" : string.Empty)}(
+{(@group.GroupId != null ? $"{nextIndent}\"{@group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents)}{newLine}{indent})",
+                LeadingComment leadingComment => $"{indent}Doc.LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})",
+                TrailingComment trailingComment => $"{indent}Doc.TrailingComment(\"{trailingComment.Comment}\", CommentType.{(trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})",
+                IfBreak ifBreak => @$"{indent}Doc.IfBreak(
 {PrintIndentedDocTree(ifBreak.BreakContents)},
 {PrintIndentedDocTree(ifBreak.FlatContents)},
-{nextIndent}""{ifBreak.GroupId}"")";
-                default:
-                    throw new Exception("Can't handle " + document);
-            }
+{nextIndent}""{ifBreak.GroupId}"")",
+                _ => throw new Exception("Can't handle " + document)
+            };
         }
     }
 }
