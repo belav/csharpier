@@ -18,29 +18,41 @@ namespace CSharpier.DocPrinter
 
         private static bool Fits(
             PrintCommand nextCommand,
-            List<PrintCommand> remainingCommands,
+            Stack<PrintCommand> remainingCommands,
             int remainingWidth,
             PrinterOptions printerOptions,
             bool mustBeFlat = false
         ) {
             var returnFalseIfMoreStringsFound = false;
-            var commandsToTest = new List<PrintCommand>(remainingCommands) { nextCommand };
+            var newCommands = new Stack<PrintCommand>();
+            newCommands.Push(nextCommand);
 
             void Push(Doc doc, PrintMode printMode, Indent indent)
             {
-                commandsToTest.Add(new PrintCommand(indent, printMode, doc));
+                newCommands.Push(new PrintCommand(indent, printMode, doc));
             }
 
             var output = new StringBuilder();
-            while (remainingWidth >= 0)
+
+            for (var x = 0; x < remainingCommands.Count || newCommands.Count > 0;)
             {
-                if (commandsToTest.Count == 0)
+                if (remainingWidth < 0)
                 {
-                    return true;
+                    return false;
                 }
 
-                var (currentIndent, currentMode, currentDoc) = commandsToTest[^1];
-                commandsToTest.RemoveAt(commandsToTest.Count - 1);
+                PrintCommand command;
+                if (newCommands.Count > 0)
+                {
+                    command = newCommands.Pop();
+                }
+                else
+                {
+                    command = remainingCommands.ElementAt(x);
+                    x++;
+                }
+
+                var (currentIndent, currentMode, currentDoc) = command;
 
                 if (currentDoc is StringDoc stringDoc)
                 {
@@ -48,10 +60,12 @@ namespace CSharpier.DocPrinter
                     {
                         continue;
                     }
+
                     if (returnFalseIfMoreStringsFound)
                     {
                         return false;
                     }
+
                     output.Append(stringDoc.Value);
                     remainingWidth -= GetStringWidth(stringDoc.Value);
                 }
@@ -145,7 +159,7 @@ namespace CSharpier.DocPrinter
                 }
             }
 
-            return false;
+            return remainingWidth > 0;
         }
 
         public static string Print(Doc document, PrinterOptions printerOptions, string endOfLine)
@@ -157,9 +171,9 @@ namespace CSharpier.DocPrinter
             var allowedWidth = printerOptions.Width;
             var currentWidth = 0;
 
-            var remainingCommands = new List<PrintCommand>();
+            var remainingCommands = new Stack<PrintCommand>();
 
-            remainingCommands.Add(
+            remainingCommands.Push(
                 new PrintCommand(IndentBuilder.MakeRoot(), PrintMode.MODE_BREAK, document)
             );
 
@@ -170,12 +184,11 @@ namespace CSharpier.DocPrinter
 
             void Add(Doc doc, PrintMode printMode, Indent indent)
             {
-                remainingCommands.Add(new PrintCommand(indent, printMode, doc));
+                remainingCommands.Push(new PrintCommand(indent, printMode, doc));
             }
             while (remainingCommands.Count > 0)
             {
-                var command = remainingCommands[^1];
-                remainingCommands.RemoveAt(remainingCommands.Count - 1);
+                var command = remainingCommands.Pop();
                 if (command.Doc == Doc.Null)
                 {
                     continue;
@@ -256,7 +269,7 @@ namespace CSharpier.DocPrinter
                                         printerOptions
                                     )
                                 ) {
-                                    remainingCommands.Add(next);
+                                    remainingCommands.Push(next);
                                 }
                                 else
                                 {
@@ -267,7 +280,7 @@ namespace CSharpier.DocPrinter
 
                         if (group.GroupId != null)
                         {
-                            groupModeMap[group.GroupId] = remainingCommands[^1].Mode;
+                            groupModeMap[group.GroupId] = remainingCommands.Peek().Mode;
                         }
                         break;
                     case IfBreak ifBreak:
