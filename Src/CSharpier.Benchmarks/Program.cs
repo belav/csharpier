@@ -8,21 +8,12 @@ namespace CSharpier.Benchmarks
     [MemoryDiagnoser]
     public class Benchmarks
     {
-        // [Benchmark]
-        // public void UseEstimated()
-        // {
-        //     var codeFormatter = new CodeFormatter();
-        //     DocPrinter.DocPrinter.UseEstimatedSize = true;
-        //     codeFormatter.Format(code, new PrinterOptions());
-        // }
-        //
-        // [Benchmark]
-        // public void Default()
-        // {
-        //     var codeFormatter = new CodeFormatter();
-        //     DocPrinter.DocPrinter.UseEstimatedSize = false;
-        //     codeFormatter.Format(code, new PrinterOptions());
-        // }
+        [Benchmark]
+        public void Default()
+        {
+            var codeFormatter = new CodeFormatter();
+            codeFormatter.Format(code, new PrinterOptions());
+        }
 
         private string code =
             @"using System;
