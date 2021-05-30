@@ -68,6 +68,9 @@ namespace CSharpier
 {(@group.GroupId != null ? $"{nextIndent}\"{@group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents)}{newLine}{indent})",
                 LeadingComment leadingComment => $"{indent}Doc.LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})",
                 TrailingComment trailingComment => $"{indent}Doc.TrailingComment(\"{trailingComment.Comment}\", CommentType.{(trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})",
+                IndentIfBreak indentIfBreak => @$"{indent}Doc.IndentIfBreak(
+{PrintIndentedDocTree(indentIfBreak.FlatContents)},
+{nextIndent}""{indentIfBreak.GroupId}"")",
                 IfBreak ifBreak => @$"{indent}Doc.IfBreak(
 {PrintIndentedDocTree(ifBreak.BreakContents)},
 {PrintIndentedDocTree(ifBreak.FlatContents)},

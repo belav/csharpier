@@ -15,7 +15,13 @@ class ClassName
             "kljasdfkljaslkjdfljaksdfkjlaksljfaksjldf"
         );
 
-        var superLongMethodNameForceLine = someFactoryName.SuperLongMethodNameForceLine();
+        var superLongMethodNameForceLine =
+            someFactoryName.SuperLongMethodNameForceLine();
+
+        // this should be changed by #7
+        var superLongMethodNameForceLine =
+            someFactoryName.SuperLongMethodNameForceLine()
+                .SomeOtherReallyLongMethodName();
 
         this.WhenThereExists(
             a.Website().WithDomainName("test-integration.insite.com")

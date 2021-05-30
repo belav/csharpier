@@ -1,3 +1,4 @@
+using System;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -27,14 +28,17 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var useLineInIndent =
                 initializer?.Value
                     is BinaryExpressionSyntax
-                        // TODO we might need IndentIfBreak for the edge cases on invocation and object creation
-                        //or InvocationExpressionSyntax
                         or InterpolatedStringExpressionSyntax
                         or IsPatternExpressionSyntax
                         or LiteralExpressionSyntax
+                        // TODO if we move the line into the indent (also change code in IndentIfNeeded) then all sorts of other formatting changes
+                        // try to figure out how prettier does this with java/ts/js
+                        // we may need conditional groups to get this to do what we want, bleh.
                         //or ObjectCreationExpressionSyntax
                         or QueryExpressionSyntax
                         or StackAllocArrayCreationExpressionSyntax;
+
+            var groupId = Guid.NewGuid().ToString();
 
             return Doc.Concat(
                 Doc.Group(
@@ -50,8 +54,15 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 ),
                 initializer != null
                     ? Doc.Concat(
-                            useLineInIndent ? Doc.Null : Doc.Group(Doc.Line),
-                            Doc.Group(IndentIfNeeded(initializer.Value, useLineInIndent))
+                            useLineInIndent
+                                ? Doc.Null
+                                : Doc.GroupWithId(groupId, Doc.Indent(Doc.Line)),
+                            initializer.Value is InvocationExpressionSyntax
+                                ? Doc.IndentIfBreak(
+                                        Doc.Group(Node.Print(initializer.Value)),
+                                        groupId
+                                    )
+                                : Doc.Group(IndentIfNeeded(initializer.Value, useLineInIndent))
                         )
                     : Doc.Null
             );

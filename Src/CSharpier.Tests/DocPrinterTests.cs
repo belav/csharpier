@@ -297,6 +297,28 @@ namespace CSharpier.Tests
             PrintedDocShouldBe(doc, $"1{NewLine}break");
         }
 
+        [Test]
+        public void IndentIfBreak_Should_Print_Indented_When_Breaks()
+        {
+            var doc = Doc.Concat(
+                Doc.GroupWithId("h1", Doc.Indent(Doc.HardLine)),
+                Doc.IndentIfBreak("indent", "h1")
+            );
+
+            PrintedDocShouldBe(doc, $"{NewLine}    indent");
+        }
+
+        [Test]
+        public void IndentIfBreak_Should_Not_Print_Indented_When_Flat()
+        {
+            var doc = Doc.Concat(
+                Doc.GroupWithId("h1", Doc.Indent(Doc.SoftLine)),
+                Doc.IndentIfBreak("indent", "h1")
+            );
+
+            PrintedDocShouldBe(doc, "indent");
+        }
+
         [TestCase(" ")]
         [TestCase("   ")]
         public void Trim_Should_Trim_Current_Line(string indent)
