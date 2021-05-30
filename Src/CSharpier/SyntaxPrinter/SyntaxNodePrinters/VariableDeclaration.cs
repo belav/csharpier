@@ -25,18 +25,24 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var variable = node.Variables[0];
             var initializer = variable.Initializer;
 
-            var useLineInIndent =
-                initializer?.Value
-                    is BinaryExpressionSyntax
-                        or InterpolatedStringExpressionSyntax
-                        or IsPatternExpressionSyntax
-                        or LiteralExpressionSyntax
-                        // TODO if we move the line into the indent (also change code in IndentIfNeeded) then all sorts of other formatting changes
-                        // try to figure out how prettier does this with java/ts/js
-                        // we may need conditional groups to get this to do what we want, bleh.
-                        //or ObjectCreationExpressionSyntax
-                        or QueryExpressionSyntax
-                        or StackAllocArrayCreationExpressionSyntax;
+            var formatMode = initializer?.Value
+                is AnonymousObjectCreationExpressionSyntax
+                    or AnonymousMethodExpressionSyntax
+                    or InitializerExpressionSyntax
+                    or InvocationExpressionSyntax
+                    or ConditionalExpressionSyntax
+                    or ObjectCreationExpressionSyntax
+                    or SwitchExpressionSyntax
+                ? FormatMode.NoIndent
+                : initializer?.Value
+                        is BinaryExpressionSyntax
+                            or InterpolatedStringExpressionSyntax
+                            or IsPatternExpressionSyntax
+                            or LiteralExpressionSyntax
+                            or QueryExpressionSyntax
+                            or StackAllocArrayCreationExpressionSyntax
+                        ? FormatMode.IndentWithLine
+                        : FormatMode.Indent;
 
             var groupId = Guid.NewGuid().ToString();
 
@@ -54,7 +60,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 ),
                 initializer != null
                     ? Doc.Concat(
-                            useLineInIndent
+                            formatMode is FormatMode.IndentWithLine
                                 ? Doc.Null
                                 : Doc.GroupWithId(groupId, Doc.Indent(Doc.Line)),
                             initializer.Value is InvocationExpressionSyntax
@@ -62,28 +68,30 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                         Doc.Group(Node.Print(initializer.Value)),
                                         groupId
                                     )
-                                : Doc.Group(IndentIfNeeded(initializer.Value, useLineInIndent))
+                                : Doc.Group(IndentIfNeeded(initializer.Value, formatMode))
                         )
                     : Doc.Null
             );
         }
 
-        private static Doc IndentIfNeeded(ExpressionSyntax initializerValue, bool useLineInIndent)
+        private static Doc IndentIfNeeded(ExpressionSyntax initializerValue, FormatMode formatMode)
         {
-            if (
-                initializerValue
-                    is AnonymousObjectCreationExpressionSyntax
-                        or AnonymousMethodExpressionSyntax
-                        or InitializerExpressionSyntax
-                        or InvocationExpressionSyntax
-                        or ConditionalExpressionSyntax
-                        or ObjectCreationExpressionSyntax
-                        or SwitchExpressionSyntax
-            ) {
+            if (formatMode is FormatMode.NoIndent)
+            {
                 return Node.Print(initializerValue);
             }
 
-            return Doc.Indent(useLineInIndent ? Doc.Line : Doc.Null, Node.Print(initializerValue));
+            return Doc.Indent(
+                formatMode is FormatMode.IndentWithLine ? Doc.Line : Doc.Null,
+                Node.Print(initializerValue)
+            );
+        }
+
+        private enum FormatMode
+        {
+            NoIndent,
+            IndentWithLine,
+            Indent
         }
     }
 }

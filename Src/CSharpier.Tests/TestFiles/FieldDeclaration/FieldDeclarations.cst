@@ -37,10 +37,12 @@ public class ClassName
     public SomeClass SomeName; // trailing comments
 
     public System.Text.StringBuilder NamespacedField;
-    
-    public static Dictionary<Type, string> PropertiesByType
-        = new Dictionary<Type, string>();
-        
+
+    public static Dictionary<Type, string> PropertiesByType = new Dictionary<
+        Type,
+        string
+    >();
+
     public static Dictionary<
         SomeLongTypeName,
         SomeOtherLongTypeName_______________________________
