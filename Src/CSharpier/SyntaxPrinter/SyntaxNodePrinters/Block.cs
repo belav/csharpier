@@ -25,7 +25,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             var docs = new List<Doc>
             {
-                groupId != null ? Doc.IfBreak(" ", Doc.Line, groupId) : Doc.Line,
+                groupId != null
+                    ? Doc.IfBreak(" ", Doc.Line, groupId)
+                    : node.Parent is ParenthesizedLambdaExpressionSyntax ? Doc.Null : Doc.Line,
                 Token.Print(node.OpenBraceToken)
             };
             if (node.Statements.Count > 0)

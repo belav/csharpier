@@ -103,6 +103,9 @@ namespace CSharpier.DocTypes
                 GroupId = groupId,
             };
 
+        public static IndentIfBreak IndentIfBreak(Doc contents, string groupId) =>
+            new(contents, groupId);
+
         public static Doc Directive(string value) => new StringDoc(value, true);
     }
 
