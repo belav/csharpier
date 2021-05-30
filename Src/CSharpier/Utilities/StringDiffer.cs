@@ -4,7 +4,11 @@ namespace CSharpier.Utilities
 {
     public static class StringDiffer
     {
-        public static void PrintDifference(string expected, string actual, IConsole console)
+        /// <summary>
+        /// Given two strings that are different, this will print the first different line it encounters
+        /// along with a single line before and after that different line.
+        /// </summary>
+        public static void PrintFirstDifference(string expected, string actual, IConsole console)
         {
             if (expected == actual)
             {
@@ -69,7 +73,7 @@ namespace CSharpier.Utilities
 
         private static string? MakeWhiteSpaceVisible(string? value)
         {
-            return value?.Replace(' ', (char)183).Replace('\t', '→');
+            return value?.Replace(' ', '·').Replace('\t', '→');
         }
     }
 }

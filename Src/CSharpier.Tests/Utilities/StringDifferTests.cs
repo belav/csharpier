@@ -127,7 +127,7 @@ four
         private string PrintDifference(string expected, string actual)
         {
             var testConsole = new TestConsole();
-            StringDiffer.PrintDifference(expected, actual, testConsole);
+            StringDiffer.PrintFirstDifference(expected, actual, testConsole);
             return testConsole.GetOutput();
         }
 

@@ -236,7 +236,7 @@ namespace CSharpier
                 if (result.Code != fileReaderResult.FileContents)
                 {
                     WriteLine(GetPath(file) + " - was not formatted");
-                    StringDiffer.PrintDifference(
+                    StringDiffer.PrintFirstDifference(
                         result.Code,
                         fileReaderResult.FileContents,
                         this.Console
