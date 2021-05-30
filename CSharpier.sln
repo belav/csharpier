@@ -47,6 +47,13 @@ EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Benchmarks", "Src\CSharpier.Benchmarks\CSharpier.Benchmarks.csproj", "{A338903F-69AD-4950-B827-8EE75F98B620}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{A267B806-24B0-4F3E-B5C2-9481C98627D0}"
+ProjectSection(SolutionItems) = preProject
+	Src\CSharpier.MsBuild\README.md = Src\CSharpier.MsBuild\README.md
+	Src\CSharpier.MsBuild\build\CSharpier.MsBuild.targets = Src\CSharpier.MsBuild\build\CSharpier.MsBuild.targets
+	Src\CSharpier.MsBuild\build\CSharpier.MsBuild.props = Src\CSharpier.MsBuild\build\CSharpier.MsBuild.props
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,5 +80,9 @@ Global
 		{A338903F-69AD-4950-B827-8EE75F98B620}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A338903F-69AD-4950-B827-8EE75F98B620}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A338903F-69AD-4950-B827-8EE75F98B620}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FE3D5DE-1284-45C6-95FC-8B3CDE63684B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FE3D5DE-1284-45C6-95FC-8B3CDE63684B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FE3D5DE-1284-45C6-95FC-8B3CDE63684B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FE3D5DE-1284-45C6-95FC-8B3CDE63684B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

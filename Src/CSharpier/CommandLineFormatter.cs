@@ -242,8 +242,11 @@ namespace CSharpier
             cancellationToken.ThrowIfCancellationRequested();
             Interlocked.Increment(ref this.Result.Files);
 
-            if (!this.CommandLineOptions.Check && !this.CommandLineOptions.SkipWrite)
-            {
+            if (
+                !this.CommandLineOptions.Check
+                && !this.CommandLineOptions.SkipWrite
+                && result.Code != fileReaderResult.FileContents
+            ) {
                 // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
                 this.FileSystem.File.WriteAllText(file, result.Code, fileReaderResult.Encoding);
             }
