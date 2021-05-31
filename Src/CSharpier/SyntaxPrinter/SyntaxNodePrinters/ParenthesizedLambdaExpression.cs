@@ -14,7 +14,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Modifiers.Print(node.Modifiers),
                 ParameterList.Print(node.ParameterList),
                 " ",
-                Token.PrintWithSuffix(node.ArrowToken, " ")
+                Token.PrintWithSuffix(node.ArrowToken, node.Block is not null ? Doc.HardLine : " ")
             };
             if (node.ExpressionBody != null)
             {
