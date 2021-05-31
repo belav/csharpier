@@ -8,8 +8,13 @@ namespace CSharpier
 {
     public partial class SyntaxNodeComparer
     {
-        private CompareResult Compare(SyntaxNode originalNode, SyntaxNode formattedNode)
+        private CompareResult Compare(
+            (SyntaxNode originalNode, SyntaxNode originalParent) original,
+            (SyntaxNode formattedNode, SyntaxNode formattedParent) formatted
+        )
         {
+            var (originalNode, originalParent) = original;
+            var (formattedNode, formattedParent) = formatted;
             if (originalNode == null && formattedNode == null)
             {
                 return Equal;
@@ -516,12 +521,12 @@ namespace CSharpier
         private CompareResult CompareQualifiedNameSyntax(QualifiedNameSyntax originalNode, QualifiedNameSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Left);
-            formattedStack.Push(formattedNode.Left);
+            originalStack.Push((originalNode.Left, originalNode));
+            formattedStack.Push((formattedNode.Left, formattedNode));
             result = this.Compare(originalNode.DotToken, formattedNode.DotToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Right);
-            formattedStack.Push(formattedNode.Right);
+            originalStack.Push((originalNode.Right, originalNode));
+            formattedStack.Push((formattedNode.Right, formattedNode));
             if (originalNode.IsVar != formattedNode.IsVar) return NotEqual(originalNode, formattedNode);
             if (originalNode.IsUnmanaged != formattedNode.IsUnmanaged) return NotEqual(originalNode, formattedNode);
             if (originalNode.IsNotNull != formattedNode.IsNotNull) return NotEqual(originalNode, formattedNode);
@@ -535,8 +540,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.TypeArgumentList);
-            formattedStack.Push(formattedNode.TypeArgumentList);
+            originalStack.Push((originalNode.TypeArgumentList, originalNode));
+            formattedStack.Push((formattedNode.TypeArgumentList, formattedNode));
             if (originalNode.IsUnboundGenericName != formattedNode.IsUnboundGenericName) return NotEqual(originalNode, formattedNode);
             if (originalNode.IsVar != formattedNode.IsVar) return NotEqual(originalNode, formattedNode);
             if (originalNode.IsUnmanaged != formattedNode.IsUnmanaged) return NotEqual(originalNode, formattedNode);
@@ -563,12 +568,12 @@ namespace CSharpier
         private CompareResult CompareAliasQualifiedNameSyntax(AliasQualifiedNameSyntax originalNode, AliasQualifiedNameSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Alias);
-            formattedStack.Push(formattedNode.Alias);
+            originalStack.Push((originalNode.Alias, originalNode));
+            formattedStack.Push((formattedNode.Alias, formattedNode));
             result = this.Compare(originalNode.ColonColonToken, formattedNode.ColonColonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             if (originalNode.IsVar != formattedNode.IsVar) return NotEqual(originalNode, formattedNode);
             if (originalNode.IsUnmanaged != formattedNode.IsUnmanaged) return NotEqual(originalNode, formattedNode);
             if (originalNode.IsNotNull != formattedNode.IsNotNull) return NotEqual(originalNode, formattedNode);
@@ -593,8 +598,8 @@ namespace CSharpier
         private CompareResult CompareArrayTypeSyntax(ArrayTypeSyntax originalNode, ArrayTypeSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.ElementType);
-            formattedStack.Push(formattedNode.ElementType);
+            originalStack.Push((originalNode.ElementType, originalNode));
+            formattedStack.Push((formattedNode.ElementType, formattedNode));
             result = this.CompareLists(originalNode.RankSpecifiers, formattedNode.RankSpecifiers, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             if (originalNode.IsVar != formattedNode.IsVar) return NotEqual(originalNode, formattedNode);
@@ -623,8 +628,8 @@ namespace CSharpier
         private CompareResult ComparePointerTypeSyntax(PointerTypeSyntax originalNode, PointerTypeSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.ElementType);
-            formattedStack.Push(formattedNode.ElementType);
+            originalStack.Push((originalNode.ElementType, originalNode));
+            formattedStack.Push((formattedNode.ElementType, formattedNode));
             result = this.Compare(originalNode.AsteriskToken, formattedNode.AsteriskToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsVar != formattedNode.IsVar) return NotEqual(originalNode, formattedNode);
@@ -642,10 +647,10 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.AsteriskToken, formattedNode.AsteriskToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.CallingConvention);
-            formattedStack.Push(formattedNode.CallingConvention);
-            originalStack.Push(originalNode.ParameterList);
-            formattedStack.Push(formattedNode.ParameterList);
+            originalStack.Push((originalNode.CallingConvention, originalNode));
+            formattedStack.Push((formattedNode.CallingConvention, formattedNode));
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
             if (originalNode.IsVar != formattedNode.IsVar) return NotEqual(originalNode, formattedNode);
             if (originalNode.IsUnmanaged != formattedNode.IsUnmanaged) return NotEqual(originalNode, formattedNode);
             if (originalNode.IsNotNull != formattedNode.IsNotNull) return NotEqual(originalNode, formattedNode);
@@ -673,8 +678,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.ManagedOrUnmanagedKeyword, formattedNode.ManagedOrUnmanagedKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.UnmanagedCallingConventionList);
-            formattedStack.Push(formattedNode.UnmanagedCallingConventionList);
+            originalStack.Push((originalNode.UnmanagedCallingConventionList, originalNode));
+            formattedStack.Push((formattedNode.UnmanagedCallingConventionList, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -703,8 +708,8 @@ namespace CSharpier
         private CompareResult CompareNullableTypeSyntax(NullableTypeSyntax originalNode, NullableTypeSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.ElementType);
-            formattedStack.Push(formattedNode.ElementType);
+            originalStack.Push((originalNode.ElementType, originalNode));
+            formattedStack.Push((formattedNode.ElementType, formattedNode));
             result = this.Compare(originalNode.QuestionToken, formattedNode.QuestionToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsVar != formattedNode.IsVar) return NotEqual(originalNode, formattedNode);
@@ -737,8 +742,8 @@ namespace CSharpier
         private CompareResult CompareTupleElementSyntax(TupleElementSyntax originalNode, TupleElementSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -764,8 +769,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.ReadOnlyKeyword, formattedNode.ReadOnlyKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             if (originalNode.IsVar != formattedNode.IsVar) return NotEqual(originalNode, formattedNode);
             if (originalNode.IsUnmanaged != formattedNode.IsUnmanaged) return NotEqual(originalNode, formattedNode);
             if (originalNode.IsNotNull != formattedNode.IsNotNull) return NotEqual(originalNode, formattedNode);
@@ -779,8 +784,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -805,8 +810,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Operand);
-            formattedStack.Push(formattedNode.Operand);
+            originalStack.Push((originalNode.Operand, originalNode));
+            formattedStack.Push((formattedNode.Operand, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -815,16 +820,16 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.AwaitKeyword, formattedNode.AwaitKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult ComparePostfixUnaryExpressionSyntax(PostfixUnaryExpressionSyntax originalNode, PostfixUnaryExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Operand);
-            formattedStack.Push(formattedNode.Operand);
+            originalStack.Push((originalNode.Operand, originalNode));
+            formattedStack.Push((formattedNode.Operand, formattedNode));
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -833,24 +838,24 @@ namespace CSharpier
         private CompareResult CompareMemberAccessExpressionSyntax(MemberAccessExpressionSyntax originalNode, MemberAccessExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareConditionalAccessExpressionSyntax(ConditionalAccessExpressionSyntax originalNode, ConditionalAccessExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.WhenNotNull);
-            formattedStack.Push(formattedNode.WhenNotNull);
+            originalStack.Push((originalNode.WhenNotNull, originalNode));
+            formattedStack.Push((formattedNode.WhenNotNull, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -859,76 +864,76 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareElementBindingExpressionSyntax(ElementBindingExpressionSyntax originalNode, ElementBindingExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.ArgumentList);
-            formattedStack.Push(formattedNode.ArgumentList);
+            originalStack.Push((originalNode.ArgumentList, originalNode));
+            formattedStack.Push((formattedNode.ArgumentList, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareRangeExpressionSyntax(RangeExpressionSyntax originalNode, RangeExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.LeftOperand);
-            formattedStack.Push(formattedNode.LeftOperand);
+            originalStack.Push((originalNode.LeftOperand, originalNode));
+            formattedStack.Push((formattedNode.LeftOperand, formattedNode));
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.RightOperand);
-            formattedStack.Push(formattedNode.RightOperand);
+            originalStack.Push((originalNode.RightOperand, originalNode));
+            formattedStack.Push((formattedNode.RightOperand, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareImplicitElementAccessSyntax(ImplicitElementAccessSyntax originalNode, ImplicitElementAccessSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.ArgumentList);
-            formattedStack.Push(formattedNode.ArgumentList);
+            originalStack.Push((originalNode.ArgumentList, originalNode));
+            formattedStack.Push((formattedNode.ArgumentList, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareBinaryExpressionSyntax(BinaryExpressionSyntax originalNode, BinaryExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Left);
-            formattedStack.Push(formattedNode.Left);
+            originalStack.Push((originalNode.Left, originalNode));
+            formattedStack.Push((formattedNode.Left, formattedNode));
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Right);
-            formattedStack.Push(formattedNode.Right);
+            originalStack.Push((originalNode.Right, originalNode));
+            formattedStack.Push((formattedNode.Right, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareAssignmentExpressionSyntax(AssignmentExpressionSyntax originalNode, AssignmentExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Left);
-            formattedStack.Push(formattedNode.Left);
+            originalStack.Push((originalNode.Left, originalNode));
+            formattedStack.Push((formattedNode.Left, formattedNode));
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Right);
-            formattedStack.Push(formattedNode.Right);
+            originalStack.Push((originalNode.Right, originalNode));
+            formattedStack.Push((formattedNode.Right, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareConditionalExpressionSyntax(ConditionalExpressionSyntax originalNode, ConditionalExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Condition);
-            formattedStack.Push(formattedNode.Condition);
+            originalStack.Push((originalNode.Condition, originalNode));
+            formattedStack.Push((formattedNode.Condition, formattedNode));
             result = this.Compare(originalNode.QuestionToken, formattedNode.QuestionToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.WhenTrue);
-            formattedStack.Push(formattedNode.WhenTrue);
+            originalStack.Push((originalNode.WhenTrue, originalNode));
+            formattedStack.Push((formattedNode.WhenTrue, formattedNode));
             result = this.Compare(originalNode.ColonToken, formattedNode.ColonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.WhenFalse);
-            formattedStack.Push(formattedNode.WhenFalse);
+            originalStack.Push((originalNode.WhenFalse, originalNode));
+            formattedStack.Push((formattedNode.WhenFalse, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -963,8 +968,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -977,8 +982,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -991,12 +996,12 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.Comma, formattedNode.Comma, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1009,8 +1014,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1023,8 +1028,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1037,8 +1042,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1051,8 +1056,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1061,20 +1066,20 @@ namespace CSharpier
         private CompareResult CompareInvocationExpressionSyntax(InvocationExpressionSyntax originalNode, InvocationExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
-            originalStack.Push(originalNode.ArgumentList);
-            formattedStack.Push(formattedNode.ArgumentList);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
+            originalStack.Push((originalNode.ArgumentList, originalNode));
+            formattedStack.Push((formattedNode.ArgumentList, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareElementAccessExpressionSyntax(ElementAccessExpressionSyntax originalNode, ElementAccessExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
-            originalStack.Push(originalNode.ArgumentList);
-            formattedStack.Push(formattedNode.ArgumentList);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
+            originalStack.Push((originalNode.ArgumentList, originalNode));
+            formattedStack.Push((formattedNode.ArgumentList, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1109,12 +1114,12 @@ namespace CSharpier
         private CompareResult CompareArgumentSyntax(ArgumentSyntax originalNode, ArgumentSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.NameColon);
-            formattedStack.Push(formattedNode.NameColon);
+            originalStack.Push((originalNode.NameColon, originalNode));
+            formattedStack.Push((formattedNode.NameColon, formattedNode));
             result = this.Compare(originalNode.RefKindKeyword, formattedNode.RefKindKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.RefOrOutKeyword, formattedNode.RefOrOutKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1123,8 +1128,8 @@ namespace CSharpier
         private CompareResult CompareNameColonSyntax(NameColonSyntax originalNode, NameColonSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.Compare(originalNode.ColonToken, formattedNode.ColonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1133,10 +1138,10 @@ namespace CSharpier
         private CompareResult CompareDeclarationExpressionSyntax(DeclarationExpressionSyntax originalNode, DeclarationExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
-            originalStack.Push(originalNode.Designation);
-            formattedStack.Push(formattedNode.Designation);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
+            originalStack.Push((originalNode.Designation, originalNode));
+            formattedStack.Push((formattedNode.Designation, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1145,12 +1150,12 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1161,16 +1166,16 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.DelegateKeyword, formattedNode.DelegateKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ParameterList);
-            formattedStack.Push(formattedNode.ParameterList);
-            originalStack.Push(originalNode.Block);
-            formattedStack.Push(formattedNode.Block);
-            originalStack.Push(originalNode.ExpressionBody);
-            formattedStack.Push(formattedNode.ExpressionBody);
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
+            originalStack.Push((originalNode.Block, originalNode));
+            formattedStack.Push((formattedNode.Block, formattedNode));
+            originalStack.Push((originalNode.ExpressionBody, originalNode));
+            formattedStack.Push((formattedNode.ExpressionBody, formattedNode));
             result = this.Compare(originalNode.AsyncKeyword, formattedNode.AsyncKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Body);
-            formattedStack.Push(formattedNode.Body);
+            originalStack.Push((originalNode.Body, originalNode));
+            formattedStack.Push((formattedNode.Body, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1179,18 +1184,18 @@ namespace CSharpier
             CompareResult result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Parameter);
-            formattedStack.Push(formattedNode.Parameter);
+            originalStack.Push((originalNode.Parameter, originalNode));
+            formattedStack.Push((formattedNode.Parameter, formattedNode));
             result = this.Compare(originalNode.ArrowToken, formattedNode.ArrowToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Block);
-            formattedStack.Push(formattedNode.Block);
-            originalStack.Push(originalNode.ExpressionBody);
-            formattedStack.Push(formattedNode.ExpressionBody);
+            originalStack.Push((originalNode.Block, originalNode));
+            formattedStack.Push((formattedNode.Block, formattedNode));
+            originalStack.Push((originalNode.ExpressionBody, originalNode));
+            formattedStack.Push((formattedNode.ExpressionBody, formattedNode));
             result = this.Compare(originalNode.AsyncKeyword, formattedNode.AsyncKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Body);
-            formattedStack.Push(formattedNode.Body);
+            originalStack.Push((originalNode.Body, originalNode));
+            formattedStack.Push((formattedNode.Body, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1199,8 +1204,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.RefKeyword, formattedNode.RefKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1209,18 +1214,18 @@ namespace CSharpier
             CompareResult result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ParameterList);
-            formattedStack.Push(formattedNode.ParameterList);
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
             result = this.Compare(originalNode.ArrowToken, formattedNode.ArrowToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Block);
-            formattedStack.Push(formattedNode.Block);
-            originalStack.Push(originalNode.ExpressionBody);
-            formattedStack.Push(formattedNode.ExpressionBody);
+            originalStack.Push((originalNode.Block, originalNode));
+            formattedStack.Push((formattedNode.Block, formattedNode));
+            originalStack.Push((originalNode.ExpressionBody, originalNode));
+            formattedStack.Push((formattedNode.ExpressionBody, formattedNode));
             result = this.Compare(originalNode.AsyncKeyword, formattedNode.AsyncKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Body);
-            formattedStack.Push(formattedNode.Body);
+            originalStack.Push((originalNode.Body, originalNode));
+            formattedStack.Push((formattedNode.Body, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1243,10 +1248,10 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.NewKeyword, formattedNode.NewKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ArgumentList);
-            formattedStack.Push(formattedNode.ArgumentList);
-            originalStack.Push(originalNode.Initializer);
-            formattedStack.Push(formattedNode.Initializer);
+            originalStack.Push((originalNode.ArgumentList, originalNode));
+            formattedStack.Push((formattedNode.ArgumentList, formattedNode));
+            originalStack.Push((originalNode.Initializer, originalNode));
+            formattedStack.Push((formattedNode.Initializer, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1255,34 +1260,34 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.NewKeyword, formattedNode.NewKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
-            originalStack.Push(originalNode.ArgumentList);
-            formattedStack.Push(formattedNode.ArgumentList);
-            originalStack.Push(originalNode.Initializer);
-            formattedStack.Push(formattedNode.Initializer);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
+            originalStack.Push((originalNode.ArgumentList, originalNode));
+            formattedStack.Push((formattedNode.ArgumentList, formattedNode));
+            originalStack.Push((originalNode.Initializer, originalNode));
+            formattedStack.Push((formattedNode.Initializer, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareWithExpressionSyntax(WithExpressionSyntax originalNode, WithExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.WithKeyword, formattedNode.WithKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Initializer);
-            formattedStack.Push(formattedNode.Initializer);
+            originalStack.Push((originalNode.Initializer, originalNode));
+            formattedStack.Push((formattedNode.Initializer, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareAnonymousObjectMemberDeclaratorSyntax(AnonymousObjectMemberDeclaratorSyntax originalNode, AnonymousObjectMemberDeclaratorSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.NameEquals);
-            formattedStack.Push(formattedNode.NameEquals);
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.NameEquals, originalNode));
+            formattedStack.Push((formattedNode.NameEquals, formattedNode));
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1307,10 +1312,10 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.NewKeyword, formattedNode.NewKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
-            originalStack.Push(originalNode.Initializer);
-            formattedStack.Push(formattedNode.Initializer);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
+            originalStack.Push((originalNode.Initializer, originalNode));
+            formattedStack.Push((formattedNode.Initializer, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1325,8 +1330,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.CloseBracketToken, formattedNode.CloseBracketToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Initializer);
-            formattedStack.Push(formattedNode.Initializer);
+            originalStack.Push((originalNode.Initializer, originalNode));
+            formattedStack.Push((formattedNode.Initializer, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1335,10 +1340,10 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.StackAllocKeyword, formattedNode.StackAllocKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
-            originalStack.Push(originalNode.Initializer);
-            formattedStack.Push(formattedNode.Initializer);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
+            originalStack.Push((originalNode.Initializer, originalNode));
+            formattedStack.Push((formattedNode.Initializer, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1351,18 +1356,18 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.CloseBracketToken, formattedNode.CloseBracketToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Initializer);
-            formattedStack.Push(formattedNode.Initializer);
+            originalStack.Push((originalNode.Initializer, originalNode));
+            formattedStack.Push((formattedNode.Initializer, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareQueryExpressionSyntax(QueryExpressionSyntax originalNode, QueryExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.FromClause);
-            formattedStack.Push(formattedNode.FromClause);
-            originalStack.Push(originalNode.Body);
-            formattedStack.Push(formattedNode.Body);
+            originalStack.Push((originalNode.FromClause, originalNode));
+            formattedStack.Push((formattedNode.FromClause, formattedNode));
+            originalStack.Push((originalNode.Body, originalNode));
+            formattedStack.Push((formattedNode.Body, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1371,10 +1376,10 @@ namespace CSharpier
             CompareResult result;
             result = this.CompareLists(originalNode.Clauses, formattedNode.Clauses, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.SelectOrGroup);
-            formattedStack.Push(formattedNode.SelectOrGroup);
-            originalStack.Push(originalNode.Continuation);
-            formattedStack.Push(formattedNode.Continuation);
+            originalStack.Push((originalNode.SelectOrGroup, originalNode));
+            formattedStack.Push((formattedNode.SelectOrGroup, formattedNode));
+            originalStack.Push((originalNode.Continuation, originalNode));
+            formattedStack.Push((formattedNode.Continuation, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1383,14 +1388,14 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.FromKeyword, formattedNode.FromKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.InKeyword, formattedNode.InKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1403,8 +1408,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.EqualsToken, formattedNode.EqualsToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1413,24 +1418,24 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.JoinKeyword, formattedNode.JoinKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.InKeyword, formattedNode.InKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.InExpression);
-            formattedStack.Push(formattedNode.InExpression);
+            originalStack.Push((originalNode.InExpression, originalNode));
+            formattedStack.Push((formattedNode.InExpression, formattedNode));
             result = this.Compare(originalNode.OnKeyword, formattedNode.OnKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.LeftExpression);
-            formattedStack.Push(formattedNode.LeftExpression);
+            originalStack.Push((originalNode.LeftExpression, originalNode));
+            formattedStack.Push((formattedNode.LeftExpression, formattedNode));
             result = this.Compare(originalNode.EqualsKeyword, formattedNode.EqualsKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.RightExpression);
-            formattedStack.Push(formattedNode.RightExpression);
-            originalStack.Push(originalNode.Into);
-            formattedStack.Push(formattedNode.Into);
+            originalStack.Push((originalNode.RightExpression, originalNode));
+            formattedStack.Push((formattedNode.RightExpression, formattedNode));
+            originalStack.Push((originalNode.Into, originalNode));
+            formattedStack.Push((formattedNode.Into, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1449,8 +1454,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.WhereKeyword, formattedNode.WhereKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Condition);
-            formattedStack.Push(formattedNode.Condition);
+            originalStack.Push((originalNode.Condition, originalNode));
+            formattedStack.Push((formattedNode.Condition, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1469,8 +1474,8 @@ namespace CSharpier
         private CompareResult CompareOrderingSyntax(OrderingSyntax originalNode, OrderingSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.AscendingOrDescendingKeyword, formattedNode.AscendingOrDescendingKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1481,8 +1486,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.SelectKeyword, formattedNode.SelectKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1491,12 +1496,12 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.GroupKeyword, formattedNode.GroupKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.GroupExpression);
-            formattedStack.Push(formattedNode.GroupExpression);
+            originalStack.Push((originalNode.GroupExpression, originalNode));
+            formattedStack.Push((formattedNode.GroupExpression, formattedNode));
             result = this.Compare(originalNode.ByKeyword, formattedNode.ByKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ByExpression);
-            formattedStack.Push(formattedNode.ByExpression);
+            originalStack.Push((originalNode.ByExpression, originalNode));
+            formattedStack.Push((formattedNode.ByExpression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1507,8 +1512,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Body);
-            formattedStack.Push(formattedNode.Body);
+            originalStack.Push((originalNode.Body, originalNode));
+            formattedStack.Push((formattedNode.Body, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1535,12 +1540,12 @@ namespace CSharpier
         private CompareResult CompareIsPatternExpressionSyntax(IsPatternExpressionSyntax originalNode, IsPatternExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.IsKeyword, formattedNode.IsKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Pattern);
-            formattedStack.Push(formattedNode.Pattern);
+            originalStack.Push((originalNode.Pattern, originalNode));
+            formattedStack.Push((formattedNode.Pattern, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1549,8 +1554,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.ThrowKeyword, formattedNode.ThrowKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1559,8 +1564,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.WhenKeyword, formattedNode.WhenKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Condition);
-            formattedStack.Push(formattedNode.Condition);
+            originalStack.Push((originalNode.Condition, originalNode));
+            formattedStack.Push((formattedNode.Condition, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1575,10 +1580,10 @@ namespace CSharpier
         private CompareResult CompareDeclarationPatternSyntax(DeclarationPatternSyntax originalNode, DeclarationPatternSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
-            originalStack.Push(originalNode.Designation);
-            formattedStack.Push(formattedNode.Designation);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
+            originalStack.Push((originalNode.Designation, originalNode));
+            formattedStack.Push((formattedNode.Designation, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1587,22 +1592,22 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.VarKeyword, formattedNode.VarKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Designation);
-            formattedStack.Push(formattedNode.Designation);
+            originalStack.Push((originalNode.Designation, originalNode));
+            formattedStack.Push((formattedNode.Designation, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareRecursivePatternSyntax(RecursivePatternSyntax originalNode, RecursivePatternSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
-            originalStack.Push(originalNode.PositionalPatternClause);
-            formattedStack.Push(formattedNode.PositionalPatternClause);
-            originalStack.Push(originalNode.PropertyPatternClause);
-            formattedStack.Push(formattedNode.PropertyPatternClause);
-            originalStack.Push(originalNode.Designation);
-            formattedStack.Push(formattedNode.Designation);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
+            originalStack.Push((originalNode.PositionalPatternClause, originalNode));
+            formattedStack.Push((formattedNode.PositionalPatternClause, formattedNode));
+            originalStack.Push((originalNode.PropertyPatternClause, originalNode));
+            formattedStack.Push((formattedNode.PropertyPatternClause, formattedNode));
+            originalStack.Push((originalNode.Designation, originalNode));
+            formattedStack.Push((formattedNode.Designation, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1637,18 +1642,18 @@ namespace CSharpier
         private CompareResult CompareSubpatternSyntax(SubpatternSyntax originalNode, SubpatternSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.NameColon);
-            formattedStack.Push(formattedNode.NameColon);
-            originalStack.Push(originalNode.Pattern);
-            formattedStack.Push(formattedNode.Pattern);
+            originalStack.Push((originalNode.NameColon, originalNode));
+            formattedStack.Push((formattedNode.NameColon, formattedNode));
+            originalStack.Push((originalNode.Pattern, originalNode));
+            formattedStack.Push((formattedNode.Pattern, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareConstantPatternSyntax(ConstantPatternSyntax originalNode, ConstantPatternSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1657,8 +1662,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Pattern);
-            formattedStack.Push(formattedNode.Pattern);
+            originalStack.Push((originalNode.Pattern, originalNode));
+            formattedStack.Push((formattedNode.Pattern, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1669,28 +1674,28 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareTypePatternSyntax(TypePatternSyntax originalNode, TypePatternSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareBinaryPatternSyntax(BinaryPatternSyntax originalNode, BinaryPatternSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Left);
-            formattedStack.Push(formattedNode.Left);
+            originalStack.Push((originalNode.Left, originalNode));
+            formattedStack.Push((formattedNode.Left, formattedNode));
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Right);
-            formattedStack.Push(formattedNode.Right);
+            originalStack.Push((originalNode.Right, originalNode));
+            formattedStack.Push((formattedNode.Right, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1699,8 +1704,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Pattern);
-            formattedStack.Push(formattedNode.Pattern);
+            originalStack.Push((originalNode.Pattern, originalNode));
+            formattedStack.Push((formattedNode.Pattern, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1717,12 +1722,12 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
-            originalStack.Push(originalNode.AlignmentClause);
-            formattedStack.Push(formattedNode.AlignmentClause);
-            originalStack.Push(originalNode.FormatClause);
-            formattedStack.Push(formattedNode.FormatClause);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
+            originalStack.Push((originalNode.AlignmentClause, originalNode));
+            formattedStack.Push((formattedNode.AlignmentClause, formattedNode));
+            originalStack.Push((originalNode.FormatClause, originalNode));
+            formattedStack.Push((formattedNode.FormatClause, formattedNode));
             result = this.Compare(originalNode.CloseBraceToken, formattedNode.CloseBraceToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1733,8 +1738,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.CommaToken, formattedNode.CommaToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Value);
-            formattedStack.Push(formattedNode.Value);
+            originalStack.Push((originalNode.Value, originalNode));
+            formattedStack.Push((formattedNode.Value, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1755,8 +1760,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Statement);
-            formattedStack.Push(formattedNode.Statement);
+            originalStack.Push((originalNode.Statement, originalNode));
+            formattedStack.Push((formattedNode.Statement, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1781,20 +1786,20 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ReturnType);
-            formattedStack.Push(formattedNode.ReturnType);
+            originalStack.Push((originalNode.ReturnType, originalNode));
+            formattedStack.Push((formattedNode.ReturnType, formattedNode));
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.TypeParameterList);
-            formattedStack.Push(formattedNode.TypeParameterList);
-            originalStack.Push(originalNode.ParameterList);
-            formattedStack.Push(formattedNode.ParameterList);
+            originalStack.Push((originalNode.TypeParameterList, originalNode));
+            formattedStack.Push((formattedNode.TypeParameterList, formattedNode));
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
             result = this.CompareLists(originalNode.ConstraintClauses, formattedNode.ConstraintClauses, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Body);
-            formattedStack.Push(formattedNode.Body);
-            originalStack.Push(originalNode.ExpressionBody);
-            formattedStack.Push(formattedNode.ExpressionBody);
+            originalStack.Push((originalNode.Body, originalNode));
+            formattedStack.Push((formattedNode.Body, formattedNode));
+            originalStack.Push((originalNode.ExpressionBody, originalNode));
+            formattedStack.Push((formattedNode.ExpressionBody, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1811,8 +1816,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Declaration);
-            formattedStack.Push(formattedNode.Declaration);
+            originalStack.Push((originalNode.Declaration, originalNode));
+            formattedStack.Push((formattedNode.Declaration, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsConst != formattedNode.IsConst) return NotEqual(originalNode, formattedNode);
@@ -1822,8 +1827,8 @@ namespace CSharpier
         private CompareResult CompareVariableDeclarationSyntax(VariableDeclarationSyntax originalNode, VariableDeclarationSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.CompareLists(originalNode.Variables, formattedNode.Variables, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Variables.GetSeparators().ToList(), formattedNode.Variables.GetSeparators().ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);
@@ -1836,10 +1841,10 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ArgumentList);
-            formattedStack.Push(formattedNode.ArgumentList);
-            originalStack.Push(originalNode.Initializer);
-            formattedStack.Push(formattedNode.Initializer);
+            originalStack.Push((originalNode.ArgumentList, originalNode));
+            formattedStack.Push((formattedNode.ArgumentList, formattedNode));
+            originalStack.Push((originalNode.Initializer, originalNode));
+            formattedStack.Push((formattedNode.Initializer, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1848,8 +1853,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.EqualsToken, formattedNode.EqualsToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Value);
-            formattedStack.Push(formattedNode.Value);
+            originalStack.Push((originalNode.Value, originalNode));
+            formattedStack.Push((formattedNode.Value, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1888,8 +1893,8 @@ namespace CSharpier
             CompareResult result;
             result = this.CompareLists(originalNode.AttributeLists, formattedNode.AttributeLists, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.AllowsAnyExpression != formattedNode.AllowsAnyExpression) return NotEqual(originalNode, formattedNode);
@@ -1915,8 +1920,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.ColonToken, formattedNode.ColonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Statement);
-            formattedStack.Push(formattedNode.Statement);
+            originalStack.Push((originalNode.Statement, originalNode));
+            formattedStack.Push((formattedNode.Statement, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -1929,8 +1934,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.CaseOrDefaultKeyword, formattedNode.CaseOrDefaultKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1967,8 +1972,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.ReturnKeyword, formattedNode.ReturnKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1981,8 +1986,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.ThrowKeyword, formattedNode.ThrowKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -1997,8 +2002,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.ReturnOrBreakKeyword, formattedNode.ReturnOrBreakKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2013,12 +2018,12 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Condition);
-            formattedStack.Push(formattedNode.Condition);
+            originalStack.Push((originalNode.Condition, originalNode));
+            formattedStack.Push((formattedNode.Condition, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Statement);
-            formattedStack.Push(formattedNode.Statement);
+            originalStack.Push((originalNode.Statement, originalNode));
+            formattedStack.Push((formattedNode.Statement, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2029,14 +2034,14 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.DoKeyword, formattedNode.DoKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Statement);
-            formattedStack.Push(formattedNode.Statement);
+            originalStack.Push((originalNode.Statement, originalNode));
+            formattedStack.Push((formattedNode.Statement, formattedNode));
             result = this.Compare(originalNode.WhileKeyword, formattedNode.WhileKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Condition);
-            formattedStack.Push(formattedNode.Condition);
+            originalStack.Push((originalNode.Condition, originalNode));
+            formattedStack.Push((formattedNode.Condition, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
@@ -2053,16 +2058,16 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Declaration);
-            formattedStack.Push(formattedNode.Declaration);
+            originalStack.Push((originalNode.Declaration, originalNode));
+            formattedStack.Push((formattedNode.Declaration, formattedNode));
             result = this.CompareLists(originalNode.Initializers, formattedNode.Initializers, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Initializers.GetSeparators().ToList(), formattedNode.Initializers.GetSeparators().ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.FirstSemicolonToken, formattedNode.FirstSemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Condition);
-            formattedStack.Push(formattedNode.Condition);
+            originalStack.Push((originalNode.Condition, originalNode));
+            formattedStack.Push((formattedNode.Condition, formattedNode));
             result = this.Compare(originalNode.SecondSemicolonToken, formattedNode.SecondSemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Incrementors, formattedNode.Incrementors, null, o => o.Span, originalNode.Span, formattedNode.Span);
@@ -2071,8 +2076,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Statement);
-            formattedStack.Push(formattedNode.Statement);
+            originalStack.Push((originalNode.Statement, originalNode));
+            formattedStack.Push((formattedNode.Statement, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2087,18 +2092,18 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.InKeyword, formattedNode.InKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Statement);
-            formattedStack.Push(formattedNode.Statement);
+            originalStack.Push((originalNode.Statement, originalNode));
+            formattedStack.Push((formattedNode.Statement, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2113,16 +2118,16 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Variable);
-            formattedStack.Push(formattedNode.Variable);
+            originalStack.Push((originalNode.Variable, originalNode));
+            formattedStack.Push((formattedNode.Variable, formattedNode));
             result = this.Compare(originalNode.InKeyword, formattedNode.InKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Statement);
-            formattedStack.Push(formattedNode.Statement);
+            originalStack.Push((originalNode.Statement, originalNode));
+            formattedStack.Push((formattedNode.Statement, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2137,14 +2142,14 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Declaration);
-            formattedStack.Push(formattedNode.Declaration);
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Declaration, originalNode));
+            formattedStack.Push((formattedNode.Declaration, formattedNode));
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Statement);
-            formattedStack.Push(formattedNode.Statement);
+            originalStack.Push((originalNode.Statement, originalNode));
+            formattedStack.Push((formattedNode.Statement, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2157,12 +2162,12 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Declaration);
-            formattedStack.Push(formattedNode.Declaration);
+            originalStack.Push((originalNode.Declaration, originalNode));
+            formattedStack.Push((formattedNode.Declaration, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Statement);
-            formattedStack.Push(formattedNode.Statement);
+            originalStack.Push((originalNode.Statement, originalNode));
+            formattedStack.Push((formattedNode.Statement, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2173,8 +2178,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.Keyword, formattedNode.Keyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Block);
-            formattedStack.Push(formattedNode.Block);
+            originalStack.Push((originalNode.Block, originalNode));
+            formattedStack.Push((formattedNode.Block, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2185,8 +2190,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.UnsafeKeyword, formattedNode.UnsafeKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Block);
-            formattedStack.Push(formattedNode.Block);
+            originalStack.Push((originalNode.Block, originalNode));
+            formattedStack.Push((formattedNode.Block, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2199,12 +2204,12 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Statement);
-            formattedStack.Push(formattedNode.Statement);
+            originalStack.Push((originalNode.Statement, originalNode));
+            formattedStack.Push((formattedNode.Statement, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2217,14 +2222,14 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Condition);
-            formattedStack.Push(formattedNode.Condition);
+            originalStack.Push((originalNode.Condition, originalNode));
+            formattedStack.Push((formattedNode.Condition, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Statement);
-            formattedStack.Push(formattedNode.Statement);
-            originalStack.Push(originalNode.Else);
-            formattedStack.Push(formattedNode.Else);
+            originalStack.Push((originalNode.Statement, originalNode));
+            formattedStack.Push((formattedNode.Statement, formattedNode));
+            originalStack.Push((originalNode.Else, originalNode));
+            formattedStack.Push((formattedNode.Else, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2233,8 +2238,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.ElseKeyword, formattedNode.ElseKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Statement);
-            formattedStack.Push(formattedNode.Statement);
+            originalStack.Push((originalNode.Statement, originalNode));
+            formattedStack.Push((formattedNode.Statement, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2247,8 +2252,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
@@ -2275,10 +2280,10 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.Keyword, formattedNode.Keyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Pattern);
-            formattedStack.Push(formattedNode.Pattern);
-            originalStack.Push(originalNode.WhenClause);
-            formattedStack.Push(formattedNode.WhenClause);
+            originalStack.Push((originalNode.Pattern, originalNode));
+            formattedStack.Push((formattedNode.Pattern, formattedNode));
+            originalStack.Push((originalNode.WhenClause, originalNode));
+            formattedStack.Push((formattedNode.WhenClause, formattedNode));
             result = this.Compare(originalNode.ColonToken, formattedNode.ColonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2289,8 +2294,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.Keyword, formattedNode.Keyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Value);
-            formattedStack.Push(formattedNode.Value);
+            originalStack.Push((originalNode.Value, originalNode));
+            formattedStack.Push((formattedNode.Value, formattedNode));
             result = this.Compare(originalNode.ColonToken, formattedNode.ColonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2309,8 +2314,8 @@ namespace CSharpier
         private CompareResult CompareSwitchExpressionSyntax(SwitchExpressionSyntax originalNode, SwitchExpressionSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.GoverningExpression);
-            formattedStack.Push(formattedNode.GoverningExpression);
+            originalStack.Push((originalNode.GoverningExpression, originalNode));
+            formattedStack.Push((formattedNode.GoverningExpression, formattedNode));
             result = this.Compare(originalNode.SwitchKeyword, formattedNode.SwitchKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
@@ -2327,14 +2332,14 @@ namespace CSharpier
         private CompareResult CompareSwitchExpressionArmSyntax(SwitchExpressionArmSyntax originalNode, SwitchExpressionArmSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Pattern);
-            formattedStack.Push(formattedNode.Pattern);
-            originalStack.Push(originalNode.WhenClause);
-            formattedStack.Push(formattedNode.WhenClause);
+            originalStack.Push((originalNode.Pattern, originalNode));
+            formattedStack.Push((formattedNode.Pattern, formattedNode));
+            originalStack.Push((originalNode.WhenClause, originalNode));
+            formattedStack.Push((formattedNode.WhenClause, formattedNode));
             result = this.Compare(originalNode.EqualsGreaterThanToken, formattedNode.EqualsGreaterThanToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2345,12 +2350,12 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.TryKeyword, formattedNode.TryKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Block);
-            formattedStack.Push(formattedNode.Block);
+            originalStack.Push((originalNode.Block, originalNode));
+            formattedStack.Push((formattedNode.Block, formattedNode));
             result = this.CompareLists(originalNode.Catches, formattedNode.Catches, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Finally);
-            formattedStack.Push(formattedNode.Finally);
+            originalStack.Push((originalNode.Finally, originalNode));
+            formattedStack.Push((formattedNode.Finally, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2359,12 +2364,12 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.CatchKeyword, formattedNode.CatchKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Declaration);
-            formattedStack.Push(formattedNode.Declaration);
-            originalStack.Push(originalNode.Filter);
-            formattedStack.Push(formattedNode.Filter);
-            originalStack.Push(originalNode.Block);
-            formattedStack.Push(formattedNode.Block);
+            originalStack.Push((originalNode.Declaration, originalNode));
+            formattedStack.Push((formattedNode.Declaration, formattedNode));
+            originalStack.Push((originalNode.Filter, originalNode));
+            formattedStack.Push((formattedNode.Filter, formattedNode));
+            originalStack.Push((originalNode.Block, originalNode));
+            formattedStack.Push((formattedNode.Block, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2373,8 +2378,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
@@ -2389,8 +2394,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenParenToken, formattedNode.OpenParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.FilterExpression);
-            formattedStack.Push(formattedNode.FilterExpression);
+            originalStack.Push((originalNode.FilterExpression, originalNode));
+            formattedStack.Push((formattedNode.FilterExpression, formattedNode));
             result = this.Compare(originalNode.CloseParenToken, formattedNode.CloseParenToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2401,8 +2406,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.FinallyKeyword, formattedNode.FinallyKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Block);
-            formattedStack.Push(formattedNode.Block);
+            originalStack.Push((originalNode.Block, originalNode));
+            formattedStack.Push((formattedNode.Block, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2443,10 +2448,10 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.StaticKeyword, formattedNode.StaticKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Alias);
-            formattedStack.Push(formattedNode.Alias);
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Alias, originalNode));
+            formattedStack.Push((formattedNode.Alias, formattedNode));
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2461,8 +2466,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.NamespaceKeyword, formattedNode.NamespaceKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Externs, formattedNode.Externs, null, o => o.Span, originalNode.Span, formattedNode.Span);
@@ -2483,8 +2488,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.OpenBracketToken, formattedNode.OpenBracketToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Target);
-            formattedStack.Push(formattedNode.Target);
+            originalStack.Push((originalNode.Target, originalNode));
+            formattedStack.Push((formattedNode.Target, formattedNode));
             result = this.CompareLists(originalNode.Attributes, formattedNode.Attributes, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Attributes.GetSeparators().ToList(), formattedNode.Attributes.GetSeparators().ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);
@@ -2507,10 +2512,10 @@ namespace CSharpier
         private CompareResult CompareAttributeSyntax(AttributeSyntax originalNode, AttributeSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
-            originalStack.Push(originalNode.ArgumentList);
-            formattedStack.Push(formattedNode.ArgumentList);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
+            originalStack.Push((originalNode.ArgumentList, originalNode));
+            formattedStack.Push((formattedNode.ArgumentList, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2531,20 +2536,20 @@ namespace CSharpier
         private CompareResult CompareAttributeArgumentSyntax(AttributeArgumentSyntax originalNode, AttributeArgumentSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.NameEquals);
-            formattedStack.Push(formattedNode.NameEquals);
-            originalStack.Push(originalNode.NameColon);
-            formattedStack.Push(formattedNode.NameColon);
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.NameEquals, originalNode));
+            formattedStack.Push((formattedNode.NameEquals, formattedNode));
+            originalStack.Push((originalNode.NameColon, originalNode));
+            formattedStack.Push((formattedNode.NameColon, formattedNode));
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareNameEqualsSyntax(NameEqualsSyntax originalNode, NameEqualsSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.Compare(originalNode.EqualsToken, formattedNode.EqualsToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2587,10 +2592,10 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.TypeParameterList);
-            formattedStack.Push(formattedNode.TypeParameterList);
-            originalStack.Push(originalNode.BaseList);
-            formattedStack.Push(formattedNode.BaseList);
+            originalStack.Push((originalNode.TypeParameterList, originalNode));
+            formattedStack.Push((formattedNode.TypeParameterList, formattedNode));
+            originalStack.Push((originalNode.BaseList, originalNode));
+            formattedStack.Push((formattedNode.BaseList, formattedNode));
             result = this.CompareLists(originalNode.ConstraintClauses, formattedNode.ConstraintClauses, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
@@ -2615,10 +2620,10 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.TypeParameterList);
-            formattedStack.Push(formattedNode.TypeParameterList);
-            originalStack.Push(originalNode.BaseList);
-            formattedStack.Push(formattedNode.BaseList);
+            originalStack.Push((originalNode.TypeParameterList, originalNode));
+            formattedStack.Push((formattedNode.TypeParameterList, formattedNode));
+            originalStack.Push((originalNode.BaseList, originalNode));
+            formattedStack.Push((formattedNode.BaseList, formattedNode));
             result = this.CompareLists(originalNode.ConstraintClauses, formattedNode.ConstraintClauses, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
@@ -2643,10 +2648,10 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.TypeParameterList);
-            formattedStack.Push(formattedNode.TypeParameterList);
-            originalStack.Push(originalNode.BaseList);
-            formattedStack.Push(formattedNode.BaseList);
+            originalStack.Push((originalNode.TypeParameterList, originalNode));
+            formattedStack.Push((formattedNode.TypeParameterList, formattedNode));
+            originalStack.Push((originalNode.BaseList, originalNode));
+            formattedStack.Push((formattedNode.BaseList, formattedNode));
             result = this.CompareLists(originalNode.ConstraintClauses, formattedNode.ConstraintClauses, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
@@ -2671,12 +2676,12 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.TypeParameterList);
-            formattedStack.Push(formattedNode.TypeParameterList);
-            originalStack.Push(originalNode.ParameterList);
-            formattedStack.Push(formattedNode.ParameterList);
-            originalStack.Push(originalNode.BaseList);
-            formattedStack.Push(formattedNode.BaseList);
+            originalStack.Push((originalNode.TypeParameterList, originalNode));
+            formattedStack.Push((formattedNode.TypeParameterList, formattedNode));
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
+            originalStack.Push((originalNode.BaseList, originalNode));
+            formattedStack.Push((formattedNode.BaseList, formattedNode));
             result = this.CompareLists(originalNode.ConstraintClauses, formattedNode.ConstraintClauses, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
@@ -2701,8 +2706,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.BaseList);
-            formattedStack.Push(formattedNode.BaseList);
+            originalStack.Push((originalNode.BaseList, originalNode));
+            formattedStack.Push((formattedNode.BaseList, formattedNode));
             result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Members, formattedNode.Members, null, o => o.Span, originalNode.Span, formattedNode.Span);
@@ -2725,14 +2730,14 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.DelegateKeyword, formattedNode.DelegateKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ReturnType);
-            formattedStack.Push(formattedNode.ReturnType);
+            originalStack.Push((originalNode.ReturnType, originalNode));
+            formattedStack.Push((formattedNode.ReturnType, formattedNode));
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.TypeParameterList);
-            formattedStack.Push(formattedNode.TypeParameterList);
-            originalStack.Push(originalNode.ParameterList);
-            formattedStack.Push(formattedNode.ParameterList);
+            originalStack.Push((originalNode.TypeParameterList, originalNode));
+            formattedStack.Push((formattedNode.TypeParameterList, formattedNode));
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
             result = this.CompareLists(originalNode.ConstraintClauses, formattedNode.ConstraintClauses, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
@@ -2749,8 +2754,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.EqualsValue);
-            formattedStack.Push(formattedNode.EqualsValue);
+            originalStack.Push((originalNode.EqualsValue, originalNode));
+            formattedStack.Push((formattedNode.EqualsValue, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2769,18 +2774,18 @@ namespace CSharpier
         private CompareResult CompareSimpleBaseTypeSyntax(SimpleBaseTypeSyntax originalNode, SimpleBaseTypeSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult ComparePrimaryConstructorBaseTypeSyntax(PrimaryConstructorBaseTypeSyntax originalNode, PrimaryConstructorBaseTypeSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
-            originalStack.Push(originalNode.ArgumentList);
-            formattedStack.Push(formattedNode.ArgumentList);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
+            originalStack.Push((originalNode.ArgumentList, originalNode));
+            formattedStack.Push((formattedNode.ArgumentList, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2789,8 +2794,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.WhereKeyword, formattedNode.WhereKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.Compare(originalNode.ColonToken, formattedNode.ColonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Constraints, formattedNode.Constraints, null, o => o.Span, originalNode.Span, formattedNode.Span);
@@ -2825,8 +2830,8 @@ namespace CSharpier
         private CompareResult CompareTypeConstraintSyntax(TypeConstraintSyntax originalNode, TypeConstraintSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2845,8 +2850,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Declaration);
-            formattedStack.Push(formattedNode.Declaration);
+            originalStack.Push((originalNode.Declaration, originalNode));
+            formattedStack.Push((formattedNode.Declaration, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2861,8 +2866,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.EventKeyword, formattedNode.EventKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Declaration);
-            formattedStack.Push(formattedNode.Declaration);
+            originalStack.Push((originalNode.Declaration, originalNode));
+            formattedStack.Push((formattedNode.Declaration, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2871,8 +2876,8 @@ namespace CSharpier
         private CompareResult CompareExplicitInterfaceSpecifierSyntax(ExplicitInterfaceSpecifierSyntax originalNode, ExplicitInterfaceSpecifierSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.Compare(originalNode.DotToken, formattedNode.DotToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2885,22 +2890,22 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ReturnType);
-            formattedStack.Push(formattedNode.ReturnType);
-            originalStack.Push(originalNode.ExplicitInterfaceSpecifier);
-            formattedStack.Push(formattedNode.ExplicitInterfaceSpecifier);
+            originalStack.Push((originalNode.ReturnType, originalNode));
+            formattedStack.Push((formattedNode.ReturnType, formattedNode));
+            originalStack.Push((originalNode.ExplicitInterfaceSpecifier, originalNode));
+            formattedStack.Push((formattedNode.ExplicitInterfaceSpecifier, formattedNode));
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.TypeParameterList);
-            formattedStack.Push(formattedNode.TypeParameterList);
-            originalStack.Push(originalNode.ParameterList);
-            formattedStack.Push(formattedNode.ParameterList);
+            originalStack.Push((originalNode.TypeParameterList, originalNode));
+            formattedStack.Push((formattedNode.TypeParameterList, formattedNode));
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
             result = this.CompareLists(originalNode.ConstraintClauses, formattedNode.ConstraintClauses, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Body);
-            formattedStack.Push(formattedNode.Body);
-            originalStack.Push(originalNode.ExpressionBody);
-            formattedStack.Push(formattedNode.ExpressionBody);
+            originalStack.Push((originalNode.Body, originalNode));
+            formattedStack.Push((formattedNode.Body, formattedNode));
+            originalStack.Push((originalNode.ExpressionBody, originalNode));
+            formattedStack.Push((formattedNode.ExpressionBody, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2913,18 +2918,18 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ReturnType);
-            formattedStack.Push(formattedNode.ReturnType);
+            originalStack.Push((originalNode.ReturnType, originalNode));
+            formattedStack.Push((formattedNode.ReturnType, formattedNode));
             result = this.Compare(originalNode.OperatorKeyword, formattedNode.OperatorKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ParameterList);
-            formattedStack.Push(formattedNode.ParameterList);
-            originalStack.Push(originalNode.Body);
-            formattedStack.Push(formattedNode.Body);
-            originalStack.Push(originalNode.ExpressionBody);
-            formattedStack.Push(formattedNode.ExpressionBody);
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
+            originalStack.Push((originalNode.Body, originalNode));
+            formattedStack.Push((formattedNode.Body, formattedNode));
+            originalStack.Push((originalNode.ExpressionBody, originalNode));
+            formattedStack.Push((formattedNode.ExpressionBody, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2941,14 +2946,14 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OperatorKeyword, formattedNode.OperatorKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
-            originalStack.Push(originalNode.ParameterList);
-            formattedStack.Push(formattedNode.ParameterList);
-            originalStack.Push(originalNode.Body);
-            formattedStack.Push(formattedNode.Body);
-            originalStack.Push(originalNode.ExpressionBody);
-            formattedStack.Push(formattedNode.ExpressionBody);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
+            originalStack.Push((originalNode.Body, originalNode));
+            formattedStack.Push((formattedNode.Body, formattedNode));
+            originalStack.Push((originalNode.ExpressionBody, originalNode));
+            formattedStack.Push((formattedNode.ExpressionBody, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2963,14 +2968,14 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ParameterList);
-            formattedStack.Push(formattedNode.ParameterList);
-            originalStack.Push(originalNode.Initializer);
-            formattedStack.Push(formattedNode.Initializer);
-            originalStack.Push(originalNode.Body);
-            formattedStack.Push(formattedNode.Body);
-            originalStack.Push(originalNode.ExpressionBody);
-            formattedStack.Push(formattedNode.ExpressionBody);
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
+            originalStack.Push((originalNode.Initializer, originalNode));
+            formattedStack.Push((formattedNode.Initializer, formattedNode));
+            originalStack.Push((originalNode.Body, originalNode));
+            formattedStack.Push((formattedNode.Body, formattedNode));
+            originalStack.Push((originalNode.ExpressionBody, originalNode));
+            formattedStack.Push((formattedNode.ExpressionBody, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2983,8 +2988,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.ThisOrBaseKeyword, formattedNode.ThisOrBaseKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ArgumentList);
-            formattedStack.Push(formattedNode.ArgumentList);
+            originalStack.Push((originalNode.ArgumentList, originalNode));
+            formattedStack.Push((formattedNode.ArgumentList, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -2999,12 +3004,12 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ParameterList);
-            formattedStack.Push(formattedNode.ParameterList);
-            originalStack.Push(originalNode.Body);
-            formattedStack.Push(formattedNode.Body);
-            originalStack.Push(originalNode.ExpressionBody);
-            formattedStack.Push(formattedNode.ExpressionBody);
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
+            originalStack.Push((originalNode.Body, originalNode));
+            formattedStack.Push((formattedNode.Body, formattedNode));
+            originalStack.Push((originalNode.ExpressionBody, originalNode));
+            formattedStack.Push((formattedNode.ExpressionBody, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -3017,18 +3022,18 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
-            originalStack.Push(originalNode.ExplicitInterfaceSpecifier);
-            formattedStack.Push(formattedNode.ExplicitInterfaceSpecifier);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
+            originalStack.Push((originalNode.ExplicitInterfaceSpecifier, originalNode));
+            formattedStack.Push((formattedNode.ExplicitInterfaceSpecifier, formattedNode));
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.AccessorList);
-            formattedStack.Push(formattedNode.AccessorList);
-            originalStack.Push(originalNode.ExpressionBody);
-            formattedStack.Push(formattedNode.ExpressionBody);
-            originalStack.Push(originalNode.Initializer);
-            formattedStack.Push(formattedNode.Initializer);
+            originalStack.Push((originalNode.AccessorList, originalNode));
+            formattedStack.Push((formattedNode.AccessorList, formattedNode));
+            originalStack.Push((originalNode.ExpressionBody, originalNode));
+            formattedStack.Push((formattedNode.ExpressionBody, formattedNode));
+            originalStack.Push((originalNode.Initializer, originalNode));
+            formattedStack.Push((formattedNode.Initializer, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -3039,8 +3044,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.ArrowToken, formattedNode.ArrowToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Expression);
-            formattedStack.Push(formattedNode.Expression);
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -3053,14 +3058,14 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.EventKeyword, formattedNode.EventKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
-            originalStack.Push(originalNode.ExplicitInterfaceSpecifier);
-            formattedStack.Push(formattedNode.ExplicitInterfaceSpecifier);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
+            originalStack.Push((originalNode.ExplicitInterfaceSpecifier, originalNode));
+            formattedStack.Push((formattedNode.ExplicitInterfaceSpecifier, formattedNode));
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.AccessorList);
-            formattedStack.Push(formattedNode.AccessorList);
+            originalStack.Push((originalNode.AccessorList, originalNode));
+            formattedStack.Push((formattedNode.AccessorList, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -3073,18 +3078,18 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
-            originalStack.Push(originalNode.ExplicitInterfaceSpecifier);
-            formattedStack.Push(formattedNode.ExplicitInterfaceSpecifier);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
+            originalStack.Push((originalNode.ExplicitInterfaceSpecifier, originalNode));
+            formattedStack.Push((formattedNode.ExplicitInterfaceSpecifier, formattedNode));
             result = this.Compare(originalNode.ThisKeyword, formattedNode.ThisKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.ParameterList);
-            formattedStack.Push(formattedNode.ParameterList);
-            originalStack.Push(originalNode.AccessorList);
-            formattedStack.Push(formattedNode.AccessorList);
-            originalStack.Push(originalNode.ExpressionBody);
-            formattedStack.Push(formattedNode.ExpressionBody);
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
+            originalStack.Push((originalNode.AccessorList, originalNode));
+            formattedStack.Push((formattedNode.AccessorList, formattedNode));
+            originalStack.Push((originalNode.ExpressionBody, originalNode));
+            formattedStack.Push((formattedNode.ExpressionBody, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -3111,10 +3116,10 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.Keyword, formattedNode.Keyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Body);
-            formattedStack.Push(formattedNode.Body);
-            originalStack.Push(originalNode.ExpressionBody);
-            formattedStack.Push(formattedNode.ExpressionBody);
+            originalStack.Push((originalNode.Body, originalNode));
+            formattedStack.Push((formattedNode.Body, formattedNode));
+            originalStack.Push((originalNode.ExpressionBody, originalNode));
+            formattedStack.Push((formattedNode.ExpressionBody, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -3155,12 +3160,12 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Default);
-            formattedStack.Push(formattedNode.Default);
+            originalStack.Push((originalNode.Default, originalNode));
+            formattedStack.Push((formattedNode.Default, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -3171,8 +3176,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -3183,8 +3188,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.CompareLists(originalNode.Modifiers, formattedNode.Modifiers, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -3209,30 +3214,30 @@ namespace CSharpier
         private CompareResult CompareTypeCrefSyntax(TypeCrefSyntax originalNode, TypeCrefSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareQualifiedCrefSyntax(QualifiedCrefSyntax originalNode, QualifiedCrefSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Container);
-            formattedStack.Push(formattedNode.Container);
+            originalStack.Push((originalNode.Container, originalNode));
+            formattedStack.Push((formattedNode.Container, formattedNode));
             result = this.Compare(originalNode.DotToken, formattedNode.DotToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Member);
-            formattedStack.Push(formattedNode.Member);
+            originalStack.Push((originalNode.Member, originalNode));
+            formattedStack.Push((formattedNode.Member, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
         private CompareResult CompareNameMemberCrefSyntax(NameMemberCrefSyntax originalNode, NameMemberCrefSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
-            originalStack.Push(originalNode.Parameters);
-            formattedStack.Push(formattedNode.Parameters);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
+            originalStack.Push((originalNode.Parameters, originalNode));
+            formattedStack.Push((formattedNode.Parameters, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -3241,8 +3246,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.ThisKeyword, formattedNode.ThisKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Parameters);
-            formattedStack.Push(formattedNode.Parameters);
+            originalStack.Push((originalNode.Parameters, originalNode));
+            formattedStack.Push((formattedNode.Parameters, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -3253,8 +3258,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Parameters);
-            formattedStack.Push(formattedNode.Parameters);
+            originalStack.Push((originalNode.Parameters, originalNode));
+            formattedStack.Push((formattedNode.Parameters, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -3265,10 +3270,10 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OperatorKeyword, formattedNode.OperatorKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
-            originalStack.Push(originalNode.Parameters);
-            formattedStack.Push(formattedNode.Parameters);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
+            originalStack.Push((originalNode.Parameters, originalNode));
+            formattedStack.Push((formattedNode.Parameters, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -3305,8 +3310,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.RefKindKeyword, formattedNode.RefKindKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Type);
-            formattedStack.Push(formattedNode.Type);
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             result = this.Compare(originalNode.RefOrOutKeyword, formattedNode.RefOrOutKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -3315,12 +3320,12 @@ namespace CSharpier
         private CompareResult CompareXmlElementSyntax(XmlElementSyntax originalNode, XmlElementSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.StartTag);
-            formattedStack.Push(formattedNode.StartTag);
+            originalStack.Push((originalNode.StartTag, originalNode));
+            formattedStack.Push((formattedNode.StartTag, formattedNode));
             result = this.CompareLists(originalNode.Content, formattedNode.Content, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.EndTag);
-            formattedStack.Push(formattedNode.EndTag);
+            originalStack.Push((originalNode.EndTag, originalNode));
+            formattedStack.Push((formattedNode.EndTag, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
@@ -3329,8 +3334,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.LessThanToken, formattedNode.LessThanToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.CompareLists(originalNode.Attributes, formattedNode.Attributes, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.GreaterThanToken, formattedNode.GreaterThanToken, originalNode, formattedNode);
@@ -3343,8 +3348,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.LessThanSlashToken, formattedNode.LessThanSlashToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.Compare(originalNode.GreaterThanToken, formattedNode.GreaterThanToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -3355,8 +3360,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.LessThanToken, formattedNode.LessThanToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.CompareLists(originalNode.Attributes, formattedNode.Attributes, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.SlashGreaterThanToken, formattedNode.SlashGreaterThanToken, originalNode, formattedNode);
@@ -3367,8 +3372,8 @@ namespace CSharpier
         private CompareResult CompareXmlNameSyntax(XmlNameSyntax originalNode, XmlNameSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Prefix);
-            formattedStack.Push(formattedNode.Prefix);
+            originalStack.Push((originalNode.Prefix, originalNode));
+            formattedStack.Push((formattedNode.Prefix, formattedNode));
             result = this.Compare(originalNode.LocalName, formattedNode.LocalName, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -3387,8 +3392,8 @@ namespace CSharpier
         private CompareResult CompareXmlTextAttributeSyntax(XmlTextAttributeSyntax originalNode, XmlTextAttributeSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.Compare(originalNode.EqualsToken, formattedNode.EqualsToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.StartQuoteToken, formattedNode.StartQuoteToken, originalNode, formattedNode);
@@ -3403,14 +3408,14 @@ namespace CSharpier
         private CompareResult CompareXmlCrefAttributeSyntax(XmlCrefAttributeSyntax originalNode, XmlCrefAttributeSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.Compare(originalNode.EqualsToken, formattedNode.EqualsToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.StartQuoteToken, formattedNode.StartQuoteToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Cref);
-            formattedStack.Push(formattedNode.Cref);
+            originalStack.Push((originalNode.Cref, originalNode));
+            formattedStack.Push((formattedNode.Cref, formattedNode));
             result = this.Compare(originalNode.EndQuoteToken, formattedNode.EndQuoteToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -3419,14 +3424,14 @@ namespace CSharpier
         private CompareResult CompareXmlNameAttributeSyntax(XmlNameAttributeSyntax originalNode, XmlNameAttributeSyntax formattedNode)
         {
             CompareResult result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.Compare(originalNode.EqualsToken, formattedNode.EqualsToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.StartQuoteToken, formattedNode.StartQuoteToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Identifier);
-            formattedStack.Push(formattedNode.Identifier);
+            originalStack.Push((originalNode.Identifier, originalNode));
+            formattedStack.Push((formattedNode.Identifier, formattedNode));
             result = this.Compare(originalNode.EndQuoteToken, formattedNode.EndQuoteToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -3457,8 +3462,8 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.StartProcessingInstructionToken, formattedNode.StartProcessingInstructionToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Name);
-            formattedStack.Push(formattedNode.Name);
+            originalStack.Push((originalNode.Name, originalNode));
+            formattedStack.Push((formattedNode.Name, formattedNode));
             result = this.CompareLists(originalNode.TextTokens, formattedNode.TextTokens, Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.EndProcessingInstructionToken, formattedNode.EndProcessingInstructionToken, originalNode, formattedNode);
@@ -3485,8 +3490,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.IfKeyword, formattedNode.IfKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Condition);
-            formattedStack.Push(formattedNode.Condition);
+            originalStack.Push((originalNode.Condition, originalNode));
+            formattedStack.Push((formattedNode.Condition, formattedNode));
             result = this.Compare(originalNode.EndOfDirectiveToken, formattedNode.EndOfDirectiveToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsActive != formattedNode.IsActive) return NotEqual(originalNode, formattedNode);
@@ -3504,8 +3509,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.ElifKeyword, formattedNode.ElifKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            originalStack.Push(originalNode.Condition);
-            formattedStack.Push(formattedNode.Condition);
+            originalStack.Push((originalNode.Condition, originalNode));
+            formattedStack.Push((formattedNode.Condition, formattedNode));
             result = this.Compare(originalNode.EndOfDirectiveToken, formattedNode.EndOfDirectiveToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsActive != formattedNode.IsActive) return NotEqual(originalNode, formattedNode);
