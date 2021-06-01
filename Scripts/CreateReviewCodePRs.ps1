@@ -1,4 +1,4 @@
-﻿# This is used to create PRs against a number of forked public repos so that csharpier can be run against them
+# This is used to create PRs against a number of forked public repos so that csharpier can be run against them
 # and the formatting reviewed before releasing csharpier
 # Long term this process can probably go away, but for now it is a tolerable way to find edge cases or bugs that are introduced
 
@@ -24,9 +24,10 @@ if ($version -eq "") {
     exit 1
 }
 
+$csharpierProject = "C:\Projects\csharpier"
 $csharpierRepos = "C:\Projects\csharpierForkedRepos"
 
-& dotnet build $csharpierRepo\Src\CSharpier\CSharpier.csproj -c Release
+& dotnet build $csharpierProject\Src\CSharpier\CSharpier.csproj -c Release
 
 $versionWithQuotes = "`"" + $version + "`"";
 
@@ -42,7 +43,7 @@ foreach($folder in Get-ChildItem $csharpierRepos) {
     & git branch -d $version
     & git checkout -b $version
 
-    dotnet $csharpierRepo\Src\CSharpier\bin\Release\net5.0\dotnet-csharpier.dll
+    dotnet $csharpierProject\Src\CSharpier\bin\Release\net5.0\dotnet-csharpier.dll
 
     & git add -A
     & git commit -m $versionWithQuotes
