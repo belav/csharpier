@@ -1,8 +1,8 @@
 ﻿# this uses https://github.com/microsoft/PowerShellForGitHub
 # you'll need to Set-GitHubAuthentication first
 
-$versionNumber = "0.9.4"
-$previousVersionNumber = "0.9.3"
+$versionNumber = "0.9.5"
+$previousVersionNumber = "0.9.4"
 
 $repository = "https://github.com/belav/csharpier"
 

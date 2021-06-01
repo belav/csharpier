@@ -1,3 +1,14 @@
+# 0.9.5
+
+[diff](https://github.com/belav/csharpier/compare/0.9.4...0.9.5)
+
+- CSharpier.MSBuild does not work with dotnet watch run [#228](https://github.com/belav/csharpier/issues/228)
+- Leading comments interfering with breaking InitializerExpression [#217](https://github.com/belav/csharpier/issues/217)
+- \#endregion is getting indented more on each format [#216](https://github.com/belav/csharpier/issues/216)
+- Some files getting extra new lines on each format [#215](https://github.com/belav/csharpier/issues/215)
+- File that fails check should give some indication of the formatting that was missing. [#182](https://github.com/belav/csharpier/issues/182)
+- Missing nodes in SyntaxNodeComparer need better reporting. [#160](https://github.com/belav/csharpier/issues/160)
+
 # 0.9.4
 
 [diff](https://github.com/belav/csharpier/compare/0.9.3...0.9.4)
