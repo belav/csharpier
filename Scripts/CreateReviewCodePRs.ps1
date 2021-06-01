@@ -23,7 +23,7 @@ if ($version -eq "") {
     Write-Output "need version"
     exit 1
 }
-$csharpierRepo = "C:\Projects\csharpier"
+
 $csharpierRepos = "C:\Projects\csharpierForkedRepos"
 
 & dotnet build $csharpierRepo\Src\CSharpier\CSharpier.csproj -c Release
@@ -34,6 +34,7 @@ $prs = @()
 
 foreach($folder in Get-ChildItem $csharpierRepos) {
     Push-Location $folder.FullName
+    Write-Output $folder.FullName
 
     #TODO git writes to stderr or some stupid shit
     & git checkout main
