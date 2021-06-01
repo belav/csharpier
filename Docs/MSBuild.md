@@ -1,7 +1,5 @@
 ### MSBuild Package
 
-**CSharpier.MSBuild is not currently compatible with `dotnet watch run` see [#228](https://github.com/belav/csharpier/issues/228)**
-
 CSharpier can be run when a package is built by installing the CSharpier.MSBuild nuget package
 ```console
 Install-Package CSharpier.MSBuild
