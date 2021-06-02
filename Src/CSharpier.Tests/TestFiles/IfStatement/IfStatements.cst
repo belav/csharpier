@@ -64,5 +64,10 @@ public class ClassName
         ) {
             return;
         }
+
+        if (true)
+        {
+            // indent
+        }
     }
 }

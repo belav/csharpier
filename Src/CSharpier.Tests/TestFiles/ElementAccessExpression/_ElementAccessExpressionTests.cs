@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ElementAccessExpressionTests : BaseTest
     {
         [Test]
-        public void BasicElementAccessExpression()
+        public void ElementAccessExpressions()
         {
-            this.RunTest("ElementAccessExpression", "BasicElementAccessExpression");
+            this.RunTest("ElementAccessExpression", "ElementAccessExpressions");
         }
     }
 }

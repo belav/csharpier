@@ -2,6 +2,8 @@ public class ClassName
 {
     public void MethodName()
     {
-        bool x = true;
+        bool x;
+
+        bool y = true;
     }
 }

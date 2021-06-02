@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class IndexerDeclarationTests : BaseTest
     {
         [Test]
-        public void BasicIndexerDeclaration()
+        public void IndexerDeclarations()
         {
-            this.RunTest("IndexerDeclaration", "BasicIndexerDeclaration");
+            this.RunTest("IndexerDeclaration", "IndexerDeclarations");
         }
     }
 }

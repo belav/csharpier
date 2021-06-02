@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ThrowStatementTests : BaseTest
     {
         [Test]
-        public void BasicThrowStatement()
+        public void ThrowStatements()
         {
-            this.RunTest("ThrowStatement", "BasicThrowStatement");
+            this.RunTest("ThrowStatement", "ThrowStatements");
         }
     }
 }

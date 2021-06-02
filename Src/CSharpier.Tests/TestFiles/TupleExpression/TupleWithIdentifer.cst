@@ -1,7 +1,0 @@
-class ClassName
-{
-    List<(string x, string y)> GenerateSomething()
-    {
-        return new() { (href: "one", title: "two") };
-    }
-}

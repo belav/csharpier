@@ -6,7 +6,7 @@ namespace CSharpier.Tests.TestFiles
     public class RecordDeclarationTests : BaseTest
     {
         [Test]
-        public void BasicRecordDeclaration()
+        public void RecordDeclarations()
         {
             this.RunTest("RecordDeclaration", "RecordDeclarations");
         }

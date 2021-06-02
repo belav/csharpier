@@ -6,7 +6,7 @@ namespace CSharpier.Tests.TestFiles
     public class ObjectCreationExpressionTests : BaseTest
     {
         [Test]
-        public void BasicObjectCreationExpression()
+        public void ObjectCreationExpressions()
         {
             this.RunTest("ObjectCreationExpression", "ObjectCreationExpressions");
         }

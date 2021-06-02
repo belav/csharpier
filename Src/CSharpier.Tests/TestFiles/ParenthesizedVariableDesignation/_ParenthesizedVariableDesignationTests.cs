@@ -6,12 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ParenthesizedVariableDesignationTests : BaseTest
     {
         [Test]
-        public void BasicParenthesizedVariableDesignation()
+        public void ParenthesizedVariableDesignations()
         {
-            this.RunTest(
-                "ParenthesizedVariableDesignation",
-                "BasicParenthesizedVariableDesignation"
-            );
+            this.RunTest("ParenthesizedVariableDesignation", "ParenthesizedVariableDesignations");
         }
     }
 }

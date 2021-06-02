@@ -6,24 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class NamespaceDeclarationTests : BaseTest
     {
         [Test]
-        public void EmptyNamespace()
+        public void NamespaceDeclarations()
         {
-            this.RunTest("NamespaceDeclaration", "EmptyNamespace");
-        }
-        [Test]
-        public void NamespaceComments()
-        {
-            this.RunTest("NamespaceDeclaration", "NamespaceComments");
-        }
-        [Test]
-        public void NamespaceWithMultipleClasses()
-        {
-            this.RunTest("NamespaceDeclaration", "NamespaceWithMultipleClasses");
-        }
-        [Test]
-        public void NamespaceWithUsingAndClass()
-        {
-            this.RunTest("NamespaceDeclaration", "NamespaceWithUsingAndClass");
+            this.RunTest("NamespaceDeclaration", "NamespaceDeclarations");
         }
     }
 }

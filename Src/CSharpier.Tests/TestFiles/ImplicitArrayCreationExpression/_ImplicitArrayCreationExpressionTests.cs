@@ -6,14 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ImplicitArrayCreationExpressionTests : BaseTest
     {
         [Test]
-        public void BasicImplicitArrayCreationExpression()
+        public void ImplicitArrayCreationExpressions()
         {
-            this.RunTest("ImplicitArrayCreationExpression", "BasicImplicitArrayCreationExpression");
-        }
-        [Test]
-        public void ImplicityArrayWithCommas()
-        {
-            this.RunTest("ImplicitArrayCreationExpression", "ImplicityArrayWithCommas");
+            this.RunTest("ImplicitArrayCreationExpression", "ImplicitArrayCreationExpressions");
         }
     }
 }

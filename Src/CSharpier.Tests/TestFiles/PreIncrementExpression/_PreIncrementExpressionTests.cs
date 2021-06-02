@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class PreIncrementExpressionTests : BaseTest
     {
         [Test]
-        public void BasicPreIncrementExpression()
+        public void PreIncrementExpressions()
         {
-            this.RunTest("PreIncrementExpression", "BasicPreIncrementExpression");
+            this.RunTest("PreIncrementExpression", "PreIncrementExpressions");
         }
     }
 }

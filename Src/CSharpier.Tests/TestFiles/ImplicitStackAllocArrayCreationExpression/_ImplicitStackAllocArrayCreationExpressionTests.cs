@@ -6,11 +6,11 @@ namespace CSharpier.Tests.TestFiles
     public class ImplicitStackAllocArrayCreationExpressionTests : BaseTest
     {
         [Test]
-        public void BasicImplicitStackAllocArrayCreationExpression()
+        public void ImplicitStackAllocArrayCreationExpressions()
         {
             this.RunTest(
                 "ImplicitStackAllocArrayCreationExpression",
-                "BasicImplicitStackAllocArrayCreationExpression"
+                "ImplicitStackAllocArrayCreationExpressions"
             );
         }
     }

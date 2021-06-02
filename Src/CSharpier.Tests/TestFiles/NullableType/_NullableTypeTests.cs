@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class NullableTypeTests : BaseTest
     {
         [Test]
-        public void BasicNullableType()
+        public void NullableTypes()
         {
-            this.RunTest("NullableType", "BasicNullableType");
+            this.RunTest("NullableType", "NullableTypes");
         }
     }
 }

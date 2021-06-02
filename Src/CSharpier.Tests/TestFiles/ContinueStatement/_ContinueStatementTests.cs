@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ContinueStatementTests : BaseTest
     {
         [Test]
-        public void BasicContinueStatement()
+        public void ContinueStatements()
         {
-            this.RunTest("ContinueStatement", "BasicContinueStatement");
+            this.RunTest("ContinueStatement", "ContinueStatements");
         }
     }
 }

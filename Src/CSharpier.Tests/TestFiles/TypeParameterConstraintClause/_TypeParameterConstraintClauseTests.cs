@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class TypeParameterConstraintClauseTests : BaseTest
     {
         [Test]
-        public void ConstraintClauses()
+        public void TypeParameterConstraintClauses()
         {
-            this.RunTest("TypeParameterConstraintClause", "ConstraintClauses");
+            this.RunTest("TypeParameterConstraintClause", "TypeParameterConstraintClauses");
         }
     }
 }

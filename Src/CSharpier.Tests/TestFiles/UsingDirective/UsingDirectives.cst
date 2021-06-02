@@ -1,0 +1,25 @@
+// leading
+using First; // trailing
+
+// leading with space
+using // another trailing
+Second;
+
+using
+// static leading
+static // static trailing
+Third;
+
+using M = System.Math;
+
+using static System.Math;
+
+using First;
+using Second;
+namespace Namespace
+{
+    using Third;
+    using One.Two.Three;
+
+    public class ClassName { }
+}

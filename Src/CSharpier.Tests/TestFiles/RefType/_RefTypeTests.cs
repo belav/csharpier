@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class RefTypeTests : BaseTest
     {
         [Test]
-        public void BasicRefType()
+        public void RefTypes()
         {
-            this.RunTest("RefType", "BasicRefType");
+            this.RunTest("RefType", "RefTypes");
         }
     }
 }

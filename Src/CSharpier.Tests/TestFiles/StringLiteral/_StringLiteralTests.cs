@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class StringLiteralTests : BaseTest
     {
         [Test]
-        public void VerbatimStrings()
+        public void StringLiterals()
         {
-            this.RunTest("StringLiteral", "VerbatimStrings");
+            this.RunTest("StringLiteral", "StringLiterals");
         }
     }
 }

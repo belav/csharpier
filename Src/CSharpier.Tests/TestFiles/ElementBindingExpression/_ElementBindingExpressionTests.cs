@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ElementBindingExpressionTests : BaseTest
     {
         [Test]
-        public void BasicElementBindingExpression()
+        public void ElementBindingExpressions()
         {
-            this.RunTest("ElementBindingExpression", "BasicElementBindingExpression");
+            this.RunTest("ElementBindingExpression", "ElementBindingExpressions");
         }
     }
 }

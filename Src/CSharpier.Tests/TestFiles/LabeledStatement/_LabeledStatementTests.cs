@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class LabeledStatementTests : BaseTest
     {
         [Test]
-        public void BasicLabeledStatement()
+        public void LabeledStatements()
         {
-            this.RunTest("LabeledStatement", "BasicLabeledStatement");
+            this.RunTest("LabeledStatement", "LabeledStatements");
         }
     }
 }

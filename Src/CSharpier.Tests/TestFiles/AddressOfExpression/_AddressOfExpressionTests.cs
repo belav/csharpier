@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class AddressOfExpressionTests : BaseTest
     {
         [Test]
-        public void BasicAddressOfExpression()
+        public void AddressOfExpressions()
         {
-            this.RunTest("AddressOfExpression", "BasicAddressOfExpression");
+            this.RunTest("AddressOfExpression", "AddressOfExpressions");
         }
     }
 }

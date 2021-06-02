@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class AliasQualifiedNameTests : BaseTest
     {
         [Test]
-        public void BasicAliasQualifiedName()
+        public void AliasQualifiedNames()
         {
-            this.RunTest("AliasQualifiedName", "BasicAliasQualifiedName");
+            this.RunTest("AliasQualifiedName", "AliasQualifiedNames");
         }
     }
 }

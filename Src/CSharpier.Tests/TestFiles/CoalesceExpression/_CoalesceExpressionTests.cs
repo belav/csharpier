@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class CoalesceExpressionTests : BaseTest
     {
         [Test]
-        public void BasicCoalesceExpression()
+        public void CoalesceExpressions()
         {
-            this.RunTest("CoalesceExpression", "BasicCoalesceExpression");
+            this.RunTest("CoalesceExpression", "CoalesceExpressions");
         }
     }
 }

@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class RefExpressionTests : BaseTest
     {
         [Test]
-        public void BasicRefExpression()
+        public void RefExpressions()
         {
-            this.RunTest("RefExpression", "BasicRefExpression");
+            this.RunTest("RefExpression", "RefExpressions");
         }
     }
 }

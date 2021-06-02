@@ -2,6 +2,9 @@ class ClassName
 {
     void MethodName()
     {
+        var x = 0;
+        x = 15;
+
         // leading on statement
         var x = 0;
 

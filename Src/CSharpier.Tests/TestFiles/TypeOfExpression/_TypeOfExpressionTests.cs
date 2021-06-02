@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class TypeOfExpressionTests : BaseTest
     {
         [Test]
-        public void BasicTypeOfExpression()
+        public void TypeOfExpressions()
         {
-            this.RunTest("TypeOfExpression", "BasicTypeOfExpression");
+            this.RunTest("TypeOfExpression", "TypeOfExpressions");
         }
     }
 }

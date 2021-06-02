@@ -6,19 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class CommentsTests : BaseTest
     {
         [Test]
-        public void ClassComments()
+        public void Comments()
         {
-            this.RunTest("Comments", "ClassComments");
-        }
-        [Test]
-        public void MethodComments()
-        {
-            this.RunTest("Comments", "MethodComments");
-        }
-        [Test]
-        public void SpecialCases()
-        {
-            this.RunTest("Comments", "SpecialCases");
+            this.RunTest("Comments", "Comments");
         }
     }
 }

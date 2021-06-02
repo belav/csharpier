@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class RangeExpressionTests : BaseTest
     {
         [Test]
-        public void BasicRangeExpression()
+        public void RangeExpressions()
         {
-            this.RunTest("RangeExpression", "BasicRangeExpression");
+            this.RunTest("RangeExpression", "RangeExpressions");
         }
     }
 }

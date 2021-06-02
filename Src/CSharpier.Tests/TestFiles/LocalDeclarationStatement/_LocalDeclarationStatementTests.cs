@@ -6,14 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class LocalDeclarationStatementTests : BaseTest
     {
         [Test]
-        public void VariableWithInitializer()
+        public void LocalDeclarationStatements()
         {
-            this.RunTest("LocalDeclarationStatement", "VariableWithInitializer");
-        }
-        [Test]
-        public void VariableWithoutInitializer()
-        {
-            this.RunTest("LocalDeclarationStatement", "VariableWithoutInitializer");
+            this.RunTest("LocalDeclarationStatement", "LocalDeclarationStatements");
         }
     }
 }

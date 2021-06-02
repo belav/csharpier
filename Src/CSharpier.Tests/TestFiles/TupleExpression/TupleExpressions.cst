@@ -1,0 +1,23 @@
+class ClassName
+{
+    void MethodName()
+    {
+        (int, int) t1;
+        var res = t1 == (1, 2);
+    }
+
+    List<(string x, string y)> TupleWithIdentifier()
+    {
+        return new() { (href: "one", title: "two") };
+    }
+
+    public async Task TupleAssignment()
+    {
+        var (noteTexts, matcher) = await (
+            GetAndAnalyzeNoteTexts(),
+            _wordInfoCollectionManager.BuildWordMatcher()
+        );
+
+        var (a, b) = await (c(), d());
+    }
+}

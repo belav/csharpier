@@ -6,14 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ExternAliasDirectiveTests : BaseTest
     {
         [Test]
-        public void BasicExternAliasDirective()
+        public void ExternAliasDirectives()
         {
-            this.RunTest("ExternAliasDirective", "BasicExternAliasDirective");
-        }
-        [Test]
-        public void ExternAliasComments()
-        {
-            this.RunTest("ExternAliasDirective", "ExternAliasComments");
+            this.RunTest("ExternAliasDirective", "ExternAliasDirectives");
         }
     }
 }

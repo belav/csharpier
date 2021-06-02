@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ConditionalAccessExpressionTests : BaseTest
     {
         [Test]
-        public void BasicConditionalAccessExpression()
+        public void ConditionalAccessExpressions()
         {
-            this.RunTest("ConditionalAccessExpression", "BasicConditionalAccessExpression");
+            this.RunTest("ConditionalAccessExpression", "ConditionalAccessExpressions");
         }
     }
 }

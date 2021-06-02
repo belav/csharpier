@@ -6,14 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class DelegateDeclarationTests : BaseTest
     {
         [Test]
-        public void BasicDelegateDeclaration()
+        public void DelegateDeclarations()
         {
-            this.RunTest("DelegateDeclaration", "BasicDelegateDeclaration");
-        }
-        [Test]
-        public void GenericDelegate()
-        {
-            this.RunTest("DelegateDeclaration", "GenericDelegate");
+            this.RunTest("DelegateDeclaration", "DelegateDeclarations");
         }
     }
 }

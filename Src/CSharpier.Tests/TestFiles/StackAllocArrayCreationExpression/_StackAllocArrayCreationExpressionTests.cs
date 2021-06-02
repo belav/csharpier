@@ -6,12 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class StackAllocArrayCreationExpressionTests : BaseTest
     {
         [Test]
-        public void BasicStackAllocArrayCreationExpression()
+        public void StackAllocArrayCreationExpressions()
         {
-            this.RunTest(
-                "StackAllocArrayCreationExpression",
-                "BasicStackAllocArrayCreationExpression"
-            );
+            this.RunTest("StackAllocArrayCreationExpression", "StackAllocArrayCreationExpressions");
         }
     }
 }

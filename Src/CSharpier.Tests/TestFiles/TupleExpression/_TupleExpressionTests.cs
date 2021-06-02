@@ -6,21 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class TupleExpressionTests : BaseTest
     {
         [Test]
-        public void BasicTupleExpression()
+        public void TupleExpressions()
         {
-            this.RunTest("TupleExpression", "BasicTupleExpression");
-        }
-
-        [Test]
-        public void TupleWithIdentifer()
-        {
-            this.RunTest("TupleExpression", "TupleWithIdentifer");
-        }
-
-        [Test]
-        public void TupleAssignment()
-        {
-            this.RunTest("TupleExpression", "TupleAssignment");
+            this.RunTest("TupleExpression", "TupleExpressions");
         }
     }
 }

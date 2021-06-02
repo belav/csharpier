@@ -46,5 +46,10 @@ class ClassName
             someEvenLongerStatement && someOtherEvenLongerStatement1111111111
         )
             return someLongerValue;
+
+        while (true)
+        {
+            // indent
+        }
     }
 }

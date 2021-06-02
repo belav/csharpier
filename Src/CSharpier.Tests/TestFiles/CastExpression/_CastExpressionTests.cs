@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class CastExpressionTests : BaseTest
     {
         [Test]
-        public void BasicCastExpression()
+        public void CastExpressions()
         {
-            this.RunTest("CastExpression", "BasicCastExpression");
+            this.RunTest("CastExpression", "CastExpressions");
         }
     }
 }

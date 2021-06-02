@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class StructDeclarationTests : BaseTest
     {
         [Test]
-        public void BasicStructDeclaration()
+        public void StructDeclarations()
         {
-            this.RunTest("StructDeclaration", "BasicStructDeclaration");
+            this.RunTest("StructDeclaration", "StructDeclarations");
         }
     }
 }

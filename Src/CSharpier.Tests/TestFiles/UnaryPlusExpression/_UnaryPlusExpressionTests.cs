@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class UnaryPlusExpressionTests : BaseTest
     {
         [Test]
-        public void BasicUnaryPlusExpression()
+        public void UnaryPlusExpressions()
         {
-            this.RunTest("UnaryPlusExpression", "BasicUnaryPlusExpression");
+            this.RunTest("UnaryPlusExpression", "UnaryPlusExpressions");
         }
     }
 }

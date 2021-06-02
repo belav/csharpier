@@ -6,14 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class AssignmentExpressionTests : BaseTest
     {
         [Test]
-        public void AssignmentExpressionComments()
+        public void AssignmentExpressions()
         {
-            this.RunTest("AssignmentExpression", "AssignmentExpressionComments");
-        }
-        [Test]
-        public void BasicAssignmentExpression()
-        {
-            this.RunTest("AssignmentExpression", "BasicAssignmentExpression");
+            this.RunTest("AssignmentExpression", "AssignmentExpressions");
         }
     }
 }

@@ -6,14 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class EnumDeclarationTests : BaseTest
     {
         [Test]
-        public void BasicEnumDeclaration()
+        public void EnumDeclarations()
         {
-            this.RunTest("EnumDeclaration", "BasicEnumDeclaration");
-        }
-        [Test]
-        public void EnumWithValues()
-        {
-            this.RunTest("EnumDeclaration", "EnumWithValues");
+            this.RunTest("EnumDeclaration", "EnumDeclarations");
         }
     }
 }

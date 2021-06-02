@@ -6,14 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class ArrayCreationExpressionTests : BaseTest
     {
         [Test]
-        public void ArrayCreationWithInitializer()
+        public void ArrayCreationExpressions()
         {
-            this.RunTest("ArrayCreationExpression", "ArrayCreationWithInitializer");
-        }
-        [Test]
-        public void BasicArrayCreationExpression()
-        {
-            this.RunTest("ArrayCreationExpression", "BasicArrayCreationExpression");
+            this.RunTest("ArrayCreationExpression", "ArrayCreationExpressions");
         }
     }
 }

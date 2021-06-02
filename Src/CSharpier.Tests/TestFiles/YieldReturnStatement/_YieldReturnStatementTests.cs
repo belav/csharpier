@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class YieldReturnStatementTests : BaseTest
     {
         [Test]
-        public void BasicYieldReturnStatement()
+        public void YieldReturnStatements()
         {
-            this.RunTest("YieldReturnStatement", "BasicYieldReturnStatement");
+            this.RunTest("YieldReturnStatement", "YieldReturnStatements");
         }
     }
 }

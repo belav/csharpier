@@ -6,19 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class TryStatementTests : BaseTest
     {
         [Test]
-        public void BasicTryStatement()
+        public void TryStatements()
         {
-            this.RunTest("TryStatement", "BasicTryStatement");
-        }
-        [Test]
-        public void TryStatementWithNoCatchDeclaration()
-        {
-            this.RunTest("TryStatement", "TryStatementWithNoCatchDeclaration");
-        }
-        [Test]
-        public void TryStatementWithWhen()
-        {
-            this.RunTest("TryStatement", "TryStatementWithWhen");
+            this.RunTest("TryStatement", "TryStatements");
         }
     }
 }

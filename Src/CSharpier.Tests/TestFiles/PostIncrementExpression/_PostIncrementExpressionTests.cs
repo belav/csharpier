@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class PostIncrementExpressionTests : BaseTest
     {
         [Test]
-        public void BasicPostIncrementExpression()
+        public void PostIncrementExpressions()
         {
-            this.RunTest("PostIncrementExpression", "BasicPostIncrementExpression");
+            this.RunTest("PostIncrementExpression", "PostIncrementExpressions");
         }
     }
 }

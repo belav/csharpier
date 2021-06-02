@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class EventFieldDeclarationTests : BaseTest
     {
         [Test]
-        public void BasicEventFieldDeclaration()
+        public void EventFieldDeclarations()
         {
-            this.RunTest("EventFieldDeclaration", "BasicEventFieldDeclaration");
+            this.RunTest("EventFieldDeclaration", "EventFieldDeclarations");
         }
     }
 }

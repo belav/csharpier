@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class AwaitExpressionTests : BaseTest
     {
         [Test]
-        public void BasicAwaitExpression()
+        public void AwaitExpressions()
         {
-            this.RunTest("AwaitExpression", "BasicAwaitExpression");
+            this.RunTest("AwaitExpression", "AwaitExpressions");
         }
     }
 }

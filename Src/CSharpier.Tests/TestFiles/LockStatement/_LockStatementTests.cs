@@ -6,9 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class LockStatementTests : BaseTest
     {
         [Test]
-        public void BasicLockStatement()
+        public void LockStatements()
         {
-            this.RunTest("LockStatement", "BasicLockStatement");
+            this.RunTest("LockStatement", "LockStatements");
         }
     }
 }

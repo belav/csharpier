@@ -1,0 +1,6 @@
+class ClassName
+{
+    float[] arrayWithInitializer = new float[5] { 0f, 1.1f };
+
+    int[] array = new int[5];
+}

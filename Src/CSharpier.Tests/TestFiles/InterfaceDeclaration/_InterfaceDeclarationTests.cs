@@ -6,24 +6,9 @@ namespace CSharpier.Tests.TestFiles
     public class InterfaceDeclarationTests : BaseTest
     {
         [Test]
-        public void BasicInterfaceDeclaration()
+        public void InterfaceDeclarations()
         {
-            this.RunTest("InterfaceDeclaration", "BasicInterfaceDeclaration");
-        }
-        [Test]
-        public void InterfaceWithBaseList()
-        {
-            this.RunTest("InterfaceDeclaration", "InterfaceWithBaseList");
-        }
-        [Test]
-        public void InterfaceWithMethod()
-        {
-            this.RunTest("InterfaceDeclaration", "InterfaceWithMethod");
-        }
-        [Test]
-        public void InterfaceWithTypeParameters()
-        {
-            this.RunTest("InterfaceDeclaration", "InterfaceWithTypeParameters");
+            this.RunTest("InterfaceDeclaration", "InterfaceDeclarations");
         }
     }
 }

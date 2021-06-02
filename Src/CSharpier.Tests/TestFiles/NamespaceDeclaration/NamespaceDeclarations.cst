@@ -1,3 +1,5 @@
+namespace EmptyNamespace { }
+
 // leading
 namespace Namespace { } // trailing
 
@@ -9,3 +11,10 @@ Namespace // trailing identifier
 { // trailing semi start
     // leading semi end
 } // trailing semi end
+
+namespace NamespaceWithUsingAndClass
+{
+    using System;
+
+    public class BasicClass { }
+}
