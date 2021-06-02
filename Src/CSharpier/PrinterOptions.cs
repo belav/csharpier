@@ -10,7 +10,7 @@ namespace CSharpier
         public EndOfLine EndOfLine { get; init; } = EndOfLine.Auto;
         public bool TrimInitialLines { get; init; } = true;
 
-        public const int WidthUsedByTests = 80;
+        public const int WidthUsedByTests = 100;
     }
 
     public enum EndOfLine

@@ -3,16 +3,16 @@ class ClassName
     int[] array = { 1, 2 };
 
     int[] array = {
-        "jklasdfjlkakljsdfkjlasdfkjlasdkjlfasjklf",
-        "klaldsjkfljkasdfjklasjklfasdjf"
+        "someLongValue_____________________________________",
+        "someLongValue_____________________________________"
     };
 
     public IList<string> Value = new List<string> { "one", "two" };
 
     Dictionary<int, string> dictionary = new Dictionary<int, string>
     {
-        { 1, "one" },
-        { 2, "two" }
+        { 1, "one_________" },
+        { 2, "two_________________" }
     };
 
     Dictionary<int, string> dictionary = new Dictionary<int, string>
@@ -22,7 +22,7 @@ class ClassName
         { 2, "two" },
         {
             3,
-            "ifThisIsReallyLongItShouldntInsertAnExtraLineAboveItttttttttttttttt"
+            "ifThisIsReallyLongItShouldntInsertAnExtraLineAboveIt_________________________________"
         }
     };
 

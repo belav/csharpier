@@ -6,7 +6,7 @@ class ClassName
         query1 = from c in customers select c into d select d;
         query1 =
             from c in customers
-            join c1 in customers11111111111111111111111111111
+            join c1 in customers_____________________________
                 on c1.GetHashCode() equals c.GetHashCode()
                 into e
             select c into d
@@ -20,14 +20,14 @@ class ClassName
             from c in customers
             where
                 c.Value == "true"
-                && someLongValueThatForcesABreak != someOtherValue
+                && someLongValueThatForcesABreak_________________________ != someOtherValue
             select d;
 
         var selectIntoQuery = from c in customers select c into d select d;
 
         var longJoin =
             from c in customers
-            join c1 in customers11111111111111111111111111111
+            join c1 in customers_____________________________
                 on c1.GetHashCode() equals c.GetHashCode()
                 into e
             select c into d
@@ -38,7 +38,7 @@ class ClassName
             let d = c
             where d != null
             join c1 in customers1 on c1 equals c
-            join c1 in customers111111111111
+            join c1 in customers__________________________________
                 on c1.GetHashCode() equals c.GetHashCode()
                 into e
             group c by c.Country into g
@@ -46,8 +46,8 @@ class ClassName
             orderby g.Key descending
             select new
             {
-                Country1111111111111 = g.Key,
-                CustCount111111111111111 = g.Count()
+                Country________________________ = g.Key,
+                CustCount____________________________ = g.Count()
             };
     }
 }

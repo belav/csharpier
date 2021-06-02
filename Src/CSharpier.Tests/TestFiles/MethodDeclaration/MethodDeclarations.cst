@@ -10,7 +10,7 @@ public class ClassName
         return;
     }
 
-    public void LongMethodNameForceLineBreakasdfasdfasfasdf(
+    public void LongMethodNameForceLineBreaks___________________________(
         string one,
         string two,
         string three
@@ -38,18 +38,18 @@ public class ClassName
         DoStuff();
     }
 
-    private Doc MethodWithParameters(
+    private Doc MethodWithParameters__________________(
         SomeClass one,
         SomeClass two,
         SomeClass three
-    ) => CallSomethingElseWithALongNameThatForcesABreak(one, two, three);
+    ) => CallSomethingElseWithALongNameThatForcesABreak_________(one, two, three);
 
     private Doc ShortMethod() => Method();
 
     private Doc ShortishMethod(SomeClass one) =>
-        CallSomeOtherLongMethodSoThatItBreaks(one);
+        CallSomeOtherLongMethodSoThatItBreaks____________________(one);
 
-    private Doc MethodWithParameters(
+    private Doc MethodWithParameters_______________________(
         SomeClass one,
         SomeClass two,
         SomeClass three
@@ -65,32 +65,32 @@ namespace SomeNamespace
 {
     public class ClassName
     {
-        public void Exactly80(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Exactly100(IApplicationBuilder app, IWebHostEnvironment env____________________)
         {
             return;
         }
 
         // leading comments don't affect modifiers
-        public void Exactly80(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Exactly100(IApplicationBuilder app, IWebHostEnvironment env____________________)
         {
             return;
         }
 
         // leading comments don't affect void
-        void Exactly80(IApplicationBuilder app, IWebHostEnvironmentttttttt env)
+        void Exactly100(IApplicationBuilder app, IWebHostEnvironment env___________________________)
         {
             return;
         }
 
         // leading comments don't affect type
-        IList<string> Exactly80(IApplicationBuilder app, IWebHostEnvironme env)
+        IList<string> Exactly100(IApplicationBuilder app, IWebHostEnvironmet env___________________)
         {
             return;
         }
 
-        public void JustOver80(
+        public void JustOver100(
             IApplicationBuilder app,
-            IWebHostEnvironment envvv
+            IWebHostEnvironment env____________________
         ) {
             return;
         }

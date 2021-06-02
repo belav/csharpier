@@ -20,30 +20,30 @@ class ClassName
             directoryInfo = directoryInfo.Parent;
         }
 
-        while (exactly80 || moreTextToMakeItWork1111111111111111111111111111111)
+        while (exactly100 || moreTextToMakeItWork__________________________________________________)
         {
             return;
         }
 
         // leading comment doesn't break differently
-        while (exactly80 || moreTextToMakeItWork1111111111111111111111111111111)
+        while (exactly100 || moreTextToMakeItWork__________________________________________________)
         {
             return;
         }
 
         while (
-            justOver80 || moreTextToMakeItWork1111111111111111111111111111112
+            justOver100 || moreTextToMakeItWork__________________________________________________
         ) {
             return;
         }
 
         while (true) return;
 
-        while (someLongerStatement && someOtherLongerStatement)
+        while (someLongerStatement && someOtherLongerStatement________________)
             return someLongerValue;
 
         while (
-            someEvenLongerStatement && someOtherEvenLongerStatement1111111111
+            someEvenLongerStatement && someOtherEvenLongerStatement________________________________
         )
             return someLongerValue;
 

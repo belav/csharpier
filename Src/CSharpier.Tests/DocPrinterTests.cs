@@ -94,7 +94,7 @@ namespace CSharpier.Tests
             const string longText = "LongTextLongTextLongTextLongText";
             var doc = Doc.Group(Doc.Concat(longText, Doc.Line, longText, Doc.Line, longText));
 
-            PrintedDocShouldBe(doc, $"{longText}{NewLine}{longText}{NewLine}{longText}");
+            PrintedDocShouldBe(doc, $"{longText}{NewLine}{longText}{NewLine}{longText}", 80);
         }
 
         [Test]

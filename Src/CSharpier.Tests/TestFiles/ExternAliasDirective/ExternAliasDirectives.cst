@@ -1,9 +1,3 @@
-extern alias Foo;
-namespace Namespace
-{
-    extern alias Bar;
-}
-
 // leading
 extern alias Foo; // trailing
 
@@ -12,3 +6,9 @@ extern // extern trailing
 // alias leading
 alias // alias trailing
 Foo;
+
+extern alias Foo;
+namespace Namespace
+{
+    extern alias Bar;
+}

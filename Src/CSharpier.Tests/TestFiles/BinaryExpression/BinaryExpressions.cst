@@ -7,7 +7,7 @@ class TestClass
         var someLongVariableName =
             "a long string with just concatenation"
             + "will break this way"
-            + "because of reasons";
+            + "because of reasons such as the fact it is too long";
 
         var someLongVariableName =
             "a really loooooooooooooooong string"

@@ -13,7 +13,7 @@ public class ClassName
         Property5 = false
     };
 
-    public ClassName TrailingComma = new ClassName
+    public ClassName TrailingComma = new ClassName_______________________
     {
         Property1 = true,
         Property2 = true,

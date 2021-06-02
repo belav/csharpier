@@ -18,5 +18,17 @@ class ClassName
         {
             return;
         }
+
+        try { }
+        catch { }
+
+        try
+        {
+            throw null;
+        }
+        catch (Exception e) when (myFilter(e))
+        {
+            throw;
+        }
     }
 }

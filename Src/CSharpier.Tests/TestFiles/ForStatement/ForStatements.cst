@@ -20,7 +20,7 @@ class ClassName
 
         for (var x = 0; x < 100; x++) break;
 
-        for (var someLongerValue = 0; someLongerValue < 1; someLongerValue++)
+        for (var someLongerValue = 0; someLongerValue____________________ < 1; someLongerValue++)
             Call(SomeLongerValue);
 
         for (
@@ -37,7 +37,7 @@ class ClassName
 
         for (
             var laksdflasdjfkaskdlfklasdfkljasdf = 0;
-            laksdflasdjfkaskdlfklasdfkljasdf
+            laksdflasdjfkaskdlfklasdfkljasdf_____________________
             < laksdflasdjfkaskdlfklasdfkljasdf + 1;
             laksdflasdjfkaskdlfklasdfkljasdf++
         ) {
@@ -47,7 +47,7 @@ class ClassName
         for (
             var laksdflasdjfkaskdlfklasdfkljasdf = 0,
                 lkasdfkjlasjldkfljaskdflkasdfljkasdfljk = 1;
-            laksdflasdjfkaskdlfklasdfkljasdf
+            laksdflasdjfkaskdlfklasdfkljasdf______________________
             < laksdflasdjfkaskdlfklasdfkljasdf + 1;
             laksdflasdjfkaskdlfklasdfkljasdf++,
                 lkasdfkjlasjldkfljaskdflkasdfljkasdfljk
@@ -55,20 +55,20 @@ class ClassName
             break;
         }
 
-        for (y = 0; y < exactly80_________________________________________; y++)
+        for (y = 0; y < exactly100____________________________________________________________; y++)
         {
             break;
         }
 
         // leading comment doesn't break differently
-        for (y = 0; y < exactly80_________________________________________; y++)
+        for (y = 0; y < exactly100____________________________________________________________; y++)
         {
             break;
         }
 
         for (
             y = 0;
-            y < justOver80_________________________________________;
+            y < justOver100____________________________________________________________;
             y++
         ) {
             break;

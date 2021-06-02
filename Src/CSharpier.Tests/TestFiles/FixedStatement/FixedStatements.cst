@@ -8,25 +8,25 @@ class ClassName
         }
 
         fixed (
-            int* someLongNameThatWillMakeThisBreakYeahKeepGoing =
+            int* someLongNameThatWillMakeThisBreakYeahKeepGoing_____________________ =
                 stackalloc int[100]
         ) {
             *intref = 1;
         }
 
-        fixed (int* exactly80____________________________ = stackalloc int[100])
+        fixed (int* exactly100_______________________________________________ = stackalloc int[100])
         {
             return;
         }
 
         // leading comment doesn't break differently
-        fixed (int* exactly80____________________________ = stackalloc int[100])
+        fixed (int* exactly100_______________________________________________ = stackalloc int[100])
         {
             return;
         }
 
         fixed (
-            int* justOver80____________________________ = stackalloc int[100]
+            int* justOver100_______________________________________________ = stackalloc int[100]
         ) {
             return;
         }

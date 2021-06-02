@@ -10,7 +10,7 @@ public class ClassName
         foreach (
             var x in this.SomeMethodCall()
                 .SomeChainedCall()
-                .AnotherChainedCall()
+                .AnotherChainedCall__________________________()
         ) {
             break;
         }
@@ -22,25 +22,25 @@ public class ClassName
             return;
         }
 
-        foreach (var exactly80 in Something____________________________________)
+        foreach (var exactly100 in Something_______________________________________________________)
         {
             return;
         }
 
         // leading comment doesn't break differently
-        foreach (var exactly80 in Something____________________________________)
+        foreach (var exactly100 in Something_______________________________________________________)
         {
             return;
         }
 
         // leading comment doesn't break differently
-        await foreach (var exactly80 in Something______________________________)
+        await foreach (var exactly100 in Something_________________________________________________)
         {
             return;
         }
 
         foreach (
-            var justOver80 in Something____________________________________
+            var justOver100 in Something_______________________________________________________
         ) {
             return;
         }
@@ -55,11 +55,11 @@ public class ClassName
 
         foreach (var x in y) CallSomething(x);
 
-        foreach (var someLongerNameThatMakesThis in BreakAndLongName)
+        foreach (var someLongerNameThatMakesThis in BreakAndLongName____________________)
             CallSomething(x);
 
         foreach (
-            var someLongerNameThatMakesThis in BreakInAnotherWay11111111111111111111
+            var someLongerNameThatMakesThis in BreakInAnotherWay_______________________________________
         )
             CallSomething(x);
 

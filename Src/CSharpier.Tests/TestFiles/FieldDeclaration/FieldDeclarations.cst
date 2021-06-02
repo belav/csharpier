@@ -11,6 +11,7 @@ public class ClassName
         RegexOptions.Compiled
         | RegexOptions.CultureInvariant
         | RegexOptions.IgnoreCase
+        | RegexOptions.MakeThisBreak
     );
 
     private SomeObject SomeLongerName = new SomeObject(
@@ -39,7 +40,7 @@ public class ClassName
     public System.Text.StringBuilder NamespacedField;
 
     public static Dictionary<Type, string> PropertiesByType = new Dictionary<
-        Type,
+        SomeLongTypeName,
         string
     >();
 

@@ -21,7 +21,8 @@ class ClassName
         Obsolete,
         System.NonSerialized,
         NonSerialized,
-        CLSCompliant(true || false & true)
+        CLSCompliant(true || false & true),
+        AnotherRandomAttribute
     ]
     private volatile int f2;
 

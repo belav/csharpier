@@ -17,7 +17,7 @@ record PC(string x) : PrimaryConstructor(x) { }
 
 record RecordWithoutBody(string property);
 
-record LongerRecordNameWhatHappenssssssssssssssssssss(string x)
+record LongerRecordNameWhatHappens_________________________________________(string x)
     : R4<string>(x) { }
 
 record GenericRecord<T>(T Result);

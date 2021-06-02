@@ -6,17 +6,17 @@ class Test
     }
 
     public static implicit operator Test(
-        OtherPerson someReallyLongNameThatWillMakeThisBreak
+        OtherPerson someReallyLongNameThatWillMakeThisBreak_________________
     ) {
         return new Test();
     }
 
     public static implicit operator Test(Person p) =>
-        new Test(p.First + " " + p.Last);
+        new Test(p.First + "                        " + p.Last);
 
     public static implicit operator Test(int x) => new Test(x);
 
     public static implicit operator Test(
-        bool reallyLongNameThatWillMakeThisBreak
+        bool reallyLongNameThatWillMakeThisBreak________________
     ) => new Test(x);
 }

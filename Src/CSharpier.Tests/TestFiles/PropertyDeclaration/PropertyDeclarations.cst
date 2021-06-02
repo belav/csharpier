@@ -5,7 +5,7 @@ public class ClassName
 
     string ShortModifiers { get; private set; }
 
-    string PropertyWithModifiers
+    string PropertyWithModifiersThatIsLongEnoughToBreak
     {
         protected internal get;
         internal protected set;
@@ -28,7 +28,7 @@ public class ClassName
 
     public string LambdaBod => this.Property;
 
-    public string LongNameForcesALineBreakSoWeCanTestEvenLonger =>
+    public string LongNameForcesALineBreakSoWeCanTestEvenLonger____________________ =>
         this.Property;
 
     public string Property
@@ -56,10 +56,10 @@ public class ClassName
 
     public virtual ICollection<
         SomeObject
-    > SomeLongNameThatForcesALineBreak { get; set; } =
+    > SomeLongNameThatForcesALineBreak______________________ { get; set; } =
         new HashSet<SomeObject>();
 
-    public Dictionary<string, string> Properties { get; set; } =
+    public Dictionary<string, string> Properties_________________ { get; set; } =
         new Dictionary<string, string>();
 
     public virtual LongerPropertyConfiguration LongerPropertyConfiguration { get; set; }

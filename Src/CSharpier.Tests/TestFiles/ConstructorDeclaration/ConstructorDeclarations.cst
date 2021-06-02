@@ -7,14 +7,14 @@ public class BasicClass
 
     public ClassName() => this.Value = 1;
 
-    public BasicClass(string one, string exactly80_____________________________)
+    public BasicClass(int two, string exactly100___________________________________________________)
     {
         return;
     }
 
     public BasicClass(
         int two,
-        string justOver80________________________________
+        string justOver100___________________________________________________
     ) {
         return;
     }

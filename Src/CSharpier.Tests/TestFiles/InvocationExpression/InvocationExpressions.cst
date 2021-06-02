@@ -4,26 +4,24 @@ class ClassName
     {
         this.DoSomething().DoSomething();
 
-        this.DoSomething()
-            .DoSomething()
-            .DoSomething()
-            .DoSomething()
-            .DoSomething();
+        this.DoSomething___________________()
+            .DoSomething___________________()
+            .DoSomething___________________();
 
         this.Method(
             "ljkasdfkljasdlkjfklajsdfkjlasdfkjlasdkljfajklsdfkjasdf",
             "kljasdfkljaslkjdfljaksdfkjlaksljfaksjldf"
         );
 
-        var superLongMethodNameForceLine =
+        var superLongMethodNameForceLine_____________________ =
             someFactoryName.SuperLongMethodNameForceLine();
 
         // this should be changed by #7
-        var superLongMethodNameForceLine =
-            someFactoryName.SuperLongMethodNameForceLine()
+        var superLongMethodNameForceLine__________________________ =
+            someFactoryName.SuperLongMethodNameForceLine____________()
                 .SomeOtherReallyLongMethodName();
 
-        this.WhenThereExists(
+        this.WhenThereExists________________(
             a.Website().WithDomainName("test-integration.insite.com")
         );
     }

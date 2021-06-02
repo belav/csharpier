@@ -4,9 +4,9 @@ class ClassName
     {
         var (one, two, three) = CallMethod();
         var (
-            oneoneoneoneoneoneone,
-            oneoneoneoneoneoneone,
-            oneoneoneoneoneoneone
+            oneoneoneoneoneoneoneoneoneone,
+            oneoneoneoneoneoneoneoneoneone,
+            oneoneoneoneoneoneoneoneoneone
             ) = CallMethod();
     }
 }

@@ -28,33 +28,31 @@ class ClassName
 
         using (
             BeginScope()
-                .LongerMethod()
-                .MakeThisThingChain()
-                .MaybeNow()
-                .OrReallyNow()
+                .LongerMethod_________________________()
+                .MakeThisThingChain______________________()
         ) {
             return;
         }
 
-        using (var x = SomeMethodCallThatHitsExactly80_______________________())
+        using (var x = SomeMethodCallThatHitsExactly100__________________________________________())
         {
             return;
         }
 
         // leading comment doesn't break differently
-        using (var x = SomeMethodCallThatHitsExactly80_______________________())
+        using (var x = SomeMethodCallThatHitsExactly100__________________________________________())
         {
             return;
         }
 
         // leading comment doesn't break differently
-        await using (var x = SomeMethodCallThatHitsExactly80_________________())
+        await using (var x = SomeMethodCallThatHitsExactly100____________________________________())
         {
             return;
         }
 
         using (
-            var x = SomeMethodCallThatIsJustOver80_________________________()
+            var x = SomeMethodCallThatHitsJustOver100__________________________________________()
         ) {
             return;
         }

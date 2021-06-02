@@ -7,7 +7,7 @@ class NoModifiers { }
 public class WithInterface : IInterface { }
 
 public class WithReallyLongNameInterface
-    : IReallyLongNameLetsMakeThisBreak1111111111 { }
+    : IReallyLongNameLetsMakeThisBreak___________________________ { }
 
 public class ThisIsSomeLongNameAndItShouldFormatWell1
     : AnotherLongClassName,
@@ -19,18 +19,18 @@ public class SimpleGeneric<T>
 
 public class LongTypeConstraints<T>
     where T : SomeLongNameThatJustKeepsGoing,
-        AndThenAnotherOneThatIsEvenLonger { }
+        AndThenAnotherOneThatIsEvenLonger____________________ { }
 
 public class LongerClassNameWithLotsOfGenerics<
     TLongName,
     TAnotherLongName,
-    TThirdLongName
+    TThirdLongName__________________
 > { }
 
 public class LongerClassNameWithLotsOfGenerics<
     TLongName,
     TAnotherLongName,
-    TThirdLongName
+    TThirdLongName__________________
 > : SomeBaseClass<TLongName> { }
 
 public class SimpleGeneric<T> : BaseClass<T>
