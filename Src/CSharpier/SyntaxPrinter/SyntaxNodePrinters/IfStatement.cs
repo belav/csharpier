@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
+using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters

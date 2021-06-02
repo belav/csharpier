@@ -1,46 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using CSharpier.DocTypes;
 
-namespace CSharpier
+namespace CSharpier.Utilities
 {
     public static class StringExtensions
     {
-        public static void EnsureDirectoryExists(this FileInfo fileInfo)
-        {
-            fileInfo.Directory?.EnsureExists();
-        }
-
-        public static void EnsureExists(this DirectoryInfo directoryInfo)
-        {
-            if (directoryInfo.Name.EndsWith("$"))
-            {
-                return;
-            }
-
-            directoryInfo.Parent?.EnsureExists();
-
-            if (directoryInfo.Exists)
-            {
-                return;
-            }
-
-            try
-            {
-                directoryInfo.Create();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(
-                    "It was not possible to create the path " + directoryInfo.FullName,
-                    ex
-                );
-            }
-        }
-
         public static string CalculateHash(this string value)
         {
             using var hasher = MD5.Create();
@@ -68,7 +35,7 @@ namespace CSharpier
             return value.EndsWith(otherValue, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool IsBlank(this string value)
+        public static bool IsBlank(this string? value)
         {
             return value == null || string.IsNullOrEmpty(value.Trim());
         }
@@ -80,6 +47,12 @@ namespace CSharpier
                 return;
             }
             list.AddRange(values);
+        }
+
+        // TODO 1 in prettier this deals with unicode characters that are double width
+        public static int GetPrintedWidth(this string value)
+        {
+            return value.Length;
         }
     }
 }
