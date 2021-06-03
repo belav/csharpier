@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using CSharpier.DocTypes;
 using CSharpier.Utilities;
@@ -25,23 +26,24 @@ namespace CSharpier.DocPrinter
             var newLineNextStringValue = false;
             var skipNextNewLine = false;
 
-            void Add(Doc doc, PrintMode printMode, Indent indent)
+            void Push(Doc doc, PrintMode printMode, Indent indent)
             {
                 remainingCommands.Push(new PrintCommand(indent, printMode, doc));
             }
-            while (remainingCommands.Count > 0)
+
+            void ProcessNextCommand()
             {
                 var (currentIndent, currentMode, currentDoc) = remainingCommands.Pop();
                 if (currentDoc == Doc.Null)
                 {
-                    continue;
+                    return;
                 }
                 switch (currentDoc)
                 {
                     case StringDoc stringDoc:
                         if (string.IsNullOrEmpty(stringDoc.Value))
                         {
-                            break;
+                            return;
                         }
 
                         // this ensures we don't print extra spaces after a trailing comment
@@ -49,7 +51,7 @@ namespace CSharpier.DocPrinter
                         // when they are set we new line the next string we find. If we new line and then print a " " we end up with an extra space
                         if (newLineNextStringValue && skipNextNewLine && stringDoc.Value == " ")
                         {
-                            break;
+                            return;
                         }
 
                         if (newLineNextStringValue)
@@ -65,11 +67,11 @@ namespace CSharpier.DocPrinter
                     case Concat concat:
                         for (var x = concat.Contents.Count - 1; x >= 0; x--)
                         {
-                            Add(concat.Contents[x], currentMode, currentIndent);
+                            Push(concat.Contents[x], currentMode, currentIndent);
                         }
                         break;
                     case IndentDoc indentBuilder:
-                        Add(
+                        Push(
                             indentBuilder.Contents,
                             currentMode,
                             IndentBuilder.Make(currentIndent, printerOptions)
@@ -83,10 +85,10 @@ namespace CSharpier.DocPrinter
                         switch (currentMode)
                         {
                             case PrintMode.Flat:
-                            case PrintMode.Forceflat:
+                            case PrintMode.ForceFlat:
                                 if (!shouldRemeasure)
                                 {
-                                    Add(
+                                    Push(
                                         group.Contents,
                                         group.Break ? PrintMode.Break : PrintMode.Flat,
                                         currentIndent
@@ -117,11 +119,54 @@ namespace CSharpier.DocPrinter
                                 }
                                 else
                                 {
-                                    Add(group.Contents, PrintMode.Break, currentIndent);
+                                    if (group is ConditionalGroup conditionalGroup)
+                                    {
+                                        if (group.Break)
+                                        {
+                                            Push(
+                                                conditionalGroup.Options.Last(),
+                                                PrintMode.Break,
+                                                currentIndent
+                                            );
+                                            break;
+                                        }
+
+                                        PrintCommand? possibleCommand = null;
+                                        var foundSomethingThatFits = false;
+                                        foreach (var option in conditionalGroup.Options)
+                                        {
+                                            possibleCommand = new PrintCommand(
+                                                currentIndent,
+                                                currentMode,
+                                                option
+                                            );
+                                            if (
+                                                DocFitter.Fits(
+                                                    possibleCommand,
+                                                    remainingCommands,
+                                                    allowedWidth - currentWidth,
+                                                    printerOptions,
+                                                    groupModeMap
+                                                )
+                                            ) {
+                                                remainingCommands.Push(possibleCommand);
+                                                foundSomethingThatFits = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (!foundSomethingThatFits)
+                                        {
+                                            remainingCommands.Push(possibleCommand!);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Push(group.Contents, PrintMode.Break, currentIndent);
+                                    }
                                 }
                                 break;
                         }
-
                         if (group.GroupId != null)
                         {
                             groupModeMap[group.GroupId] = remainingCommands.Peek().Mode;
@@ -135,13 +180,13 @@ namespace CSharpier.DocPrinter
                         var contents = groupMode == PrintMode.Break
                             ? ifBreak.BreakContents
                             : ifBreak.FlatContents;
-                        Add(contents, currentMode, currentIndent);
+                        Push(contents, currentMode, currentIndent);
                         break;
                     case LineDoc line:
                         switch (currentMode)
                         {
                             case PrintMode.Flat:
-                            case PrintMode.Forceflat:
+                            case PrintMode.ForceFlat:
                                 if (line.Type == LineDoc.LineType.Soft)
                                 {
                                     break;
@@ -214,11 +259,16 @@ namespace CSharpier.DocPrinter
                         skipNextNewLine = true;
                         break;
                     case ForceFlat forceFlat:
-                        Add(forceFlat.Contents, PrintMode.Flat, currentIndent);
+                        Push(forceFlat.Contents, PrintMode.Flat, currentIndent);
                         break;
                     default:
                         throw new Exception("didn't handle " + currentDoc);
                 }
+            }
+
+            while (remainingCommands.Count > 0)
+            {
+                ProcessNextCommand();
             }
 
             if (output.Length == 0 || output[^1] != '\n')
@@ -242,6 +292,6 @@ namespace CSharpier.DocPrinter
     {
         Flat,
         Break,
-        Forceflat
+        ForceFlat
     }
 }
