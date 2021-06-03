@@ -298,6 +298,30 @@ namespace CSharpier.Tests
         }
 
         [Test]
+        public void IfBreak_Should_Propagate_Breaks_From_Break_Contents()
+        {
+            var doc = Doc.Group(
+                "1",
+                Doc.Line,
+                Doc.IfBreak(Doc.Concat("break", Doc.HardLine), "flat")
+            );
+
+            PrintedDocShouldBe(doc, $"1{NewLine}break");
+        }
+
+        [Test]
+        public void IfBreak_Should_Propagate_Breaks_From_Flat_Contents()
+        {
+            var doc = Doc.Group(
+                "1",
+                Doc.Line,
+                Doc.IfBreak("break", Doc.Concat("flat", Doc.HardLine))
+            );
+
+            PrintedDocShouldBe(doc, $"1{NewLine}break");
+        }
+
+        [Test]
         public void IndentIfBreak_Should_Print_Indented_When_Breaks()
         {
             var doc = Doc.Concat(
@@ -396,8 +420,7 @@ namespace CSharpier.Tests
                     "    #endregion"
                 )
             );
-            var result = Print(doc);
-            result.Should().Be($" // trailing{NewLine}    #endregion");
+            PrintedDocShouldBe(doc, $" // trailing{NewLine}    #endregion");
         }
 
         [Test]
@@ -504,13 +527,13 @@ namespace CSharpier.Tests
                 Doc.Line,
                 "someValue"
             );
-            var result = Print(doc, 10);
-            result.Should()
-                .Be(
-                    @"
+            PrintedDocShouldBe(
+                doc,
+                @"
 someValue
-someValue"
-                );
+someValue",
+                10
+            );
         }
 
         [Test]
@@ -525,13 +548,12 @@ someValue"
                 Doc.Line,
                 "|| false"
             );
-            var result = Print(doc);
-            result.Should()
-                .Be(
-                    @"// shouldn't break next line
+            PrintedDocShouldBe(
+                doc,
+                @"// shouldn't break next line
 // shouldn't break next line
 true || false"
-                );
+            );
         }
 
         [Test]
@@ -549,11 +571,56 @@ true || false"
         }
 
         [Test]
+        public void Conditional_Group_Should_Print_Basic_Group()
+        {
+            var doc = Doc.ConditionalGroup("short");
+            PrintedDocShouldBe(doc, "short");
+        }
+
+        [Test]
+        public void Conditional_Group_Should_Print_Group_That_Fits()
+        {
+            var doc = Doc.ConditionalGroup(
+                "tooLong tooLong",
+                Doc.Concat("tooLong", Doc.HardLine, "tooLong")
+            );
+            PrintedDocShouldBe(doc, $"tooLong{NewLine}tooLong", 10);
+        }
+
+        [Test]
+        public void Conditional_Group_Prints_As_Group()
+        {
+            var doc = Doc.ConditionalGroup(Doc.Concat("1", Doc.Line, "2"));
+            PrintedDocShouldBe(doc, "1 2", 10);
+        }
+
+        [Test]
+        public void Conditional_Group_Does_Propagate_Breaks_Within_Options()
+        {
+            var doc = Doc.ConditionalGroup(
+                "ThisContentIsTooLong",
+                Doc.Group("1", Doc.Line, "2", Doc.HardLine, "3")
+            );
+            PrintedDocShouldBe(doc, $"1{NewLine}2{NewLine}3", 10);
+        }
+
+        [Test]
+        public void Conditional_Group_Does_Not_Propagate_Breaks_To_Parent()
+        {
+            var doc = Doc.Group(
+                Doc.ConditionalGroup(
+                    Doc.Concat("1", Doc.Line, "2"),
+                    Doc.Concat("11", Doc.HardLine, "22")
+                )
+            );
+            PrintedDocShouldBe(doc, "1 2", 10);
+        }
+
+        [Test]
         public void Scratch()
         {
             var doc = "";
-            var result = Print(doc);
-            result.Should().Be("");
+            PrintedDocShouldBe(doc, "");
         }
 
         private static void PrintedDocShouldBe(

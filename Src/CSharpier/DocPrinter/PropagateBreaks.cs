@@ -21,7 +21,10 @@ namespace CSharpier.DocPrinter
                 if (groupStack.Count > 0)
                 {
                     var parentGroup = groupStack.Peek();
-                    parentGroup.Break = true;
+                    if (parentGroup is not ConditionalGroup)
+                    {
+                        parentGroup.Break = true;
+                    }
                 }
             }
 
@@ -122,8 +125,19 @@ namespace CSharpier.DocPrinter
                         docsStack.Push(concat.Contents[x]);
                     }
                 }
-
-                if (doc is IHasContents hasContents)
+                else if (doc is IfBreak ifBreak)
+                {
+                    docsStack.Push(ifBreak.FlatContents);
+                    docsStack.Push(ifBreak.BreakContents);
+                }
+                else if (doc is ConditionalGroup conditionalGroup)
+                {
+                    foreach (var option in conditionalGroup.Options)
+                    {
+                        docsStack.Push(option);
+                    }
+                }
+                else if (doc is IHasContents hasContents)
                 {
                     docsStack.Push(hasContents.Contents);
                 }

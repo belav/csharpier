@@ -92,7 +92,13 @@ namespace CSharpier.DocPrinter
                         case Group group:
                             var groupMode = group.Break ? PrintMode.Break : currentMode;
 
-                            Push(group.Contents, groupMode, currentIndent);
+                            // when determining if something fits, use the last option from a conditionalGroup, which should be the most expanded one
+                            var groupContents = groupMode == PrintMode.Break
+                            && group
+                                is ConditionalGroup conditionalGroup
+                                ? conditionalGroup.Options.Last()
+                                : group.Contents;
+                            Push(groupContents, groupMode, currentIndent);
 
                             if (group.GroupId != null)
                             {
@@ -115,7 +121,7 @@ namespace CSharpier.DocPrinter
                             switch (currentMode)
                             {
                                 case PrintMode.Flat:
-                                case PrintMode.Forceflat:
+                                case PrintMode.ForceFlat:
                                     if (currentDoc is HardLine { SkipBreakIfFirstInGroup: true })
                                     {
                                         returnFalseIfMoreStringsFound = false;
