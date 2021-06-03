@@ -118,28 +118,27 @@ namespace CSharpier.DocPrinter
                             Push(contents, currentMode, currentIndent);
                             break;
                         case LineDoc line:
-                            switch (currentMode)
+                            if (currentMode is PrintMode.Flat or PrintMode.ForceFlat)
                             {
-                                case PrintMode.Flat:
-                                case PrintMode.ForceFlat:
-                                    if (currentDoc is HardLine { SkipBreakIfFirstInGroup: true })
-                                    {
-                                        returnFalseIfMoreStringsFound = false;
-                                    }
-                                    else if (line.Type == LineDoc.LineType.Hard)
-                                    {
-                                        return true;
-                                    }
-
-                                    if (line.Type != LineDoc.LineType.Soft)
-                                    {
-                                        output.Append(' ');
-
-                                        remainingWidth -= 1;
-                                    }
-                                    break;
-                                case PrintMode.Break:
+                                if (currentDoc is HardLine { SkipBreakIfFirstInGroup: true })
+                                {
+                                    returnFalseIfMoreStringsFound = false;
+                                }
+                                else if (line.Type == LineDoc.LineType.Hard)
+                                {
                                     return true;
+                                }
+
+                                if (line.Type != LineDoc.LineType.Soft)
+                                {
+                                    output.Append(' ');
+
+                                    remainingWidth -= 1;
+                                }
+                            }
+                            else
+                            {
+                                return true;
                             }
                             break;
                         case ForceFlat flat:
