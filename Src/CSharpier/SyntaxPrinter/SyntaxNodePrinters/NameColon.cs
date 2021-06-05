@@ -8,7 +8,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(NameColonSyntax node)
         {
-            return Doc.Concat(Token.Print(node.Name.Identifier), Token.Print(node.ColonToken, " "));
+            return Doc.Concat(
+                Token.Print(node.Name.Identifier),
+                Token.PrintWithSuffix(node.ColonToken, " ")
+            );
         }
     }
 }

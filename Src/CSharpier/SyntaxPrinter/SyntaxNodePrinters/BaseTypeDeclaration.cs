@@ -78,7 +78,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             };
             if (keyword != null)
             {
-                docs.Add(Token.Print(keyword.Value, " "));
+                docs.Add(Token.PrintWithSuffix(keyword.Value, " "));
             }
 
             docs.Add(Token.Print(node.Identifier));

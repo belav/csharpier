@@ -8,10 +8,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(FromClauseSyntax node)
         {
             return Doc.Concat(
-                Token.Print(node.FromKeyword, " "),
+                Token.PrintWithSuffix(node.FromKeyword, " "),
                 node.Type != null ? Doc.Concat(Node.Print(node.Type), " ") : Doc.Null,
-                Token.Print(node.Identifier, " "),
-                Token.Print(node.InKeyword, " "),
+                Token.PrintWithSuffix(node.Identifier, " "),
+                Token.PrintWithSuffix(node.InKeyword, " "),
                 Node.Print(node.Expression)
             );
         }

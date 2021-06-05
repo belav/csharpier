@@ -8,7 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(ArrayCreationExpressionSyntax node)
         {
             return Doc.Group(
-                Token.Print(node.NewKeyword, " "),
+                Token.PrintWithSuffix(node.NewKeyword, " "),
                 Node.Print(node.Type),
                 node.Initializer != null
                     ? Doc.Concat(Doc.Line, Node.Print(node.Initializer))

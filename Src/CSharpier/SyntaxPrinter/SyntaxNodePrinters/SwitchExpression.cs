@@ -27,7 +27,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                     o.WhenClause != null
                                         ? Doc.Concat(Node.Print(o.WhenClause), " ")
                                         : Doc.Null,
-                                    Token.Print(o.EqualsGreaterThanToken, " "),
+                                    Token.PrintWithSuffix(o.EqualsGreaterThanToken, " "),
                                     Node.Print(o.Expression)
                                 ),
                             Doc.HardLine

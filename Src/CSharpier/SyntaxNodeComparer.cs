@@ -185,7 +185,6 @@ namespace CSharpier
             return new() { IsInvalid = true, OriginalSpan = originalSpan, NewSpan = formattedSpan };
         }
 
-        // TODO this is used by compare lists, but then we don't have parents if one is missing
         private CompareResult Compare(SyntaxToken originalToken, SyntaxToken formattedToken)
         {
             return Compare(originalToken, formattedToken, null, null);

@@ -18,7 +18,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (node.AlignmentClause != null)
             {
                 docs.Add(
-                    Token.Print(node.AlignmentClause.CommaToken, " "),
+                    Token.PrintWithSuffix(node.AlignmentClause.CommaToken, " "),
                     Node.Print(node.AlignmentClause.Value)
                 );
             }

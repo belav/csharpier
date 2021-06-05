@@ -25,12 +25,6 @@ namespace CSharpier.SyntaxPrinter
             return PrintSyntaxToken(syntaxToken);
         }
 
-        // TODO partial kill by replacing with PrintWithSuffix
-        public static Doc Print(SyntaxToken syntaxToken, Doc suffixDoc)
-        {
-            return PrintWithSuffix(syntaxToken, suffixDoc);
-        }
-
         public static Doc PrintWithSuffix(SyntaxToken syntaxToken, Doc suffixDoc)
         {
             return PrintSyntaxToken(syntaxToken, suffixDoc);

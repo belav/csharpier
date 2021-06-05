@@ -8,10 +8,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(GroupClauseSyntax node)
         {
             return Doc.Concat(
-                Token.Print(node.GroupKeyword, " "),
+                Token.PrintWithSuffix(node.GroupKeyword, " "),
                 Node.Print(node.GroupExpression),
                 " ",
-                Token.Print(node.ByKeyword, " "),
+                Token.PrintWithSuffix(node.ByKeyword, " "),
                 Node.Print(node.ByExpression)
             );
         }

@@ -11,7 +11,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(CasePatternSwitchLabelSyntax node)
         {
             var docs = new List<Doc>();
-            docs.Add(Token.Print(node.Keyword, " "), Node.Print(node.Pattern));
+            docs.Add(Token.PrintWithSuffix(node.Keyword, " "), Node.Print(node.Pattern));
             if (node.WhenClause != null)
             {
                 docs.Add(" ", Node.Print(node.WhenClause));

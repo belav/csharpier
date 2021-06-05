@@ -10,26 +10,26 @@ namespace CSharpier.DocTypes
             return new StringDoc(value);
         }
 
-        public static NullDoc Null { get; } = NullDoc.Instance;
+        public static NullDoc Null => NullDoc.Instance;
 
         public static Doc BreakParent => new BreakParent();
 
-        public static HardLine HardLine => new();
+        public static readonly HardLine HardLine = new();
 
-        public static HardLine HardLineSkipBreakIfFirstInGroup => new(false, true);
+        public static readonly HardLine HardLineSkipBreakIfFirstInGroup = new(false, true);
 
-        public static HardLine HardLineIfNoPreviousLine => new(true);
+        public static readonly HardLine HardLineIfNoPreviousLine = new(true);
 
-        public static HardLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup => new(true, true);
+        public static readonly HardLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup =
+            new(true, true);
 
-        // TODO all of the Line types can probably turn into proper classes, and be the same instance by type
-        public static LiteralLine LiteralLine => new();
+        public static readonly LiteralLine LiteralLine = new();
 
-        public static LineDoc Line => new() { Type = LineDoc.LineType.Normal };
+        public static readonly LineDoc Line = new() { Type = LineDoc.LineType.Normal };
 
-        public static Trim Trim => Trim.Instance;
+        public static readonly LineDoc SoftLine = new() { Type = LineDoc.LineType.Soft };
 
-        public static LineDoc SoftLine => new() { Type = LineDoc.LineType.Soft };
+        public static readonly Trim Trim = new();
 
         public static LeadingComment LeadingComment(string comment, CommentType commentType) =>
             new() { Type = commentType, Comment = comment };
@@ -39,9 +39,7 @@ namespace CSharpier.DocTypes
 
         public static Concat Concat(List<Doc> contents) => new(contents);
 
-        public static Concat Concat(IEnumerable<Doc> contents) => new(contents.ToList());
-
-        public static Concat Concat(params Doc[] contents) => new(contents.ToList());
+        public static Concat Concat(params Doc[] contents) => new(contents);
 
         public static Doc Join(Doc separator, IEnumerable<Doc> array)
         {

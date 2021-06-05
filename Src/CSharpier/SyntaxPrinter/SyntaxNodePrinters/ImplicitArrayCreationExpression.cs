@@ -14,7 +14,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.Print(node.NewKeyword),
                 Token.Print(node.OpenBracketToken),
                 Doc.Concat(commas),
-                Token.Print(node.CloseBracketToken, " "),
+                Token.PrintWithSuffix(node.CloseBracketToken, " "),
                 Node.Print(node.Initializer)
             );
         }

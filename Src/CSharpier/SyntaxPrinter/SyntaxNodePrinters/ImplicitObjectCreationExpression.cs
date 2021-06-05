@@ -8,7 +8,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ImplicitObjectCreationExpressionSyntax node)
         {
-            // TODO 1 more tests for this?
             return Doc.Concat(
                 Token.Print(node.NewKeyword),
                 ArgumentList.Print(node.ArgumentList),

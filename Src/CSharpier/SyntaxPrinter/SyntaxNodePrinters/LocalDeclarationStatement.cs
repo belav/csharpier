@@ -10,8 +10,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Concat(
                 ExtraNewLines.Print(node),
-                Token.Print(node.AwaitKeyword, " "),
-                Token.Print(node.UsingKeyword, " "),
+                Token.PrintWithSuffix(node.AwaitKeyword, " "),
+                Token.PrintWithSuffix(node.UsingKeyword, " "),
                 Modifiers.Print(node.Modifiers),
                 VariableDeclaration.Print(node.Declaration),
                 Token.Print(node.SemicolonToken)

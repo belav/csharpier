@@ -9,8 +9,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(QueryContinuationSyntax node)
         {
             return Doc.Concat(
-                Token.Print(node.IntoKeyword, " "),
-                Token.Print(node.Identifier, Doc.Line),
+                Token.PrintWithSuffix(node.IntoKeyword, " "),
+                Token.PrintWithSuffix(node.Identifier, Doc.Line),
                 QueryBody.Print(node.Body)
             );
         }

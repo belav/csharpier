@@ -10,7 +10,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(OrderByClauseSyntax node)
         {
             return Doc.Concat(
-                Token.Print(node.OrderByKeyword, " "),
+                Token.PrintWithSuffix(node.OrderByKeyword, " "),
                 SeparatedSyntaxList.Print(
                     node.Orderings,
                     orderingNode =>

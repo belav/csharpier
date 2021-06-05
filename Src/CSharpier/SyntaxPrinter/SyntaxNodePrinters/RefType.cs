@@ -8,8 +8,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(RefTypeSyntax node)
         {
             return Doc.Concat(
-                Token.Print(node.RefKeyword, " "),
-                Token.Print(node.ReadOnlyKeyword, " "),
+                Token.PrintWithSuffix(node.RefKeyword, " "),
+                Token.PrintWithSuffix(node.ReadOnlyKeyword, " "),
                 Node.Print(node.Type)
             );
         }
