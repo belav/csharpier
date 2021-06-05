@@ -1,5 +1,12 @@
 public class ClassName
 {
+    public static readonly EventCallback Empty = new EventCallback(null, (Action)(() => { }));
+    public static readonly EventCallback<TValue> Empty = new EventCallback<TValue>(
+        null,
+        (Action)(() => { })
+    );
+    private static readonly Action _callbackCompleted = () => { };
+
     public void MethodName()
     {
         this.Where(() => true);
@@ -25,5 +32,29 @@ public class ClassName
         Action find = () => EntryPointDiscoverer.FindStaticEntryMethod(
             typeof(IEnumerable<>).Assembly
         );
+
+        var @delegate = (Action<string>)((s) => { });
+
+        var reusedCommand = new Command("reused") { Handler = CommandHandler.Create(() => { }) };
+
+        var component = new EventComponent
+        {
+            OnArbitraryDelegateEvent = (Action<EventArgs, string>)((x, y) => { }),
+        };
+
+        Parallel.For(0, OuterLoopCount, () => schedulers, _parallelAction, (s) => { });
+
+        // will be addressed by #234
+        var reusedCommand = new Command(
+            "reused"
+        )
+        {
+            Handler = CommandHandler.Create(
+                () =>
+                {
+                    doSomething();
+                }
+            )
+        };
     }
 }
