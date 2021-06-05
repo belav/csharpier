@@ -82,6 +82,12 @@ public class ClassName
     {
         // indents
     }
+
+    IReadOnlyList<IArgument> ICommand.Arguments => Arguments;
+    /// <DocumentationCommentDoesNotCauseBreaking />
+    IReadOnlyList<IArgument> ICommand.Arguments => Arguments;
+    // regular comment does not cause breaking
+    IReadOnlyList<IArgument> ICommand.Arguments => Arguments;
 }
 
 
