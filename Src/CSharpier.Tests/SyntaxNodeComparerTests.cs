@@ -207,6 +207,73 @@ public enum Enum
             );
         }
 
+        [Test]
+        public void Extra_SyntaxTrivia_Should_Work()
+        {
+            var left = "  public class ClassName { }";
+            var right = "public class ClassName { }";
+
+            var result = this.AreEqual(left, right);
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        public void Mismatched_Syntax_Trivia_Should_Print_Error()
+        {
+            var left =
+                @"// leading comment
+public class ClassName { }";
+            var right = "public class ClassName { }";
+
+            var result = this.AreEqual(left, right);
+            ResultShouldBe(
+                result,
+                @"----------------------------- Original: Around Line 0 -----------------------------
+// leading comment
+public class ClassName { }
+----------------------------- Formatted: Around Line 0 -----------------------------
+public class ClassName { }
+"
+            );
+        }
+
+        [Test]
+        public void Long_Mismatched_Syntax_Trivia_Should_Print_Error()
+        {
+            var left =
+                @"// 1
+// 2
+// 3
+// 4
+// 5
+// 6
+public class ClassName { }";
+            var right =
+                @"// 1
+// 2
+// 3
+// 4
+// 5
+// 7
+public class ClassName { }";
+
+            var result = this.AreEqual(left, right);
+            ResultShouldBe(
+                result,
+                @"----------------------------- Original: Around Line 5 -----------------------------
+// 4
+// 5
+// 6
+public class ClassName { }
+----------------------------- Formatted: Around Line 5 -----------------------------
+// 4
+// 5
+// 7
+public class ClassName { }
+"
+            );
+        }
+
         private void ResultShouldBe(string result, string be)
         {
             if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
