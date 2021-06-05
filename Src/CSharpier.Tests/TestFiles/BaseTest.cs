@@ -23,7 +23,7 @@ namespace CSharpier.Tests.TestFileTests
             }
         }
 
-        protected void RunTest(string folderName, string fileName)
+        protected void RunTest(string folderName, string fileName, bool useTabs = false)
         {
             var filePath = Path.Combine(
                 this.rootDirectory.FullName,
@@ -37,7 +37,7 @@ namespace CSharpier.Tests.TestFileTests
             var formatter = new CodeFormatter();
             var result = formatter.Format(
                 fileReaderResult.FileContents,
-                new PrinterOptions() { Width = PrinterOptions.WidthUsedByTests }
+                new PrinterOptions() { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs }
             );
 
             var actualFilePath = filePath.Replace(".cst", ".actual.cst");

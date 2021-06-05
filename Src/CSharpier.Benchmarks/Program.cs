@@ -9,28 +9,19 @@ namespace CSharpier.Benchmarks
     [MemoryDiagnoser]
     public class Benchmarks
     {
-        // [Benchmark]
-        // public void Default()
-        // {
-        //     var codeFormatter = new CodeFormatter();
-        //     codeFormatter.Format(code, new PrinterOptions());
-        // }
+        [Benchmark]
+        public void Default_CodeFormatter()
+        {
+            var codeFormatter = new CodeFormatter();
+            codeFormatter.Format(code, new PrinterOptions());
+        }
 
-        // [Benchmark]
-        // public void Default_SyntaxNodeComparer()
-        // {
-        //     var syntaxNodeComparer = new SyntaxNodeComparer(code, code, CancellationToken.None);
-        //     SyntaxNodeComparer.BeBetter = false;
-        //     syntaxNodeComparer.CompareSource();
-        // }
-        //
-        // [Benchmark]
-        // public void Better_SyntaxNodeComparer()
-        // {
-        //     var syntaxNodeComparer = new SyntaxNodeComparer(code, code, CancellationToken.None);
-        //     SyntaxNodeComparer.BeBetter = true;
-        //     syntaxNodeComparer.CompareSource();
-        // }
+        [Benchmark]
+        public void Default_SyntaxNodeComparer()
+        {
+            var syntaxNodeComparer = new SyntaxNodeComparer(code, code, CancellationToken.None);
+            syntaxNodeComparer.CompareSource();
+        }
 
         private string code =
             @"using System;
