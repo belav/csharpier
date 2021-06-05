@@ -6,14 +6,24 @@
 *.user
 *.userosscache
 *.sln.docstates
+
+# Jetbrains files
 **/.idea/**/workspace.xml
 **/.idea/**/tasks.xml
 **/.idea/**/usage.statistics.xml
 **/.idea/**/dictionaries
 **/.idea/**/shelf
 **/.idea/**/misc.xml
-**/.idea/**/encodings.xml
-**/.idea/**/applicationhost.config
+**/.idea/**/contentModel.xml
+**/.idea/**/dataSources/
+**/.idea/**/dataSources.ids
+**/.idea/**/dataSources.local.xml
+**/.idea/**/sqlDataSources.xml
+**/.idea/**/dynamic.xml
+**/.idea/**/uiDesigner.xml
+**/.idea/**/dbnavigator.xml
+
+# Jetbrains doesn't say to ignore these, but it seems like they shouldn't be committed
 **/.idea/**/watcherTasks.xml
 
 node_modules

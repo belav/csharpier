@@ -12,15 +12,8 @@ const options = {
     readOnly: true,
 };
 
-let editor: any;
-
 export const DocTree = () => {
-    const { tab, doc } = useAppContext();
-    // for whatever reason CodeMirror wasn't displaying anything until it was clicked, which refreshes it.
-    // this gets it to refresh when the tab is clicked
-    useEffect(() => {
-        editor?.refresh();
-    }, [tab, doc]);
+    const { doc } = useAppContext();
 
     return (
         <CodeMirror
@@ -28,11 +21,6 @@ export const DocTree = () => {
             options={options}
             onBeforeChange={() => {}}
             onChange={() => {}}
-            editorDidMount={value => {
-                setTimeout(() => {
-                    editor = value;
-                }, 100);
-            }}
         />
     );
 };
