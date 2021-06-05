@@ -21,7 +21,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         // https://github.com/belav/roslyn/pull/4
         // https://github.com/belav/runtime/pull/4
         // https://github.com/belav/sdk/pull/1
-        // + 2246, 247, 248, 249
 
         public static Doc Print(VariableDeclarationSyntax node)
         {

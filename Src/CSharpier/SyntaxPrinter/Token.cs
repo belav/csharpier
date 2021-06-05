@@ -136,7 +136,7 @@ namespace CSharpier.SyntaxPrinter
                             CommentType.SingleLine
                         ),
                         kind == SyntaxKind.SingleLineDocumentationCommentTrivia
-                            ? Doc.HardLine
+                            ? Doc.HardLineSkipBreakIfFirstInGroup
                             : Doc.Null
                     );
                 }
