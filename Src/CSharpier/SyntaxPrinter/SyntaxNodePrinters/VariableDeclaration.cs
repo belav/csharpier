@@ -80,7 +80,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             formatMode is FormatMode.IndentWithLine
                                 ? Doc.Null
                                 : Doc.GroupWithId(groupId, Doc.Indent(Doc.Line)),
-                            initializer.Value is InvocationExpressionSyntax
+                            initializer.Value
+                                is InvocationExpressionSyntax
+                                    or ParenthesizedLambdaExpressionSyntax
                                 ? Doc.IndentIfBreak(
                                         Doc.Group(Node.Print(initializer.Value)),
                                         groupId
