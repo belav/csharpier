@@ -10,40 +10,52 @@ import { CodeEditor } from "./CodeEditor";
 import { FormattedCode } from "./FormattedCode";
 
 export const Layout = () => {
-    const { tab } = useAppContext();
-
+    const { showDoc, showAst } = useAppContext();
+    const width = showDoc && showAst ? 25 : showDoc || showAst ? 33.3 : 50;
     return (
         <WrapperStyle>
             <Header />
-            <CodeWrapperStyle>
+            <PanelWrapperStyle columnWidth={width}>
                 <EnteredCodeStyle>
                     <CodeEditor />
                 </EnteredCodeStyle>
                 <EnteredCodeStyle>
-                    <TabBody isVisible={tab === "code"}>
-                        <FormattedCode />
-                    </TabBody>
-                    <TabBody isVisible={tab === "ast"}>
-                        <SyntaxTree />
-                    </TabBody>
-                    <TabBody isVisible={tab === "doc"}>
-                        <DocTree />
-                    </TabBody>
+                    <FormattedCode />
                 </EnteredCodeStyle>
-            </CodeWrapperStyle>
+                {showDoc && <DocTree />}
+                {showAst && <SyntaxTree />}
+            </PanelWrapperStyle>
             <Footer />
         </WrapperStyle>
     );
 };
 
-const EnteredCodeStyle = styled.div`
-    width: 50%;
+const WrapperStyle = styled.div`
     height: 100%;
+`;
 
+const PanelWrapperStyle = styled.div<{ columnWidth: number}>`
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: calc(100vh - 80px);
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    > div {
+        width: ${props => props.columnWidth}%;
+        height: 100%;
+    }
+}
+    
     .react-codemirror2,
     .CodeMirror {
         height: 100%;
     }
+    font-size: 12px;
+`;
+
+const EnteredCodeStyle = styled.div`
+    height: 100%;
 
     .compilationError {
         border-bottom: solid 1px red;
@@ -82,24 +94,6 @@ const EnteredCodeStyle = styled.div`
         height: 50%;
         border-bottom: 1px solid #ccc;
     }
-`;
-
-const WrapperStyle = styled.div`
-    height: 100%;
-`;
-
-const CodeWrapperStyle = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    height: calc(100vh - 80px);
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-`;
-
-const TabBody = styled.div<{ isVisible: boolean }>`
-    ${props => (props.isVisible ? "" : "display: none;")}
-    height: 100%;
 `;
 
 const Footer = styled.div`

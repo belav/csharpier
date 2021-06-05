@@ -4,7 +4,7 @@ import { Loading } from "./Icons/Loading";
 import { useAppContext } from "./AppContext";
 
 export const Header = () => {
-    const { tab, setTab, isLoading, hasErrors, formatCode } = useAppContext();
+    const { isLoading, formatCode, showDoc, setShowDoc, showAst, setShowAst } = useAppContext();
     return (
         <HeaderStyle>
             <Left>
@@ -23,17 +23,16 @@ export const Header = () => {
                     {!isLoading && <>Format</>}
                 </FormatButton>
             </Left>
-            <Tabs>
-                <Tab data-isactive={tab === "code"} data-haserrors={hasErrors} onClick={() => setTab("code")}>
-                    Formatted Code
-                </Tab>
-                <Tab data-isactive={tab === "ast"} onClick={() => setTab("ast")}>
-                    AST
-                </Tab>
-                <Tab data-isactive={tab === "doc"} onClick={() => setTab("doc")}>
-                    Doc
-                </Tab>
-            </Tabs>
+            <Right>
+                <label>
+                    <input type="checkbox" checked={showDoc} onChange={() => {setShowDoc(!showDoc)}} />
+                    Show Doc
+                </label>
+                <label>
+                    <input type="checkbox" checked={showAst} onChange={() => {setShowAst(!showAst)}} />
+                    Show AST
+                </label>
+            </Right>
         </HeaderStyle>
     );
 };
@@ -45,14 +44,22 @@ const HeaderStyle = styled.div`
     align-items: center;
 
     > div {
-        width: 50%;
         display: flex;
     }
 `;
 
 const Left = styled.div`
     align-items: center;
+    width: 25%;
 `;
+const Right = styled.div`
+    margin-left: auto;
+    padding-right: 20px;
+    label {
+        margin-left: 10px;
+        cursor: pointer;
+    }
+`
 
 const Title = styled.h1`
     padding-left: 28px;
@@ -74,38 +81,6 @@ const FormatButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-`;
-
-const Tabs = styled.div`
-    width: 50%;
-    padding-left: 48px;
-    height: 100%;
-    display: flex;
-    align-items: baseline;
-`;
-
-const Tab = styled.button`
-    font-size: 16px;
-    margin-right: 20px;
-    margin-top: auto;
-    border: 1px solid #ddd;
-    margin-bottom: -1px;
-    padding: 4px 8px;
-    cursor: pointer;
-
-    &[data-isactive="true"] {
-        background: white;
-        border-bottom: none;
-        cursor: default;
-    }
-
-    &[data-haserrors="true"] {
-        color: red;
-    }
-
-    &:focus {
-        outline: none;
-    }
 `;
 
 const LoadingStyle = styled(Loading)`
