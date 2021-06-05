@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 namespace CSharpier
@@ -227,27 +225,48 @@ namespace CSharpier
 
         private CompareResult Compare(SyntaxTriviaList originalList, SyntaxTriviaList formattedList)
         {
-            var cleanedOriginal = originalList.Where(
-                    o =>
-                        o.Kind() != SyntaxKind.EndOfLineTrivia
-                        && o.Kind() != SyntaxKind.WhitespaceTrivia
-                )
-                .ToList();
-            var cleanedFormatted = formattedList.Where(
-                    o =>
-                        o.Kind() != SyntaxKind.EndOfLineTrivia
-                        && o.Kind() != SyntaxKind.WhitespaceTrivia
-                )
-                .ToList();
-            var result = CompareLists(
-                cleanedOriginal,
-                cleanedFormatted,
-                Compare,
-                o => o.Span,
-                originalList.Span,
-                formattedList.Span
-            );
-            return result.IsInvalid ? result : Equal;
+            static SyntaxTrivia? FindNextSyntaxTrivia(SyntaxTriviaList list, ref int next)
+            {
+                SyntaxTrivia result;
+                do
+                {
+                    if (next >= list.Count)
+                    {
+                        return null;
+                    }
+
+                    result = list[next];
+                    next++;
+                }
+                while (result.Kind()
+                    is SyntaxKind.EndOfLineTrivia
+                        or SyntaxKind.WhitespaceTrivia);
+
+                return result;
+            }
+
+            var nextOriginal = 0;
+            var nextFormatted = 0;
+            var original = FindNextSyntaxTrivia(originalList, ref nextOriginal);
+            var formatted = FindNextSyntaxTrivia(formattedList, ref nextFormatted);
+            while (original != null && formatted != null)
+            {
+                var result = Compare(original.Value, formatted.Value);
+                if (result.IsInvalid)
+                {
+                    return result;
+                }
+
+                original = FindNextSyntaxTrivia(originalList, ref nextOriginal);
+                formatted = FindNextSyntaxTrivia(formattedList, ref nextFormatted);
+            }
+
+            if (original != formatted)
+            {
+                return NotEqual(originalList.Span, formattedList.Span);
+            }
+
+            return Equal;
         }
     }
 
