@@ -14,7 +14,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 docs.Add(NameColon.Print(node.NameColon));
             }
 
-            docs.Add(Token.Print(node.RefKindKeyword, " "));
+            docs.Add(Token.PrintWithSuffix(node.RefKindKeyword, " "));
             docs.Add(Node.Print(node.Expression));
             return Doc.Concat(docs);
         }

@@ -8,16 +8,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
+    // this is a very basic version of the logic found in prettier/src/language-js/print/binaryish.js
+    // There are a ton of edge cases that are not yet handled
     public static class BinaryExpression
     {
-        // TODO this is a very basic version of the logic found in prettier/src/language-js/print/binaryish.js
-        // There are a ton of edge cases that are not yet handled
         public static Doc Print(BinaryExpressionSyntax node)
         {
             return Doc.Group(PrintBinaryExpression(node));
         }
 
-        // TODO 0 kill? runtime repo has files that will fail on deep recursion
         [ThreadStatic]
         private static int depth;
 

@@ -19,16 +19,6 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void RemoveInitialDoubleHardLine_Should_Remove_Null()
-        {
-            var doc = new List<Doc> { Doc.Null };
-
-            DocUtilities.RemoveInitialDoubleHardLine(doc);
-
-            doc.Should().BeEmpty();
-        }
-
-        [Test]
         public void RemoveInitialDoubleHardLine_Should_Not_Remove_Simple_HardLine()
         {
             var doc = new List<Doc> { Doc.HardLine };
@@ -45,7 +35,7 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            doc.Should().HaveCount(1);
+            doc.Should().BeEquivalentTo(new List<Doc> { Doc.HardLine, Doc.Null });
         }
 
         [Test]
@@ -67,7 +57,7 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            concat.Contents.Should().ContainSingle();
+            concat.Should().BeEquivalentTo(Doc.Concat(Doc.HardLine, Doc.Null));
         }
 
         [Test]
@@ -89,7 +79,7 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            concat.Contents.Should().ContainSingle();
+            concat.Contents.Should().BeEquivalentTo(new List<Doc> { Doc.HardLine, Doc.Null });
         }
 
         [Test]
@@ -100,7 +90,8 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            concat.Contents.Should().HaveCount(2);
+            concat.Contents.Should()
+                .BeEquivalentTo(new List<Doc> { Doc.HardLine, Doc.Null, Doc.HardLine });
         }
 
         [Test]
@@ -144,7 +135,7 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            contents.Should().ContainSingle();
+            contents.Should().BeEquivalentTo(new List<Doc> { Doc.HardLine, Doc.Null });
         }
 
         [Test]
@@ -166,7 +157,11 @@ namespace CSharpier.Tests
 
             DocSerializer.Serialize(doc)
                 .Should()
-                .Be(DocSerializer.Serialize(Doc.Concat(Doc.HardLine, "1", Doc.HardLine, "2")));
+                .Be(
+                    DocSerializer.Serialize(
+                        Doc.Concat(Doc.HardLine, Doc.Null, "1", Doc.HardLine, "2")
+                    )
+                );
         }
     }
 }

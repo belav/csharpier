@@ -11,7 +11,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             var docs = new List<Doc>
             {
-                Token.Print(node.LockKeyword, " "),
+                Token.PrintWithSuffix(node.LockKeyword, " "),
                 Token.Print(node.OpenParenToken),
                 Node.Print(node.Expression),
                 Token.Print(node.CloseParenToken)

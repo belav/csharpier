@@ -10,7 +10,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Concat(
                 AttributeLists.Print(node, node.AttributeLists),
-                Token.Print(node.VarianceKeyword, " "),
+                Token.PrintWithSuffix(node.VarianceKeyword, " "),
                 Token.Print(node.Identifier)
             );
         }

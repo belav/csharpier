@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpier.DocTypes
 {
@@ -10,23 +11,20 @@ namespace CSharpier.DocTypes
             RemoveInitialDoubleHardLine(docs, ref removeNextHardLine);
         }
 
-        private static void RemoveInitialDoubleHardLine(List<Doc> docs, ref bool removeNextHardLine)
-        {
+        private static void RemoveInitialDoubleHardLine(
+            IList<Doc> docs,
+            ref bool removeNextHardLine
+        ) {
             var x = 0;
             while (x < docs.Count)
             {
                 var doc = docs[x];
 
-                if (doc == Doc.Null)
-                {
-                    docs.RemoveAt(x);
-                    break;
-                }
-                else if (doc is HardLine)
+                if (doc is HardLine)
                 {
                     if (removeNextHardLine)
                     {
-                        docs.RemoveAt(x);
+                        docs[x] = Doc.Null;
                         return;
                     }
 

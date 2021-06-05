@@ -10,10 +10,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(TypeParameterConstraintClauseSyntax node)
         {
             return Doc.Group(
-                Token.Print(node.WhereKeyword, " "),
+                Token.PrintWithSuffix(node.WhereKeyword, " "),
                 Node.Print(node.Name),
                 " ",
-                Token.Print(node.ColonToken, " "),
+                Token.PrintWithSuffix(node.ColonToken, " "),
                 Doc.Indent(SeparatedSyntaxList.Print(node.Constraints, Node.Print, Doc.Line))
             );
         }

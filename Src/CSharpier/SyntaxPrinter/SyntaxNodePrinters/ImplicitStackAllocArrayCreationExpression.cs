@@ -11,7 +11,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Doc.Concat(
                 Token.Print(node.StackAllocKeyword),
                 Token.Print(node.OpenBracketToken),
-                Token.Print(node.CloseBracketToken, " "),
+                Token.PrintWithSuffix(node.CloseBracketToken, " "),
                 Node.Print(node.Initializer)
             );
         }

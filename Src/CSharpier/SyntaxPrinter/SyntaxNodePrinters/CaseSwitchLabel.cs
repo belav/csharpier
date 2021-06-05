@@ -9,7 +9,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(CaseSwitchLabelSyntax node)
         {
             return Doc.Concat(
-                Token.Print(node.Keyword, " "),
+                Token.PrintWithSuffix(node.Keyword, " "),
                 Doc.Group(Node.Print(node.Value)),
                 Token.Print(node.ColonToken)
             );

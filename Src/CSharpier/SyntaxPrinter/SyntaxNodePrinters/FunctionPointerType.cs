@@ -11,7 +11,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Concat(
                 Token.Print(node.DelegateKeyword),
-                Token.Print(node.AsteriskToken, " "),
+                Token.PrintWithSuffix(node.AsteriskToken, " "),
                 node.CallingConvention != null
                     ? PrintCallingConvention(node.CallingConvention)
                     : Doc.Null,

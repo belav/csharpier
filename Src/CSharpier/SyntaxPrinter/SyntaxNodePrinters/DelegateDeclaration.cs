@@ -15,7 +15,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 ExtraNewLines.Print(node),
                 AttributeLists.Print(node, node.AttributeLists),
                 Modifiers.Print(node.Modifiers),
-                Token.Print(node.DelegateKeyword, " "),
+                Token.PrintWithSuffix(node.DelegateKeyword, " "),
                 Node.Print(node.ReturnType),
                 { " ", Token.Print(node.Identifier) }
             };

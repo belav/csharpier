@@ -4,9 +4,9 @@ namespace CSharpier.DocTypes
 {
     public class Concat : Doc
     {
-        public List<Doc> Contents { get; set; }
+        public IList<Doc> Contents { get; set; }
 
-        public Concat(List<Doc> contents)
+        public Concat(IList<Doc> contents)
         {
             Contents = contents;
         }

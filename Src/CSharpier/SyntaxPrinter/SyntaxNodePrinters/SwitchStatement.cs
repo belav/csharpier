@@ -23,7 +23,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Doc.Concat(
                 ExtraNewLines.Print(node),
                 Doc.Group(
-                    Token.Print(node.SwitchKeyword, " "),
+                    Token.PrintWithSuffix(node.SwitchKeyword, " "),
                     Token.Print(node.OpenParenToken),
                     Node.Print(node.Expression),
                     Token.Print(node.CloseParenToken),

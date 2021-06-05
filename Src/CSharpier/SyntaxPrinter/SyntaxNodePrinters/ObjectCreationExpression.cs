@@ -8,7 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(ObjectCreationExpressionSyntax node)
         {
             return Doc.Group(
-                Token.Print(node.NewKeyword, " "),
+                Token.PrintWithSuffix(node.NewKeyword, " "),
                 Node.Print(node.Type),
                 node.ArgumentList != null ? ArgumentList.Print(node.ArgumentList) : string.Empty,
                 node.Initializer != null

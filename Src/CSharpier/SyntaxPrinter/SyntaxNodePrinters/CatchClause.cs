@@ -28,7 +28,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 docs.Add(
                     " ",
-                    Token.Print(node.Filter.WhenKeyword, " "),
+                    Token.PrintWithSuffix(node.Filter.WhenKeyword, " "),
                     Token.Print(node.Filter.OpenParenToken),
                     Node.Print(node.Filter.FilterExpression),
                     Token.Print(node.Filter.CloseParenToken)

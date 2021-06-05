@@ -37,7 +37,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
             else if (node is EventDeclarationSyntax eventDeclarationSyntax)
             {
-                eventKeyword = Token.Print(eventDeclarationSyntax.EventKeyword, " ");
+                eventKeyword = Token.PrintWithSuffix(eventDeclarationSyntax.EventKeyword, " ");
                 explicitInterfaceSpecifierSyntax = eventDeclarationSyntax.ExplicitInterfaceSpecifier;
                 identifier = Token.Print(eventDeclarationSyntax.Identifier);
                 semicolonToken = eventDeclarationSyntax.SemicolonToken;

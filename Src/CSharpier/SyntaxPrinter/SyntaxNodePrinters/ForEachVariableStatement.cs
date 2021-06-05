@@ -10,12 +10,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Concat(
                 ExtraNewLines.Print(node),
-                Token.Print(node.AwaitKeyword, " "),
-                Token.Print(node.ForEachKeyword, " "),
+                Token.PrintWithSuffix(node.AwaitKeyword, " "),
+                Token.PrintWithSuffix(node.ForEachKeyword, " "),
                 Token.Print(node.OpenParenToken),
                 Node.Print(node.Variable),
                 " ",
-                Token.Print(node.InKeyword, " "),
+                Token.PrintWithSuffix(node.InKeyword, " "),
                 Node.Print(node.Expression),
                 Token.Print(node.CloseParenToken),
                 Node.Print(node.Statement)

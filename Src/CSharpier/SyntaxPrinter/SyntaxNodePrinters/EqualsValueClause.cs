@@ -33,7 +33,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             Doc result = Doc.Group(
                 " ",
-                Token.Print(node.EqualsToken, separator),
+                Token.PrintWithSuffix(node.EqualsToken, separator),
                 Node.Print(node.Value)
             );
 

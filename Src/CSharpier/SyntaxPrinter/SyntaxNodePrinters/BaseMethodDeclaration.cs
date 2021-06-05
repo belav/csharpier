@@ -116,7 +116,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword,
                         " "
                     ),
-                    Token.Print(conversionOperatorDeclarationSyntax.OperatorKeyword, " "),
+                    Token.PrintWithSuffix(conversionOperatorDeclarationSyntax.OperatorKeyword, " "),
                     Node.Print(conversionOperatorDeclarationSyntax.Type)
                 );
             }
@@ -125,7 +125,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 declarationGroup.Add(
                     Node.Print(operatorDeclarationSyntax.ReturnType),
                     " ",
-                    Token.Print(operatorDeclarationSyntax.OperatorKeyword, " "),
+                    Token.PrintWithSuffix(operatorDeclarationSyntax.OperatorKeyword, " "),
                     Token.Print(operatorDeclarationSyntax.OperatorToken)
                 );
             }

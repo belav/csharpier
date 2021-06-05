@@ -7,7 +7,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(IncompleteMemberSyntax node)
         {
-            return string.Empty; // TODO 1 figure this out
+            return string.Empty;
         }
     }
 }

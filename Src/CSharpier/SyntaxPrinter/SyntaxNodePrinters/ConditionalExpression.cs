@@ -12,10 +12,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Doc.Group(
                     Doc.Indent(
                         Doc.Line,
-                        Token.Print(node.QuestionToken, " "),
+                        Token.PrintWithSuffix(node.QuestionToken, " "),
                         Doc.Indent(Node.Print(node.WhenTrue)),
                         Doc.Line,
-                        Token.Print(node.ColonToken, " "),
+                        Token.PrintWithSuffix(node.ColonToken, " "),
                         Doc.Indent(Node.Print(node.WhenFalse))
                     )
                 )
