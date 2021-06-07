@@ -83,7 +83,7 @@ namespace CSharpier.DocPrinter
                             Push(
                                 indent.Contents,
                                 currentMode,
-                                IndentBuilder.Make(currentIndent, printerOptions)
+                                IndentBuilder.MakeIndent(currentIndent, printerOptions)
                             );
                             break;
                         case Trim:
@@ -145,6 +145,17 @@ namespace CSharpier.DocPrinter
                             Push(flat.Contents, currentMode, currentIndent);
                             break;
                         case BreakParent:
+                            break;
+                        case Align align:
+                            Push(
+                                align.Contents,
+                                currentMode,
+                                IndentBuilder.MakeAlign(
+                                    currentIndent,
+                                    align.Alignment,
+                                    printerOptions
+                                )
+                            );
                             break;
                         default:
                             throw new Exception("Can't handle " + currentDoc.GetType());

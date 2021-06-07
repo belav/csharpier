@@ -617,6 +617,26 @@ true || false"
         }
 
         [Test]
+        public void Align_Should_Print_Basic_Case()
+        {
+            var doc = Doc.Concat("+ ", Doc.Align(2, Doc.Group("1", Doc.HardLine, "2")));
+            PrintedDocShouldBe(doc, $"+ 1{NewLine}  2");
+        }
+
+        [Test]
+        public void Align_Should_Convert_Spaces_To_Tabs()
+        {
+            var doc = Doc.Concat(
+                "+ ",
+                Doc.Align(
+                    2,
+                    Doc.Indent(Doc.Concat("+ ", Doc.Align(2, Doc.Group("1", Doc.HardLine, "2"))))
+                )
+            );
+            PrintedDocShouldBe(doc, $"+ + 1{NewLine}\t\t  2", useTabs: true);
+        }
+
+        [Test]
         public void Scratch()
         {
             var doc = "";
@@ -627,9 +647,10 @@ true || false"
             Doc doc,
             string expected,
             int width = PrinterOptions.WidthUsedByTests,
-            bool trimInitialLines = false
+            bool trimInitialLines = false,
+            bool useTabs = false
         ) {
-            var result = Print(doc, width, trimInitialLines);
+            var result = Print(doc, width, trimInitialLines, useTabs);
 
             result.Should().Be(expected);
         }
@@ -637,11 +658,17 @@ true || false"
         private static string Print(
             Doc doc,
             int width = PrinterOptions.WidthUsedByTests,
-            bool trimInitialLines = false
+            bool trimInitialLines = false,
+            bool useTabs = false
         ) {
             return DocPrinter.DocPrinter.Print(
                     doc,
-                    new PrinterOptions { Width = width, TrimInitialLines = trimInitialLines, },
+                    new PrinterOptions
+                    {
+                        Width = width,
+                        TrimInitialLines = trimInitialLines,
+                        UseTabs = useTabs
+                    },
                     Environment.NewLine
                 )
                 .TrimEnd('\r', '\n');
