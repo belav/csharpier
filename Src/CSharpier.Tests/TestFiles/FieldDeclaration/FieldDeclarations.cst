@@ -23,6 +23,21 @@ public class ClassName
         Property2 = 2
     };
 
+    private LotsOfParametersToCauseBreaking ShortFieldName = new LotsOfParametersToCauseBreaking(
+        "someValue",
+        "someOtherValue",
+        "anotherValue",
+        "yetAnotherValue"
+    );
+
+    private SomeReallyLongObjectName SomeReallyLongFieldName_____________ =
+        new SomeReallyLongObjectName("someValue", "someOtherValue");
+
+    private SomeReallyLongObjectName LongFieldNameAndLongParameters = new SomeReallyLongObjectName(
+        "someValue___________________",
+        "someOtherValue_____________________________________"
+    );
+
     public ClassName Value = new ClassName
     {
         Property1 = true,
