@@ -22,6 +22,109 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         // https://github.com/belav/runtime/pull/4
         // https://github.com/belav/sdk/pull/1
 
+        /*
+                             var resources = await sourceRepository.GetResourceAsync<
+                            ServiceIndexResourceV3
+                        >();
+                        
+                                    bool? downloadStatus =
+                await DownloadWithRetriesAsync(Uri, DestinationPath, errorMessages);
+                vs
+                            bool? downloadStatus = await DownloadWithRetriesAsync(
+                    Uri,
+                    DestinationPath,
+                    errorMessages
+                );
+                
+                            internal readonly static DiagnosticDescriptor BuildServiceProviderShouldNotCalledInConfigureServicesMethod =
+                new DiagnosticDescriptor(
+                "ASP0000",
+                "Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'",
+                "Calling 'BuildServiceProvider' from application code results in an additional copy of singleton services being created. Consider alternatives such as dependency injecting services as parameters to 'Configure'.",
+	@@ -39,7 +40,8 @@ static Diagnostics()
+                helpLinkUri: "https://aka.ms/AA5k895"
+            );
+            
+                        var expectedValue = new byte[SqlParameterCollectionExtensions.DefaultValueColumnWidth
+                + 100];
+                
+                        private static readonly string[] NamespaceParts = new[] {
+                "RenderTree",
+                "Components",
+                "AspNetCore",
+                "Microsoft",
+            };
+            
+                    public static object? FormatValue<[DynamicallyAccessedMembers(
+                DynamicallyAccessedMemberTypes.All)]
+            T>(T value, CultureInfo? culture = null)
+            
+                        public readonly StackObjectPool<Dictionary<
+                    object,
+                    KeyedItemInfo
+                >> KeyedItemInfoDictionaryPool;
+                
+                        internal StackObjectPool<Dictionary<
+                object,
+                KeyedItemInfo
+            >> KeyedItemInfoDictionaryPool { get; } =
+            new StackObjectPool<Dictionary<object, KeyedItemInfo>>(
+                maxPreservedItems: 10,
+                () => new Dictionary<object, KeyedItemInfo>()
+            );
+                                    
+                                                                var linePosition = diagnostics[
+                                    i
+                                ].Location.GetLineSpan().StartLinePosition;
+                                
+                                            RenderFragment<AuthenticationState> customNotAuthorized = state =>
+                    builder => builder.AddContent(0, $"Go away, {state.User.Identity.Name}");
+                    
+        public List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)> AuthorizeCalls { get; } =
+            new List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)>();
+            
+                        private static readonly Action<ILogger, string, string, Exception> _displayingNotFound =
+                LoggerMessage.Define<string, string>(
+                    LogLevel.Debug,
+                    new EventId(1, "DisplayingNotFound"),
+                    $"Displaying {nameof(NotFound)} because path '{{Path}}' with base URI '{{BaseUri}}' does not match any component route"
+                );
+                
+                            private static readonly Action<
+                ILogger,
+                Type,
+                string,
+                string,
+                Exception
+            > _navigatingToComponent = LoggerMessage.Define<Type, string, string>(
+                LogLevel.Debug,
+                new EventId(2, "NavigatingToComponent"),
+                "Navigating to component {ComponentType} in response to path '{Path}' with base URI '{BaseUri}'"
+            );
+            
+            
+                                                            builder3.OpenComponent<SecondCascadingParameterConsumerComponent<
+                                                        string,
+                                                        int
+                                                    >>(0);
+                                                    
+                                                    
+                                                            public static IRemoteAuthenticationBuilder<
+            RemoteAuthenticationState,
+            RemoteUserAccount
+        > AddAccountClaimsPrincipalFactory<[DynamicallyAccessedMembers(
+                DynamicallyAccessedMemberTypes.PublicConstructors)]
+            TAccountClaimsPrincipalFactory>(
+            this IRemoteAuthenticationBuilder<RemoteAuthenticationState, RemoteUserAccount> builder
+        )
+            where TAccountClaimsPrincipalFactory : AccountClaimsPrincipalFactory<RemoteUserAccount> =>
+            builder.AddAccountClaimsPrincipalFactory<
+                RemoteAuthenticationState,
+                RemoteUserAccount,
+                TAccountClaimsPrincipalFactory
+            >();
+         */
+        
         public static Doc Print(VariableDeclarationSyntax node)
         {
             if (node.Variables.Count > 1)

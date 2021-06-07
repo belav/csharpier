@@ -54,13 +54,14 @@ public class ClassName
         set;
     }
 
-    public virtual ICollection<
-        SomeObject
-    > SomeLongNameThatForcesALineBreak______________________ { get; set; } =
+    public virtual ICollection<SomeObject> SomeLongNameThatForcesALineBreak______________________ { get; set; } =
         new HashSet<SomeObject>();
 
     public Dictionary<string, string> Properties_________________ { get; set; } =
         new Dictionary<string, string>();
 
     public virtual LongerPropertyConfiguration LongerPropertyConfiguration { get; set; }
+    
+    public List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)> AuthorizeCalls { get; } =
+        new List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)>();
 }

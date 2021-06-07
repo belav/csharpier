@@ -12,10 +12,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Doc.Concat(
                 Token.Print(node.LessThanToken),
                 Doc.Indent(
-                    Doc.SoftLine,
+                    node.Arguments.Count > 1 ? Doc.SoftLine : Doc.Null,
                     SeparatedSyntaxList.Print(node.Arguments, Node.Print, Doc.Line)
                 ),
-                Doc.SoftLine,
+                node.Arguments.Count > 1 ? Doc.SoftLine : Doc.Null,
                 Token.Print(node.GreaterThanToken)
             );
         }
