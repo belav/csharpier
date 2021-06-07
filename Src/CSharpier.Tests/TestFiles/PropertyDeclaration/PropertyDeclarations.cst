@@ -64,4 +64,6 @@ public class ClassName
 
     public List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)> AuthorizeCalls { get; } =
         new List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)>();
+
+    public int[] ArrayWithoutSizesDoesntBreak { get; set; }
 }
