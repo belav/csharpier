@@ -21,7 +21,7 @@ class ClassName
         );
 
     RenderFragment<AuthenticationState> customNotAuthorized = state =>
-            builder => builder.AddContent(0, $"Go away, {state.User.Identity.Name}");
+        builder => builder.AddContent(0, $"Go away, {state.User.Identity.Name}");
 
     public List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)> AuthorizeCalls { get; } =
         new List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)>();

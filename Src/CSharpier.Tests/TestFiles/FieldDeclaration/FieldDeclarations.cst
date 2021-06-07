@@ -70,6 +70,39 @@ public class ClassName
     private static readonly Func<SyntaxTrivia, bool> s_isVisualBasicCommentTrivia = (
         syntaxTrivia
     ) => syntaxTrivia.IsKind(VisualBasic.SyntaxKind.CommentTrivia);
+
+    private Func<SomeObjectIn, bool> SomeFieldFunc = (someValue) => true;
+
+    private Func<SomeObjectIn, bool> SomeFieldFunc = (someValue) => SometimesBreaksThisWay(
+        someValue
+    );
+
+    private Func<SomeObjectIn, bool> SomeFieldFunc = (
+        someValue
+    ) => OrWhenLongerBreaksThisWay________(someValue);
+
+    private Func<SomeObjectIn_________________________, bool> SomeFieldFuncWithALongName_________ =
+        (someValue) => SomeOtherLongerMethod(someValue);
+
+    private Func<
+        SomeLongObjectIn__________________________________,
+        bool
+    > SomeFieldFuncWithALongName = (someValue) => SometimesBreaksThisWay(someValue);
+
+    private Func<
+        SomeLongObjectIn__________________________________,
+        bool
+    > SomeFieldFuncWithALongName = (someValue) => SometimesBreaksThisWay(
+        someValue,
+        SomeOtherLongValue
+    );
+
+    private Func<
+        SomeLongObjectIn__________________________________,
+        bool
+    > SomeFieldFuncWithALongName = (
+        someValue_____________________________
+    ) => SometimesBreaksThisWay(someValue, SomeOtherLongValue);
 }
 
 struct S

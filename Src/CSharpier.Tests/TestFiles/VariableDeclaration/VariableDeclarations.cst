@@ -29,6 +29,10 @@ class ClassName
             syntaxTrivia
         ) => syntaxTrivia.IsKind(VisualBasic.SyntaxKind.CommentTrivia);
 
+        Action find = () => EntryPointDiscoverer.FindStaticEntryMethod(
+            typeof(IEnumerable<>).Assembly
+        );
+
         var arrayCreationExpression1 = new byte[100];
         var arrayCreationExpression2 = new byte[
             SqlParameterCollectionExtensions.DefaultValueColumnWidth
