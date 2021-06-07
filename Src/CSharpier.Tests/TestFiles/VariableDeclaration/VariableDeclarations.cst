@@ -28,5 +28,41 @@ class ClassName
         Func<SyntaxTrivia, bool> s_isVisualBasicCommentTrivia = (
             syntaxTrivia
         ) => syntaxTrivia.IsKind(VisualBasic.SyntaxKind.CommentTrivia);
+
+        var arrayCreationExpression1 = new byte[100];
+        var arrayCreationExpression2 = new byte[
+            SqlParameterCollectionExtensions.DefaultValueColumnWidth
+        ];
+        var arrayCreationExpression3 = new byte[
+            SqlParameterCollectionExtensions.DefaultValueColumnWidth + 100
+        ];
+        var shortOne______ = new byte[
+            SqlParameterCollectionExtensions.DefaultValueColumnWidth + 100
+        ];
+        var muchLongerOne_________________ = new byte[
+            SqlParameterCollectionExtensions.DefaultValueColumnWidth + DefaultValueColumnWidth
+        ];
+        var muchLongerOne_________________ = new byte[
+            SqlParameterCollectionExtensions.DefaultValueColumnWidth
+            + SqlParameterCollectionExtensions.DefaultValueColumnWidth
+        ];
+
+        var elementAccessExpression1 = anArray[100];
+        var elementAccessExpression2 = anArray[
+            SqlParameterCollectionExtensions.DefaultValueColumnWidth
+        ];
+        var elementAccessExpression3 = anArray[
+            SqlParameterCollectionExtensions.DefaultValueColumnWidth + 100
+        ];
+        var shortOne______ = anArray_[
+            SqlParameterCollectionExtensions.DefaultValueColumnWidth + 100
+        ];
+        var shortOne______ = anArray[
+            DefaultValueColumnWidth_________ + DefaultValueColumnWidth_______
+        ];
+        var shortOne______ = anArray[
+            SqlParameterCollectionExtensions.DefaultValueColumnWidth
+            + SqlParameterCollectionExtensions.DefaultValueColumnWidth
+        ];
     }
 }
