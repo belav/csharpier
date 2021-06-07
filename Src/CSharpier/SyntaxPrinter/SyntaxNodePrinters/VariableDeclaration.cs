@@ -110,7 +110,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 }
             );
          */
-        
+
         public static Doc Print(VariableDeclarationSyntax node)
         {
             if (node.Variables.Count > 1)
@@ -171,7 +171,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             initializer.Value
                                 is InvocationExpressionSyntax
                                     or ParenthesizedLambdaExpressionSyntax
-                                or ObjectCreationExpressionSyntax
+                                    or ObjectCreationExpressionSyntax
+                                    or ElementAccessExpressionSyntax
+                                    or ArrayCreationExpressionSyntax
                                 ? Doc.IndentIfBreak(
                                         Doc.Group(Node.Print(initializer.Value)),
                                         groupId
