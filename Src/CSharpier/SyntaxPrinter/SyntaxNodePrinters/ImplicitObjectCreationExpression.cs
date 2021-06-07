@@ -11,7 +11,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Doc.Concat(
                 Token.Print(node.NewKeyword),
                 ArgumentList.Print(node.ArgumentList),
-                node.Initializer != null ? Node.Print(node.Initializer) : Doc.Null
+                node.Initializer != null
+                    ? Doc.Concat(Doc.Line, Node.Print(node.Initializer))
+                    : Doc.Null
             );
         }
     }

@@ -14,7 +14,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.Print(node.OperatorToken),
                 node.Right is QueryExpressionSyntax
                     ? Doc.Indent(Doc.Line, Node.Print(node.Right))
-                    : Doc.Concat(" ", Node.Print(node.Right))
+                    : Doc.Group(
+                            node.Right is InitializerExpressionSyntax ? Doc.Null : " ",
+                            Node.Print(node.Right)
+                        )
             );
         }
     }
