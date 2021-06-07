@@ -4,6 +4,11 @@ class ClassName
 
     int[,] array = new[,] { { 1, 2 }, { 3, 4 } };
 
+    private string[] SomeArray = new[] {
+        "SomeValue_____________________",
+        "SomeValue_____________________",
+    };
+
     public HashSet<string> TheArrayShouldNotBreak = new HashSet<string>(
         new[] { ".dll", "exe", ".winmd" },
         StringComparer.OrdinalIgnoreCase

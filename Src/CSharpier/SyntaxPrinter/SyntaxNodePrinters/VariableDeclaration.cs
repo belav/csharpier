@@ -173,6 +173,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                     or ObjectCreationExpressionSyntax
                                     or ElementAccessExpressionSyntax
                                     or ArrayCreationExpressionSyntax
+                                    or ImplicitArrayCreationExpressionSyntax
                                 ? Doc.IndentIfBreak(
                                         Doc.Group(Node.Print(initializer.Value)),
                                         groupId
