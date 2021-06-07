@@ -53,5 +53,20 @@ class ClassName
             Property1 = true
             // should indent
         };
+
+        var objectInitializerExpression = new SomeObject()
+        {
+            ShouldNotBreak = { SecurePolicy = CookieSecurePolicy.Always }
+        };
+
+        var collectionInitializerExpressions = new SomeObject
+        {
+            ThisIsACollection = { one, two },
+            ThisIsAlsoACollection =
+            {
+                longerValueThatMakesItBreak______________________,
+                longerValueThatMakesItBreak______________________
+            },
+        };
     }
 }

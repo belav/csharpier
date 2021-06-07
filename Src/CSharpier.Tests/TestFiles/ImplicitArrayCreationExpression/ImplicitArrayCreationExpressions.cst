@@ -3,4 +3,17 @@ class ClassName
     int[] array = new[] { 1, 2 };
 
     int[,] array = new[,] { { 1, 2 }, { 3, 4 } };
+
+    public HashSet<string> TheArrayShouldNotBreak = new HashSet<string>(
+        new[] { ".dll", "exe", ".winmd" },
+        StringComparer.OrdinalIgnoreCase
+    );
+
+    void MethodName()
+    {
+        return TheArrayInHereShouldAlsoNotBreak(
+            SomeLongThing__________,
+            new[] { one, two, three, found }
+        );
+    }
 }
