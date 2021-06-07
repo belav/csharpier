@@ -49,6 +49,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     or ConditionalExpressionSyntax
                     or ObjectCreationExpressionSyntax
                     or SwitchExpressionSyntax
+                    or LambdaExpressionSyntax
                 ? FormatMode.NoIndent
                 : initializer?.Value
                         is BinaryExpressionSyntax
