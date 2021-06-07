@@ -1,6 +1,7 @@
 using System.Linq;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -22,7 +23,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Doc.Line,
                 Token.Print(node.CloseBraceToken)
             );
-            return node.Parent is not ObjectCreationExpressionSyntax ? Doc.Group(result) : result;
+            return node.Kind() is SyntaxKind.ComplexElementInitializerExpression
+                ? Doc.Group(result)
+                : result;
         }
     }
 }

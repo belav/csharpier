@@ -7,6 +7,12 @@ class ClassName
         "someLongValue_____________________________________"
     };
 
+    int[] array = new int[]
+    {
+        "someLongValue_____________________________________",
+        "someLongValue_____________________________________"
+    };
+
     public IList<string> Value = new List<string> { "one", "two" };
 
     Dictionary<int, string> dictionary = new Dictionary<int, string>

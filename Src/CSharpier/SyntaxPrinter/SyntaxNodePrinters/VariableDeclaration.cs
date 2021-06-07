@@ -22,10 +22,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         // https://github.com/belav/runtime/pull/4
         // https://github.com/belav/sdk/pull/1
 
-        /*            
-                        var expectedValue = new byte[SqlParameterCollectionExtensions.DefaultValueColumnWidth
-                + 100];
-                
+        /*                            
                         private static readonly string[] NamespaceParts = new[] {
                 "RenderTree",
                 "Components",
@@ -109,6 +106,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     throw new NotImplementedException();
                 }
             );
+            
+            
          */
 
         public static Doc Print(VariableDeclarationSyntax node)

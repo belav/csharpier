@@ -9,7 +9,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ArrayRankSpecifierSyntax node)
         {
-            return Doc.Concat(
+            return Doc.Group(
                 Token.Print(node.OpenBracketToken),
                 node.Sizes.Any()
                     ? Doc.Concat(
