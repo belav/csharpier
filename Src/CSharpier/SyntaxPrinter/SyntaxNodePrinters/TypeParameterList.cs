@@ -16,10 +16,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Doc.Group(
                 Token.Print(node.LessThanToken),
                 Doc.Indent(
-                    Doc.SoftLine,
+                    node.Parameters.Count > 1 ? Doc.SoftLine : Doc.Null,
                     SeparatedSyntaxList.Print(node.Parameters, TypeParameter.Print, Doc.Line)
                 ),
-                Doc.SoftLine,
+                node.Parameters.Count > 1 ? Doc.SoftLine : Doc.Null,
                 Token.Print(node.GreaterThanToken)
             );
         }
