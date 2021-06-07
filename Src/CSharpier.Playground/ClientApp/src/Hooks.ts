@@ -1,7 +1,7 @@
 import { useAppContext } from "./AppContext";
 
 export const useOptions = () => {
-    const { formatCode } = useAppContext();
+    const { formatCode, setEmptyMethod, setEmptyClass, copyLeft } = useAppContext();
 
     return {
         matchBrackets: true,
@@ -23,6 +23,15 @@ export const useOptions = () => {
             },
             "Ctrl-Enter": () => {
                 formatCode();
+            },
+            "Shift-Ctrl-C": () => {
+                setEmptyClass();
+            },
+            "Shift-Ctrl-X": () => {
+                setEmptyMethod();
+            },
+            "Shift-Ctrl-S": () => {
+                copyLeft();
             },
             "Shift-Tab": (cm: any) => cm.execCommand("indentLess"),
         },

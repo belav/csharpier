@@ -20,6 +20,9 @@ export const AppContext = React.createContext({
     setEnteredCode: (enteredCode: string) => {},
     formatCode: () => {},
     setFormattedCodeEditor: (value: unknown) => {},
+    setEmptyMethod: () => {},
+    setEmptyClass: () => {},
+    copyLeft: () => {},
 });
 
 export const useAppContext = () => useContext(AppContext);
@@ -72,6 +75,24 @@ export const useSetupAppContext = () => {
             setHasErrors(hasErrors);
         },
         setFormattedCodeEditor: setFormattedCodeEditor,
+        setEmptyMethod: () => {
+            setEnteredCode(`class ClassName
+{
+    void MethodName()
+    {
+        HERE
+    }
+}`);
+        },
+        setEmptyClass: () => {
+            setEnteredCode(`class ClassName
+{
+    HERE
+}`);
+        },
+        copyLeft: () => {
+            setEnteredCode(formattedCode);
+        }
     };
 };
 

@@ -101,6 +101,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 RemoteUserAccount,
                 TAccountClaimsPrincipalFactory
             >();
+            
+                    private static readonly Action<IApplicationBuilder> ActionNotImplemented =
+            new Action<IApplicationBuilder>(
+                _ =>
+                {
+                    throw new NotImplementedException();
+                }
+            );
          */
         
         public static Doc Print(VariableDeclarationSyntax node)
