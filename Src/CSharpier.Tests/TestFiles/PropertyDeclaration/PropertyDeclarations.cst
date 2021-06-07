@@ -61,7 +61,7 @@ public class ClassName
         new Dictionary<string, string>();
 
     public virtual LongerPropertyConfiguration LongerPropertyConfiguration { get; set; }
-    
+
     public List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)> AuthorizeCalls { get; } =
         new List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)>();
 }

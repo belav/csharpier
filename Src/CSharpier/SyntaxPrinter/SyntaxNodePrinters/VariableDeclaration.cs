@@ -22,29 +22,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         // https://github.com/belav/runtime/pull/4
         // https://github.com/belav/sdk/pull/1
 
-        /*
-                             var resources = await sourceRepository.GetResourceAsync<
-                            ServiceIndexResourceV3
-                        >();
-                        
-                                    bool? downloadStatus =
-                await DownloadWithRetriesAsync(Uri, DestinationPath, errorMessages);
-                vs
-                            bool? downloadStatus = await DownloadWithRetriesAsync(
-                    Uri,
-                    DestinationPath,
-                    errorMessages
-                );
-                
-                            internal readonly static DiagnosticDescriptor BuildServiceProviderShouldNotCalledInConfigureServicesMethod =
-                new DiagnosticDescriptor(
-                "ASP0000",
-                "Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'",
-                "Calling 'BuildServiceProvider' from application code results in an additional copy of singleton services being created. Consider alternatives such as dependency injecting services as parameters to 'Configure'.",
-	@@ -39,7 +40,8 @@ static Diagnostics()
-                helpLinkUri: "https://aka.ms/AA5k895"
-            );
-            
+        /*            
                         var expectedValue = new byte[SqlParameterCollectionExtensions.DefaultValueColumnWidth
                 + 100];
                 
@@ -185,6 +163,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             initializer.Value
                                 is InvocationExpressionSyntax
                                     or ParenthesizedLambdaExpressionSyntax
+                                or ObjectCreationExpressionSyntax
                                 ? Doc.IndentIfBreak(
                                         Doc.Group(Node.Print(initializer.Value)),
                                         groupId
