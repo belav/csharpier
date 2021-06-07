@@ -7,11 +7,15 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(BaseListSyntax node)
         {
-            return Doc.Concat(
-                " ",
-                Token.Print(node.ColonToken),
+            return Doc.Group(
                 Doc.Indent(
-                    Doc.Group(Doc.Line, SeparatedSyntaxList.Print(node.Types, Node.Print, Doc.Line))
+                    Doc.Line,
+                    Token.Print(node.ColonToken),
+                    " ",
+                    Doc.Align(
+                        2,
+                        Doc.Concat(SeparatedSyntaxList.Print(node.Types, Node.Print, Doc.Line))
+                    )
                 )
             );
         }

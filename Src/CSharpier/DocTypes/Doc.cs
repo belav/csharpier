@@ -107,6 +107,8 @@ namespace CSharpier.DocTypes
         public static Doc Directive(string value) => new StringDoc(value, true);
 
         public static ConditionalGroup ConditionalGroup(params Doc[] options) => new(options);
+
+        public static Align Align(int alignment, Doc contents) => new(alignment, contents);
     }
 
     public enum CommentType

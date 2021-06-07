@@ -78,7 +78,11 @@ namespace CSharpier.DocPrinter
                     break;
                 }
                 case IndentDoc indentDoc:
-                    Push(indentDoc.Contents, mode, IndentBuilder.Make(indent, PrinterOptions));
+                    Push(
+                        indentDoc.Contents,
+                        mode,
+                        IndentBuilder.MakeIndent(indent, PrinterOptions)
+                    );
                     break;
                 case Trim:
                     CurrentWidth -= Output.TrimTrailingWhitespace();
@@ -127,6 +131,13 @@ namespace CSharpier.DocPrinter
                     break;
                 case ForceFlat forceFlat:
                     Push(forceFlat.Contents, PrintMode.Flat, indent);
+                    break;
+                case Align align:
+                    Push(
+                        align.Contents,
+                        mode,
+                        IndentBuilder.MakeAlign(indent, align.Alignment, PrinterOptions)
+                    );
                     break;
                 default:
                     throw new Exception("didn't handle " + doc);
