@@ -21,5 +21,9 @@ class ClassName
 
         var trailingMulti = 1; /* ensure no extra line after this */
         var trailingMultiAfter = 2;
+
+        Func<SyntaxTrivia, bool> s_isVisualBasicCommentTrivia = (
+            syntaxTrivia
+        ) => syntaxTrivia.IsKind(VisualBasic.SyntaxKind.CommentTrivia);
     }
 }
