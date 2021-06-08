@@ -51,6 +51,10 @@ public class ClassName
         SomeLongTypeName,
         SomeOtherLongTypeName_______________________________
     >();
+
+    private static readonly Func<SyntaxTrivia, bool> s_isVisualBasicCommentTrivia = (
+        syntaxTrivia
+    ) => syntaxTrivia.IsKind(VisualBasic.SyntaxKind.CommentTrivia);
 }
 
 struct S
