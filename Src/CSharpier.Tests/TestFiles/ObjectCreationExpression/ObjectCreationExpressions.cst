@@ -18,4 +18,18 @@ public class ClassName
         Property1 = true,
         Property2 = true,
     };
+
+    public ClassName WithConstructorAndInitializer = new ClassName(false)
+    {
+        Property1 = true,
+        Property2 = false,
+    };
+
+    public ClassName WithComplexConstructor = new ClassName(
+        "parameter1",
+        new ClassName("parameter1", "parameter2") { Property1 = true }
+    )
+    {
+        Property1 = true
+    };
 }
