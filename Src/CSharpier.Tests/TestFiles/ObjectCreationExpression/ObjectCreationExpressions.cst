@@ -32,4 +32,8 @@ public class ClassName
     {
         Property1 = true
     };
+
+    public SomeGenericObject<SomeRandomObject> WithGenericLongEnoughToBreak = new SomeGenericObject<
+        SomeRandomObject
+    >("someRandomValue");
 }
