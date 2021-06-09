@@ -69,7 +69,7 @@ dotnet csharpier
 ### MsBuild Package
 If you prefer to have csharpier run when a project is built, you can use the CSharpier.MSBuild nuget package
 ```console
-Install-Package CShariper.MSBuild
+Install-Package CSharpier.MSBuild
 ```
 
 ## Documentation
