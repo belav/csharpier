@@ -44,10 +44,7 @@ public class ClassName
 
         Parallel.For(0, OuterLoopCount, () => schedulers, _parallelAction, (s) => { });
 
-        // will be addressed by #234
-        var reusedCommand = new Command(
-            "reused"
-        )
+        var reusedCommand = new Command("reused")
         {
             Handler = CommandHandler.Create(
                 () =>
