@@ -18,14 +18,16 @@ namespace CSharpier.DocPrinter
         protected bool SkipNextNewLine;
         protected readonly string EndOfLine;
         protected readonly PrinterOptions PrinterOptions;
+        protected readonly DocFitter DocFitter;
+        protected readonly Indenter Indenter;
 
         protected DocPrinter(Doc doc, PrinterOptions printerOptions, string endOfLine)
         {
             EndOfLine = endOfLine;
             PrinterOptions = printerOptions;
-            RemainingCommands.Push(
-                new PrintCommand(IndentBuilder.MakeRoot(), PrintMode.Break, doc)
-            );
+            Indenter = new Indenter(printerOptions);
+            DocFitter = new DocFitter(this.GroupModeMap, Indenter);
+            RemainingCommands.Push(new PrintCommand(Indenter.GenerateRoot(), PrintMode.Break, doc));
         }
 
         public static string Print(Doc document, PrinterOptions printerOptions, string endOfLine)
@@ -78,11 +80,7 @@ namespace CSharpier.DocPrinter
                     break;
                 }
                 case IndentDoc indentDoc:
-                    Push(
-                        indentDoc.Contents,
-                        mode,
-                        IndentBuilder.MakeIndent(indent, PrinterOptions)
-                    );
+                    Push(indentDoc.Contents, mode, Indenter.IncreaseIndent(indent));
                     break;
                 case Trim:
                     CurrentWidth -= Output.TrimTrailingWhitespace();
@@ -133,11 +131,7 @@ namespace CSharpier.DocPrinter
                     Push(forceFlat.Contents, PrintMode.Flat, indent);
                     break;
                 case Align align:
-                    Push(
-                        align.Contents,
-                        mode,
-                        IndentBuilder.MakeAlign(indent, align.Alignment, PrinterOptions)
-                    );
+                    Push(align.Contents, mode, Indenter.AddAlign(indent, align.Width));
                     break;
                 default:
                     throw new Exception("didn't handle " + doc);
@@ -281,9 +275,7 @@ namespace CSharpier.DocPrinter
             return DocFitter.Fits(
                 possibleCommand,
                 RemainingCommands,
-                PrinterOptions.Width - CurrentWidth,
-                PrinterOptions,
-                GroupModeMap
+                PrinterOptions.Width - CurrentWidth
             );
         }
 

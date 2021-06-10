@@ -7,14 +7,21 @@ using CSharpier.Utilities;
 
 namespace CSharpier.DocPrinter
 {
-    public static class DocFitter
+    public class DocFitter
     {
-        public static bool Fits(
+        protected readonly Dictionary<string, PrintMode> GroupModeMap;
+        protected readonly Indenter Indenter;
+
+        public DocFitter(Dictionary<string, PrintMode> groupModeMap, Indenter indenter)
+        {
+            GroupModeMap = groupModeMap;
+            Indenter = indenter;
+        }
+
+        public bool Fits(
             PrintCommand nextCommand,
             Stack<PrintCommand> remainingCommands,
-            int remainingWidth,
-            PrinterOptions printerOptions,
-            Dictionary<string, PrintMode> groupModeMap
+            int remainingWidth
         ) {
             var returnFalseIfMoreStringsFound = false;
             var newCommands = new Stack<PrintCommand>();
@@ -83,7 +90,7 @@ namespace CSharpier.DocPrinter
                             Push(
                                 indent.Contents,
                                 currentMode,
-                                IndentBuilder.MakeIndent(currentIndent, printerOptions)
+                                Indenter.IncreaseIndent(currentIndent)
                             );
                             break;
                         case Trim:
@@ -102,13 +109,13 @@ namespace CSharpier.DocPrinter
 
                             if (group.GroupId != null)
                             {
-                                groupModeMap![group.GroupId] = groupMode;
+                                GroupModeMap![group.GroupId] = groupMode;
                             }
                             break;
                         case IfBreak ifBreak:
                             var ifBreakMode = ifBreak.GroupId != null
-                            && groupModeMap!.ContainsKey(ifBreak.GroupId)
-                                ? groupModeMap[ifBreak.GroupId]
+                            && GroupModeMap!.ContainsKey(ifBreak.GroupId)
+                                ? GroupModeMap[ifBreak.GroupId]
                                 : currentMode;
 
                             var contents = ifBreakMode == PrintMode.Break
@@ -150,11 +157,7 @@ namespace CSharpier.DocPrinter
                             Push(
                                 align.Contents,
                                 currentMode,
-                                IndentBuilder.MakeAlign(
-                                    currentIndent,
-                                    align.Alignment,
-                                    printerOptions
-                                )
+                                Indenter.AddAlign(currentIndent, align.Width)
                             );
                             break;
                         default:
