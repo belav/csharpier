@@ -119,6 +119,6 @@ namespace CSharpier.DocTypes
 
     interface IHasContents
     {
-        Doc Contents { get; set; }
+        Doc Contents { get; }
     }
 }
