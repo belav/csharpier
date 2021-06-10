@@ -18,7 +18,6 @@ namespace CSharpier.DocPrinter
         protected bool SkipNextNewLine;
         protected readonly string EndOfLine;
         protected readonly PrinterOptions PrinterOptions;
-        protected readonly DocFitter DocFitter;
         protected readonly Indenter Indenter;
 
         protected DocPrinter(Doc doc, PrinterOptions printerOptions, string endOfLine)
@@ -26,7 +25,6 @@ namespace CSharpier.DocPrinter
             EndOfLine = endOfLine;
             PrinterOptions = printerOptions;
             Indenter = new Indenter(printerOptions);
-            DocFitter = new DocFitter(this.GroupModeMap, Indenter);
             RemainingCommands.Push(new PrintCommand(Indenter.GenerateRoot(), PrintMode.Break, doc));
         }
 
@@ -275,7 +273,9 @@ namespace CSharpier.DocPrinter
             return DocFitter.Fits(
                 possibleCommand,
                 RemainingCommands,
-                PrinterOptions.Width - CurrentWidth
+                PrinterOptions.Width - CurrentWidth,
+                GroupModeMap,
+                Indenter
             );
         }
 
