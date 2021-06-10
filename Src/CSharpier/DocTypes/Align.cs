@@ -2,7 +2,7 @@ using System;
 
 namespace CSharpier.DocTypes
 {
-    public class Align : Doc
+    public class Align : Doc, IHasContents
     {
         public int Width { get; }
         public Doc Contents { get; }

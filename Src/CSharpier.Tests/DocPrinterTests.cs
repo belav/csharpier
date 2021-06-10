@@ -624,7 +624,7 @@ true || false"
         }
 
         [Test]
-        public void Align_Should_Convert_Spaces_To_Tabs()
+        public void Align_Should_Convert_Non_Trailing_Spaces_To_Tabs()
         {
             var doc = Doc.Concat(
                 "+ ",
