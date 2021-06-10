@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,59 +7,67 @@ namespace CSharpier.DocPrinter
     {
         public string Value = string.Empty;
         public int Length;
-        public IList<IndentType>? TypesForTabs;
+        public IList<IIndentType>? TypesForTabs;
     }
 
-    public class IndentType
+    public interface IIndentType { }
+
+    public class IndentType : IIndentType
     {
-        public bool IsAlign { get; set; }
-        public int AlignWidth { get; set; }
+        protected IndentType() { }
+
+        public static IndentType Instance = new();
     }
 
-    public static class IndentBuilder
+    public class AlignType : IIndentType
     {
-        public static Indent MakeRoot()
+        public int Width { get; init; }
+    }
+
+    public class Indenter
+    {
+        protected readonly PrinterOptions PrinterOptions;
+
+        public Indenter(PrinterOptions printerOptions)
+        {
+            PrinterOptions = printerOptions;
+        }
+
+        public Indent GenerateRoot()
         {
             return new();
         }
 
-        public static Indent MakeIndent(Indent indent, PrinterOptions printerOptions)
+        public Indent IncreaseIndent(Indent indent)
         {
-            return GenerateIndent(indent, printerOptions);
-        }
+            if (PrinterOptions.UseTabs)
+            {
+                if (indent.TypesForTabs != null)
+                {
+                    return MakeIndentWithTypesForTabs(indent, IndentType.Instance);
+                }
 
-        private static Indent GenerateIndent(Indent indent, PrinterOptions printerOptions)
-        {
-            if (!printerOptions.UseTabs)
+                return new Indent
+                {
+                    Value = indent.Value + "\t",
+                    Length = indent.Length + PrinterOptions.TabWidth
+                };
+            }
+            else
             {
                 return new Indent
                 {
-                    Value = indent.Value + new string(' ', printerOptions.TabWidth),
-                    Length = indent.Length + printerOptions.TabWidth
+                    Value = indent.Value + new string(' ', PrinterOptions.TabWidth),
+                    Length = indent.Length + PrinterOptions.TabWidth
                 };
             }
-
-            if (indent.TypesForTabs != null)
-            {
-                return MakeIndentWithTypesForTabs(indent, new IndentType(), printerOptions);
-            }
-
-            return new Indent
-            {
-                Value = indent.Value + "\t",
-                Length = indent.Length + printerOptions.TabWidth
-            };
         }
 
-        public static Indent MakeAlign(Indent indent, int alignment, PrinterOptions printerOptions)
+        public Indent AddAlign(Indent indent, int alignment)
         {
-            if (printerOptions.UseTabs)
+            if (PrinterOptions.UseTabs)
             {
-                return MakeIndentWithTypesForTabs(
-                    indent,
-                    new IndentType { IsAlign = true, AlignWidth = alignment },
-                    printerOptions
-                );
+                return MakeIndentWithTypesForTabs(indent, new AlignType { Width = alignment });
             }
             else
             {
@@ -75,36 +82,33 @@ namespace CSharpier.DocPrinter
         // when using tabs we need to sometimes replace the spaces from align with tabs
         // trailing aligns stay as spaces, but any aligns before a tab get converted to a single tab
         // see https://github.com/prettier/prettier/blob/main/commands.md#align
-        private static Indent MakeIndentWithTypesForTabs(
-            Indent indent,
-            IndentType nextIndentType,
-            PrinterOptions printerOptions
-        ) {
-            List<IndentType> types;
+        private Indent MakeIndentWithTypesForTabs(Indent indent, IIndentType nextIndentType)
+        {
+            List<IIndentType> types;
 
             // if it doesn't exist yet, then all values on it are regular indents, not aligns
             if (indent.TypesForTabs == null)
             {
-                types = new List<IndentType>();
+                types = new List<IIndentType>();
                 for (var x = 0; x < indent.Value.Length; x++)
                 {
-                    types.Add(new IndentType());
+                    types.Add(IndentType.Instance);
                 }
             }
             else
             {
                 var placeTab = false;
-                types = new List<IndentType>(indent.TypesForTabs);
+                types = new List<IIndentType>(indent.TypesForTabs);
                 for (var x = types.Count - 1; x >= 0; x--)
                 {
-                    if (!types[x].IsAlign)
+                    if (types[x] == IndentType.Instance)
                     {
                         placeTab = true;
                     }
 
                     if (placeTab)
                     {
-                        types[x] = new IndentType();
+                        types[x] = IndentType.Instance;
                     }
                 }
             }
@@ -115,15 +119,15 @@ namespace CSharpier.DocPrinter
             var value = new StringBuilder();
             foreach (var indentType in types)
             {
-                if (indentType.IsAlign)
+                if (indentType is AlignType alignType)
                 {
-                    value.Append(' ', indentType.AlignWidth);
-                    length += indentType.AlignWidth;
+                    value.Append(' ', alignType.Width);
+                    length += alignType.Width;
                 }
                 else
                 {
                     value.Append('\t');
-                    length += printerOptions.TabWidth;
+                    length += PrinterOptions.TabWidth;
                 }
             }
 
