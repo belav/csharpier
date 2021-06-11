@@ -36,9 +36,8 @@ public class Initializers : BasicClass
         string reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameter
     ) : base(false) { }
 
-    public ReallyLoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooogMethodName() : base(
-        false
-    ) { }
+    public ReallyLoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooogMethodName()
+        : base(false) { }
 }
 
 public class Exactly80

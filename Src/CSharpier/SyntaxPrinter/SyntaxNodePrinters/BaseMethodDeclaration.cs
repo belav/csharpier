@@ -149,7 +149,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (constructorInitializer != null)
             {
-                declarationGroup.Add(ConstructorInitializer.Print(constructorInitializer));
+                declarationGroup.Add(
+                    groupId != null
+                        ? ConstructorInitializer.PrintWithConditionalSpace(
+                                constructorInitializer,
+                                groupId
+                            )
+                        : ConstructorInitializer.Print(constructorInitializer)
+                );
             }
 
             if (modifiers.HasValue && modifiers.Value.Count > 0)
