@@ -22,11 +22,20 @@ public class BasicClass
 
 public class Initializers : BasicClass
 {
-    public Initializers()
-        : this(true) { }
+    public Initializers() : this(true) { }
 
-    public Initializers(string value)
-        : base(value) { }
+    public Initializers(string value) : base(value) { }
+
+    public Initializers(
+        string parameter1,
+        string parameter2,
+        string parameter3,
+        string parameter4
+    ) : base(false)
+    {
+        _parameter1 = parameter1;
+        _parameter2 = parameter2;
+    }
 }
 
 public class Exactly80

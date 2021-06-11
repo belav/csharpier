@@ -8,8 +8,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ConstructorInitializerSyntax node)
         {
-            return Doc.Indent(
-                Doc.HardLine,
+            return Doc.Concat(
+                " ",
                 Token.PrintWithSuffix(node.ColonToken, " "),
                 Token.Print(node.ThisOrBaseKeyword),
                 ArgumentList.Print(node.ArgumentList)

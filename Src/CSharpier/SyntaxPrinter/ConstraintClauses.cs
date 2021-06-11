@@ -16,19 +16,40 @@ namespace CSharpier.SyntaxPrinter
             {
                 return Doc.Null;
             }
-
-            var docs = new List<Doc>
+            else if (constraintClausesList.Count == 1)
             {
-                Doc.Indent(
-                    Doc.HardLine,
-                    Doc.Join(
-                        Doc.HardLine,
-                        constraintClausesList.Select(TypeParameterConstraintClause.Print)
+                return Doc.Group(
+                    Doc.Indent(
+                        Doc.Line,
+                        Doc.Join(
+                            Doc.Line,
+                            constraintClausesList.Select(TypeParameterConstraintClause.Print)
+                        )
                     )
-                )
-            };
+                );
+            }
 
-            return Doc.Concat(docs);
+            if (constraintClausesList[0].Parent is MethodDeclarationSyntax)
+            {
+                return Doc.Concat(
+                    " ",
+                    Doc.Align(
+                        2,
+                        Doc.Join(
+                            Doc.HardLine,
+                            constraintClausesList.Select(TypeParameterConstraintClause.Print)
+                        )
+                    )
+                );
+            }
+
+            return Doc.Indent(
+                Doc.HardLine,
+                Doc.Join(
+                    Doc.HardLine,
+                    constraintClausesList.Select(TypeParameterConstraintClause.Print)
+                )
+            );
         }
     }
 }
