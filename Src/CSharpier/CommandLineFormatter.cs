@@ -104,7 +104,10 @@ namespace CSharpier
             }
 
             result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-            ResultPrinter.PrintResults(result, console, commandLineOptions);
+            if (!commandLineOptions.WriteStdout)
+            {
+                ResultPrinter.PrintResults(result, console, commandLineOptions);
+            }
             return ReturnExitCode(commandLineOptions, result);
         }
 
@@ -231,7 +234,7 @@ namespace CSharpier
                 }
             }
 
-            if (this.CommandLineOptions.Check)
+            if (this.CommandLineOptions.Check && !this.CommandLineOptions.WriteStdout)
             {
                 if (result.Code != fileReaderResult.FileContents)
                 {
@@ -248,14 +251,21 @@ namespace CSharpier
             cancellationToken.ThrowIfCancellationRequested();
             Interlocked.Increment(ref this.Result.Files);
 
-            if (
-                !this.CommandLineOptions.Check
-                && !this.CommandLineOptions.SkipWrite
-                && result.Code != fileReaderResult.FileContents
-            ) {
-                // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
-                // ReSharper disable once MethodHasAsyncOverloadWithCancellation
-                this.FileSystem.File.WriteAllText(file, result.Code, fileReaderResult.Encoding);
+            if (this.CommandLineOptions.WriteStdout)
+            {
+                this.Console.Write(result.Code);
+            }
+            else
+            {
+                if (
+                    !this.CommandLineOptions.Check
+                    && !this.CommandLineOptions.SkipWrite
+                    && result.Code != fileReaderResult.FileContents
+                ) {
+                    // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
+                    // ReSharper disable once MethodHasAsyncOverloadWithCancellation
+                    this.FileSystem.File.WriteAllText(file, result.Code, fileReaderResult.Encoding);
+                }
             }
         }
 
@@ -288,7 +298,10 @@ namespace CSharpier
 
         protected void WriteLine(string? line = null)
         {
-            this.Console.WriteLine(line);
+            if (!this.CommandLineOptions.WriteStdout)
+            {
+                this.Console.WriteLine(line);
+            }
         }
     }
 

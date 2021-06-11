@@ -28,6 +28,7 @@ namespace CSharpier
             bool check,
             bool fast,
             bool skipWrite,
+            bool writeStdout,
             CancellationToken cancellationToken
         ) {
             if (directoryOrFile is null or { Length: 0 })
@@ -47,7 +48,8 @@ namespace CSharpier
                 DirectoryOrFilePaths = directoryOrFile.ToArray(),
                 Check = check,
                 Fast = fast,
-                SkipWrite = skipWrite
+                SkipWrite = skipWrite,
+                WriteStdout = writeStdout
             };
 
             return await CommandLineFormatter.Format(

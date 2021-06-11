@@ -14,8 +14,9 @@ namespace CSharpier.Tests
     public class CommandLineFormatterTests
     {
         private MockFileSystem fileSystem;
-        private const string UnformattedClass = "public class ClassName { public int Field; }";
-        private const string FormattedClass =
+        private const string UnformattedClassContent =
+            "public class ClassName { public int Field; }";
+        private const string FormattedClassContent =
             "public class ClassName\n{\n    public int Field;\n}\n";
 
         [SetUp]
@@ -38,34 +39,34 @@ namespace CSharpier.Tests
         public void Format_Writes_File()
         {
             const string unformattedFilePath = "Unformatted.cs";
-            WhenAFileExists(unformattedFilePath, UnformattedClass);
+            WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
             this.Format();
 
-            this.GetFileContent(unformattedFilePath).Should().Be(FormattedClass);
+            this.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
         }
 
         [Test]
         public void Format_Supports_Skip_Write()
         {
             const string unformattedFilePath = "Unformatted.cs";
-            WhenAFileExists(unformattedFilePath, UnformattedClass);
+            WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
             this.Format(skipWrite: true);
 
-            this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClass);
+            this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
         }
 
         [Test]
         public void Format_Checks_Unformatted_File()
         {
             const string unformattedFilePath = "Unformatted.cs";
-            WhenAFileExists(unformattedFilePath, UnformattedClass);
+            WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
             var (exitCode, lines) = this.Format(check: true);
 
             exitCode.Should().Be(1);
-            this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClass);
+            this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
             lines.First().Should().Contain(@"Unformatted.cs - was not formatted");
         }
 
@@ -73,7 +74,7 @@ namespace CSharpier.Tests
         public void Format_Checks_Formatted_File()
         {
             const string formattedFilePath = "Formatted.cs";
-            WhenAFileExists(formattedFilePath, FormattedClass);
+            WhenAFileExists(formattedFilePath, FormattedClassContent);
 
             var (exitCode, lines) = this.Format(check: true);
 
@@ -88,7 +89,7 @@ namespace CSharpier.Tests
         public void Format_Skips_Generated_Files(string fileName)
         {
             var unformattedFilePath = fileName;
-            WhenAFileExists(unformattedFilePath, UnformattedClass);
+            WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
             var (_, lines) = this.Format();
 
@@ -107,7 +108,7 @@ namespace CSharpier.Tests
         public void File_In_Ignore_Skips_Formatting(string fileName, string ignoreContents)
         {
             var unformattedFilePath = fileName;
-            WhenAFileExists(unformattedFilePath, UnformattedClass);
+            WhenAFileExists(unformattedFilePath, UnformattedClassContent);
             WhenAFileExists(".csharpierignore", ignoreContents);
 
             var (_, lines) = this.Format();
@@ -123,7 +124,7 @@ namespace CSharpier.Tests
             string baseDirectory
         ) {
             var unformattedFilePath = fileName;
-            WhenAFileExists(unformattedFilePath, UnformattedClass);
+            WhenAFileExists(unformattedFilePath, UnformattedClassContent);
             WhenAFileExists(".csharpierignore", ignoreContents);
 
             var (_, lines) = this.Format(
@@ -138,8 +139,8 @@ namespace CSharpier.Tests
         {
             var unformattedFilePath1 = "SubFolder/1/File1.cs";
             var unformattedFilePath2 = "SubFolder/2/File2.cs";
-            WhenAFileExists(unformattedFilePath1, UnformattedClass);
-            WhenAFileExists(unformattedFilePath2, UnformattedClass);
+            WhenAFileExists(unformattedFilePath1, UnformattedClassContent);
+            WhenAFileExists(unformattedFilePath2, UnformattedClassContent);
             WhenAFileExists(".csharpierignore", "Subfolder/**/*.cs");
 
             var (_, lines) = this.Format(
@@ -154,8 +155,8 @@ namespace CSharpier.Tests
         {
             var unformattedFilePath1 = "SubFolder/1/File1.cs";
             var unformattedFilePath2 = "SubFolder/2/File2.cs";
-            WhenAFileExists(unformattedFilePath1, UnformattedClass);
-            WhenAFileExists(unformattedFilePath2, UnformattedClass);
+            WhenAFileExists(unformattedFilePath1, UnformattedClassContent);
+            WhenAFileExists(unformattedFilePath2, UnformattedClassContent);
             WhenAFileExists("SubFolder/1/.csharpierignore", "File1.cs");
             WhenAFileExists("SubFolder/2/.csharpierignore", "File2.cs");
 
@@ -170,7 +171,7 @@ namespace CSharpier.Tests
         public void Ignore_Should_Deal_With_Inconsistent_Slashes()
         {
             var unformattedFilePath1 = @"SubFolder\1\File1.cs";
-            WhenAFileExists(unformattedFilePath1, UnformattedClass);
+            WhenAFileExists(unformattedFilePath1, UnformattedClassContent);
             WhenAFileExists("SubFolder/1/.csharpierignore", "File1.cs");
 
             var (_, lines) = this.Format(directoryOrFilePaths: unformattedFilePath1);
@@ -195,9 +196,21 @@ namespace CSharpier.Tests
             lines.Should().Contain(@"\Src\Uploads\*.cs");
         }
 
+        [Test]
+        public void Write_Stdout_Should_Only_Write_File()
+        {
+            WhenAFileExists("file1.cs", UnformattedClassContent);
+
+            var (_, lines) = this.Format(writeStdout: true);
+
+            lines.Should().ContainSingle();
+            lines.First().Should().Be(FormattedClassContent);
+        }
+
         private (int exitCode, IList<string> lines) Format(
             bool skipWrite = false,
             bool check = false,
+            bool writeStdout = false,
             params string[] directoryOrFilePaths
         ) {
             if (directoryOrFilePaths.Length == 0)
@@ -219,7 +232,8 @@ namespace CSharpier.Tests
                     {
                         DirectoryOrFilePaths = directoryOrFilePaths,
                         SkipWrite = skipWrite,
-                        Check = check
+                        Check = check,
+                        WriteStdout = writeStdout
                     },
                     this.fileSystem,
                     fakeConsole,
@@ -261,6 +275,11 @@ namespace CSharpier.Tests
                 {
                     this.Lines.Add(line);
                 }
+            }
+
+            public void Write(string value)
+            {
+                this.Lines.Add(value);
             }
         }
     }
