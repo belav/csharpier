@@ -23,7 +23,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Doc.Indent(groupId != null ? Doc.IfBreak(" ", Doc.Line, groupId) : Doc.Line),
                 Token.PrintWithSuffix(node.ColonToken, " "),
                 Token.Print(node.ThisOrBaseKeyword),
-                ArgumentList.Print(node.ArgumentList)
+                groupId != null ? ArgumentList.Print(node.ArgumentList) : Doc.Indent(ArgumentList.Print(node.ArgumentList))
             );
         }
     }
