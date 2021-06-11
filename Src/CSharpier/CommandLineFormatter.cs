@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpier.Utilities;
@@ -64,7 +65,7 @@ namespace CSharpier
                     );
                 }
 
-                var configurationFileOptions = ConfigurationFileOptions.Create(
+                var printerOptions = ConfigurationFileOptions.CreatePrinterOptions(
                     baseDirectoryPath,
                     fileSystem
                 );
@@ -80,14 +81,6 @@ namespace CSharpier
                 {
                     return 1;
                 }
-
-                var printerOptions = new PrinterOptions
-                {
-                    TabWidth = configurationFileOptions.TabWidth,
-                    UseTabs = configurationFileOptions.UseTabs,
-                    Width = configurationFileOptions.PrintWidth,
-                    EndOfLine = configurationFileOptions.EndOfLine
-                };
 
                 var commandLineFormatter = new CommandLineFormatter(
                     baseDirectoryPath,
@@ -140,25 +133,28 @@ namespace CSharpier
             }
         }
 
-        private async Task FormatFile(string file, CancellationToken cancellationToken)
+        private async Task FormatFile(string filePath, CancellationToken cancellationToken)
         {
-            if (ShouldIgnoreFile(file))
+            if (ShouldIgnoreFile(filePath))
             {
                 return;
             }
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            var fileReaderResult =
-                await FileReader.ReadFile(file, this.FileSystem, cancellationToken);
-            if (fileReaderResult.FileContents.Length == 0)
+            var (encoding, fileContents, unableToDetectEncoding) = await FileReader.ReadFile(
+                filePath,
+                this.FileSystem,
+                cancellationToken
+            );
+            if (fileContents.Length == 0)
             {
                 return;
             }
-            if (fileReaderResult.DefaultedEncoding)
+            if (unableToDetectEncoding)
             {
                 WriteLine(
-                    $"{GetPath(file)} - unable to detect file encoding. Defaulting to {fileReaderResult.Encoding}"
+                    $"{GetPath(filePath)} - unable to detect file encoding. Defaulting to {encoding}"
                 );
             }
 
@@ -169,7 +165,7 @@ namespace CSharpier
             try
             {
                 result = await new CodeFormatter().FormatAsync(
-                    fileReaderResult.FileContents,
+                    fileContents,
                     this.PrinterOptions,
                     cancellationToken
                 );
@@ -181,7 +177,7 @@ namespace CSharpier
             catch (Exception ex)
             {
                 Interlocked.Increment(ref this.Result.Files);
-                WriteLine(GetPath(file) + " - threw exception while formatting");
+                WriteLine(GetPath(filePath) + " - threw exception while formatting");
                 WriteLine(ex.Message);
                 WriteLine(ex.StackTrace);
                 WriteLine();
@@ -192,21 +188,37 @@ namespace CSharpier
             if (result.Errors.Any())
             {
                 Interlocked.Increment(ref this.Result.Files);
-                WriteLine(GetPath(file) + " - failed to compile");
+                WriteLine(GetPath(filePath) + " - failed to compile");
                 return;
             }
 
             if (!result.FailureMessage.IsBlank())
             {
                 Interlocked.Increment(ref this.Result.Files);
-                WriteLine(GetPath(file) + " - " + result.FailureMessage);
+                WriteLine(GetPath(filePath) + " - " + result.FailureMessage);
                 return;
             }
 
+            await PerformSyntaxTreeValidation(filePath, fileContents, result, cancellationToken);
+
+            PerformCheck(filePath, result, fileContents);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            Interlocked.Increment(ref this.Result.Files);
+
+            WriteResult(filePath, result, fileContents, encoding);
+        }
+
+        private async Task PerformSyntaxTreeValidation(
+            string file,
+            string fileContents,
+            CSharpierResult result,
+            CancellationToken cancellationToken
+        ) {
             if (!this.CommandLineOptions.Fast)
             {
                 var syntaxNodeComparer = new SyntaxNodeComparer(
-                    fileReaderResult.FileContents,
+                    fileContents,
                     result.Code,
                     cancellationToken
                 );
@@ -233,24 +245,27 @@ namespace CSharpier
                     );
                 }
             }
+        }
 
-            if (this.CommandLineOptions.Check && !this.CommandLineOptions.WriteStdout)
-            {
-                if (result.Code != fileReaderResult.FileContents)
-                {
-                    WriteLine(GetPath(file) + " - was not formatted");
-                    StringDiffer.PrintFirstDifference(
-                        result.Code,
-                        fileReaderResult.FileContents,
-                        this.Console
-                    );
-                    Interlocked.Increment(ref this.Result.UnformattedFiles);
-                }
+        private void PerformCheck(string filePath, CSharpierResult result, string fileContents)
+        {
+            if (
+                this.CommandLineOptions.Check
+                && !this.CommandLineOptions.WriteStdout
+                && result.Code != fileContents
+            ) {
+                WriteLine(GetPath(filePath) + " - was not formatted");
+                StringDiffer.PrintFirstDifference(result.Code, fileContents, this.Console);
+                Interlocked.Increment(ref this.Result.UnformattedFiles);
             }
+        }
 
-            cancellationToken.ThrowIfCancellationRequested();
-            Interlocked.Increment(ref this.Result.Files);
-
+        private void WriteResult(
+            string filePath,
+            CSharpierResult result,
+            string? fileContents,
+            Encoding? encoding
+        ) {
             if (this.CommandLineOptions.WriteStdout)
             {
                 this.Console.Write(result.Code);
@@ -260,11 +275,10 @@ namespace CSharpier
                 if (
                     !this.CommandLineOptions.Check
                     && !this.CommandLineOptions.SkipWrite
-                    && result.Code != fileReaderResult.FileContents
+                    && result.Code != fileContents
                 ) {
                     // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
-                    // ReSharper disable once MethodHasAsyncOverloadWithCancellation
-                    this.FileSystem.File.WriteAllText(file, result.Code, fileReaderResult.Encoding);
+                    this.FileSystem.File.WriteAllText(filePath, result.Code, encoding);
                 }
             }
         }
