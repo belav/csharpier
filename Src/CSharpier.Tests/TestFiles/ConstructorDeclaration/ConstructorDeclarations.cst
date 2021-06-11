@@ -27,15 +27,18 @@ public class Initializers : BasicClass
     public Initializers(string value) : base(value) { }
 
     public Initializers(
-        string parameter1,
-        string parameter2,
-        string parameter3,
-        string parameter4
-    ) : base(false)
-    {
-        _parameter1 = parameter1;
-        _parameter2 = parameter2;
-    }
+        string reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameter
+    ) : base(
+        reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameterIMeanIt
+    ) { }
+
+    public Initializers(
+        string reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameter
+    ) : base(false) { }
+
+    public ReallyLoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooogMethodName() : base(
+        false
+    ) { }
 }
 
 public class Exactly80
