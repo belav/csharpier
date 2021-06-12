@@ -12,6 +12,9 @@ namespace CSharpier
         public bool Fast { get; init; }
         public bool SkipWrite { get; init; }
         public bool WriteStdout { get; init; }
+        public string? StandardInFileContents { get; init; }
+
+        public bool ShouldWriteStandardOut => WriteStdout || StandardInFileContents != null;
 
         internal delegate Task<int> Handler(
             string[] directoryOrFile,

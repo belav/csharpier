@@ -207,10 +207,20 @@ namespace CSharpier.Tests
             lines.First().Should().Be(FormattedClassContent);
         }
 
+        [Test]
+        public void Should_Format_StandardInput_When_Provided()
+        {
+            var (_, lines) = this.Format(standardInFileContents: UnformattedClassContent);
+
+            lines.Should().ContainSingle();
+            lines.First().Should().Be(FormattedClassContent);
+        }
+
         private (int exitCode, IList<string> lines) Format(
             bool skipWrite = false,
             bool check = false,
             bool writeStdout = false,
+            string? standardInFileContents = null,
             params string[] directoryOrFilePaths
         ) {
             if (directoryOrFilePaths.Length == 0)
@@ -233,7 +243,8 @@ namespace CSharpier.Tests
                         DirectoryOrFilePaths = directoryOrFilePaths,
                         SkipWrite = skipWrite,
                         Check = check,
-                        WriteStdout = writeStdout
+                        WriteStdout = writeStdout,
+                        StandardInFileContents = standardInFileContents,
                     },
                     this.fileSystem,
                     fakeConsole,
@@ -245,7 +256,9 @@ namespace CSharpier.Tests
 
         private string GetRootPath()
         {
-            return OperatingSystem.IsWindows() ? @"c:\test" : "/Test";
+            var result = OperatingSystem.IsWindows() ? @"c:\test" : "/Test";
+            this.fileSystem.AddDirectory(result);
+            return result;
         }
 
         private string GetFileContent(string path)

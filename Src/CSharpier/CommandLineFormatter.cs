@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpier.Utilities;
@@ -51,7 +52,7 @@ namespace CSharpier
             var stopwatch = Stopwatch.StartNew();
             var result = new CommandLineFormatterResult();
 
-            foreach (var path in commandLineOptions.DirectoryOrFilePaths)
+            async Task<CommandLineFormatter?> CreateFormatter(string path)
             {
                 var normalizedPath = path.Replace('\\', '/');
                 var baseDirectoryPath = fileSystem.File.Exists(normalizedPath)
@@ -79,10 +80,10 @@ namespace CSharpier
                     );
                 if (ignoreFile is null)
                 {
-                    return 1;
+                    return null;
                 }
 
-                var commandLineFormatter = new CommandLineFormatter(
+                return new CommandLineFormatter(
                     baseDirectoryPath,
                     normalizedPath,
                     commandLineOptions,
@@ -92,12 +93,41 @@ namespace CSharpier
                     ignoreFile,
                     result
                 );
+            }
 
-                await commandLineFormatter.FormatFiles(cancellationToken);
+            if (commandLineOptions.StandardInFileContents != null)
+            {
+                var path = commandLineOptions.DirectoryOrFilePaths[0];
+
+                var commandLineFormatter = await CreateFormatter(path);
+                if (commandLineFormatter == null)
+                {
+                    return 1;
+                }
+
+                await commandLineFormatter.FormatFile(
+                    commandLineOptions.StandardInFileContents,
+                    path,
+                    Encoding.UTF8,
+                    cancellationToken
+                );
+            }
+            else
+            {
+                foreach (var path in commandLineOptions.DirectoryOrFilePaths)
+                {
+                    var commandLineFormatter = await CreateFormatter(path);
+                    if (commandLineFormatter == null)
+                    {
+                        return 1;
+                    }
+
+                    await commandLineFormatter.FormatFiles(cancellationToken);
+                }
             }
 
             result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-            if (!commandLineOptions.WriteStdout)
+            if (!commandLineOptions.ShouldWriteStandardOut)
             {
                 ResultPrinter.PrintResults(result, console, commandLineOptions);
             }
@@ -108,7 +138,7 @@ namespace CSharpier
         {
             if (this.FileSystem.File.Exists(this.Path))
             {
-                await FormatFile(this.Path, cancellationToken);
+                await FormatFileFromPath(this.Path, cancellationToken);
             }
             else
             {
@@ -117,7 +147,7 @@ namespace CSharpier
                         "*.cs",
                         SearchOption.AllDirectories
                     )
-                    .Select(o => FormatFile(o, cancellationToken))
+                    .Select(o => FormatFileFromPath(o, cancellationToken))
                     .ToArray();
                 try
                 {
@@ -133,7 +163,7 @@ namespace CSharpier
             }
         }
 
-        private async Task FormatFile(string filePath, CancellationToken cancellationToken)
+        private async Task FormatFileFromPath(string filePath, CancellationToken cancellationToken)
         {
             if (ShouldIgnoreFile(filePath))
             {
@@ -151,6 +181,7 @@ namespace CSharpier
             {
                 return;
             }
+
             if (unableToDetectEncoding)
             {
                 WriteLine(
@@ -158,6 +189,15 @@ namespace CSharpier
                 );
             }
 
+            await FormatFile(fileContents, filePath, encoding, cancellationToken);
+        }
+
+        private async Task FormatFile(
+            string fileContents,
+            string filePath,
+            Encoding encoding,
+            CancellationToken cancellationToken
+        ) {
             cancellationToken.ThrowIfCancellationRequested();
 
             CSharpierResult result;
@@ -251,7 +291,7 @@ namespace CSharpier
         {
             if (
                 this.CommandLineOptions.Check
-                && !this.CommandLineOptions.WriteStdout
+                && !this.CommandLineOptions.ShouldWriteStandardOut
                 && result.Code != fileContents
             ) {
                 WriteLine(GetPath(filePath) + " - was not formatted");
@@ -266,7 +306,7 @@ namespace CSharpier
             string? fileContents,
             Encoding? encoding
         ) {
-            if (this.CommandLineOptions.WriteStdout)
+            if (this.CommandLineOptions.ShouldWriteStandardOut)
             {
                 this.Console.Write(result.Code);
             }
@@ -312,7 +352,7 @@ namespace CSharpier
 
         protected void WriteLine(string? line = null)
         {
-            if (!this.CommandLineOptions.WriteStdout)
+            if (!this.CommandLineOptions.ShouldWriteStandardOut)
             {
                 this.Console.WriteLine(line);
             }
