@@ -179,8 +179,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 docs.Add(
                     groupId != null
-                    && constraintClauses.Count() < 2
-                    && constructorInitializer == null
                         ? Block.PrintWithConditionalSpace(body, groupId)
                         : Block.Print(body)
                 );
