@@ -6,6 +6,8 @@ param (
     [string]$version
 )
 
+# TODO this could format from the root folder, so that it is easy to see if anything failed, but do all the git stuff in the repo specific folders.
+
 # aspnetcore
 # AspNetWebStack
 # AutoMapper          

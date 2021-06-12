@@ -31,7 +31,7 @@ export const Header = () => {
             </Left>
             <Right>
                 <RightButtons>
-                    <SmallButton title="Shift-Ctrl-X" onClick={copyLeft}>Copy Left</SmallButton>
+                    <SmallButton title="Shift-Ctrl-S" onClick={copyLeft}>Copy Left</SmallButton>
                 </RightButtons>
                 <label>
                     <input
