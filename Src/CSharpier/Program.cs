@@ -33,8 +33,10 @@ namespace CSharpier
             bool writeStdout,
             CancellationToken cancellationToken
         ) {
+            var directoryOrFileNotProvided = (directoryOrFile is null or { Length: 0 });
+
             string? standardInFileContents = null;
-            if (Console.IsInputRedirected)
+            if (Console.IsInputRedirected && directoryOrFileNotProvided)
             {
                 var input = new StringBuilder();
                 var value = 0;
@@ -46,7 +48,7 @@ namespace CSharpier
                 standardInFileContents = input.ToString();
             }
 
-            if (directoryOrFile is null or { Length: 0 })
+            if (directoryOrFileNotProvided)
             {
                 directoryOrFile = new[] { Directory.GetCurrentDirectory() };
             }
@@ -60,7 +62,7 @@ namespace CSharpier
                     return 1;
                 }
 
-                directoryOrFile = directoryOrFile.Select(
+                directoryOrFile = directoryOrFile!.Select(
                         o => Path.Combine(Directory.GetCurrentDirectory(), o)
                     )
                     .ToArray();

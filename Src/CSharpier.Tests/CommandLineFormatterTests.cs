@@ -220,7 +220,7 @@ namespace CSharpier.Tests
             bool skipWrite = false,
             bool check = false,
             bool writeStdout = false,
-            string? standardInFileContents = null,
+            string standardInFileContents = null,
             params string[] directoryOrFilePaths
         ) {
             if (directoryOrFilePaths.Length == 0)
