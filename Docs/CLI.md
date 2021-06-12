@@ -11,6 +11,7 @@ Options:
   --check           Check that files are formatted. Will not write any changes.
   --fast            Skip comparing syntax tree of formatted file to original file to validate changes.
   --skip-write      Skip writing changes. Generally used for testing to ensure csharpier doesn't throw any errors or cause syntax tree validation failures.
+  --write-stdout    Write the results of formatting any files to stdout.
   --version         Show version information
   -?, -h, --help    Show help and usage information
 
@@ -54,4 +55,25 @@ An example of CSharpier finding a file that failed validation.
             }
 
             if (prefix.Span[^1] is not ':')
+```
+
+### --write-stdout
+By default CSharpier will format files in place. This option allows you to write the formatting results to stdout.
+
+If you pipe input to CSharpier it will also write the formatting results to stdout.
+
+*TestFile.cs*
+```c#
+public class ClassName
+{
+    public string Field;
+}
+```
+*shell*
+```bash
+$ cat TestFile.cs | dotnet csharpier
+public class ClassName
+{
+    public string Field;
+}
 ```

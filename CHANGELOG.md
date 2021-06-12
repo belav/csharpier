@@ -1,3 +1,19 @@
+# 0.9.6
+
+[diff](https://github.com/belav/csharpier/compare/0.9.5...0.9.6)
+
+- Add options to write the formatted file to stdout and accept a file from stdin [#282](https://github.com/belav/csharpier/issues/282)
+- Implement ConditionalGroup doc type [#278](https://github.com/belav/csharpier/issues/278)
+- Optimize some hot paths to speed up formatting. [#277](https://github.com/belav/csharpier/issues/277)
+- Implement Align Doc Type [#276](https://github.com/belav/csharpier/issues/276)
+- Improve formatting of ClassDeclaration with BaseList + Constraints [#275](https://github.com/belav/csharpier/issues/275)
+- Switch tests to width 100 so they line up with default option [#256](https://github.com/belav/csharpier/issues/256)
+- Improving formatting of generics + variable declarations. [#240](https://github.com/belav/csharpier/pull/240)
+- Improve Forrmatting of Field with lambda and generics [#236](https://github.com/belav/csharpier/issues/236)
+- Improve Formatting of object initialiser syntax [#234](https://github.com/belav/csharpier/issues/234)
+- Improve formatting of generic methods and constructors [#94](https://github.com/belav/csharpier/issues/94)
+- Improve formatting of field with generics [#47](https://github.com/belav/csharpier/issues/47)
+______
 # 0.9.5
 
 [diff](https://github.com/belav/csharpier/compare/0.9.4...0.9.5)
