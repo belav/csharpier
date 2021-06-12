@@ -54,14 +54,6 @@ namespace CSharpier
             }
             else
             {
-                if (standardInFileContents != null)
-                {
-                    Console.WriteLine(
-                        "directoryOrFile may not be supplied when piping standard input"
-                    );
-                    return 1;
-                }
-
                 directoryOrFile = directoryOrFile!.Select(
                         o => Path.Combine(Directory.GetCurrentDirectory(), o)
                     )
