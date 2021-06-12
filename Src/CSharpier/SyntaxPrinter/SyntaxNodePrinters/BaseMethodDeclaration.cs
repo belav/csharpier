@@ -170,7 +170,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             docs.Add(Doc.Group(declarationGroup));
 
-            docs.Add(ConstraintClauses.Print(constraintClauses));
+            docs.Add(
+                groupId != null
+                    ? ConstraintClauses.PrintWithConditionalSpace(constraintClauses, groupId)
+                    : ConstraintClauses.Print(constraintClauses)
+            );
             if (body != null)
             {
                 docs.Add(

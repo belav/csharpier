@@ -8,47 +8,39 @@ namespace CSharpier.SyntaxPrinter
 {
     public static class ConstraintClauses
     {
+        public static Doc PrintWithConditionalSpace(
+            IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses,
+            string groupId
+        ) {
+            return Print(constraintClauses, groupId);
+        }
+
         public static Doc Print(IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses)
         {
+            return Print(constraintClauses, null);
+        }
+
+        private static Doc Print(
+            IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses,
+            string? groupId
+        ) {
             var constraintClausesList = constraintClauses.ToList();
 
             if (constraintClausesList.Count == 0)
             {
                 return Doc.Null;
             }
-            else if (constraintClausesList.Count == 1)
-            {
-                return Doc.Group(
-                    Doc.Indent(
-                        Doc.Line,
-                        Doc.Join(
-                            Doc.Line,
-                            constraintClausesList.Select(TypeParameterConstraintClause.Print)
-                        )
-                    )
-                );
-            }
-
-            if (constraintClausesList[0].Parent is MethodDeclarationSyntax)
-            {
-                return Doc.Concat(
-                    " ",
-                    Doc.Align(
-                        2,
-                        Doc.Join(
-                            Doc.HardLine,
-                            constraintClausesList.Select(TypeParameterConstraintClause.Print)
-                        )
-                    )
-                );
-            }
-
-            return Doc.Indent(
+            var prefix = constraintClausesList.Count >= 2 ? Doc.HardLine : Doc.Line;
+            var body = Doc.Join(
                 Doc.HardLine,
-                Doc.Join(
-                    Doc.HardLine,
-                    constraintClausesList.Select(TypeParameterConstraintClause.Print)
-                )
+                constraintClausesList.Select(TypeParameterConstraintClause.Print)
+            );
+
+            return Doc.Group(
+                Doc.Indent(groupId != null ? Doc.IfBreak(" ", prefix, groupId) : prefix),
+                groupId != null
+                    ? Doc.IfBreak(Doc.Align(2, body), Doc.Indent(body), groupId)
+                    : Doc.Indent(body)
             );
         }
     }

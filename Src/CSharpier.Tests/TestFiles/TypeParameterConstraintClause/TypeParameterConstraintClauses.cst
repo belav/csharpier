@@ -10,14 +10,18 @@ class ClassName<T> where T : class
         }
     }
 
+    public static ReturnType<T> MethodName<T, U>()
+        where T : class
+        where U : class { }
+
+    public static ReturnType<T> MethodName<T, U>(string parameter)
+        where T : class
+        where U : class { }
+
     public static ReturnType<T> MethodName<T, U>(
-        string parameter1,
-        string parameter2
+        string reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameterIMeanIt
     ) where T : class
-      where U : class
-    {
-        return;
-    }
+      where U : class { }
 }
 
 interface InterfaceName<T> where T : class { }
