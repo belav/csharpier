@@ -43,6 +43,14 @@ public class Initializers : BasicClass
         : base(
             reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameterIMeanIt
         ) { }
+
+    public Initializers(
+        string value
+    ) /*Comment*/
+      : base(value) { }
+
+    public ReallyLoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooogMethodName()
+        /*Comment*/: base(false) { }
 }
 
 public class Exactly80
