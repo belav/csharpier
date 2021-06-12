@@ -5,8 +5,10 @@ using System.CommandLine.Invocation;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 namespace CSharpier
 {
@@ -28,14 +30,36 @@ namespace CSharpier
             bool check,
             bool fast,
             bool skipWrite,
+            bool writeStdout,
             CancellationToken cancellationToken
         ) {
+            string? standardInFileContents = null;
+            if (Console.IsInputRedirected)
+            {
+                var input = new StringBuilder();
+                var value = 0;
+                while ((value = Console.Read()) != -1)
+                {
+                    input.Append(Convert.ToChar(value));
+                }
+
+                standardInFileContents = input.ToString();
+            }
+
             if (directoryOrFile is null or { Length: 0 })
             {
                 directoryOrFile = new[] { Directory.GetCurrentDirectory() };
             }
             else
             {
+                if (standardInFileContents != null)
+                {
+                    Console.WriteLine(
+                        "directoryOrFile may not be supplied when piping standard input"
+                    );
+                    return 1;
+                }
+
                 directoryOrFile = directoryOrFile.Select(
                         o => Path.Combine(Directory.GetCurrentDirectory(), o)
                     )
@@ -45,9 +69,11 @@ namespace CSharpier
             var commandLineOptions = new CommandLineOptions
             {
                 DirectoryOrFilePaths = directoryOrFile.ToArray(),
+                StandardInFileContents = standardInFileContents,
                 Check = check,
                 Fast = fast,
-                SkipWrite = skipWrite
+                SkipWrite = skipWrite,
+                WriteStdout = writeStdout
             };
 
             return await CommandLineFormatter.Format(

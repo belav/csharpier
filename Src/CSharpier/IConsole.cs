@@ -5,6 +5,7 @@ namespace CSharpier
     public interface IConsole
     {
         void WriteLine(string? line);
+        void Write(string value);
     }
 
     public class SystemConsole : IConsole
@@ -12,6 +13,11 @@ namespace CSharpier
         public void WriteLine(string? line)
         {
             Console.WriteLine(line);
+        }
+
+        public void Write(string value)
+        {
+            Console.Write(value);
         }
     }
 }

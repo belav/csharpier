@@ -19,6 +19,21 @@ namespace CSharpier
 
         private static string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
 
+        public static PrinterOptions CreatePrinterOptions(
+            string baseDirectoryPath,
+            IFileSystem fileSystem
+        ) {
+            var configurationFileOptions = Create(baseDirectoryPath, fileSystem);
+
+            return new PrinterOptions
+            {
+                TabWidth = configurationFileOptions.TabWidth,
+                UseTabs = configurationFileOptions.UseTabs,
+                Width = configurationFileOptions.PrintWidth,
+                EndOfLine = configurationFileOptions.EndOfLine
+            };
+        }
+
         public static ConfigurationFileOptions Create(
             string baseDirectoryPath,
             IFileSystem fileSystem

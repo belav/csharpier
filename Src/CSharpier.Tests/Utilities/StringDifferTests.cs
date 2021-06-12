@@ -140,6 +140,11 @@ four
                 stringBuilder.AppendLine(line);
             }
 
+            public void Write(string value)
+            {
+                stringBuilder.Append(value);
+            }
+
             public string GetOutput()
             {
                 return stringBuilder.ToString();

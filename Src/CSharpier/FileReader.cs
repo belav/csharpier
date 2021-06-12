@@ -21,7 +21,7 @@ namespace CSharpier
             IFileSystem fileSystem,
             CancellationToken cancellationToken
         ) {
-            var defaultedEncoding = false;
+            var unableToDetectEncoding = false;
 
             await Semaphore.WaitAsync(cancellationToken);
             try
@@ -31,7 +31,7 @@ namespace CSharpier
                 var encoding = detectionResult?.Detected?.Encoding;
                 if (encoding == null)
                 {
-                    defaultedEncoding = true;
+                    unableToDetectEncoding = true;
                     encoding = Encoding.Default;
                 }
 
@@ -46,7 +46,7 @@ namespace CSharpier
 
                 var fileContents = await streamReader.ReadToEndAsync();
 
-                return new FileReaderResult(encoding, fileContents, defaultedEncoding);
+                return new FileReaderResult(encoding, fileContents, unableToDetectEncoding);
             }
 
             finally
@@ -56,5 +56,9 @@ namespace CSharpier
         }
     }
 
-    public record FileReaderResult(Encoding Encoding, string FileContents, bool DefaultedEncoding);
+    public record FileReaderResult(
+        Encoding Encoding,
+        string FileContents,
+        bool UnableToDetectEncoding
+    );
 }

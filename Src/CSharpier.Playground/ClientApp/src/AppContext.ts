@@ -92,7 +92,7 @@ export const useSetupAppContext = () => {
         },
         copyLeft: () => {
             setEnteredCode(formattedCode);
-        }
+        },
     };
 };
 
