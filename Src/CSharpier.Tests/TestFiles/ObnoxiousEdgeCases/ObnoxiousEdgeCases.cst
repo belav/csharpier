@@ -60,8 +60,7 @@ class ClassName
             DynamicallyAccessedMemberTypes.PublicConstructors)]
         TAccountClaimsPrincipalFactory>(
         this IRemoteAuthenticationBuilder<RemoteAuthenticationState, RemoteUserAccount> builder
-    )
-        where TAccountClaimsPrincipalFactory : AccountClaimsPrincipalFactory<RemoteUserAccount> =>
+    ) where TAccountClaimsPrincipalFactory : AccountClaimsPrincipalFactory<RemoteUserAccount> =>
         builder.AddAccountClaimsPrincipalFactory<
             RemoteAuthenticationState,
             RemoteUserAccount,

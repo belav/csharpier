@@ -149,7 +149,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (constructorInitializer != null)
             {
-                declarationGroup.Add(ConstructorInitializer.Print(constructorInitializer));
+                declarationGroup.Add(
+                    groupId != null
+                        ? ConstructorInitializer.PrintWithConditionalSpace(
+                                constructorInitializer,
+                                groupId
+                            )
+                        : ConstructorInitializer.Print(constructorInitializer)
+                );
             }
 
             if (modifiers.HasValue && modifiers.Value.Count > 0)
@@ -163,7 +170,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             docs.Add(Doc.Group(declarationGroup));
 
-            docs.Add(ConstraintClauses.Print(constraintClauses));
+            docs.Add(
+                groupId != null
+                    ? ConstraintClauses.PrintWithConditionalSpace(constraintClauses, groupId)
+                    : ConstraintClauses.Print(constraintClauses)
+            );
             if (body != null)
             {
                 docs.Add(

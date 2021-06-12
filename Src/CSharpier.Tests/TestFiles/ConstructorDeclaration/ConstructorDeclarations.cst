@@ -22,11 +22,35 @@ public class BasicClass
 
 public class Initializers : BasicClass
 {
-    public Initializers()
-        : this(true) { }
+    public Initializers() : this(true) { }
 
-    public Initializers(string value)
-        : base(value) { }
+    public Initializers(string value) : base(value) { }
+
+    public Initializers(
+        string reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameter
+    ) : base(
+        reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameterIMeanIt
+    ) { }
+
+    public Initializers(
+        string reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameter
+    ) : base(false) { }
+
+    public ReallyLoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooogMethodName()
+        : base(false) { }
+
+    public ReallyLoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooogMethodName()
+        : base(
+            reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameterIMeanIt
+        ) { }
+
+    public Initializers(
+        string value
+    ) /*Comment*/
+      : base(value) { }
+
+    public ReallyLoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooogMethodName()
+        /*Comment*/: base(false) { }
 }
 
 public class Exactly80
