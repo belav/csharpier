@@ -3,7 +3,8 @@
 class ClassName
 {
     public static object? FormatValue<[DynamicallyAccessedMembers(
-            DynamicallyAccessedMemberTypes.All)]
+            DynamicallyAccessedMemberTypes.All
+        )]
         T>(T value, CultureInfo? culture = null) { }
 
     public readonly StackObjectPool<Dictionary<
@@ -57,7 +58,8 @@ class ClassName
         RemoteAuthenticationState,
         RemoteUserAccount
     > AddAccountClaimsPrincipalFactory<[DynamicallyAccessedMembers(
-            DynamicallyAccessedMemberTypes.PublicConstructors)]
+            DynamicallyAccessedMemberTypes.PublicConstructors
+        )]
         TAccountClaimsPrincipalFactory>(
         this IRemoteAuthenticationBuilder<RemoteAuthenticationState, RemoteUserAccount> builder
     ) where TAccountClaimsPrincipalFactory : AccountClaimsPrincipalFactory<RemoteUserAccount> =>

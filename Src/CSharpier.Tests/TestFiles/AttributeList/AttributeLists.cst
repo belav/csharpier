@@ -45,9 +45,11 @@ class ClassName
     // leading before class
     class ClassTwo { }
 
-    [BigLongAttributeWhatHappensHmmmmmmmmmmmmmmmmmmmmmmmmmmmmm(
-        "11111111111111111111111111",
-        "22222222222222222222222222")]
+    [LongAttributeWithParametersBreaking(
+        "someValue_____________",
+        "someValue_____________",
+        "someValue_____________"
+    )]
     void LongAttribute() { }
 
     public void MethodName([FromBody] SomeParameter parameter)
@@ -63,3 +65,14 @@ class ClassName
         return;
     }
 }
+
+[
+    LongAttributeWithParametersBreaking(
+        "someValue_____________",
+        "someValue_____________",
+        "someValue_____________"
+    ),
+    AnotherAttribute
+]
+public class ClassName { }
+
