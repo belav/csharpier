@@ -26,7 +26,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             );
             return node.Parent
                 is not (ObjectCreationExpressionSyntax
-                    or ArrayCreationExpressionSyntax)
+                    or ArrayCreationExpressionSyntax
+                    or ImplicitArrayCreationExpressionSyntax)
             && node.Kind()
                 is not SyntaxKind.WithInitializerExpression ? Doc.Group(result) : result;
         }
