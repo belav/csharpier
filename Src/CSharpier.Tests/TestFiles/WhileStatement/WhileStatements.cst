@@ -37,7 +37,8 @@ class ClassName
             return;
         }
 
-        while (true) return;
+        while (true)
+            return;
 
         while (someLongerStatement && someOtherLongerStatement________________)
             return someLongerValue;

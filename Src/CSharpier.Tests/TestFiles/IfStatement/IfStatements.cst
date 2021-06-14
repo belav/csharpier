@@ -20,10 +20,17 @@ public class ClassName
             return;
         }
 
-        if (true) DoSomething();
-        else if (false) DoSomething();
+        if (true)
+            DoSomething();
+        else if (false)
+            DoSomething();
         else
             DoSomething;
+
+        if (true)
+            while (true)
+                foreach (var x in y)
+                    CallMethod(x);
 
         if (someLongCondition != someOtherCondition)
             DoSomeLongMethodCall_________________________();

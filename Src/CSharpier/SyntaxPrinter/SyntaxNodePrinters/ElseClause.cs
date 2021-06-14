@@ -10,22 +10,13 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ElseClauseSyntax node)
         {
-            var docs = new List<Doc> { Token.Print(node.ElseKeyword) };
-            var statement = Node.Print(node.Statement);
-            if (node.Statement is BlockSyntax)
-            {
-                docs.Add(statement);
-            }
-            else if (node.Statement is IfStatementSyntax)
-            {
-                docs.Add(" ", statement);
-            }
-            else
-            {
-                docs.Add(Doc.Indent(Doc.HardLine, statement));
-            }
-
-            return Doc.Concat(docs);
+            return Doc.Concat(
+                Token.Print(node.ElseKeyword),
+                node.Statement
+                    is IfStatementSyntax ifStatementSyntax
+                    ? Doc.Concat(" ", IfStatement.Print(ifStatementSyntax))
+                    : OptionalBraces.Print(node.Statement)
+            );
         }
     }
 }

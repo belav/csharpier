@@ -53,7 +53,8 @@ public class ClassName
             return;
         }
 
-        foreach (var x in y) CallSomething(x);
+        foreach (var x in y)
+            CallSomething(x);
 
         foreach (var someLongerNameThatMakesThis in BreakAndLongName____________________)
             CallSomething(x);

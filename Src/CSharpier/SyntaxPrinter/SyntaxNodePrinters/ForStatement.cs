@@ -56,10 +56,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         Token.Print(node.CloseParenToken),
                         Doc.IfBreak(Doc.Null, Doc.SoftLine)
                     ),
-                    node.Statement
-                        is BlockSyntax blockSyntax
-                        ? Block.PrintWithConditionalSpace(blockSyntax, groupId)
-                        : Doc.Indent(Doc.Line, Node.Print(node.Statement))
+                    OptionalBraces.Print(node.Statement, groupId)
                 )
             };
 
