@@ -21,3 +21,21 @@ record LongerRecordNameWhatHappens_________________________________________(stri
     : R4<string>(x) { }
 
 record GenericRecord<T>(T Result);
+
+public record LotsOfParametersWithBase(
+    string longNameParameter,
+    string areTheyCalledParametersWithRecords,
+    string theyLookLikeParameters
+) : BaseRecord(longNameParameter);
+
+public record LotsOfParametersWithBaseWithLots(
+    string longNameParameter,
+    string areTheyCalledParametersWithRecords,
+    string theyLookLikeParameters
+)
+    : BaseRecord(
+          longNameParameter,
+          areTheyCalledParametersWithRecords,
+          theyLookLikeParameters,
+          "someExtraValueToMakeThisReallyLong"
+      );
