@@ -68,5 +68,8 @@ class ClassName
             SqlParameterCollectionExtensions.DefaultValueColumnWidth
             + SqlParameterCollectionExtensions.DefaultValueColumnWidth
         ];
+
+        var someLongVariable_doesNotBreakArrayRank____________________________ =
+            (ArrayType[])CallMethod();
     }
 }
