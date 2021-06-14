@@ -9,6 +9,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj -c release
+  test_stdin:
+    runs-on: ubuntu-latest
+    name: Test StdIn
+    steps:
+      - uses: actions/checkout@v2
+      - run: dotnet build Src/CSharpier/CSharpier.csproj -c release
+      - id: stdout  
+        run: echo ::set-output name=value::$(echo 'public class ClassName { }' | dotnet Src/CSharpier/bin/release/net5.0/dotnet-csharpier.dll)
+      - uses: nick-invision/assert-action@v1
+        with:
+          expected: public class ClassName { }
+          actual: ${{ steps.stdout.outputs.value }}
+          comparison: exact
   check_formatting:
     runs-on: ubuntu-latest
     name: Check Formatting

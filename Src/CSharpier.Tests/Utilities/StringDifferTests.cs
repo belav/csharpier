@@ -149,6 +149,8 @@ four
             {
                 return stringBuilder.ToString();
             }
+
+            public Encoding InputEncoding => Encoding.UTF8;
         }
     }
 }

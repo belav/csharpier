@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace CSharpier
 {
@@ -6,6 +7,7 @@ namespace CSharpier
     {
         void WriteLine(string? line);
         void Write(string value);
+        Encoding InputEncoding { get; }
     }
 
     public class SystemConsole : IConsole
@@ -19,5 +21,7 @@ namespace CSharpier
         {
             Console.Write(value);
         }
+
+        public Encoding InputEncoding => Console.InputEncoding;
     }
 }

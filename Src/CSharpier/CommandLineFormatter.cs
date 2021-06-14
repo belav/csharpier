@@ -108,7 +108,7 @@ namespace CSharpier
                 await commandLineFormatter.FormatFile(
                     commandLineOptions.StandardInFileContents,
                     path,
-                    Encoding.UTF8,
+                    console.InputEncoding,
                     cancellationToken
                 );
             }
