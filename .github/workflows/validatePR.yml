@@ -14,14 +14,10 @@ jobs:
     name: Test StdIn
     steps:
       - uses: actions/checkout@v2
-      - run: dotnet build Src/CSharpier/CSharpier.csproj -c release
-      - id: stdout  
-        run: echo ::set-output name=value::$(echo 'public class ClassName { }' | dotnet Src/CSharpier/bin/release/net5.0/dotnet-csharpier.dll)
-      - uses: nick-invision/assert-action@v1
-        with:
-          expected: public class ClassName { }
-          actual: ${{ steps.stdout.outputs.value }}
-          comparison: exact
+      - run: |
+          dotnet build Src/CSharpier/CSharpier.csproj -c release
+          echo "public class ClassName { }" > code.cs
+          cat code.cs | dotnet Src/CSharpier/bin/release/net5.0/dotnet-csharpier.dll | diff - code.cs
   check_formatting:
     runs-on: ubuntu-latest
     name: Check Formatting
