@@ -30,5 +30,27 @@ class ClassName
         {
             throw;
         }
+
+        try
+        {
+            throw new Exception();
+        }
+        catch (Exception exception)
+            when (exception.Message.Contains("someLongValueThatMakesThisLineTooLong"))
+        {
+            return;
+        }
+
+        try
+        {
+            throw new Exception();
+        }
+        catch (Exception exception)
+            when (exception.Message.Contains("someLongValueThatMakesThisLineTooLong")
+                && someLongCondition == someOtherLongValue
+            )
+        {
+            return;
+        }
     }
 }
