@@ -11,11 +11,25 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(InitializerExpressionSyntax node)
         {
+            return Print(node, null);
+        }
+
+        public static Doc PrintWithConditionalSpace(
+            InitializerExpressionSyntax node,
+            string groupId
+        ) {
+            return Print(node, groupId);
+        }
+
+        private static Doc Print(InitializerExpressionSyntax node, string? groupId)
+        {
             var result = Doc.Concat(
-                node.Kind()
-                    is SyntaxKind.CollectionInitializerExpression
-                        or SyntaxKind.ObjectInitializerExpression
-                && node.Parent is AssignmentExpressionSyntax ? Doc.Line : Doc.Null,
+                groupId != null
+                    ? Doc.IfBreak(" ", Doc.Line, groupId)
+                    : node.Kind()
+                            is SyntaxKind.CollectionInitializerExpression
+                                or SyntaxKind.ObjectInitializerExpression
+                        && node.Parent is AssignmentExpressionSyntax ? Doc.Line : Doc.Null,
                 Token.Print(node.OpenBraceToken),
                 Doc.Indent(
                     Doc.Line,

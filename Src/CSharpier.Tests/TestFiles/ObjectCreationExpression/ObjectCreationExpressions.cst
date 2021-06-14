@@ -28,8 +28,7 @@ public class ClassName
     public ClassName WithComplexConstructor = new ClassName(
         "parameter1",
         new ClassName("parameter1", "parameter2") { Property1 = true }
-    )
-    {
+    ) {
         Property1 = true
     };
 
