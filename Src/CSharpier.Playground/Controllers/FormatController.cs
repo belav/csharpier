@@ -103,10 +103,7 @@ namespace CSharpier.Playground.Controllers
 
         public string ExecuteApplication(string pathToExe, string workingDirectory, string args)
         {
-            var processStartInfo = new ProcessStartInfo(
-                pathToExe,
-                args
-            )
+            var processStartInfo = new ProcessStartInfo(pathToExe, args)
             {
                 UseShellExecute = false,
                 RedirectStandardError = true,

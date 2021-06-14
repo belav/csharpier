@@ -171,11 +171,7 @@ namespace CSharpier
         private CompareResult NotEqual(SyntaxNode? originalNode, SyntaxNode? formattedNode)
         {
             return new()
-            {
-                IsInvalid = true,
-                OriginalSpan = originalNode?.Span,
-                NewSpan = formattedNode?.Span
-            };
+            { IsInvalid = true, OriginalSpan = originalNode?.Span, NewSpan = formattedNode?.Span };
         }
 
         private CompareResult NotEqual(TextSpan? originalSpan, TextSpan? formattedSpan)

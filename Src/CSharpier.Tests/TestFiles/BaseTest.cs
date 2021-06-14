@@ -31,8 +31,11 @@ namespace CSharpier.Tests.TestFileTests
                 folderName,
                 fileName + ".cst"
             );
-            var fileReaderResult =
-                FileReader.ReadFile(filePath, new FileSystem(), CancellationToken.None).Result;
+            var fileReaderResult = FileReader.ReadFile(
+                    filePath,
+                    new FileSystem(),
+                    CancellationToken.None
+                ).Result;
 
             var formatter = new CodeFormatter();
             var result = formatter.Format(

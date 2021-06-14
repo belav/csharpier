@@ -71,8 +71,7 @@ namespace CSharpier
                     fileSystem
                 );
 
-                var ignoreFile =
-                    await IgnoreFile.Create(
+                var ignoreFile = await IgnoreFile.Create(
                         baseDirectoryPath,
                         fileSystem,
                         console,
