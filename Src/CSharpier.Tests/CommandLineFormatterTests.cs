@@ -236,8 +236,7 @@ namespace CSharpier.Tests
             }
 
             var fakeConsole = new TestConsole();
-            var result =
-                CommandLineFormatter.Format(
+            var result = CommandLineFormatter.Format(
                     new CommandLineOptions
                     {
                         DirectoryOrFilePaths = directoryOrFilePaths,
