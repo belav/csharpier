@@ -7,6 +7,6 @@ class ClassName
             oneoneoneoneoneoneoneoneoneone,
             oneoneoneoneoneoneoneoneoneone,
             oneoneoneoneoneoneoneoneoneone
-            ) = CallMethod();
+        ) = CallMethod();
     }
 }
