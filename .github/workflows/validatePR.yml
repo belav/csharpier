@@ -9,6 +9,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj -c release
+  test_stdin:
+    runs-on: ubuntu-latest
+    name: Test StdIn
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          dotnet build Src/CSharpier/CSharpier.csproj -c release
+          echo "public class ClassName { }" > code.cs
+          cat code.cs | dotnet Src/CSharpier/bin/release/net5.0/dotnet-csharpier.dll | diff - code.cs
   check_formatting:
     runs-on: ubuntu-latest
     name: Check Formatting

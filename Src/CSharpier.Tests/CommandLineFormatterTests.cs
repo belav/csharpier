@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
@@ -293,6 +294,8 @@ namespace CSharpier.Tests
             {
                 this.Lines.Add(value);
             }
+
+            public Encoding InputEncoding => Encoding.UTF8;
         }
     }
 }

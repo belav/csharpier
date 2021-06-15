@@ -38,14 +38,11 @@ namespace CSharpier
             string? standardInFileContents = null;
             if (Console.IsInputRedirected && directoryOrFileNotProvided)
             {
-                var input = new StringBuilder();
-                var value = 0;
-                while ((value = Console.Read()) != -1)
-                {
-                    input.Append(Convert.ToChar(value));
-                }
-
-                standardInFileContents = input.ToString();
+                using var streamReader = new StreamReader(
+                    Console.OpenStandardInput(),
+                    Console.InputEncoding
+                );
+                standardInFileContents = await streamReader.ReadToEndAsync();
             }
 
             if (directoryOrFileNotProvided)
