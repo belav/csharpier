@@ -18,7 +18,8 @@ class ClassName
             break;
         }
 
-        for (var x = 0; x < 100; x++) break;
+        for (var x = 0; x < 100; x++)
+            break;
 
         for (var someLongerValue = 0; someLongerValue____________________ < 1; someLongerValue++)
             Call(SomeLongerValue);
