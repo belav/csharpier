@@ -1,3 +1,4 @@
+using System;
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -7,13 +8,29 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ObjectCreationExpressionSyntax node)
         {
+            var groupId = Guid.NewGuid().ToString();
+
             return Doc.Group(
                 Token.PrintWithSuffix(node.NewKeyword, " "),
                 Node.Print(node.Type),
-                node.ArgumentList != null ? ArgumentList.Print(node.ArgumentList) : string.Empty,
+                node.ArgumentList != null
+                    ? Doc.GroupWithId(
+                            groupId,
+                            ArgumentListLike.Print(
+                                node.ArgumentList.OpenParenToken,
+                                node.ArgumentList.Arguments,
+                                node.ArgumentList.CloseParenToken
+                            )
+                        )
+                    : Doc.Null,
                 node.Initializer != null
-                    ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer))
-                    : string.Empty
+                    ? node.ArgumentList != null
+                            ? InitializerExpression.PrintWithConditionalSpace(
+                                    node.Initializer,
+                                    groupId
+                                )
+                            : Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer))
+                    : Doc.Null
             );
         }
     }
