@@ -55,9 +55,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                         Node.Print(attributeArgumentNode.Expression)
                                     ),
                                 Doc.Line
-                            ),
-                            Token.Print(attributeNode.ArgumentList.CloseParenToken)
-                        )
+                            )
+                        ),
+                        Doc.SoftLine,
+                        Token.Print(attributeNode.ArgumentList.CloseParenToken)
                     );
                 },
                 Doc.Line
