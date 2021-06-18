@@ -12,5 +12,8 @@ class ClassName
         x = 15;
 
         x = 25; // trailing!!!!
+
+        assignmentInstructionalText =
+            editAssignmentViewModel.InstructionalTextxxxxxxxxxx ?? string.Empty;
     }
 }

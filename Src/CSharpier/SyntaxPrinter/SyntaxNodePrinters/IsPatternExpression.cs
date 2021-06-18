@@ -8,7 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(IsPatternExpressionSyntax node)
         {
-            return Doc.Concat(
+            return Doc.Group(
                 Node.Print(node.Expression),
                 Doc.Indent(
                     Doc.Line,

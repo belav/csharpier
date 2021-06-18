@@ -12,12 +12,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Node.Print(node.Left),
                 " ",
                 Token.Print(node.OperatorToken),
-                node.Right is QueryExpressionSyntax
-                    ? Doc.Indent(Doc.Line, Node.Print(node.Right))
-                    : Doc.Group(
-                            node.Right is InitializerExpressionSyntax ? Doc.Null : " ",
-                            Node.Print(node.Right)
-                        )
+                Assignment.PrintRhs(node.Right)
             );
         }
     }

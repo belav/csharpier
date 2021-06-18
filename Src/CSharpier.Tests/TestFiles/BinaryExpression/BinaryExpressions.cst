@@ -31,5 +31,40 @@ class TestClass
         var directivesDontBreakBinary =
 #pragma
             true || false;
+
+        var x =
+            query
+            && (
+                currentChar == '='
+                || currentChar == '<'
+                || currentChar == '!'
+                || currentChar == '>'
+                || currentChar == '|'
+                || currentChar == '&'
+            );
+
+        var x =
+            node is BinaryExpressionSyntax
+            || node is IsPatternExpressionSyntax isPattern
+            && isPattern.Pattern is ConstantPatternSyntax;
+
+        var x =
+            (
+                optionsProvider != null
+                && optionsProvider.TryGetDiagnosticValue(
+                    tree,
+                    diagnosticId,
+                    CancellationToken.None,
+                    out _
+                )
+            )
+            || (
+                diagnosticCategory != null
+                && analyzerConfigOptions.TryGetValue(
+                    GetCategoryBasedDotnetAnalyzerDiagnosticSeverityKey(diagnosticCategory),
+                    out _
+                )
+            )
+            || analyzerConfigOptions.TryGetValue(DotnetAnalyzerDiagnosticSeverityKey, out _);
     }
 }
