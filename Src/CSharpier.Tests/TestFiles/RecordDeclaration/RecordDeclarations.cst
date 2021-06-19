@@ -15,6 +15,11 @@ record MostlyWeeklyTemperature(
 
 record PC(string x) : PrimaryConstructor(x) { }
 
+public record RecordWithProperty
+{
+    public string Property { get; set; }
+}
+
 record RecordWithoutBody(string property);
 
 record LongerRecordNameWhatHappens_________________________________________(string x)

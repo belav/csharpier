@@ -104,8 +104,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 DocUtilities.RemoveInitialDoubleHardLine(members);
 
+                var useSpaceBraceWithParameterList = groupId != null && parameterList != null;
                 docs.Add(
-                    groupId != null ? Doc.IfBreak(" ", Doc.Line, groupId) : Doc.HardLine,
+                    useSpaceBraceWithParameterList
+                        ? Doc.IfBreak(" ", Doc.Line, groupId)
+                        : Doc.HardLine,
                     Token.Print(node.OpenBraceToken),
                     members,
                     Doc.HardLine,
