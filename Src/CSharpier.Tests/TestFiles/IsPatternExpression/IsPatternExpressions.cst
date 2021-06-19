@@ -41,8 +41,7 @@ class ClassName
                     or SyntaxKind.PlusToken;
 
         if (
-            Nullable.GetUnderlyingType111111111111111(typeof(T))
-                is Type innerType
+            Nullable.GetUnderlyingType111111111111111(typeof(T)) is Type innerType
             && innerType.IsEnum
         ) {
             return;
