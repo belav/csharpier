@@ -26,10 +26,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var result = Doc.Concat(
                 groupId != null
                     ? Doc.IfBreak(" ", Doc.Line, groupId)
-                    : node.Kind()
-                            is SyntaxKind.CollectionInitializerExpression
-                                or SyntaxKind.ObjectInitializerExpression
-                        && node.Parent is AssignmentExpressionSyntax ? Doc.Line : Doc.Null,
+                    : Doc.Null,
                 Token.Print(node.OpenBraceToken),
                 Doc.Indent(
                     Doc.Line,
