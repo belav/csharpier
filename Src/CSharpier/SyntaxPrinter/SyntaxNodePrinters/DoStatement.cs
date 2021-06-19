@@ -19,7 +19,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Doc.HardLine,
                 Token.PrintWithSuffix(node.WhileKeyword, " "),
                 Token.Print(node.OpenParenToken),
-                Node.Print(node.Condition),
+                Doc.Group(Doc.Indent(Doc.SoftLine, Node.Print(node.Condition)), Doc.SoftLine),
                 Token.Print(node.CloseParenToken),
                 Token.Print(node.SemicolonToken)
             );

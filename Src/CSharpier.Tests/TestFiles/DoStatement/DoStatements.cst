@@ -10,5 +10,12 @@ class ClassName
 
         do x++;
         while (x < 10);
+
+        do { }
+        while (
+            initialDepth - 1 < reader.Depth - (JsonTokenUtils.IsEndToken(reader.TokenType) ? 1 : 0)
+            && writeChildren
+            && reader.Read()
+        );
     }
 }
