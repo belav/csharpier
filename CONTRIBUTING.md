@@ -8,9 +8,9 @@ dotnet watch run
 cd ClientApp
 npm run start
 ```
-- This should open the playground website at https://localhost:5001
+- This should open the playground website at http://localhost:5000
 - Paste the code you want to format there and click format.
-- The playground includes tabs to view the AST and generated doc tree, which help troubleshooting issues.
+- The playground includes options to view the AST and generated doc tree, which help troubleshooting issues.
 
 ### Unit Tests
 CSharpier.Core.Tests contains a number of different unit tests.
@@ -31,3 +31,6 @@ CSharpier.Core.Tests contains a number of different unit tests.
 - https://sharplab.io/ is useful for understanding the AST that is produced from some C# code
 - https://www.linqpad.net/ can also show the AST, but is less forgiving with errors in your code.
 - https://www.sapehin.com/blog/csharp-via-roslynapi-the-big-picture/ gives an overview of all the different syntax nodes in c#
+
+### Issues
+If you plan to contribute by working on an issue, you can assign it to yourself by adding a comment `.assign`
