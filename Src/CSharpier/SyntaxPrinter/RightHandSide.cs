@@ -1,5 +1,6 @@
 using System;
 using CSharpier.DocTypes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
@@ -8,6 +9,10 @@ namespace CSharpier.SyntaxPrinter
     {
         public static Doc Print(ExpressionSyntax node)
         {
+            if(node.Kind() is SyntaxKind.CollectionInitializerExpression)
+            {
+                return Doc.Group(Doc.Line, Node.Print(node));
+            }
             var formatMode = node
                 is AnonymousObjectCreationExpressionSyntax
                     or AnonymousMethodExpressionSyntax
@@ -30,7 +35,7 @@ namespace CSharpier.SyntaxPrinter
                         ? FormatMode.IndentWithLine
                         : FormatMode.Indent;
             var groupId = Guid.NewGuid().ToString();
-            return Doc.Concat(
+            return Doc.Group(
                 formatMode is FormatMode.IndentWithLine
                     ? Doc.Null
                     : Doc.GroupWithId(groupId, Doc.Indent(Doc.Line)),
