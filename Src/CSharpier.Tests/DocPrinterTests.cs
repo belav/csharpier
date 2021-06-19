@@ -256,7 +256,7 @@ namespace CSharpier.Tests
         [Test]
         public void IfBreak_Should_Print_Flat_Contents()
         {
-            var doc = Doc.Group(Doc.IfBreak("break", "flat"));
+            var doc = Doc.Group(Doc.IfGroupBreaks("break").Else("flat"));
 
             PrintedDocShouldBe(doc, "flat");
         }
@@ -264,7 +264,7 @@ namespace CSharpier.Tests
         [Test]
         public void IfBreak_Should_Print_Break_Contents()
         {
-            var doc = Doc.Group(Doc.HardLine, Doc.IfBreak("break", "flat"));
+            var doc = Doc.Group(Doc.HardLine, Doc.IfGroupBreaks("break").Else("flat"));
 
             PrintedDocShouldBe(doc, $"{NewLine}break");
         }
@@ -272,7 +272,7 @@ namespace CSharpier.Tests
         [Test]
         public void IfBreak_Should_Print_Break_Contents_When_Group_Does_Not_Fit()
         {
-            var doc = Doc.Group("another", Doc.Line, Doc.IfBreak("break", "flat"));
+            var doc = Doc.Group("another", Doc.Line, Doc.IfGroupBreaks("break").Else("flat"));
 
             PrintedDocShouldBe(doc, $"another{NewLine}break", 10);
         }
@@ -280,7 +280,10 @@ namespace CSharpier.Tests
         [Test]
         public void IfBreak_Should_Print_Flat_Contents_When_GroupId_Does_Not_Break()
         {
-            var doc = Doc.Concat(Doc.GroupWithId("1", "1"), Doc.IfBreak("break", "flat", "1"));
+            var doc = Doc.Concat(
+                Doc.GroupWithId("1", "1"),
+                Doc.IfGroupBreaks("break", "1").Else("flat")
+            );
 
             PrintedDocShouldBe(doc, "1flat");
         }
@@ -291,7 +294,7 @@ namespace CSharpier.Tests
             var doc = Doc.Concat(
                 "1",
                 Doc.GroupWithId("hl", Doc.HardLine),
-                Doc.IfBreak("break", "flat", "hl")
+                Doc.IfGroupBreaks("break", "h1").Else("flat")
             );
 
             PrintedDocShouldBe(doc, $"1{NewLine}break");
@@ -303,7 +306,7 @@ namespace CSharpier.Tests
             var doc = Doc.Group(
                 "1",
                 Doc.Line,
-                Doc.IfBreak(Doc.Concat("break", Doc.HardLine), "flat")
+                Doc.IfGroupBreaks(Doc.Concat("break", Doc.HardLine)).Else("flat")
             );
 
             PrintedDocShouldBe(doc, $"1{NewLine}break");
@@ -315,7 +318,7 @@ namespace CSharpier.Tests
             var doc = Doc.Group(
                 "1",
                 Doc.Line,
-                Doc.IfBreak("break", Doc.Concat("flat", Doc.HardLine))
+                Doc.IfGroupBreaks("break").Else(Doc.Concat("flat", Doc.HardLine))
             );
 
             PrintedDocShouldBe(doc, $"1{NewLine}break");

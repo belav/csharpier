@@ -54,7 +54,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         Token.Print(node.OpenParenToken),
                         Doc.GroupWithId(groupId, Doc.Indent(innerGroup), Doc.SoftLine),
                         Token.Print(node.CloseParenToken),
-                        Doc.IfBreak(Doc.Null, Doc.SoftLine)
+                        Doc.IfGroupBreaks(Doc.Null).Else(Doc.SoftLine)
                     ),
                     OptionalBraces.Print(node.Statement, groupId)
                 )

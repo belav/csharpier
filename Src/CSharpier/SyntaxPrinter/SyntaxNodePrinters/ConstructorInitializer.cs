@@ -21,9 +21,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             var colonToken = Token.PrintWithSuffix(node.ColonToken, " ");
             return Doc.Group(
-                Doc.Indent(groupId != null ? Doc.IfBreak(" ", Doc.Line, groupId) : Doc.Line),
+                Doc.Indent(
+                    groupId != null ? Doc.IfGroupBreaks(" ", groupId).Else(Doc.Line) : Doc.Line
+                ),
                 groupId != null
-                    ? Doc.IfBreak(Doc.Align(2, colonToken), Doc.Indent(colonToken), groupId)
+                    ? Doc.IfGroupBreaks(Doc.Align(2, colonToken), groupId)
+                            .Else(Doc.Indent(colonToken))
                     : Doc.Indent(colonToken),
                 Token.Print(node.ThisOrBaseKeyword),
                 groupId != null

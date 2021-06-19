@@ -107,7 +107,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 var useSpaceBraceWithParameterList = groupId != null && parameterList != null;
                 docs.Add(
                     useSpaceBraceWithParameterList
-                        ? Doc.IfBreak(" ", Doc.Line, groupId)
+                        ? Doc.IfGroupBreaks(" ", groupId).Else(Doc.Line)
                         : Doc.HardLine,
                     Token.Print(node.OpenBraceToken),
                     members,

@@ -144,7 +144,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     groupId = Guid.NewGuid().ToString();
                 }
                 declarationGroup.Add(ParameterList.Print(parameterList, groupId));
-                declarationGroup.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine));
+                declarationGroup.Add(Doc.IfGroupBreaks(Doc.Null).Else(Doc.SoftLine));
             }
 
             if (constructorInitializer != null)

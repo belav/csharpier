@@ -42,7 +42,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         Doc.SoftLine
                     ),
                     Token.Print(node.CloseParenToken),
-                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
+                    Doc.IfGroupBreaks(Doc.Null).Else(Doc.SoftLine)
                 )
             };
             if (node.Statement is UsingStatementSyntax)
