@@ -25,7 +25,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             var result = Doc.Concat(
                 groupId != null
-                    ? Doc.IfBreak(" ", Doc.Line, groupId)
+                    ? Doc.IfGroupBreaks(" ", groupId).Else(Doc.Line)
                     : node.Kind()
                             is SyntaxKind.CollectionInitializerExpression
                                 or SyntaxKind.ObjectInitializerExpression

@@ -98,13 +98,8 @@ namespace CSharpier.DocTypes
 
         public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
 
-        public static IfBreak IfBreak(
-            Doc breakContents,
-            Doc flatContents,
-            string? groupId = null
-        ) =>
-            new()
-            { FlatContents = flatContents, BreakContents = breakContents, GroupId = groupId, };
+        public static IfBreakBuilder IfGroupBreaks(Doc breakContents, string? groupId = null) =>
+            new(breakContents, groupId);
 
         public static IndentIfBreak IndentIfBreak(Doc contents, string groupId) =>
             new(contents, groupId);

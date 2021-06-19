@@ -37,9 +37,9 @@ namespace CSharpier.SyntaxPrinter
             );
 
             return Doc.Group(
-                Doc.Indent(groupId != null ? Doc.IfBreak(" ", prefix, groupId) : prefix),
+                Doc.Indent(groupId != null ? Doc.IfGroupBreaks(" ", groupId).Else(prefix) : prefix),
                 groupId != null
-                    ? Doc.IfBreak(Doc.Align(2, body), Doc.Indent(body), groupId)
+                    ? Doc.IfGroupBreaks(Doc.Align(2, body), groupId).Else(Doc.Indent(body))
                     : Doc.Indent(body)
             );
         }
