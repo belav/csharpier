@@ -62,8 +62,7 @@ class ClassName
         var collectionInitializerExpressions = new SomeObject
         {
             ThisIsACollection = { one, two },
-            ThisIsAlsoACollection =
-            {
+            ThisIsAlsoACollection = {
                 longerValueThatMakesItBreak______________________,
                 longerValueThatMakesItBreak______________________
             },
