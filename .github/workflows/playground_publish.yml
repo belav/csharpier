@@ -1,10 +1,8 @@
 name: Publish Playground
 on:
   push:
-    branches: [ master ]
-    paths:
-      - "Src/CSharpier/**/*"
-      - "Src/CSharpier.Playground/**/*"
+    tags:
+      - "*"
 
 defaults:
   run:
