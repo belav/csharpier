@@ -1,5 +1,4 @@
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
@@ -10,9 +9,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Concat(
                 Token.Print(node.Keyword),
-                Token.Print(node.OpenParenToken),
-                Node.Print(node.Expression),
-                Token.Print(node.CloseParenToken)
+                Doc.Group(
+                    Token.Print(node.OpenParenToken),
+                    Doc.Indent(Doc.SoftLine, Node.Print(node.Expression)),
+                    Doc.SoftLine,
+                    Token.Print(node.CloseParenToken)
+                )
             );
         }
     }
