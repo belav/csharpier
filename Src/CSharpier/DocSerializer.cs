@@ -65,6 +65,7 @@ namespace CSharpier
                 Trim => $"{indent}Doc.Trim",
                 ForceFlat forceFlat => $"{indent}Doc.ForceFlat({newLine}{PrintIndentedDocTree(forceFlat.Contents)})",
                 IndentDoc indentDoc => $"{indent}Doc.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents)}{newLine}{indent})",
+                ConditionalGroup conditionalGroup => $"{indent}Doc.ConditionalGroup({newLine}{PrintIndentedDocTree(conditionalGroup.Contents)}{newLine}{indent})",
                 Group group => @$"{indent}Doc.Group{(@group.GroupId != null ? "WithId" : string.Empty)}(
 {(@group.GroupId != null ? $"{nextIndent}\"{@group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents)}{newLine}{indent})",
                 LeadingComment leadingComment => $"{indent}Doc.LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})",
