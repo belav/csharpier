@@ -24,9 +24,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         private static Doc Print(InitializerExpressionSyntax node, string? groupId)
         {
             var result = Doc.Concat(
-                groupId != null
-                    ? Doc.IfBreak(" ", Doc.Line, groupId)
-                    : Doc.Null,
+                groupId != null ? Doc.IfBreak(" ", Doc.Line, groupId) : Doc.Null,
                 Token.Print(node.OpenBraceToken),
                 Doc.Indent(
                     Doc.Line,
