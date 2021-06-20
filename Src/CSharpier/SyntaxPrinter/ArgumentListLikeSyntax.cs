@@ -15,12 +15,14 @@ namespace CSharpier.SyntaxPrinter
             Doc.Concat(
                 Token.Print(openParenToken),
                 arguments.Any()
-                    ? Doc.Indent(
-                            Doc.SoftLine,
-                            SeparatedSyntaxList.Print(arguments, Argument.Print, Doc.Line)
+                    ? Doc.Concat(
+                            Doc.Indent(
+                                Doc.SoftLine,
+                                SeparatedSyntaxList.Print(arguments, Argument.Print, Doc.Line)
+                            ),
+                            Doc.SoftLine
                         )
                     : Doc.Null,
-                arguments.Any() ? Doc.SoftLine : Doc.Null,
                 Token.Print(closeParenToken)
             );
     }

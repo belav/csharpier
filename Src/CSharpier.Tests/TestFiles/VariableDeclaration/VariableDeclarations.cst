@@ -25,13 +25,20 @@ class ClassName
         var captureUnmatchedValuesParameters______________________________ =
             new List<IPropertySymbol>();
 
+        Func<SyntaxTrivia, bool> s_isVisualBasicCommentTrivia = (syntaxTrivia) =>
+            syntaxTrivia.IsKind(VisualBasic.SyntaxKind.CommentTrivia);
+
         Func<SyntaxTrivia, bool> s_isVisualBasicCommentTrivia = (
-            syntaxTrivia
+            syntaxTrivia_________________________________
         ) => syntaxTrivia.IsKind(VisualBasic.SyntaxKind.CommentTrivia);
 
-        Action find = () => EntryPointDiscoverer.FindStaticEntryMethod(
-            typeof(IEnumerable<>).Assembly
-        );
+        Action find = () =>
+            EntryPointDiscoverer.FindStaticEntryMethod(typeof(IEnumerable<>).Assembly);
+
+        Action find = () =>
+            EntryPointDiscoverer.FindStaticEntryMethod(
+                typeof(IEnumerable<>).Assembly_________________________________________
+            );
 
         var arrayCreationExpression1 = new byte[100];
         var arrayCreationExpression2 = new byte[

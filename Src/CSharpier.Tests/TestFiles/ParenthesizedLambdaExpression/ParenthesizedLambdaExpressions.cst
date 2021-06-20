@@ -14,10 +14,16 @@ public class ClassName
         this.Where(static () => true);
         this.Where(async static () => true);
         this.SomeMethod(
+            (longParameter__________________, longParameter_________________) =>
+                longParameter________________
+        );
+
+        this.SomeMethod(
             (
-                a11111111111111111111111111111,
-                b222222222222222222222222222222
-            ) => someLongNameThatWillDoStuff
+                longerParameter_________________________,
+                longerParameter_________________________,
+                longerParameter_________________________
+            ) => evenLongerParameter
         );
 
         var task = Task.Factory.StartNew(
@@ -29,9 +35,8 @@ public class ClassName
             }
         );
 
-        Action find = () => EntryPointDiscoverer.FindStaticEntryMethod(
-            typeof(IEnumerable<>).Assembly
-        );
+        Action find = () =>
+            EntryPointDiscoverer.FindStaticEntryMethod(typeof(IEnumerable<>).Assembly);
 
         var @delegate = (Action<string>)((s) => { });
 
@@ -53,5 +58,15 @@ public class ClassName
                 }
             )
         };
+
+        CallSomeMethod(
+            () =>
+                CallAnotherMethodWithParameters(
+                    someParameter,
+                    someParameter___________________________________
+                )
+                > someValue,
+            anotherParameter
+        );
     }
 }
