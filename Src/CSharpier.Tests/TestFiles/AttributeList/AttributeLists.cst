@@ -59,8 +59,10 @@ class ClassName
 
     public void MethodName(
         int someParameter,
-        [LongAttributeName(SomeFlag.SomeValue)]
-        AnotherObject anotherObject
+        [ShortAttributeName] AnotherObject anotherObject,
+        [VeryLongAttributeName(SomeFlag.SomeValue, SomeOtherFlag.SomeOtherLongValue)]
+            string tabbedBreakParameter,
+        bool anotherParameter
     ) {
         return;
     }

@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -10,24 +10,37 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ParameterSyntax node)
         {
+            var hasAttribute = node.AttributeLists.Any();
+            var groupId = hasAttribute ? Guid.NewGuid().ToString() : string.Empty;
             var docs = new List<Doc>
             {
                 AttributeLists.Print(node, node.AttributeLists),
-                node.AttributeLists.Any() ? Doc.Line : Doc.Null,
+                hasAttribute ? Doc.IndentIfBreak(Doc.Line, groupId) : Doc.Null,
                 Modifiers.Print(node.Modifiers)
             };
+
+            var paramDocs = new List<Doc>();
             if (node.Type != null)
             {
-                docs.Add(Node.Print(node.Type), " ");
+                paramDocs.Add(Node.Print(node.Type), " ");
             }
 
-            docs.Add(Token.Print(node.Identifier));
+            paramDocs.Add(Token.Print(node.Identifier));
             if (node.Default != null)
             {
-                docs.Add(EqualsValueClause.Print(node.Default));
+                paramDocs.Add(EqualsValueClause.Print(node.Default));
             }
 
-            return Doc.Concat(docs);
+            if (hasAttribute)
+            {
+                docs.Add(Doc.Concat(paramDocs));
+                return Doc.Concat(Doc.GroupWithId(groupId, docs.ToArray()));
+            }
+            else
+            {
+                docs.AddRange(paramDocs);
+                return Doc.Concat(docs);
+            }
         }
     }
 }
