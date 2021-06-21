@@ -77,18 +77,12 @@ namespace CSharpier.SyntaxPrinter
                 docs.Add(suffixDoc);
             }
 
-            if (docs.Count == 0)
+            return docs.Count switch
             {
-                return Doc.Null;
-            }
-            else if (docs.Count == 1)
-            {
-                return docs.First();
-            }
-            else
-            {
-                return Doc.Concat(docs);
-            }
+                <= 0 => Doc.Null,
+                1 => docs.First(),
+                _ => Doc.Concat(docs)
+            };
         }
 
         public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
