@@ -5,6 +5,17 @@ class ClassName
         checked
         {
             checked(++i);
+
+            checked(printsLikeInvocations + whenItsFlat);
+
+            checked(
+                printsLikeInvocations + whenItBreaks______________________________________________
+            );
+
+            checked(
+                printsLikeInvocations
+                + whenItLongBreaks_______________________________________________
+            );
         }
     }
 }
