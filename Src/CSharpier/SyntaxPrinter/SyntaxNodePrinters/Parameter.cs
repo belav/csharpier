@@ -34,7 +34,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (hasAttribute)
             {
                 docs.Add(Doc.Concat(paramDocs));
-                return Doc.Concat(Doc.GroupWithId(groupId, docs.ToArray()));
+                return Doc.GroupWithId(groupId, docs.ToArray());
             }
             else
             {
