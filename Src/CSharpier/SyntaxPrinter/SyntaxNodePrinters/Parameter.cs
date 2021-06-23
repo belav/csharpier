@@ -19,28 +19,18 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Modifiers.Print(node.Modifiers)
             };
 
-            var paramDocs = new List<Doc>();
             if (node.Type != null)
             {
-                paramDocs.Add(Node.Print(node.Type), " ");
+                docs.Add(Node.Print(node.Type), " ");
             }
 
-            paramDocs.Add(Token.Print(node.Identifier));
+            docs.Add(Token.Print(node.Identifier));
             if (node.Default != null)
             {
-                paramDocs.Add(EqualsValueClause.Print(node.Default));
+                docs.Add(EqualsValueClause.Print(node.Default));
             }
 
-            if (hasAttribute)
-            {
-                docs.Add(Doc.Concat(paramDocs));
-                return Doc.GroupWithId(groupId, docs.ToArray());
-            }
-            else
-            {
-                docs.AddRange(paramDocs);
-                return Doc.Concat(docs);
-            }
+            return hasAttribute ? Doc.GroupWithId(groupId, docs) : Doc.Concat(docs);
         }
     }
 }
