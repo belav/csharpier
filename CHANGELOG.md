@@ -1,3 +1,24 @@
+# 0.9.7
+
+[diff](https://github.com/belav/csharpier/compare/0.9.6...0.9.7)
+
+- New overload for `Doc.GroupWithId()` [#334](https://github.com/belav/csharpier/issues/334)
+- Improve formatting by grouping parenthesized expressions and indenting them if they break. [#328](https://github.com/belav/csharpier/issues/328)
+- Improve formatting of IsPattern in IfStatement [#327](https://github.com/belav/csharpier/issues/327)
+- Improve formatting of the condition in a do-while [#326](https://github.com/belav/csharpier/issues/326)
+- Always break statements without braces. [#303](https://github.com/belav/csharpier/issues/303)
+- Empty Line being added with Array Type [#301](https://github.com/belav/csharpier/issues/301)
+- Implicit Array Initializer does not format braces consistently with other statements. [#297](https://github.com/belav/csharpier/issues/297)
+- Format checked like a invocation expression with an argument list [#270](https://github.com/belav/csharpier/issues/270)
+- Attribute should newline before close paren [#257](https://github.com/belav/csharpier/issues/257)
+- Tuple with VariableDeclaration [#251](https://github.com/belav/csharpier/issues/251)
+- Record - does not format consistently with a class. [#233](https://github.com/belav/csharpier/issues/233)
+- CSharpier.Playground should only publish with new released version [#224](https://github.com/belav/csharpier/issues/224)
+- Attributes on parameters [#204](https://github.com/belav/csharpier/issues/204)
+- Improve Lambda Formatting - indent expression body and break in a way to minimize new lines. [#176](https://github.com/belav/csharpier/issues/176)
+- Format ObjectCreationExpression with Initializer consistently [#113](https://github.com/belav/csharpier/issues/113)
+- Improve formatting of long Catch Clauses [#86](https://github.com/belav/csharpier/issues/86)
+
 # 0.9.6
 
 [diff](https://github.com/belav/csharpier/compare/0.9.5...0.9.6)
