@@ -14,19 +14,23 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Modifiers.Print(node.Modifiers),
                 ParameterList.Print(node.ParameterList),
                 " ",
-                Token.PrintWithSuffix(
-                    node.ArrowToken,
-                    node.Block
-                        is not null
-                            and { Statements: { Count: > 0 } } ? Doc.HardLine : " "
-                )
+                Token.Print(node.ArrowToken)
             };
             if (node.ExpressionBody != null)
             {
-                docs.Add(Node.Print(node.ExpressionBody));
+                docs.Add(Doc.Group(Doc.Indent(Doc.Line, Node.Print(node.ExpressionBody))));
             }
             else if (node.Block != null)
             {
+                if (node.Block.Statements.Count > 0)
+                {
+                    docs.Add(Doc.HardLine);
+                }
+                else
+                {
+                    docs.Add(" ");
+                }
+
                 docs.Add(Block.Print(node.Block));
             }
 
