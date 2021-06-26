@@ -94,8 +94,7 @@ namespace CSharpier.DocPrinter
 
                             // when determining if something fits, use the last option from a conditionalGroup, which should be the most expanded one
                             var groupContents = groupMode == PrintMode.Break
-                            && group
-                                is ConditionalGroup conditionalGroup
+                            && group is ConditionalGroup conditionalGroup
                                 ? conditionalGroup.Options.Last()
                                 : group.Contents;
                             Push(groupContents, groupMode, currentIndent);

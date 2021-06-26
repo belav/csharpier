@@ -11,8 +11,7 @@ namespace CSharpier.SyntaxPrinter
     {
         public static Doc Print(StatementSyntax node, string? groupId = null)
         {
-            return node
-                is BlockSyntax blockSyntax
+            return node is BlockSyntax blockSyntax
                 ? groupId == null
                         ? Block.Print(blockSyntax)
                         : Block.PrintWithConditionalSpace(blockSyntax, groupId)

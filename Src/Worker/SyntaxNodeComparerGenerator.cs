@@ -14,7 +14,8 @@ namespace Worker
     {
         [Test]
         [Ignore(
-            "Run manually to update SyntaxNodeComparerGenerator.generated.cs. Then run csharpier on the result")]
+            "Run manually to update SyntaxNodeComparerGenerator.generated.cs. Then run csharpier on the result"
+        )]
         public void DoWork()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
@@ -131,8 +132,10 @@ namespace CSharpier
                 if (
                     Ignored.Properties.Contains(camelCaseName)
                     || Ignored.Types.Contains(propertyType)
-                    || (Ignored.PropertiesByType.ContainsKey(type)
-                    && Ignored.PropertiesByType[type].Contains(camelCaseName))
+                    || (
+                        Ignored.PropertiesByType.ContainsKey(type)
+                        && Ignored.PropertiesByType[type].Contains(camelCaseName)
+                    )
                 ) {
                     continue;
                 }
@@ -168,8 +171,10 @@ namespace CSharpier
                 }
                 else if (
                     propertyType == typeof(SyntaxTokenList)
-                    || (propertyType.IsGenericType
-                    && propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>))
+                    || (
+                        propertyType.IsGenericType
+                        && propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>)
+                    )
                 ) {
                     var compare = propertyType == typeof(SyntaxTokenList) ? "Compare" : "null";
                     file.WriteLine(

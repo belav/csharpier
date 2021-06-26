@@ -72,11 +72,11 @@ namespace CSharpier
                 );
 
                 var ignoreFile = await IgnoreFile.Create(
-                        baseDirectoryPath,
-                        fileSystem,
-                        console,
-                        cancellationToken
-                    );
+                    baseDirectoryPath,
+                    fileSystem,
+                    console,
+                    cancellationToken
+                );
                 if (ignoreFile is null)
                 {
                     return null;
