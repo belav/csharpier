@@ -76,4 +76,111 @@ class ClassName
                 throw new NotImplementedException();
             }
         );
+
+    public void MapFrom<TResult>(Func<TSource, TDestination, TMember, TResult> mappingFunction)
+    {
+        if (true)
+        {
+            PropertyMapActions.Add(
+                pm =>
+                {
+                    Expression<Func<
+                            TSource,
+                            TDestination,
+                            TMember,
+                            ResolutionContext,
+                            TResult
+                        >> expr = (src, dest, destMember, ctxt) =>
+                        mappingFunction(src, dest, destMember);
+
+                    pm.CustomMapFunction = expr;
+                }
+            );
+        }
+    }
+
+    public void Condition(
+        Func<ConditionParameters<TSource, TDestination, TMember>, bool> condition
+    ) =>
+        PathMapActions.Add(
+            pm =>
+            {
+                Expression<Func<
+                        TSource,
+                        TDestination,
+                        TMember,
+                        TMember,
+                        ResolutionContext,
+                        bool
+                    >> expr = (src, dest, srcMember, destMember, ctxt) =>
+                    condition(
+                        new ConditionParameters<TSource, TDestination, TMember>(
+                            src,
+                            dest,
+                            srcMember,
+                            destMember,
+                            ctxt
+                        )
+                    );
+                pm.Condition = expr;
+            }
+        );
+
+    public override Type SourceType
+    {
+        get =>
+            _sourceType ??=
+                CustomMapExpression?.ReturnType
+                ?? CustomMapFunction?.ReturnType
+                ?? (
+                    _sourceMembers.Length > 0
+                        ? _sourceMembers[_sourceMembers.Length - 1].GetMemberType()
+                        : Parameter.ParameterType
+                );
+        protected set => _sourceType = value;
+    }
+
+    public static Expression IfNullElse(
+        this Expression expression,
+        Expression then,
+        Expression @else
+    ) =>
+        expression.Type.IsValueType
+            ? (
+                    expression.Type.IsNullableType()
+                        ? Condition(
+                                Property(expression, "HasValue"),
+                                ToType(@else, then.Type),
+                                then
+                            )
+                        : @else
+                )
+            : Condition(ReferenceEqual(expression, Null), then, ToType(@else, then.Type));
+
+    private bool VisitChildForCompare(Pair<XmlNode> tuple, ref int result)
+    {
+        int r;
+        return 0
+            != (
+                result = (null == tuple.Item1)
+                    ? -1
+                    : (null == tuple.Item2)
+                            ? +1
+                            : 0
+                                != (
+                                    r = comparer.Compare(
+                                        tuple.Item1.LocalName,
+                                        tuple.Item2.LocalName
+                                    )
+                                )
+                                    ? r
+                                    : 0
+                                        != (
+                                            r = comparer.Compare(
+                                                tuple.Item1.NamespaceURI,
+                                                tuple.Item2.NamespaceURI
+                                            )
+                                        ) ? r : 0
+            );
+    }
 }
