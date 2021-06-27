@@ -60,7 +60,8 @@ namespace CSharpier
             var message =
                 $"----------------------------- Original: {GetLine(result.OriginalSpan, this.OriginalSyntaxTree, this.OriginalSourceCode)}";
 
-            message += $"----------------------------- Formatted: {GetLine(result.NewSpan, this.NewSyntaxTree, this.NewSourceCode)}";
+            message +=
+                $"----------------------------- Formatted: {GetLine(result.NewSpan, this.NewSyntaxTree, this.NewSourceCode)}";
             return message;
         }
 
@@ -147,10 +148,8 @@ namespace CSharpier
                 }
 
                 if (
-                    originalList[x]
-                        is SyntaxNode originalNode
-                    && formattedList[x]
-                        is SyntaxNode formattedNode
+                    originalList[x] is SyntaxNode originalNode
+                    && formattedList[x] is SyntaxNode formattedNode
                 ) {
                     originalStack.Push((originalNode, originalNode.Parent));
                     formattedStack.Push((formattedNode, formattedNode.Parent));
@@ -234,9 +233,7 @@ namespace CSharpier
                     result = list[next];
                     next++;
                 }
-                while (result.Kind()
-                    is SyntaxKind.EndOfLineTrivia
-                        or SyntaxKind.WhitespaceTrivia);
+                while (result.Kind() is SyntaxKind.EndOfLineTrivia or SyntaxKind.WhitespaceTrivia);
 
                 return result;
             }

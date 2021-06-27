@@ -32,7 +32,8 @@ namespace CSharpier
                 new Argument<string[]>("directoryOrFile")
                 {
                     Arity = ArgumentArity.ZeroOrMore,
-                    Description = "One or more paths to a directory containing files to format or a file to format. If a path is not specified the current directory is used"
+                    Description =
+                        "One or more paths to a directory containing files to format or a file to format. If a path is not specified the current directory is used"
                 }.LegalFilePathsOnly(),
                 new Option(
                     new[] { "--check" },

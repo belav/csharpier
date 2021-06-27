@@ -105,7 +105,8 @@ namespace CSharpier.Tests
         [TestCase("Debug/Logs/File.cs", "Debug/Logs/File.cs")]
         [TestCase(
             @"\Src\CSharpier.Playground\App_Data\Uploads\f45e11a81b926de2af29459af6974bb8.cs",
-            "Uploads/")]
+            "Uploads/"
+        )]
         public void File_In_Ignore_Skips_Formatting(string fileName, string ignoreContents)
         {
             var unformattedFilePath = fileName;
@@ -237,7 +238,8 @@ namespace CSharpier.Tests
             }
 
             var fakeConsole = new TestConsole();
-            var result = CommandLineFormatter.Format(
+            var result =
+                CommandLineFormatter.Format(
                     new CommandLineOptions
                     {
                         DirectoryOrFilePaths = directoryOrFilePaths,

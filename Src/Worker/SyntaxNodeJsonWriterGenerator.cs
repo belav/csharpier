@@ -16,7 +16,8 @@ namespace Worker
 
         [Test]
         [Ignore(
-            "Run this manually if you need to regenerate the SyntaxNodeJsonWriter.generated.cs file. Then run csharpier on the result")]
+            "Run this manually if you need to regenerate the SyntaxNodeJsonWriter.generated.cs file. Then run csharpier on the result"
+        )]
         public void DoWork()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
@@ -110,8 +111,10 @@ namespace Worker
                 if (
                     Ignored.Properties.Contains(camelCaseName)
                     || Ignored.Types.Contains(propertyType)
-                    || (Ignored.PropertiesByType.ContainsKey(type)
-                    && Ignored.PropertiesByType[type].Contains(camelCaseName))
+                    || (
+                        Ignored.PropertiesByType.ContainsKey(type)
+                        && Ignored.PropertiesByType[type].Contains(camelCaseName)
+                    )
                 ) {
                     continue;
                 }
@@ -169,9 +172,14 @@ namespace Worker
                     file.WriteLine("            }");
                 }
                 else if (
-                    (propertyType.IsGenericType
-                    && (propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>)
-                    || propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)))
+                    (
+                        propertyType.IsGenericType
+                        && (
+                            propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>)
+                            || propertyType.GetGenericTypeDefinition()
+                            == typeof(SeparatedSyntaxList<>)
+                        )
+                    )
                     || propertyType == typeof(SyntaxTokenList)
                     || propertyType == typeof(SyntaxTriviaList)
                 ) {

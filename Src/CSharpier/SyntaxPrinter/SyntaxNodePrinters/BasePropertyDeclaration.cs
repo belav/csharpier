@@ -21,14 +21,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 expressionBody = propertyDeclarationSyntax.ExpressionBody;
                 initializer = propertyDeclarationSyntax.Initializer;
-                explicitInterfaceSpecifierSyntax = propertyDeclarationSyntax.ExplicitInterfaceSpecifier;
+                explicitInterfaceSpecifierSyntax =
+                    propertyDeclarationSyntax.ExplicitInterfaceSpecifier;
                 identifier = Token.Print(propertyDeclarationSyntax.Identifier);
                 semicolonToken = propertyDeclarationSyntax.SemicolonToken;
             }
             else if (node is IndexerDeclarationSyntax indexerDeclarationSyntax)
             {
                 expressionBody = indexerDeclarationSyntax.ExpressionBody;
-                explicitInterfaceSpecifierSyntax = indexerDeclarationSyntax.ExplicitInterfaceSpecifier;
+                explicitInterfaceSpecifierSyntax =
+                    indexerDeclarationSyntax.ExplicitInterfaceSpecifier;
                 identifier = Doc.Concat(
                     Token.Print(indexerDeclarationSyntax.ThisKeyword),
                     Node.Print(indexerDeclarationSyntax.ParameterList)
@@ -38,7 +40,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             else if (node is EventDeclarationSyntax eventDeclarationSyntax)
             {
                 eventKeyword = Token.PrintWithSuffix(eventDeclarationSyntax.EventKeyword, " ");
-                explicitInterfaceSpecifierSyntax = eventDeclarationSyntax.ExplicitInterfaceSpecifier;
+                explicitInterfaceSpecifierSyntax =
+                    eventDeclarationSyntax.ExplicitInterfaceSpecifier;
                 identifier = Token.Print(eventDeclarationSyntax.Identifier);
                 semicolonToken = eventDeclarationSyntax.SemicolonToken;
             }

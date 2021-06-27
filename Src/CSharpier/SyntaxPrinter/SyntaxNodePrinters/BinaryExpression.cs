@@ -49,8 +49,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     // precedence level and should be treated as a separate group, so
                     // print them normally.
                     if (
-                        binaryExpressionSyntax.Left
-                            is BinaryExpressionSyntax left
+                        binaryExpressionSyntax.Left is BinaryExpressionSyntax left
                         && ShouldFlatten(binaryExpressionSyntax.OperatorToken, left.OperatorToken)
                     ) {
                         docs.AddRange(PrintBinaryExpression(left));

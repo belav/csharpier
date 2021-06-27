@@ -26,8 +26,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Token.Print(node.CloseParenToken),
                     Doc.IfBreak(Doc.Null, Doc.SoftLine)
                 ),
-                node.Statement
-                    is BlockSyntax blockSyntax
+                node.Statement is BlockSyntax blockSyntax
                     ? Block.PrintWithConditionalSpace(blockSyntax, groupId)
                     : Node.Print(node.Statement)
             );

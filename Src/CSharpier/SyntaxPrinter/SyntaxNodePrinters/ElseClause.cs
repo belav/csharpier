@@ -12,8 +12,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Concat(
                 Token.Print(node.ElseKeyword),
-                node.Statement
-                    is IfStatementSyntax ifStatementSyntax
+                node.Statement is IfStatementSyntax ifStatementSyntax
                     ? Doc.Concat(" ", IfStatement.Print(ifStatementSyntax))
                     : OptionalBraces.Print(node.Statement)
             );

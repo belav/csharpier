@@ -12,8 +12,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 ExtraNewLines.Print(node),
                 Token.PrintWithSuffix(
                     node.DoKeyword,
-                    node.Statement
-                        is not BlockSyntax ? " " : Doc.Null
+                    node.Statement is not BlockSyntax ? " " : Doc.Null
                 ),
                 Node.Print(node.Statement),
                 Doc.HardLine,

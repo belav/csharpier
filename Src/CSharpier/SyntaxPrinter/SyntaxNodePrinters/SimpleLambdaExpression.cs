@@ -13,8 +13,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Node.Print(node.Parameter),
                 " ",
                 Token.Print(node.ArrowToken),
-                node.Body
-                    is BlockSyntax blockSyntax
+                node.Body is BlockSyntax blockSyntax
                     ? Block.Print(blockSyntax)
                     : Doc.Indent(Doc.Line, Node.Print(node.Body))
             );
