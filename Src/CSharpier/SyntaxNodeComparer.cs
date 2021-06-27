@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CSharpier.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 namespace CSharpier
@@ -189,7 +191,11 @@ namespace CSharpier
             SyntaxNode? originalNode,
             SyntaxNode? formattedNode
         ) {
-            if (originalToken.Text != formattedToken.Text)
+            // when a verbatim string contains mismatched line endings they will become consistent
+            // this validation will fail unless we also get them consistent here
+            // adding a semi-complicated if check to determine when to do the string replacement
+            // did not appear to have any performance benefits
+            if (originalToken.Text.Replace("\r", "") != formattedToken.Text.Replace("\r", ""))
             {
                 return NotEqual(
                     originalToken.RawKind == 0 ? originalNode?.Span : originalToken.Span,
