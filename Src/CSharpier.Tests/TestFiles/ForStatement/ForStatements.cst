@@ -25,11 +25,11 @@ class ClassName
             Call(SomeLongerValue);
 
         for (
-            var someLongerValue11111111111 = 0;
-            someLongerValue11111111111 < 1;
-            someLongerValue11111111111++
+            var someLongerValue__________ = 0;
+            someLongerValue__________ < 1;
+            someLongerValue__________++
         )
-            Call(someLongerValue11111111111);
+            Call(someLongerValue__________);
 
         for (int i = 0, j = 0; i < length; i++, j++)
         {
@@ -37,21 +37,28 @@ class ClassName
         }
 
         for (
-            var laksdflasdjfkaskdlfklasdfkljasdf = 0;
-            laksdflasdjfkaskdlfklasdfkljasdf_____________________
-            < laksdflasdjfkaskdlfklasdfkljasdf + 1;
-            laksdflasdjfkaskdlfklasdfkljasdf++
+            var shorterName = 0;
+            someLongName____________
+            < someOtherLongName__________________________________________________;
+            someLongishName_________________________++
         ) {
             break;
         }
 
         for (
-            var laksdflasdjfkaskdlfklasdfkljasdf = 0,
-                lkasdfkjlasjldkfljaskdflkasdfljkasdfljk = 1;
-            laksdflasdjfkaskdlfklasdfkljasdf______________________
-            < laksdflasdjfkaskdlfklasdfkljasdf + 1;
-            laksdflasdjfkaskdlfklasdfkljasdf++,
-                lkasdfkjlasjldkfljaskdflkasdfljkasdfljk
+            var someShortName = 0, anotherShortName = 1;
+            someRandomCondition;
+            someShortName++, anotherShortName++
+        ) {
+            break;
+        }
+
+        for (
+            var someLongerName_________________________ = 0,
+                anotherLongerName________________________________ = 1;
+            someRandomCondition;
+            someLongerName_________________________++,
+                anotherLongerName________________________________++
         ) {
             break;
         }
