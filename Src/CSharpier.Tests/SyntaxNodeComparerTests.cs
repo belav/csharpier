@@ -274,6 +274,24 @@ public class ClassName { }
             );
         }
 
+        [TestCase("@")]
+        [TestCase("@$")]
+        [TestCase("$@")]
+        public void Mismatched_Line_Endings_In_Verbatim_String_Should_Not_Print_Error(string start)
+        {
+            var left =
+                "public class ClassName\n{\npublic string Value = "
+                + start
+                + "\"EndThisLineWith\r\nEndThisLineWith\n\";\n}";
+            var right =
+                "public class ClassName\n{\npublic string Value = "
+                + start
+                + "\"EndThisLineWith\nEndThisLineWith\n\";\n}";
+
+            var result = this.AreEqual(left, right);
+            result.Should().BeEmpty();
+        }
+
         private void ResultShouldBe(string result, string be)
         {
             if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)

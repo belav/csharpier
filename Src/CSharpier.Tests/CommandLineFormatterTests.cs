@@ -218,6 +218,19 @@ namespace CSharpier.Tests
             lines.First().Should().Be(FormattedClassContent);
         }
 
+        [Test]
+        public void File_With_Mismatched_Line_Endings_In_Verbatim_String_Should_Pass_Validation()
+        {
+            WhenAFileExists(
+                "file1.cs",
+                "public class ClassName\n{\npublic string Value = @\"EndThisLineWith\r\nEndThisLineWith\n\";\n}"
+            );
+
+            var (exitCode, _) = this.Format();
+
+            exitCode.Should().Be(0);
+        }
+
         private (int exitCode, IList<string> lines) Format(
             bool skipWrite = false,
             bool check = false,
