@@ -14,35 +14,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             var groupId = Guid.NewGuid().ToString();
 
-            var innerGroup = new List<Doc> { Doc.SoftLine };
-            if (node.Declaration != null)
-            {
-                innerGroup.Add(VariableDeclaration.Print(node.Declaration));
-            }
-            innerGroup.Add(SeparatedSyntaxList.Print(node.Initializers, Node.Print, " "));
-            innerGroup.Add(Token.Print(node.FirstSemicolonToken));
-            if (node.Condition != null)
-            {
-                innerGroup.Add(Doc.Line, Node.Print(node.Condition));
-            }
-            else
-            {
-                innerGroup.Add(Doc.SoftLine);
-            }
-
-            innerGroup.Add(Token.Print(node.SecondSemicolonToken));
-            if (node.Incrementors.Any())
-            {
-                innerGroup.Add(Doc.Line);
-            }
-            else
-            {
-                innerGroup.Add(Doc.SoftLine);
-            }
-            innerGroup.Add(
-                Doc.Indent(SeparatedSyntaxList.Print(node.Incrementors, Node.Print, Doc.Line))
-            );
-
             var docs = new List<Doc>
             {
                 ExtraNewLines.Print(node),
@@ -52,7 +23,34 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         Token.PrintWithoutLeadingTrivia(node.ForKeyword),
                         " ",
                         Token.Print(node.OpenParenToken),
-                        Doc.GroupWithId(groupId, Doc.Indent(innerGroup), Doc.SoftLine),
+                        Doc.GroupWithId(
+                            groupId,
+                            Doc.Indent(
+                                Doc.SoftLine,
+                                Doc.Group(
+                                    node.Declaration != null
+                                        ? VariableDeclaration.Print(node.Declaration)
+                                        : Doc.Null,
+                                    SeparatedSyntaxList.Print(node.Initializers, Node.Print, " "),
+                                    Token.Print(node.FirstSemicolonToken)
+                                ),
+                                node.Condition != null
+                                    ? Doc.Concat(Doc.Line, Node.Print(node.Condition))
+                                    : Doc.SoftLine,
+                                Token.Print(node.SecondSemicolonToken),
+                                node.Incrementors.Any() ? Doc.Line : Doc.SoftLine,
+                                Doc.Group(
+                                    Doc.Indent(
+                                        SeparatedSyntaxList.Print(
+                                            node.Incrementors,
+                                            Node.Print,
+                                            Doc.Line
+                                        )
+                                    )
+                                )
+                            ),
+                            Doc.SoftLine
+                        ),
                         Token.Print(node.CloseParenToken),
                         Doc.IfBreak(Doc.Null, Doc.SoftLine)
                     ),
