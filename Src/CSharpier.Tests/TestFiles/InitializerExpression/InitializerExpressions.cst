@@ -74,6 +74,14 @@ class ClassName
             }
         };
 
+        var someObject = new SomeObject
+        {
+            SomeProperty =
+            {
+                someOtherValue__________________________________________________________________
+            }
+        };
+
         var collectionInitializerExpressions = new SomeObject
         {
             ThisIsACollection = { one, two },
