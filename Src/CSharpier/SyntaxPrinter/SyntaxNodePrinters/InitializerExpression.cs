@@ -21,10 +21,20 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Print(node, groupId);
         }
 
-        private static Doc Print(InitializerExpressionSyntax node, string? groupId)
+        public static Doc PrintWithLine(InitializerExpressionSyntax node)
         {
+            return Print(node, null, true);
+        }
+
+        private static Doc Print(
+            InitializerExpressionSyntax node,
+            string? groupId,
+            bool useLine = false
+        ) {
             var result = Doc.Concat(
-                groupId != null ? Doc.IfBreak(" ", Doc.Line, groupId) : Doc.Null,
+                groupId != null
+                    ? Doc.IfBreak(" ", Doc.Line, groupId)
+                    : useLine ? Doc.Line : Doc.Null,
                 Token.Print(node.OpenBraceToken),
                 Doc.Indent(
                     Doc.Line,
