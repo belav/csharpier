@@ -24,12 +24,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         )
                     : Doc.Null,
                 node.Initializer != null
-                    ? node.ArgumentList != null
-                            ? InitializerExpression.PrintWithConditionalSpace(
-                                    node.Initializer,
-                                    groupId
-                                )
-                            : Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer))
+                    ? Doc.Concat(
+                            node.ArgumentList != null
+                                ? Doc.IfBreak(" ", Doc.Line, groupId)
+                                : Doc.Line,
+                            InitializerExpression.Print(node.Initializer)
+                        )
                     : Doc.Null
             );
         }
