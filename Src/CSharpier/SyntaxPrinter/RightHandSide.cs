@@ -13,7 +13,7 @@ namespace CSharpier.SyntaxPrinter
             var groupId = Guid.NewGuid().ToString();
             return node switch
             {
-                InitializerExpressionSyntax initializerExpressionSyntax => InitializerExpression.PrintWithLine(
+                InitializerExpressionSyntax initializerExpressionSyntax => InitializerExpression.Print(
                     initializerExpressionSyntax
                 ),
                 InvocationExpressionSyntax
@@ -21,7 +21,6 @@ namespace CSharpier.SyntaxPrinter
                 or ObjectCreationExpressionSyntax
                 or ElementAccessExpressionSyntax
                 or ArrayCreationExpressionSyntax
-                or InitializerExpressionSyntax
                 or ImplicitArrayCreationExpressionSyntax => Doc.Group(
                     Doc.GroupWithId(groupId, Doc.Indent(Doc.Line)),
                     Doc.IndentIfBreak(Doc.Group(Node.Print(node)), groupId)

@@ -21,20 +21,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Print(node, groupId);
         }
 
-        public static Doc PrintWithLine(InitializerExpressionSyntax node)
+        private static Doc Print(InitializerExpressionSyntax node, string? groupId)
         {
-            return Print(node, null, true);
-        }
+            Doc separator = node.Parent is AssignmentExpressionSyntax or EqualsValueClauseSyntax
+                ? Doc.Line
+                : Doc.Null;
 
-        private static Doc Print(
-            InitializerExpressionSyntax node,
-            string? groupId,
-            bool useLine = false
-        ) {
             var result = Doc.Concat(
-                groupId != null
-                    ? Doc.IfBreak(" ", Doc.Line, groupId)
-                    : useLine ? Doc.Line : Doc.Null,
+                groupId != null ? Doc.IfBreak(" ", Doc.Line, groupId) : separator,
                 Token.Print(node.OpenBraceToken),
                 Doc.Indent(
                     Doc.Line,
