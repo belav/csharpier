@@ -2,7 +2,8 @@ class ClassName
 {
     int[] array = { 1, 2 };
 
-    int[] array = {
+    int[] array =
+    {
         "someLongValue_____________________________________",
         "someLongValue_____________________________________"
     };
@@ -32,7 +33,8 @@ class ClassName
         }
     };
 
-    private int[,] arrayInitializerWithoutSize = {
+    private int[,] arrayInitializerWithoutSize =
+    {
         // leading comment should not interfere with the next line breaking
         {
             longValue______________________________,
@@ -56,7 +58,28 @@ class ClassName
 
         var objectInitializerExpression = new SomeObject()
         {
-            ShouldNotBreak = { SecurePolicy = CookieSecurePolicy.Always }
+            ShouldNotBreak = { SomeProperty = SomeValue },
+            ShouldBreak =
+            {
+                SomeOtherProperty = SomeLongValue_______________________________________
+            },
+            SomeList = new List<SomeObject>()
+            {
+                new() { SomeProperty = SomeLongValue_____________ },
+                new()
+                {
+                    SomeProperty = SomeOtherValue,
+                    AnotherProperty = SomeThirdValue_______________________
+                }
+            }
+        };
+
+        var someObject = new SomeObject
+        {
+            SomeProperty =
+            {
+                someOtherValue__________________________________________________________________
+            }
         };
 
         var collectionInitializerExpressions = new SomeObject
