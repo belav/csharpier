@@ -3,6 +3,7 @@
 # Long term this process can probably go away, but for now it is a tolerable way to find edge cases or bugs that are introduced
 
 param (
+    [Parameter(Mandatory=$true)]
     [string]$version
 )
 
