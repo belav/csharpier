@@ -1,12 +1,8 @@
 name: Deploy Playground
-#on:
-#  push:
-#    tags:
-#      - "*"
 on:
   push:
-    branches:
-      - master
+    tags:
+      - "*"
 
 jobs:
   deploy:
