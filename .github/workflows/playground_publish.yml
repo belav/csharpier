@@ -1,8 +1,12 @@
-name: Publish Playground
+name: Deploy Playground
+#on:
+#  push:
+#    tags:
+#      - "*"
 on:
   push:
-    tags:
-      - "*"
+    branches:
+      - master
 
 jobs:
   deploy:

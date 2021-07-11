@@ -48,14 +48,6 @@ namespace CSharpier.Playground.Controllers
         [HttpPost]
         public FormatResult Post([FromBody] string content)
         {
-            var filePath = Path.Combine(
-                this.webHostEnvironment.ContentRootPath,
-                "App_Data",
-                "Uploads",
-                content.CalculateHash() + ".cs"
-            );
-            new FileInfo(filePath).EnsureDirectoryExists();
-            this.WriteAllText(filePath, content);
             var result = new CodeFormatter().Format(
                 content,
                 new PrinterOptions
@@ -65,9 +57,6 @@ namespace CSharpier.Playground.Controllers
                     Width = PrinterOptions.WidthUsedByTests
                 }
             );
-
-            var formattedFilePath = filePath.Replace(".cs", ".Formatted.cs");
-            this.WriteAllText(formattedFilePath, result.Code);
 
             return new FormatResult
             {
