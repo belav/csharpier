@@ -22,7 +22,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             node.Arms,
                             o =>
                                 Doc.Group(
-                                    Doc.Indent(Node.Print(o.Pattern)),
+                                    Node.Print(o.Pattern),
                                     o.WhenClause != null
                                         ? Doc.Concat(" ", Node.Print(o.WhenClause))
                                         : Doc.Null,
@@ -33,7 +33,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                         Doc.Concat(
                                             Doc.Line,
                                             Token.PrintWithSuffix(o.EqualsGreaterThanToken, " "),
-                                            Doc.Align(2, Node.Print(o.Expression))
+                                            Node.Print(o.Expression)
                                         )
                                     )
                                 ),

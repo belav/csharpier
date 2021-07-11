@@ -22,21 +22,24 @@ class ClassName
         return someValue switch
         {
             SomeSimpleObject => DoSomething(),
+            { IsParameter: true } => 1,
+            // this comment shouldn't affect the next line
+            { IsParameter: false } => 0,
             SomeLongObject someLongObject
               => CallSomeMethodWith____________________________(someLongObject),
             YetAnotherObject
               => CallSomeMethod(
-                    someValue,
-                    andOtherParameters,
-                    thatMakeThisLongEnoughToBreak___________________
-                ),
+                  someValue,
+                  andOtherParameters,
+                  thatMakeThisLongEnoughToBreak___________________
+              ),
             OneMore
               => "someStrings"
-                + "moreStrings"
-                + "andMoreStrings_________________________________________",
+              + "moreStrings"
+              + "andMoreStrings_________________________________________",
             SomeOtherObject
-                or AnotherObject
-                or OrEvenSomeOtherObject_________________
+            or AnotherObject
+            or OrEvenSomeOtherObject_________________
               => CallSomeMethod(someValue),
             _ => CallSomeMethod(someValue)
         };
