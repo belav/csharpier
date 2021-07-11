@@ -6,7 +6,7 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
 RUN apt-get update  && \
 	apt-get install curl gnupg -yq && \ 
-	curl -sL https://deb.nodesource.com/setup_13.x | bash - && \
+	curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
 	apt-get install -y nodejs && \
 	
 	npm install -g npm
