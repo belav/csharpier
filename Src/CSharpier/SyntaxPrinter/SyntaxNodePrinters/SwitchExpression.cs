@@ -21,14 +21,21 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         SeparatedSyntaxList.Print(
                             node.Arms,
                             o =>
-                                Doc.Concat(
-                                    Node.Print(o.Pattern),
-                                    " ",
+                                Doc.Group(
+                                    Doc.Indent(Node.Print(o.Pattern)),
                                     o.WhenClause != null
-                                        ? Doc.Concat(Node.Print(o.WhenClause), " ")
+                                        ? Doc.Concat(" ", Node.Print(o.WhenClause))
                                         : Doc.Null,
-                                    Token.PrintWithSuffix(o.EqualsGreaterThanToken, " "),
-                                    Node.Print(o.Expression)
+                                    // use align 2 here to make sure that the => never lines up with statements above it
+                                    // it makes this more readable for big ugly switch expressions
+                                    Doc.Align(
+                                        2,
+                                        Doc.Concat(
+                                            Doc.Line,
+                                            Token.PrintWithSuffix(o.EqualsGreaterThanToken, " "),
+                                            Doc.Align(2, Node.Print(o.Expression))
+                                        )
+                                    )
                                 ),
                             Doc.HardLine
                         )

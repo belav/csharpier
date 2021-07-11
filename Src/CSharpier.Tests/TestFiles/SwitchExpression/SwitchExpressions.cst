@@ -1,6 +1,6 @@
 class ClassName
 {
-    int MethodName()
+    void MethodName()
     {
         return 1 switch
         {
@@ -17,6 +17,28 @@ class ClassName
             (DoorState.Closed, Action.Lock, true) => DoorState.Locked,
             (DoorState.Locked, Action.Unlock, true) => DoorState.Closed,
             (var state, _, _) => state
+        };
+
+        return someValue switch
+        {
+            SomeSimpleObject => DoSomething(),
+            SomeLongObject someLongObject
+              => CallSomeMethodWith____________________________(someLongObject),
+            YetAnotherObject
+              => CallSomeMethod(
+                    someValue,
+                    andOtherParameters,
+                    thatMakeThisLongEnoughToBreak___________________
+                ),
+            OneMore
+              => "someStrings"
+                + "moreStrings"
+                + "andMoreStrings_________________________________________",
+            SomeOtherObject
+                or AnotherObject
+                or OrEvenSomeOtherObject_________________
+              => CallSomeMethod(someValue),
+            _ => CallSomeMethod(someValue)
         };
     }
 }
