@@ -20,6 +20,8 @@ COPY ./Src/CSharpier.Playground/ClientApp/package.json Src/CSharpier.Playground/
 COPY ./Src/CSharpier.Playground/ClientApp/package-lock.json Src/CSharpier.Playground/ClientApp/
 WORKDIR /build/Src/CSharpier.Playground/ClientApp
 RUN npm install
+COPY ./Src/CSharpier.Playground/ClientApp/ .
+RUN npm run build
 
 WORKDIR /build
 COPY . .
