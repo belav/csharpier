@@ -55,7 +55,7 @@ class ClassName
         ];
         var muchLongerOne_________________ = new byte[
             SqlParameterCollectionExtensions.DefaultValueColumnWidth
-            + SqlParameterCollectionExtensions.DefaultValueColumnWidth
+                + SqlParameterCollectionExtensions.DefaultValueColumnWidth
         ];
 
         var elementAccessExpression1 = anArray[100];
@@ -73,7 +73,7 @@ class ClassName
         ];
         var shortOne______ = anArray[
             SqlParameterCollectionExtensions.DefaultValueColumnWidth
-            + SqlParameterCollectionExtensions.DefaultValueColumnWidth
+                + SqlParameterCollectionExtensions.DefaultValueColumnWidth
         ];
 
         var someLongVariable_doesNotBreakArrayRank____________________________ =

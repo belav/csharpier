@@ -76,5 +76,63 @@ public class ClassName
         {
             // indent
         }
+
+        if (
+            CallSomeMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            ) == 0
+        ) { }
+
+        if (
+            someValue
+            && CallSomeMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            ) == 0
+        ) { }
+
+        if (
+            CallSomeMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            ) == 0
+            && someValue
+        ) { }
+
+        if (
+            CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            )
+            && CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            )
+        ) { }
+
+        if (
+            CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            ) || CallMethod(shortValue, "shortValue")
+        ) { }
+
+        if (
+            CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            )
+            || CallMethod(shortValue, "shortValue")
+            || CallMethod(shortValue1, "shortValue1")
+        ) { }
+
+        if (
+            CallSomeMethod(someParameter)
+            == someLongerValue_______________________________________________________________
+        ) { }
+
+        return someValue != someOtherValue
+            && someLongValue_____________________ == someOtherLongValue_____________________;
     }
 }
