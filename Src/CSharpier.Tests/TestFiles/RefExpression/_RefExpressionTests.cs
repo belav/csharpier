@@ -1,7 +1,6 @@
-using CSharpier.Tests.TestFileTests;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFiles
+namespace CSharpier.Tests.TestFiles.RefExpression
 {
     public class RefExpressionTests : BaseTest
     {

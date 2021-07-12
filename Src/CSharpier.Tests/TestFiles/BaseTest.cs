@@ -7,7 +7,7 @@ using DiffEngine;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.TestFileTests
+namespace CSharpier.Tests.TestFiles
 {
     public class BaseTest
     {

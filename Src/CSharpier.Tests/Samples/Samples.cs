@@ -1,10 +1,8 @@
-using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 using NUnit.Framework;
 
-namespace CSharpier.Tests
+namespace CSharpier.Tests.Samples
 {
     public class Samples
     {
