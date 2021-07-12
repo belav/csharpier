@@ -20,14 +20,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                     Doc.Concat(
                                         subpatternNode.NameColon != null
                                             ? NameColon.Print(subpatternNode.NameColon)
-                                            : string.Empty,
+                                            : Doc.Null,
                                         Node.Print(subpatternNode.Pattern)
                                     ),
                                 " "
                             ),
                             Token.Print(node.PositionalPatternClause.CloseParenToken)
                         )
-                    : string.Empty,
+                    : Doc.Null,
                 node.PropertyPatternClause != null
                     ? Doc.Concat(
                             Token.PrintWithSuffix(node.PropertyPatternClause.OpenBraceToken, " "),
@@ -45,10 +45,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             node.PropertyPatternClause.Subpatterns.Any() ? " " : Doc.Null,
                             Token.Print(node.PropertyPatternClause.CloseBraceToken)
                         )
-                    : string.Empty,
-                node.Designation != null
-                    ? Doc.Concat(" ", Node.Print(node.Designation))
-                    : string.Empty
+                    : Doc.Null,
+                node.Designation != null ? Doc.Concat(" ", Node.Print(node.Designation)) : Doc.Null
             );
         }
     }
