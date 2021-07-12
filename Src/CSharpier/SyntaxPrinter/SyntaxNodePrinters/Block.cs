@@ -24,30 +24,28 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             Doc statementSeparator = node.Parent is AccessorDeclarationSyntax
             && node.Statements.Count <= 1 ? Doc.Line : Doc.HardLine;
 
-            var docs = new List<Doc>
-            {
-                groupId != null
-                    ? Doc.IfBreak(" ", Doc.Line, groupId)
-                    : node.Parent is ParenthesizedLambdaExpressionSyntax ? Doc.Null : Doc.Line,
-                Token.Print(node.OpenBraceToken)
-            };
+            Doc innerDoc = Doc.Null;
+
             if (node.Statements.Count > 0)
             {
-                var innerDoc = Doc.Indent(
+                innerDoc = Doc.Indent(
                     statementSeparator,
                     Doc.Join(statementSeparator, node.Statements.Select(Node.Print))
                 );
 
                 DocUtilities.RemoveInitialDoubleHardLine(innerDoc);
-
-                docs.Add(Doc.Concat(innerDoc, statementSeparator));
             }
 
-            docs.Add(
-                node.Statements.Count == 0 ? " " : Doc.Null,
+            return Doc.Group(
+                groupId != null
+                    ? Doc.IfBreak(" ", Doc.Line, groupId)
+                    : node.Parent is ParenthesizedLambdaExpressionSyntax or BlockSyntax
+                            ? Doc.Null
+                            : Doc.Line,
+                Token.Print(node.OpenBraceToken),
+                node.Statements.Count == 0 ? " " : Doc.Concat(innerDoc, statementSeparator),
                 Token.Print(node.CloseBraceToken)
             );
-            return Doc.Group(docs);
         }
     }
 }

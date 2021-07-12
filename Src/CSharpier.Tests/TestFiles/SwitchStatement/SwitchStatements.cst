@@ -57,5 +57,15 @@ public class ClassName
                 break;
             }
         }
+
+        switch (emptyBlockInCaseShouldntGetExtraSpace)
+        {
+            case 1:
+            {
+                {
+                    return 1;
+                }
+            }
+        }
     }
 }

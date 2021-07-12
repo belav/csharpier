@@ -54,6 +54,13 @@ public class ClassName
         SomeClass two,
         SomeClass three
     ) => CallSomething(one, two, three);
+
+    private void MethodWithEmptyBlockShouldNotGetExtraSpace()
+    {
+        {
+            return;
+        }
+    }
 }
 
 class ExplicitInterfaceSpecifier : IDisposable
