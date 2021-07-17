@@ -64,8 +64,7 @@ public class ClassName
                 CallAnotherMethodWithParameters(
                     someParameter,
                     someParameter___________________________________
-                )
-                > someValue,
+                ) > someValue,
             anotherParameter
         );
     }

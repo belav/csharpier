@@ -39,7 +39,7 @@ class ClassName
         for (
             var shorterName = 0;
             someLongName____________
-            < someOtherLongName__________________________________________________;
+                < someOtherLongName__________________________________________________;
             someLongishName_________________________++
         ) {
             break;

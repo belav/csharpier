@@ -35,8 +35,8 @@ class ClassName
               ),
             OneMore
               => "someStrings"
-              + "moreStrings"
-              + "andMoreStrings_________________________________________",
+                  + "moreStrings"
+                  + "andMoreStrings_________________________________________",
             SomeOtherObject
             or AnotherObject
             or OrEvenSomeOtherObject_________________
