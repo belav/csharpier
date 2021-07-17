@@ -51,12 +51,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
          */
         private static List<Doc> PrintBinaryExpression(SyntaxNode node)
         {
-            var docs = new List<Doc>();
-
             if (node is not BinaryExpressionSyntax binaryExpressionSyntax)
             {
-                docs.Add(Doc.Group(Node.Print(node)));
-                return docs;
+                return new List<Doc> { Doc.Group(Node.Print(node)) };
             }
 
             if (depth > 200)
@@ -67,6 +64,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             depth++;
             try
             {
+                var docs = new List<Doc>();
+
                 // nested ?? have the next level on the right side, everything else has it on the left
                 var binaryOnTheRight =
                     binaryExpressionSyntax.Kind() == SyntaxKind.CoalesceExpression;
@@ -118,8 +117,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Node.Print(binaryExpressionSyntax.Right)
                 );
 
-                // If there's only a single binary expression, we want to create a group
-                // in order to avoid having a small right part like == 0 be on its own line.
+                // This group ensures that something like == 0 does not end up on its own line
                 var shouldGroup =
                     binaryExpressionSyntax.Kind() != binaryExpressionSyntax.Parent!.Kind()
                     && binaryExpressionSyntax.Left.GetType() != binaryExpressionSyntax.GetType()
