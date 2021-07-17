@@ -103,36 +103,6 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void Should_Return_TabWidth_With_Json()
-        {
-            WhenAFileExists("c:/test/.csharpierrc", "{ \"tabWidth\": 10 }");
-
-            var result = CreateConfigurationOptions("c:/test");
-
-            result.TabWidth.Should().Be(10);
-        }
-
-        [Test]
-        public void Should_Return_UseTabs_With_Json()
-        {
-            WhenAFileExists("c:/test/.csharpierrc", "{ \"useTabs\": true }");
-
-            var result = CreateConfigurationOptions("c:/test");
-
-            result.UseTabs.Should().BeTrue();
-        }
-
-        [Test]
-        public void Should_Return_EndOfLine_With_Json()
-        {
-            WhenAFileExists("c:/test/.csharpierrc", "{ \"endOfLine\": \"crlf\" }");
-
-            var result = CreateConfigurationOptions("c:/test");
-
-            result.EndOfLine.Should().Be(EndOfLine.CRLF);
-        }
-
-        [Test]
         public void Should_Return_PrintWidth_With_Yaml()
         {
             WhenAFileExists("c:/test/.csharpierrc", "printWidth: 10");
@@ -142,42 +112,9 @@ namespace CSharpier.Tests
             result.PrintWidth.Should().Be(10);
         }
 
-        [Test]
-        public void Should_Return_TabWidth_With_Yaml()
-        {
-            WhenAFileExists("c:/test/.csharpierrc", "tabWidth: 10");
-
-            var result = CreateConfigurationOptions("c:/test");
-
-            result.TabWidth.Should().Be(10);
-        }
-
-        [Test]
-        public void Should_Return_UseTabs_With_Yaml()
-        {
-            WhenAFileExists("c:/test/.csharpierrc", "useTabs: true");
-
-            var result = CreateConfigurationOptions("c:/test");
-
-            result.UseTabs.Should().BeTrue();
-        }
-
-        [Test]
-        public void Should_Return_EndOfLine_With_Yaml()
-        {
-            WhenAFileExists("c:/test/.csharpierrc", "endOfLine: crlf");
-
-            var result = CreateConfigurationOptions("c:/test");
-
-            result.EndOfLine.Should().Be(EndOfLine.CRLF);
-        }
-
         private void ShouldHaveDefaultOptions(ConfigurationFileOptions configurationFileOptions)
         {
             configurationFileOptions.PrintWidth.Should().Be(100);
-            configurationFileOptions.TabWidth.Should().Be(4);
-            configurationFileOptions.UseTabs.Should().BeFalse();
-            configurationFileOptions.EndOfLine.Should().Be(EndOfLine.Auto);
         }
 
         private ConfigurationFileOptions CreateConfigurationOptions(string baseDirectoryPath)

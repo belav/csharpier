@@ -74,7 +74,7 @@ Install-Package CSharpier.MSBuild
 
 ## Documentation
 [Command Line Interface](Docs/CLI.md)  
-[Configuration File](Docs/Configure.md)  
+[Configuration File](Docs/Configuration.md)  
 [Editors and CI/CD](Docs/EditorsAndCICD.md)  
 [Ignoring Files](Docs/Ignore.md)  
 [ChangeLog](CHANGELOG.md)  
