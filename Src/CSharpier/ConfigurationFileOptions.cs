@@ -13,9 +13,6 @@ namespace CSharpier
     public class ConfigurationFileOptions
     {
         public int PrintWidth { get; init; } = 100;
-        public int TabWidth { get; init; } = 4;
-        public bool UseTabs { get; init; }
-        public EndOfLine EndOfLine { get; init; }
 
         private static string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
 
@@ -27,10 +24,10 @@ namespace CSharpier
 
             return new PrinterOptions
             {
-                TabWidth = configurationFileOptions.TabWidth,
-                UseTabs = configurationFileOptions.UseTabs,
+                TabWidth = 4,
+                UseTabs = false,
                 Width = configurationFileOptions.PrintWidth,
-                EndOfLine = configurationFileOptions.EndOfLine
+                EndOfLine = EndOfLine.Auto
             };
         }
 
