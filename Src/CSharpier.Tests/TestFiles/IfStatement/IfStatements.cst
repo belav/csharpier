@@ -11,15 +11,6 @@ public class ClassName
 
         if (true && false) { }
 
-        if (
-            longStatementName
-            && longerStatementName
-            && evenLongerStatementName
-            && superLongStatementName
-        ) {
-            return;
-        }
-
         if (true)
             DoSomething();
         else if (false)
@@ -38,6 +29,15 @@ public class ClassName
             DoSomeLongMethodCall_________________________();
         else
             DoSomeLongMethodCall________________________________________();
+
+        if (
+            longStatementName
+            && longerStatementName
+            && evenLongerStatementName
+            && superLongStatementName
+        ) {
+            return;
+        }
 
         if (
             longStatementName
@@ -76,63 +76,5 @@ public class ClassName
         {
             // indent
         }
-
-        if (
-            CallSomeMethod(
-                someParameter_____________________________________,
-                someParameter_____________________________________
-            ) == 0
-        ) { }
-
-        if (
-            someValue
-            && CallSomeMethod(
-                someParameter_____________________________________,
-                someParameter_____________________________________
-            ) == 0
-        ) { }
-
-        if (
-            CallSomeMethod(
-                someParameter_____________________________________,
-                someParameter_____________________________________
-            ) == 0
-            && someValue
-        ) { }
-
-        if (
-            CallMethod(
-                someParameter_____________________________________,
-                someParameter_____________________________________
-            )
-            && CallMethod(
-                someParameter_____________________________________,
-                someParameter_____________________________________
-            )
-        ) { }
-
-        if (
-            CallMethod(
-                someParameter_____________________________________,
-                someParameter_____________________________________
-            ) || CallMethod(shortValue, "shortValue")
-        ) { }
-
-        if (
-            CallMethod(
-                someParameter_____________________________________,
-                someParameter_____________________________________
-            )
-            || CallMethod(shortValue, "shortValue")
-            || CallMethod(shortValue1, "shortValue1")
-        ) { }
-
-        if (
-            CallSomeMethod(someParameter)
-            == someLongerValue_______________________________________________________________
-        ) { }
-
-        return someValue != someOtherValue
-            && someLongValue_____________________ == someOtherLongValue_____________________;
     }
 }

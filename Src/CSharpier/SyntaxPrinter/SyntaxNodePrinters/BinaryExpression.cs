@@ -66,6 +66,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 var docs = new List<Doc>();
 
+                // This group ensures that something like == 0 does not end up on its own line
+                var shouldGroup =
+                    binaryExpressionSyntax.Kind() != binaryExpressionSyntax.Parent!.Kind()
+                    && binaryExpressionSyntax.Left.GetType() != binaryExpressionSyntax.GetType()
+                    && binaryExpressionSyntax.Right.GetType() != binaryExpressionSyntax.GetType();
+
                 // nested ?? have the next level on the right side, everything else has it on the left
                 var binaryOnTheRight =
                     binaryExpressionSyntax.Kind() == SyntaxKind.CoalesceExpression;
@@ -107,7 +113,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
                 if (binaryOnTheRight)
                 {
-                    return docs;
+                    return shouldGroup
+                        ? new List<Doc> { docs[0], Doc.Group(docs.Skip(1).ToList()) }
+                        : docs;
                 }
 
                 var right = Doc.Concat(
@@ -116,12 +124,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     " ",
                     Node.Print(binaryExpressionSyntax.Right)
                 );
-
-                // This group ensures that something like == 0 does not end up on its own line
-                var shouldGroup =
-                    binaryExpressionSyntax.Kind() != binaryExpressionSyntax.Parent!.Kind()
-                    && binaryExpressionSyntax.Left.GetType() != binaryExpressionSyntax.GetType()
-                    && binaryExpressionSyntax.Right.GetType() != binaryExpressionSyntax.GetType();
 
                 docs.Add(shouldGroup ? Doc.Group(right) : right);
                 return docs;

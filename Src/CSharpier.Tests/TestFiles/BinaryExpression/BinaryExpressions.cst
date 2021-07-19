@@ -97,6 +97,9 @@ class TestClass
             )
             && CallMethod() == someValue;
 
+        var someValue =
+            someLongThing___________________________.someLongThing_____________ ?? someOtherThing;
+
         if (
             one - two == three
             || one + two == three
@@ -114,6 +117,76 @@ class TestClass
             || someLongThing - someOtherLongThing__________________________________
                 > anotherLongThing
         ) { }
+
+        if (
+            CallSomeMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            ) == 0
+        ) { }
+
+        if (
+            someValue
+            && CallSomeMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            ) == 0
+        ) { }
+
+        if (
+            CallSomeMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            ) == 0
+            && someValue
+        ) { }
+
+        if (
+            CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            )
+            && CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            )
+        ) { }
+
+        if (
+            CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            ) || CallMethod(shortValue, "shortValue")
+        ) { }
+
+        if (
+            CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            )
+            || CallMethod(shortValue, "shortValue")
+            || CallMethod(shortValue1, "shortValue1")
+        ) { }
+
+        if (
+            CallSomeMethod(someParameter)
+            == someLongerValue_______________________________________________________________
+        ) { }
+
+        return someValue != someOtherValue
+            && someLongValue_____________________ == someOtherLongValue_____________________;
+
+        var someValue =
+            CallSomething(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            ) == someOtherValue;
+
+        var coalesceIsSpecial =
+            CallSomething(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            ) ?? someOtherValue;
 
         var notIdealSee355 =
             variable.Replace(someParameter_______________________, '.')
