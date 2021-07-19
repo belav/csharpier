@@ -97,6 +97,8 @@ namespace CSharpier.SyntaxPrinter
                         return CheckedStatement.Print(checkedStatementSyntax);
                     case ClassOrStructConstraintSyntax classOrStructConstraintSyntax:
                         return ClassOrStructConstraint.Print(classOrStructConstraintSyntax);
+                    case CommonForEachStatementSyntax commonForEachStatementSyntax:
+                        return CommonForEachStatement.Print(commonForEachStatementSyntax);
                     case CompilationUnitSyntax compilationUnitSyntax:
                         return CompilationUnit.Print(compilationUnitSyntax);
                     case ConditionalAccessExpressionSyntax conditionalAccessExpressionSyntax:
@@ -149,10 +151,6 @@ namespace CSharpier.SyntaxPrinter
                         return FinallyClause.Print(finallyClauseSyntax);
                     case FixedStatementSyntax fixedStatementSyntax:
                         return FixedStatement.Print(fixedStatementSyntax);
-                    case ForEachStatementSyntax forEachStatementSyntax:
-                        return ForEachStatement.Print(forEachStatementSyntax);
-                    case ForEachVariableStatementSyntax forEachVariableStatementSyntax:
-                        return ForEachVariableStatement.Print(forEachVariableStatementSyntax);
                     case ForStatementSyntax forStatementSyntax:
                         return ForStatement.Print(forStatementSyntax);
                     case FromClauseSyntax fromClauseSyntax:
