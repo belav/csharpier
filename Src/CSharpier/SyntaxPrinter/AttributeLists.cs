@@ -17,12 +17,12 @@ namespace CSharpier.SyntaxPrinter
             }
 
             var docs = new List<Doc>();
-            Doc separator = node is TypeParameterSyntax || node is ParameterSyntax
+            Doc separator = node is TypeParameterSyntax or ParameterSyntax
                 ? Doc.Line
                 : Doc.HardLine;
             docs.Add(Doc.Join(separator, attributeLists.Select(AttributeList.Print)));
 
-            if (!(node is ParameterSyntax))
+            if (node is not (ParameterSyntax or TypeParameterSyntax))
             {
                 docs.Add(separator);
             }

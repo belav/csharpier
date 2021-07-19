@@ -66,6 +66,19 @@ class ClassName
     ) {
         return;
     }
+
+    public void MethodWithAttributesOnTypeParameters<[SomeShort] T, K>() { }
+
+    public void MethodWithAttributesOnTypeParameters<
+        [SomeLongAttribute__________________________] T,
+        K
+    >() { }
+
+    public void MethodWithAttributesOnTypeParameters<
+        [SomeLongAttribute__________________________]
+            TSomeMuchLongerName___________________________________,
+        K
+    >() { }
 }
 
 [
