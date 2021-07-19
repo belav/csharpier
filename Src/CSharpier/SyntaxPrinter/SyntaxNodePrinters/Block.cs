@@ -21,6 +21,19 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
         private static Doc Print(BlockSyntax node, string? groupId)
         {
+            if (
+                node.Statements.Count == 0
+                && node.Parent is MethodDeclarationSyntax
+                && !Token.HasComments(node.CloseBraceToken)
+            ) {
+                return Doc.Concat(
+                    " ",
+                    Token.Print(node.OpenBraceToken),
+                    " ",
+                    Token.Print(node.CloseBraceToken)
+                );
+            }
+
             Doc statementSeparator = node.Parent is AccessorDeclarationSyntax
             && node.Statements.Count <= 1 ? Doc.Line : Doc.HardLine;
 

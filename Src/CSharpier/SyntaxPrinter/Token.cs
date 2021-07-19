@@ -239,5 +239,19 @@ namespace CSharpier.SyntaxPrinter
 
             return docs.Count > 0 ? Doc.Concat(docs) : Doc.Null;
         }
+
+        public static bool HasComments(SyntaxToken syntaxToken)
+        {
+            return syntaxToken.LeadingTrivia.Any(
+                    o =>
+                        o.Kind() != SyntaxKind.WhitespaceTrivia
+                        && o.Kind() != SyntaxKind.EndOfLineTrivia
+                )
+                || syntaxToken.TrailingTrivia.Any(
+                    o =>
+                        o.Kind() != SyntaxKind.WhitespaceTrivia
+                        && o.Kind() != SyntaxKind.EndOfLineTrivia
+                );
+        }
     }
 }
