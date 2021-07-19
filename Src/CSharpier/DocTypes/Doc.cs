@@ -118,7 +118,8 @@ namespace CSharpier.DocTypes
 
         public static ConditionalGroup ConditionalGroup(params Doc[] options) => new(options);
 
-        public static Align Align(int alignment, Doc contents) => new(alignment, contents);
+        public static Align Align(int alignment, params Doc[] contents) =>
+            new(alignment, contents.Length == 1 ? contents[0] : Concat(contents));
     }
 
     public enum CommentType
