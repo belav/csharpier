@@ -12,7 +12,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(IfStatementSyntax node)
         {
             var docs = new List<Doc>();
-            if (!(node.Parent is ElseClauseSyntax))
+            if (node.Parent is not ElseClauseSyntax)
             {
                 docs.Add(ExtraNewLines.Print(node));
             }
