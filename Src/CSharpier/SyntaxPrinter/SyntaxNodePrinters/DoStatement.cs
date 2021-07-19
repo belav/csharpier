@@ -15,7 +15,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     node.Statement is not BlockSyntax ? " " : Doc.Null
                 ),
                 Node.Print(node.Statement),
-                Doc.HardLine,
+                node.Statement is BlockSyntax ? " " : Doc.HardLine,
                 Token.PrintWithSuffix(node.WhileKeyword, " "),
                 Token.Print(node.OpenParenToken),
                 Doc.Group(Doc.Indent(Doc.SoftLine, Node.Print(node.Condition)), Doc.SoftLine),
