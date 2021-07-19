@@ -193,29 +193,32 @@ namespace CSharpier.SyntaxPrinter
         }
 
         private static bool IsSingleLineComment(SyntaxKind kind) =>
-            kind == SyntaxKind.SingleLineDocumentationCommentTrivia
-            || kind == SyntaxKind.SingleLineCommentTrivia;
+            kind
+                is SyntaxKind.SingleLineDocumentationCommentTrivia
+                    or SyntaxKind.SingleLineCommentTrivia;
 
         private static bool IsMultiLineComment(SyntaxKind kind) =>
-            kind == SyntaxKind.MultiLineCommentTrivia
-            || kind == SyntaxKind.MultiLineDocumentationCommentTrivia;
+            kind
+                is SyntaxKind.MultiLineCommentTrivia
+                    or SyntaxKind.MultiLineDocumentationCommentTrivia;
 
         private static bool IsDirective(SyntaxKind kind) =>
-            kind == SyntaxKind.IfDirectiveTrivia
-            || kind == SyntaxKind.ElseDirectiveTrivia
-            || kind == SyntaxKind.ElifDirectiveTrivia
-            || kind == SyntaxKind.EndIfDirectiveTrivia
-            || kind == SyntaxKind.LineDirectiveTrivia
-            || kind == SyntaxKind.ErrorDirectiveTrivia
-            || kind == SyntaxKind.WarningDirectiveTrivia
-            || kind == SyntaxKind.PragmaWarningDirectiveTrivia
-            || kind == SyntaxKind.PragmaChecksumDirectiveTrivia
-            || kind == SyntaxKind.DefineDirectiveTrivia
-            || kind == SyntaxKind.UndefDirectiveTrivia
-            || kind == SyntaxKind.NullableDirectiveTrivia;
+            kind
+                is SyntaxKind.IfDirectiveTrivia
+                    or SyntaxKind.ElseDirectiveTrivia
+                    or SyntaxKind.ElifDirectiveTrivia
+                    or SyntaxKind.EndIfDirectiveTrivia
+                    or SyntaxKind.LineDirectiveTrivia
+                    or SyntaxKind.ErrorDirectiveTrivia
+                    or SyntaxKind.WarningDirectiveTrivia
+                    or SyntaxKind.PragmaWarningDirectiveTrivia
+                    or SyntaxKind.PragmaChecksumDirectiveTrivia
+                    or SyntaxKind.DefineDirectiveTrivia
+                    or SyntaxKind.UndefDirectiveTrivia
+                    or SyntaxKind.NullableDirectiveTrivia;
 
         private static bool IsRegion(SyntaxKind kind) =>
-            kind == SyntaxKind.RegionDirectiveTrivia || kind == SyntaxKind.EndRegionDirectiveTrivia;
+            kind is SyntaxKind.RegionDirectiveTrivia or SyntaxKind.EndRegionDirectiveTrivia;
 
         private static Doc PrintTrailingTrivia(SyntaxToken node)
         {

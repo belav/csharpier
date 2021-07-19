@@ -66,6 +66,8 @@ class ClassName
             SomeList = new List<SomeObject>()
             {
                 new() { SomeProperty = SomeLongValue_____________ },
+# pragma this should not affect the breaking of the next line
+                new() { SomeProperty = SomeLongValue_____________ },
                 new()
                 {
                     SomeProperty = SomeOtherValue,
