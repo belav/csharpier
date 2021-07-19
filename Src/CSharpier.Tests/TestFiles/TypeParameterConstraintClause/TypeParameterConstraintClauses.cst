@@ -12,16 +12,34 @@ class ClassName<T> where T : class
 
     public static ReturnType<T> MethodName<T, U>()
         where T : class
-        where U : class { }
+        where U : class
+    {
+        return;
+    }
 
     public static ReturnType<T> MethodName<T, U>(string parameter)
         where T : class
-        where U : class { }
+        where U : class
+    {
+        return;
+    }
 
     public static ReturnType<T> MethodName<T, U>(
-        string reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameterIMeanIt
+        string longParameter_______________________,
+        string longParameter_______________________
     ) where T : class
-      where U : class { }
+    {
+        return;
+    }
+
+    public static ReturnType<T> MethodName<T, U>(
+        string longParameter_______________________,
+        string longParameter_______________________
+    ) where T : class
+      where U : class
+    {
+        return;
+    }
 }
 
 interface InterfaceName<T> where T : class { }
@@ -33,4 +51,7 @@ class ClassName<N, C, T, TT, L>
     where C : class
     where T : IComparable
     where TT : IList<N>
-    where L : class, new() { }
+    where L : class, new()
+{
+    private string x;
+}
