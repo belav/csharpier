@@ -92,4 +92,10 @@ class ClassName
             },
         };
     }
+
+    private SomeObject someObject =
+        new(someLongParameter___________________)
+        {
+            SomeProperty = someLongValue____________________________
+        };
 }
