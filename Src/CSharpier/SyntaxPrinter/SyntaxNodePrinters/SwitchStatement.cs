@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
@@ -20,14 +21,23 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         ),
                         Doc.HardLine
                     );
+
+            var groupId = Guid.NewGuid().ToString();
+
             return Doc.Concat(
                 ExtraNewLines.Print(node),
+                Token.PrintLeadingTrivia(node.SwitchKeyword),
                 Doc.Group(
-                    Token.PrintWithSuffix(node.SwitchKeyword, " "),
+                    Token.PrintWithoutLeadingTrivia(node.SwitchKeyword),
+                    " ",
                     Token.Print(node.OpenParenToken),
-                    Node.Print(node.Expression),
+                    Doc.GroupWithId(
+                        groupId,
+                        Doc.Indent(Doc.SoftLine, Node.Print(node.Expression)),
+                        Doc.SoftLine
+                    ),
                     Token.Print(node.CloseParenToken),
-                    Doc.Line,
+                    Doc.IfBreak(" ", Doc.Line, groupId),
                     Token.Print(node.OpenBraceToken),
                     sections,
                     Token.Print(node.CloseBraceToken)
