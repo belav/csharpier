@@ -24,7 +24,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     ? Doc.Concat(
                             Doc.Indent(
                                 Doc.SoftLine,
-                                SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.Null)
+                                SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.Line)
                             ),
                             Doc.SoftLine
                         )
