@@ -49,7 +49,8 @@ namespace CSharpier.DocPrinter
 
                 if (currentDoc is StringDoc stringDoc)
                 {
-                    if (stringDoc.Value == null)
+                    // directives should not be considered when calculating if something fits
+                    if (stringDoc.Value == null || stringDoc.IsDirective)
                     {
                         continue;
                     }
