@@ -8,18 +8,26 @@ public class ClassName
 
     public bool CloseParenIndents = someCondition
         ? this.SomeMethodCallThatIsLonger____________________(
-                someLongValue,
-                someLongValue,
-                someLongValue
-            )
+              someLongValue,
+              someLongValue,
+              someLongValue
+          )
         : this.SomeMethodCallThatIsLonger____________________(
-                someLongValue,
-                someLongValue,
-                someLongValue
-            );
+              someLongValue,
+              someLongValue,
+              someLongValue
+          );
 
     void Method()
     {
+        var nestedConditions = someCondition
+            ? someOtherCondition______________
+                ? someValue_______________________
+                : someOtherValue___________________
+            : someThirdCondition______________
+                ? someThirdValue_________________
+                : someOtherThirdValue_______________________;
+
         var fileContents = File.ReadAllText(
             file,
             // leading here should break parameters and GetEncoding should still group
