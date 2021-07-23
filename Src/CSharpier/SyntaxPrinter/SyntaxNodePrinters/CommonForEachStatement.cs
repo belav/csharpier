@@ -16,19 +16,18 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 ? Token.PrintLeadingTrivia(node.AwaitKeyword)
                 : Token.PrintLeadingTrivia(node.ForEachKeyword);
 
-            Doc variable = Doc.Null;
-            if (node is ForEachStatementSyntax forEachStatementSyntax)
+            var variable = node switch
             {
-                variable = Doc.Concat(
-                    Node.Print(forEachStatementSyntax.Type),
+                ForEachStatementSyntax forEach => Doc.Concat(
+                    Node.Print(forEach.Type),
                     " ",
-                    Token.Print(forEachStatementSyntax.Identifier)
-                );
-            }
-            else if (node is ForEachVariableStatementSyntax forEachVariableStatementSyntax)
-            {
-                variable = Node.Print(forEachVariableStatementSyntax.Variable);
-            }
+                    Token.Print(forEach.Identifier)
+                ),
+                ForEachVariableStatementSyntax forEachVariable => Node.Print(
+                    forEachVariable.Variable
+                ),
+                _ => Doc.Null
+            };
 
             var docs = Doc.Concat(
                 ExtraNewLines.Print(node),
