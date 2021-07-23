@@ -1,6 +1,13 @@
 public class ClassName
 {
-    public void DoStuff() { }
+    public void MethodName() { }
+
+    public void LongMethodNameKeepsEmptyBraces__________________________________________________________() { }
+
+    public void LongMethodNameKeepsEmptyBraces__________________________________________________________()
+    {
+        // comment
+    }
 
     public void LongMethodNameForceLineBreak(
         string oneoneoneoneoneoneoneoneone,
