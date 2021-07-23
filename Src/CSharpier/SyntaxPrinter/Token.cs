@@ -243,14 +243,10 @@ namespace CSharpier.SyntaxPrinter
         public static bool HasComments(SyntaxToken syntaxToken)
         {
             return syntaxToken.LeadingTrivia.Any(
-                    o =>
-                        o.Kind() != SyntaxKind.WhitespaceTrivia
-                        && o.Kind() != SyntaxKind.EndOfLineTrivia
+                    o => o.Kind() is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
                 )
                 || syntaxToken.TrailingTrivia.Any(
-                    o =>
-                        o.Kind() != SyntaxKind.WhitespaceTrivia
-                        && o.Kind() != SyntaxKind.EndOfLineTrivia
+                    o => o.Kind() is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
                 );
         }
     }
