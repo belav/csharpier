@@ -70,5 +70,25 @@ public class ClassName
                 case 1:
                     return;
             }
+
+        foreach (var (x, y) in thing)
+        {
+            this.DoOtherThing();
+        }
+
+        foreach (
+            (
+                (int l2, int l3),
+                (int longName________________________, string[] anotherLongName___________)
+            ) in (
+                from l2 in Enumerable.Range(1, 7)
+                from l3 in Enumerable.Range(1, 7)
+                select (l2, l3)
+            ).AsParallel()
+                .Select(l => (l, res: GenerateTable(l.l2, l.l3, cutOff)))
+                .OrderBy(v => v.res.Total)
+        ) {
+            return;
+        }
     }
 }
