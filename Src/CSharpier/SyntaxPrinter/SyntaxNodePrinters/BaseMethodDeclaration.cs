@@ -19,7 +19,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier = null;
             TypeParameterListSyntax? typeParameterList = null;
             Doc identifier = Doc.Null;
-            var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
+            SyntaxList<TypeParameterConstraintClauseSyntax>? constraintClauses = null;
             ParameterListSyntax? parameterList = null;
             ConstructorInitializerSyntax? constructorInitializer = null;
             BlockSyntax? body = null;
@@ -159,7 +159,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 );
             }
 
-            if (modifiers.HasValue && modifiers.Value.Count > 0)
+            if (modifiers is { Count: > 0 })
             {
                 docs.Add(Token.PrintLeadingTrivia(modifiers.Value[0]));
             }
@@ -170,15 +170,20 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             docs.Add(Doc.Group(declarationGroup));
 
-            docs.Add(
-                groupId != null
-                    ? ConstraintClauses.PrintWithConditionalSpace(constraintClauses, groupId)
-                    : ConstraintClauses.Print(constraintClauses)
-            );
+            if (constraintClauses != null)
+            {
+                docs.Add(
+                    groupId != null
+                        ? ConstraintClauses.PrintWithConditionalSpace(constraintClauses, groupId)
+                        : ConstraintClauses.Print(constraintClauses)
+                );
+            }
+
             if (body != null)
             {
                 docs.Add(
                     groupId != null
+                    && (constraintClauses == null || constraintClauses.Value.Count == 0)
                         ? Block.PrintWithConditionalSpace(body, groupId)
                         : Block.Print(body)
                 );
