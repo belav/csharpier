@@ -60,6 +60,17 @@ public class ClassName
     public Dictionary<string, string> Properties_________________ { get; set; } =
         new Dictionary<string, string>();
 
+    public IReadOnlyCollection<Action<One, Two>> SomeName => true;
+
+    public IReadOnlyCollection<
+        Action<SomeRandomType, IAnotherRandomType>
+    > SomeRandomLongName___________________ => someRandomResult_________________;
+
+    public IReadOnlyCollection<
+        Action<SomeRandomType, IAnotherRandomType>,
+        SomethingElse
+    > SomeRandomLongName___________________ => someRandomResult_________________;
+
     public virtual LongerPropertyConfiguration LongerPropertyConfiguration { get; set; }
 
     public List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)> AuthorizeCalls { get; } =

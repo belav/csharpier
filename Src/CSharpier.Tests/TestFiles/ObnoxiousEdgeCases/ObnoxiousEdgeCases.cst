@@ -2,15 +2,13 @@
 // try to clean these up if you are modifying formatting that affects them.
 class ClassName
 {
-    public readonly StackObjectPool<Dictionary<
-            object,
-            KeyedItemInfo
-        >> KeyedItemInfoDictionaryPool_____;
+    public readonly StackObjectPool<
+        Dictionary<object, KeyedItemInfo>
+    > KeyedItemInfoDictionaryPool_____;
 
-    internal StackObjectPool<Dictionary<
-            object,
-            KeyedItemInfo
-        >> KeyedItemInfoDictionaryPool { get; } =
+    internal StackObjectPool<
+        Dictionary<object, KeyedItemInfo>
+    > KeyedItemInfoDictionaryPool { get; } =
         new StackObjectPool<Dictionary<object, KeyedItemInfo>>(
             maxPreservedItems: 10,
             () => new Dictionary<object, KeyedItemInfo>()
@@ -43,10 +41,9 @@ class ClassName
 
     public void MethodName()
     {
-        builder_________________.OpenComponent<SecondCascadingParameterConsumerComponent<
-                string,
-                int
-            >>(0);
+        builder_________________.OpenComponent<
+            SecondCascadingParameterConsumerComponent<string, int>
+        >(0);
     }
 
     public static IRemoteAuthenticationBuilder<
@@ -79,13 +76,9 @@ class ClassName
             PropertyMapActions.Add(
                 pm =>
                 {
-                    Expression<Func<
-                            TSource,
-                            TDestination,
-                            TMember,
-                            ResolutionContext,
-                            TResult
-                        >> expr = (src, dest, destMember, ctxt) =>
+                    Expression<
+                        Func<TSource, TDestination, TMember, ResolutionContext, TResult>
+                    > expr = (src, dest, destMember, ctxt) =>
                         mappingFunction(src, dest, destMember);
 
                     pm.CustomMapFunction = expr;
@@ -100,14 +93,9 @@ class ClassName
         PathMapActions.Add(
             pm =>
             {
-                Expression<Func<
-                        TSource,
-                        TDestination,
-                        TMember,
-                        TMember,
-                        ResolutionContext,
-                        bool
-                    >> expr = (src, dest, srcMember, destMember, ctxt) =>
+                Expression<
+                    Func<TSource, TDestination, TMember, TMember, ResolutionContext, bool>
+                > expr = (src, dest, srcMember, destMember, ctxt) =>
                     condition(
                         new ConditionParameters<TSource, TDestination, TMember>(
                             src,
