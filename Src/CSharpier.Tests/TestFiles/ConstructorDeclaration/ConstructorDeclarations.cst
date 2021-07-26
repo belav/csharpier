@@ -59,6 +59,7 @@ public class Initializers : BasicClass
             longParameter____________________________________________________________________________
         ) { }
 
+    // this may change, see #372
     public WithParameters(string parameter)
         : base(
             longParameter____________________________________________________________________________
@@ -84,6 +85,19 @@ public class Initializers : BasicClass
     {
         WithBody();
     }
+
+    public LongParametersWithEmptyBody(string parameter, bool anotherParameter_________________) { }
+
+    public LongParametersWithEmptyBody(string parameter, bool anotherParameter__________________)
+    { }
+
+    public LongInitializerWithEmptyBody() : base(parameter, anotherParameter___________________) { }
+
+    public LongInitializerWithEmptyBody() : base(parameter, anotherParameter__________________) { }
+
+    public LongInitializerWithEmptyBody()
+        : base(parameter______________, anotherParameter___________________________________________)
+    { }
 }
 
 public class Exactly100
