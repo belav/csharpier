@@ -48,9 +48,9 @@ class TestClass
 
         var conditionalIndentation = someBoolean
             ? someLongValue____________________________________
-                + someLongValue____________________________________
+              + someLongValue____________________________________
             : someLongValue____________________________________
-                + someLongValue____________________________________;
+              + someLongValue____________________________________;
 
         if (
             one == two
@@ -64,13 +64,16 @@ class TestClass
                 == thisWillIndent_______________________________________________________________
         ) { }
 
-        switch (one == two
+        switch (
+            one == two
             || someValue_______________
-                == thisWillIndent_______________________________________________________________)
-        { }
+                == thisWillIndent_______________________________________________________________
+        ) { }
 
-        do { }
-        while (
+        do
+        {
+            CallSomething();
+        } while (
             one == two
             || someValue_______________
                 == thisWillIndent_______________________________________________________________
