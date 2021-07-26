@@ -109,8 +109,6 @@ namespace CSharpier.SyntaxPrinter
                         return ConstantPattern.Print(constantPatternSyntax);
                     case ConstructorConstraintSyntax constructorConstraintSyntax:
                         return ConstructorConstraint.Print(constructorConstraintSyntax);
-                    case ConstructorInitializerSyntax constructorInitializerSyntax:
-                        return ConstructorInitializer.Print(constructorInitializerSyntax);
                     case ContinueStatementSyntax continueStatementSyntax:
                         return ContinueStatement.Print(continueStatementSyntax);
                     case DeclarationExpressionSyntax declarationExpressionSyntax:

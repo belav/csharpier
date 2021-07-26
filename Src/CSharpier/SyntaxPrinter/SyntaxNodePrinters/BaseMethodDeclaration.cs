@@ -25,7 +25,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             BlockSyntax? body = null;
             ArrowExpressionClauseSyntax? expressionBody = null;
             SyntaxToken? semicolonToken = null;
-            string? groupId = null;
+            string? parameterGroupId = null;
+            string? constructorInitializerGroupId = null;
 
             if (node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax)
             {
@@ -141,22 +142,49 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 // will cause SpaceBrace when it isn't wanted.
                 if (parameterList.Parameters.Count > 0)
                 {
-                    groupId = Guid.NewGuid().ToString();
+                    parameterGroupId = Guid.NewGuid().ToString();
                 }
-                declarationGroup.Add(ParameterList.Print(parameterList, groupId));
+                declarationGroup.Add(ParameterList.Print(parameterList, parameterGroupId));
                 declarationGroup.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine));
             }
 
             if (constructorInitializer != null)
             {
-                declarationGroup.Add(
-                    groupId != null
-                        ? ConstructorInitializer.PrintWithConditionalSpace(
-                                constructorInitializer,
-                                groupId
+                constructorInitializerGroupId = Guid.NewGuid().ToString();
+                var colonToken = Token.PrintWithSuffix(constructorInitializer.ColonToken, " ");
+
+                if (parameterGroupId != null)
+                {
+                    declarationGroup.Add(
+                        Doc.GroupWithId(
+                            constructorInitializerGroupId,
+                            Doc.Indent(Doc.IfBreak(" ", Doc.Line, parameterGroupId)),
+                            Doc.IfBreak(
+                                Doc.Align(2, colonToken),
+                                Doc.Indent(colonToken),
+                                parameterGroupId
+                            ),
+                            Token.Print(constructorInitializer.ThisOrBaseKeyword),
+                            Doc.IfBreak(
+                                ArgumentList.Print(constructorInitializer.ArgumentList),
+                                Doc.Indent(ArgumentList.Print(constructorInitializer.ArgumentList)),
+                                parameterGroupId
                             )
-                        : ConstructorInitializer.Print(constructorInitializer)
-                );
+                        )
+                    );
+                }
+                else
+                {
+                    declarationGroup.Add(
+                        Doc.GroupWithId(
+                            constructorInitializerGroupId,
+                            Doc.Indent(Doc.Line),
+                            Doc.Indent(colonToken),
+                            Token.Print(constructorInitializer.ThisOrBaseKeyword),
+                            Doc.Indent(ArgumentList.Print(constructorInitializer.ArgumentList))
+                        )
+                    );
+                }
             }
 
             if (modifiers is { Count: > 0 })
@@ -173,18 +201,31 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (constraintClauses != null)
             {
                 docs.Add(
-                    groupId != null
-                        ? ConstraintClauses.PrintWithConditionalSpace(constraintClauses, groupId)
+                    parameterGroupId != null
+                        ? ConstraintClauses.PrintWithConditionalSpace(
+                                constraintClauses,
+                                parameterGroupId
+                            )
                         : ConstraintClauses.Print(constraintClauses)
                 );
             }
 
             if (body != null)
             {
-                docs.Add(
-                    groupId != null
+                string? conditionalSpaceGroupId = null;
+                if (constructorInitializerGroupId != null)
+                {
+                    conditionalSpaceGroupId = constructorInitializerGroupId;
+                }
+                else if (
+                    parameterGroupId != null
                     && (constraintClauses == null || constraintClauses.Value.Count == 0)
-                        ? Block.PrintWithConditionalSpace(body, groupId)
+                ) {
+                    conditionalSpaceGroupId = parameterGroupId;
+                }
+                docs.Add(
+                    conditionalSpaceGroupId != null
+                        ? Block.PrintWithConditionalSpace(body, conditionalSpaceGroupId)
                         : Block.Print(body)
                 );
             }

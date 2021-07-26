@@ -27,21 +27,48 @@ public class Initializers : BasicClass
     public Initializers(string value) : base(value) { }
 
     public Initializers(
-        string reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameter
+        string longParameter_______________________________________________________________________________
     ) : base(
-        reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameterIMeanIt
+        longParameter_______________________________________________________________________________
     ) { }
 
     public Initializers(
-        string reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameter
+        string longParameter_______________________________________________________________________________
+    ) : base(
+        longParameter_______________________________________________________________________________
+    ) {
+        WithBody();
+    }
+
+    public Initializers(
+        string longParameter____________________________________________________________
     ) : base(false) { }
 
-    public ReallyLoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooogMethodName()
+    public Initializers(
+        string longParameter____________________________________________________________
+    ) : base(false)
+    {
+        WithBody();
+    }
+
+    public LongMethodName___________________________________________________________________________()
         : base(false) { }
 
-    public ReallyLoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooogMethodName()
+    public WithParameters(string parameter)
         : base(
-            reallyLooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongParameterIMeanIt
+            longParameter____________________________________________________________________________
+        ) { }
+
+    public WithParameters(string parameter)
+        : base(
+            longParameter____________________________________________________________________________
+        ) {
+        WithBody();
+    }
+
+    public LongMethodName___________________________________________________________________________()
+        : base(
+            longParameter____________________________________________________________________________
         ) { }
 
     public Initializers(
@@ -49,19 +76,19 @@ public class Initializers : BasicClass
     ) /*Comment*/
       : base(value) { }
 
-    public ReallyLoooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooogMethodName()
+    public LongMethodName___________________________________________________________()
         /*Comment*/: base(false) { }
 }
 
 public class Exactly80
 {
-    public Exactly80(int lajsfaskdlfklasdfklskadlfklsdfkasdkfjaskdfkdfdddd)
+    public Exactly80(int longParameter____________________________________)
     {
         return;
     }
 
     // leading comments don't affect this
-    public Exactly80(string lajsfaskdlfklasdfklskadlfklsdfkasdkfjaskdfkdfd)
+    public Exactly80(string longParameter_________________________________)
     {
         return;
     }
