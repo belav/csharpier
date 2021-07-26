@@ -32,7 +32,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         or DoStatementSyntax
                         or CheckedExpressionSyntax
                         or CatchFilterClauseSyntax
-                        or ParenthesizedExpressionSyntax;
+                        or ParenthesizedExpressionSyntax
+                        or SwitchStatementSyntax;
 
             return shouldNotIndent
                 ? Doc.Group(docs)
