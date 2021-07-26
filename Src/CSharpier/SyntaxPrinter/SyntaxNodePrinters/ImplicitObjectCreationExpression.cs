@@ -10,7 +10,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Group(
                 Token.Print(node.NewKeyword),
-                ArgumentList.Print(node.ArgumentList),
+                Doc.Group(ArgumentList.Print(node.ArgumentList)),
                 node.Initializer != null
                     ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer))
                     : Doc.Null

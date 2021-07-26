@@ -152,12 +152,15 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 constructorInitializerGroupId = Guid.NewGuid().ToString();
                 var colonToken = Token.PrintWithSuffix(constructorInitializer.ColonToken, " ");
+                var argumentList = Doc.GroupWithId(
+                    constructorInitializerGroupId,
+                    ArgumentList.Print(constructorInitializer.ArgumentList)
+                );
 
                 if (parameterGroupId != null)
                 {
                     declarationGroup.Add(
-                        Doc.GroupWithId(
-                            constructorInitializerGroupId,
+                        Doc.Group(
                             Doc.Indent(Doc.IfBreak(" ", Doc.Line, parameterGroupId)),
                             Doc.IfBreak(
                                 Doc.Align(2, colonToken),
@@ -165,23 +168,18 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                 parameterGroupId
                             ),
                             Token.Print(constructorInitializer.ThisOrBaseKeyword),
-                            Doc.IfBreak(
-                                ArgumentList.Print(constructorInitializer.ArgumentList),
-                                Doc.Indent(ArgumentList.Print(constructorInitializer.ArgumentList)),
-                                parameterGroupId
-                            )
+                            Doc.IfBreak(argumentList, Doc.Indent(argumentList), parameterGroupId)
                         )
                     );
                 }
                 else
                 {
                     declarationGroup.Add(
-                        Doc.GroupWithId(
-                            constructorInitializerGroupId,
+                        Doc.Group(
                             Doc.Indent(Doc.Line),
                             Doc.Indent(colonToken),
                             Token.Print(constructorInitializer.ThisOrBaseKeyword),
-                            Doc.Indent(ArgumentList.Print(constructorInitializer.ArgumentList))
+                            Doc.Indent(argumentList)
                         )
                     );
                 }

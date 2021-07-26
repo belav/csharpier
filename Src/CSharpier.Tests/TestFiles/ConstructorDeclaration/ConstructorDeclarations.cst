@@ -78,17 +78,29 @@ public class Initializers : BasicClass
 
     public LongMethodName___________________________________________________________()
         /*Comment*/: base(false) { }
+
+    public LongInitializerBreaksAtEdgeCase()
+        : this(someParameter, someOtherParameter___________________________________________________)
+    {
+        WithBody();
+    }
 }
 
-public class Exactly80
+public class Exactly100
 {
-    public Exactly80(int longParameter____________________________________)
+    public Exactly100()
+        : this(someParameter, someOtherParameter___________________________________________________)
+    {
+        WithBody();
+    }
+
+    public Exactly100(int longParameter____________________________________________________________)
     {
         return;
     }
 
     // leading comments don't affect this
-    public Exactly80(string longParameter_________________________________)
+    public Exactly100(int longParameter____________________________________________________________)
     {
         return;
     }

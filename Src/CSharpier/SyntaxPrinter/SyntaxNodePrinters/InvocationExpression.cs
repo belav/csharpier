@@ -36,7 +36,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     printedNodes.Add(
                         new PrintedNode(
                             Node: invocationExpressionSyntax,
-                            Doc: ArgumentList.Print(invocationExpressionSyntax.ArgumentList)
+                            Doc: Doc.Group(
+                                ArgumentList.Print(invocationExpressionSyntax.ArgumentList)
+                            )
                         )
                     );
                 }
