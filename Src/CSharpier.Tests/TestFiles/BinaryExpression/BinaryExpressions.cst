@@ -1,5 +1,9 @@
 class TestClass
 {
+    public string SomeProperty =>
+        "someLongStringValue__________________________"
+        + "someOtherLongStringValue_______________________________";
+
     void TestMethod()
     {
         var someVar = "a string" + thatIsJust(shortEnough) + "to not wrap";
@@ -13,6 +17,16 @@ class TestClass
             "a really loooooooooooooooong string"
             + someMethodCall("with long args")
             + "really long string";
+
+        var coalesceIsSpecial =
+            someValue_________________________
+            ?? someOtherValue_______________________
+            ?? someOtherValue_______________________;
+
+        coalesceIsSpecial ??=
+            someValue_________________________
+            ?? someOtherValue_______________________
+            ?? someOtherValue_______________________;
 
         CallSomeLongMethodWithStringConcatenationThatShouldNotBreak(
             csharpDirectory + ".generated.cs",
@@ -31,5 +45,159 @@ class TestClass
         var directivesDontBreakBinary =
 #pragma
             true || false;
+
+        var conditionalIndentation = someBoolean
+            ? someLongValue____________________________________
+                + someLongValue____________________________________
+            : someLongValue____________________________________
+                + someLongValue____________________________________;
+
+        if (
+            one == two
+            || someValue_______________
+                == thisWillIndent_______________________________________________________________
+        ) { }
+
+        while (
+            one == two
+            || someValue_______________
+                == thisWillIndent_______________________________________________________________
+        ) { }
+
+        switch (one == two
+            || someValue_______________
+                == thisWillIndent_______________________________________________________________)
+        { }
+
+        do { }
+        while (
+            one == two
+            || someValue_______________
+                == thisWillIndent_______________________________________________________________
+        );
+
+        CallMethod(
+            "shouldIndentToMakeItClearWhereParametersAre"
+                + "someLongString_________________________________",
+            "SecondParameter"
+        );
+
+        var y = someList.Where(
+            o =>
+                someLongValue_______________________
+                && theseShouldNotIndent_________________
+                && theseShouldNotIndent_________________
+                    > butThisOneShould_________________________________________
+        );
+
+        var someVariable =
+            CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            )
+            && CallMethod() == someValue;
+
+        var someValue =
+            someLongThing___________________________.someLongThing_____________ ?? someOtherThing;
+
+        if (
+            one - two == three
+            || one + two == three
+            || one * two == three
+            || one / two == three
+            || one % two == three
+            || one != three
+            || one < two
+            || one > two
+            || one <= two
+            || one >= two
+            || one is null
+            || one as Something == null
+            || one - two > three
+            || someLongThing - someOtherLongThing__________________________________
+                > anotherLongThing
+        ) { }
+
+        if (
+            CallSomeMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            ) == 0
+        ) { }
+
+        if (
+            someValue
+            && CallSomeMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            ) == 0
+        ) { }
+
+        if (
+            CallSomeMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            ) == 0
+            && someValue
+        ) { }
+
+        if (
+            CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            )
+            && CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            )
+        ) { }
+
+        if (
+            CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            ) || CallMethod(shortValue, "shortValue")
+        ) { }
+
+        if (
+            CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            )
+            || CallMethod(shortValue, "shortValue")
+            || CallMethod(shortValue1, "shortValue1")
+        ) { }
+
+        if (
+            CallSomeMethod(someParameter)
+            == someLongerValue_______________________________________________________________
+        ) { }
+
+        return someValue != someOtherValue
+            && someLongValue_____________________ == someOtherLongValue_____________________;
+
+        var someValue =
+            CallSomething(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            ) == someOtherValue;
+
+        var coalesceIsSpecial =
+            CallSomething(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            ) ?? someOtherValue;
+
+        var notIdealSee355 =
+            variable.Replace(someParameter_______________________, '.')
+                .Replace(someParameter_______________________, '.') + ".";
+
+        UglyButConsistentWithPrettier(
+            someValue
+                == someLongThing__________________________________________________________________
+                || someOtherValue
+                    == someOtherLongThing________________________________________________,
+            secondParameter
+        );
     }
 }
