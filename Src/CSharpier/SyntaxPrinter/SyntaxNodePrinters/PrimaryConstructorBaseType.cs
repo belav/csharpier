@@ -8,10 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(PrimaryConstructorBaseTypeSyntax node)
         {
-            return Doc.Concat(
-                Node.Print(node.Type),
-                Doc.Group(ArgumentList.Print(node.ArgumentList))
-            );
+            return Doc.Concat(Node.Print(node.Type), ArgumentList.Print(node.ArgumentList));
         }
     }
 }
