@@ -1,3 +1,27 @@
+# 0.9.8
+
+[diff](https://github.com/belav/csharpier/compare/0.9.7...0.9.8)
+
+- Remove all configuration options except for print width. [#358](https://github.com/belav/csharpier/issues/358)
+- Array Rank not breaking [#353](https://github.com/belav/csharpier/issues/353)
+- SwitchStatement should SpaceBrace [#352](https://github.com/belav/csharpier/issues/352)
+- ObjectInitializer keeping brace on same line [#336](https://github.com/belav/csharpier/issues/336)
+- ObjectInitializer in CollectionInitializer breaking [#335](https://github.com/belav/csharpier/issues/335)
+- Better format do-while [#317](https://github.com/belav/csharpier/issues/317)
+- Blocks inside of other blocks are getting an extra new line. [#316](https://github.com/belav/csharpier/issues/316)
+- Implicit Object Creation breaking  [#302](https://github.com/belav/csharpier/issues/302)
+- ForEachVariableStatement not breaking/indenting consistently with regular ForEachStatement [#300](https://github.com/belav/csharpier/issues/300)
+- MethodDeclaration with Constraints not breaking before brace [#299](https://github.com/belav/csharpier/issues/299)
+- Constructor with Base edge cases [#298](https://github.com/belav/csharpier/issues/298)
+- Nested Generics in Variable Declaration [#295](https://github.com/belav/csharpier/issues/295)
+- #pragma or trailing comment causes breaking in Object Initializer [#252](https://github.com/belav/csharpier/issues/252)
+- Verbatim string with mismatched line endings triggers "failed syntax tree validation" [#244](https://github.com/belav/csharpier/issues/244)
+- SwitchExpression formatting. [#237](https://github.com/belav/csharpier/issues/237)
+- Empty Method should keep braces on same line [#133](https://github.com/belav/csharpier/issues/133)
+- Improving formatting for edge cases of ForStatement [#112](https://github.com/belav/csharpier/issues/112)
+- ConditionalExpression indentation [#83](https://github.com/belav/csharpier/issues/83)
+- BinaryExpression Grouping [#37](https://github.com/belav/csharpier/issues/37)
+
 # 0.9.7
 
 [diff](https://github.com/belav/csharpier/compare/0.9.6...0.9.7)
