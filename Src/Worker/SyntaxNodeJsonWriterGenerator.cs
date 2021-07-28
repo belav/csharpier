@@ -177,7 +177,7 @@ namespace Worker
                         && (
                             propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>)
                             || propertyType.GetGenericTypeDefinition()
-                            == typeof(SeparatedSyntaxList<>)
+                                == typeof(SeparatedSyntaxList<>)
                         )
                     )
                     || propertyType == typeof(SyntaxTokenList)

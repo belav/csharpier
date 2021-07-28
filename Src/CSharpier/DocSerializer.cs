@@ -50,30 +50,46 @@ namespace CSharpier
             return document switch
             {
                 NullDoc => indent + "Doc.Null",
-                StringDoc { IsDirective: true } directive => $"{indent}Doc.Directive({directive.Value.Replace("\"", "\\\"")})",
+                StringDoc { IsDirective: true } directive
+                  => $"{indent}Doc.Directive({directive.Value.Replace("\"", "\\\"")})",
                 StringDoc stringDoc => indent + "\"" + stringDoc.Value.Replace("\"", "\\\"") + "\"",
-                HardLine hardLine => indent
-                + "Doc.HardLine"
-                + (hardLine.Squash ? "IfNoPreviousLine" : string.Empty)
-                + (hardLine.SkipBreakIfFirstInGroup ? "SkipBreakIfFirstInGroup" : string.Empty),
+                HardLine hardLine
+                  => indent
+                      + "Doc.HardLine"
+                      + (hardLine.Squash ? "IfNoPreviousLine" : string.Empty)
+                      + (
+                          hardLine.SkipBreakIfFirstInGroup
+                              ? "SkipBreakIfFirstInGroup"
+                              : string.Empty
+                      ),
                 LiteralLine => indent + "Doc.LiteralLine",
                 Concat concat => PrintConcat(concat),
-                LineDoc lineDoc => indent
-                + (lineDoc.Type == LineDoc.LineType.Normal ? "Doc.Line" : "Doc.SoftLine"),
+                LineDoc lineDoc
+                  => indent
+                      + (lineDoc.Type == LineDoc.LineType.Normal ? "Doc.Line" : "Doc.SoftLine"),
                 BreakParent => "",
-                Align align => $"{indent}Doc.Align({align.Width}, {PrintIndentedDocTree(align.Contents)})",
+                Align align
+                  => $"{indent}Doc.Align({align.Width}, {PrintIndentedDocTree(align.Contents)})",
                 Trim => $"{indent}Doc.Trim",
-                ForceFlat forceFlat => $"{indent}Doc.ForceFlat({newLine}{PrintIndentedDocTree(forceFlat.Contents)})",
-                IndentDoc indentDoc => $"{indent}Doc.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents)}{newLine}{indent})",
-                ConditionalGroup conditionalGroup => $"{indent}Doc.ConditionalGroup({newLine}{PrintIndentedDocTree(conditionalGroup.Contents)}{newLine}{indent})",
-                Group group => @$"{indent}Doc.Group{(@group.GroupId != null ? "WithId" : string.Empty)}(
+                ForceFlat forceFlat
+                  => $"{indent}Doc.ForceFlat({newLine}{PrintIndentedDocTree(forceFlat.Contents)})",
+                IndentDoc indentDoc
+                  => $"{indent}Doc.Indent({newLine}{PrintIndentedDocTree(indentDoc.Contents)}{newLine}{indent})",
+                ConditionalGroup conditionalGroup
+                  => $"{indent}Doc.ConditionalGroup({newLine}{PrintIndentedDocTree(conditionalGroup.Contents)}{newLine}{indent})",
+                Group group
+                  => @$"{indent}Doc.Group{(@group.GroupId != null ? "WithId" : string.Empty)}(
 {(@group.GroupId != null ? $"{nextIndent}\"{@group.GroupId}\",{newLine}" : string.Empty)}{PrintIndentedDocTree(@group.Contents)}{newLine}{indent})",
-                LeadingComment leadingComment => $"{indent}Doc.LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})",
-                TrailingComment trailingComment => $"{indent}Doc.TrailingComment(\"{trailingComment.Comment}\", CommentType.{(trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})",
-                IndentIfBreak indentIfBreak => @$"{indent}Doc.IndentIfBreak(
+                LeadingComment leadingComment
+                  => $"{indent}Doc.LeadingComment(\"{leadingComment.Comment}\", CommentType.{(leadingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})",
+                TrailingComment trailingComment
+                  => $"{indent}Doc.TrailingComment(\"{trailingComment.Comment}\", CommentType.{(trailingComment.Type == CommentType.SingleLine ? "SingleLine" : "MultiLine")})",
+                IndentIfBreak indentIfBreak
+                  => @$"{indent}Doc.IndentIfBreak(
 {PrintIndentedDocTree(indentIfBreak.FlatContents)},
 {nextIndent}""{indentIfBreak.GroupId}"")",
-                IfBreak ifBreak => @$"{indent}Doc.IfBreak(
+                IfBreak ifBreak
+                  => @$"{indent}Doc.IfBreak(
 {PrintIndentedDocTree(ifBreak.BreakContents)},
 {PrintIndentedDocTree(ifBreak.FlatContents)},
 {nextIndent}""{ifBreak.GroupId}"")",

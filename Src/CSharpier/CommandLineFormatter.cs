@@ -277,10 +277,10 @@ namespace CSharpier
                     Interlocked.Increment(ref this.Result.ExceptionsValidatingSource);
                     WriteLine(
                         GetPath(file)
-                        + " - failed with exception during syntax tree validation"
-                        + Environment.NewLine
-                        + ex.Message
-                        + ex.StackTrace
+                            + " - failed with exception during syntax tree validation"
+                            + Environment.NewLine
+                            + ex.Message
+                            + ex.StackTrace
                     );
                 }
             }

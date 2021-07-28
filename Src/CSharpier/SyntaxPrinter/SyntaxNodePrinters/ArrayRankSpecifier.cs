@@ -22,12 +22,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.Print(node.OpenBracketToken),
                 node.Sizes.Any()
                     ? Doc.Concat(
-                            Doc.Indent(
-                                Doc.SoftLine,
-                                SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.Line)
-                            ),
-                            Doc.SoftLine
-                        )
+                          Doc.Indent(
+                              Doc.SoftLine,
+                              SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.Line)
+                          ),
+                          Doc.SoftLine
+                      )
                     : Doc.Null,
                 Token.Print(node.CloseBracketToken)
             );

@@ -18,14 +18,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             var variable = node switch
             {
-                ForEachStatementSyntax forEach => Doc.Concat(
-                    Node.Print(forEach.Type),
-                    " ",
-                    Token.Print(forEach.Identifier)
-                ),
-                ForEachVariableStatementSyntax forEachVariable => Node.Print(
-                    forEachVariable.Variable
-                ),
+                ForEachStatementSyntax forEach
+                  => Doc.Concat(Node.Print(forEach.Type), " ", Token.Print(forEach.Identifier)),
+                ForEachVariableStatementSyntax forEachVariable
+                  => Node.Print(forEachVariable.Variable),
                 _ => Doc.Null
             };
 

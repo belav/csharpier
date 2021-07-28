@@ -13,14 +13,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             Doc sections = node.Sections.Count == 0
                 ? " "
                 : Doc.Concat(
-                        Doc.Indent(
-                            Doc.Concat(
-                                Doc.HardLine,
-                                Doc.Join(Doc.HardLine, node.Sections.Select(Node.Print))
-                            )
-                        ),
-                        Doc.HardLine
-                    );
+                      Doc.Indent(
+                          Doc.Concat(
+                              Doc.HardLine,
+                              Doc.Join(Doc.HardLine, node.Sections.Select(Node.Print))
+                          )
+                      ),
+                      Doc.HardLine
+                  );
 
             var groupId = Guid.NewGuid().ToString();
 

@@ -8,7 +8,8 @@ namespace Worker
 {
     public static class Ignored
     {
-        public static string[] Properties = {
+        public static string[] Properties =
+        {
             "language",
             "parent",
             "parentTrivia",

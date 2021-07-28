@@ -25,6 +25,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             BlockSyntax? body = null;
             ArrowExpressionClauseSyntax? expressionBody = null;
             SyntaxToken? semicolonToken = null;
+
             string? parameterGroupId = null;
             string? constructorInitializerGroupId = null;
 
@@ -201,9 +202,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 docs.Add(
                     parameterGroupId != null
                         ? ConstraintClauses.PrintWithConditionalSpace(
-                                constraintClauses,
-                                parameterGroupId
-                            )
+                              constraintClauses,
+                              parameterGroupId
+                          )
                         : ConstraintClauses.Print(constraintClauses)
                 );
             }
