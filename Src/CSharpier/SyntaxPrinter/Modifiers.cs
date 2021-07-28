@@ -28,8 +28,8 @@ namespace CSharpier.SyntaxPrinter
                 " ",
                 modifiers.Count > 1
                     ? Doc.Concat(
-                            modifiers.Skip(1).Select(o => Token.PrintWithSuffix(o, " ")).ToArray()
-                        )
+                          modifiers.Skip(1).Select(o => Token.PrintWithSuffix(o, " ")).ToArray()
+                      )
                     : Doc.Null
             );
         }

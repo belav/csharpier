@@ -53,8 +53,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 groupId != null
                     ? Doc.IfBreak(" ", Doc.Line, groupId)
                     : node.Parent is ParenthesizedLambdaExpressionSyntax or BlockSyntax
-                            ? Doc.Null
-                            : Doc.Line,
+                        ? Doc.Null
+                        : Doc.Line,
                 Token.Print(node.OpenBraceToken),
                 node.Statements.Count == 0 ? " " : Doc.Concat(innerDoc, statementSeparator),
                 Token.Print(node.CloseBraceToken)

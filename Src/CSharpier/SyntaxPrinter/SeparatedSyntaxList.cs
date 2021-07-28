@@ -11,7 +11,8 @@ namespace CSharpier.SyntaxPrinter
             SeparatedSyntaxList<T> list,
             Func<T, Doc> printFunc,
             Doc afterSeparator
-        ) where T : SyntaxNode {
+        ) where T : SyntaxNode
+        {
             var docs = new List<Doc>();
             for (var x = 0; x < list.Count; x++)
             {

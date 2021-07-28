@@ -96,9 +96,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     " ",
                     explicitInterfaceSpecifierSyntax != null
                         ? Doc.Concat(
-                                Node.Print(explicitInterfaceSpecifierSyntax.Name),
-                                Token.Print(explicitInterfaceSpecifierSyntax.DotToken)
-                            )
+                              Node.Print(explicitInterfaceSpecifierSyntax.Name),
+                              Token.Print(explicitInterfaceSpecifierSyntax.DotToken)
+                          )
                         : Doc.Null,
                     identifier,
                     contents,

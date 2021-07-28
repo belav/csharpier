@@ -7,7 +7,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ConditionalExpressionSyntax node)
         {
-            Doc[] contents = {
+            Doc[] contents =
+            {
                 Doc.Line,
                 Token.PrintWithSuffix(node.QuestionToken, " "),
                 Doc.Align(2, Node.Print(node.WhenTrue)),

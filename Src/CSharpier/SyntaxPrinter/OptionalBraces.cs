@@ -13,8 +13,8 @@ namespace CSharpier.SyntaxPrinter
         {
             return node is BlockSyntax blockSyntax
                 ? groupId == null
-                        ? Block.Print(blockSyntax)
-                        : Block.PrintWithConditionalSpace(blockSyntax, groupId)
+                    ? Block.Print(blockSyntax)
+                    : Block.PrintWithConditionalSpace(blockSyntax, groupId)
                 : Doc.Indent(Doc.HardLine, Node.Print(node));
         }
     }

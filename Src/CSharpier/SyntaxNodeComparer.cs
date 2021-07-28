@@ -172,7 +172,11 @@ namespace CSharpier
         private CompareResult NotEqual(SyntaxNode? originalNode, SyntaxNode? formattedNode)
         {
             return new()
-            { IsInvalid = true, OriginalSpan = originalNode?.Span, NewSpan = formattedNode?.Span };
+            {
+                IsInvalid = true,
+                OriginalSpan = originalNode?.Span,
+                NewSpan = formattedNode?.Span
+            };
         }
 
         private CompareResult NotEqual(TextSpan? originalSpan, TextSpan? formattedSpan)
@@ -238,8 +242,9 @@ namespace CSharpier
 
                     result = list[next];
                     next++;
-                }
-                while (result.Kind() is SyntaxKind.EndOfLineTrivia or SyntaxKind.WhitespaceTrivia);
+                } while (
+                    result.Kind() is SyntaxKind.EndOfLineTrivia or SyntaxKind.WhitespaceTrivia
+                );
 
                 return result;
             }

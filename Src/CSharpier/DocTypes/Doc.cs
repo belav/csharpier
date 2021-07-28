@@ -32,12 +32,10 @@ namespace CSharpier.DocTypes
         public static readonly Trim Trim = new();
 
         public static LeadingComment LeadingComment(string comment, CommentType commentType) =>
-            new()
-            { Type = commentType, Comment = comment };
+            new() { Type = commentType, Comment = comment };
 
         public static TrailingComment TrailingComment(string comment, CommentType commentType) =>
-            new()
-            { Type = commentType, Comment = comment };
+            new() { Type = commentType, Comment = comment };
 
         public static Concat Concat(List<Doc> contents) => new(contents);
 
@@ -68,16 +66,13 @@ namespace CSharpier.DocTypes
         }
 
         public static ForceFlat ForceFlat(List<Doc> contents) =>
-            new()
-            { Contents = contents.Count == 0 ? contents[0] : Concat(contents) };
+            new() { Contents = contents.Count == 0 ? contents[0] : Concat(contents) };
 
         public static ForceFlat ForceFlat(params Doc[] contents) =>
-            new()
-            { Contents = contents.Length == 0 ? contents[0] : Concat(contents) };
+            new() { Contents = contents.Length == 0 ? contents[0] : Concat(contents) };
 
         public static Group Group(List<Doc> contents) =>
-            new()
-            { Contents = contents.Count == 1 ? contents[0] : Concat(contents) };
+            new() { Contents = contents.Count == 1 ? contents[0] : Concat(contents) };
 
         public static Group GroupWithId(string groupId, List<Doc> contents)
         {
@@ -94,12 +89,10 @@ namespace CSharpier.DocTypes
         }
 
         public static Group Group(params Doc[] contents) =>
-            new()
-            { Contents = contents.Length == 1 ? contents[0] : Concat(contents) };
+            new() { Contents = contents.Length == 1 ? contents[0] : Concat(contents) };
 
         public static IndentDoc Indent(params Doc[] contents) =>
-            new()
-            { Contents = contents.Length == 1 ? contents[0] : Concat(contents) };
+            new() { Contents = contents.Length == 1 ? contents[0] : Concat(contents) };
 
         public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
 
@@ -109,7 +102,11 @@ namespace CSharpier.DocTypes
             string? groupId = null
         ) =>
             new()
-            { FlatContents = flatContents, BreakContents = breakContents, GroupId = groupId, };
+            {
+                FlatContents = flatContents,
+                BreakContents = breakContents,
+                GroupId = groupId,
+            };
 
         public static IndentIfBreak IndentIfBreak(Doc contents, string groupId) =>
             new(contents, groupId);

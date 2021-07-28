@@ -23,9 +23,9 @@ namespace CSharpier
             {
                 throw new Exception(
                     "The filePath of "
-                    + filePath
-                    + " does not start with the ignoreBaseDirectoryPath of "
-                    + this.IgnoreBaseDirectoryPath
+                        + filePath
+                        + " does not start with the ignoreBaseDirectoryPath of "
+                        + this.IgnoreBaseDirectoryPath
                 );
             }
 
@@ -63,8 +63,8 @@ namespace CSharpier
                 {
                     console.WriteLine(
                         "The .csharpierignore file at "
-                        + ignoreFilePath
-                        + " could not be parsed due to the following line:"
+                            + ignoreFilePath
+                            + " could not be parsed due to the following line:"
                     );
                     console.WriteLine(line);
                     console.WriteLine("Exception: " + ex.Message);
