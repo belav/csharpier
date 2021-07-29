@@ -14,7 +14,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             docs.Add(Token.PrintWithSuffix(node.Keyword, " "), Node.Print(node.Pattern));
             if (node.WhenClause != null)
             {
-                docs.Add(" ", Node.Print(node.WhenClause));
+                docs.Add(Node.Print(node.WhenClause));
             }
             docs.Add(Token.Print(node.ColonToken));
             return Doc.Concat(docs);
