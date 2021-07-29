@@ -52,6 +52,8 @@ public class ClassName
         {
             case "A" when b > 50:
             case "B" when B < 50:
+            case "C______________________________________________________________________"
+                when C == 50:
             default:
             {
                 break;

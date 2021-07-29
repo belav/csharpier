@@ -7,9 +7,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(WhenClauseSyntax node)
         {
-            return Doc.Concat(
-                Token.PrintWithSuffix(node.WhenKeyword, " "),
-                Node.Print(node.Condition)
+            return Doc.Group(
+                Doc.Indent(
+                    Doc.Line,
+                    Token.PrintWithSuffix(node.WhenKeyword, " "),
+                    Node.Print(node.Condition)
+                )
             );
         }
     }

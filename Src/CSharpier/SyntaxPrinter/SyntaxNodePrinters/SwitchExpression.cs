@@ -1,6 +1,4 @@
-using System.Linq;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
@@ -24,7 +22,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                 Doc.Group(
                                     Node.Print(o.Pattern),
                                     o.WhenClause != null
-                                        ? Doc.Concat(" ", Node.Print(o.WhenClause))
+                                        ? Node.Print(o.WhenClause)
                                         : Doc.Null,
                                     // use align 2 here to make sure that the => never lines up with statements above it
                                     // it makes this more readable for big ugly switch expressions
