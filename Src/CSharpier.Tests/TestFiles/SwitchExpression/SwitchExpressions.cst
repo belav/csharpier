@@ -7,15 +7,21 @@ class ClassName
             1 => 100,
             2 => 200,
             3 when false => 300,
+
             _ => throw new global::System.Exception()
         };
 
         var newState = (GetState(), action, hasKey) switch
         {
+            // Open/Close
             (DoorState.Closed, Action.Open, _) => DoorState.Opened,
             (DoorState.Opened, Action.Close, _) => DoorState.Closed,
+
+            // Locking
             (DoorState.Closed, Action.Lock, true) => DoorState.Locked,
             (DoorState.Locked, Action.Unlock, true) => DoorState.Closed,
+
+            // Do nothing
             (var state, _, _) => state
         };
 

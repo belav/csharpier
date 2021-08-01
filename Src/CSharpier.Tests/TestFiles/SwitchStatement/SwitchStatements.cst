@@ -9,13 +9,16 @@ public class ClassName
             {
                 break;
             }
+
             case 1 + 1:
             {
                 return;
             }
+
             case 4:
                 var x = 1;
                 break;
+
             default:
             {
                 return;
@@ -26,6 +29,7 @@ public class ClassName
         {
             case 1:
             case 2:
+
             default:
                 break;
         }
@@ -52,8 +56,10 @@ public class ClassName
         {
             case "A" when b > 50:
             case "B" when B < 50:
+
             case "C______________________________________________________________________"
                 when C == 50:
+
             default:
             {
                 break;
