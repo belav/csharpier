@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 namespace CSharpier
 {
@@ -26,7 +23,7 @@ namespace CSharpier
         }
 
         public static async Task<int> Run(
-            string[] directoryOrFile,
+            string[]? directoryOrFile,
             bool check,
             bool fast,
             bool skipWrite,
@@ -43,10 +40,7 @@ namespace CSharpier
                     Console.InputEncoding
                 );
                 standardInFileContents = await streamReader.ReadToEndAsync();
-            }
 
-            if (directoryOrFileNotProvided)
-            {
                 directoryOrFile = new[] { Directory.GetCurrentDirectory() };
             }
             else
@@ -59,7 +53,7 @@ namespace CSharpier
 
             var commandLineOptions = new CommandLineOptions
             {
-                DirectoryOrFilePaths = directoryOrFile.ToArray(),
+                DirectoryOrFilePaths = directoryOrFile!.ToArray(),
                 StandardInFileContents = standardInFileContents,
                 Check = check,
                 Fast = fast,

@@ -34,7 +34,7 @@ if ($firstRun)
     & git reset --hard
     & git checkout -b $preBranch
 
-    dotnet $csharpierProject\Src\CSharpier\bin\Release\net5.0\dotnet-csharpier.dll
+    dotnet $csharpierProject\Src\CSharpier\bin\Release\net5.0\dotnet-csharpier.dll .
 
     & git add -A
     & git commit -m "Before $branch"
@@ -53,7 +53,7 @@ if ($firstRun) {
     & git checkout $postBranch
 }
 
-dotnet $csharpierProject\Src\CSharpier\bin\Release\net5.0\dotnet-csharpier.dll
+dotnet $csharpierProject\Src\CSharpier\bin\Release\net5.0\dotnet-csharpier.dll .
 
 & git add -A
 & git commit -m "After $branch"

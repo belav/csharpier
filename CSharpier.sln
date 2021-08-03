@@ -34,6 +34,7 @@ ProjectSection(SolutionItems) = preProject
 	Scripts/ChangeLog.ps1 = Scripts/ChangeLog.ps1
 	Scripts/UpdateForkedRepos.ps1 = Scripts/UpdateForkedRepos.ps1
 	Scripts\CreateTestingPR.ps1 = Scripts\CreateTestingPR.ps1
+	Scripts\TestCli.ps1 = Scripts\TestCli.ps1
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{7C99AEA7-E608-40B5-9B2E-353B6E4C9DBE}"

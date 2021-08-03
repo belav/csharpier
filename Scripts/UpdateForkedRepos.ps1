@@ -20,7 +20,7 @@ foreach($folder in Get-ChildItem $csharpierRepos) {
     & git checkout main
     & git reset --hard
 
-    dotnet csharpier
+    dotnet csharpier .
 
     & git add -A
     & git commit -m $versionWithQuotes
