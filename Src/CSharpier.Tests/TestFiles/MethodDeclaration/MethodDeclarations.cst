@@ -10,9 +10,9 @@ public class ClassName
     }
 
     public void LongMethodNameForceLineBreak(
-        string oneoneoneoneoneoneoneoneone,
-        string twotwotwotwotwotwotwotwo,
-        string threethreethreethreethreethree
+        string firstParameter___________,
+        string secondParameter___________,
+        string thirdParameter___________
     ) {
         return;
     }
@@ -23,12 +23,12 @@ public class ClassName
         string three
     ) { }
 
-    public void ReallyLongMethodNameWithoutAnyParametersShouldNewLineBrace111111()
+    public void ReallyLongMethodNameWithoutAnyParametersShouldNewLineBrace_______()
     {
         return;
     }
 
-    public void DoStuff(
+    public void MethodName(
         // leading
         string one, // trailing
         string two,
@@ -37,12 +37,12 @@ public class ClassName
         var x = 0;
     }
 
-    public void DoStuff(string one, string two) { }
+    public void MethodName(string one, string two) { }
 
-    public void DoStuff()
+    public void MethodName()
     {
-        DoStuff();
-        DoStuff();
+        MethodName();
+        MethodName();
     }
 
     private Doc MethodWithParameters__________________(
@@ -64,6 +64,15 @@ public class ClassName
 
     private void MethodWithEmptyBlockShouldNotGetExtraSpace()
     {
+        {
+            return;
+        }
+    }
+
+    public void MethodName()
+    {
+        var keepNextExtraLine = 1;
+
         {
             return;
         }

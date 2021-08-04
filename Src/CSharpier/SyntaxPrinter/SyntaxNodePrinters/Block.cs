@@ -49,7 +49,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 DocUtilities.RemoveInitialDoubleHardLine(innerDoc);
             }
 
-            return Doc.Group(
+            var result = Doc.Group(
                 groupId != null
                     ? Doc.IfBreak(" ", Doc.Line, groupId)
                     : node.Parent is ParenthesizedLambdaExpressionSyntax or BlockSyntax
@@ -59,6 +59,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 node.Statements.Count == 0 ? " " : Doc.Concat(innerDoc, statementSeparator),
                 Token.Print(node.CloseBraceToken)
             );
+
+            return node.Parent is BlockSyntax
+                ? Doc.Concat(ExtraNewLines.Print(node), result)
+                : result;
         }
     }
 }
