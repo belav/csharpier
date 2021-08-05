@@ -63,8 +63,6 @@ namespace CSharpier.SyntaxPrinter
                         return BaseExpression.Print(baseExpressionSyntax);
                     case BaseFieldDeclarationSyntax baseFieldDeclarationSyntax:
                         return BaseFieldDeclaration.Print(baseFieldDeclarationSyntax);
-                    case BaseListSyntax baseListSyntax:
-                        return BaseList.Print(baseListSyntax);
                     case BaseMethodDeclarationSyntax baseMethodDeclarationSyntax:
                         return BaseMethodDeclaration.Print(baseMethodDeclarationSyntax);
                     case BasePropertyDeclarationSyntax basePropertyDeclarationSyntax:
