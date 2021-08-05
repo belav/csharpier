@@ -69,7 +69,7 @@ namespace CSharpier
                       + (lineDoc.Type == LineDoc.LineType.Normal ? "Doc.Line" : "Doc.SoftLine"),
                 BreakParent => "",
                 Align align
-                  => $"{indent}Doc.Align({align.Width}, {PrintIndentedDocTree(align.Contents)})",
+                  => $"{indent}Doc.Align({align.Width},{newLine}{PrintIndentedDocTree(align.Contents)}{newLine}{indent})",
                 Trim => $"{indent}Doc.Trim",
                 ForceFlat forceFlat
                   => $"{indent}Doc.ForceFlat({newLine}{PrintIndentedDocTree(forceFlat.Contents)})",
