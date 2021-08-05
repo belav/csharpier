@@ -37,10 +37,9 @@ public record LotsOfParametersWithBaseWithLots(
     string longNameParameter,
     string areTheyCalledParametersWithRecords,
     string theyLookLikeParameters
-)
-    : BaseRecord(
-          longNameParameter,
-          areTheyCalledParametersWithRecords,
-          theyLookLikeParameters,
-          "someExtraValueToMakeThisReallyLong"
-      );
+) : BaseRecord(
+      longNameParameter,
+      areTheyCalledParametersWithRecords,
+      theyLookLikeParameters,
+      "someExtraValueToMakeThisReallyLong"
+  );

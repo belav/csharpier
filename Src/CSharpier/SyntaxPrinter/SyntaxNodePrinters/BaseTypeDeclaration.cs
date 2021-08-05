@@ -95,7 +95,29 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (node.BaseList != null)
             {
-                docs.Add(BaseList.Print(node.BaseList));
+                var baseListDoc = Doc.Concat(
+                    Token.Print(node.BaseList.ColonToken),
+                    " ",
+                    Doc.Align(
+                        2,
+                        Doc.Concat(
+                            SeparatedSyntaxList.Print(node.BaseList.Types, Node.Print, Doc.Line)
+                        )
+                    )
+                );
+
+                var groupedBaseListDoc = Doc.Group(Doc.Indent(Doc.Line, baseListDoc));
+
+                if (node is RecordDeclarationSyntax)
+                {
+                    docs.Add(
+                        Doc.IfBreak(Doc.Concat(" ", baseListDoc), groupedBaseListDoc, groupId)
+                    );
+                }
+                else
+                {
+                    docs.Add(groupedBaseListDoc);
+                }
             }
 
             docs.Add(ConstraintClauses.Print(constraintClauses));
