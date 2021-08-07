@@ -28,6 +28,12 @@ public class ClassName
                 ? someThirdValue_________________
                 : someOtherThirdValue_______________________;
 
+        var value =
+            someLongValue__________________________________
+            && someOtherValue__________________________________
+                ? trueValue
+                : falseValue;
+
         var fileContents = File.ReadAllText(
             file,
             // leading here should break parameters and GetEncoding should still group

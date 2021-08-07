@@ -141,19 +141,25 @@ class ClassName
         int r;
         return 0
             != (
-                result = (null == tuple.Item1)
-                    ? -1
-                    : (null == tuple.Item2)
-                        ? +1
-                        : 0 != (r = comparer.Compare(tuple.Item1.LocalName, tuple.Item2.LocalName))
-                            ? r
+                result =
+                    (null == tuple.Item1)
+                        ? -1
+                        : (null == tuple.Item2)
+                            ? +1
                             : 0
                               != (
-                                  r = comparer.Compare(
-                                      tuple.Item1.NamespaceURI,
-                                      tuple.Item2.NamespaceURI
+                                  r = comparer.Compare(tuple.Item1.LocalName, tuple.Item2.LocalName)
+                              )
+                                ? r
+                                : 0
+                                  != (
+                                      r = comparer.Compare(
+                                          tuple.Item1.NamespaceURI,
+                                          tuple.Item2.NamespaceURI
+                                      )
                                   )
-                              ) ? r : 0
+                                    ? r
+                                    : 0
             );
     }
 }
