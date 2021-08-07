@@ -46,7 +46,11 @@ namespace CSharpier
             else
             {
                 directoryOrFile = directoryOrFile!.Select(
-                        o => Path.Combine(Directory.GetCurrentDirectory(), o)
+                        o =>
+                            o == "."
+                                // .csharpierignore gets confused by . so just don't include it
+                                ? Directory.GetCurrentDirectory()
+                                : Path.Combine(Directory.GetCurrentDirectory(), o)
                     )
                     .ToArray();
             }
