@@ -15,5 +15,15 @@ class ClassName
 
         assignmentInstructionalText =
             editAssignmentViewModel.InstructionalTextxxxxxxxxxx ?? string.Empty;
+
+        value =
+            someLongValue__________________________________
+            && someOtherValue__________________________________
+                ? trueValue
+                : falseValue;
+
+        value = someLongCondition________________________________
+            ? "someLongValue"
+            : "someOtherLongValue";
     }
 }

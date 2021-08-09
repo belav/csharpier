@@ -76,7 +76,81 @@ class ClassName
                 + SqlParameterCollectionExtensions.DefaultValueColumnWidth
         ];
 
+        var someLongValue_________________ =
+            memberAccessExpression[elementAccessExpression].theMember______________________________;
+
         var someLongVariable_doesNotBreakArrayRank____________________________ =
             (ArrayType[])CallMethod();
+
+        var conditionalIndentation = someBoolean
+            ? someLongValue____________________________________
+              + someLongValue____________________________________
+            : someLongValue____________________________________
+              + someLongValue____________________________________;
+
+        var longEnoughToMakeThisBreak =
+            something == somethingElse ? shortValue__________ : otherShortValue;
+
+        var value =
+            someLongValue__________________________________
+            && someOtherValue__________________________________
+                ? trueValue
+                : falseValue;
+
+        var value = someLongCondition______________________
+            ? "someLongValue"
+            : "someOtherLongValue";
+
+        fixed (
+            byte* someName_____________________ =
+                (someCondition > someOtherLongCondition_______________________)
+                    ? new byte[someValue]
+                    : null
+        ) { }
+
+        var variableDeclarator = conditionalAccessExpression?.invocationExpression(
+            o => someLongValue___________________________________
+        );
+
+        var variableDeclarator = (CastExpression)invocationExpression.SomeMethod(
+            someParameter______________________
+        );
+
+        var someValue =
+            (SomeLongGenericType<SomeType, SomeOtherType>)someLongValue___________________________;
+
+        var variableDeclarator = (
+            @"parenthesizedExpression
+withLineEnding"
+        );
+
+        var value = coalesceAssignmentExpression ??= CallMethod(
+            parameter_____________________,
+            parameter_____________________
+        );
+
+        var value = CallSomeMethod(
+            someParameter_____________________,
+            someParameter_____________________
+        )
+            ? someValue
+            : someOtherValue;
+
+        var someValue =
+            await SomeObject.CallLongAsyncMethod____________________________________________(
+                someParameter_________________________,
+                someParameter_________________________
+            );
+
+        var someValue =
+            SomeObject.CallLongMethod____________________________________________________(
+                someParameter_________________________,
+                someParameter_________________________
+            );
+
+        var someValue =
+            SomeObject.CallLongMethod____________________________________________________()
+                ? someValue
+                : someOtherValue;
     }
 }

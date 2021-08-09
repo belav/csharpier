@@ -8,11 +8,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(AssignmentExpressionSyntax node)
         {
-            return Doc.Concat(
-                Node.Print(node.Left),
-                " ",
+            return RightHandSide.Print(
+                Doc.Concat(Node.Print(node.Left), " "),
                 Token.Print(node.OperatorToken),
-                RightHandSide.Print(node.Right)
+                node.Right
             );
         }
     }
