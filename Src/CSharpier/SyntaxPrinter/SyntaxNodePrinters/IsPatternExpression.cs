@@ -8,12 +8,20 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(IsPatternExpressionSyntax node)
         {
+            var useSpace =
+                node.Parent is IfStatementSyntax or ParenthesizedExpressionSyntax
+                && node.Pattern is not (ParenthesizedPatternSyntax or UnaryPatternSyntax);
+
             return Doc.Group(
                 Node.Print(node.Expression),
-                Doc.Indent(
-                    Doc.Line,
-                    Token.PrintWithSuffix(node.IsKeyword, " "),
-                    Doc.Indent(Node.Print(node.Pattern))
+                Doc.IndentIf(
+                    node.Parent is not (IfStatementSyntax or ParenthesizedExpressionSyntax),
+                    Doc.Concat(
+                        useSpace ? " " : Doc.Line,
+                        Token.Print(node.IsKeyword),
+                        node.Pattern is RecursivePatternSyntax { Type: null } ? Doc.Null : " ",
+                        Node.Print(node.Pattern)
+                    )
                 )
             );
         }

@@ -71,7 +71,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 var shouldGroup =
                     binaryExpressionSyntax.Kind() != binaryExpressionSyntax.Parent!.Kind()
                     && binaryExpressionSyntax.Left.GetType() != binaryExpressionSyntax.GetType()
-                    && binaryExpressionSyntax.Right.GetType() != binaryExpressionSyntax.GetType();
+                    && binaryExpressionSyntax.Right.GetType() != binaryExpressionSyntax.GetType()
+                    && binaryExpressionSyntax.Left is not IsPatternExpressionSyntax;
 
                 // nested ?? have the next level on the right side, everything else has it on the left
                 var binaryOnTheRight =

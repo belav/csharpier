@@ -8,7 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ParenthesizedPatternSyntax node)
         {
-            return Doc.Concat(
+            return Doc.Group(
                 Token.Print(node.OpenParenToken),
                 Node.Print(node.Pattern),
                 Token.Print(node.CloseParenToken)

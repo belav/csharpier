@@ -50,7 +50,28 @@ class ClassName
             or AnotherObject
             or OrEvenSomeOtherObject_________________
               => CallSomeMethod(someValue),
+            SomeOtherObject
+            {
+                SomeProperty: SomeOtherProject
+            }
+            or AnotherObject
+              => CallSomeMethod(someValue),
+            AnotherObject
+            or SomeOtherObject
+            {
+                SomeProperty: SomeOtherProject
+            }
+              => CallSomeMethod(someValue),
             _ => CallSomeMethod(someValue)
+        };
+
+        return someValue switch
+        {
+            { IsParameter: true, } => noExtraLineAfterThis,
+            {
+                IsParameter: someLongValue____________________________________________,
+            }
+              => someOtherValue
         };
     }
 }
