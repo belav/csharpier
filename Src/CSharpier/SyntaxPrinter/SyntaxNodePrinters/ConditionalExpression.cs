@@ -17,13 +17,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Doc.Align(2, Node.Print(node.WhenFalse))
             };
 
-            return Doc.Concat(
+            return Doc.Group(
                 Node.Print(node.Condition),
-                Doc.Group(
-                    node.Parent is ConditionalExpressionSyntax
-                        ? Doc.Align(2, contents)
-                        : Doc.Indent(contents)
-                )
+                node.Parent is ConditionalExpressionSyntax
+                    ? Doc.Align(2, contents)
+                    : Doc.Indent(contents)
             );
         }
     }

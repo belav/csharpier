@@ -18,7 +18,7 @@ I encourage you to try it out on your own code and report any bugs, code that do
   - It supports validating the syntax of the code it produces to ensure the only changes made were whitespace and line breaks.
   - It formats c# <= 9.0
 
-Try it out at [Playground](https://csharpier.bnt-studios.com)
+Try it out at [Playground](https://csharpier.com)
 
 ### Before
 ```c#

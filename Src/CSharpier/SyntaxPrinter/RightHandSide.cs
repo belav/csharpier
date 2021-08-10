@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis.CSharp;
@@ -8,40 +9,59 @@ namespace CSharpier.SyntaxPrinter
 {
     public static class RightHandSide
     {
-        public static Doc Print(ExpressionSyntax node)
+        public static Doc Print(Doc leftDoc, Doc operatorDoc, ExpressionSyntax rightNode)
         {
+            var layout = DetermineLayout(rightNode);
+
             var groupId = Guid.NewGuid().ToString();
-            return node switch
+
+            return layout switch
             {
-                InitializerExpressionSyntax initializerExpressionSyntax
-                  => InitializerExpression.Print(initializerExpressionSyntax),
-                InvocationExpressionSyntax
-                or ParenthesizedLambdaExpressionSyntax
-                or ObjectCreationExpressionSyntax
-                or ElementAccessExpressionSyntax
-                or ArrayCreationExpressionSyntax
-                or ImplicitArrayCreationExpressionSyntax
+                Layout.BasicConcatWithoutLine
+                  => Doc.Concat(leftDoc, operatorDoc, Node.Print(rightNode)),
+                Layout.BreakAfterOperator
                   => Doc.Group(
-                      Doc.GroupWithId(groupId, Doc.Indent(Doc.Line)),
-                      Doc.IndentIfBreak(Doc.Group(Node.Print(node)), groupId)
+                      Doc.Group(leftDoc),
+                      operatorDoc,
+                      Doc.Group(Doc.Indent(Doc.Line, Node.Print(rightNode)))
                   ),
-                AnonymousObjectCreationExpressionSyntax
-                or AnonymousMethodExpressionSyntax
-                or ConditionalExpressionSyntax
-                or SwitchExpressionSyntax
-                or LambdaExpressionSyntax
-                or AwaitExpressionSyntax
-                or WithExpressionSyntax
-                  => Doc.Group(Doc.Group(Doc.Indent(Doc.Line)), Node.Print(node)),
+                Layout.Fluid
+                  => Doc.Group(
+                      Doc.Group(leftDoc),
+                      operatorDoc,
+                      Doc.GroupWithId(groupId, Doc.Indent(Doc.Line)),
+                      Doc.IndentIfBreak(Node.Print(rightNode), groupId)
+                  ),
+                _ => throw new Exception("The layout type of " + layout + " was not handled.")
+            };
+        }
+
+        private static Layout DetermineLayout(ExpressionSyntax rightNode)
+        {
+            return rightNode switch
+            {
+                InitializerExpressionSyntax => Layout.BasicConcatWithoutLine,
                 BinaryExpressionSyntax
+                or ImplicitObjectCreationExpressionSyntax
                 or InterpolatedStringExpressionSyntax
                 or IsPatternExpressionSyntax
                 or LiteralExpressionSyntax
                 or QueryExpressionSyntax
                 or StackAllocArrayCreationExpressionSyntax
-                  => Doc.Indent(Doc.Group(Doc.Line, Node.Print(node))),
-                _ => Doc.Group(Doc.Indent(Doc.Line), Doc.Indent(Node.Print(node)))
+                or MemberAccessExpressionSyntax
+                or ConditionalExpressionSyntax { Condition: BinaryExpressionSyntax
+                or ParenthesizedExpressionSyntax }
+                or CastExpressionSyntax { Type: GenericNameSyntax }
+                  => Layout.BreakAfterOperator,
+                _ => Layout.Fluid
             };
+        }
+
+        private enum Layout
+        {
+            BasicConcatWithoutLine,
+            BreakAfterOperator,
+            Fluid
         }
     }
 }

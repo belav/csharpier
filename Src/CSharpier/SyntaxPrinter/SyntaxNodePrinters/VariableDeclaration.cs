@@ -21,22 +21,25 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
 
             var variable = node.Variables[0];
+
+            var leftDoc = Doc.Concat(
+                Node.Print(node.Type),
+                " ",
+                Token.Print(variable.Identifier),
+                variable.ArgumentList != null
+                    ? BracketedArgumentList.Print(variable.ArgumentList)
+                    : Doc.Null
+            );
+
             var initializer = variable.Initializer;
 
-            return Doc.Concat(
-                Doc.Group(
-                    Node.Print(node.Type),
-                    " ",
-                    Token.Print(variable.Identifier),
-                    variable.ArgumentList != null
-                        ? BracketedArgumentList.Print(variable.ArgumentList)
-                        : Doc.Null,
-                    initializer != null
-                        ? Doc.Concat(" ", Token.Print(initializer.EqualsToken))
-                        : Doc.Null
-                ),
-                initializer != null ? RightHandSide.Print(initializer.Value) : Doc.Null
-            );
+            return initializer == null
+                ? Doc.Group(leftDoc)
+                : RightHandSide.Print(
+                      Doc.Concat(leftDoc, " "),
+                      Token.Print(initializer.EqualsToken),
+                      initializer.Value
+                  );
         }
     }
 }
