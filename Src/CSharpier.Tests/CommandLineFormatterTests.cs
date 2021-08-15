@@ -248,6 +248,45 @@ namespace CSharpier.Tests
             exitCode.Should().Be(0);
         }
 
+        [Test]
+        public void File_Should_Format_With_Supplied_Symbols()
+        {
+            WhenAFileExists(".csharpierrc", @"{ ""preprocessorSymbolSets"": [[""FORMAT""]] }");
+            WhenAFileExists(
+                "file1.cs",
+                @"public class ClassName
+{
+#if FORMAT
+    public     string ShortPropertyName;
+#elif NO_FORMAT
+    public     string ShortPropertyName;
+#else
+    public     string ShortPropertyName;
+#endif
+}
+"
+            );
+
+            this.Format();
+
+            var result = GetFileContent("file1.cs");
+
+            result.Should()
+                .Be(
+                    @"public class ClassName
+{
+#if FORMAT
+    public string ShortPropertyName;
+#elif NO_FORMAT
+    public     string ShortPropertyName;
+#else
+    public     string ShortPropertyName;
+#endif
+}
+"
+                );
+        }
+
         private (int exitCode, IList<string> lines) Format(
             bool skipWrite = false,
             bool check = false,

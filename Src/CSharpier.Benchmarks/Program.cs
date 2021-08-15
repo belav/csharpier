@@ -9,7 +9,7 @@ namespace CSharpier.Benchmarks
     [MemoryDiagnoser]
     public class Benchmarks
     {
-        [Benchmark]
+        //[Benchmark]
         public void Default_CodeFormatter()
         {
             var codeFormatter = new CodeFormatter();
@@ -21,6 +21,12 @@ namespace CSharpier.Benchmarks
         {
             var syntaxNodeComparer = new SyntaxNodeComparer(code, code, CancellationToken.None);
             syntaxNodeComparer.CompareSource();
+        }
+
+        [Benchmark]
+        public void IsCodeBasicallyEqual_SyntaxNodeComparer()
+        {
+            DisabledTextComparer.IsCodeBasicallyEqual(code, code);
         }
 
         private string code =

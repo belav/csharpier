@@ -13,6 +13,7 @@ namespace CSharpier
     public class ConfigurationFileOptions
     {
         public int PrintWidth { get; init; } = 100;
+        public List<string[]>? PreprocessorSymbolSets { get; init; }
 
         private static string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
 
@@ -27,7 +28,8 @@ namespace CSharpier
                 TabWidth = 4,
                 UseTabs = false,
                 Width = configurationFileOptions.PrintWidth,
-                EndOfLine = EndOfLine.Auto
+                EndOfLine = EndOfLine.Auto,
+                PreprocessorSymbolSets = configurationFileOptions.PreprocessorSymbolSets ?? new(),
             };
         }
 

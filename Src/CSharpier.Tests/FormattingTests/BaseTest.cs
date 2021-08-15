@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Text;
 using System.Threading;
+using CSharpier.SyntaxPrinter;
 using DiffEngine;
 using FluentAssertions;
 using NUnit.Framework;
@@ -33,6 +34,8 @@ namespace CSharpier.Tests.FormattingTests
             );
             var fileReaderResult =
                 FileReader.ReadFile(filePath, new FileSystem(), CancellationToken.None).Result;
+
+            PreprocessorSymbols.Reset();
 
             var formatter = new CodeFormatter();
             var result = formatter.Format(

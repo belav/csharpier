@@ -182,6 +182,8 @@ namespace CSharpier.SyntaxPrinter
                         Doc.HardLineSkipBreakIfFirstInGroup
                     );
                 }
+
+                PreprocessorSymbols.AddSymbolSet(trivia);
             }
 
             if (skipLastHardline && docs.Any() && docs.Last() is HardLine)

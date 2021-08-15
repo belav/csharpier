@@ -24,11 +24,25 @@ namespace CSharpier
             PrinterOptions printerOptions,
             CancellationToken cancellationToken
         ) {
-            var syntaxTree = CSharpSyntaxTree.ParseText(
-                code,
-                new CSharpParseOptions(LanguageVersion.CSharp9, DocumentationMode.Diagnose),
-                cancellationToken: cancellationToken
-            );
+            SyntaxTree ParseText(string codeToFormat, params string[] preprocessorSymbols)
+            {
+                return CSharpSyntaxTree.ParseText(
+                    codeToFormat,
+                    new CSharpParseOptions(
+                        LanguageVersion.CSharp9,
+                        DocumentationMode.Diagnose,
+                        preprocessorSymbols: preprocessorSymbols
+                    ),
+                    cancellationToken: cancellationToken
+                );
+            }
+
+            // if a user supplied symbolSets, then we should start with the first one
+            var initialSymbolSet = printerOptions.PreprocessorSymbolSets is { Count: > 0 }
+                ? printerOptions.PreprocessorSymbolSets.First()
+                : Array.Empty<string>();
+
+            var syntaxTree = ParseText(code, initialSymbolSet);
             var syntaxNode = await syntaxTree.GetRootAsync(cancellationToken);
             if (syntaxNode is not CompilationUnitSyntax rootNode)
             {
@@ -57,6 +71,16 @@ namespace CSharpier
 
             try
             {
+                if (printerOptions.PreprocessorSymbolSets is { Count: > 0 })
+                {
+                    PreprocessorSymbols.StopCollecting();
+                    PreprocessorSymbols.SetSymbolSets(
+                        // we already formatted with the first set above
+                        printerOptions.PreprocessorSymbolSets.Skip(1).ToList()
+                    );
+                }
+
+                PreprocessorSymbols.Reset();
                 var document = Node.Print(rootNode);
                 var lineEnding = GetLineEnding(code, printerOptions);
                 var formattedCode = DocPrinter.DocPrinter.Print(
@@ -64,6 +88,20 @@ namespace CSharpier
                     printerOptions,
                     lineEnding
                 );
+
+                PreprocessorSymbols.StopCollecting();
+                foreach (var symbolSet in PreprocessorSymbols.GetSymbolSets())
+                {
+                    syntaxTree = ParseText(formattedCode, symbolSet);
+
+                    document = Node.Print(await syntaxTree.GetRootAsync(cancellationToken));
+                    formattedCode = DocPrinter.DocPrinter.Print(
+                        document,
+                        printerOptions,
+                        lineEnding
+                    );
+                }
+
                 return new CSharpierResult
                 {
                     Code = formattedCode,
