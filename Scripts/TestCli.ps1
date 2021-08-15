@@ -1,6 +1,9 @@
-$csharpier = $PSScriptRoot + "/../Src/CSharpier/bin/release/net5.0/dotnet-csharpier.dll"
-if (-not (Test-Path $csharpier)) {
-    Write-Output "No dll found at $($csharpier)" 
+$ErrorActionPreference = "Stop"
+
+. $PsScriptRoot/Helpers.ps1
+
+if (-not (Test-Path $csharpierDllPath)) {
+    Write-Output "No dll found at $($csharpierDllPath)" 
     exit 1
 }
 
@@ -17,7 +20,7 @@ $unformatted = "public class ClassName  { }"
 $failed = $false;
 
 Write-Output "---- File provided by stdIn should be formatted"
-$stdInResult = $unformatted | dotnet $csharpier
+$stdInResult = $unformatted | dotnet $csharpierDllPath
 if ($stdInResult -ne $formatted) {
     Write-Output "Piping c# code to CSharpier did not result in formatted code. The result was:"
     Write-Output $stdInResult
@@ -27,7 +30,7 @@ if ($stdInResult -ne $formatted) {
 
 Write-Output "---- Check should exit with 1 when file not formatted"
 New-Item -Path . -Name "Check.cs" -Value $unformatted 2>&1 | Out-Null
-$checkResult = dotnet $csharpier Check.cs --check
+$checkResult = dotnet $csharpierDllPath Check.cs --check
 $checkResult = $checkResult -join "`n"
 if ($LASTEXITCODE -ne 1) {
     Write-Output "The exit code from --check was $($LASTEXITCODE) but was expected to be 1"
@@ -47,7 +50,7 @@ if (-not ($checkResult.Contains($wasNotFormatted))) {
 
 Write-Output "---- Basic file should be formatted"
 New-Item -Path . -Name "Code.cs" -Value $unformatted 2>&1 | Out-Null
-dotnet $csharpier Code.cs 2>&1 | Out-Null
+dotnet $csharpierDllPath Code.cs 2>&1 | Out-Null
 $codeContents = Get-Content "Code.cs"
 if ($codeContents -ne $formatted) {
     Write-Output "The result of formatting a basic class was"
@@ -62,7 +65,7 @@ Write-Output "---- Ignore file respected when directoryOrFile is '.' and csharpi
 New-Item -Path "Subdirectory" -ItemType "Directory" | Out-Null
 New-Item -Path "Subdirectory" -Name "IgnoredFile.cs" -Value $unformatted | Out-Null
 New-Item -Path . -Name ".csharpierignore" -Value "Subdirectory/IgnoredFile.cs" | Out-Null
-dotnet $csharpier . 2>&1 | Out-Null
+dotnet $csharpierDllPath . 2>&1 | Out-Null
 $ignoredFileContents = Get-Content "Subdirectory/IgnoredFile.cs"
 if ($ignoredFileContents -ne $unformatted) {
     Write-Output "The file at Subdirectory/IgnoredFile.cs should have been ignored but it was formatted"
@@ -72,7 +75,7 @@ Remove-Item "Subdirectory" -Recurse -Force
 Remove-Item ".csharpierignore"
 
 Write-Output "---- DirectoryOrFile is required when not using stdin"
-$noDirectoryResult = dotnet $csharpier 2>&1 | Out-Null
+$noDirectoryResult = dotnet $csharpierDllPath 2>&1 | Out-Null
 $noDirectoryResult = $noDirectoryResult -join "`n"
 $missingDirectoryOrFailes = "directoryOrFile is required when not piping stdin to CSharpier"
 if (-not ($missingDirectoryOrFailes.Contains($missingDirectoryOrFailes))) {
