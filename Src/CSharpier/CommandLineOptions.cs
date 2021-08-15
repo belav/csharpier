@@ -33,7 +33,7 @@ namespace CSharpier
                 {
                     Arity = ArgumentArity.ZeroOrMore,
                     Description =
-                        "One or more paths to a directory containing files to format or a file to format. If a path is not specified the current directory is used"
+                        "One or more paths to a directory containing c# files to format or a c# file to format. If a path is not specified the current directory is used"
                 }.LegalFilePathsOnly(),
                 new Option(
                     new[] { "--check" },

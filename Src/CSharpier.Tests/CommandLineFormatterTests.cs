@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using System.Text;
@@ -33,7 +32,21 @@ namespace CSharpier.Tests
 
             var result = this.Format();
 
-            result.lines.First().Should().Contain(@"Invalid.cs - failed to compile");
+            result.lines.First()
+                .Should()
+                .Be(@"Warn \Invalid.cs - Failed to compile so was not formatted.");
+        }
+
+        [Test]
+        public void Format_Writes_Unsupported()
+        {
+            WhenAFileExists("Unsupported.js", "asdfasfasdf");
+
+            var result = this.Format(directoryOrFilePaths: "Unsupported.js");
+
+            result.lines.First()
+                .Should()
+                .Be(@"Error /Unsupported.js - Is an unsupported file type.");
         }
 
         [Test]
@@ -68,7 +81,7 @@ namespace CSharpier.Tests
 
             exitCode.Should().Be(1);
             this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
-            lines.First().Should().Contain(@"Unformatted.cs - was not formatted");
+            lines.First().Should().Be(@"Warn \Unformatted.cs - Was not formatted.");
         }
 
         [Test]
@@ -266,6 +279,8 @@ namespace CSharpier.Tests
                     CancellationToken.None
                 ).Result;
 
+            fakeConsole.Close();
+
             return (result, fakeConsole.Lines);
         }
 
@@ -292,6 +307,8 @@ namespace CSharpier.Tests
         {
             public readonly IList<string> Lines = new List<string>();
 
+            private string nextLine = "";
+
             public void WriteLine(string line = null)
             {
                 while (line != null && line.Contains("  "))
@@ -301,16 +318,31 @@ namespace CSharpier.Tests
 
                 if (line != null)
                 {
-                    this.Lines.Add(line);
+                    nextLine += line;
+                    this.Lines.Add(nextLine);
+                    nextLine = "";
                 }
             }
 
             public void Write(string value)
             {
-                this.Lines.Add(value);
+                nextLine += value;
+            }
+
+            public void WriteWithColor(string value, ConsoleColor color)
+            {
+                this.Write(value);
             }
 
             public Encoding InputEncoding => Encoding.UTF8;
+
+            public void Close()
+            {
+                if (nextLine != "")
+                {
+                    this.Lines.Add(nextLine);
+                }
+            }
         }
     }
 }

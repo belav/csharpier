@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using CSharpier.Utilities;
 using FluentAssertions;
 using NUnit.Framework;
@@ -143,6 +144,11 @@ four
             public void Write(string value)
             {
                 stringBuilder.Append(value);
+            }
+
+            public void WriteWithColor(string value, ConsoleColor color)
+            {
+                this.Write(value);
             }
 
             public string GetOutput()

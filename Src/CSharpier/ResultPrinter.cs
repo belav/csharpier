@@ -8,28 +8,38 @@ namespace CSharpier
             CommandLineOptions commandLineOptions
         ) {
             console.WriteLine(
-                PadToSize("total time: ", 80) + ReversePad(result.ElapsedMilliseconds + "ms")
+                PadToSize("Total time: ", 80) + ReversePad(result.ElapsedMilliseconds + "ms")
             );
             PrintResultLine("Total files", result.Files, console);
 
             if (!commandLineOptions.Fast)
             {
-                PrintResultLine(
-                    "Failed syntax tree validation",
-                    result.FailedSyntaxTreeValidation,
-                    console
-                );
+                if (result.FailedSyntaxTreeValidation != 0)
+                {
+                    PrintResultLine(
+                        "Failed syntax tree validation",
+                        result.FailedSyntaxTreeValidation,
+                        console
+                    );
+                }
 
-                PrintResultLine(
-                    "Threw exceptions while formatting",
-                    result.ExceptionsFormatting,
-                    console
-                );
-                PrintResultLine(
-                    "files that threw exceptions while validating syntax tree",
-                    result.ExceptionsValidatingSource,
-                    console
-                );
+                if (result.ExceptionsFormatting != 0)
+                {
+                    PrintResultLine(
+                        "Threw exceptions while formatting",
+                        result.ExceptionsFormatting,
+                        console
+                    );
+                }
+
+                if (result.ExceptionsValidatingSource != 0)
+                {
+                    PrintResultLine(
+                        "files that threw exceptions while validating syntax tree",
+                        result.ExceptionsValidatingSource,
+                        console
+                    );
+                }
             }
 
             if (commandLineOptions.Check)

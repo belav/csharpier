@@ -414,7 +414,7 @@ public class CommandLineFormatter
             this.WriteLine(PadToSize(message + "": "", 80) + ReversePad(count + ""  ""));
         }
 
-        // TODO this could be implemented with a https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.filesystemglobbing.matcher?view=dotnet-plat-ext-5.0
+        // this could be implemented with a https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.filesystemglobbing.matcher?view=dotnet-plat-ext-5.0
         // when we implement include/exclude/ignore for real, look into using that
         private bool IgnoreFile(string filePath)
         {
