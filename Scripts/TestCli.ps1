@@ -72,7 +72,7 @@ if ($ignoredFileContents -ne $unformatted) {
     Write-Output ""
 }
 Remove-Item "Subdirectory" -Recurse -Force
-Remove-Item ".csharpierignore"
+Remove-Item ".csharpierignore" -Force
 
 Write-Output "---- DirectoryOrFile is required when not using stdin"
 $noDirectoryResult = dotnet $csharpierDllPath 2>&1 | Out-Null
