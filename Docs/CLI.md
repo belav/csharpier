@@ -19,10 +19,12 @@ Options:
 ```
 
 ### \[<directoryOrFile\>]
-If this is not supplied, then CSharpier will recursively format all files it finds starting from the current directory.  
+ 
 If a list of paths is supplied
 - if the path points to an existing file, CSharpier will format that file
 - if the path points to an existing directory, CSharpier will recursively format the contents of that directory
+
+If a list of paths is not supplied, then stdin is read.
 
 ### --check
 Used to check if your files are already formatted. Outputs any files that have not already been formatted.
