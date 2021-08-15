@@ -10,7 +10,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             var useSpace =
                 node.Parent is IfStatementSyntax or ParenthesizedExpressionSyntax
-                && node.Pattern is not (ParenthesizedPatternSyntax or UnaryPatternSyntax);
+                && node.Pattern
+                    is not (ParenthesizedPatternSyntax
+                        or UnaryPatternSyntax
+                        or RecursivePatternSyntax { PropertyPatternClause: { Subpatterns: { Count: 0 } } });
 
             return Doc.Group(
                 Node.Print(node.Expression),

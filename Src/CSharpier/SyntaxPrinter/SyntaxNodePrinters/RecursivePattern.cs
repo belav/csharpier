@@ -39,31 +39,38 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (node.PropertyPatternClause != null)
             {
-                result.Add(
-                    node.Parent switch
-                    {
-                        IsPatternExpressionSyntax => Doc.Line,
-                        SwitchExpressionArmSyntax => Doc.Null,
-                        _ => Doc.SoftLine
-                    },
-                    Token.Print(node.PropertyPatternClause.OpenBraceToken),
-                    Doc.Indent(
-                        node.PropertyPatternClause.Subpatterns.Any() ? Doc.Line : Doc.Null,
-                        SeparatedSyntaxList.Print(
-                            node.PropertyPatternClause.Subpatterns,
-                            subpatternNode =>
-                                Doc.Group(
-                                    subpatternNode.NameColon != null
-                                        ? NameColon.Print(subpatternNode.NameColon)
-                                        : Doc.Null,
-                                    Node.Print(subpatternNode.Pattern)
-                                ),
-                            Doc.Line
-                        )
-                    ),
-                    Doc.Line,
-                    Token.Print(node.PropertyPatternClause.CloseBraceToken)
-                );
+                if (!node.PropertyPatternClause.Subpatterns.Any())
+                {
+                    result.Add(" { }");
+                }
+                else
+                {
+                    result.Add(
+                        node.Parent switch
+                        {
+                            IsPatternExpressionSyntax => Doc.Line,
+                            SwitchExpressionArmSyntax => Doc.Null,
+                            _ => Doc.SoftLine
+                        },
+                        Token.Print(node.PropertyPatternClause.OpenBraceToken),
+                        Doc.Indent(
+                            node.PropertyPatternClause.Subpatterns.Any() ? Doc.Line : Doc.Null,
+                            SeparatedSyntaxList.Print(
+                                node.PropertyPatternClause.Subpatterns,
+                                subpatternNode =>
+                                    Doc.Group(
+                                        subpatternNode.NameColon != null
+                                            ? NameColon.Print(subpatternNode.NameColon)
+                                            : Doc.Null,
+                                        Node.Print(subpatternNode.Pattern)
+                                    ),
+                                Doc.Line
+                            )
+                        ),
+                        Doc.Line,
+                        Token.Print(node.PropertyPatternClause.CloseBraceToken)
+                    );
+                }
             }
 
             if (node.Designation != null)

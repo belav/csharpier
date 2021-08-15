@@ -22,8 +22,37 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 }
 /*
 
-// review this, there are more edge cases
-https://github.com/belav/aspnetcore/pull/25/files
+// used to break before is
+            if (
+                contractResolver.ResolveContract(
+                    target.GetType()
+                ) is JsonObjectContract jsonObjectContract
+            ) {
+// related
+                        if (
+                            GetModelStateValue(
+                                viewContext,
+                                fullName,
+                                typeof(string)
+                            ) is string modelStateValue
+                        ) {
+
+                            if (
+                                node.Children[
+                                    i
+                                ] is CSharpExpressionIntermediateNode nestedExpression
+                            ) {
+                            
+            if (
+                TestSink.Writes.FirstOrDefault(
+                    w => w.LogLevel > LogLevel.Information
+                ) is WriteContext writeContext
+            ) {
+
+// this is over the limit
+                        if (
+                            duplicate is TagHelperDirectiveAttributeIntermediateNode duplicateDirectiveAttribute
+                        ) {
 
 // what should this do?
 if (
