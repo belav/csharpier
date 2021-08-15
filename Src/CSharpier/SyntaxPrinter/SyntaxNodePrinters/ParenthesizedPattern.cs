@@ -10,7 +10,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Group(
                 Token.Print(node.OpenParenToken),
-                Node.Print(node.Pattern),
+                Doc.Indent(Doc.SoftLine, Node.Print(node.Pattern)),
+                Doc.SoftLine,
                 Token.Print(node.CloseParenToken)
             );
         }

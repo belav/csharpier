@@ -118,6 +118,16 @@ class ClassName
         }
 
         if (
+            someOtherValue_____________
+            is (
+                SomeLongType_____________________________________
+                or SomeLongType_____________________________________
+            )
+        ) {
+            return;
+        }
+
+        if (
             node is SomeType_______________
             {
                 SomeProperty: SomeOtherType_____________________________
@@ -152,10 +162,19 @@ class ClassName
         if (
             someLongName____________________________________________________
             is { } anotherLongName______________________
-        ) { }
+        ) {
+            return;
+        }
 
         if (
             someLongVariableName____________
+            is SomeLongTypeName______________________________ someOtherLongVariableName_____________
+        ) {
+            return;
+        }
+
+        if (
+            someArray[index]
             is SomeLongTypeName______________________________ someOtherLongVariableName_____________
         ) {
             return;
