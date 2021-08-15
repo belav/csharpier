@@ -153,5 +153,12 @@ class ClassName
             someLongName____________________________________________________
             is { } anotherLongName______________________
         ) { }
+
+        if (
+            someLongVariableName____________
+            is SomeLongTypeName______________________________ someOtherLongVariableName_____________
+        ) {
+            return;
+        }
     }
 }

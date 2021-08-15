@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -9,10 +7,20 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
     public static class RecursivePattern
     {
+        public static Doc PrintWithOutType(RecursivePatternSyntax node)
+        {
+            return Print(node, false);
+        }
+
         public static Doc Print(RecursivePatternSyntax node)
         {
+            return Print(node, true);
+        }
+
+        private static Doc Print(RecursivePatternSyntax node, bool includeType)
+        {
             var result = new List<Doc>();
-            if (node.Type != null)
+            if (node.Type != null && includeType)
             {
                 result.Add(Node.Print(node.Type));
             }

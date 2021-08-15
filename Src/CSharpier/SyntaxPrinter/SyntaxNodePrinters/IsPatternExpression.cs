@@ -8,24 +8,49 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(IsPatternExpressionSyntax node)
         {
-            var useSpace =
-                node.Parent is IfStatementSyntax or ParenthesizedExpressionSyntax
-                && node.Pattern
-                    is not (ParenthesizedPatternSyntax
-                        or UnaryPatternSyntax
-                        or RecursivePatternSyntax { PropertyPatternClause: { Subpatterns: { Count: 0 } } });
-
-            return Doc.Group(
-                Node.Print(node.Expression),
-                Doc.IndentIf(
-                    node.Parent is not (IfStatementSyntax or ParenthesizedExpressionSyntax),
-                    Doc.Concat(
-                        useSpace ? " " : Doc.Line,
+            if (node.Parent is not (IfStatementSyntax or ParenthesizedExpressionSyntax))
+            {
+                return Doc.Group(
+                    Node.Print(node.Expression),
+                    Doc.Indent(
+                        Doc.Line,
                         Token.Print(node.IsKeyword),
                         node.Pattern is RecursivePatternSyntax { Type: null } ? Doc.Null : " ",
                         Node.Print(node.Pattern)
                     )
-                )
+                );
+            }
+
+            if (node.Pattern is not RecursivePatternSyntax recursivePattern)
+            {
+                return Doc.Group(
+                    Node.Print(node.Expression),
+                    Doc.Line,
+                    Token.Print(node.IsKeyword),
+                    " ",
+                    Node.Print(node.Pattern)
+                );
+            }
+
+            if (recursivePattern.Type is null)
+            {
+                return Doc.Group(
+                    Node.Print(node.Expression),
+                    Doc.Line,
+                    Token.Print(node.IsKeyword),
+                    RecursivePattern.Print(recursivePattern)
+                );
+            }
+
+            return Doc.Group(
+                Doc.Group(
+                    Node.Print(node.Expression),
+                    Doc.Line,
+                    Token.Print(node.IsKeyword),
+                    " ",
+                    Node.Print(recursivePattern.Type)
+                ),
+                RecursivePattern.PrintWithOutType(recursivePattern)
             );
         }
     }

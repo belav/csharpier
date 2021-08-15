@@ -49,11 +49,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 ) is WriteContext writeContext
             ) {
 
-// this is over the limit
-                        if (
-                            duplicate is TagHelperDirectiveAttributeIntermediateNode duplicateDirectiveAttribute
-                        ) {
-
 // what should this do?
 if (
     someOtherValue_____________
