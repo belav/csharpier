@@ -35,7 +35,7 @@ namespace CSharpier.Tests
             result.lines.First()
                 .Should()
                 .Be(
-                    $"Warn {Path.PathSeparator}Invalid.cs - Failed to compile so was not formatted."
+                    $"Warn {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
                 );
         }
 
@@ -85,7 +85,7 @@ namespace CSharpier.Tests
             this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
             lines.First()
                 .Should()
-                .Be($"Warn {Path.PathSeparator}Unformatted.cs - Was not formatted.");
+                .Be($"Warn {Path.DirectorySeparatorChar}Unformatted.cs - Was not formatted.");
         }
 
         [Test]
