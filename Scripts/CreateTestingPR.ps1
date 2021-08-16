@@ -25,7 +25,7 @@ if ($branch -eq "master") {
 $preBranch = "pre-" + $branch
 $postBranch = "post-" + $branch
 
-Set-Location $testingRepo
+Set-Location $pathToTestingRepo
 & git reset --hard
 
 git checkout $postBranch
