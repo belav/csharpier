@@ -53,7 +53,17 @@ namespace CSharpier
                 )
             };
 
-            rootCommand.Description = "csharpier";
+            rootCommand.AddValidator(
+                cmd =>
+                {
+                    if (!Console.IsInputRedirected && cmd.Children["directoryOrFile"] == null)
+                    {
+                        return "directoryOrFile is required when not piping stdin to CSharpier";
+                    }
+
+                    return null;
+                }
+            );
 
             return rootCommand;
         }

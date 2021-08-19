@@ -63,7 +63,7 @@ dotnet tool install -g csharpier
 ### Basic Usage
 Run csharpier from the directory you wish to format.
 ```console
-dotnet csharpier
+dotnet csharpier .
 ```
 
 ### MsBuild Package

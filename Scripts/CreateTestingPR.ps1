@@ -1,3 +1,18 @@
+param (
+    [string]$pathToTestingRepo
+)
+
+if (!$pathToTestingRepo) {
+    $pathToTestingRepo = "C:\Projects\csharpierForkedRepos\aspnetcore"
+}
+if (!(Test-Path $pathToTestingRepo)) {
+    Write-Output "No directory found at $($pathToTestingRepo)."
+    Write-Output "Please checkout out https://github.com/belav/aspnetcore there or supply -pathToTestingRepo"
+    exit 1
+}
+
+. $PsScriptRoot/Helpers.ps1
+
 $ErrorActionPreference = "Stop"
 
 $branch = & git branch --show-current
@@ -10,12 +25,7 @@ if ($branch -eq "master") {
 $preBranch = "pre-" + $branch
 $postBranch = "post-" + $branch
 
-$csharpierProject = (Get-Item $PSScriptRoot).Parent.FullName
-
-# TODO this should probably be a parameter
-$testingRepo = "C:\Projects\csharpierForkedRepos\aspnetcore"
-
-Set-Location $testingRepo
+Set-Location $pathToTestingRepo
 & git reset --hard
 
 git checkout $postBranch
@@ -23,29 +33,29 @@ $postBranchOutput = (git status) | Out-String
 $firstRun = -not $postBranchOutput.Contains("On branch $postBranch")
 if ($firstRun)
 {
-    Set-Location $csharpierProject
+    Set-Location $repositoryRoot
     # TODO this should make sure the working tree is clean
     & git checkout master
-    & dotnet build Src\CSharpier\CSharpier.csproj -c Release
+    Build-CSharpier
 
-    Set-Location $testingRepo
+    Set-Location $pathToTestingRepo
     
     & git checkout main
     & git reset --hard
     & git checkout -b $preBranch
 
-    dotnet $csharpierProject\Src\CSharpier\bin\Release\net5.0\dotnet-csharpier.dll
+    dotnet $csharpierDllPath .
 
     & git add -A
     & git commit -m "Before $branch"
     & git push --set-upstream origin $preBranch
 }
 
-Set-Location $csharpierProject
+Set-Location $repositoryRoot
 git checkout $branch
-& dotnet build Src\CSharpier\CSharpier.csproj -c Release
+Build-CSharpier
 
-Set-Location $testingRepo
+Set-Location $pathToTestingRepo
 
 if ($firstRun) {
     & git checkout -b $postBranch
@@ -53,7 +63,7 @@ if ($firstRun) {
     & git checkout $postBranch
 }
 
-dotnet $csharpierProject\Src\CSharpier\bin\Release\net5.0\dotnet-csharpier.dll
+dotnet $csharpierDllPath .
 
 & git add -A
 & git commit -m "After $branch"
