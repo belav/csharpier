@@ -12,14 +12,6 @@ class ClassName
             return;
         }
 
-        if (
-            MethodKind
-                is not (MethodKind.Ordinary_________________________
-                    or MethodKind.LocalFunctionn)
-        ) {
-            return;
-        }
-
         if (expr is < 'A' or > 'Z')
         {
             return;
@@ -35,14 +27,14 @@ class ClassName
         var useLine =
             node.OperatorToken.Kind()
                 is SyntaxKind.BarBarToken
-                    or SyntaxKind.BarToken
-                    or SyntaxKind.AmpersandAmpersandToken
-                    or SyntaxKind.AmpersandToken
-                    or SyntaxKind.PlusToken;
+                or SyntaxKind.BarToken
+                or SyntaxKind.AmpersandAmpersandToken
+                or SyntaxKind.AmpersandToken
+                or SyntaxKind.PlusToken;
 
         if (
-            Nullable.GetUnderlyingType111111111111111(typeof(T)) is Type innerType
-            && innerType.IsEnum
+            someRandomValue___________________ is SomeRandomType someRandomType
+            && someRandomType.IsEnum
         ) {
             return;
         }
@@ -54,6 +46,137 @@ class ClassName
 
         if (expr is { } noExtraSpaceBeforeOpenBrace)
         {
+            return;
+        }
+
+        if (
+            someValue_________________________ is SomeType_________________ someType
+            && someType.SomeProperty
+        ) { }
+
+        var value =
+            someOtherValue
+                is SomeType___________________
+                {
+                    SomeProperty: SomeOtherType_____________________________________________
+                }
+                or SomeThirdType___________;
+
+        var value =
+            someOtherValue
+                is SomeType___________________
+                {
+                    SomeProperty: SomeOtherType_____________________________________________,
+                    AnotherProperty: SomeType
+                }
+                or SomeThirdType___________;
+
+        var value =
+            someOtherValue
+                is SomeType___________________
+                {
+                    SomeProperty: SomeType or SomeOtherType
+                };
+
+        var value =
+            someOtherValue
+                is SomeType___________________
+                {
+                    SomeProperty: SomeLongType_______________
+                        or SomeOtherLongType___________________
+                };
+
+        var value =
+            someOtherValue
+                is SomeType___________________
+                or SomeOtherType___________________
+                or SomeThirdType___________
+            && someLongValue_________________;
+
+        if (someOtherValue is (SomeType or SomeOtherType))
+        {
+            return;
+        }
+
+        if (someOtherValue is not (SomeType or SomeOtherType))
+        {
+            return;
+        }
+
+        if (
+            someOtherValue_____________
+            is (SomeLongType_____________ or SomeOtherLongType_____________)
+        ) {
+            return;
+        }
+
+        if (
+            someOtherValue_____________
+            is not (SomeLongType_____________ or SomeOtherLongType_____________)
+        ) {
+            return;
+        }
+
+        if (
+            someOtherValue_____________
+            is (
+                SomeLongType_____________________________________
+                or SomeLongType_____________________________________
+            )
+        ) {
+            return;
+        }
+
+        if (
+            node is SomeType_______________
+            {
+                SomeProperty: SomeOtherType_____________________________
+            }
+        ) {
+            return;
+        }
+
+        if (
+            node is PrefixUnaryExpressionSyntax
+            {
+                Operand: ParenthesizedExpressionSyntax
+                {
+                    Expression: IsPatternExpressionSyntax or IsPatternExpressionSyntax
+                },
+            }
+        ) {
+            return;
+        }
+
+        if (
+            !(
+                node is PrefixUnaryExpressionSyntax
+                {
+                    Operand: ParenthesizedExpressionSyntax or IsPatternExpressionSyntax
+                }
+            )
+        ) {
+            return;
+        }
+
+        if (
+            someLongName____________________________________________________
+            is { } anotherLongName______________________
+        ) {
+            return;
+        }
+
+        if (
+            someLongVariableName____________
+            is SomeLongTypeName______________________________ someOtherLongVariableName_____________
+        ) {
+            return;
+        }
+
+        if (
+            someArray[index]
+            is SomeLongTypeName______________________________ someOtherLongVariableName_____________
+        ) {
             return;
         }
     }
