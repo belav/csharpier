@@ -61,9 +61,14 @@ dotnet tool install -g csharpier
 ```
 
 ### Basic Usage
-Run csharpier from the directory you wish to format.
+Run csharpier from the directory you wish to format to recursively format all .cs files
 ```console
 dotnet csharpier .
+```
+
+Run csharpier on a specific file
+```console
+dotnet csharpier /src/UglyUnformattedFile.cs
 ```
 
 ### MsBuild Package

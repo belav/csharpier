@@ -40,7 +40,7 @@ if ($LASTEXITCODE -ne 1) {
 Remove-Item "Check.cs"
 
 Write-Output "---- Check should print unformatted file"
-$wasNotFormatted = "was not formatted"
+$wasNotFormatted = "Was not formatted"
 if (-not ($checkResult.Contains($wasNotFormatted))) {
     Write-Output "The result from --check did not contain '$($wasNotFormatted)', it was: "
     Write-Output $checkResult

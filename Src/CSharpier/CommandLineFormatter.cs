@@ -169,6 +169,12 @@ namespace CSharpier
                 return;
             }
 
+            if (!filePath.EndsWithIgnoreCase(".cs") && !filePath.EndsWithIgnoreCase(".cst"))
+            {
+                WriteError(filePath, "Is an unsupported file type.");
+                return;
+            }
+
             cancellationToken.ThrowIfCancellationRequested();
 
             var (encoding, fileContents, unableToDetectEncoding) = await FileReader.ReadFile(
@@ -183,8 +189,9 @@ namespace CSharpier
 
             if (unableToDetectEncoding)
             {
-                WriteLine(
-                    $"{GetPath(filePath)} - unable to detect file encoding. Defaulting to {encoding}"
+                WriteWarning(
+                    filePath,
+                    $"Unable to detect file encoding. Defaulting to {encoding}."
                 );
             }
 
@@ -216,7 +223,7 @@ namespace CSharpier
             catch (Exception ex)
             {
                 Interlocked.Increment(ref this.Result.Files);
-                WriteLine(GetPath(filePath) + " - threw exception while formatting");
+                WriteError(filePath, "Threw exception while formatting.");
                 WriteLine(ex.Message);
                 WriteLine(ex.StackTrace);
                 WriteLine();
@@ -227,14 +234,14 @@ namespace CSharpier
             if (result.Errors.Any())
             {
                 Interlocked.Increment(ref this.Result.Files);
-                WriteLine(GetPath(filePath) + " - failed to compile");
+                WriteWarning(filePath, "Failed to compile so was not formatted.");
                 return;
             }
 
             if (!result.FailureMessage.IsBlank())
             {
                 Interlocked.Increment(ref this.Result.Files);
-                WriteLine(GetPath(filePath) + " - " + result.FailureMessage);
+                WriteError(filePath, result.FailureMessage);
                 return;
             }
 
@@ -268,20 +275,17 @@ namespace CSharpier
                     if (!string.IsNullOrEmpty(failure))
                     {
                         Interlocked.Increment(ref this.Result.FailedSyntaxTreeValidation);
-                        WriteLine(GetPath(file) + " - failed syntax tree validation");
+                        WriteError(file, "Failed syntax tree validation.");
                         WriteLine(failure);
                     }
                 }
                 catch (Exception ex)
                 {
                     Interlocked.Increment(ref this.Result.ExceptionsValidatingSource);
-                    WriteLine(
-                        GetPath(file)
-                            + " - failed with exception during syntax tree validation"
-                            + Environment.NewLine
-                            + ex.Message
-                            + ex.StackTrace
-                    );
+
+                    WriteError(file, "Failed with exception during syntax tree validation.");
+                    WriteLine(ex.Message);
+                    WriteLine(ex.StackTrace);
                 }
             }
         }
@@ -293,7 +297,7 @@ namespace CSharpier
                 && !this.CommandLineOptions.ShouldWriteStandardOut
                 && result.Code != fileContents
             ) {
-                WriteLine(GetPath(filePath) + " - was not formatted");
+                WriteWarning(filePath, "Was not formatted.");
                 StringDiffer.PrintFirstDifference(result.Code, fileContents, this.Console);
                 Interlocked.Increment(ref this.Result.UnformattedFiles);
             }
@@ -324,7 +328,7 @@ namespace CSharpier
 
         private string GetPath(string file)
         {
-            return ResultPrinter.PadToSize(file.Substring(this.BaseDirectoryPath.Length));
+            return file.Substring(this.BaseDirectoryPath.Length);
         }
 
         private static int ReturnExitCode(
@@ -347,6 +351,35 @@ namespace CSharpier
         {
             return GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
                 || this.IgnoreFile.IsIgnored(filePath);
+        }
+
+        private void WriteError(string filePath, string value)
+        {
+            this.WriteMessage(filePath, value, "Error", ConsoleColor.DarkRed);
+        }
+
+        private void WriteWarning(string filePath, string value)
+        {
+            this.WriteMessage(filePath, value, "Warn", ConsoleColor.DarkYellow);
+        }
+
+        private static readonly object ConsoleLock = new();
+
+        protected void WriteMessage(
+            string filePath,
+            string value,
+            string valueForColor,
+            ConsoleColor color
+        ) {
+            if (this.CommandLineOptions.ShouldWriteStandardOut)
+            {
+                return;
+            }
+            lock (ConsoleLock)
+            {
+                this.Console.WriteWithColor($"{valueForColor} ", color);
+                this.Console.WriteLine($"{GetPath(filePath)} - {value}");
+            }
         }
 
         protected void WriteLine(string? line = null)
