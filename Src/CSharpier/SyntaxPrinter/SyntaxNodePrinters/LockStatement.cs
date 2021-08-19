@@ -9,24 +9,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(LockStatementSyntax node)
         {
-            var docs = new List<Doc>
-            {
+            var statement = Node.Print(node.Statement);
+
+            return Doc.Concat(
+                ExtraNewLines.Print(node),
                 Token.PrintWithSuffix(node.LockKeyword, " "),
                 Token.Print(node.OpenParenToken),
                 Node.Print(node.Expression),
-                Token.Print(node.CloseParenToken)
-            };
-            var statement = Node.Print(node.Statement);
-            if (node.Statement is BlockSyntax)
-            {
-                docs.Add(statement);
-            }
-            else
-            {
-                docs.Add(Doc.Indent(Doc.HardLine, statement));
-            }
-
-            return Doc.Concat(docs);
+                Token.Print(node.CloseParenToken),
+                node.Statement is BlockSyntax ? statement : Doc.Indent(Doc.HardLine, statement)
+            );
         }
     }
 }
