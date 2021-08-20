@@ -48,13 +48,6 @@ namespace CSharpier.SyntaxPrinter
 
             var kind = trivia.Kind();
 
-            // TODO == false
-            // TODO !
-            // TODO ||
-            // TODO &&
-            // TODO ( )
-            // TODO complex conditions
-            // TODO nested directives
             if (kind is SyntaxKind.IfDirectiveTrivia or SyntaxKind.ElifDirectiveTrivia)
             {
                 var ifDirectiveTriviaSyntax =

@@ -79,8 +79,11 @@ namespace CSharpier
                         printerOptions.PreprocessorSymbolSets.Skip(1).ToList()
                     );
                 }
+                else
+                {
+                    PreprocessorSymbols.Reset();
+                }
 
-                PreprocessorSymbols.Reset();
                 var document = Node.Print(rootNode);
                 var lineEnding = GetLineEnding(code, printerOptions);
                 var formattedCode = DocPrinter.DocPrinter.Print(

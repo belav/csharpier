@@ -14,9 +14,7 @@ namespace CSharpier.Tests
             var after =
                 @"public
 string Tester;
-"";
-
-            using var stringReader = new StringReader(jsontext);";
+";
 
             DisabledTextComparer.IsCodeBasicallyEqual(before, after).Should().BeTrue();
         }
