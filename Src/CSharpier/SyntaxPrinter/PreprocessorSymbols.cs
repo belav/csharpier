@@ -7,14 +7,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
-    // TODO these files fail validation
-    // \Newtonsoft.Json\Src\Newtonsoft.Json\Serialization\JsonTypeReflector.cs
-    // \aspnetcore\src\Razor\Microsoft.AspNetCore.Razor.Language\src\Legacy\CSharpLanguageCharacteristics.cs
-    // \runtime\src\libraries\Common\src\Microsoft\Win32\SafeHandles\SafeX509Handles.Unix.cs
-    // \runtime\src\libraries\System.Text.RegularExpressions\src\System\Text\RegularExpressions\RegexBoyerMoore.cs
-
-    // plus some files fail to compile, compare that list
-
+    // the usage or this is a little wonky right now.
+    // the next iteration of this should find all #if and relates directives
+    // before we ever format a file
+    // come up with the symbol sets, and use those in code formatter
+    // that will get rid of the ugly threadStatic/reset/stopCollecting stuff
     public class PreprocessorSymbols
     {
         [ThreadStatic]

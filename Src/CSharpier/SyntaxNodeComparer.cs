@@ -217,11 +217,6 @@ namespace CSharpier
 
         private CompareResult Compare(SyntaxTrivia originalTrivia, SyntaxTrivia formattedTrivia)
         {
-            // when we encounter disabled text, it is inside an #if when the condition on the #if is false
-            // we format all that code by doing multiple passes of csharpier
-            // this comparer is very slow, and running it after every pass on a file would take a long time
-            // so we do this quick version of validating that the code is basically the same besides
-            // line breaks and spaces
             if (originalTrivia.Kind() is SyntaxKind.DisabledTextTrivia)
             {
                 return DisabledTextComparer.IsCodeBasicallyEqual(

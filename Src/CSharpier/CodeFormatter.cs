@@ -56,17 +56,30 @@ namespace CSharpier
                 return new CSharpierResult { Code = code };
             }
 
-            var diagnostics = syntaxTree.GetDiagnostics(cancellationToken)
-                .Where(o => o.Severity == DiagnosticSeverity.Error && o.Id != "CS1029")
-                .ToList();
-            if (diagnostics.Any())
+            bool TryGetCompilationFailure(out CSharpierResult? compilationResult)
             {
-                return new CSharpierResult
+                var diagnostics = syntaxTree!.GetDiagnostics(cancellationToken)
+                    .Where(o => o.Severity == DiagnosticSeverity.Error && o.Id != "CS1029")
+                    .ToList();
+                if (diagnostics.Any())
                 {
-                    Code = code,
-                    Errors = diagnostics,
-                    AST = printerOptions.IncludeAST ? this.PrintAST(rootNode) : string.Empty
-                };
+                    compilationResult = new CSharpierResult
+                    {
+                        Code = code,
+                        Errors = diagnostics,
+                        AST = printerOptions.IncludeAST ? this.PrintAST(rootNode) : string.Empty
+                    };
+
+                    return true;
+                }
+
+                compilationResult = null;
+                return false;
+            }
+
+            if (TryGetCompilationFailure(out var result))
+            {
+                return result!;
             }
 
             try
@@ -96,6 +109,11 @@ namespace CSharpier
                 foreach (var symbolSet in PreprocessorSymbols.GetSymbolSets())
                 {
                     syntaxTree = ParseText(formattedCode, symbolSet);
+
+                    if (TryGetCompilationFailure(out result))
+                    {
+                        return result!;
+                    }
 
                     document = Node.Print(await syntaxTree.GetRootAsync(cancellationToken));
                     formattedCode = DocPrinter.DocPrinter.Print(
