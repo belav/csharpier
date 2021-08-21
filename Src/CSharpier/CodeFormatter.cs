@@ -56,7 +56,7 @@ namespace CSharpier
                 return new CSharpierResult { Code = code };
             }
 
-            bool TryGetCompilationFailure(out CSharpierResult? compilationResult)
+            bool TryGetCompilationFailure(out CSharpierResult compilationResult)
             {
                 var diagnostics = syntaxTree!.GetDiagnostics(cancellationToken)
                     .Where(o => o.Severity == DiagnosticSeverity.Error && o.Id != "CS1029")
@@ -73,13 +73,13 @@ namespace CSharpier
                     return true;
                 }
 
-                compilationResult = null;
+                compilationResult = CSharpierResult.Null;
                 return false;
             }
 
             if (TryGetCompilationFailure(out var result))
             {
-                return result!;
+                return result;
             }
 
             try
@@ -112,7 +112,7 @@ namespace CSharpier
 
                     if (TryGetCompilationFailure(out result))
                     {
-                        return result!;
+                        return result;
                     }
 
                     document = Node.Print(await syntaxTree.GetRootAsync(cancellationToken));
@@ -174,11 +174,13 @@ namespace CSharpier
 
     public class CSharpierResult
     {
-        public string Code { get; set; } = string.Empty;
-        public string DocTree { get; set; } = string.Empty;
-        public string AST { get; set; } = string.Empty;
-        public IEnumerable<Diagnostic> Errors { get; set; } = Enumerable.Empty<Diagnostic>();
+        public string Code { get; init; } = string.Empty;
+        public string DocTree { get; init; } = string.Empty;
+        public string AST { get; init; } = string.Empty;
+        public IEnumerable<Diagnostic> Errors { get; init; } = Enumerable.Empty<Diagnostic>();
 
-        public string FailureMessage { get; set; } = string.Empty;
+        public string FailureMessage { get; init; } = string.Empty;
+
+        public static readonly CSharpierResult Null = new();
     }
 }

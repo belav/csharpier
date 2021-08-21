@@ -40,7 +40,7 @@ namespace CSharpier.Tests.FormattingTests
             var formatter = new CodeFormatter();
             var result = formatter.Format(
                 fileReaderResult.FileContents,
-                new PrinterOptions() { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs }
+                new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs }
             );
 
             var actualFilePath = filePath.Replace(".cst", ".actual.cst");
@@ -57,26 +57,28 @@ namespace CSharpier.Tests.FormattingTests
                 filePathToChange = expectedFilePath;
             }
 
+            var normalizedCode = result.Code;
+
             if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
             {
                 expectedCode = expectedCode.Replace("\r\n", "\n");
-                result.Code = result.Code.Replace("\r\n", "\n");
+                normalizedCode = normalizedCode.Replace("\r\n", "\n");
             }
 
             var comparer = new SyntaxNodeComparer(
                 expectedCode,
-                result.Code,
+                normalizedCode,
                 CancellationToken.None
             );
 
             result.Errors.Should().BeEmpty();
             result.FailureMessage.Should().BeEmpty();
 
-            if (result.Code != expectedCode && !BuildServerDetector.Detected)
+            if (normalizedCode != expectedCode && !BuildServerDetector.Detected)
             {
                 DiffRunner.Launch(filePathToChange, actualFilePath);
             }
-            result.Code.Should().Be(expectedCode);
+            normalizedCode.Should().Be(expectedCode);
 
             var compareResult = comparer.CompareSource();
             compareResult.Should().BeNullOrEmpty();

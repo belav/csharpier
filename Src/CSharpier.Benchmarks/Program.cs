@@ -9,7 +9,7 @@ namespace CSharpier.Benchmarks
     [MemoryDiagnoser]
     public class Benchmarks
     {
-        //[Benchmark]
+        [Benchmark]
         public void Default_CodeFormatter()
         {
             var codeFormatter = new CodeFormatter();
