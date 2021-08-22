@@ -2,10 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-
         <IsPackable>false</IsPackable>
-
         <RootNamespace>CSharpier.Tests</RootNamespace>
+        <LangVersion>preview</LangVersion>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,6 +18,19 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\CSharpier.Tests.Generators\CSharpier.Tests.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
       <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <AdditionalFiles Include="FormattingTests\TestFiles\*.cst" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="FormattingTests\TestFiles\*.actual.cst">
+            <DependentUpon>$([System.String]::Copy(%(Filename)).Replace('.actual', '.cst'))</DependentUpon>
+        </Content>
+        <Content Include="FormattingTests\TestFiles\*.expected.cst">
+            <DependentUpon>$([System.String]::Copy(%(Filename)).Replace('.expected', '.cst'))</DependentUpon>
+        </Content>
     </ItemGroup>
 </Project>
