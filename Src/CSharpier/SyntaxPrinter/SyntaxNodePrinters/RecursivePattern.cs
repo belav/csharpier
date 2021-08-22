@@ -28,20 +28,29 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (node.PositionalPatternClause != null)
             {
                 result.Add(
-                    Doc.SoftLine,
-                    Token.Print(node.PositionalPatternClause.OpenParenToken),
-                    SeparatedSyntaxList.Print(
-                        node.PositionalPatternClause.Subpatterns,
-                        subpatternNode =>
-                            Doc.Concat(
-                                subpatternNode.NameColon != null
-                                    ? NameColon.Print(subpatternNode.NameColon)
-                                    : Doc.Null,
-                                Node.Print(subpatternNode.Pattern)
-                            ),
-                        " "
-                    ),
-                    Token.Print(node.PositionalPatternClause.CloseParenToken)
+                    node.Parent is SwitchExpressionArmSyntax ? Doc.Null : Doc.SoftLine,
+                    Token.PrintLeadingTrivia(node.PositionalPatternClause.OpenParenToken),
+                    Doc.Group(
+                        Token.PrintWithoutLeadingTrivia(
+                            node.PositionalPatternClause.OpenParenToken
+                        ),
+                        Doc.Indent(
+                            Doc.SoftLine,
+                            SeparatedSyntaxList.Print(
+                                node.PositionalPatternClause.Subpatterns,
+                                subpatternNode =>
+                                    Doc.Concat(
+                                        subpatternNode.NameColon != null
+                                            ? NameColon.Print(subpatternNode.NameColon)
+                                            : Doc.Null,
+                                        Node.Print(subpatternNode.Pattern)
+                                    ),
+                                Doc.Line
+                            )
+                        ),
+                        Doc.SoftLine,
+                        Token.Print(node.PositionalPatternClause.CloseParenToken)
+                    )
                 );
             }
 

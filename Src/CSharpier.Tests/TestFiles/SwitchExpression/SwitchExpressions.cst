@@ -22,7 +22,9 @@ class ClassName
             (DoorState.Locked, Action.Unlock, true) => DoorState.Closed,
 
             // Do nothing
-            (var state, _, _) => state
+            (var state, _, _) => state,
+            (_, _, _)
+              => DoorState.LongStateShouldNotGetExtraLine________________________________________
         };
 
         return someValue switch
@@ -72,6 +74,23 @@ class ClassName
                 IsParameter: someLongValue____________________________________________,
             }
               => someOtherValue
+        };
+
+        return (original, updated) switch
+        {
+            (
+                FieldSymbol
+                {
+                    ContainingType: { IsTupleType: true },
+                    TupleElementIndex: var oi
+                } originalField,
+                FieldSymbol
+                {
+                    ContainingType: { IsTupleType: true },
+                    TupleElementIndex: var ui
+                } updatedField
+            )
+              => originalField.Type.Equals(updatedField.Type)
         };
     }
 }
