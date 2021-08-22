@@ -23,7 +23,6 @@ namespace CSharpier.Tests.FormattingTests
             }
         }
 
-        // Just the tabs one uses this parameter
         protected void RunTest(string fileName, bool useTabs = false)
         {
             var filePath = Path.Combine(

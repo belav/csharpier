@@ -3,7 +3,6 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-        <LangVersion>preview</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
