@@ -41,15 +41,14 @@ namespace CSharpier.Tests
                 "c:/test/.csharpierrc.json",
                 @"{ 
     ""printWidth"": 10, 
-    ""preprocessorSymbolSets"": [[""1"",""2""], [""3""]]
+    ""preprocessorSymbolSets"": [""1,2"", ""3""]
 }"
             );
 
             var result = CreateConfigurationOptions("c:/test");
 
             result.PrintWidth.Should().Be(10);
-            result.PreprocessorSymbolSets.Should()
-                .BeEquivalentTo(new List<string[]> { new[] { "1", "2" }, new[] { "3" } });
+            result.PreprocessorSymbolSets.Should().BeEquivalentTo(new List<string> { "1,2", "3" });
         }
 
         [TestCase("yaml")]
@@ -61,19 +60,15 @@ namespace CSharpier.Tests
                 @"
 printWidth: 10
 preprocessorSymbolSets: 
-  - 
-    - 1
-    - 2
-  - 
-    - 3
+  - 1,2
+  - 3
 "
             );
 
             var result = CreateConfigurationOptions("c:/test");
 
             result.PrintWidth.Should().Be(10);
-            result.PreprocessorSymbolSets.Should()
-                .BeEquivalentTo(new List<string[]> { new[] { "1", "2" }, new[] { "3" } });
+            result.PreprocessorSymbolSets.Should().BeEquivalentTo(new List<string> { "1,2", "3" });
         }
 
         [TestCase("{ \"printWidth\": 10 }")]

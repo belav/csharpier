@@ -274,7 +274,7 @@ namespace CSharpier.Tests
         [Test]
         public void File_Should_Format_With_Supplied_Symbols()
         {
-            WhenAFileExists(".csharpierrc", @"{ ""preprocessorSymbolSets"": [[""FORMAT""]] }");
+            WhenAFileExists(".csharpierrc", @"{ ""preprocessorSymbolSets"": [""FORMAT""] }");
             WhenAFileExists(
                 "file1.cs",
                 @"public class ClassName
