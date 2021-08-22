@@ -8,9 +8,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace CSharpier.SyntaxPrinter
 {
     // the usage or this is a little wonky right now.
-    // the next iteration of this should find all #if and relates directives
-    // before we ever format a file
-    // come up with the symbol sets, and use those in code formatter
+    // the next iteration of this will do the following
+    // find all #if and related directives (from file contents)
+    // come up with the symbol sets
+    // use those in code formatter
     // that will get rid of the ugly threadStatic/reset/stopCollecting stuff
     public class PreprocessorSymbols
     {
