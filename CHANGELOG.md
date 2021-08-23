@@ -1,3 +1,26 @@
+# 0.9.9
+
+[diff](https://github.com/belav/csharpier/compare/0.9.8...0.9.9)
+
+### Breaking Changes
+
+- Require the directoryOrFile argument when not piping into to stdin [#381](https://github.com/belav/csharpier/issues/381)
+
+### Resolved Issues
+- SwitchExpression + Pattern edge cause causes extra line and poor formatting [#408](https://github.com/belav/csharpier/issues/408)
+- NewLines not retained before lock statement [#401](https://github.com/belav/csharpier/issues/401)
+- Better error handling when given a csproj or sln file [#398](https://github.com/belav/csharpier/issues/398)
+- CSharpierignore not taken into account when supplying . as the directory [#392](https://github.com/belav/csharpier/issues/392)
+- SwitchStatement with When breaks even with body of switch [#387](https://github.com/belav/csharpier/issues/387)
+- Respect new lines between case statements [#383](https://github.com/belav/csharpier/issues/383)
+- Line breaks in "when" clause in SwitchExpression [#382](https://github.com/belav/csharpier/issues/382)
+- Block loses extra lines [#378](https://github.com/belav/csharpier/issues/378)
+- RecordDeclaration should format consistently with ConstructorDeclaration [#371](https://github.com/belav/csharpier/issues/371)
+- Conditional breaking without indentation [#345](https://github.com/belav/csharpier/issues/345)
+- Improve formatting of pattern matching (IsPatternExpression, BinaryPattern, etc) [#154](https://github.com/belav/csharpier/issues/154)
+- Code in IfDirective can't currently be formatted [#15](https://github.com/belav/csharpier/issues/15)
+
+
 # 0.9.8
 
 [diff](https://github.com/belav/csharpier/compare/0.9.7...0.9.8)
