@@ -1,5 +1,5 @@
 ## Development
-There are a couple different ways of running CSharpier while developing it.
+The two main ways to work with CSharpier locally are the playground or with formatting tests.
 
 ### Using the playground
 From your IDE run the following in the /CSharpier/CSharpier.Playground directory
@@ -12,18 +12,21 @@ npm run start
 - Paste the code you want to format there and click format.
 - The playground includes options to view the AST and generated doc tree, which help troubleshooting issues.
 
-### Unit Tests
-CSharpier.Core.Tests contains a number of different unit tests.
-- DocPrinterTests - are used for testing converting Doc's into source code. Playing around with them can help to understand how Doc's are formatted
-- TestFiles
-  - Each directory here roughly corresponds to a different node type.
-  - Originally tests were very granular, but more recently there is a single file per node type.
-  - The testing files are .cst to easily exclude them from being compiled with the project
-  - The testing files are formatted to [file].actual.cst so they can be compared against the original [file].cst
-  - In a situation where the original file is not the expected output, [file].expected.cst can be created and it will be compared instead
-- Samples
-  - Mainly used for testing the AllInOne.cs file
-  - Scratch.cs is also a dumping ground for a quick test, but has mostly been replaced by using the Playground
+### Formatting Tests
+The main way CSharpier is tested is with the files at src/CSharpier.Tests/FormattingTests/TestFiles. Any changes to formatting should include appropriate test coverage using these files.
+
+A source generator is used to generate an nunit test for each file. That test
+- Uses CSharpier to format each [FileName].cst to a new file [FileName].actual.cst
+- If a file [FileName].expected.cst exists, it is compared to [FileName].actual.cst instead
+- If the files differ, a diff tool will automatically open to allow you to compare the files.
+
+### Other Tests
+Most areas of CSharpier are covered by tests. Some to take note of
+
+- /Scripts/TestCli.ps1 - Full end to end style tests, only used for cases that can't be covered another way.
+- /Src/CSharpier.Tests/CommandLineFormatterTests - Integration tests that are close to end to end.
+- /Src/CSharpier.Tests/DocPrinterTests - used to test the doc types directly. Can be useful to understand how the different doc types work.
+- /Scripts/CreateTestingPR.ps1 - used to test the formatting changes in your branch against a large repo. Useful for finding edge cases you may have missed. (this script may require changes to work correctly)
 
 ### Helpful Information
 - https://github.com/prettier/prettier/blob/main/commands.md is useful for understanding how formatting with the Doc classes works. CSharpier hasn't implemented all of the prettier Doc types, and it has added a couple new ones.
