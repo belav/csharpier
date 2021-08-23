@@ -1,5 +1,7 @@
 using System.IO;
 using System.Text;
+using System.Threading;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CSharpier.Tests.Samples
@@ -33,6 +35,15 @@ namespace CSharpier.Tests.Samples
                 code,
                 new PrinterOptions { IncludeDocTree = true, IncludeAST = true, }
             );
+
+            var syntaxNodeComparer = new SyntaxNodeComparer(
+                code,
+                result.Code,
+                CancellationToken.None
+            );
+
+            var compareResult = syntaxNodeComparer.CompareSource();
+            compareResult.Should().BeEmpty();
 
             File.WriteAllText(file.Replace(".cst", ".actual.cst"), result.Code, Encoding.UTF8);
             File.WriteAllText(file.Replace(".cst", ".doctree.txt"), result.DocTree, Encoding.UTF8);

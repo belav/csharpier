@@ -30,9 +30,9 @@ namespace CSharpier.Tests
         {
             WhenAFileExists("Invalid.cs", "asdfasfasdf");
 
-            var result = this.Format();
+            var (_, lines) = this.Format();
 
-            result.lines.First()
+            lines.First()
                 .Should()
                 .Be(
                     $"Warn {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
@@ -246,6 +246,68 @@ namespace CSharpier.Tests
             var (exitCode, _) = this.Format();
 
             exitCode.Should().Be(0);
+        }
+
+        [Test]
+        public void File_With_Compilation_Error_In_If_Should_Not_Lose_Code()
+        {
+            var contents =
+                @"#if DEBUG
+?using System;
+#endif
+";
+            WhenAFileExists("Invalid.cs", contents);
+
+            var (_, lines) = this.Format();
+
+            var result = GetFileContent("Invalid.cs");
+
+            result.Should().Be(contents);
+
+            lines.First()
+                .Should()
+                .Be(
+                    $"Warn {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
+                );
+        }
+
+        [Test]
+        public void File_Should_Format_With_Supplied_Symbols()
+        {
+            WhenAFileExists(".csharpierrc", @"{ ""preprocessorSymbolSets"": [""FORMAT""] }");
+            WhenAFileExists(
+                "file1.cs",
+                @"public class ClassName
+{
+#if FORMAT
+    public     string ShortPropertyName;
+#elif NO_FORMAT
+    public     string ShortPropertyName;
+#else
+    public     string ShortPropertyName;
+#endif
+}
+"
+            );
+
+            this.Format();
+
+            var result = GetFileContent("file1.cs");
+
+            result.Should()
+                .Be(
+                    @"public class ClassName
+{
+#if FORMAT
+    public string ShortPropertyName;
+#elif NO_FORMAT
+    public     string ShortPropertyName;
+#else
+    public     string ShortPropertyName;
+#endif
+}
+"
+                );
         }
 
         private (int exitCode, IList<string> lines) Format(

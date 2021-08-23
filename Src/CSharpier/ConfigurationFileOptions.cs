@@ -13,6 +13,7 @@ namespace CSharpier
     public class ConfigurationFileOptions
     {
         public int PrintWidth { get; init; } = 100;
+        public List<string>? PreprocessorSymbolSets { get; init; }
 
         private static string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
 
@@ -22,12 +23,31 @@ namespace CSharpier
         ) {
             var configurationFileOptions = Create(baseDirectoryPath, fileSystem);
 
+            List<string[]> preprocessorSymbolSets;
+            if (configurationFileOptions.PreprocessorSymbolSets == null)
+            {
+                preprocessorSymbolSets = new();
+            }
+            else
+            {
+                preprocessorSymbolSets = configurationFileOptions.PreprocessorSymbolSets.Select(
+                        o =>
+                            o.Split(
+                                ",",
+                                StringSplitOptions.RemoveEmptyEntries
+                                    | StringSplitOptions.TrimEntries
+                            )
+                    )
+                    .ToList();
+            }
+
             return new PrinterOptions
             {
                 TabWidth = 4,
                 UseTabs = false,
                 Width = configurationFileOptions.PrintWidth,
-                EndOfLine = EndOfLine.Auto
+                EndOfLine = EndOfLine.Auto,
+                PreprocessorSymbolSets = preprocessorSymbolSets,
             };
         }
 

@@ -1,0 +1,52 @@
+public class ClassName
+{
+#if BASIC_IF
+    public     string ShortPropertyName;
+#elif BASIC_ELIF
+    public     string ShortPropertyName;
+#else 
+    public     string ShortPropertyName;
+#endif
+
+#if !NOT_IF
+    public     string ShortPropertyName;
+#else 
+    public     string ShortPropertyName;
+#endif
+
+#if EQUALS_TRUE == true
+    public     string ShortPropertyName;
+#else 
+    public     string ShortPropertyName;
+#endif
+
+#if true == TRUE_EQUALS
+    public     string ShortPropertyName;
+#else 
+    public     string ShortPropertyName;
+#endif
+
+#if NOT_EQUALS_TRUE != true
+    public     string ShortPropertyName;
+#else 
+    public     string ShortPropertyName;
+#endif
+
+#if true != TRUE_NOT_EQUALS
+    public     string ShortPropertyName;
+#else 
+    public     string ShortPropertyName;
+#endif
+
+#if LEFT_AND && RIGHT_AND
+    public     string ShortPropertyName;
+#else 
+    public     string ShortPropertyName;
+#endif
+
+#if (LEFT_PAREN && RIGHT_PAREN)
+    public     string ShortPropertyName;
+#else 
+    public     string ShortPropertyName;
+#endif
+}

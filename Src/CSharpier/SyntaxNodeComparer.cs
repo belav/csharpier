@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CSharpier.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 namespace CSharpier
@@ -220,12 +217,17 @@ namespace CSharpier
 
         private CompareResult Compare(SyntaxTrivia originalTrivia, SyntaxTrivia formattedTrivia)
         {
-            if (originalTrivia.ToString().TrimEnd() != formattedTrivia.ToString().TrimEnd())
+            if (originalTrivia.Kind() is SyntaxKind.DisabledTextTrivia)
             {
-                return NotEqual(originalTrivia.Span, formattedTrivia.Span);
+                return DisabledTextComparer.IsCodeBasicallyEqual(
+                    originalTrivia.ToString(),
+                    formattedTrivia.ToString()
+                ) ? Equal : NotEqual(originalTrivia.Span, formattedTrivia.Span);
             }
 
-            return Equal;
+            return originalTrivia.ToString().TrimEnd() == formattedTrivia.ToString().TrimEnd()
+                ? Equal
+                : NotEqual(originalTrivia.Span, formattedTrivia.Span);
         }
 
         private CompareResult Compare(SyntaxTriviaList originalList, SyntaxTriviaList formattedList)

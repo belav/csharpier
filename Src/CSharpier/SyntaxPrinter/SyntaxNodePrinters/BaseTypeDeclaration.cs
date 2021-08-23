@@ -134,7 +134,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Token.Print(node.OpenBraceToken),
                     members,
                     Doc.HardLine,
-                    Token.Print(node.CloseBraceToken)
+                    node.CloseBraceToken.LeadingTrivia.Any(
+                        o => o.Kind() == SyntaxKind.DisabledTextTrivia
+                    )
+                        ? Doc.Concat(
+                              Token.PrintLeadingTriviaWithNewLines(
+                                  node.CloseBraceToken.LeadingTrivia
+                              ),
+                              Token.PrintWithoutLeadingTrivia(node.CloseBraceToken)
+                          )
+                        : Token.Print(node.CloseBraceToken)
                 );
             }
             else if (node.OpenBraceToken.Kind() != SyntaxKind.None)

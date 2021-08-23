@@ -24,11 +24,25 @@ namespace CSharpier
             PrinterOptions printerOptions,
             CancellationToken cancellationToken
         ) {
-            var syntaxTree = CSharpSyntaxTree.ParseText(
-                code,
-                new CSharpParseOptions(LanguageVersion.CSharp9, DocumentationMode.Diagnose),
-                cancellationToken: cancellationToken
-            );
+            SyntaxTree ParseText(string codeToFormat, params string[] preprocessorSymbols)
+            {
+                return CSharpSyntaxTree.ParseText(
+                    codeToFormat,
+                    new CSharpParseOptions(
+                        LanguageVersion.CSharp9,
+                        DocumentationMode.Diagnose,
+                        preprocessorSymbols: preprocessorSymbols
+                    ),
+                    cancellationToken: cancellationToken
+                );
+            }
+
+            // if a user supplied symbolSets, then we should start with the first one
+            var initialSymbolSet = printerOptions.PreprocessorSymbolSets is { Count: > 0 }
+                ? printerOptions.PreprocessorSymbolSets.First()
+                : Array.Empty<string>();
+
+            var syntaxTree = ParseText(code, initialSymbolSet);
             var syntaxNode = await syntaxTree.GetRootAsync(cancellationToken);
             if (syntaxNode is not CompilationUnitSyntax rootNode)
             {
@@ -42,21 +56,47 @@ namespace CSharpier
                 return new CSharpierResult { Code = code };
             }
 
-            var diagnostics = syntaxTree.GetDiagnostics(cancellationToken)
-                .Where(o => o.Severity == DiagnosticSeverity.Error && o.Id != "CS1029")
-                .ToList();
-            if (diagnostics.Any())
+            bool TryGetCompilationFailure(out CSharpierResult compilationResult)
             {
-                return new CSharpierResult
+                var diagnostics = syntaxTree!.GetDiagnostics(cancellationToken)
+                    .Where(o => o.Severity == DiagnosticSeverity.Error && o.Id != "CS1029")
+                    .ToList();
+                if (diagnostics.Any())
                 {
-                    Code = code,
-                    Errors = diagnostics,
-                    AST = printerOptions.IncludeAST ? this.PrintAST(rootNode) : string.Empty
-                };
+                    compilationResult = new CSharpierResult
+                    {
+                        Code = code,
+                        Errors = diagnostics,
+                        AST = printerOptions.IncludeAST ? this.PrintAST(rootNode) : string.Empty
+                    };
+
+                    return true;
+                }
+
+                compilationResult = CSharpierResult.Null;
+                return false;
+            }
+
+            if (TryGetCompilationFailure(out var result))
+            {
+                return result;
             }
 
             try
             {
+                if (printerOptions.PreprocessorSymbolSets is { Count: > 0 })
+                {
+                    PreprocessorSymbols.StopCollecting();
+                    PreprocessorSymbols.SetSymbolSets(
+                        // we already formatted with the first set above
+                        printerOptions.PreprocessorSymbolSets.Skip(1).ToList()
+                    );
+                }
+                else
+                {
+                    PreprocessorSymbols.Reset();
+                }
+
                 var document = Node.Print(rootNode);
                 var lineEnding = GetLineEnding(code, printerOptions);
                 var formattedCode = DocPrinter.DocPrinter.Print(
@@ -64,6 +104,25 @@ namespace CSharpier
                     printerOptions,
                     lineEnding
                 );
+
+                PreprocessorSymbols.StopCollecting();
+                foreach (var symbolSet in PreprocessorSymbols.GetSymbolSets())
+                {
+                    syntaxTree = ParseText(formattedCode, symbolSet);
+
+                    if (TryGetCompilationFailure(out result))
+                    {
+                        return result;
+                    }
+
+                    document = Node.Print(await syntaxTree.GetRootAsync(cancellationToken));
+                    formattedCode = DocPrinter.DocPrinter.Print(
+                        document,
+                        printerOptions,
+                        lineEnding
+                    );
+                }
+
                 return new CSharpierResult
                 {
                     Code = formattedCode,
@@ -115,11 +174,13 @@ namespace CSharpier
 
     public class CSharpierResult
     {
-        public string Code { get; set; } = string.Empty;
-        public string DocTree { get; set; } = string.Empty;
-        public string AST { get; set; } = string.Empty;
-        public IEnumerable<Diagnostic> Errors { get; set; } = Enumerable.Empty<Diagnostic>();
+        public string Code { get; init; } = string.Empty;
+        public string DocTree { get; init; } = string.Empty;
+        public string AST { get; init; } = string.Empty;
+        public IEnumerable<Diagnostic> Errors { get; init; } = Enumerable.Empty<Diagnostic>();
 
-        public string FailureMessage { get; set; } = string.Empty;
+        public string FailureMessage { get; init; } = string.Empty;
+
+        public static readonly CSharpierResult Null = new();
     }
 }

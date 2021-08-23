@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using FluentAssertions;
 using NUnit.Framework;
@@ -36,22 +37,38 @@ namespace CSharpier.Tests
         [Test]
         public void Should_Return_Json_Extension_Options()
         {
-            WhenAFileExists("c:/test/.csharpierrc.json", "{ \"printWidth\": 10 }");
+            WhenAFileExists(
+                "c:/test/.csharpierrc.json",
+                @"{ 
+    ""printWidth"": 10, 
+    ""preprocessorSymbolSets"": [""1,2"", ""3""]
+}"
+            );
 
             var result = CreateConfigurationOptions("c:/test");
 
             result.PrintWidth.Should().Be(10);
+            result.PreprocessorSymbolSets.Should().BeEquivalentTo(new List<string> { "1,2", "3" });
         }
 
         [TestCase("yaml")]
         [TestCase("yml")]
         public void Should_Return_Yaml_Extension_Options(string extension)
         {
-            WhenAFileExists($"c:/test/.csharpierrc.{extension}", "printWidth: 10");
+            WhenAFileExists(
+                $"c:/test/.csharpierrc.{extension}",
+                @"
+printWidth: 10
+preprocessorSymbolSets: 
+  - 1,2
+  - 3
+"
+            );
 
             var result = CreateConfigurationOptions("c:/test");
 
             result.PrintWidth.Should().Be(10);
+            result.PreprocessorSymbolSets.Should().BeEquivalentTo(new List<string> { "1,2", "3" });
         }
 
         [TestCase("{ \"printWidth\": 10 }")]
@@ -115,6 +132,7 @@ namespace CSharpier.Tests
         private void ShouldHaveDefaultOptions(ConfigurationFileOptions configurationFileOptions)
         {
             configurationFileOptions.PrintWidth.Should().Be(100);
+            configurationFileOptions.PreprocessorSymbolSets.Should().BeNull();
         }
 
         private ConfigurationFileOptions CreateConfigurationOptions(string baseDirectoryPath)

@@ -23,6 +23,12 @@ namespace CSharpier.Benchmarks
             syntaxNodeComparer.CompareSource();
         }
 
+        [Benchmark]
+        public void IsCodeBasicallyEqual_SyntaxNodeComparer()
+        {
+            DisabledTextComparer.IsCodeBasicallyEqual(code, code);
+        }
+
         private string code =
             @"using System;
 using System.Collections.Generic;

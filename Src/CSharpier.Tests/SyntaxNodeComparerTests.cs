@@ -292,6 +292,29 @@ public class ClassName { }
             result.Should().BeEmpty();
         }
 
+        [Test]
+        public void Mismatched_Disabled_Text_Should_Not_Print_Error()
+        {
+            var left =
+                @"class ClassName
+{
+#if DEBUG
+    public string    Tester;
+#endif
+}";
+            var right =
+                @"class ClassName
+{
+#if DEBUG
+    public string Tester;
+#endif
+}
+";
+
+            var result = this.AreEqual(left, right);
+            result.Should().BeEmpty();
+        }
+
         private void ResultShouldBe(string result, string be)
         {
             if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
