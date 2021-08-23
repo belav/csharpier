@@ -15,13 +15,6 @@ namespace CSharpier.Tests.Generators
 
         public void Execute(GeneratorExecutionContext context)
         {
-            var myFiles = context.AdditionalFiles.Where(
-                o =>
-                    o.Path.EndsWith(".cst")
-                    && !o.Path.EndsWith(".actual.cst")
-                    && !o.Path.EndsWith(".expected.cst")
-            );
-
             var sourceBuilder = new StringBuilder();
             sourceBuilder.AppendLine(
                 @"using NUnit.Framework;
@@ -29,11 +22,18 @@ namespace CSharpier.Tests.Generators
 namespace CSharpier.Tests.FormattingTests
 {
     [TestFixture]
-    public class TestFiles : BaseTest
+    public class FormattingTests : BaseTest
     {"
             );
 
-            foreach (var file in myFiles)
+            var cstFiles = context.AdditionalFiles.Where(
+                o =>
+                    o.Path.EndsWith(".cst")
+                    && !o.Path.EndsWith(".actual.cst")
+                    && !o.Path.EndsWith(".expected.cst")
+            );
+
+            foreach (var file in cstFiles)
             {
                 var name = Path.GetFileNameWithoutExtension(file.Path);
 

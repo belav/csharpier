@@ -25,8 +25,8 @@ Most areas of CSharpier are covered by tests. Some to take note of
 
 - /Scripts/TestCli.ps1 - Full end to end style tests, only used for cases that can't be covered another way.
 - /Src/CSharpier.Tests/CommandLineFormatterTests - Integration tests that are close to end to end.
-- /Src/CSharpier.Tests/DocPrinterTests - used to test the Doc types directly. Can be useful to understand how the different doc types work.
-- /Scripts/CreateTestingPR.ps1 - used to test the formatting changes in your branch against a large repo. Useful for finding edge cases you may have missed. (this may require changes to work correctly)
+- /Src/CSharpier.Tests/DocPrinterTests - used to test the doc types directly. Can be useful to understand how the different doc types work.
+- /Scripts/CreateTestingPR.ps1 - used to test the formatting changes in your branch against a large repo. Useful for finding edge cases you may have missed. (this script may require changes to work correctly)
 
 ### Helpful Information
 - https://github.com/prettier/prettier/blob/main/commands.md is useful for understanding how formatting with the Doc classes works. CSharpier hasn't implemented all of the prettier Doc types, and it has added a couple new ones.
