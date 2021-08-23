@@ -160,7 +160,7 @@ namespace CSharpier.SyntaxPrinter
                 }
                 else if (kind == SyntaxKind.DisabledTextTrivia)
                 {
-                    docs.Add(Doc.Trim, trivia.ToString().TrimEnd('\n', '\r'), Doc.HardLine);
+                    docs.Add(Doc.Trim, trivia.ToString());
                 }
                 else if (IsDirective(kind) || IsRegion(kind))
                 {
