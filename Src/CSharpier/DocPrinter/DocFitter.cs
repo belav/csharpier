@@ -94,10 +94,11 @@ namespace CSharpier.DocPrinter
                             var groupMode = group.Break ? PrintMode.Break : currentMode;
 
                             // when determining if something fits, use the last option from a conditionalGroup, which should be the most expanded one
-                            var groupContents = groupMode == PrintMode.Break
-                            && group is ConditionalGroup conditionalGroup
-                                ? conditionalGroup.Options.Last()
-                                : group.Contents;
+                            var groupContents =
+                                groupMode == PrintMode.Break
+                                && group is ConditionalGroup conditionalGroup
+                                    ? conditionalGroup.Options.Last()
+                                    : group.Contents;
                             Push(groupContents, groupMode, currentIndent);
 
                             if (group.GroupId != null)
@@ -106,14 +107,16 @@ namespace CSharpier.DocPrinter
                             }
                             break;
                         case IfBreak ifBreak:
-                            var ifBreakMode = ifBreak.GroupId != null
-                            && groupModeMap!.ContainsKey(ifBreak.GroupId)
-                                ? groupModeMap[ifBreak.GroupId]
-                                : currentMode;
+                            var ifBreakMode =
+                                ifBreak.GroupId != null
+                                && groupModeMap!.ContainsKey(ifBreak.GroupId)
+                                    ? groupModeMap[ifBreak.GroupId]
+                                    : currentMode;
 
-                            var contents = ifBreakMode == PrintMode.Break
-                                ? ifBreak.BreakContents
-                                : ifBreak.FlatContents;
+                            var contents =
+                                ifBreakMode == PrintMode.Break
+                                    ? ifBreak.BreakContents
+                                    : ifBreak.FlatContents;
 
                             Push(contents, currentMode, currentIndent);
                             break;

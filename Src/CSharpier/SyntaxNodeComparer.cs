@@ -222,7 +222,9 @@ namespace CSharpier
                 return DisabledTextComparer.IsCodeBasicallyEqual(
                     originalTrivia.ToString(),
                     formattedTrivia.ToString()
-                ) ? Equal : NotEqual(originalTrivia.Span, formattedTrivia.Span);
+                )
+                    ? Equal
+                    : NotEqual(originalTrivia.Span, formattedTrivia.Span);
             }
 
             return originalTrivia.ToString().TrimEnd() == formattedTrivia.ToString().TrimEnd()

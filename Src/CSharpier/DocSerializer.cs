@@ -50,7 +50,9 @@ namespace CSharpier
             return document switch
             {
                 NullDoc => indent + "Doc.Null",
-                StringDoc { IsDirective: true } directive
+                StringDoc{
+                    IsDirective: true
+                } directive
                   => $"{indent}Doc.Directive({directive.Value.Replace("\"", "\\\"")})",
                 StringDoc stringDoc => indent + "\"" + stringDoc.Value.Replace("\"", "\\\"") + "\"",
                 HardLine hardLine

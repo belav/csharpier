@@ -12,9 +12,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             var groupId = Guid.NewGuid().ToString();
 
-            var leadingTrivia = node.AwaitKeyword.Kind() != SyntaxKind.None
-                ? Token.PrintLeadingTrivia(node.AwaitKeyword)
-                : Token.PrintLeadingTrivia(node.ForEachKeyword);
+            var leadingTrivia =
+                node.AwaitKeyword.Kind() != SyntaxKind.None
+                    ? Token.PrintLeadingTrivia(node.AwaitKeyword)
+                    : Token.PrintLeadingTrivia(node.ForEachKeyword);
 
             var variable = node switch
             {

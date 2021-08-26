@@ -9,17 +9,18 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(SwitchStatementSyntax node)
         {
-            Doc sections = node.Sections.Count == 0
-                ? " "
-                : Doc.Concat(
-                      Doc.Indent(
-                          Doc.Concat(
-                              Doc.HardLine,
-                              Doc.Join(Doc.HardLine, node.Sections.Select(SwitchSection.Print))
-                          )
-                      ),
-                      Doc.HardLine
-                  );
+            Doc sections =
+                node.Sections.Count == 0
+                    ? " "
+                    : Doc.Concat(
+                          Doc.Indent(
+                              Doc.Concat(
+                                  Doc.HardLine,
+                                  Doc.Join(Doc.HardLine, node.Sections.Select(SwitchSection.Print))
+                              )
+                          ),
+                          Doc.HardLine
+                      );
 
             DocUtilities.RemoveInitialDoubleHardLine(sections);
 

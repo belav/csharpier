@@ -19,14 +19,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
             else if (
                 node.Value
-                    is AnonymousObjectCreationExpressionSyntax
-                        or AnonymousMethodExpressionSyntax
-                        or ConditionalExpressionSyntax
-                        or ObjectCreationExpressionSyntax
-                        or InitializerExpressionSyntax
-                        or ParenthesizedLambdaExpressionSyntax
-                        or InvocationExpressionSyntax
-                        or SwitchExpressionSyntax
+                is AnonymousObjectCreationExpressionSyntax
+                or AnonymousMethodExpressionSyntax
+                or ConditionalExpressionSyntax
+                or ObjectCreationExpressionSyntax
+                or InitializerExpressionSyntax
+                or ParenthesizedLambdaExpressionSyntax
+                or InvocationExpressionSyntax
+                or SwitchExpressionSyntax
             ) {
                 separator = " ";
             }
