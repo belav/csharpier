@@ -30,7 +30,8 @@ namespace CSharpier
                         result.Length > 0
                         && index != code.Length - 1
                         && result[^1]
-                            is not (' '
+                            is not (
+                                ' '
                                 or '('
                                 or ')'
                                 or '{'
@@ -51,7 +52,8 @@ namespace CSharpier
                                 or '<'
                                 or '>'
                                 or ':'
-                                or ';')
+                                or ';'
+                            )
                     ) {
                         result.Append(' ');
                     }
@@ -59,26 +61,26 @@ namespace CSharpier
                 else if (
                     nextChar
                         is '('
-                            or ')'
-                            or '{'
-                            or '}'
-                            or ']'
-                            or '['
-                            or '.'
-                            or ','
-                            or '*'
-                            or '+'
-                            or '-'
-                            or '='
-                            or '/'
-                            or '%'
-                            or '|'
-                            or '&'
-                            or '!'
-                            or '<'
-                            or '>'
-                            or ';'
-                            or ':'
+                        or ')'
+                        or '{'
+                        or '}'
+                        or ']'
+                        or '['
+                        or '.'
+                        or ','
+                        or '*'
+                        or '+'
+                        or '-'
+                        or '='
+                        or '/'
+                        or '%'
+                        or '|'
+                        or '&'
+                        or '!'
+                        or '<'
+                        or '>'
+                        or ';'
+                        or ':'
                     && result.Length > 0
                     && result[^1] is ' '
                 ) {

@@ -49,9 +49,14 @@ namespace CSharpier.SyntaxPrinter
                 or QueryExpressionSyntax
                 or StackAllocArrayCreationExpressionSyntax
                 or MemberAccessExpressionSyntax
-                or ConditionalExpressionSyntax { Condition: BinaryExpressionSyntax
-                or ParenthesizedExpressionSyntax }
-                or CastExpressionSyntax { Type: GenericNameSyntax }
+                or ConditionalExpressionSyntax
+                {
+                    Condition: BinaryExpressionSyntax or ParenthesizedExpressionSyntax
+                }
+                or CastExpressionSyntax
+                {
+                    Type: GenericNameSyntax
+                }
                   => Layout.BreakAfterOperator,
                 _ => Layout.Fluid
             };

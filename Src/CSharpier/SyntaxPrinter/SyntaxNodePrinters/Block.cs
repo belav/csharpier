@@ -34,8 +34,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 );
             }
 
-            Doc statementSeparator = node.Parent is AccessorDeclarationSyntax
-            && node.Statements.Count <= 1 ? Doc.Line : Doc.HardLine;
+            Doc statementSeparator =
+                node.Parent is AccessorDeclarationSyntax && node.Statements.Count <= 1
+                    ? Doc.Line
+                    : Doc.HardLine;
 
             Doc innerDoc = Doc.Null;
 

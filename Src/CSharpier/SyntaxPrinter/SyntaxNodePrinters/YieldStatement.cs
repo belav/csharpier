@@ -8,9 +8,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(YieldStatementSyntax node)
         {
-            Doc expression = node.Expression != null
-                ? Doc.Concat(" ", Node.Print(node.Expression))
-                : string.Empty;
+            Doc expression =
+                node.Expression != null
+                    ? Doc.Concat(" ", Node.Print(node.Expression))
+                    : string.Empty;
             return Doc.Concat(
                 ExtraNewLines.Print(node),
                 Token.PrintWithSuffix(node.YieldKeyword, " "),

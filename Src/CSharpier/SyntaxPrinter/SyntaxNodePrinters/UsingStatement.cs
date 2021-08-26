@@ -14,9 +14,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             var groupId = Guid.NewGuid().ToString();
 
-            var leadingTrivia = node.AwaitKeyword.Kind() != SyntaxKind.None
-                ? Token.PrintLeadingTrivia(node.AwaitKeyword)
-                : Token.PrintLeadingTrivia(node.UsingKeyword);
+            var leadingTrivia =
+                node.AwaitKeyword.Kind() != SyntaxKind.None
+                    ? Token.PrintLeadingTrivia(node.AwaitKeyword)
+                    : Token.PrintLeadingTrivia(node.UsingKeyword);
 
             var docs = new List<Doc>
             {

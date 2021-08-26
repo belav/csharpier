@@ -9,8 +9,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(TypeArgumentListSyntax node)
         {
-            Doc separator = node.Arguments.Count > 1
-            || node.Arguments.Any(o => o is GenericNameSyntax) ? Doc.SoftLine : Doc.Null;
+            Doc separator =
+                node.Arguments.Count > 1 || node.Arguments.Any(o => o is GenericNameSyntax)
+                    ? Doc.SoftLine
+                    : Doc.Null;
 
             return Doc.Concat(
                 Token.Print(node.LessThanToken),
