@@ -15,7 +15,13 @@ namespace CSharpier
         public int PrintWidth { get; init; } = 100;
         public List<string>? PreprocessorSymbolSets { get; init; }
 
-        private static string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
+        private static readonly string[] validExtensions =
+        {
+            ".csharpierrc",
+            ".json",
+            ".yml",
+            ".yaml"
+        };
 
         public static PrinterOptions CreatePrinterOptions(
             string baseDirectoryPath,
@@ -76,6 +82,13 @@ namespace CSharpier
                 }
 
                 var contents = fileSystem.File.ReadAllText(file.FullName);
+
+                if (string.IsNullOrWhiteSpace(contents))
+                {
+                    // TODO log warning
+                    return new();
+                }
+
                 return contents.TrimStart().StartsWith("{")
                     ? ReadJson(contents)
                     : ReadYaml(contents);

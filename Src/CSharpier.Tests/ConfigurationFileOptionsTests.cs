@@ -34,6 +34,17 @@ namespace CSharpier.Tests
             ShouldHaveDefaultOptions(result);
         }
 
+        [TestCase(".csharpierrc")]
+        [TestCase(".csharpierrc.json")]
+        [TestCase(".csharpierrc.yaml")]
+        public void Should_Return_Default_Options_With_Empty_File(string fileName)
+        {
+            WhenAFileExists($"c:/test/{fileName}", string.Empty);
+            var result = CreateConfigurationOptions("c:/test");
+
+            ShouldHaveDefaultOptions(result);
+        }
+
         [Test]
         public void Should_Return_Json_Extension_Options()
         {

@@ -313,6 +313,18 @@ namespace CSharpier.Tests
                 );
         }
 
+        [TestCase(".csharpierrc")]
+        [TestCase(".csharpierrc.json")]
+        [TestCase(".csharpierrc.yaml")]
+        public void Empty_Config_Files_Should_Log_Warning(string configFileName)
+        {
+            WhenAFileExists(".csharpierrc", "");
+            WhenAFileExists("file1.cs", "public class ClassName { }");
+
+            this.Format();
+            // TODO check for warning
+        }
+
         private (int exitCode, IList<string> lines) Format(
             bool skipWrite = false,
             bool check = false,
