@@ -277,7 +277,6 @@ namespace CSharpier
                     if (!string.IsNullOrEmpty(failure))
                     {
                         Interlocked.Increment(ref this.Result.FailedSyntaxTreeValidation);
-                        // TODO this will look ugly
                         WriteError(file, $"Failed syntax tree validation.\n{failure}");
                     }
                 }

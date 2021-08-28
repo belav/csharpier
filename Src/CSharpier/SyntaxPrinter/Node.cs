@@ -355,7 +355,6 @@ namespace CSharpier.SyntaxPrinter
                         return WithExpression.Print(withExpressionSyntax);
                     case YieldStatementSyntax yieldStatementSyntax:
                         return YieldStatement.Print(yieldStatementSyntax);
-
                     default:
                         throw new Exception("Can't handle " + syntaxNode.GetType().Name);
                 }

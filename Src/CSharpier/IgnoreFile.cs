@@ -62,7 +62,6 @@ namespace CSharpier
                 }
                 catch (Exception ex)
                 {
-                    // TODO test this
                     logger.LogError(
                         ex,
                         @$"The .csharpierignore file at {ignoreFilePath} could not be parsed due to the following line:

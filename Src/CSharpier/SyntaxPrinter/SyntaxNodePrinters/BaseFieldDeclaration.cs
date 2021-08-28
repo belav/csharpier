@@ -12,8 +12,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var docs = new List<Doc>
             {
                 ExtraNewLines.Print(node),
-                AttributeLists.Print(node, node.AttributeLists),
-                Modifiers.Print(node.Modifiers)
+                AttributeLists.Print(node, node.AttributeLists)
+                //Modifiers.Print(node.Modifiers)
             };
             if (node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax)
             {

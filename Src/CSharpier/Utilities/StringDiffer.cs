@@ -9,11 +9,11 @@ namespace CSharpier.Utilities
         /// Given two strings that are different, this will print the first different line it encounters
         /// along with a single line before and after that different line.
         /// </summary>
-        public static string? PrintFirstDifference(string expected, string actual)
+        public static string PrintFirstDifference(string expected, string actual)
         {
             if (expected == actual)
             {
-                return null;
+                return string.Empty;
             }
 
             var stringBuilder = new StringBuilder();
