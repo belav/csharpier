@@ -5,17 +5,16 @@ namespace CSharpier
 {
     public interface IConsole
     {
-        void WriteLine(string? line);
+        void WriteLine(string? line = null);
         void Write(string value);
-        void WriteWithColor(string value, ConsoleColor color);
         Encoding InputEncoding { get; }
+        ConsoleColor ForegroundColor { set; }
+        void ResetColor();
     }
 
     public class SystemConsole : IConsole
     {
-        private readonly ConsoleColor originalColor = Console.ForegroundColor;
-
-        public void WriteLine(string? line)
+        public void WriteLine(string? line = null)
         {
             Console.WriteLine(line);
         }
@@ -25,11 +24,14 @@ namespace CSharpier
             Console.Write(value);
         }
 
-        public void WriteWithColor(string value, ConsoleColor color)
+        public ConsoleColor ForegroundColor
         {
-            Console.ForegroundColor = color;
-            Console.Write(value);
-            Console.ForegroundColor = this.originalColor;
+            set => Console.ForegroundColor = value;
+        }
+
+        public void ResetColor()
+        {
+            Console.ResetColor();
         }
 
         public Encoding InputEncoding => Console.InputEncoding;

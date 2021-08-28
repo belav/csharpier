@@ -6,14 +6,13 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace CSharpier
 {
-    class Program
+    public class Program
     {
-        // TODO https://github.com/dotnet/command-line-api/blob/main/docs/Your-first-app-with-System-CommandLine-DragonFruit.md
-        // can be used to simplify this, but it didn't appear to work with descriptions of the parameters
-        static async Task<int> Main(string[] args)
+        public static async Task<int> Main(string[] args)
         {
             var rootCommand = CommandLineOptions.Create();
 
@@ -30,6 +29,9 @@ namespace CSharpier
             bool writeStdout,
             CancellationToken cancellationToken
         ) {
+            var console = new SystemConsole();
+            var logger = new ConsoleLogger(console);
+
             var directoryOrFileNotProvided = (directoryOrFile is null or { Length: 0 });
 
             string? standardInFileContents = null;
@@ -68,7 +70,8 @@ namespace CSharpier
             return await CommandLineFormatter.Format(
                 commandLineOptions,
                 new FileSystem(),
-                new SystemConsole(),
+                console,
+                logger,
                 cancellationToken
             );
         }

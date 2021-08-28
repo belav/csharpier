@@ -1,16 +1,18 @@
+using Microsoft.Extensions.Logging;
+
 namespace CSharpier
 {
-    public class ResultPrinter
+    public static class ResultPrinter
     {
         public static void PrintResults(
             CommandLineFormatterResult result,
-            IConsole console,
+            ILogger logger,
             CommandLineOptions commandLineOptions
         ) {
-            console.WriteLine(
+            logger.LogInformation(
                 PadToSize("Total time: ", 80) + ReversePad(result.ElapsedMilliseconds + "ms")
             );
-            PrintResultLine("Total files", result.Files, console);
+            PrintResultLine("Total files", result.Files, logger);
 
             if (!commandLineOptions.Fast)
             {
@@ -19,7 +21,7 @@ namespace CSharpier
                     PrintResultLine(
                         "Failed syntax tree validation",
                         result.FailedSyntaxTreeValidation,
-                        console
+                        logger
                     );
                 }
 
@@ -28,7 +30,7 @@ namespace CSharpier
                     PrintResultLine(
                         "Threw exceptions while formatting",
                         result.ExceptionsFormatting,
-                        console
+                        logger
                     );
                 }
 
@@ -37,20 +39,20 @@ namespace CSharpier
                     PrintResultLine(
                         "files that threw exceptions while validating syntax tree",
                         result.ExceptionsValidatingSource,
-                        console
+                        logger
                     );
                 }
             }
 
             if (commandLineOptions.Check)
             {
-                PrintResultLine("files that were not formatted", result.UnformattedFiles, console);
+                PrintResultLine("files that were not formatted", result.UnformattedFiles, logger);
             }
         }
 
-        private static void PrintResultLine(string message, int count, IConsole console)
+        private static void PrintResultLine(string message, int count, ILogger logger)
         {
-            console.WriteLine(PadToSize(message + ": ", 80) + ReversePad(count + "  "));
+            logger.LogInformation(PadToSize(message + ": ", 80) + ReversePad(count + "  "));
         }
 
         public static string PadToSize(string value, int size = 120)

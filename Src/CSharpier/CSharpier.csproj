@@ -17,8 +17,9 @@
     <ItemGroup>
         <PackageReference Include="Ignore" Version="0.1.42" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-        <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
+        <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />
         <PackageReference Include="System.IO.Abstractions" Version="13.2.29" />
         <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="13.2.29" />
         <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />

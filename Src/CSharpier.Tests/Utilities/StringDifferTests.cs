@@ -127,36 +127,7 @@ four
 
         private string PrintDifference(string expected, string actual)
         {
-            var testConsole = new TestConsole();
-            StringDiffer.PrintFirstDifference(expected, actual, testConsole);
-            return testConsole.GetOutput();
-        }
-
-        private class TestConsole : IConsole
-        {
-            private readonly StringBuilder stringBuilder = new();
-
-            public void WriteLine(string line = null)
-            {
-                stringBuilder.AppendLine(line);
-            }
-
-            public void Write(string value)
-            {
-                stringBuilder.Append(value);
-            }
-
-            public void WriteWithColor(string value, ConsoleColor color)
-            {
-                this.Write(value);
-            }
-
-            public string GetOutput()
-            {
-                return stringBuilder.ToString();
-            }
-
-            public Encoding InputEncoding => Encoding.UTF8;
+            return StringDiffer.PrintFirstDifference(expected, actual);
         }
     }
 }
