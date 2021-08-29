@@ -13,6 +13,8 @@ namespace CSharpier.Generators
     {
         public void Initialize(GeneratorInitializationContext context) { }
 
+        // this would probably be easier to understand as a scriban template but is a lot of effort
+        // to switch and doesn't really change at this point
         public void Execute(GeneratorExecutionContext context)
         {
             var sourceText = SourceText.From(GenerateSource(), Encoding.UTF8);
