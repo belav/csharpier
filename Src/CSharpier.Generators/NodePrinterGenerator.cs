@@ -1,43 +1,48 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Scriban;
 
-namespace CSharpier.Tests.Generators
+namespace CSharpier.Generators
 {
     [Generator]
-    public class FormattingTestsGenerator : ISourceGenerator
+    public class NodePrinterGenerator : ISourceGenerator
     {
         public void Initialize(GeneratorInitializationContext context) { }
 
         public void Execute(GeneratorExecutionContext context)
         {
-            var tests = context.AdditionalFiles.Where(
-                    o =>
-                        o.Path.EndsWith(".cst")
-                        && !o.Path.EndsWith(".actual.cst")
-                        && !o.Path.EndsWith(".expected.cst")
+            var nodeTypes = context.Compilation.SyntaxTrees.Where(
+                    o => o.FilePath.Contains("SyntaxNodePrinters")
                 )
+                .Select(o => Path.GetFileNameWithoutExtension(o.FilePath))
                 .Select(
-                    o =>
+                    fileName =>
                         new
                         {
-                            Name = Path.GetFileNameWithoutExtension(o.Path),
-                            UseTabs = Path.GetFileNameWithoutExtension(o.Path) == "Tabs"
+                            PrinterName = fileName,
+                            SyntaxNodeName = fileName + "Syntax",
+                            VariableName = fileName[0].ToString().ToLower() + fileName[1..]
                         }
-                );
+                )
+                .OrderBy(o => o.SyntaxNodeName)
+                .ToArray();
 
-            var template = Template.Parse(GetContent("FormattingTestsGenerator.sbntxt"));
-            var renderedSource = template.Render(new { Tests = tests }, member => member.Name);
+            var template = Template.Parse(GetContent("NodePrinterGenerator.sbntxt"));
+            var renderedSource = template.Render(
+                new { NodeTypes = nodeTypes },
+                member => member.Name
+            );
 
             var sourceText = SourceText.From(renderedSource, Encoding.UTF8);
 
-            context.AddSource("FormattingTests", sourceText);
+            context.AddSource("Node", sourceText);
         }
 
         public static string GetContent(string relativePath)

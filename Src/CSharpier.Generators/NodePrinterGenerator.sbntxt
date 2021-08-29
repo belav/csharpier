@@ -1,0 +1,45 @@
+using System;
+using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace CSharpier.SyntaxPrinter
+{
+    public static class Node
+    {
+        [ThreadStatic]
+        private static int depth;
+
+        public static Doc Print(SyntaxNode syntaxNode)
+        {
+            if (syntaxNode == null)
+            {
+                return Doc.Null;
+            }
+
+            if (depth > 200)
+            {
+                throw new InTooDeepException();
+            }
+
+            depth++;
+            try
+            {
+                switch (syntaxNode)
+                {
+                    {{- for nodeType in NodeTypes }}
+                    case {{ nodeType.SyntaxNodeName }} {{ nodeType.VariableName }}:
+                        return {{ nodeType.PrinterName }}.Print({{ nodeType.VariableName }});
+                    {{- end }}
+                    default:
+                        throw new Exception("Can't handle " + syntaxNode.GetType().Name);
+                }
+            }
+            finally
+            {
+                depth--;
+            }
+        }
+    }
+}
