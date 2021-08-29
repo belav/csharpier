@@ -23,7 +23,9 @@ namespace Worker
                 directory = directory.Parent;
             }
 
-            var files = Directory.GetFiles(Path.Combine(directory.FullName, "CSharpier/Printer"))
+            var files = Directory.GetFiles(
+                    Path.Combine(directory.FullName, "CSharpier/SyntaxPrinter/SyntaxNodePrinters")
+                )
                 .Select(Path.GetFileNameWithoutExtension)
                 .ToList();
 

@@ -1,38 +1,30 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using NUnit.Framework;
+using Microsoft.CodeAnalysis.Text;
 
-namespace Worker
+namespace CSharpier.Generators
 {
-    [TestFixture]
-    public class SyntaxNodeComparerGenerator
+    [Generator]
+    public class SyntaxNodeComparerGenerator : ISourceGenerator
     {
-        [Test]
-        [Ignore(
-            "Run manually to update SyntaxNodeComparerGenerator.generated.cs. Then run csharpier on the result"
-        )]
-        public void DoWork()
+        public void Initialize(GeneratorInitializationContext context) { }
+
+        public void Execute(GeneratorExecutionContext context)
         {
-            var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
-            while (directory.Name != "Src")
-            {
-                directory = directory.Parent;
-            }
+            var sourceText = SourceText.From(GenerateSource(), Encoding.UTF8);
 
-            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
-                .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o))
-                .ToList();
+            context.AddSource("SyntaxNodeComparer.generated", sourceText);
+        }
 
-            var fileName = directory.FullName + "/CSharpier/SyntaxNodeComparer.generated.cs";
-            using (var file = new StreamWriter(fileName, false))
-            {
-                file.WriteLine(
-                    @"#pragma warning disable CS0168
+        private string GenerateSource()
+        {
+            var sourceBuilder = new StringBuilder();
+            sourceBuilder.AppendLine(
+                @"#pragma warning disable CS0168
 using System;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -72,56 +64,65 @@ namespace CSharpier
 
             switch (originalNode)
             {"
-                );
-                foreach (var syntaxNodeType in syntaxNodeTypes)
-                {
-                    var lowerCaseName =
-                        syntaxNodeType.Name[0].ToString().ToLower()
-                        + syntaxNodeType.Name.Substring(1);
-                    file.WriteLine(
-                        $@"                case {syntaxNodeType.Name} {lowerCaseName}:
-                    return this.Compare{syntaxNodeType.Name}({lowerCaseName}, formattedNode as {syntaxNodeType.Name});"
-                    );
-                }
+            );
 
-                file.WriteLine(
-                    @"                default:
+            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
+                .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o))
+                .OrderBy(o => o.Name)
+                .ToList();
+
+            foreach (var syntaxNodeType in syntaxNodeTypes)
+            {
+                var lowerCaseName =
+                    syntaxNodeType.Name[0].ToString().ToLower() + syntaxNodeType.Name.Substring(1);
+                sourceBuilder.AppendLine(
+                    $@"                case {syntaxNodeType.Name} {lowerCaseName}:
+                    return this.Compare{syntaxNodeType.Name}({lowerCaseName}, formattedNode as {syntaxNodeType.Name});"
+                );
+            }
+
+            sourceBuilder.AppendLine(
+                @"                default:
                     throw new Exception(""Can't handle "" + originalNode.GetType().Name);
             }
         }
         "
-                );
+            );
 
-                foreach (var syntaxNodeType in syntaxNodeTypes)
-                {
-                    GenerateMethod(file, syntaxNodeType);
-                }
-
-                file.WriteLine("    }");
-                file.WriteLine("}");
+            foreach (var syntaxNodeType in syntaxNodeTypes)
+            {
+                GenerateMethod(sourceBuilder, syntaxNodeType);
             }
+
+            sourceBuilder.AppendLine(
+                @"    }
+}"
+            );
+
+            return sourceBuilder.ToString();
         }
 
-        private void GenerateMethod(StreamWriter file, Type type)
+        private void GenerateMethod(StringBuilder sourceBuilder, Type type)
         {
-            file.WriteLine(
+            sourceBuilder.AppendLine(
                 @$"        private CompareResult Compare{type.Name}({type.Name} originalNode, {type.Name} formattedNode)
         {{
             CompareResult result;"
             );
 
-            foreach (var propertyInfo in type.GetProperties())
+            foreach (var propertyInfo in type.GetProperties().OrderBy(o => o.Name))
             {
                 var propertyName = propertyInfo.Name;
 
                 if (
-                    propertyName == "Language"
-                    || propertyName == "Parent"
-                    || propertyName == "HasLeadingTrivia" // we modify/remove whitespace and new lines so we can't look at these properties.
-                    || propertyName == "HasTrailingTrivia"
-                    || propertyName == "ParentTrivia"
-                    || propertyName == "Arity"
-                    || propertyName == "SpanStart"
+                    propertyName
+                    is "Language"
+                    or "Parent"
+                    or "HasLeadingTrivia" // we modify/remove whitespace and new lines so we can't look at these properties.
+                    or "HasTrailingTrivia"
+                    or "ParentTrivia"
+                    or "Arity"
+                    or "SpanStart"
                 ) {
                     continue;
                 }
@@ -142,30 +143,30 @@ namespace CSharpier
 
                 if (propertyType == typeof(bool) || propertyType == typeof(Int32))
                 {
-                    file.WriteLine(
+                    sourceBuilder.AppendLine(
                         $@"            if (originalNode.{propertyName} != formattedNode.{propertyName}) return NotEqual(originalNode, formattedNode);"
                     );
                 }
                 else if (propertyType == typeof(SyntaxToken))
                 {
-                    file.WriteLine(
+                    sourceBuilder.AppendLine(
                         $"            result = this.Compare(originalNode.{propertyName}, formattedNode.{propertyName}, originalNode, formattedNode);"
                     );
-                    file.WriteLine($"            if (result.IsInvalid) return result;");
+                    sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
                 }
                 else if (propertyType == typeof(SyntaxTrivia))
                 {
-                    file.WriteLine(
+                    sourceBuilder.AppendLine(
                         $"            result = this.Compare(originalNode.{propertyName}, formattedNode.{propertyName});"
                     );
-                    file.WriteLine($"            if (result.IsInvalid) return result;");
+                    sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
                 }
                 else if (typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType))
                 {
-                    file.WriteLine(
+                    sourceBuilder.AppendLine(
                         $"            originalStack.Push((originalNode.{propertyName}, originalNode));"
                     );
-                    file.WriteLine(
+                    sourceBuilder.AppendLine(
                         $"            formattedStack.Push((formattedNode.{propertyName}, formattedNode));"
                     );
                 }
@@ -177,28 +178,28 @@ namespace CSharpier
                     )
                 ) {
                     var compare = propertyType == typeof(SyntaxTokenList) ? "Compare" : "null";
-                    file.WriteLine(
+                    sourceBuilder.AppendLine(
                         $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, {compare}, o => o.Span, originalNode.Span, formattedNode.Span);"
                     );
-                    file.WriteLine($"            if (result.IsInvalid) return result;");
+                    sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
                 }
                 else if (
                     propertyType.IsGenericType
                     && propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)
                 ) {
-                    file.WriteLine(
+                    sourceBuilder.AppendLine(
                         $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, null, o => o.Span, originalNode.Span, formattedNode.Span);"
                     );
-                    file.WriteLine($"            if (result.IsInvalid) return result;");
+                    sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
 
-                    file.WriteLine(
+                    sourceBuilder.AppendLine(
                         $"            result = this.CompareLists(originalNode.{propertyName}.GetSeparators().ToList(), formattedNode.{propertyName}.GetSeparators().ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);"
                     );
-                    file.WriteLine($"            if (result.IsInvalid) return result;");
+                    sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
                 }
             }
-            file.WriteLine("            return Equal;");
-            file.WriteLine("        }");
+            sourceBuilder.AppendLine("            return Equal;");
+            sourceBuilder.AppendLine("        }");
         }
 
         private static string CamelCaseName(string name)
