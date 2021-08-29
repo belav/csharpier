@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Reflection;
-using System.Text;
+using Generators;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
-using Scriban;
 
 namespace CSharpier.Generators
 {
     [Generator]
-    public class NodePrinterGenerator : ISourceGenerator
+    public class NodePrinterGenerator : TemplatedGenerator
     {
-        public void Initialize(GeneratorInitializationContext context) { }
+        protected override string SourceName => "Node";
 
-        public void Execute(GeneratorExecutionContext context)
+        protected override object GetModel(GeneratorExecutionContext context)
         {
             var nodeTypes = context.Compilation.SyntaxTrees.Where(
                     o => o.FilePath.Contains("SyntaxNodePrinters")
@@ -34,39 +28,7 @@ namespace CSharpier.Generators
                 .OrderBy(o => o.SyntaxNodeName)
                 .ToArray();
 
-            var template = Template.Parse(GetContent("NodePrinterGenerator.sbntxt"));
-            var renderedSource = template.Render(
-                new { NodeTypes = nodeTypes },
-                member => member.Name
-            );
-
-            var sourceText = SourceText.From(renderedSource, Encoding.UTF8);
-
-            context.AddSource("Node", sourceText);
-        }
-
-        public static string GetContent(string relativePath)
-        {
-            var baseName = Assembly.GetExecutingAssembly().GetName().Name;
-            var resourceName = relativePath.TrimStart('.')
-                .Replace(Path.DirectorySeparatorChar, '.')
-                .Replace(Path.AltDirectorySeparatorChar, '.');
-
-            var name = baseName + "." + resourceName;
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(name);
-
-            if (stream == null)
-            {
-                var list = Assembly.GetExecutingAssembly().GetManifestResourceNames();
-
-                throw new Exception(
-                    $"No embedded resource found with the name {name}. Resources found are "
-                        + string.Join(", ", list)
-                );
-            }
-
-            using var reader = new StreamReader(stream);
-            return reader.ReadToEnd();
+            return new { NodeTypes = nodeTypes };
         }
     }
 }

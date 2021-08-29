@@ -205,15 +205,5 @@ namespace CSharpier
         {
             return name.ToLower()[0] + name.Substring(1);
         }
-
-        private static string PadToSize(string value, int size)
-        {
-            while (value.Length < size)
-            {
-                value += " ";
-            }
-
-            return value;
-        }
     }
 }

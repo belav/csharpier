@@ -14,4 +14,8 @@
     <ItemGroup>
         <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbntxt'))" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Generators\Generators.csproj" OutputItemType="Analyzer" />
+    </ItemGroup>
 </Project>

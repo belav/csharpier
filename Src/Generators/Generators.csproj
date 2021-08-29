@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
     </PropertyGroup>
 
@@ -11,11 +10,4 @@
       <PackageReference Include="Scriban" Version="3.9.0" IncludeAssets="Build" />
     </ItemGroup>
 
-    <ItemGroup>
-        <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbntxt'))" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Generators\Generators.csproj" OutputItemType="Analyzer" />
-    </ItemGroup>
 </Project>
