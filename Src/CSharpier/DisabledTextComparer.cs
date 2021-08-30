@@ -28,7 +28,6 @@ namespace CSharpier
                 {
                     if (
                         result.Length > 0
-                        && index != code.Length - 1
                         && result[^1]
                             is not (
                                 ' '
