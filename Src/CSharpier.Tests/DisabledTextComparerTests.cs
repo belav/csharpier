@@ -20,6 +20,16 @@ string Tester;
         }
 
         [Test]
+        public void Squash_Should_Work_For_Trailing_Space_And_New_Line()
+        {
+            var before = "    public \n";
+
+            var after = "    public\n";
+
+            Squash(before).Should().Be(Squash(after));
+        }
+
+        [Test]
         public void Squash_Should_Work_With_Pointer_Stuff()
         {
             var before =
