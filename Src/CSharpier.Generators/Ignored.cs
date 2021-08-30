@@ -31,7 +31,13 @@ namespace CSharpier.Generators
                 { typeof(PropertyDeclarationSyntax), new[] { "semicolon" } },
                 { typeof(IndexerDeclarationSyntax), new[] { "semicolon" } },
                 { typeof(SyntaxTrivia), new[] { "token" } },
-                { typeof(SyntaxToken), new[] { "value", "valueText" } }
+                { typeof(SyntaxToken), new[] { "value", "valueText" } },
+                // for some reason the github action uses 3.11.0 of Microsoft.CodeAnalysis, but trying to use that version locally fails
+                // these are all the extra properties in 3.11 that don't exist in 3.8
+                { typeof(ParenthesizedLambdaExpressionSyntax), new[] { "attributeLists" } },
+                { typeof(RecordDeclarationSyntax), new[] { "classOrStructKeyword" } },
+                { typeof(SimpleLambdaExpressionSyntax), new[] { "attributeLists" } },
+                { typeof(UsingDirectiveSyntax), new[] { "globalKeyword" } }
             };
     }
 }
