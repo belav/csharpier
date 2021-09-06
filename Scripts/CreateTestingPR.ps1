@@ -3,11 +3,11 @@ param (
 )
 
 if (!$pathToTestingRepo) {
-    $pathToTestingRepo = "C:\Projects\csharpierForkedRepos\aspnetcore"
+    $pathToTestingRepo = "C:\Projects\csharpier-repos"
 }
 if (!(Test-Path $pathToTestingRepo)) {
     Write-Output "No directory found at $($pathToTestingRepo)."
-    Write-Output "Please checkout out https://github.com/belav/aspnetcore there or supply -pathToTestingRepo"
+    Write-Output "Please checkout out https://github.com/belav/csharpier-repos there or supply -pathToTestingRepo"
     exit 1
 }
 

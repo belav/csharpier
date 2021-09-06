@@ -7,6 +7,8 @@ using Scriban;
 
 namespace Generators
 {
+    // this should be in a shared project but the build hates that sometimes and it isn't worth figuring out right now
+    // see https://github.com/dotnet/roslyn/discussions/47517
     public abstract class TemplatedGenerator : ISourceGenerator
     {
         protected abstract string SourceName { get; }
