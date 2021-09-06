@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using Generators;
 using Microsoft.CodeAnalysis;
@@ -22,7 +23,7 @@ namespace CSharpier.Generators
                         {
                             PrinterName = fileName,
                             SyntaxNodeName = fileName + "Syntax",
-                            VariableName = fileName[0].ToString().ToLower() + fileName[1..]
+                            VariableName = char.ToLower(fileName[0]) + fileName[1..]
                         }
                 )
                 .OrderBy(o => o.SyntaxNodeName)
