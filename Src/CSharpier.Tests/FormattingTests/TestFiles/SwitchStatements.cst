@@ -85,5 +85,26 @@ public class ClassName
             default:
                 return;
         }
+
+        switch (patternMatching)
+        {
+            case SomeLongRecursivePattern
+            {
+                SomeProperty: "                             ",
+                SomeOtherProperty: { SomeProperty: One or Two }
+            }:
+                return 1;
+            case SomeShortRecursivePattern { SomeProperty: "" }:
+                return 2;
+            default:
+                break;
+        }
+
+        switch (positionalPattern1, positionalPattern2)
+        {
+            case (SomeValue, _) when !isEquality:
+            case (_, SomeValue) when !isEquality:
+                return;
+        }
     }
 }

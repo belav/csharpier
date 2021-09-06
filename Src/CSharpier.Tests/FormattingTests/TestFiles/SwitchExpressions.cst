@@ -11,17 +11,15 @@ class ClassName
             _ => throw new global::System.Exception()
         };
 
-        var newState = (GetState(), action, hasKey) switch
+        return (GetState(), action, hasKey) switch
         {
-            // Open/Close
+            // Comment
             (DoorState.Closed, Action.Open, _) => DoorState.Opened,
             (DoorState.Opened, Action.Close, _) => DoorState.Closed,
 
-            // Locking
+            // ExtraLineBeforeThis
             (DoorState.Closed, Action.Lock, true) => DoorState.Locked,
             (DoorState.Locked, Action.Unlock, true) => DoorState.Closed,
-
-            // Do nothing
             (var state, _, _) => state,
             (_, _, _)
               => DoorState.LongStateShouldNotGetExtraLine________________________________________
@@ -52,27 +50,25 @@ class ClassName
             or AnotherObject
             or OrEvenSomeOtherObject_________________
               => CallSomeMethod(someValue),
-            SomeOtherObject
-            {
-                SomeProperty: SomeOtherProject
-            }
+            SomeOtherObject { SomeProperty: SomeOtherProject }
             or AnotherObject
               => CallSomeMethod(someValue),
             AnotherObject
-            or SomeOtherObject
-            {
-                SomeProperty: SomeOtherProject
-            }
+            or SomeOtherObject { SomeProperty: SomeOtherProject }
               => CallSomeMethod(someValue),
+            SomeOtherObject { Property: true } => CallSomeMethod(someValue),
+            SomeOtherObject { SomeProperty: YetAnotherObject { Property: true } }
+              => CallSomeMethod(someValue),
+            { } otherSyntax => CallSomeMethod(otherSyntax),
+            { SomeProperty: true }
+              => "Just because this is long, don't break the pattern                           ",
             _ => CallSomeMethod(someValue)
         };
 
         return someValue switch
         {
             { IsParameter: true, } => noExtraLineAfterThis,
-            {
-                IsParameter: someLongValue____________________________________________,
-            }
+            { IsParameter: someLongValue____________________________________________, }
               => someOtherValue
         };
 
