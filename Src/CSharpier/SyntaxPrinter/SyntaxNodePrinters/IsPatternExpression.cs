@@ -27,26 +27,26 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 );
             }
 
-            if (recursivePattern.Type is not null)
+            if (recursivePattern.Type is null)
             {
                 return Doc.Group(
-                    Doc.Group(
-                        Node.Print(node.Expression),
-                        Doc.Line,
-                        Token.Print(node.IsKeyword),
-                        " ",
-                        Node.Print(recursivePattern.Type)
-                    ),
-                    RecursivePattern.PrintWithOutType(recursivePattern)
+                    Node.Print(node.Expression),
+                    " ",
+                    Token.Print(node.IsKeyword),
+                    Doc.Line,
+                    RecursivePattern.Print(recursivePattern)
                 );
             }
 
             return Doc.Group(
-                Node.Print(node.Expression),
-                " ",
-                Token.Print(node.IsKeyword),
-                Doc.Line,
-                RecursivePattern.Print(recursivePattern)
+                Doc.Group(
+                    Node.Print(node.Expression),
+                    Doc.Line,
+                    Token.Print(node.IsKeyword),
+                    " ",
+                    Node.Print(recursivePattern.Type)
+                ),
+                RecursivePattern.PrintWithOutType(recursivePattern)
             );
         }
     }

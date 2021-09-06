@@ -163,6 +163,18 @@ class ClassName
         }
 
         if (
+            node is PrefixUnaryExpressionSyntax
+            {
+                Operand:
+                {
+                    Expression: IsPatternExpressionSyntax or IsPatternExpressionSyntax______________
+                },
+            }
+        ) {
+            return;
+        }
+
+        if (
             !(
                 node is PrefixUnaryExpressionSyntax
                 {
