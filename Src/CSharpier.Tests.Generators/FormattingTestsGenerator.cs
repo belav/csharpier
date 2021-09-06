@@ -1,59 +1,33 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
+using Generators;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
 
 namespace CSharpier.Tests.Generators
 {
     [Generator]
-    public class FormattingTestsGenerator : ISourceGenerator
+    public class FormattingTestsGenerator : TemplatedGenerator
     {
-        public void Initialize(GeneratorInitializationContext context) { }
+        protected override string SourceName => "FormattingTests";
 
-        public void Execute(GeneratorExecutionContext context)
+        protected override object GetModel(GeneratorExecutionContext context)
         {
-            var sourceBuilder = new StringBuilder();
-            sourceBuilder.AppendLine(
-                @"using NUnit.Framework;
-
-namespace CSharpier.Tests.FormattingTests
-{
-    [TestFixture]
-    public class FormattingTests : BaseTest
-    {"
-            );
-
-            var cstFiles = context.AdditionalFiles.Where(
-                o =>
-                    o.Path.EndsWith(".cst")
-                    && !o.Path.EndsWith(".actual.cst")
-                    && !o.Path.EndsWith(".expected.cst")
-            );
-
-            foreach (var file in cstFiles)
-            {
-                var name = Path.GetFileNameWithoutExtension(file.Path);
-
-                sourceBuilder.AppendLine(
-                    $@"        [Test]
-        public void {name}()
-        {{
-            this.RunTest(""{name}""{(name == "Tabs" ? ", true" : string.Empty)});
-        }}"
+            var tests = context.AdditionalFiles.Where(
+                    o =>
+                        o.Path.EndsWith(".cst")
+                        && !o.Path.EndsWith(".actual.cst")
+                        && !o.Path.EndsWith(".expected.cst")
+                )
+                .Select(
+                    o =>
+                        new
+                        {
+                            Name = Path.GetFileNameWithoutExtension(o.Path),
+                            UseTabs = Path.GetFileNameWithoutExtension(o.Path) == "Tabs"
+                        }
                 );
-            }
 
-            sourceBuilder.AppendLine(
-                @"    }
-}"
-            );
-
-            var sourceText = SourceText.From(sourceBuilder.ToString(), Encoding.UTF8);
-
-            context.AddSource("FormattingTests", sourceText);
+            return new { Tests = tests };
         }
     }
 }

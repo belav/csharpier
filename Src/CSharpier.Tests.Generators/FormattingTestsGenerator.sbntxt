@@ -1,0 +1,16 @@
+using NUnit.Framework;
+
+namespace CSharpier.Tests.FormattingTests
+{
+    [TestFixture]
+    public class FormattingTests : BaseTest
+    {
+        {{- for test in Tests }}
+        [Test]
+        public void {{ test.Name }}()
+        {
+            this.RunTest("{{ test.Name }}"{{ if test.UseTabs }}, true{{ end }});
+        }
+        {{- end }}
+    }
+}
