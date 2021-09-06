@@ -215,7 +215,7 @@ namespace CSharpier.Tests
                 .StartWith(
                     $"Error The .csharpierignore file at {path} could not be parsed due to the following line:"
                 );
-            lines.First().Should().Contain(@"\Src\Uploads\*.cs");
+            lines.Skip(1).First().Should().Contain(@"\Src\Uploads\*.cs");
         }
 
         [Test]

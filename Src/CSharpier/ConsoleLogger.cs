@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier
@@ -30,20 +31,36 @@ namespace CSharpier
             {
                 var message = formatter(state, exception!);
 
-                this.console.ForegroundColor = GetColorLevel(logLevel);
                 if (logLevel >= LogLevel.Warning)
                 {
+                    this.console.ForegroundColor = GetColorLevel(logLevel);
                     this.console.Write($"{logLevel} ");
+                    this.console.ResetColor();
                 }
-                this.console.WriteLine(message);
-                this.console.ResetColor();
+
+                var stringReader = new StringReader(message);
+                var line = stringReader.ReadLine();
+                this.console.WriteLine(line);
+                while ((line = stringReader.ReadLine()) != null)
+                {
+                    this.console.WriteLine("  " + line);
+                }
 
                 if (exception == null)
                 {
                     return;
                 }
-                this.console.WriteLine(exception.Message);
-                this.console.WriteLine(exception.StackTrace);
+
+                this.console.WriteLine("  " + exception.Message);
+                if (exception.StackTrace != null)
+                {
+                    stringReader = new StringReader(exception.StackTrace);
+                    while ((line = stringReader.ReadLine()) != null)
+                    {
+                        this.console.WriteLine("  " + line);
+                    }
+                }
+
                 this.console.WriteLine();
             }
         }
@@ -54,8 +71,6 @@ namespace CSharpier
                 LogLevel.Critical => ConsoleColor.DarkRed,
                 LogLevel.Error => ConsoleColor.DarkRed,
                 LogLevel.Warning => ConsoleColor.DarkYellow,
-                LogLevel.Debug => ConsoleColor.Gray,
-                LogLevel.Trace => ConsoleColor.Gray,
                 _ => ConsoleColor.White,
             };
 
