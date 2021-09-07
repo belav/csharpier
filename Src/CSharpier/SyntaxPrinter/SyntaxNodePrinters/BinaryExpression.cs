@@ -24,7 +24,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     or ArrowExpressionClauseSyntax
                     or ParenthesizedLambdaExpressionSyntax
                     or AssignmentExpressionSyntax
-                    or ConditionalExpressionSyntax
                     or SimpleLambdaExpressionSyntax
                     or IfStatementSyntax
                     or WhileStatementSyntax
@@ -33,7 +32,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     or CheckedExpressionSyntax
                     or CatchFilterClauseSyntax
                     or ParenthesizedExpressionSyntax
-                    or SwitchStatementSyntax;
+                    or SwitchStatementSyntax
+                || node.Parent is ConditionalExpressionSyntax
+                    && node.Parent.Parent is not ArgumentSyntax;
 
             return shouldNotIndent
                 ? Doc.Group(docs)

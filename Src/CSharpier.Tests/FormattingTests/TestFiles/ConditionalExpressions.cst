@@ -34,12 +34,25 @@ public class ClassName
                 ? trueValue
                 : falseValue;
 
+        CallMethod(
+            someValue,
+            someCondition
+              ? trueValue________________________________
+              : falseValue_______________________________,
+            someCondition_____________________________________
+                && someOtherCondition__________________________________
+              ? trueValue________________________________
+              : falseValue_______________________________,
+            someCondition_____________________________________
+                && someOtherCondition__________________________________
+        );
+
         var fileContents = File.ReadAllText(
             file,
             // leading here should break parameters and GetEncoding should still group
             encoding
-                ? File.GetEncoding________________________________(1252)
-                : encoding_____________________,
+              ? File.GetEncoding________________________________(1252)
+              : encoding_____________________,
             cancellationToken
         );
 
@@ -47,14 +60,6 @@ public class ClassName
             file,
             // leading here should break parameters
             encoding ? GetEncoding(1252) : encoding,
-            cancellationToken
-        );
-
-        var fileContents = File.ReadAllText(
-            file,
-            encoding
-                ? File.GetEncoding________________________________(1252)
-                : encoding_____________________,
             cancellationToken
         );
     }
