@@ -9,7 +9,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         public static Doc Print(BinaryPatternSyntax node)
         {
             return Doc.IndentIf(
-                node.Parent is SubpatternSyntax,
+                node.Parent is SubpatternSyntax or IsPatternExpressionSyntax,
                 Doc.Concat(
                     Node.Print(node.Left),
                     Doc.Line,
