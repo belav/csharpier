@@ -12,12 +12,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 return Doc.Group(
                     Node.Print(node.Expression),
-                    Doc.Indent(
-                        Doc.Line,
-                        Token.Print(node.IsKeyword),
-                        node.Pattern is RecursivePatternSyntax { Type: null } ? Doc.Null : " ",
-                        Node.Print(node.Pattern)
-                    )
+                    Doc.Indent(Doc.Line, Token.Print(node.IsKeyword), " ", Node.Print(node.Pattern))
                 );
             }
 
@@ -36,8 +31,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 return Doc.Group(
                     Node.Print(node.Expression),
-                    Doc.Line,
+                    " ",
                     Token.Print(node.IsKeyword),
+                    Doc.Line,
                     RecursivePattern.Print(recursivePattern)
                 );
             }

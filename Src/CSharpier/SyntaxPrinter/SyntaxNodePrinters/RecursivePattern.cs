@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using CSharpier.DocTypes;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
@@ -28,7 +30,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (node.PositionalPatternClause != null)
             {
                 result.Add(
-                    node.Parent is SwitchExpressionArmSyntax ? Doc.Null : Doc.SoftLine,
+                    node.Parent is SwitchExpressionArmSyntax or CasePatternSwitchLabelSyntax
+                        ? Doc.Null
+                        : Doc.SoftLine,
                     Token.PrintLeadingTrivia(node.PositionalPatternClause.OpenParenToken),
                     Doc.Group(
                         Token.PrintWithoutLeadingTrivia(
@@ -58,34 +62,38 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 if (!node.PropertyPatternClause.Subpatterns.Any())
                 {
-                    result.Add(" { }");
+                    if (node.Type != null)
+                    {
+                        result.Add(" ");
+                    }
+                    result.Add("{ }");
                 }
                 else
                 {
                     result.Add(
-                        node.Parent switch
-                        {
-                            IsPatternExpressionSyntax => Doc.Line,
-                            SwitchExpressionArmSyntax => Doc.Null,
-                            _ => Doc.SoftLine
-                        },
-                        Token.Print(node.PropertyPatternClause.OpenBraceToken),
-                        Doc.Indent(
-                            node.PropertyPatternClause.Subpatterns.Any() ? Doc.Line : Doc.Null,
-                            SeparatedSyntaxList.Print(
-                                node.PropertyPatternClause.Subpatterns,
-                                subpatternNode =>
-                                    Doc.Group(
-                                        subpatternNode.NameColon != null
-                                            ? NameColon.Print(subpatternNode.NameColon)
-                                            : Doc.Null,
-                                        Node.Print(subpatternNode.Pattern)
-                                    ),
-                                Doc.Line
-                            )
-                        ),
-                        Doc.Line,
-                        Token.Print(node.PropertyPatternClause.CloseBraceToken)
+                        Token.PrintLeadingTrivia(node.PropertyPatternClause.OpenBraceToken),
+                        Doc.Group(
+                            node.Type != null ? Doc.Line : Doc.Null,
+                            Token.PrintWithoutLeadingTrivia(
+                                node.PropertyPatternClause.OpenBraceToken
+                            ),
+                            Doc.Indent(
+                                node.PropertyPatternClause.Subpatterns.Any() ? Doc.Line : Doc.Null,
+                                SeparatedSyntaxList.Print(
+                                    node.PropertyPatternClause.Subpatterns,
+                                    subpatternNode =>
+                                        Doc.Group(
+                                            subpatternNode.NameColon != null
+                                                ? NameColon.Print(subpatternNode.NameColon)
+                                                : Doc.Null,
+                                            Node.Print(subpatternNode.Pattern)
+                                        ),
+                                    Doc.Line
+                                )
+                            ),
+                            Doc.Line,
+                            Token.Print(node.PropertyPatternClause.CloseBraceToken)
+                        )
                     );
                 }
             }

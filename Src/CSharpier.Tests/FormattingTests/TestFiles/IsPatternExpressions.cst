@@ -24,13 +24,28 @@ class ClassName
             return;
         }
 
+        if (expr is { Length: 5 })
+        {
+            return;
+        }
+
+        if (
+            expr is
+            {
+                SomeProperty: "someValue________________",
+                SomeOtherProperty: "someOtherValue______________"
+            }
+        ) {
+            return;
+        }
+
         var useLine =
             node.OperatorToken.Kind()
                 is SyntaxKind.BarBarToken
-                or SyntaxKind.BarToken
-                or SyntaxKind.AmpersandAmpersandToken
-                or SyntaxKind.AmpersandToken
-                or SyntaxKind.PlusToken;
+                    or SyntaxKind.BarToken
+                    or SyntaxKind.AmpersandAmpersandToken
+                    or SyntaxKind.AmpersandToken
+                    or SyntaxKind.PlusToken;
 
         if (
             someRandomValue___________________ is SomeRandomType someRandomType
@@ -54,29 +69,28 @@ class ClassName
             && someType.SomeProperty
         ) { }
 
-        var value =
-            someOtherValue
-                is SomeType___________________
-                {
-                    SomeProperty: SomeOtherType_____________________________________________
-                }
-                or SomeThirdType___________;
+        var value = someOtherValue is { Property: true };
 
         var value =
             someOtherValue
                 is SomeType___________________
-                {
-                    SomeProperty: SomeOtherType_____________________________________________,
-                    AnotherProperty: SomeType
-                }
-                or SomeThirdType___________;
+                    {
+                        SomeProperty: SomeOtherType_____________________________________________
+                    }
+                    or SomeThirdType___________;
 
         var value =
             someOtherValue
                 is SomeType___________________
-                {
-                    SomeProperty: SomeType or SomeOtherType
-                };
+                    {
+                        SomeProperty: SomeOtherType_____________________________________________,
+                        AnotherProperty: SomeType
+                    }
+                    or SomeThirdType___________;
+
+        var value =
+            someOtherValue
+                is SomeType___________________ { SomeProperty: SomeType or SomeOtherType };
 
         var value =
             someOtherValue
@@ -89,8 +103,8 @@ class ClassName
         var value =
             someOtherValue
                 is SomeType___________________
-                or SomeOtherType___________________
-                or SomeThirdType___________
+                    or SomeOtherType___________________
+                    or SomeThirdType___________
             && someLongValue_________________;
 
         if (someOtherValue is (SomeType or SomeOtherType))
@@ -149,6 +163,18 @@ class ClassName
         }
 
         if (
+            node is PrefixUnaryExpressionSyntax
+            {
+                Operand:
+                {
+                    Expression: IsPatternExpressionSyntax or IsPatternExpressionSyntax______________
+                },
+            }
+        ) {
+            return;
+        }
+
+        if (
             !(
                 node is PrefixUnaryExpressionSyntax
                 {
@@ -160,8 +186,8 @@ class ClassName
         }
 
         if (
-            someLongName____________________________________________________
-            is { } anotherLongName______________________
+            someLongName____________________________________________________ is
+            { } anotherLongName______________________
         ) {
             return;
         }
@@ -179,5 +205,20 @@ class ClassName
         ) {
             return;
         }
+
+        if (
+            someLongName_____________
+            is SomeObjectType
+                or SomeOtherObjectType
+                or YetAnotherObjectType
+        ) {
+            return;
+        }
+
+        if (
+            someCondition
+            && someLongName_____________
+                is { Kind: SomeObjectType, Value: "___________________________________" }
+        ) { }
     }
 }
