@@ -318,11 +318,15 @@ namespace CSharpier.Tests
         [TestCase(".csharpierrc.yaml")]
         public void Empty_Config_Files_Should_Log_Warning(string configFileName)
         {
-            WhenAFileExists(".csharpierrc", "");
+            var configPath = WhenAFileExists(".csharpierrc", "");
             WhenAFileExists("file1.cs", "public class ClassName { }");
 
-            this.Format();
-            // TODO check for warning
+            var (_, lines) = this.Format();
+
+            lines.First()
+                .Replace("\\", "/")
+                .Should()
+                .Be($"Warning The configuration file at {configPath} was empty.");
         }
 
         private (int exitCode, IList<string> lines) Format(
@@ -380,10 +384,11 @@ namespace CSharpier.Tests
             return this.fileSystem.File.ReadAllText(path);
         }
 
-        private void WhenAFileExists(string path, string contents)
+        private string WhenAFileExists(string path, string contents)
         {
             path = this.fileSystem.Path.Combine(GetRootPath(), path).Replace('\\', '/');
             this.fileSystem.AddFile(path, new MockFileData(contents));
+            return path;
         }
 
         private class TestConsole : IConsole

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
@@ -25,9 +26,10 @@ namespace CSharpier
 
         public static PrinterOptions CreatePrinterOptions(
             string baseDirectoryPath,
-            IFileSystem fileSystem
+            IFileSystem fileSystem,
+            ILogger logger
         ) {
-            var configurationFileOptions = Create(baseDirectoryPath, fileSystem);
+            var configurationFileOptions = Create(baseDirectoryPath, fileSystem, logger);
 
             List<string[]> preprocessorSymbolSets;
             if (configurationFileOptions.PreprocessorSymbolSets == null)
@@ -59,7 +61,8 @@ namespace CSharpier
 
         public static ConfigurationFileOptions Create(
             string baseDirectoryPath,
-            IFileSystem fileSystem
+            IFileSystem fileSystem,
+            ILogger? logger = null
         ) {
             var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
 
@@ -85,7 +88,10 @@ namespace CSharpier
 
                 if (string.IsNullOrWhiteSpace(contents))
                 {
-                    // TODO log warning
+                    logger?.LogWarning(
+                        "The configuration file at " + file.FullName + " was empty."
+                    );
+
                     return new();
                 }
 
