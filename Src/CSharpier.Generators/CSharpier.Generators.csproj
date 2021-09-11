@@ -5,19 +5,14 @@
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
     </PropertyGroup>
-
+    
     <ItemGroup>
-      <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.8.0" />
-      <PackageReference Include="Scriban" Version="3.9.0" IncludeAssets="Build" />
+        <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.8.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
+        <PackageReference Include="Scriban" Version="3.9.0" IncludeAssets="Build" />
     </ItemGroup>
 
     <ItemGroup>
         <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbntxt'))" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Include="..\CSharpier.Generators\TemplatedGenerator.cs">
-        <Link>TemplatedGenerator.cs</Link>
-      </Compile>
     </ItemGroup>
 </Project>

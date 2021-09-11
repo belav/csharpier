@@ -10,7 +10,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             return Doc.Concat(
                 Token.Print(node.Name.Identifier),
-                Token.PrintWithSuffix(node.ColonToken, " ")
+                Token.PrintWithSuffix(
+                    node.ColonToken,
+                    node.Parent
+                        is SubpatternSyntax
+                        {
+                            Pattern: RecursivePatternSyntax{ Type: null }
+                        }
+                        ? Doc.Line
+                        : " "
+                )
             );
         }
     }

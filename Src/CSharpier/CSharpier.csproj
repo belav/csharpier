@@ -8,6 +8,7 @@
         <RootNamespace>CSharpier</RootNamespace>
         <PackAsTool>true</PackAsTool>
         <Nullable>enable</Nullable>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -27,4 +28,8 @@
         <PackageReference Include="YamlDotNet" Version="11.1.1" />
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\CSharpier.Generators\CSharpier.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    </ItemGroup>
+    
 </Project>

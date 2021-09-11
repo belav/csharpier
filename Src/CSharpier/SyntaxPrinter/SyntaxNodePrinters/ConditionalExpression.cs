@@ -19,7 +19,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             return Doc.Group(
                 Node.Print(node.Condition),
-                node.Parent is ConditionalExpressionSyntax
+                node.Parent is ConditionalExpressionSyntax or ArgumentSyntax
                     ? Doc.Align(2, contents)
                     : Doc.Indent(contents)
             );

@@ -5,4 +5,7 @@ $csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier/bin/release/net5.0/
 function Build-CSharpier
 {
     & dotnet build $csProjectPath -c release
+    if ($lastExitCode -gt 0) {
+        exit $lastExitCode;
+    }
 }
