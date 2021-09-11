@@ -96,7 +96,7 @@ namespace CSharpier.DocTypes
 
         public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
 
-        public static Doc IndentIf(bool condition, Concat contents)
+        public static Doc IndentIf(bool condition, Doc contents)
         {
             return condition ? Doc.Indent(contents) : contents;
         }

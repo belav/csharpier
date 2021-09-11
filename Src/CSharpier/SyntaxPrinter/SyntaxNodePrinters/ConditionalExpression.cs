@@ -18,8 +18,17 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             };
 
             return Doc.Group(
-                Node.Print(node.Condition),
-                node.Parent is ConditionalExpressionSyntax or ArgumentSyntax
+                Doc.IndentIf(
+                    node.Parent is ReturnStatementSyntax,
+                    Doc.Concat(
+                        node.Parent is ReturnStatementSyntax ? Doc.SoftLine : Doc.Null,
+                        Node.Print(node.Condition)
+                    )
+                ),
+                node.Parent
+                    is ConditionalExpressionSyntax
+                    or ArgumentSyntax
+                    or ReturnStatementSyntax
                     ? Doc.Align(2, contents)
                     : Doc.Indent(contents)
             );
