@@ -56,7 +56,7 @@ namespace CSharpier
             rootCommand.AddValidator(
                 cmd =>
                 {
-                    if (!Console.IsInputRedirected && cmd.Children["directoryOrFile"] == null)
+                    if (!Console.IsInputRedirected && !cmd.Children.Contains("directoryOrFile"))
                     {
                         return "directoryOrFile is required when not piping stdin to CSharpier";
                     }

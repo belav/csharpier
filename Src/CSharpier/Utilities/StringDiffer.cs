@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 
 namespace CSharpier.Utilities
 {
@@ -8,12 +9,14 @@ namespace CSharpier.Utilities
         /// Given two strings that are different, this will print the first different line it encounters
         /// along with a single line before and after that different line.
         /// </summary>
-        public static void PrintFirstDifference(string expected, string actual, IConsole console)
+        public static string PrintFirstDifference(string expected, string actual)
         {
             if (expected == actual)
             {
-                return;
+                return string.Empty;
             }
+
+            var stringBuilder = new StringBuilder();
 
             using var expectedReader = new StringReader(expected);
             using var actualReader = new StringReader(actual);
@@ -35,40 +38,42 @@ namespace CSharpier.Utilities
                     continue;
                 }
 
-                console.WriteLine(
+                stringBuilder.AppendLine(
                     $"----------------------------- Expected: Around Line {line} -----------------------------"
                 );
                 if (previousExpectedLine != null)
                 {
-                    console.WriteLine(MakeWhiteSpaceVisible(previousExpectedLine));
+                    stringBuilder.AppendLine(MakeWhiteSpaceVisible(previousExpectedLine));
                 }
-                console.WriteLine(MakeWhiteSpaceVisible(expectedLine));
+                stringBuilder.AppendLine(MakeWhiteSpaceVisible(expectedLine));
                 var nextExpectedLine = expectedReader.ReadLine();
                 if (nextExpectedLine != null)
                 {
-                    console.WriteLine(MakeWhiteSpaceVisible(nextExpectedLine));
+                    stringBuilder.AppendLine(MakeWhiteSpaceVisible(nextExpectedLine));
                 }
 
-                console.WriteLine(
+                stringBuilder.AppendLine(
                     $"----------------------------- Actual: Around Line {line} -----------------------------"
                 );
                 if (previousActualLine != null)
                 {
-                    console.WriteLine(MakeWhiteSpaceVisible(previousActualLine));
+                    stringBuilder.AppendLine(MakeWhiteSpaceVisible(previousActualLine));
                 }
-                console.WriteLine(MakeWhiteSpaceVisible(actualLine));
+                stringBuilder.AppendLine(MakeWhiteSpaceVisible(actualLine));
                 var nextActualLine = actualReader.ReadLine();
                 if (nextActualLine != null)
                 {
-                    console.WriteLine(MakeWhiteSpaceVisible(nextActualLine));
+                    stringBuilder.AppendLine(MakeWhiteSpaceVisible(nextActualLine));
                 }
 
-                return;
+                return stringBuilder.ToString();
             }
 
-            console.WriteLine(
+            stringBuilder.AppendLine(
                 "The file contained different line endings than formatting it would result in."
             );
+
+            return stringBuilder.ToString();
         }
 
         private static string? MakeWhiteSpaceVisible(string? value)

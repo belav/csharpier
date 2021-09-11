@@ -4,10 +4,10 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpier.Utilities;
+using Microsoft.Extensions.Logging;
 
 namespace CSharpier
 {
@@ -22,6 +22,7 @@ namespace CSharpier
         protected readonly IFileSystem FileSystem;
         protected readonly IConsole Console;
         protected readonly IgnoreFile IgnoreFile;
+        protected readonly ILogger Logger;
 
         protected CommandLineFormatter(
             string baseDirectoryPath,
@@ -31,7 +32,8 @@ namespace CSharpier
             IFileSystem fileSystem,
             IConsole console,
             IgnoreFile ignoreFile,
-            CommandLineFormatterResult result
+            CommandLineFormatterResult result,
+            ILogger logger
         ) {
             this.BaseDirectoryPath = baseDirectoryPath;
             this.Path = path;
@@ -41,12 +43,14 @@ namespace CSharpier
             this.Console = console;
             this.IgnoreFile = ignoreFile;
             this.Result = result;
+            this.Logger = logger;
         }
 
         public static async Task<int> Format(
             CommandLineOptions commandLineOptions,
             IFileSystem fileSystem,
             IConsole console,
+            ILogger logger,
             CancellationToken cancellationToken
         ) {
             var stopwatch = Stopwatch.StartNew();
@@ -74,7 +78,7 @@ namespace CSharpier
                 var ignoreFile = await IgnoreFile.Create(
                     baseDirectoryPath,
                     fileSystem,
-                    console,
+                    logger,
                     cancellationToken
                 );
                 if (ignoreFile is null)
@@ -90,7 +94,8 @@ namespace CSharpier
                     fileSystem,
                     console,
                     ignoreFile,
-                    result
+                    result,
+                    logger
                 );
             }
 
@@ -128,7 +133,7 @@ namespace CSharpier
             result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
             if (!commandLineOptions.ShouldWriteStandardOut)
             {
-                ResultPrinter.PrintResults(result, console, commandLineOptions);
+                ResultPrinter.PrintResults(result, logger, commandLineOptions);
             }
             return ReturnExitCode(commandLineOptions, result);
         }
@@ -223,10 +228,7 @@ namespace CSharpier
             catch (Exception ex)
             {
                 Interlocked.Increment(ref this.Result.Files);
-                WriteError(filePath, "Threw exception while formatting.");
-                WriteLine(ex.Message);
-                WriteLine(ex.StackTrace);
-                WriteLine();
+                WriteError(filePath, "Threw exception while formatting.", ex);
                 Interlocked.Increment(ref this.Result.ExceptionsFormatting);
                 return;
             }
@@ -252,7 +254,7 @@ namespace CSharpier
             cancellationToken.ThrowIfCancellationRequested();
             Interlocked.Increment(ref this.Result.Files);
 
-            WriteResult(filePath, result, fileContents, encoding);
+            WriteFormattedResult(filePath, result, fileContents, encoding);
         }
 
         private async Task PerformSyntaxTreeValidation(
@@ -275,17 +277,14 @@ namespace CSharpier
                     if (!string.IsNullOrEmpty(failure))
                     {
                         Interlocked.Increment(ref this.Result.FailedSyntaxTreeValidation);
-                        WriteError(file, "Failed syntax tree validation.");
-                        WriteLine(failure);
+                        WriteError(file, $"Failed syntax tree validation.\n{failure}");
                     }
                 }
                 catch (Exception ex)
                 {
                     Interlocked.Increment(ref this.Result.ExceptionsValidatingSource);
 
-                    WriteError(file, "Failed with exception during syntax tree validation.");
-                    WriteLine(ex.Message);
-                    WriteLine(ex.StackTrace);
+                    WriteError(file, "Failed with exception during syntax tree validation.", ex);
                 }
             }
         }
@@ -297,13 +296,13 @@ namespace CSharpier
                 && !this.CommandLineOptions.ShouldWriteStandardOut
                 && result.Code != fileContents
             ) {
-                WriteWarning(filePath, "Was not formatted.");
-                StringDiffer.PrintFirstDifference(result.Code, fileContents, this.Console);
+                var difference = StringDiffer.PrintFirstDifference(result.Code, fileContents);
+                WriteWarning(filePath, $"Was not formatted.\n{difference}");
                 Interlocked.Increment(ref this.Result.UnformattedFiles);
             }
         }
 
-        private void WriteResult(
+        private void WriteFormattedResult(
             string filePath,
             CSharpierResult result,
             string? fileContents,
@@ -353,41 +352,14 @@ namespace CSharpier
                 || this.IgnoreFile.IsIgnored(filePath);
         }
 
-        private void WriteError(string filePath, string value)
+        private void WriteError(string filePath, string value, Exception? exception = null)
         {
-            this.WriteMessage(filePath, value, "Error", ConsoleColor.DarkRed);
+            this.Logger.LogError(exception, $"{GetPath(filePath)} - {value}");
         }
 
         private void WriteWarning(string filePath, string value)
         {
-            this.WriteMessage(filePath, value, "Warn", ConsoleColor.DarkYellow);
-        }
-
-        private static readonly object ConsoleLock = new();
-
-        protected void WriteMessage(
-            string filePath,
-            string value,
-            string valueForColor,
-            ConsoleColor color
-        ) {
-            if (this.CommandLineOptions.ShouldWriteStandardOut)
-            {
-                return;
-            }
-            lock (ConsoleLock)
-            {
-                this.Console.WriteWithColor($"{valueForColor} ", color);
-                this.Console.WriteLine($"{GetPath(filePath)} - {value}");
-            }
-        }
-
-        protected void WriteLine(string? line = null)
-        {
-            if (!this.CommandLineOptions.ShouldWriteStandardOut)
-            {
-                this.Console.WriteLine(line);
-            }
+            this.Logger.LogWarning($"{GetPath(filePath)} - {value}");
         }
     }
 

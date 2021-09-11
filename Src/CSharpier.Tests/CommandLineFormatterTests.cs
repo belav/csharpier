@@ -35,7 +35,7 @@ namespace CSharpier.Tests
             lines.First()
                 .Should()
                 .Be(
-                    $"Warn {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
+                    $"Warning {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
                 );
         }
 
@@ -85,7 +85,9 @@ namespace CSharpier.Tests
             this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
             lines.First()
                 .Should()
-                .Be($"Warn {Path.DirectorySeparatorChar}Unformatted.cs - Was not formatted.");
+                .StartWith(
+                    $"Warning {Path.DirectorySeparatorChar}Unformatted.cs - Was not formatted."
+                );
         }
 
         [Test]
@@ -208,11 +210,12 @@ namespace CSharpier.Tests
             var path = this.fileSystem.Path.Combine(GetRootPath(), ".csharpierignore");
 
             exitCode.Should().Be(1);
-            lines.Should()
-                .Contain(
-                    $"The .csharpierignore file at {path} could not be parsed due to the following line:"
+            lines.First()
+                .Should()
+                .StartWith(
+                    $"Error The .csharpierignore file at {path} could not be parsed due to the following line:"
                 );
-            lines.Should().Contain(@"\Src\Uploads\*.cs");
+            lines.Skip(1).First().Should().Contain(@"\Src\Uploads\*.cs");
         }
 
         [Test]
@@ -267,7 +270,7 @@ namespace CSharpier.Tests
             lines.First()
                 .Should()
                 .Be(
-                    $"Warn {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
+                    $"Warning {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
                 );
         }
 
@@ -330,6 +333,7 @@ namespace CSharpier.Tests
             }
 
             var fakeConsole = new TestConsole();
+            var testLogger = new ConsoleLogger(fakeConsole);
             var result =
                 CommandLineFormatter.Format(
                     new CommandLineOptions
@@ -342,6 +346,7 @@ namespace CSharpier.Tests
                     },
                     this.fileSystem,
                     fakeConsole,
+                    testLogger,
                     CancellationToken.None
                 ).Result;
 
@@ -371,7 +376,7 @@ namespace CSharpier.Tests
 
         private class TestConsole : IConsole
         {
-            public readonly IList<string> Lines = new List<string>();
+            public readonly List<string> Lines = new();
 
             private string nextLine = "";
 
@@ -395,12 +400,9 @@ namespace CSharpier.Tests
                 nextLine += value;
             }
 
-            public void WriteWithColor(string value, ConsoleColor color)
-            {
-                this.Write(value);
-            }
-
             public Encoding InputEncoding => Encoding.UTF8;
+            public ConsoleColor ForegroundColor { get; set; }
+            public void ResetColor() { }
 
             public void Close()
             {

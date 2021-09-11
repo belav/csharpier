@@ -2,6 +2,7 @@ using System;
 using System.IO.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace CSharpier
 {
@@ -39,7 +40,7 @@ namespace CSharpier
         public static async Task<IgnoreFile?> Create(
             string baseDirectoryPath,
             IFileSystem fileSystem,
-            IConsole console,
+            ILogger logger,
             CancellationToken cancellationToken
         ) {
             var ignore = new Ignore.Ignore();
@@ -61,13 +62,12 @@ namespace CSharpier
                 }
                 catch (Exception ex)
                 {
-                    console.WriteLine(
-                        "The .csharpierignore file at "
-                            + ignoreFilePath
-                            + " could not be parsed due to the following line:"
+                    logger.LogError(
+                        ex,
+                        @$"The .csharpierignore file at {ignoreFilePath} could not be parsed due to the following line:
+{line}
+"
                     );
-                    console.WriteLine(line);
-                    console.WriteLine("Exception: " + ex.Message);
                     return null;
                 }
             }
