@@ -22,6 +22,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             return Doc.Group(
                 node.Parent is ReturnStatementSyntax
+                && node.Condition is BinaryExpressionSyntax or IsPatternExpressionSyntax
                     ? Doc.Indent(
                           Doc.Group(Doc.IfBreak(Doc.SoftLine, Doc.Null), Node.Print(node.Condition))
                       )
