@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
@@ -15,13 +16,20 @@ namespace CSharpier
         public int PrintWidth { get; init; } = 100;
         public List<string>? PreprocessorSymbolSets { get; init; }
 
-        private static string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
+        private static readonly string[] validExtensions =
+        {
+            ".csharpierrc",
+            ".json",
+            ".yml",
+            ".yaml"
+        };
 
         public static PrinterOptions CreatePrinterOptions(
             string baseDirectoryPath,
-            IFileSystem fileSystem
+            IFileSystem fileSystem,
+            ILogger logger
         ) {
-            var configurationFileOptions = Create(baseDirectoryPath, fileSystem);
+            var configurationFileOptions = Create(baseDirectoryPath, fileSystem, logger);
 
             List<string[]> preprocessorSymbolSets;
             if (configurationFileOptions.PreprocessorSymbolSets == null)
@@ -53,7 +61,8 @@ namespace CSharpier
 
         public static ConfigurationFileOptions Create(
             string baseDirectoryPath,
-            IFileSystem fileSystem
+            IFileSystem fileSystem,
+            ILogger? logger = null
         ) {
             var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
 
@@ -76,6 +85,16 @@ namespace CSharpier
                 }
 
                 var contents = fileSystem.File.ReadAllText(file.FullName);
+
+                if (string.IsNullOrWhiteSpace(contents))
+                {
+                    logger?.LogWarning(
+                        "The configuration file at " + file.FullName + " was empty."
+                    );
+
+                    return new();
+                }
+
                 return contents.TrimStart().StartsWith("{")
                     ? ReadJson(contents)
                     : ReadYaml(contents);
