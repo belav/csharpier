@@ -1,3 +1,4 @@
+using System;
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -17,14 +18,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Doc.Align(2, Node.Print(node.WhenFalse))
             };
 
+            var groupId = Guid.NewGuid().ToString();
+
             return Doc.Group(
-                Doc.IndentIf(
-                    node.Parent is ReturnStatementSyntax,
-                    Doc.Concat(
-                        node.Parent is ReturnStatementSyntax ? Doc.SoftLine : Doc.Null,
-                        Node.Print(node.Condition)
-                    )
-                ),
+                node.Parent is ReturnStatementSyntax
+                    ? Doc.Indent(
+                          Doc.Group(Doc.IfBreak(Doc.SoftLine, Doc.Null), Node.Print(node.Condition))
+                      )
+                    : Node.Print(node.Condition),
                 node.Parent
                     is ConditionalExpressionSyntax
                     or ArgumentSyntax

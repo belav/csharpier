@@ -63,6 +63,10 @@ public class ClassName
             cancellationToken
         );
 
+        return someLongCondition___________________________
+          ? trueValue________________________________
+          : falseValue________________________________;
+
         return
             someLongCondition____________________________________
             && someOtherLongCondition____________________________________
