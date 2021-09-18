@@ -8,7 +8,7 @@ dotnet watch run
 cd ClientApp
 npm run start
 ```
-- This should open the playground website at http://localhost:5000
+- This should open the playground website at http://localhost:7000
 - Paste the code you want to format there and click format.
 - The playground includes options to view the AST and generated doc tree, which help troubleshooting issues.
 

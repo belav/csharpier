@@ -17,7 +17,7 @@ module.exports = merge(commonConfig, {
         hot: true,
         disableHostCheck: true,
         host: "0.0.0.0",
-        port: 5010,
+        port: 7010,
         injectClient: false,
     },
     devtool: "cheap-module-eval-source-map",

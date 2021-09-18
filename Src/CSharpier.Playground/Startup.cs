@@ -43,7 +43,6 @@ namespace CSharpier.Playground
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
@@ -70,7 +69,7 @@ namespace CSharpier.Playground
 
                     if (env.IsDevelopment())
                     {
-                        spa.UseProxyToSpaDevelopmentServer("http://localhost:5010");
+                        spa.UseProxyToSpaDevelopmentServer("http://localhost:7010");
                     }
                 }
             );
