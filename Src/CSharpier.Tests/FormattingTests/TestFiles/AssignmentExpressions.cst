@@ -25,5 +25,23 @@ class ClassName
         value = someLongCondition________________________________
             ? "someLongValue"
             : "someOtherLongValue";
+
+        var chainFormatting =
+            anotherVariable1 =
+                "someValue____________________________________________";
+
+        chainFormatting =
+            anotherVariable2 =
+                "someValue____________________________________________";
+
+        var chainFormatting =
+            anotherVariable1 =
+            anotherVariable2 =
+                "someValue____________________________________________";
+
+        chainFormatting =
+            anotherVariable1 =
+            anotherVariable2 =
+                "someValue____________________________________________";
     }
 }

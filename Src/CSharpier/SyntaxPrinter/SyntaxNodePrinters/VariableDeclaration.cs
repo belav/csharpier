@@ -36,6 +36,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return initializer == null
                 ? Doc.Group(leftDoc)
                 : RightHandSide.Print(
+                      node,
                       Doc.Concat(leftDoc, " "),
                       Token.Print(initializer.EqualsToken),
                       initializer.Value
