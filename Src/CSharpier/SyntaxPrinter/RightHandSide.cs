@@ -53,15 +53,26 @@ namespace CSharpier.SyntaxPrinter
             var isTail = rightNode is not AssignmentExpressionSyntax;
             var shouldUseChainFormatting =
                 leftNode is AssignmentExpressionSyntax
-                && leftNode.Parent is AssignmentExpressionSyntax or EqualsValueClauseSyntax;
+                && leftNode.Parent is AssignmentExpressionSyntax or EqualsValueClauseSyntax
+                && (
+                    !isTail
+                    || leftNode.Parent.Parent
+                        is not (
+                            ExpressionStatementSyntax
+                            or VariableDeclaratorSyntax
+                            or ArrowExpressionClauseSyntax
+                        )
+                );
 
             if (shouldUseChainFormatting)
             {
                 return !isTail ? Layout.Chain : Layout.ChainTail;
             }
 
-            if (!isTail && rightNode is AssignmentExpressionSyntax)
-            {
+            if (
+                !isTail
+                && rightNode is AssignmentExpressionSyntax { Right: AssignmentExpressionSyntax }
+            ) {
                 return Layout.BreakAfterOperator;
             }
 

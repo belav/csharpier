@@ -26,13 +26,11 @@ class ClassName
             ? "someLongValue"
             : "someOtherLongValue";
 
-        var chainFormatting =
-            anotherVariable1 =
-                "someValue____________________________________________";
+        var nonChainFormatting = anotherVariable1 =
+            "someValue____________________________________________";
 
-        chainFormatting =
-            anotherVariable2 =
-                "someValue____________________________________________";
+        nonChainFormatting = anotherVariable1 =
+            "someValue____________________________________________";
 
         var chainFormatting =
             anotherVariable1 =
@@ -43,5 +41,46 @@ class ClassName
             anotherVariable1 =
             anotherVariable2 =
                 "someValue____________________________________________";
+
+        var nonChainFormatting = anotherVariable1 = CallMethod(
+            parameter________________________________,
+            parameter________________________________
+        );
+
+        nonChainFormatting = anotherVariable1 = CallMethod(
+            parameter________________________________,
+            parameter________________________________
+        );
+
+        var chainFormatting =
+            anotherVariable1 =
+            anotherVariable2 =
+                CallMethod(
+                    parameter________________________________,
+                    parameter________________________________
+                );
+
+        chainFormatting =
+            anotherVariable1 =
+            anotherVariable2 =
+                CallMethod(
+                    parameter________________________________,
+                    parameter________________________________
+                );
     }
+
+    public SomeExpressionBodyMethod() =>
+        nonChainFormatting = anotherVariable1 = (
+            someCondition________________________________
+            || someOtherCondition___________________________
+        );
+
+    public SomeExpressionBodyMethod() =>
+        chainFormatting =
+            anotherVariable1 =
+            anotherVariable2 =
+                (
+                    someCondition________________________________
+                    || someOtherCondition___________________________
+                );
 }

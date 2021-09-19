@@ -124,9 +124,10 @@ class ClassName
 withLineEnding"
         );
 
-        var value =
-            coalesceAssignmentExpression ??=
-                CallMethod(parameter_____________________, parameter_____________________);
+        var value = coalesceAssignmentExpression ??= CallMethod(
+            parameter_____________________,
+            parameter_____________________
+        );
 
         var value =
             coalesceAssignmentExpression =
