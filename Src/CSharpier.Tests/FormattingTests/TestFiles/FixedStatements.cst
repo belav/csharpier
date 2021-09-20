@@ -30,5 +30,14 @@ class ClassName
         ) {
             return;
         }
+
+        fixed (char* pSrcBegin = text)
+        fixed (char* pDstBegin = _bufChars)
+        {
+            char* pSrc = pSrcBegin;
+        }
+
+        fixed (int* pIndices = &indices[0])
+            InternalGetReference(&elemref, indices.Length, pIndices);
     }
 }

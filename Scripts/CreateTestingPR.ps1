@@ -1,5 +1,6 @@
 param (
-    [string]$pathToTestingRepo
+    [string]$pathToTestingRepo,
+    [switch] $fast = $false
 )
 
 if (!$pathToTestingRepo) {
@@ -31,6 +32,12 @@ Set-Location $pathToTestingRepo
 git checkout $postBranch
 $postBranchOutput = (git status) | Out-String
 $firstRun = -not $postBranchOutput.Contains("On branch $postBranch")
+
+$fastParam = ""
+if ($fast -eq $true) {
+    $fastParam = "--fast"
+}
+
 if ($firstRun)
 {
     Set-Location $repositoryRoot
@@ -43,8 +50,8 @@ if ($firstRun)
     & git checkout main
     & git reset --hard
     & git checkout -b $preBranch
-
-    dotnet $csharpierDllPath .
+    
+    dotnet $csharpierDllPath . $fastParam
 
     & git add -A
     & git commit -m "Before $branch"
@@ -63,7 +70,7 @@ if ($firstRun) {
     & git checkout $postBranch
 }
 
-dotnet $csharpierDllPath .
+dotnet $csharpierDllPath . $fastParam
 
 & git add -A
 & git commit -m "After $branch"
