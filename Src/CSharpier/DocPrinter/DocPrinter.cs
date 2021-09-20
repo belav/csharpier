@@ -89,10 +89,17 @@ namespace CSharpier.DocPrinter
                     break;
                 case IfBreak ifBreak:
                 {
-                    var groupMode =
-                        ifBreak.GroupId != null && GroupModeMap.ContainsKey(ifBreak.GroupId)
-                            ? GroupModeMap[ifBreak.GroupId]
-                            : mode;
+                    var groupMode = mode;
+                    if (ifBreak.GroupId != null)
+                    {
+                        if (!GroupModeMap.TryGetValue(ifBreak.GroupId, out groupMode))
+                        {
+                            throw new Exception(
+                                "You cannot use an ifBreak before the group it targets."
+                            );
+                        }
+                    }
+
                     var contents =
                         groupMode == PrintMode.Break ? ifBreak.BreakContents : ifBreak.FlatContents;
                     Push(contents, mode, indent);

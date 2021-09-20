@@ -108,7 +108,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
                 var groupedBaseListDoc = Doc.Group(Doc.Indent(Doc.Line, baseListDoc));
 
-                if (node is RecordDeclarationSyntax)
+                if (node is RecordDeclarationSyntax && parameterList != null)
                 {
                     docs.Add(
                         Doc.IfBreak(Doc.Concat(" ", baseListDoc), groupedBaseListDoc, groupId)

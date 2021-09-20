@@ -28,7 +28,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 ),
                 node.Statement is BlockSyntax blockSyntax
                     ? Block.PrintWithConditionalSpace(blockSyntax, groupId)
-                    : Node.Print(node.Statement)
+                    : Doc.IndentIf(
+                          node.Statement is not FixedStatementSyntax,
+                          Doc.Concat(Doc.HardLine, Node.Print(node.Statement))
+                      )
             );
         }
     }

@@ -7,7 +7,7 @@ namespace CSharpier.Tests
 {
     public class DocPrinterTests
     {
-        private static string NewLine = System.Environment.NewLine;
+        private static readonly string NewLine = System.Environment.NewLine;
 
         [Test]
         public void Lines_Allowed()
@@ -280,9 +280,21 @@ namespace CSharpier.Tests
         [Test]
         public void IfBreak_Should_Print_Flat_Contents_When_GroupId_Does_Not_Break()
         {
-            var doc = Doc.Concat(Doc.GroupWithId("1", "1"), Doc.IfBreak("break", "flat", "1"));
+            var doc = Doc.Concat(Doc.GroupWithId("id", "1"), Doc.IfBreak("break", "flat", "id"));
 
             PrintedDocShouldBe(doc, "1flat");
+        }
+
+        [Test]
+        public void IfBreak_Should_Throw_Exception_When_It_Targets_Not_Yet_Printed_Group()
+        {
+            var doc = Doc.Concat(Doc.IfBreak("break", "flat", "id"), Doc.GroupWithId("id", "1"));
+
+            this.Invoking(o => PrintedDocShouldBe(doc, "flat1"))
+                .Should()
+                .Throw<Exception>()
+                .WithMessage("You cannot use an ifBreak before the group it targets.");
+            ;
         }
 
         [Test]
