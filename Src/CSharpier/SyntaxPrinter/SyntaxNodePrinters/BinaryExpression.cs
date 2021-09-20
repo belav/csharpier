@@ -18,21 +18,21 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             var shouldNotIndent =
                 node.Parent
-                    is ReturnStatementSyntax
-                    or WhereClauseSyntax
-                    or EqualsValueClauseSyntax
-                    or ArrowExpressionClauseSyntax
-                    or ParenthesizedLambdaExpressionSyntax
+                    is ArrowExpressionClauseSyntax
                     or AssignmentExpressionSyntax
-                    or SimpleLambdaExpressionSyntax
-                    or IfStatementSyntax
-                    or WhileStatementSyntax
-                    or SwitchExpressionSyntax
-                    or DoStatementSyntax
-                    or CheckedExpressionSyntax
                     or CatchFilterClauseSyntax
+                    or CheckedExpressionSyntax
+                    or DoStatementSyntax
+                    or EqualsValueClauseSyntax
+                    or IfStatementSyntax
                     or ParenthesizedExpressionSyntax
+                    or ParenthesizedLambdaExpressionSyntax
+                    or SimpleLambdaExpressionSyntax
+                    or ReturnStatementSyntax
+                    or SwitchExpressionSyntax
                     or SwitchStatementSyntax
+                    or WhereClauseSyntax
+                    or WhileStatementSyntax
                 || node.Parent is ConditionalExpressionSyntax
                     && node.Parent.Parent is not ArgumentSyntax;
 

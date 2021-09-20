@@ -62,5 +62,42 @@ public class ClassName
             encoding ? GetEncoding(1252) : encoding,
             cancellationToken
         );
+
+        return someLongCondition___________________________
+          ? trueValue________________________________
+          : falseValue________________________________;
+
+        return
+            someLongCondition____________________________________
+            && someOtherLongCondition____________________________________
+          ? trueValue________________________________
+          : falseValue_______________________________;
+
+        return
+            someLongCondition____________________________________
+            is SomeLongType___________________________
+          ? trueValue________________________________
+          : falseValue_______________________________;
+
+        return (
+            someLongCondition____________________________________
+            && someOtherLongCondition____________________________________
+        )
+          ? trueValue________________________________
+          : falseValue_______________________________;
+
+        return
+            someLongCondition____________________________________
+                == someThingElse______________________
+            && someOtherLongCondition____________________________________
+          ? trueValue________________________________
+          : falseValue_______________________________;
+
+        return CallSomeMethod(
+            someLongCondition____________________________________,
+            someOtherLongCondition____________________________________
+        )
+          ? trueValue________________________________
+          : falseValue_______________________________;
     }
 }
