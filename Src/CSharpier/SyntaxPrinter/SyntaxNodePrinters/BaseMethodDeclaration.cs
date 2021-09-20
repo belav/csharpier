@@ -190,16 +190,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (constraintClauses != null)
             {
-                docs.Add(
-                    // parameterGroupId != null
-                    //     // TODO what about this?
-                    //     ? ConstraintClauses.PrintWithConditionalSpace(
-                    //           constraintClauses,
-                    //           parameterGroupId
-                    //       )
-                    //     :
-                    ConstraintClauses.Print(constraintClauses)
-                );
+                docs.Add(ConstraintClauses.Print(constraintClauses));
             }
 
             if (body != null)
