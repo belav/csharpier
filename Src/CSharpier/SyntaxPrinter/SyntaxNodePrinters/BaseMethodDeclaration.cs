@@ -139,13 +139,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (parameterList != null)
             {
-                // if there are no parameters, but there is a super long method name, a groupId
-                // will cause SpaceBrace when it isn't wanted.
-                if (parameterList.Parameters.Count > 0)
-                {
-                    parameterGroupId = Guid.NewGuid().ToString();
-                }
-                declarationGroup.Add(ParameterList.Print(parameterList, parameterGroupId));
+                declarationGroup.Add(ParameterList.Print(parameterList));
                 declarationGroup.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine));
             }
 
@@ -200,33 +194,20 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (constraintClauses != null)
             {
                 docs.Add(
-                    parameterGroupId != null
-                        ? ConstraintClauses.PrintWithConditionalSpace(
-                              constraintClauses,
-                              parameterGroupId
-                          )
-                        : ConstraintClauses.Print(constraintClauses)
+                    // parameterGroupId != null
+                    //     // TODO what about this?
+                    //     ? ConstraintClauses.PrintWithConditionalSpace(
+                    //           constraintClauses,
+                    //           parameterGroupId
+                    //       )
+                    //     :
+                    ConstraintClauses.Print(constraintClauses)
                 );
             }
 
             if (body != null)
             {
-                string? conditionalSpaceGroupId = null;
-                if (constructorInitializerGroupId != null)
-                {
-                    conditionalSpaceGroupId = constructorInitializerGroupId;
-                }
-                else if (
-                    parameterGroupId != null
-                    && (constraintClauses == null || constraintClauses.Value.Count == 0)
-                ) {
-                    conditionalSpaceGroupId = parameterGroupId;
-                }
-                docs.Add(
-                    conditionalSpaceGroupId != null
-                        ? Block.PrintWithConditionalSpace(body, conditionalSpaceGroupId)
-                        : Block.Print(body)
-                );
+                docs.Add(Block.Print(body));
             }
             else
             {
