@@ -72,7 +72,8 @@ namespace CSharpier
 
                 var printerOptions = ConfigurationFileOptions.CreatePrinterOptions(
                     baseDirectoryPath,
-                    fileSystem
+                    fileSystem,
+                    logger
                 );
 
                 var ignoreFile = await IgnoreFile.Create(
