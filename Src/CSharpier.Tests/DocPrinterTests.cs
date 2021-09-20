@@ -286,7 +286,7 @@ namespace CSharpier.Tests
         }
 
         [Test]
-        public void IfBreak_Should_Print_Flat_Contents_When_GroupId_Does_Not_Break_And_Group_Comes_Second()
+        public void IfBreak_Should_Throw_Exception_When_It_Targets_Not_Yet_Printed_Group()
         {
             var doc = Doc.Concat(Doc.IfBreak("break", "flat", "id"), Doc.GroupWithId("id", "1"));
 
