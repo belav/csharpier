@@ -27,7 +27,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             SyntaxToken? semicolonToken = null;
 
             string? parameterGroupId = null;
-            string? constructorInitializerGroupId = null;
 
             if (node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax)
             {
@@ -145,10 +144,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (constructorInitializer != null)
             {
-                constructorInitializerGroupId = Guid.NewGuid().ToString();
                 var colonToken = Token.PrintWithSuffix(constructorInitializer.ColonToken, " ");
-                var argumentList = Doc.GroupWithId(
-                    constructorInitializerGroupId,
+                var argumentList = Doc.Group(
                     ArgumentList.Print(constructorInitializer.ArgumentList)
                 );
 
@@ -193,16 +190,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             if (constraintClauses != null)
             {
-                docs.Add(
-                    // parameterGroupId != null
-                    //     // TODO what about this?
-                    //     ? ConstraintClauses.PrintWithConditionalSpace(
-                    //           constraintClauses,
-                    //           parameterGroupId
-                    //       )
-                    //     :
-                    ConstraintClauses.Print(constraintClauses)
-                );
+                docs.Add(ConstraintClauses.Print(constraintClauses));
             }
 
             if (body != null)
