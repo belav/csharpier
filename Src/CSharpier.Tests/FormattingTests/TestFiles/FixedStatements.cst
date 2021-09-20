@@ -30,5 +30,11 @@ class ClassName
         ) {
             return;
         }
+
+        fixed (char* pSrcBegin = text)
+        fixed (char* pDstBegin = _bufChars)
+        {
+            char* pSrc = pSrcBegin;
+        }
     }
 }
