@@ -36,5 +36,8 @@ class ClassName
         {
             char* pSrc = pSrcBegin;
         }
+
+        fixed (int* pIndices = &indices[0])
+            InternalGetReference(&elemref, indices.Length, pIndices);
     }
 }
