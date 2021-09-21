@@ -9,9 +9,13 @@ namespace CSharpier.SyntaxPrinter
 {
     public static class RightHandSide
     {
-        public static Doc Print(Doc leftDoc, Doc operatorDoc, ExpressionSyntax rightNode)
-        {
-            var layout = DetermineLayout(rightNode);
+        public static Doc Print(
+            CSharpSyntaxNode leftNode,
+            Doc leftDoc,
+            Doc operatorDoc,
+            ExpressionSyntax rightNode
+        ) {
+            var layout = DetermineLayout(leftNode, rightNode);
 
             var groupId = Guid.NewGuid().ToString();
 
@@ -25,6 +29,14 @@ namespace CSharpier.SyntaxPrinter
                       operatorDoc,
                       Doc.Group(Doc.Indent(Doc.Line, Node.Print(rightNode)))
                   ),
+                Layout.Chain
+                  => Doc.Concat(Doc.Group(leftDoc), operatorDoc, Doc.Line, Node.Print(rightNode)),
+                Layout.ChainTail
+                  => Doc.Concat(
+                      Doc.Group(leftDoc),
+                      operatorDoc,
+                      Doc.Indent(Doc.Line, Node.Print(rightNode))
+                  ),
                 Layout.Fluid
                   => Doc.Group(
                       Doc.Group(leftDoc),
@@ -36,27 +48,53 @@ namespace CSharpier.SyntaxPrinter
             };
         }
 
-        private static Layout DetermineLayout(ExpressionSyntax rightNode)
+        private static Layout DetermineLayout(CSharpSyntaxNode leftNode, ExpressionSyntax rightNode)
         {
+            var isTail = rightNode is not AssignmentExpressionSyntax;
+            var shouldUseChainFormatting =
+                leftNode is AssignmentExpressionSyntax
+                && leftNode.Parent is AssignmentExpressionSyntax or EqualsValueClauseSyntax
+                && (
+                    !isTail
+                    || leftNode.Parent.Parent
+                        is not (
+                            ExpressionStatementSyntax
+                            or VariableDeclaratorSyntax
+                            or ArrowExpressionClauseSyntax
+                        )
+                );
+
+            if (shouldUseChainFormatting)
+            {
+                return !isTail ? Layout.Chain : Layout.ChainTail;
+            }
+
+            if (
+                !isTail
+                && rightNode is AssignmentExpressionSyntax { Right: AssignmentExpressionSyntax }
+            ) {
+                return Layout.BreakAfterOperator;
+            }
+
             return rightNode switch
             {
                 InitializerExpressionSyntax => Layout.BasicConcatWithoutLine,
                 BinaryExpressionSyntax
-                or ImplicitObjectCreationExpressionSyntax
-                or InterpolatedStringExpressionSyntax
-                or IsPatternExpressionSyntax
-                or LiteralExpressionSyntax
-                or QueryExpressionSyntax
-                or StackAllocArrayCreationExpressionSyntax
-                or MemberAccessExpressionSyntax
-                or ConditionalExpressionSyntax
-                {
-                    Condition: BinaryExpressionSyntax or ParenthesizedExpressionSyntax
-                }
                 or CastExpressionSyntax
                 {
                     Type: GenericNameSyntax
                 }
+                or ConditionalExpressionSyntax
+                {
+                    Condition: BinaryExpressionSyntax or ParenthesizedExpressionSyntax
+                }
+                or ImplicitObjectCreationExpressionSyntax
+                or InterpolatedStringExpressionSyntax
+                or IsPatternExpressionSyntax
+                or LiteralExpressionSyntax
+                or MemberAccessExpressionSyntax
+                or StackAllocArrayCreationExpressionSyntax
+                or QueryExpressionSyntax
                   => Layout.BreakAfterOperator,
                 _ => Layout.Fluid
             };
@@ -66,7 +104,9 @@ namespace CSharpier.SyntaxPrinter
         {
             BasicConcatWithoutLine,
             BreakAfterOperator,
-            Fluid
+            Chain,
+            ChainTail,
+            Fluid,
         }
     }
 }
