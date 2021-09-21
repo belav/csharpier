@@ -129,6 +129,11 @@ withLineEnding"
             parameter_____________________
         );
 
+        var value =
+            coalesceAssignmentExpression =
+            coalesceAssignmentExpression ??=
+                CallMethod(parameter_____________________, parameter_____________________);
+
         var value = CallSomeMethod(
             someParameter_____________________,
             someParameter_____________________
