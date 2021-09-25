@@ -14,7 +14,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(InvocationExpressionSyntax node)
         {
-            var printedNodes = new List<(CSharpSyntaxNode node, Doc doc)>();
+            var printedNodes = new List<PrintedNode>();
 
             void Traverse(ExpressionSyntax expression)
             {
@@ -37,9 +37,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 {
                     Traverse(invocationExpressionSyntax.Expression);
                     printedNodes.Add(
-                        (
-                            node: invocationExpressionSyntax,
-                            doc: ArgumentList.Print(invocationExpressionSyntax.ArgumentList)
+                        new PrintedNode(
+                            invocationExpressionSyntax,
+                            ArgumentList.Print(invocationExpressionSyntax.ArgumentList)
                         )
                     );
                 }
@@ -47,9 +47,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 {
                     Traverse(memberAccessExpressionSyntax.Expression);
                     printedNodes.Add(
-                        (
-                            node: memberAccessExpressionSyntax,
-                            doc: Doc.Concat(
+                        new PrintedNode(
+                            memberAccessExpressionSyntax,
+                            Doc.Concat(
                                 Token.Print(memberAccessExpressionSyntax.OperatorToken),
                                 Node.Print(memberAccessExpressionSyntax.Name)
                             )
@@ -58,20 +58,20 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 }
                 else
                 {
-                    printedNodes.Add((node: expression, doc: Node.Print(expression)));
+                    printedNodes.Add(new PrintedNode(expression, Node.Print(expression)));
                 }
             }
 
             Traverse(node);
 
-            var groups = new List<List<Doc>>();
-            var currentGroup = new List<Doc> { printedNodes[0].doc };
+            var groups = new List<List<PrintedNode>>();
+            var currentGroup = new List<PrintedNode> { printedNodes[0] };
             var index = 1;
             for (; index < printedNodes.Count; index++)
             {
-                if (printedNodes[index].node is InvocationExpressionSyntax)
+                if (printedNodes[index].Node is InvocationExpressionSyntax)
                 {
-                    currentGroup.Add(printedNodes[index].doc);
+                    currentGroup.Add(printedNodes[index]);
                 }
                 else
                 {
@@ -79,15 +79,15 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 }
             }
 
-            if (printedNodes[0].node is not InvocationExpressionSyntax)
+            if (printedNodes[0].Node is not InvocationExpressionSyntax)
             {
                 for (; index + 1 < printedNodes.Count; ++index)
                 {
                     if (
-                        IsMemberish(printedNodes[index].node)
-                        && IsMemberish(printedNodes[index + 1].node)
+                        IsMemberish(printedNodes[index].Node)
+                        && IsMemberish(printedNodes[index + 1].Node)
                     ) {
-                        currentGroup.Add(printedNodes[index].doc);
+                        currentGroup.Add(printedNodes[index]);
                     }
                     else
                     {
@@ -97,23 +97,23 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
 
             groups.Add(currentGroup);
-            currentGroup = new List<Doc>();
+            currentGroup = new List<PrintedNode>();
 
             var hasSeenInvocationExpression = false;
             for (; index < printedNodes.Count; index++)
             {
-                if (hasSeenInvocationExpression && IsMemberish(printedNodes[index].node))
+                if (hasSeenInvocationExpression && IsMemberish(printedNodes[index].Node))
                 {
                     groups.Add(currentGroup);
-                    currentGroup = new List<Doc>();
+                    currentGroup = new List<PrintedNode>();
                     hasSeenInvocationExpression = false;
                 }
 
-                if (printedNodes[index].node is InvocationExpressionSyntax)
+                if (printedNodes[index].Node is InvocationExpressionSyntax)
                 {
                     hasSeenInvocationExpression = true;
                 }
-                currentGroup.Add(printedNodes[index].doc);
+                currentGroup.Add(printedNodes[index]);
             }
 
             if (currentGroup.Any())
@@ -121,7 +121,13 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 groups.Add(currentGroup);
             }
 
-            var oneLine = groups.SelectMany(o => o).ToArray();
+            var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
+
+            // var shouldMerge =
+            //     groups.Count >= 2
+            //     &&
+            //     // !hasComment(groups[1][0].node) &&
+            //     ShouldNotWrap(groups);
 
             var cutoff = 3;
             if (groups.Count < cutoff)
@@ -129,7 +135,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 return Doc.Group(oneLine);
             }
 
-            var expanded = Doc.Concat(Doc.Concat(groups[0]), PrintIndentedGroup(node, groups));
+            var expanded = Doc.Concat(
+                Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
+                PrintIndentedGroup(node, groups)
+            );
 
             return Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
         }
@@ -141,7 +150,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
         private static Doc PrintIndentedGroup(
             InvocationExpressionSyntax node,
-            IList<List<Doc>> groups
+            IList<List<PrintedNode>> groups
         ) {
             if (groups.Count == 1)
             {
@@ -152,14 +161,38 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 node.Parent is not ConditionalExpressionSyntax,
                 Doc.Group(
                     Doc.HardLine,
-                    Doc.Join(Doc.HardLine, groups.Skip(1).Select(o => Doc.Group(o.ToArray())))
+                    Doc.Join(
+                        Doc.HardLine,
+                        groups.Skip(1).Select(o => Doc.Group(o.Select(o => o.Doc).ToArray()))
+                    )
                 )
             );
         }
+        // private static bool ShouldNotWrap(List<List<Doc>> groups)
+        // {
+        //     var hasComputed = false; // groups[1].Count > 0 && groups[1][0].node.computed;
+        //
+        //     if (groups[0].Count == 1) {
+        //         var firstNode = groups[0][0].node;
+        //         return (
+        //             firstNode.type === "ThisExpression" ||
+        //                                (firstNode.type === "Identifier" &&
+        //                                                    (isFactory(firstNode.name) ||
+        //                                                     (isExpressionStatement && isShort(firstNode.name)) ||
+        //                                                     hasComputed))
+        //         );
+        //     }
+        //
+        //     const lastNode = getLast(groups[0]).node;
+        //     return (
+        //         isMemberExpression(lastNode) &&
+        //             lastNode.property.type === "Identifier" &&
+        //                                        (isFactory(lastNode.property.name) || hasComputed)
+        //     );
+        // }
     }
 }
 
-// TODO look into failing tests before continuing
 
 /*
 class ClassName
