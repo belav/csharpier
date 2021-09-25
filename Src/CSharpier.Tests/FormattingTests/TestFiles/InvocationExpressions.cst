@@ -4,7 +4,13 @@ class ClassName
     {
         this.DoSomething().DoSomething();
 
-        this.DoSomething___________________()
+        this
+            .DoSomething___________________()
+            .DoSomething___________________()
+            .DoSomething___________________();
+
+        AnIdentifier
+            .DoSomething___________________()
             .DoSomething___________________()
             .DoSomething___________________();
 

@@ -8,7 +8,8 @@ public class ClassName
         }
 
         foreach (
-            var x in this.SomeMethodCall()
+            var x in this
+                .SomeMethodCall()
                 .SomeChainedCall()
                 .AnotherChainedCall__________________________()
         )
@@ -87,7 +88,8 @@ public class ClassName
                 from l2 in Enumerable.Range(1, 7)
                 from l3 in Enumerable.Range(1, 7)
                 select (l2, l3)
-            ).AsParallel()
+            )
+                .AsParallel()
                 .Select(l => (l, res: GenerateTable(l.l2, l.l3, cutOff)))
                 .OrderBy(v => v.res.Total)
         )

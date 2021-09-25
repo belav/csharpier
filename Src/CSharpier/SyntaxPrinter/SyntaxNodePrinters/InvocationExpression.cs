@@ -64,6 +64,32 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             Traverse(node);
 
+            // Once we have a linear list of printed nodes, we want to create groups out
+            // of it.
+            //
+            //   a().b.c().d().e
+            // will be grouped as
+            //   [
+            //     [Identifier, InvocationExpression],
+            //     [MemberAccessExpression, MemberAccessExpression, InvocationExpression],
+            //     [MemberAccessExpression, InvocationExpression],
+            //     [MemberAccessExpression],
+            //   ]
+
+            // so that we can print it as
+            //   a()
+            //     .b.c()
+            //     .d()
+            //     .e
+
+            // The first group is the first node followed by
+            //   - as many InvocationExpression as possible
+            //       < fn()()() >.something()
+            //   - as many array accessors as possible
+            //       < fn()[0][1][2] >.something()
+            //   - then, as many MemberAccessExpression as possible but the last one
+            //       < this.items >.something()
+
             var groups = new List<List<PrintedNode>>();
             var currentGroup = new List<PrintedNode> { printedNodes[0] };
             var index = 1;
@@ -123,21 +149,20 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
 
-            // var shouldMerge =
-            //     groups.Count >= 2
-            //     &&
-            //     // !hasComment(groups[1][0].node) &&
-            //     ShouldNotWrap(groups);
+            var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
 
-            var cutoff = 3;
-            if (groups.Count < cutoff)
+            var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
+            if (groups.Count <= cutoff)
             {
                 return Doc.Group(oneLine);
             }
 
             var expanded = Doc.Concat(
                 Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
-                PrintIndentedGroup(node, groups)
+                shouldMergeFirstTwoGroups
+                    ? Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
+                    : Doc.Null,
+                PrintIndentedGroup(node, groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
             );
 
             return Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
@@ -152,7 +177,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             InvocationExpressionSyntax node,
             IList<List<PrintedNode>> groups
         ) {
-            if (groups.Count == 1)
+            if (groups.Count == 0)
             {
                 return Doc.Null;
             }
@@ -163,33 +188,76 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Doc.HardLine,
                     Doc.Join(
                         Doc.HardLine,
-                        groups.Skip(1).Select(o => Doc.Group(o.Select(o => o.Doc).ToArray()))
+                        groups.Select(o => Doc.Group(o.Select(o => o.Doc).ToArray()))
                     )
                 )
             );
         }
-        // private static bool ShouldNotWrap(List<List<Doc>> groups)
-        // {
-        //     var hasComputed = false; // groups[1].Count > 0 && groups[1][0].node.computed;
-        //
-        //     if (groups[0].Count == 1) {
-        //         var firstNode = groups[0][0].node;
-        //         return (
-        //             firstNode.type === "ThisExpression" ||
-        //                                (firstNode.type === "Identifier" &&
-        //                                                    (isFactory(firstNode.name) ||
-        //                                                     (isExpressionStatement && isShort(firstNode.name)) ||
-        //                                                     hasComputed))
-        //         );
-        //     }
-        //
-        //     const lastNode = getLast(groups[0]).node;
-        //     return (
-        //         isMemberExpression(lastNode) &&
-        //             lastNode.property.type === "Identifier" &&
-        //                                        (isFactory(lastNode.property.name) || hasComputed)
-        //     );
-        // }
+
+        // TODO we may need to ditch this, it leads to weird shit, like
+        /*
+         unless we can figure out some way to make it work..... hmmmm
+         ifBreak?
+         check length of the 2nd group?
+         only if the second group doesn't have a lambda?
+        I think the problem is the one line version fits, so it gets used
+        
+good
+        AnIdentifier.DoSomething___________________()
+            .DoSomething___________________()
+            .DoSomething___________________();
+    
+        AnIdentifier.DoSomething___________________()
+            .DoSomething___________________()
+            .DoSomething___________________();
+bad
+        var someValue = someOtherValue.Where(
+            o => someLongCondition__________________________
+        ).Where(o => someLongCondition__________________________);
+     
+        this.Where((o) => someLongCondition__________________________).Where(
+            (o) => someLongCondition__________________________
+        );
+        
+         */
+        private static bool ShouldMergeFirstTwoGroups(List<List<PrintedNode>> groups)
+        {
+            return false;
+
+            if (groups.Count < 2
+            // || hasComment(groups[1][0].node)
+            )
+            {
+                return false;
+            }
+
+            // wtf is this? it is on the node in prettier
+            //var hasComputed = false; // groups[1].Count > 0 && groups[1][0].node.computed;
+
+            if (groups[0].Count == 1)
+            {
+                var firstNode = groups[0][0].Node;
+                return (
+                    firstNode is ThisExpressionSyntax
+                    || (
+                        firstNode is IdentifierNameSyntax
+                    // we might not need any of this
+                    // && (
+                    //     isFactory(firstNode.name)
+                    //     || ( isExpressionStatement && isShort(firstNode.name) )
+                    //     || hasComputed)
+                    // )
+                    )
+                );
+            }
+            // const lastNode = getLast(groups[0]).node;
+            // return (
+            //     isMemberExpression(lastNode) &&
+            //         lastNode.property.type === "Identifier" &&
+            //                                    (isFactory(lastNode.property.name) || hasComputed)
+            // );
+            return false;
+        }
     }
 }
 
