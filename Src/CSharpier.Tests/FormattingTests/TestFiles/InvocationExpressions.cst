@@ -4,33 +4,52 @@ class ClassName
     {
         this.DoSomething().DoSomething();
 
-        this
-            .DoSomething___________________()
+        this.DoSomething___________________()
             .DoSomething___________________()
             .DoSomething___________________();
 
-        AnIdentifier
-            .DoSomething___________________()
+        AnIdentifier.DoSomething___________________()
             .DoSomething___________________()
             .DoSomething___________________();
 
         this.Method(
-            "ljkasdfkljasdlkjfklajsdfkjlasdfkjlasdkljfajklsdfkjasdf",
-            "kljasdfkljaslkjdfljaksdfkjlaksljfaksjldf"
+            someParameter__________________________________,
+            someParameter__________________________________
         );
 
-        var superLongMethodNameForceLine_____________________ =
-            someFactoryName.SuperLongMethodNameForceLine();
+        this.SomeMethod(
+            SomeOtherMethod(parameter__________________________________________________)
+        );
+
+        var superLongName____________________________________ =
+            someOtherName.CallSomeMethod________________();
+
+        var superLongName_______________ = someOtherName____________.CallSomeMethod______________()
+            .CallSomeMethod______________();
 
         var someValue = someOtherValue.Where(o => someLongCondition).Where(o => someLongCondition);
 
-        var someValue = someOtherValue
+        var someValue = someOtherValue.Where(o => someLongCondition__________________________)
+            .Where(o => someLongCondition__________________________);
+
+        var someValue = someOtherValue.Where(o => someLongCondition__________________________)
             .Where(o => someLongCondition__________________________)
             .Where(o => someLongCondition__________________________);
 
-        this.WhenThereExists________________(
-            a.Website().WithDomainName("test-integration.insite.com")
+        roleNames.ToList()
+            .Where(o => someLongCondition)
+            .Where(o => someLongCondition)
+            .Where(o => someLongCondition);
+
+        this.SomeMethod(
+            SomeOtherMethod(parameter__________________________________________________)
         );
+
+        roleNames.ToList()
+            .ForEach(
+                role =>
+                    this.SomeProperty.Setup(o => longThing_______________________________________)
+            );
 
         return someCondition
           ? CallMethod(

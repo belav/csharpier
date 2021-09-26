@@ -192,8 +192,7 @@ class TestClass
             ) ?? someOtherValue;
 
         var notIdealSee355 =
-            variable
-                .Replace(someParameter_______________________, '.')
+            variable.Replace(someParameter_______________________, '.')
                 .Replace(someParameter_______________________, '.') + ".";
 
         UglyButConsistentWithPrettier(

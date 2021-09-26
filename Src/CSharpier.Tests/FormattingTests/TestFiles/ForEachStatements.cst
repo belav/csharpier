@@ -8,8 +8,7 @@ public class ClassName
         }
 
         foreach (
-            var x in this
-                .SomeMethodCall()
+            var x in this.SomeMethodCall()
                 .SomeChainedCall()
                 .AnotherChainedCall__________________________()
         )

@@ -151,7 +151,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
 
-            var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
+            // does the cutoff even make sense anymore?
+            var cutoff = shouldMergeFirstTwoGroups ? 2 : 1;
             if (groups.Count <= cutoff)
             {
                 return Doc.Group(oneLine);
@@ -194,36 +195,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             );
         }
 
-        // TODO we may need to ditch this, it leads to weird shit, like
-        /*
-         unless we can figure out some way to make it work..... hmmmm
-         ifBreak?
-         check length of the 2nd group?
-         only if the second group doesn't have a lambda?
-        I think the problem is the one line version fits, so it gets used
-        
-good
-        AnIdentifier.DoSomething___________________()
-            .DoSomething___________________()
-            .DoSomething___________________();
-    
-        AnIdentifier.DoSomething___________________()
-            .DoSomething___________________()
-            .DoSomething___________________();
-bad
-        var someValue = someOtherValue.Where(
-            o => someLongCondition__________________________
-        ).Where(o => someLongCondition__________________________);
-     
-        this.Where((o) => someLongCondition__________________________).Where(
-            (o) => someLongCondition__________________________
-        );
-        
-         */
         private static bool ShouldMergeFirstTwoGroups(List<List<PrintedNode>> groups)
         {
-            return false;
-
             if (groups.Count < 2
             // || hasComment(groups[1][0].node)
             )
@@ -282,22 +255,18 @@ class ClassName
         // this isn't how prettier does it, stretch goal
         this.Address1 = addressFields_________________
             .FirstOrDefault(field => field.FieldName == "Address1");
+        // except that conflicts with
+        var y = someList.Where(
+            o =>
+                someLongValue_______________________
+                && theseShouldNotIndent_________________
+                && theseShouldNotIndent_________________
+                    > butThisOneShould_________________________________________
+        );
 
-        this.Address1 = addressFields
-            .Where(field => field.FieldName == "Address1__________________________")
-            .Where(field => yeah)
-            .Where(field => yeah);
-
-        roleNames
-            .ToList()
-            .ForEach(
-                (role) =>
-                    this.adminContextMock.Setup((ctx) => ctx.IsUserInRole(role)).Returns(false)
-            );
-
-        var superLongMethodNameForceLine = someFactoryName__________
-            .SuperLongMethodNameForceLine()
-            .SomeOtherReallyLongMethodName();
+        // this is kinda gross, maybe it should only be short names and this that merge
+        var superLongName_______________ = someOtherName____________.CallSomeMethod______________()
+            .CallSomeMethod______________();
 
         // prettier does it this way, but ugly!
         string signedRequest = htmlHelper.ViewContext.HttpContext.Request.Params[
@@ -333,12 +302,14 @@ class ClassName
                 
 
         // this one seems fine?
+        // but kinda looks better without the merge
         var proxy1 = generator.CreateInterfaceProxyWithTargetInterface<IEventHandler<EventArgs1>>(
             null,
             new[] { lazyInterceptor1 }
         );
         
         // this is just gross, it used to break parameters instead of generic types
+        // but it is just barely too long so it shouldn't break on generics
         var count = (int)await _invoker.InvokeUnmarshalled<
             string[],
             object?,
@@ -346,6 +317,7 @@ class ClassName
             Task<object>
         >(GetSatelliteAssemblies, culturesToLoad.ToArray(), null, null);
 
+        // looks better with the merge
         var ex = Assert.Throws<ArgumentException>(
             () =>
                 generator.CreateInterfaceProxyWithTargetInterface<IList<IList<PrivateInterface>>>(
