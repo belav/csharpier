@@ -1,6 +1,6 @@
 ## Continuous Integration
 Normally when using a code formatter like CSharpier, you'll want to ensure that all code that makes it to your main branch has been formatted. This can be accomplished by doing the following
-1. Set up a dotnet tool manifest file at `./config/dotnet-tools.json` with the following content. Replacing `[SpecificVersion]` with the version of CSharpier you are currently using. 
+1. Set up a dotnet tool manifest file at `.config/dotnet-tools.json` with the following content. Replacing `[SpecificVersion]` with the version of CSharpier you are currently using. 
    ```json
    {
        "version": 1,
