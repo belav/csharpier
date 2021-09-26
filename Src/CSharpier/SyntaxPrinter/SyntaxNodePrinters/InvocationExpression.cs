@@ -234,6 +234,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     }
 }
 
+// TODO !!!!!!!!! the PR is too big, we should allow the testing script to work on a subset of repos
+// or create 1 PR per subfolder, or something
 
 /*
 class ClassName
@@ -367,6 +369,57 @@ class ClassName
         storedArguments_______[i] = localVariables[i] = Expression.Parameter(
             parameters[i].ParameterType
         );
+        
+        
+        // this switched and is probably better
+        private static readonly MethodInfo _callPropertyGetterOpenGenericMethod =
+            typeof(PropertyHelper).GetMethod(
+                "CallPropertyGetter",
+                BindingFlags.NonPublic | BindingFlags.Static
+            );
+        private static readonly MethodInfo _callPropertyGetterOpenGenericMethod =
+            typeof(PropertyHelper)
+                .GetMethod("CallPropertyGetter", BindingFlags.NonPublic | BindingFlags.Static);
+        // except this got worse!!
+        private static readonly MethodInfo _callPropertyGetterByReferenceOpenGenericMethod =
+            typeof(PropertyHelper).GetMethod(
+                "CallPropertyGetterByReference",
+                BindingFlags.NonPublic | BindingFlags.Static
+            );
+        private static readonly MethodInfo _callPropertyGetterByReferenceOpenGenericMethod =
+            typeof(PropertyHelper)
+                .GetMethod(
+                    "CallPropertyGetterByReference",
+                    BindingFlags.NonPublic | BindingFlags.Static
+                );
+                
+
+        // this looks weird, but might be correct? prettier has some inconsistent formatting around things like this
+                IEnumerable<PropertyInfo> properties = type.GetProperties(
+                    BindingFlags.Public | BindingFlags.Instance
+                )
+                    .Where(prop => prop.GetIndexParameters().Length == 0 && prop.GetMethod != null);
+
+        // add some test cases for things like this
+            return permissionsStatus.Status
+                .Where(kvp => kvp.Value == status)
+                .Select(kvp => kvp.Key);
+                
+        // this used to not break before the .ConvertTo
+                return modelState.Value
+                    .ConvertTo(
+                        destinationType,
+                        null /asterisk culture asterisk/ 
+                    );
+                    
+        // another better/worse
+            _currentChain.Elements
+                .Add(new ParameterExpressionFingerprint(node.NodeType, node.Type, parameterIndex));
+            _currentChain.Elements
+                .Add(
+                    new TypeBinaryExpressionFingerprint(node.NodeType, node.Type, node.TypeOperand)
+                );
+        
     }
 }
 
