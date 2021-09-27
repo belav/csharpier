@@ -140,5 +140,8 @@ class ClassName
                 return;
             }
         );
+
+        o.CallMethod(parameter_____________, parameter_____________)
+            .CallMethod(parameter_____________, parameter_____________);
     }
 }

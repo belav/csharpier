@@ -33,7 +33,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             );
             var forceOneLine =
                 groups.Count <= cutoff
-                && !groups.All(o => o.Last().Node is InvocationExpressionSyntax);
+                && !groups.Skip(shouldMergeFirstTwoGroups ? 1 : 0)
+                    .All(o => o.Last().Node is InvocationExpressionSyntax);
             //&& !oneLineContainsBreak.Value;
 
             if (forceOneLine)
@@ -245,6 +246,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (groups[0].Count == 1)
             {
                 var firstNode = groups[0][0].Node;
+
+                if (
+                    firstNode is IdentifierNameSyntax identifierNameSyntax
+                    && identifierNameSyntax.Identifier.Text.Length <= 4
+                ) {
+                    return true;
+                }
+
                 return firstNode is ThisExpressionSyntax or PredefinedTypeSyntax
                 // or IdentifierNameSyntax
                 // I don't think I like this, it screws
