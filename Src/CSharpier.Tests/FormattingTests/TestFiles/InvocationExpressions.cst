@@ -60,5 +60,11 @@ class ClassName
                 someLongParameter____________________________,
                 someLongParameter____________________________
             );
+
+        string.Equals(
+                firstParameter__________,
+                secondParameter_________,
+                StringComparison.OrdinalIgnoreCase
+            );
     }
 }

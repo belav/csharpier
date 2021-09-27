@@ -210,18 +210,18 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (groups[0].Count == 1)
             {
                 var firstNode = groups[0][0].Node;
-                return (
-                    firstNode is ThisExpressionSyntax
-                    || (
-                        firstNode is IdentifierNameSyntax
-                    // we might not need any of this
-                    // && (
-                    //     isFactory(firstNode.name)
-                    //     || ( isExpressionStatement && isShort(firstNode.name) )
-                    //     || hasComputed)
-                    // )
-                    )
-                );
+                return firstNode
+                    is ThisExpressionSyntax
+                    or PredefinedTypeSyntax
+                    or IdentifierNameSyntax;
+                // we might not need any of this, it was on the identifierNameSyntax
+                // && (
+                //     isFactory(firstNode.name)
+                //     || ( isExpressionStatement && isShort(firstNode.name) )
+                //     || hasComputed)
+                // )
+
+                ;
             }
             // const lastNode = getLast(groups[0]).node;
             // return (
@@ -400,6 +400,12 @@ class ClassName
                 )
                     .Where(prop => prop.GetIndexParameters().Length == 0 && prop.GetMethod != null);
 
+            XAttribute[] rootAttributes = RootAttributes?.Select(
+                item => new XAttribute(item.ItemSpec, item.GetMetadata("Value"))
+            )
+                .ToArray();
+
+
         // add some test cases for things like this
             return permissionsStatus.Status
                 .Where(kvp => kvp.Value == status)
@@ -419,7 +425,61 @@ class ClassName
                 .Add(
                     new TypeBinaryExpressionFingerprint(node.NodeType, node.Type, node.TypeOperand)
                 );
+        // another better/worse??
+            return SymbolEqualityComparer.Default
+                .Equals(symbol.Parameters[0].Type, symbols.IServiceCollection);
+            return SymbolEqualityComparer.Default.Equals(
+                symbol.Parameters[0].Type,
+                symbols.IServiceCollection
+            );                
+
+        // probably should merge
+        if (
+            httpResponse.StatusCode == HttpStatusCode.NotFound
+            || httpResponse.ReasonPhrase
+                .IndexOf(
+                    "The requested URI does not represent any resource on the server.",
+                    StringComparison.OrdinalIgnoreCase
+                ) == 0
+        )
         
+        // probably should merge
+        var value = string
+            .Join(",", Values.Select(o => o.ItemSpec).ToArray())
+            .ToLowerInvariant();
+        
+        if (
+            context.Operation is IInvocationOperation invocation
+            && invocation.Instance == null
+            && invocation.Arguments.Length >= 1
+            && SymbolEqualityComparer.Default
+                .Equals(
+                    invocation.Arguments[0].Parameter?.Type,
+                    _context.StartupSymbols.IApplicationBuilder
+                )
+        )
+                    
+        if (
+            symbol.Name == null
+            || !symbol.Name
+                .StartsWith(
+                    SymbolNames.ConfigureServicesMethodPrefix,
+                    StringComparison.OrdinalIgnoreCase
+                )
+            || !symbol.Name
+                .EndsWith(
+                    SymbolNames.ConfigureServicesMethodSuffix,
+                    StringComparison.OrdinalIgnoreCase
+                )
+        )
+            
+        solution = new AdhocWorkspace().CurrentSolution
+            .AddProject(
+                projectId,
+                TestProjectName,
+                TestProjectName,
+                LanguageNames.CSharp
+            );
     }
 }
 
