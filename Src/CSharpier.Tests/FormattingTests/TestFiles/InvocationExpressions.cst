@@ -121,5 +121,14 @@ class ClassName
         SomeObject
             .CallMethod(parameter_______________________________________________________________)
             .ToArray();
+
+        CallMethod(
+                lambdaWithBlock =>
+                {
+                    return;
+                }
+            )
+            .CallMethod()
+            .CallMethod();
     }
 }

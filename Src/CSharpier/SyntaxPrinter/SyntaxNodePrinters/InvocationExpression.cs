@@ -26,9 +26,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
 
             var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
+            // could we simplify this to look for a lambda with a block? are there other cases where a hardline appears?
+            var oneLineContainsBreak = new Lazy<bool>(
+                () => oneLine.Any(DocUtilities.ContainsBreak)
+            );
             var forceOneLine =
                 groups.Count <= cutoff
-                && !groups.All(o => o.Last().Node is InvocationExpressionSyntax);
+                && !groups.All(o => o.Last().Node is InvocationExpressionSyntax)
+                && !oneLineContainsBreak.Value;
 
             if (forceOneLine)
             {
@@ -43,7 +48,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 PrintIndentedGroup(node, groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
             );
 
-            return Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
+            return oneLineContainsBreak.Value
+                ? expanded
+                : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
         }
 
         private static void FlattenAndPrintNodes(
@@ -261,6 +268,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     }
 }
 
+// https://github.com/belav/aspnetcore/pull/29/files
+
 // https://github.com/prettier/prettier/issues/5737
 // https://github.com/prettier/prettier/issues/8902
 
@@ -268,14 +277,18 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
 // this looks good https://github.com/prettier/prettier/pull/8063/files
 /*
-    test case for it
+        // test case for it
         this.CallMethod().CallMethod__________________(
             one_____________________,
             two_____________________
         );
-    // could be
+        // could be
         this.CallMethod()
             .CallMethod__________________(one_____________________, two_____________________);
+
+        // and maybe this
+        var value = string.Join(",_______________", Values.Select(o => o.ItemSpec).ToArray())
+            .ToLowerInvariant();
  */
 
 // some discussions
@@ -298,6 +311,21 @@ class ClassName
 
     void MethodName()
     {
+        // why does this work this way? it is maybe fine
+        var mvcBuilder = services.AddMvc().ConfigureApplicationPartManager(
+            apm =>
+            {
+                apm.FeatureProviders.Add(new AzureADAccountControllerFeatureProvider());
+            }
+        );
+
+        // this looks a bit odd, should it break on all . instead?
+        var app = applicationBuilder.UseRouting().UseEndpoints(
+            endpoints =>
+            {
+                endpoints.MapBlazorHub("_blazor", dispatchOptions => called = true);
+            }
+        ).Build();
 
         // this isn't how prettier does it, stretch goal
         this.Address1 = addressFields_________________

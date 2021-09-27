@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -5,6 +6,36 @@ namespace CSharpier.DocTypes
 {
     public static class DocUtilities
     {
+        public static bool ContainsBreak(Doc doc)
+        {
+            if (CheckForBreak(doc))
+            {
+                return true;
+            }
+
+            // we don't deal with ConditionalGroups or the BreakContents of IfBreak
+            // they aren't needed for where this is currently used and they will be more expensive
+            return doc switch
+            {
+                IHasContents hasContents => ContainsBreak(hasContents.Contents),
+                Concat concat => concat.Contents.Any(ContainsBreak),
+                IfBreak ifBreak => ContainsBreak(ifBreak.FlatContents),
+                _ => false
+            };
+        }
+
+        private static bool CheckForBreak(Doc doc)
+        {
+            return doc switch
+            {
+                Group group => group.Break,
+                HardLine => true,
+                LiteralLine => true,
+                BreakParent => true,
+                _ => false
+            };
+        }
+
         public static void RemoveInitialDoubleHardLine(List<Doc> docs)
         {
             var removeNextHardLine = false;
