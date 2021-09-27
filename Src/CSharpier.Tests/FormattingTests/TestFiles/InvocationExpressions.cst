@@ -76,5 +76,42 @@ class ClassName
         var someVariable = someObject.Property.CallMethod(
             someValue => someValue.SomeProperty == someOtherValue___________________________________
         );
+
+        // TODO can we get it consistent with below?
+        CallMethod(
+            firstParameter____________________________,
+            secondParameter___________________________
+        ).CallMethod(
+            firstParameter____________________________,
+            secondParameter___________________________
+        );
+
+        // TODO figure out why this used to indent this way anyway, maybe undo ArgumentList change
+        CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            );
+
+        // comment shouldn't do weird stuff
+        CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            );
     }
 }

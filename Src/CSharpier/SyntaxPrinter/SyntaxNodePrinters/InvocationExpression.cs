@@ -16,54 +16,81 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             var printedNodes = new List<PrintedNode>();
 
-            void Traverse(ExpressionSyntax expression)
+            FlattenAndPrintNodes(node, printedNodes);
+
+            var groups = GroupPrintedNodes(printedNodes);
+
+            var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
+
+            var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
+
+            var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
+            if (groups.Count <= cutoff)
             {
-                /*
-                  We need to flatten things out because the AST has them this way
-                  where the first node is this 
-                  InvocationExpression
-                  [ this.DoSomething().DoSomething ] [ () ]
-                  
-                  SimpleMemberAccessExpression
-                  [ this.DoSomething() ] [ . ] [ DoSomething ]
-                  
-                  InvocationExpression
-                  [ this.DoSomething ] [ () ]
-                  
-                  SimpleMemberAccessExpression
-                  [ this ] [ . ] [ DoSomething ]
-                */
-                if (expression is InvocationExpressionSyntax invocationExpressionSyntax)
-                {
-                    Traverse(invocationExpressionSyntax.Expression);
-                    printedNodes.Add(
-                        new PrintedNode(
-                            invocationExpressionSyntax,
-                            ArgumentList.Print(invocationExpressionSyntax.ArgumentList)
-                        )
-                    );
-                }
-                else if (expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax)
-                {
-                    Traverse(memberAccessExpressionSyntax.Expression);
-                    printedNodes.Add(
-                        new PrintedNode(
-                            memberAccessExpressionSyntax,
-                            Doc.Concat(
-                                Token.Print(memberAccessExpressionSyntax.OperatorToken),
-                                Node.Print(memberAccessExpressionSyntax.Name)
-                            )
-                        )
-                    );
-                }
-                else
-                {
-                    printedNodes.Add(new PrintedNode(expression, Node.Print(expression)));
-                }
+                return Doc.Group(oneLine);
             }
 
-            Traverse(node);
+            var expanded = Doc.Concat(
+                Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
+                shouldMergeFirstTwoGroups
+                    ? Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
+                    : Doc.Null,
+                PrintIndentedGroup(node, groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
+            );
 
+            return Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
+        }
+
+        private static void FlattenAndPrintNodes(
+            ExpressionSyntax expression,
+            List<PrintedNode> printedNodes
+        ) {
+            /*
+              We need to flatten things out because the AST has them this way
+              where the first node is this 
+              InvocationExpression
+              [ this.DoSomething().DoSomething ] [ () ]
+              
+              SimpleMemberAccessExpression
+              [ this.DoSomething() ] [ . ] [ DoSomething ]
+              
+              InvocationExpression
+              [ this.DoSomething ] [ () ]
+              
+              SimpleMemberAccessExpression
+              [ this ] [ . ] [ DoSomething ]
+            */
+            if (expression is InvocationExpressionSyntax invocationExpressionSyntax)
+            {
+                FlattenAndPrintNodes(invocationExpressionSyntax.Expression, printedNodes);
+                printedNodes.Add(
+                    new PrintedNode(
+                        invocationExpressionSyntax,
+                        ArgumentList.Print(invocationExpressionSyntax.ArgumentList)
+                    )
+                );
+            }
+            else if (expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax)
+            {
+                FlattenAndPrintNodes(memberAccessExpressionSyntax.Expression, printedNodes);
+                printedNodes.Add(
+                    new PrintedNode(
+                        memberAccessExpressionSyntax,
+                        Doc.Concat(
+                            Token.Print(memberAccessExpressionSyntax.OperatorToken),
+                            Node.Print(memberAccessExpressionSyntax.Name)
+                        )
+                    )
+                );
+            }
+            else
+            {
+                printedNodes.Add(new PrintedNode(expression, Node.Print(expression)));
+            }
+        }
+
+        private static List<List<PrintedNode>> GroupPrintedNodes(List<PrintedNode> printedNodes)
+        {
             // Once we have a linear list of printed nodes, we want to create groups out
             // of it.
             //
@@ -147,26 +174,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 groups.Add(currentGroup);
             }
 
-            var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
-
-            var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
-
-            // does the cutoff even make sense anymore?
-            var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
-            if (groups.Count <= cutoff)
-            {
-                return Doc.Group(oneLine);
-            }
-
-            var expanded = Doc.Concat(
-                Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
-                shouldMergeFirstTwoGroups
-                    ? Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
-                    : Doc.Null,
-                PrintIndentedGroup(node, groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
-            );
-
-            return Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
+            return groups;
         }
 
         private static bool IsMemberish(CSharpSyntaxNode node)
@@ -234,8 +242,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     }
 }
 
-// TODO !!!!!!!!! the PR is too big, we should allow the testing script to work on a subset of repos
-// or create 1 PR per subfolder, or something
+// https://github.com/prettier/prettier/issues/5737
+// https://github.com/prettier/prettier/issues/8902
+
+// this too, although it got pulled out https://github.com/prettier/prettier/pull/7889
+// this looks good https://github.com/prettier/prettier/pull/8063/files
+
+
+// some discussions
+// https://github.com/prettier/prettier/issues/8003
+// https://github.com/prettier/prettier/issues/7884
 
 /*
 class ClassName
