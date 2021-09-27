@@ -8,7 +8,8 @@ class ClassName
             .DoSomething___________________()
             .DoSomething___________________();
 
-        AnIdentifier.DoSomething___________________()
+        AnIdentifier
+            .DoSomething___________________()
             .DoSomething___________________()
             .DoSomething___________________();
 
@@ -24,19 +25,23 @@ class ClassName
         var superLongName____________________________________ =
             someOtherName.CallSomeMethod________________();
 
-        var superLongName_______________ = someOtherName____________.CallSomeMethod______________()
+        var superLongName_______________ = someOtherName____________
+            .CallSomeMethod______________()
             .CallSomeMethod______________();
 
         var someValue = someOtherValue.Where(o => someLongCondition).Where(o => someLongCondition);
 
-        var someValue = someOtherValue.Where(o => someLongCondition__________________________)
-            .Where(o => someLongCondition__________________________);
-
-        var someValue = someOtherValue.Where(o => someLongCondition__________________________)
+        var someValue = someOtherValue
             .Where(o => someLongCondition__________________________)
             .Where(o => someLongCondition__________________________);
 
-        roleNames.ToList()
+        var someValue = someOtherValue
+            .Where(o => someLongCondition__________________________)
+            .Where(o => someLongCondition__________________________)
+            .Where(o => someLongCondition__________________________);
+
+        roleNames
+            .ToList()
             .Where(o => someLongCondition)
             .Where(o => someLongCondition)
             .Where(o => someLongCondition);
@@ -45,7 +50,8 @@ class ClassName
             SomeOtherMethod(parameter__________________________________________________)
         );
 
-        roleNames.ToList()
+        roleNames
+            .ToList()
             .ForEach(
                 role =>
                     this.SomeProperty.Setup(o => longThing_______________________________________)
@@ -62,9 +68,13 @@ class ClassName
             );
 
         string.Equals(
-                firstParameter__________,
-                secondParameter_________,
-                StringComparison.OrdinalIgnoreCase
-            );
+            firstParameter__________,
+            secondParameter_________,
+            StringComparison.OrdinalIgnoreCase
+        );
+
+        var someVariable = someObject.Property.CallMethod(
+            someValue => someValue.SomeProperty == someOtherValue___________________________________
+        );
     }
 }

@@ -152,7 +152,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
 
             // does the cutoff even make sense anymore?
-            var cutoff = shouldMergeFirstTwoGroups ? 2 : 1;
+            var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
             if (groups.Count <= cutoff)
             {
                 return Doc.Group(oneLine);
@@ -210,10 +210,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (groups[0].Count == 1)
             {
                 var firstNode = groups[0][0].Node;
-                return firstNode
-                    is ThisExpressionSyntax
-                    or PredefinedTypeSyntax
-                    or IdentifierNameSyntax;
+                return firstNode is ThisExpressionSyntax or PredefinedTypeSyntax
+                // or IdentifierNameSyntax
+                // I don't think I like this, it screws
+                ;
                 // we might not need any of this, it was on the identifierNameSyntax
                 // && (
                 //     isFactory(firstNode.name)
