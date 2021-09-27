@@ -12,7 +12,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
     public static class InvocationExpression
     {
-        public static Doc Print(InvocationExpressionSyntax node)
+        // TODO better name? Or move to another file?
+        public static Doc Print(ExpressionSyntax node)
         {
             var printedNodes = new List<PrintedNode>();
 
@@ -86,6 +87,20 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         )
                     )
                 );
+            }
+            else if (
+                expression is ConditionalAccessExpressionSyntax conditionalAccessExpressionSyntax
+            ) {
+                printedNodes.Add(
+                    new PrintedNode(
+                        conditionalAccessExpressionSyntax,
+                        Doc.Concat(
+                            Node.Print(conditionalAccessExpressionSyntax.Expression),
+                            Token.Print(conditionalAccessExpressionSyntax.OperatorToken)
+                        )
+                    )
+                );
+                FlattenAndPrintNodes(conditionalAccessExpressionSyntax.WhenNotNull, printedNodes);
             }
             else
             {
@@ -183,11 +198,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
         private static bool IsMemberish(CSharpSyntaxNode node)
         {
-            return node is MemberAccessExpressionSyntax;
+            return node is MemberAccessExpressionSyntax or ConditionalAccessExpressionSyntax;
         }
 
         private static Doc PrintIndentedGroup(
-            InvocationExpressionSyntax node,
+            ExpressionSyntax node,
             IList<List<PrintedNode>> groups
         ) {
             if (groups.Count == 0)
@@ -250,11 +265,17 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 // https://github.com/prettier/prettier/issues/8902
 
 // this too, although it got pulled out https://github.com/prettier/prettier/pull/7889
+
 // this looks good https://github.com/prettier/prettier/pull/8063/files
-/* test case for above
-             XAttribute[] rootAttributes = RootAttributes?.Select(
-                item => new XAttribute(item.ItemSpec, item.GetMetadata("Value"))
-            ).ToArray();
+/*
+    test case for it
+        this.CallMethod().CallMethod__________________(
+            one_____________________,
+            two_____________________
+        );
+    // could be
+        this.CallMethod()
+            .CallMethod__________________(one_____________________, two_____________________);
  */
 
 // some discussions

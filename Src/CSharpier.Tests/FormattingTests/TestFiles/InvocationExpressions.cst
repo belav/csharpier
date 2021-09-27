@@ -113,5 +113,13 @@ class ClassName
                 firstParameter____________________________,
                 secondParameter___________________________
             );
+
+        SomeObject?
+            .CallMethod(parameter_______________________________________________________________)
+            .ToArray();
+
+        SomeObject
+            .CallMethod(parameter_______________________________________________________________)
+            .ToArray();
     }
 }
