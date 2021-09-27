@@ -122,6 +122,9 @@ class ClassName
             .CallMethod(parameter_______________________________________________________________)
             .ToArray();
 
+        // comment shouldn't do weird stuff
+        SomeObject.CallMethod();
+
         CallMethod(
                 lambdaWithBlock =>
                 {

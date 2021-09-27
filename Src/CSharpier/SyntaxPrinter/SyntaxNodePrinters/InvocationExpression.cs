@@ -26,9 +26,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
 
             var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
+            /* I think this causes issues now??
+            // comment
+            action
+                .Invoke(root);
+            */
             // could we simplify this to look for a lambda with a block? are there other cases where a hardline appears?
             var oneLineContainsBreak = new Lazy<bool>(
-                () => oneLine.Any(DocUtilities.ContainsBreak)
+                () => oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
             );
             var forceOneLine =
                 groups.Count <= cutoff
@@ -269,6 +274,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 }
 
 // https://github.com/belav/aspnetcore/pull/29/files
+// https://github.com/belav/moq4/pull/12
 
 // https://github.com/prettier/prettier/issues/5737
 // https://github.com/prettier/prettier/issues/8902
