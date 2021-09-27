@@ -269,8 +269,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     }
 }
 
+// PRs to review
 // https://github.com/belav/aspnetcore/pull/29/files
 // https://github.com/belav/moq4/pull/12
+// https://github.com/belav/AutoMapper/pull/10
 
 // https://github.com/prettier/prettier/issues/5737
 // https://github.com/prettier/prettier/issues/8902
@@ -555,6 +557,36 @@ class ClassName
                 TestProjectName,
                 LanguageNames.CSharp
             );
+
+        // maybe things < 4 should merge? looks super bad when it is a single character
+        // but what about when they are on something like
+        var someLongName = cfg.CallMethod()
+            .CallMethod()o
+        new MapperConfiguration(
+            cfg =>
+            {
+                cfg
+                    .CreateProjection<Source, Destination>()
+                    .IncludeMembers(
+                        s => s.InnerSources.FirstOrDefault(),
+                        s => s.OtherInnerSources.FirstOrDefault()
+                    );
+                cfg
+                    .CreateProjection<InnerSource, Destination>(MemberList.None)
+                    .ForMember(
+                        d => d.Details,
+                        o => o.MapFrom(s => s.InnerSourceDetails.FirstOrDefault())
+                    );
+                cfg
+                    .CreateProjection<OtherInnerSource, Destination>(MemberList.None)
+                    .ForMember(
+                        d => d.OtherDetails,
+                        o => o.MapFrom(s => s.OtherInnerSourceDetails.FirstOrDefault())
+                    );
+                cfg.CreateProjection<InnerSourceDetails, DestinationDetails>();
+                cfg.CreateProjection<OtherInnerSourceDetails, OtherDestinationDetails>();
+            }
+        );
 
     }
 }
