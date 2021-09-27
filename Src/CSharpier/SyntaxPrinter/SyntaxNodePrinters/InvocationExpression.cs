@@ -566,37 +566,6 @@ class ClassName
                 TestProjectName,
                 LanguageNames.CSharp
             );
-
-        // maybe things < 4 should merge? looks super bad when it is a single character
-        // but what about when they are on something like
-        var someLongName = cfg.CallMethod()
-            .CallMethod()o
-        new MapperConfiguration(
-            cfg =>
-            {
-                cfg
-                    .CreateProjection<Source, Destination>()
-                    .IncludeMembers(
-                        s => s.InnerSources.FirstOrDefault(),
-                        s => s.OtherInnerSources.FirstOrDefault()
-                    );
-                cfg
-                    .CreateProjection<InnerSource, Destination>(MemberList.None)
-                    .ForMember(
-                        d => d.Details,
-                        o => o.MapFrom(s => s.InnerSourceDetails.FirstOrDefault())
-                    );
-                cfg
-                    .CreateProjection<OtherInnerSource, Destination>(MemberList.None)
-                    .ForMember(
-                        d => d.OtherDetails,
-                        o => o.MapFrom(s => s.OtherInnerSourceDetails.FirstOrDefault())
-                    );
-                cfg.CreateProjection<InnerSourceDetails, DestinationDetails>();
-                cfg.CreateProjection<OtherInnerSourceDetails, OtherDestinationDetails>();
-            }
-        );
-
     }
 }
 

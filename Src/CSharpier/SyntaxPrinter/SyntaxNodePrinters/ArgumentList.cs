@@ -5,6 +5,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
     public static class ArgumentList
     {
+        // TODO I think this indent logic can move into the FlattenAndPrintNodes method
+        // then hopefully it can share it with ShouldMergeFirstTwoGroups
         public static Doc Print(ArgumentListSyntax node)
         {
             return Doc.Group(
@@ -13,7 +15,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     node.Parent
                         is InvocationExpressionSyntax
                         {
-                            Expression: IdentifierNameSyntax,
+                            Expression: IdentifierNameSyntax
+                                or MemberAccessExpressionSyntax
+                                {
+                                    Expression: ThisExpressionSyntax
+                                        or PredefinedTypeSyntax
+                                        or IdentifierNameSyntax
+                                        {
+                                            Identifier: { Text: { Length: <= 4 } }
+                                        }
+                                },
                             Parent: { Parent: InvocationExpressionSyntax }
                         },
                     ArgumentListLike.Print(

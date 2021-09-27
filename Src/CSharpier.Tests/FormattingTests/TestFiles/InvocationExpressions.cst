@@ -114,6 +114,33 @@ class ClassName
                 secondParameter___________________________
             );
 
+        this.CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            );
+
+        string.CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            );
+
+        o.CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            );
+
         SomeObject?
             .CallMethod(parameter_______________________________________________________________)
             .ToArray();
