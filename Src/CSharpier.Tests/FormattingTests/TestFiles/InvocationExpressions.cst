@@ -77,14 +77,14 @@ class ClassName
             someValue => someValue.SomeProperty == someOtherValue___________________________________
         );
 
-        // TODO can we get it consistent with below?
         CallMethod(
-            firstParameter____________________________,
-            secondParameter___________________________
-        ).CallMethod(
-            firstParameter____________________________,
-            secondParameter___________________________
-        );
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            );
 
         // TODO figure out why this used to indent this way anyway, maybe undo ArgumentList change
         CallMethod(

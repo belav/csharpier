@@ -25,7 +25,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
 
             var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
-            if (groups.Count <= cutoff)
+            var forceOneLine =
+                groups.Count <= cutoff
+                && !groups.All(o => o.Last().Node is InvocationExpressionSyntax);
+
+            if (forceOneLine)
             {
                 return Doc.Group(oneLine);
             }
@@ -247,7 +251,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
 // this too, although it got pulled out https://github.com/prettier/prettier/pull/7889
 // this looks good https://github.com/prettier/prettier/pull/8063/files
-
+/* test case for above
+             XAttribute[] rootAttributes = RootAttributes?.Select(
+                item => new XAttribute(item.ItemSpec, item.GetMetadata("Value"))
+            ).ToArray();
+ */
 
 // some discussions
 // https://github.com/prettier/prettier/issues/8003
