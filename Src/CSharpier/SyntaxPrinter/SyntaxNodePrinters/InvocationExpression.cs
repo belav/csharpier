@@ -26,19 +26,15 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
 
             var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
-            /* I think this causes issues now??
-            // comment
-            action
-                .Invoke(root);
-            */
             // could we simplify this to look for a lambda with a block? are there other cases where a hardline appears?
+            // move it below if that is the only place we use it
             var oneLineContainsBreak = new Lazy<bool>(
                 () => oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
             );
             var forceOneLine =
                 groups.Count <= cutoff
-                && !groups.All(o => o.Last().Node is InvocationExpressionSyntax)
-                && !oneLineContainsBreak.Value;
+                && !groups.All(o => o.Last().Node is InvocationExpressionSyntax);
+            //&& !oneLineContainsBreak.Value;
 
             if (forceOneLine)
             {
@@ -559,6 +555,7 @@ class ClassName
                 TestProjectName,
                 LanguageNames.CSharp
             );
+
     }
 }
 

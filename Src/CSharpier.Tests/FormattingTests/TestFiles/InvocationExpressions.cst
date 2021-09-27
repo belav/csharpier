@@ -133,5 +133,12 @@ class ClassName
             )
             .CallMethod()
             .CallMethod();
+
+        someObject.CallMethod(
+            lambdaWithBlock =>
+            {
+                return;
+            }
+        );
     }
 }
