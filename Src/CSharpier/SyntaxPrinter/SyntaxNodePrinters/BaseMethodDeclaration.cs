@@ -74,7 +74,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             var docs = new List<Doc> { ExtraNewLines.Print(node) };
 
-            if (attributeLists.HasValue && attributeLists.Value.Any())
+            if (attributeLists is { Count: >0 })
             {
                 docs.Add(AttributeLists.Print(node, attributeLists.Value));
             }

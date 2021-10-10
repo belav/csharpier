@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -40,8 +41,10 @@ namespace CSharpier.DocTypes
         public static Doc Concat(List<Doc> contents) =>
             contents.Count == 1 ? contents[0] : new Concat(contents);
 
-        public static Doc Concat(params Doc[] contents) =>
-            contents.Length == 1 ? contents[0] : new Concat(contents);
+        // prevents allocating an array if there is only a single parameter
+        public static Doc Concat(Doc contents) => contents;
+
+        public static Doc Concat(params Doc[] contents) => new Concat(contents);
 
         public static Doc Join(Doc separator, IEnumerable<Doc> array)
         {
@@ -83,6 +86,14 @@ namespace CSharpier.DocTypes
             return group;
         }
 
+        // prevents allocating an array if there is only a single parameter
+        public static Group GroupWithId(string groupId, Doc contents)
+        {
+            var group = Group(contents);
+            group.GroupId = groupId;
+            return group;
+        }
+
         public static Group GroupWithId(string groupId, params Doc[] contents)
         {
             var group = Group(contents);
@@ -90,11 +101,16 @@ namespace CSharpier.DocTypes
             return group;
         }
 
-        public static Group Group(params Doc[] contents) =>
-            new() { Contents = contents.Length == 1 ? contents[0] : Concat(contents) };
+        // prevents allocating an array if there is only a single parameter
+        public static Group Group(Doc contents) => new() { Contents = contents };
+
+        public static Group Group(params Doc[] contents) => new() { Contents = Concat(contents) };
+
+        // prevents allocating an array if there is only a single parameter
+        public static IndentDoc Indent(Doc contents) => new() { Contents = contents };
 
         public static IndentDoc Indent(params Doc[] contents) =>
-            new() { Contents = contents.Length == 1 ? contents[0] : Concat(contents) };
+            new() { Contents = Concat(contents) };
 
         public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
 
@@ -122,8 +138,11 @@ namespace CSharpier.DocTypes
 
         public static ConditionalGroup ConditionalGroup(params Doc[] options) => new(options);
 
+        // prevents allocating an array if there is only a single parameter
+        public static Align Align(int alignment, Doc contents) => new(alignment, contents);
+
         public static Align Align(int alignment, params Doc[] contents) =>
-            new(alignment, contents.Length == 1 ? contents[0] : Concat(contents));
+            new(alignment, Concat(contents));
     }
 
     public enum CommentType

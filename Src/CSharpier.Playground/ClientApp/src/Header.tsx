@@ -4,7 +4,19 @@ import { Loading } from "./Icons/Loading";
 import { useAppContext } from "./AppContext";
 
 export const Header = () => {
-    const { isLoading, formatCode, showDoc, setShowDoc, showAst, setShowAst, setEmptyMethod, setEmptyClass, copyLeft } = useAppContext();
+    const {
+        isLoading,
+        formatCode,
+        showDoc,
+        setShowDoc,
+        hideNull,
+        setHideNull,
+        showAst,
+        setShowAst,
+        setEmptyMethod,
+        setEmptyClass,
+        copyLeft,
+    } = useAppContext();
     const width = showDoc && showAst ? 25 : showDoc || showAst ? 33.3 : 50;
     return (
         <HeaderStyle>
@@ -21,8 +33,12 @@ export const Header = () => {
                 </a>
 
                 <Buttons>
-                    <SmallButton title="Shift-Ctrl-X" onClick={setEmptyMethod}>Empty Method</SmallButton>
-                    <SmallButton title="Shift-Ctrl-C" onClick={setEmptyClass}>Empty Class</SmallButton>
+                    <SmallButton title="Shift-Ctrl-X" onClick={setEmptyMethod}>
+                        Empty Method
+                    </SmallButton>
+                    <SmallButton title="Shift-Ctrl-C" onClick={setEmptyClass}>
+                        Empty Class
+                    </SmallButton>
                     <FormatButton onClick={formatCode} title="Ctrl-Enter">
                         {isLoading && <LoadingStyle />}
                         {!isLoading && <>Format</>}
@@ -31,7 +47,9 @@ export const Header = () => {
             </Left>
             <Right>
                 <RightButtons>
-                    <SmallButton title="Shift-Ctrl-S" onClick={copyLeft}>Copy Left</SmallButton>
+                    <SmallButton title="Shift-Ctrl-S" onClick={copyLeft}>
+                        Copy Left
+                    </SmallButton>
                 </RightButtons>
                 <label>
                     <input
@@ -43,6 +61,18 @@ export const Header = () => {
                     />
                     Show Doc
                 </label>
+                {showDoc && (
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={hideNull}
+                            onChange={() => {
+                                setHideNull(!hideNull);
+                            }}
+                        />
+                        Hide Null
+                    </label>
+                )}
                 <label>
                     <input
                         type="checkbox"
@@ -106,7 +136,7 @@ const SmallButton = styled.button`
     height: 24px;
     cursor: pointer;
     margin-right: 6px;
-`
+`;
 
 const FormatButton = styled.button`
     background-color: #666;

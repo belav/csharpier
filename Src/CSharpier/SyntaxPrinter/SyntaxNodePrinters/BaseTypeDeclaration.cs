@@ -104,9 +104,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     " ",
                     Doc.Align(
                         2,
-                        Doc.Concat(
-                            SeparatedSyntaxList.Print(node.BaseList.Types, Node.Print, Doc.Line)
-                        )
+                        SeparatedSyntaxList.Print(node.BaseList.Types, Node.Print, Doc.Line)
                     )
                 );
 

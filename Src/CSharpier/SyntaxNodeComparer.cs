@@ -199,8 +199,8 @@ namespace CSharpier
             if (originalToken.Text.Replace("\r", "") != formattedToken.Text.Replace("\r", ""))
             {
                 return NotEqual(
-                    originalToken.RawKind == 0 ? originalNode?.Span : originalToken.Span,
-                    formattedToken.RawKind == 0 ? formattedNode?.Span : formattedToken.Span
+                    originalToken.Kind() == SyntaxKind.None ? originalNode?.Span : originalToken.Span,
+                    formattedToken.Kind() == SyntaxKind.None ? formattedNode?.Span : formattedToken.Span
                 );
             }
 

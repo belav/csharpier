@@ -12,15 +12,11 @@ const options = {
     readOnly: true,
 };
 
-export const DocTree = () => {
-    const { doc } = useAppContext();
+const regex = /\s+Doc\.Null,/g;
 
-    return (
-        <CodeMirror
-            value={doc}
-            options={options}
-            onBeforeChange={() => {}}
-            onChange={() => {}}
-        />
-    );
+export const DocTree = () => {
+    const { doc, hideNull } = useAppContext();
+    const docToDisplay = hideNull ? doc.replaceAll(regex, "") : doc;
+
+    return <CodeMirror value={docToDisplay} options={options} onBeforeChange={() => {}} onChange={() => {}} />;
 };

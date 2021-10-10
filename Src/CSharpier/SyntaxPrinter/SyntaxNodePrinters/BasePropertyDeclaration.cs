@@ -79,7 +79,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
             else if (expressionBody != null)
             {
-                contents = Doc.Concat(ArrowExpressionClause.Print(expressionBody));
+                contents = ArrowExpressionClause.Print(expressionBody);
             }
 
             var docs = new List<Doc>

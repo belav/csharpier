@@ -6,6 +6,8 @@ export const AppContext = React.createContext({
     setShowAst: (value: boolean) => {},
     showDoc: false,
     setShowDoc: (value: boolean) => {},
+    hideNull: false,
+    setHideNull: (value: boolean) => {},
     doc: "",
     setDoc: (doc: string) => {},
     isLoading: false,
@@ -27,10 +29,12 @@ export const AppContext = React.createContext({
 
 export const useAppContext = () => useContext(AppContext);
 
+// I regret trying out this approach to managing state....
 export const useSetupAppContext = () => {
     const [doc, setDoc] = useState("");
     const [showAst, setShowAst] = useState(getInitialShowAst());
     const [showDoc, setShowDoc] = useState(getInitialShowDoc());
+    const [hideNull, setHideNull] = useState(getInitialHideNull());
     const [formattedCode, setFormattedCode] = useState("");
     const [enteredCode, setEnteredCode] = useState(getInitialCode());
     const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +52,11 @@ export const useSetupAppContext = () => {
         setShowDoc: (value: boolean) => {
             window.sessionStorage.setItem("showDoc", value.toString());
             setShowDoc(value);
+        },
+        hideNull,
+        setHideNull: (value: boolean) => {
+            window.sessionStorage.setItem("hideNull", value.toString());
+            setHideNull(value);
         },
         setDoc,
         isLoading,
@@ -115,4 +124,7 @@ const getInitialShowAst = () => {
 };
 const getInitialShowDoc = () => {
     return window.sessionStorage.getItem("showDoc") === "true";
+};
+const getInitialHideNull = () => {
+    return window.sessionStorage.getItem("hideNull") === "true";
 };

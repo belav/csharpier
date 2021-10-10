@@ -5,7 +5,7 @@
     "importHelpers": true,
     "jsx": "react",
     "lib": [
-      "es6",
+      "esnext",
       "dom"
     ],
     "module": "esnext",
