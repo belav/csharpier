@@ -1,19 +1,28 @@
 name: Validate PR
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ master, next ]
 jobs:
   run_tests:
     runs-on: ubuntu-latest
     name: Run Tests
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
       - run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj -c release
   test_cli:
     runs-on: ubuntu-latest
     name: Test Cli
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease:
+            true
       - run: |
           dotnet build Src/CSharpier.Cli/CSharpier.Cli.csproj -c release
           pwsh ./Scripts/TestCli.ps1
@@ -22,6 +31,10 @@ jobs:
     name: Check Formatting
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
       - run: |
           dotnet tool restore
           dotnet csharpier . --check 
