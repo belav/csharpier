@@ -5,8 +5,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
     public static class ArgumentList
     {
-        // TODO I think this indent logic can move into the FlattenAndPrintNodes method
-        // then hopefully it can share it with ShouldMergeFirstTwoGroups
         public static Doc Print(ArgumentListSyntax node)
         {
             return Doc.Group(

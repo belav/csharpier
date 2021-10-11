@@ -41,7 +41,7 @@ namespace CSharpier.Tests
         [Test]
         public void RemoveInitialDoubleHardLine_Should_Not_Remove_Concated_HardLine()
         {
-            var concat = new Concat(new List<Doc> { Doc.HardLine });
+            var concat = ActualConcat(Doc.HardLine);
             var doc = new List<Doc> { concat };
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
@@ -63,8 +63,8 @@ namespace CSharpier.Tests
         [Test]
         public void RemoveInitialDoubleHardLine_Should_Not_Remove_Deep_Concated_HardLine()
         {
-            var concat = new Concat(new List<Doc> { Doc.HardLine });
-            var doc = new List<Doc> { new Concat(new List<Doc> { concat }) };
+            var concat = ActualConcat(Doc.HardLine);
+            var doc = new List<Doc> { ActualConcat(concat) };
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
@@ -75,7 +75,7 @@ namespace CSharpier.Tests
         public void RemoveInitialDoubleHardLine_Should_Remove_Deep_Concated_HardLine()
         {
             var concat = Doc.Concat(Doc.HardLine, Doc.HardLine) as Concat;
-            var doc = new List<Doc> { new Concat(new List<Doc> { concat }) };
+            var doc = new List<Doc> { ActualConcat(concat) };
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
@@ -86,7 +86,7 @@ namespace CSharpier.Tests
         public void RemoveInitialDoubleHardLine_Should_Remove_Single_HardLine()
         {
             var concat = Doc.Concat(Doc.HardLine, Doc.HardLine, Doc.HardLine) as Concat;
-            var doc = new List<Doc> { new Concat(new List<Doc> { concat }) };
+            var doc = new List<Doc> { ActualConcat(concat) };
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 

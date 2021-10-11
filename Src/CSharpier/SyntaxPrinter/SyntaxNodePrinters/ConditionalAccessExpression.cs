@@ -8,7 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ConditionalAccessExpressionSyntax node)
         {
-            return InvocationExpression.Print(node);
+            return InvocationExpression.PrintMemberChain(node);
         }
     }
 }

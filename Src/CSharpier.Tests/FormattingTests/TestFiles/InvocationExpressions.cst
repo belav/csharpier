@@ -57,6 +57,10 @@ class ClassName
                     this.SomeProperty.Setup(o => longThing_______________________________________)
             );
 
+        roleNames.Value
+            .Where(o => o.SomeProperty____________________________________)
+            .Select(o => o.SomethingElse);
+
         return someCondition
           ? CallMethod(
                 someLongParameter____________________________,
@@ -86,7 +90,6 @@ class ClassName
                 secondParameter___________________________
             );
 
-        // TODO figure out why this used to indent this way anyway, maybe undo ArgumentList change
         CallMethod(
                 firstParameter____________________________,
                 secondParameter___________________________
@@ -170,5 +173,8 @@ class ClassName
 
         o.CallMethod(parameter_____________, parameter_____________)
             .CallMethod(parameter_____________, parameter_____________);
+
+        this.CallMethod()
+            .CallMethod__________________(one_____________________, two_____________________);
     }
 }

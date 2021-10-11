@@ -12,8 +12,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
     public static class InvocationExpression
     {
-        // TODO better name? Or move to another file?
-        public static Doc Print(ExpressionSyntax node)
+        public static Doc Print(InvocationExpressionSyntax node)
+        {
+            return PrintMemberChain(node);
+        }
+
+        public static Doc PrintMemberChain(ExpressionSyntax node)
         {
             var printedNodes = new List<PrintedNode>();
 
@@ -26,16 +30,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
 
             var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
-            // could we simplify this to look for a lambda with a block? are there other cases where a hardline appears?
-            // move it below if that is the only place we use it
-            var oneLineContainsBreak = new Lazy<bool>(
-                () => oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
-            );
+
             var forceOneLine =
                 groups.Count <= cutoff
                 && !groups.Skip(shouldMergeFirstTwoGroups ? 1 : 0)
                     .All(o => o.Last().Node is InvocationExpressionSyntax);
-            //&& !oneLineContainsBreak.Value;
 
             if (forceOneLine)
             {
@@ -50,7 +49,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 PrintIndentedGroup(node, groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
             );
 
-            return oneLineContainsBreak.Value
+            return oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
                 ? expanded
                 : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
         }
@@ -61,18 +60,23 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         ) {
             /*
               We need to flatten things out because the AST has them this way
-              where the first node is this 
               InvocationExpression
-              [ this.DoSomething().DoSomething ] [ () ]
+              Expression                        ArgumentList
+              this.DoSomething().DoSomething    ()
               
-              SimpleMemberAccessExpression
-              [ this.DoSomething() ] [ . ] [ DoSomething ]
+              MemberAccessExpression
+              Expression            OperatorToken   Name
+              this.DoSomething()    .               DoSomething
               
               InvocationExpression
-              [ this.DoSomething ] [ () ]
+              Expression            ArgumentList
+              this.DoSomething      ()
               
-              SimpleMemberAccessExpression
-              [ this ] [ . ] [ DoSomething ]
+              MemberAccessExpression
+              Expression    OperatorToken   Name
+              this          .               DoSomething
+              
+              And we want to work with them from Left to Right
             */
             if (expression is InvocationExpressionSyntax invocationExpressionSyntax)
             {
@@ -233,51 +237,26 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
         private static bool ShouldMergeFirstTwoGroups(List<List<PrintedNode>> groups)
         {
-            if (groups.Count < 2
-            // || hasComment(groups[1][0].node)
-            )
+            if (groups.Count < 2 || groups[0].Count != 1)
             {
                 return false;
             }
 
-            // wtf is this? it is on the node in prettier
-            //var hasComputed = false; // groups[1].Count > 0 && groups[1][0].node.computed;
+            var firstNode = groups[0][0].Node;
 
-            if (groups[0].Count == 1)
-            {
-                var firstNode = groups[0][0].Node;
-
-                if (
-                    firstNode is IdentifierNameSyntax identifierNameSyntax
-                    && identifierNameSyntax.Identifier.Text.Length <= 4
-                ) {
-                    return true;
-                }
-
-                return firstNode is ThisExpressionSyntax or PredefinedTypeSyntax
-                // or IdentifierNameSyntax
-                // I don't think I like this, it screws
-                ;
-                // we might not need any of this, it was on the identifierNameSyntax
-                // && (
-                //     isFactory(firstNode.name)
-                //     || ( isExpressionStatement && isShort(firstNode.name) )
-                //     || hasComputed)
-                // )
-
-                ;
+            if (
+                firstNode is IdentifierNameSyntax identifierNameSyntax
+                && identifierNameSyntax.Identifier.Text.Length <= 4
+            ) {
+                return true;
             }
-            // const lastNode = getLast(groups[0]).node;
-            // return (
-            //     isMemberExpression(lastNode) &&
-            //         lastNode.property.type === "Identifier" &&
-            //                                    (isFactory(lastNode.property.name) || hasComputed)
-            // );
-            return false;
+
+            return firstNode is ThisExpressionSyntax or PredefinedTypeSyntax;
         }
     }
 }
 
+// TODO 7
 // PRs to review
 // https://github.com/belav/aspnetcore/pull/29/files
 // https://github.com/belav/moq4/pull/12
@@ -288,285 +267,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
 // this too, although it got pulled out https://github.com/prettier/prettier/pull/7889
 
-// this looks good https://github.com/prettier/prettier/pull/8063/files
-/*
-        // test case for it
-        this.CallMethod().CallMethod__________________(
-            one_____________________,
-            two_____________________
-        );
-        // could be
-        this.CallMethod()
-            .CallMethod__________________(one_____________________, two_____________________);
-
-        // and maybe this
-        var value = string.Join(",_______________", Values.Select(o => o.ItemSpec).ToArray())
-            .ToLowerInvariant();
- */
-
 // some discussions
 // https://github.com/prettier/prettier/issues/8003
 // https://github.com/prettier/prettier/issues/7884
 
-/*
-class ClassName
-{
-    // this is better, but still looks weird
-    public AccessTokenNotAvailableException(
-        NavigationManager navigation,
-        AccessTokenResult tokenResult,
-        IEnumerable<string> scopes
-    ) : base(
-        message: "Unable to provision an access token for the requested scopes: " + scopes != null
-          ? $"'{string.Join(", ", scopes ?? Array.Empty<string>())}'"
-          : "(default scopes)"
-    ) { }
-
-    void MethodName()
-    {
-        // why does this work this way? it is maybe fine
-        var mvcBuilder = services.AddMvc().ConfigureApplicationPartManager(
-            apm =>
-            {
-                apm.FeatureProviders.Add(new AzureADAccountControllerFeatureProvider());
-            }
-        );
-
-        // this looks a bit odd, should it break on all . instead?
-        var app = applicationBuilder.UseRouting().UseEndpoints(
-            endpoints =>
-            {
-                endpoints.MapBlazorHub("_blazor", dispatchOptions => called = true);
-            }
-        ).Build();
-
-        // this isn't how prettier does it, stretch goal
-        this.Address1 = addressFields_________________
-            .FirstOrDefault(field => field.FieldName == "Address1");
-        // except that conflicts with
-        var y = someList.Where(
-            o =>
-                someLongValue_______________________
-                && theseShouldNotIndent_________________
-                && theseShouldNotIndent_________________
-                    > butThisOneShould_________________________________________
-        );
-
-        // this is kinda gross, maybe it should only be short names and this that merge
-        var superLongName_______________ = someOtherName____________.CallSomeMethod______________()
-            .CallSomeMethod______________();
-
-        // prettier does it this way, but ugly!
-        string signedRequest = htmlHelper.ViewContext.HttpContext.Request.Params[
-            "signed_request____________"
-        ];
-
-        // prettier does it this way, but ugly!
-        result[i / ReferenceFrameSize] = RenderTreeFrame.ComponentReferenceCapture(
-            0,
-            null__________,
-            0
-        );
-
-        // not sure if anything here should change
-        Diagnostic.Create(
-            _descriptor,
-            symbolForDiagnostic.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax()
-                .GetLocation() ?? Location.None,
-            symbol.ToDisplayString(SymbolDisplayFormat.CSharpShortErrorMessageFormat)
-        );
-        
-        // see below
-        FacebookGroupConnection<TStatus> statuses = await GetFacebookObjectAsync<
-            FacebookGroupConnection<TStatus>
-        >(client, "me/statuses");
-
-        /* should maybe be
-            FacebookGroupConnection<TStatus> statuses = 
-                await GetFacebookObjectAsync<FacebookGroupConnection<TStatus>>(
-                    client,
-                    "me/statuses"
-                );
-                
-
-        // this one seems fine?
-        // but kinda looks better without the merge
-        var proxy1 = generator.CreateInterfaceProxyWithTargetInterface<IEventHandler<EventArgs1>>(
-            null,
-            new[] { lazyInterceptor1 }
-        );
-        
-        // this is just gross, it used to break parameters instead of generic types
-        // but it is just barely too long so it shouldn't break on generics
-        var count = (int)await _invoker.InvokeUnmarshalled<
-            string[],
-            object?,
-            object?,
-            Task<object>
-        >(GetSatelliteAssemblies, culturesToLoad.ToArray(), null, null);
-
-        // looks better with the merge
-        var ex = Assert.Throws<ArgumentException>(
-            () =>
-                generator.CreateInterfaceProxyWithTargetInterface<IList<IList<PrivateInterface>>>(
-                    new List<IList<PrivateInterface>>(),
-                    new IInterceptor[0]
-                )
-        );
-
-        // these used to not break so weird
-        ref var parentFrame = ref diffContext.NewTree[
-            newFrame.ComponentReferenceCaptureParentFrameIndexField
-        ];
-
-        var newComponentInstance = (CaptureSetParametersComponent)oldTree.GetFrames().Array[
-            0
-        ].Component;
-
-        parent = (ContainerNode)parent.Children[
-            childIndexAtCurrentDepth__________ + siblingIndex__________
-        ];
-
-        configuration.EncryptionAlgorithmKeySize = (int)encryptionElement.Attribute(
-            "keyLength__________________"
-        )!;
-
-        // used to break onto the next line
-        var cbTempSubkeys = checked(
-            _symmetricAlgorithmSubkeyLengthInBytes + _hmacAlgorithmSubkeyLengthInBytes
-        );
-        // but then this looks better with checked next to =
-        var cbEncryptedData = checked(
-            cbCiphertext
-            - (
-                KEY_MODIFIER_SIZE_IN_BYTES
-                + _symmetricAlgorithmBlockSizeInBytes
-                + _hmacAlgorithmDigestLengthInBytes
-            )
-        );
-
-        // used to be 2 lines
-        var cacheKey__________ = (
-            ModelType: fieldIdentifier.Model.GetType(),
-            fieldIdentifier.FieldName
-        );
-
-        // not sure what to do with this, nothing??
-        storedArguments_______[i] = localVariables[i] = Expression.Parameter(
-            parameters[i].ParameterType
-        );
-        
-        
-        // this switched and is probably better
-        private static readonly MethodInfo _callPropertyGetterOpenGenericMethod =
-            typeof(PropertyHelper).GetMethod(
-                "CallPropertyGetter",
-                BindingFlags.NonPublic | BindingFlags.Static
-            );
-        private static readonly MethodInfo _callPropertyGetterOpenGenericMethod =
-            typeof(PropertyHelper)
-                .GetMethod("CallPropertyGetter", BindingFlags.NonPublic | BindingFlags.Static);
-        // except this got worse!!
-        private static readonly MethodInfo _callPropertyGetterByReferenceOpenGenericMethod =
-            typeof(PropertyHelper).GetMethod(
-                "CallPropertyGetterByReference",
-                BindingFlags.NonPublic | BindingFlags.Static
-            );
-        private static readonly MethodInfo _callPropertyGetterByReferenceOpenGenericMethod =
-            typeof(PropertyHelper)
-                .GetMethod(
-                    "CallPropertyGetterByReference",
-                    BindingFlags.NonPublic | BindingFlags.Static
-                );
-                
-
-        // this looks weird, but might be correct? prettier has some inconsistent formatting around things like this
-                IEnumerable<PropertyInfo> properties = type.GetProperties(
-                    BindingFlags.Public | BindingFlags.Instance
-                )
-                    .Where(prop => prop.GetIndexParameters().Length == 0 && prop.GetMethod != null);
-
-            XAttribute[] rootAttributes = RootAttributes?.Select(
-                item => new XAttribute(item.ItemSpec, item.GetMetadata("Value"))
-            )
-                .ToArray();
-
-
-        // add some test cases for things like this
-            return permissionsStatus.Status
-                .Where(kvp => kvp.Value == status)
-                .Select(kvp => kvp.Key);
-                
-        // this used to not break before the .ConvertTo
-                return modelState.Value
-                    .ConvertTo(
-                        destinationType,
-                        null /asterisk culture asterisk/ 
-                    );
-                    
-        // another better/worse
-            _currentChain.Elements
-                .Add(new ParameterExpressionFingerprint(node.NodeType, node.Type, parameterIndex));
-            _currentChain.Elements
-                .Add(
-                    new TypeBinaryExpressionFingerprint(node.NodeType, node.Type, node.TypeOperand)
-                );
-        // another better/worse??
-            return SymbolEqualityComparer.Default
-                .Equals(symbol.Parameters[0].Type, symbols.IServiceCollection);
-            return SymbolEqualityComparer.Default.Equals(
-                symbol.Parameters[0].Type,
-                symbols.IServiceCollection
-            );                
-
-        // probably should merge
-        if (
-            httpResponse.StatusCode == HttpStatusCode.NotFound
-            || httpResponse.ReasonPhrase
-                .IndexOf(
-                    "The requested URI does not represent any resource on the server.",
-                    StringComparison.OrdinalIgnoreCase
-                ) == 0
-        )
-        
-        // probably should merge
-        var value = string
-            .Join(",", Values.Select(o => o.ItemSpec).ToArray())
-            .ToLowerInvariant();
-        
-        if (
-            context.Operation is IInvocationOperation invocation
-            && invocation.Instance == null
-            && invocation.Arguments.Length >= 1
-            && SymbolEqualityComparer.Default
-                .Equals(
-                    invocation.Arguments[0].Parameter?.Type,
-                    _context.StartupSymbols.IApplicationBuilder
-                )
-        )
-                    
-        if (
-            symbol.Name == null
-            || !symbol.Name
-                .StartsWith(
-                    SymbolNames.ConfigureServicesMethodPrefix,
-                    StringComparison.OrdinalIgnoreCase
-                )
-            || !symbol.Name
-                .EndsWith(
-                    SymbolNames.ConfigureServicesMethodSuffix,
-                    StringComparison.OrdinalIgnoreCase
-                )
-        )
-            
-        solution = new AdhocWorkspace().CurrentSolution
-            .AddProject(
-                projectId,
-                TestProjectName,
-                TestProjectName,
-                LanguageNames.CSharp
-            );
-    }
-}
-
- */
