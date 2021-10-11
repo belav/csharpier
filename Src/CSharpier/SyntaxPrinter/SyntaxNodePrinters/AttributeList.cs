@@ -47,8 +47,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                           ? NameEquals.Print(attributeArgumentNode.NameEquals)
                                           : Doc.Null,
                                         attributeArgumentNode.NameColon != null
-                                          ? NameColon.Print(attributeArgumentNode.NameColon)
-                                          : Doc.Null,
+                                            ? BaseExpressionColon.Print(attributeArgumentNode.NameColon)
+                                            : Doc.Null,
                                         Node.Print(attributeArgumentNode.Expression)
                                     ),
                                 Doc.Line

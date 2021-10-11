@@ -8,6 +8,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ParenthesizedLambdaExpressionSyntax node)
         {
+            // TODO 10 what about node.AttributeLists? it doesn't appear to be in the doc for c# 10
             var docs = new List<Doc>
             {
                 Modifiers.Print(node.Modifiers),
