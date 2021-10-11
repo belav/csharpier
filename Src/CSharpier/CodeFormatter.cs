@@ -30,7 +30,8 @@ namespace CSharpier
                 return CSharpSyntaxTree.ParseText(
                     codeToFormat,
                     new CSharpParseOptions(
-                        LanguageVersion.CSharp9,
+                        // this also exists in SyntaxNodeComparer
+                        LanguageVersion.CSharp10,
                         DocumentationMode.Diagnose,
                         preprocessorSymbols: preprocessorSymbols
                     ),

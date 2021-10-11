@@ -4,7 +4,7 @@
         <OutputType>Exe</OutputType>
         <PackageId>CSharpier</PackageId>
         <AssemblyName>dotnet-csharpier</AssemblyName>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>CSharpier</RootNamespace>
         <PackAsTool>true</PackAsTool>
         <Nullable>enable</Nullable>
@@ -17,7 +17,7 @@
 
     <ItemGroup>
         <PackageReference Include="Ignore" Version="0.1.42" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0-4.final" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
         <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />

@@ -97,6 +97,7 @@ namespace CSharpier.Tests
                 "InterpolationAlignmentClauseSyntax",
                 "InterpolationFormatClauseSyntax",
                 "JoinIntoClauseSyntax",
+                "LineDirectivePositionSyntax",
                 "NameMemberCrefSyntax",
                 "OperatorMemberCrefSyntax",
                 "OrderingSyntax",

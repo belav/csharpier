@@ -233,5 +233,10 @@ class ClassName
             && someLongName_____________
                 is { Kind: SomeObjectType, Value: "___________________________________" }
         ) { }
+
+        if (expr is { Property.Length: 5 })
+        {
+            return;
+        }
     }
 }

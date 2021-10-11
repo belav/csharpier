@@ -47,3 +47,7 @@ public record LotsOfParametersWithBaseWithLots(
       );
 
 public record SomeRecord : SomeBaseRecord { }
+
+public record struct StructRecord;
+
+public record class ClassRecord;

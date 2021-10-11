@@ -4,12 +4,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class NameColon
+    public static class BaseExpressionColon 
     {
-        public static Doc Print(NameColonSyntax node)
+        public static Doc Print(BaseExpressionColonSyntax node)
         {
             return Doc.Concat(
-                Token.Print(node.Name.Identifier),
+                Node.Print(node.Expression),
                 Token.PrintWithSuffix(
                     node.ColonToken,
                     node.Parent
