@@ -10,6 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
+          # TODO 10 will the need for this go away when .net 6 is official?
           dotnet-version: '6.0.x'
           include-prerelease: true
       - run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj -c release
