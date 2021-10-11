@@ -31,10 +31,6 @@ jobs:
     name: Check Formatting
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
-          include-prerelease: true
       - run: |
           dotnet tool restore
           dotnet csharpier . --check 

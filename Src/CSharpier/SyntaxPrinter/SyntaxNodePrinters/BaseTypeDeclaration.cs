@@ -83,7 +83,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 docs.Add(Token.PrintWithSuffix(recordKeyword.Value, " "));
             }
 
-            
             if (keyword != null)
             {
                 docs.Add(Token.PrintWithSuffix(keyword.Value, " "));
