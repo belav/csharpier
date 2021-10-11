@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -10,6 +8,13 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
     public record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
+    // This is based on prettier/src/language-js/print/member-chain.js
+    // various discussions/prs about how to potentially improve the formatting
+    // https://github.com/prettier/prettier/issues/5737
+    // https://github.com/prettier/prettier/issues/7884
+    // https://github.com/prettier/prettier/issues/8003
+    // https://github.com/prettier/prettier/issues/8902
+    // https://github.com/prettier/prettier/pull/7889
     public static class InvocationExpression
     {
         public static Doc Print(InvocationExpressionSyntax node)
@@ -123,8 +128,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
         private static List<List<PrintedNode>> GroupPrintedNodes(List<PrintedNode> printedNodes)
         {
-            // Once we have a linear list of printed nodes, we want to create groups out
-            // of it.
+            // We want to group the printed nodes in the following manner
             //
             //   a().b.c().d().e
             // will be grouped as
@@ -235,6 +239,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             );
         }
 
+        // There are cases where merging the first two groups looks better
+        // For example without merging we would end up with
+        /*
+            this
+                .CallMethod()
+                .CallMethod(); 
+            vs
+            this.CallMethod()
+                .CallMethod();
+         */
         private static bool ShouldMergeFirstTwoGroups(List<List<PrintedNode>> groups)
         {
             if (groups.Count < 2 || groups[0].Count != 1)
@@ -262,12 +276,5 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 // https://github.com/belav/moq4/pull/12
 // https://github.com/belav/AutoMapper/pull/10
 
-// https://github.com/prettier/prettier/issues/5737
-// https://github.com/prettier/prettier/issues/8902
 
-// this too, although it got pulled out https://github.com/prettier/prettier/pull/7889
-
-// some discussions
-// https://github.com/prettier/prettier/issues/8003
-// https://github.com/prettier/prettier/issues/7884
 

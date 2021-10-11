@@ -14,6 +14,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         is InvocationExpressionSyntax
                         {
                             Expression: IdentifierNameSyntax
+                                or GenericNameSyntax
                                 or MemberAccessExpressionSyntax
                                 {
                                     Expression: ThisExpressionSyntax
