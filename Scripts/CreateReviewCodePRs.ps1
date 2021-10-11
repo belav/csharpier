@@ -48,7 +48,7 @@ foreach($folder in Get-ChildItem $csharpierRepos) {
 
 Push-Location $csharpierRepos
 
-dotnet $csharpierProject\Src\CSharpier\bin\Release\net5.0\dotnet-csharpier.dll .
+dotnet $csharpierProject\Src\CSharpier\bin\Release\net6.0\dotnet-csharpier.dll .
 
 foreach($folder in Get-ChildItem $csharpierRepos)
 {
