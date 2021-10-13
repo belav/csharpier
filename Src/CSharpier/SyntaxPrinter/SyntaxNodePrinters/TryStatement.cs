@@ -17,7 +17,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 AttributeLists.Print(node, node.AttributeLists),
                 Token.Print(node.TryKeyword),
                 Block.Print(node.Block),
-                Doc.HardLine,
+                node.Catches.Any() ? Doc.HardLine : Doc.Null,
                 Doc.Join(Doc.HardLine, node.Catches.Select(CatchClause.Print))
             };
             if (node.Finally != null)
