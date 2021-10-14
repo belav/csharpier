@@ -22,6 +22,9 @@ class ClassName
         try { }
         catch { }
 
+        try { }
+        finally { }
+
         try
         {
             throw null;
