@@ -1,5 +1,6 @@
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
@@ -15,7 +16,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Doc.Concat(
                 ExtraNewLines.Print(node),
                 Token.Print(node.GotoKeyword),
-                node.CaseOrDefaultKeyword.RawKind != 0 ? " " : Doc.Null,
+                node.CaseOrDefaultKeyword.Kind() != SyntaxKind.None ? " " : Doc.Null,
                 Token.Print(node.CaseOrDefaultKeyword),
                 expression,
                 Token.Print(node.SemicolonToken)

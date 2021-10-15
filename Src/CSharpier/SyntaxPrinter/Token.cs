@@ -35,7 +35,7 @@ namespace CSharpier.SyntaxPrinter
             Doc? suffixDoc = null,
             bool skipLeadingTrivia = false
         ) {
-            if (syntaxToken.RawKind == 0)
+            if (syntaxToken.Kind() == SyntaxKind.None)
             {
                 return Doc.Null;
             }

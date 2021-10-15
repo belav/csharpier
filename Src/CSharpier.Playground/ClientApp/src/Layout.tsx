@@ -34,7 +34,7 @@ const WrapperStyle = styled.div`
     height: 100%;
 `;
 
-const PanelWrapperStyle = styled.div<{ columnWidth: number}>`
+const PanelWrapperStyle = styled.div<{ columnWidth: number }>`
     display: flex;
     flex-wrap: wrap;
     width: 100%;

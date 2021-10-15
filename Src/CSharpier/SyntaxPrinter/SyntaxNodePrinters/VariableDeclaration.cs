@@ -9,15 +9,17 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         {
             if (node.Variables.Count > 1)
             {
-                var docs = Doc.Concat(
-                    SeparatedSyntaxList.Print(
-                        node.Variables,
-                        VariableDeclarator.Print,
-                        node.Parent is ForStatementSyntax ? Doc.Line : Doc.HardLine
+                return Doc.Concat(
+                    Node.Print(node.Type),
+                    " ",
+                    Doc.Indent(
+                        SeparatedSyntaxList.Print(
+                            node.Variables,
+                            VariableDeclarator.Print,
+                            node.Parent is ForStatementSyntax ? Doc.Line : Doc.HardLine
+                        )
                     )
                 );
-
-                return Doc.Concat(Node.Print(node.Type), " ", Doc.Indent(docs));
             }
 
             var variable = node.Variables[0];

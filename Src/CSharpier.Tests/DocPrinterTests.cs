@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using CSharpier.DocTypes;
 using FluentAssertions;
 using NUnit.Framework;
@@ -200,7 +201,7 @@ namespace CSharpier.Tests
         {
             var doc = Doc.Concat(
                 "1",
-                Doc.Group(Doc.Line, Doc.Concat("2")),
+                Doc.Group(Doc.Line, ActualConcat("2")),
                 Doc.HardLine,
                 Doc.Concat(
                     "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
@@ -462,7 +463,9 @@ namespace CSharpier.Tests
         [Test]
         public void HardLineIfNoPreviousLine_Should_Not_Insert_After_Indented_HardLine()
         {
-            var doc = Doc.Concat(Doc.Indent("1", Doc.HardLine, Doc.HardLineIfNoPreviousLine, "2"));
+            var doc = ActualConcat(
+                Doc.Indent("1", Doc.HardLine, Doc.HardLineIfNoPreviousLine, "2")
+            );
 
             PrintedDocShouldBe(doc, $"1{NewLine}    2");
         }
@@ -684,6 +687,11 @@ true || false"
                     Environment.NewLine
                 )
                 .TrimEnd('\r', '\n');
+        }
+
+        private Concat ActualConcat(params Doc[] contents)
+        {
+            return new Concat(contents.ToList());
         }
     }
 }

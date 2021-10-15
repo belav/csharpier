@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CSharpier.DocTypes;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
@@ -14,7 +15,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 docs.Add(NameColon.Print(node.NameColon));
             }
 
-            docs.Add(Token.PrintWithSuffix(node.RefKindKeyword, " "));
+            if (node.RefKindKeyword.Kind() != SyntaxKind.None)
+            {
+                docs.Add(Token.PrintWithSuffix(node.RefKindKeyword, " "));
+            }
+
             docs.Add(Node.Print(node.Expression));
             return Doc.Concat(docs);
         }

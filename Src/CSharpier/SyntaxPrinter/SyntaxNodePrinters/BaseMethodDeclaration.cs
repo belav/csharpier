@@ -74,14 +74,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             var docs = new List<Doc> { ExtraNewLines.Print(node) };
 
-            if (attributeLists.HasValue)
+            if (attributeLists is { Count: > 0 })
             {
                 docs.Add(AttributeLists.Print(node, attributeLists.Value));
             }
 
             var declarationGroup = new List<Doc>();
 
-            if (modifiers.HasValue)
+            if (modifiers.HasValue && modifiers.Value.Any())
             {
                 declarationGroup.Add(Modifiers.PrintWithoutLeadingTrivia(modifiers.Value));
             }

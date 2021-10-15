@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.IO;
 using System.Threading;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
@@ -13,7 +12,7 @@ namespace CSharpier.Benchmarks
         public void Default_CodeFormatter()
         {
             var codeFormatter = new CodeFormatter();
-            codeFormatter.Format(code, new PrinterOptions());
+            codeFormatter.Format(largeCode, new PrinterOptions());
         }
 
         [Benchmark]
@@ -28,6 +27,10 @@ namespace CSharpier.Benchmarks
         {
             DisabledTextComparer.IsCodeBasicallyEqual(code, code);
         }
+
+        private readonly string largeCode = File.ReadAllText(
+            @"C:\projects\csharpier-repos\runtime\src\libraries\Common\tests\System\Xml\XPath\FuncLocation\PathAxesTests.cs"
+        );
 
         private readonly string code =
             @"using System;
