@@ -1,6 +1,6 @@
 import React from "react";
 
-if (!IS_PRODUCTION) {
+if (window.location.host === "localhost") {
     const whyDidYouRender = require("@welldone-software/why-did-you-render");
     whyDidYouRender(React, {
         trackAllPureComponents: true,
