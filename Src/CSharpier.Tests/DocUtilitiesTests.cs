@@ -79,7 +79,7 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            concat!.Contents.Should().BeEquivalentTo(new List<Doc> { Doc.HardLine, Doc.Null });
+            concat.Contents.Should().BeEquivalentTo(new List<Doc> { Doc.HardLine, Doc.Null });
         }
 
         [Test]

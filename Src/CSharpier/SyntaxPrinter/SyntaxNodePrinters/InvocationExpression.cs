@@ -240,12 +240,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         }
 
         // There are cases where merging the first two groups looks better
-        // For example without merging we would end up with
+        // For example
         /*
+            // without merging we get this
             this
                 .CallMethod()
                 .CallMethod(); 
-            vs
+
+            // merging gives us this
             this.CallMethod()
                 .CallMethod();
          */
