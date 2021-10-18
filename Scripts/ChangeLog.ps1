@@ -7,12 +7,16 @@ param (
 )
 
 if ($versionNumber -eq "" -or $previousVersionNumber -eq "") {
-    Write-Output "Supply version numbers"
+    Write-Output "Supply version numbers [previous] [current]"
     exit 1;
 }
 
+$ErrorActionPreference = "Stop"
+
 $repository = "https://github.com/belav/csharpier"
 
+# if this fails
+# Install-Module -Name PowerShellForGitHub
 $milestones = Get-GitHubMilestone -Uri $repository -State "Open"
 $milestoneNumber = -1
 foreach($milestone in $milestones) {

@@ -1,3 +1,20 @@
+# 0.10.0
+
+[diff](https://github.com/belav/csharpier/compare/0.9.9...0.10.0)
+
+- try-finally without catch clause is formatted strangely. [#454](https://github.com/belav/csharpier/issues/454)
+- Nested FixedStatements should break [#438](https://github.com/belav/csharpier/issues/438)
+- Disabled text validation fails with trailing whitespace [#428](https://github.com/belav/csharpier/issues/428)
+- Vertically Align Curly Braces [#423](https://github.com/belav/csharpier/issues/423)
+- Crash On Empty Config File [#421](https://github.com/belav/csharpier/issues/421)
+- Conditional in Arguments should indent. [#419](https://github.com/belav/csharpier/issues/419)
+- Chained assignments formatting can be improved [#417](https://github.com/belav/csharpier/issues/417)
+- Improve ConditionalExpression in ReturnStatement formatting [#416](https://github.com/belav/csharpier/issues/416)
+- Pattern Matching edge cases [#413](https://github.com/belav/csharpier/issues/413)
+- Implement proper logging. [#406](https://github.com/belav/csharpier/issues/406)
+- (finally) Improve formatting of InvocationExpressions [#7](https://github.com/belav/csharpier/issues/7)
+
+
 # 0.9.9
 
 [diff](https://github.com/belav/csharpier/compare/0.9.8...0.9.9)
