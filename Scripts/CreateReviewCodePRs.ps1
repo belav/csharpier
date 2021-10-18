@@ -20,6 +20,8 @@ param (
 # roslyn
 # runtime
 
+$ErrorActionPreference = "Stop"
+
 if ($version -eq "") {
     Write-Output "need version"
     exit 1
