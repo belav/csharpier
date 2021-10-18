@@ -1,9 +1,7 @@
-import React, { FC } from "react";
+import React from "react";
 import ReactJson, { CollapsedFieldProps } from "react-json-view";
 import styled from "styled-components";
 import { useAppContext } from "./AppContext";
-
-let lastTree;
 
 const shouldCollapse = (field: CollapsedFieldProps) => {
     if (

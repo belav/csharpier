@@ -14,6 +14,7 @@ ProjectSection(SolutionItems) = preProject
 	.config\dotnet-tools.json = .config\dotnet-tools.json
 	CSharpier.Build.props = CSharpier.Build.props
 	Dockerfile = Dockerfile
+	Start.ps1 = Start.ps1
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{176BB0EA-B72B-4ACA-82AE-C16A732BE023}"
