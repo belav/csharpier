@@ -1,8 +1,5 @@
 name: Deploy Playground
-on:
-  create:
-    tags:
-      - "*"
+on: [push]
 
 jobs:
   deploy:
