@@ -37,6 +37,7 @@ App_Data
 nupkg
 
 dist
+build
 publish
 
 *.doctree.txt

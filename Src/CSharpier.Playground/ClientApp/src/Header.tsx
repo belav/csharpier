@@ -1,27 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Loading } from "./Icons/Loading";
 import { useAppContext } from "./AppContext";
 
 export const Header = () => {
-    const {
-        isLoading,
-        formatCode,
-        showDoc,
-        setShowDoc,
-        hideNull,
-        setHideNull,
-        showAst,
-        setShowAst,
-        setEmptyMethod,
-        setEmptyClass,
-        copyLeft,
-    } = useAppContext();
+    const { isLoading, formatCode, showDoc, showAst } = useAppContext();
     const width = showDoc && showAst ? 25 : showDoc || showAst ? 33.3 : 50;
+    const [version, setVersion] = useState<string | undefined>();
+
+    useEffect(() => {
+        (async () => {
+            const response = await fetch("/Version", {
+                method: "Get",
+            });
+            const version = await response.text();
+
+            setVersion(version);
+        })();
+    }, []);
+
     return (
         <HeaderStyle>
             <Left width={width}>
-                <Title>CSharpier</Title>
+                <Title>
+                    CSharpier<Version> {version}</Version>
+                </Title>
                 <a
                     className="github-button"
                     href="https://github.com/belav/csharpier"
@@ -33,57 +36,13 @@ export const Header = () => {
                 </a>
 
                 <Buttons>
-                    <SmallButton title="Shift-Ctrl-X" onClick={setEmptyMethod}>
-                        Empty Method
-                    </SmallButton>
-                    <SmallButton title="Shift-Ctrl-C" onClick={setEmptyClass}>
-                        Empty Class
-                    </SmallButton>
                     <FormatButton onClick={formatCode} title="Ctrl-Enter">
                         {isLoading && <LoadingStyle />}
                         {!isLoading && <>Format</>}
                     </FormatButton>
                 </Buttons>
             </Left>
-            <Right>
-                <RightButtons>
-                    <SmallButton title="Shift-Ctrl-S" onClick={copyLeft}>
-                        Copy Left
-                    </SmallButton>
-                </RightButtons>
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={showDoc}
-                        onChange={() => {
-                            setShowDoc(!showDoc);
-                        }}
-                    />
-                    Show Doc
-                </label>
-                {showDoc && (
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={hideNull}
-                            onChange={() => {
-                                setHideNull(!hideNull);
-                            }}
-                        />
-                        Hide Null
-                    </label>
-                )}
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={showAst}
-                        onChange={() => {
-                            setShowAst(!showAst);
-                        }}
-                    />
-                    Show AST
-                </label>
-            </Right>
+            <Right />
         </HeaderStyle>
     );
 };
@@ -101,7 +60,10 @@ const HeaderStyle = styled.div`
 
 const Left = styled.div<{ width: number }>`
     align-items: center;
-    width: ${props => props.width}%;
+    width: calc(${props => props.width}% + 100px);
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 `;
 const Right = styled.div`
     display: flex;
@@ -113,17 +75,15 @@ const Right = styled.div`
     }
 `;
 
-const RightButtons = styled.div`
-    margin-right: auto;
-    display: flex;
-    margin-left: 16px;
-`;
-
 const Title = styled.h1`
     padding-left: 28px;
     font-size: 22px;
     font-style: italic;
     margin-right: 20px;
+`;
+
+const Version = styled.span`
+    font-size: 12px;
 `;
 
 const Buttons = styled.div`

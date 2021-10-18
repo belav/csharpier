@@ -8,6 +8,7 @@ import { Header } from "./Header";
 import { useAppContext } from "./AppContext";
 import { CodeEditor } from "./CodeEditor";
 import { FormattedCode } from "./FormattedCode";
+import { Controls } from "./Controls";
 
 export const Layout = () => {
     const { showDoc, showAst } = useAppContext();
@@ -15,16 +16,19 @@ export const Layout = () => {
     return (
         <WrapperStyle>
             <Header />
-            <PanelWrapperStyle columnWidth={width}>
-                <EnteredCodeStyle>
-                    <CodeEditor />
-                </EnteredCodeStyle>
-                <EnteredCodeStyle>
-                    <FormattedCode />
-                </EnteredCodeStyle>
-                {showDoc && <DocTree />}
-                {showAst && <SyntaxTree />}
-            </PanelWrapperStyle>
+            <OuterWrapper>
+                <Controls />
+                <PanelWrapperStyle columnWidth={width}>
+                    <EnteredCodeStyle>
+                        <CodeEditor />
+                    </EnteredCodeStyle>
+                    <EnteredCodeStyle>
+                        <FormattedCode />
+                    </EnteredCodeStyle>
+                    {showDoc && <DocTree />}
+                    {showAst && <SyntaxTree />}
+                </PanelWrapperStyle>
+            </OuterWrapper>
             <Footer />
         </WrapperStyle>
     );
@@ -34,24 +38,45 @@ const WrapperStyle = styled.div`
     height: 100%;
 `;
 
-const PanelWrapperStyle = styled.div<{ columnWidth: number }>`
+const OuterWrapper = styled.div`
+    height: calc(100vh - 80px);
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    height: calc(100vh - 80px);
+    > div:first-child {
+        width: 130px;
+        @media (max-width: 768px) {
+            display: none;
+        }
+    }
+`;
+
+const PanelWrapperStyle = styled.div<{ columnWidth: number }>`
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% - 130px);
+    height: 100%;
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     > div {
         width: ${props => props.columnWidth}%;
+
         height: 100%;
     }
-}
-    
+
     .react-codemirror2,
     .CodeMirror {
         height: 100%;
     }
     font-size: 12px;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        > div {
+            width: 100%;
+            height: 50%;
+        }
+    }
 `;
 
 const EnteredCodeStyle = styled.div`

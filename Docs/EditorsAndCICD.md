@@ -39,7 +39,17 @@ Normally when using a code formatter like CSharpier, you'll want to ensure that 
    ```
 
 
-## Editor Support
+## Editor Integration
+### Visual Studio
+Check out [WillFuqua.RunOnSave](https://marketplace.visualstudio.com/items?itemName=WillFuqua.RunOnSave)
+### Visual Studio Code
+An official extension is being discussed https://github.com/belav/csharpier/issues/283 \
+A couple of extensions have been built for personal use [CSharpier-vscode]([https://github.com/pontusntengnas/CSharpier-vscode]) and
+[vscode-csharpier](https://github.com/saborrie/vscode-csharpier) \
+Using a run on save extension is another option. Check out
+ [emeraldwalk.RunOnSave](https://marketplace.visualstudio.com/items?itemName=emeraldwalk.RunOnSave) or [pucelle.run-on-save](https://marketplace.visualstudio.com/items?itemName=pucelle.run-on-save)
+
+
 ### Rider
 1. Open Settings
 2. Tools - File Watchers
