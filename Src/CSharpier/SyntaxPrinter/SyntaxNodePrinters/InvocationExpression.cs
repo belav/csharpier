@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -10,67 +8,159 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
     public record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
+    // This is based on prettier/src/language-js/print/member-chain.js
+    // various discussions/prs about how to potentially improve the formatting
+    // https://github.com/prettier/prettier/issues/5737
+    // https://github.com/prettier/prettier/issues/7884
+    // https://github.com/prettier/prettier/issues/8003
+    // https://github.com/prettier/prettier/issues/8902
+    // https://github.com/prettier/prettier/pull/7889
     public static class InvocationExpression
     {
         public static Doc Print(InvocationExpressionSyntax node)
         {
+            return PrintMemberChain(node);
+        }
+
+        public static Doc PrintMemberChain(ExpressionSyntax node)
+        {
             var printedNodes = new List<PrintedNode>();
 
-            void Traverse(ExpressionSyntax expression)
+            FlattenAndPrintNodes(node, printedNodes);
+
+            var groups = GroupPrintedNodes(printedNodes);
+
+            var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
+
+            var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
+
+            var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
+
+            var forceOneLine =
+                groups.Count <= cutoff
+                && !groups.Skip(shouldMergeFirstTwoGroups ? 1 : 0)
+                    .All(o => o.Last().Node is InvocationExpressionSyntax);
+
+            if (forceOneLine)
             {
-                /*InvocationExpression
-                  [this.DoSomething().DoSomething][()]
-                  
-                  SimpleMemberAccessExpression
-                  [this.DoSomething()][.][DoSomething]
-                  
-                  InvocationExpression
-                  [this.DoSomething][()]
-                  
-                  SimpleMemberAccessExpression
-                  [this][.][DoSomething]
-                */
-                if (expression is InvocationExpressionSyntax invocationExpressionSyntax)
-                {
-                    Traverse(invocationExpressionSyntax.Expression);
-                    printedNodes.Add(
-                        new PrintedNode(
-                            Node: invocationExpressionSyntax,
-                            Doc: ArgumentList.Print(invocationExpressionSyntax.ArgumentList)
-                        )
-                    );
-                }
-                else if (expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax)
-                {
-                    Traverse(memberAccessExpressionSyntax.Expression);
-                    printedNodes.Add(
-                        new PrintedNode(
-                            Node: memberAccessExpressionSyntax,
-                            Doc: Doc.Concat(
-                                Token.Print(memberAccessExpressionSyntax.OperatorToken),
-                                Node.Print(memberAccessExpressionSyntax.Name)
-                            )
-                        )
-                    );
-                }
-                else
-                {
-                    printedNodes.Add(
-                        new PrintedNode(Node: expression, Doc: Node.Print(expression))
-                    );
-                }
+                return Doc.Group(oneLine);
             }
 
-            Traverse(node);
+            var expanded = Doc.Concat(
+                Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
+                shouldMergeFirstTwoGroups
+                    ? Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
+                    : Doc.Null,
+                PrintIndentedGroup(node, groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
+            );
 
-            var groups = new List<List<Doc>>();
-            var currentGroup = new List<Doc> { printedNodes[0].Doc };
+            return oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
+                ? expanded
+                : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
+        }
+
+        private static void FlattenAndPrintNodes(
+            ExpressionSyntax expression,
+            List<PrintedNode> printedNodes
+        ) {
+            /*
+              We need to flatten things out because the AST has them this way
+              InvocationExpression
+              Expression                        ArgumentList
+              this.DoSomething().DoSomething    ()
+              
+              MemberAccessExpression
+              Expression            OperatorToken   Name
+              this.DoSomething()    .               DoSomething
+              
+              InvocationExpression
+              Expression            ArgumentList
+              this.DoSomething      ()
+              
+              MemberAccessExpression
+              Expression    OperatorToken   Name
+              this          .               DoSomething
+              
+              And we want to work with them from Left to Right
+            */
+            if (expression is InvocationExpressionSyntax invocationExpressionSyntax)
+            {
+                FlattenAndPrintNodes(invocationExpressionSyntax.Expression, printedNodes);
+                printedNodes.Add(
+                    new PrintedNode(
+                        invocationExpressionSyntax,
+                        ArgumentList.Print(invocationExpressionSyntax.ArgumentList)
+                    )
+                );
+            }
+            else if (expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax)
+            {
+                FlattenAndPrintNodes(memberAccessExpressionSyntax.Expression, printedNodes);
+                printedNodes.Add(
+                    new PrintedNode(
+                        memberAccessExpressionSyntax,
+                        Doc.Concat(
+                            Token.Print(memberAccessExpressionSyntax.OperatorToken),
+                            Node.Print(memberAccessExpressionSyntax.Name)
+                        )
+                    )
+                );
+            }
+            else if (
+                expression is ConditionalAccessExpressionSyntax conditionalAccessExpressionSyntax
+            ) {
+                printedNodes.Add(
+                    new PrintedNode(
+                        conditionalAccessExpressionSyntax,
+                        Doc.Concat(
+                            Node.Print(conditionalAccessExpressionSyntax.Expression),
+                            Token.Print(conditionalAccessExpressionSyntax.OperatorToken)
+                        )
+                    )
+                );
+                FlattenAndPrintNodes(conditionalAccessExpressionSyntax.WhenNotNull, printedNodes);
+            }
+            else
+            {
+                printedNodes.Add(new PrintedNode(expression, Node.Print(expression)));
+            }
+        }
+
+        private static List<List<PrintedNode>> GroupPrintedNodes(List<PrintedNode> printedNodes)
+        {
+            // We want to group the printed nodes in the following manner
+            //
+            //   a().b.c().d().e
+            // will be grouped as
+            //   [
+            //     [Identifier, InvocationExpression],
+            //     [MemberAccessExpression, MemberAccessExpression, InvocationExpression],
+            //     [MemberAccessExpression, InvocationExpression],
+            //     [MemberAccessExpression],
+            //   ]
+
+            // so that we can print it as
+            //   a()
+            //     .b.c()
+            //     .d()
+            //     .e
+
+            // The first group is the first node followed by
+            //   - as many InvocationExpression as possible
+            //       < fn()()() >.something()
+            //   - as many array accessors as possible
+            //       < fn()[0][1][2] >.something()
+            //   - then, as many MemberAccessExpression as possible but the last one
+            //       < this.items >.something()
+
+            var groups = new List<List<PrintedNode>>();
+            var currentGroup = new List<PrintedNode> { printedNodes[0] };
             var index = 1;
             for (; index < printedNodes.Count; index++)
             {
-                if (printedNodes[index].Node is MemberAccessExpressionSyntax)
+                if (printedNodes[index].Node is InvocationExpressionSyntax)
                 {
-                    currentGroup.Add(printedNodes[index].Doc);
+                    currentGroup.Add(printedNodes[index]);
                 }
                 else
                 {
@@ -78,29 +168,33 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 }
             }
 
-            // TODO GH-7 there is a lot more code in prettier for how to get this all working, also include some documents
-            if (printedNodes[index].Node is MemberAccessExpressionSyntax)
+            if (printedNodes[0].Node is not InvocationExpressionSyntax)
             {
-                currentGroup.Add(printedNodes[index].Doc);
-                index++;
+                for (; index + 1 < printedNodes.Count; ++index)
+                {
+                    if (
+                        IsMemberish(printedNodes[index].Node)
+                        && IsMemberish(printedNodes[index + 1].Node)
+                    ) {
+                        currentGroup.Add(printedNodes[index]);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
             }
 
             groups.Add(currentGroup);
-            currentGroup = new List<Doc>();
+            currentGroup = new List<PrintedNode>();
 
             var hasSeenInvocationExpression = false;
             for (; index < printedNodes.Count; index++)
             {
                 if (hasSeenInvocationExpression && IsMemberish(printedNodes[index].Node))
                 {
-                    // [0] should be appended at the end of the group instead of the
-                    // beginning of the next one
-                    // if (printedNodes[i].node.computed && isNumericLiteral(printedNodes[i].node.property)) {
-                    //     currentGroup.push(printedNodes[i]);
-                    //     continue;
-                    // }
                     groups.Add(currentGroup);
-                    currentGroup = new List<Doc>();
+                    currentGroup = new List<PrintedNode>();
                     hasSeenInvocationExpression = false;
                 }
 
@@ -108,12 +202,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 {
                     hasSeenInvocationExpression = true;
                 }
-                currentGroup.Add(printedNodes[index].Doc);
-                // if (printedNodes[i].node.comments && printedNodes[i].node.comments.some(comment => comment.trailing)) {
-                //     groups.push(currentGroup);
-                //     currentGroup = [];
-                //     hasSeenCallExpression = false;
-                // }
+                currentGroup.Add(printedNodes[index]);
             }
 
             if (currentGroup.Any())
@@ -121,31 +210,73 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 groups.Add(currentGroup);
             }
 
-            var cutoff = 3;
-            if (groups.Count < cutoff)
-            {
-                return Doc.Group(groups.SelectMany(o => o).ToArray());
-            }
-
-            return Doc.Concat(Doc.Group(groups[0].ToArray()), PrintIndentedGroup(groups.Skip(1)));
+            return groups;
         }
 
         private static bool IsMemberish(CSharpSyntaxNode node)
         {
-            return node is MemberAccessExpressionSyntax;
+            return node is MemberAccessExpressionSyntax or ConditionalAccessExpressionSyntax;
         }
 
-        private static Doc PrintIndentedGroup(IEnumerable<List<Doc>> groups)
-        {
-            if (!groups.Any())
+        private static Doc PrintIndentedGroup(
+            ExpressionSyntax node,
+            IList<List<PrintedNode>> groups
+        ) {
+            if (groups.Count == 0)
             {
                 return Doc.Null;
             }
 
-            // TODO GH-7 softline here?
-            return Doc.Indent(
-                Doc.Group(Doc.Join(Doc.SoftLine, groups.Select(o => Doc.Group(o.ToArray()))))
+            return Doc.IndentIf(
+                node.Parent is not ConditionalExpressionSyntax,
+                Doc.Group(
+                    Doc.HardLine,
+                    Doc.Join(
+                        Doc.HardLine,
+                        groups.Select(o => Doc.Group(o.Select(o => o.Doc).ToArray()))
+                    )
+                )
             );
+        }
+
+        // There are cases where merging the first two groups looks better
+        // For example
+        /*
+            // without merging we get this
+            this
+                .CallMethod()
+                .CallMethod(); 
+
+            // merging gives us this
+            this.CallMethod()
+                .CallMethod();
+         */
+        private static bool ShouldMergeFirstTwoGroups(List<List<PrintedNode>> groups)
+        {
+            if (groups.Count < 2 || groups[0].Count != 1)
+            {
+                return false;
+            }
+
+            var firstNode = groups[0][0].Node;
+
+            if (
+                firstNode is IdentifierNameSyntax identifierNameSyntax
+                && identifierNameSyntax.Identifier.Text.Length <= 4
+            ) {
+                return true;
+            }
+
+            return firstNode is ThisExpressionSyntax or PredefinedTypeSyntax;
         }
     }
 }
+
+// TODO 7
+// PRs to review
+// https://github.com/belav/aspnetcore/pull/29/files
+// https://github.com/belav/moq4/pull/12
+// https://github.com/belav/AutoMapper/pull/10
+
+
+

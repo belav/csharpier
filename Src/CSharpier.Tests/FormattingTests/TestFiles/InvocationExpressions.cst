@@ -8,21 +8,182 @@ class ClassName
             .DoSomething___________________()
             .DoSomething___________________();
 
+        AnIdentifier
+            .DoSomething___________________()
+            .DoSomething___________________()
+            .DoSomething___________________();
+
         this.Method(
-            "ljkasdfkljasdlkjfklajsdfkjlasdfkjlasdkljfajklsdfkjasdf",
-            "kljasdfkljaslkjdfljaksdfkjlaksljfaksjldf"
+            someParameter__________________________________,
+            someParameter__________________________________
         );
 
-        var superLongMethodNameForceLine_____________________ =
-            someFactoryName.SuperLongMethodNameForceLine();
-
-        // this should be changed by #7
-        var superLongMethodNameForceLine__________________________ =
-            someFactoryName.SuperLongMethodNameForceLine____________()
-                .SomeOtherReallyLongMethodName();
-
-        this.WhenThereExists________________(
-            a.Website().WithDomainName("test-integration.insite.com")
+        this.SomeMethod(
+            SomeOtherMethod(parameter__________________________________________________)
         );
+
+        var superLongName____________________________________ =
+            someOtherName.CallSomeMethod________________();
+
+        var superLongName_______________ = someOtherName____________
+            .CallSomeMethod______________()
+            .CallSomeMethod______________();
+
+        var someValue = someOtherValue.Where(o => someLongCondition).Where(o => someLongCondition);
+
+        var someValue = someOtherValue
+            .Where(o => someLongCondition__________________________)
+            .Where(o => someLongCondition__________________________);
+
+        var someValue = someOtherValue
+            .Where(o => someLongCondition__________________________)
+            .Where(o => someLongCondition__________________________)
+            .Where(o => someLongCondition__________________________);
+
+        roleNames
+            .ToList()
+            .Where(o => someLongCondition)
+            .Where(o => someLongCondition)
+            .Where(o => someLongCondition);
+
+        this.SomeMethod(
+            SomeOtherMethod(parameter__________________________________________________)
+        );
+
+        roleNames
+            .ToList()
+            .ForEach(
+                role =>
+                    this.SomeProperty.Setup(o => longThing_______________________________________)
+            );
+
+        roleNames.Value
+            .Where(o => o.SomeProperty____________________________________)
+            .Select(o => o.SomethingElse);
+
+        return someCondition
+          ? CallMethod(
+                someLongParameter____________________________,
+                someLongParameter____________________________
+            )
+          : Something.CallMethod(
+                someLongParameter____________________________,
+                someLongParameter____________________________
+            );
+
+        string.Equals(
+            firstParameter__________,
+            secondParameter_________,
+            StringComparison.OrdinalIgnoreCase
+        );
+
+        var someVariable = someObject.Property.CallMethod(
+            someValue => someValue.SomeProperty == someOtherValue___________________________________
+        );
+
+        CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            );
+
+        CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            );
+
+        // comment shouldn't do weird stuff
+        CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            );
+
+        this.CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            );
+
+        string.CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            );
+
+        o.CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            )
+            .CallMethod(
+                firstParameter____________________________,
+                secondParameter___________________________
+            );
+
+        CallMethod<string>(
+                one__________________________________,
+                two__________________________________
+            )
+            .CallMethod(
+                one__________________________________,
+                two__________________________________
+            );
+
+        SomeObject?
+            .CallMethod(parameter_______________________________________________________________)
+            .ToArray();
+
+        SomeObject
+            .CallMethod(parameter_______________________________________________________________)
+            .ToArray();
+
+        // comment shouldn't do weird stuff
+        SomeObject.CallMethod();
+
+        CallMethod(
+                lambdaWithBlock =>
+                {
+                    return;
+                }
+            )
+            .CallMethod()
+            .CallMethod();
+
+        someObject.CallMethod(
+            lambdaWithBlock =>
+            {
+                return;
+            }
+        );
+
+        o.CallMethod(parameter_____________, parameter_____________)
+            .CallMethod(parameter_____________, parameter_____________);
+
+        this.CallMethod()
+            .CallMethod__________________(one_____________________, two_____________________);
     }
 }
