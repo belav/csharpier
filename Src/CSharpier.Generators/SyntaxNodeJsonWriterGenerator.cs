@@ -27,7 +27,8 @@ namespace CSharpier.Generators
 
         private string GenerateSource()
         {
-            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
+            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly
+                .GetTypes()
                 .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o))
                 .OrderBy(o => o.Name)
                 .ToList();
@@ -116,7 +117,8 @@ namespace CSharpier.Generators
                         Ignored.PropertiesByType.ContainsKey(type)
                         && Ignored.PropertiesByType[type].Contains(camelCaseName)
                     )
-                ) {
+                )
+                {
                     continue;
                 }
 
@@ -142,7 +144,8 @@ namespace CSharpier.Generators
                     typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType)
                     || propertyType == typeof(SyntaxToken)
                     || propertyType == typeof(SyntaxTrivia)
-                ) {
+                )
+                {
                     var methodName = "WriteSyntaxNode";
                     if (propertyType == typeof(SyntaxToken))
                     {
@@ -183,7 +186,8 @@ namespace CSharpier.Generators
                     )
                     || propertyType == typeof(SyntaxTokenList)
                     || propertyType == typeof(SyntaxTriviaList)
-                ) {
+                )
+                {
                     var methodName = "WriteSyntaxNode";
                     if (propertyType == typeof(SyntaxTokenList))
                     {

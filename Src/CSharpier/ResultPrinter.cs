@@ -8,7 +8,8 @@ namespace CSharpier
             CommandLineFormatterResult result,
             ILogger logger,
             CommandLineOptions commandLineOptions
-        ) {
+        )
+        {
             logger.LogInformation(
                 PadToSize("Total time: ", 80) + ReversePad(result.ElapsedMilliseconds + "ms")
             );

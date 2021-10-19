@@ -15,7 +15,8 @@ namespace CSharpier.DocPrinter
             int remainingWidth,
             Dictionary<string, PrintMode> groupModeMap,
             Indenter indenter
-        ) {
+        )
+        {
             var returnFalseIfMoreStringsFound = false;
             var newCommands = new Stack<PrintCommand>();
             newCommands.Push(nextCommand);

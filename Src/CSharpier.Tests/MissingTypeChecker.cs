@@ -21,13 +21,15 @@ namespace CSharpier.Tests
                 directory = directory.Parent;
             }
 
-            var files = Directory.GetFiles(
+            var files = Directory
+                .GetFiles(
                     Path.Combine(directory.FullName, "CSharpier/SyntaxPrinter/SyntaxNodePrinters")
                 )
                 .Select(o => Path.GetFileNameWithoutExtension(o) + "Syntax")
                 .ToList();
 
-            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
+            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly
+                .GetTypes()
                 .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o))
                 .ToList();
 
@@ -39,7 +41,8 @@ namespace CSharpier.Tests
                 if (
                     typeof(StructuredTriviaSyntax).IsAssignableFrom(type)
                     || typeof(XmlNodeSyntax).IsAssignableFrom(type)
-                ) {
+                )
+                {
                     continue;
                 }
 

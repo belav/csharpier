@@ -11,8 +11,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.PrintWithSuffix(node.StackAllocKeyword, " "),
                 Node.Print(node.Type),
                 node.Initializer != null
-                    ? Doc.Concat(" ", InitializerExpression.Print(node.Initializer))
-                    : string.Empty
+                  ? Doc.Concat(" ", InitializerExpression.Print(node.Initializer))
+                  : string.Empty
             );
         }
     }

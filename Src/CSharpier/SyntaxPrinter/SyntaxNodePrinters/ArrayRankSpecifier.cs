@@ -21,14 +21,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Doc.Group(
                 Token.Print(node.OpenBracketToken),
                 node.Sizes.Any()
-                    ? Doc.Concat(
-                          Doc.Indent(
-                              Doc.SoftLine,
-                              SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.Line)
-                          ),
-                          Doc.SoftLine
-                      )
-                    : Doc.Null,
+                  ? Doc.Concat(
+                        Doc.Indent(
+                            Doc.SoftLine,
+                            SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.Line)
+                        ),
+                        Doc.SoftLine
+                    )
+                  : Doc.Null,
                 Token.Print(node.CloseBracketToken)
             );
         }

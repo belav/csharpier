@@ -31,7 +31,8 @@ namespace Generators
         {
             var assembly = GetType().Assembly;
             var baseName = assembly.GetName().Name;
-            var resourceName = relativePath.TrimStart('.')
+            var resourceName = relativePath
+                .TrimStart('.')
                 .Replace(Path.DirectorySeparatorChar, '.')
                 .Replace(Path.AltDirectorySeparatorChar, '.');
 

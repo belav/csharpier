@@ -13,12 +13,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.PrintWithSuffix(
                     node.ColonToken,
                     node.Parent
-                        is SubpatternSyntax
-                        {
-                            Pattern: RecursivePatternSyntax{ Type: null }
-                        }
-                        ? Doc.Line
-                        : " "
+                        is SubpatternSyntax { Pattern: RecursivePatternSyntax { Type: null } }
+                      ? Doc.Line
+                      : " "
                 )
             );
         }

@@ -40,7 +40,8 @@ namespace CSharpier
             IFileSystem fileSystem,
             ILogger logger,
             CancellationToken cancellationToken
-        ) {
+        )
+        {
             var ignore = new Ignore.Ignore();
             var ignoreFilePath = FindIgnorePath(baseDirectoryPath, fileSystem);
             if (ignoreFilePath == null)
@@ -53,7 +54,8 @@ namespace CSharpier
                     ignoreFilePath,
                     cancellationToken
                 )
-            ) {
+            )
+            {
                 try
                 {
                     ignore.Add(line);

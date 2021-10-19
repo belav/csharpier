@@ -64,7 +64,8 @@ namespace Namespace { }
 
             var result = AreEqual(left, right);
 
-            result.Should()
+            result
+                .Should()
                 .Be(
                     @"----------------------------- Original: Around Line 2 -----------------------------
 public class ConstructorWithBase

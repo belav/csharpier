@@ -22,7 +22,8 @@ namespace CSharpier.Tests.Utilities
         {
             var result = PrintDifference("value", "value   ");
 
-            result.Should()
+            result
+                .Should()
                 .Be(
                     @"----------------------------- Expected: Around Line 1 -----------------------------
 value
@@ -37,7 +38,8 @@ value···
         {
             var result = PrintDifference("value", "value\t");
 
-            result.Should()
+            result
+                .Should()
                 .Be(
                     @"----------------------------- Expected: Around Line 1 -----------------------------
 value
@@ -52,7 +54,8 @@ value→
         {
             var result = PrintDifference("lineEndings\r\ndiffer", "lineEndings\ndiffer");
 
-            result.Should()
+            result
+                .Should()
                 .Be(
                     @"The file contained different line endings than formatting it would result in.
 "
@@ -64,7 +67,8 @@ value→
         {
             var result = PrintDifference("one", "two");
 
-            result.Should()
+            result
+                .Should()
                 .Be(
                     @"----------------------------- Expected: Around Line 1 -----------------------------
 one
@@ -87,7 +91,8 @@ three
 four"
             );
 
-            result.Should()
+            result
+                .Should()
                 .Be(
                     @"----------------------------- Expected: Around Line 3 -----------------------------
 two
@@ -113,7 +118,8 @@ three
 four"
             );
 
-            result.Should()
+            result
+                .Should()
                 .Be(
                     @"----------------------------- Expected: Around Line 4 -----------------------------
 three

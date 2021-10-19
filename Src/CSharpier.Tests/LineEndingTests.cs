@@ -59,7 +59,8 @@ four"";
         public void LineEndings_In_Verbatim_String_Should_Respect_Options(
             string newLine,
             EndOfLine endOfLine
-        ) {
+        )
+        {
             var code =
                 @$"class ClassName
 {{
@@ -77,7 +78,8 @@ four"";
         public void Escaped_LineEndings_In_Verbatim_String_Should_Remain(
             string escapedNewLine,
             EndOfLine endOfLine
-        ) {
+        )
+        {
             var code =
                 @$"class ClassName
 {{

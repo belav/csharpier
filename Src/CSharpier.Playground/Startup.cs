@@ -33,7 +33,8 @@ namespace CSharpier.Playground
             IApplicationBuilder app,
             IWebHostEnvironment env,
             ILoggerFactory loggerFactory
-        ) {
+        )
+        {
             loggerFactory.AddFile("App_Data/logs_{Date}.txt");
 
             if (env.IsDevelopment())

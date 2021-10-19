@@ -20,7 +20,8 @@ namespace CSharpier
             string filePath,
             IFileSystem fileSystem,
             CancellationToken cancellationToken
-        ) {
+        )
+        {
             var unableToDetectEncoding = false;
 
             await Semaphore.WaitAsync(cancellationToken);
@@ -47,7 +48,6 @@ namespace CSharpier
 
                 return new FileReaderResult(encoding, fileContents, unableToDetectEncoding);
             }
-
             finally
             {
                 Semaphore.Release();

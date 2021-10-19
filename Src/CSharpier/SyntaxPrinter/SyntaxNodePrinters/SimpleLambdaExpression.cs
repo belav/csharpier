@@ -14,8 +14,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 " ",
                 Token.Print(node.ArrowToken),
                 node.Body is BlockSyntax blockSyntax
-                    ? Block.Print(blockSyntax)
-                    : Doc.Indent(Doc.Line, Node.Print(node.Body))
+                  ? Block.Print(blockSyntax)
+                  : Doc.Indent(Doc.Line, Node.Print(node.Body))
             );
         }
     }

@@ -11,7 +11,8 @@ namespace CSharpier.SyntaxPrinter
         public static Doc PrintWithConditionalSpace(
             IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses,
             string groupId
-        ) {
+        )
+        {
             return Print(constraintClauses, groupId);
         }
 
@@ -23,7 +24,8 @@ namespace CSharpier.SyntaxPrinter
         private static Doc Print(
             IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses,
             string? groupId
-        ) {
+        )
+        {
             var constraintClausesList = constraintClauses.ToList();
 
             if (constraintClausesList.Count == 0)
@@ -39,8 +41,8 @@ namespace CSharpier.SyntaxPrinter
             return Doc.Group(
                 Doc.Indent(groupId != null ? Doc.IfBreak(" ", prefix, groupId) : prefix),
                 groupId != null
-                    ? Doc.IfBreak(Doc.Align(2, body), Doc.Indent(body), groupId)
-                    : Doc.Indent(body)
+                  ? Doc.IfBreak(Doc.Align(2, body), Doc.Indent(body), groupId)
+                  : Doc.Indent(body)
             );
         }
     }

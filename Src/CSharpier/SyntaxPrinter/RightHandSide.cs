@@ -14,7 +14,8 @@ namespace CSharpier.SyntaxPrinter
             Doc leftDoc,
             Doc operatorDoc,
             ExpressionSyntax rightNode
-        ) {
+        )
+        {
             var layout = DetermineLayout(leftNode, rightNode);
 
             var groupId = Guid.NewGuid().ToString();
@@ -72,7 +73,8 @@ namespace CSharpier.SyntaxPrinter
             if (
                 !isTail
                 && rightNode is AssignmentExpressionSyntax { Right: AssignmentExpressionSyntax }
-            ) {
+            )
+            {
                 return Layout.BreakAfterOperator;
             }
 
@@ -80,10 +82,7 @@ namespace CSharpier.SyntaxPrinter
             {
                 InitializerExpressionSyntax => Layout.BasicConcatWithoutLine,
                 BinaryExpressionSyntax
-                or CastExpressionSyntax
-                {
-                    Type: GenericNameSyntax
-                }
+                or CastExpressionSyntax { Type: GenericNameSyntax }
                 or ConditionalExpressionSyntax
                 {
                     Condition: BinaryExpressionSyntax or ParenthesizedExpressionSyntax

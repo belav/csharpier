@@ -12,8 +12,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Doc.Concat(
                 Node.Print(node.Type),
                 node.Identifier.Kind() != SyntaxKind.None
-                    ? Doc.Concat(" ", Token.Print(node.Identifier))
-                    : Doc.Null
+                  ? Doc.Concat(" ", Token.Print(node.Identifier))
+                  : Doc.Null
             );
         }
     }

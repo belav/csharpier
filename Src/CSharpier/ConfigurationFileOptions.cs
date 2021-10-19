@@ -28,7 +28,8 @@ namespace CSharpier
             string baseDirectoryPath,
             IFileSystem fileSystem,
             ILogger logger
-        ) {
+        )
+        {
             var configurationFileOptions = Create(baseDirectoryPath, fileSystem, logger);
 
             List<string[]> preprocessorSymbolSets;
@@ -38,7 +39,8 @@ namespace CSharpier
             }
             else
             {
-                preprocessorSymbolSets = configurationFileOptions.PreprocessorSymbolSets.Select(
+                preprocessorSymbolSets = configurationFileOptions.PreprocessorSymbolSets
+                    .Select(
                         o =>
                             o.Split(
                                 ",",
@@ -63,15 +65,14 @@ namespace CSharpier
             string baseDirectoryPath,
             IFileSystem fileSystem,
             ILogger? logger = null
-        ) {
+        )
+        {
             var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
 
             while (directoryInfo is not null)
             {
-                var file = directoryInfo.EnumerateFiles(
-                        ".csharpierrc*",
-                        SearchOption.TopDirectoryOnly
-                    )
+                var file = directoryInfo
+                    .EnumerateFiles(".csharpierrc*", SearchOption.TopDirectoryOnly)
                     .Where(
                         o => validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase)
                     )
@@ -96,8 +97,8 @@ namespace CSharpier
                 }
 
                 return contents.TrimStart().StartsWith("{")
-                    ? ReadJson(contents)
-                    : ReadYaml(contents);
+                  ? ReadJson(contents)
+                  : ReadYaml(contents);
             }
 
             return new ConfigurationFileOptions();
@@ -110,9 +111,8 @@ namespace CSharpier
 
         private static ConfigurationFileOptions ReadYaml(string contents)
         {
-            var deserializer = new DeserializerBuilder().WithNamingConvention(
-                    CamelCaseNamingConvention.Instance
-                )
+            var deserializer = new DeserializerBuilder()
+                .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .Build();
 
             return deserializer.Deserialize<ConfigurationFileOptions>(contents);

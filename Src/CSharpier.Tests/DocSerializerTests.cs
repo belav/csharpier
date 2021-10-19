@@ -35,7 +35,8 @@ namespace CSharpier.Tests
 
             var actual = DocSerializer.Serialize(doc);
 
-            actual.Should()
+            actual
+                .Should()
                 .Be(
                     @"Doc.Concat(
     Doc.Line,
@@ -59,7 +60,8 @@ namespace CSharpier.Tests
 
             var actual = DocSerializer.Serialize(doc);
 
-            actual.Should()
+            actual
+                .Should()
                 .Be(
                     @"Doc.Group(
     Doc.Null,
@@ -75,7 +77,8 @@ namespace CSharpier.Tests
 
             var actual = DocSerializer.Serialize(doc);
 
-            actual.Should()
+            actual
+                .Should()
                 .Be(
                     @"Doc.GroupWithId(
     ""1"",
@@ -95,7 +98,8 @@ namespace CSharpier.Tests
 
             var actual = DocSerializer.Serialize(doc);
 
-            actual.Should()
+            actual
+                .Should()
                 .Be(
                     @"Doc.ConditionalGroup(
     Doc.Concat(
@@ -117,7 +121,8 @@ namespace CSharpier.Tests
 
             var actual = DocSerializer.Serialize(doc);
 
-            actual.Should()
+            actual
+                .Should()
                 .Be(
                     @"Doc.Align(
     2,
@@ -134,7 +139,8 @@ namespace CSharpier.Tests
 
             var actual = DocSerializer.Serialize(doc);
 
-            actual.Should()
+            actual
+                .Should()
                 .Be(
                     @"Doc.ForceFlat(
     Doc.Null,
@@ -150,7 +156,8 @@ namespace CSharpier.Tests
 
             var actual = DocSerializer.Serialize(doc);
 
-            actual.Should()
+            actual
+                .Should()
                 .Be(
                     @"Doc.Indent(
     Doc.Null,
@@ -166,7 +173,8 @@ namespace CSharpier.Tests
 
             var actual = DocSerializer.Serialize(doc);
 
-            actual.Should()
+            actual
+                .Should()
                 .Be(
                     @"Doc.IndentIfBreak(
     Doc.Null,
@@ -182,7 +190,8 @@ namespace CSharpier.Tests
 
             var actual = DocSerializer.Serialize(doc);
 
-            actual.Should()
+            actual
+                .Should()
                 .Be(
                     @"Doc.IfBreak(
     Doc.Null,
@@ -199,7 +208,8 @@ namespace CSharpier.Tests
 
             var actual = DocSerializer.Serialize(doc);
 
-            actual.Should()
+            actual
+                .Should()
                 .Be(
                     @"Doc.IfBreak(
     Doc.Null,

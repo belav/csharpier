@@ -34,7 +34,8 @@ namespace CSharpier
             IgnoreFile ignoreFile,
             CommandLineFormatterResult result,
             ILogger logger
-        ) {
+        )
+        {
             this.BaseDirectoryPath = baseDirectoryPath;
             this.Path = path;
             this.PrinterOptions = printerOptions;
@@ -52,7 +53,8 @@ namespace CSharpier
             IConsole console,
             ILogger logger,
             CancellationToken cancellationToken
-        ) {
+        )
+        {
             var stopwatch = Stopwatch.StartNew();
             var result = new CommandLineFormatterResult();
 
@@ -147,11 +149,8 @@ namespace CSharpier
             }
             else
             {
-                var tasks = this.FileSystem.Directory.EnumerateFiles(
-                        this.Path,
-                        "*.cs",
-                        SearchOption.AllDirectories
-                    )
+                var tasks = this.FileSystem.Directory
+                    .EnumerateFiles(this.Path, "*.cs", SearchOption.AllDirectories)
                     .Select(o => FormatFileFromPath(o, cancellationToken))
                     .ToArray();
                 try
@@ -209,7 +208,8 @@ namespace CSharpier
             string filePath,
             Encoding encoding,
             CancellationToken cancellationToken
-        ) {
+        )
+        {
             cancellationToken.ThrowIfCancellationRequested();
 
             CSharpierResult result;
@@ -263,7 +263,8 @@ namespace CSharpier
             string fileContents,
             CSharpierResult result,
             CancellationToken cancellationToken
-        ) {
+        )
+        {
             if (!this.CommandLineOptions.Fast)
             {
                 var syntaxNodeComparer = new SyntaxNodeComparer(
@@ -296,7 +297,8 @@ namespace CSharpier
                 this.CommandLineOptions.Check
                 && !this.CommandLineOptions.ShouldWriteStandardOut
                 && result.Code != fileContents
-            ) {
+            )
+            {
                 var difference = StringDiffer.PrintFirstDifference(result.Code, fileContents);
                 WriteWarning(filePath, $"Was not formatted.\n{difference}");
                 Interlocked.Increment(ref this.Result.UnformattedFiles);
@@ -308,7 +310,8 @@ namespace CSharpier
             CSharpierResult result,
             string? fileContents,
             Encoding? encoding
-        ) {
+        )
+        {
             if (this.CommandLineOptions.ShouldWriteStandardOut)
             {
                 this.Console.Write(result.Code);
@@ -319,7 +322,8 @@ namespace CSharpier
                     !this.CommandLineOptions.Check
                     && !this.CommandLineOptions.SkipWrite
                     && result.Code != fileContents
-                ) {
+                )
+                {
                     // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
                     this.FileSystem.File.WriteAllText(filePath, result.Code, encoding);
                 }
@@ -334,13 +338,15 @@ namespace CSharpier
         private static int ReturnExitCode(
             CommandLineOptions commandLineOptions,
             CommandLineFormatterResult result
-        ) {
+        )
+        {
             if (
                 (commandLineOptions.Check && result.UnformattedFiles > 0)
                 || result.FailedSyntaxTreeValidation > 0
                 || result.ExceptionsFormatting > 0
                 || result.ExceptionsValidatingSource > 0
-            ) {
+            )
+            {
                 return 1;
             }
 

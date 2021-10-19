@@ -21,12 +21,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Token.PrintWithSuffix(node.EqualsKeyword, " "),
                     Node.Print(node.RightExpression),
                     node.Into != null
-                        ? Doc.Concat(
-                              Doc.Line,
-                              Token.PrintWithSuffix(node.Into.IntoKeyword, " "),
-                              Token.Print(node.Into.Identifier)
-                          )
-                        : Doc.Null
+                      ? Doc.Concat(
+                            Doc.Line,
+                            Token.PrintWithSuffix(node.Into.IntoKeyword, " "),
+                            Token.Print(node.Into.Identifier)
+                        )
+                      : Doc.Null
                 )
             );
         }

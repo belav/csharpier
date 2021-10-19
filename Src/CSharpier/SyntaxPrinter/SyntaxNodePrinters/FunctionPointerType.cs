@@ -13,8 +13,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.Print(node.DelegateKeyword),
                 Token.PrintWithSuffix(node.AsteriskToken, " "),
                 node.CallingConvention != null
-                    ? PrintCallingConvention(node.CallingConvention)
-                    : Doc.Null,
+                  ? PrintCallingConvention(node.CallingConvention)
+                  : Doc.Null,
                 Token.Print(node.ParameterList.LessThanToken),
                 Doc.Indent(
                     Doc.Group(
@@ -40,16 +40,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Doc.Concat(
                 Token.Print(node.ManagedOrUnmanagedKeyword),
                 node.UnmanagedCallingConventionList != null
-                    ? Doc.Concat(
-                          Token.Print(node.UnmanagedCallingConventionList.OpenBracketToken),
-                          SeparatedSyntaxList.Print(
-                              node.UnmanagedCallingConventionList.CallingConventions,
-                              o => Token.Print(o.Name),
-                              " "
-                          ),
-                          Token.Print(node.UnmanagedCallingConventionList.CloseBracketToken)
-                      )
-                    : Doc.Null
+                  ? Doc.Concat(
+                        Token.Print(node.UnmanagedCallingConventionList.OpenBracketToken),
+                        SeparatedSyntaxList.Print(
+                            node.UnmanagedCallingConventionList.CallingConventions,
+                            o => Token.Print(o.Name),
+                            " "
+                        ),
+                        Token.Print(node.UnmanagedCallingConventionList.CloseBracketToken)
+                    )
+                  : Doc.Null
             );
         }
     }

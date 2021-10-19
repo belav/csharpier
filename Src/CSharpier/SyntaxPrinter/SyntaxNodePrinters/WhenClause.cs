@@ -16,8 +16,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             return Doc.Group(
                 node.Parent is CasePatternSwitchLabelSyntax
-                    ? Doc.Align(6, content)
-                    : Doc.Indent(content)
+                  ? Doc.Align(6, content)
+                  : Doc.Indent(content)
             );
         }
     }

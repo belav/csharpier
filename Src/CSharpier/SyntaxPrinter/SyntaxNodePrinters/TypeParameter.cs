@@ -17,8 +17,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 AttributeLists.Print(node, node.AttributeLists),
                 hasAttribute ? Doc.IndentIfBreak(Doc.Line, groupId) : Doc.Null,
                 node.VarianceKeyword.Kind() != SyntaxKind.None
-                    ? Token.PrintWithSuffix(node.VarianceKeyword, " ")
-                    : Doc.Null,
+                  ? Token.PrintWithSuffix(node.VarianceKeyword, " ")
+                  : Doc.Null,
                 Token.Print(node.Identifier)
             );
 

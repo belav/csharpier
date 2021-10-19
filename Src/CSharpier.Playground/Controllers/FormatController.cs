@@ -40,7 +40,8 @@ namespace CSharpier.Playground.Controllers
         public FormatController(
             IWebHostEnvironment webHostEnvironment,
             ILogger<FormatController> logger
-        ) {
+        )
+        {
             this.webHostEnvironment = webHostEnvironment;
             this.logger = logger;
         }

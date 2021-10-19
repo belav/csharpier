@@ -45,7 +45,8 @@ namespace CSharpier.DocTypes
         private static void RemoveInitialDoubleHardLine(
             IList<Doc> docs,
             ref bool removeNextHardLine
-        ) {
+        )
+        {
             var x = 0;
             while (x < docs.Count)
             {

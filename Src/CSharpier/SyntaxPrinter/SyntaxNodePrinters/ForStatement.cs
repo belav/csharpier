@@ -24,14 +24,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             Doc.SoftLine,
                             Doc.Group(
                                 node.Declaration != null
-                                    ? VariableDeclaration.Print(node.Declaration)
-                                    : Doc.Null,
+                                  ? VariableDeclaration.Print(node.Declaration)
+                                  : Doc.Null,
                                 SeparatedSyntaxList.Print(node.Initializers, Node.Print, " "),
                                 Token.Print(node.FirstSemicolonToken)
                             ),
                             node.Condition != null
-                                ? Doc.Concat(Doc.Line, Node.Print(node.Condition))
-                                : Doc.SoftLine,
+                              ? Doc.Concat(Doc.Line, Node.Print(node.Condition))
+                              : Doc.SoftLine,
                             Token.Print(node.SecondSemicolonToken),
                             node.Incrementors.Any() ? Doc.Line : Doc.SoftLine,
                             Doc.Group(
