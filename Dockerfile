@@ -21,7 +21,6 @@ COPY ./Src/CSharpier.Playground/ClientApp/package-lock.json Src/CSharpier.Playgr
 WORKDIR /build/Src/CSharpier.Playground/ClientApp
 RUN npm ci
 COPY ./Src/CSharpier.Playground/ClientApp/ .
-ENV DISABLE_ESLINT_PLUGIN=true
 RUN npm run build
 
 WORKDIR /build
