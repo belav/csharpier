@@ -19,8 +19,9 @@ RUN dotnet restore "Src/CSharpier.Playground/CSharpier.Playground.csproj"
 COPY ./Src/CSharpier.Playground/ClientApp/package.json Src/CSharpier.Playground/ClientApp/
 COPY ./Src/CSharpier.Playground/ClientApp/package-lock.json Src/CSharpier.Playground/ClientApp/
 WORKDIR /build/Src/CSharpier.Playground/ClientApp
-RUN npm install
+RUN npm ci
 COPY ./Src/CSharpier.Playground/ClientApp/ .
+ENV DISABLE_ESLINT_PLUGIN=true
 RUN npm run build
 
 WORKDIR /build
