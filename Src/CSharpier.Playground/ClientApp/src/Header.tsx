@@ -60,7 +60,7 @@ const HeaderStyle = styled.div`
 
 const Left = styled.div<{ width: number }>`
     align-items: center;
-    width: calc(${props => props.width}% + 100px);
+    width: calc(${props => props.width}% + 64px);
     @media (max-width: 768px) {
         width: 100%;
     }
