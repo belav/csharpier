@@ -25,16 +25,17 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Doc.Line,
                 Token.Print(node.CloseBraceToken)
             );
-            return node.Parent
-                is not (
-                    ObjectCreationExpressionSyntax
-                    or ArrayCreationExpressionSyntax
-                    or ImplicitArrayCreationExpressionSyntax
-                    or ImplicitObjectCreationExpressionSyntax
-                )
-            && node.Kind() is not SyntaxKind.WithInitializerExpression
-                ? Doc.Group(result)
-                : result;
+            return
+                node.Parent
+                    is not (
+                        ObjectCreationExpressionSyntax
+                        or ArrayCreationExpressionSyntax
+                        or ImplicitArrayCreationExpressionSyntax
+                        or ImplicitObjectCreationExpressionSyntax
+                    )
+                && node.Kind() is not SyntaxKind.WithInitializerExpression
+              ? Doc.Group(result)
+              : result;
         }
     }
 }

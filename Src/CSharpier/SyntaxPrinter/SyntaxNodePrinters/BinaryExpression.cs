@@ -19,26 +19,26 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var shouldNotIndent =
                 node.Parent
                     is ArrowExpressionClauseSyntax
-                    or AssignmentExpressionSyntax
-                    or CatchFilterClauseSyntax
-                    or CheckedExpressionSyntax
-                    or DoStatementSyntax
-                    or EqualsValueClauseSyntax
-                    or IfStatementSyntax
-                    or ParenthesizedExpressionSyntax
-                    or ParenthesizedLambdaExpressionSyntax
-                    or SimpleLambdaExpressionSyntax
-                    or ReturnStatementSyntax
-                    or SwitchExpressionSyntax
-                    or SwitchStatementSyntax
-                    or WhereClauseSyntax
-                    or WhileStatementSyntax
+                        or AssignmentExpressionSyntax
+                        or CatchFilterClauseSyntax
+                        or CheckedExpressionSyntax
+                        or DoStatementSyntax
+                        or EqualsValueClauseSyntax
+                        or IfStatementSyntax
+                        or ParenthesizedExpressionSyntax
+                        or ParenthesizedLambdaExpressionSyntax
+                        or SimpleLambdaExpressionSyntax
+                        or ReturnStatementSyntax
+                        or SwitchExpressionSyntax
+                        or SwitchStatementSyntax
+                        or WhereClauseSyntax
+                        or WhileStatementSyntax
                 || node.Parent is ConditionalExpressionSyntax
                     && node.Parent.Parent is not ArgumentSyntax;
 
             return shouldNotIndent
-                ? Doc.Group(docs)
-                : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
+              ? Doc.Group(docs)
+              : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
         }
 
         [ThreadStatic]
@@ -106,7 +106,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         binaryExpressionSyntax.OperatorToken,
                         childBinary.OperatorToken
                     )
-                ) {
+                )
+                {
                     docs.AddRange(PrintBinaryExpression(childBinary));
                 }
                 else
@@ -117,8 +118,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 if (binaryOnTheRight)
                 {
                     return shouldGroup
-                        ? new List<Doc> { docs[0], Doc.Group(docs.Skip(1).ToList()) }
-                        : docs;
+                      ? new List<Doc> { docs[0], Doc.Group(docs.Skip(1).ToList()) }
+                      : docs;
                 }
 
                 var right = Doc.Concat(
@@ -131,7 +132,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 docs.Add(shouldGroup ? Doc.Group(right) : right);
                 return docs;
             }
-
             finally
             {
                 depth--;

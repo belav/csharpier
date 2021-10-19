@@ -14,23 +14,21 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.PrintWithSuffix(node.NewKeyword, " "),
                 Node.Print(node.Type),
                 node.ArgumentList != null
-                    ? Doc.GroupWithId(
-                          groupId,
-                          ArgumentListLike.Print(
-                              node.ArgumentList.OpenParenToken,
-                              node.ArgumentList.Arguments,
-                              node.ArgumentList.CloseParenToken
-                          )
-                      )
-                    : Doc.Null,
+                  ? Doc.GroupWithId(
+                        groupId,
+                        ArgumentListLike.Print(
+                            node.ArgumentList.OpenParenToken,
+                            node.ArgumentList.Arguments,
+                            node.ArgumentList.CloseParenToken
+                        )
+                    )
+                  : Doc.Null,
                 node.Initializer != null
-                    ? Doc.Concat(
-                          node.ArgumentList != null
-                              ? Doc.IfBreak(" ", Doc.Line, groupId)
-                              : Doc.Line,
-                          InitializerExpression.Print(node.Initializer)
-                      )
-                    : Doc.Null
+                  ? Doc.Concat(
+                        node.ArgumentList != null ? Doc.IfBreak(" ", Doc.Line, groupId) : Doc.Line,
+                        InitializerExpression.Print(node.Initializer)
+                    )
+                  : Doc.Null
             );
         }
     }

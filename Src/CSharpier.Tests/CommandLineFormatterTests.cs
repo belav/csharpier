@@ -32,7 +32,8 @@ namespace CSharpier.Tests
 
             var (_, lines) = this.Format();
 
-            lines.First()
+            lines
+                .First()
                 .Should()
                 .Be(
                     $"Warning {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
@@ -81,7 +82,8 @@ namespace CSharpier.Tests
 
             exitCode.Should().Be(1);
             this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
-            lines.First()
+            lines
+                .First()
                 .Should()
                 .StartWith(
                     $"Warning {Path.DirectorySeparatorChar}Unformatted.cs - Was not formatted."
@@ -140,7 +142,8 @@ namespace CSharpier.Tests
             string fileName,
             string ignoreContents,
             string baseDirectory
-        ) {
+        )
+        {
             var unformattedFilePath = fileName;
             WhenAFileExists(unformattedFilePath, UnformattedClassContent);
             WhenAFileExists(".csharpierignore", ignoreContents);
@@ -207,7 +210,8 @@ namespace CSharpier.Tests
             var path = this.fileSystem.Path.Combine(GetRootPath(), ".csharpierignore");
 
             exitCode.Should().Be(1);
-            lines.First()
+            lines
+                .First()
                 .Should()
                 .StartWith(
                     $"Error The .csharpierignore file at {path} could not be parsed due to the following line:"
@@ -264,7 +268,8 @@ namespace CSharpier.Tests
 
             result.Should().Be(contents);
 
-            lines.First()
+            lines
+                .First()
                 .Should()
                 .Be(
                     $"Warning {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
@@ -294,7 +299,8 @@ namespace CSharpier.Tests
 
             var result = GetFileContent("file1.cs");
 
-            result.Should()
+            result
+                .Should()
                 .Be(
                     @"public class ClassName
 {
@@ -320,7 +326,8 @@ namespace CSharpier.Tests
 
             var (_, lines) = this.Format();
 
-            lines.First()
+            lines
+                .First()
                 .Replace("\\", "/")
                 .Should()
                 .Be($"Warning The configuration file at {configPath} was empty.");
@@ -332,16 +339,16 @@ namespace CSharpier.Tests
             bool writeStdout = false,
             string standardInFileContents = null,
             params string[] directoryOrFilePaths
-        ) {
+        )
+        {
             if (directoryOrFilePaths.Length == 0)
             {
                 directoryOrFilePaths = new[] { GetRootPath() };
             }
             else
             {
-                directoryOrFilePaths = directoryOrFilePaths.Select(
-                        o => this.fileSystem.Path.Combine(GetRootPath(), o)
-                    )
+                directoryOrFilePaths = directoryOrFilePaths
+                    .Select(o => this.fileSystem.Path.Combine(GetRootPath(), o))
                     .ToArray();
             }
 

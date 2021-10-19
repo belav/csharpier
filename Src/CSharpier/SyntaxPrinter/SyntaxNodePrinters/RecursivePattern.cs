@@ -31,8 +31,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 result.Add(
                     node.Parent is SwitchExpressionArmSyntax or CasePatternSwitchLabelSyntax
-                        ? Doc.Null
-                        : Doc.SoftLine,
+                      ? Doc.Null
+                      : Doc.SoftLine,
                     Token.PrintLeadingTrivia(node.PositionalPatternClause.OpenParenToken),
                     Doc.Group(
                         Token.PrintWithoutLeadingTrivia(
@@ -45,8 +45,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                 subpatternNode =>
                                     Doc.Concat(
                                         subpatternNode.NameColon != null
-                                            ? NameColon.Print(subpatternNode.NameColon)
-                                            : Doc.Null,
+                                          ? NameColon.Print(subpatternNode.NameColon)
+                                          : Doc.Null,
                                         Node.Print(subpatternNode.Pattern)
                                     ),
                                 Doc.Line
@@ -84,8 +84,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                     subpatternNode =>
                                         Doc.Group(
                                             subpatternNode.NameColon != null
-                                                ? NameColon.Print(subpatternNode.NameColon)
-                                                : Doc.Null,
+                                              ? NameColon.Print(subpatternNode.NameColon)
+                                              : Doc.Null,
                                             Node.Print(subpatternNode.Pattern)
                                         ),
                                     Doc.Line

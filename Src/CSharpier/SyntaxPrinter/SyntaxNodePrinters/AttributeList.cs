@@ -47,11 +47,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                 attributeArgumentNode =>
                                     Doc.Concat(
                                         attributeArgumentNode.NameEquals != null
-                                            ? NameEquals.Print(attributeArgumentNode.NameEquals)
-                                            : Doc.Null,
+                                          ? NameEquals.Print(attributeArgumentNode.NameEquals)
+                                          : Doc.Null,
                                         attributeArgumentNode.NameColon != null
-                                            ? NameColon.Print(attributeArgumentNode.NameColon)
-                                            : Doc.Null,
+                                          ? NameColon.Print(attributeArgumentNode.NameColon)
+                                          : Doc.Null,
                                         Node.Print(attributeArgumentNode.Expression)
                                     ),
                                 Doc.Line
@@ -66,8 +66,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             docs.Add(
                 node.Attributes.Count > 1
-                    ? Doc.Indent(Doc.SoftLine, printSeparatedSyntaxList)
-                    : printSeparatedSyntaxList
+                  ? Doc.Indent(Doc.SoftLine, printSeparatedSyntaxList)
+                  : printSeparatedSyntaxList
             );
 
             docs.Add(

@@ -58,7 +58,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                             || o.Modifiers.Any()
                             || o.AttributeLists.Any()
                     )
-                ) {
+                )
+                {
                     separator = Doc.Line;
                 }
 
@@ -67,9 +68,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         separator,
                         Token.Print(node.AccessorList.OpenBraceToken),
                         Doc.Indent(
-                            node.AccessorList.Accessors.Select(
-                                    o => PrintAccessorDeclarationSyntax(o, separator)
-                                )
+                            node.AccessorList.Accessors
+                                .Select(o => PrintAccessorDeclarationSyntax(o, separator))
                                 .ToArray()
                         ),
                         separator,
@@ -96,11 +96,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Node.Print(node.Type),
                     " ",
                     explicitInterfaceSpecifierSyntax != null
-                        ? Doc.Concat(
-                              Node.Print(explicitInterfaceSpecifierSyntax.Name),
-                              Token.Print(explicitInterfaceSpecifierSyntax.DotToken)
-                          )
-                        : Doc.Null,
+                      ? Doc.Concat(
+                            Node.Print(explicitInterfaceSpecifierSyntax.Name),
+                            Token.Print(explicitInterfaceSpecifierSyntax.DotToken)
+                        )
+                      : Doc.Null,
                     identifier,
                     contents,
                     initializer != null ? EqualsValueClause.Print(initializer) : Doc.Null,
@@ -112,7 +112,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         private static Doc PrintAccessorDeclarationSyntax(
             AccessorDeclarationSyntax node,
             Doc separator
-        ) {
+        )
+        {
             var docs = new List<Doc>();
             if (node.AttributeLists.Count > 0 || node.Body != null || node.ExpressionBody != null)
             {

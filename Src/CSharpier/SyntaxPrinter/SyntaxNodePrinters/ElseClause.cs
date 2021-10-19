@@ -13,8 +13,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             return Doc.Concat(
                 Token.Print(node.ElseKeyword),
                 node.Statement is IfStatementSyntax ifStatementSyntax
-                    ? Doc.Concat(" ", IfStatement.Print(ifStatementSyntax))
-                    : OptionalBraces.Print(node.Statement)
+                  ? Doc.Concat(" ", IfStatement.Print(ifStatementSyntax))
+                  : OptionalBraces.Print(node.Statement)
             );
         }
     }

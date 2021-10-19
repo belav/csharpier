@@ -36,7 +36,8 @@ namespace CSharpier.DocPrinter
                 }
                 if (
                     doc is IBreakParent && (forceFlat == 0 || (forceFlat > 0 && doc is LiteralLine))
-                ) {
+                )
+                {
                     if (doc is HardLine { SkipBreakIfFirstInGroup: true } && canSkipBreak)
                     {
                         if (groupStack.Count > 1)
@@ -115,7 +116,8 @@ namespace CSharpier.DocPrinter
                         if (
                             forceFlat > 0
                             && concat.Contents[x] is LineDoc { IsLiteral: false } lineDoc
-                        ) {
+                        )
+                        {
                             concat.Contents[x] =
                                 lineDoc.Type == LineDoc.LineType.Soft ? string.Empty : " ";
                         }

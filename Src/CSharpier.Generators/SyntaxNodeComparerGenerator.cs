@@ -68,7 +68,8 @@ namespace CSharpier
             {"
             );
 
-            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly.GetTypes()
+            var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly
+                .GetTypes()
                 .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o))
                 .OrderBy(o => o.Name)
                 .ToList();
@@ -119,13 +120,14 @@ namespace CSharpier
                 if (
                     propertyName
                     is "Language"
-                    or "Parent"
-                    or "HasLeadingTrivia" // we modify/remove whitespace and new lines so we can't look at these properties.
-                    or "HasTrailingTrivia"
-                    or "ParentTrivia"
-                    or "Arity"
-                    or "SpanStart"
-                ) {
+                        or "Parent"
+                        or "HasLeadingTrivia" // we modify/remove whitespace and new lines so we can't look at these properties.
+                        or "HasTrailingTrivia"
+                        or "ParentTrivia"
+                        or "Arity"
+                        or "SpanStart"
+                )
+                {
                     continue;
                 }
 
@@ -139,7 +141,8 @@ namespace CSharpier
                         Ignored.PropertiesByType.ContainsKey(type)
                         && Ignored.PropertiesByType[type].Contains(camelCaseName)
                     )
-                ) {
+                )
+                {
                     continue;
                 }
 
@@ -178,7 +181,8 @@ namespace CSharpier
                         propertyType.IsGenericType
                         && propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>)
                     )
-                ) {
+                )
+                {
                     var compare = propertyType == typeof(SyntaxTokenList) ? "Compare" : "null";
                     sourceBuilder.AppendLine(
                         $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, {compare}, o => o.Span, originalNode.Span, formattedNode.Span);"
@@ -188,7 +192,8 @@ namespace CSharpier
                 else if (
                     propertyType.IsGenericType
                     && propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)
-                ) {
+                )
+                {
                     sourceBuilder.AppendLine(
                         $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, null, o => o.Span, originalNode.Span, formattedNode.Span);"
                     );

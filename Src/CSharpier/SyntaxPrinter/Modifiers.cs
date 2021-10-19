@@ -27,10 +27,10 @@ namespace CSharpier.SyntaxPrinter
                 Token.PrintWithoutLeadingTrivia(modifiers[0]),
                 " ",
                 modifiers.Count > 1
-                    ? Doc.Concat(
-                          modifiers.Skip(1).Select(o => Token.PrintWithSuffix(o, " ")).ToArray()
-                      )
-                    : Doc.Null
+                  ? Doc.Concat(
+                        modifiers.Skip(1).Select(o => Token.PrintWithSuffix(o, " ")).ToArray()
+                    )
+                  : Doc.Null
             );
         }
     }

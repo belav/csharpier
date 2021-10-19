@@ -22,7 +22,8 @@ namespace CSharpier
             string originalSourceCode,
             string newSourceCode,
             CancellationToken cancellationToken
-        ) {
+        )
+        {
             this.OriginalSourceCode = originalSourceCode;
             this.NewSourceCode = newSourceCode;
 
@@ -111,7 +112,8 @@ namespace CSharpier
         private CompareResult AreEqualIgnoringWhitespace(
             SyntaxNode originalStart,
             SyntaxNode formattedStart
-        ) {
+        )
+        {
             originalStack.Push((originalStart, originalStart));
             formattedStack.Push((formattedStart, formattedStart));
             while (originalStack.Count > 0)
@@ -133,7 +135,8 @@ namespace CSharpier
             Func<T, TextSpan> getSpan,
             TextSpan originalParentSpan,
             TextSpan newParentSpan
-        ) {
+        )
+        {
             for (var x = 0; x < originalList.Count || x < formattedList.Count; x++)
             {
                 if (x == originalList.Count)
@@ -149,7 +152,8 @@ namespace CSharpier
                 if (
                     originalList[x] is SyntaxNode originalNode
                     && formattedList[x] is SyntaxNode formattedNode
-                ) {
+                )
+                {
                     originalStack.Push((originalNode, originalNode.Parent));
                     formattedStack.Push((formattedNode, formattedNode.Parent));
                 }
@@ -191,7 +195,8 @@ namespace CSharpier
             SyntaxToken formattedToken,
             SyntaxNode? originalNode,
             SyntaxNode? formattedNode
-        ) {
+        )
+        {
             // when a verbatim string contains mismatched line endings they will become consistent
             // this validation will fail unless we also get them consistent here
             // adding a semi-complicated if check to determine when to do the string replacement
@@ -200,11 +205,11 @@ namespace CSharpier
             {
                 return NotEqual(
                     originalToken.Kind() == SyntaxKind.None
-                        ? originalNode?.Span
-                        : originalToken.Span,
+                      ? originalNode?.Span
+                      : originalToken.Span,
                     formattedToken.Kind() == SyntaxKind.None
-                        ? formattedNode?.Span
-                        : formattedToken.Span
+                      ? formattedNode?.Span
+                      : formattedToken.Span
                 );
             }
 
@@ -227,13 +232,13 @@ namespace CSharpier
                     originalTrivia.ToString(),
                     formattedTrivia.ToString()
                 )
-                    ? Equal
-                    : NotEqual(originalTrivia.Span, formattedTrivia.Span);
+                  ? Equal
+                  : NotEqual(originalTrivia.Span, formattedTrivia.Span);
             }
 
             return originalTrivia.ToString().TrimEnd() == formattedTrivia.ToString().TrimEnd()
-                ? Equal
-                : NotEqual(originalTrivia.Span, formattedTrivia.Span);
+              ? Equal
+              : NotEqual(originalTrivia.Span, formattedTrivia.Span);
         }
 
         private CompareResult Compare(SyntaxTriviaList originalList, SyntaxTriviaList formattedList)

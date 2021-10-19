@@ -29,20 +29,20 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 " ",
                 Token.Print(variable.Identifier),
                 variable.ArgumentList != null
-                    ? BracketedArgumentList.Print(variable.ArgumentList)
-                    : Doc.Null
+                  ? BracketedArgumentList.Print(variable.ArgumentList)
+                  : Doc.Null
             );
 
             var initializer = variable.Initializer;
 
             return initializer == null
-                ? Doc.Group(leftDoc)
-                : RightHandSide.Print(
-                      node,
-                      Doc.Concat(leftDoc, " "),
-                      Token.Print(initializer.EqualsToken),
-                      initializer.Value
-                  );
+              ? Doc.Group(leftDoc)
+              : RightHandSide.Print(
+                    node,
+                    Doc.Concat(leftDoc, " "),
+                    Token.Print(initializer.EqualsToken),
+                    initializer.Value
+                );
         }
     }
 }

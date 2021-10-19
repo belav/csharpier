@@ -690,7 +690,8 @@ true || false"
             int width = PrinterOptions.WidthUsedByTests,
             bool trimInitialLines = false,
             bool useTabs = false
-        ) {
+        )
+        {
             var result = Print(doc, width, trimInitialLines, useTabs);
 
             result.Should().Be(expected);
@@ -701,8 +702,10 @@ true || false"
             int width = PrinterOptions.WidthUsedByTests,
             bool trimInitialLines = false,
             bool useTabs = false
-        ) {
-            return DocPrinter.DocPrinter.Print(
+        )
+        {
+            return DocPrinter.DocPrinter
+                .Print(
                     doc,
                     new PrinterOptions
                     {

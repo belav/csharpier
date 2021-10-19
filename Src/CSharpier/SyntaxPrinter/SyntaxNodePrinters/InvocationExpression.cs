@@ -38,7 +38,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             var forceOneLine =
                 groups.Count <= cutoff
-                && !groups.Skip(shouldMergeFirstTwoGroups ? 1 : 0)
+                && !groups
+                    .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
                     .All(o => o.Last().Node is InvocationExpressionSyntax);
 
             if (forceOneLine)
@@ -49,20 +50,21 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var expanded = Doc.Concat(
                 Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
                 shouldMergeFirstTwoGroups
-                    ? Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
-                    : Doc.Null,
+                  ? Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
+                  : Doc.Null,
                 PrintIndentedGroup(node, groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
             );
 
             return oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
-                ? expanded
-                : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
+              ? expanded
+              : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
         }
 
         private static void FlattenAndPrintNodes(
             ExpressionSyntax expression,
             List<PrintedNode> printedNodes
-        ) {
+        )
+        {
             /*
               We need to flatten things out because the AST has them this way
               InvocationExpression
@@ -108,7 +110,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             }
             else if (
                 expression is ConditionalAccessExpressionSyntax conditionalAccessExpressionSyntax
-            ) {
+            )
+            {
                 printedNodes.Add(
                     new PrintedNode(
                         conditionalAccessExpressionSyntax,
@@ -175,7 +178,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     if (
                         IsMemberish(printedNodes[index].Node)
                         && IsMemberish(printedNodes[index + 1].Node)
-                    ) {
+                    )
+                    {
                         currentGroup.Add(printedNodes[index]);
                     }
                     else
@@ -221,7 +225,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         private static Doc PrintIndentedGroup(
             ExpressionSyntax node,
             IList<List<PrintedNode>> groups
-        ) {
+        )
+        {
             if (groups.Count == 0)
             {
                 return Doc.Null;
@@ -263,7 +268,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (
                 firstNode is IdentifierNameSyntax identifierNameSyntax
                 && identifierNameSyntax.Identifier.Text.Length <= 4
-            ) {
+            )
+            {
                 return true;
             }
 

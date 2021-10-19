@@ -23,7 +23,8 @@ namespace CSharpier
             string code,
             PrinterOptions printerOptions,
             CancellationToken cancellationToken
-        ) {
+        )
+        {
             SyntaxTree ParseText(string codeToFormat, params string[] preprocessorSymbols)
             {
                 return CSharpSyntaxTree.ParseText(
@@ -58,7 +59,8 @@ namespace CSharpier
 
             bool TryGetCompilationFailure(out CSharpierResult compilationResult)
             {
-                var diagnostics = syntaxTree!.GetDiagnostics(cancellationToken)
+                var diagnostics = syntaxTree!
+                    .GetDiagnostics(cancellationToken)
                     .Where(o => o.Severity == DiagnosticSeverity.Error && o.Id != "CS1029")
                     .ToList();
                 if (diagnostics.Any())

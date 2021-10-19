@@ -53,36 +53,38 @@ namespace CSharpier
                                 or ':'
                                 or ';'
                             )
-                    ) {
+                    )
+                    {
                         result.Append(' ');
                     }
                 }
                 else if (
                     nextChar
                         is '('
-                        or ')'
-                        or '{'
-                        or '}'
-                        or ']'
-                        or '['
-                        or '.'
-                        or ','
-                        or '*'
-                        or '+'
-                        or '-'
-                        or '='
-                        or '/'
-                        or '%'
-                        or '|'
-                        or '&'
-                        or '!'
-                        or '<'
-                        or '>'
-                        or ';'
-                        or ':'
+                            or ')'
+                            or '{'
+                            or '}'
+                            or ']'
+                            or '['
+                            or '.'
+                            or ','
+                            or '*'
+                            or '+'
+                            or '-'
+                            or '='
+                            or '/'
+                            or '%'
+                            or '|'
+                            or '&'
+                            or '!'
+                            or '<'
+                            or '>'
+                            or ';'
+                            or ':'
                     && result.Length > 0
                     && result[^1] is ' '
-                ) {
+                )
+                {
                     result[^1] = nextChar;
                 }
                 else

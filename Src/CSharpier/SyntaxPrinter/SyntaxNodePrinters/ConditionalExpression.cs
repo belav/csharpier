@@ -20,17 +20,17 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             return Doc.Group(
                 node.Parent is ReturnStatementSyntax
-                && node.Condition is BinaryExpressionSyntax or IsPatternExpressionSyntax
-                    ? Doc.Indent(
-                          Doc.Group(Doc.IfBreak(Doc.SoftLine, Doc.Null), Node.Print(node.Condition))
-                      )
-                    : Node.Print(node.Condition),
+                    && node.Condition is BinaryExpressionSyntax or IsPatternExpressionSyntax
+                  ? Doc.Indent(
+                        Doc.Group(Doc.IfBreak(Doc.SoftLine, Doc.Null), Node.Print(node.Condition))
+                    )
+                  : Node.Print(node.Condition),
                 node.Parent
                     is ConditionalExpressionSyntax
-                    or ArgumentSyntax
-                    or ReturnStatementSyntax
-                    ? Doc.Align(2, contents)
-                    : Doc.Indent(contents)
+                        or ArgumentSyntax
+                        or ReturnStatementSyntax
+                  ? Doc.Align(2, contents)
+                  : Doc.Indent(contents)
             );
         }
     }

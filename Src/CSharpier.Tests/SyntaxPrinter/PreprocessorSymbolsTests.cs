@@ -72,7 +72,8 @@ namespace CSharpier.Tests.SyntaxPrinter
         {
             public static void AddSymbolSet(
                 ConditionalDirectiveTriviaSyntax conditionalDirectiveTriviaSyntax
-            ) {
+            )
+            {
                 AddSymbolSetForConditional(conditionalDirectiveTriviaSyntax);
             }
         }

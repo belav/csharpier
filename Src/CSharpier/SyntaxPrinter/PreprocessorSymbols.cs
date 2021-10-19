@@ -56,7 +56,8 @@ namespace CSharpier.SyntaxPrinter
 
         protected static void AddSymbolSetForConditional(
             ConditionalDirectiveTriviaSyntax conditionalDirectiveTriviaSyntax
-        ) {
+        )
+        {
             var stack = new Stack<ExpressionSyntax>();
             stack.Push(conditionalDirectiveTriviaSyntax.Condition);
 

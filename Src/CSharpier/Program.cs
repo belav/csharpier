@@ -28,7 +28,8 @@ namespace CSharpier
             bool skipWrite,
             bool writeStdout,
             CancellationToken cancellationToken
-        ) {
+        )
+        {
             var console = new SystemConsole();
             var logger = new ConsoleLogger(console);
 
@@ -47,7 +48,8 @@ namespace CSharpier
             }
             else
             {
-                directoryOrFile = directoryOrFile!.Select(
+                directoryOrFile = directoryOrFile!
+                    .Select(
                         o =>
                             o == "."
                                 // .csharpierignore gets confused by . so just don't include it

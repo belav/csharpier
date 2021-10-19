@@ -20,11 +20,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Doc.IfBreak(Doc.Null, Doc.SoftLine)
                 ),
                 node.Statement is BlockSyntax blockSyntax
-                    ? Block.Print(blockSyntax)
-                    : Doc.IndentIf(
-                          node.Statement is not FixedStatementSyntax,
-                          Doc.Concat(Doc.HardLine, Node.Print(node.Statement))
-                      )
+                  ? Block.Print(blockSyntax)
+                  : Doc.IndentIf(
+                        node.Statement is not FixedStatementSyntax,
+                        Doc.Concat(Doc.HardLine, Node.Print(node.Statement))
+                    )
             );
         }
     }

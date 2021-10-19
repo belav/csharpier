@@ -90,7 +90,8 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            concat.Contents.Should()
+            concat.Contents
+                .Should()
                 .BeEquivalentTo(new List<Doc> { Doc.HardLine, Doc.Null, Doc.HardLine });
         }
 
@@ -155,7 +156,8 @@ namespace CSharpier.Tests
 
             DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-            DocSerializer.Serialize(doc)
+            DocSerializer
+                .Serialize(doc)
                 .Should()
                 .Be(
                     DocSerializer.Serialize(

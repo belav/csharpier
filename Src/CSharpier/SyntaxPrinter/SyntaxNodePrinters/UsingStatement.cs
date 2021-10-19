@@ -25,8 +25,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                         Doc.Indent(
                             Doc.SoftLine,
                             node.Declaration != null
-                                ? VariableDeclaration.Print(node.Declaration)
-                                : Doc.Null,
+                              ? VariableDeclaration.Print(node.Declaration)
+                              : Doc.Null,
                             node.Expression != null ? Node.Print(node.Expression) : Doc.Null
                         ),
                         Doc.SoftLine

@@ -13,9 +13,8 @@ namespace CSharpier.Generators
 
         protected override object GetModel(GeneratorExecutionContext context)
         {
-            var nodeTypes = context.Compilation.SyntaxTrees.Where(
-                    o => o.FilePath.Contains("SyntaxNodePrinters")
-                )
+            var nodeTypes = context.Compilation.SyntaxTrees
+                .Where(o => o.FilePath.Contains("SyntaxNodePrinters"))
                 .Select(o => Path.GetFileNameWithoutExtension(o.FilePath))
                 .Select(
                     fileName =>

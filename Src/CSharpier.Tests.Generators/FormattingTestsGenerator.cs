@@ -12,7 +12,8 @@ namespace CSharpier.Tests.Generators
 
         protected override object GetModel(GeneratorExecutionContext context)
         {
-            var tests = context.AdditionalFiles.Where(
+            var tests = context.AdditionalFiles
+                .Where(
                     o =>
                         o.Path.EndsWith(".cst")
                         && !o.Path.EndsWith(".actual.cst")

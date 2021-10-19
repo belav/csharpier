@@ -34,7 +34,8 @@ namespace CSharpier.SyntaxPrinter
             SyntaxToken syntaxToken,
             Doc? suffixDoc = null,
             bool skipLeadingTrivia = false
-        ) {
+        )
+        {
             if (syntaxToken.Kind() == SyntaxKind.None)
             {
                 return Doc.Null;
@@ -63,12 +64,11 @@ namespace CSharpier.SyntaxPrinter
                         is InterpolatedStringExpressionSyntax
                         {
                             StringStartToken:
-                            {
-                                RawKind: (int)SyntaxKind.InterpolatedVerbatimStringStartToken
-                            }
+                            { RawKind: (int)SyntaxKind.InterpolatedVerbatimStringStartToken }
                         }
                 )
-            ) {
+            )
+            {
                 var lines = syntaxToken.Text.Replace("\r", string.Empty).Split(new[] { '\n' });
                 docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
             }
@@ -105,8 +105,8 @@ namespace CSharpier.SyntaxPrinter
             );
 
             return indentTrivia && printedTrivia != Doc.Null
-                ? Doc.Concat(Doc.Indent(printedTrivia), Doc.HardLine)
-                : printedTrivia;
+              ? Doc.Concat(Doc.Indent(printedTrivia), Doc.HardLine)
+              : printedTrivia;
         }
 
         public static Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia)
@@ -123,7 +123,8 @@ namespace CSharpier.SyntaxPrinter
             SyntaxTriviaList leadingTrivia,
             bool includeInitialNewLines = false,
             bool skipLastHardline = false
-        ) {
+        )
+        {
             var docs = new List<Doc>();
 
             // we don't print any new lines until we run into a comment or directive
@@ -151,8 +152,8 @@ namespace CSharpier.SyntaxPrinter
                             CommentType.SingleLine
                         ),
                         kind == SyntaxKind.SingleLineDocumentationCommentTrivia
-                            ? Doc.HardLineSkipBreakIfFirstInGroup
-                            : Doc.Null
+                          ? Doc.HardLineSkipBreakIfFirstInGroup
+                          : Doc.Null
                     );
                 }
                 else if (IsMultiLineComment(kind))
@@ -175,7 +176,8 @@ namespace CSharpier.SyntaxPrinter
                         IsRegion(kind)
                         && x > 0
                         && leadingTrivia[x - 1].Kind() == SyntaxKind.WhitespaceTrivia
-                    ) {
+                    )
+                    {
                         triviaText = leadingTrivia[x - 1] + triviaText;
                     }
 
@@ -203,27 +205,27 @@ namespace CSharpier.SyntaxPrinter
         private static bool IsSingleLineComment(SyntaxKind kind) =>
             kind
                 is SyntaxKind.SingleLineDocumentationCommentTrivia
-                or SyntaxKind.SingleLineCommentTrivia;
+                    or SyntaxKind.SingleLineCommentTrivia;
 
         private static bool IsMultiLineComment(SyntaxKind kind) =>
             kind
                 is SyntaxKind.MultiLineCommentTrivia
-                or SyntaxKind.MultiLineDocumentationCommentTrivia;
+                    or SyntaxKind.MultiLineDocumentationCommentTrivia;
 
         private static bool IsDirective(SyntaxKind kind) =>
             kind
                 is SyntaxKind.IfDirectiveTrivia
-                or SyntaxKind.ElseDirectiveTrivia
-                or SyntaxKind.ElifDirectiveTrivia
-                or SyntaxKind.EndIfDirectiveTrivia
-                or SyntaxKind.LineDirectiveTrivia
-                or SyntaxKind.ErrorDirectiveTrivia
-                or SyntaxKind.WarningDirectiveTrivia
-                or SyntaxKind.PragmaWarningDirectiveTrivia
-                or SyntaxKind.PragmaChecksumDirectiveTrivia
-                or SyntaxKind.DefineDirectiveTrivia
-                or SyntaxKind.UndefDirectiveTrivia
-                or SyntaxKind.NullableDirectiveTrivia;
+                    or SyntaxKind.ElseDirectiveTrivia
+                    or SyntaxKind.ElifDirectiveTrivia
+                    or SyntaxKind.EndIfDirectiveTrivia
+                    or SyntaxKind.LineDirectiveTrivia
+                    or SyntaxKind.ErrorDirectiveTrivia
+                    or SyntaxKind.WarningDirectiveTrivia
+                    or SyntaxKind.PragmaWarningDirectiveTrivia
+                    or SyntaxKind.PragmaChecksumDirectiveTrivia
+                    or SyntaxKind.DefineDirectiveTrivia
+                    or SyntaxKind.UndefDirectiveTrivia
+                    or SyntaxKind.NullableDirectiveTrivia;
 
         private static bool IsRegion(SyntaxKind kind) =>
             kind is SyntaxKind.RegionDirectiveTrivia or SyntaxKind.EndRegionDirectiveTrivia;

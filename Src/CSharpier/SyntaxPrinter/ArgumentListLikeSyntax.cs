@@ -13,7 +13,8 @@ namespace CSharpier.SyntaxPrinter
             SyntaxToken openParenToken,
             SeparatedSyntaxList<ArgumentSyntax> arguments,
             SyntaxToken closeParenToken
-        ) {
+        )
+        {
             var docs = new List<Doc> { Token.Print(openParenToken) };
 
             if (arguments.Any())

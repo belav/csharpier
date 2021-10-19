@@ -11,8 +11,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.PrintWithSuffix(node.NewKeyword, " "),
                 Node.Print(node.Type),
                 node.Initializer != null
-                    ? Doc.Concat(Doc.Line, Node.Print(node.Initializer))
-                    : Doc.Null
+                  ? Doc.Concat(Doc.Line, Node.Print(node.Initializer))
+                  : Doc.Null
             );
         }
     }
