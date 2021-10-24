@@ -2,6 +2,7 @@
 	<Import Project="../../CSharpier.Build.props" />
     <PropertyGroup>
         <PackageId>CSharpier.Core</PackageId>
+        <!-- TODO 10 target multiple frameworks? netstandard2.0;net5.0;net6.0 ?-->
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>CSharpier</RootNamespace>
         <Nullable>enable</Nullable>
@@ -13,8 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <!-- TODO 10 we want the real version of this when it is released, although maybe 3.11.0 supports c# 10-->
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0-4.final" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0-6.final" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 

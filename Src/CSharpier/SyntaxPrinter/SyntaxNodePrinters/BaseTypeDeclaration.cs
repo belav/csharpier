@@ -73,10 +73,13 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             docs.AddIfNotNull(ExtraNewLines.Print(node));
             if (node.AttributeLists.Any())
             {
-                ExtraNewLines.Print(node),
-                AttributeLists.Print(node, node.AttributeLists),
-                Modifiers.Print(node.Modifiers)
-            };
+                docs.Add(AttributeLists.Print(node, node.AttributeLists));
+            }
+
+            if (node.Modifiers.Any())
+            {
+                docs.Add(Modifiers.Print(node.Modifiers));
+            }
 
             if (recordKeyword != null)
             {
