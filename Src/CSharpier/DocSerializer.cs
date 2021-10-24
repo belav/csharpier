@@ -70,6 +70,11 @@ namespace CSharpier
                 AppendIndent();
                 result.Append("Doc.LiteralLine");
             }
+            else if (doc is BreakParent)
+            {
+                AppendIndent();
+                result.Append("Doc.BreakParent");
+            }
             else if (doc is LineDoc lineDoc)
             {
                 AppendIndent();

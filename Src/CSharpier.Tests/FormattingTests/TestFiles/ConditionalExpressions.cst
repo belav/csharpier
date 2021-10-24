@@ -99,5 +99,29 @@ public class ClassName
         )
           ? trueValue________________________________
           : falseValue_______________________________;
+
+        return firstCondition
+          ? firstValue
+          : secondCondition
+              ? secondValue
+              : thirdCondition
+                  ? thirdValue
+                  : fourthValue;
+
+        return firstCondition
+          ? secondCondition
+              ? firstValue
+              : secondValue
+          : thirdCondition
+              ? thirdValue
+              : fourthValue;
+
+        return a ? b : c;
+
+        return a
+          ? b
+          : c
+              ? d
+              : e;
     }
 }
