@@ -30,6 +30,7 @@ namespace CSharpier.Tests
                 Doc.SoftLine,
                 Doc.Null,
                 Doc.Trim,
+                Doc.BreakParent,
                 "1"
             );
 
@@ -48,6 +49,7 @@ namespace CSharpier.Tests
     Doc.SoftLine,
     Doc.Null,
     Doc.Trim,
+    Doc.BreakParent,
     ""1""
 )"
                 );
