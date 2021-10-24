@@ -4,6 +4,7 @@
         <OutputType>Exe</OutputType>
         <PackageId>CSharpier</PackageId>
         <AssemblyName>dotnet-csharpier</AssemblyName>
+        <!-- TODO 10 target multiple frameworks? netstandard2.0;net5.0;net6.0 ?-->
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>CSharpier</RootNamespace>
         <PackAsTool>true</PackAsTool>
@@ -17,8 +18,7 @@
 
     <ItemGroup>
         <PackageReference Include="Ignore" Version="0.1.42" />
-        <!-- TODO 10 we want the real version of this when it is released, although maybe 3.11.0 supports c# 10-->
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0-4.final" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0-6.final" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
         <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />

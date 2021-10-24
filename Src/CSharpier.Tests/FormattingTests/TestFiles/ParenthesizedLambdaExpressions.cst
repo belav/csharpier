@@ -10,7 +10,9 @@ public class ClassName
     public void MethodName()
     {
         this.Where(() => true);
+        this.Where([Attribute] () => true);
         this.Where(async () => true);
+        this.Where([Attribute] async () => true);
         this.Where(static () => true);
         this.Where(async static () => true);
         this.SomeMethod(
@@ -19,6 +21,15 @@ public class ClassName
         );
 
         this.SomeMethod(
+            (
+                longerParameter_________________________,
+                longerParameter_________________________,
+                longerParameter_________________________
+            ) => evenLongerParameter
+        );
+
+        this.SomeMethod(
+            [Attribute]
             (
                 longerParameter_________________________,
                 longerParameter_________________________,
