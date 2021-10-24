@@ -43,8 +43,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                 subpatternNode =>
                                     Doc.Concat(
                                         subpatternNode.NameColon != null
-                                            ? BaseExpressionColon.Print(subpatternNode.NameColon)
-                                            : Doc.Null,
+                                          ? BaseExpressionColon.Print(subpatternNode.NameColon)
+                                          : Doc.Null,
                                         Node.Print(subpatternNode.Pattern)
                                     ),
                                 Doc.Line
@@ -82,8 +82,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                                     subpatternNode =>
                                         Doc.Group(
                                             subpatternNode.ExpressionColon != null
-                                                ? Node.Print(subpatternNode.ExpressionColon)
-                                                : Doc.Null,
+                                              ? Node.Print(subpatternNode.ExpressionColon)
+                                              : Doc.Null,
                                             Node.Print(subpatternNode.Pattern)
                                         ),
                                     Doc.Line

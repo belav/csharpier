@@ -29,8 +29,4 @@
         <ProjectReference Include="..\CSharpier.Generators\CSharpier.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
 
-    <Target Name="AdditionalRestores" AfterTargets="Restore">
-        <Exec Command="dotnet tool restore" ConsoleToMsBuild="true" />
-    </Target>
-    
 </Project>

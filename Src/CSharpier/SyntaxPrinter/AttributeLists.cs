@@ -17,7 +17,10 @@ namespace CSharpier.SyntaxPrinter
             }
 
             var docs = new List<Doc>();
-            Doc separator = node is TypeParameterSyntax or ParameterSyntax or ParenthesizedLambdaExpressionSyntax
+            Doc separator = node
+                is TypeParameterSyntax
+                    or ParameterSyntax
+                    or ParenthesizedLambdaExpressionSyntax
                 ? Doc.Line
                 : Doc.HardLine;
             docs.Add(Doc.Join(separator, attributeLists.Select(AttributeList.Print)));
