@@ -24,10 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="App_Data" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Remove="App_Data\Uploads\**" />
     </ItemGroup>
 
