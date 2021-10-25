@@ -4,6 +4,11 @@ public class ClassName
 
     public ClassName WithInitializer = new ClassName { Property = true };
 
+    public ClassName WithMediumInitializer = new ClassName
+    {
+        Property_____________________________ = true
+    };
+
     public ClassName WithBigInitializer = new ClassName
     {
         Property1 = true,
