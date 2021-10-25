@@ -8,14 +8,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     {
         public static Doc Print(ObjectCreationExpressionSyntax node)
         {
-            var groupId = Guid.NewGuid().ToString();
-
             return Doc.Group(
                 Token.PrintWithSuffix(node.NewKeyword, " "),
                 Node.Print(node.Type),
                 node.ArgumentList != null
-                  ? Doc.GroupWithId(
-                        groupId,
+                  ? Doc.Group(
                         ArgumentListLike.Print(
                             node.ArgumentList.OpenParenToken,
                             node.ArgumentList.Arguments,
@@ -24,10 +21,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     )
                   : Doc.Null,
                 node.Initializer != null
-                  ? Doc.Concat(
-                        node.ArgumentList != null ? Doc.IfBreak(" ", Doc.Line, groupId) : Doc.Line,
-                        InitializerExpression.Print(node.Initializer)
-                    )
+                  ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer))
                   : Doc.Null
             );
         }
