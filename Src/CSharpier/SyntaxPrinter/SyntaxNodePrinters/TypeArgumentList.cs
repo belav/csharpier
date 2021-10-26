@@ -18,7 +18,13 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 Token.Print(node.LessThanToken),
                 Doc.Indent(
                     separator,
-                    SeparatedSyntaxList.Print(node.Arguments, Node.Print, Doc.Line)
+                    SeparatedSyntaxList.Print(
+                        node.Arguments,
+                        Node.Print,
+                        node.Arguments.FirstOrDefault() is OmittedTypeArgumentSyntax
+                          ? Doc.Null
+                          : Doc.Line
+                    )
                 ),
                 separator,
                 Token.Print(node.GreaterThanToken)

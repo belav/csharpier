@@ -98,6 +98,8 @@ public class ClassName
         bool
     > SomeFieldFuncWithALongName = (someValue_____________________________) =>
         SometimesBreaksThisWay(someValue, SomeOtherLongValue);
+
+    private Type OmittedTypes = typeof(OmittedTypes<,>);
 }
 
 struct S
