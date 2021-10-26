@@ -93,6 +93,8 @@ class ClassName
                 longerValueThatMakesItBreak______________________
             },
         };
+
+        var emptyInitializer = new SomeObject[] { };
     }
 
     private SomeObject someObject =

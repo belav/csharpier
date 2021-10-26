@@ -19,7 +19,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                     Doc.Line,
                     SeparatedSyntaxList.Print(node.Expressions, Node.Print, Doc.Line)
                 ),
-                Doc.Line,
+                node.Expressions.Any() ? Doc.Line : Doc.Null,
                 Token.Print(node.CloseBraceToken)
             );
             return
