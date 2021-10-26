@@ -17,7 +17,8 @@ public class ClassName
     private SomeObject SomeLongerName = new SomeObject(
         "lkjasdflkjasdfkljaskldjf",
         "klasldkfaksdfasdfkjasdklf"
-    ) {
+    )
+    {
         Property1 = 1,
         Property2 = 2
     };

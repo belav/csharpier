@@ -81,3 +81,5 @@ if ($firstRun) {
     $newPr = & hub pull-request -b belav:$preBranch -m "Testing $branch"
     Write-Output $newPr
 }
+
+Pop-Location
