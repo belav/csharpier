@@ -10,7 +10,7 @@ namespace CSharpier.DocPrinter
         public IList<IIndentType>? TypesForTabs;
     }
 
-    public interface IIndentType { }
+    internal interface IIndentType { }
 
     internal class IndentType : IIndentType
     {

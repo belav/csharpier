@@ -12,6 +12,13 @@ using Newtonsoft.Json;
 
 namespace CSharpier
 {
+    // TODO lib
+    // is csharpier.core the name?
+    // should csharpier.cli have .cli as a namespace? leaning yes
+    // test msbuild, core and the cli nuget packages
+    // publish the 0.10.0 core package by hand, maybe name it 0.10.1? I could also branch from 0.10.0
+    // and get it to be a proper 0.10.0 version
+    // add some /// to the public stuff on here
     public class CodeFormatter
     {
         public static string Format(string code, CodeFormatterOptions options)
