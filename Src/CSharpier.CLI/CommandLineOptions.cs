@@ -3,7 +3,7 @@ using System.CommandLine;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CSharpier
+namespace CSharpier.CLI
 {
     public class CommandLineOptions
     {

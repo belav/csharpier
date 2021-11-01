@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace CSharpier
+namespace CSharpier.CLI
 {
     public class IgnoreFile
     {

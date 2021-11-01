@@ -5,6 +5,7 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using CSharpier.CLI;
 using FluentAssertions;
 using NUnit.Framework;
 

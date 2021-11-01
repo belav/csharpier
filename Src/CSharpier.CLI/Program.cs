@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CSharpier
+namespace CSharpier.CLI
 {
     public class Program
     {

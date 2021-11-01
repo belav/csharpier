@@ -1,3 +1,2 @@
-You can test this by running the following from `Src/CSharpier.MSBuild`  
-`dotnet pack -o publish`  
-Then add a nuget source pointing to `\Src\CSharpier.MsBuild\publish` and install the nuget package into a project
+You can test this by running the script at `[RepositoryRoot]/Scripts/BuildPackages.ps1`
+Then add a nuget source pointing to `[RepositoryRoot]/nupkg` and install the nuget package into a project

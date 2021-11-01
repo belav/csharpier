@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Text;
 using System.Threading;
+using CSharpier.CLI;
 using CSharpier.SyntaxPrinter;
 using DiffEngine;
 using FluentAssertions;

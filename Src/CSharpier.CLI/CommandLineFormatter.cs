@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using CSharpier.Utilities;
 using Microsoft.Extensions.Logging;
 
-namespace CSharpier
+namespace CSharpier.CLI
 {
     internal class CommandLineFormatter
     {

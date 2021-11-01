@@ -31,6 +31,15 @@ namespace CSharpier.Tests
         }
 
         [Test]
+        public void Format_Should_Use_Default_Width()
+        {
+            var code = "var someVariable = someValue;";
+            var result = CodeFormatter.Format(code);
+
+            result.Should().Be("var someVariable = someValue;\n");
+        }
+
+        [Test]
         public void Format_Should_Use_Width()
         {
             var code = "var someVariable = someValue;";

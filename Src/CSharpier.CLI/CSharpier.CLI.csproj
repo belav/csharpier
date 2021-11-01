@@ -2,8 +2,10 @@
     <Import Project="../../CSharpier.Build.props" />
     <PropertyGroup>
         <OutputType>Exe</OutputType>
+        <PackageId>CSharpier</PackageId>
+        <AssemblyName>dotnet-csharpier</AssemblyName>
         <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>CSharpier</RootNamespace>
+        <PackAsTool>true</PackAsTool>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
