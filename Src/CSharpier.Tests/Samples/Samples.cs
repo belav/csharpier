@@ -31,7 +31,7 @@ namespace CSharpier.Tests.Samples
             var file = Path.Combine(directory.FullName, $"Samples/{fileName}.cst");
 
             var code = File.ReadAllText(file);
-            var result = new CodeFormatter().Format(
+            var result = CodeFormatter.Format(
                 code,
                 new PrinterOptions { IncludeDocTree = true, IncludeAST = true, }
             );

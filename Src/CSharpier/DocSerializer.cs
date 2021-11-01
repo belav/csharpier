@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Text;
 using CSharpier.DocTypes;
 
@@ -9,7 +8,7 @@ namespace CSharpier
     /// Used to create a string representation of a Doc
     /// The string representation can be pasted into DocPrinterTests
     /// </summary>
-    public static class DocSerializer
+    internal static class DocSerializer
     {
         public static string Serialize(Doc doc)
         {

@@ -7,7 +7,7 @@ using UtfUnknown;
 
 namespace CSharpier
 {
-    public static class FileReader
+    internal static class FileReader
     {
         private static readonly SemaphoreSlim Semaphore = new(10);
 
@@ -55,7 +55,7 @@ namespace CSharpier
         }
     }
 
-    public record FileReaderResult(
+    internal record FileReaderResult(
         Encoding Encoding,
         string FileContents,
         bool UnableToDetectEncoding

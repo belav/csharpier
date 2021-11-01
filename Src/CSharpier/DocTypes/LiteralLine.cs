@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-
 namespace CSharpier.DocTypes
 {
-    public class LiteralLine : LineDoc, IBreakParent
+    internal class LiteralLine : LineDoc, IBreakParent
     {
         public LiteralLine()
         {

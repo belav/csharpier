@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public static class Node
+    internal static class Node
     {
         [ThreadStatic]
         private static int depth;

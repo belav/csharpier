@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks.Sources;
 using CSharpier.DocTypes;
 
 namespace CSharpier.Utilities
 {
-    public static class ListExtensions
+    internal static class ListExtensions
     {
         public static void Add(this List<Doc> list, params Doc[] values)
         {

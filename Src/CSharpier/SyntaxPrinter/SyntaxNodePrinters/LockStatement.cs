@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class LockStatement
+    internal static class LockStatement
     {
         public static Doc Print(LockStatementSyntax node)
         {

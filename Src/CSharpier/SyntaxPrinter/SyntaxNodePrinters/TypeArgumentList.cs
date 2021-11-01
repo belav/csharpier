@@ -1,11 +1,10 @@
 using System.Linq;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class TypeArgumentList
+    internal static class TypeArgumentList
     {
         public static Doc Print(TypeArgumentListSyntax node)
         {

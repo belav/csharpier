@@ -1,6 +1,6 @@
 namespace CSharpier.DocTypes
 {
-    public class StringDoc : Doc
+    internal class StringDoc : Doc
     {
         public string Value { get; }
         public bool IsDirective { get; }

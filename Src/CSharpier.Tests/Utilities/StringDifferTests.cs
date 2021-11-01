@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text;
-using CSharpier.Utilities;
+﻿using CSharpier.Utilities;
 using FluentAssertions;
 using NUnit.Framework;
 

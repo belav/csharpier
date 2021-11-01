@@ -34,7 +34,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
 {
-    public partial class SyntaxNodeComparer
+    internal partial class SyntaxNodeComparer
     {
         private CompareResult Compare(
             (SyntaxNode originalNode, SyntaxNode originalParent) original,

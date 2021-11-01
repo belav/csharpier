@@ -1,8 +1,8 @@
 namespace CSharpier.DocTypes
 {
-    public class LineDoc : Doc
+    internal class LineDoc : Doc
     {
-        public enum LineType
+        internal enum LineType
         {
             Normal,
             Hard,

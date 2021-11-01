@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace CSharpier
 {
-    public class PrinterOptions
+    internal class PrinterOptions
     {
         public bool IncludeAST { get; init; }
         public bool IncludeDocTree { get; init; }
@@ -16,7 +16,7 @@ namespace CSharpier
         public const int WidthUsedByTests = 100;
     }
 
-    public enum EndOfLine
+    internal enum EndOfLine
     {
         Auto,
         CRLF,

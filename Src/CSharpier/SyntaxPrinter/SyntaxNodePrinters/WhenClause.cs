@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class WhenClause
+    internal static class WhenClause
     {
         public static Doc Print(WhenClauseSyntax node)
         {

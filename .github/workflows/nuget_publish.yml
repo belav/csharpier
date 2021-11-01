@@ -23,6 +23,14 @@ jobs:
           VERSION_FILE_PATH: CSharpier.Build.props
           TAG_FORMAT: "*"
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+      - name: publish csharpier.cli on version change
+        id: publish_csharpier_cli_nuget
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: Src/CSharpier.CLI/CSharpier.CLI.csproj
+          VERSION_FILE_PATH: CSharpier.Build.props
+          TAG_FORMAT: "*"
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
       - name: publish csharpier.msbuild on version change
         id: publish_csharpier_msbuild_nuget
         uses: rohith/publish-nuget@v2

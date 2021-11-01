@@ -2,7 +2,7 @@ using System.Text;
 
 namespace CSharpier.Utilities
 {
-    public static class StringBuilderExtensions
+    internal static class StringBuilderExtensions
     {
         public static bool EndsWithNewLineAndWhitespace(this StringBuilder stringBuilder)
         {

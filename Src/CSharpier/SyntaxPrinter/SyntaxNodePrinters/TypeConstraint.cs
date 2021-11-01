@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class TypeConstraint
+    internal static class TypeConstraint
     {
         public static Doc Print(TypeConstraintSyntax node)
         {

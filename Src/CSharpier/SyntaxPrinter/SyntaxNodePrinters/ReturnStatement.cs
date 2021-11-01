@@ -1,10 +1,9 @@
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class ReturnStatement
+    internal static class ReturnStatement
     {
         public static Doc Print(ReturnStatementSyntax node)
         {

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier
 {
-    public class CommandLineFormatter
+    internal class CommandLineFormatter
     {
         protected readonly CommandLineFormatterResult Result;
 
@@ -216,7 +216,7 @@ namespace CSharpier
 
             try
             {
-                result = await new CodeFormatter().FormatAsync(
+                result = await CodeFormatter.FormatAsync(
                     fileContents,
                     this.PrinterOptions,
                     cancellationToken

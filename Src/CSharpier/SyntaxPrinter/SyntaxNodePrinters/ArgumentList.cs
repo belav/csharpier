@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class ArgumentList
+    internal static class ArgumentList
     {
         public static Doc Print(ArgumentListSyntax node)
         {

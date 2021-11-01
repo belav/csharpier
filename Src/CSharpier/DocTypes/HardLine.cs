@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-
 namespace CSharpier.DocTypes
 {
-    public class HardLine : LineDoc, IBreakParent
+    internal class HardLine : LineDoc, IBreakParent
     {
         public bool SkipBreakIfFirstInGroup { get; }
 

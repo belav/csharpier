@@ -1,12 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="../../CSharpier.Build.props" />
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <PackageId>CSharpier</PackageId>
-        <AssemblyName>dotnet-csharpier</AssemblyName>
+        <PackageId>CSharpier.Core</PackageId>
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>CSharpier</RootNamespace>
-        <PackAsTool>true</PackAsTool>
         <Nullable>enable</Nullable>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     </PropertyGroup>
@@ -16,18 +13,25 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Ignore" Version="0.1.42" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-        <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />
-        <PackageReference Include="System.IO.Abstractions" Version="13.2.29" />
-        <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="13.2.29" />
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
-        <PackageReference Include="UTF.Unknown" Version="2.3.0" />
-        <PackageReference Include="YamlDotNet" Version="11.1.1" />
     </ItemGroup>
 
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>CSharpier.Benchmarks</_Parameter1>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>CSharpier.CLI</_Parameter1>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>CSharpier.Playground</_Parameter1>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>CSharpier.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+    
     <ItemGroup>
         <ProjectReference Include="..\CSharpier.Generators\CSharpier.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -10,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public static class Token
+    internal static class Token
     {
         [ThreadStatic]
         public static bool ShouldSkipNextLeadingTrivia;

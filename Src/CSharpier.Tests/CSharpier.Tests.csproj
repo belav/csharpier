@@ -17,10 +17,11 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\CSharpier.CLI\CSharpier.CLI.csproj" />
       <ProjectReference Include="..\CSharpier.Tests.Generators\CSharpier.Tests.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
       <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
     </ItemGroup>
-    
+        
     <ItemGroup>
         <AdditionalFiles Include="FormattingTests\TestFiles\*.cst" />
     </ItemGroup>

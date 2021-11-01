@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class AnonymousObjectMemberDeclarator
+    internal static class AnonymousObjectMemberDeclarator
     {
         public static Doc Print(AnonymousObjectMemberDeclaratorSyntax node)
         {

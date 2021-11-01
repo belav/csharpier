@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class CheckedExpression
+    internal static class CheckedExpression
     {
         public static Doc Print(CheckedExpressionSyntax node)
         {

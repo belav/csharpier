@@ -1,10 +1,9 @@
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class MemberBindingExpression
+    internal static class MemberBindingExpression
     {
         public static Doc Print(MemberBindingExpressionSyntax node)
         {

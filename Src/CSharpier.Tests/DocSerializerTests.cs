@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace CSharpier.Tests
 {
     [TestFixture]
-    public class DocSerializerTests
+    internal class DocSerializerTests
     {
         [Test]
         public void Should_Format_Directive()

@@ -5,7 +5,6 @@ using System.IO.Abstractions;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -24,7 +23,7 @@ namespace CSharpier
             ".yaml"
         };
 
-        public static PrinterOptions CreatePrinterOptions(
+        internal static PrinterOptions CreatePrinterOptions(
             string baseDirectoryPath,
             IFileSystem fileSystem,
             ILogger logger

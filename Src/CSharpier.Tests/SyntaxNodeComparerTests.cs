@@ -1,8 +1,6 @@
 using System;
 using System.Threading;
 using FluentAssertions;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 
 namespace CSharpier.Tests

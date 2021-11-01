@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace CSharpier
 {
-    public partial class SyntaxNodeJsonWriter
+    internal partial class SyntaxNodeJsonWriter
     {
         private static string? WriteBoolean(string name, bool value)
         {

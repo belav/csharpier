@@ -1,12 +1,11 @@
 using System;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class TypeParameter
+    internal static class TypeParameter
     {
         public static Doc Print(TypeParameterSyntax node)
         {

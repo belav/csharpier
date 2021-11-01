@@ -1,13 +1,10 @@
-using System.Collections.Generic;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
-using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class CatchClause
+    internal static class CatchClause
     {
         public static Doc Print(CatchClauseSyntax node)
         {

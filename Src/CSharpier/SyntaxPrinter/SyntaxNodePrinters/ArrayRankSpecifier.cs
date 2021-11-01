@@ -1,11 +1,10 @@
 using System.Linq;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class ArrayRankSpecifier
+    internal static class ArrayRankSpecifier
     {
         public static Doc Print(ArrayRankSpecifierSyntax node)
         {

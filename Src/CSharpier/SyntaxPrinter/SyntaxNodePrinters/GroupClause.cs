@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class GroupClause
+    internal static class GroupClause
     {
         public static Doc Print(GroupClauseSyntax node)
         {

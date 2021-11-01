@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using CSharpier.DocTypes;
 
 namespace CSharpier.DocPrinter
 {
-    public static class PropagateBreaks
+    internal static class PropagateBreaks
     {
         private static readonly Doc TraverseDocOnExitStackMarker = new();
 

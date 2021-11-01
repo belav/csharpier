@@ -1,10 +1,9 @@
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class EqualsValueClause
+    internal static class EqualsValueClause
     {
         public static Doc Print(EqualsValueClauseSyntax node)
         {

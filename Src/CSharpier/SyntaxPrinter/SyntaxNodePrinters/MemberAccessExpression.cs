@@ -1,11 +1,9 @@
-using System;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class MemberAccessExpression
+    internal static class MemberAccessExpression
     {
         public static Doc Print(MemberAccessExpressionSyntax node)
         {

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace CSharpier.Utilities
 {
-    public static class DirectoryExtensions
+    internal static class DirectoryExtensions
     {
         public static void EnsureDirectoryExists(this FileInfo fileInfo)
         {

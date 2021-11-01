@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public static class ArgumentListLike
+    internal static class ArgumentListLike
     {
         public static Doc Print(
             SyntaxToken openParenToken,

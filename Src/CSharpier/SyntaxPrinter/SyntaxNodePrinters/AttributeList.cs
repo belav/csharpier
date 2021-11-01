@@ -1,14 +1,11 @@
 using System.Collections.Generic;
-using System.Linq;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
-using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class AttributeList
+    internal static class AttributeList
     {
         public static Doc Print(AttributeListSyntax node)
         {

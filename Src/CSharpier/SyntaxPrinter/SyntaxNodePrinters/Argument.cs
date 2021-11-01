@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class Argument
+    internal static class Argument
     {
         public static Doc Print(ArgumentSyntax node)
         {

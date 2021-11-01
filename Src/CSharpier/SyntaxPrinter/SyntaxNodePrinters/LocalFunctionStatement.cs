@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class LocalFunctionStatement
+    internal static class LocalFunctionStatement
     {
         public static Doc Print(LocalFunctionStatementSyntax node)
         {

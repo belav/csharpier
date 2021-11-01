@@ -37,8 +37,7 @@ namespace CSharpier.Tests.FormattingTests
 
             PreprocessorSymbols.Reset();
 
-            var formatter = new CodeFormatter();
-            var result = formatter.Format(
+            var result = CodeFormatter.Format(
                 fileReaderResult.FileContents,
                 new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs }
             );

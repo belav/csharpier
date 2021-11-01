@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace CSharpier.Tests
 {
     [TestFixture]
-    public class CodeFormatterTests
+    internal class CodeFormatterTests
     {
         [TestCase(EndOfLine.LF, "\n")]
         [TestCase(EndOfLine.CRLF, "\r\n")]
@@ -28,6 +28,15 @@ namespace CSharpier.Tests
             var result = CodeFormatter.GetLineEnding(code, new PrinterOptions());
 
             result.Should().Be(expected);
+        }
+
+        [Test]
+        public void Format_Should_Use_Width()
+        {
+            var code = "var someVariable = someValue;";
+            var result = CodeFormatter.Format(code, new CodeFormatterOptions { Width = 10 });
+
+            result.Should().Be("var someVariable =\n    someValue;\n");
         }
     }
 }

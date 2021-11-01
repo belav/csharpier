@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class TryStatement
+    internal static class TryStatement
     {
         public static Doc Print(TryStatementSyntax node)
         {

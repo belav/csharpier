@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
         <PackageId>CSharpier.MsBuild</PackageId>
-        <CSharpierOutputDir>../CSharpier/bin/$(Configuration)/net5.0</CSharpierOutputDir>
+        <CSharpierOutputDir>../CSharpier.CLI/bin/$(Configuration)/net5.0</CSharpierOutputDir>
     </PropertyGroup>
 
     <!--
@@ -12,7 +12,7 @@
         CSharpier is a net5.0 project with <PackAsTool> and this is neither.
     -->
     <Target Name="BuildCSharpier" BeforeTargets="Build">
-		<Exec command="dotnet build -c $(Configuration)" WorkingDirectory="../CSharpier" />
+        <Exec command="dotnet build -c $(Configuration)" WorkingDirectory="../CSharpier.CLI" />
     </Target>
 
     <ItemGroup>

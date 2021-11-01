@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class ParenthesizedVariableDesignation
+    internal static class ParenthesizedVariableDesignation
     {
         public static Doc Print(ParenthesizedVariableDesignationSyntax node)
         {

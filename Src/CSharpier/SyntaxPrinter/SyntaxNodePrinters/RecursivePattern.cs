@@ -1,13 +1,11 @@
-using System;
 using System.Collections.Generic;
 using CSharpier.DocTypes;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Newtonsoft.Json;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class RecursivePattern
+    internal static class RecursivePattern
     {
         public static Doc PrintWithOutType(RecursivePatternSyntax node)
         {

@@ -1,6 +1,6 @@
 namespace CSharpier.DocTypes
 {
-    public class Trim : Doc
+    internal class Trim : Doc
     {
     }
 }

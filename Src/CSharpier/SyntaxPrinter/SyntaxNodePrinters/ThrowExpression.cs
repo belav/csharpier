@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class ThrowExpression
+    internal static class ThrowExpression
     {
         public static Doc Print(ThrowExpressionSyntax node)
         {

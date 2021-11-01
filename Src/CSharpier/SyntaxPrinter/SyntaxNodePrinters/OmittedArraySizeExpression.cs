@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class OmittedArraySizeExpression
+    internal static class OmittedArraySizeExpression
     {
         public static Doc Print(OmittedArraySizeExpressionSyntax node)
         {

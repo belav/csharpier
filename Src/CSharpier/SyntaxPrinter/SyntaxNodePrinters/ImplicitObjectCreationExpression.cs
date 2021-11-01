@@ -1,10 +1,9 @@
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class ImplicitObjectCreationExpression
+    internal static class ImplicitObjectCreationExpression
     {
         public static Doc Print(ImplicitObjectCreationExpressionSyntax node)
         {

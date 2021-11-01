@@ -1,10 +1,9 @@
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class ParenthesizedExpression
+    internal static class ParenthesizedExpression
     {
         public static Doc Print(ParenthesizedExpressionSyntax node)
         {

@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace CSharpier
 {
-    public partial class SyntaxNodeComparer
+    internal partial class SyntaxNodeComparer
     {
         protected string OriginalSourceCode { get; }
         protected string NewSourceCode { get; }

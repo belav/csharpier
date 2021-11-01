@@ -1,10 +1,9 @@
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class PostfixUnaryExpression
+    internal static class PostfixUnaryExpression
     {
         public static Doc Print(PostfixUnaryExpressionSyntax node)
         {
