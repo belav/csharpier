@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
-using CSharpier.CLI;
+using CSharpier.Cli;
 using FluentAssertions;
 using NUnit.Framework;
 

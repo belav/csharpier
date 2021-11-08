@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 
-namespace CSharpier.CLI
+namespace CSharpier.Cli
 {
     public static class ResultPrinter
     {

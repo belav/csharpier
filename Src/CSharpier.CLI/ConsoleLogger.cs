@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using Microsoft.Extensions.Logging;
 
-namespace CSharpier.CLI
+namespace CSharpier.Cli
 {
     public class ConsoleLogger : ILogger
     {

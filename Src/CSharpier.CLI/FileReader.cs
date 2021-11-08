@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UtfUnknown;
 
-namespace CSharpier.CLI
+namespace CSharpier.Cli
 {
     internal static class FileReader
     {

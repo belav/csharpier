@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace CSharpier.CLI
+namespace CSharpier.Cli
 {
     public interface IConsole
     {

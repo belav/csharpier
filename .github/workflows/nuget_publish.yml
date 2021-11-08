@@ -19,15 +19,15 @@ jobs:
       NUGET_KEY: ${{secrets.NUGET_API_KEY}}
     steps:
       - uses: actions/checkout@v2
-      - name: publish csharpier on version change
+      - name: Publish CSharpier.Core library on version change
         uses: rohith/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: Src/CSharpier/CSharpier.csproj
-      - name: publish csharpier.cli on version change
+      - name: Publish CSharpie dotnet tool on version change
         uses: rohith/publish-nuget@v2
         with:
-          PROJECT_FILE_PATH: Src/CSharpier.CLI/CSharpier.CLI.csproj
-      - name: publish csharpier.msbuild on version change
+          PROJECT_FILE_PATH: Src/CSharpier.Cli/CSharpier.Cli.csproj
+      - name: Publish CSharpier.MsBuild library on version change
         uses: rohith/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj

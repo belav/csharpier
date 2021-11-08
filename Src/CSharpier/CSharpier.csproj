@@ -18,18 +18,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>CSharpier.Benchmarks</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>dotnet-csharpier</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>CSharpier.Playground</_Parameter1>
-        </AssemblyAttribute>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>CSharpier.Tests</_Parameter1>
-        </AssemblyAttribute>
+        <InternalsVisibleTo Include="CSharpier.Benchmarks" />
+        <InternalsVisibleTo Include="CSharpier.Playground" />
+        <InternalsVisibleTo Include="CSharpier.Tests" />
+        <InternalsVisibleTo Include="dotnet-csharpier" />
     </ItemGroup>
     
     <ItemGroup>

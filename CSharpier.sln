@@ -16,6 +16,7 @@ ProjectSection(SolutionItems) = preProject
 	Dockerfile = Dockerfile
 	.dockerignore = .dockerignore
 	global.json = global.json
+	CSharpier.Build.targets = CSharpier.Build.targets
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{176BB0EA-B72B-4ACA-82AE-C16A732BE023}"
@@ -65,7 +66,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests.Generators"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Generators", "Src\CSharpier.Generators\CSharpier.Generators.csproj", "{D846F494-57FC-4315-A2A8-357343175D2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.CLI", "src\CSharpier.CLI\CSharpier.CLI.csproj", "{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Cli", "src\CSharpier.Cli\CSharpier.Cli.csproj", "{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

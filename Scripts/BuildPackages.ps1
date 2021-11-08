@@ -1,6 +1,7 @@
 $repositoryRoot = Join-Path $PSScriptRoot ".."
 
-$projects = @("CSharpier.CLI", "CSharpier", "CSharpier.MSBuild")
+# build individual projects because CSharpier.MSBuild can't be in the sln
+$projects = @("CSharpier.Cli", "CSharpier", "CSharpier.MSBuild")
 $nupkgPath = Join-Path $repositoryRoot "nupkg"
 
 foreach ($project in $projects) {
