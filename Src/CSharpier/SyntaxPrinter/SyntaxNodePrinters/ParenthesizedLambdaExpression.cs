@@ -13,6 +13,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             {
                 AttributeLists.Print(node, node.AttributeLists),
                 Modifiers.Print(node.Modifiers),
+                node.ReturnType != null ? Doc.Concat(Node.Print(node.ReturnType), " ") : Doc.Null,
                 ParameterList.Print(node.ParameterList),
                 " ",
                 Token.Print(node.ArrowToken)

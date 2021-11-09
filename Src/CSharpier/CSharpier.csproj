@@ -4,7 +4,7 @@
         <OutputType>Exe</OutputType>
         <PackageId>CSharpier</PackageId>
         <AssemblyName>dotnet-csharpier</AssemblyName>
-        <!-- TODO 10 target multiple frameworks? netstandard2.0;net5.0;net6.0 ?-->
+        <!-- TODO 10 target multiple frameworks? netstandard2.0;net5.0;net6.0? this will conflict with the Cli change -->
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>CSharpier</RootNamespace>
         <PackAsTool>true</PackAsTool>
