@@ -2,8 +2,7 @@
 	<Import Project="../../CSharpier.Build.props" />
     <PropertyGroup>
         <PackageId>CSharpier.Core</PackageId>
-        <!-- TODO 10 target multiple frameworks? netstandard2.0;net5.0;net6.0 ?-->
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
         <RootNamespace>CSharpier</RootNamespace>
         <Nullable>enable</Nullable>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
