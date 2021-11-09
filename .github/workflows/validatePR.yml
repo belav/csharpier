@@ -20,8 +20,6 @@ jobs:
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.0.x'
-          include-prerelease:
-            true
       - run: |
           dotnet build Src/CSharpier/CSharpier.csproj -c release
           pwsh ./Scripts/TestCli.ps1
@@ -30,6 +28,9 @@ jobs:
     name: Check Formatting
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
       - run: |
           dotnet tool restore
           dotnet csharpier . --check 
