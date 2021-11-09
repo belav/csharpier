@@ -78,5 +78,9 @@ public class ClassName
                 ) > someValue,
             anotherParameter
         );
+
+        var returnType = object (bool o) => o ? 1 : "two";
+        var returnTypeWithAsync = async object (bool o) => o ? 1 : "two";
+        var returnTypeWithAttribute = [Attribute] object (bool o) => o ? 1 : "two";
     }
 }
