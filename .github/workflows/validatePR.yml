@@ -8,6 +8,9 @@ jobs:
     name: Run Tests
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
       - run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj -c release
   test_cli:
     runs-on: ubuntu-latest
