@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class BaseExpressionColon
+    internal static class BaseExpressionColon
     {
         public static Doc Print(BaseExpressionColonSyntax node)
         {

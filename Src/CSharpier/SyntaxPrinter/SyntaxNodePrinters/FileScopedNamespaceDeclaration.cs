@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class FileScopedNamespaceDeclaration
+    internal static class FileScopedNamespaceDeclaration
     {
         public static Doc Print(FileScopedNamespaceDeclarationSyntax node)
         {
