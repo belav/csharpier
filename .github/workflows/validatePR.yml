@@ -1,7 +1,7 @@
 name: Validate PR
 on:
   pull_request:
-    branches: [ master, next ]
+    branches: [ master ]
 jobs:
   run_tests:
     runs-on: ubuntu-latest
