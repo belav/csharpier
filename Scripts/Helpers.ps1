@@ -1,6 +1,6 @@
 $repositoryRoot = Join-Path $PSScriptRoot ".."
-$csProjectPath = Join-Path $repositoryRoot "Src/CSharpier/CSharpier.csproj"
-$csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier/bin/release/net5.0/dotnet-csharpier.dll"
+$csProjectPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/CSharpier.Cli.csproj"
+$csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/bin/release/net5.0/dotnet-csharpier.dll"
 
 function Build-CSharpier
 {

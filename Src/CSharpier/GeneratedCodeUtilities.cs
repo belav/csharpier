@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis;
@@ -6,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace CSharpier
 {
-    public static class GeneratedCodeUtilities
+    internal static class GeneratedCodeUtilities
     {
         public static bool IsGeneratedCodeFile(string filePath)
         {

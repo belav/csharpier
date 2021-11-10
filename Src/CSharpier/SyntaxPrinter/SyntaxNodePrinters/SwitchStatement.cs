@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class SwitchStatement
+    internal static class SwitchStatement
     {
         public static Doc Print(SwitchStatementSyntax node)
         {

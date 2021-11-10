@@ -13,21 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     name: publish nuget
     needs: test
+    env:
+      VERSION_FILE_PATH: CSharpier.Build.props
+      TAG_FORMAT: "*"
+      NUGET_KEY: ${{secrets.NUGET_API_KEY}}
     steps:
       - uses: actions/checkout@v2
-      - name: publish csharpier on version change
-        id: publish_csharpier_nuget
+      - name: Publish CSharpier.Core library on version change
         uses: rohith/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: Src/CSharpier/CSharpier.csproj
-          VERSION_FILE_PATH: CSharpier.Build.props
-          TAG_FORMAT: "*"
-          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-      - name: publish csharpier.msbuild on version change
-        id: publish_csharpier_msbuild_nuget
+      - name: Publish CSharpie dotnet tool on version change
+        uses: rohith/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: Src/CSharpier.Cli/CSharpier.Cli.csproj
+      - name: Publish CSharpier.MsBuild library on version change
         uses: rohith/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj
-          VERSION_FILE_PATH: CSharpier.Build.props
-          TAG_FORMAT: "*"
-          NUGET_KEY: ${{secrets.NUGET_API_KEY}}

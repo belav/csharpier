@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public static class Modifiers
+    internal static class Modifiers
     {
         public static Doc Print(SyntaxTokenList modifiers)
         {

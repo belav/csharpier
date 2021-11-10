@@ -11,8 +11,7 @@ namespace CSharpier.Benchmarks
         [Benchmark]
         public void Default_CodeFormatter()
         {
-            var codeFormatter = new CodeFormatter();
-            codeFormatter.Format(largeCode, new PrinterOptions());
+            CodeFormatter.Format(largeCode, new PrinterOptions());
         }
 
         [Benchmark]

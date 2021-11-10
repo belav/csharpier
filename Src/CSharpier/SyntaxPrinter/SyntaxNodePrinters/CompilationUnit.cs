@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class CompilationUnit
+    internal static class CompilationUnit
     {
         public static Doc Print(CompilationUnitSyntax node)
         {

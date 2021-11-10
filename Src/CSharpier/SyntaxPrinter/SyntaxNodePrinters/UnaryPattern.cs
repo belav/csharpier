@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class UnaryPattern
+    internal static class UnaryPattern
     {
         public static Doc Print(UnaryPatternSyntax node)
         {

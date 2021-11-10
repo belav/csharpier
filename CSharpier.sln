@@ -16,6 +16,7 @@ ProjectSection(SolutionItems) = preProject
 	Dockerfile = Dockerfile
 	.dockerignore = .dockerignore
 	global.json = global.json
+	CSharpier.Build.targets = CSharpier.Build.targets
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{176BB0EA-B72B-4ACA-82AE-C16A732BE023}"
@@ -36,6 +37,7 @@ ProjectSection(SolutionItems) = preProject
 	Scripts\CreateTestingPR.ps1 = Scripts\CreateTestingPR.ps1
 	Scripts\TestCli.ps1 = Scripts\TestCli.ps1
 	Scripts\Helpers.ps1 = Scripts\Helpers.ps1
+	Scripts\BuildPackages.ps1 = Scripts\BuildPackages.ps1
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{7C99AEA7-E608-40B5-9B2E-353B6E4C9DBE}"
@@ -63,6 +65,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests.Generators", "Src\CSharpier.Tests.Generators\CSharpier.Tests.Generators.csproj", "{3E1D074B-A4F3-4010-84E7-820459214202}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Generators", "Src\CSharpier.Generators\CSharpier.Generators.csproj", "{D846F494-57FC-4315-A2A8-357343175D2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Cli", "src\CSharpier.Cli\CSharpier.Cli.csproj", "{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,5 +102,9 @@ Global
 		{D846F494-57FC-4315-A2A8-357343175D2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D846F494-57FC-4315-A2A8-357343175D2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D846F494-57FC-4315-A2A8-357343175D2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

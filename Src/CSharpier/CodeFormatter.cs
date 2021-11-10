@@ -14,12 +14,33 @@ namespace CSharpier
 {
     public class CodeFormatter
     {
-        public CSharpierResult Format(string code, PrinterOptions printerOptions)
+        public static string Format(string code, CodeFormatterOptions? options = null)
         {
-            return this.FormatAsync(code, printerOptions, CancellationToken.None).Result;
+            return FormatAsync(code, options).Result;
         }
 
-        public async Task<CSharpierResult> FormatAsync(
+        public static async Task<string> FormatAsync(
+            string code,
+            CodeFormatterOptions? options = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            options ??= new();
+
+            var result = await FormatAsync(
+                code,
+                new PrinterOptions { Width = options.Width },
+                cancellationToken
+            );
+            return result.Code;
+        }
+
+        internal static CSharpierResult Format(string code, PrinterOptions printerOptions)
+        {
+            return FormatAsync(code, printerOptions, CancellationToken.None).Result;
+        }
+
+        internal static async Task<CSharpierResult> FormatAsync(
             string code,
             PrinterOptions printerOptions,
             CancellationToken cancellationToken
@@ -143,7 +164,7 @@ namespace CSharpier
             }
         }
 
-        public static string GetLineEnding(string code, PrinterOptions printerOptions)
+        internal static string GetLineEnding(string code, PrinterOptions printerOptions)
         {
             if (printerOptions.EndOfLine == EndOfLine.Auto)
             {
@@ -174,7 +195,7 @@ namespace CSharpier
         }
     }
 
-    public class CSharpierResult
+    internal class CSharpierResult
     {
         public string Code { get; init; } = string.Empty;
         public string DocTree { get; init; } = string.Empty;

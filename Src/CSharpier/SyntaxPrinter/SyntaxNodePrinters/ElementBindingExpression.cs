@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class ElementBindingExpression
+    internal static class ElementBindingExpression
     {
         public static Doc Print(ElementBindingExpressionSyntax node)
         {

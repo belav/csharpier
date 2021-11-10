@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
     // this is loosely based on prettier/src/language-js/print/binaryish.js
-    public static class BinaryExpression
+    internal static class BinaryExpression
     {
         public static Doc Print(BinaryExpressionSyntax node)
         {

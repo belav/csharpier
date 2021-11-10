@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class Interpolation
+    internal static class Interpolation
     {
         public static Doc Print(InterpolationSyntax node)
         {

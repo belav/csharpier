@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using CSharpier.DocTypes;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis;
@@ -9,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class BaseMethodDeclaration
+    internal static class BaseMethodDeclaration
     {
         public static Doc Print(CSharpSyntaxNode node)
         {

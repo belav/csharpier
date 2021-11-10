@@ -7,7 +7,7 @@ using CSharpier.Utilities;
 
 namespace CSharpier.DocPrinter
 {
-    public static class DocFitter
+    internal static class DocFitter
     {
         public static bool Fits(
             PrintCommand nextCommand,

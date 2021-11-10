@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class ParameterList
+    internal static class ParameterList
     {
         public static Doc Print(ParameterListSyntax node)
         {

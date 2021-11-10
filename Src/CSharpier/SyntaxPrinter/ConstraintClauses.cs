@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public static class ConstraintClauses
+    internal static class ConstraintClauses
     {
         public static Doc PrintWithConditionalSpace(
             IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses,

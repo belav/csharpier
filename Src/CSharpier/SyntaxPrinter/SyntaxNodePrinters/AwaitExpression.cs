@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class AwaitExpression
+    internal static class AwaitExpression
     {
         public static Doc Print(AwaitExpressionSyntax node)
         {

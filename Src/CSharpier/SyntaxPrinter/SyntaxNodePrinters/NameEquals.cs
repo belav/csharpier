@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class NameEquals
+    internal static class NameEquals
     {
         public static Doc Print(NameEqualsSyntax node)
         {

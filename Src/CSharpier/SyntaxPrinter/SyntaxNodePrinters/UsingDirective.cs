@@ -1,11 +1,9 @@
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
-using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class UsingDirective
+    internal static class UsingDirective
     {
         public static Doc Print(UsingDirectiveSyntax node)
         {

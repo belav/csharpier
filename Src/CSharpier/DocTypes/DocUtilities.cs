@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CSharpier.DocTypes
 {
-    public static class DocUtilities
+    internal static class DocUtilities
     {
         public static bool ContainsBreak(Doc doc)
         {

@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public static class AttributeLists
+    internal static class AttributeLists
     {
         public static Doc Print(SyntaxNode node, SyntaxList<AttributeListSyntax> attributeLists)
         {

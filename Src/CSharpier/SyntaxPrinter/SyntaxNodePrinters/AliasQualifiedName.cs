@@ -1,10 +1,9 @@
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class AliasQualifiedName
+    internal static class AliasQualifiedName
     {
         public static Doc Print(AliasQualifiedNameSyntax node)
         {

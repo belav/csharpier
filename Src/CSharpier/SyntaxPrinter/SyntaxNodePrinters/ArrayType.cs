@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class ArrayType
+    internal static class ArrayType
     {
         public static Doc Print(ArrayTypeSyntax node)
         {

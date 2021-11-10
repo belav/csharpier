@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class QueryExpression
+    internal static class QueryExpression
     {
         public static Doc Print(QueryExpressionSyntax node)
         {

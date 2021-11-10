@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class BaseFieldDeclaration
+    internal static class BaseFieldDeclaration
     {
         public static Doc Print(BaseFieldDeclarationSyntax node)
         {

@@ -1,3 +1,4 @@
+using CSharpier.Cli;
 using NUnit.Framework;
 
 namespace CSharpier.Tests

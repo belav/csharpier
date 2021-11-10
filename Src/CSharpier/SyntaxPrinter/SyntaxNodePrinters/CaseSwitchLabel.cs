@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class CaseSwitchLabel
+    internal static class CaseSwitchLabel
     {
         public static Doc Print(CaseSwitchLabelSyntax node)
         {

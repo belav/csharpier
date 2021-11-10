@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public static class ExtraNewLines
+    internal static class ExtraNewLines
     {
         public static Doc Print(CSharpSyntaxNode node)
         {

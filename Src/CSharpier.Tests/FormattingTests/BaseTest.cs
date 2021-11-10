@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Text;
 using System.Threading;
+using CSharpier.Cli;
 using CSharpier.SyntaxPrinter;
 using DiffEngine;
 using FluentAssertions;
@@ -37,8 +38,7 @@ namespace CSharpier.Tests.FormattingTests
 
             PreprocessorSymbols.Reset();
 
-            var formatter = new CodeFormatter();
-            var result = formatter.Format(
+            var result = CodeFormatter.Format(
                 fileReaderResult.FileContents,
                 new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs }
             );

@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class RefType
+    internal static class RefType
     {
         public static Doc Print(RefTypeSyntax node)
         {

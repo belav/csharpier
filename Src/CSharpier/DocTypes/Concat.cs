@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace CSharpier.DocTypes
 {
-    public class Concat : Doc
+    internal class Concat : Doc
     {
         public IList<Doc> Contents { get; set; }
 

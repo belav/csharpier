@@ -2,7 +2,7 @@ using System;
 
 namespace CSharpier.DocTypes
 {
-    public class ConditionalGroup : Group
+    internal class ConditionalGroup : Group
     {
         public ConditionalGroup(Doc[] options)
         {

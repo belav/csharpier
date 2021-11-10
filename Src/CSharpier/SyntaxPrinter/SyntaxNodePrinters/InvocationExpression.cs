@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
+    internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
     // This is based on prettier/src/language-js/print/member-chain.js
     // various discussions/prs about how to potentially improve the formatting
@@ -15,7 +15,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
     // https://github.com/prettier/prettier/issues/8003
     // https://github.com/prettier/prettier/issues/8902
     // https://github.com/prettier/prettier/pull/7889
-    public static class InvocationExpression
+    internal static class InvocationExpression
     {
         public static Doc Print(InvocationExpressionSyntax node)
         {

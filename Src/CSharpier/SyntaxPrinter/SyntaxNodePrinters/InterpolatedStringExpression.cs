@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class InterpolatedStringExpression
+    internal static class InterpolatedStringExpression
     {
         public static Doc Print(InterpolatedStringExpressionSyntax node)
         {

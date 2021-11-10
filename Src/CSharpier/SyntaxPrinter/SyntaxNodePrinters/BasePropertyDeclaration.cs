@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class BasePropertyDeclaration
+    internal static class BasePropertyDeclaration
     {
         public static Doc Print(BasePropertyDeclarationSyntax node)
         {

@@ -2,7 +2,7 @@ using System.Text;
 
 namespace CSharpier
 {
-    public class DisabledTextComparer
+    internal class DisabledTextComparer
     {
         // when we encounter disabled text, it is inside an #if when the condition on the #if is false
         // we format all that code by doing multiple passes of csharpier

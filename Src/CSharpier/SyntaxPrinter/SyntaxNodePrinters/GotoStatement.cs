@@ -1,11 +1,10 @@
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class GotoStatement
+    internal static class GotoStatement
     {
         public static Doc Print(GotoStatementSyntax node)
         {

@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class VariableDeclaration
+    internal static class VariableDeclaration
     {
         public static Doc Print(VariableDeclarationSyntax node)
         {

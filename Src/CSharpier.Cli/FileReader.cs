@@ -5,9 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using UtfUnknown;
 
-namespace CSharpier
+namespace CSharpier.Cli
 {
-    public static class FileReader
+    internal static class FileReader
     {
         private static readonly SemaphoreSlim Semaphore = new(10);
 
@@ -55,7 +55,7 @@ namespace CSharpier
         }
     }
 
-    public record FileReaderResult(
+    internal record FileReaderResult(
         Encoding Encoding,
         string FileContents,
         bool UnableToDetectEncoding

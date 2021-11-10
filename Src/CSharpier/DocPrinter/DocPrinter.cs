@@ -7,7 +7,7 @@ using CSharpier.Utilities;
 
 namespace CSharpier.DocPrinter
 {
-    public class DocPrinter
+    internal class DocPrinter
     {
         protected readonly Stack<PrintCommand> RemainingCommands = new();
         protected readonly Dictionary<string, PrintMode> GroupModeMap = new();
@@ -291,9 +291,9 @@ namespace CSharpier.DocPrinter
         }
     }
 
-    public record PrintCommand(Indent Indent, PrintMode Mode, Doc Doc);
+    internal record PrintCommand(Indent Indent, PrintMode Mode, Doc Doc);
 
-    public enum PrintMode
+    internal enum PrintMode
     {
         Flat,
         Break,

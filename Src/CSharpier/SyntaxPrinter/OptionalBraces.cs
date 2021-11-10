@@ -1,13 +1,10 @@
-using System.Collections.Generic;
-using System.Linq;
 using CSharpier.DocTypes;
 using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public static class OptionalBraces
+    internal static class OptionalBraces
     {
         public static Doc Print(StatementSyntax node)
         {

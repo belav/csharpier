@@ -1,13 +1,11 @@
 using System;
-using System.Threading;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public static class RightHandSide
+    internal static class RightHandSide
     {
         public static Doc Print(
             CSharpSyntaxNode leftNode,

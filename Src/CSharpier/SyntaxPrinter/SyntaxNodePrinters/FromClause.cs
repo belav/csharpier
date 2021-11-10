@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class FromClause
+    internal static class FromClause
     {
         public static Doc Print(FromClauseSyntax node)
         {

@@ -3,28 +3,28 @@ using System.Text;
 
 namespace CSharpier.DocPrinter
 {
-    public class Indent
+    internal class Indent
     {
         public string Value = string.Empty;
         public int Length;
         public IList<IIndentType>? TypesForTabs;
     }
 
-    public interface IIndentType { }
+    internal interface IIndentType { }
 
-    public class IndentType : IIndentType
+    internal class IndentType : IIndentType
     {
         protected IndentType() { }
 
         public static IndentType Instance = new();
     }
 
-    public class AlignType : IIndentType
+    internal class AlignType : IIndentType
     {
         public int Width { get; init; }
     }
 
-    public class Indenter
+    internal class Indenter
     {
         protected readonly PrinterOptions PrinterOptions;
 

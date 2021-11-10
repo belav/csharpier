@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class SwitchExpression
+    internal static class SwitchExpression
     {
         public static Doc Print(SwitchExpressionSyntax node)
         {

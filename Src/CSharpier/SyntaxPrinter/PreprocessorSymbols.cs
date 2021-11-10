@@ -13,7 +13,7 @@ namespace CSharpier.SyntaxPrinter
     // come up with the symbol sets
     // use those in code formatter
     // that will get rid of the ugly threadStatic/reset/stopCollecting stuff
-    public class PreprocessorSymbols
+    internal class PreprocessorSymbols
     {
         [ThreadStatic]
         protected static List<string[]>? SymbolSets;

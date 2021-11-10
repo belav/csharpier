@@ -1,11 +1,9 @@
-using System.Linq;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class TupleType
+    internal static class TupleType
     {
         public static Doc Print(TupleTypeSyntax node)
         {

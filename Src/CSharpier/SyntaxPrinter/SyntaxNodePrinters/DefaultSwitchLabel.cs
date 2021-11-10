@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class DefaultSwitchLabel
+    internal static class DefaultSwitchLabel
     {
         public static Doc Print(DefaultSwitchLabelSyntax node)
         {

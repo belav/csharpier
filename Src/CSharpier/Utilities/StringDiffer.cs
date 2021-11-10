@@ -3,7 +3,7 @@ using System.Text;
 
 namespace CSharpier.Utilities
 {
-    public static class StringDiffer
+    internal static class StringDiffer
     {
         /// <summary>
         /// Given two strings that are different, this will print the first different line it encounters

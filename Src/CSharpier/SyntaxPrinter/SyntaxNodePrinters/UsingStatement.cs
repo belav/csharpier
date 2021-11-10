@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class UsingStatement
+    internal static class UsingStatement
     {
         public static Doc Print(UsingStatementSyntax node)
         {

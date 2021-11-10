@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
-using CSharpier.DocTypes;
 
 namespace CSharpier.Utilities
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         public static string CalculateHash(this string value)
         {

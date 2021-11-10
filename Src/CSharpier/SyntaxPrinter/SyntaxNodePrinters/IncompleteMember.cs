@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class IncompleteMember
+    internal static class IncompleteMember
     {
         public static Doc Print(IncompleteMemberSyntax node)
         {

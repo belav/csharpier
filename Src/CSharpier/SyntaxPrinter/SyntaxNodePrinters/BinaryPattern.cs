@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class BinaryPattern
+    internal static class BinaryPattern
     {
         public static Doc Print(BinaryPatternSyntax node)
         {

@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CSharpier.DocTypes
 {
-    public class Doc
+    internal class Doc
     {
         public static implicit operator Doc(string value)
         {
@@ -145,7 +144,7 @@ namespace CSharpier.DocTypes
             new(alignment, Concat(contents));
     }
 
-    public enum CommentType
+    internal enum CommentType
     {
         SingleLine,
         MultiLine

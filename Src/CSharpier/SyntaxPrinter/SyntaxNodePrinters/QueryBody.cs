@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class QueryBody
+    internal static class QueryBody
     {
         public static Doc Print(QueryBodySyntax node)
         {

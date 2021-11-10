@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 {
-    public static class ArrowExpressionClause
+    internal static class ArrowExpressionClause
     {
         public static Doc Print(ArrowExpressionClauseSyntax node)
         {

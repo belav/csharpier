@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 
 namespace CSharpier.SyntaxPrinter
 {
-    public static class SeparatedSyntaxList
+    internal static class SeparatedSyntaxList
     {
         public static Doc Print<T>(
             SeparatedSyntaxList<T> list,
