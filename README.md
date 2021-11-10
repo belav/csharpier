@@ -73,6 +73,15 @@ If you prefer to have csharpier run when a project is built, you can use the CSh
 Install-Package CSharpier.MSBuild
 ```
 
+### Programmatically Formatting Code
+It is possible to format code programmatically using the [CSharpier.Core](https://www.nuget.org/packages/CSharpier.Core) nuget library.
+```c#
+using CSharpier;
+
+var unformattedCode = "public     class Class2 {     }";
+var formattedCode = CodeFormatter.Format(unformattedCode);
+```
+
 ## Documentation
 [Command Line Interface](Docs/CLI.md)  
 [Configuration File](Docs/Configuration.md)  
