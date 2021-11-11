@@ -4,7 +4,7 @@
         <OutputType>Exe</OutputType>
         <PackageId>CSharpier</PackageId>
         <AssemblyName>dotnet-csharpier</AssemblyName>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
         <PackAsTool>true</PackAsTool>
         <Nullable>enable</Nullable>
     </PropertyGroup>
