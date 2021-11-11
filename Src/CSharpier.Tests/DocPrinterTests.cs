@@ -677,6 +677,25 @@ true || false"
             PrintedDocShouldBe(doc, $"+ + 1{NewLine}\t\t  2", useTabs: true);
         }
 
+        [TestCase(0, "\n")]
+        [TestCase(0, "\r\n")]
+        [TestCase(1, "\r\n")]
+        [TestCase(1, "\r\n")]
+        [TestCase(2, "\r\n")]
+        [TestCase(2, "\r\n")]
+        public void Print_Should_Include_Single_NewLine(int instances, string endOfLine)
+        {
+            var doc = "1";
+            for (var x = 0; x < instances; x++)
+            {
+                doc += endOfLine;
+            }
+
+            var result = DocPrinter.DocPrinter.Print(doc, new PrinterOptions(), endOfLine);
+
+            result.Should().Be($"1{endOfLine}");
+        }
+
         [Test]
         public void Scratch()
         {
