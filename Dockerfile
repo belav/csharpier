@@ -1,14 +1,13 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 RUN apt-get update  && \
-	apt-get install curl gnupg -yq && \ 
+	apt-get install curl gnupg -yq && \
 	curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
 	apt-get install -y nodejs && \
-	
 	npm install -g npm
 
 WORKDIR /build
