@@ -273,7 +273,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 return true;
             }
 
-            return firstNode is ThisExpressionSyntax or PredefinedTypeSyntax;
+            return firstNode
+                is ThisExpressionSyntax
+                    or PredefinedTypeSyntax
+                    or BaseExpressionSyntax;
         }
     }
 }
