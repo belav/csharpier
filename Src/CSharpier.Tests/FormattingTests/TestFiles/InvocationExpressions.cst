@@ -8,6 +8,10 @@ class ClassName
             .DoSomething___________________()
             .DoSomething___________________();
 
+        base.DoSomething___________________()
+            .DoSomething___________________()
+            .DoSomething___________________();
+
         AnIdentifier
             .DoSomething___________________()
             .DoSomething___________________()
