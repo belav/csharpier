@@ -11,4 +11,3 @@ public enum E
     B = A,
     C = 2 + A
 }
-

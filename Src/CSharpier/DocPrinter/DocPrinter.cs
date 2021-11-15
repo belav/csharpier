@@ -42,10 +42,7 @@ namespace CSharpier.DocPrinter
                 ProcessNextCommand();
             }
 
-            if (Output.Length == 0 || Output[^1] != '\n')
-            {
-                Output.Append(EndOfLine);
-            }
+            EnsureOutputEndsWithSingleNewLine();
 
             var result = Output.ToString();
             if (PrinterOptions.TrimInitialLines)
@@ -54,6 +51,21 @@ namespace CSharpier.DocPrinter
             }
 
             return result;
+        }
+
+        private void EnsureOutputEndsWithSingleNewLine()
+        {
+            var trimmed = 0;
+            for (; trimmed < Output.Length; trimmed++)
+            {
+                if (Output[^(trimmed + 1)] != '\r' && Output[^(trimmed + 1)] != '\n')
+                {
+                    break;
+                }
+            }
+            Output.Length -= trimmed;
+
+            Output.Append(EndOfLine);
         }
 
         private void ProcessNextCommand()

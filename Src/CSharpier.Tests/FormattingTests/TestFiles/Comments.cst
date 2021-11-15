@@ -89,5 +89,3 @@ public class ClassName
     // regular comment does not cause breaking
     IReadOnlyList<IArgument> ICommand.Arguments => Arguments;
 }
-
-
