@@ -18,7 +18,6 @@ jobs:
     needs: test
     env:
       VERSION_FILE_PATH: CSharpier.Build.props
-      TAG_FORMAT: "*"
       NUGET_KEY: ${{secrets.NUGET_API_KEY}}
     steps:
       - uses: actions/checkout@v2
@@ -29,11 +28,14 @@ jobs:
         uses: rohith/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: Src/CSharpier/CSharpier.csproj
+          TAG_FORMAT: "*"
       - name: Publish CSharpie dotnet tool on version change
         uses: rohith/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: Src/CSharpier.Cli/CSharpier.Cli.csproj
+          TAG_FORMAT: "*"
       - name: Publish CSharpier.MsBuild library on version change
         uses: rohith/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj
+          TAG_FORMAT: "*"
