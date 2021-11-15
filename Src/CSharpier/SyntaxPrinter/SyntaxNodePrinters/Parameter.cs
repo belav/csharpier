@@ -38,7 +38,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             return hasAttribute
               ? Doc.GroupWithId(groupId, docs)
-              : docs.Count == 1 ? docs[0] : Doc.Concat(docs);
+              : docs.Count == 1
+                  ? docs[0]
+                  : Doc.Concat(docs);
         }
     }
 }

@@ -33,4 +33,3 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         }
     }
 }
-
