@@ -4,6 +4,7 @@
         <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
     
     <ItemGroup>

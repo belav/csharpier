@@ -1,18 +1,17 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class AssignmentExpression
 {
-    internal static class AssignmentExpression
+    public static Doc Print(AssignmentExpressionSyntax node)
     {
-        public static Doc Print(AssignmentExpressionSyntax node)
-        {
-            return RightHandSide.Print(
-                node,
-                Doc.Concat(Node.Print(node.Left), " "),
-                Token.Print(node.OperatorToken),
-                node.Right
-            );
-        }
+        return RightHandSide.Print(
+            node,
+            Doc.Concat(Node.Print(node.Left), " "),
+            Token.Print(node.OperatorToken),
+            node.Right
+        );
     }
 }

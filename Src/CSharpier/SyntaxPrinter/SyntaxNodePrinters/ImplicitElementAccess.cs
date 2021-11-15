@@ -1,13 +1,12 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class ImplicitElementAccess
 {
-    internal static class ImplicitElementAccess
+    public static Doc Print(ImplicitElementAccessSyntax node)
     {
-        public static Doc Print(ImplicitElementAccessSyntax node)
-        {
-            return Node.Print(node.ArgumentList);
-        }
+        return Node.Print(node.ArgumentList);
     }
 }

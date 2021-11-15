@@ -1,11 +1,10 @@
-namespace CSharpier.DocTypes
+namespace CSharpier.DocTypes;
+
+internal class LiteralLine : LineDoc, IBreakParent
 {
-    internal class LiteralLine : LineDoc, IBreakParent
+    public LiteralLine()
     {
-        public LiteralLine()
-        {
-            Type = LineType.Hard;
-            IsLiteral = true;
-        }
+        Type = LineType.Hard;
+        IsLiteral = true;
     }
 }

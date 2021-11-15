@@ -1,7 +1,6 @@
-namespace CSharpier.DocTypes
+namespace CSharpier.DocTypes;
+
+internal class IndentDoc : Doc, IHasContents
 {
-    internal class IndentDoc : Doc, IHasContents
-    {
-        public Doc Contents { get; set; } = Doc.Null;
-    }
+    public Doc Contents { get; set; } = Doc.Null;
 }

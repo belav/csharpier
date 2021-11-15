@@ -1,13 +1,12 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class ContinueStatement
 {
-    internal static class ContinueStatement
+    public static Doc Print(ContinueStatementSyntax node)
     {
-        public static Doc Print(ContinueStatementSyntax node)
-        {
-            return Doc.Concat(Token.Print(node.ContinueKeyword), Token.Print(node.SemicolonToken));
-        }
+        return Doc.Concat(Token.Print(node.ContinueKeyword), Token.Print(node.SemicolonToken));
     }
 }

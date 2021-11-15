@@ -1,17 +1,16 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class DefaultSwitchLabel
 {
-    internal static class DefaultSwitchLabel
+    public static Doc Print(DefaultSwitchLabelSyntax node)
     {
-        public static Doc Print(DefaultSwitchLabelSyntax node)
-        {
-            return Doc.Concat(
-                ExtraNewLines.Print(node),
-                Token.Print(node.Keyword),
-                Token.Print(node.ColonToken)
-            );
-        }
+        return Doc.Concat(
+            ExtraNewLines.Print(node),
+            Token.Print(node.Keyword),
+            Token.Print(node.ColonToken)
+        );
     }
 }

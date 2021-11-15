@@ -4,11 +4,13 @@ using CSharpier.DocTypes;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class FileScopedNamespaceDeclaration
 {
-    internal static class FileScopedNamespaceDeclaration
+    public static Doc Print(FileScopedNamespaceDeclarationSyntax node)
     {
-        public static Doc Print(FileScopedNamespaceDeclarationSyntax node)
+        var docs = new List<Doc>()
         {
             var docs = new List<Doc>()
             {
@@ -40,5 +42,17 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
 
             return Doc.Concat(docs);
         }
+
+        if (node.Usings.Any())
+        {
+            docs.Add(Doc.Join(Doc.HardLine, node.Usings.Select(Node.Print)), Doc.HardLine);
+        }
+
+        if (node.Members.Any())
+        {
+            docs.Add(Doc.Join(Doc.HardLine, node.Members.Select(Node.Print)), Doc.HardLine);
+        }
+
+        return Doc.Concat(docs);
     }
 }

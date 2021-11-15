@@ -1,144 +1,138 @@
 using System.Collections.Generic;
 using CSharpier.DocTypes;
 
-namespace CSharpier.DocPrinter
+namespace CSharpier.DocPrinter;
+
+internal static class PropagateBreaks
 {
-    internal static class PropagateBreaks
+    private static readonly Doc TraverseDocOnExitStackMarker = new();
+
+    public static void RunOn(Doc document)
     {
-        private static readonly Doc TraverseDocOnExitStackMarker = new();
+        var alreadyVisitedSet = new HashSet<Group>();
+        var groupStack = new Stack<Group>();
+        var forceFlat = 0;
+        var canSkipBreak = false;
 
-        public static void RunOn(Doc document)
+        void BreakParentGroup()
         {
-            var alreadyVisitedSet = new HashSet<Group>();
-            var groupStack = new Stack<Group>();
-            var forceFlat = 0;
-            var canSkipBreak = false;
-
-            void BreakParentGroup()
+            if (groupStack.Count > 0)
             {
-                if (groupStack.Count > 0)
+                var parentGroup = groupStack.Peek();
+                if (parentGroup is not ConditionalGroup)
                 {
-                    var parentGroup = groupStack.Peek();
-                    if (parentGroup is not ConditionalGroup)
-                    {
-                        parentGroup.Break = true;
-                    }
+                    parentGroup.Break = true;
                 }
             }
+        }
 
-            bool OnEnter(Doc doc)
+        bool OnEnter(Doc doc)
+        {
+            if (doc is ForceFlat)
             {
-                if (doc is ForceFlat)
-                {
-                    forceFlat++;
-                }
-                if (
-                    doc is IBreakParent && (forceFlat == 0 || (forceFlat > 0 && doc is LiteralLine))
-                )
-                {
-                    if (doc is HardLine { SkipBreakIfFirstInGroup: true } && canSkipBreak)
-                    {
-                        if (groupStack.Count > 1)
-                        {
-                            var nextGroup = groupStack.Pop();
-                            groupStack.Peek().Break = true;
-                            groupStack.Push(nextGroup);
-                        }
-                    }
-                    else
-                    {
-                        BreakParentGroup();
-                    }
-                }
-                else if (doc is Group group)
-                {
-                    canSkipBreak = true;
-                    groupStack.Push(group);
-                    if (alreadyVisitedSet.Contains(group))
-                    {
-                        return false;
-                    }
-
-                    alreadyVisitedSet.Add(group);
-                }
-                else if (doc is StringDoc { IsDirective: false })
-                {
-                    canSkipBreak = false;
-                }
-
-                return true;
+                forceFlat++;
             }
-
-            void OnExit(Doc doc)
+            if (doc is IBreakParent && (forceFlat == 0 || (forceFlat > 0 && doc is LiteralLine)))
             {
-                if (doc is ForceFlat)
+                if (doc is HardLine { SkipBreakIfFirstInGroup: true } && canSkipBreak)
                 {
-                    forceFlat--;
-                }
-                else if (doc is Group)
-                {
-                    canSkipBreak = false;
-                    var group = groupStack.Pop();
-                    if (group.Break)
+                    if (groupStack.Count > 1)
                     {
-                        BreakParentGroup();
+                        var nextGroup = groupStack.Pop();
+                        groupStack.Peek().Break = true;
+                        groupStack.Push(nextGroup);
                     }
+                }
+                else
+                {
+                    BreakParentGroup();
                 }
             }
-
-            var docsStack = new Stack<Doc>();
-            docsStack.Push(document);
-            while (docsStack.Count > 0)
+            else if (doc is Group group)
             {
-                var doc = docsStack.Pop();
-
-                if (doc == TraverseDocOnExitStackMarker)
+                canSkipBreak = true;
+                groupStack.Push(group);
+                if (alreadyVisitedSet.Contains(group))
                 {
-                    OnExit(docsStack.Pop());
-                    continue;
+                    return false;
                 }
 
-                docsStack.Push(doc);
-                docsStack.Push(TraverseDocOnExitStackMarker);
+                alreadyVisitedSet.Add(group);
+            }
+            else if (doc is StringDoc { IsDirective: false })
+            {
+                canSkipBreak = false;
+            }
 
-                if (!OnEnter(doc))
+            return true;
+        }
+
+        void OnExit(Doc doc)
+        {
+            if (doc is ForceFlat)
+            {
+                forceFlat--;
+            }
+            else if (doc is Group)
+            {
+                canSkipBreak = false;
+                var group = groupStack.Pop();
+                if (group.Break)
                 {
-                    continue;
+                    BreakParentGroup();
                 }
+            }
+        }
 
-                if (doc is Concat concat)
+        var docsStack = new Stack<Doc>();
+        docsStack.Push(document);
+        while (docsStack.Count > 0)
+        {
+            var doc = docsStack.Pop();
+
+            if (doc == TraverseDocOnExitStackMarker)
+            {
+                OnExit(docsStack.Pop());
+                continue;
+            }
+
+            docsStack.Push(doc);
+            docsStack.Push(TraverseDocOnExitStackMarker);
+
+            if (!OnEnter(doc))
+            {
+                continue;
+            }
+
+            if (doc is Concat concat)
+            {
+                // push onto stack in reverse order so they are processed in the original order
+                for (var x = concat.Contents.Count - 1; x >= 0; --x)
                 {
-                    // push onto stack in reverse order so they are processed in the original order
-                    for (var x = concat.Contents.Count - 1; x >= 0; --x)
+                    if (forceFlat > 0 && concat.Contents[x] is LineDoc { IsLiteral: false } lineDoc)
                     {
-                        if (
-                            forceFlat > 0
-                            && concat.Contents[x] is LineDoc { IsLiteral: false } lineDoc
-                        )
-                        {
-                            concat.Contents[x] =
-                                lineDoc.Type == LineDoc.LineType.Soft ? string.Empty : " ";
-                        }
+                        concat.Contents[x] =
+                            lineDoc.Type == LineDoc.LineType.Soft ? string.Empty : " ";
+                    }
 
-                        docsStack.Push(concat.Contents[x]);
-                    }
+                    docsStack.Push(concat.Contents[x]);
                 }
-                else if (doc is IfBreak ifBreak)
+            }
+            else if (doc is IfBreak ifBreak)
+            {
+                docsStack.Push(ifBreak.FlatContents);
+                docsStack.Push(ifBreak.BreakContents);
+            }
+            else if (doc is ConditionalGroup conditionalGroup)
+            {
+                foreach (var option in conditionalGroup.Options)
                 {
-                    docsStack.Push(ifBreak.FlatContents);
-                    docsStack.Push(ifBreak.BreakContents);
+                    docsStack.Push(option);
                 }
-                else if (doc is ConditionalGroup conditionalGroup)
-                {
-                    foreach (var option in conditionalGroup.Options)
-                    {
-                        docsStack.Push(option);
-                    }
-                }
-                else if (doc is IHasContents hasContents)
-                {
-                    docsStack.Push(hasContents.Contents);
-                }
+            }
+            else if (doc is IHasContents hasContents)
+            {
+                docsStack.Push(hasContents.Contents);
             }
         }
     }

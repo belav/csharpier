@@ -2,28 +2,27 @@ using System;
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class ObjectCreationExpression
 {
-    internal static class ObjectCreationExpression
+    public static Doc Print(ObjectCreationExpressionSyntax node)
     {
-        public static Doc Print(ObjectCreationExpressionSyntax node)
-        {
-            return Doc.Group(
-                Token.PrintWithSuffix(node.NewKeyword, " "),
-                Node.Print(node.Type),
-                node.ArgumentList != null
-                  ? Doc.Group(
-                        ArgumentListLike.Print(
-                            node.ArgumentList.OpenParenToken,
-                            node.ArgumentList.Arguments,
-                            node.ArgumentList.CloseParenToken
-                        )
+        return Doc.Group(
+            Token.PrintWithSuffix(node.NewKeyword, " "),
+            Node.Print(node.Type),
+            node.ArgumentList != null
+              ? Doc.Group(
+                    ArgumentListLike.Print(
+                        node.ArgumentList.OpenParenToken,
+                        node.ArgumentList.Arguments,
+                        node.ArgumentList.CloseParenToken
                     )
-                  : Doc.Null,
-                node.Initializer != null
-                  ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer))
-                  : Doc.Null
-            );
-        }
+                )
+              : Doc.Null,
+            node.Initializer != null
+              ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer))
+              : Doc.Null
+        );
     }
 }

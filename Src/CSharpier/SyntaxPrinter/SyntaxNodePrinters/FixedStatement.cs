@@ -1,29 +1,28 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class FixedStatement
 {
-    internal static class FixedStatement
+    public static Doc Print(FixedStatementSyntax node)
     {
-        public static Doc Print(FixedStatementSyntax node)
-        {
-            return Doc.Concat(
-                ExtraNewLines.Print(node),
-                Doc.Group(
-                    Token.Print(node.FixedKeyword),
-                    " ",
-                    Token.Print(node.OpenParenToken),
-                    Doc.Group(Doc.Indent(Doc.SoftLine, Node.Print(node.Declaration)), Doc.SoftLine),
-                    Token.Print(node.CloseParenToken),
-                    Doc.IfBreak(Doc.Null, Doc.SoftLine)
-                ),
-                node.Statement is BlockSyntax blockSyntax
-                  ? Block.Print(blockSyntax)
-                  : Doc.IndentIf(
-                        node.Statement is not FixedStatementSyntax,
-                        Doc.Concat(Doc.HardLine, Node.Print(node.Statement))
-                    )
-            );
-        }
+        return Doc.Concat(
+            ExtraNewLines.Print(node),
+            Doc.Group(
+                Token.Print(node.FixedKeyword),
+                " ",
+                Token.Print(node.OpenParenToken),
+                Doc.Group(Doc.Indent(Doc.SoftLine, Node.Print(node.Declaration)), Doc.SoftLine),
+                Token.Print(node.CloseParenToken),
+                Doc.IfBreak(Doc.Null, Doc.SoftLine)
+            ),
+            node.Statement is BlockSyntax blockSyntax
+              ? Block.Print(blockSyntax)
+              : Doc.IndentIf(
+                    node.Statement is not FixedStatementSyntax,
+                    Doc.Concat(Doc.HardLine, Node.Print(node.Statement))
+                )
+        );
     }
 }

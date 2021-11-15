@@ -8,113 +8,99 @@ using Newtonsoft.Json;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace CSharpier.Cli
+namespace CSharpier.Cli;
+
+public class ConfigurationFileOptions
 {
-    public class ConfigurationFileOptions
+    public int PrintWidth { get; init; } = 100;
+    public List<string>? PreprocessorSymbolSets { get; init; }
+
+    private static readonly string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
+
+    internal static PrinterOptions CreatePrinterOptions(
+        string baseDirectoryPath,
+        IFileSystem fileSystem,
+        ILogger logger
+    )
     {
-        public int PrintWidth { get; init; } = 100;
-        public List<string>? PreprocessorSymbolSets { get; init; }
+        var configurationFileOptions = Create(baseDirectoryPath, fileSystem, logger);
 
-        private static readonly string[] validExtensions =
+        List<string[]> preprocessorSymbolSets;
+        if (configurationFileOptions.PreprocessorSymbolSets == null)
         {
-            ".csharpierrc",
-            ".json",
-            ".yml",
-            ".yaml"
+            preprocessorSymbolSets = new();
+        }
+        else
+        {
+            preprocessorSymbolSets = configurationFileOptions.PreprocessorSymbolSets
+                .Select(
+                    o =>
+                        o.Split(
+                            ",",
+                            StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries
+                        )
+                )
+                .ToList();
+        }
+
+        return new PrinterOptions
+        {
+            TabWidth = 4,
+            UseTabs = false,
+            Width = configurationFileOptions.PrintWidth,
+            EndOfLine = EndOfLine.Auto,
+            PreprocessorSymbolSets = preprocessorSymbolSets,
         };
+    }
 
-        internal static PrinterOptions CreatePrinterOptions(
-            string baseDirectoryPath,
-            IFileSystem fileSystem,
-            ILogger logger
-        )
+    public static ConfigurationFileOptions Create(
+        string baseDirectoryPath,
+        IFileSystem fileSystem,
+        ILogger? logger = null
+    )
+    {
+        var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
+
+        while (directoryInfo is not null)
         {
-            var configurationFileOptions = Create(baseDirectoryPath, fileSystem, logger);
+            var file = directoryInfo
+                .EnumerateFiles(".csharpierrc*", SearchOption.TopDirectoryOnly)
+                .Where(o => validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase))
+                .OrderBy(o => o.Extension)
+                .FirstOrDefault();
 
-            List<string[]> preprocessorSymbolSets;
-            if (configurationFileOptions.PreprocessorSymbolSets == null)
+            if (file == null)
             {
-                preprocessorSymbolSets = new();
-            }
-            else
-            {
-                preprocessorSymbolSets = configurationFileOptions.PreprocessorSymbolSets
-                    .Select(
-                        o =>
-                            o.Split(
-                                ",",
-                                StringSplitOptions.RemoveEmptyEntries
-                                    | StringSplitOptions.TrimEntries
-                            )
-                    )
-                    .ToList();
+                directoryInfo = directoryInfo.Parent;
+                continue;
             }
 
-            return new PrinterOptions
+            var contents = fileSystem.File.ReadAllText(file.FullName);
+
+            if (string.IsNullOrWhiteSpace(contents))
             {
-                TabWidth = 4,
-                UseTabs = false,
-                Width = configurationFileOptions.PrintWidth,
-                EndOfLine = EndOfLine.Auto,
-                PreprocessorSymbolSets = preprocessorSymbolSets,
-            };
-        }
+                logger?.LogWarning("The configuration file at " + file.FullName + " was empty.");
 
-        public static ConfigurationFileOptions Create(
-            string baseDirectoryPath,
-            IFileSystem fileSystem,
-            ILogger? logger = null
-        )
-        {
-            var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
-
-            while (directoryInfo is not null)
-            {
-                var file = directoryInfo
-                    .EnumerateFiles(".csharpierrc*", SearchOption.TopDirectoryOnly)
-                    .Where(
-                        o => validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase)
-                    )
-                    .OrderBy(o => o.Extension)
-                    .FirstOrDefault();
-
-                if (file == null)
-                {
-                    directoryInfo = directoryInfo.Parent;
-                    continue;
-                }
-
-                var contents = fileSystem.File.ReadAllText(file.FullName);
-
-                if (string.IsNullOrWhiteSpace(contents))
-                {
-                    logger?.LogWarning(
-                        "The configuration file at " + file.FullName + " was empty."
-                    );
-
-                    return new();
-                }
-
-                return contents.TrimStart().StartsWith("{")
-                  ? ReadJson(contents)
-                  : ReadYaml(contents);
+                return new();
             }
 
-            return new ConfigurationFileOptions();
+            return contents.TrimStart().StartsWith("{") ? ReadJson(contents) : ReadYaml(contents);
         }
 
-        private static ConfigurationFileOptions ReadJson(string contents)
-        {
-            return JsonConvert.DeserializeObject<ConfigurationFileOptions>(contents);
-        }
+        return new ConfigurationFileOptions();
+    }
 
-        private static ConfigurationFileOptions ReadYaml(string contents)
-        {
-            var deserializer = new DeserializerBuilder()
-                .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                .Build();
+    private static ConfigurationFileOptions ReadJson(string contents)
+    {
+        return JsonConvert.DeserializeObject<ConfigurationFileOptions>(contents);
+    }
 
-            return deserializer.Deserialize<ConfigurationFileOptions>(contents);
-        }
+    private static ConfigurationFileOptions ReadYaml(string contents)
+    {
+        var deserializer = new DeserializerBuilder()
+            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .Build();
+
+        return deserializer.Deserialize<ConfigurationFileOptions>(contents);
     }
 }

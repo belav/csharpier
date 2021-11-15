@@ -4,5 +4,6 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/belav/csharpier</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
 </Project>

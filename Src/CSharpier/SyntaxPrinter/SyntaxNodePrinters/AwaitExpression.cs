@@ -1,16 +1,15 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class AwaitExpression
 {
-    internal static class AwaitExpression
+    public static Doc Print(AwaitExpressionSyntax node)
     {
-        public static Doc Print(AwaitExpressionSyntax node)
-        {
-            return Doc.Concat(
-                Token.PrintWithSuffix(node.AwaitKeyword, " "),
-                Node.Print(node.Expression)
-            );
-        }
+        return Doc.Concat(
+            Token.PrintWithSuffix(node.AwaitKeyword, " "),
+            Node.Print(node.Expression)
+        );
     }
 }

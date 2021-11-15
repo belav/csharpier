@@ -4,95 +4,91 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace CSharpier.Cli
+namespace CSharpier.Cli;
+
+public class IgnoreFile
 {
-    public class IgnoreFile
+    protected Ignore.Ignore Ignore { get; }
+    protected string IgnoreBaseDirectoryPath { get; }
+
+    protected IgnoreFile(Ignore.Ignore ignore, string ignoreBaseDirectoryPath)
     {
-        protected Ignore.Ignore Ignore { get; }
-        protected string IgnoreBaseDirectoryPath { get; }
+        this.Ignore = ignore;
+        this.IgnoreBaseDirectoryPath = ignoreBaseDirectoryPath.Replace('\\', '/');
+    }
 
-        protected IgnoreFile(Ignore.Ignore ignore, string ignoreBaseDirectoryPath)
+    public bool IsIgnored(string filePath)
+    {
+        var normalizedFilePath = filePath.Replace('\\', '/');
+        if (!normalizedFilePath.StartsWith(this.IgnoreBaseDirectoryPath))
         {
-            this.Ignore = ignore;
-            this.IgnoreBaseDirectoryPath = ignoreBaseDirectoryPath.Replace('\\', '/');
+            throw new Exception(
+                "The filePath of "
+                    + filePath
+                    + " does not start with the ignoreBaseDirectoryPath of "
+                    + this.IgnoreBaseDirectoryPath
+            );
         }
 
-        public bool IsIgnored(string filePath)
+        normalizedFilePath = normalizedFilePath[(this.IgnoreBaseDirectoryPath.Length + 1)..];
+
+        return this.Ignore.IsIgnored(normalizedFilePath);
+    }
+
+    public static async Task<IgnoreFile?> Create(
+        string baseDirectoryPath,
+        IFileSystem fileSystem,
+        ILogger logger,
+        CancellationToken cancellationToken
+    )
+    {
+        var ignore = new Ignore.Ignore();
+        var ignoreFilePath = FindIgnorePath(baseDirectoryPath, fileSystem);
+        if (ignoreFilePath == null)
         {
-            var normalizedFilePath = filePath.Replace('\\', '/');
-            if (!normalizedFilePath.StartsWith(this.IgnoreBaseDirectoryPath))
-            {
-                throw new Exception(
-                    "The filePath of "
-                        + filePath
-                        + " does not start with the ignoreBaseDirectoryPath of "
-                        + this.IgnoreBaseDirectoryPath
-                );
-            }
-
-            normalizedFilePath = normalizedFilePath[(this.IgnoreBaseDirectoryPath.Length + 1)..];
-
-            return this.Ignore.IsIgnored(normalizedFilePath);
+            return new IgnoreFile(ignore, baseDirectoryPath);
         }
 
-        public static async Task<IgnoreFile?> Create(
-            string baseDirectoryPath,
-            IFileSystem fileSystem,
-            ILogger logger,
-            CancellationToken cancellationToken
+        foreach (
+            var line in await fileSystem.File.ReadAllLinesAsync(ignoreFilePath, cancellationToken)
         )
         {
-            var ignore = new Ignore.Ignore();
-            var ignoreFilePath = FindIgnorePath(baseDirectoryPath, fileSystem);
-            if (ignoreFilePath == null)
+            try
             {
-                return new IgnoreFile(ignore, baseDirectoryPath);
+                ignore.Add(line);
             }
-
-            foreach (
-                var line in await fileSystem.File.ReadAllLinesAsync(
-                    ignoreFilePath,
-                    cancellationToken
-                )
-            )
+            catch (Exception ex)
             {
-                try
-                {
-                    ignore.Add(line);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(
-                        ex,
-                        @$"The .csharpierignore file at {ignoreFilePath} could not be parsed due to the following line:
+                logger.LogError(
+                    ex,
+                    @$"The .csharpierignore file at {ignoreFilePath} could not be parsed due to the following line:
 {line}
 "
-                    );
-                    return null;
-                }
-            }
-
-            return new IgnoreFile(ignore, fileSystem.Path.GetDirectoryName(ignoreFilePath));
-        }
-
-        private static string? FindIgnorePath(string baseDirectoryPath, IFileSystem fileSystem)
-        {
-            var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
-            while (directoryInfo != null)
-            {
-                var ignoreFilePath = fileSystem.Path.Combine(
-                    directoryInfo.FullName,
-                    ".csharpierignore"
                 );
-                if (fileSystem.File.Exists(ignoreFilePath))
-                {
-                    return ignoreFilePath;
-                }
+                return null;
+            }
+        }
 
-                directoryInfo = directoryInfo.Parent;
+        return new IgnoreFile(ignore, fileSystem.Path.GetDirectoryName(ignoreFilePath));
+    }
+
+    private static string? FindIgnorePath(string baseDirectoryPath, IFileSystem fileSystem)
+    {
+        var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
+        while (directoryInfo != null)
+        {
+            var ignoreFilePath = fileSystem.Path.Combine(
+                directoryInfo.FullName,
+                ".csharpierignore"
+            );
+            if (fileSystem.File.Exists(ignoreFilePath))
+            {
+                return ignoreFilePath;
             }
 
-            return null;
+            directoryInfo = directoryInfo.Parent;
         }
+
+        return null;
     }
 }

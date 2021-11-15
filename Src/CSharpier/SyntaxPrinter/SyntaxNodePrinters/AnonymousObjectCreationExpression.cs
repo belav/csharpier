@@ -1,26 +1,25 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class AnonymousObjectCreationExpression
 {
-    internal static class AnonymousObjectCreationExpression
+    public static Doc Print(AnonymousObjectCreationExpressionSyntax node)
     {
-        public static Doc Print(AnonymousObjectCreationExpressionSyntax node)
-        {
-            return Doc.Group(
-                Token.PrintWithSuffix(node.NewKeyword, Doc.Line),
-                Token.Print(node.OpenBraceToken),
-                Doc.Indent(
-                    Doc.Line,
-                    SeparatedSyntaxList.Print(
-                        node.Initializers,
-                        AnonymousObjectMemberDeclarator.Print,
-                        Doc.Line
-                    )
-                ),
+        return Doc.Group(
+            Token.PrintWithSuffix(node.NewKeyword, Doc.Line),
+            Token.Print(node.OpenBraceToken),
+            Doc.Indent(
                 Doc.Line,
-                Token.Print(node.CloseBraceToken)
-            );
-        }
+                SeparatedSyntaxList.Print(
+                    node.Initializers,
+                    AnonymousObjectMemberDeclarator.Print,
+                    Doc.Line
+                )
+            ),
+            Doc.Line,
+            Token.Print(node.CloseBraceToken)
+        );
     }
 }

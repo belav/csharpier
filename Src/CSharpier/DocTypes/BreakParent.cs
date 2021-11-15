@@ -1,6 +1,5 @@
-namespace CSharpier.DocTypes
-{
-    internal class BreakParent : Doc, IBreakParent { }
+namespace CSharpier.DocTypes;
 
-    internal interface IBreakParent { }
-}
+internal class BreakParent : Doc, IBreakParent { }
+
+internal interface IBreakParent { }

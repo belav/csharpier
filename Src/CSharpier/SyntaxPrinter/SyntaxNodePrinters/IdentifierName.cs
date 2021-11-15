@@ -1,13 +1,12 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class IdentifierName
 {
-    internal static class IdentifierName
+    public static Doc Print(IdentifierNameSyntax node)
     {
-        public static Doc Print(IdentifierNameSyntax node)
-        {
-            return Token.Print(node.Identifier);
-        }
+        return Token.Print(node.Identifier);
     }
 }

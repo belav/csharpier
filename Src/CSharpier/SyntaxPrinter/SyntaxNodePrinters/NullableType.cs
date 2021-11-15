@@ -1,13 +1,12 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class NullableType
 {
-    internal static class NullableType
+    public static Doc Print(NullableTypeSyntax node)
     {
-        public static Doc Print(NullableTypeSyntax node)
-        {
-            return Doc.Concat(Node.Print(node.ElementType), Token.Print(node.QuestionToken));
-        }
+        return Doc.Concat(Node.Print(node.ElementType), Token.Print(node.QuestionToken));
     }
 }

@@ -1,13 +1,12 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class SimpleBaseType
 {
-    internal static class SimpleBaseType
+    public static Doc Print(SimpleBaseTypeSyntax node)
     {
-        public static Doc Print(SimpleBaseTypeSyntax node)
-        {
-            return Node.Print(node.Type);
-        }
+        return Node.Print(node.Type);
     }
 }

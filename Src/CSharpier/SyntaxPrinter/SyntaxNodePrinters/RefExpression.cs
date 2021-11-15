@@ -1,16 +1,12 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class RefExpression
 {
-    internal static class RefExpression
+    public static Doc Print(RefExpressionSyntax node)
     {
-        public static Doc Print(RefExpressionSyntax node)
-        {
-            return Doc.Concat(
-                Token.PrintWithSuffix(node.RefKeyword, " "),
-                Node.Print(node.Expression)
-            );
-        }
+        return Doc.Concat(Token.PrintWithSuffix(node.RefKeyword, " "), Node.Print(node.Expression));
     }
 }

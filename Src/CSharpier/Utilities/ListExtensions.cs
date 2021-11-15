@@ -1,25 +1,24 @@
 using System.Collections.Generic;
 using CSharpier.DocTypes;
 
-namespace CSharpier.Utilities
-{
-    internal static class ListExtensions
-    {
-        public static void Add(this List<Doc> list, params Doc[] values)
-        {
-            if (values.Length == 1 && values[0] == Doc.Null)
-            {
-                return;
-            }
-            list.AddRange(values);
-        }
+namespace CSharpier.Utilities;
 
-        public static void AddIfNotNull(this List<Doc> value, Doc doc)
+internal static class ListExtensions
+{
+    public static void Add(this List<Doc> list, params Doc[] values)
+    {
+        if (values.Length == 1 && values[0] == Doc.Null)
         {
-            if (doc != Doc.Null)
-            {
-                value.Add(doc);
-            }
+            return;
+        }
+        list.AddRange(values);
+    }
+
+    public static void AddIfNotNull(this List<Doc> value, Doc doc)
+    {
+        if (doc != Doc.Null)
+        {
+            value.Add(doc);
         }
     }
 }

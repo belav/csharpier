@@ -1,19 +1,18 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class CasePatternSwitchLabel
 {
-    internal static class CasePatternSwitchLabel
+    public static Doc Print(CasePatternSwitchLabelSyntax node)
     {
-        public static Doc Print(CasePatternSwitchLabelSyntax node)
-        {
-            return Doc.Concat(
-                ExtraNewLines.Print(node),
-                Token.PrintWithSuffix(node.Keyword, " "),
-                Node.Print(node.Pattern),
-                node.WhenClause != null ? Node.Print(node.WhenClause) : Doc.Null,
-                Token.Print(node.ColonToken)
-            );
-        }
+        return Doc.Concat(
+            ExtraNewLines.Print(node),
+            Token.PrintWithSuffix(node.Keyword, " "),
+            Node.Print(node.Pattern),
+            node.WhenClause != null ? Node.Print(node.WhenClause) : Doc.Null,
+            Token.Print(node.ColonToken)
+        );
     }
 }

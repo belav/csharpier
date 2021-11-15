@@ -1,13 +1,12 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class PointerType
 {
-    internal static class PointerType
+    public static Doc Print(PointerTypeSyntax node)
     {
-        public static Doc Print(PointerTypeSyntax node)
-        {
-            return Doc.Concat(Node.Print(node.ElementType), Token.Print(node.AsteriskToken));
-        }
+        return Doc.Concat(Node.Print(node.ElementType), Token.Print(node.AsteriskToken));
     }
 }

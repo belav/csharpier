@@ -1,13 +1,12 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class DefaultConstraint
 {
-    internal static class DefaultConstraint
+    public static Doc Print(DefaultConstraintSyntax node)
     {
-        public static Doc Print(DefaultConstraintSyntax node)
-        {
-            return Token.Print(node.DefaultKeyword);
-        }
+        return Token.Print(node.DefaultKeyword);
     }
 }

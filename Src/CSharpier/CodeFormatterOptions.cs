@@ -1,7 +1,6 @@
-namespace CSharpier
+namespace CSharpier;
+
+public class CodeFormatterOptions
 {
-    public class CodeFormatterOptions
-    {
-        public int Width { get; init; } = 100;
-    }
+    public int Width { get; init; } = 100;
 }

@@ -1,13 +1,12 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class OmittedArraySizeExpression
 {
-    internal static class OmittedArraySizeExpression
+    public static Doc Print(OmittedArraySizeExpressionSyntax node)
     {
-        public static Doc Print(OmittedArraySizeExpressionSyntax node)
-        {
-            return Doc.Null;
-        }
+        return Doc.Null;
     }
 }
