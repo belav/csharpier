@@ -30,4 +30,11 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           dotnet tool restore
-          dotnet csharpier . --check 
+          dotnet csharpier . --check
+  build_msbuild:
+    runs-on: ubuntu-latest
+    name: Build CSharpier.MSBuild
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          dotnet build Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj 
