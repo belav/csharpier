@@ -1,4 +1,4 @@
-name: Publish CSharpier
+name: Publish Nuget
 on:
   push:
     branches: [ master ]
