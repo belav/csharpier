@@ -683,7 +683,7 @@ true || false"
         [TestCase(1, "\r\n")]
         [TestCase(2, "\n")]
         [TestCase(2, "\r\n")]
-        public void Print_Should_Include_Single_NewLine(int instances, string endOfLine)
+        public void Print_Should_Include_Single_NewLine_To_End_File(int instances, string endOfLine)
         {
             var doc = "1";
             for (var x = 0; x < instances; x++)
