@@ -1,6 +1,6 @@
-# 0.11.0
+# 0.11.1
 
-[diff](https://github.com/belav/csharpier/compare/0.10.0...0.11.0)
+[diff](https://github.com/belav/csharpier/compare/0.10.0...0.11.1)
 
 - base should merge in an invocation chain [#473](https://github.com/belav/csharpier/issues/473)
 - File with multiple newlines at the end keeps them [#464](https://github.com/belav/csharpier/issues/464)
