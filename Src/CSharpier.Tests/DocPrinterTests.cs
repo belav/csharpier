@@ -679,9 +679,9 @@ true || false"
 
         [TestCase(0, "\n")]
         [TestCase(0, "\r\n")]
+        [TestCase(1, "\n")]
         [TestCase(1, "\r\n")]
-        [TestCase(1, "\r\n")]
-        [TestCase(2, "\r\n")]
+        [TestCase(2, "\n")]
         [TestCase(2, "\r\n")]
         public void Print_Should_Include_Single_NewLine(int instances, string endOfLine)
         {
