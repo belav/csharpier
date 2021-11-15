@@ -1,1 +1,7 @@
 namespace Namespace;
+
+extern alias Foo;
+
+using System;
+
+class ClassName { }
