@@ -11,7 +11,7 @@ If you can live with the fact that the formatting will be changing over time, it
 ### Features
   - It is fast. It can format a solution of ~11,000 files in ~30 seconds.
   - It supports validating the syntax of the code it produces to ensure the only changes made were whitespace and line breaks.
-  - It formats c# <= 9.0 - [c# 10 coming soon](https://github.com/belav/csharpier/issues/448)
+  - It formats c# <= 10.0
 
 Try it out at [Playground](https://csharpier.com)
 

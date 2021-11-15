@@ -1,3 +1,16 @@
+# 0.11.0
+
+[diff](https://github.com/belav/csharpier/compare/0.10.0...0.11.0)
+
+- base should merge in an invocation chain [#473](https://github.com/belav/csharpier/issues/473)
+- File with multiple newlines at the end keeps them [#464](https://github.com/belav/csharpier/issues/464)
+- Extra space in generic with omitted types [#463](https://github.com/belav/csharpier/issues/463)
+- Object creation still uses SpaceBrace [#462](https://github.com/belav/csharpier/issues/462)
+- Empty Initializer gets double whitespace [#461](https://github.com/belav/csharpier/issues/461)
+- Support C# 10 and .Net 6 [#448](https://github.com/belav/csharpier/issues/448)
+- Always break nested Conditionals  [#434](https://github.com/belav/csharpier/issues/434)
+
+
 # 0.10.0
 
 [diff](https://github.com/belav/csharpier/compare/0.9.9...0.10.0)
