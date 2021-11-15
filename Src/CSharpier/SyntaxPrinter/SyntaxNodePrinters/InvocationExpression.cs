@@ -280,12 +280,3 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
         }
     }
 }
-
-// TODO 7
-// PRs to review
-// https://github.com/belav/aspnetcore/pull/29/files
-// https://github.com/belav/moq4/pull/12
-// https://github.com/belav/AutoMapper/pull/10
-
-
-

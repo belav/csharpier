@@ -12,7 +12,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             var docs = new List<Doc>();
             if (node.NameColon != null)
             {
-                docs.Add(NameColon.Print(node.NameColon));
+                docs.Add(BaseExpressionColon.Print(node.NameColon));
             }
 
             if (node.RefKindKeyword.Kind() != SyntaxKind.None)

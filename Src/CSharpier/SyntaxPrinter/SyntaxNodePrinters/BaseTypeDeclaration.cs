@@ -16,6 +16,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             TypeParameterListSyntax? typeParameterList = null;
             var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
             var hasMembers = false;
+            SyntaxToken? recordKeyword = null;
             SyntaxToken? keyword = null;
             Doc members = Doc.Null;
             SyntaxToken? semicolonToken = null;
@@ -46,7 +47,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
                 }
                 else if (node is RecordDeclarationSyntax recordDeclarationSyntax)
                 {
-                    keyword = recordDeclarationSyntax.Keyword;
+                    recordKeyword = recordDeclarationSyntax.Keyword;
+                    keyword = recordDeclarationSyntax.ClassOrStructKeyword;
                     parameterList = recordDeclarationSyntax.ParameterList;
                 }
 
@@ -77,6 +79,11 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
             if (node.Modifiers.Any())
             {
                 docs.Add(Modifiers.Print(node.Modifiers));
+            }
+
+            if (recordKeyword != null)
+            {
+                docs.Add(Token.PrintWithSuffix(recordKeyword.Value, " "));
             }
 
             if (keyword != null)

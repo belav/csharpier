@@ -27,7 +27,7 @@ namespace CSharpier
             this.OriginalSourceCode = originalSourceCode;
             this.NewSourceCode = newSourceCode;
 
-            var cSharpParseOptions = new CSharpParseOptions(LanguageVersion.CSharp9);
+            var cSharpParseOptions = new CSharpParseOptions(LanguageVersion.CSharp10);
             this.OriginalSyntaxTree = CSharpSyntaxTree.ParseText(
                 this.OriginalSourceCode,
                 cSharpParseOptions,
