@@ -20,6 +20,8 @@ param (
 # roslyn
 # runtime
 
+. $PsScriptRoot/Helpers.ps1
+
 $ErrorActionPreference = "Stop"
 
 if ($version -eq "") {
@@ -30,7 +32,7 @@ if ($version -eq "") {
 $csharpierProject = "C:\Projects\csharpier"
 $csharpierRepos = "C:\Projects\csharpierForkedRepos"
 
-& dotnet build $csharpierProject\Src\CSharpier\CSharpier.csproj -c Release
+Build-CSharpier
 
 $versionWithQuotes = "`"" + $version + "`"";
 
@@ -48,7 +50,7 @@ foreach($folder in Get-ChildItem $csharpierRepos) {
 
 Push-Location $csharpierRepos
 
-dotnet $csharpierProject\Src\CSharpier\bin\Release\net6.0\dotnet-csharpier.dll .
+dotnet $csharpierDllPath .
 
 foreach($folder in Get-ChildItem $csharpierRepos)
 {
