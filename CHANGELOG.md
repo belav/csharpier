@@ -1,3 +1,6 @@
+# 0.11.2 (CSharpier.MSBuild only)
+- CSharpier.MSBuild 0.11.1 is not published correctly [#481](https://github.com/belav/csharpier/issues/481)
+
 # 0.11.1
 
 [diff](https://github.com/belav/csharpier/compare/0.10.0...0.11.1)
