@@ -1,6 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="../../CSharpier.Build.props"/>
     <PropertyGroup>
+        <!-- 
+            targeting more than one framework leads to occasional build errors
+            and CSharpier.MSBuild just calls csharpier via command line so
+            targeting other frameworks seems unnecessary
+        -->
         <TargetFramework>netstandard2.0</TargetFramework>
         <PackageId>CSharpier.MsBuild</PackageId>
         <CSharpierOutputDir>../CSharpier.Cli/bin/$(Configuration)/net5.0</CSharpierOutputDir>
