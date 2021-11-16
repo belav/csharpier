@@ -36,5 +36,8 @@ jobs:
     name: Build CSharpier.MSBuild
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
       - run: |
           dotnet build Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj 
