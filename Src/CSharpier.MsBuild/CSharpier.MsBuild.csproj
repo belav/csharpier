@@ -1,9 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="../../CSharpier.Build.props"/>
     <PropertyGroup>
-        <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
+        <!-- 
+            targeting more than one framework leads to occasional build errors
+            and CSharpier.MSBuild just calls csharpier via command line so
+            targeting other frameworks seems unnecessary
+        -->
+        <TargetFramework>netstandard2.0</TargetFramework>
         <PackageId>CSharpier.MsBuild</PackageId>
-        <CSharpierOutputDir>../CSharpier.CLI/bin/$(Configuration)/net5.0</CSharpierOutputDir>
+        <CSharpierOutputDir>../CSharpier.Cli/bin/$(Configuration)/net5.0</CSharpierOutputDir>
     </PropertyGroup>
 
     <!--
@@ -12,7 +17,7 @@
         CSharpier is a net5.0 project with <PackAsTool> and this is neither.
     -->
     <Target Name="BuildCSharpier" BeforeTargets="Build">
-        <Exec command="dotnet build -c $(Configuration)" WorkingDirectory="../CSharpier.CLI" />
+        <Exec command="dotnet build -c $(Configuration)" WorkingDirectory="../CSharpier.Cli" />
     </Target>
 
     <ItemGroup>

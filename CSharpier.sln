@@ -61,6 +61,7 @@ ProjectSection(SolutionItems) = preProject
 	Src\CSharpier.MsBuild\README.md = Src\CSharpier.MsBuild\README.md
 	Src\CSharpier.MsBuild\build\CSharpier.MsBuild.targets = Src\CSharpier.MsBuild\build\CSharpier.MsBuild.targets
 	Src\CSharpier.MsBuild\build\CSharpier.MsBuild.props = Src\CSharpier.MsBuild\build\CSharpier.MsBuild.props
+	Src\CSharpier.MsBuild\CSharpier.MsBuild.csproj = Src\CSharpier.MsBuild\CSharpier.MsBuild.csproj
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests.Generators", "Src\CSharpier.Tests.Generators\CSharpier.Tests.Generators.csproj", "{3E1D074B-A4F3-4010-84E7-820459214202}"
