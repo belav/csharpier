@@ -1,7 +1,4 @@
-using System;
 using System.CommandLine;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace CSharpier.Cli;
 

@@ -1,9 +1,4 @@
-using System.Collections.Generic;
-using CSharpier.DocTypes;
 using CSharpier.Utilities;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 

@@ -1,7 +1,4 @@
-using System;
 using System.IO.Abstractions;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;

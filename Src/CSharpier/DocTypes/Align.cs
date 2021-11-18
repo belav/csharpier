@@ -1,5 +1,3 @@
-using System;
-
 namespace CSharpier.DocTypes;
 
 internal class Align : Doc, IHasContents
