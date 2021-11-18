@@ -1,13 +1,12 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class BreakStatement
 {
-    internal static class BreakStatement
+    public static Doc Print(BreakStatementSyntax node)
     {
-        public static Doc Print(BreakStatementSyntax node)
-        {
-            return Doc.Concat(Token.Print(node.BreakKeyword), Token.Print(node.SemicolonToken));
-        }
+        return Doc.Concat(Token.Print(node.BreakKeyword), Token.Print(node.SemicolonToken));
     }
 }

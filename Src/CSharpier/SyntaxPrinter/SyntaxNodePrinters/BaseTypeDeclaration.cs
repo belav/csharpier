@@ -6,158 +6,152 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class BaseTypeDeclaration
 {
-    internal static class BaseTypeDeclaration
+    public static Doc Print(BaseTypeDeclarationSyntax node)
     {
-        public static Doc Print(BaseTypeDeclarationSyntax node)
+        ParameterListSyntax? parameterList = null;
+        TypeParameterListSyntax? typeParameterList = null;
+        var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
+        var hasMembers = false;
+        SyntaxToken? recordKeyword = null;
+        SyntaxToken? keyword = null;
+        Doc members = Doc.Null;
+        SyntaxToken? semicolonToken = null;
+
+        if (node is TypeDeclarationSyntax typeDeclarationSyntax)
         {
-            ParameterListSyntax? parameterList = null;
-            TypeParameterListSyntax? typeParameterList = null;
-            var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
-            var hasMembers = false;
-            SyntaxToken? recordKeyword = null;
-            SyntaxToken? keyword = null;
-            Doc members = Doc.Null;
-            SyntaxToken? semicolonToken = null;
-
-            if (node is TypeDeclarationSyntax typeDeclarationSyntax)
-            {
-                typeParameterList = typeDeclarationSyntax.TypeParameterList;
-                constraintClauses = typeDeclarationSyntax.ConstraintClauses;
-                hasMembers = typeDeclarationSyntax.Members.Count > 0;
-                if (typeDeclarationSyntax.Members.Count > 0)
-                {
-                    members = Doc.Indent(
-                        Doc.HardLine,
-                        Doc.Join(Doc.HardLine, typeDeclarationSyntax.Members.Select(Node.Print))
-                    );
-                }
-                if (node is ClassDeclarationSyntax classDeclarationSyntax)
-                {
-                    keyword = classDeclarationSyntax.Keyword;
-                }
-                else if (node is StructDeclarationSyntax structDeclarationSyntax)
-                {
-                    keyword = structDeclarationSyntax.Keyword;
-                }
-                else if (node is InterfaceDeclarationSyntax interfaceDeclarationSyntax)
-                {
-                    keyword = interfaceDeclarationSyntax.Keyword;
-                }
-                else if (node is RecordDeclarationSyntax recordDeclarationSyntax)
-                {
-                    recordKeyword = recordDeclarationSyntax.Keyword;
-                    keyword = recordDeclarationSyntax.ClassOrStructKeyword;
-                    parameterList = recordDeclarationSyntax.ParameterList;
-                }
-
-                semicolonToken = typeDeclarationSyntax.SemicolonToken;
-            }
-            else if (node is EnumDeclarationSyntax enumDeclarationSyntax)
+            typeParameterList = typeDeclarationSyntax.TypeParameterList;
+            constraintClauses = typeDeclarationSyntax.ConstraintClauses;
+            hasMembers = typeDeclarationSyntax.Members.Count > 0;
+            if (typeDeclarationSyntax.Members.Count > 0)
             {
                 members = Doc.Indent(
                     Doc.HardLine,
-                    SeparatedSyntaxList.Print(
-                        enumDeclarationSyntax.Members,
-                        EnumMemberDeclaration.Print,
-                        Doc.HardLine
-                    )
-                );
-                hasMembers = enumDeclarationSyntax.Members.Count > 0;
-                keyword = enumDeclarationSyntax.EnumKeyword;
-                semicolonToken = enumDeclarationSyntax.SemicolonToken;
-            }
-
-            var docs = new List<Doc>();
-            docs.AddIfNotNull(ExtraNewLines.Print(node));
-            if (node.AttributeLists.Any())
-            {
-                docs.Add(AttributeLists.Print(node, node.AttributeLists));
-            }
-
-            if (node.Modifiers.Any())
-            {
-                docs.Add(Modifiers.Print(node.Modifiers));
-            }
-
-            if (recordKeyword != null)
-            {
-                docs.Add(Token.PrintWithSuffix(recordKeyword.Value, " "));
-            }
-
-            if (keyword != null)
-            {
-                docs.Add(Token.PrintWithSuffix(keyword.Value, " "));
-            }
-
-            docs.Add(Token.Print(node.Identifier));
-
-            if (typeParameterList != null)
-            {
-                docs.Add(TypeParameterList.Print(typeParameterList));
-            }
-
-            if (parameterList != null)
-            {
-                docs.Add(ParameterList.Print(parameterList));
-            }
-
-            if (node.BaseList != null)
-            {
-                var baseListDoc = Doc.Concat(
-                    Token.Print(node.BaseList.ColonToken),
-                    " ",
-                    Doc.Align(
-                        2,
-                        SeparatedSyntaxList.Print(node.BaseList.Types, Node.Print, Doc.Line)
-                    )
-                );
-
-                docs.Add(Doc.Group(Doc.Indent(Doc.Line, baseListDoc)));
-            }
-
-            docs.Add(ConstraintClauses.Print(constraintClauses));
-
-            if (hasMembers)
-            {
-                DocUtilities.RemoveInitialDoubleHardLine(members);
-
-                docs.Add(
-                    Doc.HardLine,
-                    Token.Print(node.OpenBraceToken),
-                    members,
-                    Doc.HardLine,
-                    node.CloseBraceToken.LeadingTrivia.Any(
-                        o => o.Kind() == SyntaxKind.DisabledTextTrivia
-                    )
-                      ? Doc.Concat(
-                            Token.PrintLeadingTriviaWithNewLines(
-                                node.CloseBraceToken.LeadingTrivia
-                            ),
-                            Token.PrintWithoutLeadingTrivia(node.CloseBraceToken)
-                        )
-                      : Token.Print(node.CloseBraceToken)
+                    Doc.Join(Doc.HardLine, typeDeclarationSyntax.Members.Select(Node.Print))
                 );
             }
-            else if (node.OpenBraceToken.Kind() != SyntaxKind.None)
+            if (node is ClassDeclarationSyntax classDeclarationSyntax)
             {
-                Doc separator = node.CloseBraceToken.LeadingTrivia.Any() ? Doc.Line : " ";
-
-                docs.Add(
-                    separator,
-                    Token.Print(node.OpenBraceToken),
-                    separator,
-                    Token.Print(node.CloseBraceToken)
-                );
+                keyword = classDeclarationSyntax.Keyword;
+            }
+            else if (node is StructDeclarationSyntax structDeclarationSyntax)
+            {
+                keyword = structDeclarationSyntax.Keyword;
+            }
+            else if (node is InterfaceDeclarationSyntax interfaceDeclarationSyntax)
+            {
+                keyword = interfaceDeclarationSyntax.Keyword;
+            }
+            else if (node is RecordDeclarationSyntax recordDeclarationSyntax)
+            {
+                recordKeyword = recordDeclarationSyntax.Keyword;
+                keyword = recordDeclarationSyntax.ClassOrStructKeyword;
+                parameterList = recordDeclarationSyntax.ParameterList;
             }
 
-            if (semicolonToken.HasValue)
-            {
-                docs.Add(Token.Print(semicolonToken.Value));
-            }
-
-            return Doc.Concat(docs);
+            semicolonToken = typeDeclarationSyntax.SemicolonToken;
         }
+        else if (node is EnumDeclarationSyntax enumDeclarationSyntax)
+        {
+            members = Doc.Indent(
+                Doc.HardLine,
+                SeparatedSyntaxList.Print(
+                    enumDeclarationSyntax.Members,
+                    EnumMemberDeclaration.Print,
+                    Doc.HardLine
+                )
+            );
+            hasMembers = enumDeclarationSyntax.Members.Count > 0;
+            keyword = enumDeclarationSyntax.EnumKeyword;
+            semicolonToken = enumDeclarationSyntax.SemicolonToken;
+        }
+
+        var docs = new List<Doc>();
+        docs.AddIfNotNull(ExtraNewLines.Print(node));
+        if (node.AttributeLists.Any())
+        {
+            docs.Add(AttributeLists.Print(node, node.AttributeLists));
+        }
+
+        if (node.Modifiers.Any())
+        {
+            docs.Add(Modifiers.Print(node.Modifiers));
+        }
+
+        if (recordKeyword != null)
+        {
+            docs.Add(Token.PrintWithSuffix(recordKeyword.Value, " "));
+        }
+
+        if (keyword != null)
+        {
+            docs.Add(Token.PrintWithSuffix(keyword.Value, " "));
+        }
+
+        docs.Add(Token.Print(node.Identifier));
+
+        if (typeParameterList != null)
+        {
+            docs.Add(TypeParameterList.Print(typeParameterList));
+        }
+
+        if (parameterList != null)
+        {
+            docs.Add(ParameterList.Print(parameterList));
+        }
+
+        if (node.BaseList != null)
+        {
+            var baseListDoc = Doc.Concat(
+                Token.Print(node.BaseList.ColonToken),
+                " ",
+                Doc.Align(2, SeparatedSyntaxList.Print(node.BaseList.Types, Node.Print, Doc.Line))
+            );
+
+            docs.Add(Doc.Group(Doc.Indent(Doc.Line, baseListDoc)));
+        }
+
+        docs.Add(ConstraintClauses.Print(constraintClauses));
+
+        if (hasMembers)
+        {
+            DocUtilities.RemoveInitialDoubleHardLine(members);
+
+            docs.Add(
+                Doc.HardLine,
+                Token.Print(node.OpenBraceToken),
+                members,
+                Doc.HardLine,
+                node.CloseBraceToken.LeadingTrivia.Any(
+                    o => o.Kind() == SyntaxKind.DisabledTextTrivia
+                )
+                  ? Doc.Concat(
+                        Token.PrintLeadingTriviaWithNewLines(node.CloseBraceToken.LeadingTrivia),
+                        Token.PrintWithoutLeadingTrivia(node.CloseBraceToken)
+                    )
+                  : Token.Print(node.CloseBraceToken)
+            );
+        }
+        else if (node.OpenBraceToken.Kind() != SyntaxKind.None)
+        {
+            Doc separator = node.CloseBraceToken.LeadingTrivia.Any() ? Doc.Line : " ";
+
+            docs.Add(
+                separator,
+                Token.Print(node.OpenBraceToken),
+                separator,
+                Token.Print(node.CloseBraceToken)
+            );
+        }
+
+        if (semicolonToken.HasValue)
+        {
+            docs.Add(Token.Print(semicolonToken.Value));
+        }
+
+        return Doc.Concat(docs);
     }
 }

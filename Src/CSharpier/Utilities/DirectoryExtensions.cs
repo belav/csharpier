@@ -1,40 +1,39 @@
 using System;
 using System.IO;
 
-namespace CSharpier.Utilities
+namespace CSharpier.Utilities;
+
+internal static class DirectoryExtensions
 {
-    internal static class DirectoryExtensions
+    public static void EnsureDirectoryExists(this FileInfo fileInfo)
     {
-        public static void EnsureDirectoryExists(this FileInfo fileInfo)
+        fileInfo.Directory?.EnsureExists();
+    }
+
+    public static void EnsureExists(this DirectoryInfo directoryInfo)
+    {
+        if (directoryInfo.Name.EndsWith("$"))
         {
-            fileInfo.Directory?.EnsureExists();
+            return;
         }
 
-        public static void EnsureExists(this DirectoryInfo directoryInfo)
+        directoryInfo.Parent?.EnsureExists();
+
+        if (directoryInfo.Exists)
         {
-            if (directoryInfo.Name.EndsWith("$"))
-            {
-                return;
-            }
+            return;
+        }
 
-            directoryInfo.Parent?.EnsureExists();
-
-            if (directoryInfo.Exists)
-            {
-                return;
-            }
-
-            try
-            {
-                directoryInfo.Create();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(
-                    "It was not possible to create the path " + directoryInfo.FullName,
-                    ex
-                );
-            }
+        try
+        {
+            directoryInfo.Create();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(
+                "It was not possible to create the path " + directoryInfo.FullName,
+                ex
+            );
         }
     }
 }

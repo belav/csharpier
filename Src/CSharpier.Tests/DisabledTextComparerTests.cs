@@ -1,43 +1,43 @@
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace CSharpier.Tests
-{
-    [TestFixture]
-    public class DisabledTextComparerTests
-    {
-        [Test]
-        public void IsCodeBasicallyEqual_Should_Return_True_For_Basic_Case()
-        {
-            var before = "public string    Tester;";
+namespace CSharpier.Tests;
 
-            var after =
-                @"public
+[TestFixture]
+public class DisabledTextComparerTests
+{
+    [Test]
+    public void IsCodeBasicallyEqual_Should_Return_True_For_Basic_Case()
+    {
+        var before = "public string    Tester;";
+
+        var after =
+            @"public
 string Tester;
 ";
 
-            DisabledTextComparer.IsCodeBasicallyEqual(before, after).Should().BeTrue();
-        }
+        DisabledTextComparer.IsCodeBasicallyEqual(before, after).Should().BeTrue();
+    }
 
-        [Test]
-        public void Squash_Should_Work_For_Trailing_Space_And_New_Line()
-        {
-            var before = "    public \n";
+    [Test]
+    public void Squash_Should_Work_For_Trailing_Space_And_New_Line()
+    {
+        var before = "    public \n";
 
-            var after = "    public\n";
+        var after = "    public\n";
 
-            Squash(before).Should().Be(Squash(after));
-        }
+        Squash(before).Should().Be(Squash(after));
+    }
 
-        [Test]
-        public void Squash_Should_Work_With_Pointer_Stuff()
-        {
-            var before =
-                @"        [MethodImpl (MethodImplOptions.InternalCall)]
+    [Test]
+    public void Squash_Should_Work_With_Pointer_Stuff()
+    {
+        var before =
+            @"        [MethodImpl (MethodImplOptions.InternalCall)]
         private static unsafe extern void ApplyUpdate_internal (IntPtr base_assm, byte* dmeta_bytes, int dmeta_length, byte *dil_bytes, int dil_length, byte *dpdb_bytes, int dpdb_length);";
 
-            var after =
-                @"[MethodImpl(MethodImplOptions.InternalCall)]
+        var after =
+            @"[MethodImpl(MethodImplOptions.InternalCall)]
         private static unsafe extern void ApplyUpdate_internal(
             IntPtr base_assm,
             byte* dmeta_bytes,
@@ -48,14 +48,14 @@ string Tester;
             int dpdb_length
         );
 ";
-            Squash(before).Should().Be(Squash(after));
-        }
+        Squash(before).Should().Be(Squash(after));
+    }
 
-        [Test]
-        public void Squash_Should_Work_With_Commas()
-        {
-            var before =
-                @"
+    [Test]
+    public void Squash_Should_Work_With_Commas()
+    {
+        var before =
+            @"
             TypeBuilder typeBuilder = moduleBuilder.DefineType(assemblyName.FullName
                 , TypeAttributes.Public |
                   TypeAttributes.Class |
@@ -66,8 +66,8 @@ string Tester;
                 , null);
 ";
 
-            var after =
-                @"
+        var after =
+            @"
 TypeBuilder typeBuilder = moduleBuilder.DefineType(
                 assemblyName.FullName,
                 TypeAttributes.Public
@@ -79,47 +79,46 @@ TypeBuilder typeBuilder = moduleBuilder.DefineType(
                 null
             );
 ";
-            Squash(before).Should().Be(Squash(after));
-        }
+        Squash(before).Should().Be(Squash(after));
+    }
 
-        [Test]
-        public void Squash_Should_Work_With_Period()
-        {
-            var before =
-                @"
+    [Test]
+    public void Squash_Should_Work_With_Period()
+    {
+        var before =
+            @"
             var options2 = (ProxyGenerationOptions)proxy.GetType().
                 GetField(""proxyGenerationOptions"", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
 ";
 
-            var after =
-                @"
+        var after =
+            @"
             var options2 = (ProxyGenerationOptions)proxy.GetType()
                 .GetField(""proxyGenerationOptions"", BindingFlags.Static | BindingFlags.NonPublic)
                 .GetValue(null);
 ";
-            Squash(before).Should().Be(Squash(after));
-        }
+        Squash(before).Should().Be(Squash(after));
+    }
 
-        [Test]
-        public void Squash_Should_Work_With_Starting_Indent()
+    [Test]
+    public void Squash_Should_Work_With_Starting_Indent()
+    {
+        var before = @"array = new ulong[] { (ulong)dy.Property_ulong };";
+
+        var after = @"            array = new ulong[] { (ulong)dy.Property_ulong };";
+        Squash(before).Should().Be(Squash(after));
+    }
+
+    private static string Squash(string value)
+    {
+        return TestableDisabledTextComparer.TestSquash(value);
+    }
+
+    private class TestableDisabledTextComparer : DisabledTextComparer
+    {
+        public static string TestSquash(string value)
         {
-            var before = @"array = new ulong[] { (ulong)dy.Property_ulong };";
-
-            var after = @"            array = new ulong[] { (ulong)dy.Property_ulong };";
-            Squash(before).Should().Be(Squash(after));
-        }
-
-        private static string Squash(string value)
-        {
-            return TestableDisabledTextComparer.TestSquash(value);
-        }
-
-        private class TestableDisabledTextComparer : DisabledTextComparer
-        {
-            public static string TestSquash(string value)
-            {
-                return Squash(value);
-            }
+            return Squash(value);
         }
     }
 }

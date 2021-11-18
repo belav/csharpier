@@ -1,52 +1,51 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class IsPatternExpression
 {
-    internal static class IsPatternExpression
+    public static Doc Print(IsPatternExpressionSyntax node)
     {
-        public static Doc Print(IsPatternExpressionSyntax node)
+        if (node.Parent is not (IfStatementSyntax or ParenthesizedExpressionSyntax))
         {
-            if (node.Parent is not (IfStatementSyntax or ParenthesizedExpressionSyntax))
-            {
-                return Doc.Group(
-                    Node.Print(node.Expression),
-                    Doc.Indent(Doc.Line, Token.Print(node.IsKeyword), " ", Node.Print(node.Pattern))
-                );
-            }
-
-            if (node.Pattern is not RecursivePatternSyntax recursivePattern)
-            {
-                return Doc.Group(
-                    Node.Print(node.Expression),
-                    Doc.Line,
-                    Token.Print(node.IsKeyword),
-                    " ",
-                    Node.Print(node.Pattern)
-                );
-            }
-
-            if (recursivePattern.Type is null)
-            {
-                return Doc.Group(
-                    Node.Print(node.Expression),
-                    " ",
-                    Token.Print(node.IsKeyword),
-                    Doc.Line,
-                    RecursivePattern.Print(recursivePattern)
-                );
-            }
-
             return Doc.Group(
-                Doc.Group(
-                    Node.Print(node.Expression),
-                    Doc.Line,
-                    Token.Print(node.IsKeyword),
-                    " ",
-                    Node.Print(recursivePattern.Type)
-                ),
-                RecursivePattern.PrintWithOutType(recursivePattern)
+                Node.Print(node.Expression),
+                Doc.Indent(Doc.Line, Token.Print(node.IsKeyword), " ", Node.Print(node.Pattern))
             );
         }
+
+        if (node.Pattern is not RecursivePatternSyntax recursivePattern)
+        {
+            return Doc.Group(
+                Node.Print(node.Expression),
+                Doc.Line,
+                Token.Print(node.IsKeyword),
+                " ",
+                Node.Print(node.Pattern)
+            );
+        }
+
+        if (recursivePattern.Type is null)
+        {
+            return Doc.Group(
+                Node.Print(node.Expression),
+                " ",
+                Token.Print(node.IsKeyword),
+                Doc.Line,
+                RecursivePattern.Print(recursivePattern)
+            );
+        }
+
+        return Doc.Group(
+            Doc.Group(
+                Node.Print(node.Expression),
+                Doc.Line,
+                Token.Print(node.IsKeyword),
+                " ",
+                Node.Print(recursivePattern.Type)
+            ),
+            RecursivePattern.PrintWithOutType(recursivePattern)
+        );
     }
 }

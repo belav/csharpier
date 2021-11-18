@@ -4,49 +4,44 @@ using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.Samples
+namespace CSharpier.Tests.Samples;
+
+public class Samples
 {
-    public class Samples
+    [Test]
+    public void Scratch()
     {
-        [Test]
-        public void Scratch()
+        RunTest("Scratch");
+    }
+
+    [Test]
+    public void AllInOne()
+    {
+        RunTest("AllInOne");
+    }
+
+    public static void RunTest(string fileName)
+    {
+        var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
+        while (directory.Name != "CSharpier.Tests")
         {
-            RunTest("Scratch");
+            directory = directory.Parent;
         }
 
-        [Test]
-        public void AllInOne()
-        {
-            RunTest("AllInOne");
-        }
+        var file = Path.Combine(directory.FullName, $"Samples/{fileName}.cst");
 
-        public static void RunTest(string fileName)
-        {
-            var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
-            while (directory.Name != "CSharpier.Tests")
-            {
-                directory = directory.Parent;
-            }
+        var code = File.ReadAllText(file);
+        var result = CodeFormatter.Format(
+            code,
+            new PrinterOptions { IncludeDocTree = true, IncludeAST = true, }
+        );
 
-            var file = Path.Combine(directory.FullName, $"Samples/{fileName}.cst");
+        var syntaxNodeComparer = new SyntaxNodeComparer(code, result.Code, CancellationToken.None);
 
-            var code = File.ReadAllText(file);
-            var result = CodeFormatter.Format(
-                code,
-                new PrinterOptions { IncludeDocTree = true, IncludeAST = true, }
-            );
+        var compareResult = syntaxNodeComparer.CompareSource();
+        compareResult.Should().BeEmpty();
 
-            var syntaxNodeComparer = new SyntaxNodeComparer(
-                code,
-                result.Code,
-                CancellationToken.None
-            );
-
-            var compareResult = syntaxNodeComparer.CompareSource();
-            compareResult.Should().BeEmpty();
-
-            File.WriteAllText(file.Replace(".cst", ".actual.cst"), result.Code, Encoding.UTF8);
-            File.WriteAllText(file.Replace(".cst", ".doctree.txt"), result.DocTree, Encoding.UTF8);
-        }
+        File.WriteAllText(file.Replace(".cst", ".actual.cst"), result.Code, Encoding.UTF8);
+        File.WriteAllText(file.Replace(".cst", ".doctree.txt"), result.DocTree, Encoding.UTF8);
     }
 }

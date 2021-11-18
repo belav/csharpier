@@ -2,21 +2,20 @@ using System.Linq;
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class ImplicitArrayCreationExpression
 {
-    internal static class ImplicitArrayCreationExpression
+    public static Doc Print(ImplicitArrayCreationExpressionSyntax node)
     {
-        public static Doc Print(ImplicitArrayCreationExpressionSyntax node)
-        {
-            var commas = node.Commas.Select(Token.Print).ToArray();
-            return Doc.Group(
-                Token.Print(node.NewKeyword),
-                Token.Print(node.OpenBracketToken),
-                Doc.Concat(commas),
-                Token.Print(node.CloseBracketToken),
-                Doc.Line,
-                InitializerExpression.Print(node.Initializer)
-            );
-        }
+        var commas = node.Commas.Select(Token.Print).ToArray();
+        return Doc.Group(
+            Token.Print(node.NewKeyword),
+            Token.Print(node.OpenBracketToken),
+            Doc.Concat(commas),
+            Token.Print(node.CloseBracketToken),
+            Doc.Line,
+            InitializerExpression.Print(node.Initializer)
+        );
     }
 }

@@ -1,17 +1,16 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class QualifiedName
 {
-    internal static class QualifiedName
+    public static Doc Print(QualifiedNameSyntax node)
     {
-        public static Doc Print(QualifiedNameSyntax node)
-        {
-            return Doc.Concat(
-                Node.Print(node.Left),
-                Token.Print(node.DotToken),
-                Node.Print(node.Right)
-            );
-        }
+        return Doc.Concat(
+            Node.Print(node.Left),
+            Token.Print(node.DotToken),
+            Node.Print(node.Right)
+        );
     }
 }

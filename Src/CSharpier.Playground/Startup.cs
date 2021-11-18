@@ -6,74 +6,73 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace CSharpier.Playground
+namespace CSharpier.Playground;
+
+public class Startup
 {
-    public class Startup
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        Configuration = configuration;
+    }
 
-        public IConfiguration Configuration { get; }
+    public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllersWithViews();
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddControllersWithViews();
 
-            services.AddSpaStaticFiles(
-                configuration =>
-                {
-                    configuration.RootPath = "ClientApp/build";
-                }
-            );
-        }
-
-        public void Configure(
-            IApplicationBuilder app,
-            IWebHostEnvironment env,
-            ILoggerFactory loggerFactory
-        )
-        {
-            loggerFactory.AddFile("App_Data/logs_{Date}.txt");
-
-            if (env.IsDevelopment())
+        services.AddSpaStaticFiles(
+            configuration =>
             {
-                app.UseDeveloperExceptionPage();
+                configuration.RootPath = "ClientApp/build";
             }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
-                app.UseHttpsRedirection();
-            }
+        );
+    }
 
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+    public void Configure(
+        IApplicationBuilder app,
+        IWebHostEnvironment env,
+        ILoggerFactory loggerFactory
+    )
+    {
+        loggerFactory.AddFile("App_Data/logs_{Date}.txt");
 
-            app.UseRouting();
-
-            app.UseEndpoints(
-                endpoints =>
-                {
-                    endpoints.MapControllerRoute(
-                        name: "default",
-                        pattern: "{controller}/{action=Index}/{id?}"
-                    );
-                }
-            );
-
-            app.UseSpa(
-                spa =>
-                {
-                    spa.Options.SourcePath = "ClientApp";
-
-                    if (env.IsDevelopment())
-                    {
-                        spa.UseReactDevelopmentServer(npmScript: "start");
-                    }
-                }
-            );
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
         }
+        else
+        {
+            app.UseExceptionHandler("/Error");
+            app.UseHsts();
+            app.UseHttpsRedirection();
+        }
+
+        app.UseStaticFiles();
+        app.UseSpaStaticFiles();
+
+        app.UseRouting();
+
+        app.UseEndpoints(
+            endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}"
+                );
+            }
+        );
+
+        app.UseSpa(
+            spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            }
+        );
     }
 }

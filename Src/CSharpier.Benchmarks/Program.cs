@@ -3,36 +3,36 @@ using System.Threading;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 
-namespace CSharpier.Benchmarks
+namespace CSharpier.Benchmarks;
+
+[MemoryDiagnoser]
+public class Benchmarks
 {
-    [MemoryDiagnoser]
-    public class Benchmarks
+    [Benchmark]
+    public void Default_CodeFormatter()
     {
-        [Benchmark]
-        public void Default_CodeFormatter()
-        {
-            CodeFormatter.Format(largeCode, new PrinterOptions());
-        }
+        CodeFormatter.Format(largeCode, new PrinterOptions());
+    }
 
-        [Benchmark]
-        public void Default_SyntaxNodeComparer()
-        {
-            var syntaxNodeComparer = new SyntaxNodeComparer(code, code, CancellationToken.None);
-            syntaxNodeComparer.CompareSource();
-        }
+    [Benchmark]
+    public void Default_SyntaxNodeComparer()
+    {
+        var syntaxNodeComparer = new SyntaxNodeComparer(code, code, CancellationToken.None);
+        syntaxNodeComparer.CompareSource();
+    }
 
-        [Benchmark]
-        public void IsCodeBasicallyEqual_SyntaxNodeComparer()
-        {
-            DisabledTextComparer.IsCodeBasicallyEqual(code, code);
-        }
+    [Benchmark]
+    public void IsCodeBasicallyEqual_SyntaxNodeComparer()
+    {
+        DisabledTextComparer.IsCodeBasicallyEqual(code, code);
+    }
 
-        private readonly string largeCode = File.ReadAllText(
-            @"C:\projects\csharpier-repos\runtime\src\libraries\Common\tests\System\Xml\XPath\FuncLocation\PathAxesTests.cs"
-        );
+    private readonly string largeCode = File.ReadAllText(
+        @"C:\projects\csharpier-repos\runtime\src\libraries\Common\tests\System\Xml\XPath\FuncLocation\PathAxesTests.cs"
+    );
 
-        private readonly string code =
-            @"using System;
+    private readonly string code =
+        @"using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -464,13 +464,12 @@ public class CommandLineFormatter
     }
 }
 ";
-    }
+}
 
-    class Program
+class Program
+{
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            _ = BenchmarkRunner.Run<Benchmarks>();
-        }
+        _ = BenchmarkRunner.Run<Benchmarks>();
     }
 }

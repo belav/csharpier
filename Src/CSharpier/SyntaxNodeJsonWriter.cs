@@ -1,49 +1,48 @@
 using System;
 using Newtonsoft.Json;
 
-namespace CSharpier
+namespace CSharpier;
+
+internal partial class SyntaxNodeJsonWriter
 {
-    internal partial class SyntaxNodeJsonWriter
+    private static string? WriteBoolean(string name, bool value)
     {
-        private static string? WriteBoolean(string name, bool value)
+        if (value)
         {
-            if (value)
-            {
-                return $"\"{name}\":true";
-            }
-
-            return null;
+            return $"\"{name}\":true";
         }
 
-        private static string? WriteString(string name, string value)
-        {
-            if (!string.IsNullOrEmpty(value))
-            {
-                return $"\"{name}\":{JsonConvert.ToString(value, '"', StringEscapeHandling.Default)}";
-            }
+        return null;
+    }
 
-            return null;
+    private static string? WriteString(string name, string value)
+    {
+        if (!string.IsNullOrEmpty(value))
+        {
+            return $"\"{name}\":{JsonConvert.ToString(value, '"', StringEscapeHandling.Default)}";
         }
 
-        private static string? WriteInt(string name, int value)
-        {
-            if (value != 0)
-            {
-                return $"\"{name}\":{value}";
-            }
+        return null;
+    }
 
-            return null;
+    private static string? WriteInt(string name, int value)
+    {
+        if (value != 0)
+        {
+            return $"\"{name}\":{value}";
         }
 
-        private static string? GetNodeType(Type type)
-        {
-            var name = type.Name;
-            if (name.EndsWith("Syntax"))
-            {
-                return name.Substring(0, name.Length - "Syntax".Length);
-            }
+        return null;
+    }
 
-            return name;
+    private static string? GetNodeType(Type type)
+    {
+        var name = type.Name;
+        if (name.EndsWith("Syntax"))
+        {
+            return name.Substring(0, name.Length - "Syntax".Length);
         }
+
+        return name;
     }
 }

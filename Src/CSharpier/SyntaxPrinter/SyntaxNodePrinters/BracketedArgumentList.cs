@@ -1,21 +1,20 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class BracketedArgumentList
 {
-    internal static class BracketedArgumentList
+    public static Doc Print(BracketedArgumentListSyntax node)
     {
-        public static Doc Print(BracketedArgumentListSyntax node)
-        {
-            return Doc.Group(
-                Token.Print(node.OpenBracketToken),
-                Doc.Indent(
-                    Doc.SoftLine,
-                    SeparatedSyntaxList.Print(node.Arguments, Node.Print, Doc.Line)
-                ),
+        return Doc.Group(
+            Token.Print(node.OpenBracketToken),
+            Doc.Indent(
                 Doc.SoftLine,
-                Token.Print(node.CloseBracketToken)
-            );
-        }
+                SeparatedSyntaxList.Print(node.Arguments, Node.Print, Doc.Line)
+            ),
+            Doc.SoftLine,
+            Token.Print(node.CloseBracketToken)
+        );
     }
 }

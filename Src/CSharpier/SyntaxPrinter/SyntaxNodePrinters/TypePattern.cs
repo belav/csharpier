@@ -1,13 +1,12 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class TypePattern
 {
-    internal static class TypePattern
+    public static Doc Print(TypePatternSyntax node)
     {
-        public static Doc Print(TypePatternSyntax node)
-        {
-            return Node.Print(node.Type);
-        }
+        return Node.Print(node.Type);
     }
 }

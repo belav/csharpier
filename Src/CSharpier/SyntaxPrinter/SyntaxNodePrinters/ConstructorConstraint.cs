@@ -1,17 +1,16 @@
 using CSharpier.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+
+internal static class ConstructorConstraint
 {
-    internal static class ConstructorConstraint
+    public static Doc Print(ConstructorConstraintSyntax node)
     {
-        public static Doc Print(ConstructorConstraintSyntax node)
-        {
-            return Doc.Concat(
-                Token.Print(node.NewKeyword),
-                Token.Print(node.OpenParenToken),
-                Token.Print(node.CloseParenToken)
-            );
-        }
+        return Doc.Concat(
+            Token.Print(node.NewKeyword),
+            Token.Print(node.OpenParenToken),
+            Token.Print(node.CloseParenToken)
+        );
     }
 }

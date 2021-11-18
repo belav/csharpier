@@ -1,21 +1,20 @@
 using System;
 
-namespace CSharpier.DocTypes
+namespace CSharpier.DocTypes;
+
+internal class Align : Doc, IHasContents
 {
-    internal class Align : Doc, IHasContents
+    public int Width { get; }
+    public Doc Contents { get; }
+
+    public Align(int width, Doc contents)
     {
-        public int Width { get; }
-        public Doc Contents { get; }
-
-        public Align(int width, Doc contents)
+        if (width < 1)
         {
-            if (width < 1)
-            {
-                throw new Exception($"{nameof(width)} must be >= 1");
-            }
-
-            this.Width = width;
-            this.Contents = contents;
+            throw new Exception($"{nameof(width)} must be >= 1");
         }
+
+        this.Width = width;
+        this.Contents = contents;
     }
 }
