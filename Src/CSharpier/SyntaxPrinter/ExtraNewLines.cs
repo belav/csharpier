@@ -1,8 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using CSharpier.DocTypes;
-using Microsoft.CodeAnalysis.CSharp;
-
 namespace CSharpier.SyntaxPrinter;
 
 internal static class ExtraNewLines

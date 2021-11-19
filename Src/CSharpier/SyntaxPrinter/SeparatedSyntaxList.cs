@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using CSharpier.DocTypes;
-using Microsoft.CodeAnalysis;
-
 namespace CSharpier.SyntaxPrinter;
 
 internal static class SeparatedSyntaxList

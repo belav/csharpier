@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using CSharpier.DocTypes;
-
 namespace CSharpier.Utilities;
 
 internal static class ListExtensions

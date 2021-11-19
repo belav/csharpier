@@ -1,9 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
 namespace CSharpier.SyntaxPrinter;
 
 internal static class ConstraintClauses

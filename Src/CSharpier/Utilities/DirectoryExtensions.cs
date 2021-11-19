@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 namespace CSharpier.Utilities;
 
 internal static class DirectoryExtensions

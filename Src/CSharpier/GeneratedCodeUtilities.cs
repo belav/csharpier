@@ -1,7 +1,4 @@
-using System.IO;
 using CSharpier.Utilities;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace CSharpier;
 

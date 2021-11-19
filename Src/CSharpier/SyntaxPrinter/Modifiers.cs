@@ -1,7 +1,3 @@
-using System.Linq;
-using CSharpier.DocTypes;
-using Microsoft.CodeAnalysis;
-
 namespace CSharpier.SyntaxPrinter;
 
 internal static class Modifiers

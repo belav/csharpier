@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace CSharpier.DocTypes;
 
 internal class Concat : Doc
