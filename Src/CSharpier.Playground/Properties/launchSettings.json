@@ -3,7 +3,8 @@
     "Watch": {
       "commandName": "Executable",
       "executablePath": "dotnet",
-      "commandLineArgs": "watch run",
+      "comments": "hot reload was not reloading any changes to the csharpier project, just to playground",
+      "commandLineArgs": "watch run no-hot-reload",
       "workingDirectory": "$(ProjectDir)",
       "launchBrowser": true,
       "environmentVariables": {
