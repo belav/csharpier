@@ -95,6 +95,32 @@ class ClassName
         };
 
         var emptyInitializer = new SomeObject[] { };
+
+        var emptyInitializer = new Thing { One = 1 };
+
+        var nestedInitializer = new Thing
+        {
+            One = 1,
+            Two = new Thing { One = 1 }
+        };
+
+        var nestedInitializer = new List<Thing>()
+        {
+            new Thing() { One = 1 },
+            new Thing() { One = 1 }
+        };
+
+        var nestedInitializer = new Thing
+        {
+            One = 1,
+            Two = new() { One = 1 }
+        };
+
+        var nestedInitializer = new List<Thing>()
+        {
+            new() { One = 1 },
+            new() { One = 1 }
+        };
     }
 
     private SomeObject someObject =
