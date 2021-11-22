@@ -121,6 +121,17 @@ class ClassName
             new() { One = 1 },
             new() { One = 1 }
         };
+
+        var noBreak = new List<Thing> { new Thing { One = 1 } };
+        var yesBreak = new List<Thing>
+        {
+            new Thing { One = 1, Two = 2 }
+        };
+        var yesBreak = new List<Thing>
+        {
+            new Thing { One = 1 },
+            Two = 2
+        };
     }
 
     private SomeObject someObject =

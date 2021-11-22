@@ -27,12 +27,23 @@ internal static class ObjectCreationExpression
 
     public static Doc BreakParentIfNested(BaseObjectCreationExpressionSyntax node, Doc doc)
     {
+        InitializerExpressionSyntax? parentInitializerExpressionSyntax = null;
+        if (node.Parent is InitializerExpressionSyntax i1)
+        {
+            parentInitializerExpressionSyntax = i1;
+        }
+        else if (node.Parent?.Parent is InitializerExpressionSyntax i2)
+        {
+            parentInitializerExpressionSyntax = i2;
+        }
+
         return
-            (
-                node.Parent?.Parent is InitializerExpressionSyntax
-                || node.Parent is InitializerExpressionSyntax
-            )
+            parentInitializerExpressionSyntax != null
             && node.Initializer != null
+            && (
+                node.Initializer.Expressions.Count > 1
+                || parentInitializerExpressionSyntax.Expressions.Count > 1
+            )
           ? Doc.Concat(doc, Doc.BreakParent)
           : doc;
     }
