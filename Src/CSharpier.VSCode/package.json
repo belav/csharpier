@@ -1,0 +1,58 @@
+{
+  "name": "csharpier-vscode",
+  "license": "MIT",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./build/Extension.js",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false,
+      "description": "This extension is only supported in trusted workspaces"
+    }
+  },
+  "contributes": {
+    "configuration": [
+      {
+        "title": "CSharpier",
+        "properties": {
+          "csharpier-vscode.enableDebugLogs": {
+            "type": "boolean",
+            "default": false,
+            "description": "Enable debug logs."
+          }
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "rimraf build && tsc -p ./",
+    "start": "tsc -watch -p ./",
+    "pretest": "npm run build",
+    "prettier": "prettier --parser typescript ./src/**/*.{ts,tsx} --write",
+    "test": "node ./build/Tests/RunTests.js",
+    "vsix": "vsce package"
+  },
+  "devDependencies": {
+    "@types/command-exists": "1.2.0",
+    "@types/glob": "7.1.4",
+    "@types/mocha": "9.0.0",
+    "@types/node": "14.x",
+    "@types/vscode": "1.60.0",
+    "@vscode/test-electron": "1.6.2",
+    "command-exists": "1.2.9",
+    "glob": "^7.1.7",
+    "mocha": "9.1.1",
+    "prettier": "2.4.1",
+    "rimraf": "3.0.2",
+    "typescript": "4.4.3"
+  }
+}

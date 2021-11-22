@@ -1,6 +1,8 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO.Abstractions;
+using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
@@ -21,11 +23,17 @@ public class Program
         bool fast,
         bool skipWrite,
         bool writeStdout,
+        bool pipeMultipleFiles,
         CancellationToken cancellationToken
     )
     {
         var console = new SystemConsole();
         var logger = new ConsoleLogger(console);
+
+        if (pipeMultipleFiles)
+        {
+            return await PipeMultipleFiles(console, logger, cancellationToken);
+        }
 
         var directoryOrFileNotProvided = (directoryOrFile is null or { Length: 0 });
 
@@ -70,5 +78,63 @@ public class Program
             logger,
             cancellationToken
         );
+    }
+
+    private static async Task<int> PipeMultipleFiles(
+        SystemConsole console,
+        ILogger logger,
+        CancellationToken cancellationToken
+    )
+    {
+        using var streamReader = new StreamReader(
+            Console.OpenStandardInput(),
+            Console.InputEncoding
+        );
+
+        var stringBuilder = new StringBuilder();
+        string? fileName = null;
+
+        // TODO should we have a way to send a kill signal?
+        while (true)
+        {
+            while (true)
+            {
+                var character = Convert.ToChar(streamReader.Read());
+                if (character == '\u0003')
+                {
+                    break;
+                }
+
+                stringBuilder.Append(character);
+            }
+
+            if (fileName == null)
+            {
+                fileName = stringBuilder.ToString();
+                stringBuilder.Clear();
+            }
+            else
+            {
+                var commandLineOptions = new CommandLineOptions
+                {
+                    // TODO this should use the supplied file name
+                    DirectoryOrFilePaths = new[] { Directory.GetCurrentDirectory() },
+                    StandardInFileContents = stringBuilder.ToString(),
+                    Fast = true,
+                    WriteStdout = true
+                };
+
+                await CommandLineFormatter.Format(
+                    commandLineOptions,
+                    new FileSystem(),
+                    console,
+                    logger,
+                    cancellationToken
+                );
+
+                stringBuilder.Clear();
+                fileName = null;
+            }
+        }
     }
 }

@@ -58,6 +58,7 @@ if ($codeContents -ne $formatted) {
     Write-Output "Expected"
     Write-Output $formatted
     Write-Output ""
+    $failed = $true
 }
 Remove-Item "Code.cs"
 
@@ -70,6 +71,7 @@ $ignoredFileContents = Get-Content "Subdirectory/IgnoredFile.cs"
 if ($ignoredFileContents -ne $unformatted) {
     Write-Output "The file at Subdirectory/IgnoredFile.cs should have been ignored but it was formatted"
     Write-Output ""
+    $failed = $true
 }
 Remove-Item "Subdirectory" -Recurse -Force
 Remove-Item ".csharpierignore" -Force

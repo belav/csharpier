@@ -17,6 +17,7 @@ ProjectSection(SolutionItems) = preProject
 	.dockerignore = .dockerignore
 	global.json = global.json
 	CSharpier.Build.targets = CSharpier.Build.targets
+	test.js = test.js
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{176BB0EA-B72B-4ACA-82AE-C16A732BE023}"
