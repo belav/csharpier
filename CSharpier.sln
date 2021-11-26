@@ -17,7 +17,6 @@ ProjectSection(SolutionItems) = preProject
 	.dockerignore = .dockerignore
 	global.json = global.json
 	CSharpier.Build.targets = CSharpier.Build.targets
-	test.js = test.js
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{176BB0EA-B72B-4ACA-82AE-C16A732BE023}"
@@ -73,6 +72,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Cli", "src\CSharp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxFinder", "Src\SyntaxFinder\SyntaxFinder.csproj", "{0B075DD3-1FEE-483E-8665-43C226188287}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Cli.Tests", "Src\CSharpier.Cli.Tests\CSharpier.Cli.Tests.csproj", "{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,5 +116,9 @@ Global
 		{0B075DD3-1FEE-483E-8665-43C226188287}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B075DD3-1FEE-483E-8665-43C226188287}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B075DD3-1FEE-483E-8665-43C226188287}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
