@@ -68,7 +68,7 @@ public class Program
             Check = check,
             Fast = fast,
             SkipWrite = skipWrite,
-            WriteStdout = writeStdout
+            WriteStdout = writeStdout || standardInFileContents != null
         };
 
         return await CommandLineFormatter.Format(

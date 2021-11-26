@@ -97,6 +97,7 @@ internal class CommandLineFormatter
             );
         }
 
+        // TODO should we rename this property? and the assumption that DirectoryOrFilePaths contains one file is kinda ugly
         if (commandLineOptions.StandardInFileContents != null)
         {
             var path = commandLineOptions.DirectoryOrFilePaths[0];
@@ -129,7 +130,7 @@ internal class CommandLineFormatter
         }
 
         result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-        if (!commandLineOptions.ShouldWriteStandardOut)
+        if (!commandLineOptions.WriteStdout)
         {
             ResultPrinter.PrintResults(result, logger, commandLineOptions);
         }
@@ -287,7 +288,7 @@ internal class CommandLineFormatter
     {
         if (
             this.CommandLineOptions.Check
-            && !this.CommandLineOptions.ShouldWriteStandardOut
+            && !this.CommandLineOptions.WriteStdout
             && result.Code != fileContents
         )
         {
@@ -304,7 +305,7 @@ internal class CommandLineFormatter
         Encoding? encoding
     )
     {
-        if (this.CommandLineOptions.ShouldWriteStandardOut)
+        if (this.CommandLineOptions.WriteStdout)
         {
             this.Console.Write(result.Code);
         }

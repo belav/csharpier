@@ -6,8 +6,7 @@ import { LoggingService } from "./LoggingService";
 
 export class FormattingService implements Disposable {
     longRunner: import("child_process").ChildProcessWithoutNullStreams;
-    // TODO fix this any
-    callbacks: any = [];
+    callbacks: ((result: string) => void)[] = [];
     loggingService: LoggingService;
 
     constructor(loggingService: LoggingService) {
@@ -35,15 +34,8 @@ export class FormattingService implements Disposable {
         });
     }
 
-    provideDocumentFormattingEdits = async (document: TextDocument) => {
+    private provideDocumentFormattingEdits = async (document: TextDocument) => {
         this.loggingService.logInfo(`Formatting started.`);
-
-        // TODO what is this? it does not seem to matter
-        // if (document.isUntitled) {
-        //     return this.formatByTextEdit(document);
-        // }
-
-        this.loggingService.logInfo("Formatting in place");
         const startTime = performance.now();
         // TODO if the file fails to compile, we lose it
         const result = await this.formatInPlace(document.getText(), document.fileName);
@@ -58,7 +50,7 @@ export class FormattingService implements Disposable {
         return new Range(0, 0, lastLineId, document.lineAt(lastLineId).text.length);
     }
 
-    formatInPlace = async (content: string, fileName: string) => {
+    private formatInPlace = async (content: string, fileName: string) => {
         this.longRunner.stdin.write(fileName);
         this.longRunner.stdin.write("\u0003");
         this.longRunner.stdin.write(content);
@@ -68,13 +60,7 @@ export class FormattingService implements Disposable {
         });
     };
 
-    // TODO figure this out
-    formatByTextEdit = async (document: TextDocument) => {
-        return this.formatInPlace(document.getText(), document.fileName);
-    };
-
     dispose() {
-        // TODO do we need pause?
         (this.longRunner.stdin as any).pause();
         this.longRunner.kill();
     }

@@ -6,7 +6,6 @@ import * as path from "path";
 const unformattedCode = "public class ClassName {\n\n}";
 const formattedCode = "public class ClassName { }\n";
 
-// TODO these are now complaining about Code already running, maybe just reboot?
 suite("Formatting", () => {
     test("Formats physical C# file", async () => {
         const testFilePath = path.resolve(__dirname, "./TestFile.cs");
@@ -20,13 +19,24 @@ suite("Formatting", () => {
 
     test("Formats virtual C# file", async () => {
         const document = await workspace.openTextDocument({
-            content: "public class ClassName {\n}",
+            content: unformattedCode,
             language: "csharp",
         });
 
         await showDocumentAndFormat(document);
 
         strictEqual(document.getText(), formattedCode);
+    });
+
+    test("Retains invalid virtual C# file", async () => {
+        const document = await workspace.openTextDocument({
+            content: "public class ClassName {",
+            language: "csharp",
+        });
+
+        await showDocumentAndFormat(document);
+
+        strictEqual(document.getText(), "public class ClassName {");
     });
 });
 

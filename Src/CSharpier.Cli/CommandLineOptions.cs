@@ -10,11 +10,7 @@ public class CommandLineOptions
     public bool SkipWrite { get; init; }
     public bool WriteStdout { get; init; }
     public bool PipeMultipleFiles { get; init; }
-    // TODO could we rename this? then set WriteStdout to true for the situations where we do want to write
-    // then ditch the property below
     public string? StandardInFileContents { get; init; }
-
-    public bool ShouldWriteStandardOut => WriteStdout || StandardInFileContents != null;
 
     internal delegate Task<int> Handler(
         string[] directoryOrFile,

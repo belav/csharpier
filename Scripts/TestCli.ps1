@@ -28,6 +28,20 @@ if ($stdInResult -ne $formatted) {
     $failed = $true;
 }
 
+# TODO prettier does not just spit out the file, the extension does not use the CLI
+# it can print out detailed info about what went wrong
+# the prettier CLI also shows errors when you pipe to it
+# have different modes? like --mode plugin, then later can add --mode plugin2
+
+Write-Output "---- File with compilation error provided by stdIn should not be changed"
+$stdInResult = "public class ClassName { " | dotnet $csharpierDllPath
+if ($stdInResult -ne "public class ClassName { ") {
+    Write-Output "Piping invalid c# code to CSharpier did not result in the original code. The result was:"
+    Write-Output $stdInResult
+    Write-Output ""
+    $failed = $true;
+}
+
 Write-Output "---- Check should exit with 1 when file not formatted"
 New-Item -Path . -Name "Check.cs" -Value $unformatted 2>&1 | Out-Null
 $checkResult = dotnet $csharpierDllPath Check.cs --check
