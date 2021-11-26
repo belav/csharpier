@@ -79,6 +79,10 @@ public class Program
             cancellationToken
         );
     }
+    // TODO prettier does not just spit out the file, the extension does not use the CLI
+    //  it can print out detailed info about what went wrong
+    //  the prettier CLI also shows errors when you pipe to it
+    //  have different modes? like --mode plugin, then later can add --mode plugin2
 
     private static async Task<int> PipeMultipleFiles(
         SystemConsole console,

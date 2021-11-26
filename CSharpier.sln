@@ -35,7 +35,6 @@ ProjectSection(SolutionItems) = preProject
 	Scripts/ChangeLog.ps1 = Scripts/ChangeLog.ps1
 	Scripts/UpdateForkedRepos.ps1 = Scripts/UpdateForkedRepos.ps1
 	Scripts\CreateTestingPR.ps1 = Scripts\CreateTestingPR.ps1
-	Scripts\TestCli.ps1 = Scripts\TestCli.ps1
 	Scripts\Helpers.ps1 = Scripts\Helpers.ps1
 	Scripts\BuildPackages.ps1 = Scripts\BuildPackages.ps1
 	Scripts\UpdateCSharpierRepos.ps1 = Scripts\UpdateCSharpierRepos.ps1
