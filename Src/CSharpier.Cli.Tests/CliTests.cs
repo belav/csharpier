@@ -9,9 +9,21 @@ using NUnit.Framework;
 namespace CSharpier.Cli.Tests;
 
 // TODO update workflow to run these
-// TODO do all the work in a subdirectory that we can wipe out when each test is done
 public class CliTests
 {
+    private const string TestFileDirectory = "TestFiles";
+
+    [SetUp]
+    public void BeforeEachTest()
+    {
+        if (Directory.Exists(TestFileDirectory))
+        {
+            Directory.Delete(TestFileDirectory, true);
+        }
+
+        Directory.CreateDirectory(TestFileDirectory);
+    }
+
     [TestCase("\n")]
     [TestCase("\r\n")]
     public async Task Should_Format_Basic_File(string lineEnding)
@@ -19,12 +31,12 @@ public class CliTests
         var formattedContent = "public class ClassName { }" + lineEnding;
         var unformattedContent = $"public class ClassName {{{lineEnding}{lineEnding}}}";
 
-        await File.WriteAllTextAsync("BasicFile.cs", unformattedContent);
+        await WriteFileAsync("BasicFile.cs", unformattedContent);
 
         using var process = new CsharpierProcess("BasicFile.cs");
 
         var (output, exitCode) = await process.GetOutputWithExitCode();
-        var result = await File.ReadAllTextAsync("BasicFile.cs");
+        var result = await ReadAllTextAsync("BasicFile.cs");
 
         output.Should().StartWith("Total time:");
         output
@@ -36,32 +48,32 @@ public class CliTests
         result.Should().Be(formattedContent);
     }
 
-    /*
-Write-Output "---- Ignore file respected when directoryOrFile is '.' and csharpierignore has subdirectory"
-New-Item -Path "Subdirectory" -ItemType "Directory" | Out-Null
-New-Item -Path "Subdirectory" -Name "IgnoredFile.cs" -Value $unformatted | Out-Null
-New-Item -Path . -Name ".csharpierignore" -Value "Subdirectory/IgnoredFile.cs" | Out-Null
-dotnet $csharpierDllPath . 2>&1 | Out-Null
-$ignoredFileContents = Get-Content "Subdirectory/IgnoredFile.cs"
-if ($ignoredFileContents -ne $unformatted) {
-    Write-Output "The file at Subdirectory/IgnoredFile.cs should have been ignored but it was formatted"
-    Write-Output ""
-    $failed = $true
-}
-Remove-Item "Subdirectory" -Recurse -Force
-Remove-Item ".csharpierignore" -Force
+    [Test]
+    public async Task Should_Respect_Ignore_File_With_Subdirectory_When_DirectorOrFile_Is_Dot()
+    {
+        var unformattedContent = "public class Unformatted {     }";
+        var filePath = "Subdirectory/IgnoredFile.cs";
+        await WriteFileAsync(filePath, unformattedContent);
+        await WriteFileAsync(".csharpierignore", filePath);
 
-Write-Output "---- DirectoryOrFile is required when not using stdin"
-$noDirectoryResult = dotnet $csharpierDllPath 2>&1 | Out-Null
-$noDirectoryResult = $noDirectoryResult -join "`n"
-$missingDirectoryOrFailes = "directoryOrFile is required when not piping stdin to CSharpier"
-if (-not ($missingDirectoryOrFailes.Contains($missingDirectoryOrFailes))) {
-    Write-Output "The result from running with no options did not contain '$($missingDirectoryOrFailes)', it was: "
-    Write-Output $missingDirectoryOrFailes
-    Write-Output ""
-    $failed = $true
-}
-     */
+        // TODO easier way to run this and get output
+        using var process = new CsharpierProcess(".");
+        await process.GetOutputWithExitCode();
+        var result = await ReadAllTextAsync(filePath);
+
+        result.Should().Be(unformattedContent, $"The file at {filePath} should have been ignored");
+    }
+
+    [Test]
+    public async Task Should_Return_Error_When_No_DirectoryOrFile_And_Not_Piping_StdIn()
+    {
+        throw new Exception("TODO CSharpierProcess always pipes input, we need to change that");
+        using var process = new CsharpierProcess();
+        var (output, exitCode) = await process.GetOutputWithExitCode();
+
+        exitCode.Should().Be(1);
+        output.Should().Contain("directoryOrFile is required when not piping stdin to CSharpier");
+    }
 
     [TestCase("\n")]
     [TestCase("\r\n")]
@@ -84,7 +96,7 @@ if (-not ($missingDirectoryOrFailes.Contains($missingDirectoryOrFailes))) {
     {
         var unformattedContent = "public class ClassName1 {\n\n}";
 
-        await File.WriteAllTextAsync("CheckUnformatted.cs", unformattedContent);
+        await WriteFileAsync("CheckUnformatted.cs", unformattedContent);
 
         using var process = new CsharpierProcess("CheckUnformatted.cs --check");
         var (result, exitCode) = await process.GetOutputWithExitCode();
@@ -93,7 +105,8 @@ if (-not ($missingDirectoryOrFailes.Contains($missingDirectoryOrFailes))) {
         exitCode.Should().Be(1);
     }
 
-    // TODO file with compilation error should spit out warning
+    // TODO file with compilation error should spit out warning for regular use
+    // TODO file with compilation error should return file for piping, multi file and single file
 
     // TODO test with ignored file?
     // TODO why doesn't the final /n show up? is it trimmed by the process junk?
@@ -128,6 +141,32 @@ if (-not ($missingDirectoryOrFailes.Contains($missingDirectoryOrFailes))) {
         result.Should().Be(formattedContent2);
     }
 
+    private async Task WriteFileAsync(string path, string content)
+    {
+        var fileInfo = new FileInfo(Path.Combine(TestFileDirectory, path));
+        EnsureExists(fileInfo.Directory!);
+
+        await File.WriteAllTextAsync(fileInfo.FullName, content);
+    }
+
+    private async Task<string> ReadAllTextAsync(string path)
+    {
+        return await File.ReadAllTextAsync(Path.Combine(TestFileDirectory, path));
+    }
+
+    private void EnsureExists(DirectoryInfo directoryInfo)
+    {
+        if (directoryInfo.Parent != null)
+        {
+            EnsureExists(directoryInfo.Parent);
+        }
+
+        if (!directoryInfo.Exists)
+        {
+            directoryInfo.Create();
+        }
+    }
+
     // cli wrap does not give a clean way to do this because it is hard to distinguish
     // between files that come back from it
     // but using this with the regular tests was causing troubles
@@ -148,6 +187,10 @@ if (-not ($missingDirectoryOrFailes.Contains($missingDirectoryOrFailes))) {
             }
 
             this.process = new Process();
+            this.process.StartInfo.WorkingDirectory = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                TestFileDirectory
+            );
             this.process.StartInfo.FileName = path;
             this.process.StartInfo.Arguments = arguments;
             this.process.StartInfo.UseShellExecute = false;
@@ -222,6 +265,7 @@ if (-not ($missingDirectoryOrFailes.Contains($missingDirectoryOrFailes))) {
         public void Dispose()
         {
             this.standardInput.Dispose();
+            this.process.Kill();
             this.process.Dispose();
         }
     }
