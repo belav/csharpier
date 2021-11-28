@@ -8,8 +8,6 @@ using NUnit.Framework;
 
 namespace CSharpier.Cli.Tests;
 
-// TODO update workflow to run these, or do they run already?
-
 // these tests are kind of nice as c# because they run in the same place.
 // they used to be powershell, but doing the multiple file thing didn't work
 // that worked in by writing js, but that felt worse than powershell
@@ -18,16 +16,19 @@ namespace CSharpier.Cli.Tests;
 // are written properly
 public class CliTests
 {
-    private const string TestFileDirectory = "TestFiles";
+    private static readonly string testFileDirectory = Path.Combine(
+        Directory.GetCurrentDirectory(),
+        "TestFiles"
+    );
 
     [SetUp]
     public void BeforeEachTest()
     {
-        if (Directory.Exists(TestFileDirectory))
+        if (Directory.Exists(testFileDirectory))
         {
-            Directory.Delete(TestFileDirectory, true);
+            Directory.Delete(testFileDirectory, true);
         }
-        Directory.CreateDirectory(TestFileDirectory);
+        Directory.CreateDirectory(testFileDirectory);
     }
 
     [TestCase("\n")]
@@ -119,6 +120,7 @@ public class CliTests
         exitCode.Should().Be(1);
     }
 
+    // TODO all the TODOs in vscode as well
     // TODO file with compilation error should spit out warning for regular use
     // TODO file with compilation error should return file for piping, multi file and single file
 
@@ -159,7 +161,7 @@ public class CliTests
 
     private async Task WriteFileAsync(string path, string content)
     {
-        var fileInfo = new FileInfo(Path.Combine(TestFileDirectory, path));
+        var fileInfo = new FileInfo(Path.Combine(testFileDirectory, path));
         EnsureExists(fileInfo.Directory!);
 
         await File.WriteAllTextAsync(fileInfo.FullName, content);
@@ -167,7 +169,7 @@ public class CliTests
 
     private async Task<string> ReadAllTextAsync(string path)
     {
-        return await File.ReadAllTextAsync(Path.Combine(TestFileDirectory, path));
+        return await File.ReadAllTextAsync(Path.Combine(testFileDirectory, path));
     }
 
     private void EnsureExists(DirectoryInfo directoryInfo)
@@ -191,14 +193,12 @@ public class CliTests
 
         public CsharpierProcess()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.exe");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
 
             this.process = new Process();
-            this.process.StartInfo.WorkingDirectory = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                TestFileDirectory
-            );
-            this.process.StartInfo.FileName = path;
+            this.process.StartInfo.WorkingDirectory = testFileDirectory;
+            this.process.StartInfo.FileName = "dotnet";
+            this.process.StartInfo.Arguments = path;
             this.process.StartInfo.UseShellExecute = false;
             this.process.StartInfo.RedirectStandardInput = false;
             this.process.StartInfo.RedirectStandardOutput = true;
@@ -207,7 +207,7 @@ public class CliTests
 
         public CsharpierProcess WithArguments(string arguments)
         {
-            this.process.StartInfo.Arguments = arguments;
+            this.process.StartInfo.Arguments += " " + arguments;
 
             return this;
         }

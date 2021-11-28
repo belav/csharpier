@@ -97,7 +97,8 @@ internal class CommandLineFormatter
             );
         }
 
-        // TODO should we rename this property? and the assumption that DirectoryOrFilePaths contains one file is kinda ugly
+        // TODO should we rename this property?
+        // and the assumption that DirectoryOrFilePaths contains one file is kinda ugly
         if (commandLineOptions.StandardInFileContents != null)
         {
             var path = commandLineOptions.DirectoryOrFilePaths[0];

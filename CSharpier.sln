@@ -67,7 +67,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests.Generators"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Generators", "Src\CSharpier.Generators\CSharpier.Generators.csproj", "{D846F494-57FC-4315-A2A8-357343175D2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Cli", "src\CSharpier.Cli\CSharpier.Cli.csproj", "{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Cli", "Src\CSharpier.Cli\CSharpier.Cli.csproj", "{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxFinder", "Src\SyntaxFinder\SyntaxFinder.csproj", "{0B075DD3-1FEE-483E-8665-43C226188287}"
 EndProject
