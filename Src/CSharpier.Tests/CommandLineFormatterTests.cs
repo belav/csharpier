@@ -359,7 +359,7 @@ public class CommandLineFormatterTests
                     DirectoryOrFilePaths = directoryOrFilePaths,
                     SkipWrite = skipWrite,
                     Check = check,
-                    WriteStdout = writeStdout,
+                    WriteStdout = writeStdout || standardInFileContents != null,
                     StandardInFileContents = standardInFileContents,
                 },
                 this.fileSystem,
