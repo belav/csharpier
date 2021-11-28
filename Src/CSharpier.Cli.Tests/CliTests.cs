@@ -8,7 +8,14 @@ using NUnit.Framework;
 
 namespace CSharpier.Cli.Tests;
 
-// TODO update workflow to run these
+// TODO update workflow to run these, or do they run already?
+
+// these tests are kind of nice as c# because they run in the same place.
+// they used to be powershell, but doing the multiple file thing didn't work
+// that worked in by writing js, but that felt worse than powershell
+// these mostly work except the one test that has issues with console input redirection
+// the CSharpierProcess abstraction is also a little fragile, but makes for clean tests when they
+// are written properly
 public class CliTests
 {
     private const string TestFileDirectory = "TestFiles";
@@ -20,7 +27,6 @@ public class CliTests
         {
             Directory.Delete(TestFileDirectory, true);
         }
-
         Directory.CreateDirectory(TestFileDirectory);
     }
 
@@ -33,9 +39,10 @@ public class CliTests
 
         await WriteFileAsync("BasicFile.cs", unformattedContent);
 
-        using var process = new CsharpierProcess("BasicFile.cs");
+        var (output, exitCode, _) = await new CsharpierProcess()
+            .WithArguments("BasicFile.cs")
+            .ExecuteAsync();
 
-        var (output, exitCode) = await process.GetOutputWithExitCode();
         var result = await ReadAllTextAsync("BasicFile.cs");
 
         output.Should().StartWith("Total time:");
@@ -56,9 +63,7 @@ public class CliTests
         await WriteFileAsync(filePath, unformattedContent);
         await WriteFileAsync(".csharpierignore", filePath);
 
-        // TODO easier way to run this and get output
-        using var process = new CsharpierProcess(".");
-        await process.GetOutputWithExitCode();
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
         var result = await ReadAllTextAsync(filePath);
 
         result.Should().Be(unformattedContent, $"The file at {filePath} should have been ignored");
@@ -67,12 +72,20 @@ public class CliTests
     [Test]
     public async Task Should_Return_Error_When_No_DirectoryOrFile_And_Not_Piping_StdIn()
     {
-        throw new Exception("TODO CSharpierProcess always pipes input, we need to change that");
-        using var process = new CsharpierProcess();
-        var (output, exitCode) = await process.GetOutputWithExitCode();
+        if (Console.IsInputRedirected)
+        {
+            // This test cannot run if Console.IsInputRedirected is true.
+            // Running it from the command line is required.
+            // See https://github.com/dotnet/runtime/issues/1147"
+            return;
+        }
+
+        var (output, exitCode, errorOutput) = await new CsharpierProcess().ExecuteAsync();
 
         exitCode.Should().Be(1);
-        output.Should().Contain("directoryOrFile is required when not piping stdin to CSharpier");
+        errorOutput
+            .Should()
+            .Contain("directoryOrFile is required when not piping stdin to CSharpier");
     }
 
     [TestCase("\n")]
@@ -82,7 +95,7 @@ public class CliTests
         var formattedContent1 = "public class ClassName1 { }" + lineEnding;
         var unformattedContent1 = $"public class ClassName1 {{{lineEnding}{lineEnding}}}";
 
-        using var process = new CsharpierProcess();
+        using var process = new CsharpierProcess().WithPipedInput().Start();
 
         process.Write(unformattedContent1);
 
@@ -98,8 +111,9 @@ public class CliTests
 
         await WriteFileAsync("CheckUnformatted.cs", unformattedContent);
 
-        using var process = new CsharpierProcess("CheckUnformatted.cs --check");
-        var (result, exitCode) = await process.GetOutputWithExitCode();
+        var (result, exitCode, _) = await new CsharpierProcess()
+            .WithArguments("CheckUnformatted.cs --check")
+            .ExecuteAsync();
 
         result.Should().StartWith("Warning /CheckUnformatted.cs - Was not formatted.");
         exitCode.Should().Be(1);
@@ -109,7 +123,6 @@ public class CliTests
     // TODO file with compilation error should return file for piping, multi file and single file
 
     // TODO test with ignored file?
-    // TODO why doesn't the final /n show up? is it trimmed by the process junk?
     [TestCase("\n")]
     [TestCase("\r\n")]
     public async Task Cli_Should_Format_Multiple_Piped_Files(string lineEnding)
@@ -120,7 +133,10 @@ public class CliTests
         var unformattedContent1 = $"public class ClassName1 {{{lineEnding}{lineEnding}}}";
         var unformattedContent2 = $"public class ClassName2 {{{lineEnding}{lineEnding}}}";
 
-        using var process = new CsharpierProcess("--pipe-multiple-files");
+        using var process = new CsharpierProcess()
+            .WithArguments("--pipe-multiple-files")
+            .WithPipedInput()
+            .Start();
 
         process.Write("Test2.cs");
         process.Write('\u0003');
@@ -167,24 +183,15 @@ public class CliTests
         }
     }
 
-    // cli wrap does not give a clean way to do this because it is hard to distinguish
-    // between files that come back from it
-    // but using this with the regular tests was causing troubles
     private class CsharpierProcess : IDisposable
     {
-        private string output = string.Empty;
-        private readonly StreamWriter standardInput;
+        private StreamWriter? standardInput;
         private readonly Process process;
+        private bool started;
 
-        public CsharpierProcess(string? arguments = null)
+        public CsharpierProcess()
         {
-            const string path = "dotnet-csharpier.exe";
-
-            void OutputHandler(object sender, DataReceivedEventArgs e)
-            {
-                Console.WriteLine("got data: " + e.Data + "-----");
-                this.output += e.Data;
-            }
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.exe");
 
             this.process = new Process();
             this.process.StartInfo.WorkingDirectory = Path.Combine(
@@ -192,29 +199,58 @@ public class CliTests
                 TestFileDirectory
             );
             this.process.StartInfo.FileName = path;
-            this.process.StartInfo.Arguments = arguments;
             this.process.StartInfo.UseShellExecute = false;
-            this.process.StartInfo.RedirectStandardInput = true;
+            this.process.StartInfo.RedirectStandardInput = false;
             this.process.StartInfo.RedirectStandardOutput = true;
             this.process.StartInfo.RedirectStandardError = true;
-            this.process.ErrorDataReceived += OutputHandler;
+        }
 
+        public CsharpierProcess WithArguments(string arguments)
+        {
+            this.process.StartInfo.Arguments = arguments;
+
+            return this;
+        }
+
+        public CsharpierProcess WithPipedInput()
+        {
+            this.process.StartInfo.RedirectStandardInput = true;
+
+            return this;
+        }
+
+        public CsharpierProcess Start()
+        {
+            this.started = true;
             this.process.Start();
 
-            this.standardInput = this.process.StandardInput;
+            if (this.process.StartInfo.RedirectStandardInput)
+            {
+                this.standardInput = this.process.StandardInput;
+            }
 
-            this.process.BeginErrorReadLine();
+            return this;
         }
 
         public void Write(string value)
         {
-            this.standardInput.Write(value);
+            if (!this.process.StartInfo.RedirectStandardInput)
+            {
+                throw new Exception("WithPipedInput was not called");
+            }
+
+            this.standardInput?.Write(value);
             Console.WriteLine("Write: " + value);
         }
 
         public void Write(char value)
         {
-            this.standardInput.Write(value);
+            if (!this.process.StartInfo.RedirectStandardInput)
+            {
+                throw new Exception("WithPipedInput was not called");
+            }
+
+            this.standardInput?.Write(value);
             Console.WriteLine("Write: " + value);
         }
 
@@ -228,17 +264,29 @@ public class CliTests
             return this.GetOutput(true);
         }
 
-        public async Task<(string, int)> GetOutputWithExitCode()
+        public async Task<(string output, int exitCode, string errorOutput)> ExecuteAsync()
         {
+            this.started = true;
+            this.process.Start();
             await this.process.WaitForExitAsync();
-            return (await this.process.StandardOutput.ReadToEndAsync(), this.process.ExitCode);
+            var output = await this.process.StandardOutput.ReadToEndAsync();
+            var errorOutput = await this.process.StandardError.ReadToEndAsync();
+            var exitCode = this.process.ExitCode;
+            this.Dispose();
+
+            return (output, exitCode, errorOutput);
         }
 
         private async Task<string> GetOutput(bool close)
         {
+            if (!this.started)
+            {
+                throw new Exception("The process was never started");
+            }
+
             if (close)
             {
-                this.standardInput.Close();
+                this.standardInput?.Close();
                 await this.process.WaitForExitAsync();
                 return await this.process.StandardOutput.ReadToEndAsync();
             }
@@ -264,9 +312,12 @@ public class CliTests
 
         public void Dispose()
         {
-            this.standardInput.Dispose();
-            this.process.Kill();
-            this.process.Dispose();
+            this.standardInput?.Dispose();
+            if (this.started)
+            {
+                this.process.Kill();
+                this.process.Dispose();
+            }
         }
     }
 }
