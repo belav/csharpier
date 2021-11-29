@@ -167,10 +167,11 @@ public class CliTests
             .WithPipedInput($"InvalidFile.cs{'\u0003'}{invalidFile}{'\u0003'}")
             .ExecuteAsync();
 
-        // TODO this should contain the file name
         result.ErrorOutput
             .Should()
-            .Be($"Error  - Failed to compile so was not formatted.{Environment.NewLine}");
+            .Be(
+                $"Error /InvalidFile.cs - Failed to compile so was not formatted.{Environment.NewLine}"
+            );
         result.ExitCode.Should().Be(1);
     }
 
