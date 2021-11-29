@@ -16,13 +16,19 @@ export class FormattingService implements Disposable {
         this.loggingService.logInfo("Initializing.");
 
         let csharpierPath = "csharpier";
+        const csharpierDebugPath = path.resolve(
+            __dirname,
+            "../../CSharpier.Cli/bin/Debug/net6.0/dotnet-csharpier.dll",
+        );
+        const csharpierReleasePath = csharpierDebugPath.replace("Debug", "Release");
         
-        if (fs.existsSync(path.resolve(__dirname, "../../CSharpier.Cli")))
+        if (fs.existsSync(csharpierDebugPath))
         {
-            csharpierPath = path.resolve(
-                __dirname,
-                "../../CSharpier.Cli/bin/debug/net6.0/dotnet-csharpier.dll",
-            );
+            csharpierPath = csharpierDebugPath;
+        }
+        else if (fs.existsSync(csharpierReleasePath))
+        {
+            csharpierPath = csharpierReleasePath;
         }
 
         this.longRunner = spawn("dotnet", [csharpierPath, "--pipe-multiple-files"], {
