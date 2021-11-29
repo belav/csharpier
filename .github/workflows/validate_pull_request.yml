@@ -17,6 +17,8 @@ jobs:
           cd Src/CSharpier.VSCode
           npm ci
           npm test
+        env:
+          DISPLAY: ":99.0"
   check_formatting:
     runs-on: ubuntu-latest
     name: Check Formatting

@@ -11,7 +11,7 @@ internal class CommandLineFormatter
     protected readonly CommandLineFormatterResult Result;
 
     protected readonly string BaseDirectoryPath;
-    protected readonly string Path;
+    protected readonly string PathToFileOrDirectory;
     protected readonly CommandLineOptions CommandLineOptions;
     protected readonly PrinterOptions PrinterOptions;
     protected readonly IFileSystem FileSystem;
@@ -21,7 +21,7 @@ internal class CommandLineFormatter
 
     protected CommandLineFormatter(
         string baseDirectoryPath,
-        string path,
+        string pathToFileOrDirectory,
         CommandLineOptions commandLineOptions,
         PrinterOptions printerOptions,
         IFileSystem fileSystem,
@@ -32,7 +32,7 @@ internal class CommandLineFormatter
     )
     {
         this.BaseDirectoryPath = baseDirectoryPath;
-        this.Path = path;
+        this.PathToFileOrDirectory = pathToFileOrDirectory;
         this.PrinterOptions = printerOptions;
         this.CommandLineOptions = commandLineOptions;
         this.FileSystem = fileSystem;
@@ -139,14 +139,14 @@ internal class CommandLineFormatter
 
     public async Task FormatFiles(CancellationToken cancellationToken)
     {
-        if (this.FileSystem.File.Exists(this.Path))
+        if (this.FileSystem.File.Exists(this.PathToFileOrDirectory))
         {
-            await FormatFileFromPath(this.Path, cancellationToken);
+            await FormatFileFromPath(this.PathToFileOrDirectory, cancellationToken);
         }
         else
         {
             var tasks = this.FileSystem.Directory
-                .EnumerateFiles(this.Path, "*.cs", SearchOption.AllDirectories)
+                .EnumerateFiles(this.PathToFileOrDirectory, "*.cs", SearchOption.AllDirectories)
                 .Select(o => FormatFileFromPath(o, cancellationToken))
                 .ToArray();
             try
