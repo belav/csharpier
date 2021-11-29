@@ -37,7 +37,7 @@ jobs:
     strategy:
       matrix:
         os: [ windows-latest, ubuntu-latest, macos-latest ]
-    name: Test on ${{ matrix.os }}
+    name: Test VSCode on ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -51,6 +51,7 @@ jobs:
           dotnet-version: '6.0.x'
       - run: |
           dotnet build CSharpier.sln -c release
+          cd Src/CSharpier.VSCode
           npm ci
           npm test
         env:
