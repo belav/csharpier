@@ -12,7 +12,7 @@ export async function activate(context: ExtensionContext) {
     initPlugin(context);
 }
 
-const initPlugin = async (context: ExtensionContext) =>
+const initPlugin = async (context: ExtensionContext) => {
     const enableDebugLogs =
         workspace.getConfiguration("csharpier-vscode").get<boolean>("enableDebugLogs") ?? false;
 

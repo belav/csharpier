@@ -136,8 +136,6 @@ public class CliTests
         result.ExitCode.Should().Be(1);
     }
 
-    // TODO file with compilation error should return file for piping, multi file and single file
-
     // TODO test with ignored file?
     [TestCase("\n")]
     [TestCase("\r\n")]
@@ -145,7 +143,6 @@ public class CliTests
     {
         var formattedContent1 = "public class ClassName1 { }" + lineEnding;
         var formattedContent2 = "public class ClassName2 { }" + lineEnding;
-        ;
         var unformattedContent1 = $"public class ClassName1 {{{lineEnding}{lineEnding}}}";
         var unformattedContent2 = $"public class ClassName2 {{{lineEnding}{lineEnding}}}";
 
@@ -159,18 +156,16 @@ public class CliTests
         process.Write(unformattedContent1);
         process.Write('\u0003');
 
-        var (output, _) = await process.GetOutputWithoutClosing();
-
-        output.Should().Be(formattedContent1);
-
         process.Write("Test2.cs");
         process.Write('\u0003');
         process.Write(unformattedContent2);
         process.Write('\u0003');
 
-        (output, _) = await process.GetOutputWithoutClosing();
+        var result = await process.GetOutputAsync();
 
-        output.Should().Be(formattedContent2);
+        var results = result.Output.Split('\u0003');
+        results[0].Should().Be(formattedContent1);
+        results[1].Should().Be(formattedContent2);
     }
 
     [Test]
@@ -188,10 +183,13 @@ public class CliTests
         process.Write(invalidFile);
         process.Write('\u0003');
 
-        var (_, errorOutput) = await process.GetOutputWithoutClosing();
+        var result = await process.GetOutputAsync();
 
         // TODO this should contain the file name
-        errorOutput.Should().Be("Error  - Failed to compile so was not formatted");
+        result.ErrorOutput
+            .Should()
+            .Be($"Error  - Failed to compile so was not formatted.{Environment.NewLine}");
+        result.ExitCode.Should().Be(1);
     }
 
     private async Task WriteFileAsync(string path, string content)
@@ -220,6 +218,7 @@ public class CliTests
         }
     }
 
+    // TODO with how much we simplified this, why not just use cliwrap??
     private class CsharpierProcess : IDisposable
     {
         private StreamWriter? standardInput;
@@ -317,55 +316,6 @@ public class CliTests
             var exitCode = this.process.ExitCode;
 
             return new ProcessResult(output, errorOutput, exitCode);
-        }
-
-        public async Task<(string output, string errorOutput)> GetOutputWithoutClosing()
-        {
-            var output = new StringBuilder();
-            var errorOutput = new StringBuilder();
-            while (true)
-            {
-                if (HasData(this.process.StandardOutput))
-                {
-                    output.Append(Convert.ToChar(this.process.StandardOutput.Read()));
-                }
-
-                if (HasData(this.process.StandardError))
-                {
-                    errorOutput.Append(Convert.ToChar(this.process.StandardError.Read()));
-                }
-
-                // wait to see if there will be another character to read
-                var x = 0;
-                while (
-                    !HasData(this.process.StandardOutput) && !HasData(this.process.StandardError)
-                )
-                {
-                    x++;
-                    if (x > 10)
-                    {
-                        return (output.ToString(), errorOutput.ToString());
-                    }
-                }
-            }
-        }
-
-        // If we just peek, then standardError.Peek will hang because nothing is written to it during some tests.
-        // if we switch to ErrorDataReceived/OutputDataReceived we do not get the new line values
-        // if we stick with this method, the tests take forever for some reason.
-        private bool HasData(StreamReader streamReader)
-        {
-            var hasData = false;
-            var task = Task.Run(
-                () =>
-                {
-                    hasData = streamReader.Peek() >= 0;
-                }
-            );
-
-            var completedTask = Task.WhenAny(task, Task.Delay(TimeSpan.FromMilliseconds(1))).Result;
-
-            return hasData;
         }
 
         public void Dispose()

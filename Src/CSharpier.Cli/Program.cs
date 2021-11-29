@@ -79,10 +79,6 @@ public class Program
             cancellationToken
         );
     }
-    // TODO prettier does not just spit out the file, the extension does not use the CLI
-    //  it can print out detailed info about what went wrong
-    //  the prettier CLI also shows errors when you pipe to it
-    //  have different modes? like --mode plugin, then later can add --mode plugin2
 
     private static async Task<int> PipeMultipleFiles(
         SystemConsole console,
@@ -98,12 +94,18 @@ public class Program
         var stringBuilder = new StringBuilder();
         string? fileName = null;
 
-        // TODO should we have a way to send a kill signal?
+        var exitCode = 0;
+
         while (true)
         {
             while (true)
             {
-                var character = Convert.ToChar(streamReader.Read());
+                var value = streamReader.Read();
+                if (value == -1)
+                {
+                    return exitCode;
+                }
+                var character = Convert.ToChar(value);
                 if (character == '\u0003')
                 {
                     break;
@@ -128,13 +130,20 @@ public class Program
                     WriteStdout = true
                 };
 
-                await CommandLineFormatter.Format(
+                var result = await CommandLineFormatter.Format(
                     commandLineOptions,
                     new FileSystem(),
                     console,
                     logger,
                     cancellationToken
                 );
+
+                console.Write('\u0003'.ToString());
+
+                if (result != 0)
+                {
+                    exitCode = result;
+                }
 
                 stringBuilder.Clear();
                 fileName = null;

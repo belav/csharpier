@@ -27,10 +27,10 @@ export class FormattingService implements Disposable {
         });
 
         // warm up csharpier so the first real format is fast
-        this.formatInPlace("public class ClassName { }", "Test.cs");
-
-        languages.registerDocumentFormattingEditProvider("csharp", {
-            provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
+        this.formatInPlace("public class ClassName { }", "Test.cs").then(() => {
+            languages.registerDocumentFormattingEditProvider("csharp", {
+                provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
+            }); 
         });
     }
 
@@ -42,10 +42,10 @@ export class FormattingService implements Disposable {
         const endTime = performance.now();
         this.loggingService.logInfo("Formatted in " + (endTime - startTime) + "ms");
 
-        return [TextEdit.replace(this.fullDocumentRange(document), result)];
+        return [TextEdit.replace(FormattingService.fullDocumentRange(document), result)];
     };
 
-    private fullDocumentRange(document: TextDocument): Range {
+    private static fullDocumentRange(document: TextDocument): Range {
         const lastLineId = document.lineCount - 1;
         return new Range(0, 0, lastLineId, document.lineAt(lastLineId).text.length);
     }
