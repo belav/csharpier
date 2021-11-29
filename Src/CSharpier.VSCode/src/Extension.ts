@@ -18,11 +18,13 @@ const initPlugin = async (context: ExtensionContext) => {
 
     const loggingService = new LoggingService(enableDebugLogs);
 
-    const installed = await isInstalled("dotnet-csharpier");
-    if (!installed) {
-        await displayInstallNeededMessage(loggingService);
-        // TODO return;
-    }
+    // TODO this fails when running on github action, maybe change to install csharpier?
+    // or if we know there is a dll, ignore this?
+    // const installed = await isInstalled("dotnet-csharpier");
+    // if (!installed) {
+    //     await displayInstallNeededMessage(loggingService);
+    //     return;
+    // }
 
     const formattingService = new FormattingService(loggingService);
 

@@ -217,7 +217,6 @@ public class CliTests
         }
     }
 
-    // TODO with how much we simplified this, why not just use cliwrap??
     private class CsharpierProcess
     {
         private readonly StringBuilder output = new();
