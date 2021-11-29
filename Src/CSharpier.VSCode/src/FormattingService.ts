@@ -1,8 +1,9 @@
 import { spawn } from "child_process";
 import { performance } from "perf_hooks";
-import { types } from "util";
 import { Disposable, languages, Range, TextDocument, TextEdit, window } from "vscode";
 import { LoggingService } from "./LoggingService";
+import * as path from "path";
+import * as fs from "fs";
 
 export class FormattingService implements Disposable {
     longRunner: import("child_process").ChildProcessWithoutNullStreams;
@@ -11,18 +12,36 @@ export class FormattingService implements Disposable {
 
     constructor(loggingService: LoggingService) {
         this.loggingService = loggingService;
-        this.longRunner = spawn(
-            "C:\\projects\\csharpier\\Src\\CSharpier.Cli\\bin\\debug\\net6.0\\dotnet-csharpier.exe",
-            ["--pipe-multiple-files"],
-            {
-                stdio: "pipe",
-            },
-        );
 
-        this.longRunner.stdout.on("data", chunk => {
+        this.loggingService.logInfo("Initializing.");
+
+        let csharpierPath = "csharpier";
+        
+        if (fs.existsSync(path.resolve(__dirname, "../../CSharpier.Cli")))
+        {
+            csharpierPath = path.resolve(
+                __dirname,
+                "../../CSharpier.Cli/bin/debug/net6.0/dotnet-csharpier.dll",
+            );
+        }
+
+        this.longRunner = spawn("dotnet", [csharpierPath, "--pipe-multiple-files"], {
+            stdio: "pipe",
+        });
+
+        this.longRunner.stderr.on("data", chunk => {
+            this.loggingService.logInfo("Got error: " + chunk.toString());
             const callback = this.callbacks.shift();
             if (callback) {
-                var content: string = chunk.toString();
+                callback("");
+            }
+        });
+
+        this.longRunner.stdout.on("data", chunk => {
+            this.loggingService.logInfo("Got chunk");
+            const callback = this.callbacks.shift();
+            if (callback) {
+                let content: string = chunk.toString();
                 if (content.endsWith("\u0003")) {
                     content = content.substring(0, content.length - 1);
                 }
@@ -30,17 +49,18 @@ export class FormattingService implements Disposable {
             }
         });
 
-        // warm up csharpier so the first real format is fast
-        this.formatInPlace("public class ClassName { }", "Test.cs").then(() => {
-            languages.registerDocumentFormattingEditProvider("csharp", {
-                provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
-            });
+        this.loggingService.logInfo("Warm CSharpier with initial format");
+        this.formatInPlace("public class ClassName { }", "Test.cs");
+
+        languages.registerDocumentFormattingEditProvider("csharp", {
+            provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
         });
     }
 
     private provideDocumentFormattingEdits = async (document: TextDocument) => {
-        this.loggingService.logInfo("Formatting started.");
+        this.loggingService.logInfo("Formatting started for " + document.fileName + ".");
         const startTime = performance.now();
+        // TODO this will be "Untitled-1" if it hasn't been saved
         const result = await this.formatInPlace(document.getText(), document.fileName);
         if (!result) {
             this.loggingService.logInfo("Formatting failed.");

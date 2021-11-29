@@ -123,26 +123,35 @@ public class Program
             {
                 var commandLineOptions = new CommandLineOptions
                 {
-                    // TODO this should use the supplied file name
-                    DirectoryOrFilePaths = new[] { Directory.GetCurrentDirectory() },
+                    DirectoryOrFilePaths = new[]
+                    {
+                        Path.Combine(Directory.GetCurrentDirectory(), fileName)
+                    },
                     StandardInFileContents = stringBuilder.ToString(),
                     Fast = true,
                     WriteStdout = true
                 };
 
-                var result = await CommandLineFormatter.Format(
-                    commandLineOptions,
-                    new FileSystem(),
-                    console,
-                    logger,
-                    cancellationToken
-                );
-
-                console.Write('\u0003'.ToString());
-
-                if (result != 0)
+                try
                 {
-                    exitCode = result;
+                    var result = await CommandLineFormatter.Format(
+                        commandLineOptions,
+                        new FileSystem(),
+                        console,
+                        logger,
+                        cancellationToken
+                    );
+
+                    console.Write('\u0003'.ToString());
+
+                    if (result != 0)
+                    {
+                        exitCode = result;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Failed!");
                 }
 
                 stringBuilder.Clear();

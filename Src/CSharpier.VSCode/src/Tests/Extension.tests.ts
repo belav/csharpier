@@ -6,6 +6,8 @@ import * as path from "path";
 const unformattedCode = "public class ClassName {\n\n}";
 const formattedCode = "public class ClassName { }\n";
 
+// TODO run these in workflow
+
 suite("Formatting", () => {
     test("Formats physical C# file", async () => {
         const testFilePath = path.resolve(__dirname, "./TestFile.cs");
@@ -15,6 +17,19 @@ suite("Formatting", () => {
         const actual = readFileSync(testFilePath, "utf8");
 
         strictEqual(actual, formattedCode);
+    });
+
+    test("Ignores physical C# file", async () => {
+        const testFilePath = path.resolve(__dirname, "./Ignored.cs");
+        writeFileSync(testFilePath, unformattedCode);
+
+        const ignorePath = path.resolve(__dirname, "./.csharpierignore");
+        writeFileSync(ignorePath, "Ignored.cs");
+
+        await formatFile(testFilePath);
+        const actual = readFileSync(testFilePath, "utf8");
+
+        strictEqual(actual, unformattedCode);
     });
 
     test("Formats virtual C# file", async () => {

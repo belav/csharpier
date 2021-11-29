@@ -1,20 +1,18 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using CliWrap;
 using FluentAssertions;
 using NUnit.Framework;
 
 namespace CSharpier.Cli.Tests;
 
 // these tests are kind of nice as c# because they run in the same place.
+// except the one test that has issues with console input redirection
 // they used to be powershell, but doing the multiple file thing didn't work
 // that worked in by writing js, but that felt worse than powershell
-// these mostly work except the one test that has issues with console input redirection
 // the CSharpierProcess abstraction is also a little fragile, but makes for clean tests when they
 // are written properly
 public class CliTests
@@ -95,11 +93,9 @@ public class CliTests
         var formattedContent1 = "public class ClassName1 { }" + lineEnding;
         var unformattedContent1 = $"public class ClassName1 {{{lineEnding}{lineEnding}}}";
 
-        using var process = new CsharpierProcess().WithPipedInput().Start();
-
-        process.Write(unformattedContent1);
-
-        var result = await process.GetOutputAsync();
+        var result = await new CsharpierProcess()
+            .WithPipedInput(unformattedContent1)
+            .ExecuteAsync();
 
         result.Output.Should().Be(formattedContent1);
         result.ExitCode.Should().Be(0);
@@ -110,11 +106,7 @@ public class CliTests
     {
         const string invalidFile = "public class ClassName { ";
 
-        using var process = new CsharpierProcess().WithPipedInput().Start();
-
-        process.Write(invalidFile);
-
-        var result = await process.GetOutputAsync();
+        var result = await new CsharpierProcess().WithPipedInput(invalidFile).ExecuteAsync();
 
         result.Output.Should().BeEmpty();
         result.ExitCode.Should().Be(1);
@@ -148,50 +140,54 @@ public class CliTests
         var unformattedContent1 = $"public class ClassName1 {{{lineEnding}{lineEnding}}}";
         var unformattedContent2 = $"public class ClassName2 {{{lineEnding}{lineEnding}}}";
 
-        using var process = new CsharpierProcess()
+        var input =
+            $"Test1.cs{'\u0003'}{unformattedContent1}{'\u0003'}"
+            + $"Test2.cs{'\u0003'}{unformattedContent2}{'\u0003'}";
+
+        var result = await new CsharpierProcess()
             .WithArguments("--pipe-multiple-files")
-            .WithPipedInput()
-            .Start();
+            .WithPipedInput(input)
+            .ExecuteAsync();
 
-        process.Write("Test2.cs");
-        process.Write('\u0003');
-        process.Write(unformattedContent1);
-        process.Write('\u0003');
-
-        process.Write("Test2.cs");
-        process.Write('\u0003');
-        process.Write(unformattedContent2);
-        process.Write('\u0003');
-
-        var result = await process.GetOutputAsync();
-
+        result.ErrorOutput.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
         var results = result.Output.Split('\u0003');
         results[0].Should().Be(formattedContent1);
         results[1].Should().Be(formattedContent2);
     }
+    // TODO kill
 
     [Test]
     public async Task Should_Write_Error_With_Multiple_Piped_Files()
     {
         const string invalidFile = "public class ClassName { ";
 
-        using var process = new CsharpierProcess()
+        var result = await new CsharpierProcess()
             .WithArguments("--pipe-multiple-files")
-            .WithPipedInput()
-            .Start();
-
-        process.Write("InvalidFile.cs");
-        process.Write('\u0003');
-        process.Write(invalidFile);
-        process.Write('\u0003');
-
-        var result = await process.GetOutputAsync();
+            .WithPipedInput($"InvalidFile.cs{'\u0003'}{invalidFile}{'\u0003'}")
+            .ExecuteAsync();
 
         // TODO this should contain the file name
         result.ErrorOutput
             .Should()
             .Be($"Error  - Failed to compile so was not formatted.{Environment.NewLine}");
         result.ExitCode.Should().Be(1);
+    }
+
+    [Test]
+    public async Task Should_Ignore_Piped_File_With_Multiple_Piped_Files()
+    {
+        const string ignoredFile = "public class ClassName {     }";
+        var fileName = Path.Combine(testFileDirectory, "Ignored.cs");
+        await WriteFileAsync(".csharpierignore", "Ignored.cs");
+
+        var result = await new CsharpierProcess()
+            .WithArguments("--pipe-multiple-files")
+            .WithPipedInput($"{fileName}{'\u0003'}{ignoredFile}{'\u0003'}")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.Output.TrimEnd('\u0003').Should().BeEmpty();
     }
 
     private async Task WriteFileAsync(string path, string content)
@@ -221,113 +217,46 @@ public class CliTests
     }
 
     // TODO with how much we simplified this, why not just use cliwrap??
-    private class CsharpierProcess : IDisposable
+    private class CsharpierProcess
     {
-        private StreamWriter? standardInput;
-        private readonly Process process;
-        private bool started;
+        private readonly StringBuilder output = new();
+        private readonly StringBuilder errorOutput = new();
+        private Command command;
 
         public CsharpierProcess()
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
 
-            this.process = new Process();
-            this.process.StartInfo.WorkingDirectory = testFileDirectory;
-            this.process.StartInfo.FileName = "dotnet";
-            this.process.StartInfo.Arguments = path;
-            this.process.StartInfo.UseShellExecute = false;
-            this.process.StartInfo.RedirectStandardInput = false;
-            this.process.StartInfo.RedirectStandardOutput = true;
-            this.process.StartInfo.RedirectStandardError = true;
+            this.command = CliWrap.Cli
+                .Wrap("dotnet")
+                .WithArguments(path)
+                .WithWorkingDirectory(testFileDirectory)
+                .WithValidation(CommandResultValidation.None)
+                .WithStandardOutputPipe(PipeTarget.ToStringBuilder(this.output))
+                .WithStandardErrorPipe(PipeTarget.ToStringBuilder(this.errorOutput));
         }
 
         public CsharpierProcess WithArguments(string arguments)
         {
-            this.process.StartInfo.Arguments += " " + arguments;
+            this.command = this.command.WithArguments(this.command.Arguments + " " + arguments);
+            return this;
+        }
+
+        public CsharpierProcess WithPipedInput(string input)
+        {
+            this.command = this.command.WithStandardInputPipe(PipeSource.FromString(input));
 
             return this;
         }
 
-        public CsharpierProcess WithPipedInput()
+        public async Task<ProcessResult> ExecuteAsync()
         {
-            this.process.StartInfo.RedirectStandardInput = true;
-
-            return this;
-        }
-
-        public CsharpierProcess Start()
-        {
-            this.started = true;
-            this.process.Start();
-
-            if (this.process.StartInfo.RedirectStandardInput)
-            {
-                this.standardInput = this.process.StandardInput;
-            }
-
-            return this;
-        }
-
-        public void Write(string value)
-        {
-            if (!this.process.StartInfo.RedirectStandardInput)
-            {
-                throw new Exception("WithPipedInput was not called");
-            }
-
-            this.standardInput?.Write(value);
-            Console.WriteLine("Write: " + value);
-        }
-
-        public void Write(char value)
-        {
-            if (!this.process.StartInfo.RedirectStandardInput)
-            {
-                throw new Exception("WithPipedInput was not called");
-            }
-
-            this.standardInput?.Write(value);
-            Console.WriteLine("Write: " + value);
-        }
-
-        public Task<ProcessResult> ExecuteAsync()
-        {
-            this.started = true;
-            this.process.Start();
-
-            return this.GetResult();
-        }
-
-        public Task<ProcessResult> GetOutputAsync()
-        {
-            if (!this.started)
-            {
-                throw new Exception("The process was never started");
-            }
-
-            this.standardInput?.Close();
-
-            return this.GetResult();
-        }
-
-        private async Task<ProcessResult> GetResult()
-        {
-            await this.process.WaitForExitAsync();
-            var output = await this.process.StandardOutput.ReadToEndAsync();
-            var errorOutput = await this.process.StandardError.ReadToEndAsync();
-            var exitCode = this.process.ExitCode;
-
-            return new ProcessResult(output, errorOutput, exitCode);
-        }
-
-        public void Dispose()
-        {
-            this.standardInput?.Dispose();
-            if (this.started)
-            {
-                this.process.Kill();
-                this.process.Dispose();
-            }
+            var result = await this.command.ExecuteAsync();
+            return new ProcessResult(
+                this.output.ToString(),
+                this.errorOutput.ToString(),
+                result.ExitCode
+            );
         }
 
         public record ProcessResult(string Output, string ErrorOutput, int ExitCode);

@@ -14,6 +14,9 @@ jobs:
       - run: |
           dotnet build CSharpier.sln -c release
           dotnet test CSharpier.sln -c release
+          cd Src/CSharpier.VSCode
+          npm ci
+          npm test
   check_formatting:
     runs-on: ubuntu-latest
     name: Check Formatting

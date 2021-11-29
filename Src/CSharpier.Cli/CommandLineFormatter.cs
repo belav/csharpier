@@ -56,9 +56,9 @@ internal class CommandLineFormatter
         async Task<CommandLineFormatter?> CreateFormatter(string path)
         {
             var normalizedPath = path.Replace('\\', '/');
-            var baseDirectoryPath = fileSystem.File.Exists(normalizedPath)
-                ? fileSystem.Path.GetDirectoryName(normalizedPath)
-                : path;
+            var baseDirectoryPath = fileSystem.Directory.Exists(normalizedPath)
+                ? normalizedPath
+                : fileSystem.Path.GetDirectoryName(normalizedPath);
 
             if (baseDirectoryPath == null)
             {
@@ -97,10 +97,9 @@ internal class CommandLineFormatter
             );
         }
 
-        // TODO should we rename this property?
-        // and the assumption that DirectoryOrFilePaths contains one file is kinda ugly
         if (commandLineOptions.StandardInFileContents != null)
         {
+            //var path = fileSystem.Path.GetDirectoryName(commandLineOptions.DirectoryOrFilePaths[0]);
             var path = commandLineOptions.DirectoryOrFilePaths[0];
 
             var commandLineFormatter = await CreateFormatter(path);
@@ -204,6 +203,11 @@ internal class CommandLineFormatter
         CancellationToken cancellationToken
     )
     {
+        if (ShouldIgnoreFile(filePath))
+        {
+            return;
+        }
+
         cancellationToken.ThrowIfCancellationRequested();
 
         CSharpierResult result;

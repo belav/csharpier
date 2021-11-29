@@ -5,6 +5,9 @@
       <Path>Src/CSharpier.VSCode</Path>
     </attachedFolders>
     <explicitIncludes />
-    <explicitExcludes />
+    <explicitExcludes>
+      <Path>Src/CSharpier.VSCode/.vscode-test</Path>
+      <Path>Src/CSharpier.VSCode/build</Path>
+    </explicitExcludes>
   </component>
 </project>
