@@ -231,7 +231,8 @@ internal class CommandLineFormatter
         if (result.Errors.Any())
         {
             Interlocked.Increment(ref this.Result.Files);
-            WriteWarning(filePath, "Failed to compile so was not formatted.");
+            WriteError(filePath, "Failed to compile so was not formatted.");
+            Interlocked.Increment(ref this.Result.FailedCompilation);
             return;
         }
 
@@ -335,7 +336,8 @@ internal class CommandLineFormatter
     )
     {
         if (
-            (commandLineOptions.Check && result.UnformattedFiles > 0)
+            (commandLineOptions.StandardInFileContents != null && result.FailedCompilation > 0)
+            || (commandLineOptions.Check && result.UnformattedFiles > 0)
             || result.FailedSyntaxTreeValidation > 0
             || result.ExceptionsFormatting > 0
             || result.ExceptionsValidatingSource > 0
@@ -368,6 +370,7 @@ public class CommandLineFormatterResult
 {
     // these are public fields so that Interlocked.Increment may be used on them.
     public int FailedSyntaxTreeValidation;
+    public int FailedCompilation;
     public int ExceptionsFormatting;
     public int ExceptionsValidatingSource;
     public int Files;

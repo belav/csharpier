@@ -1,7 +1,10 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
@@ -40,20 +43,16 @@ public class CliTests
 
         await WriteFileAsync("BasicFile.cs", unformattedContent);
 
-        var (output, exitCode, _) = await new CsharpierProcess()
-            .WithArguments("BasicFile.cs")
-            .ExecuteAsync();
+        var result = await new CsharpierProcess().WithArguments("BasicFile.cs").ExecuteAsync();
 
-        var result = await ReadAllTextAsync("BasicFile.cs");
-
-        output.Should().StartWith("Total time:");
-        output
+        result.Output.Should().StartWith("Total time:");
+        result.Output
             .Should()
             .Contain(
                 "Total files:                                                                           1"
             );
-        exitCode.Should().Be(0);
-        result.Should().Be(formattedContent);
+        result.ExitCode.Should().Be(0);
+        (await ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
     }
 
     [Test]
@@ -81,10 +80,10 @@ public class CliTests
             return;
         }
 
-        var (output, exitCode, errorOutput) = await new CsharpierProcess().ExecuteAsync();
+        var result = await new CsharpierProcess().ExecuteAsync();
 
-        exitCode.Should().Be(1);
-        errorOutput
+        result.ExitCode.Should().Be(1);
+        result.ErrorOutput
             .Should()
             .Contain("directoryOrFile is required when not piping stdin to CSharpier");
     }
@@ -100,9 +99,26 @@ public class CliTests
 
         process.Write(unformattedContent1);
 
-        var result = await process.GetOutput();
+        var result = await process.GetOutputAsync();
 
-        result.Should().Be(formattedContent1);
+        result.Output.Should().Be(formattedContent1);
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    public async Task Should_Write_To_StdError_For_Piped_Invalid_File()
+    {
+        const string invalidFile = "public class ClassName { ";
+
+        using var process = new CsharpierProcess().WithPipedInput().Start();
+
+        process.Write(invalidFile);
+
+        var result = await process.GetOutputAsync();
+
+        result.Output.Should().BeEmpty();
+        result.ExitCode.Should().Be(1);
+        result.ErrorOutput.Should().Contain("Failed to compile so was not formatted");
     }
 
     [Test]
@@ -112,22 +128,20 @@ public class CliTests
 
         await WriteFileAsync("CheckUnformatted.cs", unformattedContent);
 
-        var (result, exitCode, _) = await new CsharpierProcess()
+        var result = await new CsharpierProcess()
             .WithArguments("CheckUnformatted.cs --check")
             .ExecuteAsync();
 
-        result.Should().StartWith("Warning /CheckUnformatted.cs - Was not formatted.");
-        exitCode.Should().Be(1);
+        result.Output.Should().StartWith("Warning /CheckUnformatted.cs - Was not formatted.");
+        result.ExitCode.Should().Be(1);
     }
 
-    // TODO all the TODOs in vscode as well
-    // TODO file with compilation error should spit out warning for regular use
     // TODO file with compilation error should return file for piping, multi file and single file
 
     // TODO test with ignored file?
     [TestCase("\n")]
     [TestCase("\r\n")]
-    public async Task Cli_Should_Format_Multiple_Piped_Files(string lineEnding)
+    public async Task Should_Format_Multiple_Piped_Files(string lineEnding)
     {
         var formattedContent1 = "public class ClassName1 { }" + lineEnding;
         var formattedContent2 = "public class ClassName2 { }" + lineEnding;
@@ -145,18 +159,39 @@ public class CliTests
         process.Write(unformattedContent1);
         process.Write('\u0003');
 
-        var result = await process.GetOutputWithoutClosing();
+        var (output, _) = await process.GetOutputWithoutClosing();
 
-        result.Should().Be(formattedContent1);
+        output.Should().Be(formattedContent1);
 
         process.Write("Test2.cs");
         process.Write('\u0003');
         process.Write(unformattedContent2);
         process.Write('\u0003');
 
-        result = await process.GetOutputWithoutClosing();
+        (output, _) = await process.GetOutputWithoutClosing();
 
-        result.Should().Be(formattedContent2);
+        output.Should().Be(formattedContent2);
+    }
+
+    [Test]
+    public async Task Should_Write_Error_With_Multiple_Piped_Files()
+    {
+        const string invalidFile = "public class ClassName { ";
+
+        using var process = new CsharpierProcess()
+            .WithArguments("--pipe-multiple-files")
+            .WithPipedInput()
+            .Start();
+
+        process.Write("InvalidFile.cs");
+        process.Write('\u0003');
+        process.Write(invalidFile);
+        process.Write('\u0003');
+
+        var (_, errorOutput) = await process.GetOutputWithoutClosing();
+
+        // TODO this should contain the file name
+        errorOutput.Should().Be("Error  - Failed to compile so was not formatted");
     }
 
     private async Task WriteFileAsync(string path, string content)
@@ -254,60 +289,83 @@ public class CliTests
             Console.WriteLine("Write: " + value);
         }
 
-        public Task<string> GetOutputWithoutClosing()
-        {
-            return this.GetOutput(false);
-        }
-
-        public Task<string> GetOutput()
-        {
-            return this.GetOutput(true);
-        }
-
-        public async Task<(string output, int exitCode, string errorOutput)> ExecuteAsync()
+        public Task<ProcessResult> ExecuteAsync()
         {
             this.started = true;
             this.process.Start();
-            await this.process.WaitForExitAsync();
-            var output = await this.process.StandardOutput.ReadToEndAsync();
-            var errorOutput = await this.process.StandardError.ReadToEndAsync();
-            var exitCode = this.process.ExitCode;
-            this.Dispose();
 
-            return (output, exitCode, errorOutput);
+            return this.GetResult();
         }
 
-        private async Task<string> GetOutput(bool close)
+        public Task<ProcessResult> GetOutputAsync()
         {
             if (!this.started)
             {
                 throw new Exception("The process was never started");
             }
 
-            if (close)
-            {
-                this.standardInput?.Close();
-                await this.process.WaitForExitAsync();
-                return await this.process.StandardOutput.ReadToEndAsync();
-            }
+            this.standardInput?.Close();
 
-            var result = new StringBuilder();
+            return this.GetResult();
+        }
+
+        private async Task<ProcessResult> GetResult()
+        {
+            await this.process.WaitForExitAsync();
+            var output = await this.process.StandardOutput.ReadToEndAsync();
+            var errorOutput = await this.process.StandardError.ReadToEndAsync();
+            var exitCode = this.process.ExitCode;
+
+            return new ProcessResult(output, errorOutput, exitCode);
+        }
+
+        public async Task<(string output, string errorOutput)> GetOutputWithoutClosing()
+        {
+            var output = new StringBuilder();
+            var errorOutput = new StringBuilder();
             while (true)
             {
-                result.Append(Convert.ToChar(this.process.StandardOutput.Read()));
-
-                // wait 10ms to see if there will be another character to read
-                var x = 0;
-                while (this.process.StandardOutput.Peek() < 0)
+                if (HasData(this.process.StandardOutput))
                 {
-                    await Task.Delay(TimeSpan.FromMilliseconds(1));
+                    output.Append(Convert.ToChar(this.process.StandardOutput.Read()));
+                }
+
+                if (HasData(this.process.StandardError))
+                {
+                    errorOutput.Append(Convert.ToChar(this.process.StandardError.Read()));
+                }
+
+                // wait to see if there will be another character to read
+                var x = 0;
+                while (
+                    !HasData(this.process.StandardOutput) && !HasData(this.process.StandardError)
+                )
+                {
                     x++;
                     if (x > 10)
                     {
-                        return result.ToString();
+                        return (output.ToString(), errorOutput.ToString());
                     }
                 }
             }
+        }
+
+        // If we just peek, then standardError.Peek will hang because nothing is written to it during some tests.
+        // if we switch to ErrorDataReceived/OutputDataReceived we do not get the new line values
+        // if we stick with this method, the tests take forever for some reason.
+        private bool HasData(StreamReader streamReader)
+        {
+            var hasData = false;
+            var task = Task.Run(
+                () =>
+                {
+                    hasData = streamReader.Peek() >= 0;
+                }
+            );
+
+            var completedTask = Task.WhenAny(task, Task.Delay(TimeSpan.FromMilliseconds(1))).Result;
+
+            return hasData;
         }
 
         public void Dispose()
@@ -319,5 +377,7 @@ public class CliTests
                 this.process.Dispose();
             }
         }
+
+        public record ProcessResult(string Output, string ErrorOutput, int ExitCode);
     }
 }
