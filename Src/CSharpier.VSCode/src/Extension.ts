@@ -21,7 +21,7 @@ const initPlugin = async (context: ExtensionContext) => {
     const installed = await isInstalled("dotnet-csharpier");
     if (!installed) {
         await displayInstallNeededMessage(loggingService);
-        return;
+        // TODO return;
     }
 
     const formattingService = new FormattingService(loggingService);

@@ -6,8 +6,6 @@ import * as path from "path";
 const unformattedCode = "public class ClassName {\n\n}";
 const formattedCode = "public class ClassName { }\n";
 
-// TODO figure out if we can run these in github actions, maybe inside of docker?
-
 suite("Formatting", () => {
     test("Formats physical C# file", async () => {
         const testFilePath = path.resolve(__dirname, "./TestFile.cs");
