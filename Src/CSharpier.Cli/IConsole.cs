@@ -24,12 +24,12 @@ public class SystemConsole : IConsole
     {
         Console.Error.WriteLine(line);
     }
-    
+
     public void Write(string value)
     {
         Console.Write(value);
     }
-    
+
     public void WriteError(string value)
     {
         Console.Error.Write(value);

@@ -47,7 +47,10 @@ public class CommandLineFormatterTests
 
         var result = this.Format(directoryOrFilePaths: "Unsupported.js");
 
-        result.ErrorLines.First().Should().Be(@"Error /Unsupported.js - Is an unsupported file type.");
+        result.ErrorLines
+            .First()
+            .Should()
+            .Be(@"Error /Unsupported.js - Is an unsupported file type.");
     }
 
     [Test]
@@ -131,7 +134,10 @@ public class CommandLineFormatterTests
 
         var result = this.Format();
 
-        result.Lines.FirstOrDefault(o => o.StartsWith("Total files")).Should().Be("Total files: 0 ");
+        result.Lines
+            .FirstOrDefault(o => o.StartsWith("Total files"))
+            .Should()
+            .Be("Total files: 0 ");
     }
 
     [TestCase("SubFolder/File.cs", "*.cs", "SubFolder")]
@@ -146,11 +152,12 @@ public class CommandLineFormatterTests
         WhenAFileExists(unformattedFilePath, UnformattedClassContent);
         WhenAFileExists(".csharpierignore", ignoreContents);
 
-        var result = this.Format(
-            directoryOrFilePaths: Path.Combine(GetRootPath(), baseDirectory)
-        );
+        var result = this.Format(directoryOrFilePaths: Path.Combine(GetRootPath(), baseDirectory));
 
-        result.Lines.FirstOrDefault(o => o.StartsWith("Total files")).Should().Be("Total files: 0 ");
+        result.Lines
+            .FirstOrDefault(o => o.StartsWith("Total files"))
+            .Should()
+            .Be("Total files: 0 ");
     }
 
     [Test]
@@ -166,7 +173,10 @@ public class CommandLineFormatterTests
             directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
         );
 
-        result.Lines.FirstOrDefault(o => o.StartsWith("Total files")).Should().Be("Total files: 0 ");
+        result.Lines
+            .FirstOrDefault(o => o.StartsWith("Total files"))
+            .Should()
+            .Be("Total files: 0 ");
     }
 
     [Test]
@@ -183,7 +193,10 @@ public class CommandLineFormatterTests
             directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
         );
 
-        result.Lines.FirstOrDefault(o => o.StartsWith("Total files")).Should().Be("Total files: 0 ");
+        result.Lines
+            .FirstOrDefault(o => o.StartsWith("Total files"))
+            .Should()
+            .Be("Total files: 0 ");
     }
 
     [Test]
@@ -195,7 +208,10 @@ public class CommandLineFormatterTests
 
         var result = this.Format(directoryOrFilePaths: unformattedFilePath1);
 
-        result.Lines.FirstOrDefault(o => o.StartsWith("Total files")).Should().Be("Total files: 0 ");
+        result.Lines
+            .FirstOrDefault(o => o.StartsWith("Total files"))
+            .Should()
+            .Be("Total files: 0 ");
     }
 
     [Test]
@@ -261,7 +277,7 @@ public class CommandLineFormatterTests
         WhenAFileExists("Invalid.cs", contents);
 
         var result = this.Format();
-        
+
         GetFileContent("Invalid.cs").Should().Be(contents);
         result.ErrorLines
             .First()
@@ -391,7 +407,7 @@ public class CommandLineFormatterTests
     }
 
     private record FormatResult(int ExitCode, IList<string> Lines, IList<string> ErrorLines);
-    
+
     private class TestConsole : IConsole
     {
         public readonly List<string> Lines = new();

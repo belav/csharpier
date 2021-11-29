@@ -32,7 +32,7 @@ public class ConsoleLogger : ILogger
                 this.console.Write(value);
             }
         }
-        
+
         void WriteLine(string? value = null)
         {
             if (logLevel >= LogLevel.Error)
@@ -44,7 +44,7 @@ public class ConsoleLogger : ILogger
                 this.console.WriteLine(value);
             }
         }
-        
+
         if (!IsEnabled(logLevel))
         {
             return;
