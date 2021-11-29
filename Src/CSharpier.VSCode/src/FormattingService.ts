@@ -22,7 +22,11 @@ export class FormattingService implements Disposable {
         this.longRunner.stdout.on("data", chunk => {
             const callback = this.callbacks.shift();
             if (callback) {
-                callback(chunk.toString());
+                var content: string = chunk.toString();
+                if (content.endsWith("\u0003")) {
+                    content = content.substring(0, content.length - 1);
+                }
+                callback(content);
             }
         });
 
@@ -30,15 +34,19 @@ export class FormattingService implements Disposable {
         this.formatInPlace("public class ClassName { }", "Test.cs").then(() => {
             languages.registerDocumentFormattingEditProvider("csharp", {
                 provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
-            }); 
+            });
         });
     }
 
     private provideDocumentFormattingEdits = async (document: TextDocument) => {
-        this.loggingService.logInfo(`Formatting started.`);
+        this.loggingService.logInfo("Formatting started.");
         const startTime = performance.now();
-        // TODO if the file fails to compile, we lose it
         const result = await this.formatInPlace(document.getText(), document.fileName);
+        if (!result) {
+            this.loggingService.logInfo("Formatting failed.");
+            return [];
+        }
+
         const endTime = performance.now();
         this.loggingService.logInfo("Formatted in " + (endTime - startTime) + "ms");
 

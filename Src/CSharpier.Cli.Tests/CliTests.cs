@@ -136,6 +136,8 @@ public class CliTests
         result.ExitCode.Should().Be(1);
     }
 
+    // TODO publish vscode?
+    // TODO respect csharpier config in vscode?
     // TODO test with ignored file?
     [TestCase("\n")]
     [TestCase("\r\n")]
