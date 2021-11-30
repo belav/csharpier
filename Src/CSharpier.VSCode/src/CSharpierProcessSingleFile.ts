@@ -22,7 +22,11 @@ export class CSharpierProcessSingleFile implements ICSharpierProcess {
                 output += chunk.toString();
             });
             csharpier.on("exit", () => {
-                resolve(output);
+                if (output.indexOf("Failed to compile so was not formatted") > 0) {
+                    resolve("");
+                } else {
+                    resolve(output);
+                }
             });
 
             csharpier.stdin.write(content);

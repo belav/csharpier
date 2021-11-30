@@ -58,7 +58,7 @@ export class CSharpierService implements Disposable {
 
             if (semver.lt(version, "0.12.0")) {
                 window.showInformationMessage(
-                    "Please upgrade to CSharpier >= 0.12.0 for improved formatting speed.",
+                    "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.",
                 );
                 return new CSharpierProcessSingleFile(this.loggingService, this.csharpierPath);
             } else {
