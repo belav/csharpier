@@ -79,7 +79,7 @@ internal static class RightHandSide
             {
                 Condition: BinaryExpressionSyntax or ParenthesizedExpressionSyntax
             }
-            or ImplicitObjectCreationExpressionSyntax
+            or ImplicitObjectCreationExpressionSyntax { Parent: EqualsValueClauseSyntax }
             or InterpolatedStringExpressionSyntax
             or IsPatternExpressionSyntax
             or LiteralExpressionSyntax
