@@ -6,6 +6,7 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     private process: ChildProcessWithoutNullStreams;
     private callbacks: ((result: string) => void)[] = [];
     private loggingService: LoggingService;
+    private nextFile: string = "";
 
     constructor(loggingService: LoggingService, csharpierPath: string) {
         this.loggingService = loggingService;
@@ -30,13 +31,17 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
 
         csharpierProcess.stdout.on("data", chunk => {
             this.loggingService.logInfo("Got chunk");
-            const callback = this.callbacks.shift();
-            if (callback) {
-                let content: string = chunk.toString();
-                if (content.endsWith("\u0003")) {
-                    content = content.substring(0, content.length - 1);
+            this.nextFile += chunk;
+            let number = this.nextFile.indexOf("\u0003");
+            if (number >= 0)
+            {
+                this.loggingService.logInfo("Got last chunk");
+                const result = this.nextFile.substring(0, number)
+                this.nextFile = this.nextFile.substring(number + 1)
+                const callback = this.callbacks.shift();
+                if (callback) {
+                    callback(result);
                 }
-                callback(content);
             }
         });
 
