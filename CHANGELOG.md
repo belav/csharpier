@@ -1,3 +1,13 @@
+[diff](https://github.com/belav/csharpier/compare/0.11.1...0.12.0)
+
+### Breaking Changes
+- If a file that fails to compile is piped to csharpier, csharpier now writes an error message on std error and return a 1 exit code.  
+
+### Changes
+- Nested Initializers should break [#487](https://github.com/belav/csharpier/issues/487)
+- Adding --pipe-multiple-files and other changes to support vscode extension [#283](https://github.com/belav/csharpier/pull/495)
+
+
 # 0.11.2 (CSharpier.MSBuild only)
 - CSharpier.MSBuild 0.11.1 is not published correctly [#481](https://github.com/belav/csharpier/issues/481)
 
@@ -39,7 +49,7 @@
 
 - Require the directoryOrFile argument when not piping into to stdin [#381](https://github.com/belav/csharpier/issues/381)
 
-### Resolved Issues
+### Changes
 - SwitchExpression + Pattern edge cause causes extra line and poor formatting [#408](https://github.com/belav/csharpier/issues/408)
 - NewLines not retained before lock statement [#401](https://github.com/belav/csharpier/issues/401)
 - Better error handling when given a csproj or sln file [#398](https://github.com/belav/csharpier/issues/398)

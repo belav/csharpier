@@ -12,6 +12,7 @@ Options:
   --fast            Skip comparing syntax tree of formatted file to original file to validate changes.
   --skip-write      Skip writing changes. Generally used for testing to ensure csharpier doesn't throw any errors or cause syntax tree validation failures.
   --write-stdout    Write the results of formatting any files to stdout.
+  --pipe-multiple-files  Keep csharpier running so that multiples files can be piped to it via stdin
   --version         Show version information
   -?, -h, --help    Show help and usage information
 
@@ -74,6 +75,26 @@ public class ClassName
 *shell*
 ```bash
 $ cat TestFile.cs | dotnet csharpier
+public class ClassName
+{
+    public string Field;
+}
+```
+
+### --pipe-multiple-files
+Running csharpier to format a single file is slow because of the overhead of starting up dotnet. 
+This option keeps csharpier running so that multiple files can be formatted. This is mainly used by IDE plugins
+to drastically improve formatting time.  
+The input is a '\u0003' delimited list of file names followed by file contents.  
+The results are written to stdout delimited by \u0003.  
+For an example of implementing this in code see [this example](https://github.com/belav/csharpier/blob/master/Src/CSharpier.VSCode/src/CSharpierProcessPipeMultipleFiles.ts)
+```bash
+$ [FullPathToFile]\u0003[FileContents]\u0003[FullPathToFile]\u0003[FileContents]\u0003 | dotnet csharpier --pipe-multiple-files
+public class ClassName
+{
+    public string Field;
+}
+\u0003
 public class ClassName
 {
     public string Field;
