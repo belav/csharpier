@@ -27,6 +27,7 @@
 **/.idea/**/watcherTasks.xml
 
 .vscode
+.vscode-test
 
 node_modules
 bin

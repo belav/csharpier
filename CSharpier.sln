@@ -35,7 +35,6 @@ ProjectSection(SolutionItems) = preProject
 	Scripts/ChangeLog.ps1 = Scripts/ChangeLog.ps1
 	Scripts/UpdateForkedRepos.ps1 = Scripts/UpdateForkedRepos.ps1
 	Scripts\CreateTestingPR.ps1 = Scripts\CreateTestingPR.ps1
-	Scripts\TestCli.ps1 = Scripts\TestCli.ps1
 	Scripts\Helpers.ps1 = Scripts\Helpers.ps1
 	Scripts\BuildPackages.ps1 = Scripts\BuildPackages.ps1
 	Scripts\UpdateCSharpierRepos.ps1 = Scripts\UpdateCSharpierRepos.ps1
@@ -68,9 +67,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests.Generators"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Generators", "Src\CSharpier.Generators\CSharpier.Generators.csproj", "{D846F494-57FC-4315-A2A8-357343175D2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Cli", "src\CSharpier.Cli\CSharpier.Cli.csproj", "{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Cli", "Src\CSharpier.Cli\CSharpier.Cli.csproj", "{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxFinder", "Src\SyntaxFinder\SyntaxFinder.csproj", "{0B075DD3-1FEE-483E-8665-43C226188287}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Cli.Tests", "Src\CSharpier.Cli.Tests\CSharpier.Cli.Tests.csproj", "{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -114,5 +115,9 @@ Global
 		{0B075DD3-1FEE-483E-8665-43C226188287}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B075DD3-1FEE-483E-8665-43C226188287}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B075DD3-1FEE-483E-8665-43C226188287}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

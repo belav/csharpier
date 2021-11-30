@@ -21,6 +21,30 @@ public class ConsoleLogger : ILogger
         Func<TState, Exception, string> formatter
     )
     {
+        void Write(string value)
+        {
+            if (logLevel >= LogLevel.Error)
+            {
+                this.console.WriteError(value);
+            }
+            else
+            {
+                this.console.Write(value);
+            }
+        }
+
+        void WriteLine(string? value = null)
+        {
+            if (logLevel >= LogLevel.Error)
+            {
+                this.console.WriteErrorLine(value);
+            }
+            else
+            {
+                this.console.WriteLine(value);
+            }
+        }
+
         if (!IsEnabled(logLevel))
         {
             return;
@@ -33,16 +57,16 @@ public class ConsoleLogger : ILogger
             if (logLevel >= LogLevel.Warning)
             {
                 this.console.ForegroundColor = GetColorLevel(logLevel);
-                this.console.Write($"{logLevel} ");
+                Write($"{logLevel} ");
                 this.console.ResetColor();
             }
 
             var stringReader = new StringReader(message);
             var line = stringReader.ReadLine();
-            this.console.WriteLine(line);
+            WriteLine(line);
             while ((line = stringReader.ReadLine()) != null)
             {
-                this.console.WriteLine("  " + line);
+                WriteLine("  " + line);
             }
 
             if (exception == null)
@@ -50,17 +74,17 @@ public class ConsoleLogger : ILogger
                 return;
             }
 
-            this.console.WriteLine("  " + exception.Message);
+            WriteLine("  " + exception.Message);
             if (exception.StackTrace != null)
             {
                 stringReader = new StringReader(exception.StackTrace);
                 while ((line = stringReader.ReadLine()) != null)
                 {
-                    this.console.WriteLine("  " + line);
+                    WriteLine("  " + line);
                 }
             }
 
-            this.console.WriteLine();
+            WriteLine();
         }
     }
 

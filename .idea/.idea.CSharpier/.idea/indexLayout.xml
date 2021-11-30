@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="UserContentModel">
-    <attachedFolders />
+    <attachedFolders>
+      <Path>Src/CSharpier.VSCode</Path>
+    </attachedFolders>
     <explicitIncludes />
-    <explicitExcludes />
+    <explicitExcludes>
+      <Path>Src/CSharpier.VSCode/.vscode-test</Path>
+      <Path>Src/CSharpier.VSCode/build</Path>
+    </explicitExcludes>
   </component>
 </project>

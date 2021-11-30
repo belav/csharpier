@@ -27,7 +27,10 @@ public class IgnoreFile
             );
         }
 
-        normalizedFilePath = normalizedFilePath[(this.IgnoreBaseDirectoryPath.Length + 1)..];
+        normalizedFilePath =
+            normalizedFilePath.Length > this.IgnoreBaseDirectoryPath.Length
+                ? normalizedFilePath[(this.IgnoreBaseDirectoryPath.Length + 1)..]
+                : string.Empty;
 
         return this.Ignore.IsIgnored(normalizedFilePath);
     }

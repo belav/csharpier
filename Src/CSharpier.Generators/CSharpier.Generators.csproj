@@ -5,6 +5,7 @@
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
         <LangVersion>10</LangVersion>
+        <NoWarn>SYSLIB0013</NoWarn>
     </PropertyGroup>
     
     <ItemGroup>
