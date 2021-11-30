@@ -4,12 +4,9 @@ import * as path from "path";
 import * as fs from "fs";
 import * as semver from "semver";
 import { execSync } from "child_process";
-import {
-    LongRunningCSharpierProcess,
-    ICSharpierProcess,
-    NullCSharpierProcess,
-    ObsoleteCSharpierProcess,
-} from "./CSharpierProcess";
+import { ICSharpierProcess, NullCSharpierProcess } from "./CSharpierProcess";
+import { CSharpierProcessSingleFile } from "./CSharpierProcessSingleFile";
+import { CSharpierProcessPipeMultipleFiles } from "./CSharpierProcessPipeMultipleFiles";
 
 export class CSharpierService implements Disposable {
     loggingService: LoggingService;
@@ -63,9 +60,12 @@ export class CSharpierService implements Disposable {
                 window.showInformationMessage(
                     "Please upgrade to CSharpier >= 0.12.0 for improved formatting speed.",
                 );
-                return new ObsoleteCSharpierProcess(this.loggingService, this.csharpierPath);
+                return new CSharpierProcessSingleFile(this.loggingService, this.csharpierPath);
             } else {
-                return new LongRunningCSharpierProcess(this.loggingService, this.csharpierPath);
+                return new CSharpierProcessPipeMultipleFiles(
+                    this.loggingService,
+                    this.csharpierPath,
+                );
             }
         } catch (ex: any) {
             this.loggingService.logDebug(ex.output.toString());

@@ -99,7 +99,6 @@ internal class CommandLineFormatter
 
         if (commandLineOptions.StandardInFileContents != null)
         {
-            //var path = fileSystem.Path.GetDirectoryName(commandLineOptions.DirectoryOrFilePaths[0]);
             var path = commandLineOptions.DirectoryOrFilePaths[0];
 
             var commandLineFormatter = await CreateFormatter(path);
