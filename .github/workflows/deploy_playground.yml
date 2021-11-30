@@ -4,7 +4,7 @@ on: [push]
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    #if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Cloning repo
         uses: actions/checkout@v2
