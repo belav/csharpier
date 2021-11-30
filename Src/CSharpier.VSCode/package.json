@@ -34,9 +34,10 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run build",
-        "build": "rimraf build && webpack --env NODE_ENV=production",
+        "actualBuild": "webpack --env NODE_ENV=production",
+        "build": "rimraf build && npm run actualBuild",
         "start": "rimraf build && webpack --env NODE_ENV=development --watch",
-        "pretest": "npm run build",
+        "pretest": "npm run actualBuild && tsc -p ./ && npm run actualBuild",
         "prettier": "prettier . --write",
         "test": "node ./build/Tests/RunTests.js",
         "vsix": "vsce package"
