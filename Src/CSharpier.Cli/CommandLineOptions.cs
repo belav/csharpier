@@ -9,9 +9,8 @@ public class CommandLineOptions
     public bool Fast { get; init; }
     public bool SkipWrite { get; init; }
     public bool WriteStdout { get; init; }
+    public bool PipeMultipleFiles { get; init; }
     public string? StandardInFileContents { get; init; }
-
-    public bool ShouldWriteStandardOut => WriteStdout || StandardInFileContents != null;
 
     internal delegate Task<int> Handler(
         string[] directoryOrFile,
@@ -19,6 +18,7 @@ public class CommandLineOptions
         bool fast,
         bool skipWrite,
         bool writeStdout,
+        bool pipeMultipleFiles,
         CancellationToken cancellationToken
     );
 
@@ -47,12 +47,20 @@ public class CommandLineOptions
             new Option(
                 new[] { "--write-stdout" },
                 "Write the results of formatting any files to stdout."
+            ),
+            new Option(
+                new[] { "--pipe-multiple-files" },
+                "Keep csharpier running so that multiples files can be piped to it via stdin"
             )
         };
 
         rootCommand.AddValidator(
             cmd =>
             {
+                if (!Console.IsInputRedirected && cmd.Children.Contains("--pipe-multiple-files"))
+                {
+                    return "--pipe-multiple-files may only be used if you pipe stdin to CSharpier";
+                }
                 if (!Console.IsInputRedirected && !cmd.Children.Contains("directoryOrFile"))
                 {
                     return "directoryOrFile is required when not piping stdin to CSharpier";

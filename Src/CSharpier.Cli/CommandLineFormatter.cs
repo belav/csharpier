@@ -11,7 +11,7 @@ internal class CommandLineFormatter
     protected readonly CommandLineFormatterResult Result;
 
     protected readonly string BaseDirectoryPath;
-    protected readonly string Path;
+    protected readonly string PathToFileOrDirectory;
     protected readonly CommandLineOptions CommandLineOptions;
     protected readonly PrinterOptions PrinterOptions;
     protected readonly IFileSystem FileSystem;
@@ -21,7 +21,7 @@ internal class CommandLineFormatter
 
     protected CommandLineFormatter(
         string baseDirectoryPath,
-        string path,
+        string pathToFileOrDirectory,
         CommandLineOptions commandLineOptions,
         PrinterOptions printerOptions,
         IFileSystem fileSystem,
@@ -32,7 +32,7 @@ internal class CommandLineFormatter
     )
     {
         this.BaseDirectoryPath = baseDirectoryPath;
-        this.Path = path;
+        this.PathToFileOrDirectory = pathToFileOrDirectory;
         this.PrinterOptions = printerOptions;
         this.CommandLineOptions = commandLineOptions;
         this.FileSystem = fileSystem;
@@ -56,9 +56,9 @@ internal class CommandLineFormatter
         async Task<CommandLineFormatter?> CreateFormatter(string path)
         {
             var normalizedPath = path.Replace('\\', '/');
-            var baseDirectoryPath = fileSystem.File.Exists(normalizedPath)
-                ? fileSystem.Path.GetDirectoryName(normalizedPath)
-                : path;
+            var baseDirectoryPath = fileSystem.Directory.Exists(normalizedPath)
+                ? normalizedPath
+                : fileSystem.Path.GetDirectoryName(normalizedPath);
 
             if (baseDirectoryPath == null)
             {
@@ -129,7 +129,7 @@ internal class CommandLineFormatter
         }
 
         result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-        if (!commandLineOptions.ShouldWriteStandardOut)
+        if (!commandLineOptions.WriteStdout)
         {
             ResultPrinter.PrintResults(result, logger, commandLineOptions);
         }
@@ -138,14 +138,14 @@ internal class CommandLineFormatter
 
     public async Task FormatFiles(CancellationToken cancellationToken)
     {
-        if (this.FileSystem.File.Exists(this.Path))
+        if (this.FileSystem.File.Exists(this.PathToFileOrDirectory))
         {
-            await FormatFileFromPath(this.Path, cancellationToken);
+            await FormatFileFromPath(this.PathToFileOrDirectory, cancellationToken);
         }
         else
         {
             var tasks = this.FileSystem.Directory
-                .EnumerateFiles(this.Path, "*.cs", SearchOption.AllDirectories)
+                .EnumerateFiles(this.PathToFileOrDirectory, "*.cs", SearchOption.AllDirectories)
                 .Select(o => FormatFileFromPath(o, cancellationToken))
                 .ToArray();
             try
@@ -202,6 +202,11 @@ internal class CommandLineFormatter
         CancellationToken cancellationToken
     )
     {
+        if (ShouldIgnoreFile(filePath))
+        {
+            return;
+        }
+
         cancellationToken.ThrowIfCancellationRequested();
 
         CSharpierResult result;
@@ -229,7 +234,8 @@ internal class CommandLineFormatter
         if (result.Errors.Any())
         {
             Interlocked.Increment(ref this.Result.Files);
-            WriteWarning(filePath, "Failed to compile so was not formatted.");
+            WriteError(filePath, "Failed to compile so was not formatted.");
+            Interlocked.Increment(ref this.Result.FailedCompilation);
             return;
         }
 
@@ -287,7 +293,7 @@ internal class CommandLineFormatter
     {
         if (
             this.CommandLineOptions.Check
-            && !this.CommandLineOptions.ShouldWriteStandardOut
+            && !this.CommandLineOptions.WriteStdout
             && result.Code != fileContents
         )
         {
@@ -304,7 +310,7 @@ internal class CommandLineFormatter
         Encoding? encoding
     )
     {
-        if (this.CommandLineOptions.ShouldWriteStandardOut)
+        if (this.CommandLineOptions.WriteStdout)
         {
             this.Console.Write(result.Code);
         }
@@ -333,7 +339,8 @@ internal class CommandLineFormatter
     )
     {
         if (
-            (commandLineOptions.Check && result.UnformattedFiles > 0)
+            (commandLineOptions.StandardInFileContents != null && result.FailedCompilation > 0)
+            || (commandLineOptions.Check && result.UnformattedFiles > 0)
             || result.FailedSyntaxTreeValidation > 0
             || result.ExceptionsFormatting > 0
             || result.ExceptionsValidatingSource > 0
@@ -366,6 +373,7 @@ public class CommandLineFormatterResult
 {
     // these are public fields so that Interlocked.Increment may be used on them.
     public int FailedSyntaxTreeValidation;
+    public int FailedCompilation;
     public int ExceptionsFormatting;
     public int ExceptionsValidatingSource;
     public int Files;
