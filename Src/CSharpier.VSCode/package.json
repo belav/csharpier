@@ -1,10 +1,29 @@
 {
     "name": "csharpier-vscode",
-    "license": "MIT",
+    "displayName": "CSharpier - Code formatter",
+    "description": "Code formatter using csharpier",
     "version": "1.0.0",
+    "publisher": "csharpier",
+    "author": "CSharpier",
+    "homepage": "https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/belav/csharpier.git"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/belav/belav/issues"
+    },
     "engines": {
         "vscode": "^1.60.0"
     },
+    "keywords": [
+        "prettier",
+        "formatter",
+        "c#",
+        "csharp",
+        "csharpier"
+    ],
     "categories": [
         "Formatters"
     ],
