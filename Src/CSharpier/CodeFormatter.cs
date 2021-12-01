@@ -6,6 +6,8 @@ namespace CSharpier;
 
 public class CodeFormatter
 {
+    public static LanguageVersion LanguageVersion = LanguageVersion.CSharp10;
+
     public static string Format(string code, CodeFormatterOptions? options = null)
     {
         return FormatAsync(code, options).Result;
@@ -43,8 +45,7 @@ public class CodeFormatter
             return CSharpSyntaxTree.ParseText(
                 codeToFormat,
                 new CSharpParseOptions(
-                    // this also exists in SyntaxNodeComparer
-                    LanguageVersion.CSharp10,
+                    LanguageVersion,
                     DocumentationMode.Diagnose,
                     preprocessorSymbols: preprocessorSymbols
                 ),
