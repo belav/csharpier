@@ -124,7 +124,10 @@ public class CliTests
             .WithArguments("CheckUnformatted.cs --check")
             .ExecuteAsync();
 
-        result.Output.Should().StartWith("Warning /CheckUnformatted.cs - Was not formatted.");
+        result.Output
+            .Replace("\\", "/")
+            .Should()
+            .StartWith("Warning /CheckUnformatted.cs - Was not formatted.");
         result.ExitCode.Should().Be(1);
     }
 
@@ -200,14 +203,19 @@ public class CliTests
             .ExecuteAsync();
 
         result.ErrorOutput.Should().BeEmpty();
-        result.Output
-            .TrimEnd('\u0003')
-            .Should()
-            .Be(
-                @"var myVariable =
-    someLongValue;
-"
-            );
+        result.Output.TrimEnd('\u0003').Should().Be("var myVariable =\n    someLongValue;\n");
+    }
+
+    [Test]
+    public async Task Should_Not_Fail_On_Empty_File()
+    {
+        await WriteFileAsync("BasicFile.cs", "");
+
+        var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+
+        result.Output.Should().StartWith("Total time:");
+        result.ErrorOutput.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
     }
 
     private async Task WriteFileAsync(string path, string content)

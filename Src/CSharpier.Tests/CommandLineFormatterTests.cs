@@ -49,17 +49,29 @@ public class CommandLineFormatterTests
 
         result.ErrorLines
             .First()
+            .Replace("\\", "/")
             .Should()
             .Be(@"Error /Unsupported.js - Is an unsupported file type.");
     }
 
     [Test]
-    public void Format_Writes_File()
+    public void Format_Writes_File_With_Directory_Path()
     {
         const string unformattedFilePath = "Unformatted.cs";
         WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
         this.Format();
+
+        this.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
+    }
+
+    [Test]
+    public void Format_Writes_File_With_File_Path()
+    {
+        const string unformattedFilePath = "Unformatted.cs";
+        WhenAFileExists(unformattedFilePath, UnformattedClassContent);
+
+        this.Format(directoryOrFilePaths: "Unformatted.cs");
 
         this.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
     }
@@ -217,6 +229,7 @@ public class CommandLineFormatterTests
     [Test]
     public void Ignore_Reports_Errors()
     {
+        WhenAFileExists("Test.cs", UnformattedClassContent);
         WhenAFileExists(".csharpierignore", @"\Src\Uploads\*.cs");
 
         var result = this.Format();
