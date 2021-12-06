@@ -1,47 +1,14 @@
+using System;
 using System.Diagnostics;
 using System.IO.Abstractions;
-using System.Text;
+using System.Linq;
 using CSharpier.Utilities;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
-internal class CommandLineFormatter
+internal static class CommandLineFormatter
 {
-    protected readonly CommandLineFormatterResult Result;
-
-    protected readonly string BaseDirectoryPath;
-    protected readonly string PathToFileOrDirectory;
-    protected readonly CommandLineOptions CommandLineOptions;
-    protected readonly PrinterOptions PrinterOptions;
-    protected readonly IFileSystem FileSystem;
-    protected readonly IConsole Console;
-    protected readonly IgnoreFile IgnoreFile;
-    protected readonly ILogger Logger;
-
-    protected CommandLineFormatter(
-        string baseDirectoryPath,
-        string pathToFileOrDirectory,
-        CommandLineOptions commandLineOptions,
-        PrinterOptions printerOptions,
-        IFileSystem fileSystem,
-        IConsole console,
-        IgnoreFile ignoreFile,
-        CommandLineFormatterResult result,
-        ILogger logger
-    )
-    {
-        this.BaseDirectoryPath = baseDirectoryPath;
-        this.PathToFileOrDirectory = pathToFileOrDirectory;
-        this.PrinterOptions = printerOptions;
-        this.CommandLineOptions = commandLineOptions;
-        this.FileSystem = fileSystem;
-        this.Console = console;
-        this.IgnoreFile = ignoreFile;
-        this.Result = result;
-        this.Logger = logger;
-    }
-
     public static async Task<int> Format(
         CommandLineOptions commandLineOptions,
         IFileSystem fileSystem,
@@ -50,287 +17,220 @@ internal class CommandLineFormatter
         CancellationToken cancellationToken
     )
     {
-        var stopwatch = Stopwatch.StartNew();
-        var result = new CommandLineFormatterResult();
-
-        async Task<CommandLineFormatter?> CreateFormatter(string path)
+        try
         {
-            var normalizedPath = path.Replace('\\', '/');
-            var baseDirectoryPath = fileSystem.Directory.Exists(normalizedPath)
-                ? normalizedPath
-                : fileSystem.Path.GetDirectoryName(normalizedPath);
+            var stopwatch = Stopwatch.StartNew();
+            var commandLineFormatterResult = new CommandLineFormatterResult();
 
-            if (baseDirectoryPath == null)
+            if (commandLineOptions.StandardInFileContents != null)
             {
-                throw new Exception(
-                    $"The path of {normalizedPath} does not appear to point to a directory or a file."
+                var filePath = commandLineOptions.DirectoryOrFilePaths[0];
+                var fileToFormatInfo = FileToFormatInfo.Create(
+                    filePath,
+                    commandLineOptions.StandardInFileContents,
+                    console.InputEncoding
                 );
-            }
 
-            var printerOptions = ConfigurationFileOptions.CreatePrinterOptions(
-                baseDirectoryPath,
-                fileSystem,
-                logger
-            );
+                var loggerAndOptions = await GetLoggerAndOptions(
+                    filePath,
+                    filePath,
+                    fileSystem,
+                    logger,
+                    cancellationToken
+                );
 
-            var ignoreFile = await IgnoreFile.Create(
-                baseDirectoryPath,
-                fileSystem,
-                logger,
-                cancellationToken
-            );
-            if (ignoreFile is null)
-            {
-                return null;
-            }
-
-            return new CommandLineFormatter(
-                baseDirectoryPath,
-                normalizedPath,
-                commandLineOptions,
-                printerOptions,
-                fileSystem,
-                console,
-                ignoreFile,
-                result,
-                logger
-            );
-        }
-
-        if (commandLineOptions.StandardInFileContents != null)
-        {
-            var path = commandLineOptions.DirectoryOrFilePaths[0];
-
-            var commandLineFormatter = await CreateFormatter(path);
-            if (commandLineFormatter == null)
-            {
-                return 1;
-            }
-
-            await commandLineFormatter.FormatFile(
-                commandLineOptions.StandardInFileContents,
-                path,
-                console.InputEncoding,
-                cancellationToken
-            );
-        }
-        else
-        {
-            foreach (var path in commandLineOptions.DirectoryOrFilePaths)
-            {
-                var commandLineFormatter = await CreateFormatter(path);
-                if (commandLineFormatter == null)
+                if (loggerAndOptions != null)
                 {
-                    return 1;
-                }
-
-                await commandLineFormatter.FormatFiles(cancellationToken);
-            }
-        }
-
-        result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-        if (!commandLineOptions.WriteStdout)
-        {
-            ResultPrinter.PrintResults(result, logger, commandLineOptions);
-        }
-        return ReturnExitCode(commandLineOptions, result);
-    }
-
-    public async Task FormatFiles(CancellationToken cancellationToken)
-    {
-        if (this.FileSystem.File.Exists(this.PathToFileOrDirectory))
-        {
-            await FormatFileFromPath(this.PathToFileOrDirectory, cancellationToken);
-        }
-        else
-        {
-            var tasks = this.FileSystem.Directory
-                .EnumerateFiles(this.PathToFileOrDirectory, "*.cs", SearchOption.AllDirectories)
-                .Select(o => FormatFileFromPath(o, cancellationToken))
-                .ToArray();
-            try
-            {
-                Task.WaitAll(tasks, cancellationToken);
-            }
-            catch (OperationCanceledException ex)
-            {
-                if (ex.CancellationToken != cancellationToken)
-                {
-                    throw;
+                    await PerformFormattingSteps(
+                        fileToFormatInfo,
+                        new StdOutFormattedFileWriter(console),
+                        commandLineFormatterResult,
+                        loggerAndOptions.Value.fileIssueLogger,
+                        loggerAndOptions.Value.printerOptions,
+                        commandLineOptions,
+                        cancellationToken
+                    );
                 }
             }
+            else
+            {
+                IFormattedFileWriter? writer = null;
+                if (commandLineOptions.WriteStdout)
+                {
+                    writer = new StdOutFormattedFileWriter(console);
+                }
+                else if (commandLineOptions.Check || commandLineOptions.SkipWrite)
+                {
+                    writer = new NullFormattedFileWriter();
+                }
+                else
+                {
+                    writer = new FileSystemFormattedFileWriter(fileSystem);
+                }
+
+                foreach (
+                    var directoryOrFile in commandLineOptions.DirectoryOrFilePaths.Select(
+                        o => o.Replace("\\", "/")
+                    )
+                )
+                {
+                    async Task FormatFile(string filePath)
+                    {
+                        await FormatPhysicalFile(
+                            filePath,
+                            directoryOrFile,
+                            fileSystem,
+                            logger,
+                            commandLineFormatterResult,
+                            writer,
+                            commandLineOptions,
+                            cancellationToken
+                        );
+                    }
+
+                    if (fileSystem.File.Exists(directoryOrFile))
+                    {
+                        await FormatFile(directoryOrFile);
+                    }
+                    else
+                    {
+                        var tasks = fileSystem.Directory
+                            .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
+                            .Select(FormatFile)
+                            .ToArray();
+                        try
+                        {
+                            Task.WaitAll(tasks, cancellationToken);
+                        }
+                        catch (OperationCanceledException ex)
+                        {
+                            if (ex.CancellationToken != cancellationToken)
+                            {
+                                throw;
+                            }
+                        }
+                    }
+                }
+            }
+
+            commandLineFormatterResult.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+            if (!commandLineOptions.WriteStdout)
+            {
+                ResultPrinter.PrintResults(commandLineFormatterResult, logger, commandLineOptions);
+            }
+
+            return ReturnExitCode(commandLineOptions, commandLineFormatterResult);
+        }
+        catch (Exception ex)
+            when (ex is InvalidIgnoreFileException
+                || ex.InnerException is InvalidIgnoreFileException
+            )
+        {
+            var invalidIgnoreFileException =
+                ex is InvalidIgnoreFileException ? ex : ex.InnerException;
+
+            logger.LogError(
+                invalidIgnoreFileException!.InnerException,
+                invalidIgnoreFileException.Message
+            );
+            return 1;
         }
     }
 
-    private async Task FormatFileFromPath(string filePath, CancellationToken cancellationToken)
+    private static async Task FormatPhysicalFile(
+        string filePath,
+        string directoryOrFile,
+        IFileSystem fileSystem,
+        ILogger logger,
+        CommandLineFormatterResult commandLineFormatterResult,
+        IFormattedFileWriter writer,
+        CommandLineOptions commandLineOptions,
+        CancellationToken cancellationToken
+    )
     {
-        if (ShouldIgnoreFile(filePath))
+        var fileToFormatInfo = await FileToFormatInfo.CreateFromFileSystem(
+            filePath,
+            fileSystem,
+            cancellationToken
+        );
+
+        var loggerAndOptions = await GetLoggerAndOptions(
+            directoryOrFile,
+            filePath,
+            fileSystem,
+            logger,
+            cancellationToken
+        );
+
+        if (loggerAndOptions == null)
         {
             return;
         }
 
         if (!filePath.EndsWithIgnoreCase(".cs") && !filePath.EndsWithIgnoreCase(".cst"))
         {
-            WriteError(filePath, "Is an unsupported file type.");
+            loggerAndOptions.Value.fileIssueLogger.WriteError("Is an unsupported file type.");
             return;
         }
 
-        cancellationToken.ThrowIfCancellationRequested();
-
-        var (encoding, fileContents, unableToDetectEncoding) = await FileReader.ReadFile(
-            filePath,
-            this.FileSystem,
+        await PerformFormattingSteps(
+            fileToFormatInfo,
+            writer,
+            commandLineFormatterResult,
+            loggerAndOptions.Value.fileIssueLogger,
+            loggerAndOptions.Value.printerOptions,
+            commandLineOptions,
             cancellationToken
         );
-        if (fileContents.Length == 0)
-        {
-            return;
-        }
-
-        if (unableToDetectEncoding)
-        {
-            WriteWarning(filePath, $"Unable to detect file encoding. Defaulting to {encoding}.");
-        }
-
-        await FormatFile(fileContents, filePath, encoding, cancellationToken);
     }
 
-    private async Task FormatFile(
-        string fileContents,
-        string filePath,
-        Encoding encoding,
+    private static async Task<(FileIssueLogger fileIssueLogger, PrinterOptions printerOptions)?> GetLoggerAndOptions(
+        string pathToDirectoryOrFile,
+        string pathToFile,
+        IFileSystem fileSystem,
+        ILogger logger,
         CancellationToken cancellationToken
     )
     {
-        if (ShouldIgnoreFile(filePath))
+        var normalizedPath = pathToDirectoryOrFile.Replace('\\', '/');
+        var baseDirectoryPath = fileSystem.Directory.Exists(normalizedPath)
+            ? normalizedPath
+            : fileSystem.Path.GetDirectoryName(normalizedPath);
+
+        if (baseDirectoryPath == null)
         {
-            return;
-        }
-
-        cancellationToken.ThrowIfCancellationRequested();
-
-        CSharpierResult result;
-
-        try
-        {
-            result = await CodeFormatter.FormatAsync(
-                fileContents,
-                this.PrinterOptions,
-                cancellationToken
+            throw new Exception(
+                $"The path of {normalizedPath} does not appear to point to a directory or a file."
             );
         }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            Interlocked.Increment(ref this.Result.Files);
-            WriteError(filePath, "Threw exception while formatting.", ex);
-            Interlocked.Increment(ref this.Result.ExceptionsFormatting);
-            return;
-        }
 
-        if (result.Errors.Any())
-        {
-            Interlocked.Increment(ref this.Result.Files);
-            WriteError(filePath, "Failed to compile so was not formatted.");
-            Interlocked.Increment(ref this.Result.FailedCompilation);
-            return;
-        }
+        var printerOptions = ConfigurationFileOptions.CreatePrinterOptions(
+            baseDirectoryPath,
+            fileSystem,
+            logger
+        );
 
-        if (!result.FailureMessage.IsBlank())
-        {
-            Interlocked.Increment(ref this.Result.Files);
-            WriteError(filePath, result.FailureMessage);
-            return;
-        }
+        var ignoreFile = await IgnoreFile.Create(
+            baseDirectoryPath,
+            fileSystem,
+            logger,
+            cancellationToken
+        );
 
-        await PerformSyntaxTreeValidation(filePath, fileContents, result, cancellationToken);
-
-        PerformCheck(filePath, result, fileContents);
-
-        cancellationToken.ThrowIfCancellationRequested();
-        Interlocked.Increment(ref this.Result.Files);
-
-        WriteFormattedResult(filePath, result, fileContents, encoding);
-    }
-
-    private async Task PerformSyntaxTreeValidation(
-        string file,
-        string fileContents,
-        CSharpierResult result,
-        CancellationToken cancellationToken
-    )
-    {
-        if (!this.CommandLineOptions.Fast)
-        {
-            var syntaxNodeComparer = new SyntaxNodeComparer(
-                fileContents,
-                result.Code,
-                cancellationToken
-            );
-
-            try
-            {
-                var failure = await syntaxNodeComparer.CompareSourceAsync(cancellationToken);
-                if (!string.IsNullOrEmpty(failure))
-                {
-                    Interlocked.Increment(ref this.Result.FailedSyntaxTreeValidation);
-                    WriteError(file, $"Failed syntax tree validation.\n{failure}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Interlocked.Increment(ref this.Result.ExceptionsValidatingSource);
-
-                WriteError(file, "Failed with exception during syntax tree validation.", ex);
-            }
-        }
-    }
-
-    private void PerformCheck(string filePath, CSharpierResult result, string fileContents)
-    {
         if (
-            this.CommandLineOptions.Check
-            && !this.CommandLineOptions.WriteStdout
-            && result.Code != fileContents
+            GeneratedCodeUtilities.IsGeneratedCodeFile(pathToFile)
+            || ignoreFile.IsIgnored(pathToFile)
         )
         {
-            var difference = StringDiffer.PrintFirstDifference(result.Code, fileContents);
-            WriteWarning(filePath, $"Was not formatted.\n{difference}");
-            Interlocked.Increment(ref this.Result.UnformattedFiles);
+            return null;
         }
-    }
 
-    private void WriteFormattedResult(
-        string filePath,
-        CSharpierResult result,
-        string? fileContents,
-        Encoding? encoding
-    )
-    {
-        if (this.CommandLineOptions.WriteStdout)
-        {
-            this.Console.Write(result.Code);
-        }
-        else
-        {
-            if (
-                !this.CommandLineOptions.Check
-                && !this.CommandLineOptions.SkipWrite
-                && result.Code != fileContents
-            )
-            {
-                // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
-                this.FileSystem.File.WriteAllText(filePath, result.Code, encoding);
-            }
-        }
-    }
+        var filePathLogger = new FileIssueLogger(
+            pathToFile.Replace('\\', '/')[baseDirectoryPath.Length..],
+            logger
+        );
 
-    private string GetPath(string file)
-    {
-        return file[this.BaseDirectoryPath.Length..];
+        return (filePathLogger, printerOptions);
     }
 
     private static int ReturnExitCode(
@@ -352,31 +252,112 @@ internal class CommandLineFormatter
         return 0;
     }
 
-    private bool ShouldIgnoreFile(string filePath)
+    private static async Task PerformFormattingSteps(
+        FileToFormatInfo fileToFormatInfo,
+        IFormattedFileWriter formattedFileWriter,
+        CommandLineFormatterResult commandLineFormatterResult,
+        FileIssueLogger fileIssueLogger,
+        PrinterOptions printerOptions,
+        CommandLineOptions commandLineOptions,
+        CancellationToken cancellationToken
+    )
     {
-        return GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
-            || this.IgnoreFile.IsIgnored(filePath);
-    }
+        if (fileToFormatInfo.FileContents.Length == 0)
+        {
+            return;
+        }
 
-    private void WriteError(string filePath, string value, Exception? exception = null)
-    {
-        this.Logger.LogError(exception, $"{GetPath(filePath)} - {value}");
-    }
+        if (fileToFormatInfo.UnableToDetectEncoding)
+        {
+            fileIssueLogger.WriteWarning(
+                $"Unable to detect file encoding. Defaulting to {fileToFormatInfo.Encoding}."
+            );
+        }
 
-    private void WriteWarning(string filePath, string value)
-    {
-        this.Logger.LogWarning($"{GetPath(filePath)} - {value}");
-    }
-}
+        cancellationToken.ThrowIfCancellationRequested();
 
-public class CommandLineFormatterResult
-{
-    // these are public fields so that Interlocked.Increment may be used on them.
-    public int FailedSyntaxTreeValidation;
-    public int FailedCompilation;
-    public int ExceptionsFormatting;
-    public int ExceptionsValidatingSource;
-    public int Files;
-    public int UnformattedFiles;
-    public long ElapsedMilliseconds;
+        CodeFormatterResult codeFormattingResult;
+
+        try
+        {
+            codeFormattingResult = await CodeFormatter.FormatAsync(
+                fileToFormatInfo.FileContents,
+                printerOptions,
+                cancellationToken
+            );
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            fileIssueLogger.WriteError("Threw exception while formatting.", ex);
+            Interlocked.Increment(ref commandLineFormatterResult.ExceptionsFormatting);
+            return;
+        }
+        finally
+        {
+            Interlocked.Increment(ref commandLineFormatterResult.Files);
+        }
+
+        if (codeFormattingResult.Errors.Any())
+        {
+            fileIssueLogger.WriteError("Failed to compile so was not formatted.");
+            Interlocked.Increment(ref commandLineFormatterResult.FailedCompilation);
+            return;
+        }
+
+        if (!codeFormattingResult.FailureMessage.IsBlank())
+        {
+            fileIssueLogger.WriteError(codeFormattingResult.FailureMessage);
+            return;
+        }
+
+        if (!commandLineOptions.Fast)
+        {
+            var syntaxNodeComparer = new SyntaxNodeComparer(
+                fileToFormatInfo.FileContents,
+                codeFormattingResult.Code,
+                cancellationToken
+            );
+
+            try
+            {
+                var failure = await syntaxNodeComparer.CompareSourceAsync(cancellationToken);
+                if (!string.IsNullOrEmpty(failure))
+                {
+                    Interlocked.Increment(
+                        ref commandLineFormatterResult.FailedSyntaxTreeValidation
+                    );
+                    fileIssueLogger.WriteError($"Failed syntax tree validation.\n{failure}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Interlocked.Increment(ref commandLineFormatterResult.ExceptionsValidatingSource);
+
+                fileIssueLogger.WriteError(
+                    "Failed with exception during syntax tree validation.",
+                    ex
+                );
+            }
+        }
+
+        if (
+            commandLineOptions.Check
+            && !commandLineOptions.WriteStdout
+            && codeFormattingResult.Code != fileToFormatInfo.FileContents
+        )
+        {
+            var difference = StringDiffer.PrintFirstDifference(
+                codeFormattingResult.Code,
+                fileToFormatInfo.FileContents
+            );
+            fileIssueLogger.WriteWarning($"Was not formatted.\n{difference}");
+            Interlocked.Increment(ref commandLineFormatterResult.UnformattedFiles);
+        }
+
+        formattedFileWriter.WriteResult(codeFormattingResult, fileToFormatInfo);
+    }
 }

@@ -35,9 +35,20 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .Be(
-                $"Error {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
-            );
+            .Be("Error /Invalid.cs - Failed to compile so was not formatted.");
+    }
+
+    [Test]
+    public void Format_Writes_Failed_To_Compile_With_Directory()
+    {
+        WhenAFileExists("Directory/Invalid.cs", "asdfasfasdf");
+
+        var result = this.Format();
+
+        result.ErrorLines
+            .First()
+            .Should()
+            .Be("Error /Directory/Invalid.cs - Failed to compile so was not formatted.");
     }
 
     [Test]
@@ -54,12 +65,23 @@ public class CommandLineFormatterTests
     }
 
     [Test]
-    public void Format_Writes_File()
+    public void Format_Writes_File_With_Directory_Path()
     {
         const string unformattedFilePath = "Unformatted.cs";
         WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
         this.Format();
+
+        this.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
+    }
+
+    [Test]
+    public void Format_Writes_File_With_File_Path()
+    {
+        const string unformattedFilePath = "Unformatted.cs";
+        WhenAFileExists(unformattedFilePath, UnformattedClassContent);
+
+        this.Format(directoryOrFilePaths: "Unformatted.cs");
 
         this.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
     }
@@ -85,10 +107,7 @@ public class CommandLineFormatterTests
 
         result.ExitCode.Should().Be(1);
         this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
-        result.Lines
-            .First()
-            .Should()
-            .StartWith($"Warning {Path.DirectorySeparatorChar}Unformatted.cs - Was not formatted.");
+        result.Lines.First().Should().StartWith("Warning /Unformatted.cs - Was not formatted.");
     }
 
     [Test]
@@ -217,6 +236,7 @@ public class CommandLineFormatterTests
     [Test]
     public void Ignore_Reports_Errors()
     {
+        WhenAFileExists("Test.cs", UnformattedClassContent);
         WhenAFileExists(".csharpierignore", @"\Src\Uploads\*.cs");
 
         var result = this.Format();
@@ -227,7 +247,7 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .StartWith(
+            .Contain(
                 $"Error The .csharpierignore file at {path} could not be parsed due to the following line:"
             );
         result.ErrorLines.Skip(1).First().Should().Contain(@"\Src\Uploads\*.cs");
@@ -282,9 +302,7 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .Be(
-                $"Error {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
-            );
+            .Be("Error /Invalid.cs - Failed to compile so was not formatted.");
     }
 
     [Test]
@@ -339,7 +357,6 @@ public class CommandLineFormatterTests
 
         result.Lines
             .First()
-            .Replace("\\", "/")
             .Should()
             .Be($"Warning The configuration file at {configPath} was empty.");
     }
