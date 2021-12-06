@@ -20,15 +20,11 @@ internal static class CommandLineFormatter
             var stopwatch = Stopwatch.StartNew();
             var commandLineFormatterResult = new CommandLineFormatterResult();
 
-            // TODO maybe the IFileInfo, IFormattedFileWriter and these two checks should just go back to the way they were
-            // sending through IFileSystem and CommandLineOptions is probably less parameters.
-            var performSyntaxTreeValidation = !commandLineOptions.Fast;
-            var performCheck = commandLineOptions.Check && !commandLineOptions.WriteStdout;
-
             if (commandLineOptions.StandardInFileContents != null)
             {
                 var filePath = commandLineOptions.DirectoryOrFilePaths[0];
-                var provider = new StandardInFileInfo(
+                var fileToFormatInfo = FileToFormatInfo.Create(
+                    filePath,
                     commandLineOptions.StandardInFileContents,
                     console.InputEncoding
                 );
@@ -44,13 +40,12 @@ internal static class CommandLineFormatter
                 if (loggerAndOptions != null)
                 {
                     await PerformFormattingSteps(
-                        provider,
+                        fileToFormatInfo,
                         new StdOutFormattedFileWriter(console),
                         commandLineFormatterResult,
                         loggerAndOptions.Value.fileIssueLogger,
                         loggerAndOptions.Value.printerOptions,
-                        performSyntaxTreeValidation,
-                        performCheck,
+                        commandLineOptions,
                         cancellationToken
                     );
                 }
@@ -66,6 +61,10 @@ internal static class CommandLineFormatter
                 {
                     writer = new NullFormattedFileWriter();
                 }
+                else
+                {
+                    writer = new FileSystemFormattedFileWriter(fileSystem);
+                }
 
                 foreach (var directoryOrFile in commandLineOptions.DirectoryOrFilePaths)
                 {
@@ -78,8 +77,7 @@ internal static class CommandLineFormatter
                             logger,
                             commandLineFormatterResult,
                             writer,
-                            performSyntaxTreeValidation,
-                            performCheck,
+                            commandLineOptions,
                             cancellationToken
                         );
                     }
@@ -126,7 +124,7 @@ internal static class CommandLineFormatter
                 ex is InvalidIgnoreFileException ? ex : ex.InnerException;
 
             logger.LogError(
-                invalidIgnoreFileException.InnerException,
+                invalidIgnoreFileException!.InnerException,
                 invalidIgnoreFileException.Message
             );
             return 1;
@@ -139,13 +137,12 @@ internal static class CommandLineFormatter
         IFileSystem fileSystem,
         ILogger logger,
         CommandLineFormatterResult commandLineFormatterResult,
-        IFormattedFileWriter? writer,
-        bool performSyntaxTreeValidation,
-        bool performCheck,
+        IFormattedFileWriter writer,
+        CommandLineOptions commandLineOptions,
         CancellationToken cancellationToken
     )
     {
-        var provider = await PhysicalFileInfoAndWriter.Create(
+        var fileToFormatInfo = await FileToFormatInfo.CreateFromFileSystem(
             filePath,
             fileSystem,
             cancellationToken
@@ -171,13 +168,12 @@ internal static class CommandLineFormatter
         }
 
         await PerformFormattingSteps(
-            provider,
-            writer ?? provider,
+            fileToFormatInfo,
+            writer,
             commandLineFormatterResult,
             loggerAndOptions.Value.fileIssueLogger,
             loggerAndOptions.Value.printerOptions,
-            performSyntaxTreeValidation,
-            performCheck,
+            commandLineOptions,
             cancellationToken
         );
     }
@@ -248,25 +244,24 @@ internal static class CommandLineFormatter
     }
 
     private static async Task PerformFormattingSteps(
-        IFileInfo fileInfo,
+        FileToFormatInfo fileToFormatInfo,
         IFormattedFileWriter formattedFileWriter,
         CommandLineFormatterResult commandLineFormatterResult,
         FileIssueLogger fileIssueLogger,
         PrinterOptions printerOptions,
-        bool performSyntaxTreeValidation,
-        bool performCheck,
+        CommandLineOptions commandLineOptions,
         CancellationToken cancellationToken
     )
     {
-        if (fileInfo.FileContents.Length == 0)
+        if (fileToFormatInfo.FileContents.Length == 0)
         {
             return;
         }
 
-        if (fileInfo.UnableToDetectEncoding)
+        if (fileToFormatInfo.UnableToDetectEncoding)
         {
             fileIssueLogger.WriteWarning(
-                $"Unable to detect file encoding. Defaulting to {fileInfo.Encoding}."
+                $"Unable to detect file encoding. Defaulting to {fileToFormatInfo.Encoding}."
             );
         }
 
@@ -277,7 +272,7 @@ internal static class CommandLineFormatter
         try
         {
             codeFormattingResult = await CodeFormatter.FormatAsync(
-                fileInfo.FileContents,
+                fileToFormatInfo.FileContents,
                 printerOptions,
                 cancellationToken
             );
@@ -310,10 +305,10 @@ internal static class CommandLineFormatter
             return;
         }
 
-        if (performSyntaxTreeValidation)
+        if (!commandLineOptions.Fast)
         {
             var syntaxNodeComparer = new SyntaxNodeComparer(
-                fileInfo.FileContents,
+                fileToFormatInfo.FileContents,
                 codeFormattingResult.Code,
                 cancellationToken
             );
@@ -340,16 +335,20 @@ internal static class CommandLineFormatter
             }
         }
 
-        if (performCheck && codeFormattingResult.Code != fileInfo.FileContents)
+        if (
+            commandLineOptions.Check
+            && !commandLineOptions.WriteStdout
+            && codeFormattingResult.Code != fileToFormatInfo.FileContents
+        )
         {
             var difference = StringDiffer.PrintFirstDifference(
                 codeFormattingResult.Code,
-                fileInfo.FileContents
+                fileToFormatInfo.FileContents
             );
             fileIssueLogger.WriteWarning($"Was not formatted.\n{difference}");
             Interlocked.Increment(ref commandLineFormatterResult.UnformattedFiles);
         }
 
-        formattedFileWriter.WriteResult(codeFormattingResult);
+        formattedFileWriter.WriteResult(codeFormattingResult, fileToFormatInfo);
     }
 }
