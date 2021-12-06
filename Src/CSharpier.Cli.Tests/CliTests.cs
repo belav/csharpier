@@ -102,6 +102,18 @@ public class CliTests
     }
 
     [Test]
+    public async Task Should_Print_NotFound()
+    {
+        var result = await new CsharpierProcess().WithArguments("/BasicFile.cs").ExecuteAsync();
+
+        result.Output.Should().BeEmpty();
+        result.ErrorOutput
+            .Should()
+            .StartWith("There was no file or directory found at /BasicFile.cs");
+        result.ExitCode.Should().Be(1);
+    }
+
+    [Test]
     public async Task Should_Write_To_StdError_For_Piped_Invalid_File()
     {
         const string invalidFile = "public class ClassName { ";
