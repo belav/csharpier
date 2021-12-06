@@ -92,7 +92,7 @@ internal static class CommandLineFormatter
                     {
                         await FormatFile(directoryOrFile);
                     }
-                    else
+                    else if (fileSystem.Directory.Exists(directoryOrFile))
                     {
                         var tasks = fileSystem.Directory
                             .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
@@ -109,6 +109,13 @@ internal static class CommandLineFormatter
                                 throw;
                             }
                         }
+                    }
+                    else
+                    {
+                        console.WriteErrorLine(
+                            "There was no file or directory found at " + directoryOrFile
+                        );
+                        return 1;
                     }
                 }
             }
