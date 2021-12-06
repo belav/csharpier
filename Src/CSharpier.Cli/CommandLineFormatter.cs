@@ -112,7 +112,9 @@ internal static class CommandLineFormatter
                     }
                     else
                     {
-                        console.WriteErrorLine("There was no file or directory found at " + directoryOrFile);
+                        console.WriteErrorLine(
+                            "There was no file or directory found at " + directoryOrFile
+                        );
                         return 1;
                     }
                 }
