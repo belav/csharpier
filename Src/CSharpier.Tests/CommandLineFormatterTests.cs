@@ -75,6 +75,91 @@ public class CommandLineFormatterTests
         this.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
     }
 
+    [TestCase("0.9.0", false)]
+    [TestCase("9999.0.0", false)]
+    [TestCase("current", true)]
+    public void Works_With_MSBuild_Version_Checking(string version, bool shouldPass)
+    {
+        var currentVersion = typeof(CommandLineFormatter).Assembly.GetName().Version!.ToString(3);
+
+        var versionToTest = version == "current" ? currentVersion : version;
+
+        WhenAFileExists(
+            "Test.csproj",
+            $@"<Project Sdk=""Microsoft.NET.Sdk"">
+    <ItemGroup>
+        <PackageReference Include=""CSharpier.MsBuild"" Version=""{versionToTest}"" />
+    </ItemGroup>
+</Project>
+"
+        );
+
+        var result = this.Format();
+
+        if (shouldPass)
+        {
+            result.ExitCode.Should().Be(0);
+            result.ErrorLines.Should().BeEmpty();
+        }
+        else
+        {
+            result.ExitCode.Should().Be(1);
+            result.ErrorLines
+                .First()
+                .Should()
+                .EndWith(
+                    $@"Test.csproj uses version {version} of CSharpier.MsBuild which is a mismatch with version {currentVersion}"
+                );
+        }
+    }
+
+    [Test]
+    public void Works_With_MSBuild_Version_Checking_When_No_Version_Specified()
+    {
+        var currentVersion = typeof(CommandLineFormatter).Assembly.GetName().Version!.ToString(3);
+
+        WhenAFileExists(
+            "Test.csproj",
+            $@"<Project Sdk=""Microsoft.NET.Sdk"">
+    <ItemGroup>
+        <PackageReference Include=""CSharpier.MsBuild"" />
+    </ItemGroup>
+</Project>
+"
+        );
+
+        var result = this.Format();
+
+        result.ExitCode.Should().Be(1);
+        result.ErrorLines
+            .First()
+            .Should()
+            .EndWith(
+                $"Test.csproj uses an unknown version of CSharpier.MsBuild which is a mismatch with version {currentVersion}"
+            );
+    }
+
+    [Test]
+    public void Works_With_MSBuild_Version_Checking_When_No_Version_Included()
+    {
+        var currentVersion = typeof(CommandLineFormatter).Assembly.GetName().Version!.ToString(3);
+
+        WhenAFileExists(
+            "Test.csproj",
+            $@"<Project Sdk=""Microsoft.NET.Sdk"">
+    <ItemGroup>
+        <PackageReference Include=""SomeOtherLibrary"" />
+    </ItemGroup>
+</Project>
+"
+        );
+
+        var result = this.Format();
+
+        result.ExitCode.Should().Be(0);
+        result.ErrorLines.Should().BeEmpty();
+    }
+
     [Test]
     public void Format_Writes_File_With_File_Path()
     {
@@ -357,6 +442,7 @@ public class CommandLineFormatterTests
 
         result.Lines
             .First()
+            .Replace("\\", "/")
             .Should()
             .Be($"Warning The configuration file at {configPath} was empty.");
     }

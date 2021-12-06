@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.IO.Abstractions;
-using System.Linq;
+using System.Reflection;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using CSharpier.Utilities;
 using Microsoft.Extensions.Logging;
 
@@ -94,6 +96,17 @@ internal static class CommandLineFormatter
                     }
                     else if (fileSystem.Directory.Exists(directoryOrFile))
                     {
+                        if (
+                            HasMismatchedCliAndMsBuildVersions.Check(
+                                directoryOrFile,
+                                fileSystem,
+                                logger
+                            )
+                        )
+                        {
+                            return 1;
+                        }
+
                         var tasks = fileSystem.Directory
                             .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
                             .Select(FormatFile)
