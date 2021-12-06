@@ -35,9 +35,20 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .Be(
-                $"Error {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
-            );
+            .Be("Error /Invalid.cs - Failed to compile so was not formatted.");
+    }
+
+    [Test]
+    public void Format_Writes_Failed_To_Compile_With_Directory()
+    {
+        WhenAFileExists("Directory/Invalid.cs", "asdfasfasdf");
+
+        var result = this.Format();
+
+        result.ErrorLines
+            .First()
+            .Should()
+            .Be("Error /Directory/Invalid.cs - Failed to compile so was not formatted.");
     }
 
     [Test]
@@ -49,7 +60,6 @@ public class CommandLineFormatterTests
 
         result.ErrorLines
             .First()
-            .Replace("\\", "/")
             .Should()
             .Be(@"Error /Unsupported.js - Is an unsupported file type.");
     }
@@ -97,10 +107,7 @@ public class CommandLineFormatterTests
 
         result.ExitCode.Should().Be(1);
         this.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
-        result.Lines
-            .First()
-            .Should()
-            .StartWith($"Warning {Path.DirectorySeparatorChar}Unformatted.cs - Was not formatted.");
+        result.Lines.First().Should().StartWith("Warning /Unformatted.cs - Was not formatted.");
     }
 
     [Test]
@@ -295,9 +302,7 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .Be(
-                $"Error {Path.DirectorySeparatorChar}Invalid.cs - Failed to compile so was not formatted."
-            );
+            .Be("Error /Invalid.cs - Failed to compile so was not formatted.");
     }
 
     [Test]
@@ -352,7 +357,6 @@ public class CommandLineFormatterTests
 
         result.Lines
             .First()
-            .Replace("\\", "/")
             .Should()
             .Be($"Warning The configuration file at {configPath} was empty.");
     }

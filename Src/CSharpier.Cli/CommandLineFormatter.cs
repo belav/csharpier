@@ -219,7 +219,10 @@ internal static class CommandLineFormatter
             return null;
         }
 
-        var filePathLogger = new FileIssueLogger(pathToFile[baseDirectoryPath.Length..], logger);
+        var filePathLogger = new FileIssueLogger(
+            pathToFile.Replace('\\', '/')[baseDirectoryPath.Length..],
+            logger
+        );
 
         return (filePathLogger, printerOptions);
     }

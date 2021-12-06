@@ -169,7 +169,7 @@ public class CliTests
         result.ErrorOutput
             .Should()
             .Be(
-                $"Error {Path.DirectorySeparatorChar}InvalidFile.cs - Failed to compile so was not formatted.{Environment.NewLine}"
+                $"Error /InvalidFile.cs - Failed to compile so was not formatted.{Environment.NewLine}"
             );
         result.ExitCode.Should().Be(1);
     }
