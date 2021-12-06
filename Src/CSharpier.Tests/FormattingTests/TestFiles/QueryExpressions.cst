@@ -33,6 +33,14 @@ class ClassName
             select c into d
             select d;
 
+        var joinWitType =
+            from c in customers
+            join Customers c1 in customers_____________________________
+                on c1.GetHashCode() equals c.GetHashCode()
+                into e
+            select c into d
+            select d;
+
         var complexQuery =
             from c in customers
             let d = c

@@ -6,6 +6,7 @@ internal static class JoinClause
     {
         return Doc.Group(
             Token.PrintWithSuffix(node.JoinKeyword, " "),
+            node.Type != null ? Doc.Concat(Node.Print(node.Type), " ") : Doc.Null,
             Token.PrintWithSuffix(node.Identifier, " "),
             Token.PrintWithSuffix(node.InKeyword, " "),
             Node.Print(node.InExpression),
