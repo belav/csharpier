@@ -35,7 +35,7 @@ public class IgnoreFile
         return this.Ignore.IsIgnored(normalizedFilePath);
     }
 
-    public static async Task<IgnoreFile?> Create(
+    public static async Task<IgnoreFile> Create(
         string baseDirectoryPath,
         IFileSystem fileSystem,
         ILogger logger,
@@ -59,13 +59,12 @@ public class IgnoreFile
             }
             catch (Exception ex)
             {
-                logger.LogError(
-                    ex,
+                throw new InvalidIgnoreFileException(
                     @$"The .csharpierignore file at {ignoreFilePath} could not be parsed due to the following line:
 {line}
-"
+",
+                    ex
                 );
-                return null;
             }
         }
 
@@ -91,4 +90,10 @@ public class IgnoreFile
 
         return null;
     }
+}
+
+public class InvalidIgnoreFileException : Exception
+{
+    public InvalidIgnoreFileException(string message, Exception exception)
+        : base(message, exception) { }
 }

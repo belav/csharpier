@@ -15,103 +15,121 @@ internal static class CommandLineFormatter
         CancellationToken cancellationToken
     )
     {
-        var stopwatch = Stopwatch.StartNew();
-        var commandLineFormatterResult = new CommandLineFormatterResult();
-
-        var performSyntaxTreeValidation = !commandLineOptions.Fast;
-        var performCheck = commandLineOptions.Check && !commandLineOptions.WriteStdout;
-
-        if (commandLineOptions.StandardInFileContents != null)
+        try
         {
-            var filePath = commandLineOptions.DirectoryOrFilePaths[0];
-            var provider = new StandardInFileInfo(
-                commandLineOptions.StandardInFileContents,
-                console.InputEncoding
-            );
+            var stopwatch = Stopwatch.StartNew();
+            var commandLineFormatterResult = new CommandLineFormatterResult();
 
-            var loggerAndOptions = await GetLoggerAndOptions(
-                filePath,
-                filePath,
-                fileSystem,
-                logger,
-                commandLineFormatterResult,
-                cancellationToken
-            );
+            var performSyntaxTreeValidation = !commandLineOptions.Fast;
+            var performCheck = commandLineOptions.Check && !commandLineOptions.WriteStdout;
 
-            if (loggerAndOptions != null)
+            if (commandLineOptions.StandardInFileContents != null)
             {
-                await PerformFormattingSteps(
-                    provider,
-                    new StdOutFormattedFileWriter(console),
+                var filePath = commandLineOptions.DirectoryOrFilePaths[0];
+                var provider = new StandardInFileInfo(
+                    commandLineOptions.StandardInFileContents,
+                    console.InputEncoding
+                );
+
+                var loggerAndOptions = await GetLoggerAndOptions(
+                    filePath,
+                    filePath,
+                    fileSystem,
+                    logger,
                     commandLineFormatterResult,
-                    loggerAndOptions.Value.filePathLogger,
-                    loggerAndOptions.Value.printerOptions,
-                    performSyntaxTreeValidation,
-                    performCheck,
                     cancellationToken
                 );
-            }
-        }
-        else
-        {
-            IFormattedFileWriter? writer = null;
-            if (commandLineOptions.WriteStdout)
-            {
-                writer = new StdOutFormattedFileWriter(console);
-            }
-            else if (commandLineOptions.Check || commandLineOptions.SkipWrite)
-            {
-                writer = new NullFormattedFileWriter();
-            }
 
-            foreach (var directoryOrFile in commandLineOptions.DirectoryOrFilePaths)
-            {
-                async Task FormatFile(string filePath)
+                if (loggerAndOptions != null)
                 {
-                    await FormatPhysicalFile(
-                        filePath,
-                        directoryOrFile,
-                        fileSystem,
-                        logger,
+                    await PerformFormattingSteps(
+                        provider,
+                        new StdOutFormattedFileWriter(console),
                         commandLineFormatterResult,
-                        writer,
+                        loggerAndOptions.Value.filePathLogger,
+                        loggerAndOptions.Value.printerOptions,
                         performSyntaxTreeValidation,
                         performCheck,
                         cancellationToken
                     );
                 }
-
-                if (fileSystem.File.Exists(directoryOrFile))
+            }
+            else
+            {
+                IFormattedFileWriter? writer = null;
+                if (commandLineOptions.WriteStdout)
                 {
-                    await FormatFile(directoryOrFile);
+                    writer = new StdOutFormattedFileWriter(console);
                 }
-                else
+                else if (commandLineOptions.Check || commandLineOptions.SkipWrite)
                 {
-                    var tasks = fileSystem.Directory
-                        .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
-                        .Select(FormatFile)
-                        .ToArray();
-                    try
+                    writer = new NullFormattedFileWriter();
+                }
+
+                foreach (var directoryOrFile in commandLineOptions.DirectoryOrFilePaths)
+                {
+                    async Task FormatFile(string filePath)
                     {
-                        Task.WaitAll(tasks, cancellationToken);
+                        await FormatPhysicalFile(
+                            filePath,
+                            directoryOrFile,
+                            fileSystem,
+                            logger,
+                            commandLineFormatterResult,
+                            writer,
+                            performSyntaxTreeValidation,
+                            performCheck,
+                            cancellationToken
+                        );
                     }
-                    catch (OperationCanceledException ex)
+
+                    if (fileSystem.File.Exists(directoryOrFile))
                     {
-                        if (ex.CancellationToken != cancellationToken)
+                        await FormatFile(directoryOrFile);
+                    }
+                    else
+                    {
+                        var tasks = fileSystem.Directory
+                            .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
+                            .Select(FormatFile)
+                            .ToArray();
+                        try
                         {
-                            throw;
+                            Task.WaitAll(tasks, cancellationToken);
+                        }
+                        catch (OperationCanceledException ex)
+                        {
+                            if (ex.CancellationToken != cancellationToken)
+                            {
+                                throw;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        commandLineFormatterResult.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-        if (!commandLineOptions.WriteStdout)
-        {
-            ResultPrinter.PrintResults(commandLineFormatterResult, logger, commandLineOptions);
+            commandLineFormatterResult.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+            if (!commandLineOptions.WriteStdout)
+            {
+                ResultPrinter.PrintResults(commandLineFormatterResult, logger, commandLineOptions);
+            }
+
+            return ReturnExitCode(commandLineOptions, commandLineFormatterResult);
         }
-        return ReturnExitCode(commandLineOptions, commandLineFormatterResult);
+        catch (Exception ex)
+            when (ex is InvalidIgnoreFileException
+                || ex.InnerException is InvalidIgnoreFileException
+            )
+        {
+            var invalidIgnoreFileException =
+                ex is InvalidIgnoreFileException ? ex : ex.InnerException;
+
+            logger.LogError(
+                invalidIgnoreFileException.InnerException,
+                invalidIgnoreFileException.Message
+            );
+            return 1;
+        }
     }
 
     private static async Task FormatPhysicalFile(
@@ -197,11 +215,6 @@ internal static class CommandLineFormatter
             logger,
             cancellationToken
         );
-        if (ignoreFile is null)
-        {
-            commandLineFormatterResult.ReturnExitCodeOne = true;
-            return null;
-        }
 
         if (
             GeneratedCodeUtilities.IsGeneratedCodeFile(pathToFile)
@@ -222,8 +235,7 @@ internal static class CommandLineFormatter
     )
     {
         if (
-            result.ReturnExitCodeOne
-            || (commandLineOptions.StandardInFileContents != null && result.FailedCompilation > 0)
+            (commandLineOptions.StandardInFileContents != null && result.FailedCompilation > 0)
             || (commandLineOptions.Check && result.UnformattedFiles > 0)
             || result.FailedSyntaxTreeValidation > 0
             || result.ExceptionsFormatting > 0

@@ -240,7 +240,7 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .StartWith(
+            .Contain(
                 $"Error The .csharpierignore file at {path} could not be parsed due to the following line:"
             );
         result.ErrorLines.Skip(1).First().Should().Contain(@"\Src\Uploads\*.cs");

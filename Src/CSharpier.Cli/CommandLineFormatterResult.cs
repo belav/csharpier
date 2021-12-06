@@ -10,5 +10,4 @@ public class CommandLineFormatterResult
     public int Files;
     public int UnformattedFiles;
     public long ElapsedMilliseconds;
-    public bool ReturnExitCodeOne;
 }
