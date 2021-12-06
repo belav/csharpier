@@ -68,7 +68,11 @@ internal static class CommandLineFormatter
                     writer = new FileSystemFormattedFileWriter(fileSystem);
                 }
 
-                foreach (var directoryOrFile in commandLineOptions.DirectoryOrFilePaths.Select(o => o.Replace("\\", "/")))
+                foreach (
+                    var directoryOrFile in commandLineOptions.DirectoryOrFilePaths.Select(
+                        o => o.Replace("\\", "/")
+                    )
+                )
                 {
                     async Task FormatFile(string filePath)
                     {
