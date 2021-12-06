@@ -29,6 +29,9 @@
 .vscode
 .vscode-test
 
+.gradle
+.tmp
+
 node_modules
 bin
 obj

@@ -1,0 +1,19 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>com.github.belav.csharpier</id>
+    <name>csharpier</name>
+    <vendor>belav</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <projectService serviceImplementation="com.intellij.csharpierrider.CSharpierService"/>
+    </extensions>
+
+    <actions>
+        <action id="com.intellij.csharpierrider.ReformatWithCSharpierAction"
+                class="com.intellij.csharpierrider.ReformatWithCSharpierAction" text="Reformat With CSharpier">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
