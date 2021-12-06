@@ -1,5 +1,7 @@
+using System;
 using System.Diagnostics;
 using System.IO.Abstractions;
+using System.Linq;
 using CSharpier.Utilities;
 using Microsoft.Extensions.Logging;
 
@@ -66,7 +68,7 @@ internal static class CommandLineFormatter
                     writer = new FileSystemFormattedFileWriter(fileSystem);
                 }
 
-                foreach (var directoryOrFile in commandLineOptions.DirectoryOrFilePaths)
+                foreach (var directoryOrFile in commandLineOptions.DirectoryOrFilePaths.Select(o => o.Replace("\\", "/")))
                 {
                     async Task FormatFile(string filePath)
                     {
