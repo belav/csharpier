@@ -20,6 +20,8 @@ internal static class CommandLineFormatter
             var stopwatch = Stopwatch.StartNew();
             var commandLineFormatterResult = new CommandLineFormatterResult();
 
+            // TODO maybe the IFileInfo, IFormattedFileWriter and these two checks should just go back to the way they were
+            // sending through IFileSystem and CommandLineOptions is probably less parameters.
             var performSyntaxTreeValidation = !commandLineOptions.Fast;
             var performCheck = commandLineOptions.Check && !commandLineOptions.WriteStdout;
 
@@ -36,7 +38,6 @@ internal static class CommandLineFormatter
                     filePath,
                     fileSystem,
                     logger,
-                    commandLineFormatterResult,
                     cancellationToken
                 );
 
@@ -46,7 +47,7 @@ internal static class CommandLineFormatter
                         provider,
                         new StdOutFormattedFileWriter(console),
                         commandLineFormatterResult,
-                        loggerAndOptions.Value.filePathLogger,
+                        loggerAndOptions.Value.fileIssueLogger,
                         loggerAndOptions.Value.printerOptions,
                         performSyntaxTreeValidation,
                         performCheck,
@@ -155,7 +156,6 @@ internal static class CommandLineFormatter
             filePath,
             fileSystem,
             logger,
-            commandLineFormatterResult,
             cancellationToken
         );
 
@@ -166,7 +166,7 @@ internal static class CommandLineFormatter
 
         if (!filePath.EndsWithIgnoreCase(".cs") && !filePath.EndsWithIgnoreCase(".cst"))
         {
-            loggerAndOptions.Value.filePathLogger.WriteError("Is an unsupported file type.");
+            loggerAndOptions.Value.fileIssueLogger.WriteError("Is an unsupported file type.");
             return;
         }
 
@@ -174,7 +174,7 @@ internal static class CommandLineFormatter
             provider,
             writer ?? provider,
             commandLineFormatterResult,
-            loggerAndOptions.Value.filePathLogger,
+            loggerAndOptions.Value.fileIssueLogger,
             loggerAndOptions.Value.printerOptions,
             performSyntaxTreeValidation,
             performCheck,
@@ -182,12 +182,11 @@ internal static class CommandLineFormatter
         );
     }
 
-    private static async Task<(FileIssueLogger filePathLogger, PrinterOptions printerOptions)?> GetLoggerAndOptions(
+    private static async Task<(FileIssueLogger fileIssueLogger, PrinterOptions printerOptions)?> GetLoggerAndOptions(
         string pathToDirectoryOrFile,
         string pathToFile,
         IFileSystem fileSystem,
         ILogger logger,
-        CommandLineFormatterResult commandLineFormatterResult,
         CancellationToken cancellationToken
     )
     {
