@@ -85,10 +85,17 @@ public class Program
     [Conditional("DEBUG")]
     private static void Log(string message)
     {
-        File.AppendAllText(
-            @"C:\projects\csharpier\Src\CSharpier.Cli\bin\Debug\net6.0\log.txt",
-            message + "\n"
-        );
+        try
+        {
+            File.AppendAllText(
+                @"C:\projects\csharpier\Src\CSharpier.Cli\bin\Debug\net6.0\log.txt",
+                message + "\n"
+            );
+        }
+        catch (Exception)
+        {
+            // we don't care if this fails
+        }
     }
 
     private static async Task<int> PipeMultipleFiles(

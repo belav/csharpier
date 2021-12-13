@@ -1,3 +1,8 @@
+TODO clean this up
+
+- https://plugins.jetbrains.com/docs/intellij/welcome.html
+- https://developerlife.com/2021/03/13/ij-idea-plugin-advanced/
+
 # csharpier-rider
 
 ![Build](https://github.com/belav/csharpier-rider/workflows/Build/badge.svg)

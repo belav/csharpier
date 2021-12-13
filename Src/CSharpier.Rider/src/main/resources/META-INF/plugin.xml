@@ -8,6 +8,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <projectService serviceImplementation="com.intellij.csharpierrider.CSharpierService"/>
+        <notificationGroup id="CSharpier" displayType="BALLOON"/>
+        <postStartupActivity implementation="com.intellij.csharpierrider.CSharpierStartup"/>
     </extensions>
 
     <actions>

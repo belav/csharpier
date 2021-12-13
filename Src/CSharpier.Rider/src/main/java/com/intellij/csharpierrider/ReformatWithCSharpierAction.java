@@ -8,7 +8,6 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ex.util.EditorScrollingPositionKeeper;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -18,16 +17,10 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.LineSeparator;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.Collections;
 
 import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction;
 
-// TODO review the prettier one
-// TODO review the vscode one
 public class ReformatWithCSharpierAction extends AnAction {
     Logger LOG = Logger.getInstance(ReformatWithCSharpierAction.class);
 
@@ -68,37 +61,10 @@ public class ReformatWithCSharpierAction extends AnAction {
 
         CSharpierService cSharpierService = CSharpierService.getInstance(project);
         String result = cSharpierService.format(file.getText(), file.getName());
-        // TODO
-        if (result.length() < 2) {
+        // TODO check for actual formatting result
+        if (result == "") {
             return;
         }
-//        Runtime runtime = Runtime.getRuntime();
-//        try {
-//            Process process = runtime.exec("dotnet csharpier ");
-//            OutputStream stdin = process.getOutputStream();
-//            BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//            BufferedReader stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-//
-//            stdin.write(file.getText().getBytes());
-//            stdin.flush();
-//            stdin.close();
-//
-//            String output = null;
-//            while ((output = stdOut.readLine()) != null) {
-//                result += output;
-//            }
-//
-//            // TODO if error, then what?
-//            while ((output = stdError.readLine()) != null) {
-//                result += output;
-//            }
-//
-//        } catch (IOException e) {
-//
-//            Messages.showMessageDialog(e.getMessage(), "EXCEPTION", Messages.getInformationIcon());
-//
-//            e.printStackTrace();
-//        }
 
         Document document = editor.getDocument();
         CharSequence textBefore = document.getImmutableCharSequence();
