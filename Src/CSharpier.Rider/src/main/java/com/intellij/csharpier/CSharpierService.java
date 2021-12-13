@@ -1,4 +1,4 @@
-package com.intellij.csharpierrider;
+package com.intellij.csharpier;
 
 import com.esotericsoftware.minlog.Log;
 import com.intellij.notification.Notification;

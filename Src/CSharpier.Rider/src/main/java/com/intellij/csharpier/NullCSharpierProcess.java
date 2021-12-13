@@ -1,4 +1,4 @@
-package com.intellij.csharpierrider;
+package com.intellij.csharpier;
 
 public class NullCSharpierProcess implements ICSharpierProcess {
     @Override

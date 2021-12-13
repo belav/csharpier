@@ -7,14 +7,14 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <projectService serviceImplementation="com.intellij.csharpierrider.CSharpierService"/>
+        <projectService serviceImplementation="com.intellij.csharpier.CSharpierService"/>
         <notificationGroup id="CSharpier" displayType="BALLOON"/>
-        <postStartupActivity implementation="com.intellij.csharpierrider.CSharpierStartup"/>
+        <postStartupActivity implementation="com.intellij.csharpier.CSharpierStartup"/>
     </extensions>
 
     <actions>
-        <action id="com.intellij.csharpierrider.ReformatWithCSharpierAction"
-                class="com.intellij.csharpierrider.ReformatWithCSharpierAction" text="Reformat With CSharpier">
+        <action id="com.intellij.csharpier.ReformatWithCSharpierAction"
+                class="com.intellij.csharpier.ReformatWithCSharpierAction" text="Reformat With CSharpier">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
     </actions>

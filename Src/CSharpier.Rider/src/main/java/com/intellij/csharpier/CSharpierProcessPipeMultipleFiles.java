@@ -1,4 +1,4 @@
-package com.intellij.csharpierrider;
+package com.intellij.csharpier;
 
 import com.esotericsoftware.minlog.Log;
 import com.intellij.openapi.Disposable;
@@ -9,8 +9,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+// TODO format on save
+// TODO test with ignore
+// TODO icon file?
 // TODO only work with c#?
 // TODO workflows?
+// TODO kill tests? or make them work?
 
 public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
     Logger LOG = Logger.getInstance(CSharpierProcessPipeMultipleFiles.class);
