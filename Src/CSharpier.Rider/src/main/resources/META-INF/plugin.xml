@@ -8,8 +8,10 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <projectService serviceImplementation="com.intellij.csharpier.CSharpierService"/>
+        <projectService serviceImplementation="com.intellij.csharpier.FormattingService"/>
         <notificationGroup id="CSharpier" displayType="BALLOON"/>
         <postStartupActivity implementation="com.intellij.csharpier.CSharpierStartup"/>
+        <fileDocumentManagerListener implementation="com.intellij.csharpier.ReformatWithCSharpierOnSave"/>
     </extensions>
 
     <actions>

@@ -9,10 +9,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-// TODO format on save
 // TODO test with ignore
 // TODO icon file?
-// TODO only work with c#?
 // TODO workflows?
 // TODO kill tests? or make them work?
 
@@ -43,11 +41,12 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
     @Override
     public String formatFile(String content, String filePath) {
+        Log.debug("Formatting file at " + filePath);
 
         try {
             LOG.info(filePath);
             // TODO we need the real file path
-            stdin.write("C:\\projects\\csharpier\\Src\\CSharpier\\DocSerializer.cs".getBytes());
+            stdin.write(filePath.getBytes());
             stdin.write('\u0003');
             stdin.write(content.getBytes());
             stdin.write('\u0003');
