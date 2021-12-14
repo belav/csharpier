@@ -24,7 +24,7 @@ public class CSharpierService {
         this.project = project;
         csharpierPath = getCSharpierPath();
 
-        Log.info("Using command dotnet " + csharpierPath);
+        LOG.info("Using command dotnet " + csharpierPath);
 
         csharpierProcess = setupCSharpierProcess();
     }
@@ -67,7 +67,7 @@ public class CSharpierService {
     private ICSharpierProcess setupCSharpierProcess() {
         try {
             String version = execCmd("dotnet " + this.csharpierPath + " --version");
-            Log.info("CSharpier version: " + version);
+            LOG.info("CSharpier version: " + version);
             if (version == null) {
                 this.displayInstallNeededMessage();
             }

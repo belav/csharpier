@@ -12,6 +12,11 @@
         <notificationGroup id="CSharpier" displayType="BALLOON"/>
         <postStartupActivity implementation="com.intellij.csharpier.CSharpierStartup"/>
         <fileDocumentManagerListener implementation="com.intellij.csharpier.ReformatWithCSharpierOnSave"/>
+        <projectConfigurable
+                parentId="tools"
+                id="com.intellij.csharpier.CSharpierSettingsComponent"
+                instance="com.intellij.csharpier.CSharpierSettingsComponent"/>
+        <applicationService serviceImplementation="com.intellij.csharpier.CSharpierSettings"/>
     </extensions>
 
     <actions>

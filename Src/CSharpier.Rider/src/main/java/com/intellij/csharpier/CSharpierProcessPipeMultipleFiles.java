@@ -41,11 +41,10 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
     @Override
     public String formatFile(String content, String filePath) {
-        Log.debug("Formatting file at " + filePath);
+        LOG.info("Formatting file at " + filePath);
 
         try {
             LOG.info(filePath);
-            // TODO we need the real file path
             stdin.write(filePath.getBytes());
             stdin.write('\u0003');
             stdin.write(content.getBytes());
@@ -70,15 +69,16 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
             errorReaderThread.interrupt();
             outputReaderThread.interrupt();
 
-            Log.info("Output:");
-            Log.info(output.toString());
-            Log.info("Error:");
-            Log.info(errorOutput.toString());
+            String errorResult = errorOutput.toString();
+            if (errorResult.length() > 0) {
+                LOG.info("Got error output: " + errorResult);
+                return "";
+            }
 
             return output.toString();
 
         } catch (Exception e) {
-            LOG.error("error", e);
+            LOG.error(e);
             e.printStackTrace();
             return "";
         }
@@ -89,7 +89,6 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
             try {
                 var nextCharacter = reader.read();
                 while (nextCharacter != -1) {
-                    LOG.info("Got Error " + nextCharacter);
                     if (nextCharacter == '\u0003') {
                         done.set(true);
                         return;
@@ -98,7 +97,7 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
                     nextCharacter = reader.read();
                 }
             } catch (Exception e) {
-                LOG.error("error", e);
+                LOG.error(e);
                 done.set(true);
             }
         });

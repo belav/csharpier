@@ -14,7 +14,7 @@ public class ReformatWithCSharpierAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        LOG.debug("Running ReformatWithCSharpierAction");
+        LOG.info("Running ReformatWithCSharpierAction");
         Project project = e.getProject();
         if (project == null) {
             return;

@@ -14,9 +14,12 @@ public class ReformatWithCSharpierOnSave implements FileDocumentManagerListener 
 
     @Override
     public void beforeDocumentSaving(@NotNull Document document) {
-        // TODO make this configurable
+        CSharpierSettings cSharpierSettings = CSharpierSettings.getInstance();
+        if (!cSharpierSettings.getRunOnSave()) {
+            return;
+        }
 
-        LOG.debug("Running ReformatWithCSharpierOnSave");
+        LOG.info("Running ReformatWithCSharpierOnSave");
 
         VirtualFile file = FileDocumentManager.getInstance().getFile(document);
         if (file == null) {

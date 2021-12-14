@@ -20,14 +20,19 @@ public class FormattingService {
         return project.getService(FormattingService.class);
     }
 
-    public void format(@NotNull Document document,@NotNull  Project project) {
+    public void format(@NotNull Document document,@NotNull Project project) {
         PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
         if (psiFile == null) {
             return;
         }
 
-        if (psiFile.getLanguage().getID() != "C#") {
-            LOG.debug("Skipping formatting because language was " + psiFile.getLanguage().getDisplayName());
+
+
+        if (!(psiFile.getLanguage().getID().equals("C#")
+                // while testing in intellij it doesn't know about c#
+                || (psiFile.getLanguage().getID().equals("TEXT") && psiFile.getName().endsWith(".cs")))
+        ) {
+            LOG.info("Skipping formatting because language was " + psiFile.getLanguage().getDisplayName());
             return;
         }
 
@@ -45,7 +50,7 @@ public class FormattingService {
         CSharpierService cSharpierService = CSharpierService.getInstance(project);
         String result = cSharpierService.format(currentDocumentText, filePath);
 
-        if (result != "") {
+        if (result.length() > 0) {
             WriteCommandAction.runWriteCommandAction(project, () -> {
                 document.replaceString(0, currentDocumentText.length(), result);
             });
