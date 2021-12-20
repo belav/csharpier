@@ -6,6 +6,8 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests.Samples;
 
+[TestFixture]
+[Parallelizable(ParallelScope.All)]
 public class Samples
 {
     [Test]
