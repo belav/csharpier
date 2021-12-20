@@ -82,6 +82,7 @@ public class Program
         );
     }
 
+    // this is used for troubleshooting new IDE plugins and can eventually go away.
     [Conditional("DEBUG")]
     private static void Log(string message)
     {
