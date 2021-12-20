@@ -8,6 +8,8 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests.SyntaxPrinter;
 
+[TestFixture]
+[Parallelizable(ParallelScope.All)]
 public class PreprocessorSymbolsTests
 {
     [TestCase("BASIC_IF", "BASIC_IF")]
