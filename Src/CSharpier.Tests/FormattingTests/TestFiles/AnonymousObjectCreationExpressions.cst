@@ -10,4 +10,9 @@ public class ClassName
     };
 
     public dynamic Value = new { NoName };
+
+    public void Method()
+    {
+        var x = new { };
+    }
 }

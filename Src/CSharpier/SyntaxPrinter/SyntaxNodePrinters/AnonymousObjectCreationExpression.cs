@@ -7,14 +7,16 @@ internal static class AnonymousObjectCreationExpression
         return Doc.Group(
             Token.PrintWithSuffix(node.NewKeyword, Doc.Line),
             Token.Print(node.OpenBraceToken),
-            Doc.Indent(
-                Doc.Line,
-                SeparatedSyntaxList.Print(
-                    node.Initializers,
-                    AnonymousObjectMemberDeclarator.Print,
-                    Doc.Line
+            node.Initializers.Any()
+              ? Doc.Indent(
+                    Doc.Line,
+                    SeparatedSyntaxList.Print(
+                        node.Initializers,
+                        AnonymousObjectMemberDeclarator.Print,
+                        Doc.Line
+                    )
                 )
-            ),
+              : Doc.Null,
             Doc.Line,
             Token.Print(node.CloseBraceToken)
         );
