@@ -89,14 +89,15 @@ internal static class Token
 
     public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
     {
-        var indentTrivia = syntaxToken.Kind() == SyntaxKind.CloseBraceToken;
+        var isClosingBrace = syntaxToken.Kind() == SyntaxKind.CloseBraceToken;
 
         var printedTrivia = PrivatePrintLeadingTrivia(
             syntaxToken.LeadingTrivia,
-            skipLastHardline: indentTrivia
+            includeInitialNewLines: isClosingBrace,
+            skipLastHardline: isClosingBrace
         );
 
-        return indentTrivia && printedTrivia != Doc.Null
+        return isClosingBrace && printedTrivia != Doc.Null
           ? Doc.Concat(Doc.Indent(printedTrivia), Doc.HardLine)
           : printedTrivia;
     }
