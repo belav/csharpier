@@ -56,6 +56,15 @@ class ClassName
             // should indent
         };
 
+        var x = new OneProperty { One = true };
+        var x = new TwoProperties { One = true, Two = true };
+        var x = new ThreeProperties
+        {
+            One = true,
+            Two = true,
+            Three = true
+        };
+
         var objectInitializerExpression = new SomeObject()
         {
             ShouldNotBreak = { SomeProperty = SomeValue },
