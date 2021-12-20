@@ -15,7 +15,7 @@ public class BaseTest
 {
     private DirectoryInfo rootDirectory;
 
-    [SetUp]
+    [OneTimeSetUp]
     public void Setup()
     {
         this.rootDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());

@@ -4,6 +4,7 @@ using NUnit.Framework;
 namespace CSharpier.Tests;
 
 [TestFixture]
+[Parallelizable(ParallelScope.All)]
 internal class CodeFormatterTests
 {
     [TestCase(EndOfLine.LF, "\n")]

@@ -3,6 +3,7 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
+[Parallelizable(ParallelScope.All)]
 public class DeepRecursionTests
 {
     [Test]

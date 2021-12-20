@@ -5,6 +5,7 @@ using NUnit.Framework;
 namespace CSharpier.Tests.Utilities;
 
 [TestFixture]
+[Parallelizable(ParallelScope.All)]
 public class StringDifferTests
 {
     [Test]
