@@ -95,5 +95,29 @@ public class ClassName
         {
             return;
         }
+
+        foreach (var x in y)
+        {
+            continue;
+        }
+
+        foreach (var x in y)
+        {
+            KeepNewLine();
+
+            continue;
+        }
+
+        foreach (var x in y)
+        {
+            break;
+        }
+
+        foreach (var x in y)
+        {
+            KeepNewLine();
+
+            break;
+        }
     }
 }
