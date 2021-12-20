@@ -8,11 +8,25 @@ internal static class InitializerExpression
             ? Doc.Line
             : Doc.Null;
 
+        var alwaysBreak =
+            node.Kind() == SyntaxKind.ObjectInitializerExpression && node.Expressions.Count >= 3;
+
         var result = Doc.Concat(
             separator,
             Token.Print(node.OpenBraceToken),
-            Doc.Indent(Doc.Line, SeparatedSyntaxList.Print(node.Expressions, Node.Print, Doc.Line)),
-            node.Expressions.Any() ? Doc.Line : Doc.Null,
+            Doc.Indent(
+                alwaysBreak ? Doc.HardLine : Doc.Line,
+                SeparatedSyntaxList.Print(
+                    node.Expressions,
+                    Node.Print,
+                    alwaysBreak ? Doc.HardLine : Doc.Line
+                )
+            ),
+            node.Expressions.Any()
+              ? alwaysBreak
+                  ? Doc.HardLine
+                  : Doc.Line
+              : Doc.Null,
             Token.Print(node.CloseBraceToken)
         );
         return
