@@ -1,6 +1,5 @@
 package com.intellij.csharpier;
 
-import com.esotericsoftware.minlog.Log;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.diagnostic.Logger;
 
@@ -8,11 +7,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-// TODO test with ignore
-// TODO icon file?
-// TODO workflows?
-// TODO kill tests? or make them work?
 
 public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
     Logger LOG = Logger.getInstance(CSharpierProcessPipeMultipleFiles.class);

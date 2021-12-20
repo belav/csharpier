@@ -3,5 +3,11 @@
 # csharpier-rider Changelog
 
 ## [Unreleased]
+
+## [1.0.0]
 ### Added
-- Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
+- Initial Release
+- Action for Reformat
+- Setting for Reformat on Save
+- Support for leaving csharpier >= 0.12.0 running for faster formatting
+
