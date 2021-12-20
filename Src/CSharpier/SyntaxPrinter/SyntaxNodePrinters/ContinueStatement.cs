@@ -4,6 +4,10 @@ internal static class ContinueStatement
 {
     public static Doc Print(ContinueStatementSyntax node)
     {
-        return Doc.Concat(Token.Print(node.ContinueKeyword), Token.Print(node.SemicolonToken));
+        return Doc.Group(
+            ExtraNewLines.Print(node),
+            Token.Print(node.ContinueKeyword),
+            Token.Print(node.SemicolonToken)
+        );
     }
 }
