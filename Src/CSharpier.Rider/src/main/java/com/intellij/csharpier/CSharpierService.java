@@ -30,18 +30,20 @@ public class CSharpierService {
     }
 
     public String getCSharpierPath() {
-        try {
-            String csharpierDebugPath = "C:\\projects\\csharpier\\Src\\CSharpier.Cli\\bin\\Debug\\net6.0\\dotnet-csharpier.dll";
-            String csharpierReleasePath = csharpierDebugPath.replace("Debug", "Release");
-
-            if (new File(csharpierDebugPath).exists()) {
-                return csharpierDebugPath;
-            } else if (new File(csharpierReleasePath).exists()) {
-                return csharpierReleasePath;
-            }
-        } catch (Exception ex) {
-            Log.debug("Could not find local csharpier " + ex.getMessage());
-        }
+        // TODO make this some kind of build property so it only works when testing the plugin
+        // or maybe make it a setting?
+//        try {
+//            String csharpierDebugPath = "C:\\projects\\csharpier\\Src\\CSharpier.Cli\\bin\\Debug\\net6.0\\dotnet-csharpier.dll";
+//            String csharpierReleasePath = csharpierDebugPath.replace("Debug", "Release");
+//
+//            if (new File(csharpierDebugPath).exists()) {
+//                return csharpierDebugPath;
+//            } else if (new File(csharpierReleasePath).exists()) {
+//                return csharpierReleasePath;
+//            }
+//        } catch (Exception ex) {
+//            Log.debug("Could not find local csharpier " + ex.getMessage());
+//        }
 
         return "csharpier";
     }

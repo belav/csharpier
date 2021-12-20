@@ -19,6 +19,10 @@ public class ReformatWithCSharpierOnSave implements FileDocumentManagerListener 
             return;
         }
         Project project = ProjectLocator.getInstance().guessProjectForFile(file);
+        if (project == null) {
+            LOG.info("Could not find project for file so not trying to format in save.");
+            return;
+        }
 
         CSharpierSettings cSharpierSettings = CSharpierSettings.getInstance(project);
         if (!cSharpierSettings.getRunOnSave()) {
