@@ -4,7 +4,7 @@ internal static class SwitchStatement
 {
     public static Doc Print(SwitchStatementSyntax node)
     {
-        Doc sections =
+        var sections =
             node.Sections.Count == 0
                 ? " "
                 : Doc.Concat(
