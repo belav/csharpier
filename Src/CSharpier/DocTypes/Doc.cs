@@ -1,6 +1,6 @@
 namespace CSharpier.DocTypes;
 
-internal class Doc
+internal abstract class Doc
 {
     public static implicit operator Doc(string value)
     {
