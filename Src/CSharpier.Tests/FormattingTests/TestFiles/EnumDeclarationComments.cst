@@ -1,0 +1,15 @@
+public enum SubCode
+{
+    First,
+
+    // keep line
+    BasicComment,
+
+    /* keep line */
+    MultiLineComment,
+
+    /// keep line
+    XmlComment,
+    
+    DoNotKeepLine
+}
