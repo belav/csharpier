@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+## [1.0.3]
+- Add logo
+
 ## [1.0.2]
 - Fix bug where reformat on save can't find project for file
 

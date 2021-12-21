@@ -1,8 +1,8 @@
 <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-    <path style="fill: #dedede; fill-opacity: 1" d="M0 0h40v40H0z" />
-    <text
-            xml:space="preserve"
-            style="
+  <path style="fill: #dedede; fill-opacity: 1" d="M0 0h40v40H0z" />
+  <text
+    xml:space="preserve"
+    style="
       font-style: normal;
       font-variant: normal;
       font-weight: 400;
@@ -12,14 +12,14 @@
       font-family: Corbel;
       -inkscape-font-specification: Corbel;
     "
-            x="1.929"
-            y="28.888"
-    >
+    x="1.929"
+    y="28.888"
+  >
     <tspan x="1.929" y="28.888">C</tspan>
   </text>
-    <text
-            xml:space="preserve"
-            style="
+  <text
+    xml:space="preserve"
+    style="
       font-style: normal;
       font-variant: normal;
       font-weight: 400;
@@ -29,15 +29,15 @@
       font-family: Corbel;
       -inkscape-font-specification: Corbel;
     "
-            x="18.377"
-            y="25.343"
-    >
+    x="18.377"
+    y="25.343"
+  >
     <tspan x="18.377" y="25.343">#</tspan>
   </text>
-    <g>
-        <text
-                xml:space="preserve"
-                style="
+  <g>
+    <text
+      xml:space="preserve"
+      style="
         font-style: normal;
         font-variant: normal;
         font-weight: 700;
@@ -48,10 +48,10 @@
         -inkscape-font-specification: 'Corbel Bold';
         fill: #000;
       "
-                x="20.98"
-                y="34.956"
-        >
+      x="20.98"
+      y="34.956"
+    >
       <tspan x="20.98" y="34.956">ier</tspan>
     </text>
-    </g>
+  </g>
 </svg>
