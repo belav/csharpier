@@ -21,9 +21,10 @@ public class ConfigurationFileOptionsTests
     [Test]
     public void Should_Return_Default_Options_With_Empty_Json()
     {
-        WhenAFileExists("c:/test/.csharpierrc", "{}");
+        var context = new TestContext();
+        context.WhenAFileExists("c:/test/.csharpierrc", "{}");
 
-        var result = CreateConfigurationOptions("c:/test");
+        var result = context.CreateConfigurationOptions("c:/test");
 
         ShouldHaveDefaultOptions(result);
     }
@@ -31,7 +32,8 @@ public class ConfigurationFileOptionsTests
     [Test]
     public void Should_Return_Default_Options_With_No_File()
     {
-        var result = CreateConfigurationOptions("c:/test");
+        var context = new TestContext();
+        var result = context.CreateConfigurationOptions("c:/test");
 
         ShouldHaveDefaultOptions(result);
     }
@@ -41,8 +43,9 @@ public class ConfigurationFileOptionsTests
     [TestCase(".csharpierrc.yaml")]
     public void Should_Return_Default_Options_With_Empty_File(string fileName)
     {
-        WhenAFileExists($"c:/test/{fileName}", string.Empty);
-        var result = CreateConfigurationOptions("c:/test");
+        var context = new TestContext();
+        context.WhenAFileExists($"c:/test/{fileName}", string.Empty);
+        var result = context.CreateConfigurationOptions("c:/test");
 
         ShouldHaveDefaultOptions(result);
     }
@@ -50,7 +53,8 @@ public class ConfigurationFileOptionsTests
     [Test]
     public void Should_Return_Json_Extension_Options()
     {
-        WhenAFileExists(
+        var context = new TestContext();
+        context.WhenAFileExists(
             "c:/test/.csharpierrc.json",
             @"{ 
     ""printWidth"": 10, 
@@ -58,7 +62,7 @@ public class ConfigurationFileOptionsTests
 }"
         );
 
-        var result = CreateConfigurationOptions("c:/test");
+        var result = context.CreateConfigurationOptions("c:/test");
 
         result.PrintWidth.Should().Be(10);
         result.PreprocessorSymbolSets.Should().BeEquivalentTo(new List<string> { "1,2", "3" });
@@ -68,7 +72,8 @@ public class ConfigurationFileOptionsTests
     [TestCase("yml")]
     public void Should_Return_Yaml_Extension_Options(string extension)
     {
-        WhenAFileExists(
+        var context = new TestContext();
+        context.WhenAFileExists(
             $"c:/test/.csharpierrc.{extension}",
             @"
 printWidth: 10
@@ -78,7 +83,7 @@ preprocessorSymbolSets:
 "
         );
 
-        var result = CreateConfigurationOptions("c:/test");
+        var result = context.CreateConfigurationOptions("c:/test");
 
         result.PrintWidth.Should().Be(10);
         result.PreprocessorSymbolSets.Should().BeEquivalentTo(new List<string> { "1,2", "3" });
@@ -88,9 +93,10 @@ preprocessorSymbolSets:
     [TestCase("printWidth: 10")]
     public void Should_Read_ExtensionLess_File(string contents)
     {
-        WhenAFileExists($"c:/test/.csharpierrc", contents);
+        var context = new TestContext();
+        context.WhenAFileExists($"c:/test/.csharpierrc", contents);
 
-        var result = CreateConfigurationOptions("c:/test");
+        var result = context.CreateConfigurationOptions("c:/test");
 
         result.PrintWidth.Should().Be(10);
     }
@@ -102,9 +108,10 @@ preprocessorSymbolSets:
     [TestCase(".json", "{ \"printWidth\": 10 }")]
     public void Should_Find_Configuration_In_Parent_Directory(string extension, string contents)
     {
-        WhenAFileExists($"c:/test/.csharpierrc{extension}", contents);
+        var context = new TestContext();
+        context.WhenAFileExists($"c:/test/.csharpierrc{extension}", contents);
 
-        var result = CreateConfigurationOptions("c:/test/subfolder");
+        var result = context.CreateConfigurationOptions("c:/test/subfolder");
 
         result.PrintWidth.Should().Be(10);
     }
@@ -112,12 +119,13 @@ preprocessorSymbolSets:
     [Test]
     public void Should_Prefer_No_Extension()
     {
-        WhenAFileExists("c:/test/.csharpierrc", "{ \"printWidth\": 1 }");
+        var context = new TestContext();
+        context.WhenAFileExists("c:/test/.csharpierrc", "{ \"printWidth\": 1 }");
 
-        WhenAFileExists("c:/test/.csharpierrc.json", "{ \"printWidth\": 2 }");
-        WhenAFileExists("c:/test/.csharpierrc.yaml", "printWidth: 3");
+        context.WhenAFileExists("c:/test/.csharpierrc.json", "{ \"printWidth\": 2 }");
+        context.WhenAFileExists("c:/test/.csharpierrc.yaml", "printWidth: 3");
 
-        var result = CreateConfigurationOptions("c:/test");
+        var result = context.CreateConfigurationOptions("c:/test");
 
         result.PrintWidth.Should().Be(1);
     }
@@ -125,9 +133,10 @@ preprocessorSymbolSets:
     [Test]
     public void Should_Return_PrintWidth_With_Json()
     {
-        WhenAFileExists("c:/test/.csharpierrc", "{ \"printWidth\": 10 }");
+        var context = new TestContext();
+        context.WhenAFileExists("c:/test/.csharpierrc", "{ \"printWidth\": 10 }");
 
-        var result = CreateConfigurationOptions("c:/test");
+        var result = context.CreateConfigurationOptions("c:/test");
 
         result.PrintWidth.Should().Be(10);
     }
@@ -135,9 +144,10 @@ preprocessorSymbolSets:
     [Test]
     public void Should_Return_PrintWidth_With_Yaml()
     {
-        WhenAFileExists("c:/test/.csharpierrc", "printWidth: 10");
+        var context = new TestContext();
+        context.WhenAFileExists("c:/test/.csharpierrc", "printWidth: 10");
 
-        var result = CreateConfigurationOptions("c:/test");
+        var result = context.CreateConfigurationOptions("c:/test");
 
         result.PrintWidth.Should().Be(10);
     }
@@ -148,14 +158,19 @@ preprocessorSymbolSets:
         configurationFileOptions.PreprocessorSymbolSets.Should().BeNull();
     }
 
-    private ConfigurationFileOptions CreateConfigurationOptions(string baseDirectoryPath)
+    private class TestContext
     {
-        this.fileSystem.AddDirectory(baseDirectoryPath);
-        return ConfigurationFileOptions.Create(baseDirectoryPath, fileSystem);
-    }
+        private MockFileSystem fileSystem = new();
 
-    private void WhenAFileExists(string path, string contents)
-    {
-        this.fileSystem.AddFile(path, new MockFileData(contents));
+        public ConfigurationFileOptions CreateConfigurationOptions(string baseDirectoryPath)
+        {
+            this.fileSystem.AddDirectory(baseDirectoryPath);
+            return ConfigurationFileOptions.Create(baseDirectoryPath, fileSystem);
+        }
+
+        public void WhenAFileExists(string path, string contents)
+        {
+            this.fileSystem.AddFile(path, new MockFileData(contents));
+        }
     }
 }
