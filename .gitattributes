@@ -1,0 +1,4 @@
+* text=auto
+
+# Preserve line endings in gradle scripts
+gradlew* -text diff
