@@ -119,14 +119,7 @@ internal static class BaseTypeDeclaration
                 Token.Print(node.OpenBraceToken),
                 members,
                 Doc.HardLine,
-                node.CloseBraceToken.LeadingTrivia.Any(
-                    o => o.Kind() == SyntaxKind.DisabledTextTrivia
-                )
-                  ? Doc.Concat(
-                        Token.PrintLeadingTriviaWithNewLines(node.CloseBraceToken.LeadingTrivia),
-                        Token.PrintWithoutLeadingTrivia(node.CloseBraceToken)
-                    )
-                  : Token.Print(node.CloseBraceToken)
+                Token.Print(node.CloseBraceToken)
             );
         }
         else if (node.OpenBraceToken.Kind() != SyntaxKind.None)

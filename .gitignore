@@ -30,6 +30,7 @@
 .vscode-test
 
 .gradle
+.qodana
 .tmp
 
 node_modules

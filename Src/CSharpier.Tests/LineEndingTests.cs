@@ -3,6 +3,8 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
+[TestFixture]
+[Parallelizable(ParallelScope.All)]
 internal class LineEndingTests
 {
     [Test]

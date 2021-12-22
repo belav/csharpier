@@ -13,7 +13,22 @@ class ClassName
             break;
         }
 
-        for (;;)
+        for (; ; )
+        {
+            break;
+        }
+
+        for (var x = 1; ; )
+        {
+            break;
+        }
+
+        for (var x = 1; x < 0; )
+        {
+            break;
+        }
+
+        for (var x = 1; ; x++)
         {
             break;
         }

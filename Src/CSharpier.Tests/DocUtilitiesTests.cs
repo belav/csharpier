@@ -6,6 +6,8 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
+[TestFixture]
+[Parallelizable(ParallelScope.All)]
 public class DocUtilitiesTests
 {
     [Test]

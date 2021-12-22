@@ -23,9 +23,9 @@ internal static class ForStatement
                         ),
                         node.Condition != null
                           ? Doc.Concat(Doc.Line, Node.Print(node.Condition))
-                          : Doc.SoftLine,
+                          : Doc.Line,
                         Token.Print(node.SecondSemicolonToken),
-                        node.Incrementors.Any() ? Doc.Line : Doc.SoftLine,
+                        Doc.Line,
                         Doc.Group(
                             Doc.Indent(
                                 SeparatedSyntaxList.Print(node.Incrementors, Node.Print, Doc.Line)
