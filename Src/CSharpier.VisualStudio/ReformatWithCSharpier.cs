@@ -44,6 +44,7 @@ namespace CSharpier.VisualStudio
             var button = (OleMenuCommand)sender;
 
             button.Visible = dte.ActiveDocument.Name.EndsWith(".cs");
+            button.Enabled = this.formattingService.CanFormat;
         }
 
         public static ReformatWithCSharpier Instance { get; private set; }
@@ -66,6 +67,10 @@ namespace CSharpier.VisualStudio
         private void Execute(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            if (!this.formattingService.CanFormat)
+            {
+                return;
+            }
             this.formattingService.Format(this.dte.ActiveDocument);
         }
     }

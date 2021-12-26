@@ -7,7 +7,6 @@ using Process = System.Diagnostics.Process;
 
 namespace CSharpier.VisualStudio
 {
-    // TODO what about disposing this?
     public class CSharpierProcessPipeMultipleFiles : ICSharpierProcess
     {
         private readonly Logger logger;
@@ -17,8 +16,11 @@ namespace CSharpier.VisualStudio
         public CSharpierProcessPipeMultipleFiles(string csharpierPath, Logger logger)
         {
             this.logger = logger;
-            
-            var processStartInfo = new ProcessStartInfo("dotnet", csharpierPath + " --pipe-multiple-files")
+
+            var processStartInfo = new ProcessStartInfo(
+                "dotnet",
+                csharpierPath + " --pipe-multiple-files"
+            )
             {
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
@@ -31,6 +33,8 @@ namespace CSharpier.VisualStudio
 
             this.FormatFile("public class ClassName { }", "Test.cs");
         }
+
+        public bool CanFormat => true;
 
         public string FormatFile(string content, string fileName)
         {
@@ -45,7 +49,7 @@ namespace CSharpier.VisualStudio
 
             var outputReaderThread = CreateReadingThread(process.StandardOutput, output);
             var errorReaderThread = CreateReadingThread(process.StandardError, errorOutput);
-            
+
             outputReaderThread.Start();
             errorReaderThread.Start();
 
@@ -53,41 +57,46 @@ namespace CSharpier.VisualStudio
             {
                 Thread.Sleep(TimeSpan.FromMilliseconds(1));
             }
-            
+
             outputReaderThread.Interrupt();
             errorReaderThread.Interrupt();
-            
+
             var errorResult = errorOutput.ToString();
             if (string.IsNullOrEmpty(errorResult))
             {
                 return output.ToString();
             }
-            
+
             this.logger.Log("Got error output: " + errorResult);
             return "";
-
         }
 
         private Thread CreateReadingThread(StreamReader reader, StringBuilder stringBuilder)
         {
-            return new Thread(() => {
-                try {
-                    var nextCharacter = reader.Read();
-                    while (nextCharacter != -1) {
-                        if (nextCharacter == '\u0003')
-                        {
-                            done = true;
-                            return;
-                        }
-                        stringBuilder.Append((char) nextCharacter);
-                        nextCharacter = reader.Read();
-                    }
-                } catch (Exception e)
+            return new Thread(
+                () =>
                 {
-                    // TODO log
-                    done = true;
+                    try
+                    {
+                        var nextCharacter = reader.Read();
+                        while (nextCharacter != -1)
+                        {
+                            if (nextCharacter == '\u0003')
+                            {
+                                done = true;
+                                return;
+                            }
+                            stringBuilder.Append((char)nextCharacter);
+                            nextCharacter = reader.Read();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Log(e);
+                        done = true;
+                    }
                 }
-            });
+            );
         }
     }
 }

@@ -13,21 +13,25 @@ namespace CSharpier.VisualStudio
         private readonly DTE dte;
         private readonly RunningDocumentTable runningDocumentTable;
         private readonly FormattingService formattingService;
+        private readonly CSharpierOptionsPage csharpierOptionsPage;
 
         private ReformatWithCSharpierOnSave(
             DTE dte,
             RunningDocumentTable runningDocumentTable,
-            FormattingService formattingService
+            FormattingService formattingService,
+            CSharpierOptionsPage csharpierOptionsPage
         )
         {
             this.dte = dte;
             this.runningDocumentTable = runningDocumentTable;
             this.formattingService = formattingService;
+            this.csharpierOptionsPage = csharpierOptionsPage;
         }
 
         public static async Task InitializeAsync(
             CSharpierPackage csharpierPackage,
-            FormattingService formattingService
+            FormattingService formattingService,
+            CSharpierOptionsPage cSharpierOptionsPage
         )
         {
             var dte = await csharpierPackage.GetServiceAsync(typeof(DTE)) as DTE;
@@ -35,14 +39,15 @@ namespace CSharpier.VisualStudio
             var reformatWithCSharpierOnSave = new ReformatWithCSharpierOnSave(
                 dte,
                 runningDocumentTable,
-                formattingService
+                formattingService,
+                cSharpierOptionsPage
             );
             runningDocumentTable.Advise(reformatWithCSharpierOnSave);
         }
 
         public int OnBeforeSave(uint docCookie)
         {
-            if (!Settings.Instance.RunOnSave)
+            if (!this.csharpierOptionsPage.RunOnSave)
             {
                 return VSConstants.S_OK;
             }

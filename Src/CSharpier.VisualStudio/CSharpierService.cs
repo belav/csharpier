@@ -1,8 +1,12 @@
 using System;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace CSharpier.VisualStudio
 {
+    // TODO figure out how to publish https://docs.microsoft.com/en-us/visualstudio/extensibility/walkthrough-publishing-a-visual-studio-extension?view=vs-2022
+    // TODO make this work in 2022 https://docs.microsoft.com/en-us/visualstudio/extensibility/migration/update-visual-studio-extension?view=vs-2022
+    
     public class CSharpierService
     {
         private readonly string csharpierPath;
@@ -42,8 +46,6 @@ namespace CSharpier.VisualStudio
 
         public string ExecuteCommand(string cmd, string arguments)
         {
-            // TODO when testing, this runs from in the csharpier directory, which means it uses csharpier from there instead of globally
-
             var processStartInfo = new ProcessStartInfo(cmd, arguments)
             {
                 UseShellExecute = false,
@@ -51,6 +53,10 @@ namespace CSharpier.VisualStudio
                 RedirectStandardOutput = true,
                 WindowStyle = ProcessWindowStyle.Hidden,
                 CreateNoWindow = true,
+#if DEBUG
+                // TODO when testing, this runs from in the csharpier directory, which means it uses csharpier from there instead of globally
+                WorkingDirectory = "C:/"
+#endif
             };
 
             using var process = new Process { StartInfo = processStartInfo };
@@ -66,7 +72,7 @@ namespace CSharpier.VisualStudio
             {
                 var version = ExecuteCommand("dotnet", this.csharpierPath + " --version");
                 this.logger.Log("CSharpier version: " + version);
-                if (version == null)
+                if (string.IsNullOrEmpty(version))
                 {
                     this.DisplayInstallNeededMessage();
                 }
@@ -78,10 +84,7 @@ namespace CSharpier.VisualStudio
                     {
                         var content =
                             "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.";
-                        // TODO notify if csharpier should be updated
-                        // NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
-                        //         .createNotification(content, NotificationType.INFORMATION)
-                        //         .notify(project);
+                        InfoBarService.Instance.ShowInfoBar(content);
 
                         return new CSharpierProcessSingleFile(this.csharpierPath, this.logger);
                     }
@@ -98,17 +101,18 @@ namespace CSharpier.VisualStudio
 
         private void DisplayInstallNeededMessage()
         {
-            // TODO notify if not installed
-            //         Notification notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
-            //                 .createNotification("CSharpier must be installed globally to support formatting.", NotificationType.WARNING);
-            //
-            // //        notification.addAction(new EditAction());
-            //
-            //         notification.notify(project);
+            InfoBarService.Instance.ShowInfoBar("CSharpier must be installed globally to support formatting.");
         }
 
+        public bool CanFormat => this.csharpierProcess.CanFormat;
+        
         public string Format(string content, string filePath)
         {
+            if (!this.csharpierProcess.CanFormat)
+            {
+                return null;
+            }
+            
             this.logger.Log("Formatting " + filePath);
             try
             {

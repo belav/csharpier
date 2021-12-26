@@ -5,14 +5,16 @@ namespace CSharpier.VisualStudio
     public class FormattingService
     {
         private readonly Logger logger;
-        private readonly CSharpierService cSharpierService;
+        private readonly CSharpierService csharpierService;
 
-        public FormattingService(Logger logger, CSharpierService cSharpierService)
+        public FormattingService(Logger logger, CSharpierService csharpierService)
         {
             this.logger = logger;
-            this.cSharpierService = cSharpierService;
+            this.csharpierService = csharpierService;
         }
 
+        public bool CanFormat => this.csharpierService.CanFormat;
+        
         public void Format(Document document)
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
@@ -32,7 +34,7 @@ namespace CSharpier.VisualStudio
             var endPoint = textDocument.EndPoint.CreateEditPoint();
             var text = editPoint.GetText(endPoint);
 
-            var newText = this.cSharpierService.Format(text, document.FullName);
+            var newText = this.csharpierService.Format(text, document.FullName);
             if (string.IsNullOrEmpty(newText))
             {
                 return;

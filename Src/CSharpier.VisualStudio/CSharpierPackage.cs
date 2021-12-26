@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Microsoft.VisualStudio.Settings;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.Shell.Settings;
 using Task = System.Threading.Tasks.Task;
 
 namespace CSharpier.VisualStudio
@@ -28,12 +26,20 @@ namespace CSharpier.VisualStudio
             var outputPane = await this.GetServiceAsync(typeof(SVsOutputWindow)) as IVsOutputWindow;
             var logger = new Logger(outputPane);
             logger.Log("Starting");
-
+            
+            await InfoBarService.InitializeAsync(this);
+            
             var csharpierService = new CSharpierService(logger);
             var formattingService = new FormattingService(logger, csharpierService);
 
-            await Settings.InitializeAsync(this);
-            await ReformatWithCSharpierOnSave.InitializeAsync(this, formattingService);
+            var csharpierOptionsPage = (CSharpierOptionsPage)GetDialogPage(
+                typeof(CSharpierOptionsPage)
+            );
+            await ReformatWithCSharpierOnSave.InitializeAsync(
+                this,
+                formattingService,
+                csharpierOptionsPage
+            );
             await ReformatWithCSharpier.InitializeAsync(this, formattingService);
         }
     }
