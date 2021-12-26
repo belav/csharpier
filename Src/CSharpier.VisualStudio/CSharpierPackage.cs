@@ -26,9 +26,9 @@ namespace CSharpier.VisualStudio
             var outputPane = await this.GetServiceAsync(typeof(SVsOutputWindow)) as IVsOutputWindow;
             var logger = new Logger(outputPane);
             logger.Log("Starting");
-            
+
             await InfoBarService.InitializeAsync(this);
-            
+
             var csharpierService = new CSharpierService(logger);
             var formattingService = new FormattingService(logger, csharpierService);
 

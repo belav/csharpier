@@ -6,7 +6,7 @@ namespace CSharpier.VisualStudio
 {
     // TODO figure out how to publish https://docs.microsoft.com/en-us/visualstudio/extensibility/walkthrough-publishing-a-visual-studio-extension?view=vs-2022
     // TODO make this work in 2022 https://docs.microsoft.com/en-us/visualstudio/extensibility/migration/update-visual-studio-extension?view=vs-2022
-    
+
     public class CSharpierService
     {
         private readonly string csharpierPath;
@@ -101,18 +101,20 @@ namespace CSharpier.VisualStudio
 
         private void DisplayInstallNeededMessage()
         {
-            InfoBarService.Instance.ShowInfoBar("CSharpier must be installed globally to support formatting.");
+            InfoBarService.Instance.ShowInfoBar(
+                "CSharpier must be installed globally to support formatting."
+            );
         }
 
         public bool CanFormat => this.csharpierProcess.CanFormat;
-        
+
         public string Format(string content, string filePath)
         {
             if (!this.csharpierProcess.CanFormat)
             {
                 return null;
             }
-            
+
             this.logger.Log("Formatting " + filePath);
             try
             {

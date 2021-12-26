@@ -38,10 +38,7 @@ namespace CSharpier.VisualStudio
 
                         pane.OutputStringThreadSafe(message + Environment.NewLine);
                     }
-                    catch
-                    {
-                        // Do nothing
-                    }
+                    catch { }
                 }
             );
         }

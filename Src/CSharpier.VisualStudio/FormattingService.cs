@@ -14,7 +14,7 @@ namespace CSharpier.VisualStudio
         }
 
         public bool CanFormat => this.csharpierService.CanFormat;
-        
+
         public void Format(Document document)
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();

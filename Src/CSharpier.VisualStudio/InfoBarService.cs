@@ -6,7 +6,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace CSharpier.VisualStudio
 {
-public class InfoBarService : IVsInfoBarUIEvents
+    public class InfoBarService : IVsInfoBarUIEvents
     {
         private readonly CSharpierPackage csharpierPackage;
         private uint cookie;
@@ -21,7 +21,7 @@ public class InfoBarService : IVsInfoBarUIEvents
         public static Task InitializeAsync(CSharpierPackage serviceProvider)
         {
             Instance = new InfoBarService(serviceProvider);
-            
+
             return Task.CompletedTask;
         }
 
@@ -30,7 +30,10 @@ public class InfoBarService : IVsInfoBarUIEvents
             infoBarUiElement.Unadvise(cookie);
         }
 
-        public void OnActionItemClicked(IVsInfoBarUIElement infoBarUIElement, IVsInfoBarActionItem actionItem)
+        public void OnActionItemClicked(
+            IVsInfoBarUIElement infoBarUIElement,
+            IVsInfoBarActionItem actionItem
+        )
         {
             throw new System.NotImplementedException();
         }
@@ -44,8 +47,8 @@ public class InfoBarService : IVsInfoBarUIEvents
             {
                 return;
             }
-            
-            shell.GetProperty((int) __VSSPROPID7.VSSPROPID_MainWindowInfoBarHost, out var property);
+
+            shell.GetProperty((int)__VSSPROPID7.VSSPROPID_MainWindowInfoBarHost, out var property);
             if (!(property is IVsInfoBarHost infoBarHost))
             {
                 return;
@@ -54,9 +57,16 @@ public class InfoBarService : IVsInfoBarUIEvents
 
             var spans = new[] { text };
             var actions = new InfoBarActionItem[] { };
-            var infoBarModel = new InfoBarModel(spans, actions, KnownMonikers.StatusInformation, isCloseButtonVisible: true);
+            var infoBarModel = new InfoBarModel(
+                spans,
+                actions,
+                KnownMonikers.StatusInformation,
+                isCloseButtonVisible: true
+            );
 
-            var factory = csharpierPackage.GetServiceAsync(typeof(SVsInfoBarUIFactory)).Result as IVsInfoBarUIFactory;
+            var factory =
+                csharpierPackage.GetServiceAsync(typeof(SVsInfoBarUIFactory)).Result
+                as IVsInfoBarUIFactory;
             var element = factory.CreateInfoBar(infoBarModel);
             element.Advise(this, out cookie);
             infoBarHost.AddInfoBar(element);
