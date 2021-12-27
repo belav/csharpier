@@ -4,9 +4,6 @@ using System.Windows.Forms;
 
 namespace CSharpier.VisualStudio
 {
-    // TODO figure out how to publish https://docs.microsoft.com/en-us/visualstudio/extensibility/walkthrough-publishing-a-visual-studio-extension?view=vs-2022
-    // TODO make this work in 2022 cd
-
     public class CSharpierService
     {
         private readonly string csharpierPath;
