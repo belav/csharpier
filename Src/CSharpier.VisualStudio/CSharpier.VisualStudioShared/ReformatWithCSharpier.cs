@@ -6,11 +6,6 @@ using Task = System.Threading.Tasks.Task;
 
 namespace CSharpier.VisualStudio
 {
-    // https://michaelscodingspot.com/visual-studio-2017-extension-development-tutorial-part-2-add-menu-item/
-
-    // TODO doc now to add a keyboard shortcut
-    // EditorContextMenus.CodeWindow.ReformatWithCSharpier
-
     internal sealed class ReformatWithCSharpier
     {
         public const int CommandId = 0x0100;

@@ -36,9 +36,12 @@ namespace CSharpier.VisualStudio
 
         public bool CanFormat => true;
 
-        public string FormatFile(string content, string fileName)
+        public string FormatFile(string content, string filePath)
         {
-            process.StandardInput.Write(fileName);
+            this.logger.Log("Formatting " + filePath);
+            var stopwatch = Stopwatch.StartNew();
+
+            process.StandardInput.Write(filePath);
             process.StandardInput.Write('\u0003');
             process.StandardInput.Write(content);
             process.StandardInput.Write('\u0003');
@@ -62,13 +65,23 @@ namespace CSharpier.VisualStudio
             errorReaderThread.Interrupt();
 
             var errorResult = errorOutput.ToString();
+            var result = output.ToString();
             if (string.IsNullOrEmpty(errorResult))
             {
-                return output.ToString();
+                if (string.IsNullOrEmpty(result))
+                {
+                    this.logger.Log("File is ignored by .csharpierignore");
+                    return null;
+                }
+                else
+                {
+                    this.logger.Log("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");
+                    return output.ToString();
+                }
             }
 
             this.logger.Log("Got error output: " + errorResult);
-            return "";
+            return null;
         }
 
         private Thread CreateReadingThread(StreamReader reader, StringBuilder stringBuilder)
