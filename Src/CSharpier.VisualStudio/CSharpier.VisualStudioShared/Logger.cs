@@ -6,41 +6,19 @@ namespace CSharpier.VisualStudio
 {
     public class Logger
     {
-        private readonly IVsOutputWindow outputWindow;
-        private IVsOutputWindowPane pane;
+        private readonly IVsOutputWindowPane pane;
 
         public Logger(IVsOutputWindow outputWindow)
         {
-            this.outputWindow = outputWindow;
+            var guid = Guid.NewGuid();
+
+            outputWindow.CreatePane(ref guid, "CSharpier", 1, 1);
+            outputWindow.GetPane(ref guid, out this.pane);
         }
 
         public void Log(string message)
         {
-            if (string.IsNullOrEmpty(message))
-            {
-                return;
-            }
-
-            ThreadHelper.JoinableTaskFactory.Run(
-                async () =>
-                {
-                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-                    try
-                    {
-                        if (pane == null)
-                        {
-                            var guid = Guid.NewGuid();
-
-                            outputWindow.CreatePane(ref guid, "CSharpier", 1, 1);
-                            outputWindow.GetPane(ref guid, out pane);
-                        }
-
-                        pane.OutputStringThreadSafe(message + Environment.NewLine);
-                    }
-                    catch { }
-                }
-            );
+            this.pane.OutputStringThreadSafe(message + Environment.NewLine);
         }
 
         public void Log(Exception ex)

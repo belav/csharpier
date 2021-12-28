@@ -21,20 +21,18 @@ namespace CSharpier.VisualStudio
             IProgress<ServiceProgressData> progress
         )
         {
-            await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-
-            var outputPane = await this.GetServiceAsync(typeof(SVsOutputWindow)) as IVsOutputWindow;
+            var outputPane = await this.GetServiceAsync<IVsOutputWindow>();
             var logger = new Logger(outputPane);
             logger.Log("Starting");
+
+            await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             await InfoBarService.InitializeAsync(this);
 
             var csharpierService = new CSharpierService(logger);
             var formattingService = new FormattingService(logger, csharpierService);
 
-            var csharpierOptionsPage = (CSharpierOptionsPage)GetDialogPage(
-                typeof(CSharpierOptionsPage)
-            );
+            var csharpierOptionsPage = this.GetDialogPage<CSharpierOptionsPage>();
             await ReformatWithCSharpierOnSave.InitializeAsync(
                 this,
                 formattingService,

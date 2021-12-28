@@ -50,6 +50,8 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
             AtomicBoolean done = new AtomicBoolean(false);
 
+            // TODO look into ExecutorService.invokeAny to get this cleaned up like the VS version
+            // https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html#invokeAny-java.util.Collection-
             Thread outputReaderThread = CreateReadingThread(stdOut, output, done);
             outputReaderThread.start();
 

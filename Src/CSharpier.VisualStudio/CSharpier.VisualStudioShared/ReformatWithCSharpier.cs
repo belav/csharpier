@@ -28,7 +28,7 @@ namespace CSharpier.VisualStudio
 
             var menuCommandId = new CommandID(CommandSet, CommandId);
             var menuItem = new OleMenuCommand(this.Execute, menuCommandId);
-            menuItem.BeforeQueryStatus += QueryStatus;
+            menuItem.BeforeQueryStatus += this.QueryStatus;
             commandService.AddCommand(menuItem);
             this.formattingService = formattingService;
         }
@@ -38,7 +38,7 @@ namespace CSharpier.VisualStudio
             ThreadHelper.ThrowIfNotOnUIThread();
             var button = (OleMenuCommand)sender;
 
-            button.Visible = dte.ActiveDocument.Name.EndsWith(".cs");
+            button.Visible = this.dte.ActiveDocument.Name.EndsWith(".cs");
             button.Enabled = this.formattingService.CanFormat;
         }
 

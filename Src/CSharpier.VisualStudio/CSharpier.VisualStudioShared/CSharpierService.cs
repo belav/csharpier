@@ -14,11 +14,11 @@ namespace CSharpier.VisualStudio
         {
             this.logger = logger;
 
-            csharpierPath = this.GetCSharpierPath();
+            this.csharpierPath = this.GetCSharpierPath();
 
-            logger.Log("Using command dotnet " + csharpierPath);
+            logger.Log("Using command dotnet " + this.csharpierPath);
 
-            csharpierProcess = this.SetupCSharpierProcess();
+            this.csharpierProcess = this.SetupCSharpierProcess();
         }
 
         public string GetCSharpierPath()
@@ -67,7 +67,7 @@ namespace CSharpier.VisualStudio
         {
             try
             {
-                var version = ExecuteCommand("dotnet", this.csharpierPath + " --version");
+                var version = this.ExecuteCommand("dotnet", this.csharpierPath + " --version");
                 this.logger.Log("CSharpier version: " + version);
                 if (string.IsNullOrEmpty(version))
                 {

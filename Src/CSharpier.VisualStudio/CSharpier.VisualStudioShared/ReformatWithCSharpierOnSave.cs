@@ -52,7 +52,7 @@ namespace CSharpier.VisualStudio
                 return VSConstants.S_OK;
             }
 
-            var document = FindDocument(docCookie);
+            var document = this.FindDocument(docCookie);
 
             if (document == null)
             {
@@ -68,10 +68,12 @@ namespace CSharpier.VisualStudio
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var documentInfo = runningDocumentTable.GetDocumentInfo(docCookie);
+            var documentInfo = this.runningDocumentTable.GetDocumentInfo(docCookie);
             var documentPath = documentInfo.Moniker;
 
-            return dte.Documents.Cast<Document>().FirstOrDefault(o => o.FullName == documentPath);
+            return this.dte.Documents
+                .Cast<Document>()
+                .FirstOrDefault(o => o.FullName == documentPath);
         }
 
         public int OnAfterFirstDocumentLock(

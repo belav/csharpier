@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
 using Thread = System.Threading.Thread;
 using Process = System.Diagnostics.Process;
 
@@ -11,7 +12,9 @@ namespace CSharpier.VisualStudio
     {
         private readonly Logger logger;
         private readonly Process process;
-        private bool done;
+        private readonly AutoResetEvent autoEvent = new AutoResetEvent(false);
+        private readonly StringBuilder output = new StringBuilder();
+        private readonly StringBuilder errorOutput = new StringBuilder();
 
         public CSharpierProcessPipeMultipleFiles(string csharpierPath, Logger logger)
         {
@@ -29,7 +32,7 @@ namespace CSharpier.VisualStudio
                 CreateNoWindow = true
             };
             this.process = new Process { StartInfo = processStartInfo };
-            process.Start();
+            this.process.Start();
 
             this.FormatFile("public class ClassName { }", "Test.cs");
         }
@@ -38,34 +41,24 @@ namespace CSharpier.VisualStudio
 
         public string FormatFile(string content, string filePath)
         {
+            this.output.Clear();
+            this.errorOutput.Clear();
+
             this.logger.Log("Formatting " + filePath);
             var stopwatch = Stopwatch.StartNew();
 
-            process.StandardInput.Write(filePath);
-            process.StandardInput.Write('\u0003');
-            process.StandardInput.Write(content);
-            process.StandardInput.Write('\u0003');
+            this.process.StandardInput.Write(filePath);
+            this.process.StandardInput.Write('\u0003');
+            this.process.StandardInput.Write(content);
+            this.process.StandardInput.Write('\u0003');
 
-            var output = new StringBuilder();
-            var errorOutput = new StringBuilder();
-            this.done = false;
+            ThreadPool.QueueUserWorkItem(this.ReadOutput, this.autoEvent);
+            ThreadPool.QueueUserWorkItem(this.ReadError, this.autoEvent);
 
-            var outputReaderThread = CreateReadingThread(process.StandardOutput, output);
-            var errorReaderThread = CreateReadingThread(process.StandardError, errorOutput);
+            this.autoEvent.WaitOne();
 
-            outputReaderThread.Start();
-            errorReaderThread.Start();
-
-            while (!this.done)
-            {
-                Thread.Sleep(TimeSpan.FromMilliseconds(1));
-            }
-
-            outputReaderThread.Interrupt();
-            errorReaderThread.Interrupt();
-
-            var errorResult = errorOutput.ToString();
-            var result = output.ToString();
+            var errorResult = this.errorOutput.ToString();
+            var result = this.output.ToString();
             if (string.IsNullOrEmpty(errorResult))
             {
                 if (string.IsNullOrEmpty(result))
@@ -76,7 +69,7 @@ namespace CSharpier.VisualStudio
                 else
                 {
                     this.logger.Log("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");
-                    return output.ToString();
+                    return this.output.ToString();
                 }
             }
 
@@ -84,32 +77,48 @@ namespace CSharpier.VisualStudio
             return null;
         }
 
-        private Thread CreateReadingThread(StreamReader reader, StringBuilder stringBuilder)
+        private void ReadOutput(object state)
         {
-            return new Thread(
-                () =>
-                {
-                    try
-                    {
-                        var nextCharacter = reader.Read();
-                        while (nextCharacter != -1)
-                        {
-                            if (nextCharacter == '\u0003')
-                            {
-                                done = true;
-                                return;
-                            }
-                            stringBuilder.Append((char)nextCharacter);
-                            nextCharacter = reader.Read();
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Log(e);
-                        done = true;
-                    }
-                }
+            this.ReadFromProcess(this.process.StandardOutput, this.output, (AutoResetEvent)state);
+        }
+
+        private void ReadError(object state)
+        {
+            this.ReadFromProcess(
+                this.process.StandardError,
+                this.errorOutput,
+                (AutoResetEvent)state
             );
+        }
+
+        private void ReadFromProcess(
+            StreamReader reader,
+            StringBuilder stringBuilder,
+            AutoResetEvent autoResetEvent
+        )
+        {
+            try
+            {
+                var nextCharacter = reader.Read();
+                while (nextCharacter != -1)
+                {
+                    if (nextCharacter == '\u0003')
+                    {
+                        return;
+                    }
+
+                    stringBuilder.Append((char)nextCharacter);
+                    nextCharacter = reader.Read();
+                }
+            }
+            catch (Exception e)
+            {
+                this.logger.Log(e);
+            }
+            finally
+            {
+                autoResetEvent.Set();
+            }
         }
     }
 }

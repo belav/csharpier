@@ -30,9 +30,9 @@ namespace CSharpier.VisualStudio
                 return;
             }
 
-            var editPoint = textDocument.StartPoint.CreateEditPoint();
+            var startPoint = textDocument.StartPoint.CreateEditPoint();
             var endPoint = textDocument.EndPoint.CreateEditPoint();
-            var text = editPoint.GetText(endPoint);
+            var text = startPoint.GetText(endPoint);
 
             var newText = this.csharpierService.Format(text, document.FullName);
             if (string.IsNullOrEmpty(newText))
@@ -40,7 +40,7 @@ namespace CSharpier.VisualStudio
                 return;
             }
 
-            editPoint.ReplaceText(
+            startPoint.ReplaceText(
                 endPoint,
                 newText,
                 (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers

@@ -9,6 +9,7 @@
     <Import_RootNamespace>CSharpier.VisualStudioShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AsyncPackageExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSharpierOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>

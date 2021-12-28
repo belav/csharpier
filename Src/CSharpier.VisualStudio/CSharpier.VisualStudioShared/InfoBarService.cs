@@ -27,22 +27,19 @@ namespace CSharpier.VisualStudio
 
         public void OnClosed(IVsInfoBarUIElement infoBarUiElement)
         {
-            infoBarUiElement.Unadvise(cookie);
+            infoBarUiElement.Unadvise(this.cookie);
         }
 
         public void OnActionItemClicked(
             IVsInfoBarUIElement infoBarUIElement,
             IVsInfoBarActionItem actionItem
-        )
-        {
-            throw new System.NotImplementedException();
-        }
+        ) { }
 
         public void ShowInfoBar(string message)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var shell = csharpierPackage.GetServiceAsync(typeof(SVsShell)).Result as IVsShell;
+            var shell = this.csharpierPackage.GetServiceAsync(typeof(SVsShell)).Result as IVsShell;
             if (shell == null)
             {
                 return;
@@ -65,10 +62,10 @@ namespace CSharpier.VisualStudio
             );
 
             var factory =
-                csharpierPackage.GetServiceAsync(typeof(SVsInfoBarUIFactory)).Result
+                this.csharpierPackage.GetServiceAsync(typeof(SVsInfoBarUIFactory)).Result
                 as IVsInfoBarUIFactory;
             var element = factory.CreateInfoBar(infoBarModel);
-            element.Advise(this, out cookie);
+            element.Advise(this, out this.cookie);
             infoBarHost.AddInfoBar(element);
         }
     }
