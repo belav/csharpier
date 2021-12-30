@@ -123,5 +123,13 @@ public class ClassName
           : c
               ? d
               : e;
+
+        var invocationIndent = someCondition
+            ? SomeObject
+              .CallLongMethod__________________________________________()
+              .CallLongMethod__________________________________________()
+            : SomeObject
+              .CallLongMethod__________________________________________()
+              .CallLongMethod__________________________________________();
     }
 }
