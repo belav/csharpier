@@ -26,6 +26,7 @@
 # Jetbrains doesn't say to ignore these, but it seems like they shouldn't be committed
 **/.idea/**/watcherTasks.xml
 
+.vs
 .vscode
 .vscode-test
 
@@ -47,3 +48,4 @@ publish
 
 *.doctree.txt
 *.actual.cst
+*.vsix
