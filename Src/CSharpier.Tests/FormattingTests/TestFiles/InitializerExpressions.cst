@@ -141,6 +141,27 @@ class ClassName
             new Thing { One = 1 },
             Two = 2
         };
+
+        var conditionalsAndInvocations = new List<SomeObject>
+        {
+            this.CallSomeMethod________________________________________()
+                .CallSomeMethod________________________________________()
+              ? one
+              : two,
+            SomeOtherMethod(),
+            SomethingElse
+                .CallSomeMethod________________________________________()
+                .CallSomeMethod________________________________________()
+              ? one
+              : two,
+            SomeOtherMethod(),
+            this.CallSomeMethod________________________________________()
+                .CallSomeMethod________________________________________(),
+            someLongCondition___________________________________
+            && someLongCondition___________________________________
+                ? one
+                : two
+        };
     }
 
     private SomeObject someObject =

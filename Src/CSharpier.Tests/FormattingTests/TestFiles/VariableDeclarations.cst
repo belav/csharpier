@@ -138,8 +138,8 @@ withLineEnding"
             someParameter_____________________,
             someParameter_____________________
         )
-            ? someValue
-            : someOtherValue;
+          ? someValue
+          : someOtherValue;
 
         var someValue =
             await SomeObject.CallLongAsyncMethod____________________________________________(
@@ -155,7 +155,19 @@ withLineEnding"
 
         var someValue =
             SomeObject.CallLongMethod____________________________________________________()
+              ? someValue
+              : someOtherValue;
+
+        var someValue = SomeObject
+            .CallLongMethod____________________________________________________()
+            .CallLongMethod____________________________________________________()
+          ? someValue
+          : someOtherValue;
+
+        var someValue =
+            someLongCondition___________________________________
+            && someOtheLongCondition___________________________________
                 ? someValue
-                : someOtherValue;
+                : someValue;
     }
 }
