@@ -82,4 +82,4 @@ if ($firstRun) {
     Write-Output $newPr
 }
 
-Pop-Location
+Set-Location $repositoryRoot
