@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -41,6 +43,14 @@ public class Program
             }
         );
 
+        // foreach (var entry in CustomWalker.Dictionary)
+        // {
+        //     Console.WriteLine(entry.Key);
+        //     foreach (var member in entry.Value.OrderBy(o => o))
+        //     {
+        //         Console.WriteLine("    " + member);
+        //     }
+        // }
         if (CustomWalker.Matching > CustomWalker.Total)
         {
             Console.WriteLine("Matching was > than Total, so you did something wrong.");
@@ -63,29 +73,89 @@ public class Program
 
 public class CustomWalker : CSharpSyntaxWalker
 {
+    public static readonly ConcurrentDictionary<string, List<string>> Dictionary = new();
     public static int Total;
     public static int Matching;
     private readonly string file;
     private bool wroteFile;
+    private int maxCodeWrites = 1000;
+    private int codeWrites = 0;
 
     public CustomWalker(string file) : base()
     {
+        Dictionary.TryAdd(nameof(ClassDeclarationSyntax), new List<string>());
+        Dictionary.TryAdd(nameof(StructDeclarationSyntax), new List<string>());
+        Dictionary.TryAdd(nameof(RecordDeclarationSyntax), new List<string>());
+        Dictionary.TryAdd(nameof(InterfaceDeclarationSyntax), new List<string>());
+
         this.file = file;
+    }
+
+    public override void VisitClassDeclaration(ClassDeclarationSyntax node)
+    {
+        this.VisitType(node);
+        base.VisitClassDeclaration(node);
+    }
+
+    public override void VisitStructDeclaration(StructDeclarationSyntax node)
+    {
+        this.VisitType(node);
+        base.VisitStructDeclaration(node);
+    }
+
+    public override void VisitRecordDeclaration(RecordDeclarationSyntax node)
+    {
+        this.VisitType(node);
+        base.VisitRecordDeclaration(node);
+    }
+
+    public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
+    {
+        this.VisitType(node);
+        base.VisitInterfaceDeclaration(node);
+    }
+
+    private void VisitType(TypeDeclarationSyntax node)
+    {
+        foreach (var member in node.Members)
+        {
+            Dictionary.AddOrUpdate(
+                node.GetType().Name,
+                new List<string>(),
+                (key, list) =>
+                {
+                    if (!list.Contains(member.GetType().Name))
+                    {
+                        list.Add(member.GetType().Name);
+                    }
+
+                    return list;
+                }
+            );
+        }
     }
 
     public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
     {
-        if (node.ConstraintClauses.Any())
+        if (
+            node.Parent is not InterfaceDeclarationSyntax
+            || (
+                node.Parent is TypeDeclarationSyntax typeDeclarationSyntax
+                && node == typeDeclarationSyntax.Members.First()
+            )
+            || node.GetLeadingTrivia().Any(o => o.IsComment() || node.AttributeLists.Any())
+        )
         {
-            Interlocked.Increment(ref Total);
+            base.VisitMethodDeclaration(node);
+            return;
+        }
 
-            var trivia = node.ParameterList.CloseParenToken.TrailingTrivia;
-            if (trivia.Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia))
-            {
-                Interlocked.Increment(ref Matching);
-            }
+        Interlocked.Increment(ref Total);
 
-            this.WriteCode(node);
+        if (node.GetLeadingTrivia().Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia))
+        {
+            Interlocked.Increment(ref Matching);
+            this.WriteCode(node.Parent);
         }
 
         base.VisitMethodDeclaration(node);
@@ -93,7 +163,11 @@ public class CustomWalker : CSharpSyntaxWalker
 
     private void WriteCode(SyntaxNode syntaxNode)
     {
-        Console.WriteLine(syntaxNode.SyntaxTree.GetText().ToString(syntaxNode.Span));
+        if (this.codeWrites < this.maxCodeWrites)
+        {
+            Interlocked.Increment(ref this.codeWrites);
+            Console.WriteLine(syntaxNode.SyntaxTree.GetText().ToString(syntaxNode.Span));
+        }
     }
 
     private void WriteFilePath()
@@ -109,6 +183,18 @@ public class CustomWalker : CSharpSyntaxWalker
     {
         var lineSpan = syntaxNode.SyntaxTree.GetLineSpan(syntaxNode.Span);
         return lineSpan.StartLinePosition.Line != lineSpan.EndLinePosition.Line;
+    }
+}
+
+public static class SyntaxTriviaExtensions
+{
+    public static bool IsComment(this SyntaxTrivia syntaxTrivia)
+    {
+        return syntaxTrivia.Kind()
+            is SyntaxKind.SingleLineCommentTrivia
+                or SyntaxKind.MultiLineCommentTrivia
+                or SyntaxKind.SingleLineDocumentationCommentTrivia
+                or SyntaxKind.MultiLineDocumentationCommentTrivia;
     }
 }
 

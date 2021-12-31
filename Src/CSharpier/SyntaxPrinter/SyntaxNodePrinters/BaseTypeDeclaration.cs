@@ -20,10 +20,7 @@ internal static class BaseTypeDeclaration
             hasMembers = typeDeclarationSyntax.Members.Count > 0;
             if (typeDeclarationSyntax.Members.Count > 0)
             {
-                members = Doc.Indent(
-                    Doc.HardLine,
-                    Doc.Join(Doc.HardLine, typeDeclarationSyntax.Members.Select(Node.Print))
-                );
+                members = CreateTypeMembers(typeDeclarationSyntax);
             }
             if (node is ClassDeclarationSyntax classDeclarationSyntax)
             {
@@ -62,7 +59,6 @@ internal static class BaseTypeDeclaration
         }
 
         var docs = new List<Doc>();
-        docs.AddIfNotNull(ExtraNewLines.Print(node));
         if (node.AttributeLists.Any())
         {
             docs.Add(AttributeLists.Print(node, node.AttributeLists));
@@ -138,5 +134,56 @@ internal static class BaseTypeDeclaration
         }
 
         return Doc.Concat(docs);
+    }
+
+    private static Doc CreateTypeMembers(TypeDeclarationSyntax typeDeclarationSyntax)
+    {
+        var members = new List<Doc> { Doc.HardLine };
+        for (var x = 0; x < typeDeclarationSyntax.Members.Count; x++)
+        {
+            var member = typeDeclarationSyntax.Members[x];
+
+            if (x == 0)
+            {
+                members.Add(Node.Print(member));
+                continue;
+            }
+
+            var lineIsForced =
+                member is MethodDeclarationSyntax
+                    && typeDeclarationSyntax is not InterfaceDeclarationSyntax
+                || member
+                    is ClassDeclarationSyntax
+                        or EnumDeclarationSyntax
+                        or InterfaceDeclarationSyntax
+                        or ConstructorDeclarationSyntax
+                        or ConversionOperatorDeclarationSyntax
+                        or DestructorDeclarationSyntax
+                        or RecordDeclarationSyntax
+                        or StructDeclarationSyntax
+                        or OperatorDeclarationSyntax;
+
+            var addLine = lineIsForced;
+
+            if (!lineIsForced)
+            {
+                addLine =
+                    member.AttributeLists.Any()
+                    || member
+                        .GetLeadingTrivia()
+                        .Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia || o.IsComment());
+            }
+
+            members.Add(Doc.HardLine);
+
+            if (addLine)
+            {
+                members.Add(Doc.HardLine);
+            }
+
+            members.Add(Node.Print(member));
+        }
+
+        return Doc.Indent(members);
     }
 }

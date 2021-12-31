@@ -63,7 +63,7 @@ internal static class BaseMethodDeclaration
             semicolonToken = localFunctionStatementSyntax.SemicolonToken;
         }
 
-        var docs = new List<Doc> { ExtraNewLines.Print(node) };
+        var docs = new List<Doc>();
 
         if (attributeLists is { Count: > 0 })
         {
