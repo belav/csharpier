@@ -1,7 +1,60 @@
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
+// TODO should abstract methods be treated like interface methods?
+/*
+    public abstract void WriteParameterSeparator();
+    public abstract void WriteReturn();
+*/
+
 // TODO these are all the edge cases left + any failing tests
 /*
+
+// adds line before pragma
+class ClassName
+{
+#pragma warning disable 0618
+    public void DoStuff() { }   
+#pragma warning restore 0618
+
+    public void DoStuff() { }
+}
+// this should keep the line like so
+class ClassName
+{
+    public void DoStuff() { }
+
+#pragma warning disable 0618
+    public void DoStuff() { }
+#pragma warning restore 0618
+}
+
+// this loses a line before the first #if
+public class DirectRouteFactoryContext
+{
+    private readonly string _actionName;
+
+#if !ASPNETWEBAPI
+    private readonly string _controllerName;
+#endif
+
+#if ASPNETWEBAPI
+    private readonly string _prefix;
+#else
+    private readonly string _areaPrefix;
+    private readonly string _controllerPrefix;
+#endif
+}
+
+// this also loses the new line before the #if
+using System.Text;
+using System.Threading;
+using System.Web.Http;
+
+#if NETFX_CORE
+using NameValueCollection = System.Net.Http.Formatting.HttpValueCollection;
+#endif
+
+namespace System.Net.Http.Formatting { }
 
 // this loses a new line before the comment
 
