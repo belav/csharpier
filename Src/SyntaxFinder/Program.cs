@@ -43,26 +43,26 @@ public class Program
             }
         );
 
-        // foreach (var entry in CustomWalker.Dictionary)
-        // {
-        //     Console.WriteLine(entry.Key);
-        //     foreach (var member in entry.Value.OrderBy(o => o))
-        //     {
-        //         Console.WriteLine("    " + member);
-        //     }
-        // }
-        if (CustomWalker.Matching > CustomWalker.Total)
+        foreach (var entry in CustomWalker.Dictionary)
         {
-            Console.WriteLine("Matching was > than Total, so you did something wrong.");
+            Console.WriteLine(entry.Key);
+            foreach (var member in entry.Value.OrderBy(o => o))
+            {
+                Console.WriteLine("    " + member);
+            }
         }
-
-        WriteResult("Matching", CustomWalker.Matching.ToString("n0"));
-        WriteResult("Total", CustomWalker.Total.ToString("n0"));
-        WriteResult(
-            "Percent",
-            (Convert.ToDecimal(CustomWalker.Matching) / CustomWalker.Total * 100).ToString("n")
-                + "%"
-        );
+        // if (CustomWalker.Matching > CustomWalker.Total)
+        // {
+        //     Console.WriteLine("Matching was > than Total, so you did something wrong.");
+        // }
+        //
+        // WriteResult("Matching", CustomWalker.Matching.ToString("n0"));
+        // WriteResult("Total", CustomWalker.Total.ToString("n0"));
+        // WriteResult(
+        //     "Percent",
+        //     (Convert.ToDecimal(CustomWalker.Matching) / CustomWalker.Total * 100).ToString("n")
+        //         + "%"
+        // );
     }
 
     private static void WriteResult(string label, string value)
@@ -91,34 +91,21 @@ public class CustomWalker : CSharpSyntaxWalker
         this.file = file;
     }
 
-    public override void VisitClassDeclaration(ClassDeclarationSyntax node)
+    public override void VisitCompilationUnit(CompilationUnitSyntax node)
     {
         this.VisitType(node);
-        base.VisitClassDeclaration(node);
+        base.VisitCompilationUnit(node);
     }
 
-    public override void VisitStructDeclaration(StructDeclarationSyntax node)
-    {
-        this.VisitType(node);
-        base.VisitStructDeclaration(node);
-    }
-
-    public override void VisitRecordDeclaration(RecordDeclarationSyntax node)
-    {
-        this.VisitType(node);
-        base.VisitRecordDeclaration(node);
-    }
-
-    public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
-    {
-        this.VisitType(node);
-        base.VisitInterfaceDeclaration(node);
-    }
-
-    private void VisitType(TypeDeclarationSyntax node)
+    private void VisitType(CompilationUnitSyntax node)
     {
         foreach (var member in node.Members)
         {
+            if (member is DelegateDeclarationSyntax)
+            {
+                this.WriteCode(member.Parent);
+            }
+
             Dictionary.AddOrUpdate(
                 node.GetType().Name,
                 new List<string>(),
@@ -138,7 +125,8 @@ public class CustomWalker : CSharpSyntaxWalker
     public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
     {
         if (
-            node.Parent is not InterfaceDeclarationSyntax
+            true
+            || node.ExpressionBody == null
             || (
                 node.Parent is TypeDeclarationSyntax typeDeclarationSyntax
                 && node == typeDeclarationSyntax.Members.First()
@@ -151,11 +139,11 @@ public class CustomWalker : CSharpSyntaxWalker
         }
 
         Interlocked.Increment(ref Total);
+        this.WriteCode(node.Parent);
 
         if (node.GetLeadingTrivia().Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia))
         {
             Interlocked.Increment(ref Matching);
-            this.WriteCode(node.Parent);
         }
 
         base.VisitMethodDeclaration(node);

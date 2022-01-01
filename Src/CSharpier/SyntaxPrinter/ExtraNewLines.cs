@@ -4,6 +4,11 @@ internal static class ExtraNewLines
 {
     public static Doc Print(CSharpSyntaxNode node)
     {
+        if (node.Parent is GlobalStatementSyntax)
+        {
+            return Doc.Null;
+        }
+
         var docs = new List<Doc>();
         foreach (var leadingTrivia in node.GetLeadingTrivia())
         {

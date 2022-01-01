@@ -6,7 +6,6 @@ internal static class NamespaceDeclaration
     {
         var docs = new List<Doc>
         {
-            ExtraNewLines.Print(node),
             AttributeLists.Print(node, node.AttributeLists),
             Modifiers.Print(node.Modifiers),
             Token.Print(node.NamespaceKeyword),
@@ -38,7 +37,11 @@ internal static class NamespaceDeclaration
             if (hasMembers)
             {
                 innerDocs.Add(
-                    Doc.Join(Doc.HardLine, node.Members.Select(Node.Print)),
+                    Doc.HardLine,
+                    Doc.Join(
+                        Doc.Concat(Doc.HardLine, Doc.HardLine),
+                        node.Members.Select(Node.Print)
+                    ),
                     Doc.HardLine
                 );
             }

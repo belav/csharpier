@@ -64,6 +64,10 @@ internal static class BaseMethodDeclaration
         }
 
         var docs = new List<Doc>();
+        if (node is LocalFunctionStatementSyntax)
+        {
+            docs.Add(ExtraNewLines.Print(node));
+        }
 
         if (attributeLists is { Count: > 0 })
         {

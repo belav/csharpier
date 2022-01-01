@@ -22,9 +22,7 @@ internal static class CompilationUnit
         docs.Add(AttributeLists.Print(node, node.AttributeLists));
         if (node.Members.Count > 0)
         {
-            docs.Add(
-                Doc.Join(Doc.Concat(Doc.HardLine, Doc.HardLine), node.Members.Select(Node.Print))
-            );
+            docs.AddRange(MembersWithForcedLines.Print(node, node.Members));
         }
 
         var finalTrivia = Token.PrintLeadingTriviaWithNewLines(node.EndOfFileToken.LeadingTrivia);

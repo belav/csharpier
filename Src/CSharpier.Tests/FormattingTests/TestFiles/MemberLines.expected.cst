@@ -1,8 +1,11 @@
 public class ClassRules
 {
     public void NeverLineBeforeFirstMember() { }
+
     public void AlwaysLineBetweenMethods() { }
+
     public void EvenWithLambdaBody() => "";
+
     private enum AlwaysLineBeforeEnum
     {
         One,
@@ -14,18 +17,23 @@ public class ClassRules
         One,
         Two
     }
+
     private class AlwaysLineBeforeClass { }
 
     private class NoDoubleLines { }
+
     private interface IAlwaysLineBeforeInterface { }
 
     private interface INoDoubleLines { }
+
     public ClassRules() { }
 
     public ClassRules() { }
+
     public ~ClassName() { }
 
     public ~ClassName() { }
+
     public static implicit operator ClassRules(string s)
     {
         return new Test();
@@ -35,12 +43,15 @@ public class ClassRules
     {
         return new Test();
     }
+
     public record SomeRecord1(string property);
 
     public record SomeRecord2(string property);
+
     public struct SomeStruct1 { }
 
     public struct SomeStruct2 { }
+
     static ClassRules operator +(ClassRules a, ClassRules b)
     {
         return a.Add(b);
@@ -53,39 +64,51 @@ public class ClassRules
 
     private string FieldsCanBeGroupedBecauseLinesWillBeKept;
     private string ButLinesAreNotForcedHere;
+
     // comments force a line
     private string FieldWithComment;
+
     /* comments force a line */
     private string FieldWithComment;
+
     /// <summary> comments force a line </summary> ///
     private string FieldWithComment;
+
     [AttributesForceALine]
     private string FieldWithAttribute;
 
     private string PropertiesCanBeGrouped { get; set; }
     private string BecauseTheyDontForceLines { get; set; }
+
     // comments force a line
     private string PropertyWithComment;
+
     [AttributesForceALine]
     private string PropertyWithAttribute;
-    
+
     delegate void DelegatesAreLikeFields();
     delegate void AndCanBeGrouped();
+
     // comments force a line
     private string DelegateWithComment;
+
     [AttributesForceALine]
     private string DelegateWithAttribute;
-    
+
     public void AlwaysLineBetweenMethods() { }
+
     private string FieldAfterMethodGetsLine;
 }
+
 public class LineBeforeClass { }
+
 public interface InterfaceRulesAreLikeClassesButMethodsFollowTheFieldRulesAbove
 {
     void NeverLineHere();
-    
+
     void ExistingLineHereIsKept();
     void ButNoLineIsAdded();
+
     // comments do force a line
     void MethodWithComment();
 }

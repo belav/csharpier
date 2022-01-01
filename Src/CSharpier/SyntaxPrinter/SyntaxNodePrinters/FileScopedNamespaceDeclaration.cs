@@ -4,7 +4,7 @@ internal static class FileScopedNamespaceDeclaration
 {
     public static Doc Print(FileScopedNamespaceDeclarationSyntax node)
     {
-        var docs = new List<Doc>()
+        var docs = new List<Doc>
         {
             ExtraNewLines.Print(node),
             AttributeLists.Print(node, node.AttributeLists),
@@ -12,10 +12,9 @@ internal static class FileScopedNamespaceDeclaration
             Token.Print(node.NamespaceKeyword),
             " ",
             Node.Print(node.Name),
-            Token.Print(node.SemicolonToken)
+            Token.Print(node.SemicolonToken),
+            Doc.HardLine
         };
-
-        docs.Add(Doc.HardLine);
 
         if (node.Externs.Any())
         {
@@ -29,7 +28,11 @@ internal static class FileScopedNamespaceDeclaration
 
         if (node.Members.Any())
         {
-            docs.Add(Doc.Join(Doc.HardLine, node.Members.Select(Node.Print)), Doc.HardLine);
+            docs.Add(
+                Doc.HardLine,
+                Doc.Join(Doc.Concat(Doc.HardLine, Doc.HardLine), node.Members.Select(Node.Print)),
+                Doc.HardLine
+            );
         }
 
         return Doc.Concat(docs);
