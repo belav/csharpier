@@ -33,8 +33,15 @@ internal static class NamespaceLikePrinter
             docs.Add(Doc.Join(Doc.HardLine, usings.Select(UsingDirective.Print)));
         }
 
-        if (node is CompilationUnitSyntax compilationUnitSyntax)
+        if (
+            node is CompilationUnitSyntax compilationUnitSyntax
+            && compilationUnitSyntax.AttributeLists.Any()
+        )
         {
+            if (externs.Any() || usings.Any())
+            {
+                docs.Add(Doc.HardLine, Doc.HardLine);
+            }
             docs.Add(AttributeLists.Print(node, compilationUnitSyntax.AttributeLists));
         }
 
@@ -42,7 +49,9 @@ internal static class NamespaceLikePrinter
         {
             if (
                 (usings.Any() || (!usings.Any() && externs.Any()))
-                && !members[0].GetLeadingTrivia().Any(o => o.IsDirective)
+                && !members[0]
+                    .GetLeadingTrivia()
+                    .Any(o => o.Kind() is SyntaxKind.EndIfDirectiveTrivia)
             )
             {
                 docs.Add(Doc.HardLine);

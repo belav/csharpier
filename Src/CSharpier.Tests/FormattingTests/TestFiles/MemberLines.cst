@@ -78,6 +78,15 @@ public class ClassRules
     
     public void AlwaysLineBetweenMethods() { }
     private string FieldAfterMethodGetsLine;
+
+#if EDGE_CASE_SHOULD_KEEP_LINE_ABOVE_METHOD
+    private string Field;
+#else
+    private string Field;
+#endif
+
+    public void SomeMethod() { }
+
 }
 public class LineBeforeClass { }
 public interface InterfaceRulesAreLikeClassesButMethodsFollowTheFieldRulesAbove

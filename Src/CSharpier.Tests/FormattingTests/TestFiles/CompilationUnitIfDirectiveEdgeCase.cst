@@ -1,0 +1,10 @@
+using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Reflection;
+
+#if KEEP_LINE_ABOVE
+namespace System.Web.Http.Internal
+#else
+namespace System.Web.WebPages
+#endif
+{ }

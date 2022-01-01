@@ -13,7 +13,7 @@ internal static class MembersWithForcedLines
         {
             var member = members[x];
 
-            var blankLineIsForced =
+            var blankLineIsForced = (
                 member is MethodDeclarationSyntax && node is not InterfaceDeclarationSyntax
                 || member
                     is ClassDeclarationSyntax
@@ -26,7 +26,8 @@ internal static class MembersWithForcedLines
                         or NamespaceDeclarationSyntax
                         or OperatorDeclarationSyntax
                         or RecordDeclarationSyntax
-                        or StructDeclarationSyntax;
+                        or StructDeclarationSyntax
+            );
 
             if (x == 0)
             {
@@ -41,12 +42,17 @@ internal static class MembersWithForcedLines
             {
                 addBlankLine =
                     member.AttributeLists.Any()
-                    || member
-                        .GetLeadingTrivia()
-                        .Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia || o.IsComment());
+                    || (
+                        member
+                            .GetLeadingTrivia()
+                            .Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia || o.IsComment())
+                    );
             }
 
-            if (addBlankLine)
+            if (
+                addBlankLine
+                && !member.GetLeadingTrivia().Any(o => o.Kind() is SyntaxKind.EndIfDirectiveTrivia)
+            )
             {
                 result.Add(Doc.HardLine);
             }

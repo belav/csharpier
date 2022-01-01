@@ -3,57 +3,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 // TODO these are all the edge cases left + any failing tests
 /*
 
-// this loses the new line before the namespace
-
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Reflection;
-
-#if ASPNETWEBAPI
-namespace System.Web.Http.Internal
-#else
-namespace System.Web.WebPages
-#endif
-
-// this adds new lines
-public class ClassName
-{
-    #if ASPNETWEBAPI
-            public IEnumerable<IHttpRouteConstraint> Constraints { get; private set; }
-    #else
-            public IEnumerable<IRouteConstraint> Constraints { get; private set; }
-    #endif
-
-    public void DoStuff() { }
-}
-
-// this adds new lines too
-public class ClassName
-{
-#if !ASPNETWEBAPI
-        private readonly string _controllerName;
-#endif
-
-#if ASPNETWEBAPI
-        private readonly string _prefix;
-#else
-        private readonly string _areaPrefix;
-        private readonly string _controllerPrefix;
-#endif
-}
-
-// this completely loses the break
-// Copyright (c) .NET Foundation. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
-
-using System.Diagnostics.CodeAnalysis;
-
-[assembly: SuppressMessage(
-    "Microsoft.Design",
-    "CA2210:AssembliesShouldHaveValidStrongNames",
-    Justification = "Assembly is delay-signed"
-)]
-
 // this loses a new line before the comment
 
 // Copyright (c) .NET Foundation. All rights reserved.

@@ -5,7 +5,10 @@ internal static class AttributeList
     public static Doc Print(AttributeListSyntax node)
     {
         var docs = new List<Doc>();
-        if (node.Parent is CompilationUnitSyntax)
+        if (
+            node.Parent is CompilationUnitSyntax compilationUnitSyntax
+            && compilationUnitSyntax.AttributeLists.First() != node
+        )
         {
             docs.Add(ExtraNewLines.Print(node));
         }
