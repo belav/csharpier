@@ -1,9 +1,5 @@
-using System;
 using System.Diagnostics;
 using System.IO.Abstractions;
-using System.Reflection;
-using System.Xml.Linq;
-using System.Xml.XPath;
 using CSharpier.Utilities;
 using Microsoft.Extensions.Logging;
 

@@ -1,5 +1,3 @@
-using CSharpier.Utilities;
-
 namespace CSharpier.SyntaxPrinter;
 
 internal static class Token
