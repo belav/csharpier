@@ -16,24 +16,7 @@ internal static class FileScopedNamespaceDeclaration
             Doc.HardLine
         };
 
-        if (node.Externs.Any())
-        {
-            docs.Add(Doc.Join(Doc.HardLine, node.Externs.Select(Node.Print)), Doc.HardLine);
-        }
-
-        if (node.Usings.Any())
-        {
-            docs.Add(Doc.Join(Doc.HardLine, node.Usings.Select(Node.Print)), Doc.HardLine);
-        }
-
-        if (node.Members.Any())
-        {
-            docs.Add(
-                Doc.HardLine,
-                Doc.Join(Doc.Concat(Doc.HardLine, Doc.HardLine), node.Members.Select(Node.Print)),
-                Doc.HardLine
-            );
-        }
+        NamespaceLikePrinter.Print(node, docs);
 
         return Doc.Concat(docs);
     }

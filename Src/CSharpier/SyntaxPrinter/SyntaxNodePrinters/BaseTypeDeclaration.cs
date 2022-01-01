@@ -1,6 +1,21 @@
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 // TODO what about regions and other directives
+/*
+ 
+ // the two blank lines got addes
+ 
+using System.Collections.Generic;
+using System.Globalization;
+#if ASPNETWEBAPI
+using System.Net.Http;
+
+#else
+using System.Web.Routing;
+
+#endif
+ 
+ */
 
 internal static class BaseTypeDeclaration
 {
