@@ -8,12 +8,12 @@ internal static class MembersWithForcedLines
     )
     {
         var result = new List<Doc> { Doc.HardLine };
-        var lastMemberForcedLine = false;
+        var lastMemberForcedBlankLine = false;
         for (var x = 0; x < members.Count; x++)
         {
             var member = members[x];
 
-            var lineIsForced =
+            var blankLineIsForced =
                 member is MethodDeclarationSyntax && node is not InterfaceDeclarationSyntax
                 || member
                     is ClassDeclarationSyntax
@@ -30,32 +30,30 @@ internal static class MembersWithForcedLines
 
             if (x == 0)
             {
-                lastMemberForcedLine = lineIsForced;
+                lastMemberForcedBlankLine = blankLineIsForced;
                 result.Add(Node.Print(member));
                 continue;
             }
 
-            var addLine = lineIsForced || lastMemberForcedLine;
+            var addBlankLine = blankLineIsForced || lastMemberForcedBlankLine;
 
-            if (!addLine)
+            if (!addBlankLine)
             {
-                addLine =
+                addBlankLine =
                     member.AttributeLists.Any()
                     || member
                         .GetLeadingTrivia()
                         .Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia || o.IsComment());
             }
 
-            result.Add(Doc.HardLine);
-
-            if (addLine)
+            if (addBlankLine)
             {
                 result.Add(Doc.HardLine);
             }
 
-            result.Add(Node.Print(member));
+            result.Add(Doc.HardLine, Node.Print(member));
 
-            lastMemberForcedLine = lineIsForced;
+            lastMemberForcedBlankLine = blankLineIsForced;
         }
 
         return result;

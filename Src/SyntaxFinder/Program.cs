@@ -43,7 +43,7 @@ public class Program
             }
         );
 
-        foreach (var entry in CustomWalker.Dictionary)
+        foreach (var entry in CustomWalker.MembersInType)
         {
             Console.WriteLine(entry.Key);
             foreach (var member in entry.Value.OrderBy(o => o))
@@ -51,18 +51,19 @@ public class Program
                 Console.WriteLine("    " + member);
             }
         }
-        // if (CustomWalker.Matching > CustomWalker.Total)
-        // {
-        //     Console.WriteLine("Matching was > than Total, so you did something wrong.");
-        // }
-        //
-        // WriteResult("Matching", CustomWalker.Matching.ToString("n0"));
-        // WriteResult("Total", CustomWalker.Total.ToString("n0"));
-        // WriteResult(
-        //     "Percent",
-        //     (Convert.ToDecimal(CustomWalker.Matching) / CustomWalker.Total * 100).ToString("n")
-        //         + "%"
-        // );
+
+        if (CustomWalker.Matching > CustomWalker.Total)
+        {
+            Console.WriteLine("Matching was > than Total, so you did something wrong.");
+        }
+
+        WriteResult("Matching", CustomWalker.Matching.ToString("n0"));
+        WriteResult("Total", CustomWalker.Total.ToString("n0"));
+        WriteResult(
+            "Percent",
+            (Convert.ToDecimal(CustomWalker.Matching) / CustomWalker.Total * 100).ToString("n")
+                + "%"
+        );
     }
 
     private static void WriteResult(string label, string value)
@@ -73,40 +74,30 @@ public class Program
 
 public class CustomWalker : CSharpSyntaxWalker
 {
-    public static readonly ConcurrentDictionary<string, List<string>> Dictionary = new();
+    public static readonly ConcurrentDictionary<string, List<string>> MembersInType = new();
     public static int Total;
     public static int Matching;
     private readonly string file;
     private bool wroteFile;
-    private int maxCodeWrites = 1000;
+    private readonly int maxCodeWrites = 250;
     private int codeWrites = 0;
 
-    public CustomWalker(string file) : base()
+    public CustomWalker(string file)
     {
-        Dictionary.TryAdd(nameof(ClassDeclarationSyntax), new List<string>());
-        Dictionary.TryAdd(nameof(StructDeclarationSyntax), new List<string>());
-        Dictionary.TryAdd(nameof(RecordDeclarationSyntax), new List<string>());
-        Dictionary.TryAdd(nameof(InterfaceDeclarationSyntax), new List<string>());
-
         this.file = file;
     }
 
     public override void VisitCompilationUnit(CompilationUnitSyntax node)
     {
-        this.VisitType(node);
+        this.VisitType(node, node.Members);
         base.VisitCompilationUnit(node);
     }
 
-    private void VisitType(CompilationUnitSyntax node)
+    private void VisitType(CSharpSyntaxNode node, SyntaxList<MemberDeclarationSyntax> members)
     {
-        foreach (var member in node.Members)
+        foreach (var member in members)
         {
-            if (member is DelegateDeclarationSyntax)
-            {
-                this.WriteCode(member.Parent);
-            }
-
-            Dictionary.AddOrUpdate(
+            MembersInType.AddOrUpdate(
                 node.GetType().Name,
                 new List<string>(),
                 (key, list) =>
@@ -125,13 +116,10 @@ public class CustomWalker : CSharpSyntaxWalker
     public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
     {
         if (
-            true
-            || node.ExpressionBody == null
-            || (
+            (
                 node.Parent is TypeDeclarationSyntax typeDeclarationSyntax
                 && node == typeDeclarationSyntax.Members.First()
-            )
-            || node.GetLeadingTrivia().Any(o => o.IsComment() || node.AttributeLists.Any())
+            ) || node.GetLeadingTrivia().Any(o => o.IsComment() || node.AttributeLists.Any())
         )
         {
             base.VisitMethodDeclaration(node);
