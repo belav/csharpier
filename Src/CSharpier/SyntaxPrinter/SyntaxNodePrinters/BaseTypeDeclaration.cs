@@ -3,6 +3,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 // TODO these are all the edge cases left + any failing tests
 /*
 
+
  */
 
 internal static class BaseTypeDeclaration

@@ -24,6 +24,7 @@ internal static class NamespaceLikePrinter
         {
             docs.Add(Doc.Join(Doc.HardLine, externs.Select(ExternAliasDirective.Print)));
         }
+
         if (usings.Count > 0)
         {
             if (externs.Any())
@@ -45,21 +46,22 @@ internal static class NamespaceLikePrinter
             docs.Add(AttributeLists.Print(node, compilationUnitSyntax.AttributeLists));
         }
 
-        if (members.Count > 0)
+        if (members.Count <= 0)
         {
-            if (usings.Any() || (!usings.Any() && externs.Any()))
-            {
-                if (
-                    members[0].GetLeadingTrivia().Any(o => o.Kind() is SyntaxKind.IfDirectiveTrivia)
-                    || !members[0]
-                        .GetLeadingTrivia()
-                        .Any(o => o.Kind() is SyntaxKind.EndIfDirectiveTrivia)
-                )
-                {
-                    docs.Add(Doc.HardLine);
-                }
-            }
-            docs.AddRange(MembersWithForcedLines.Print(node, members));
+            return;
         }
+
+        if (usings.Any() || (!usings.Any() && externs.Any()))
+        {
+            if (members[0].GetLeadingTrivia().Any(o => o.IsDirective))
+            {
+                docs.Add(ExtraNewLines.Print(members[0]));
+            }
+            else
+            {
+                docs.Add(Doc.HardLine);
+            }
+        }
+        docs.AddRange(MembersWithForcedLines.Print(node, members));
     }
 }
