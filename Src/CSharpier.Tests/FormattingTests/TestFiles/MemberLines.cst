@@ -87,6 +87,11 @@ public class ClassRules
 
     public void SomeMethod() { }
 
+#pragma warning disable 0618
+    public void KeepLineAboveAndBelow() { }
+#pragma warning restore 0618    
+
+    public void SomeMethod() { }
 }
 public class LineBeforeClass { }
 public interface InterfaceRulesAreLikeClassesButMethodsFollowTheFieldRulesAbove
@@ -97,4 +102,24 @@ public interface InterfaceRulesAreLikeClassesButMethodsFollowTheFieldRulesAbove
     void ButNoLineIsAdded();
     // comments do force a line
     void MethodWithComment();
+}
+
+abstract class AbstractClass
+{
+    abstract void NoLineHere() { }
+    
+    abstract void KeepTheLineHere();
+    abstract void DoNotForceTheLineHere();
+    void ButForceLineForRealMethod() { }
+}
+
+public class ClassName
+{
+    private string someField1;
+
+#if KEEP_LINE_ABOVE
+    private string someField2;
+#endif
+
+    private string someField2;
 }

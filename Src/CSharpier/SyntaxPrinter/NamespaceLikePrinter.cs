@@ -47,14 +47,17 @@ internal static class NamespaceLikePrinter
 
         if (members.Count > 0)
         {
-            if (
-                (usings.Any() || (!usings.Any() && externs.Any()))
-                && !members[0]
-                    .GetLeadingTrivia()
-                    .Any(o => o.Kind() is SyntaxKind.EndIfDirectiveTrivia)
-            )
+            if (usings.Any() || (!usings.Any() && externs.Any()))
             {
-                docs.Add(Doc.HardLine);
+                if (
+                    members[0].GetLeadingTrivia().Any(o => o.Kind() is SyntaxKind.IfDirectiveTrivia)
+                    || !members[0]
+                        .GetLeadingTrivia()
+                        .Any(o => o.Kind() is SyntaxKind.EndIfDirectiveTrivia)
+                )
+                {
+                    docs.Add(Doc.HardLine);
+                }
             }
             docs.AddRange(MembersWithForcedLines.Print(node, members));
         }
