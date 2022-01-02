@@ -123,3 +123,14 @@ public class ClassName
 
     private string someField2;
 }
+
+public class ClassName
+{
+#region RegionWithSpaceBeforeAndAfterMethod
+
+    void SomeMethod() { }
+
+#endregion
+
+    void SomeMethod() { }
+}

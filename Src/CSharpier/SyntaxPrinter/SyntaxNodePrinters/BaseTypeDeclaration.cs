@@ -2,13 +2,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 // TODO these are all the edge cases left + any failing tests
 /*
-// adds an extra line
-#if DETECT_LEAKS
+// adds an extra lines
 using System.Runtime.CompilerServices;
-
+#if STUFF
+using System.Runtime.CompilerServices;
 #endif
 
-namespace Microsoft.AspNetCore.Razor.Language.Syntax;
+[assembly: Attribute]
+
  */
 
 internal static class BaseTypeDeclaration

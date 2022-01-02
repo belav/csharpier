@@ -68,6 +68,7 @@ internal static class MembersWithForcedLines
                                 is SyntaxKind.PragmaWarningDirectiveTrivia
                                     or SyntaxKind.PragmaChecksumDirectiveTrivia
                                     or SyntaxKind.IfDirectiveTrivia
+                                    or SyntaxKind.EndRegionDirectiveTrivia
                     )
             )
             {
