@@ -221,13 +221,18 @@ internal static class InvocationExpression
             return Doc.Null;
         }
 
+        var shouldIndent = !(
+            node.Parent is ConditionalExpressionSyntax conditionalExpressionSyntax
+            && conditionalExpressionSyntax.Condition != node
+        );
+
         return Doc.IndentIf(
-            node.Parent is not ConditionalExpressionSyntax,
+            shouldIndent,
             Doc.Group(
                 Doc.HardLine,
                 Doc.Join(
                     Doc.HardLine,
-                    groups.Select(o => Doc.Group(o.Select(o => o.Doc).ToArray()))
+                    groups.Select(o => Doc.Group(o.Select(p => p.Doc).ToArray()))
                 )
             )
         );

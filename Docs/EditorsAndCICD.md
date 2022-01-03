@@ -1,19 +1,11 @@
 ## Editor Integration
 ### Visual Studio
-Check out [WillFuqua.RunOnSave](https://marketplace.visualstudio.com/items?itemName=WillFuqua.RunOnSave)
+Use the [official 2022 extension](https://marketplace.visualstudio.com/items?itemName=csharpier.CSharpier)  
+Use the [official 2019 extension](https://marketplace.visualstudio.com/items?itemName=csharpier.CSharpier2019)
 ### Visual Studio Code
 Use the [official extension](https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode)
-
-
 ### Rider
-1. Open Settings
-2. Tools - File Watchers
-3. Add New File Watcher
-   * File Type: C# File
-   * Program: dotnet
-   * Arguments: csharpier $FilePath$
-   * Output paths to refresh: $FilePath$
-   * Advanced Options - Auto-save edited files...: This should probably be off otherwise if you pause while coding csharpier will reformat the file as is.
+Use the [official plugin](https://plugins.jetbrains.com/plugin/18243-csharpier)
 
 ## Continuous Integration
 Normally when using a code formatter like CSharpier, you'll want to ensure that all code that makes it to your main branch has been formatted. This can be accomplished by doing the following

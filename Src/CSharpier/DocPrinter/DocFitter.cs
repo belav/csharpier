@@ -1,5 +1,4 @@
 using System.Text;
-using CSharpier.Utilities;
 
 namespace CSharpier.DocPrinter;
 

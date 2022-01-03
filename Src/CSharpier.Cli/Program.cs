@@ -1,5 +1,6 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Text;
 using Microsoft.Extensions.Logging;
@@ -27,6 +28,7 @@ public class Program
         CancellationToken cancellationToken
     )
     {
+        Log("Starting");
         var console = new SystemConsole();
         var logger = new ConsoleLogger(console);
 
@@ -80,6 +82,23 @@ public class Program
         );
     }
 
+    // this is used for troubleshooting new IDE plugins and can eventually go away.
+    [Conditional("DEBUG")]
+    private static void Log(string message)
+    {
+        try
+        {
+            File.AppendAllText(
+                @"C:\projects\csharpier\Src\CSharpier.Cli\bin\Debug\net6.0\log.txt",
+                message + "\n"
+            );
+        }
+        catch (Exception)
+        {
+            // we don't care if this fails
+        }
+    }
+
     private static async Task<int> PipeMultipleFiles(
         SystemConsole console,
         ILogger logger,
@@ -106,8 +125,10 @@ public class Program
                     return exitCode;
                 }
                 var character = Convert.ToChar(value);
+                Log("Got " + character);
                 if (character == '\u0003')
                 {
+                    Log("Got EOF");
                     break;
                 }
 

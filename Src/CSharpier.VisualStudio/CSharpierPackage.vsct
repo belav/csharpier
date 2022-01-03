@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+
+  <Extern href="vsshlids.h"/>
+
+  <Commands package="guidCSharpierPackage">
+    <Groups>
+      <Group guid="guidCSharpierPackageCmdSet" id="EditorContextMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidCSharpierPackageCmdSet" id="ReformatWithCSharpier" priority="0x0100" type="Button">
+        <Parent guid="guidCSharpierPackageCmdSet" id="EditorContextMenuGroup" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Reformat With CSharpier</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+
+  </Commands>
+
+  <Symbols>
+
+    <GuidSymbol name="guidCSharpierPackage" value="{d348ba73-11dc-46be-8660-6d9819fc2c52}" />
+    
+    <GuidSymbol name="guidCSharpierPackageCmdSet" value="{3675aa7e-5cd1-4ea2-a077-17e6eefdc3b1}">
+      <IDSymbol name="EditorContextMenuGroup" value="0x1020" />
+      <IDSymbol name="ReformatWithCSharpier" value="0x0100" />
+      <IDSymbol name="EnableDisableRunOnSave" value="0x0200" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>

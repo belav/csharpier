@@ -1,5 +1,3 @@
-using CSharpier.Utilities;
-
 namespace CSharpier;
 
 internal static class GeneratedCodeUtilities
