@@ -130,6 +130,11 @@ internal class Indenter
             }
         }
 
-        return new Indent { Length = length, Value = value.ToString(), TypesForTabs = types };
+        return new Indent
+        {
+            Length = length,
+            Value = value.ToString(),
+            TypesForTabs = types
+        };
     }
 }

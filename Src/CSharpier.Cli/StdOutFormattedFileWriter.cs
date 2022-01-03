@@ -8,6 +8,7 @@ internal class StdOutFormattedFileWriter : IFormattedFileWriter
     {
         this.console = console;
     }
+
     public void WriteResult(CodeFormatterResult result, FileToFormatInfo fileToFormatInfo)
     {
         this.console.Write(result.Code);
