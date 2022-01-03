@@ -6,7 +6,6 @@ internal static class DelegateDeclaration
     {
         var docs = new List<Doc>
         {
-            ExtraNewLines.Print(node),
             AttributeLists.Print(node, node.AttributeLists),
             Modifiers.Print(node.Modifiers),
             Token.PrintWithSuffix(node.DelegateKeyword, " "),

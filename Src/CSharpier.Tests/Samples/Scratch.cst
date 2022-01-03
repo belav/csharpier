@@ -1,15 +1,7 @@
-    public class FunctionParameter : EntityBase
-    {
-        public Function Function
-        
-        [Required]
-        [UniqueIndex(AdditionalColumns = nameof(Name))]
-        public Guid FunctionId { get; set; }
-        
-        public string Name { get; set; }
-        
-        public override string GetDisplayName()
-        {
-            return this.Name;
-        
-    }
+using System.Web.Http;
+
+#if KEEP_LINE_ABOVE
+using System.Web.Http;
+#endif
+
+namespace Namespace { }

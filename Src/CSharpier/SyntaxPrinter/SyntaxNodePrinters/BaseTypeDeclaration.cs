@@ -21,8 +21,10 @@ internal static class BaseTypeDeclaration
             if (typeDeclarationSyntax.Members.Count > 0)
             {
                 members = Doc.Indent(
-                    Doc.HardLine,
-                    Doc.Join(Doc.HardLine, typeDeclarationSyntax.Members.Select(Node.Print))
+                    MembersWithForcedLines.Print(
+                        typeDeclarationSyntax,
+                        typeDeclarationSyntax.Members
+                    )
                 );
             }
             if (node is ClassDeclarationSyntax classDeclarationSyntax)
@@ -62,7 +64,6 @@ internal static class BaseTypeDeclaration
         }
 
         var docs = new List<Doc>();
-        docs.AddIfNotNull(ExtraNewLines.Print(node));
         if (node.AttributeLists.Any())
         {
             docs.Add(AttributeLists.Print(node, node.AttributeLists));

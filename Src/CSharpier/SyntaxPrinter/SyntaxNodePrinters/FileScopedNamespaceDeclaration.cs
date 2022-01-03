@@ -4,33 +4,18 @@ internal static class FileScopedNamespaceDeclaration
 {
     public static Doc Print(FileScopedNamespaceDeclarationSyntax node)
     {
-        var docs = new List<Doc>()
+        var docs = new List<Doc>
         {
-            ExtraNewLines.Print(node),
             AttributeLists.Print(node, node.AttributeLists),
             Modifiers.Print(node.Modifiers),
             Token.Print(node.NamespaceKeyword),
             " ",
             Node.Print(node.Name),
-            Token.Print(node.SemicolonToken)
+            Token.Print(node.SemicolonToken),
+            Doc.HardLine
         };
 
-        docs.Add(Doc.HardLine);
-
-        if (node.Externs.Any())
-        {
-            docs.Add(Doc.Join(Doc.HardLine, node.Externs.Select(Node.Print)), Doc.HardLine);
-        }
-
-        if (node.Usings.Any())
-        {
-            docs.Add(Doc.Join(Doc.HardLine, node.Usings.Select(Node.Print)), Doc.HardLine);
-        }
-
-        if (node.Members.Any())
-        {
-            docs.Add(Doc.Join(Doc.HardLine, node.Members.Select(Node.Print)), Doc.HardLine);
-        }
+        NamespaceLikePrinter.Print(node, docs);
 
         return Doc.Concat(docs);
     }
