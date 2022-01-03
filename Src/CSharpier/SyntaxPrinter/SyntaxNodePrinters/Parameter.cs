@@ -1,5 +1,3 @@
-using CSharpier.Utilities;
-
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class Parameter

@@ -24,6 +24,7 @@ internal static class ConditionalExpression
                   )
                 : Node.Print(node.Condition),
             node.Parent is ConditionalExpressionSyntax or ArgumentSyntax or ReturnStatementSyntax
+            || node.Condition is InvocationExpressionSyntax
                 ? Doc.Align(2, innerContents)
                 : Doc.Indent(innerContents)
         };
