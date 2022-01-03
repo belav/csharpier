@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -41,6 +43,15 @@ public class Program
             }
         );
 
+        foreach (var entry in CustomWalker.MembersInType)
+        {
+            Console.WriteLine(entry.Key);
+            foreach (var member in entry.Value.OrderBy(o => o))
+            {
+                Console.WriteLine("    " + member);
+            }
+        }
+
         if (CustomWalker.Matching > CustomWalker.Total)
         {
             Console.WriteLine("Matching was > than Total, so you did something wrong.");
@@ -63,29 +74,64 @@ public class Program
 
 public class CustomWalker : CSharpSyntaxWalker
 {
+    public static readonly ConcurrentDictionary<string, List<string>> MembersInType = new();
     public static int Total;
     public static int Matching;
     private readonly string file;
     private bool wroteFile;
+    private readonly int maxCodeWrites = 250;
+    private int codeWrites = 0;
 
-    public CustomWalker(string file) : base()
+    public CustomWalker(string file)
     {
         this.file = file;
     }
 
+    public override void VisitCompilationUnit(CompilationUnitSyntax node)
+    {
+        this.VisitType(node, node.Members);
+        base.VisitCompilationUnit(node);
+    }
+
+    private void VisitType(CSharpSyntaxNode node, SyntaxList<MemberDeclarationSyntax> members)
+    {
+        foreach (var member in members)
+        {
+            MembersInType.AddOrUpdate(
+                node.GetType().Name,
+                new List<string>(),
+                (key, list) =>
+                {
+                    if (!list.Contains(member.GetType().Name))
+                    {
+                        list.Add(member.GetType().Name);
+                    }
+
+                    return list;
+                }
+            );
+        }
+    }
+
     public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
     {
-        if (node.ConstraintClauses.Any())
+        if (
+            (
+                node.Parent is TypeDeclarationSyntax typeDeclarationSyntax
+                && node == typeDeclarationSyntax.Members.First()
+            ) || node.GetLeadingTrivia().Any(o => o.IsComment() || node.AttributeLists.Any())
+        )
         {
-            Interlocked.Increment(ref Total);
+            base.VisitMethodDeclaration(node);
+            return;
+        }
 
-            var trivia = node.ParameterList.CloseParenToken.TrailingTrivia;
-            if (trivia.Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia))
-            {
-                Interlocked.Increment(ref Matching);
-            }
+        Interlocked.Increment(ref Total);
+        this.WriteCode(node.Parent!);
 
-            this.WriteCode(node);
+        if (node.GetLeadingTrivia().Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia))
+        {
+            Interlocked.Increment(ref Matching);
         }
 
         base.VisitMethodDeclaration(node);
@@ -93,7 +139,11 @@ public class CustomWalker : CSharpSyntaxWalker
 
     private void WriteCode(SyntaxNode syntaxNode)
     {
-        Console.WriteLine(syntaxNode.SyntaxTree.GetText().ToString(syntaxNode.Span));
+        if (this.codeWrites < this.maxCodeWrites)
+        {
+            Interlocked.Increment(ref this.codeWrites);
+            Console.WriteLine(syntaxNode.SyntaxTree.GetText().ToString(syntaxNode.Span));
+        }
     }
 
     private void WriteFilePath()
@@ -109,6 +159,18 @@ public class CustomWalker : CSharpSyntaxWalker
     {
         var lineSpan = syntaxNode.SyntaxTree.GetLineSpan(syntaxNode.Span);
         return lineSpan.StartLinePosition.Line != lineSpan.EndLinePosition.Line;
+    }
+}
+
+public static class SyntaxTriviaExtensions
+{
+    public static bool IsComment(this SyntaxTrivia syntaxTrivia)
+    {
+        return syntaxTrivia.Kind()
+            is SyntaxKind.SingleLineCommentTrivia
+                or SyntaxKind.MultiLineCommentTrivia
+                or SyntaxKind.SingleLineDocumentationCommentTrivia
+                or SyntaxKind.MultiLineDocumentationCommentTrivia;
     }
 }
 

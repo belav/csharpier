@@ -6,7 +6,6 @@ internal static class NamespaceDeclaration
     {
         var docs = new List<Doc>
         {
-            ExtraNewLines.Print(node),
             AttributeLists.Print(node, node.AttributeLists),
             Modifiers.Print(node.Modifiers),
             Token.Print(node.NamespaceKeyword),
@@ -21,29 +20,7 @@ internal static class NamespaceDeclaration
         if (hasMembers || hasUsing || hasExterns)
         {
             innerDocs.Add(Doc.HardLine);
-            if (hasExterns)
-            {
-                innerDocs.Add(
-                    Doc.Join(Doc.HardLine, node.Externs.Select(ExternAliasDirective.Print)),
-                    Doc.HardLine
-                );
-            }
-            if (hasUsing)
-            {
-                innerDocs.Add(
-                    Doc.Join(Doc.HardLine, node.Usings.Select(UsingDirective.Print)),
-                    Doc.HardLine
-                );
-            }
-            if (hasMembers)
-            {
-                innerDocs.Add(
-                    Doc.Join(Doc.HardLine, node.Members.Select(Node.Print)),
-                    Doc.HardLine
-                );
-            }
-
-            innerDocs.RemoveAt(innerDocs.Count - 1);
+            NamespaceLikePrinter.Print(node, innerDocs);
         }
         else
         {

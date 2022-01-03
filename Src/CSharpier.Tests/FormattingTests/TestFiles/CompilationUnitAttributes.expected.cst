@@ -1,0 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
+
+[assembly: ForceLineAbove]
+[assembly: ButNotHere]
+
+[assembly: ButKeepThisOne]
