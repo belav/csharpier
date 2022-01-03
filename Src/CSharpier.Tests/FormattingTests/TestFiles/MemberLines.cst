@@ -72,9 +72,9 @@ public class ClassRules
     delegate void DelegatesAreLikeFields();
     delegate void AndCanBeGrouped();
     // comments force a line
-    private string DelegateWithComment;
+    delegate void DelegateWithComment();
     [AttributesForceALine]
-    private string DelegateWithAttribute;
+    delegate void DelegateWithAttribute();
     
     public void AlwaysLineBetweenMethods() { }
     private string FieldAfterMethodGetsLine;

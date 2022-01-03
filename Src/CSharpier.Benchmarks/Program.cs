@@ -369,8 +369,8 @@ public class CommandLineFormatter
 
             if (!this.CommandLineOptions.Check && !this.CommandLineOptions.SkipWrite)
             {
-// purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
-this.FileSystem.File.WriteAllText(file, result.Code, fileReaderResult.Encoding);
+                // purposely avoid async here, that way the file completely writes if the process gets cancelled while running.
+                this.FileSystem.File.WriteAllText(file, result.Code, fileReaderResult.Encoding);
             }
         }
 

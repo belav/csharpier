@@ -127,7 +127,7 @@ public class CustomWalker : CSharpSyntaxWalker
         }
 
         Interlocked.Increment(ref Total);
-        this.WriteCode(node.Parent);
+        this.WriteCode(node.Parent!);
 
         if (node.GetLeadingTrivia().Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia))
         {

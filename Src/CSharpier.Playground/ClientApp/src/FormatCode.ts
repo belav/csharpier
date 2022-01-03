@@ -3,7 +3,7 @@ let marks: any[] = [];
 let editor: any = undefined;
 
 export const formatCode = async (code: string) => {
-    const doStuff = async () => {
+    const makeRequest = async () => {
         const response = await fetch("/Format", {
             method: "POST",
             body: JSON.stringify(code),
@@ -35,13 +35,15 @@ export const formatCode = async (code: string) => {
         }
     }
     
-    try {
-        return doStuff();
+    for (let x = 0; x < 5; x++) {
+        try {
+            return makeRequest();
+        }
+        catch {
+            await sleep(500);
+        }
     }
-    catch {
-        await sleep(500);
-        return doStuff();
-    }
+    return makeRequest();
 };
 
 function sleep (milliseconds: number) {
