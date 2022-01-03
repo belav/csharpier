@@ -1,10 +1,12 @@
 name: Deploy Playground
-on: [push]
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Cloning repo
         uses: actions/checkout@v2
