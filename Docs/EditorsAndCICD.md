@@ -1,6 +1,7 @@
 ## Editor Integration
 ### Visual Studio
-Check out [WillFuqua.RunOnSave](https://marketplace.visualstudio.com/items?itemName=WillFuqua.RunOnSave)
+Use the [official 2022 extension](https://marketplace.visualstudio.com/items?itemName=csharpier.CSharpier)  
+Use the [official 2019 extension](https://marketplace.visualstudio.com/items?itemName=csharpier.CSharpier2019)
 ### Visual Studio Code
 Use the [official extension](https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode)
 ### Rider
