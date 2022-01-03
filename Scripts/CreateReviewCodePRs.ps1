@@ -9,14 +9,14 @@ param (
 
 # aspnetcore
 # AspNetWebStack
-# AutoMapper          
-# command-line-api    
-# Core                
+# AutoMapper
+# command-line-api
+# Core
 # efcore
-# format              
-# insite-commerce     
-# moq4                
-# Newtonsoft.Json     
+# format
+# insite-commerce
+# moq4
+# Newtonsoft.Json
 # roslyn
 # runtime
 

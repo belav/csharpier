@@ -1,3 +1,25 @@
+# 0.13.0
+
+[diff](https://github.com/belav/csharpier/compare/0.12.0...0.13.0)
+
+- Incorrect indentation in Method chain inside Initializer [#529](https://github.com/belav/csharpier/issues/529)
+- Allow empty lines before comments in enums [#524](https://github.com/belav/csharpier/issues/524)
+- For with empty statement should have space. [#523](https://github.com/belav/csharpier/issues/523)
+- Empty lines are not respected with break and continue [#520](https://github.com/belav/csharpier/issues/520)
+- Extra Whitespace in empty anonymous initializer [#519](https://github.com/belav/csharpier/issues/519)
+- Class that ends with comment does not retain extra line before comment [#513](https://github.com/belav/csharpier/issues/513)
+- Join Clause with Type losing Type [#508](https://github.com/belav/csharpier/issues/508)
+- Give cli bad path, you get an exception [#506](https://github.com/belav/csharpier/issues/506)
+- Double blank lines appearing in top level statements [#501](https://github.com/belav/csharpier/issues/501)
+- VisualStudio Extension [#499](https://github.com/belav/csharpier/issues/499)
+- Rider Plugin [#498](https://github.com/belav/csharpier/issues/498)
+- CSharpier.MSBuild may have mismatched version with CLI [#490](https://github.com/belav/csharpier/issues/490)
+- Break object initializers if there are 3 or more properties [#446](https://github.com/belav/csharpier/issues/446)
+- Force lines before and after some members. [#285](https://github.com/belav/csharpier/issues/285)
+- Formatting may conflict with StyleCopAnalayzers [#13](https://github.com/belav/csharpier/issues/13)
+
+# 0.12.0
+
 [diff](https://github.com/belav/csharpier/compare/0.11.1...0.12.0)
 
 ### Breaking Changes
