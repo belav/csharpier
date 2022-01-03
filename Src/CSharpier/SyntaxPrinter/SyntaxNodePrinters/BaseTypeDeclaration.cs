@@ -1,17 +1,5 @@
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
-// TODO these are all the edge cases left + any failing tests
-/*
-// adds an extra lines
-using System.Runtime.CompilerServices;
-#if STUFF
-using System.Runtime.CompilerServices;
-#endif
-
-[assembly: Attribute]
-
- */
-
 internal static class BaseTypeDeclaration
 {
     public static Doc Print(BaseTypeDeclarationSyntax node)

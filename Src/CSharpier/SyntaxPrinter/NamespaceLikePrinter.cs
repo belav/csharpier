@@ -51,10 +51,13 @@ internal static class NamespaceLikePrinter
                 }
                 else
                 {
-                    docs.Add(Doc.HardLine, Doc.HardLine);
+                    docs.Add(Doc.HardLine);
                 }
             }
-            docs.Add(AttributeLists.Print(node, compilationUnitSyntax.AttributeLists));
+            docs.Add(
+                Doc.HardLine,
+                AttributeLists.Print(node, compilationUnitSyntax.AttributeLists)
+            );
         }
 
         if (members.Count <= 0)
