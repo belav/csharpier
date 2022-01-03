@@ -1,5 +1,3 @@
-using CSharpier.Utilities;
-
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 // this is loosely based on prettier/src/language-js/print/binaryish.js
