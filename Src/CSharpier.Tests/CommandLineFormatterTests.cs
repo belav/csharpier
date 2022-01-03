@@ -25,7 +25,7 @@ public class CommandLineFormatterTests
         var context = new TestContext();
         context.WhenAFileExists("Invalid.cs", "asdfasfasdf");
 
-        var result = context.Format();
+        var result = this.Format(context);
 
         result.ErrorLines
             .First()
@@ -39,7 +39,7 @@ public class CommandLineFormatterTests
         var context = new TestContext();
         context.WhenAFileExists("Directory/Invalid.cs", "asdfasfasdf");
 
-        var result = context.Format();
+        var result = this.Format(context);
 
         result.ErrorLines
             .First()
@@ -53,7 +53,7 @@ public class CommandLineFormatterTests
         var context = new TestContext();
         context.WhenAFileExists("Unsupported.js", "asdfasfasdf");
 
-        var result = context.Format(directoryOrFilePaths: "Unsupported.js");
+        var result = this.Format(context, directoryOrFilePaths: "Unsupported.js");
 
         result.ErrorLines
             .First()
@@ -68,7 +68,7 @@ public class CommandLineFormatterTests
         const string unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
-        context.Format();
+        this.Format(context);
 
         context.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
     }
@@ -93,7 +93,7 @@ public class CommandLineFormatterTests
 "
         );
 
-        var result = context.Format();
+        var result = this.Format(context);
 
         if (shouldPass)
         {
@@ -128,7 +128,7 @@ public class CommandLineFormatterTests
 "
         );
 
-        var result = context.Format();
+        var result = this.Format(context);
 
         result.ExitCode.Should().Be(1);
         result.ErrorLines
@@ -154,7 +154,7 @@ public class CommandLineFormatterTests
 "
         );
 
-        var result = context.Format();
+        var result = this.Format(context);
 
         result.ExitCode.Should().Be(0);
         result.ErrorLines.Should().BeEmpty();
@@ -167,7 +167,7 @@ public class CommandLineFormatterTests
         const string unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
-        context.Format(directoryOrFilePaths: "Unformatted.cs");
+        this.Format(context, directoryOrFilePaths: "Unformatted.cs");
 
         context.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
     }
@@ -179,7 +179,7 @@ public class CommandLineFormatterTests
         const string unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
-        context.Format(skipWrite: true);
+        this.Format(context, skipWrite: true);
 
         context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
     }
@@ -191,7 +191,7 @@ public class CommandLineFormatterTests
         const string unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
-        var result = context.Format(check: true);
+        var result = this.Format(context, check: true);
 
         result.ExitCode.Should().Be(1);
         context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
@@ -204,7 +204,7 @@ public class CommandLineFormatterTests
         var context = new TestContext();
         const string formattedFilePath = "Formatted.cs";
         context.WhenAFileExists(formattedFilePath, FormattedClassContent);
-        var result = context.Format(check: true);
+        var result = this.Format(context, check: true);
 
         result.ExitCode.Should().Be(0);
     }
@@ -220,7 +220,7 @@ public class CommandLineFormatterTests
         var unformattedFilePath = fileName;
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
-        var result = context.Format();
+        var result = this.Format(context);
 
         result.Lines.Should().Contain("Total files: 0 ");
     }
@@ -242,7 +242,7 @@ public class CommandLineFormatterTests
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
         context.WhenAFileExists(".csharpierignore", ignoreContents);
 
-        var result = context.Format();
+        var result = this.Format(context);
 
         result.Lines
             .FirstOrDefault(o => o.StartsWith("Total files"))
@@ -263,7 +263,8 @@ public class CommandLineFormatterTests
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
         context.WhenAFileExists(".csharpierignore", ignoreContents);
 
-        var result = context.Format(
+        var result = this.Format(
+            context,
             directoryOrFilePaths: Path.Combine(context.GetRootPath(), baseDirectory)
         );
 
@@ -283,7 +284,8 @@ public class CommandLineFormatterTests
         context.WhenAFileExists(unformattedFilePath2, UnformattedClassContent);
         context.WhenAFileExists(".csharpierignore", "Subfolder/**/*.cs");
 
-        var result = context.Format(
+        var result = this.Format(
+            context,
             directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
         );
 
@@ -304,7 +306,8 @@ public class CommandLineFormatterTests
         context.WhenAFileExists("SubFolder/1/.csharpierignore", "File1.cs");
         context.WhenAFileExists("SubFolder/2/.csharpierignore", "File2.cs");
 
-        var result = context.Format(
+        var result = this.Format(
+            context,
             directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
         );
 
@@ -322,7 +325,7 @@ public class CommandLineFormatterTests
         context.WhenAFileExists(unformattedFilePath1, UnformattedClassContent);
         context.WhenAFileExists("SubFolder/1/.csharpierignore", "File1.cs");
 
-        var result = context.Format(directoryOrFilePaths: unformattedFilePath1);
+        var result = this.Format(context, directoryOrFilePaths: unformattedFilePath1);
 
         result.Lines
             .FirstOrDefault(o => o.StartsWith("Total files"))
@@ -337,7 +340,7 @@ public class CommandLineFormatterTests
         context.WhenAFileExists("Test.cs", UnformattedClassContent);
         var path = context.WhenAFileExists(".csharpierignore", @"\Src\Uploads\*.cs");
 
-        var result = context.Format();
+        var result = this.Format(context);
 
         result.ExitCode.Should().Be(1);
         result.ErrorLines
@@ -356,7 +359,7 @@ public class CommandLineFormatterTests
         var context = new TestContext();
         context.WhenAFileExists("file1.cs", UnformattedClassContent);
 
-        var result = context.Format(writeStdout: true);
+        var result = this.Format(context, writeStdout: true);
 
         result.Lines.Should().ContainSingle();
         result.Lines.First().Should().Be(FormattedClassContent);
@@ -366,7 +369,7 @@ public class CommandLineFormatterTests
     public void Should_Format_StandardInput_When_Provided()
     {
         var context = new TestContext();
-        var result = context.Format(standardInFileContents: UnformattedClassContent);
+        var result = this.Format(context, standardInFileContents: UnformattedClassContent);
 
         result.Lines.Should().ContainSingle();
         result.Lines.First().Should().Be(FormattedClassContent);
@@ -381,7 +384,7 @@ public class CommandLineFormatterTests
             "public class ClassName\n{\npublic string Value = @\"EndThisLineWith\r\nEndThisLineWith\n\";\n}"
         );
 
-        var result = context.Format();
+        var result = this.Format(context);
 
         result.ExitCode.Should().Be(0);
     }
@@ -397,7 +400,7 @@ public class CommandLineFormatterTests
 ";
         context.WhenAFileExists("Invalid.cs", contents);
 
-        var result = context.Format();
+        var result = this.Format(context);
 
         context.GetFileContent("Invalid.cs").Should().Be(contents);
         result.ErrorLines
@@ -426,7 +429,7 @@ public class CommandLineFormatterTests
 "
         );
 
-        context.Format();
+        this.Format(context);
 
         var result = context.GetFileContent("file1.cs");
 
@@ -456,7 +459,7 @@ public class CommandLineFormatterTests
         var configPath = context.WhenAFileExists(".csharpierrc", "");
         context.WhenAFileExists("file1.cs", "public class ClassName { }");
 
-        var result = context.Format();
+        var result = this.Format(context);
 
         result.Lines
             .First()
@@ -465,70 +468,72 @@ public class CommandLineFormatterTests
             .Be($"Warning The configuration file at {configPath} was empty.");
     }
 
+    private FormatResult Format(
+        TestContext context,
+        bool skipWrite = false,
+        bool check = false,
+        bool writeStdout = false,
+        string standardInFileContents = null,
+        params string[] directoryOrFilePaths
+    )
+    {
+        if (directoryOrFilePaths.Length == 0)
+        {
+            directoryOrFilePaths = new[] { context.GetRootPath() };
+        }
+        else
+        {
+            directoryOrFilePaths = directoryOrFilePaths
+                .Select(o => context.FileSystem.Path.Combine(context.GetRootPath(), o))
+                .ToArray();
+        }
+
+        var fakeConsole = new TestConsole();
+        var testLogger = new ConsoleLogger(fakeConsole);
+        var exitCode =
+            CommandLineFormatter.Format(
+                new CommandLineOptions
+                {
+                    DirectoryOrFilePaths = directoryOrFilePaths,
+                    SkipWrite = skipWrite,
+                    Check = check,
+                    WriteStdout = writeStdout || standardInFileContents != null,
+                    StandardInFileContents = standardInFileContents,
+                },
+                context.FileSystem,
+                fakeConsole,
+                testLogger,
+                CancellationToken.None
+            ).Result;
+
+        return new FormatResult(exitCode, fakeConsole.GetLines(), fakeConsole.GetErrorLines());
+    }
+
     private class TestContext
     {
-        private MockFileSystem fileSystem = new();
+        public readonly MockFileSystem FileSystem = new();
+
+        public TestContext()
+        {
+            this.FileSystem.AddDirectory(this.GetRootPath());
+        }
 
         public string WhenAFileExists(string path, string contents)
         {
-            path = this.fileSystem.Path.Combine(GetRootPath(), path).Replace('\\', '/');
-            this.fileSystem.AddFile(path, new MockFileData(contents));
+            path = this.FileSystem.Path.Combine(this.GetRootPath(), path).Replace('\\', '/');
+            this.FileSystem.AddFile(path, new MockFileData(contents));
             return path;
         }
 
         public string GetRootPath()
         {
-            var result = OperatingSystem.IsWindows() ? @"c:\test" : "/Test";
-            this.fileSystem.AddDirectory(result);
-            return result;
+            return OperatingSystem.IsWindows() ? @"c:\test" : "/Test";
         }
 
         public string GetFileContent(string path)
         {
-            path = this.fileSystem.Path.Combine(GetRootPath(), path);
-            return this.fileSystem.File.ReadAllText(path);
-        }
-
-        public FormatResult Format(
-            bool skipWrite = false,
-            bool check = false,
-            bool writeStdout = false,
-            string standardInFileContents = null,
-            params string[] directoryOrFilePaths
-        )
-        {
-            if (directoryOrFilePaths.Length == 0)
-            {
-                directoryOrFilePaths = new[] { GetRootPath() };
-            }
-            else
-            {
-                directoryOrFilePaths = directoryOrFilePaths
-                    .Select(o => this.fileSystem.Path.Combine(GetRootPath(), o))
-                    .ToArray();
-            }
-
-            var fakeConsole = new TestConsole();
-            var testLogger = new ConsoleLogger(fakeConsole);
-            var exitCode =
-                CommandLineFormatter.Format(
-                    new CommandLineOptions
-                    {
-                        DirectoryOrFilePaths = directoryOrFilePaths,
-                        SkipWrite = skipWrite,
-                        Check = check,
-                        WriteStdout = writeStdout || standardInFileContents != null,
-                        StandardInFileContents = standardInFileContents,
-                    },
-                    this.fileSystem,
-                    fakeConsole,
-                    testLogger,
-                    CancellationToken.None
-                ).Result;
-
-            fakeConsole.Close();
-
-            return new FormatResult(exitCode, fakeConsole.Lines, fakeConsole.ErrorLines);
+            path = this.FileSystem.Path.Combine(this.GetRootPath(), path);
+            return this.FileSystem.File.ReadAllText(path);
         }
     }
 
@@ -536,11 +541,23 @@ public class CommandLineFormatterTests
 
     private class TestConsole : IConsole
     {
-        public readonly List<string> Lines = new();
-        public readonly List<string> ErrorLines = new();
+        private readonly List<string> lines = new();
+        private readonly List<string> errorLines = new();
 
-        private string nextLine = "";
-        private string nextErrorLine = "";
+        public List<string> GetLines()
+        {
+            this.FinishReadingLines();
+            return this.lines;
+        }
+
+        public List<string> GetErrorLines()
+        {
+            this.FinishReadingLines();
+            return this.errorLines;
+        }
+
+        private string nextLine = string.Empty;
+        private string nextErrorLine = string.Empty;
 
         public void WriteLine(string line = null)
         {
@@ -551,9 +568,9 @@ public class CommandLineFormatterTests
 
             if (line != null)
             {
-                nextLine += line;
-                this.Lines.Add(nextLine);
-                nextLine = "";
+                this.nextLine += line;
+                this.lines.Add(this.nextLine);
+                this.nextLine = "";
             }
         }
 
@@ -566,35 +583,37 @@ public class CommandLineFormatterTests
 
             if (line != null)
             {
-                nextErrorLine += line;
-                this.ErrorLines.Add(nextErrorLine);
-                nextErrorLine = "";
+                this.nextErrorLine += line;
+                this.errorLines.Add(this.nextErrorLine);
+                this.nextErrorLine = "";
             }
         }
 
         public void Write(string value)
         {
-            nextLine += value;
+            this.nextLine += value;
         }
 
         public void WriteError(string value)
         {
-            nextErrorLine += value;
+            this.nextErrorLine += value;
         }
 
         public Encoding InputEncoding => Encoding.UTF8;
         public ConsoleColor ForegroundColor { get; set; }
         public void ResetColor() { }
 
-        public void Close()
+        private void FinishReadingLines()
         {
-            if (nextLine != "")
+            if (this.nextLine != string.Empty)
             {
-                this.Lines.Add(nextLine);
+                this.lines.Add(this.nextLine);
+                this.nextLine = string.Empty;
             }
-            if (nextErrorLine != "")
+            if (this.nextErrorLine != string.Empty)
             {
-                this.ErrorLines.Add(nextErrorLine);
+                this.errorLines.Add(this.nextErrorLine);
+                this.nextErrorLine = string.Empty;
             }
         }
     }
