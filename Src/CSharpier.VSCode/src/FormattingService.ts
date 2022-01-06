@@ -1,15 +1,15 @@
 import { performance } from "perf_hooks";
 import { languages, Range, TextDocument, TextEdit } from "vscode";
-import { CSharpierService } from "./CSharpierService";
+import { CSharpierProcessProvider } from "./CSharpierProcessProvider";
 import { LoggingService } from "./LoggingService";
 
 export class FormattingService {
     loggingService: LoggingService;
-    csharpierService: CSharpierService;
+    csharpierProcessProvider: CSharpierProcessProvider;
 
-    constructor(loggingService: LoggingService, csharpierService: CSharpierService) {
+    constructor(loggingService: LoggingService, csharpierProcessProvider: CSharpierProcessProvider) {
         this.loggingService = loggingService;
-        this.csharpierService = csharpierService;
+        this.csharpierProcessProvider = csharpierProcessProvider;
 
         languages.registerDocumentFormattingEditProvider("csharp", {
             provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
@@ -37,6 +37,6 @@ export class FormattingService {
     }
 
     private formatInPlace = async (content: string, fileName: string) => {
-        return this.csharpierService.formatInPlace(content, fileName);
+        return this.csharpierProcessProvider.getProcessFor(fileName).formatFile(content, fileName);
     };
 }
