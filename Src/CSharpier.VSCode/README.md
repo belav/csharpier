@@ -41,6 +41,4 @@ You can turn on format-on-save on a per-language basis by scoping the setting:
 
 ## Limitations
 
-This extension currently only works with a globally installed version of csharpier. See [this issue](https://github.com/belav/csharpier/issues/493) for details.
-
 Format Selection is not supported.
