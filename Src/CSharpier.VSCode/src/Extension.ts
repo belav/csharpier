@@ -12,17 +12,17 @@ export async function activate(context: ExtensionContext) {
     await initPlugin(context);
 }
 
-const initPlugin = async (context: ExtensionContext) => {
-    const enableDebugLogs =
+let initPlugin = async (context: ExtensionContext) => {
+    let enableDebugLogs =
         workspace.getConfiguration("csharpier").get<boolean>("enableDebugLogs") ?? false;
 
-    const loggingService = new LoggingService(enableDebugLogs);
+    let loggingService = new LoggingService(enableDebugLogs);
 
-    const isDevelopment = (process.env as any).MODE === "development";
+    let isDevelopment = (process.env as any).MODE === "development";
 
     loggingService.logInfo("Initializing " + (process.env as any).EXTENSION_NAME);
 
-    const csharpierProcessProvider = new CSharpierProcessProvider(loggingService);
+    let csharpierProcessProvider = new CSharpierProcessProvider(loggingService);
     new FormattingService(loggingService, csharpierProcessProvider);
 
     context.subscriptions.push(csharpierProcessProvider);

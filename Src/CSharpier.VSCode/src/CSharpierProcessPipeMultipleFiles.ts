@@ -20,14 +20,14 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     }
 
     private spawnProcess = (csharpierPath: string, workingDirectory: string) => {
-        const csharpierProcess = spawn("dotnet", [csharpierPath, "--pipe-multiple-files"], {
+        let csharpierProcess = spawn("dotnet", [csharpierPath, "--pipe-multiple-files"], {
             stdio: "pipe",
             cwd: workingDirectory,
         });
 
         csharpierProcess.stderr.on("data", chunk => {
             this.loggingService.logInfo("Got error: " + chunk.toString());
-            const callback = this.callbacks.shift();
+            let callback = this.callbacks.shift();
             if (callback) {
                 callback("");
             }
@@ -37,12 +37,11 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
             this.loggingService.logDebug("Got chunk");
             this.nextFile += chunk;
             let number = this.nextFile.indexOf("\u0003");
-            if (number >= 0)
-            {
+            if (number >= 0) {
                 this.loggingService.logDebug("Got last chunk");
-                const result = this.nextFile.substring(0, number)
-                this.nextFile = this.nextFile.substring(number + 1)
-                const callback = this.callbacks.shift();
+                let result = this.nextFile.substring(0, number);
+                this.nextFile = this.nextFile.substring(number + 1);
+                let callback = this.callbacks.shift();
                 if (callback) {
                     callback(result);
                 }
@@ -52,8 +51,8 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
         return csharpierProcess;
     };
 
-    formatFile(content: string, fileName: string): Promise<string> {
-        this.process.stdin.write(fileName);
+    formatFile(content: string, filePath: string): Promise<string> {
+        this.process.stdin.write(filePath);
         this.process.stdin.write("\u0003");
         this.process.stdin.write(content);
         this.process.stdin.write("\u0003");

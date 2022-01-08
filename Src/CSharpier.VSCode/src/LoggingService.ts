@@ -12,7 +12,7 @@ export class LoggingService {
         }
     }
 
-    public logDebug(message: string, data?: unknown): void {
+    public logDebug(message: any, data?: unknown): void {
         if (
             this.logLevel === "NONE" ||
             this.logLevel === "INFO" ||
@@ -27,7 +27,7 @@ export class LoggingService {
         }
     }
 
-    public logInfo(message: string, data?: unknown): void {
+    public logInfo(message: any, data?: unknown): void {
         if (this.logLevel === "NONE" || this.logLevel === "WARN" || this.logLevel === "ERROR") {
             return;
         }
@@ -37,7 +37,7 @@ export class LoggingService {
         }
     }
 
-    public logWarning(message: string, data?: unknown): void {
+    public logWarning(message: any, data?: unknown): void {
         if (this.logLevel === "NONE" || this.logLevel === "ERROR") {
             return;
         }
@@ -47,7 +47,7 @@ export class LoggingService {
         }
     }
 
-    public logError(message: string, error?: unknown) {
+    public logError(message: any, error?: unknown) {
         if (this.logLevel === "NONE") {
             return;
         }
@@ -73,13 +73,13 @@ export class LoggingService {
     }
 
     private logObject(data: unknown): void {
-        const message = JSON.stringify(data, null, 2);
+        let message = JSON.stringify(data, null, 2);
 
         this.outputChannel.appendLine(message);
     }
 
-    private logMessage(message: string, logLevel: LogLevel): void {
-        const title = new Date().toLocaleTimeString();
+    private logMessage(message: any, logLevel: LogLevel): void {
+        let title = new Date().toLocaleTimeString();
         this.outputChannel.appendLine(`["${logLevel}" - ${title}] ${message}`);
         console.log(message);
     }
