@@ -3,7 +3,7 @@
 CSharpier can be used with a pre-commit hook to ensure that all staged files are formatted before being committed.
 
 ## [Husky.Net](https://github.com/alirezanet/husky.net)
-Husky.Net makes setting up a precommit hook simple. 
+Husky.Net makes setting up a pre-commit hook simple. 
 
 From the root of your repository
 ```bash
