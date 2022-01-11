@@ -1,4 +1,5 @@
 {
+   "enablePreCommit": "dotnet husky set pre-commit -c 'dotnet husky run'",
    "tasks": [
       {
          "name": "Run csharpier",

@@ -49,3 +49,4 @@ publish
 *.doctree.txt
 *.actual.cst
 *.vsix
+/.husky/pre-commit

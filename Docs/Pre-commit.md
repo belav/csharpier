@@ -43,3 +43,5 @@ Once you are sure the task is working properly, you can add it as a pre-commit h
 ```bash
 dotnet husky add pre-commit -c "dotnet husky run"
 ```
+
+If you want the pre-commit hook to be opt in, ignore the `.husky/pre-commit` file. It can be enabled by individual developers if the run the command above.
