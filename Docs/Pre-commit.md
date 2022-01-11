@@ -39,7 +39,7 @@ You can run and test your task with the following command.
 dotnet husky run
 ```
 
-Once you are sure the task is working properly, you can add it as a precommit hook.
+Once you are sure the task is working properly, you can add it as a pre-commit hook.
 ```bash
 dotnet husky add pre-commit -c "dotnet husky run"
 ```
