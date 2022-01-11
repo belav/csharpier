@@ -601,6 +601,7 @@ public class CommandLineFormatterTests
 
         public Encoding InputEncoding => Encoding.UTF8;
         public ConsoleColor ForegroundColor { get; set; }
+
         public void ResetColor() { }
 
         private void FinishReadingLines()

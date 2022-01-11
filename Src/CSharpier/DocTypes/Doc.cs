@@ -115,7 +115,12 @@ internal abstract class Doc
     }
 
     public static IfBreak IfBreak(Doc breakContents, Doc flatContents, string? groupId = null) =>
-        new() { FlatContents = flatContents, BreakContents = breakContents, GroupId = groupId, };
+        new()
+        {
+            FlatContents = flatContents,
+            BreakContents = breakContents,
+            GroupId = groupId,
+        };
 
     public static IndentIfBreak IndentIfBreak(Doc contents, string groupId) =>
         new(contents, groupId);

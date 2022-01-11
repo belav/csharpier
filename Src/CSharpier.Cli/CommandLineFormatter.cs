@@ -210,8 +210,8 @@ internal static class CommandLineFormatter
     {
         var normalizedPath = pathToDirectoryOrFile.Replace('\\', '/');
         var baseDirectoryPath = fileSystem.Directory.Exists(normalizedPath)
-            ? normalizedPath
-            : fileSystem.Path.GetDirectoryName(normalizedPath);
+          ? normalizedPath
+          : fileSystem.Path.GetDirectoryName(normalizedPath);
 
         if (baseDirectoryPath == null)
         {
