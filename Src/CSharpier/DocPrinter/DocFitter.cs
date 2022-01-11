@@ -23,7 +23,7 @@ internal static class DocFitter
 
         var output = new StringBuilder();
 
-        for (var x = 0; x < remainingCommands.Count || newCommands.Count > 0;)
+        for (var x = 0; x < remainingCommands.Count || newCommands.Count > 0; )
         {
             if (remainingWidth < 0)
             {

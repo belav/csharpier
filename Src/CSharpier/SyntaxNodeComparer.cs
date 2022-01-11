@@ -175,7 +175,12 @@ internal partial class SyntaxNodeComparer
 
     private static CompareResult NotEqual(TextSpan? originalSpan, TextSpan? formattedSpan)
     {
-        return new() { IsInvalid = true, OriginalSpan = originalSpan, NewSpan = formattedSpan };
+        return new()
+        {
+            IsInvalid = true,
+            OriginalSpan = originalSpan,
+            NewSpan = formattedSpan
+        };
     }
 
     private CompareResult Compare(SyntaxToken originalToken, SyntaxToken formattedToken)
