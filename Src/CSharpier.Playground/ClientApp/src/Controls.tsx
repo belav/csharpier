@@ -3,10 +3,6 @@ import styled from "styled-components";
 import { Loading } from "./Icons/Loading";
 import { useAppContext } from "./AppContext";
 
-
-
-
-
 export const Controls = () => {
     const {
         isLoading,
