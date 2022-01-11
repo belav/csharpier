@@ -17,51 +17,11 @@ ProjectSection(SolutionItems) = preProject
 	.dockerignore = .dockerignore
 	global.json = global.json
 	CSharpier.Build.targets = CSharpier.Build.targets
-EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{176BB0EA-B72B-4ACA-82AE-C16A732BE023}"
-ProjectSection(SolutionItems) = preProject
-	.github\workflows\format_repositories.yml = .github\workflows\format_repositories.yml
-	.github\workflows\assign_issue.yml = .github\workflows\assign_issue.yml
-	.github\workflows\deploy_playground.yml = .github\workflows\deploy_playground.yml
-	.github\workflows\publish_nuget.yml = .github\workflows\publish_nuget.yml
-	.github\workflows\validate_pull_request.yml = .github\workflows\validate_pull_request.yml
-EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{62DCCDB3-45D3-4236-B34A-E01618028BFE}"
-ProjectSection(SolutionItems) = preProject
-	Scripts/RunLinuxTests.ps1 = Scripts/RunLinuxTests.ps1
-	Scripts/CreateReviewCodePRs.ps1 = Scripts/CreateReviewCodePRs.ps1
-	Scripts/ChangeLog.ps1 = Scripts/ChangeLog.ps1
-	Scripts/UpdateForkedRepos.ps1 = Scripts/UpdateForkedRepos.ps1
-	Scripts\CreateTestingPR.ps1 = Scripts\CreateTestingPR.ps1
-	Scripts\Helpers.ps1 = Scripts\Helpers.ps1
-	Scripts\BuildPackages.ps1 = Scripts\BuildPackages.ps1
-	Scripts\UpdateCSharpierRepos.ps1 = Scripts\UpdateCSharpierRepos.ps1
-EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{7C99AEA7-E608-40B5-9B2E-353B6E4C9DBE}"
-ProjectSection(SolutionItems) = preProject
-	Docs/EditorsAndCICD.md = Docs/EditorsAndCICD.md
-	Docs/Configuration.md = Docs/Configuration.md
-	Docs/CLI.md = Docs/CLI.md
-	Docs/Ignore.md = Docs/Ignore.md
-	Docs\MSBuild.md = Docs\MSBuild.md
-				README.md = README.md
-				CONTRIBUTING.md = CONTRIBUTING.md
-				CHANGELOG.md = CHANGELOG.md
-	Docs\IntegratingWithLinters.md = Docs\IntegratingWithLinters.md
+	.husky\task-runner.json = .husky\task-runner.json
+	README.md = README.md
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Benchmarks", "Src\CSharpier.Benchmarks\CSharpier.Benchmarks.csproj", "{A338903F-69AD-4950-B827-8EE75F98B620}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSBuild", "MSBuild", "{A267B806-24B0-4F3E-B5C2-9481C98627D0}"
-ProjectSection(SolutionItems) = preProject
-	Src\CSharpier.MsBuild\README.md = Src\CSharpier.MsBuild\README.md
-	Src\CSharpier.MsBuild\build\CSharpier.MsBuild.targets = Src\CSharpier.MsBuild\build\CSharpier.MsBuild.targets
-	Src\CSharpier.MsBuild\build\CSharpier.MsBuild.props = Src\CSharpier.MsBuild\build\CSharpier.MsBuild.props
-	Src\CSharpier.MsBuild\CSharpier.MsBuild.csproj = Src\CSharpier.MsBuild\CSharpier.MsBuild.csproj
-EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests.Generators", "Src\CSharpier.Tests.Generators\CSharpier.Tests.Generators.csproj", "{3E1D074B-A4F3-4010-84E7-820459214202}"
 EndProject
@@ -72,6 +32,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxFinder", "Src\SyntaxFinder\SyntaxFinder.csproj", "{0B075DD3-1FEE-483E-8665-43C226188287}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Cli.Tests", "Src\CSharpier.Cli.Tests\CSharpier.Cli.Tests.csproj", "{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Docs", "Docs\Docs.csproj", "{1E43290C-C7DA-43CA-ADC5-BD95786BA440}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripts", "Scripts\Scripts.csproj", "{3CFB200D-ABA6-4021-AF40-CFCF26DBCD66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Github", ".github\Github.csproj", "{6D0C91DF-2FB7-48EC-8C1D-86FD4F6531A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsBuild", "Src\CSharpier.MsBuild\MsBuild.csproj", "{19874634-1A44-4831-BB43-6E2B864AB3ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
