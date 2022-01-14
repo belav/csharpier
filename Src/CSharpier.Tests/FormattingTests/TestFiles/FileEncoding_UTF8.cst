@@ -2,6 +2,6 @@ public class ClassName
 {
     public void MethodName()
     {
-        private const char test = '。';
+        char test = '。';
     }
 }
