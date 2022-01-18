@@ -376,6 +376,18 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public void Should_Format_Unicode_StandardInput()
+    {
+        var unicodeContent = $"var test = '{'\u3002'}';\n";
+
+        var context = new TestContext();
+        var result = this.Format(context, standardInFileContents: unicodeContent);
+
+        result.Lines.Should().ContainSingle();
+        result.Lines.First().Should().Be(unicodeContent);
+    }
+
+    [Test]
     public void File_With_Mismatched_Line_Endings_In_Verbatim_String_Should_Pass_Validation()
     {
         var context = new TestContext();

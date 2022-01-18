@@ -101,6 +101,18 @@ public class CliTests
     }
 
     [Test]
+    public async Task Should_Format_Unicode()
+    {
+        // use the \u so that we don't accidentally reform this file to be '?'
+        var unicodeContent = $"var test = '{'\u3002'}';\n";
+
+        var result = await new CsharpierProcess().WithPipedInput(unicodeContent).ExecuteAsync();
+
+        result.Output.Should().Be(unicodeContent);
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
     public async Task Should_Print_NotFound()
     {
         var result = await new CsharpierProcess().WithArguments("/BasicFile.cs").ExecuteAsync();
