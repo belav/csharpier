@@ -87,6 +87,7 @@ var formattedCode = CodeFormatter.Format(unformattedCode);
 [Configuration File](Docs/Configuration.md)  
 [Editors and CI/CD](Docs/EditorsAndCICD.md)  
 [Integrating with Linters/Formatters](Docs/IntegratingWithLinters.md)  
+[Pre-commit Hook](Docs/Pre-commit.md)  
 [Ignoring Files](Docs/Ignore.md)  
 [ChangeLog](CHANGELOG.md)  
 [MSBuild Package](Docs/MSBuild.md)

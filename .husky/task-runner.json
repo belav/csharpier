@@ -1,0 +1,27 @@
+{
+   "comment-enablePreCommitWith": "dotnet husky set pre-commit -c 'dotnet husky run'",
+   "tasks": [
+      {
+         "name": "Run csharpier",
+         "command": "dotnet",
+         "args": [ "csharpier", "${staged}" ],
+         "include": [ "**/*.cs" ]
+      },
+      {
+         "name": "Run prettier on vscode",
+         "cwd": "Src/CSharpier.VSCode",
+         "pathMode": "absolute",
+         "command": "npx",
+         "args": ["prettier", "--write", "${staged}"],
+         "include": ["**/*.ts", "**/*.vue", "**/*.js"]
+      },
+      {
+         "name": "Run prettier on playground",
+         "cwd": "Src/CSharpier.Playground/ClientApp",
+         "pathMode": "absolute",
+         "command": "npx",
+         "args": ["prettier", "--write", "${staged}"],
+         "include": ["**/*.ts", "**/*.vue", "**/*.js"]
+      }
+   ]
+}
