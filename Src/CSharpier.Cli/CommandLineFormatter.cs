@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO.Abstractions;
+using System.Text;
 using CSharpier.Utilities;
 using Microsoft.Extensions.Logging;
 
@@ -22,6 +23,9 @@ internal static class CommandLineFormatter
 
             if (commandLineOptions.StandardInFileContents != null)
             {
+                File.AppendAllText("c:/temp/log.txt", commandLineOptions.StandardInFileContents);
+                File.AppendAllText("c:/temp/log.txt", "\n");
+
                 var filePath = commandLineOptions.DirectoryOrFilePaths[0];
                 var fileToFormatInfo = FileToFormatInfo.Create(
                     filePath,
@@ -320,6 +324,7 @@ internal static class CommandLineFormatter
         if (codeFormattingResult.Errors.Any())
         {
             fileIssueLogger.WriteError("Failed to compile so was not formatted.");
+            fileIssueLogger.WriteError(codeFormattingResult.Errors.First().GetMessage());
             Interlocked.Increment(ref commandLineFormatterResult.FailedCompilation);
             return;
         }
