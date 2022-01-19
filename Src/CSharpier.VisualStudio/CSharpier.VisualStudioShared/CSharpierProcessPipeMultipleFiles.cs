@@ -8,6 +8,7 @@ using Process = System.Diagnostics.Process;
 
 namespace CSharpier.VisualStudio
 {
+    // TODO clean this up, and then test the rider one
     public class CSharpierProcessPipeMultipleFiles : ICSharpierProcess
     {
         private readonly Logger logger;
@@ -15,6 +16,7 @@ namespace CSharpier.VisualStudio
         private readonly AutoResetEvent autoEvent = new AutoResetEvent(false);
         private readonly StringBuilder output = new StringBuilder();
         private readonly StringBuilder errorOutput = new StringBuilder();
+        private readonly StreamWriter standardIn;
 
         public CSharpierProcessPipeMultipleFiles(string csharpierPath, Logger logger)
         {
@@ -28,13 +30,26 @@ namespace CSharpier.VisualStudio
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
+                StandardOutputEncoding = Encoding.UTF8,
+                StandardErrorEncoding = Encoding.UTF8,
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
             this.process = new Process { StartInfo = processStartInfo };
             this.process.Start();
+            this.standardIn = new StreamWriter(
+                this.process.StandardInput.BaseStream,
+                Encoding.UTF8
+            );
 
-            this.FormatFile("public class ClassName { }", "Test.cs");
+            try
+            {
+                this.FormatFile("public class ClassName { }", "Test.cs");
+            }
+            catch (Exception ex)
+            {
+                this.logger.Log(ex);
+            }
         }
 
         public bool CanFormat => true;
@@ -44,13 +59,14 @@ namespace CSharpier.VisualStudio
             this.output.Clear();
             this.errorOutput.Clear();
 
-            this.logger.Log("Formatting " + filePath);
+            this.logger.Info("Formatting " + filePath);
             var stopwatch = Stopwatch.StartNew();
 
-            this.process.StandardInput.Write(filePath);
-            this.process.StandardInput.Write('\u0003');
-            this.process.StandardInput.Write(content);
-            this.process.StandardInput.Write('\u0003');
+            this.standardIn.Write(filePath);
+            this.standardIn.Write('\u0003');
+            this.standardIn.Write(content);
+            this.standardIn.Write('\u0003');
+            this.standardIn.Flush();
 
             ThreadPool.QueueUserWorkItem(this.ReadOutput, this.autoEvent);
             ThreadPool.QueueUserWorkItem(this.ReadError, this.autoEvent);
@@ -63,17 +79,17 @@ namespace CSharpier.VisualStudio
             {
                 if (string.IsNullOrEmpty(result))
                 {
-                    this.logger.Log("File is ignored by .csharpierignore");
+                    this.logger.Info("File is ignored by .csharpierignore");
                     return null;
                 }
                 else
                 {
-                    this.logger.Log("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");
+                    this.logger.Info("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");
                     return this.output.ToString();
                 }
             }
 
-            this.logger.Log("Got error output: " + errorResult);
+            this.logger.Info("Got error output: " + errorResult);
             return null;
         }
 

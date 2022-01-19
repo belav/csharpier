@@ -45,7 +45,7 @@ public class Program
         {
             using var streamReader = new StreamReader(
                 Console.OpenStandardInput(),
-                Console.InputEncoding
+                console.InputEncoding
             );
             standardInFileContents = await streamReader.ReadToEndAsync();
 
@@ -62,6 +62,7 @@ public class Program
 
              */
 
+            File.AppendAllText("c:/temp/log.txt", "Input:");
             File.AppendAllText("c:/temp/log.txt", standardInFileContents);
             File.AppendAllText("c:/temp/log.txt", "\n");
 
@@ -124,7 +125,7 @@ public class Program
     {
         using var streamReader = new StreamReader(
             Console.OpenStandardInput(),
-            Console.InputEncoding
+            console.InputEncoding
         );
 
         var stringBuilder = new StringBuilder();

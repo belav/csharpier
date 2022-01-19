@@ -44,6 +44,10 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
             }
         });
 
+        // csharpierProcess.stdin.setDefaultEncoding("utf8");
+        // csharpierProcess.stdout.setEncoding("utf8");
+        // csharpierProcess.stderr.setEncoding("utf8");
+
         return csharpierProcess;
     };
 

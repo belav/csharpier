@@ -23,9 +23,6 @@ internal static class CommandLineFormatter
 
             if (commandLineOptions.StandardInFileContents != null)
             {
-                File.AppendAllText("c:/temp/log.txt", commandLineOptions.StandardInFileContents);
-                File.AppendAllText("c:/temp/log.txt", "\n");
-
                 var filePath = commandLineOptions.DirectoryOrFilePaths[0];
                 var fileToFormatInfo = FileToFormatInfo.Create(
                     filePath,

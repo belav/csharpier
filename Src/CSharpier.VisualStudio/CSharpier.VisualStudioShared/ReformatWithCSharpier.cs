@@ -15,16 +15,19 @@ namespace CSharpier.VisualStudio
         private readonly CSharpierPackage package;
         private readonly DTE dte;
         private readonly FormattingService formattingService;
+        private readonly Logger logger;
 
         private ReformatWithCSharpier(
             CSharpierPackage package,
             OleMenuCommandService commandService,
             DTE dte,
-            FormattingService formattingService
+            FormattingService formattingService,
+            Logger logger
         )
         {
             this.package = package;
             this.dte = dte;
+            this.logger = logger;
 
             var menuCommandId = new CommandID(CommandSet, CommandId);
             var menuItem = new OleMenuCommand(this.Execute, menuCommandId);
@@ -38,6 +41,8 @@ namespace CSharpier.VisualStudio
             ThreadHelper.ThrowIfNotOnUIThread();
             var button = (OleMenuCommand)sender;
 
+            this.logger.Debug("QueryStatus");
+
             button.Visible = this.dte.ActiveDocument.Name.EndsWith(".cs");
             button.Enabled = this.formattingService.CanFormat;
         }
@@ -46,7 +51,8 @@ namespace CSharpier.VisualStudio
 
         public static async Task InitializeAsync(
             CSharpierPackage package,
-            FormattingService formattingService
+            FormattingService formattingService,
+            Logger logger
         )
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
@@ -56,11 +62,18 @@ namespace CSharpier.VisualStudio
 
             var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
 
-            Instance = new ReformatWithCSharpier(package, commandService, dte, formattingService);
+            Instance = new ReformatWithCSharpier(
+                package,
+                commandService,
+                dte,
+                formattingService,
+                logger
+            );
         }
 
         private void Execute(object sender, EventArgs e)
         {
+            this.logger.Debug("Execute");
             ThreadHelper.ThrowIfNotOnUIThread();
             if (!this.formattingService.CanFormat)
             {

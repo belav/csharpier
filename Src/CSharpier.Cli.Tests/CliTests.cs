@@ -1,8 +1,10 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using CliWrap;
+using CliWrap.Buffered;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -38,7 +40,7 @@ public class CliTests
         var formattedContent = "public class ClassName { }" + lineEnding;
         var unformattedContent = $"public class ClassName {{{lineEnding}{lineEnding}}}";
 
-        await WriteFileAsync("BasicFile.cs", unformattedContent);
+        await this.WriteFileAsync("BasicFile.cs", unformattedContent);
 
         var result = await new CsharpierProcess().WithArguments("BasicFile.cs").ExecuteAsync();
 
@@ -49,7 +51,7 @@ public class CliTests
                 "Total files:                                                                           1"
             );
         result.ExitCode.Should().Be(0);
-        (await ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
+        (await this.ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
     }
 
     [Test]
@@ -57,11 +59,11 @@ public class CliTests
     {
         var unformattedContent = "public class Unformatted {     }";
         var filePath = "Subdirectory/IgnoredFile.cs";
-        await WriteFileAsync(filePath, unformattedContent);
-        await WriteFileAsync(".csharpierignore", filePath);
+        await this.WriteFileAsync(filePath, unformattedContent);
+        await this.WriteFileAsync(".csharpierignore", filePath);
 
         await new CsharpierProcess().WithArguments(".").ExecuteAsync();
-        var result = await ReadAllTextAsync(filePath);
+        var result = await this.ReadAllTextAsync(filePath);
 
         result.Should().Be(unformattedContent, $"The file at {filePath} should have been ignored");
     }
@@ -108,6 +110,7 @@ public class CliTests
 
         var result = await new CsharpierProcess().WithPipedInput(unicodeContent).ExecuteAsync();
 
+        result.ErrorOutput.Should().BeEmpty();
         result.Output.Should().Be(unicodeContent);
         result.ExitCode.Should().Be(0);
     }
@@ -141,7 +144,7 @@ public class CliTests
     {
         var unformattedContent = "public class ClassName1 {\n\n}";
 
-        await WriteFileAsync("CheckUnformatted.cs", unformattedContent);
+        await this.WriteFileAsync("CheckUnformatted.cs", unformattedContent);
 
         var result = await new CsharpierProcess()
             .WithArguments("CheckUnformatted.cs --check")
@@ -202,7 +205,7 @@ public class CliTests
     {
         const string ignoredFile = "public class ClassName {     }";
         var fileName = Path.Combine(testFileDirectory, "Ignored.cs");
-        await WriteFileAsync(".csharpierignore", "Ignored.cs");
+        await this.WriteFileAsync(".csharpierignore", "Ignored.cs");
 
         var result = await new CsharpierProcess()
             .WithArguments("--pipe-multiple-files")
@@ -218,7 +221,7 @@ public class CliTests
     {
         const string fileContent = "var myVariable = someLongValue;";
         var fileName = Path.Combine(testFileDirectory, "TooWide.cs");
-        await WriteFileAsync(".csharpierrc", "printWidth: 10");
+        await this.WriteFileAsync(".csharpierrc", "printWidth: 10");
 
         var result = await new CsharpierProcess()
             .WithArguments("--pipe-multiple-files")
@@ -232,7 +235,7 @@ public class CliTests
     [Test]
     public async Task Should_Not_Fail_On_Empty_File()
     {
-        await WriteFileAsync("BasicFile.cs", "");
+        await this.WriteFileAsync("BasicFile.cs", "");
 
         var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
 
@@ -244,7 +247,7 @@ public class CliTests
     private async Task WriteFileAsync(string path, string content)
     {
         var fileInfo = new FileInfo(Path.Combine(testFileDirectory, path));
-        EnsureExists(fileInfo.Directory!);
+        this.EnsureExists(fileInfo.Directory!);
 
         await File.WriteAllTextAsync(fileInfo.FullName, content);
     }
@@ -258,7 +261,7 @@ public class CliTests
     {
         if (directoryInfo.Parent != null)
         {
-            EnsureExists(directoryInfo.Parent);
+            this.EnsureExists(directoryInfo.Parent);
         }
 
         if (!directoryInfo.Exists)
@@ -273,6 +276,13 @@ public class CliTests
         private readonly StringBuilder errorOutput = new();
         private Command command;
 
+        // TODO my latest thought is that the extensions need to set the encoding correctly on the console
+        // UTF8 comes in wrong
+        // Unicode does weird stuff
+        // ASCII comes in ?
+
+        private readonly Encoding encoding = Encoding.UTF8;
+
         public CsharpierProcess()
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
@@ -282,8 +292,8 @@ public class CliTests
                 .WithArguments(path)
                 .WithWorkingDirectory(testFileDirectory)
                 .WithValidation(CommandResultValidation.None)
-                .WithStandardOutputPipe(PipeTarget.ToStringBuilder(this.output))
-                .WithStandardErrorPipe(PipeTarget.ToStringBuilder(this.errorOutput));
+                .WithStandardOutputPipe(PipeTarget.ToStringBuilder(this.output, this.encoding))
+                .WithStandardErrorPipe(PipeTarget.ToStringBuilder(this.errorOutput, this.encoding));
         }
 
         public CsharpierProcess WithArguments(string arguments)
@@ -294,14 +304,19 @@ public class CliTests
 
         public CsharpierProcess WithPipedInput(string input)
         {
-            this.command = this.command.WithStandardInputPipe(PipeSource.FromString(input));
+            this.command = this.command.WithStandardInputPipe(
+                PipeSource.FromString(input, this.encoding)
+            );
 
             return this;
         }
 
         public async Task<ProcessResult> ExecuteAsync()
         {
-            var result = await this.command.ExecuteAsync();
+            // TODO can we somehow detect that we are getting bad content? like the ?
+
+            // TODO maybe this needs to change? or something in here? github runs the unicode test just fine
+            var result = await this.command.ExecuteBufferedAsync(this.encoding);
             return new ProcessResult(
                 this.output.ToString(),
                 this.errorOutput.ToString(),

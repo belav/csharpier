@@ -26,7 +26,7 @@ namespace CSharpier.VisualStudio
 
             if (!(document.Object("TextDocument") is TextDocument textDocument))
             {
-                this.logger.Log("There was no TextDocument for the current Document");
+                this.logger.Info("There was no TextDocument for the current Document");
                 return;
             }
 

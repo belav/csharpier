@@ -23,7 +23,7 @@ namespace CSharpier.VisualStudio
         {
             var outputPane = await this.GetServiceAsync<IVsOutputWindow>();
             var logger = new Logger(outputPane);
-            logger.Log("Starting");
+            logger.Info("Starting");
 
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
@@ -36,9 +36,11 @@ namespace CSharpier.VisualStudio
             await ReformatWithCSharpierOnSave.InitializeAsync(
                 this,
                 formattingService,
-                csharpierOptionsPage
+                csharpierOptionsPage,
+                logger
             );
-            await ReformatWithCSharpier.InitializeAsync(this, formattingService);
+            await ReformatWithCSharpier.InitializeAsync(this, formattingService, logger);
+            logger.Debug("Started");
         }
     }
 }
