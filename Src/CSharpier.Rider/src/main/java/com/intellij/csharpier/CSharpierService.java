@@ -32,9 +32,9 @@ public class CSharpierService {
     public String getCSharpierPath() {
         // TODO make this some kind of build property so it only works when testing the plugin
         // or maybe make it a setting?
-        // return "C:\\projects\\csharpier\\Src\\CSharpier.Cli\\bin\\Debug\\net6.0\\dotnet-csharpier.dll";
+        return "C:\\projects\\csharpier\\Src\\CSharpier.Cli\\bin\\Debug\\net6.0\\dotnet-csharpier.dll";
 
-        return "csharpier";
+        //return "csharpier";
     }
 
     @NotNull
@@ -73,11 +73,11 @@ public class CSharpierService {
                             .notify(project);
 
                     return new CSharpierProcessSingleFile(this.csharpierPath);
-                } else if (installedVersion.compareTo(utf8Version) < 0) {
-                    return new CSharpierProcessPipeMultipleFiles(this.csharpierPath, false);
                 }
 
-                return new CSharpierProcessPipeMultipleFiles(this.csharpierPath, true);
+                boolean useUtf8 = installedVersion.compareTo(utf8Version) >= 0;
+
+                return new CSharpierProcessPipeMultipleFiles(this.csharpierPath, useUtf8);
 
             }
         } catch (Exception ex) {
