@@ -32,9 +32,9 @@ public class CSharpierService {
     public String getCSharpierPath() {
         // TODO make this some kind of build property so it only works when testing the plugin
         // or maybe make it a setting?
-        return "C:\\projects\\csharpier\\Src\\CSharpier.Cli\\bin\\Debug\\net6.0\\dotnet-csharpier.dll";
+        // return "C:\\projects\\csharpier\\Src\\CSharpier.Cli\\bin\\Debug\\net6.0\\dotnet-csharpier.dll";
 
-        //return "csharpier";
+        return "csharpier";
     }
 
     @NotNull

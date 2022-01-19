@@ -15,7 +15,6 @@ namespace CSharpier.VisualStudio
         private readonly CSharpierPackage package;
         private readonly DTE dte;
         private readonly FormattingService formattingService;
-        private readonly Logger logger;
 
         private ReformatWithCSharpier(
             CSharpierPackage package,

@@ -27,7 +27,6 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
             String charset = useUtf8 ? "utf-8" : Charset.defaultCharset().toString();
 
-            // TODO only use UTF-8 if on the newest version, bleh
             stdin = new OutputStreamWriter(process.getOutputStream(), charset);
             stdOut = new BufferedReader(new InputStreamReader(process.getInputStream(), charset));
             stdError = new BufferedReader(new InputStreamReader(process.getErrorStream(), charset));
