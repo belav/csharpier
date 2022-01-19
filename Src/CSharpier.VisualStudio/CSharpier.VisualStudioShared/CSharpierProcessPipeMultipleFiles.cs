@@ -8,7 +8,6 @@ using Process = System.Diagnostics.Process;
 
 namespace CSharpier.VisualStudio
 {
-    // TODO clean this up, and then test the rider one
     public class CSharpierProcessPipeMultipleFiles : ICSharpierProcess
     {
         private readonly Logger logger;
@@ -42,14 +41,7 @@ namespace CSharpier.VisualStudio
                 Encoding.UTF8
             );
 
-            try
-            {
-                this.FormatFile("public class ClassName { }", "Test.cs");
-            }
-            catch (Exception ex)
-            {
-                this.logger.Log(ex);
-            }
+            this.FormatFile("public class ClassName { }", "Test.cs");
         }
 
         public bool CanFormat => true;

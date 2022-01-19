@@ -17,6 +17,7 @@ namespace CSharpier.VisualStudio
             outputWindow.GetPane(ref guid, out this.pane);
         }
 
+        // TODO make a proper setting for this so real users can see debug messages
         public void Debug(string message)
         {
 #if DEBUG
@@ -31,11 +32,6 @@ namespace CSharpier.VisualStudio
 
         private void Log(string message)
         {
-#if DEBUG
-            File.AppendAllText("c:/temp/vs.txt", message);
-            File.AppendAllText("c:/temp/vs.txt", "\n");
-#endif
-
             this.pane.OutputStringThreadSafe(message + Environment.NewLine);
         }
 

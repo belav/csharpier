@@ -25,9 +25,11 @@ namespace CSharpier.VisualStudio
         {
             // TODO make this some kind of build property so it only works when testing the plugin
             // or maybe make it a setting?
+#if DEBUG
             return @"C:\projects\csharpier\Src\CSharpier.Cli\bin\Debug\net6.0\dotnet-csharpier.dll";
+#endif
 
-            // return "csharpier";
+            return "csharpier";
         }
 
         private string ExecuteCommand(string cmd, string arguments)

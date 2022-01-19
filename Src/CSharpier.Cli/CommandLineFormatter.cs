@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.IO.Abstractions;
-using System.Text;
 using CSharpier.Utilities;
 using Microsoft.Extensions.Logging;
 
@@ -321,7 +320,6 @@ internal static class CommandLineFormatter
         if (codeFormattingResult.Errors.Any())
         {
             fileIssueLogger.WriteError("Failed to compile so was not formatted.");
-            fileIssueLogger.WriteError(codeFormattingResult.Errors.First().GetMessage());
             Interlocked.Increment(ref commandLineFormatterResult.FailedCompilation);
             return;
         }

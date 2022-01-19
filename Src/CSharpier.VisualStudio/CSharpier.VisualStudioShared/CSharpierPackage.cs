@@ -36,11 +36,9 @@ namespace CSharpier.VisualStudio
             await ReformatWithCSharpierOnSave.InitializeAsync(
                 this,
                 formattingService,
-                csharpierOptionsPage,
-                logger
+                csharpierOptionsPage
             );
-            await ReformatWithCSharpier.InitializeAsync(this, formattingService, logger);
-            logger.Debug("Started");
+            await ReformatWithCSharpier.InitializeAsync(this, formattingService);
         }
     }
 }

@@ -32,18 +32,7 @@ public class CSharpierService {
     public String getCSharpierPath() {
         // TODO make this some kind of build property so it only works when testing the plugin
         // or maybe make it a setting?
-//        try {
-//            String csharpierDebugPath = "C:\\projects\\csharpier\\Src\\CSharpier.Cli\\bin\\Debug\\net6.0\\dotnet-csharpier.dll";
-//            String csharpierReleasePath = csharpierDebugPath.replace("Debug", "Release");
-//
-//            if (new File(csharpierDebugPath).exists()) {
-//                return csharpierDebugPath;
-//            } else if (new File(csharpierReleasePath).exists()) {
-//                return csharpierReleasePath;
-//            }
-//        } catch (Exception ex) {
-//            Log.debug("Could not find local csharpier " + ex.getMessage());
-//        }
+        // return "C:\\projects\\csharpier\\Src\\CSharpier.Cli\\bin\\Debug\\net6.0\\dotnet-csharpier.dll";
 
         return "csharpier";
     }
@@ -76,6 +65,7 @@ public class CSharpierService {
             else {
                 ComparableVersion installedVersion = new ComparableVersion(version);
                 ComparableVersion pipeFilesVersion = new ComparableVersion("0.12.0");
+                ComparableVersion utf8Version = new ComparableVersion("0.14.0");
                 if (installedVersion.compareTo(pipeFilesVersion) < 0) {
                     String content = "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.";
                     NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
@@ -83,8 +73,12 @@ public class CSharpierService {
                             .notify(project);
 
                     return new CSharpierProcessSingleFile(this.csharpierPath);
+                } else if (installedVersion.compareTo(utf8Version) < 0) {
+                    return new CSharpierProcessPipeMultipleFiles(this.csharpierPath, false);
                 }
-                return new CSharpierProcessPipeMultipleFiles(this.csharpierPath);
+
+                return new CSharpierProcessPipeMultipleFiles(this.csharpierPath, true);
+
             }
         } catch (Exception ex) {
             LOG.error(ex);

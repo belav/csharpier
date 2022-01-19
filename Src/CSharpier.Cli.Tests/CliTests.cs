@@ -276,11 +276,6 @@ public class CliTests
         private readonly StringBuilder errorOutput = new();
         private Command command;
 
-        // TODO my latest thought is that the extensions need to set the encoding correctly on the console
-        // UTF8 comes in wrong
-        // Unicode does weird stuff
-        // ASCII comes in ?
-
         private readonly Encoding encoding = Encoding.UTF8;
 
         public CsharpierProcess()
@@ -313,9 +308,6 @@ public class CliTests
 
         public async Task<ProcessResult> ExecuteAsync()
         {
-            // TODO can we somehow detect that we are getting bad content? like the ?
-
-            // TODO maybe this needs to change? or something in here? github runs the unicode test just fine
             var result = await this.command.ExecuteBufferedAsync(this.encoding);
             return new ProcessResult(
                 this.output.ToString(),
