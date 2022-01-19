@@ -23,17 +23,20 @@ There are probably additional rules that are unnecessary because CSharpier forma
 <Rule Id="SA1009" Action="None" />
 <Rule Id="SA1111" Action="None" />
 <Rule Id="SA1118" Action="None" />
-<!-- see https://github.com/belav/csharpier/issues/526 -->
-<Rule Id="SA1128" Action="None" />
+
 <!-- see https://github.com/belav/csharpier/issues/527 -->
 <Rule Id="SA1127" Action="None" />
+
+<!-- see https://github.com/belav/csharpier/issues/526 -->
+<Rule Id="SA1128" Action="None" />
+<Rule Id="SA1137" Action="None" />
+<Rule Id="SA1500" Action="None" />
 <Rule Id="SA1501" Action="None" />
 <Rule Id="SA1502" Action="None" />
 <Rule Id="SA1504" Action="None" />
-<Rule Id="SA1137" Action="None" />
-<Rule Id="SA1500" Action="None" />
-<Rule Id="SA1516" Action="None" />
-<!-- This could be left on. If tries to force a new line before a comment for a catch. The comment can be moved
+
+<!-- This could be left on. It tries to force a new line before a comment for a catch. The comment can be moved
  to the end of the line for the closing brace of the try -->
 <Rule Id="SA1513" Action="None" />
+<Rule Id="SA1516" Action="None" />
 ```
