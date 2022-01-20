@@ -62,6 +62,8 @@ internal static class BinaryExpression
             // This group ensures that something like == 0 does not end up on its own line
             var shouldGroup =
                 binaryExpressionSyntax.Kind() != binaryExpressionSyntax.Parent!.Kind()
+                && GetPrecedence(binaryExpressionSyntax)
+                    != GetPrecedence(binaryExpressionSyntax.Parent!)
                 && binaryExpressionSyntax.Left.GetType() != binaryExpressionSyntax.GetType()
                 && binaryExpressionSyntax.Right.GetType() != binaryExpressionSyntax.GetType()
                 && binaryExpressionSyntax.Left is not IsPatternExpressionSyntax;
@@ -128,6 +130,16 @@ internal static class BinaryExpression
     private static bool ShouldFlatten(SyntaxToken parentToken, SyntaxToken nodeToken)
     {
         return GetPrecedence(parentToken) == GetPrecedence(nodeToken);
+    }
+
+    private static int GetPrecedence(SyntaxNode node)
+    {
+        if (node is BinaryExpressionSyntax binaryExpressionSyntax)
+        {
+            return GetPrecedence(binaryExpressionSyntax.OperatorToken);
+        }
+
+        return -1;
     }
 
     private static int GetPrecedence(SyntaxToken syntaxToken)
