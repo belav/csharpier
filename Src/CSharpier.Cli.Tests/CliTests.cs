@@ -38,7 +38,7 @@ public class CliTests
         var formattedContent = "public class ClassName { }" + lineEnding;
         var unformattedContent = $"public class ClassName {{{lineEnding}{lineEnding}}}";
 
-        await WriteFileAsync("BasicFile.cs", unformattedContent);
+        await this.WriteFileAsync("BasicFile.cs", unformattedContent);
 
         var result = await new CsharpierProcess().WithArguments("BasicFile.cs").ExecuteAsync();
 
@@ -49,7 +49,7 @@ public class CliTests
                 "Total files:                                                                           1"
             );
         result.ExitCode.Should().Be(0);
-        (await ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
+        (await this.ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
     }
 
     [Test]
@@ -57,11 +57,11 @@ public class CliTests
     {
         var unformattedContent = "public class Unformatted {     }";
         var filePath = "Subdirectory/IgnoredFile.cs";
-        await WriteFileAsync(filePath, unformattedContent);
-        await WriteFileAsync(".csharpierignore", filePath);
+        await this.WriteFileAsync(filePath, unformattedContent);
+        await this.WriteFileAsync(".csharpierignore", filePath);
 
         await new CsharpierProcess().WithArguments(".").ExecuteAsync();
-        var result = await ReadAllTextAsync(filePath);
+        var result = await this.ReadAllTextAsync(filePath);
 
         result.Should().Be(unformattedContent, $"The file at {filePath} should have been ignored");
     }
@@ -129,7 +129,7 @@ public class CliTests
     {
         var unformattedContent = "public class ClassName1 {\n\n}";
 
-        await WriteFileAsync("CheckUnformatted.cs", unformattedContent);
+        await this.WriteFileAsync("CheckUnformatted.cs", unformattedContent);
 
         var result = await new CsharpierProcess()
             .WithArguments("CheckUnformatted.cs --check")
@@ -190,7 +190,7 @@ public class CliTests
     {
         const string ignoredFile = "public class ClassName {     }";
         var fileName = Path.Combine(testFileDirectory, "Ignored.cs");
-        await WriteFileAsync(".csharpierignore", "Ignored.cs");
+        await this.WriteFileAsync(".csharpierignore", "Ignored.cs");
 
         var result = await new CsharpierProcess()
             .WithArguments("--pipe-multiple-files")
@@ -206,7 +206,7 @@ public class CliTests
     {
         const string fileContent = "var myVariable = someLongValue;";
         var fileName = Path.Combine(testFileDirectory, "TooWide.cs");
-        await WriteFileAsync(".csharpierrc", "printWidth: 10");
+        await this.WriteFileAsync(".csharpierrc", "printWidth: 10");
 
         var result = await new CsharpierProcess()
             .WithArguments("--pipe-multiple-files")
@@ -220,7 +220,7 @@ public class CliTests
     [Test]
     public async Task Should_Not_Fail_On_Empty_File()
     {
-        await WriteFileAsync("BasicFile.cs", "");
+        await this.WriteFileAsync("BasicFile.cs", "");
 
         var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
 
@@ -232,7 +232,7 @@ public class CliTests
     private async Task WriteFileAsync(string path, string content)
     {
         var fileInfo = new FileInfo(Path.Combine(testFileDirectory, path));
-        EnsureExists(fileInfo.Directory!);
+        this.EnsureExists(fileInfo.Directory!);
 
         await File.WriteAllTextAsync(fileInfo.FullName, content);
     }
@@ -246,7 +246,7 @@ public class CliTests
     {
         if (directoryInfo.Parent != null)
         {
-            EnsureExists(directoryInfo.Parent);
+            this.EnsureExists(directoryInfo.Parent);
         }
 
         if (!directoryInfo.Exists)
