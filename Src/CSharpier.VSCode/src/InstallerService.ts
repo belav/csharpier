@@ -62,7 +62,10 @@ export class InstallerService {
                 } else if (selection === "Install CSharpier Locally") {
                     if (solutionRoot) {
                         try {
-                            const manifestPath = path.join(solutionRoot, ".config/dotnet-tools.json");
+                            const manifestPath = path.join(
+                                solutionRoot,
+                                ".config/dotnet-tools.json",
+                            );
                             this.loggingService.logInfo("Installing csharpier in " + manifestPath);
                             if (!fs.existsSync(manifestPath)) {
                                 execSync("dotnet new tool-manifest", { cwd: solutionRoot });

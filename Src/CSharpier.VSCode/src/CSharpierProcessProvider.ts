@@ -39,9 +39,7 @@ export class CSharpierProcessProvider implements Disposable {
         window.onDidChangeWindowState(event => {
             if (!event.focused) {
                 this.killRunningProcesses();
-            }
-            else {
-
+            } else {
             }
         });
         window.onDidChangeActiveTextEditor((event: TextEditor | undefined) => {
