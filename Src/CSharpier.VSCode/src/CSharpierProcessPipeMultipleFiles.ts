@@ -20,28 +20,28 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     }
 
     private spawnProcess = (csharpierPath: string, workingDirectory: string) => {
-        let csharpierProcess = spawn("dotnet", [csharpierPath, "--pipe-multiple-files"], {
+        const csharpierProcess = spawn("dotnet", [csharpierPath, "--pipe-multiple-files"], {
             stdio: "pipe",
             cwd: workingDirectory,
         });
 
         csharpierProcess.stderr.on("data", chunk => {
             this.loggingService.logInfo("Got error: " + chunk.toString());
-            let callback = this.callbacks.shift();
+            const callback = this.callbacks.shift();
             if (callback) {
                 callback("");
             }
         });
 
         csharpierProcess.stdout.on("data", chunk => {
-            this.loggingService.logDebug("Got chunk");
+            this.loggingService.logDebug("Got chunk of size " + chunk.length);
             this.nextFile += chunk;
-            let number = this.nextFile.indexOf("\u0003");
+            const number = this.nextFile.indexOf("\u0003");
             if (number >= 0) {
-                this.loggingService.logDebug("Got last chunk");
-                let result = this.nextFile.substring(0, number);
+                this.loggingService.logDebug("Got last chunk with ETX at " + number);
+                const result = this.nextFile.substring(0, number);
                 this.nextFile = this.nextFile.substring(number + 1);
-                let callback = this.callbacks.shift();
+                const callback = this.callbacks.shift();
                 if (callback) {
                     callback(result);
                 }

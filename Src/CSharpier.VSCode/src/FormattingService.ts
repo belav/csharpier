@@ -21,21 +21,21 @@ export class FormattingService {
 
     private provideDocumentFormattingEdits = async (document: TextDocument) => {
         this.loggingService.logInfo("Formatting started for " + document.fileName + ".");
-        let startTime = performance.now();
-        let result = await this.formatInPlace(document.getText(), document.fileName);
+        const startTime = performance.now();
+        const result = await this.formatInPlace(document.getText(), document.fileName);
         if (!result) {
             this.loggingService.logInfo("Formatting failed.");
             return [];
         }
 
-        let endTime = performance.now();
+        const endTime = performance.now();
         this.loggingService.logInfo("Formatted in " + (endTime - startTime) + "ms");
 
         return [TextEdit.replace(FormattingService.fullDocumentRange(document), result)];
     };
 
     private static fullDocumentRange(document: TextDocument): Range {
-        let lastLineId = document.lineCount - 1;
+        const lastLineId = document.lineCount - 1;
         return new Range(0, 0, lastLineId, document.lineAt(lastLineId).text.length);
     }
 

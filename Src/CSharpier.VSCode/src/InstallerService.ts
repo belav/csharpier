@@ -20,10 +20,10 @@ export class InstallerService {
     public displayInstallNeededMessage = (directoryThatContainsFile: string) => {
         this.loggingService.logError("CSharpier was not found so files may not be formatted.");
 
-        let items = ["Install CSharpier Globally"];
+        const items = ["Install CSharpier Globally"];
         let solutionRoot: string;
         if (workspace.workspaceFolders) {
-            for (let folder of workspace.workspaceFolders) {
+            for (const folder of workspace.workspaceFolders) {
                 if (directoryThatContainsFile.startsWith(folder.uri.fsPath)) {
                     solutionRoot = folder.uri.fsPath;
                     items.unshift("Install CSharpier Locally");
@@ -32,7 +32,7 @@ export class InstallerService {
             }
         }
 
-        let isOnlyGlobal = items.length === 1;
+        const isOnlyGlobal = items.length === 1;
         let message: string;
 
         if (isOnlyGlobal) {
@@ -55,14 +55,14 @@ export class InstallerService {
         window.showErrorMessage(message, ...items).then(
             selection => {
                 if (selection === "Install CSharpier Globally") {
-                    let command = "dotnet tool install -g csharpier";
+                    const command = "dotnet tool install -g csharpier";
                     this.loggingService.logInfo("Installing csharpier globally with " + command);
-                    let output = execSync(command).toString();
+                    const output = execSync(command).toString();
                     this.loggingService.logInfo(output);
                 } else if (selection === "Install CSharpier Locally") {
                     if (solutionRoot) {
                         try {
-                            let manifestPath = path.join(solutionRoot, ".config/dotnet-tools.json");
+                            const manifestPath = path.join(solutionRoot, ".config/dotnet-tools.json");
                             this.loggingService.logInfo("Installing csharpier in " + manifestPath);
                             if (!fs.existsSync(manifestPath)) {
                                 execSync("dotnet new tool-manifest", { cwd: solutionRoot });
