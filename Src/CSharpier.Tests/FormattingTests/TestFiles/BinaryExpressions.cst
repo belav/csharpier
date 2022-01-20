@@ -58,6 +58,10 @@ class TestClass
             : someLongValue____________________________________
               + someLongValue____________________________________;
 
+        var someValue =
+            value1__________________ == value2_________________
+            != (value3_______________________ == value4___________________);
+
         if (
             one == two
             || someValue_______________
