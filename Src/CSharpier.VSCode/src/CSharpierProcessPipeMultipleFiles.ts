@@ -38,10 +38,11 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
             this.nextFile += chunk;
             let number = this.nextFile.indexOf("\u0003");
             if (number >= 0) {
-                this.loggingService.logDebug("Got last chunk");
-                let result = this.nextFile.substring(0, number);
+                this.loggingService.logInfo("Got last chunk");
+                const result = this.nextFile.substring(0, number);
                 this.nextFile = this.nextFile.substring(number + 1);
-                let callback = this.callbacks.shift();
+                const callback = this.callbacks.shift();
+
                 if (callback) {
                     callback(result);
                 }

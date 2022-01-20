@@ -33,21 +33,20 @@ export const formatCode = async (code: string) => {
                 hasErrors: true,
             };
         }
-    }
-    
+    };
+
     for (let x = 0; x < 5; x++) {
         try {
             return makeRequest();
-        }
-        catch {
+        } catch {
             await sleep(500);
         }
     }
     return makeRequest();
 };
 
-function sleep (milliseconds: number) {
-    return new Promise((resolve) => setTimeout(resolve, milliseconds));
+function sleep(milliseconds: number) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
 const setupMarks = (errors: any[]) => {
