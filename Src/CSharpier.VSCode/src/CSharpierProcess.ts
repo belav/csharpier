@@ -1,11 +1,11 @@
 import { Disposable } from "vscode";
 
 export interface ICSharpierProcess extends Disposable {
-    formatFile(content: string, fileName: string): Promise<string>;
+    formatFile(content: string, filePath: string): Promise<string>;
 }
 
 export class NullCSharpierProcess implements ICSharpierProcess {
-    formatFile(content: string, fileName: string): Promise<string> {
+    formatFile(content: string, filePath: string): Promise<string> {
         return Promise.resolve("");
     }
 

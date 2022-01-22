@@ -1,5 +1,5 @@
 import { ExtensionContext, workspace } from "vscode";
-import { CSharpierService } from "./CSharpierService";
+import { CSharpierProcessProvider } from "./CSharpierProcessProvider";
 import { FormattingService } from "./FormattingService";
 import { LoggingService } from "./LoggingService";
 
@@ -22,8 +22,8 @@ const initPlugin = async (context: ExtensionContext) => {
 
     loggingService.logInfo("Initializing " + (process.env as any).EXTENSION_NAME);
 
-    const csharpierService = new CSharpierService(loggingService);
-    const formattingService = new FormattingService(loggingService, csharpierService);
+    const csharpierProcessProvider = new CSharpierProcessProvider(loggingService);
+    new FormattingService(loggingService, csharpierProcessProvider);
 
-    context.subscriptions.push(csharpierService);
+    context.subscriptions.push(csharpierProcessProvider);
 };
