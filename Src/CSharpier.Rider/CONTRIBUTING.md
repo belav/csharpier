@@ -9,3 +9,10 @@ Local testing
 - Run  .\gradlew.bat :buildPlugin to create plugin so that it can be used in rider, 
   - may need to change version number in gradle.properties
   - go to settings - plugins - install manually - Src\CSharpier.Rider\build\distributions
+
+Publishing
+- Update version in gradle.properties
+- Run  .\gradlew.bat :buildPlugin
+- Login to https://plugins.jetbrains.com/plugin/18243-csharpier using github account
+- upload file from build/distributions
+- Automate this if we release a lot

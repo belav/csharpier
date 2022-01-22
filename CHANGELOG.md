@@ -1,3 +1,13 @@
+# 0.14.0
+
+[diff](https://github.com/belav/csharpier/compare/0.13.0...0.14.0)
+
+- File with no preprocessor symbols formats twice. [#555](https://github.com/belav/csharpier/issues/555)
+- A namespace with `assembly` attribute and `using` causes two newlines [#551](https://github.com/belav/csharpier/issues/551)
+- Wrapping arithmetic expressions not stacked/chopped down [#547](https://github.com/belav/csharpier/issues/547)
+- Use UTF8 for piping in/out to CLI to support unicode characters  [#545](https://github.com/belav/csharpier/issues/545)
+
+
 # 0.13.0
 
 [diff](https://github.com/belav/csharpier/compare/0.12.0...0.13.0)
