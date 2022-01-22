@@ -6,6 +6,6 @@ internal class Concat : Doc
 
     public Concat(IList<Doc> contents)
     {
-        Contents = contents;
+        this.Contents = contents;
     }
 }

@@ -17,7 +17,7 @@ public class SyntaxNodeComparerGenerator : ISourceGenerator
     // to switch and doesn't really change at this point
     public void Execute(GeneratorExecutionContext context)
     {
-        var sourceText = SourceText.From(GenerateSource(), Encoding.UTF8);
+        var sourceText = SourceText.From(this.GenerateSource(), Encoding.UTF8);
 
         context.AddSource("SyntaxNodeComparer.generated", sourceText);
     }

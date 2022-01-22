@@ -17,10 +17,12 @@ internal class DocPrinter
 
     protected DocPrinter(Doc doc, PrinterOptions printerOptions, string endOfLine)
     {
-        EndOfLine = endOfLine;
-        PrinterOptions = printerOptions;
-        Indenter = new Indenter(printerOptions);
-        RemainingCommands.Push(new PrintCommand(Indenter.GenerateRoot(), PrintMode.Break, doc));
+        this.EndOfLine = endOfLine;
+        this.PrinterOptions = printerOptions;
+        this.Indenter = new Indenter(printerOptions);
+        this.RemainingCommands.Push(
+            new PrintCommand(Indenter.GenerateRoot(), PrintMode.Break, doc)
+        );
     }
 
     public static string Print(Doc document, PrinterOptions printerOptions, string endOfLine)
@@ -32,15 +34,15 @@ internal class DocPrinter
 
     public string Print()
     {
-        while (RemainingCommands.Count > 0)
+        while (this.RemainingCommands.Count > 0)
         {
-            ProcessNextCommand();
+            this.ProcessNextCommand();
         }
 
-        EnsureOutputEndsWithSingleNewLine();
+        this.EnsureOutputEndsWithSingleNewLine();
 
-        var result = Output.ToString();
-        if (PrinterOptions.TrimInitialLines)
+        var result = this.Output.ToString();
+        if (this.PrinterOptions.TrimInitialLines)
         {
             result = result.TrimStart('\n', '\r');
         }
@@ -51,21 +53,22 @@ internal class DocPrinter
     private void EnsureOutputEndsWithSingleNewLine()
     {
         var trimmed = 0;
-        for (; trimmed < Output.Length; trimmed++)
+        for (; trimmed < this.Output.Length; trimmed++)
         {
-            if (Output[^(trimmed + 1)] != '\r' && Output[^(trimmed + 1)] != '\n')
+            if (this.Output[^(trimmed + 1)] != '\r' && this.Output[^(trimmed + 1)] != '\n')
             {
                 break;
             }
         }
-        Output.Length -= trimmed;
 
-        Output.Append(EndOfLine);
+        this.Output.Length -= trimmed;
+
+        this.Output.Append(this.EndOfLine);
     }
 
     private void ProcessNextCommand()
     {
-        var (indent, mode, doc) = RemainingCommands.Pop();
+        var (indent, mode, doc) = this.RemainingCommands.Pop();
         if (doc == Doc.Null)
         {
             return;
@@ -74,32 +77,32 @@ internal class DocPrinter
         switch (doc)
         {
             case StringDoc stringDoc:
-                ProcessString(stringDoc, indent);
+                this.ProcessString(stringDoc, indent);
                 break;
             case Concat concat:
             {
                 for (var x = concat.Contents.Count - 1; x >= 0; x--)
                 {
-                    Push(concat.Contents[x], mode, indent);
+                    this.Push(concat.Contents[x], mode, indent);
                 }
                 break;
             }
             case IndentDoc indentDoc:
-                Push(indentDoc.Contents, mode, Indenter.IncreaseIndent(indent));
+                this.Push(indentDoc.Contents, mode, this.Indenter.IncreaseIndent(indent));
                 break;
             case Trim:
-                CurrentWidth -= Output.TrimTrailingWhitespace();
-                NewLineNextStringValue = false;
+                this.CurrentWidth -= this.Output.TrimTrailingWhitespace();
+                this.NewLineNextStringValue = false;
                 break;
             case Group group:
-                ProcessGroup(@group, mode, indent);
+                this.ProcessGroup(@group, mode, indent);
                 break;
             case IfBreak ifBreak:
             {
                 var groupMode = mode;
                 if (ifBreak.GroupId != null)
                 {
-                    if (!GroupModeMap.TryGetValue(ifBreak.GroupId, out groupMode))
+                    if (!this.GroupModeMap.TryGetValue(ifBreak.GroupId, out groupMode))
                     {
                         throw new Exception(
                             "You cannot use an ifBreak before the group it targets."
@@ -109,40 +112,43 @@ internal class DocPrinter
 
                 var contents =
                     groupMode == PrintMode.Break ? ifBreak.BreakContents : ifBreak.FlatContents;
-                Push(contents, mode, indent);
+                this.Push(contents, mode, indent);
                 break;
             }
             case LineDoc line:
-                ProcessLine(line, mode, indent);
+                this.ProcessLine(line, mode, indent);
                 break;
             case BreakParent:
                 break;
             case LeadingComment leadingComment:
             {
-                Output.TrimTrailingWhitespace();
-                if ((Output.Length != 0 && Output[^1] != '\n') || NewLineNextStringValue)
+                this.Output.TrimTrailingWhitespace();
+                if (
+                    (this.Output.Length != 0 && this.Output[^1] != '\n')
+                    || this.NewLineNextStringValue
+                )
                 {
-                    Output.Append(EndOfLine);
+                    this.Output.Append(this.EndOfLine);
                 }
 
-                Output.Append(indent.Value).Append(leadingComment.Comment);
-                CurrentWidth = indent.Length;
-                NewLineNextStringValue = false;
-                SkipNextNewLine = false;
+                this.Output.Append(indent.Value).Append(leadingComment.Comment);
+                this.CurrentWidth = indent.Length;
+                this.NewLineNextStringValue = false;
+                this.SkipNextNewLine = false;
                 break;
             }
             case TrailingComment trailingComment:
-                Output.TrimTrailingWhitespace();
-                Output.Append(' ').Append(trailingComment.Comment);
-                CurrentWidth = indent.Length;
-                NewLineNextStringValue = true;
-                SkipNextNewLine = true;
+                this.Output.TrimTrailingWhitespace();
+                this.Output.Append(' ').Append(trailingComment.Comment);
+                this.CurrentWidth = indent.Length;
+                this.NewLineNextStringValue = true;
+                this.SkipNextNewLine = true;
                 break;
             case ForceFlat forceFlat:
-                Push(forceFlat.Contents, PrintMode.Flat, indent);
+                this.Push(forceFlat.Contents, PrintMode.Flat, indent);
                 break;
             case Align align:
-                Push(align.Contents, mode, Indenter.AddAlign(indent, align.Width));
+                this.Push(align.Contents, mode, this.Indenter.AddAlign(indent, align.Width));
                 break;
             default:
                 throw new Exception("didn't handle " + doc);
@@ -159,21 +165,21 @@ internal class DocPrinter
         // this ensures we don't print extra spaces after a trailing comment
         // newLineNextStringValue & skipNextNewLine are set to true when we print a trailing comment
         // when they are set we new line the next string we find. If we new line and then print a " " we end up with an extra space
-        if (NewLineNextStringValue && SkipNextNewLine && stringDoc.Value == " ")
+        if (this.NewLineNextStringValue && this.SkipNextNewLine && stringDoc.Value == " ")
         {
             return;
         }
 
-        if (NewLineNextStringValue)
+        if (this.NewLineNextStringValue)
         {
-            Output.TrimTrailingWhitespace();
-            Output.Append(EndOfLine).Append(indent.Value);
-            CurrentWidth = indent.Length;
-            NewLineNextStringValue = false;
+            this.Output.TrimTrailingWhitespace();
+            this.Output.Append(this.EndOfLine).Append(indent.Value);
+            this.CurrentWidth = indent.Length;
+            this.NewLineNextStringValue = false;
         }
 
-        Output.Append(stringDoc.Value);
-        CurrentWidth += stringDoc.Value.GetPrintedWidth();
+        this.Output.Append(stringDoc.Value);
+        this.CurrentWidth += stringDoc.Value.GetPrintedWidth();
     }
 
     private void ProcessLine(LineDoc line, PrintMode mode, Indent indent)
@@ -187,66 +193,66 @@ internal class DocPrinter
 
             if (line.Type == LineDoc.LineType.Normal)
             {
-                Output.Append(' ');
-                CurrentWidth += 1;
+                this.Output.Append(' ');
+                this.CurrentWidth += 1;
                 return;
             }
 
             // This line was forced into the output even if we were in flattened mode, so we need to tell the next
             // group that no matter what, it needs to remeasure because the previous measurement didn't accurately
             // capture the entire expression (this is necessary for nested groups)
-            ShouldRemeasure = true;
+            this.ShouldRemeasure = true;
         }
 
-        if (line.Squash && Output.Length > 0 && Output.EndsWithNewLineAndWhitespace())
+        if (line.Squash && this.Output.Length > 0 && this.Output.EndsWithNewLineAndWhitespace())
         {
             return;
         }
 
         if (line.IsLiteral)
         {
-            if (Output.Length > 0)
+            if (this.Output.Length > 0)
             {
-                Output.Append(EndOfLine);
-                CurrentWidth = 0;
+                this.Output.Append(this.EndOfLine);
+                this.CurrentWidth = 0;
             }
         }
         else
         {
-            if (!SkipNextNewLine || !NewLineNextStringValue)
+            if (!this.SkipNextNewLine || !this.NewLineNextStringValue)
             {
-                Output.TrimTrailingWhitespace();
-                Output.Append(EndOfLine).Append(indent.Value);
-                CurrentWidth = indent.Length;
+                this.Output.TrimTrailingWhitespace();
+                this.Output.Append(this.EndOfLine).Append(indent.Value);
+                this.CurrentWidth = indent.Length;
             }
 
-            if (SkipNextNewLine)
+            if (this.SkipNextNewLine)
             {
-                SkipNextNewLine = false;
+                this.SkipNextNewLine = false;
             }
         }
     }
 
     private void ProcessGroup(Group group, PrintMode mode, Indent indent)
     {
-        if (mode is PrintMode.Flat or PrintMode.ForceFlat && !ShouldRemeasure)
+        if (mode is PrintMode.Flat or PrintMode.ForceFlat && !this.ShouldRemeasure)
         {
-            Push(group.Contents, group.Break ? PrintMode.Break : PrintMode.Flat, indent);
+            this.Push(group.Contents, group.Break ? PrintMode.Break : PrintMode.Flat, indent);
         }
         else
         {
-            ShouldRemeasure = false;
+            this.ShouldRemeasure = false;
             var possibleCommand = new PrintCommand(indent, PrintMode.Flat, group.Contents);
 
-            if (!group.Break && Fits(possibleCommand))
+            if (!group.Break && this.Fits(possibleCommand))
             {
-                RemainingCommands.Push(possibleCommand);
+                this.RemainingCommands.Push(possibleCommand);
             }
             else if (group is ConditionalGroup conditionalGroup)
             {
                 if (group.Break)
                 {
-                    Push(conditionalGroup.Options.Last(), PrintMode.Break, indent);
+                    this.Push(conditionalGroup.Options.Last(), PrintMode.Break, indent);
                 }
                 else
                 {
@@ -254,30 +260,31 @@ internal class DocPrinter
                     foreach (var option in conditionalGroup.Options.Skip(1))
                     {
                         possibleCommand = new PrintCommand(indent, mode, option);
-                        if (!Fits(possibleCommand))
+                        if (!this.Fits(possibleCommand))
                         {
                             continue;
                         }
-                        RemainingCommands.Push(possibleCommand);
+
+                        this.RemainingCommands.Push(possibleCommand);
                         foundSomethingThatFits = true;
                         break;
                     }
 
                     if (!foundSomethingThatFits)
                     {
-                        RemainingCommands.Push(possibleCommand);
+                        this.RemainingCommands.Push(possibleCommand);
                     }
                 }
             }
             else
             {
-                Push(group.Contents, PrintMode.Break, indent);
+                this.Push(group.Contents, PrintMode.Break, indent);
             }
         }
 
         if (group.GroupId != null)
         {
-            GroupModeMap[group.GroupId] = RemainingCommands.Peek().Mode;
+            this.GroupModeMap[group.GroupId] = this.RemainingCommands.Peek().Mode;
         }
     }
 
@@ -285,16 +292,16 @@ internal class DocPrinter
     {
         return DocFitter.Fits(
             possibleCommand,
-            RemainingCommands,
-            PrinterOptions.Width - CurrentWidth,
-            GroupModeMap,
-            Indenter
+            this.RemainingCommands,
+            this.PrinterOptions.Width - this.CurrentWidth,
+            this.GroupModeMap,
+            this.Indenter
         );
     }
 
     private void Push(Doc doc, PrintMode printMode, Indent indent)
     {
-        RemainingCommands.Push(new PrintCommand(indent, printMode, doc));
+        this.RemainingCommands.Push(new PrintCommand(indent, printMode, doc));
     }
 }
 

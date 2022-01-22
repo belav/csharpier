@@ -45,7 +45,7 @@ public class ConsoleLogger : ILogger
             }
         }
 
-        if (!IsEnabled(logLevel))
+        if (!this.IsEnabled(logLevel))
         {
             return;
         }
