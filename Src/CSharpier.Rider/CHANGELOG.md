@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+## [1.0.4]
+- Adding support for UTF8 and unicode characters. Requires csharpier 0.14.0
+
 ## [1.0.3]
 - Add logo
 
