@@ -50,3 +50,5 @@ publish
 *.actual.cst
 *.vsix
 /.husky/pre-commit
+
+debug.txt

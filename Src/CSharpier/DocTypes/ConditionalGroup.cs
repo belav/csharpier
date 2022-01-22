@@ -8,8 +8,9 @@ internal class ConditionalGroup : Group
         {
             throw new ArgumentException("Options was an empty array");
         }
-        Options = options;
-        Contents = options[0];
+
+        this.Options = options;
+        this.Contents = options[0];
     }
 
     public Doc[] Options { get; }

@@ -98,7 +98,6 @@ internal class PreprocessorSymbols
     {
         if (SymbolSets == null)
         {
-            yield return Array.Empty<string>();
             yield break;
         }
 

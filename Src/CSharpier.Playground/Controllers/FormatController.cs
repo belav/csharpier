@@ -58,7 +58,7 @@ public class FormatController : ControllerBase
             Code = result.Code,
             Json = result.AST,
             Doc = result.DocTree,
-            Errors = result.Errors.Select(ConvertError).ToList(),
+            Errors = result.Errors.Select(this.ConvertError).ToList(),
         };
     }
 

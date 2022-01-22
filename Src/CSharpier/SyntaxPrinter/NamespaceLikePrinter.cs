@@ -67,15 +67,26 @@ internal static class NamespaceLikePrinter
 
         if (usings.Any() || (!usings.Any() && externs.Any()))
         {
-            if (members[0].GetLeadingTrivia().Any(o => o.IsDirective))
+            var directiveTrivia = members[0].GetLeadingTrivia().Where(o => o.IsDirective).ToArray();
+
+            if (directiveTrivia.Any())
             {
-                docs.Add(ExtraNewLines.Print(members[0]));
+                if (
+                    (
+                        node is not CompilationUnitSyntax { AttributeLists: { Count: > 0 } }
+                        && directiveTrivia.All(o => o.Kind() is SyntaxKind.EndIfDirectiveTrivia)
+                    ) || !directiveTrivia.All(o => o.Kind() is SyntaxKind.EndIfDirectiveTrivia)
+                )
+                {
+                    docs.Add(ExtraNewLines.Print(members[0]));
+                }
             }
-            else
+            else if (node is not CompilationUnitSyntax { AttributeLists: { Count: > 0 } })
             {
                 docs.Add(Doc.HardLine);
             }
         }
+
         docs.AddRange(MembersWithForcedLines.Print(node, members));
     }
 }

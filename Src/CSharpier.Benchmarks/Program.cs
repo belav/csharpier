@@ -11,20 +11,24 @@ public class Benchmarks
     [Benchmark]
     public void Default_CodeFormatter()
     {
-        CodeFormatter.Format(largeCode, new PrinterOptions());
+        CodeFormatter.Format(this.largeCode, new PrinterOptions());
     }
 
     [Benchmark]
     public void Default_SyntaxNodeComparer()
     {
-        var syntaxNodeComparer = new SyntaxNodeComparer(code, code, CancellationToken.None);
+        var syntaxNodeComparer = new SyntaxNodeComparer(
+            this.code,
+            this.code,
+            CancellationToken.None
+        );
         syntaxNodeComparer.CompareSource();
     }
 
     [Benchmark]
     public void IsCodeBasicallyEqual_SyntaxNodeComparer()
     {
-        DisabledTextComparer.IsCodeBasicallyEqual(code, code);
+        DisabledTextComparer.IsCodeBasicallyEqual(this.code, this.code);
     }
 
     private readonly string largeCode = File.ReadAllText(
