@@ -6,6 +6,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
@@ -13,19 +15,21 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     String csharpierPath;
 
     Process process = null;
-    OutputStream stdin;
+    OutputStreamWriter stdin;
     BufferedReader stdOut;
     BufferedReader stdError;
 
-    public CSharpierProcessPipeMultipleFiles(String csharpierPath) {
+    public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8) {
         this.csharpierPath = csharpierPath;
         try {
             process = new ProcessBuilder("dotnet", csharpierPath, "--pipe-multiple-files")
                     .start();
 
-            stdin = process.getOutputStream();
-            stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            String charset = useUtf8 ? "utf-8" : Charset.defaultCharset().toString();
+
+            stdin = new OutputStreamWriter(process.getOutputStream(), charset);
+            stdOut = new BufferedReader(new InputStreamReader(process.getInputStream(), charset));
+            stdError = new BufferedReader(new InputStreamReader(process.getErrorStream(), charset));
         } catch (Exception e) {
             LOG.error("error", e);
         }
@@ -39,9 +43,9 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
         try {
             LOG.info(filePath);
-            stdin.write(filePath.getBytes());
+            stdin.write(filePath);
             stdin.write('\u0003');
-            stdin.write(content.getBytes());
+            stdin.write(content);
             stdin.write('\u0003');
             stdin.flush();
 

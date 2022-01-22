@@ -1,8 +1,10 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using CliWrap;
+using CliWrap.Buffered;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -97,6 +99,19 @@ public class CliTests
             .ExecuteAsync();
 
         result.Output.Should().Be(formattedContent1);
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    public async Task Should_Format_Unicode()
+    {
+        // use the \u so that we don't accidentally reformat this to be '?'
+        var unicodeContent = $"var test = '{'\u3002'}';\n";
+
+        var result = await new CsharpierProcess().WithPipedInput(unicodeContent).ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.Output.Should().Be(unicodeContent);
         result.ExitCode.Should().Be(0);
     }
 
@@ -261,6 +276,8 @@ public class CliTests
         private readonly StringBuilder errorOutput = new();
         private Command command;
 
+        private readonly Encoding encoding = Encoding.UTF8;
+
         public CsharpierProcess()
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
@@ -270,8 +287,8 @@ public class CliTests
                 .WithArguments(path)
                 .WithWorkingDirectory(testFileDirectory)
                 .WithValidation(CommandResultValidation.None)
-                .WithStandardOutputPipe(PipeTarget.ToStringBuilder(this.output))
-                .WithStandardErrorPipe(PipeTarget.ToStringBuilder(this.errorOutput));
+                .WithStandardOutputPipe(PipeTarget.ToStringBuilder(this.output, this.encoding))
+                .WithStandardErrorPipe(PipeTarget.ToStringBuilder(this.errorOutput, this.encoding));
         }
 
         public CsharpierProcess WithArguments(string arguments)
@@ -282,14 +299,16 @@ public class CliTests
 
         public CsharpierProcess WithPipedInput(string input)
         {
-            this.command = this.command.WithStandardInputPipe(PipeSource.FromString(input));
+            this.command = this.command.WithStandardInputPipe(
+                PipeSource.FromString(input, this.encoding)
+            );
 
             return this;
         }
 
         public async Task<ProcessResult> ExecuteAsync()
         {
-            var result = await this.command.ExecuteAsync();
+            var result = await this.command.ExecuteBufferedAsync(this.encoding);
             return new ProcessResult(
                 this.output.ToString(),
                 this.errorOutput.ToString(),

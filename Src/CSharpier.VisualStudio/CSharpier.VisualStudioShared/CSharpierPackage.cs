@@ -23,7 +23,7 @@ namespace CSharpier.VisualStudio
         {
             var outputPane = await this.GetServiceAsync<IVsOutputWindow>();
             var logger = new Logger(outputPane);
-            logger.Log("Starting");
+            logger.Info("Starting");
 
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 

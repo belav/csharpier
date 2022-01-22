@@ -1,4 +1,4 @@
-﻿using System.CommandLine;
+using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Diagnostics;
 using System.IO.Abstractions;
@@ -44,7 +44,7 @@ public class Program
         {
             using var streamReader = new StreamReader(
                 Console.OpenStandardInput(),
-                Console.InputEncoding
+                console.InputEncoding
             );
             standardInFileContents = await streamReader.ReadToEndAsync();
 
@@ -90,7 +90,7 @@ public class Program
     {
         using var streamReader = new StreamReader(
             Console.OpenStandardInput(),
-            Console.InputEncoding
+            console.InputEncoding
         );
 
         var stringBuilder = new StringBuilder();

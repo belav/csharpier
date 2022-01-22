@@ -16,7 +16,7 @@ namespace CSharpier.VisualStudio
 
             this.csharpierPath = this.GetCSharpierPath();
 
-            logger.Log("Using command dotnet " + this.csharpierPath);
+            logger.Debug("Using command dotnet " + this.csharpierPath);
 
             this.csharpierProcess = this.SetupCSharpierProcess();
         }
@@ -25,23 +25,14 @@ namespace CSharpier.VisualStudio
         {
             // TODO make this some kind of build property so it only works when testing the plugin
             // or maybe make it a setting?
-            //        try {
-            //            String csharpierDebugPath = "C:\\projects\\csharpier\\Src\\CSharpier.Cli\\bin\\Debug\\net6.0\\dotnet-csharpier.dll";
-            //            String csharpierReleasePath = csharpierDebugPath.replace("Debug", "Release");
-            //
-            //            if (new File(csharpierDebugPath).exists()) {
-            //                return csharpierDebugPath;
-            //            } else if (new File(csharpierReleasePath).exists()) {
-            //                return csharpierReleasePath;
-            //            }
-            //        } catch (Exception ex) {
-            //            Log.debug("Could not find local csharpier " + ex.getMessage());
-            //        }
+#if DEBUG
+            // return @"C:\projects\csharpier\Src\CSharpier.Cli\bin\Debug\net6.0\dotnet-csharpier.dll";
+#endif
 
             return "csharpier";
         }
 
-        public string ExecuteCommand(string cmd, string arguments)
+        private string ExecuteCommand(string cmd, string arguments)
         {
             var processStartInfo = new ProcessStartInfo(cmd, arguments)
             {
@@ -68,7 +59,7 @@ namespace CSharpier.VisualStudio
             try
             {
                 var version = this.ExecuteCommand("dotnet", this.csharpierPath + " --version");
-                this.logger.Log("CSharpier version: " + version);
+                this.logger.Info("CSharpier version: " + version);
                 if (string.IsNullOrEmpty(version))
                 {
                     this.DisplayInstallNeededMessage();

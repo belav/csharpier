@@ -15,6 +15,11 @@ public interface IConsole
 
 public class SystemConsole : IConsole
 {
+    public SystemConsole()
+    {
+        Console.OutputEncoding = Encoding.UTF8;
+    }
+
     public void WriteLine(string? line = null)
     {
         Console.WriteLine(line);
@@ -45,5 +50,5 @@ public class SystemConsole : IConsole
         Console.ResetColor();
     }
 
-    public Encoding InputEncoding => Console.InputEncoding;
+    public Encoding InputEncoding => Encoding.UTF8;
 }

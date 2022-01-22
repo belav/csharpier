@@ -49,8 +49,8 @@ namespace CSharpier.VisualStudio
                 return result;
             }
 
-            this.logger.Log(errorOutput.ToString());
-            this.logger.Log(result);
+            this.logger.Info(errorOutput.ToString());
+            this.logger.Info(result);
 
             return null;
         }

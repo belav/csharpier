@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
@@ -16,7 +17,20 @@ namespace CSharpier.VisualStudio
             outputWindow.GetPane(ref guid, out this.pane);
         }
 
-        public void Log(string message)
+        // TODO make a proper setting for this so real users can see debug messages
+        public void Debug(string message)
+        {
+#if DEBUG
+            this.Log(message);
+#endif
+        }
+
+        public void Info(string message)
+        {
+            this.Log(message);
+        }
+
+        private void Log(string message)
         {
             this.pane.OutputStringThreadSafe(message + Environment.NewLine);
         }
