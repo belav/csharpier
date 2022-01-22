@@ -1,6 +1,7 @@
 import { LoggingService } from "./LoggingService";
 import { spawn } from "child_process";
 import { ICSharpierProcess } from "./CSharpierProcess";
+import * as path from "path";
 
 export class CSharpierProcessSingleFile implements ICSharpierProcess {
     private readonly csharpierPath: string;
@@ -11,10 +12,12 @@ export class CSharpierProcessSingleFile implements ICSharpierProcess {
         this.csharpierPath = csharpierPath;
     }
 
-    formatFile(content: string, fileName: string): Promise<string> {
+    formatFile(content: string, filePath: string): Promise<string> {
+        const directory = path.parse(filePath).dir;
         return new Promise((resolve, reject) => {
             const csharpier = spawn("dotnet", [this.csharpierPath, "--write-stdout"], {
                 stdio: "pipe",
+                cwd: directory,
             });
 
             let output = "";
