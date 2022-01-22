@@ -42,12 +42,11 @@ public class PreprocessorSymbolsTests
 
     private static string[] AddSymbolSet(ConditionalDirectiveTriviaSyntax trivia)
     {
-        TestablePreprocessorSymbols.Reset();
+        PreprocessorSymbols.Reset();
 
         TestablePreprocessorSymbols.AddSymbolSet(trivia);
 
-        return TestablePreprocessorSymbols.GetSymbolSets().FirstOrDefault()
-            ?? Array.Empty<string>();
+        return PreprocessorSymbols.GetSymbolSets().FirstOrDefault() ?? Array.Empty<string>();
     }
 
     private static IfDirectiveTriviaSyntax WhenIfDirectiveHasCondition(string condition)

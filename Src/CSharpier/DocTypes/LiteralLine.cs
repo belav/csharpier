@@ -4,7 +4,7 @@ internal class LiteralLine : LineDoc, IBreakParent
 {
     public LiteralLine()
     {
-        Type = LineType.Hard;
-        IsLiteral = true;
+        this.Type = LineType.Hard;
+        this.IsLiteral = true;
     }
 }

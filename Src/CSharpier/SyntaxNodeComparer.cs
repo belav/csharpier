@@ -41,8 +41,8 @@ internal partial class SyntaxNodeComparer
     public async Task<string> CompareSourceAsync(CancellationToken cancellationToken)
     {
         var result = this.AreEqualIgnoringWhitespace(
-            await OriginalSyntaxTree.GetRootAsync(cancellationToken),
-            await NewSyntaxTree.GetRootAsync(cancellationToken)
+            await this.OriginalSyntaxTree.GetRootAsync(cancellationToken),
+            await this.NewSyntaxTree.GetRootAsync(cancellationToken)
         );
 
         if (!result.IsInvalid)
@@ -107,11 +107,11 @@ internal partial class SyntaxNodeComparer
         SyntaxNode formattedStart
     )
     {
-        originalStack.Push((originalStart, originalStart));
-        formattedStack.Push((formattedStart, formattedStart));
-        while (originalStack.Count > 0)
+        this.originalStack.Push((originalStart, originalStart));
+        this.formattedStack.Push((formattedStart, formattedStart));
+        while (this.originalStack.Count > 0)
         {
-            var result = this.Compare(originalStack.Pop(), formattedStack.Pop());
+            var result = this.Compare(this.originalStack.Pop(), this.formattedStack.Pop());
             if (result.IsInvalid)
             {
                 return result;
@@ -147,8 +147,8 @@ internal partial class SyntaxNodeComparer
                 && formattedList[x] is SyntaxNode formattedNode
             )
             {
-                originalStack.Push((originalNode, originalNode.Parent));
-                formattedStack.Push((formattedNode, formattedNode.Parent));
+                this.originalStack.Push((originalNode, originalNode.Parent));
+                this.formattedStack.Push((formattedNode, formattedNode.Parent));
             }
             else
             {
@@ -185,7 +185,7 @@ internal partial class SyntaxNodeComparer
 
     private CompareResult Compare(SyntaxToken originalToken, SyntaxToken formattedToken)
     {
-        return Compare(originalToken, formattedToken, null, null);
+        return this.Compare(originalToken, formattedToken, null, null);
     }
 
     private CompareResult Compare(
@@ -260,7 +260,7 @@ internal partial class SyntaxNodeComparer
         var formatted = FindNextSyntaxTrivia(formattedList, ref nextFormatted);
         while (original != null && formatted != null)
         {
-            var result = Compare(original.Value, formatted.Value);
+            var result = this.Compare(original.Value, formatted.Value);
             if (result.IsInvalid)
             {
                 return result;

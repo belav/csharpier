@@ -29,7 +29,7 @@ internal class Indenter
 
     public Indenter(PrinterOptions printerOptions)
     {
-        PrinterOptions = printerOptions;
+        this.PrinterOptions = printerOptions;
     }
 
     public static Indent GenerateRoot()
@@ -39,34 +39,34 @@ internal class Indenter
 
     public Indent IncreaseIndent(Indent indent)
     {
-        if (PrinterOptions.UseTabs)
+        if (this.PrinterOptions.UseTabs)
         {
             if (indent.TypesForTabs != null)
             {
-                return MakeIndentWithTypesForTabs(indent, IndentType.Instance);
+                return this.MakeIndentWithTypesForTabs(indent, IndentType.Instance);
             }
 
             return new Indent
             {
                 Value = indent.Value + "\t",
-                Length = indent.Length + PrinterOptions.TabWidth
+                Length = indent.Length + this.PrinterOptions.TabWidth
             };
         }
         else
         {
             return new Indent
             {
-                Value = indent.Value + new string(' ', PrinterOptions.TabWidth),
-                Length = indent.Length + PrinterOptions.TabWidth
+                Value = indent.Value + new string(' ', this.PrinterOptions.TabWidth),
+                Length = indent.Length + this.PrinterOptions.TabWidth
             };
         }
     }
 
     public Indent AddAlign(Indent indent, int alignment)
     {
-        if (PrinterOptions.UseTabs)
+        if (this.PrinterOptions.UseTabs)
         {
-            return MakeIndentWithTypesForTabs(indent, new AlignType { Width = alignment });
+            return this.MakeIndentWithTypesForTabs(indent, new AlignType { Width = alignment });
         }
         else
         {
@@ -126,7 +126,7 @@ internal class Indenter
             else
             {
                 value.Append('\t');
-                length += PrinterOptions.TabWidth;
+                length += this.PrinterOptions.TabWidth;
             }
         }
 

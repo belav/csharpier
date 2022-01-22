@@ -17,19 +17,19 @@ public abstract class TemplatedGenerator : ISourceGenerator
 
     public void Execute(GeneratorExecutionContext context)
     {
-        var template = Template.Parse(GetContent(GetType().Name + ".sbntxt"));
-        var renderedSource = template.Render(GetModel(context), member => member.Name);
+        var template = Template.Parse(this.GetContent(this.GetType().Name + ".sbntxt"));
+        var renderedSource = template.Render(this.GetModel(context), member => member.Name);
 
         var sourceText = SourceText.From(renderedSource, Encoding.UTF8);
 
-        context.AddSource(SourceName, sourceText);
+        context.AddSource(this.SourceName, sourceText);
     }
 
     protected abstract object GetModel(GeneratorExecutionContext context);
 
     public string GetContent(string relativePath)
     {
-        var assembly = GetType().Assembly;
+        var assembly = this.GetType().Assembly;
         var baseName = assembly.GetName().Name;
         var resourceName = relativePath
             .TrimStart('.')
