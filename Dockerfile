@@ -13,6 +13,7 @@ RUN apt-get update  && \
 WORKDIR /build
 COPY ./Src/CSharpier.Playground/CSharpier.Playground.csproj Src/CSharpier.Playground/
 COPY ./Src/CSharpier/CSharpier.csproj Src/CSharpier/
+ARG RESTORE_TOOLS=0
 RUN dotnet restore "Src/CSharpier.Playground/CSharpier.Playground.csproj"
 
 COPY ./Src/CSharpier.Playground/ClientApp/package.json Src/CSharpier.Playground/ClientApp/
