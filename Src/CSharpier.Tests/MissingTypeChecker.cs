@@ -48,7 +48,7 @@ public class MissingTypeChecker
                 continue;
             }
 
-            if (ignored.Contains(nodeType.Name))
+            if (this.ignored.Contains(nodeType.Name))
             {
                 continue;
             }

@@ -111,7 +111,7 @@ internal abstract class Doc
 
     public static Doc IndentIf(bool condition, Doc contents)
     {
-        return condition ? Doc.Indent(contents) : contents;
+        return condition ? Indent(contents) : contents;
     }
 
     public static IfBreak IfBreak(Doc breakContents, Doc flatContents, string? groupId = null) =>

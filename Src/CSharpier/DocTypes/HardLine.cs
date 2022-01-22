@@ -6,8 +6,8 @@ internal class HardLine : LineDoc, IBreakParent
 
     public HardLine(bool squash = false, bool skipBreakIfFirstInGroup = false)
     {
-        Type = LineType.Hard;
-        Squash = squash;
-        SkipBreakIfFirstInGroup = skipBreakIfFirstInGroup;
+        this.Type = LineType.Hard;
+        this.Squash = squash;
+        this.SkipBreakIfFirstInGroup = skipBreakIfFirstInGroup;
     }
 }

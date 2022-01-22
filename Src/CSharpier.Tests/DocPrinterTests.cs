@@ -10,7 +10,7 @@ namespace CSharpier.Tests;
 [Parallelizable(ParallelScope.All)]
 public class DocPrinterTests
 {
-    private static readonly string NewLine = System.Environment.NewLine;
+    private static readonly string NewLine = Environment.NewLine;
 
     [Test]
     public void Lines_Allowed()
@@ -203,7 +203,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Concat(
             "1",
-            Doc.Group(Doc.Line, ActualConcat("2")),
+            Doc.Group(Doc.Line, this.ActualConcat("2")),
             Doc.HardLine,
             Doc.Concat(
                 "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
@@ -457,7 +457,9 @@ public class DocPrinterTests
     [Test]
     public void HardLineIfNoPreviousLine_Should_Not_Insert_After_Indented_HardLine()
     {
-        var doc = ActualConcat(Doc.Indent("1", Doc.HardLine, Doc.HardLineIfNoPreviousLine, "2"));
+        var doc = this.ActualConcat(
+            Doc.Indent("1", Doc.HardLine, Doc.HardLineIfNoPreviousLine, "2")
+        );
 
         PrintedDocShouldBe(doc, $"1{NewLine}    2");
     }

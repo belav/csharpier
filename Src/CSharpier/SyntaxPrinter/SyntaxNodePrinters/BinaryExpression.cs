@@ -62,6 +62,8 @@ internal static class BinaryExpression
             // This group ensures that something like == 0 does not end up on its own line
             var shouldGroup =
                 binaryExpressionSyntax.Kind() != binaryExpressionSyntax.Parent!.Kind()
+                && GetPrecedence(binaryExpressionSyntax)
+                    != GetPrecedence(binaryExpressionSyntax.Parent!)
                 && binaryExpressionSyntax.Left.GetType() != binaryExpressionSyntax.GetType()
                 && binaryExpressionSyntax.Right.GetType() != binaryExpressionSyntax.GetType()
                 && binaryExpressionSyntax.Left is not IsPatternExpressionSyntax;
@@ -130,6 +132,16 @@ internal static class BinaryExpression
         return GetPrecedence(parentToken) == GetPrecedence(nodeToken);
     }
 
+    private static int GetPrecedence(SyntaxNode node)
+    {
+        if (node is BinaryExpressionSyntax binaryExpressionSyntax)
+        {
+            return GetPrecedence(binaryExpressionSyntax.OperatorToken);
+        }
+
+        return -1;
+    }
+
     private static int GetPrecedence(SyntaxToken syntaxToken)
     {
         return syntaxToken.Kind() switch
@@ -141,20 +153,20 @@ internal static class BinaryExpression
             SyntaxKind.CaretToken => 5,
             SyntaxKind.AmpersandToken => 6,
             SyntaxKind.ExclamationEqualsToken => 7,
-            SyntaxKind.EqualsEqualsToken => 7,
-            SyntaxKind.LessThanToken => 8,
-            SyntaxKind.LessThanEqualsToken => 8,
-            SyntaxKind.GreaterThanToken => 8,
-            SyntaxKind.GreaterThanEqualsToken => 8,
-            SyntaxKind.IsKeyword => 8,
-            SyntaxKind.AsKeyword => 8,
-            SyntaxKind.LessThanLessThanToken => 9,
-            SyntaxKind.GreaterThanGreaterThanToken => 9,
-            SyntaxKind.MinusToken => 10,
-            SyntaxKind.PlusToken => 10,
-            SyntaxKind.AsteriskToken => 11,
-            SyntaxKind.SlashToken => 11,
-            SyntaxKind.PercentToken => 11,
+            SyntaxKind.EqualsEqualsToken => 8,
+            SyntaxKind.LessThanToken => 9,
+            SyntaxKind.LessThanEqualsToken => 9,
+            SyntaxKind.GreaterThanToken => 9,
+            SyntaxKind.GreaterThanEqualsToken => 9,
+            SyntaxKind.IsKeyword => 9,
+            SyntaxKind.AsKeyword => 9,
+            SyntaxKind.LessThanLessThanToken => 10,
+            SyntaxKind.GreaterThanGreaterThanToken => 10,
+            SyntaxKind.MinusToken => 11,
+            SyntaxKind.PlusToken => 11,
+            SyntaxKind.AsteriskToken => 12,
+            SyntaxKind.SlashToken => 12,
+            SyntaxKind.PercentToken => 12,
             _ => throw new Exception($"No precedence defined for {syntaxToken}")
         };
     }
