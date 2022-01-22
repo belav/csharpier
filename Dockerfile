@@ -26,6 +26,7 @@ WORKDIR /build
 COPY . .
 
 FROM build AS publish
+ARG RESTORE_TOOLS=0
 RUN dotnet publish "Src/CSharpier.Playground/CSharpier.Playground.csproj" -c Release -o /app/publish
 
 FROM base AS final
