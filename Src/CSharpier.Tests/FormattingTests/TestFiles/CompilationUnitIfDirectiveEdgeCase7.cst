@@ -1,0 +1,8 @@
+using System;
+
+#if DEBUG
+[assembly: SomeAttribute]
+
+#endif
+
+namespace Namespace { }

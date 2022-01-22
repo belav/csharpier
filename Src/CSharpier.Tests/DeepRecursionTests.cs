@@ -9,7 +9,7 @@ public class DeepRecursionTests
     [Test]
     public void Format_Should_Return_Error_For_Deep_Recursion()
     {
-        var code = uglyLongConcatenatedString;
+        var code = this.uglyLongConcatenatedString;
         var result = CodeFormatter.Format(code, new PrinterOptions());
 
         result.FailureMessage.Should().Be("We can't handle this deep of recursion yet.");

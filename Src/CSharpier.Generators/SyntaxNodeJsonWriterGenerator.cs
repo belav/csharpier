@@ -20,7 +20,7 @@ public class SyntaxNodeJsonWriterGenerator : ISourceGenerator
     // to switch and doesn't really change at this point
     public void Execute(GeneratorExecutionContext context)
     {
-        var sourceText = SourceText.From(GenerateSource(), Encoding.UTF8);
+        var sourceText = SourceText.From(this.GenerateSource(), Encoding.UTF8);
 
         context.AddSource("SyntaxNodeJsonWriter.generated", sourceText);
     }
@@ -63,19 +63,19 @@ public class SyntaxNodeJsonWriterGenerator : ISourceGenerator
 
         foreach (var syntaxNodeType in syntaxNodeTypes)
         {
-            GenerateMethod(sourceBuilder, syntaxNodeType);
+            this.GenerateMethod(sourceBuilder, syntaxNodeType);
         }
 
-        GenerateMethod(sourceBuilder, typeof(SyntaxToken));
-        GenerateMethod(sourceBuilder, typeof(SyntaxTrivia));
+        this.GenerateMethod(sourceBuilder, typeof(SyntaxToken));
+        this.GenerateMethod(sourceBuilder, typeof(SyntaxTrivia));
 
         sourceBuilder.AppendLine("    }");
         sourceBuilder.AppendLine("}");
 
-        if (missingTypes.Any())
+        if (this.missingTypes.Any())
         {
             throw new Exception(
-                Environment.NewLine + string.Join(Environment.NewLine, missingTypes)
+                Environment.NewLine + string.Join(Environment.NewLine, this.missingTypes)
             );
         }
 
@@ -224,7 +224,7 @@ public class SyntaxNodeJsonWriterGenerator : ISourceGenerator
             }
             else
             {
-                missingTypes.Add(
+                this.missingTypes.Add(
                     PadToSize(type.Name + "." + propertyName + ": ", 40) + propertyType
                 );
             }

@@ -18,6 +18,12 @@ class TestClass
             + someMethodCall("with long args")
             + "really long string";
 
+        var samePrecedenceAligns =
+            one_________________________________
+            + two_______________________________
+            - three_____________________________
+            + four______________________________;
+
         var coalesceIsSpecial =
             someValue_________________________
             ?? someOtherValue_______________________
@@ -51,6 +57,10 @@ class TestClass
               + someLongValue____________________________________
             : someLongValue____________________________________
               + someLongValue____________________________________;
+
+        var someValue =
+            value1__________________ == value2_________________
+            != (value3_______________________ == value4___________________);
 
         if (
             one == two
