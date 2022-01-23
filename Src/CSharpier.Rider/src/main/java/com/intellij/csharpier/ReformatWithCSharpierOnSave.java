@@ -10,7 +10,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
 public class ReformatWithCSharpierOnSave implements FileDocumentManagerListener {
-    Logger logger = Logger.getInstance(ReformatWithCSharpierAction.class);
+    Logger logger = CSharpierLogger.getInstance();
 
     @Override
     public void beforeDocumentSaving(@NotNull Document document) {

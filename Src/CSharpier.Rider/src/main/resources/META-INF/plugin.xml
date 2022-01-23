@@ -7,9 +7,10 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <projectService serviceImplementation="com.intellij.csharpier.CSharpierService"/>
+        <projectService serviceImplementation="com.intellij.csharpier.CSharpierProcessProvider"/>
         <projectService serviceImplementation="com.intellij.csharpier.FormattingService"/>
         <projectService serviceImplementation="com.intellij.csharpier.CSharpierSettings"/>
+        <projectService serviceImplementation="com.intellij.csharpier.InstallerService"/>
         <notificationGroup id="CSharpier" displayType="BALLOON"/>
         <postStartupActivity implementation="com.intellij.csharpier.CSharpierStartup"/>
         <fileDocumentManagerListener implementation="com.intellij.csharpier.ReformatWithCSharpierOnSave"/>
