@@ -28,7 +28,6 @@ public class FormattingService {
             return;
         }
 
-
         if (!(psiFile.getLanguage().getID().equals("C#")
                 // while testing in intellij it doesn't know about c#
                 || (psiFile.getLanguage().getID().equals("TEXT") && psiFile.getName().endsWith(".cs")))
@@ -46,6 +45,11 @@ public class FormattingService {
         }
 
         String filePath = virtualFile.getPath();
+
+        if (!this.getCanFormat(filePath, project)) {
+            return;
+        }
+
         String currentDocumentText = document.getText();
 
         CSharpierProcessProvider cSharpierProcessProvider = CSharpierProcessProvider.getInstance(project);
@@ -60,5 +64,10 @@ public class FormattingService {
                 document.replaceString(0, currentDocumentText.length(), result);
             });
         }
+    }
+
+    public boolean getCanFormat(String filePath, Project project) {
+        ICSharpierProcess cSharpierProcess = CSharpierProcessProvider.getInstance(project).getProcessFor(filePath);
+        return !NullCSharpierProcess.class.isInstance(cSharpierProcess);
     }
 }

@@ -94,11 +94,11 @@ namespace CSharpier.VisualStudio
             );
         }
 
-        public bool CanFormat => this.csharpierProcess.CanFormat;
+        public bool CanFormat => !(this.csharpierProcess is NullCSharpierProcess);
 
         public string Format(string content, string filePath)
         {
-            if (!this.csharpierProcess.CanFormat)
+            if (!this.CanFormat)
             {
                 return null;
             }

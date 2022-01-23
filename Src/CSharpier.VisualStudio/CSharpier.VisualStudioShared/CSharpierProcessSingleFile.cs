@@ -14,8 +14,6 @@ namespace CSharpier.VisualStudio
             this.logger = logger;
         }
 
-        public bool CanFormat => true;
-
         public string FormatFile(string content, string fileName)
         {
             var output = new StringBuilder();

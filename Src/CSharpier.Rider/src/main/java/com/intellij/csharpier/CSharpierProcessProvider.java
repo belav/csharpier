@@ -91,6 +91,7 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
     }
 
     public ICSharpierProcess getProcessFor(String filePath) {
+        this.logger.debug(filePath);
         String directory = Path.of(filePath).getParent().toString();
         String version = this.csharpierVersionByDirectory.getOrDefault(directory, null);
         if (version == null) {

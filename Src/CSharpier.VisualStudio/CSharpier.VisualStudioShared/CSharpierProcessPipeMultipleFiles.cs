@@ -44,8 +44,6 @@ namespace CSharpier.VisualStudio
             this.FormatFile("public class ClassName { }", "Test.cs");
         }
 
-        public bool CanFormat => true;
-
         public string FormatFile(string content, string filePath)
         {
             this.output.Clear();
