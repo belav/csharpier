@@ -44,6 +44,11 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
         EditorFactory.getInstance().getEventMulticaster().addDocumentListener(this, this);
     }
 
+    @NotNull
+    static CSharpierProcessProvider getInstance(@NotNull Project project) {
+        return project.getService(CSharpierProcessProvider.class);
+    }
+
     @Override
     public void documentChanged(@NotNull DocumentEvent event) {
         Document document = event.getDocument();
@@ -57,11 +62,6 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
         }
         String filePath = file.getPath();
         this.findAndWarmProcess(filePath);
-    }
-
-    @NotNull
-    static CSharpierProcessProvider getInstance(@NotNull Project project) {
-        return project.getService(CSharpierProcessProvider.class);
     }
 
     private void findAndWarmProcess(String filePath) {
@@ -106,8 +106,6 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
         return this.csharpierProcessesByVersion.get(version);
     }
 
-    ;
-
     private String getCSharpierVersion(String directoryThatContainsFile) {
         Path currentDirectory = Path.of(directoryThatContainsFile);
         try {
@@ -149,14 +147,12 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
         env.put("DOTNET_NOLOGO", "1");
 
         String[] command = {"dotnet", "csharpier", "--version"};
-
         String version = ProcessHelper.ExecuteCommand(command, env, new File(directoryThatContainsFile));
 
         this.logger.debug("dotnet csharpier --version output: " + version);
 
         return version == null ? "" : version;
     }
-
 
     private ICSharpierProcess setupCSharpierProcess(String directory, String version) {
         if (version == null || version.equals("")) {
