@@ -7,8 +7,8 @@ export class CSharpierProcessSingleFile implements ICSharpierProcess {
     private readonly csharpierPath: string;
     private logger: Logger;
 
-    constructor(loggingService: Logger, csharpierPath: string) {
-        this.logger = loggingService;
+    constructor(logger: Logger, csharpierPath: string) {
+        this.logger = logger;
         this.csharpierPath = csharpierPath;
     }
 

@@ -8,10 +8,10 @@ export class FormattingService {
     csharpierProcessProvider: CSharpierProcessProvider;
 
     constructor(
-        loggingService: Logger,
+        logger: Logger,
         csharpierProcessProvider: CSharpierProcessProvider,
     ) {
-        this.logger = loggingService;
+        this.logger = logger;
         this.csharpierProcessProvider = csharpierProcessProvider;
 
         languages.registerDocumentFormattingEditProvider("csharp", {

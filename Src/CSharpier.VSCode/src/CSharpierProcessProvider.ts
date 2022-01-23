@@ -18,8 +18,8 @@ export class CSharpierProcessProvider implements Disposable {
     csharpierVersionByDirectory: Record<string, string | undefined> = {};
     csharpierProcessesByVersion: Record<string, ICSharpierProcess | undefined> = {};
 
-    constructor(loggingService: Logger) {
-        this.logger = loggingService;
+    constructor(logger: Logger) {
+        this.logger = logger;
         this.installerService = new InstallerService(
             this.logger,
             this.killRunningProcesses,
