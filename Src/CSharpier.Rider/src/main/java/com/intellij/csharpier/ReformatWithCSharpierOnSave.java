@@ -10,7 +10,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
 public class ReformatWithCSharpierOnSave implements FileDocumentManagerListener {
-    Logger LOG = Logger.getInstance(ReformatWithCSharpierAction.class);
+    Logger logger = Logger.getInstance(ReformatWithCSharpierAction.class);
 
     @Override
     public void beforeDocumentSaving(@NotNull Document document) {
@@ -20,7 +20,7 @@ public class ReformatWithCSharpierOnSave implements FileDocumentManagerListener 
         }
         Project project = ProjectLocator.getInstance().guessProjectForFile(file);
         if (project == null) {
-            LOG.info("Could not find project for file so not trying to format in save.");
+            this.logger.info("Could not find project for file so not trying to format in save.");
             return;
         }
 
@@ -29,7 +29,7 @@ public class ReformatWithCSharpierOnSave implements FileDocumentManagerListener 
             return;
         }
 
-        LOG.info("Running ReformatWithCSharpierOnSave");
+        this.logger.info("Running ReformatWithCSharpierOnSave");
 
         FormattingService formattingService = FormattingService.getInstance(project);
         formattingService.format(document, project);

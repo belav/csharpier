@@ -1,5 +1,5 @@
 import { Disposable, TextEditor, window, workspace } from "vscode";
-import { LoggingService } from "./LoggingService";
+import { Logger } from "./Logger";
 import * as path from "path";
 import * as semver from "semver";
 import { execSync } from "child_process";
@@ -11,17 +11,17 @@ import { InstallerService } from "./InstallerService";
 
 export class CSharpierProcessProvider implements Disposable {
     warnedForOldVersion = false;
-    loggingService: LoggingService;
+    logger: Logger;
     installerService: InstallerService;
     csharpierPath: string;
     warmingByDirectory: Record<string, boolean | undefined> = {};
     csharpierVersionByDirectory: Record<string, string | undefined> = {};
     csharpierProcessesByVersion: Record<string, ICSharpierProcess | undefined> = {};
 
-    constructor(loggingService: LoggingService) {
-        this.loggingService = loggingService;
+    constructor(loggingService: Logger) {
+        this.logger = loggingService;
         this.installerService = new InstallerService(
-            this.loggingService,
+            this.logger,
             this.killRunningProcesses,
         );
 
@@ -60,7 +60,7 @@ export class CSharpierProcessProvider implements Disposable {
 
         this.csharpierPath = this.getCSharpierPath();
 
-        this.loggingService.logDebug("Using command dotnet " + this.csharpierPath);
+        this.logger.debug("Using command dotnet " + this.csharpierPath);
     }
 
     private findAndWarmProcess(filePath: string) {
@@ -68,7 +68,7 @@ export class CSharpierProcessProvider implements Disposable {
         if (this.warmingByDirectory[directory]) {
             return;
         }
-        this.loggingService.logDebug("Ensure there is a csharpier process for " + directory);
+        this.logger.debug("Ensure there is a csharpier process for " + directory);
         this.warmingByDirectory[directory] = true;
         let version = this.csharpierVersionByDirectory[directory];
         if (!version) {
@@ -125,12 +125,12 @@ export class CSharpierProcessProvider implements Disposable {
         let currentDirectory = directoryThatContainsFile;
         while (true) {
             const dotnetToolsPath = path.join(currentDirectory, ".config/dotnet-tools.json");
-            this.loggingService.logDebug(`Looking for ${dotnetToolsPath}`);
+            this.logger.debug(`Looking for ${dotnetToolsPath}`);
             if (fs.existsSync(dotnetToolsPath)) {
                 const data = JSON.parse(fs.readFileSync(dotnetToolsPath).toString());
                 const version = data.tools.csharpier?.version;
                 if (version) {
-                    this.loggingService.logDebug(
+                    this.logger.debug(
                         "Found version " + version + " in " + dotnetToolsPath,
                     );
                     return version;
@@ -144,7 +144,7 @@ export class CSharpierProcessProvider implements Disposable {
             currentDirectory = nextDirectory;
         }
 
-        this.loggingService.logDebug(
+        this.logger.debug(
             "Unable to find dotnet-tools.json, falling back to running dotnet csharpier --version",
         );
 
@@ -155,13 +155,13 @@ export class CSharpierProcessProvider implements Disposable {
                 cwd: directoryThatContainsFile,
             }).toString();
         } catch (error: any) {
-            this.loggingService.logDebug(
+            this.logger.debug(
                 "dotnet csharpier --version failed with " + error.stderr.toString(),
             );
             return "";
         }
 
-        this.loggingService.logDebug(`dotnet csharpier --version output ${outputFromCsharpier}`);
+        this.logger.debug(`dotnet csharpier --version output ${outputFromCsharpier}`);
 
         const lines = outputFromCsharpier.split(/\r?\n/);
 
@@ -173,7 +173,7 @@ export class CSharpierProcessProvider implements Disposable {
             }
         }
 
-        this.loggingService.logDebug(
+        this.logger.debug(
             "Could not find version in output from dotnet csharpier --version in cwd " +
                 directoryThatContainsFile +
                 ". Output was \n" +
@@ -189,7 +189,7 @@ export class CSharpierProcessProvider implements Disposable {
                 return new NullCSharpierProcess();
             }
 
-            this.loggingService.logDebug(`Adding new version ${version} process for ${directory}`);
+            this.logger.debug(`Adding new version ${version} process for ${directory}`);
 
             if (semver.lt(version, "0.12.0")) {
                 if (!this.warnedForOldVersion) {
@@ -198,16 +198,16 @@ export class CSharpierProcessProvider implements Disposable {
                     );
                     this.warnedForOldVersion = true;
                 }
-                return new CSharpierProcessSingleFile(this.loggingService, this.csharpierPath);
+                return new CSharpierProcessSingleFile(this.logger, this.csharpierPath);
             } else {
                 return new CSharpierProcessPipeMultipleFiles(
-                    this.loggingService,
+                    this.logger,
                     this.csharpierPath,
                     directory,
                 );
             }
         } catch (ex: any) {
-            this.loggingService.logError(ex.output.toString());
+            this.logger.error(ex.output.toString());
             return new NullCSharpierProcess();
         }
     };
@@ -218,7 +218,7 @@ export class CSharpierProcessProvider implements Disposable {
 
     private killRunningProcesses = () => {
         for (const key in this.csharpierProcessesByVersion) {
-            this.loggingService.logDebug(
+            this.logger.debug(
                 "disposing of process for version " + (key === "" ? "null" : key),
             );
             this.csharpierProcessesByVersion[key]?.dispose();

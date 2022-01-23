@@ -2,7 +2,7 @@ import { window } from "vscode";
 
 type LogLevel = "DEBUG" | "INFO" | "WARN" | "ERROR" | "NONE";
 
-export class LoggingService {
+export class Logger {
     private outputChannel = window.createOutputChannel("CSharpier");
     private readonly logLevel: LogLevel = "INFO";
 
@@ -12,7 +12,7 @@ export class LoggingService {
         }
     }
 
-    public logDebug(message: any, data?: unknown): void {
+    public debug(message: any, data?: unknown): void {
         if (
             this.logLevel === "NONE" ||
             this.logLevel === "INFO" ||
@@ -27,7 +27,7 @@ export class LoggingService {
         }
     }
 
-    public logInfo(message: any, data?: unknown): void {
+    public info(message: any, data?: unknown): void {
         if (this.logLevel === "NONE" || this.logLevel === "WARN" || this.logLevel === "ERROR") {
             return;
         }
@@ -37,7 +37,7 @@ export class LoggingService {
         }
     }
 
-    public logWarning(message: any, data?: unknown): void {
+    public warn(message: any, data?: unknown): void {
         if (this.logLevel === "NONE" || this.logLevel === "ERROR") {
             return;
         }
@@ -47,7 +47,7 @@ export class LoggingService {
         }
     }
 
-    public logError(message: any, error?: unknown) {
+    public error(message: any, error?: unknown) {
         if (this.logLevel === "NONE") {
             return;
         }

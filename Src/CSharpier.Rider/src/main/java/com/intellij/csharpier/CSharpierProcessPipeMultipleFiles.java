@@ -5,13 +5,12 @@ import com.intellij.openapi.diagnostic.Logger;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
-    Logger LOG = Logger.getInstance(CSharpierProcessPipeMultipleFiles.class);
+    Logger logger = Logger.getInstance(CSharpierProcessPipeMultipleFiles.class);
     String csharpierPath;
 
     Process process = null;
@@ -22,16 +21,16 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8) {
         this.csharpierPath = csharpierPath;
         try {
-            process = new ProcessBuilder("dotnet", csharpierPath, "--pipe-multiple-files")
+            this.process = new ProcessBuilder("dotnet", csharpierPath, "--pipe-multiple-files")
                     .start();
 
             String charset = useUtf8 ? "utf-8" : Charset.defaultCharset().toString();
 
-            stdin = new OutputStreamWriter(process.getOutputStream(), charset);
-            stdOut = new BufferedReader(new InputStreamReader(process.getInputStream(), charset));
-            stdError = new BufferedReader(new InputStreamReader(process.getErrorStream(), charset));
+            this.stdin = new OutputStreamWriter(this.process.getOutputStream(), charset);
+            this.stdOut = new BufferedReader(new InputStreamReader(this.process.getInputStream(), charset));
+            this.stdError = new BufferedReader(new InputStreamReader(this.process.getErrorStream(), charset));
         } catch (Exception e) {
-            LOG.error("error", e);
+            this.logger.error("error", e);
         }
 
         this.formatFile("public class ClassName { }", "Test.cs");
@@ -39,15 +38,15 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
     @Override
     public String formatFile(String content, String filePath) {
-        LOG.info("Formatting file at " + filePath);
+        this.logger.info("Formatting file at " + filePath);
 
         try {
-            LOG.info(filePath);
-            stdin.write(filePath);
-            stdin.write('\u0003');
-            stdin.write(content);
-            stdin.write('\u0003');
-            stdin.flush();
+            this.logger.info(filePath);
+            this.stdin.write(filePath);
+            this.stdin.write('\u0003');
+            this.stdin.write(content);
+            this.stdin.write('\u0003');
+            this.stdin.flush();
 
             StringBuilder output = new StringBuilder();
             StringBuilder errorOutput = new StringBuilder();
@@ -56,10 +55,10 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
             // TODO look into ExecutorService.invokeAny to get this cleaned up like the VS version
             // https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html#invokeAny-java.util.Collection-
-            Thread outputReaderThread = CreateReadingThread(stdOut, output, done);
+            Thread outputReaderThread = CreateReadingThread(this.stdOut, output, done);
             outputReaderThread.start();
 
-            Thread errorReaderThread = CreateReadingThread(stdError, errorOutput, done);
+            Thread errorReaderThread = CreateReadingThread(this.stdError, errorOutput, done);
             errorReaderThread.start();
 
             while (!done.get()) {
@@ -71,14 +70,14 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
             String errorResult = errorOutput.toString();
             if (errorResult.length() > 0) {
-                LOG.info("Got error output: " + errorResult);
+                this.logger.info("Got error output: " + errorResult);
                 return "";
             }
 
             return output.toString();
 
         } catch (Exception e) {
-            LOG.error(e);
+            this.logger.error(e);
             e.printStackTrace();
             return "";
         }
@@ -97,7 +96,7 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
                     nextCharacter = reader.read();
                 }
             } catch (Exception e) {
-                LOG.error(e);
+                this.logger.error(e);
                 done.set(true);
             }
         });
@@ -105,6 +104,6 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
     @Override
     public void dispose() {
-        process.destroy();
+        this.process.destroy();
     }
 }

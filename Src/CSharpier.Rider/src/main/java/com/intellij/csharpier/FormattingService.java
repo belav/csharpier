@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 
 public class FormattingService {
-    Logger LOG = Logger.getInstance(FormattingService.class);
+    Logger logger = Logger.getInstance(FormattingService.class);
 
     @NotNull
     static FormattingService getInstance(@NotNull Project project) {
@@ -32,7 +32,7 @@ public class FormattingService {
                 // while testing in intellij it doesn't know about c#
                 || (psiFile.getLanguage().getID().equals("TEXT") && psiFile.getName().endsWith(".cs")))
         ) {
-            LOG.info("Skipping formatting because language was " + psiFile.getLanguage().getDisplayName());
+            this.logger.info("Skipping formatting because language was " + psiFile.getLanguage().getDisplayName());
             return;
         }
 

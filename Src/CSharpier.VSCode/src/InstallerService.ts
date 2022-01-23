@@ -1,4 +1,4 @@
-import { LoggingService } from "./LoggingService";
+import { Logger } from "./Logger";
 import { window, workspace } from "vscode";
 import { execSync } from "child_process";
 import * as path from "path";
@@ -9,16 +9,16 @@ export class InstallerService {
     rejectedGlobalError = false;
     errorVisible = false;
     globalErrorVisible = false;
-    loggingService: LoggingService;
+    logger: Logger;
     killRunningProcesses: () => void;
 
-    constructor(loggingService: LoggingService, killRunningProcesses: () => void) {
-        this.loggingService = loggingService;
+    constructor(logger: Logger, killRunningProcesses: () => void) {
+        this.logger = logger;
         this.killRunningProcesses = killRunningProcesses;
     }
 
     public displayInstallNeededMessage = (directoryThatContainsFile: string) => {
-        this.loggingService.logError("CSharpier was not found so files may not be formatted.");
+        this.logger.error("CSharpier was not found so files may not be formatted.");
 
         const items = ["Install CSharpier Globally"];
         let solutionRoot: string;
@@ -56,9 +56,9 @@ export class InstallerService {
             selection => {
                 if (selection === "Install CSharpier Globally") {
                     const command = "dotnet tool install -g csharpier";
-                    this.loggingService.logInfo("Installing csharpier globally with " + command);
+                    this.logger.info("Installing csharpier globally with " + command);
                     const output = execSync(command).toString();
-                    this.loggingService.logInfo(output);
+                    this.logger.info(output);
                 } else if (selection === "Install CSharpier Locally") {
                     if (solutionRoot) {
                         try {
@@ -66,13 +66,13 @@ export class InstallerService {
                                 solutionRoot,
                                 ".config/dotnet-tools.json",
                             );
-                            this.loggingService.logInfo("Installing csharpier in " + manifestPath);
+                            this.logger.info("Installing csharpier in " + manifestPath);
                             if (!fs.existsSync(manifestPath)) {
                                 execSync("dotnet new tool-manifest", { cwd: solutionRoot });
                             }
                             execSync("dotnet tool install csharpier", { cwd: solutionRoot });
                         } catch (error) {
-                            this.loggingService.logError("Installing failed with ", error);
+                            this.logger.error("Installing failed with ", error);
                         }
                     }
                 } else {
@@ -82,7 +82,7 @@ export class InstallerService {
                         this.rejectedGlobalError = true;
                     }
 
-                    this.loggingService.logDebug("rejected");
+                    this.logger.debug("rejected");
                 }
 
                 if (isOnlyGlobal) {

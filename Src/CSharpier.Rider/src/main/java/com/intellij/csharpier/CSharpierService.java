@@ -9,24 +9,23 @@ import com.intellij.openapi.project.Project;
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
 public class CSharpierService {
-    Logger LOG = Logger.getInstance(ReformatWithCSharpierAction.class);
+    Logger logger = Logger.getInstance(ReformatWithCSharpierAction.class);
     String csharpierPath;
     ICSharpierProcess csharpierProcess;
     Project project;
 
     public CSharpierService(@NotNull Project project) {
         this.project = project;
-        csharpierPath = getCSharpierPath();
+        this.csharpierPath = getCSharpierPath();
 
-        LOG.info("Using command dotnet " + csharpierPath);
+        this.logger.info("Using command dotnet " + this.csharpierPath);
 
-        csharpierProcess = setupCSharpierProcess();
+        this.csharpierProcess = setupCSharpierProcess();
     }
 
     public String getCSharpierPath() {
@@ -58,7 +57,7 @@ public class CSharpierService {
     private ICSharpierProcess setupCSharpierProcess() {
         try {
             String version = execCmd("dotnet " + this.csharpierPath + " --version");
-            LOG.info("CSharpier version: " + version);
+            this.logger.info("CSharpier version: " + version);
             if (version == null) {
                 this.displayInstallNeededMessage();
             }
@@ -70,7 +69,7 @@ public class CSharpierService {
                     String content = "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.";
                     NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
                             .createNotification(content, NotificationType.INFORMATION)
-                            .notify(project);
+                            .notify(this.project);
 
                     return new CSharpierProcessSingleFile(this.csharpierPath);
                 }
@@ -81,7 +80,7 @@ public class CSharpierService {
 
             }
         } catch (Exception ex) {
-            LOG.error(ex);
+            this.logger.error(ex);
         }
 
         return new NullCSharpierProcess();
@@ -94,7 +93,7 @@ public class CSharpierService {
         // TODO why can't an action be displayed in this???
 //        notification.addAction(new EditAction());
 
-        notification.notify(project);
+        notification.notify(this.project);
     }
 
     public String format(@NotNull String content, @NotNull String filePath) {

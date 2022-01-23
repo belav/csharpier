@@ -10,11 +10,11 @@ import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 public class ReformatWithCSharpierAction extends AnAction {
-    Logger LOG = Logger.getInstance(ReformatWithCSharpierAction.class);
+    Logger logger = Logger.getInstance(ReformatWithCSharpierAction.class);
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        LOG.info("Running ReformatWithCSharpierAction");
+        this.logger.info("Running ReformatWithCSharpierAction");
         Project project = e.getProject();
         if (project == null) {
             return;

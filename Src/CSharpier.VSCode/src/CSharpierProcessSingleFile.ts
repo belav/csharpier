@@ -1,14 +1,14 @@
-import { LoggingService } from "./LoggingService";
+import { Logger } from "./Logger";
 import { spawn } from "child_process";
 import { ICSharpierProcess } from "./CSharpierProcess";
 import * as path from "path";
 
 export class CSharpierProcessSingleFile implements ICSharpierProcess {
     private readonly csharpierPath: string;
-    private loggingService: LoggingService;
+    private logger: Logger;
 
-    constructor(loggingService: LoggingService, csharpierPath: string) {
-        this.loggingService = loggingService;
+    constructor(loggingService: Logger, csharpierPath: string) {
+        this.logger = loggingService;
         this.csharpierPath = csharpierPath;
     }
 

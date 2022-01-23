@@ -1,7 +1,6 @@
 package com.intellij.csharpier;
 
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
@@ -23,7 +22,7 @@ public class CSharpierSettings
     private boolean runOnSave;
 
     public boolean getRunOnSave() {
-        return runOnSave;
+        return this.runOnSave;
     }
 
     public void setRunOnSave(boolean runOnSave) {
