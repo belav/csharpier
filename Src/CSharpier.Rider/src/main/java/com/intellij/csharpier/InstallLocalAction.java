@@ -28,15 +28,15 @@ public class InstallLocalAction extends NotificationAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e, @NotNull Notification notification) {
-        String manifestPath = Path.of(this.projectPath, ".config/dotnet-tools.json").toString();
+        var manifestPath = Path.of(this.projectPath, ".config/dotnet-tools.json").toString();
         this.logger.info("Installing csharpier in " + manifestPath);
         if (!new File(manifestPath).exists())
         {
-            String[] command = { "dotnet", "new", "tool-manifest" };
+            var command = new String[]{"dotnet", "new", "tool-manifest"};
             ProcessHelper.ExecuteCommand(command, null, new File(this.projectPath));
         }
 
-        String[] command2 = { "dotnet", "tool", "install", "csharpier" };
+        var command2 = new String[]{"dotnet", "tool", "install", "csharpier"};
         ProcessHelper.ExecuteCommand(command2, null, new File(this.projectPath));
         this.processKiller.killRunningProcesses();
 

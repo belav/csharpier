@@ -14,24 +14,24 @@ public class ReformatWithCSharpierOnSave implements FileDocumentManagerListener 
 
     @Override
     public void beforeDocumentSaving(@NotNull Document document) {
-        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+        var file = FileDocumentManager.getInstance().getFile(document);
         if (file == null) {
             return;
         }
-        Project project = ProjectLocator.getInstance().guessProjectForFile(file);
+        var project = ProjectLocator.getInstance().guessProjectForFile(file);
         if (project == null) {
             this.logger.info("Could not find project for file so not trying to format in save.");
             return;
         }
 
-        CSharpierSettings cSharpierSettings = CSharpierSettings.getInstance(project);
+        var cSharpierSettings = CSharpierSettings.getInstance(project);
         if (!cSharpierSettings.getRunOnSave()) {
             return;
         }
 
         this.logger.info("Running ReformatWithCSharpierOnSave");
 
-        FormattingService formattingService = FormattingService.getInstance(project);
+        var formattingService = FormattingService.getInstance(project);
         formattingService.format(document, project);
     }
 }

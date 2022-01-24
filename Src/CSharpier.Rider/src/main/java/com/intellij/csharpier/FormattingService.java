@@ -23,7 +23,7 @@ public class FormattingService {
     }
 
     public void format(@NotNull Document document, @NotNull Project project) {
-        PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
+        var psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
         if (psiFile == null) {
             return;
         }
@@ -36,7 +36,7 @@ public class FormattingService {
             return;
         }
 
-        VirtualFile virtualFile = psiFile.getVirtualFile();
+        var virtualFile = psiFile.getVirtualFile();
         if (ReadonlyStatusHandler.getInstance(project)
                 .ensureFilesWritable(Collections.singletonList(virtualFile))
                 .hasReadonlyFiles()
@@ -44,19 +44,19 @@ public class FormattingService {
             return;
         }
 
-        String filePath = virtualFile.getPath();
+        var filePath = virtualFile.getPath();
 
         if (!this.getCanFormat(filePath, project)) {
             return;
         }
 
-        String currentDocumentText = document.getText();
+        var currentDocumentText = document.getText();
 
-        CSharpierProcessProvider cSharpierProcessProvider = CSharpierProcessProvider.getInstance(project);
+        var cSharpierProcessProvider = CSharpierProcessProvider.getInstance(project);
         this.logger.info("Formatting started for " + filePath + ".");
-        Instant start = Instant.now();
-        String result = cSharpierProcessProvider.getProcessFor(filePath).formatFile(currentDocumentText, filePath);
-        Instant end = Instant.now();
+        var start = Instant.now();
+        var result = cSharpierProcessProvider.getProcessFor(filePath).formatFile(currentDocumentText, filePath);
+        var end = Instant.now();
         this.logger.info("Formatted in " + (Duration.between(start, end).toMillis()) + "ms");
 
         if (result.length() > 0) {
@@ -67,7 +67,7 @@ public class FormattingService {
     }
 
     public boolean getCanFormat(String filePath, Project project) {
-        ICSharpierProcess cSharpierProcess = CSharpierProcessProvider.getInstance(project).getProcessFor(filePath);
+        var cSharpierProcess = CSharpierProcessProvider.getInstance(project).getProcessFor(filePath);
         return !NullCSharpierProcess.class.isInstance(cSharpierProcess);
     }
 }
