@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 public class CSharpierProcessSingleFile implements ICSharpierProcess {
-    Logger logger = Logger.getInstance(CSharpierProcessSingleFile.class);
+    Logger logger = CSharpierLogger.getInstance();
     String csharpierPath;
 
     public CSharpierProcessSingleFile(String csharpierPath) {
@@ -18,7 +18,9 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
     @Override
     public String formatFile(String content, String fileName) {
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("dotnet", this.csharpierPath, "--write-stdout");
+            this.logger.debug("Running " + this.csharpierPath + " --write-stdout");
+            ProcessBuilder processBuilder = new ProcessBuilder(this.csharpierPath, "--write-stdout");
+            processBuilder.environment().put("DOTNET_NOLOGO", "1");
             processBuilder.redirectErrorStream(true);
             Process process = processBuilder.start();
 
@@ -32,7 +34,6 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
 
             var nextCharacter = stdOut.read();
             while (nextCharacter != -1) {
-                this.logger.info("Got Output " + nextCharacter);
                 output.append((char)nextCharacter);
                 nextCharacter = stdOut.read();
             }
@@ -50,5 +51,10 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
         }
 
         return "";
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

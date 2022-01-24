@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
-    Logger logger = Logger.getInstance(CSharpierProcessPipeMultipleFiles.class);
+    Logger logger = CSharpierLogger.getInstance();
     String csharpierPath;
 
     Process process = null;
@@ -21,8 +21,9 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8) {
         this.csharpierPath = csharpierPath;
         try {
-            this.process = new ProcessBuilder("dotnet", csharpierPath, "--pipe-multiple-files")
-                    .start();
+            ProcessBuilder processBuilder = new ProcessBuilder(csharpierPath, "--pipe-multiple-files");
+            processBuilder.environment().put("DOTNET_NOLOGO", "1");
+            this.process = processBuilder.start();
 
             String charset = useUtf8 ? "utf-8" : Charset.defaultCharset().toString();
 
@@ -33,6 +34,9 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
             this.logger.error("error", e);
         }
 
+        this.logger.debug("Warm CSharpier with initial format");
+        // warm by formatting a file twice, the 3rd time is when it gets really fast
+        this.formatFile("public class ClassName { }", "Test.cs");
         this.formatFile("public class ClassName { }", "Test.cs");
     }
 

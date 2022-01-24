@@ -5,4 +5,9 @@ public class NullCSharpierProcess implements ICSharpierProcess {
     public String formatFile(String content, String fileName) {
         return "";
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

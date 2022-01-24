@@ -8,6 +8,6 @@ import org.jetbrains.annotations.NotNull;
 public class CSharpierStartup implements StartupActivity, DumbAware {
     @Override
     public void runActivity(@NotNull Project project) {
-        CSharpierService.getInstance(project);
+        CSharpierProcessProvider.getInstance(project);
     }
 }
