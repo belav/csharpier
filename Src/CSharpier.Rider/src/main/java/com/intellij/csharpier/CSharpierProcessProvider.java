@@ -38,7 +38,10 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
         this.project = project;
 
         for (FileEditor fileEditor : FileEditorManager.getInstance(project).getAllEditors()) {
-            this.findAndWarmProcess(fileEditor.getFile().getPath());
+            var path = fileEditor.getFile().getPath();
+            if (path.toLowerCase().endsWith(".cs")) {
+                this.findAndWarmProcess(path);
+            }
         }
 
         EditorFactory.getInstance().getEventMulticaster().addDocumentListener(this, this);
