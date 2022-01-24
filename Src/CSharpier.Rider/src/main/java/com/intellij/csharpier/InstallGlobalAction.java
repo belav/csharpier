@@ -24,6 +24,8 @@ public class InstallGlobalAction extends NotificationAction {
         String[] command2 = { "dotnet", "tool", "install", "-g", "csharpier" };
         ProcessHelper.ExecuteCommand(command2, null, null);
         this.processKiller.killRunningProcesses();
+
+        notification.expire();
     }
 }
 

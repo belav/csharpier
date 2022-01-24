@@ -11,7 +11,7 @@
         <projectService serviceImplementation="com.intellij.csharpier.FormattingService"/>
         <projectService serviceImplementation="com.intellij.csharpier.CSharpierSettings"/>
         <projectService serviceImplementation="com.intellij.csharpier.InstallerService"/>
-        <notificationGroup id="CSharpier" displayType="BALLOON"/>
+        <notificationGroup id="CSharpier" displayType="STICKY_BALLOON"/>
         <postStartupActivity implementation="com.intellij.csharpier.CSharpierStartup"/>
         <fileDocumentManagerListener implementation="com.intellij.csharpier.ReformatWithCSharpierOnSave"/>
         <projectConfigurable

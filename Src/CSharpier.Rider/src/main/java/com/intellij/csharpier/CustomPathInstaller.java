@@ -1,6 +1,7 @@
 package com.intellij.csharpier;
 
 import com.intellij.openapi.diagnostic.Logger;
+import org.apache.commons.lang.SystemUtils;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -24,13 +25,13 @@ public class CustomPathInstaller {
     }
 
     private String getDirectoryForVersion(String version) {
-        String userHome = System.getProperty("user.home");
-        Path path = Path.of(userHome, ".csharpier", version);
+        Path path = SystemUtils.IS_OS_LINUX
+                ? Path.of(System.getProperty("user.home"), ".cache/csharpier", version)
+                : Path.of(System.getenv("LOCALAPPDATA"), "CSharpier", version);
         return path.toString();
     }
 
     public String getPathForVersion(String version) {
-        // TODO what about linux? can someone test it?
         Path path = Path.of(getDirectoryForVersion(version), "dotnet-csharpier");
         return path.toString();
     }

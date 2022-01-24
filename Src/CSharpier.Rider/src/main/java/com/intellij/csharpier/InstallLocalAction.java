@@ -2,6 +2,8 @@ package com.intellij.csharpier;
 
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationAction;
+import com.intellij.notification.NotificationGroupManager;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.NlsContexts;
@@ -38,7 +40,8 @@ public class InstallLocalAction extends NotificationAction {
 
         String[] command2 = { "dotnet", "tool", "install", "csharpier" };
         ProcessHelper.ExecuteCommand(command2, null, new File(this.projectPath));
-
         this.processKiller.killRunningProcesses();
+
+        notification.expire();
     }
 }

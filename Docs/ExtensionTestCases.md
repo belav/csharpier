@@ -1,20 +1,21 @@
-No installs at all
-- show message to install globaly or in solution
+# Test Cases For Extensions
 
-Install globaly
-- should format after
-- can uninstall globaly after process running
-
-Install solution
-- works with existing config
-- works with no config
-- should format after
-
-Formatting
-- Existing open documents get warmed
-- Edit warms
-- Uses correct version - adding lines is easy to test, 0.12 vs 0.14
-
-Action
-- is not shown on files that aren't c#
-- run on save works
+- No installs at all
+  - show message to install globally or locally
+- Install globally
+  - shows for file outside solutions if solution has csharpier 
+  - should format after
+  - can uninstall globally after formatting
+- Install Locally
+  - works with existing tool manifest
+  - works with no tool manifest
+  - should format after
+- Formatting
+  - Existing open documents get warmed
+  - Edit warms
+  - Finds local version
+  - Finds global version
+  - Uses correct version - adding lines between methods is easy to test, 0.12 vs 0.14
+- Action (does not apply to vscode)
+  - is not shown on files that aren't c#
+  - run on save works
