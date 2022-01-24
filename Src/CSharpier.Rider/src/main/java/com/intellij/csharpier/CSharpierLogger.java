@@ -7,7 +7,7 @@ public class CSharpierLogger {
     private final static Logger logger = createLogger();
 
     private static Logger createLogger() {
-        Logger logger = Logger.getInstance(CSharpierLogger.class);
+        var logger = Logger.getInstance(CSharpierLogger.class);
         if ("1".equals(System.getenv("DEBUG"))) {
             logger.setLevel(Level.DEBUG);
         }

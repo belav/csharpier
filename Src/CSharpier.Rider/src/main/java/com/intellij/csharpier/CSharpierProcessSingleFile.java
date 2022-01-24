@@ -19,18 +19,18 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
     public String formatFile(String content, String fileName) {
         try {
             this.logger.debug("Running " + this.csharpierPath + " --write-stdout");
-            ProcessBuilder processBuilder = new ProcessBuilder(this.csharpierPath, "--write-stdout");
+            var processBuilder = new ProcessBuilder(this.csharpierPath, "--write-stdout");
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
             processBuilder.redirectErrorStream(true);
-            Process process = processBuilder.start();
+            var process = processBuilder.start();
 
-            OutputStream stdin = process.getOutputStream();
-            BufferedReader stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            var stdin = process.getOutputStream();
+            var stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             stdin.write(content.getBytes());
             stdin.close();
 
-            StringBuilder output = new StringBuilder();
+            var output = new StringBuilder();
 
             var nextCharacter = stdOut.read();
             while (nextCharacter != -1) {
@@ -38,7 +38,7 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
                 nextCharacter = stdOut.read();
             }
 
-            String result = output.toString();
+            var result = output.toString();
 
             if (process.exitValue() == 0 && !result.contains("Failed to compile so was not formatted.")) {
                 return result;

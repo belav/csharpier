@@ -13,26 +13,26 @@ public class CustomPathInstaller {
         if (version == null || version.equals("")) {
             return;
         }
-        String directoryForVersion = getDirectoryForVersion(version);
-        File file = new File(directoryForVersion);
+        var directoryForVersion = getDirectoryForVersion(version);
+        var file = new File(directoryForVersion);
         if (file.exists()) {
             this.logger.debug("File at " + directoryForVersion + " already exists");
             return;
         }
 
-        String[] command = {"dotnet", "tool", "install", "csharpier", "--version", version, "--tool-path", directoryForVersion};
+        var command = new String[]{"dotnet", "tool", "install", "csharpier", "--version", version, "--tool-path", directoryForVersion};
         ProcessHelper.ExecuteCommand(command, null, null);
     }
 
     private String getDirectoryForVersion(String version) {
-        Path path = SystemUtils.IS_OS_LINUX
+        var path = SystemUtils.IS_OS_LINUX
                 ? Path.of(System.getProperty("user.home"), ".cache/csharpier", version)
                 : Path.of(System.getenv("LOCALAPPDATA"), "CSharpier", version);
         return path.toString();
     }
 
     public String getPathForVersion(String version) {
-        Path path = Path.of(getDirectoryForVersion(version), "dotnet-csharpier");
+        var path = Path.of(getDirectoryForVersion(version), "dotnet-csharpier");
         return path.toString();
     }
 }
