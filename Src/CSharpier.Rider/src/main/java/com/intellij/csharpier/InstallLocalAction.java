@@ -38,7 +38,8 @@ public class InstallLocalAction extends NotificationAction {
 
         String[] command2 = { "dotnet", "tool", "install", "csharpier" };
         ProcessHelper.ExecuteCommand(command2, null, new File(this.projectPath));
-
         this.processKiller.killRunningProcesses();
+
+        notification.expire();
     }
 }

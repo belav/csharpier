@@ -30,8 +30,15 @@ public class ReformatWithCSharpierAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        // TODO what else could this start with? what if the file isn't saved yet?
-        String file = e.getData(PlatformDataKeys.VIRTUAL_FILE).toString().replace("file://", "");
+        var virtualFile = e.getData(PlatformDataKeys.VIRTUAL_FILE).toString();
+        var filePrefix = "file://";
+        if (!virtualFile.startsWith(filePrefix)) {
+            this.logger.debug("VIRTUAL_FILE did not start with file://, was: " + virtualFile);
+            e.getPresentation().setVisible(false);
+            return;
+        }
+
+        String file = virtualFile.substring(filePrefix.length());
         e.getPresentation().setVisible(file.toLowerCase().endsWith(".cs"));
         boolean canFormat = FormattingService.getInstance(e.getProject()).getCanFormat(file, e.getProject());
         e.getPresentation().setEnabled(canFormat);
