@@ -45,14 +45,14 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
 
     @Override
     public void apply() throws ConfigurationException {
-        CSharpierSettings settings = CSharpierSettings.getInstance(this.project);
+        var settings = CSharpierSettings.getInstance(this.project);
 
         settings.setRunOnSave(this.runOnSaveCheckBox.isSelected());
     }
 
     @Override
     public void reset() {
-        CSharpierSettings settings = CSharpierSettings.getInstance(this.project);
+        var settings = CSharpierSettings.getInstance(this.project);
         this.runOnSaveCheckBox.setSelected(settings.getRunOnSave());
     }
 }

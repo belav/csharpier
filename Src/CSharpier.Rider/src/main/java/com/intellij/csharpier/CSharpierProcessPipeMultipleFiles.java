@@ -21,11 +21,11 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8) {
         this.csharpierPath = csharpierPath;
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder(csharpierPath, "--pipe-multiple-files");
+            var processBuilder = new ProcessBuilder(csharpierPath, "--pipe-multiple-files");
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
             this.process = processBuilder.start();
 
-            String charset = useUtf8 ? "utf-8" : Charset.defaultCharset().toString();
+            var charset = useUtf8 ? "utf-8" : Charset.defaultCharset().toString();
 
             this.stdin = new OutputStreamWriter(this.process.getOutputStream(), charset);
             this.stdOut = new BufferedReader(new InputStreamReader(this.process.getInputStream(), charset));
@@ -52,17 +52,17 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
             this.stdin.write('\u0003');
             this.stdin.flush();
 
-            StringBuilder output = new StringBuilder();
-            StringBuilder errorOutput = new StringBuilder();
+            var output = new StringBuilder();
+            var errorOutput = new StringBuilder();
 
-            AtomicBoolean done = new AtomicBoolean(false);
+            var done = new AtomicBoolean(false);
 
             // TODO look into ExecutorService.invokeAny to get this cleaned up like the VS version
             // https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html#invokeAny-java.util.Collection-
-            Thread outputReaderThread = CreateReadingThread(this.stdOut, output, done);
+            var outputReaderThread = CreateReadingThread(this.stdOut, output, done);
             outputReaderThread.start();
 
-            Thread errorReaderThread = CreateReadingThread(this.stdError, errorOutput, done);
+            var errorReaderThread = CreateReadingThread(this.stdError, errorOutput, done);
             errorReaderThread.start();
 
             while (!done.get()) {
@@ -72,7 +72,7 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
             errorReaderThread.interrupt();
             outputReaderThread.interrupt();
 
-            String errorResult = errorOutput.toString();
+            var errorResult = errorOutput.toString();
             if (errorResult.length() > 0) {
                 this.logger.info("Got error output: " + errorResult);
                 return "";

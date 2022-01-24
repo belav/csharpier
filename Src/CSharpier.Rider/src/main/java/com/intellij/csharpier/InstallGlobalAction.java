@@ -21,7 +21,7 @@ public class InstallGlobalAction extends NotificationAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e, @NotNull Notification notification) {
-        String[] command2 = { "dotnet", "tool", "install", "-g", "csharpier" };
+        var command2 = new String[]{"dotnet", "tool", "install", "-g", "csharpier"};
         ProcessHelper.ExecuteCommand(command2, null, null);
         this.processKiller.killRunningProcesses();
 

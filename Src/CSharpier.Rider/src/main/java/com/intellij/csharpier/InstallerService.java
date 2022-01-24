@@ -31,13 +31,13 @@ public class InstallerService {
         this.logger.debug(directoryThatContainsFile);
         this.logger.debug(this.project.getBasePath());
 
-        boolean isOnlyGlobal = !directoryThatContainsFile.replace('\\', '/').startsWith(this.project.getBasePath());
+        var isOnlyGlobal = !directoryThatContainsFile.replace('\\', '/').startsWith(this.project.getBasePath());
 
-        String message = isOnlyGlobal
+        var message = isOnlyGlobal
                 ? ("CSharpier needs to be installed globally to format files in " + directoryThatContainsFile)
                 : "CSharpier needs to be installed to support formatting files";
 
-        Notification notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
+        var notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
                 .createNotification(message, NotificationType.WARNING);
 
         notification.addAction(new InstallGlobalAction("Install CSharpier Globally", processKiller));

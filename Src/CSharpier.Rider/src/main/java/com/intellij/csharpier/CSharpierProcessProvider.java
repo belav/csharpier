@@ -37,7 +37,7 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
     public CSharpierProcessProvider(@NotNull Project project) {
         this.project = project;
 
-        for (FileEditor fileEditor : FileEditorManager.getInstance(project).getAllEditors()) {
+        for (var fileEditor : FileEditorManager.getInstance(project).getAllEditors()) {
             var path = fileEditor.getFile().getPath();
             if (path.toLowerCase().endsWith(".cs")) {
                 this.findAndWarmProcess(path);
@@ -54,8 +54,8 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
 
     @Override
     public void documentChanged(@NotNull DocumentEvent event) {
-        Document document = event.getDocument();
-        VirtualFile file = FileDocumentManager.getInstance().getFile(document);
+        var document = event.getDocument();
+        var file = FileDocumentManager.getInstance().getFile(document);
 
         if (file == null
                 || file.getExtension() == null
@@ -63,18 +63,18 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
         ) {
             return;
         }
-        String filePath = file.getPath();
+        var filePath = file.getPath();
         this.findAndWarmProcess(filePath);
     }
 
     private void findAndWarmProcess(String filePath) {
-        String directory = Path.of(filePath).getParent().toString();
+        var directory = Path.of(filePath).getParent().toString();
         if (this.warmingByDirectory.getOrDefault(directory, false)) {
             return;
         }
         this.logger.debug("Ensure there is a csharpier process for " + directory);
         this.warmingByDirectory.put(directory, true);
-        String version = this.csharpierVersionByDirectory.getOrDefault(directory, null);
+        var version = this.csharpierVersionByDirectory.getOrDefault(directory, null);
         if (version == null) {
             version = this.getCSharpierVersion(directory);
             if (version == null || version.isEmpty()) {
@@ -95,8 +95,8 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
 
     public ICSharpierProcess getProcessFor(String filePath) {
         this.logger.debug(filePath);
-        String directory = Path.of(filePath).getParent().toString();
-        String version = this.csharpierVersionByDirectory.getOrDefault(directory, null);
+        var directory = Path.of(filePath).getParent().toString();
+        var version = this.csharpierVersionByDirectory.getOrDefault(directory, null);
         if (version == null) {
             this.findAndWarmProcess(filePath);
             version = this.csharpierVersionByDirectory.get(directory);
@@ -111,21 +111,21 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
     }
 
     private String getCSharpierVersion(String directoryThatContainsFile) {
-        Path currentDirectory = Path.of(directoryThatContainsFile);
+        var currentDirectory = Path.of(directoryThatContainsFile);
         try {
             while (true) {
-                Path configPath = Path.of(currentDirectory.toString(), ".config/dotnet-tools.json");
-                String dotnetToolsPath = configPath.toString();
-                File file = new File(dotnetToolsPath);
+                var configPath = Path.of(currentDirectory.toString(), ".config/dotnet-tools.json");
+                var dotnetToolsPath = configPath.toString();
+                var file = new File(dotnetToolsPath);
                 this.logger.debug("Looking for " + dotnetToolsPath);
                 if (file.exists()) {
-                    String data = new String(Files.readAllBytes(configPath));
-                    JsonObject configData = new Gson().fromJson(data, JsonObject.class);
-                    JsonObject tools = configData.getAsJsonObject("tools");
+                    var data = new String(Files.readAllBytes(configPath));
+                    var configData = new Gson().fromJson(data, JsonObject.class);
+                    var tools = configData.getAsJsonObject("tools");
                     if (tools != null) {
-                        JsonObject csharpier = tools.getAsJsonObject("csharpier");
+                        var csharpier = tools.getAsJsonObject("csharpier");
                         if (csharpier != null) {
-                            String version = csharpier.get("version").getAsString();
+                            var version = csharpier.get("version").getAsString();
                             if (version != null) {
                                 this.logger.debug("Found version " + version + " in " + dotnetToolsPath);
                                 return version;
@@ -150,8 +150,8 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
         Map<String, String> env = new HashMap<>();
         env.put("DOTNET_NOLOGO", "1");
 
-        String[] command = {"dotnet", "csharpier", "--version"};
-        String version = ProcessHelper.ExecuteCommand(command, env, new File(directoryThatContainsFile));
+        var command = new String[]{"dotnet", "csharpier", "--version"};
+        var version = ProcessHelper.ExecuteCommand(command, env, new File(directoryThatContainsFile));
 
         this.logger.debug("dotnet csharpier --version output: " + version);
 
@@ -164,17 +164,17 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
         }
 
         this.customPathInstaller.ensureVersionInstalled(version);
-        String customPath = this.customPathInstaller.getPathForVersion(version);
+        var customPath = this.customPathInstaller.getPathForVersion(version);
         try {
             this.logger.debug("Adding new version " + version + " process for " + directory);
 
-            ComparableVersion installedVersion = new ComparableVersion(version);
-            ComparableVersion pipeFilesVersion = new ComparableVersion("0.12.0");
-            ComparableVersion utf8Version = new ComparableVersion("0.14.0");
+            var installedVersion = new ComparableVersion(version);
+            var pipeFilesVersion = new ComparableVersion("0.12.0");
+            var utf8Version = new ComparableVersion("0.14.0");
 
             if (installedVersion.compareTo(pipeFilesVersion) < 0) {
                 if (!this.warnedForOldVersion) {
-                    String content = "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.";
+                    var content = "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.";
                     NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
                             .createNotification(content, NotificationType.INFORMATION)
                             .notify(this.project);
@@ -186,7 +186,7 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
                 return new CSharpierProcessSingleFile(customPath);
             }
 
-            boolean useUtf8 = installedVersion.compareTo(utf8Version) >= 0;
+            var useUtf8 = installedVersion.compareTo(utf8Version) >= 0;
 
             return new CSharpierProcessPipeMultipleFiles(customPath, useUtf8);
 
@@ -203,7 +203,7 @@ public class CSharpierProcessProvider implements DocumentListener, @NotNull Disp
     }
 
     public void killRunningProcesses() {
-        for (String key : this.csharpierProcessesByVersion.keySet()) {
+        for (var key : this.csharpierProcessesByVersion.keySet()) {
             this.logger.debug(
                     "disposing of process for version " + (key == "" ? "null" : key)
             );

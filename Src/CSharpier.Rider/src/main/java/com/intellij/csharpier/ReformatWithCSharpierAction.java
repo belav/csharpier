@@ -18,11 +18,11 @@ public class ReformatWithCSharpierAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         this.logger.info("Running ReformatWithCSharpierAction");
-        Project project = e.getProject();
+        var project = e.getProject();
         if (project == null) {
             return;
         }
-        Editor editor = e.getData(CommonDataKeys.EDITOR);
+        var editor = e.getData(CommonDataKeys.EDITOR);
         if (editor != null) {
             processFileInEditor(project, editor.getDocument());
         }
@@ -38,14 +38,14 @@ public class ReformatWithCSharpierAction extends AnAction {
             return;
         }
 
-        String file = virtualFile.substring(filePrefix.length());
+        var file = virtualFile.substring(filePrefix.length());
         e.getPresentation().setVisible(file.toLowerCase().endsWith(".cs"));
-        boolean canFormat = FormattingService.getInstance(e.getProject()).getCanFormat(file, e.getProject());
+        var canFormat = FormattingService.getInstance(e.getProject()).getCanFormat(file, e.getProject());
         e.getPresentation().setEnabled(canFormat);
     }
 
     private static void processFileInEditor(@NotNull Project project, @NotNull Document document) {
-        FormattingService formattingService = FormattingService.getInstance(project);
+        var formattingService = FormattingService.getInstance(project);
         formattingService.format(document, project);
     }
 }
