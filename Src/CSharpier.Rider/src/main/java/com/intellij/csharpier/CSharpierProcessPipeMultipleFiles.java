@@ -7,9 +7,15 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
+    private final ExecutorService executor;
     Logger logger = CSharpierLogger.getInstance();
     String csharpierPath;
 
@@ -20,6 +26,7 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
     public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8) {
         this.csharpierPath = csharpierPath;
+        this.executor = Executors.newCachedThreadPool();
         try {
             var processBuilder = new ProcessBuilder(csharpierPath, "--pipe-multiple-files");
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
@@ -42,8 +49,6 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
     @Override
     public String formatFile(String content, String filePath) {
-        this.logger.info("Formatting file at " + filePath);
-
         try {
             this.logger.info(filePath);
             this.stdin.write(filePath);
@@ -55,22 +60,10 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
             var output = new StringBuilder();
             var errorOutput = new StringBuilder();
 
-            var done = new AtomicBoolean(false);
-
-            // TODO look into ExecutorService.invokeAny to get this cleaned up like the VS version
-            // https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ExecutorService.html#invokeAny-java.util.Collection-
-            var outputReaderThread = CreateReadingThread(this.stdOut, output, done);
-            outputReaderThread.start();
-
-            var errorReaderThread = CreateReadingThread(this.stdError, errorOutput, done);
-            errorReaderThread.start();
-
-            while (!done.get()) {
-                Thread.sleep(1);
-            }
-
-            errorReaderThread.interrupt();
-            outputReaderThread.interrupt();
+            var callableTasks = new ArrayList<Callable<Object>>();
+            callableTasks.add(Executors.callable(CreateReadingThread(this.stdOut, output)));
+            callableTasks.add(Executors.callable(CreateReadingThread(this.stdError, errorOutput)));
+            this.executor.invokeAny(callableTasks);
 
             var errorResult = errorOutput.toString();
             if (errorResult.length() > 0) {
@@ -87,27 +80,35 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
         }
     }
 
-    private Thread CreateReadingThread(BufferedReader reader, StringBuilder stringBuilder, AtomicBoolean done) {
-        return new Thread(() -> {
+    private Runnable CreateReadingThread(BufferedReader reader, StringBuilder stringBuilder) {
+        var runnable = (Runnable) () -> {
             try {
                 var nextCharacter = reader.read();
                 while (nextCharacter != -1) {
                     if (nextCharacter == '\u0003') {
-                        done.set(true);
-                        return;
+                        break;
                     }
                     stringBuilder.append((char) nextCharacter);
                     nextCharacter = reader.read();
                 }
             } catch (Exception e) {
                 this.logger.error(e);
-                done.set(true);
             }
-        });
+
+        };
+        return runnable;
     }
 
     @Override
     public void dispose() {
         this.process.destroy();
+        this.executor.shutdown();
+        try {
+            if (!this.executor.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+                this.executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            this.executor.shutdownNow();
+        }
     }
 }

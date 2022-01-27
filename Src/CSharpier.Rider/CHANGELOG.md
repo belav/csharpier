@@ -8,6 +8,7 @@
 - Run csharpier from custom tools location so that the global/local versions of the tool are not locked.
 - Provide actions for installing csharpier locally or globally if it is not detected
 - Hide "Reformat with CSharpier" action for non csharp files
+- Better handling of threads for the long-running formatting process
 
 ## [1.0.4]
 - Adding support for UTF8 and unicode characters. Requires csharpier 0.14.0
