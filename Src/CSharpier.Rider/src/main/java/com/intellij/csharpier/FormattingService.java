@@ -59,8 +59,9 @@ public class FormattingService {
         var end = Instant.now();
         this.logger.info("Formatted in " + (Duration.between(start, end).toMillis()) + "ms");
 
-        if (result.length() > 0) {
+        if (result.length() > 0 && !currentDocumentText.equals(result)) {
             WriteCommandAction.runWriteCommandAction(project, () -> {
+                // why replace instead of setText?
                 document.replaceString(0, currentDocumentText.length(), result);
             });
         }
