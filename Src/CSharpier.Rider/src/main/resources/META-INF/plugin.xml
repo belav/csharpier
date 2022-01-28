@@ -11,8 +11,10 @@
         <projectService serviceImplementation="com.intellij.csharpier.FormattingService"/>
         <projectService serviceImplementation="com.intellij.csharpier.CSharpierSettings"/>
         <projectService serviceImplementation="com.intellij.csharpier.InstallerService"/>
+<!--        <projectService serviceImplementation="com.intellij.csharpier.ReformatWithCSharpierOnSave4"/>-->
         <notificationGroup id="CSharpier" displayType="STICKY_BALLOON"/>
         <postStartupActivity implementation="com.intellij.csharpier.CSharpierStartup"/>
+        <fileDocumentManagerListener implementation="com.intellij.csharpier.ReformatWithCSharpierOnSave3"/>
 <!--        <actionOnSave id="ReformatWithCSharpierOnSave2"-->
 <!--                      implementation="com.intellij.csharpier.ReformatWithCSharpierOnSave2"-->
 <!--                      order="after FormatOnSaveAction"/>-->
@@ -22,8 +24,8 @@
                 instance="com.intellij.csharpier.CSharpierSettingsComponent"/>
     </extensions>
     <projectListeners>
-        <listener class="com.intellij.csharpier.ReformatWithCSharpierOnSave"
-                  topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener" />
+<!--        <listener class="com.intellij.csharpier.ReformatWithCSharpierOnSave"-->
+<!--                  topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener"/>-->
     </projectListeners>
 
     <actions>

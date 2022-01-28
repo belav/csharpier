@@ -29,15 +29,18 @@ public class ReformatWithCSharpierOnSave implements FileDocumentManagerListener 
         this.formattingService = FormattingService.getInstance(project);
     }
 
+    // TODO this does not get called while in rider until you leave the IDE
+    // with the regular way to do it, or the way to inject projects
+    // could it be a bug with rider?
     @Override
     public void beforeAllDocumentsSaving() {
         this.logger.debug("beforeAllDocumentsSaving");
-        if (!CSharpierSettings.getInstance(project).getRunOnSave()) {
-            this.logger.debug("runOnSaveNotEnabled");
-            return;
-        }
-
-        this.logger.debug("bailing because this doesn't seem to work in rider");
+//        if (!CSharpierSettings.getInstance(project).getRunOnSave()) {
+//            this.logger.debug("runOnSaveNotEnabled");
+//            return;
+//        }
+//
+////         this.logger.debug("bailing because this doesn't seem to work in rider");
 //        var unsavedDocuments = FileDocumentManager.getInstance().getUnsavedDocuments();
 //        this.scheduleDocumentsProcessing(unsavedDocuments);
     }
@@ -66,19 +69,20 @@ public class ReformatWithCSharpierOnSave implements FileDocumentManagerListener 
 
         for (var document : documents) {
             this.formattingService.format(document, this.project);
-            manager.saveDocument(document);
+            //manager.saveDocument(document);
         }
     }
 
+    // TODO if this is used, then we get a double format
     @Override
     public void beforeDocumentSaving(@NotNull Document document) {
         this.logger.debug("beforeDocumentSaving");
-        if (!CSharpierSettings.getInstance(project).getRunOnSave()) {
-            this.logger.debug("runOnSaveNotEnabled");
-            return;
-        }
-        this.scheduleDocumentsProcessing(document);
-        // this.scheduleDocumentsProcessing(document);
+//        if (!CSharpierSettings.getInstance(project).getRunOnSave()) {
+//            this.logger.debug("runOnSaveNotEnabled");
+//            return;
+//        }
+//        this.scheduleDocumentsProcessing(document);
+
 //        var project = ProjectLocator.getInstance().guessProjectForFile(file);
 //        if (project == null) {
 //            this.logger.info("Could not find project for file so not trying to format in save.");

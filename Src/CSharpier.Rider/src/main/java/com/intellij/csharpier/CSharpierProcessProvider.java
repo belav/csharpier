@@ -24,7 +24,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CSharpierProcessProvider implements DocumentListener, @NotNull Disposable, IProcessKiller {
+public class CSharpierProcessProvider implements DocumentListener, Disposable, IProcessKiller {
     private final CustomPathInstaller customPathInstaller = new CustomPathInstaller();
     private final Logger logger = CSharpierLogger.getInstance();
     private final Project project;

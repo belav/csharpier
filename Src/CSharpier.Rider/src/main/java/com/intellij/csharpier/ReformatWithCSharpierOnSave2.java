@@ -22,7 +22,7 @@ public class ReformatWithCSharpierOnSave2 extends ActionsOnSaveFileDocumentManag
     }
 
     @Override
-    public void processDocuments(@NotNull Project project, @NotNull Document @NotNull [] documents) {
+    public void processDocuments(@NotNull Project project, Document[] documents) {
         this.logger.debug("processDocuments");
         if (!this.isEnabledForProject(project)) {
             return;

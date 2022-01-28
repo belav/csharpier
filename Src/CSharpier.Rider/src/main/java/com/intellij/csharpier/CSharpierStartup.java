@@ -9,5 +9,7 @@ public class CSharpierStartup implements StartupActivity, DumbAware {
     @Override
     public void runActivity(@NotNull Project project) {
         CSharpierProcessProvider.getInstance(project);
+        // TODO why is this required?
+        // new ReformatWithCSharpierOnSave4(project);
     }
 }
