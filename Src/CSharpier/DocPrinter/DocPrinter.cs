@@ -131,7 +131,19 @@ internal class DocPrinter
                     this.Output.Append(this.EndOfLine);
                 }
 
-                this.Output.Append(indent.Value).Append(leadingComment.Comment);
+                // TODO do trailing comments need to do the same thing?
+                var stringReader = new StringReader(leadingComment.Comment);
+                var line = stringReader.ReadLine();
+                while (line != null)
+                {
+                    this.Output.Append(indent.Value).Append(line.Trim());
+                    line = stringReader.ReadLine();
+                    if (line != null)
+                    {
+                        this.Output.Append(this.EndOfLine);
+                    }
+                }
+
                 this.CurrentWidth = indent.Length;
                 this.NewLineNextStringValue = false;
                 this.SkipNextNewLine = false;
