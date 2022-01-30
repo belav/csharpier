@@ -16,14 +16,12 @@ namespace CSharpier.VisualStudio
     public sealed class CSharpierPackage : AsyncPackage
     {
         public const string PackageGuidString = "d348ba73-11dc-46be-8660-6d9819fc2c52";
-        public IVsOutputWindow OutputWindow { get; set; }
 
         protected override async Task InitializeAsync(
             CancellationToken cancellationToken,
             IProgress<ServiceProgressData> progress
         )
         {
-            this.OutputWindow = await this.GetServiceAsync<IVsOutputWindow>();
             await Logger.InitializeAsync(this);
             Logger.Instance.Info("Starting");
 

@@ -68,7 +68,6 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
             var errorResult = errorOutput.toString();
             if (errorResult.length() > 0) {
                 this.logger.info("Got error output: " + errorResult);
-                // TODO get this consistent with VS by returning null?
                 return "";
             }
 

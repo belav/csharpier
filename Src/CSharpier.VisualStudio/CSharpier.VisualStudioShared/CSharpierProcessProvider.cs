@@ -190,6 +190,7 @@ namespace CSharpier.VisualStudio
             return new NullCSharpierProcess();
         }
 
+        // TODO do we need to call this from anywhere?
         public void Dispose()
         {
             this.KillRunningProcesses();
