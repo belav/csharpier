@@ -138,6 +138,10 @@ internal static class Token
 
             void AddLeadingCommend(CommentType commentType)
             {
+                // when printing comments, we need leading whitespace to ensure something like the following formats correctly
+                // /*
+                //  * keep the * in line
+                //  */
                 var previousTrivia = x > 0 ? leadingTrivia[x - 1] : (SyntaxTrivia?)null;
                 docs.Add(
                     Doc.LeadingComment(
