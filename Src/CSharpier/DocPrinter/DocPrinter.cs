@@ -131,38 +131,7 @@ internal class DocPrinter
                     this.Output.Append(this.EndOfLine);
                 }
 
-                // TODO do trailing comments need to do the same thing?
-                // TODO this could be cleaned up too
-                var stringReader = new StringReader(leadingComment.Comment);
-                var line = stringReader.ReadLine();
-                var firstLine = line;
-                string? extraIndent = null;
-                while (line != null)
-                {
-                    this.Output.Append(indent.Value);
-                    if (extraIndent != null)
-                    {
-                        this.Output.Append(extraIndent);
-                    }
-                    this.Output.Append(line.Trim());
-                    line = stringReader.ReadLine();
-                    if (line != null)
-                    {
-                        this.Output.Append(this.EndOfLine);
-                        if (extraIndent == null)
-                        {
-                            var firstLineIndentLength =
-                                firstLine!.Replace("\t", "    ").Length
-                                - firstLine.TrimStart().Length;
-                            var secondLineIndentLength =
-                                line.Replace("\t", "    ").Length - line.TrimStart().Length;
-                            extraIndent = new string(
-                                ' ',
-                                Math.Max(secondLineIndentLength - firstLineIndentLength, 0)
-                            );
-                        }
-                    }
-                }
+                this.AppendComment(leadingComment, indent);
 
                 this.CurrentWidth = indent.Length;
                 this.NewLineNextStringValue = false;
@@ -184,6 +153,47 @@ internal class DocPrinter
                 break;
             default:
                 throw new Exception("didn't handle " + doc);
+        }
+    }
+
+    private void AppendComment(LeadingComment leadingComment, Indent indent)
+    {
+        var stringReader = new StringReader(leadingComment.Comment);
+        var line = stringReader.ReadLine();
+        var firstLine = line;
+        string? extraIndent = null;
+        while (line != null)
+        {
+            this.Output.Append(indent.Value);
+            if (extraIndent?.Length > 0)
+            {
+                this.Output.Append(extraIndent);
+            }
+            this.Output.Append(line.Trim());
+            line = stringReader.ReadLine();
+            if (line == null)
+            {
+                return;
+            }
+
+            this.Output.Append(this.EndOfLine);
+            if (extraIndent != null)
+            {
+                continue;
+            }
+
+            // comparing the amount of whitespace ensures formatting like this is possible
+            // /*
+            //  *  keeps the * in line
+            //  */
+            var firstLineIndentLength =
+                firstLine!.Replace("\t", "    ").Length - firstLine.TrimStart().Length;
+            var secondLineIndentLength =
+                line.Replace("\t", "    ").Length - line.TrimStart().Length;
+            extraIndent = new string(
+                ' ',
+                Math.Max(secondLineIndentLength - firstLineIndentLength, 0)
+            );
         }
     }
 
