@@ -132,8 +132,7 @@ internal class DocPrinter
                 }
 
                 // TODO do trailing comments need to do the same thing?
-                // TODO validation fails, why? testing with stuff in moq4 causes it, maybe any file with /// will
-                // TODO this could probably be cleaned up too
+                // TODO this could be cleaned up too
                 var stringReader = new StringReader(leadingComment.Comment);
                 var line = stringReader.ReadLine();
                 var firstLine = line;
