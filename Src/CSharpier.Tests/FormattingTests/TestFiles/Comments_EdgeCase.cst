@@ -1,0 +1,14 @@
+public class ClassName
+{
+  /// multiline
+  /// second line
+  private string field;
+
+  public void Method()
+  {
+    /* multiline
+     *  multiline
+     */
+    var variable = true;
+  }
+}

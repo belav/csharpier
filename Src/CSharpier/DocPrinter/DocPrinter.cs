@@ -132,15 +132,35 @@ internal class DocPrinter
                 }
 
                 // TODO do trailing comments need to do the same thing?
+                // TODO validation fails, because of the extraIndent or other reasons?
+                // TODO we need to keep the indent on leadingComment for the logic below to work
+                // TODO this could probably be cleaned up too
                 var stringReader = new StringReader(leadingComment.Comment);
                 var line = stringReader.ReadLine();
+                var firstLine = line;
+                string? extraIndent = null;
                 while (line != null)
                 {
-                    this.Output.Append(indent.Value).Append(line.Trim());
+                    this.Output.Append(indent.Value);
+                    if (extraIndent != null)
+                    {
+                        this.Output.Append(extraIndent);
+                    }
+                    this.Output.Append(line.Trim());
                     line = stringReader.ReadLine();
                     if (line != null)
                     {
                         this.Output.Append(this.EndOfLine);
+                        if (extraIndent == null)
+                        {
+                            var firstLineIndentLength =
+                                firstLine!.Length - firstLine.TrimStart().Length;
+                            var secondLineIndentLength = line.Length - line.TrimStart().Length;
+                            extraIndent = new string(
+                                ' ',
+                                secondLineIndentLength - firstLineIndentLength
+                            );
+                        }
                     }
                 }
 
