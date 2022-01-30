@@ -1,4 +1,3 @@
-using System.Windows.Forms;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -8,25 +7,26 @@ namespace CSharpier.VisualStudio
 {
     public class InfoBarService : IVsInfoBarUIEvents
     {
-        private readonly CSharpierPackage csharpierPackage;
+        private readonly CSharpierPackage package;
         private uint cookie;
 
-        private InfoBarService(CSharpierPackage csharpierPackage)
+        private InfoBarService(CSharpierPackage package)
         {
-            this.csharpierPackage = csharpierPackage;
+            this.package = package;
         }
 
         public static InfoBarService Instance { get; private set; }
 
-        public static Task InitializeAsync(CSharpierPackage serviceProvider)
+        public static Task InitializeAsync(CSharpierPackage package)
         {
-            Instance = new InfoBarService(serviceProvider);
+            Instance = new InfoBarService(package);
 
             return Task.CompletedTask;
         }
 
         public void OnClosed(IVsInfoBarUIElement infoBarUiElement)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             infoBarUiElement.Unadvise(this.cookie);
         }
 
@@ -39,7 +39,7 @@ namespace CSharpier.VisualStudio
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var shell = this.csharpierPackage.GetServiceAsync(typeof(SVsShell)).Result as IVsShell;
+            var shell = this.package.GetServiceAsync(typeof(SVsShell)).Result as IVsShell;
             if (shell == null)
             {
                 return;
@@ -62,7 +62,7 @@ namespace CSharpier.VisualStudio
             );
 
             var factory =
-                this.csharpierPackage.GetServiceAsync(typeof(SVsInfoBarUIFactory)).Result
+                this.package.GetServiceAsync(typeof(SVsInfoBarUIFactory)).Result
                 as IVsInfoBarUIFactory;
             var element = factory.CreateInfoBar(infoBarModel);
             element.Advise(this, out this.cookie);

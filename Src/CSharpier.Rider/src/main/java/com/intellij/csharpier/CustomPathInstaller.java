@@ -24,15 +24,15 @@ public class CustomPathInstaller {
         ProcessHelper.ExecuteCommand(command, null, null);
     }
 
+    public String getPathForVersion(String version) {
+        var path = Path.of(getDirectoryForVersion(version), "dotnet-csharpier");
+        return path.toString();
+    }
+
     private String getDirectoryForVersion(String version) {
         var path = SystemUtils.IS_OS_LINUX
                 ? Path.of(System.getProperty("user.home"), ".cache/csharpier", version)
                 : Path.of(System.getenv("LOCALAPPDATA"), "CSharpier", version);
-        return path.toString();
-    }
-
-    public String getPathForVersion(String version) {
-        var path = Path.of(getDirectoryForVersion(version), "dotnet-csharpier");
         return path.toString();
     }
 }
