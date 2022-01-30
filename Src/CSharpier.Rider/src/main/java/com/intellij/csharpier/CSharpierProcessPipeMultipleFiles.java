@@ -50,21 +50,21 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     @Override
     public String formatFile(String content, String filePath) {
         try {
-            this.logger.info(filePath);
+            var output = new StringBuilder();
+            var errorOutput = new StringBuilder();
+
             this.stdin.write(filePath);
             this.stdin.write('\u0003');
             this.stdin.write(content);
             this.stdin.write('\u0003');
             this.stdin.flush();
 
-            var output = new StringBuilder();
-            var errorOutput = new StringBuilder();
-
             var callableTasks = new ArrayList<Callable<Object>>();
             callableTasks.add(Executors.callable(CreateReadingThread(this.stdOut, output)));
             callableTasks.add(Executors.callable(CreateReadingThread(this.stdError, errorOutput)));
             this.executor.invokeAny(callableTasks);
 
+            // TODO more logging like vs version
             var errorResult = errorOutput.toString();
             if (errorResult.length() > 0) {
                 this.logger.info("Got error output: " + errorResult);
