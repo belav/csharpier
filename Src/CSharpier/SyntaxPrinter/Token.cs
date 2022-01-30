@@ -135,13 +135,26 @@ internal static class Token
             {
                 printNewLines = true;
             }
-            if (IsSingleLineComment(kind))
+
+            void AddLeadingCommend(CommentType commentType)
             {
+                var previousTrivia = x > 0 ? leadingTrivia[x - 1] : (SyntaxTrivia?)null;
                 docs.Add(
                     Doc.LeadingComment(
-                        trivia.ToFullString().TrimEnd('\n', '\r'),
-                        CommentType.SingleLine
-                    ),
+                        (
+                            previousTrivia?.Kind() is SyntaxKind.WhitespaceTrivia
+                                ? previousTrivia
+                                : null
+                        ) + trivia.ToFullString().TrimEnd('\n', '\r'),
+                        commentType
+                    )
+                );
+            }
+
+            if (IsSingleLineComment(kind))
+            {
+                AddLeadingCommend(CommentType.SingleLine);
+                docs.Add(
                     kind == SyntaxKind.SingleLineDocumentationCommentTrivia
                       ? Doc.HardLineSkipBreakIfFirstInGroup
                       : Doc.Null
@@ -149,12 +162,7 @@ internal static class Token
             }
             else if (IsMultiLineComment(kind))
             {
-                docs.Add(
-                    Doc.LeadingComment(
-                        trivia.ToFullString().TrimEnd('\n', '\r'),
-                        CommentType.MultiLine
-                    )
-                );
+                AddLeadingCommend(CommentType.MultiLine);
             }
             else if (kind == SyntaxKind.DisabledTextTrivia)
             {
