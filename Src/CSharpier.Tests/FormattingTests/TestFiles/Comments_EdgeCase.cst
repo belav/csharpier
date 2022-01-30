@@ -11,4 +11,8 @@ public class ClassName
      */
     var variable = true;
   }
+    /// <summary> no tabs here
+	/// Tabs here
+	/// </summary>
+    public class ClassName { }
 }

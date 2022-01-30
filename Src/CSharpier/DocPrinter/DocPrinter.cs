@@ -152,11 +152,13 @@ internal class DocPrinter
                         if (extraIndent == null)
                         {
                             var firstLineIndentLength =
-                                firstLine!.Length - firstLine.TrimStart().Length;
-                            var secondLineIndentLength = line.Length - line.TrimStart().Length;
+                                firstLine!.Replace("\t", "    ").Length
+                                - firstLine.TrimStart().Length;
+                            var secondLineIndentLength =
+                                line.Replace("\t", "    ").Length - line.TrimStart().Length;
                             extraIndent = new string(
                                 ' ',
-                                secondLineIndentLength - firstLineIndentLength
+                                Math.Max(secondLineIndentLength - firstLineIndentLength, 0)
                             );
                         }
                     }
