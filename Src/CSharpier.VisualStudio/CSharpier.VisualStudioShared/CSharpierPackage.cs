@@ -30,6 +30,7 @@ namespace CSharpier.VisualStudio
             await InfoBarService.InitializeAsync(this);
             await ReformatWithCSharpierOnSave.InitializeAsync(this);
             await ReformatWithCSharpier.InitializeAsync(this);
+            await InstallerService.InitializeAsync(this);
 
             var dte = await this.GetServiceAsync(typeof(DTE)) as DTE;
             if (dte.ActiveDocument != null)

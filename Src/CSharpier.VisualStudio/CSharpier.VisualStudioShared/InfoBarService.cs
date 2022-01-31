@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -7,12 +10,15 @@ namespace CSharpier.VisualStudio
 {
     public class InfoBarService : IVsInfoBarUIEvents
     {
+        private readonly Logger logger;
         private readonly CSharpierPackage package;
         private uint cookie;
+        private Dictionary<string, Action> buttonActions = new Dictionary<string, Action>();
 
         private InfoBarService(CSharpierPackage package)
         {
             this.package = package;
+            this.logger = Logger.Instance;
         }
 
         public static InfoBarService Instance { get; private set; }
@@ -33,9 +39,21 @@ namespace CSharpier.VisualStudio
         public void OnActionItemClicked(
             IVsInfoBarUIElement infoBarUIElement,
             IVsInfoBarActionItem actionItem
-        ) { }
+        )
+        {
+            if (this.buttonActions.TryGetValue(actionItem.ActionContext.ToString(), out Action onClick))
+            {
+                onClick();
+            }
+            else
+            {
+                this.logger.Debug("No action found for the context " + actionItem.ActionContext);
+            }
 
-        public void ShowInfoBar(string message)
+            infoBarUIElement.Close();
+        }
+
+        public void ShowInfoBar(string message, IEnumerable<InfoBarActionButton>? buttons = null)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -53,7 +71,18 @@ namespace CSharpier.VisualStudio
             var text = new InfoBarTextSpan(message);
 
             var spans = new[] { text };
-            var actions = new InfoBarActionItem[] { };
+
+            if (buttons != null)
+            {
+                foreach (var infoBarActionButton in buttons)
+                {
+                    this.buttonActions[infoBarActionButton.Context] = infoBarActionButton.OnClicked;
+                }
+            }
+
+            var actions = (buttons ?? Enumerable.Empty<InfoBarActionButton>())
+                .Select(o => new InfoBarButton(o.Text, o.Context))
+                .ToArray();
             var infoBarModel = new InfoBarModel(
                 spans,
                 actions,
@@ -68,5 +97,12 @@ namespace CSharpier.VisualStudio
             element.Advise(this, out this.cookie);
             infoBarHost.AddInfoBar(element);
         }
+    }
+
+    public class InfoBarActionButton
+    {
+        public string Text { get; set; }
+        public string Context { get; set; }
+        public Action OnClicked { get; set; }
     }
 }

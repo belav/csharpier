@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace CSharpier.VisualStudio
 {
@@ -38,7 +39,14 @@ namespace CSharpier.VisualStudio
             process.Start();
             process.WaitForExit();
 
-            return process.StandardOutput.ReadToEnd();
+            if (process.ExitCode == 0)
+            {
+                return process.StandardOutput.ReadToEnd().Trim();
+            }
+
+            Logger.Instance.Debug(process.StandardError.ReadToEnd());
+
+            return string.Empty;
         }
     }
 }

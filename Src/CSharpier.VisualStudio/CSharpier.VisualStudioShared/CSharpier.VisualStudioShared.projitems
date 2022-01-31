@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)FormattingService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ICSharpierProcess.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InfoBarService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InstallerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NullCSharpierProcess.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProcessHelper.cs" />

@@ -5,10 +5,11 @@ using Newtonsoft.Json;
 
 namespace CSharpier.VisualStudio
 {
-    public class CSharpierProcessProvider
+    public class CSharpierProcessProvider : IProcessKiller
     {
         private readonly CustomPathInstaller customPathInstaller;
         private readonly Logger logger;
+
         private bool warnedForOldVersion;
 
         private readonly Dictionary<string, bool> warmingByDirectory = new Dictionary<
@@ -54,13 +55,7 @@ namespace CSharpier.VisualStudio
                 version = this.GetCSharpierVersion(directory);
                 if (string.IsNullOrEmpty(version))
                 {
-                    // TODO Installer junk
-                    // InfoBarService.Instance.ShowInfoBar(
-                    //     "CSharpier must be installed globally to support formatting."
-                    // );
-                    // InstallerService
-                    //     .getInstance(this.project)
-                    //     .displayInstallNeededMessage(directory, this);
+                    InstallerService.Instance.DisplayInstallNeededMessage(directory, this);
                 }
                 this.csharpierVersionByDirectory[directory] = version;
             }
@@ -188,12 +183,6 @@ namespace CSharpier.VisualStudio
             }
 
             return new NullCSharpierProcess();
-        }
-
-        // TODO do we need to call this from anywhere?
-        public void Dispose()
-        {
-            this.KillRunningProcesses();
         }
 
         public void KillRunningProcesses()

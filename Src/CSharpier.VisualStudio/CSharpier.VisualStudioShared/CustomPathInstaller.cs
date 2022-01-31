@@ -26,9 +26,9 @@ namespace CSharpier.VisualStudio
                 return;
             }
             var directoryForVersion = this.GetDirectoryForVersion(version);
-            if (File.Exists(directoryForVersion))
+            if (Directory.Exists(directoryForVersion))
             {
-                this.logger.Debug("File at " + directoryForVersion + " already exists");
+                this.logger.Debug("Directory at " + directoryForVersion + " already exists");
                 return;
             }
 
