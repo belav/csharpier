@@ -64,14 +64,23 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
             callableTasks.add(Executors.callable(CreateReadingThread(this.stdError, errorOutput)));
             this.executor.invokeAny(callableTasks);
 
-            // TODO more logging like vs version
+            var result = output.toString();
             var errorResult = errorOutput.toString();
-            if (errorResult.length() > 0) {
-                this.logger.info("Got error output: " + errorResult);
-                return "";
+            if (errorResult == null || errorResult.isEmpty())
+            {
+                if (result == null || result.isEmpty())
+                {
+                    this.logger.info("File is ignored by .csharpierignore");
+                    return "";
+                }
+                else
+                {
+                    return output.toString();
+                }
             }
 
-            return output.toString();
+            this.logger.info("Got error output: " + errorResult);
+            return "";
 
         } catch (Exception e) {
             this.logger.error(e);

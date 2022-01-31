@@ -34,8 +34,6 @@ public class ReformatWithCSharpierOnSave implements AnActionListener {
                 this.logger.debug("SaveDocumentAction for " + document);
                 formattingService.format(document, project);
             }
-
-            // TODO test this with a big refactor
         } else if (action instanceof SaveAllAction) {
             var project = event.getData(CommonDataKeys.PROJECT);
             var cSharpierSettings = CSharpierSettings.getInstance(project);

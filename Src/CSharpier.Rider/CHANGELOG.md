@@ -3,7 +3,7 @@
 # csharpier-rider Changelog
 
 ## [1.2.1]
-- Fixing issue
+- Fixing error when refactoring to move class to new file
 
 ## [1.2.0]
 - Fix bug with dotnet csharpier sometimes outputting .net welcome message

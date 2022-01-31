@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -22,8 +21,6 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-
-
 
 public class CSharpierProcessProvider implements DocumentListener, Disposable, IProcessKiller {
     private final CustomPathInstaller customPathInstaller = new CustomPathInstaller();

@@ -11,7 +11,5 @@ public class CSharpierStartup implements StartupActivity, DumbAware {
     public void runActivity(@NotNull Project project) {
         CSharpierProcessProvider.getInstance(project);
         ApplicationManager.getApplication().getService(ReformatWithCSharpierOnSave.class);
-        // TODO why is this required?
-        // new ReformatWithCSharpierOnSave4(project);
     }
 }
