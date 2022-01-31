@@ -41,7 +41,12 @@ namespace CSharpier.VisualStudio
             IVsInfoBarActionItem actionItem
         )
         {
-            if (this.buttonActions.TryGetValue(actionItem.ActionContext.ToString(), out Action onClick))
+            if (
+                this.buttonActions.TryGetValue(
+                    actionItem.ActionContext.ToString(),
+                    out Action onClick
+                )
+            )
             {
                 onClick();
             }
