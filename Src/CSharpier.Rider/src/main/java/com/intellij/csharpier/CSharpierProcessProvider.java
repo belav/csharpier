@@ -5,23 +5,21 @@ import com.google.gson.JsonObject;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,14 +31,12 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
     private final Project project;
 
     private boolean warnedForOldVersion;
-    private final HashMap<String, Boolean> warmingByDirectory = new HashMap<>();
+    private final HashMap<String, Long> lastWarmedByDirectory = new HashMap<>();
     private final HashMap<String, String> csharpierVersionByDirectory = new HashMap<>();
     private final HashMap<String, ICSharpierProcess> csharpierProcessesByVersion = new HashMap<>();
 
     public CSharpierProcessProvider(@NotNull Project project) {
         this.project = project;
-
-
 
         for (var fileEditor : FileEditorManager.getInstance(project).getAllEditors()) {
             var path = fileEditor.getFile().getPath();
@@ -57,7 +53,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         return project.getService(CSharpierProcessProvider.class);
     }
 
-    // TODO switch to fileOpened, maybe
+    // TODO ideally this would warm on document open/focus. But there doesn't seem to be an event for focus
     @Override
     public void documentChanged(@NotNull DocumentEvent event) {
         var document = event.getDocument();
@@ -75,11 +71,13 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
     private void findAndWarmProcess(String filePath) {
         var directory = Path.of(filePath).getParent().toString();
-        if (this.warmingByDirectory.getOrDefault(directory, false)) {
+        var now = Instant.now().toEpochMilli();
+        var lastWarmed = this.lastWarmedByDirectory.getOrDefault(directory, Long.valueOf(0));
+        if (lastWarmed + 5000 > now) {
             return;
         }
         this.logger.debug("Ensure there is a csharpier process for " + directory);
-        this.warmingByDirectory.put(directory, true);
+        this.lastWarmedByDirectory.put(directory, now);
         var version = this.csharpierVersionByDirectory.getOrDefault(directory, null);
         if (version == null) {
             version = this.getCSharpierVersion(directory);
@@ -95,12 +93,9 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
                     version
             ));
         }
-
-        this.warmingByDirectory.remove(directory);
     }
 
     public ICSharpierProcess getProcessFor(String filePath) {
-        this.logger.debug(filePath);
         var directory = Path.of(filePath).getParent().toString();
         var version = this.csharpierVersionByDirectory.getOrDefault(directory, null);
         if (version == null) {
@@ -215,7 +210,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
             );
             this.csharpierProcessesByVersion.get(key).dispose();
         }
-        this.warmingByDirectory.clear();
+        this.lastWarmedByDirectory.clear();
         this.csharpierVersionByDirectory.clear();
         this.csharpierProcessesByVersion.clear();
     }

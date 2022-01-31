@@ -60,7 +60,7 @@ public class FormattingService {
         this.logger.info("Formatted in " + (Duration.between(start, end).toMillis()) + "ms");
 
         if (result.length() == 0 || currentDocumentText.equals(result)) {
-            this.logger.debug("Skipping write because " + (result.length() == 0 ? "result is empty" : " current document equals result"));
+            this.logger.debug("Skipping write because " + (result.length() == 0 ? "result is empty" : "current document equals result"));
         } else {
             WriteCommandAction.runWriteCommandAction(project, () -> {
                 // why replace instead of setText?

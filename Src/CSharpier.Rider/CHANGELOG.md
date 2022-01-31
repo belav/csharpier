@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.2.1]
+- Fixing issue
+
 ## [1.2.0]
 - Fix bug with dotnet csharpier sometimes outputting .net welcome message
 - Support for using local version of csharpier from tool manifest file

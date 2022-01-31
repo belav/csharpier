@@ -23,7 +23,10 @@ public class ReformatWithCSharpierOnSave implements AnActionListener {
     public void beforeActionPerformed(@NotNull AnAction action, @NotNull AnActionEvent event) {
         if (action instanceof SaveDocumentAction) {
             var project = event.getData(CommonDataKeys.PROJECT);
-
+            var cSharpierSettings = CSharpierSettings.getInstance(project);
+            if (!cSharpierSettings.getRunOnSave()) {
+                return;
+            }
             var editor = event.getData(CommonDataKeys.EDITOR);
             if (editor != null) {
                 var formattingService = FormattingService.getInstance(project);
@@ -35,14 +38,16 @@ public class ReformatWithCSharpierOnSave implements AnActionListener {
             // TODO test this with a big refactor
         } else if (action instanceof SaveAllAction) {
             var project = event.getData(CommonDataKeys.PROJECT);
+            var cSharpierSettings = CSharpierSettings.getInstance(project);
+            if (!cSharpierSettings.getRunOnSave()) {
+                return;
+            }
             var unsavedDocuments = FileDocumentManager.getInstance().getUnsavedDocuments();
             var formattingService = FormattingService.getInstance(project);
             this.logger.debug("SaveAllAction for " + unsavedDocuments.length + " Documents");
-            //ApplicationManager.getApplication().invokeLater(() -> {
-                for (var document : unsavedDocuments) {
-                    formattingService.format(document, project);
-                }
-            //});
+            for (var document : unsavedDocuments) {
+                formattingService.format(document, project);
+            }
         }
     }
 }

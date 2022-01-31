@@ -14,24 +14,11 @@
         <projectService serviceImplementation="com.intellij.csharpier.InstallerService"/>
         <notificationGroup id="CSharpier" displayType="STICKY_BALLOON"/>
         <postStartupActivity implementation="com.intellij.csharpier.CSharpierStartup"/>
-<!--        <fileDocumentManagerListener implementation="com.intellij.csharpier.ReformatWithCSharpierOnSave3"/>-->
         <projectConfigurable
                 parentId="tools"
                 id="com.intellij.csharpier.CSharpierSettingsComponent"
                 instance="com.intellij.csharpier.CSharpierSettingsComponent"/>
     </extensions>
-    <projectListeners>
-<!--        <listener class="com.intellij.csharpier.ReformatWithCSharpierOnSaveOld"-->
-<!--                  topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener"/>-->
-    </projectListeners>
-
-<!--    <application-components>-->
-<!--        <component>-->
-<!--            <implementation-class>com.intellij.csharpier.ReformatWithCSharpierOnSave</implementation-class>-->
-<!--        </component>-->
-
-<!--    </application-components>-->
-
     <actions>
         <action id="com.intellij.csharpier.ReformatWithCSharpierAction"
                 class="com.intellij.csharpier.ReformatWithCSharpierAction" text="Reformat With CSharpier">
