@@ -1,5 +1,6 @@
 package com.intellij.csharpier;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
@@ -9,6 +10,7 @@ public class CSharpierStartup implements StartupActivity, DumbAware {
     @Override
     public void runActivity(@NotNull Project project) {
         CSharpierProcessProvider.getInstance(project);
+        ApplicationManager.getApplication().getService(ReformatWithCSharpierOnSave.class);
         // TODO why is this required?
         // new ReformatWithCSharpierOnSave4(project);
     }

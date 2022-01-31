@@ -13,6 +13,7 @@ import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.maven.artifact.versioning.ComparableVersion;
@@ -23,6 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+
+
 
 public class CSharpierProcessProvider implements DocumentListener, Disposable, IProcessKiller {
     private final CustomPathInstaller customPathInstaller = new CustomPathInstaller();
@@ -36,6 +39,8 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
     public CSharpierProcessProvider(@NotNull Project project) {
         this.project = project;
+
+
 
         for (var fileEditor : FileEditorManager.getInstance(project).getAllEditors()) {
             var path = fileEditor.getFile().getPath();
@@ -52,6 +57,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         return project.getService(CSharpierProcessProvider.class);
     }
 
+    // TODO switch to fileOpened, maybe
     @Override
     public void documentChanged(@NotNull DocumentEvent event) {
         var document = event.getDocument();

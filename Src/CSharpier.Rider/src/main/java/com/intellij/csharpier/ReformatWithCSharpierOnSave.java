@@ -1,102 +1,48 @@
 package com.intellij.csharpier;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
+import com.intellij.application.Topics;
+import com.intellij.ide.actions.SaveAllAction;
+import com.intellij.ide.actions.SaveDocumentAction;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.ex.AnActionListener;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileDocumentManagerListener;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDocumentManager;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+public class ReformatWithCSharpierOnSave implements AnActionListener {
 
-public class ReformatWithCSharpierOnSave implements FileDocumentManagerListener {
     private final Logger logger = CSharpierLogger.getInstance();
 
-    private final Project project;
-    private final PsiDocumentManager psiDocumentManager;
-    private final FormattingService formattingService;
-
-    private final Set<Document> documentsToProcess = new HashSet<>();
-
-    public ReformatWithCSharpierOnSave(Project project) {
-        this.project = project;
-        this.psiDocumentManager = PsiDocumentManager.getInstance(project);
-        this.formattingService = FormattingService.getInstance(project);
+    public ReformatWithCSharpierOnSave() {
+        Topics.subscribe(AnActionListener.TOPIC, null, this);
     }
 
-    // TODO this does not get called while in rider until you leave the IDE
-    // with the regular way to do it, or the way to inject projects
-    // could it be a bug with rider?
     @Override
-    public void beforeAllDocumentsSaving() {
-        this.logger.debug("beforeAllDocumentsSaving");
-//        if (!CSharpierSettings.getInstance(project).getRunOnSave()) {
-//            this.logger.debug("runOnSaveNotEnabled");
-//            return;
-//        }
-//
-////         this.logger.debug("bailing because this doesn't seem to work in rider");
-//        var unsavedDocuments = FileDocumentManager.getInstance().getUnsavedDocuments();
-//        this.scheduleDocumentsProcessing(unsavedDocuments);
-    }
+    public void beforeActionPerformed(@NotNull AnAction action, @NotNull AnActionEvent event) {
+        if (action instanceof SaveDocumentAction) {
+            var project = event.getData(CommonDataKeys.PROJECT);
 
-    private void scheduleDocumentsProcessing(Document ... documents) {
-        var processingAlreadyScheduled = !documentsToProcess.isEmpty();
+            var editor = event.getData(CommonDataKeys.EDITOR);
+            if (editor != null) {
+                var formattingService = FormattingService.getInstance(project);
+                var document = editor.getDocument();
+                this.logger.debug("SaveDocumentAction for " + document);
+                formattingService.format(document, project);
+            }
 
-        this.documentsToProcess.addAll(Arrays.asList(documents));
-
-        if (!processingAlreadyScheduled) {
-            ApplicationManager.getApplication().invokeLater(() -> processSavedDocuments(), ModalityState.NON_MODAL);
+            // TODO test this with a big refactor
+        } else if (action instanceof SaveAllAction) {
+            var project = event.getData(CommonDataKeys.PROJECT);
+            var unsavedDocuments = FileDocumentManager.getInstance().getUnsavedDocuments();
+            var formattingService = FormattingService.getInstance(project);
+            this.logger.debug("SaveAllAction for " + unsavedDocuments.length + " Documents");
+            //ApplicationManager.getApplication().invokeLater(() -> {
+                for (var document : unsavedDocuments) {
+                    formattingService.format(document, project);
+                }
+            //});
         }
-    }
-
-    private void processSavedDocuments() {
-        var documents = this.documentsToProcess.toArray(Document.EMPTY_ARRAY);
-        this.documentsToProcess.clear();
-
-        // Although invokeLater() is called with ModalityState.NON_MODAL argument, somehow this might be called in modal context (for example on Commit File action)
-        // It's quite weird if save action progress appears or documents get changed in modal context, let's ignore the request.
-        if (ModalityState.current() != ModalityState.NON_MODAL) {
-            return;
-        }
-
-        var manager = FileDocumentManager.getInstance();
-
-        for (var document : documents) {
-            this.formattingService.format(document, this.project);
-            //manager.saveDocument(document);
-        }
-    }
-
-    // TODO if this is used, then we get a double format
-    @Override
-    public void beforeDocumentSaving(@NotNull Document document) {
-        this.logger.debug("beforeDocumentSaving");
-//        if (!CSharpierSettings.getInstance(project).getRunOnSave()) {
-//            this.logger.debug("runOnSaveNotEnabled");
-//            return;
-//        }
-//        this.scheduleDocumentsProcessing(document);
-
-//        var project = ProjectLocator.getInstance().guessProjectForFile(file);
-//        if (project == null) {
-//            this.logger.info("Could not find project for file so not trying to format in save.");
-//            return;
-//        }
-//
-//        var cSharpierSettings = CSharpierSettings.getInstance(project);
-//        if (!cSharpierSettings.getRunOnSave()) {
-//            return;
-//        }
-//
-//        this.logger.info("Running ReformatWithCSharpierOnSave");
-//
-//        var formattingService = FormattingService.getInstance(project);
-//        formattingService.format(document, project);
     }
 }
