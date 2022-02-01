@@ -92,7 +92,8 @@ internal static class Token
         var printedTrivia = PrivatePrintLeadingTrivia(
             syntaxToken.LeadingTrivia,
             includeInitialNewLines: isClosingBrace,
-            skipLastHardline: isClosingBrace
+            skipLastHardline: isClosingBrace,
+            useLastWasLine: isClosingBrace
         );
 
         return isClosingBrace && printedTrivia != Doc.Null
@@ -113,7 +114,8 @@ internal static class Token
     private static Doc PrivatePrintLeadingTrivia(
         SyntaxTriviaList leadingTrivia,
         bool includeInitialNewLines = false,
-        bool skipLastHardline = false
+        bool skipLastHardline = false,
+        bool useLastWasLine = false
     )
     {
         var docs = new List<Doc>();
@@ -121,19 +123,25 @@ internal static class Token
         // we don't print any new lines until we run into a comment or directive
         // the PrintExtraNewLines method takes care of printing the initial new lines for a given node
         var printNewLines = includeInitialNewLines;
-
+        var lastWasLine = false;
         for (var x = 0; x < leadingTrivia.Count; x++)
         {
             var trivia = leadingTrivia[x];
             var kind = trivia.Kind();
 
-            if (printNewLines && kind == SyntaxKind.EndOfLineTrivia)
+            if (
+                printNewLines
+                && (!lastWasLine || !useLastWasLine)
+                && kind == SyntaxKind.EndOfLineTrivia
+            )
             {
+                lastWasLine = true;
                 docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
             }
             if (kind != SyntaxKind.EndOfLineTrivia && kind != SyntaxKind.WhitespaceTrivia)
             {
                 printNewLines = true;
+                lastWasLine = false;
             }
             if (IsSingleLineComment(kind))
             {
