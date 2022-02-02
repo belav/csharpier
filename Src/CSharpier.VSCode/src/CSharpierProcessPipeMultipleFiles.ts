@@ -20,9 +20,10 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     }
 
     private spawnProcess = (csharpierPath: string, workingDirectory: string) => {
-        const csharpierProcess = spawn("dotnet", [csharpierPath, "--pipe-multiple-files"], {
+        const csharpierProcess = spawn(csharpierPath, ["--pipe-multiple-files"], {
             stdio: "pipe",
             cwd: workingDirectory,
+            env: { ...process.env, DOTNET_NOLOGO: "1" },
         });
 
         csharpierProcess.stderr.on("data", chunk => {

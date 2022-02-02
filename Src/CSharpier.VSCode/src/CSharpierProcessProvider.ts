@@ -8,59 +8,28 @@ import { CSharpierProcessSingleFile } from "./CSharpierProcessSingleFile";
 import { CSharpierProcessPipeMultipleFiles } from "./CSharpierProcessPipeMultipleFiles";
 import * as fs from "fs";
 import { InstallerService } from "./InstallerService";
+import { CustomPathInstaller } from "./CustomPathInstaller";
 
 export class CSharpierProcessProvider implements Disposable {
     warnedForOldVersion = false;
     logger: Logger;
+    customPathInstaller: CustomPathInstaller;
     installerService: InstallerService;
-    csharpierPath: string;
     warmingByDirectory: Record<string, boolean | undefined> = {};
     csharpierVersionByDirectory: Record<string, string | undefined> = {};
     csharpierProcessesByVersion: Record<string, ICSharpierProcess | undefined> = {};
 
     constructor(logger: Logger) {
         this.logger = logger;
-        this.installerService = new InstallerService(
-            this.logger,
-            this.killRunningProcesses,
-        );
+        this.customPathInstaller = new CustomPathInstaller(logger);
+        this.installerService = new InstallerService(this.logger, this.killRunningProcesses);
 
-        let timeoutHandle: NodeJS.Timeout;
-        const setupKillRunningProcesses = () => {
-            // TODO we can't detect when the terminal gets focused
-            // see https://github.com/microsoft/vscode/issues/117980
-            // and we can't detect when the text editor itself loses focus
-            // so in order to make sure someone can use the terminal to update csharpier
-            // we have to kill off the background process after a set amount of time
-            clearTimeout(timeoutHandle);
-            timeoutHandle = setTimeout(this.killRunningProcesses, 15000);
-        };
-
-        window.onDidChangeWindowState(event => {
-            if (!event.focused) {
-                this.killRunningProcesses();
-            } else {
-            }
-        });
         window.onDidChangeActiveTextEditor((event: TextEditor | undefined) => {
             if (event?.document?.languageId !== "csharp") {
                 return;
             }
             this.findAndWarmProcess(event.document.fileName);
-            setupKillRunningProcesses();
         });
-        workspace.onDidChangeTextDocument(event => {
-            if (event.document.languageId !== "csharp") {
-                return;
-            }
-            this.findAndWarmProcess(event.document.fileName);
-            clearTimeout(timeoutHandle);
-            setupKillRunningProcesses();
-        });
-
-        this.csharpierPath = this.getCSharpierPath();
-
-        this.logger.debug("Using command dotnet " + this.csharpierPath);
     }
 
     private findAndWarmProcess(filePath: string) {
@@ -88,23 +57,6 @@ export class CSharpierProcessProvider implements Disposable {
         delete this.warmingByDirectory[directory];
     }
 
-    private getCSharpierPath = () => {
-        const csharpierPath = "csharpier";
-
-        // const csharpierDebugPath = path.resolve(
-        //     __dirname,
-        //     "../../CSharpier.Cli/bin/Debug/net6.0/dotnet-csharpier.dll",
-        // );
-        // const csharpierReleasePath = csharpierDebugPath.replace("Debug", "Release");
-        //
-        // if (fs.existsSync(csharpierDebugPath)) {
-        //     csharpierPath = csharpierDebugPath;
-        // } else if (fs.existsSync(csharpierReleasePath)) {
-        //     csharpierPath = csharpierReleasePath;
-        // }
-        return csharpierPath;
-    };
-
     public getProcessFor = (filePath: string) => {
         const directory = path.parse(filePath).dir;
         let version = this.csharpierVersionByDirectory[directory];
@@ -130,9 +82,7 @@ export class CSharpierProcessProvider implements Disposable {
                 const data = JSON.parse(fs.readFileSync(dotnetToolsPath).toString());
                 const version = data.tools.csharpier?.version;
                 if (version) {
-                    this.logger.debug(
-                        "Found version " + version + " in " + dotnetToolsPath,
-                    );
+                    this.logger.debug("Found version " + version + " in " + dotnetToolsPath);
                     return version;
                 }
             }
@@ -151,13 +101,12 @@ export class CSharpierProcessProvider implements Disposable {
         let outputFromCsharpier: string;
 
         try {
-            outputFromCsharpier = execSync(`dotnet ${this.csharpierPath} --version`, {
+            outputFromCsharpier = execSync(`dotnet csharpier --version`, {
                 cwd: directoryThatContainsFile,
+                env: { ...process.env, DOTNET_NOLOGO: "1" },
             }).toString();
         } catch (error: any) {
-            this.logger.debug(
-                "dotnet csharpier --version failed with " + error.stderr.toString(),
-            );
+            this.logger.debug("dotnet csharpier --version failed with " + error.stderr.toString());
             return "";
         }
 
@@ -189,6 +138,9 @@ export class CSharpierProcessProvider implements Disposable {
                 return new NullCSharpierProcess();
             }
 
+            this.customPathInstaller.ensureVersionInstalled(version);
+            const customPath = this.customPathInstaller.getPathForVersion(version);
+
             this.logger.debug(`Adding new version ${version} process for ${directory}`);
 
             if (semver.lt(version, "0.12.0")) {
@@ -198,13 +150,9 @@ export class CSharpierProcessProvider implements Disposable {
                     );
                     this.warnedForOldVersion = true;
                 }
-                return new CSharpierProcessSingleFile(this.logger, this.csharpierPath);
+                return new CSharpierProcessSingleFile(this.logger, customPath);
             } else {
-                return new CSharpierProcessPipeMultipleFiles(
-                    this.logger,
-                    this.csharpierPath,
-                    directory,
-                );
+                return new CSharpierProcessPipeMultipleFiles(this.logger, customPath, directory);
             }
         } catch (ex: any) {
             this.logger.error(ex.output.toString());
@@ -218,9 +166,7 @@ export class CSharpierProcessProvider implements Disposable {
 
     private killRunningProcesses = () => {
         for (const key in this.csharpierProcessesByVersion) {
-            this.logger.debug(
-                "disposing of process for version " + (key === "" ? "null" : key),
-            );
+            this.logger.debug("disposing of process for version " + (key === "" ? "null" : key));
             this.csharpierProcessesByVersion[key]?.dispose();
         }
         this.warmingByDirectory = {};
