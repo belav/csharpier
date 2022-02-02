@@ -44,6 +44,10 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
                 this.nextFile = this.nextFile.substring(number + 1);
                 const callback = this.callbacks.shift();
                 if (callback) {
+                    if (!result) {
+                        this.logger.info("File is ignored by .csharpierignore");
+                    }
+
                     callback(result);
                 }
             }
