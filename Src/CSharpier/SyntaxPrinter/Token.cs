@@ -89,15 +89,24 @@ internal static class Token
     {
         var isClosingBrace = syntaxToken.Kind() == SyntaxKind.CloseBraceToken;
 
+        Doc extraNewLines = Doc.Null;
+
+        if (isClosingBrace && syntaxToken.LeadingTrivia.Any(o => o.IsDirective || o.IsComment()))
+        {
+            extraNewLines = ExtraNewLines.Print(syntaxToken.LeadingTrivia);
+        }
+
         var printedTrivia = PrivatePrintLeadingTrivia(
             syntaxToken.LeadingTrivia,
-            includeInitialNewLines: isClosingBrace,
-            skipLastHardline: isClosingBrace,
-            useLastWasLine: isClosingBrace
+            skipLastHardline: isClosingBrace
         );
 
-        return isClosingBrace && printedTrivia != Doc.Null
-          ? Doc.Concat(Doc.Indent(printedTrivia), Doc.HardLine)
+        return isClosingBrace && (printedTrivia != Doc.Null || extraNewLines != Doc.Null)
+          ? Doc.Concat(
+                extraNewLines,
+                Doc.IndentIf(printedTrivia != Doc.Null, printedTrivia),
+                Doc.HardLine
+            )
           : printedTrivia;
     }
 
@@ -114,8 +123,7 @@ internal static class Token
     private static Doc PrivatePrintLeadingTrivia(
         SyntaxTriviaList leadingTrivia,
         bool includeInitialNewLines = false,
-        bool skipLastHardline = false,
-        bool useLastWasLine = false
+        bool skipLastHardline = false
     )
     {
         var docs = new List<Doc>();
@@ -123,25 +131,18 @@ internal static class Token
         // we don't print any new lines until we run into a comment or directive
         // the PrintExtraNewLines method takes care of printing the initial new lines for a given node
         var printNewLines = includeInitialNewLines;
-        var lastWasLine = false;
         for (var x = 0; x < leadingTrivia.Count; x++)
         {
             var trivia = leadingTrivia[x];
             var kind = trivia.Kind();
 
-            if (
-                printNewLines
-                && (!lastWasLine || !useLastWasLine)
-                && kind == SyntaxKind.EndOfLineTrivia
-            )
+            if (printNewLines && kind == SyntaxKind.EndOfLineTrivia)
             {
-                lastWasLine = true;
                 docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
             }
             if (kind != SyntaxKind.EndOfLineTrivia && kind != SyntaxKind.WhitespaceTrivia)
             {
                 printNewLines = true;
-                lastWasLine = false;
             }
             if (IsSingleLineComment(kind))
             {

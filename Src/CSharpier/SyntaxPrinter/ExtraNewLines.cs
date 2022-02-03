@@ -4,26 +4,24 @@ internal static class ExtraNewLines
 {
     public static Doc Print(CSharpSyntaxNode node)
     {
-        if (node.Parent is GlobalStatementSyntax)
-        {
-            return Doc.Null;
-        }
+        return node.Parent is GlobalStatementSyntax ? Doc.Null : Print(node.GetLeadingTrivia());
+    }
 
-        var docs = new List<Doc>();
-        foreach (var leadingTrivia in node.GetLeadingTrivia())
+    public static Doc Print(SyntaxTriviaList syntaxTriviaList)
+    {
+        foreach (var leadingTrivia in syntaxTriviaList)
         {
             if (leadingTrivia.Kind() == SyntaxKind.EndOfLineTrivia)
             {
-                docs.Add(Doc.HardLine);
                 // ensures we only print a single new line
-                break;
+                return Doc.HardLine;
             }
-            else if (leadingTrivia.Kind() != SyntaxKind.WhitespaceTrivia)
+            if (leadingTrivia.Kind() != SyntaxKind.WhitespaceTrivia)
             {
-                break;
+                return Doc.Null;
             }
         }
 
-        return docs.Any() ? Doc.Concat(docs) : Doc.Null;
+        return Doc.Null;
     }
 }
