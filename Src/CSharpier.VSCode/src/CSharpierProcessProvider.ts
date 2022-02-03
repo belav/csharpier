@@ -166,7 +166,7 @@ export class CSharpierProcessProvider implements Disposable {
 
     private killRunningProcesses = () => {
         for (const key in this.csharpierProcessesByVersion) {
-            this.logger.debug("disposing of process for version " + (key === "" ? "null" : key));
+            this.logger.debug("disposing of process for version " + (key || "null"));
             this.csharpierProcessesByVersion[key]?.dispose();
         }
         this.warmingByDirectory = {};

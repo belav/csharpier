@@ -16,11 +16,11 @@ export class CustomPathInstaller {
         }
         const directoryForVersion = this.getDirectoryForVersion(version);
         if (fs.existsSync(directoryForVersion)) {
-            this.logger.debug("File at " + directoryForVersion + " already exists");
+            this.logger.debug(`File at ${directoryForVersion} already exists`);
             return;
         }
 
-        const command = "dotnet tool install csharpier --version " + version + " --tool-path";
+        const command = `dotnet tool install csharpier --version ${version} --tool-path${directoryForVersion}`;
         execSync(command);
     }
 
