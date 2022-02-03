@@ -20,7 +20,7 @@ export class CustomPathInstaller {
             return;
         }
 
-        const command = `dotnet tool install csharpier --version ${version} --tool-path${directoryForVersion}`;
+        const command = `dotnet tool install csharpier --version ${version} --tool-path ${directoryForVersion}`;
         execSync(command);
     }
 
