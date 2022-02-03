@@ -131,6 +131,7 @@ internal static class Token
         // we don't print any new lines until we run into a comment or directive
         // the PrintExtraNewLines method takes care of printing the initial new lines for a given node
         var printNewLines = includeInitialNewLines;
+
         for (var x = 0; x < leadingTrivia.Count; x++)
         {
             var trivia = leadingTrivia[x];
