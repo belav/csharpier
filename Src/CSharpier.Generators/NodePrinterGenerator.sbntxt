@@ -23,6 +23,11 @@ namespace CSharpier.SyntaxPrinter
                 throw new InTooDeepException();
             }
 
+            if (CSharpierIgnore.IsNodeIgnored(syntaxNode))
+            {
+                return CSharpierIgnore.PrintWithoutFormatting(syntaxNode);
+            }
+
             depth++;
             try
             {

@@ -1,0 +1,20 @@
+// csharpier-ignore
+public class Unformatted     { }
+
+public class ClassName
+{
+    // csharpier-ignore
+    private string    unformatted;
+
+    public void MethodName()
+    {
+        // csharpier-ignore
+        var unformatted    = true;
+
+        if (true)
+        {
+            // csharpier-ignore
+            var unformatted    = true;
+        }
+    }
+}
