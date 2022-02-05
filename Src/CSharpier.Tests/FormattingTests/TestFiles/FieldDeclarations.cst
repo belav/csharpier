@@ -54,18 +54,26 @@ public class ClassName
 
     public System.Text.StringBuilder NamespacedField;
 
-    public static Dictionary<Type, string> PropertiesByType = new Dictionary<
-        SomeLongTypeName,
-        string
-    >();
+    public Dictionary<SomeType__________________, SomeType___________________> Property =
+        new Dictionary<SomeType__________________, SomeType__________________>();
+
+    public Dictionary<SomeType_________, SomeType_________> Property =
+        new Dictionary<SomeType_________, SomeType_________>();
 
     public static Dictionary<
-        SomeLongTypeName,
+        SomeOtherLongTypeName_______________,
+        SomeOtherLongTypeName_______________
+    > PropertiesByType =
+        new Dictionary<SomeOtherLongTypeName____________, SomeOtherLongTypeName____________>();
+
+    public static Dictionary<
+        SomeOtherLongTypeName_______________________________,
         SomeOtherLongTypeName_______________________________
-    > PropertiesByType = new Dictionary<
-        SomeLongTypeName,
-        SomeOtherLongTypeName_______________________________
-    >();
+    > PropertiesByType =
+        new Dictionary<
+            SomeOtherLongTypeName_______________________________,
+            SomeOtherLongTypeName_______________________________
+        >();
 
     private static readonly Func<SyntaxTrivia, bool> s_isVisualBasicCommentTrivia = (
         syntaxTrivia
