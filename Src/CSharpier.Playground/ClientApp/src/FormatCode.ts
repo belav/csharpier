@@ -35,7 +35,7 @@ export const formatCode = async (code: string) => {
         }
     };
 
-    for (let x = 0; x < 5; x++) {
+    for (let x = 0; x < 20; x++) {
         try {
             return makeRequest();
         } catch {
