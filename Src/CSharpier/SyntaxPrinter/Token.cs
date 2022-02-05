@@ -136,7 +136,7 @@ internal static class Token
                 printNewLines = true;
             }
 
-            void AddLeadingCommend(CommentType commentType)
+            void AddLeadingComment(CommentType commentType)
             {
                 // when printing comments, we need leading whitespace to ensure something like the following formats correctly
                 // /*
@@ -157,7 +157,7 @@ internal static class Token
 
             if (IsSingleLineComment(kind))
             {
-                AddLeadingCommend(CommentType.SingleLine);
+                AddLeadingComment(CommentType.SingleLine);
                 docs.Add(
                     kind == SyntaxKind.SingleLineDocumentationCommentTrivia
                       ? Doc.HardLineSkipBreakIfFirstInGroup
@@ -166,7 +166,7 @@ internal static class Token
             }
             else if (IsMultiLineComment(kind))
             {
-                AddLeadingCommend(CommentType.MultiLine);
+                AddLeadingComment(CommentType.MultiLine);
             }
             else if (kind == SyntaxKind.DisabledTextTrivia)
             {
