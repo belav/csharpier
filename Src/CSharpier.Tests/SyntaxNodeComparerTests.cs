@@ -311,6 +311,38 @@ public class ClassName { }
 #endif
 }
 ";
+        var result = AreEqual(left, right);
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void Comments_Should_Ignore_Indent_Width()
+    {
+        var left =
+            @"class ClassName
+{
+    /// multiline
+    /// multiline
+    private string field;
+
+    /* multiline
+     * multiline
+     */
+    private string field;
+}";
+
+        var right =
+            @"class ClassName
+{
+  /// multiline
+  /// multiline
+  private string field;
+
+  /* multiline
+   * multiline
+   */
+  private string field;
+}";
 
         var result = AreEqual(left, right);
         result.Should().BeEmpty();

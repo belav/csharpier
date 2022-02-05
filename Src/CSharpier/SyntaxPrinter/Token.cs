@@ -135,13 +135,30 @@ internal static class Token
             {
                 printNewLines = true;
             }
-            if (IsSingleLineComment(kind))
+
+            void AddLeadingComment(CommentType commentType)
             {
+                // when printing comments, we need leading whitespace to ensure something like the following formats correctly
+                // /*
+                //  * keep the * in line
+                //  */
+                var previousTrivia = x > 0 ? leadingTrivia[x - 1] : (SyntaxTrivia?)null;
                 docs.Add(
                     Doc.LeadingComment(
-                        trivia.ToFullString().TrimEnd('\n', '\r'),
-                        CommentType.SingleLine
-                    ),
+                        (
+                            previousTrivia?.Kind() is SyntaxKind.WhitespaceTrivia
+                                ? previousTrivia
+                                : null
+                        ) + trivia.ToFullString().TrimEnd('\n', '\r'),
+                        commentType
+                    )
+                );
+            }
+
+            if (IsSingleLineComment(kind))
+            {
+                AddLeadingComment(CommentType.SingleLine);
+                docs.Add(
                     kind == SyntaxKind.SingleLineDocumentationCommentTrivia
                       ? Doc.HardLineSkipBreakIfFirstInGroup
                       : Doc.Null
@@ -149,12 +166,7 @@ internal static class Token
             }
             else if (IsMultiLineComment(kind))
             {
-                docs.Add(
-                    Doc.LeadingComment(
-                        trivia.ToFullString().TrimEnd('\n', '\r'),
-                        CommentType.MultiLine
-                    )
-                );
+                AddLeadingComment(CommentType.MultiLine);
             }
             else if (kind == SyntaxKind.DisabledTextTrivia)
             {

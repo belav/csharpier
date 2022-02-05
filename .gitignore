@@ -52,3 +52,5 @@ publish
 /.husky/pre-commit
 
 debug.txt
+
+Src/CSharpier.VSCode/.idea/prettier.xml
