@@ -1,37 +1,51 @@
 package com.intellij.csharpier;
 
+import com.intellij.application.Topics;
+import com.intellij.ide.actions.SaveAllAction;
+import com.intellij.ide.actions.SaveDocumentAction;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.ex.AnActionListener;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileDocumentManagerListener;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectLocator;
-import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
-public class ReformatWithCSharpierOnSave implements FileDocumentManagerListener {
-    Logger logger = CSharpierLogger.getInstance();
+public class ReformatWithCSharpierOnSave implements AnActionListener {
+
+    private final Logger logger = CSharpierLogger.getInstance();
+
+    public ReformatWithCSharpierOnSave() {
+        Topics.subscribe(AnActionListener.TOPIC, null, this);
+    }
 
     @Override
-    public void beforeDocumentSaving(@NotNull Document document) {
-        var file = FileDocumentManager.getInstance().getFile(document);
-        if (file == null) {
-            return;
+    public void beforeActionPerformed(@NotNull AnAction action, @NotNull AnActionEvent event) {
+        if (action instanceof SaveDocumentAction) {
+            var project = event.getData(CommonDataKeys.PROJECT);
+            var cSharpierSettings = CSharpierSettings.getInstance(project);
+            if (!cSharpierSettings.getRunOnSave()) {
+                return;
+            }
+            var editor = event.getData(CommonDataKeys.EDITOR);
+            if (editor != null) {
+                var formattingService = FormattingService.getInstance(project);
+                var document = editor.getDocument();
+                this.logger.debug("SaveDocumentAction for " + document);
+                formattingService.format(document, project);
+            }
+        } else if (action instanceof SaveAllAction) {
+            var project = event.getData(CommonDataKeys.PROJECT);
+            var cSharpierSettings = CSharpierSettings.getInstance(project);
+            if (!cSharpierSettings.getRunOnSave()) {
+                return;
+            }
+            var unsavedDocuments = FileDocumentManager.getInstance().getUnsavedDocuments();
+            var formattingService = FormattingService.getInstance(project);
+            this.logger.debug("SaveAllAction for " + unsavedDocuments.length + " Documents");
+            for (var document : unsavedDocuments) {
+                formattingService.format(document, project);
+            }
         }
-        var project = ProjectLocator.getInstance().guessProjectForFile(file);
-        if (project == null) {
-            this.logger.info("Could not find project for file so not trying to format in save.");
-            return;
-        }
-
-        var cSharpierSettings = CSharpierSettings.getInstance(project);
-        if (!cSharpierSettings.getRunOnSave()) {
-            return;
-        }
-
-        this.logger.info("Running ReformatWithCSharpierOnSave");
-
-        var formattingService = FormattingService.getInstance(project);
-        formattingService.format(document, project);
     }
 }

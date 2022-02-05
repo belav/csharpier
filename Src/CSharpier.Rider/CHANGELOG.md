@@ -2,7 +2,10 @@
 
 # csharpier-rider Changelog
 
-## [Unreleased]
+## [1.2.1]
+- Fixing error when refactoring to move class to new file
+
+## [1.2.0]
 - Fix bug with dotnet csharpier sometimes outputting .net welcome message
 - Support for using local version of csharpier from tool manifest file
 - Run csharpier from custom tools location so that the global/local versions of the tool are not locked.
