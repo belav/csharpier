@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
     private final ExecutorService executor;
     Logger logger = CSharpierLogger.getInstance();
-    String csharpierPath;
 
     Process process = null;
     OutputStreamWriter stdin;
@@ -25,7 +24,6 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     BufferedReader stdError;
 
     public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8) {
-        this.csharpierPath = csharpierPath;
         this.executor = Executors.newCachedThreadPool();
         try {
             var processBuilder = new ProcessBuilder(csharpierPath, "--pipe-multiple-files");
