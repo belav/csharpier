@@ -230,6 +230,26 @@ internal partial class SyntaxNodeComparer
               : NotEqual(originalTrivia.Span, formattedTrivia.Span);
         }
 
+        if (originalTrivia.IsComment())
+        {
+            var originalStringReader = new StringReader(originalTrivia.ToString());
+            var formattedStringReader = new StringReader(formattedTrivia.ToString());
+            var originalLine = originalStringReader.ReadLine();
+            var formattedLine = formattedStringReader.ReadLine();
+            while (originalLine != null)
+            {
+                if (formattedLine == null || originalLine.Trim() != formattedLine.Trim())
+                {
+                    return NotEqual(originalTrivia.Span, formattedTrivia.Span);
+                }
+
+                originalLine = originalStringReader.ReadLine();
+                formattedLine = formattedStringReader.ReadLine();
+            }
+
+            return Equal;
+        }
+
         return originalTrivia.ToString().TrimEnd() == formattedTrivia.ToString().TrimEnd()
           ? Equal
           : NotEqual(originalTrivia.Span, formattedTrivia.Span);

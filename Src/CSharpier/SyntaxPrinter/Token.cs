@@ -89,14 +89,24 @@ internal static class Token
     {
         var isClosingBrace = syntaxToken.Kind() == SyntaxKind.CloseBraceToken;
 
+        Doc extraNewLines = Doc.Null;
+
+        if (isClosingBrace && syntaxToken.LeadingTrivia.Any(o => o.IsDirective || o.IsComment()))
+        {
+            extraNewLines = ExtraNewLines.Print(syntaxToken.LeadingTrivia);
+        }
+
         var printedTrivia = PrivatePrintLeadingTrivia(
             syntaxToken.LeadingTrivia,
-            includeInitialNewLines: isClosingBrace,
             skipLastHardline: isClosingBrace
         );
 
-        return isClosingBrace && printedTrivia != Doc.Null
-          ? Doc.Concat(Doc.Indent(printedTrivia), Doc.HardLine)
+        return isClosingBrace && (printedTrivia != Doc.Null || extraNewLines != Doc.Null)
+          ? Doc.Concat(
+                extraNewLines,
+                Doc.IndentIf(printedTrivia != Doc.Null, printedTrivia),
+                Doc.HardLine
+            )
           : printedTrivia;
     }
 
@@ -135,13 +145,30 @@ internal static class Token
             {
                 printNewLines = true;
             }
-            if (IsSingleLineComment(kind))
+
+            void AddLeadingComment(CommentType commentType)
             {
+                // when printing comments, we need leading whitespace to ensure something like the following formats correctly
+                // /*
+                //  * keep the * in line
+                //  */
+                var previousTrivia = x > 0 ? leadingTrivia[x - 1] : (SyntaxTrivia?)null;
                 docs.Add(
                     Doc.LeadingComment(
-                        trivia.ToFullString().TrimEnd('\n', '\r'),
-                        CommentType.SingleLine
-                    ),
+                        (
+                            previousTrivia?.Kind() is SyntaxKind.WhitespaceTrivia
+                                ? previousTrivia
+                                : null
+                        ) + trivia.ToFullString().TrimEnd('\n', '\r'),
+                        commentType
+                    )
+                );
+            }
+
+            if (IsSingleLineComment(kind))
+            {
+                AddLeadingComment(CommentType.SingleLine);
+                docs.Add(
                     kind == SyntaxKind.SingleLineDocumentationCommentTrivia
                       ? Doc.HardLineSkipBreakIfFirstInGroup
                       : Doc.Null
@@ -149,12 +176,7 @@ internal static class Token
             }
             else if (IsMultiLineComment(kind))
             {
-                docs.Add(
-                    Doc.LeadingComment(
-                        trivia.ToFullString().TrimEnd('\n', '\r'),
-                        CommentType.MultiLine
-                    )
-                );
+                AddLeadingComment(CommentType.MultiLine);
             }
             else if (kind == SyntaxKind.DisabledTextTrivia)
             {
