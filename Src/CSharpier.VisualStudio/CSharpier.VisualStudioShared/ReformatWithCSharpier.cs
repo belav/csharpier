@@ -16,11 +16,24 @@ namespace CSharpier.VisualStudio
         private readonly DTE dte;
         private readonly FormattingService formattingService;
 
+        public static ReformatWithCSharpier Instance { get; private set; }
+
+        public static async Task InitializeAsync(CSharpierPackage package)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
+
+            var commandService =
+                await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
+
+            var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
+
+            Instance = new ReformatWithCSharpier(package, commandService, dte);
+        }
+
         private ReformatWithCSharpier(
             CSharpierPackage package,
             OleMenuCommandService commandService,
-            DTE dte,
-            FormattingService formattingService
+            DTE dte
         )
         {
             this.package = package;
@@ -30,7 +43,7 @@ namespace CSharpier.VisualStudio
             var menuItem = new OleMenuCommand(this.Execute, menuCommandId);
             menuItem.BeforeQueryStatus += this.QueryStatus;
             commandService.AddCommand(menuItem);
-            this.formattingService = formattingService;
+            this.formattingService = FormattingService.GetInstance(package);
         }
 
         private void QueryStatus(object sender, EventArgs e)
@@ -39,33 +52,14 @@ namespace CSharpier.VisualStudio
             var button = (OleMenuCommand)sender;
 
             button.Visible = this.dte.ActiveDocument.Name.EndsWith(".cs");
-            button.Enabled = this.formattingService.CanFormat;
-        }
-
-        public static ReformatWithCSharpier Instance { get; private set; }
-
-        public static async Task InitializeAsync(
-            CSharpierPackage package,
-            FormattingService formattingService
-        )
-        {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
-
-            var commandService =
-                await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-
-            var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
-
-            Instance = new ReformatWithCSharpier(package, commandService, dte, formattingService);
+            button.Enabled = this.formattingService.ProcessSupportsFormatting(
+                this.dte.ActiveDocument
+            );
         }
 
         private void Execute(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (!this.formattingService.CanFormat)
-            {
-                return;
-            }
             this.formattingService.Format(this.dte.ActiveDocument);
         }
     }

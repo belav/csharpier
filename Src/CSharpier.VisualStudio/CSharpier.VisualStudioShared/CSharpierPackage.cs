@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
@@ -21,24 +22,23 @@ namespace CSharpier.VisualStudio
             IProgress<ServiceProgressData> progress
         )
         {
-            var outputPane = await this.GetServiceAsync<IVsOutputWindow>();
-            var logger = new Logger(outputPane);
-            logger.Info("Starting");
+            await Logger.InitializeAsync(this);
+            Logger.Instance.Info("Starting");
 
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             await InfoBarService.InitializeAsync(this);
+            await ReformatWithCSharpierOnSave.InitializeAsync(this);
+            await ReformatWithCSharpier.InitializeAsync(this);
+            await InstallerService.InitializeAsync(this);
 
-            var csharpierService = new CSharpierService(logger);
-            var formattingService = new FormattingService(logger, csharpierService);
-
-            var csharpierOptionsPage = this.GetDialogPage<CSharpierOptionsPage>();
-            await ReformatWithCSharpierOnSave.InitializeAsync(
-                this,
-                formattingService,
-                csharpierOptionsPage
-            );
-            await ReformatWithCSharpier.InitializeAsync(this, formattingService);
+            var dte = await this.GetServiceAsync(typeof(DTE)) as DTE;
+            if (dte.ActiveDocument != null)
+            {
+                CSharpierProcessProvider
+                    .GetInstance(this)
+                    .FindAndWarmProcess(dte.ActiveDocument.FullName);
+            }
         }
     }
 }

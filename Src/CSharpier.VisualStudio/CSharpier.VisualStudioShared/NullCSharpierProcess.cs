@@ -4,7 +4,9 @@ namespace CSharpier.VisualStudio
     {
         public string FormatFile(string content, string fileName)
         {
-            return null;
+            return string.Empty;
         }
+
+        public void Dispose() { }
     }
 }

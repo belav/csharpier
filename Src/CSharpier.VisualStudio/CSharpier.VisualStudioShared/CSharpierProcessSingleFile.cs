@@ -19,7 +19,7 @@ namespace CSharpier.VisualStudio
             var output = new StringBuilder();
             var errorOutput = new StringBuilder();
 
-            var processStartInfo = new ProcessStartInfo("dotnet", this.csharpierPath)
+            var processStartInfo = new ProcessStartInfo(this.csharpierPath)
             {
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
@@ -27,6 +27,7 @@ namespace CSharpier.VisualStudio
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
+            processStartInfo.EnvironmentVariables["DOTNET_NOLOGO"] = "1";
 
             using var process = new Process { StartInfo = processStartInfo };
             process.Start();
@@ -47,10 +48,9 @@ namespace CSharpier.VisualStudio
                 return result;
             }
 
-            this.logger.Info(errorOutput.ToString());
-            this.logger.Info(result);
-
-            return null;
+            return string.Empty;
         }
+
+        public void Dispose() { }
     }
 }
