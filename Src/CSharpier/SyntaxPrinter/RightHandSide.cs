@@ -64,7 +64,17 @@ internal static class RightHandSide
         }
 
         if (
-            !isTail && rightNode is AssignmentExpressionSyntax { Right: AssignmentExpressionSyntax }
+            (
+                !isTail
+                && rightNode is AssignmentExpressionSyntax { Right: AssignmentExpressionSyntax }
+            )
+            || rightNode
+                is ObjectCreationExpressionSyntax
+                {
+                    Type: GenericNameSyntax,
+                    ArgumentList: { Arguments: { Count: 0 } },
+                    Initializer: null
+                }
         )
         {
             return Layout.BreakAfterOperator;
