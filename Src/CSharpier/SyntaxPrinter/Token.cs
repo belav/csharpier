@@ -89,14 +89,24 @@ internal static class Token
     {
         var isClosingBrace = syntaxToken.Kind() == SyntaxKind.CloseBraceToken;
 
+        Doc extraNewLines = Doc.Null;
+
+        if (isClosingBrace && syntaxToken.LeadingTrivia.Any(o => o.IsDirective || o.IsComment()))
+        {
+            extraNewLines = ExtraNewLines.Print(syntaxToken.LeadingTrivia);
+        }
+
         var printedTrivia = PrivatePrintLeadingTrivia(
             syntaxToken.LeadingTrivia,
-            includeInitialNewLines: isClosingBrace,
             skipLastHardline: isClosingBrace
         );
 
-        return isClosingBrace && printedTrivia != Doc.Null
-          ? Doc.Concat(Doc.Indent(printedTrivia), Doc.HardLine)
+        return isClosingBrace && (printedTrivia != Doc.Null || extraNewLines != Doc.Null)
+          ? Doc.Concat(
+                extraNewLines,
+                Doc.IndentIf(printedTrivia != Doc.Null, printedTrivia),
+                Doc.HardLine
+            )
           : printedTrivia;
     }
 
