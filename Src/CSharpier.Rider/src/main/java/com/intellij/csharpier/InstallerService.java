@@ -28,9 +28,6 @@ public class InstallerService {
         this.warnedAlready = true;
         this.logger.warn("CSharpier was not found so files may not be formatted.");
 
-        this.logger.debug(directoryThatContainsFile);
-        this.logger.debug(this.project.getBasePath());
-
         var isOnlyGlobal = !directoryThatContainsFile.replace('\\', '/').startsWith(this.project.getBasePath());
 
         var message = isOnlyGlobal
