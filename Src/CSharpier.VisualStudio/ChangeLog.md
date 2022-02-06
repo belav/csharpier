@@ -1,0 +1,14 @@
+﻿## [1.2.0]
+- Fix bug with dotnet csharpier sometimes outputting .net welcome message
+- Support for using local version of csharpier from tool manifest file
+- Run csharpier from custom tools location so that the global/local versions of the tool are not locked.
+- Provide actions for installing csharpier locally or globally if it is not detected
+
+## [1.0.1]
+- Support for unicode
+
+## [1.0.0]
+- Initial Release
+- Action for Reformat
+- Setting for Reformat on Save
+- Support for leaving csharpier >= 0.12.0 running for faster formatting
