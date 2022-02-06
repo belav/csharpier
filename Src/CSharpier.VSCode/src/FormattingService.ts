@@ -7,10 +7,7 @@ export class FormattingService {
     logger: Logger;
     csharpierProcessProvider: CSharpierProcessProvider;
 
-    constructor(
-        logger: Logger,
-        csharpierProcessProvider: CSharpierProcessProvider,
-    ) {
+    constructor(logger: Logger, csharpierProcessProvider: CSharpierProcessProvider) {
         this.logger = logger;
         this.csharpierProcessProvider = csharpierProcessProvider;
 
@@ -22,16 +19,20 @@ export class FormattingService {
     private provideDocumentFormattingEdits = async (document: TextDocument) => {
         this.logger.info("Formatting started for " + document.fileName + ".");
         const startTime = performance.now();
-        const result = await this.format(document.getText(), document.fileName);
-        if (!result) {
-            this.logger.info("Formatting failed.");
+        const text = document.getText();
+        const newText = await this.format(text, document.fileName);
+        const endTime = performance.now();
+        this.logger.info("Formatted in " + (endTime - startTime) + "ms");
+        if (!newText || newText === text) {
+            this.logger.debug(
+                "Skipping write because " + !newText
+                    ? "result is empty"
+                    : "current document equals result",
+            );
             return [];
         }
 
-        const endTime = performance.now();
-        this.logger.info("Formatted in " + (endTime - startTime) + "ms");
-
-        return [TextEdit.replace(FormattingService.fullDocumentRange(document), result)];
+        return [TextEdit.replace(FormattingService.fullDocumentRange(document), newText)];
     };
 
     private static fullDocumentRange(document: TextDocument): Range {

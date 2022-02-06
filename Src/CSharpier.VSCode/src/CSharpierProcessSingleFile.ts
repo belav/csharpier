@@ -15,9 +15,10 @@ export class CSharpierProcessSingleFile implements ICSharpierProcess {
     formatFile(content: string, filePath: string): Promise<string> {
         const directory = path.parse(filePath).dir;
         return new Promise((resolve, reject) => {
-            const csharpier = spawn("dotnet", [this.csharpierPath, "--write-stdout"], {
+            const csharpier = spawn(this.csharpierPath, ["--write-stdout"], {
                 stdio: "pipe",
                 cwd: directory,
+                env: { ...process.env, DOTNET_NOLOGO: "1" },
             });
 
             let output = "";

@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Threading.Tasks;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -14,35 +13,29 @@ namespace CSharpier.VisualStudio
         private readonly RunningDocumentTable runningDocumentTable;
         private readonly FormattingService formattingService;
         private readonly CSharpierOptionsPage csharpierOptionsPage;
+        private readonly CSharpierProcessProvider cSharpierProcessProvider;
 
         private ReformatWithCSharpierOnSave(
+            CSharpierPackage package,
             DTE dte,
-            RunningDocumentTable runningDocumentTable,
-            FormattingService formattingService,
             CSharpierOptionsPage csharpierOptionsPage
         )
         {
             this.dte = dte;
-            this.runningDocumentTable = runningDocumentTable;
-            this.formattingService = formattingService;
+            this.runningDocumentTable = new RunningDocumentTable(package);
+            this.formattingService = FormattingService.GetInstance(package);
+            this.cSharpierProcessProvider = CSharpierProcessProvider.GetInstance(package);
             this.csharpierOptionsPage = csharpierOptionsPage;
+
+            this.runningDocumentTable.Advise(this);
         }
 
-        public static async Task InitializeAsync(
-            CSharpierPackage csharpierPackage,
-            FormattingService formattingService,
-            CSharpierOptionsPage cSharpierOptionsPage
-        )
+        public static async Task InitializeAsync(CSharpierPackage package)
         {
-            var dte = await csharpierPackage.GetServiceAsync(typeof(DTE)) as DTE;
-            var runningDocumentTable = new RunningDocumentTable(csharpierPackage);
-            var reformatWithCSharpierOnSave = new ReformatWithCSharpierOnSave(
-                dte,
-                runningDocumentTable,
-                formattingService,
-                cSharpierOptionsPage
-            );
-            runningDocumentTable.Advise(reformatWithCSharpierOnSave);
+            var cSharpierOptionsPage = package.GetDialogPage<CSharpierOptionsPage>();
+
+            var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
+            new ReformatWithCSharpierOnSave(package, dte, cSharpierOptionsPage);
         }
 
         public int OnBeforeSave(uint docCookie)
@@ -64,7 +57,19 @@ namespace CSharpier.VisualStudio
             return VSConstants.S_OK;
         }
 
-        private Document FindDocument(uint docCookie)
+        public int OnBeforeDocumentWindowShow(uint docCookie, int fFirstShow, IVsWindowFrame pFrame)
+        {
+            var document = this.FindDocument(docCookie);
+
+            if (document != null)
+            {
+                this.cSharpierProcessProvider.FindAndWarmProcess(document.FullName);
+            }
+
+            return VSConstants.S_OK;
+        }
+
+        private Document? FindDocument(uint docCookie)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -102,11 +107,6 @@ namespace CSharpier.VisualStudio
         }
 
         public int OnAfterAttributeChange(uint docCookie, uint grfAttribs)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnBeforeDocumentWindowShow(uint docCookie, int fFirstShow, IVsWindowFrame pFrame)
         {
             return VSConstants.S_OK;
         }

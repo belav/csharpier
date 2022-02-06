@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
-using Thread = System.Threading.Thread;
 using Process = System.Diagnostics.Process;
 
 namespace CSharpier.VisualStudio
@@ -21,10 +20,7 @@ namespace CSharpier.VisualStudio
         {
             this.logger = logger;
 
-            var processStartInfo = new ProcessStartInfo(
-                "dotnet",
-                csharpierPath + " --pipe-multiple-files"
-            )
+            var processStartInfo = new ProcessStartInfo(csharpierPath, " --pipe-multiple-files")
             {
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
@@ -34,6 +30,7 @@ namespace CSharpier.VisualStudio
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
+            processStartInfo.EnvironmentVariables["DOTNET_NOLOGO"] = "1";
             this.process = new Process { StartInfo = processStartInfo };
             this.process.Start();
             this.standardIn = new StreamWriter(
@@ -41,6 +38,9 @@ namespace CSharpier.VisualStudio
                 Encoding.UTF8
             );
 
+            this.logger.Debug("Warm CSharpier with initial format");
+            // warm by formatting a file twice, the 3rd time is when it gets really fast
+            this.FormatFile("public class ClassName { }", "Test.cs");
             this.FormatFile("public class ClassName { }", "Test.cs");
         }
 
@@ -48,9 +48,6 @@ namespace CSharpier.VisualStudio
         {
             this.output.Clear();
             this.errorOutput.Clear();
-
-            this.logger.Info("Formatting " + filePath);
-            var stopwatch = Stopwatch.StartNew();
 
             this.standardIn.Write(filePath);
             this.standardIn.Write('\u0003');
@@ -70,17 +67,16 @@ namespace CSharpier.VisualStudio
                 if (string.IsNullOrEmpty(result))
                 {
                     this.logger.Info("File is ignored by .csharpierignore");
-                    return null;
+                    return string.Empty;
                 }
                 else
                 {
-                    this.logger.Info("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");
                     return this.output.ToString();
                 }
             }
 
             this.logger.Info("Got error output: " + errorResult);
-            return null;
+            return string.Empty;
         }
 
         private void ReadOutput(object state)
@@ -119,12 +115,17 @@ namespace CSharpier.VisualStudio
             }
             catch (Exception e)
             {
-                this.logger.Log(e);
+                this.logger.Error(e);
             }
             finally
             {
                 autoResetEvent.Set();
             }
+        }
+
+        public void Dispose()
+        {
+            this.process.Kill();
         }
     }
 }

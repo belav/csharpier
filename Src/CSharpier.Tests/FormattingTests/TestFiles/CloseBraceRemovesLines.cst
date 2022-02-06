@@ -1,0 +1,9 @@
+public class ClassName
+{
+    public void MethodName()
+    {
+        var x = 1;
+        
+    }
+    
+}
