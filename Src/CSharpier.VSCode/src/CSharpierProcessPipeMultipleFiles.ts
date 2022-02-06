@@ -20,9 +20,10 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     }
 
     private spawnProcess = (csharpierPath: string, workingDirectory: string) => {
-        const csharpierProcess = spawn("dotnet", [csharpierPath, "--pipe-multiple-files"], {
+        const csharpierProcess = spawn(csharpierPath, ["--pipe-multiple-files"], {
             stdio: "pipe",
             cwd: workingDirectory,
+            env: { ...process.env, DOTNET_NOLOGO: "1" },
         });
 
         csharpierProcess.stderr.on("data", chunk => {
@@ -43,6 +44,10 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
                 this.nextFile = this.nextFile.substring(number + 1);
                 const callback = this.callbacks.shift();
                 if (callback) {
+                    if (!result) {
+                        this.logger.info("File is ignored by .csharpierignore");
+                    }
+
                     callback(result);
                 }
             }
