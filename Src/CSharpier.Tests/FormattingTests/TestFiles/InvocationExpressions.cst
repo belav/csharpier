@@ -8,6 +8,10 @@ class ClassName
             .DoSomething___________________()
             .DoSomething___________________();
 
+        this.DoSomething___________________()
+            ?.DoSomething___________________()
+            ?.DoSomething___________________();
+
         base.DoSomething___________________()
             .DoSomething___________________()
             .DoSomething___________________();
@@ -157,8 +161,8 @@ class ClassName
                 two__________________________________
             );
 
-        SomeObject?
-            .CallMethod(parameter_______________________________________________________________)
+        SomeObject
+            ?.CallMethod(parameter_______________________________________________________________)
             .ToArray();
 
         SomeObject
