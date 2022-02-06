@@ -1,0 +1,18 @@
+public class ClassName
+{
+  /// multiline
+  /// second line
+  private string field;
+
+  public void Method()
+  {
+    /* multiline
+     *  multiline
+     */
+    var variable = true;
+  }
+    /// <summary> no tabs here
+	/// Tabs here
+	/// </summary>
+    public class ClassName { }
+}

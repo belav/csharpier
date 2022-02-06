@@ -1,6 +1,6 @@
 param (
     [string]$pathToTestingRepo,
-    [switch] $fast = $false
+    [switch]$fast = $false
 )
 
 if (!$pathToTestingRepo) {
