@@ -104,13 +104,11 @@ internal static class InvocationExpression
         }
         else if (expression is ConditionalAccessExpressionSyntax conditionalAccessExpressionSyntax)
         {
+            FlattenAndPrintNodes(conditionalAccessExpressionSyntax.Expression, printedNodes);
             printedNodes.Add(
                 new PrintedNode(
                     conditionalAccessExpressionSyntax,
-                    Doc.Concat(
-                        Node.Print(conditionalAccessExpressionSyntax.Expression),
-                        Token.Print(conditionalAccessExpressionSyntax.OperatorToken)
-                    )
+                    Token.Print(conditionalAccessExpressionSyntax.OperatorToken)
                 )
             );
             FlattenAndPrintNodes(conditionalAccessExpressionSyntax.WhenNotNull, printedNodes);
