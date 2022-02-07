@@ -28,7 +28,7 @@
         <ProjectReference Include="..\CSharpier.Generators\CSharpier.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
 
-    <Target Name="RestoreTools" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(RESTORE_TOOLS)' != 0">
+    <Target Name="RestoreTools" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(RESTORE_TOOLS)' != 0 and '$(IsCrossTargetingBuild)' == 'true'">
         <Exec Command="dotnet tool restore" StandardOutputImportance="Low" StandardErrorImportance="High" />
         <Exec Command="dotnet husky install" StandardOutputImportance="Low" StandardErrorImportance="High" WorkingDirectory="../../" />
     </Target>
