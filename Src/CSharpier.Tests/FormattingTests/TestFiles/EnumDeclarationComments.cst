@@ -8,6 +8,9 @@ public enum SubCode
     /// force line
     XmlComment,
     
+    /// SingleLine
+    ExistingLine,
+    
     DoNotKeepLine,
     [ForceLine]
     ForceLine
