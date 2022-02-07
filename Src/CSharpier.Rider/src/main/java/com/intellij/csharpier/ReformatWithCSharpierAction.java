@@ -27,15 +27,20 @@ public class ReformatWithCSharpierAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        var virtualFile = e.getData(PlatformDataKeys.VIRTUAL_FILE).toString();
+        var virtualFile = e.getData(PlatformDataKeys.VIRTUAL_FILE);
+        if (virtualFile == null) {
+            e.getPresentation().setVisible(false);
+            return;
+        }
+        var virtualFileString = virtualFile.toString();
         var filePrefix = "file://";
-        if (!virtualFile.startsWith(filePrefix)) {
-            this.logger.debug("VIRTUAL_FILE did not start with file://, was: " + virtualFile);
+        if (!virtualFileString.startsWith(filePrefix)) {
+            this.logger.debug("VIRTUAL_FILE did not start with file://, was: " + virtualFileString);
             e.getPresentation().setVisible(false);
             return;
         }
 
-        var file = virtualFile.substring(filePrefix.length());
+        var file = virtualFileString.substring(filePrefix.length());
         e.getPresentation().setVisible(file.toLowerCase().endsWith(".cs"));
         var canFormat = FormattingService.getInstance(e.getProject()).getCanFormat(file, e.getProject());
         e.getPresentation().setEnabled(canFormat);
