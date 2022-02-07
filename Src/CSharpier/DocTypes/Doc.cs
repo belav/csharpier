@@ -2,6 +2,11 @@ namespace CSharpier.DocTypes;
 
 internal abstract class Doc
 {
+    public override string ToString()
+    {
+        return DocSerializer.Serialize(this);
+    }
+
     public static implicit operator Doc(string value)
     {
         return new StringDoc(value);

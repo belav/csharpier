@@ -8,7 +8,7 @@
         -->
         <TargetFramework>netstandard2.0</TargetFramework>
         <PackageId>CSharpier.MsBuild</PackageId>
-        <CSharpierOutputDir>../CSharpier.Cli/bin/$(Configuration)/net5.0</CSharpierOutputDir>
+        <CSharpierOutputDir>../CSharpier.Cli/bin/$(Configuration)/net6.0</CSharpierOutputDir>
     </PropertyGroup>
 
     <!--
