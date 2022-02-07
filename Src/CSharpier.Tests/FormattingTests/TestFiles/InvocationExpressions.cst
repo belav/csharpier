@@ -12,6 +12,10 @@ class ClassName
             ?.DoSomething___________________()
             ?.DoSomething___________________();
 
+        this.DoSomething___________________()
+            !.DoSomething___________________()
+            !.DoSomething___________________();
+
         base.DoSomething___________________()
             .DoSomething___________________()
             .DoSomething___________________();

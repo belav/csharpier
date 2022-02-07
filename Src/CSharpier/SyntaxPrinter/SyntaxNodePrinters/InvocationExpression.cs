@@ -113,6 +113,16 @@ internal static class InvocationExpression
             );
             FlattenAndPrintNodes(conditionalAccessExpressionSyntax.WhenNotNull, printedNodes);
         }
+        else if (expression is PostfixUnaryExpressionSyntax postfixUnaryExpression)
+        {
+            FlattenAndPrintNodes(postfixUnaryExpression.Operand, printedNodes);
+            printedNodes.Add(
+                new PrintedNode(
+                    postfixUnaryExpression,
+                    Token.Print(postfixUnaryExpression.OperatorToken)
+                )
+            );
+        }
         else
         {
             printedNodes.Add(new PrintedNode(expression, Node.Print(expression)));
@@ -209,7 +219,10 @@ internal static class InvocationExpression
 
     private static bool IsMemberish(CSharpSyntaxNode node)
     {
-        return node is MemberAccessExpressionSyntax or ConditionalAccessExpressionSyntax;
+        return node
+            is MemberAccessExpressionSyntax
+                or ConditionalAccessExpressionSyntax
+                or PostfixUnaryExpressionSyntax;
     }
 
     private static Doc PrintIndentedGroup(ExpressionSyntax node, IList<List<PrintedNode>> groups)
