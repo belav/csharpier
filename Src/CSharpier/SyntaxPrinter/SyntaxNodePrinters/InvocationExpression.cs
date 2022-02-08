@@ -157,7 +157,12 @@ internal static class InvocationExpression
             );
             FlattenAndPrintNodes(conditionalAccessExpressionSyntax.WhenNotNull, printedNodes);
         }
-        else if (expression is PostfixUnaryExpressionSyntax postfixUnaryExpression)
+        else if (
+            expression is PostfixUnaryExpressionSyntax
+            {
+                Operand: InvocationExpressionSyntax
+            } postfixUnaryExpression
+        )
         {
             FlattenAndPrintNodes(postfixUnaryExpression.Operand, printedNodes);
             printedNodes.Add(
