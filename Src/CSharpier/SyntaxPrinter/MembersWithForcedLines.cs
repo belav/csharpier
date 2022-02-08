@@ -2,15 +2,21 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class MembersWithForcedLines
 {
-    public static List<Doc> Print(
-        CSharpSyntaxNode node,
-        SyntaxList<MemberDeclarationSyntax> members
-    )
+    public static List<Doc> Print<T>(CSharpSyntaxNode node, IReadOnlyList<T> members)
+        where T : MemberDeclarationSyntax
     {
         var result = new List<Doc> { Doc.HardLine };
         var lastMemberForcedBlankLine = false;
         for (var x = 0; x < members.Count; x++)
         {
+            void AddSeparatorIfNeeded()
+            {
+                if (members is SeparatedSyntaxList<T> list && x < list.SeparatorCount)
+                {
+                    result.Add(Token.Print(list.GetSeparator(x)));
+                }
+            }
+
             var member = members[x];
 
             var blankLineIsForced = (
@@ -43,6 +49,7 @@ internal static class MembersWithForcedLines
             {
                 lastMemberForcedBlankLine = blankLineIsForced;
                 result.Add(Node.Print(member));
+                AddSeparatorIfNeeded();
                 continue;
             }
 
@@ -90,6 +97,7 @@ internal static class MembersWithForcedLines
             }
 
             result.Add(Doc.HardLine, Node.Print(member));
+            AddSeparatorIfNeeded();
 
             lastMemberForcedBlankLine = blankLineIsForced;
         }
