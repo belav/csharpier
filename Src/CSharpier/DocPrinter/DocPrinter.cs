@@ -158,6 +158,19 @@ internal class DocPrinter
 
     private void AppendComment(LeadingComment leadingComment, Indent indent)
     {
+        // this may move around the opening /* for a multiline comment
+        // but it doesn't properly line up comments of the following style if their
+        // indentation changes
+        // /*
+        //  *
+        //  */
+        // if (leadingComment.Type is CommentType.MultiLine)
+        // {
+        //     this.Output.Append(indent.Value);
+        //     this.Output.Append(leadingComment.Comment.TrimStart());
+        //     return;
+        // }
+
         var stringReader = new StringReader(leadingComment.Comment);
         var line = stringReader.ReadLine();
         var firstLine = line;
@@ -169,6 +182,36 @@ internal class DocPrinter
             {
                 this.Output.Append(extraIndent);
             }
+
+            // this takes more work, fixes the issue above, but sometimes moves around the */ on a multiline comment
+            if (extraIndent != null && leadingComment.Type is CommentType.MultiLine)
+            {
+                var startingSpace = 0;
+                foreach (var character in line)
+                {
+                    if (character == ' ')
+                    {
+                        startingSpace += 1;
+                    }
+                    else if (character == '\t')
+                    {
+                        startingSpace += 4;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (startingSpace > indent.Value.Length + extraIndent.Length)
+                {
+                    this.Output.Append(
+                        ' ',
+                        startingSpace - (extraIndent.Length + indent.Value.Length)
+                    );
+                }
+            }
+
             this.Output.Append(line.Trim());
             line = stringReader.ReadLine();
             if (line == null)
