@@ -187,9 +187,10 @@ internal class DocPrinter
             //  *  keeps the * in line
             //  */
             var firstLineIndentLength =
-                firstLine!.Replace("\t", "    ").Length - firstLine.TrimStart().Length;
+                firstLine!.Replace("\t", "    ").Length
+                - firstLine.TrimStart().Replace("\t", "    ").Length;
             var secondLineIndentLength =
-                line.Replace("\t", "    ").Length - line.TrimStart().Length;
+                line.Replace("\t", "    ").Length - line.TrimStart().Replace("\t", "    ").Length;
             extraIndent = new string(
                 ' ',
                 Math.Max(secondLineIndentLength - firstLineIndentLength, 0)
