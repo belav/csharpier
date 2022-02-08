@@ -51,12 +51,7 @@ internal static class BaseTypeDeclaration
         else if (node is EnumDeclarationSyntax enumDeclarationSyntax)
         {
             members = Doc.Indent(
-                Doc.HardLine,
-                SeparatedSyntaxList.Print(
-                    enumDeclarationSyntax.Members,
-                    EnumMemberDeclaration.Print,
-                    Doc.HardLine
-                )
+                MembersWithForcedLines.Print(enumDeclarationSyntax, enumDeclarationSyntax.Members)
             );
             hasMembers = enumDeclarationSyntax.Members.Count > 0;
             keyword = enumDeclarationSyntax.EnumKeyword;
