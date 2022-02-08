@@ -2,6 +2,50 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
+/* TODO some edge cases just in case
+ class ClassName
+{
+    private static readonly MethodInfo CallPropertySetterOpenGenericMethod =
+        typeof(PropertySetter).GetMethod(
+            nameof(CallPropertySetter),
+            BindingFlags.NonPublic | BindingFlags.Static
+        )!;
+
+    void MethodName()
+    {
+        this.DoSomething__________________________________________________()!
+            .DoSomething__________________________________________________()!
+            .DoSomething__________________________________________________();
+
+        this.DoSomething__________________________________________________()!
+            .DoSomething__________________________________________________()!
+            .DoSomething__________________________________________________()!;
+
+        NamingStrategy namingStrategy___________________________ =
+            JsonTypeReflector.GetContainerNamingStrategy(attribute)!;
+
+        IsUnion______________________________________ =
+            JsonTypeReflector.ReflectionDelegateFactory
+            .CreateMethodCall<object?>(isUnionMethodInfo)!;
+
+        MethodCall<object?, object> invoke_______ =
+            JsonTypeReflector.ReflectionDelegateFactory.CreateMethodCall<object?>(invokeFunc)!;
+
+        var deserialized =
+            (JSInProcessObjectReference)JsonSerializer
+            .Deserialize<IJSInProcessObjectReference>(json, JsonSerializerOptions)!;
+
+        _uiThreadId = (int)_window
+            .GetType()
+            .GetField("_managedThreadId", BindingFlags.NonPublic | BindingFlags.Instance)!
+            .GetValue(_window)!;
+    }
+}
+
+ 
+ */
+
+
 // This is based on prettier/src/language-js/print/member-chain.js
 // various discussions/prs about how to potentially improve the formatting
 // https://github.com/prettier/prettier/issues/5737
@@ -219,10 +263,7 @@ internal static class InvocationExpression
 
     private static bool IsMemberish(CSharpSyntaxNode node)
     {
-        return node
-            is MemberAccessExpressionSyntax
-                or ConditionalAccessExpressionSyntax
-                or PostfixUnaryExpressionSyntax;
+        return node is MemberAccessExpressionSyntax or ConditionalAccessExpressionSyntax;
     }
 
     private static Doc PrintIndentedGroup(ExpressionSyntax node, IList<List<PrintedNode>> groups)

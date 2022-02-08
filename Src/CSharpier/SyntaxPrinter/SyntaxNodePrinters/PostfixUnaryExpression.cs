@@ -12,6 +12,10 @@ internal static class PostfixUnaryExpression
             return InvocationExpression.PrintMemberChain(node);
         }
 
+        // TODO handle
+        /*
+             this.DoSomething__________________________________________________!.DoSomething__________________________________________________!.DoSomething__________________________________________________;
+         */
         return Doc.Concat(Node.Print(node.Operand), Token.Print(node.OperatorToken));
     }
 }
