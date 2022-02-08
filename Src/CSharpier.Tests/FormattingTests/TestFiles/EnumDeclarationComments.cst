@@ -10,7 +10,8 @@ public enum SubCode
     
     /// SingleLine
     ExistingLine,
-    
+
+
     DoNotKeepLine,
     [ForceLine]
     ForceLine
