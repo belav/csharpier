@@ -2,6 +2,57 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
+/* TODO some real edge cases
+ 
+ class ClassName
+{
+    void MethodName()
+    {
+        TraceWriterrrrrrrrrrrrrrrrrrr.Trace(
+            TraceLevel.Verbose,
+            traceJsonReader.GetDeserializedJsonMessage(),
+            null
+        );
+
+        TraceWriterrrrrrrrrrrrrrrrrrr!
+            .Trace(TraceLevel.Verbose, traceJsonReader.GetDeserializedJsonMessage(), null);
+
+        EnsureType(
+            reader,
+            keyValue,
+            CultureInfo.InvariantCulture,
+            contract.KeyContract,
+            contract.DictionaryKeyType
+        )
+            !;
+
+        object? createdObjectCollectiossssssssssssssn = property.ValueProvider!
+            .GetValue(createdObject);
+
+        object? createdObjectCollectiossssssssssssssn = property.ValueProvider.GetValue(
+            createdObject
+        );
+
+        string keyIdAsString = (string)revocationElement
+            .Element(KeyElementName)
+            .Attribute(IdAttributeName);
+
+        Assert.True(
+            ((call.Arguments[1] as ConstantExpression)!.Value as CultureInfo)!
+                .Equals(CultureInfo.InvariantCulture)
+        );
+        
+        Assert.True(
+            ((call.Arguments[1] as ConstantExpression)!.Value as CultureInfo)
+                .Equals(CultureInfo.InvariantCulture)
+        );
+    }
+}
+
+ 
+ 
+ */
+
 /* TODO some edge cases just in case
  class ClassName
 {
