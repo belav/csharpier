@@ -205,5 +205,21 @@ class ClassName
 
         this.CallMethod()
             .CallMethod__________________(one_____________________, two_____________________);
+
+        var someValue = CallMethod__________________(longParameter________________________________)!
+            .CallMethod__________________();
+
+        var someValue = CallMethod__________________(longParameter________________________________)
+            .CallMethod__________________();
+
+        var someValue = CallMethod__________________(
+                longParameter_______________________________________
+            )!
+            .CallMethod__________________();
+
+        var someValue = CallMethod__________________(
+                longParameter_______________________________________
+            )
+            .CallMethod__________________();
     }
 }

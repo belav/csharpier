@@ -78,7 +78,9 @@ internal static class InvocationExpression
             groups.Count <= cutoff
             && !groups
                 .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
-                .All(o => o.Last().Node is InvocationExpressionSyntax);
+                .All(
+                    o => o.Last().Node is InvocationExpressionSyntax or PostfixUnaryExpressionSyntax
+                );
 
         if (forceOneLine)
         {
@@ -225,8 +227,11 @@ internal static class InvocationExpression
             for (; index + 1 < printedNodes.Count; ++index)
             {
                 if (
-                    IsMemberish(printedNodes[index].Node)
-                    && IsMemberish(printedNodes[index + 1].Node)
+                    (
+                        IsMemberish(printedNodes[index].Node)
+                        && IsMemberish(printedNodes[index + 1].Node)
+                    )
+                    || printedNodes[index].Node is PostfixUnaryExpressionSyntax
                 )
                 {
                     currentGroup.Add(printedNodes[index]);
