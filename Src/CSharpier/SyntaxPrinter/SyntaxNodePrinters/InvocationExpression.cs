@@ -185,7 +185,10 @@ internal static class InvocationExpression
         var hasSeenInvocationExpression = false;
         for (; index < printedNodes.Count; index++)
         {
-            if (hasSeenInvocationExpression && IsMemberish(printedNodes[index].Node))
+            if (
+                hasSeenInvocationExpression && IsMemberish(printedNodes[index].Node)
+                || printedNodes[index - 1].Node is ConditionalAccessExpressionSyntax
+            )
             {
                 groups.Add(currentGroup);
                 currentGroup = new List<PrintedNode>();
@@ -209,7 +212,7 @@ internal static class InvocationExpression
 
     private static bool IsMemberish(CSharpSyntaxNode node)
     {
-        return node is MemberAccessExpressionSyntax or ConditionalAccessExpressionSyntax;
+        return node is MemberAccessExpressionSyntax;
     }
 
     private static Doc PrintIndentedGroup(ExpressionSyntax node, IList<List<PrintedNode>> groups)
