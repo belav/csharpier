@@ -2,6 +2,13 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
+/*
+
+so many edge cases with this approach
+https://github.com/belav/csharpier-repos/pull/31/files
+
+ */
+
 // This is based on prettier/src/language-js/print/member-chain.js
 // various discussions/prs about how to potentially improve the formatting
 // https://github.com/prettier/prettier/issues/5737
