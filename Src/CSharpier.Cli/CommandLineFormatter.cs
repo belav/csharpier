@@ -17,6 +17,31 @@ internal static class CommandLineFormatter
     {
         try
         {
+            async Task<(IgnoreFile, PrinterOptions)> GetIgnoreFileAndPrinterOptions(
+                string directoryOrFile
+            )
+            {
+                var baseDirectoryPath =
+                    fileSystem.Path.GetExtension(directoryOrFile) == string.Empty
+                        ? directoryOrFile
+                        : fileSystem.Path.GetDirectoryName(directoryOrFile);
+
+                var ignoreFile = await IgnoreFile.Create(
+                    baseDirectoryPath,
+                    fileSystem,
+                    logger,
+                    cancellationToken
+                );
+
+                var printerOptions = ConfigurationFileOptions.CreatePrinterOptions(
+                    baseDirectoryPath,
+                    fileSystem,
+                    logger
+                );
+
+                return (ignoreFile, printerOptions);
+            }
+
             var stopwatch = Stopwatch.StartNew();
             var commandLineFormatterResult = new CommandLineFormatterResult();
 
@@ -29,22 +54,26 @@ internal static class CommandLineFormatter
                     console.InputEncoding
                 );
 
-                var loggerAndOptions = await GetLoggerAndOptions(
-                    filePath,
-                    filePath,
-                    fileSystem,
-                    logger,
-                    cancellationToken
-                );
+                var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(filePath);
 
-                if (loggerAndOptions != null)
+                if (
+                    !GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
+                    && !ignoreFile.IsIgnored(filePath)
+                )
                 {
+                    var fileIssueLogger = GetFileIssueLogger(
+                        filePath,
+                        filePath,
+                        fileSystem,
+                        logger
+                    );
+
                     await PerformFormattingSteps(
                         fileToFormatInfo,
                         new StdOutFormattedFileWriter(console),
                         commandLineFormatterResult,
-                        loggerAndOptions.Value.fileIssueLogger,
-                        loggerAndOptions.Value.printerOptions,
+                        fileIssueLogger,
+                        printerOptions,
                         commandLineOptions,
                         cancellationToken
                     );
@@ -52,7 +81,7 @@ internal static class CommandLineFormatter
             }
             else
             {
-                IFormattedFileWriter? writer = null;
+                IFormattedFileWriter? writer;
                 if (commandLineOptions.WriteStdout)
                 {
                     writer = new StdOutFormattedFileWriter(console);
@@ -72,8 +101,20 @@ internal static class CommandLineFormatter
                     )
                 )
                 {
+                    var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(
+                        directoryOrFile
+                    );
+
                     async Task FormatFile(string filePath)
                     {
+                        if (
+                            GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
+                            || ignoreFile.IsIgnored(filePath)
+                        )
+                        {
+                            return;
+                        }
+
                         await FormatPhysicalFile(
                             filePath,
                             directoryOrFile,
@@ -82,6 +123,7 @@ internal static class CommandLineFormatter
                             commandLineFormatterResult,
                             writer,
                             commandLineOptions,
+                            printerOptions,
                             cancellationToken
                         );
                     }
@@ -161,6 +203,7 @@ internal static class CommandLineFormatter
         CommandLineFormatterResult commandLineFormatterResult,
         IFormattedFileWriter writer,
         CommandLineOptions commandLineOptions,
+        PrinterOptions printerOptions,
         CancellationToken cancellationToken
     )
     {
@@ -170,22 +213,11 @@ internal static class CommandLineFormatter
             cancellationToken
         );
 
-        var loggerAndOptions = await GetLoggerAndOptions(
-            directoryOrFile,
-            filePath,
-            fileSystem,
-            logger,
-            cancellationToken
-        );
-
-        if (loggerAndOptions == null)
-        {
-            return;
-        }
+        var fileIssueLogger = GetFileIssueLogger(directoryOrFile, filePath, fileSystem, logger);
 
         if (!filePath.EndsWithIgnoreCase(".cs") && !filePath.EndsWithIgnoreCase(".cst"))
         {
-            loggerAndOptions.Value.fileIssueLogger.WriteError("Is an unsupported file type.");
+            fileIssueLogger.WriteError("Is an unsupported file type.");
             return;
         }
 
@@ -193,19 +225,18 @@ internal static class CommandLineFormatter
             fileToFormatInfo,
             writer,
             commandLineFormatterResult,
-            loggerAndOptions.Value.fileIssueLogger,
-            loggerAndOptions.Value.printerOptions,
+            fileIssueLogger,
+            printerOptions,
             commandLineOptions,
             cancellationToken
         );
     }
 
-    private static async Task<(FileIssueLogger fileIssueLogger, PrinterOptions printerOptions)?> GetLoggerAndOptions(
+    private static FileIssueLogger GetFileIssueLogger(
         string pathToDirectoryOrFile,
         string pathToFile,
         IFileSystem fileSystem,
-        ILogger logger,
-        CancellationToken cancellationToken
+        ILogger logger
     )
     {
         var normalizedPath = pathToDirectoryOrFile.Replace('\\', '/');
@@ -220,33 +251,12 @@ internal static class CommandLineFormatter
             );
         }
 
-        var printerOptions = ConfigurationFileOptions.CreatePrinterOptions(
-            baseDirectoryPath,
-            fileSystem,
-            logger
-        );
-
-        var ignoreFile = await IgnoreFile.Create(
-            baseDirectoryPath,
-            fileSystem,
-            logger,
-            cancellationToken
-        );
-
-        if (
-            GeneratedCodeUtilities.IsGeneratedCodeFile(pathToFile)
-            || ignoreFile.IsIgnored(pathToFile)
-        )
-        {
-            return null;
-        }
-
         var filePathLogger = new FileIssueLogger(
             pathToFile.Replace('\\', '/')[baseDirectoryPath.Length..],
             logger
         );
 
-        return (filePathLogger, printerOptions);
+        return filePathLogger;
     }
 
     private static int ReturnExitCode(
