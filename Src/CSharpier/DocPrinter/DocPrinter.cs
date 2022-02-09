@@ -158,12 +158,13 @@ internal class DocPrinter
 
     private void AppendComment(LeadingComment leadingComment, Indent indent)
     {
-        // this may move around the opening /* for a multiline comment
-        // but it doesn't properly line up comments of the following style if their
-        // indentation changes
-        // /*
-        //  *
-        //  */
+        // when the indentation in front of multi line comments is changing
+        // this won't properly move the whole comment
+        // but understanding when to move the comment isn't easy, and not worth the effort
+        // moving around comments interferes with someone who commented out large blocks of code
+        // using multi line comments
+        // see https://github.com/belav/csharpier/releases/tag/comments for a potential solution
+        // it had other side effects though
         if (leadingComment.Type is CommentType.MultiLine)
         {
             this.Output.Append(indent.Value);
@@ -173,45 +174,9 @@ internal class DocPrinter
 
         var stringReader = new StringReader(leadingComment.Comment);
         var line = stringReader.ReadLine();
-        var firstLine = line;
-        string? extraIndent = null;
         while (line != null)
         {
             this.Output.Append(indent.Value);
-            if (extraIndent?.Length > 0)
-            {
-                this.Output.Append(extraIndent);
-            }
-
-            // this takes more work, fixes the issue above, but sometimes moves around the */ on a multiline comment
-            // if (extraIndent != null && leadingComment.Type is CommentType.MultiLine)
-            // {
-            //     var startingSpace = 0;
-            //     foreach (var character in line)
-            //     {
-            //         if (character == ' ')
-            //         {
-            //             startingSpace += 1;
-            //         }
-            //         else if (character == '\t')
-            //         {
-            //             startingSpace += 4;
-            //         }
-            //         else
-            //         {
-            //             break;
-            //         }
-            //     }
-            //
-            //     if (startingSpace > indent.Value.Length + extraIndent.Length)
-            //     {
-            //         this.Output.Append(
-            //             ' ',
-            //             startingSpace - (extraIndent.Length + indent.Value.Length)
-            //         );
-            //     }
-            // }
-
             this.Output.Append(line.Trim());
             line = stringReader.ReadLine();
             if (line == null)
@@ -220,24 +185,6 @@ internal class DocPrinter
             }
 
             this.Output.Append(this.EndOfLine);
-            if (extraIndent != null)
-            {
-                continue;
-            }
-
-            // comparing the amount of whitespace ensures formatting like this is possible
-            // /*
-            //  *  keeps the * in line
-            //  */
-            var firstLineIndentLength =
-                firstLine!.Replace("\t", "    ").Length
-                - firstLine.TrimStart().Replace("\t", "    ").Length;
-            var secondLineIndentLength =
-                line.Replace("\t", "    ").Length - line.TrimStart().Replace("\t", "    ").Length;
-            extraIndent = new string(
-                ' ',
-                Math.Max(secondLineIndentLength - firstLineIndentLength, 0)
-            );
         }
     }
 
