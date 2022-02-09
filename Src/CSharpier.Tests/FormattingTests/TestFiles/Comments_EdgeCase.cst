@@ -33,6 +33,7 @@ public interface Interface
 		void Method();
 
 		/* this also doesn't work well because of turning 2 tabs into 4 spaces
+		and it keeps the tabs here, which is maybe what we want
 		*/
 		void Method();
 }
