@@ -6,9 +6,9 @@ public class ClassName
 
     public void Method()
     {
-        /* multiline
-         *  multiline
-         */
+        /* this doesn't work well because the indentation is changing
+     *  multiline
+     */
         var variable = true;
     }
 
@@ -16,6 +16,15 @@ public class ClassName
     /// Tabs here
     /// </summary>
     public class ClassName { }
+
+    /* this works fine
+     * because indentation does not change
+     */
+    public class ClassName2 { }
+
+    /*
+    public string String;
+    */
 }
 
 public interface Interface
@@ -23,4 +32,16 @@ public interface Interface
     /// <summary>
     ///	</summary> tab here before <
     void Method();
+
+    /* this also doesn't work well because of turning 2 tabs into 4 spaces
+		and it keeps the tabs here, which is maybe what we want
+		*/
+    void Method();
 }
+
+/*
+public class CommentedCodeShouldKeepFormatting
+{
+    void MethodName() { }
+}
+*/
