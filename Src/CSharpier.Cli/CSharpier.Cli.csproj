@@ -23,6 +23,12 @@
     <ItemGroup>
         <InternalsVisibleTo Include="CSharpier.Tests" />
     </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\logo.png" Pack="true" PackagePath="">
+            <Link>logo.png</Link>
+        </None>
+    </ItemGroup>
     
     <ItemGroup>
       <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
