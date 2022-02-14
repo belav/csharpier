@@ -81,37 +81,11 @@ const Wrapper = styled.div`
 `;
 
 const SmallButton = styled.button`
+    background-color: #ccc;
+    border-radius: 4px;
+    color: #000;
+    border: none;
     height: 24px;
     cursor: pointer;
     margin-right: 6px;
-`;
-
-const FormatButton = styled.button`
-    background-color: #666;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    font-size: 18px;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 82px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-
-const LoadingStyle = styled(Loading)`
-    animation-name: spin;
-    animation-duration: 2000ms;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-
-    @keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
 `;

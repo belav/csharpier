@@ -1,0 +1,21 @@
+.hero .container { display: flex; }
+
+.hero__left { margin-right: auto; }
+
+.hero__getStarted {
+    margin-top: .5rem;
+    display: inline-block;
+    background-color: #D8D9D9;
+    padding: .5rem 2rem;
+    font-size: 20px;
+    color: var(--ifm-color-primary);
+}
+
+.hero__image {
+
+    height: 250px;
+    width: 250px;
+    margin-top: -20px;
+    background: url("/static/img/logo.svg");
+    background-repeat: no-repeat;
+}
