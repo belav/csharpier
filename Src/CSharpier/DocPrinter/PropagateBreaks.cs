@@ -2,9 +2,7 @@ namespace CSharpier.DocPrinter;
 
 internal static class PropagateBreaks
 {
-    private class MarkerDoc : Doc
-    {
-    }
+    private class MarkerDoc : Doc { }
 
     private static readonly MarkerDoc TraverseDocOnExitStackMarker = new();
 
