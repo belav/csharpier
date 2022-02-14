@@ -1,3 +1,9 @@
+# 0.15.1
+
+[diff](https://github.com/belav/csharpier/compare/0.15.0...0.15.1)
+
+- Set CSharpier.MsBuild as DevelopmentDependency. [#607](https://github.com/belav/csharpier/pull/607)
+
 # 0.15.0
 
 [diff](https://github.com/belav/csharpier/compare/0.14.0...0.15.0)
