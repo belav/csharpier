@@ -1,5 +1,4 @@
 FROM node:14-alpine AS base
-WORKDIR /app
 EXPOSE 80
 
 WORKDIR /src
@@ -11,4 +10,4 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-ENTRYPOINT npm run serve -- --build --port 80 --host 0.0.0.0
+ENTRYPOINT npm run serve -- --port 80 --host 0.0.0.0

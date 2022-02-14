@@ -4,6 +4,10 @@ import React from "react";
 import Layout from "@theme/Layout";
 
 // TODO make this work for mobile
+// TODO copy the docs back to the regular folder
+// TODO do we need a process for updating the docs
+// TODO figure out github action for deploy
+// TODO configure dokku, add this, change playground to be a subdomain
 
 function HomepageHeader() {
     return (
