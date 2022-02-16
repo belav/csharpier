@@ -11,7 +11,13 @@ namespace CSharpier.VisualStudio
     {
         private readonly Logger logger;
         private readonly Process process;
-        private readonly AutoResetEvent autoEvent = new AutoResetEvent(false);
+
+        private readonly WaitHandle[] waitHandles = new WaitHandle[]
+        {
+            new AutoResetEvent(false),
+            new AutoResetEvent(false)
+        };
+
         private readonly StringBuilder output = new StringBuilder();
         private readonly StringBuilder errorOutput = new StringBuilder();
         private readonly StreamWriter standardIn;
@@ -55,10 +61,11 @@ namespace CSharpier.VisualStudio
             this.standardIn.Write('\u0003');
             this.standardIn.Flush();
 
-            ThreadPool.QueueUserWorkItem(this.ReadOutput, this.autoEvent);
-            ThreadPool.QueueUserWorkItem(this.ReadError, this.autoEvent);
+            ThreadPool.QueueUserWorkItem(this.ReadOutput, this.waitHandles[0]);
+            ThreadPool.QueueUserWorkItem(this.ReadError, this.waitHandles[1]);
 
-            this.autoEvent.WaitOne();
+            // this leaves the error reading thread open
+            WaitHandle.WaitAny(this.waitHandles);
 
             var errorResult = this.errorOutput.ToString();
             var result = this.output.ToString();
@@ -86,6 +93,12 @@ namespace CSharpier.VisualStudio
 
         private void ReadError(object state)
         {
+            while (true)
+            {
+                this.logger.Debug("waiting");
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+            }
+
             this.ReadFromProcess(
                 this.process.StandardError,
                 this.errorOutput,
