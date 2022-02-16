@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+using Microsoft.VisualStudio.Text.Editor.OptionsExtensionMethods;
 using Process = System.Diagnostics.Process;
 
 namespace CSharpier.VisualStudio
@@ -12,11 +13,7 @@ namespace CSharpier.VisualStudio
         private readonly Logger logger;
         private readonly Process process;
 
-        private readonly WaitHandle[] waitHandles = new WaitHandle[]
-        {
-            new AutoResetEvent(false),
-            new AutoResetEvent(false)
-        };
+        private volatile bool done;
 
         private readonly StringBuilder output = new StringBuilder();
         private readonly StringBuilder errorOutput = new StringBuilder();
@@ -61,11 +58,20 @@ namespace CSharpier.VisualStudio
             this.standardIn.Write('\u0003');
             this.standardIn.Flush();
 
-            ThreadPool.QueueUserWorkItem(this.ReadOutput, this.waitHandles[0]);
-            ThreadPool.QueueUserWorkItem(this.ReadError, this.waitHandles[1]);
+            this.done = false;
 
-            // this leaves the error reading thread open
-            WaitHandle.WaitAny(this.waitHandles);
+            var outputThread = new Thread(this.ReadOutput);
+            var errorThread = new Thread(this.ReadError);
+            outputThread.Start();
+            errorThread.Start();
+
+            while (!this.done)
+            {
+                Thread.Sleep(1);
+            }
+
+            outputThread.Abort();
+            errorThread.Abort();
 
             var errorResult = this.errorOutput.ToString();
             var result = this.output.ToString();
@@ -88,7 +94,7 @@ namespace CSharpier.VisualStudio
 
         private void ReadOutput(object state)
         {
-            this.ReadFromProcess(this.process.StandardOutput, this.output, (AutoResetEvent)state);
+            this.ReadFromProcess(this.process.StandardOutput, this.output);
         }
 
         private void ReadError(object state)
@@ -99,18 +105,10 @@ namespace CSharpier.VisualStudio
                 Thread.Sleep(TimeSpan.FromSeconds(1));
             }
 
-            this.ReadFromProcess(
-                this.process.StandardError,
-                this.errorOutput,
-                (AutoResetEvent)state
-            );
+            this.ReadFromProcess(this.process.StandardError, this.errorOutput);
         }
 
-        private void ReadFromProcess(
-            StreamReader reader,
-            StringBuilder stringBuilder,
-            AutoResetEvent autoResetEvent
-        )
+        private void ReadFromProcess(StreamReader reader, StringBuilder stringBuilder)
         {
             try
             {
@@ -132,7 +130,7 @@ namespace CSharpier.VisualStudio
             }
             finally
             {
-                autoResetEvent.Set();
+                this.done = true;
             }
         }
 
