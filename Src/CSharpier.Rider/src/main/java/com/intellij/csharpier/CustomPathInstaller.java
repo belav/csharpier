@@ -9,7 +9,7 @@ import java.nio.file.Path;
 public class CustomPathInstaller {
     Logger logger = CSharpierLogger.getInstance();
 
-    public void ensureVersionInstalled(String version) {
+    public void ensureVersionInstalled(String version) throws Exception {
         if (version == null || version.equals("")) {
             return;
         }
@@ -24,14 +24,20 @@ public class CustomPathInstaller {
         ProcessHelper.ExecuteCommand(command, null, null);
     }
 
-    private String getDirectoryForVersion(String version) {
-        var path = SystemUtils.IS_OS_LINUX
-                ? Path.of(System.getProperty("user.home"), ".cache/csharpier", version)
-                : Path.of(System.getenv("LOCALAPPDATA"), "CSharpier", version);
-        return path.toString();
+    private String getDirectoryForVersion(String version) throws Exception {
+        if (SystemUtils.IS_OS_WINDOWS) {
+            return Path.of(System.getenv("LOCALAPPDATA"), "CSharpier", version).toString();
+        }
+
+        var userHome = System.getProperty("user.home");
+        if (userHome == null) {
+            throw new Exception("There was no user.home property and the OS was not windows");
+        }
+
+        return Path.of(userHome, ".cache/csharpier", version).toString();
     }
 
-    public String getPathForVersion(String version) {
+    public String getPathForVersion(String version) throws Exception {
         var path = Path.of(getDirectoryForVersion(version), "dotnet-csharpier");
         return path.toString();
     }

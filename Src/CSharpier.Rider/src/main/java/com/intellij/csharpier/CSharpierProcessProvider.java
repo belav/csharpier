@@ -161,9 +161,10 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
             return new NullCSharpierProcess();
         }
 
-        this.customPathInstaller.ensureVersionInstalled(version);
-        var customPath = this.customPathInstaller.getPathForVersion(version);
         try {
+            this.customPathInstaller.ensureVersionInstalled(version);
+            var customPath = this.customPathInstaller.getPathForVersion(version);
+
             this.logger.debug("Adding new version " + version + " process for " + directory);
 
             var installedVersion = new ComparableVersion(version);
