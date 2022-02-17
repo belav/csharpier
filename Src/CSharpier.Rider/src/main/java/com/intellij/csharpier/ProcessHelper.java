@@ -8,11 +8,11 @@ public class ProcessHelper {
     public static String ExecuteCommand(String[] command, Map<String, String> env, File workingDirectory) {
         var logger = CSharpierLogger.getInstance();
         try {
-            var processBuilder = new ProcessBuilder(command);
             var directoryToLog = workingDirectory == null ? "" : " in " + workingDirectory;
 
             logger.debug("user.dir is " + System.getProperty("user.dir"));
             logger.debug("Running " + String.join(" ", command) + directoryToLog);
+            var processBuilder = new ProcessBuilder(command);
             if (env != null) {
                 processBuilder.environment().putAll(env);
             }
