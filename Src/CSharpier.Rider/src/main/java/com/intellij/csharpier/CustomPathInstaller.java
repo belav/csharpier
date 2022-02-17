@@ -21,12 +21,16 @@ public class CustomPathInstaller {
         }
 
         var command = new String[]{"dotnet", "tool", "install", "csharpier", "--version", version, "--tool-path", directoryForVersion};
-        ProcessHelper.ExecuteCommand(command, null, null);
+        ProcessHelper.ExecuteCommand(command, null, new File(this.getUserHome()));
     }
 
     private String getDirectoryForVersion(String version) throws Exception {
+        return Path.of(this.getUserHome(), ".cache/csharpier", version).toString();
+    }
+
+    private String getUserHome() throws Exception {
         if (SystemUtils.IS_OS_WINDOWS) {
-            return Path.of(System.getenv("LOCALAPPDATA"), "CSharpier", version).toString();
+            return System.getenv("LOCALAPPDATA");
         }
 
         var userHome = System.getProperty("user.home");
@@ -34,7 +38,7 @@ public class CustomPathInstaller {
             throw new Exception("There was no user.home property and the OS was not windows");
         }
 
-        return Path.of(userHome, ".cache/csharpier", version).toString();
+        return userHome;
     }
 
     public String getPathForVersion(String version) throws Exception {
