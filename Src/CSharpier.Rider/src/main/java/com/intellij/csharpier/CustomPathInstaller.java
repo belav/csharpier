@@ -29,6 +29,10 @@ public class CustomPathInstaller {
     }
 
     private String getUserHome() throws Exception {
+        // https://docs.microsoft.com/en-us/dotnet/core/install/macos#path-differences
+        this.logger.debug("PATH is " + System.getenv("PATH"));
+        this.logger.debug("DOTNET_ROOT is " + System.getenv("DOTNET_ROOT"));
+
         if (SystemUtils.IS_OS_WINDOWS) {
             return System.getenv("LOCALAPPDATA");
         }
