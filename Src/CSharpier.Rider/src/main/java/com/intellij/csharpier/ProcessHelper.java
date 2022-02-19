@@ -1,6 +1,8 @@
 package com.intellij.csharpier;
 
+import org.apache.commons.lang.SystemUtils;
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ProcessHelper {
@@ -12,10 +14,18 @@ public class ProcessHelper {
 
             logger.debug("user.dir is " + System.getProperty("user.dir"));
             logger.debug("Running " + String.join(" ", command) + directoryToLog);
-            var processBuilder = new ProcessBuilder(command);
-            if (env != null) {
-                processBuilder.environment().putAll(env);
+            var processBuilder = new ProcessBuilder(GetShellCommand(command));
+
+            if (env == null) {
+                env = new HashMap<>();
             }
+
+            if (!env.containsKey("PATH")) {
+                env.put("PATH", GetPathWithDotNetBinary());
+            }
+
+            processBuilder.environment().putAll(env);
+
             if (workingDirectory != null) {
                 processBuilder.directory(workingDirectory);
             }
@@ -46,5 +56,33 @@ public class ProcessHelper {
 
         }
         return null;
+    }
+
+    private static String GetPathWithDotNetBinary() {
+        var path = System.getenv("PATH");
+
+        // For Mac, the .NET binary isn't available for ProcessBuilder, so we'll add the default
+        // installation location to the PATH. We'll prefer the ARM version and fallback to the x64.
+        if (SystemUtils.IS_OS_MAC) {
+            return path + ":/usr/local/share/dotnet:/usr/local/share/dotnet/x64/dotnet";
+        }
+
+        // For others, it seems the .NET binary is already available to ProcessBuilder by default.
+        // So we'll just return the PATH as is.
+        return path;
+    }
+
+    // Setting the PATH doesn't affect the ProcessBuilder's command, but it will apply to
+    // spawned processes, so we'll run the desired command in the OS's default shell.
+    private static String[] GetShellCommand(String[] command) {
+        if (SystemUtils.IS_OS_MAC) {
+            return new String[] {"/bin/zsh", "-c", String.join(" ", command)};
+        }
+
+        if (SystemUtils.IS_OS_WINDOWS) {
+            return new String[] {"cmd.exe", "/c", String.join(" ", command)};
+        }
+
+        return new String[] {"/bin/sh", "-c", String.join(" ", command)};
     }
 }
