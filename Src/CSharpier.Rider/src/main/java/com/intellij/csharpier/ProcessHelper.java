@@ -14,7 +14,7 @@ public class ProcessHelper {
 
             logger.debug("user.dir is " + System.getProperty("user.dir"));
             logger.debug("Running " + String.join(" ", command) + directoryToLog);
-            var processBuilder = new ProcessBuilder(GetShellCommand(command));
+            var processBuilder = new ProcessBuilder(GetShellCommandIfNeeded(command));
 
             if (env == null) {
                 env = new HashMap<>();
@@ -72,17 +72,14 @@ public class ProcessHelper {
         return path;
     }
 
-    // Setting the PATH doesn't affect the ProcessBuilder's command, but it will apply to
+    // For Mac, we'll have updated the PATH to include the .NET binary. However, setting
+    // the PATH doesn't affect the ProcessBuilder's command, but it will apply to
     // spawned processes, so we'll run the desired command in the OS's default shell.
-    private static String[] GetShellCommand(String[] command) {
+    private static String[] GetShellCommandIfNeeded(String[] command) {
         if (SystemUtils.IS_OS_MAC) {
             return new String[] {"/bin/zsh", "-c", String.join(" ", command)};
         }
 
-        if (SystemUtils.IS_OS_WINDOWS) {
-            return new String[] {"cmd.exe", "/c", String.join(" ", command)};
-        }
-
-        return new String[] {"/bin/sh", "-c", String.join(" ", command)};
+        return command;
     }
 }
