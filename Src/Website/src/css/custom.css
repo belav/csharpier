@@ -174,11 +174,9 @@ h1, h2, h3 {
   .hero__subtitle {
     font-size: 1rem;
   }
-  .hero__left {
-    width: 50%;
-  }
   .hero__right {
-    width: 50%;
+    text-align: right;
+    margin-right: -16px;
   }
   .hero__image {
     width: 90%;
