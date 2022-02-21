@@ -174,7 +174,7 @@ namespace System
 
         /// <summary>Indicates whether the current Range object is equal to another object of the same type.</summary>
         /// <param name="value">An object to compare with this object</param>
-        public override bool Equals(object? value) =>
+        public override bool Equals(object value) =>
             value is Range r && r.Start.Equals(Start) && r.End.Equals(End);
 
         /// <summary>Indicates whether the current Range object is equal to another Range object.</summary>
