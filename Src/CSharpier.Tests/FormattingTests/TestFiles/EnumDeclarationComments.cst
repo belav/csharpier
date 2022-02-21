@@ -1,18 +1,20 @@
 public enum SubCode
 {
     First,
+
     // force line
     BasicComment,
+
     /* force line */
     MultiLineComment,
+
     /// force line
     XmlComment,
-    
+
     /// SingleLine
     ExistingLine,
 
 
     DoNotKeepLine,
-    [ForceLine]
-    ForceLine
+    [ForceLine] ForceLine
 }

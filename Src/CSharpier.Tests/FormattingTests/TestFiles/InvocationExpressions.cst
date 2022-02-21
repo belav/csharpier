@@ -70,11 +70,11 @@ class ClassName
             .Select(o => o.SomethingElse);
 
         return someCondition
-          ? CallMethod(
+            ? CallMethod(
                 someLongParameter____________________________,
                 someLongParameter____________________________
             )
-          : Something.CallMethod(
+            : Something.CallMethod(
                 someLongParameter____________________________,
                 someLongParameter____________________________
             );
@@ -173,19 +173,13 @@ class ClassName
         SomeObject.CallMethod();
 
         CallMethod(
-                lambdaWithBlock =>
-                {
-                    return;
-                }
+                lambdaWithBlock => { return; }
             )
             .CallMethod()
             .CallMethod();
 
         someObject.CallMethod(
-            lambdaWithBlock =>
-            {
-                return;
-            }
+            lambdaWithBlock => { return; }
         );
 
         o.CallMethod(parameter_____________, parameter_____________)

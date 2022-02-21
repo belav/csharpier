@@ -19,11 +19,19 @@ class ClassName
             return;
         }
 
-        try { }
-        catch { }
+        try
+        {
+        }
+        catch
+        {
+        }
 
-        try { }
-        finally { }
+        try
+        {
+        }
+        finally
+        {
+        }
 
         try
         {
@@ -50,8 +58,8 @@ class ClassName
         }
         catch (Exception exception)
             when (exception.Message.Contains("someLongValueThatMakesThisLineTooLong")
-                && someLongCondition == someOtherLongValue
-            )
+                  && someLongCondition == someOtherLongValue
+                 )
         {
             return;
         }

@@ -61,8 +61,8 @@ class ClassName
 
         // leading await
         await
-        // leading using
-        using (var y = Something())
+            // leading using
+            using (var y = Something())
         {
             return;
         }

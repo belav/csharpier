@@ -13,7 +13,7 @@ class ClassName
     bool ReturnLongBinaryExpression()
     {
         return someValueThatIsLongAndForcesALineBreak
-            || otherValueThatIsLongAndForcesALineBreak_____________________;
+               || otherValueThatIsLongAndForcesALineBreak_____________________;
     }
 
     string LongMethodCallWithParameter()

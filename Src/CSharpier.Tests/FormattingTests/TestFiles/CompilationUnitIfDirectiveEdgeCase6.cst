@@ -2,4 +2,6 @@ using System;
 
 [assembly: SomeAttribute]
 
-namespace Namespace { }
+namespace Namespace
+{
+}

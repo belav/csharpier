@@ -50,7 +50,9 @@ public class ClassName
             }
         }
 
-        switch (0) { }
+        switch (0)
+        {
+        }
 
         switch (arg)
         {
@@ -58,10 +60,10 @@ public class ClassName
             case "B" when B < 50:
 
             case "C______________________________________________________________________"
-                  when C == 50:
+                when C == 50:
                 return;
             case "D______________________________________________________________________"
-                  when D == 50:
+                when D == 50:
             default:
             {
                 break;
@@ -81,7 +83,8 @@ public class ClassName
         switch (
             someLongValue
             + someOtherLongValue_________________________________________________________
-        ) {
+        )
+        {
             default:
                 return;
         }

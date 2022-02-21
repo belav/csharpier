@@ -16,4 +16,6 @@ using System.Web.Http;
 using System.Web.Http;
 #endif
 
-namespace Namespace { }
+namespace Namespace
+{
+}

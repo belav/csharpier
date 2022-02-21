@@ -1,14 +1,19 @@
 namespace Namespace
 {
     [Obsolete]
-    class ClassOne { }
+    class ClassOne
+    {
+    }
 
     [Obsolete]
-
     [NoNewLine]
-    
-    // do stuff
-    class ClassTwo { }
 
-    class ClassThree { }
+    // do stuff
+    class ClassTwo
+    {
+    }
+
+    class ClassThree
+    {
+    }
 }

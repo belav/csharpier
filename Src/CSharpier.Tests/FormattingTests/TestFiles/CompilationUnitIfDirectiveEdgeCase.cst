@@ -7,4 +7,5 @@ namespace System.Web.Http.Internal
 #else
 namespace System.Web.WebPages
 #endif
-{ }
+{
+}

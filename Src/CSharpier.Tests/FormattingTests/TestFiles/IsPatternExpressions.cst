@@ -43,10 +43,10 @@ class ClassName
         var useLine =
             node.OperatorToken.Kind()
                 is SyntaxKind.BarBarToken
-                    or SyntaxKind.BarToken
-                    or SyntaxKind.AmpersandAmpersandToken
-                    or SyntaxKind.AmpersandToken
-                    or SyntaxKind.PlusToken;
+                or SyntaxKind.BarToken
+                or SyntaxKind.AmpersandAmpersandToken
+                or SyntaxKind.AmpersandToken
+                or SyntaxKind.PlusToken;
 
         if (
             someRandomValue___________________ is SomeRandomType someRandomType
@@ -69,26 +69,28 @@ class ClassName
         if (
             someValue_________________________ is SomeType_________________ someType
             && someType.SomeProperty
-        ) { }
+        )
+        {
+        }
 
         var value = someOtherValue is { Property: true };
 
         var value =
             someOtherValue
                 is SomeType___________________
-                    {
-                        SomeProperty: SomeOtherType_____________________________________________
-                    }
-                    or SomeThirdType___________;
+                {
+                    SomeProperty: SomeOtherType_____________________________________________
+                }
+                or SomeThirdType___________;
 
         var value =
             someOtherValue
                 is SomeType___________________
-                    {
-                        SomeProperty: SomeOtherType_____________________________________________,
-                        AnotherProperty: SomeType
-                    }
-                    or SomeThirdType___________;
+                {
+                    SomeProperty: SomeOtherType_____________________________________________,
+                    AnotherProperty: SomeType
+                }
+                or SomeThirdType___________;
 
         var value =
             someOtherValue
@@ -99,14 +101,14 @@ class ClassName
                 is SomeType___________________
                 {
                     SomeProperty: SomeLongType_______________
-                        or SomeOtherLongType___________________
+                    or SomeOtherLongType___________________
                 };
 
         var value =
             someOtherValue
                 is SomeType___________________
-                    or SomeOtherType___________________
-                    or SomeThirdType___________
+                or SomeOtherType___________________
+                or SomeThirdType___________
             && someLongValue_________________;
 
         if (someOtherValue is (SomeType or SomeOtherType))
@@ -138,8 +140,8 @@ class ClassName
         if (
             someOtherValue_____________
             is (
-                SomeLongType_____________________________________
-                or SomeLongType_____________________________________
+            SomeLongType_____________________________________
+            or SomeLongType_____________________________________
             )
         )
         {
@@ -221,8 +223,8 @@ class ClassName
         if (
             someLongName_____________
             is SomeObjectType
-                or SomeOtherObjectType
-                or YetAnotherObjectType
+            or SomeOtherObjectType
+            or YetAnotherObjectType
         )
         {
             return;
@@ -232,7 +234,9 @@ class ClassName
             someCondition
             && someLongName_____________
                 is { Kind: SomeObjectType, Value: "___________________________________" }
-        ) { }
+        )
+        {
+        }
 
         if (expr is { Property.Length: 5 })
         {

@@ -1,35 +1,35 @@
-namespace Namespace 
+namespace Namespace
 {
+    public class RemovesLineBefore
+    {
+    }
 
-    public class RemovesLineBefore { }
-    
-    
-    public class RemovesDoubledLines { }
 
-    public class RemoveTrailingLine { }
-    
+    public class RemovesDoubledLines
+    {
+    }
+
+    public class RemoveTrailingLine
+    {
+    }
 }
 
 public class ClassName
 {
-
     public int RemoveLineBefore;
-    
-    
+
+
     public int RemoveDoubleLines;
-    
+
     public void MethodName()
     {
-        
         var removeLineBefore = 1;
-        
-        
+
+
         var removeDoubleLines = 2;
 
         var removeTrailingLine = 3;
-        
     }
 
     public int RemoveTrailingLine;
-    
 }

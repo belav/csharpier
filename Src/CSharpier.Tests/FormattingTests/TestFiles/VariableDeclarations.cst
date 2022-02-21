@@ -55,7 +55,7 @@ class ClassName
         ];
         var muchLongerOne_________________ = new byte[
             SqlParameterCollectionExtensions.DefaultValueColumnWidth
-                + SqlParameterCollectionExtensions.DefaultValueColumnWidth
+            + SqlParameterCollectionExtensions.DefaultValueColumnWidth
         ];
 
         var elementAccessExpression1 = anArray[100];
@@ -73,7 +73,7 @@ class ClassName
         ];
         var shortOne______ = anArray[
             SqlParameterCollectionExtensions.DefaultValueColumnWidth
-                + SqlParameterCollectionExtensions.DefaultValueColumnWidth
+            + SqlParameterCollectionExtensions.DefaultValueColumnWidth
         ];
 
         var someLongValue_________________ =
@@ -106,7 +106,9 @@ class ClassName
                 (someCondition > someOtherLongCondition_______________________)
                     ? new byte[someValue]
                     : null
-        ) { }
+        )
+        {
+        }
 
         var variableDeclarator = conditionalAccessExpression?.invocationExpression(
             o => someLongValue___________________________________
@@ -131,15 +133,15 @@ withLineEnding"
 
         var value =
             coalesceAssignmentExpression =
-            coalesceAssignmentExpression ??=
-                CallMethod(parameter_____________________, parameter_____________________);
+                coalesceAssignmentExpression ??=
+                    CallMethod(parameter_____________________, parameter_____________________);
 
         var value = CallSomeMethod(
             someParameter_____________________,
             someParameter_____________________
         )
-          ? someValue
-          : someOtherValue;
+            ? someValue
+            : someOtherValue;
 
         var someValue =
             await SomeObject.CallLongAsyncMethod____________________________________________(
@@ -155,14 +157,14 @@ withLineEnding"
 
         var someValue =
             SomeObject.CallLongMethod____________________________________________________()
-              ? someValue
-              : someOtherValue;
+                ? someValue
+                : someOtherValue;
 
         var someValue = SomeObject
             .CallLongMethod____________________________________________________()
             .CallLongMethod____________________________________________________()
-          ? someValue
-          : someOtherValue;
+            ? someValue
+            : someOtherValue;
 
         var someValue =
             someLongCondition___________________________________

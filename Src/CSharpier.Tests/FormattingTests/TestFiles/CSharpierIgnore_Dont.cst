@@ -1,15 +1,17 @@
 public
 // csharpier-ignore
-class ClassName {
+    class ClassName
+{
     private void MethodName(
-    // csharpier-ignore
-    string one) {
+        // csharpier-ignore
+        string one)
+    {
         var x
-        // csharpier-ignore
-                    = someRandomValue;
-        
+            // csharpier-ignore
+            = someRandomValue;
+
         this.CallMethod(
-        // csharpier-ignore
-        true,        false);
+            // csharpier-ignore
+            true, false);
     }
 }

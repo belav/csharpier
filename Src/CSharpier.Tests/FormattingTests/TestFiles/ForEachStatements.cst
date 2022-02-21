@@ -50,8 +50,8 @@ public class ClassName
 
         // leading await
         await
-        // leading using
-        foreach (var y in Something())
+            // leading using
+            foreach (var y in Something())
         {
             return;
         }
@@ -88,9 +88,9 @@ public class ClassName
                 from l3 in Enumerable.Range(1, 7)
                 select (l2, l3)
             )
-                .AsParallel()
-                .Select(l => (l, res: GenerateTable(l.l2, l.l3, cutOff)))
-                .OrderBy(v => v.res.Total)
+            .AsParallel()
+            .Select(l => (l, res: GenerateTable(l.l2, l.l3, cutOff)))
+            .OrderBy(v => v.res.Total)
         )
         {
             return;

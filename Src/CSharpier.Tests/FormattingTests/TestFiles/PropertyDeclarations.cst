@@ -5,13 +5,10 @@ public class ClassName
 
     string ShortModifiers { get; private set; }
 
-    string PropertyWithModifiersThatIsLongEnoughToBreak
-    {
-        protected internal get;
-        internal protected set;
-    }
+    string PropertyWithModifiersThatIsLongEnoughToBreak { protected internal get; internal protected set; }
 
     private string backingValue;
+
     public string PropertyWithBackingValue
     {
         get { return backingValue; }
@@ -46,13 +43,7 @@ public class ClassName
         }
     }
 
-    public string Property
-    {
-        [Obsolete]
-        get;
-        [Obsolete]
-        set;
-    }
+    public string Property { [Obsolete] get; [Obsolete] set; }
 
     public virtual ICollection<SomeObject> SomeLongNameThatForcesALineBreak______________________ { get; set; } =
         new HashSet<SomeObject>();

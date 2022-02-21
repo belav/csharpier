@@ -9,7 +9,8 @@ class ClassName
             join c1 in customers_____________________________
                 on c1.GetHashCode() equals c.GetHashCode()
                 into e
-            select c into d
+            select c
+            into d
             select d;
 
         var query2 = from Customer c in customers select c;
@@ -30,7 +31,8 @@ class ClassName
             join c1 in customers_____________________________
                 on c1.GetHashCode() equals c.GetHashCode()
                 into e
-            select c into d
+            select c
+            into d
             select d;
 
         var joinWitType =
@@ -38,7 +40,8 @@ class ClassName
             join Customers c1 in customers_____________________________
                 on c1.GetHashCode() equals c.GetHashCode()
                 into e
-            select c into d
+            select c
+            into d
             select d;
 
         var complexQuery =
@@ -49,7 +52,8 @@ class ClassName
             join c1 in customers__________________________________
                 on c1.GetHashCode() equals c.GetHashCode()
                 into e
-            group c by c.Country into g
+            group c by c.Country
+            into g
             orderby g.Count() ascending
             orderby g.Key descending
             select new

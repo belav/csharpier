@@ -5,35 +5,44 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 // public class
-public class ClassName { }
+
+public class ClassName
+{
+}
 
 // other class
-class ClassName2 { }
+class ClassName2
+{
+}
 
 // leading
 public // trailing
-static // trailing
-class // trailing
-ClassName2 { }
+    static // trailing
+    class // trailing
+    ClassName2
+{
+}
 
 // this
 public
 // is
-static
+    static
 // valid
 // wtf
-class
+    class
 // yeah
-ClassName3 // more trailing
+    ClassName3 // more trailing
 {
     // yeah
     private
-    // no
-    readonly string Tester = "lajsdf";
+        // no
+        readonly string Tester = "lajsdf";
 }
 
 /// single line doc comment
-class ClassName { }
+class ClassName
+{
+}
 
 class ClassName
 {
@@ -51,19 +60,27 @@ namespace NameSpace
 public class ClassName
 {
     // method
-    public void MethodName() { }
+    public void MethodName()
+    {
+    }
 
     // leading modifer
     public // trailing modifier
-    static // more trailing
-    // leading return type
-    void // more trailing
-    MethodName2() { }
+        static // more trailing
+        // leading return type
+        void // more trailing
+        MethodName2()
+    {
+    }
 
-    public static void MethodName3() { }
+    public static void MethodName3()
+    {
+    }
 
     void //other trailing
-    MethodName4() { }
+        MethodName4()
+    {
+    }
 
     void TrailingCommentTest() // shouldn't space before the next brace
     {

@@ -2,25 +2,13 @@ class ClassName
 {
     void MethodName()
     {
-        Func<bool, bool> f1 = delegate(bool a)
-        {
-            return !a;
-        };
+        Func<bool, bool> f1 = delegate(bool a) { return !a; };
 
-        Func<bool, bool> f2 = static delegate(bool a)
-        {
-            return !a;
-        };
+        Func<bool, bool> f2 = static delegate(bool a) { return !a; };
 
-        Func<bool, bool> f3 = async delegate(bool a)
-        {
-            return await !a;
-        };
+        Func<bool, bool> f3 = async delegate(bool a) { return await !a; };
 
-        Func<bool, bool> f4 = async static delegate(bool a)
-        {
-            return await !a;
-        };
+        Func<bool, bool> f4 = async static delegate(bool a) { return await !a; };
 
         Func<bool, bool> f5 = delegate(
             string longName,

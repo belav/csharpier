@@ -1,9 +1,13 @@
 public class BasicClass
 {
-    public BasicClass() { }
+    public BasicClass()
+    {
+    }
 
     [Obsolete]
-    public BasicClass(string one) { }
+    public BasicClass(string one)
+    {
+    }
 
     public ClassName() => this.Value = 1;
 
@@ -23,16 +27,22 @@ public class BasicClass
 
 public class Initializers : BasicClass
 {
-    public Initializers() : this(true) { }
+    public Initializers() : this(true)
+    {
+    }
 
-    public Initializers(string value) : base(value) { }
+    public Initializers(string value) : base(value)
+    {
+    }
 
     public Initializers(
         string longParameter_______________________________________________________________________________
     )
         : base(
             longParameter_______________________________________________________________________________
-        ) { }
+        )
+    {
+    }
 
     public Initializers(
         string longParameter_______________________________________________________________________________
@@ -46,7 +56,9 @@ public class Initializers : BasicClass
 
     public Initializers(
         string longParameter____________________________________________________________
-    ) : base(false) { }
+    ) : base(false)
+    {
+    }
 
     public Initializers(
         string longParameter____________________________________________________________
@@ -56,12 +68,16 @@ public class Initializers : BasicClass
     }
 
     public LongMethodName___________________________________________________________________________()
-        : base(false) { }
+        : base(false)
+    {
+    }
 
     public WithParameters(string parameter)
         : base(
             longParameter____________________________________________________________________________
-        ) { }
+        )
+    {
+    }
 
     // this may change, see #372
     public WithParameters(string parameter)
@@ -75,13 +91,19 @@ public class Initializers : BasicClass
     public LongMethodName___________________________________________________________________________()
         : base(
             longParameter____________________________________________________________________________
-        ) { }
+        )
+    {
+    }
 
     public Initializers(string value) /*Comment*/
-        : base(value) { }
+        : base(value)
+    {
+    }
 
     public LongMethodName___________________________________________________________()
-        /*Comment*/: base(false) { }
+        /*Comment*/ : base(false)
+    {
+    }
 
     public LongInitializerBreaksAtEdgeCase()
         : this(someParameter, someOtherParameter___________________________________________________)
@@ -89,18 +111,26 @@ public class Initializers : BasicClass
         WithBody();
     }
 
-    public LongParametersWithEmptyBody(string parameter, bool anotherParameter_________________) { }
+    public LongParametersWithEmptyBody(string parameter, bool anotherParameter_________________)
+    {
+    }
 
     public LongParametersWithEmptyBody(string parameter, bool anotherParameter__________________)
-    { }
+    {
+    }
 
-    public LongInitializerWithEmptyBody() : base(parameter, anotherParameter___________________) { }
+    public LongInitializerWithEmptyBody() : base(parameter, anotherParameter___________________)
+    {
+    }
 
-    public LongInitializerWithEmptyBody() : base(parameter, anotherParameter__________________) { }
+    public LongInitializerWithEmptyBody() : base(parameter, anotherParameter__________________)
+    {
+    }
 
     public LongInitializerWithEmptyBody()
         : base(parameter______________, anotherParameter___________________________________________)
-    { }
+    {
+    }
 }
 
 public class Exactly100

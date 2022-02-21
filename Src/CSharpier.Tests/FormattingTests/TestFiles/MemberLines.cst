@@ -1,8 +1,15 @@
 public class ClassRules
 {
-    public void NeverLineBeforeFirstMember() { }
-    public void AlwaysLineBetweenMethods() { }
+    public void NeverLineBeforeFirstMember()
+    {
+    }
+
+    public void AlwaysLineBetweenMethods()
+    {
+    }
+
     public void EvenWithLambdaBody() => "";
+
     private enum AlwaysLineBeforeEnum
     {
         One,
@@ -14,18 +21,39 @@ public class ClassRules
         One,
         Two
     }
-    private class AlwaysLineBeforeClass { }
 
-    private class NoDoubleLines { }
-    private interface IAlwaysLineBeforeInterface { }
+    private class AlwaysLineBeforeClass
+    {
+    }
 
-    private interface INoDoubleLines { }
-    public ClassRules() { }
+    private class NoDoubleLines
+    {
+    }
 
-    public ClassRules() { }
-    public ~ClassName() { }
+    private interface IAlwaysLineBeforeInterface
+    {
+    }
 
-    public ~ClassName() { }
+    private interface INoDoubleLines
+    {
+    }
+
+    public ClassRules()
+    {
+    }
+
+    public ClassRules()
+    {
+    }
+
+    public ~ClassName()
+    {
+    }
+
+    public ~ClassName()
+    {
+    }
+
     public static implicit operator ClassRules(string s)
     {
         return new Test();
@@ -35,12 +63,19 @@ public class ClassRules
     {
         return new Test();
     }
+
     public record SomeRecord1(string property);
 
     public record SomeRecord2(string property);
-    public struct SomeStruct1 { }
 
-    public struct SomeStruct2 { }
+    public struct SomeStruct1
+    {
+    }
+
+    public struct SomeStruct2
+    {
+    }
+
     static ClassRules operator +(ClassRules a, ClassRules b)
     {
         return a.Add(b);
@@ -52,31 +87,42 @@ public class ClassRules
     }
 
     private string FieldsCanBeGroupedBecauseLinesWillBeKept;
+
     private string ButLinesAreNotForcedHere;
+
     // comments force a line
     private string FieldWithComment;
+
     /* comments force a line */
     private string FieldWithComment;
+
     /// <summary> comments force a line </summary> ///
     private string FieldWithComment;
-    [AttributesForceALine]
-    private string FieldWithAttribute;
+
+    [AttributesForceALine] private string FieldWithAttribute;
 
     private string PropertiesCanBeGrouped { get; set; }
+
     private string BecauseTheyDontForceLines { get; set; }
+
     // comments force a line
     private string PropertyWithComment;
-    [AttributesForceALine]
-    private string PropertyWithAttribute;
-    
+    [AttributesForceALine] private string PropertyWithAttribute;
+
     delegate void DelegatesAreLikeFields();
+
     delegate void AndCanBeGrouped();
+
     // comments force a line
     delegate void DelegateWithComment();
+
     [AttributesForceALine]
     delegate void DelegateWithAttribute();
-    
-    public void AlwaysLineBetweenMethods() { }
+
+    public void AlwaysLineBetweenMethods()
+    {
+    }
+
     private string FieldAfterMethodGetsLine;
 
 #if EDGE_CASE_SHOULD_KEEP_LINE_ABOVE_METHOD
@@ -85,32 +131,49 @@ public class ClassRules
     private string Field;
 #endif
 
-    public void SomeMethod() { }
+    public void SomeMethod()
+    {
+    }
 
 #pragma warning disable 0618
-    public void KeepLineAboveAndBelow() { }
-#pragma warning restore 0618    
+    public void KeepLineAboveAndBelow()
+    {
+    }
+#pragma warning restore 0618
 
-    public void SomeMethod() { }
+    public void SomeMethod()
+    {
+    }
 }
-public class LineBeforeClass { }
+
+public class LineBeforeClass
+{
+}
+
 public interface InterfaceRulesAreLikeClassesButMethodsFollowTheFieldRulesAbove
 {
     void NeverLineHere();
-    
+
     void ExistingLineHereIsKept();
+
     void ButNoLineIsAdded();
+
     // comments do force a line
     void MethodWithComment();
 }
 
 abstract class AbstractClass
 {
-    abstract void NoLineHere() { }
-    
+    abstract void NoLineHere()
+    {
+    }
+
     abstract void KeepTheLineHere();
     abstract void DoNotForceTheLineHere();
-    void ButForceLineForRealMethod() { }
+
+    void ButForceLineForRealMethod()
+    {
+    }
 }
 
 public class ClassName
@@ -126,11 +189,15 @@ public class ClassName
 
 public class ClassName
 {
-#region RegionWithSpaceBeforeAndAfterMethod
+    #region RegionWithSpaceBeforeAndAfterMethod
 
-    void SomeMethod() { }
+    void SomeMethod()
+    {
+    }
 
-#endregion
+    #endregion
 
-    void SomeMethod() { }
+    void SomeMethod()
+    {
+    }
 }

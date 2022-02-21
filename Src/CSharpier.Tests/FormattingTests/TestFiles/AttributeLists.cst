@@ -4,20 +4,15 @@
 [Obsolete]
 class ClassName
 {
-    [Obsolete]
-    private string Field;
+    [Obsolete] private string Field;
 
     [Obsolete]
-    public string Property
-    {
-        [Obsolete]
-        get;
-        [Obsolete]
-        set;
-    }
+    public string Property { [Obsolete] get; [Obsolete] set; }
 
     [Obsolete, NonSerialized]
-    void MethodName([In] string value) { }
+    void MethodName([In] string value)
+    {
+    }
 
     [
         Obsolete,
@@ -32,27 +27,37 @@ class ClassName
     static extern bool NameEquals(string name, SecurityAttribute sa);
 
     [Obsolete("Error", error: true)]
-    void NameColon() { }
+    void NameColon()
+    {
+    }
 
     [return: Obsolete]
     [method: Obsolete]
-    void Targets() { }
+    void Targets()
+    {
+    }
 
     // leading
     [Obsolete] // trailing
-    class ClassOne { }
+    class ClassOne
+    {
+    }
 
     // leading with new line
     [Obsolete] // more trailing
     // leading before class
-    class ClassTwo { }
+    class ClassTwo
+    {
+    }
 
     [LongAttributeWithParametersBreaking(
         "someValue_____________",
         "someValue_____________",
         "someValue_____________"
     )]
-    void LongAttribute() { }
+    void LongAttribute()
+    {
+    }
 
     public void MethodName([FromBody] SomeParameter parameter)
     {
@@ -63,34 +68,43 @@ class ClassName
         int someParameter,
         [ShortAttributeName] AnotherObject anotherObject,
         [VeryLongAttributeName(SomeFlag.SomeValue, SomeOtherFlag.SomeOtherLongValue)]
-            string tabbedBreakParameter,
+        string tabbedBreakParameter,
         bool anotherParameter
     )
     {
         return;
     }
 
-    public void MethodWithAttributesOnTypeParameters<[SomeShort] T, K>() { }
-
-    public void MethodWithAttributesOnTypeParameters<
-        [SomeLongAttribute__________________________] T,
-        K
-    >() { }
+    public void MethodWithAttributesOnTypeParameters<[SomeShort] T, K>()
+    {
+    }
 
     public void MethodWithAttributesOnTypeParameters<
         [SomeLongAttribute__________________________]
-            TSomeMuchLongerName___________________________________,
+        T,
         K
-    >() { }
+    >()
+    {
+    }
+
+    public void MethodWithAttributesOnTypeParameters<
+        [SomeLongAttribute__________________________]
+        TSomeMuchLongerName___________________________________,
+        K
+    >()
+    {
+    }
 
     public void MethodWithAttributesOnTypeParameters<
         [SomeAttributeWithParameters(
             longParameter_____________________________,
             longParameter_____________________________
         )]
-            TSomeMuchLongerName___________________________________,
+        TSomeMuchLongerName___________________________________,
         K
-    >() { }
+    >()
+    {
+    }
 }
 
 [
@@ -101,4 +115,6 @@ class ClassName
     ),
     AnotherAttribute
 ]
-public class ClassName { }
+public class ClassName
+{
+}

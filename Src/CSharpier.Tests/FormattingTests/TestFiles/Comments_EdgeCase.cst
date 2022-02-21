@@ -1,25 +1,30 @@
 public class ClassName
 {
-  /// multiline
-  /// second line
-  private string field;
+    /// multiline
+    /// second line
+    private string field;
 
-  public void Method()
-  {
-    /* this doesn't work well because the indentation is changing
-     *  multiline
-     */
-    var variable = true;
-  }
+    public void Method()
+    {
+        /* this doesn't work well because the indentation is changing
+         *  multiline
+         */
+        var variable = true;
+    }
+
     /// <summary> no tabs here
-	/// Tabs here
-	/// </summary>
-    public class ClassName { }
+    /// Tabs here
+    /// </summary>
+    public class ClassName
+    {
+    }
 
     /* this works fine
      * because indentation does not change
      */
-    public class ClassName2 { } 
+    public class ClassName2
+    {
+    }
 
     /*
     public string String;
@@ -28,14 +33,14 @@ public class ClassName
 
 public interface Interface
 {
-		/// <summary>
-		///	</summary> tab here before <
-		void Method();
+    /// <summary>
+    ///	</summary> tab here before <
+    void Method();
 
-		/* this also doesn't work well because of turning 2 tabs into 4 spaces
-		and it keeps the tabs here, which is maybe what we want
-		*/
-		void Method();
+    /* this also doesn't work well because of turning 2 tabs into 4 spaces
+    and it keeps the tabs here, which is maybe what we want
+    */
+    void Method();
 }
 
 /*

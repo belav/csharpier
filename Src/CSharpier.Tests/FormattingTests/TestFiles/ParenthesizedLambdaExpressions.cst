@@ -1,16 +1,18 @@
 public class ClassName
 {
     public static readonly EventCallback Empty = new EventCallback(null, (Action)(() => { }));
+
     public static readonly EventCallback<TValue> Empty = new EventCallback<TValue>(
         null,
         (Action)(() => { })
     );
+
     private static readonly Action _callbackCompleted = () => { };
 
     public void MethodName()
     {
         this.Where(() => true);
-        this.Where([Attribute] () => true);
+        this.Where([Attribute]() => true);
         this.Where(async () => true);
         this.Where([Attribute] async () => true);
         this.Where(static () => true);
@@ -29,8 +31,7 @@ public class ClassName
         );
 
         this.SomeMethod(
-            [Attribute]
-            (
+            [Attribute](
                 longerParameter_________________________,
                 longerParameter_________________________,
                 longerParameter_________________________
@@ -63,10 +64,7 @@ public class ClassName
         var reusedCommand = new Command("reused")
         {
             Handler = CommandHandler.Create(
-                () =>
-                {
-                    doSomething();
-                }
+                () => { doSomething(); }
             )
         };
 
@@ -79,8 +77,8 @@ public class ClassName
             anotherParameter
         );
 
-        var returnType = object (bool o) => o ? 1 : "two";
-        var returnTypeWithAsync = async object (bool o) => o ? 1 : "two";
-        var returnTypeWithAttribute = [Attribute] object (bool o) => o ? 1 : "two";
+        var returnType = object(bool o) => o ? 1 : "two";
+        var returnTypeWithAsync = async object(bool o) => o ? 1 : "two";
+        var returnTypeWithAttribute = [Attribute] object(bool o) => o ? 1 : "two";
     }
 }

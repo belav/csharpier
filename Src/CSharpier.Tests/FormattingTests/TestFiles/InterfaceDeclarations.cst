@@ -3,11 +3,15 @@ public interface BasicInterface
     string Property { get; set; }
 }
 
-public interface BasicInterface : BaseInterface { }
+public interface BasicInterface : BaseInterface
+{
+}
 
 public interface BasicInterface
 {
     void SomeMethod();
 }
 
-interface CoContra<out T, in K> { }
+interface CoContra<out T, in K>
+{
+}

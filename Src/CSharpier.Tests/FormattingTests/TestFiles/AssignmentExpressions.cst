@@ -34,13 +34,13 @@ class ClassName
 
         var chainFormatting =
             anotherVariable1 =
-            anotherVariable2 =
-                "someValue____________________________________________";
+                anotherVariable2 =
+                    "someValue____________________________________________";
 
         chainFormatting =
             anotherVariable1 =
-            anotherVariable2 =
-                "someValue____________________________________________";
+                anotherVariable2 =
+                    "someValue____________________________________________";
 
         var nonChainFormatting = anotherVariable1 = CallMethod(
             parameter________________________________,
@@ -54,19 +54,19 @@ class ClassName
 
         var chainFormatting =
             anotherVariable1 =
-            anotherVariable2 =
-                CallMethod(
-                    parameter________________________________,
-                    parameter________________________________
-                );
+                anotherVariable2 =
+                    CallMethod(
+                        parameter________________________________,
+                        parameter________________________________
+                    );
 
         chainFormatting =
             anotherVariable1 =
-            anotherVariable2 =
-                CallMethod(
-                    parameter________________________________,
-                    parameter________________________________
-                );
+                anotherVariable2 =
+                    CallMethod(
+                        parameter________________________________,
+                        parameter________________________________
+                    );
     }
 
     public SomeExpressionBodyMethod() =>
@@ -78,7 +78,7 @@ class ClassName
     public SomeExpressionBodyMethod() =>
         chainFormatting =
             anotherVariable1 =
-            anotherVariable2 =
+                anotherVariable2 =
                 (
                     someCondition________________________________
                     || someOtherCondition___________________________

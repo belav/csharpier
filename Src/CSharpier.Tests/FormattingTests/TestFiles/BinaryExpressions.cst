@@ -65,20 +65,26 @@ class TestClass
         if (
             one == two
             || someValue_______________
-                == thisWillIndent_______________________________________________________________
-        ) { }
+            == thisWillIndent_______________________________________________________________
+        )
+        {
+        }
 
         while (
             one == two
             || someValue_______________
-                == thisWillIndent_______________________________________________________________
-        ) { }
+            == thisWillIndent_______________________________________________________________
+        )
+        {
+        }
 
         switch (
             one == two
             || someValue_______________
-                == thisWillIndent_______________________________________________________________
-        ) { }
+            == thisWillIndent_______________________________________________________________
+        )
+        {
+        }
 
         do
         {
@@ -86,12 +92,12 @@ class TestClass
         } while (
             one == two
             || someValue_______________
-                == thisWillIndent_______________________________________________________________
+            == thisWillIndent_______________________________________________________________
         );
 
         CallMethod(
             "shouldIndentToMakeItClearWhereParametersAre"
-                + "someLongString_________________________________",
+            + "someLongString_________________________________",
             "SecondParameter"
         );
 
@@ -100,7 +106,7 @@ class TestClass
                 someLongValue_______________________
                 && theseShouldNotIndent_________________
                 && theseShouldNotIndent_________________
-                    > butThisOneShould_________________________________________
+                > butThisOneShould_________________________________________
         );
 
         var someVariable =
@@ -128,15 +134,19 @@ class TestClass
             || one as Something == null
             || one - two > three
             || someLongThing - someOtherLongThing__________________________________
-                > anotherLongThing
-        ) { }
+            > anotherLongThing
+        )
+        {
+        }
 
         if (
             CallSomeMethod(
                 someParameter_____________________________________,
                 someParameter_____________________________________
             ) == 0
-        ) { }
+        )
+        {
+        }
 
         if (
             someValue
@@ -144,7 +154,9 @@ class TestClass
                 someParameter_____________________________________,
                 someParameter_____________________________________
             ) == 0
-        ) { }
+        )
+        {
+        }
 
         if (
             CallSomeMethod(
@@ -152,7 +164,9 @@ class TestClass
                 someParameter_____________________________________
             ) == 0
             && someValue
-        ) { }
+        )
+        {
+        }
 
         if (
             CallMethod(
@@ -163,14 +177,18 @@ class TestClass
                 someParameter_____________________________________,
                 someParameter_____________________________________
             )
-        ) { }
+        )
+        {
+        }
 
         if (
             CallMethod(
                 someParameter_____________________________________,
                 someParameter_____________________________________
             ) || CallMethod(shortValue, "shortValue")
-        ) { }
+        )
+        {
+        }
 
         if (
             CallMethod(
@@ -179,15 +197,19 @@ class TestClass
             )
             || CallMethod(shortValue, "shortValue")
             || CallMethod(shortValue1, "shortValue1")
-        ) { }
+        )
+        {
+        }
 
         if (
             CallSomeMethod(someParameter)
             == someLongerValue_______________________________________________________________
-        ) { }
+        )
+        {
+        }
 
         return someValue != someOtherValue
-            && someLongValue_____________________ == someOtherLongValue_____________________;
+               && someLongValue_____________________ == someOtherLongValue_____________________;
 
         var someValue =
             CallSomething(
@@ -208,9 +230,9 @@ class TestClass
 
         UglyButConsistentWithPrettier(
             someValue
-                == someLongThing__________________________________________________________________
-                || someOtherValue
-                    == someOtherLongThing________________________________________________,
+            == someLongThing__________________________________________________________________
+            || someOtherValue
+            == someOtherLongThing________________________________________________,
             secondParameter
         );
     }
