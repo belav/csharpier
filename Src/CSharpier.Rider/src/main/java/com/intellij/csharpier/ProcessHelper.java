@@ -12,7 +12,6 @@ public class ProcessHelper {
         try {
             var directoryToLog = workingDirectory == null ? "" : " in " + workingDirectory;
 
-            logger.debug("user.dir is " + System.getProperty("user.dir"));
             logger.debug("Running " + String.join(" ", command) + directoryToLog);
             var processBuilder = new ProcessBuilder(GetShellCommandIfNeeded(command));
 
