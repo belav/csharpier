@@ -111,8 +111,6 @@ h1, h2, h3 {
   height: 250px;
   width: 250px;
   margin-top: -20px;
-  background: url("/static/img/logo.svg");
-  background-repeat: no-repeat;
 }
 
 .home__text {
@@ -129,6 +127,9 @@ h1, h2, h3 {
   height: 221px;
   width: 771px;
   margin: 0 auto 3rem;
+}
+.codeContainer {
+  overflow: hidden;
 }
 
 @keyframes changeBg {
@@ -175,5 +176,11 @@ h1, h2, h3 {
   }
   .hero__left {
     width: 50%;
+  }
+  .hero__right {
+    width: 50%;
+  }
+  .hero__image {
+    width: 90%;
   }
 }

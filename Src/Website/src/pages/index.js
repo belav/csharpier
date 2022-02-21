@@ -15,7 +15,7 @@ function HomepageHeader() {
                     </a>
                 </div>
                 <div className="hero__right">
-                    <div className="hero__image" />
+                    <img className="hero__image" src="img/logo.svg" />
                 </div>
             </div>
         </header>
@@ -47,7 +47,9 @@ export default function Home() {
                         <li>Supports validating the changes it makes.</li>
                     </ul>
                 </div>
-                <div class="codeExample" />
+                <div class="codeContainer">
+                    <div class="codeExample" />
+                </div>
             </main>
         </Layout>
     );
