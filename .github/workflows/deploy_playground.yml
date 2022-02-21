@@ -1,13 +1,10 @@
 name: Deploy Playground
 on:
-  push:
-    branches: [ master ]
-#on:
-#  create:
-#    tags:
-#      - '0.*'
-#      - '1.*'
-#      - '2.*'
+  create:
+    tags:
+      - '0.*'
+      - '1.*'
+      - '2.*'
 
 jobs:
   deploy:
