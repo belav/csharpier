@@ -153,5 +153,15 @@ h1, h2, h3 {
 }
 
 .theme-doc-sidebar-container {
-  padding-left: 16px;
+  padding-left: 40px;
+}
+
+.navbar-sidebar__items {
+  padding-left: 20px;
+}
+
+@media only screen and (max-width: 1360px) {
+  .navbar__inner, .docs-wrapper {
+    width: 100%;
+  }
 }

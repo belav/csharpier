@@ -1,4 +1,9 @@
-## Integrating with Linters/Formatters
+---
+title: Integrating with Linters
+hide_table_of_contents: true
+---
+
+
 More often than not, linters contain formatting rules that conflict with CSharpier.
 
 ### Dotnet Format

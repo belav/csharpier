@@ -1,4 +1,7 @@
-### MSBuild Package
+---
+title: MsBuild Package
+hide_table_of_contents: true
+---
 
 CSharpier can be run when a package is built by installing the CSharpier.MSBuild nuget package
 ```console

@@ -1,4 +1,6 @@
-
+---
+hide_table_of_contents: true
+---
 ### Command Line Options
 ```console
 Usage:

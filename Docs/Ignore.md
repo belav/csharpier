@@ -1,4 +1,7 @@
-## Ignoring Code
+---
+title: Ignoring Code
+hide_table_of_contents: true
+---
 
 Csharpier will ignore the following files
 - Any file that begins with ```TemporaryGeneratedFile_```

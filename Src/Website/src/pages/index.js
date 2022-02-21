@@ -3,12 +3,6 @@
 import React from "react";
 import Layout from "@theme/Layout";
 
-// TODO make this work for mobile
-// TODO copy the docs back to the regular folder
-// TODO do we need a process for updating the docs
-// TODO figure out github action for deploy
-// TODO configure dokku, add this, change playground to be a subdomain
-
 function HomepageHeader() {
     return (
         <header className="hero">
@@ -16,7 +10,7 @@ function HomepageHeader() {
                 <div className="hero__left">
                     <h1 className="hero__title">CSharpier</h1>
                     <p className="hero__subtitle">An Opinionated Code Formatter</p>
-                    <a className="hero__getStarted" href="/doc/About">
+                    <a className="hero__getStarted" href="/docs/About">
                         Get started
                     </a>
                 </div>

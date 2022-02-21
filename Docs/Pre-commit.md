@@ -1,4 +1,7 @@
-## Precommit Hooks
+---
+title: Pre-commit Hook
+hide_table_of_contents: true
+---
 
 CSharpier can be used with a pre-commit hook to ensure that all staged files are formatted before being committed.
 
