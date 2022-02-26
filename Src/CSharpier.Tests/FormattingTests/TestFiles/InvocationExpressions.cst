@@ -87,13 +87,13 @@ class ClassName
 
         return someCondition
             ? CallMethod(
-                    someLongParameter____________________________,
-                    someLongParameter____________________________
-                )
+                someLongParameter____________________________,
+                someLongParameter____________________________
+            )
             : Something.CallMethod(
-                    someLongParameter____________________________,
-                    someLongParameter____________________________
-                );
+                someLongParameter____________________________,
+                someLongParameter____________________________
+            );
 
         someValue.CallMethod(
             someLongParameter____________________________,

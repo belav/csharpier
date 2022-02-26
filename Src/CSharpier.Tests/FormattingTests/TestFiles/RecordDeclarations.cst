@@ -40,11 +40,11 @@ public record LotsOfParametersWithBaseWithLots(
     string theyLookLikeParameters
 )
     : BaseRecord(
-            longNameParameter,
-            areTheyCalledParametersWithRecords,
-            theyLookLikeParameters,
-            "someExtraValueToMakeThisReallyLong"
-        );
+        longNameParameter,
+        areTheyCalledParametersWithRecords,
+        theyLookLikeParameters,
+        "someExtraValueToMakeThisReallyLong"
+    );
 
 public record SomeRecord : SomeBaseRecord { }
 

@@ -8,25 +8,25 @@ public class ClassName
 
     public bool CloseParenIndents = someCondition
         ? this.SomeMethodCallThatIsLonger____________________(
-                someLongValue,
-                someLongValue,
-                someLongValue
-            )
+            someLongValue,
+            someLongValue,
+            someLongValue
+        )
         : this.SomeMethodCallThatIsLonger____________________(
-                someLongValue,
-                someLongValue,
-                someLongValue
-            );
+            someLongValue,
+            someLongValue,
+            someLongValue
+        );
 
     void Method()
     {
         var nestedConditions = someCondition
             ? someOtherCondition______________
-                    ? someValue_______________________
-                    : someOtherValue___________________
+                ? someValue_______________________
+                : someOtherValue___________________
             : someThirdCondition______________
-                    ? someThirdValue_________________
-                    : someOtherThirdValue_______________________;
+                ? someThirdValue_________________
+                : someOtherThirdValue_______________________;
 
         var value =
             someLongValue__________________________________
@@ -40,11 +40,11 @@ public class ClassName
                 ? trueValue________________________________
                 : falseValue_______________________________,
             someCondition_____________________________________
-                && someOtherCondition__________________________________
+            && someOtherCondition__________________________________
                 ? trueValue________________________________
                 : falseValue_______________________________,
             someCondition_____________________________________
-                && someOtherCondition__________________________________
+            && someOtherCondition__________________________________
         );
 
         var fileContents = File.ReadAllText(
@@ -103,26 +103,26 @@ public class ClassName
         return firstCondition
             ? firstValue
             : secondCondition
-                    ? secondValue
-                    : thirdCondition
-                            ? thirdValue
-                            : fourthValue;
+                ? secondValue
+                : thirdCondition
+                        ? thirdValue
+                        : fourthValue;
 
         return firstCondition
             ? secondCondition
-                    ? firstValue
-                    : secondValue
+                ? firstValue
+                : secondValue
             : thirdCondition
-                    ? thirdValue
-                    : fourthValue;
+                ? thirdValue
+                : fourthValue;
 
         return a ? b : c;
 
         return a
             ? b
             : c
-                    ? d
-                    : e;
+                ? d
+                : e;
 
         var invocationIndent = someCondition
             ? SomeObject
