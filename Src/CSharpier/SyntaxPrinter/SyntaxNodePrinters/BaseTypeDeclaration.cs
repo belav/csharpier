@@ -96,7 +96,7 @@ internal static class BaseTypeDeclaration
             var baseListDoc = Doc.Concat(
                 Token.Print(node.BaseList.ColonToken),
                 " ",
-                Doc.Align(4, SeparatedSyntaxList.Print(node.BaseList.Types, Node.Print, Doc.Line))
+                Doc.Align(2, SeparatedSyntaxList.Print(node.BaseList.Types, Node.Print, Doc.Line))
             );
 
             docs.Add(Doc.Group(Doc.Indent(Doc.Line, baseListDoc)));

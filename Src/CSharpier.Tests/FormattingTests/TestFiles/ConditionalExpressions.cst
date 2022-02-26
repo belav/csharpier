@@ -105,8 +105,8 @@ public class ClassName
             : secondCondition
                 ? secondValue
                 : thirdCondition
-                        ? thirdValue
-                        : fourthValue;
+                    ? thirdValue
+                    : fourthValue;
 
         return firstCondition
             ? secondCondition
