@@ -44,8 +44,8 @@ class ClassName
                 => CallSomeMethod(someValue),
             OneMore
                 => "someStrings"
-                   + "moreStrings"
-                   + "andMoreStrings_________________________________________",
+                    + "moreStrings"
+                    + "andMoreStrings_________________________________________",
             SomeOtherObject
                 or AnotherObject
                 or OrEvenSomeOtherObject_________________
