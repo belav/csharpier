@@ -35,7 +35,7 @@ internal static class ConstraintClauses
         return Doc.Group(
             Doc.Indent(groupId != null ? Doc.IfBreak(" ", prefix, groupId) : prefix),
             groupId != null
-              ? Doc.IfBreak(Doc.Align(2, body), Doc.Indent(body), groupId)
+              ? Doc.IfBreak(Doc.Align(4, body), Doc.Indent(body), groupId)
               : Doc.Indent(body)
         );
     }

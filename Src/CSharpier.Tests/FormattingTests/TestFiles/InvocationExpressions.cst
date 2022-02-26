@@ -86,14 +86,14 @@ class ClassName
             .Select(o => o.SomethingElse);
 
         return someCondition
-          ? CallMethod(
-                someLongParameter____________________________,
-                someLongParameter____________________________
-            )
-          : Something.CallMethod(
-                someLongParameter____________________________,
-                someLongParameter____________________________
-            );
+            ? CallMethod(
+                    someLongParameter____________________________,
+                    someLongParameter____________________________
+                )
+            : Something.CallMethod(
+                    someLongParameter____________________________,
+                    someLongParameter____________________________
+                );
 
         someValue.CallMethod(
             someLongParameter____________________________,

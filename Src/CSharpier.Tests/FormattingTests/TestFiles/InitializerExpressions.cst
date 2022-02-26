@@ -146,14 +146,14 @@ class ClassName
         {
             this.CallSomeMethod________________________________________()
                 .CallSomeMethod________________________________________()
-              ? one
-              : two,
+                ? one
+                : two,
             SomeOtherMethod(),
             SomethingElse
                 .CallSomeMethod________________________________________()
                 .CallSomeMethod________________________________________()
-              ? one
-              : two,
+                ? one
+                : two,
             SomeOtherMethod(),
             this.CallSomeMethod________________________________________()
                 .CallSomeMethod________________________________________(),

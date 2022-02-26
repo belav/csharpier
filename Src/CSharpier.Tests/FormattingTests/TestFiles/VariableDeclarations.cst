@@ -96,9 +96,9 @@ class ClassName
 
         var conditionalIndentation = someBoolean
             ? someLongValue____________________________________
-              + someLongValue____________________________________
+                + someLongValue____________________________________
             : someLongValue____________________________________
-              + someLongValue____________________________________;
+                + someLongValue____________________________________;
 
         var longEnoughToMakeThisBreak =
             something == somethingElse ? shortValue__________ : otherShortValue;
@@ -149,8 +149,8 @@ withLineEnding"
             someParameter_____________________,
             someParameter_____________________
         )
-          ? someValue
-          : someOtherValue;
+            ? someValue
+            : someOtherValue;
 
         var someValue =
             await SomeObject.CallLongAsyncMethod____________________________________________(
@@ -166,14 +166,14 @@ withLineEnding"
 
         var someValue =
             SomeObject.CallLongMethod____________________________________________________()
-              ? someValue
-              : someOtherValue;
+                ? someValue
+                : someOtherValue;
 
         var someValue = SomeObject
             .CallLongMethod____________________________________________________()
             .CallLongMethod____________________________________________________()
-          ? someValue
-          : someOtherValue;
+            ? someValue
+            : someOtherValue;
 
         var someValue =
             someLongCondition___________________________________

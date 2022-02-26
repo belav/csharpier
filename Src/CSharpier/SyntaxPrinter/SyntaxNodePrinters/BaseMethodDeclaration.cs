@@ -159,7 +159,7 @@ internal static class BaseMethodDeclaration
                     Doc.Group(
                         Doc.Indent(Doc.IfBreak(" ", Doc.Line, parameterGroupId)),
                         Doc.IfBreak(
-                            Doc.Align(2, colonToken),
+                            Doc.Align(4, colonToken),
                             Doc.Indent(colonToken),
                             parameterGroupId
                         ),
