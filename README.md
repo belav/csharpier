@@ -1,4 +1,4 @@
-![CSharpier](./banner.png)
+![CSharpier](./banner.svg)
 
 CSharpier is an opinionated code formatter for c#. It uses Roslyn to parse your code and re-prints it using its own rules. 
 The printing process was ported from [prettier](https://github.com/prettier/prettier) but has evolved over time.
