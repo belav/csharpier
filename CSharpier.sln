@@ -14,6 +14,7 @@ ProjectSection(SolutionItems) = preProject
 	.config\dotnet-tools.json = .config\dotnet-tools.json
 	CSharpier.Build.props = CSharpier.Build.props
 	Dockerfile = Dockerfile
+	Dockerfile-Website = Dockerfile-Website
 	.dockerignore = .dockerignore
 	global.json = global.json
 	CSharpier.Build.targets = CSharpier.Build.targets

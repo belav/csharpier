@@ -22,19 +22,10 @@ export const Header = () => {
     return (
         <HeaderStyle>
             <Left width={width}>
+                <LogoStyle />
                 <Title>
-                    CSharpier<Version> {version}</Version>
+                    <a href="https://csharpier.com">CSharpier</a><Version> {version}</Version>
                 </Title>
-                <a
-                    className="github-button"
-                    href="https://github.com/belav/csharpier"
-                    data-size="large"
-                    data-show-count="true"
-                    aria-label="Star belav/csharpier on GitHub"
-                >
-                    Github
-                </a>
-
                 <Buttons>
                     <FormatButton onClick={formatCode} title="Ctrl-Enter">
                         {isLoading && <LoadingStyle />}
@@ -42,14 +33,16 @@ export const Header = () => {
                     </FormatButton>
                 </Buttons>
             </Left>
-            <Right />
+            <Right>
+                <a className="header-github-link" href="https://github.com/belav/csharpier"></a>
+            </Right>
         </HeaderStyle>
     );
 };
 
 const HeaderStyle = styled.div`
     height: 60px;
-    background-color: #f7f7f7;
+    background-color: #32576C;
     display: flex;
     align-items: center;
 
@@ -67,19 +60,29 @@ const Left = styled.div<{ width: number }>`
 `;
 const Right = styled.div`
     display: flex;
+    justify-content: end;
     flex-grow: 1;
     padding-right: 20px;
-    label {
-        margin-left: 10px;
-        cursor: pointer;
-    }
+`;
+
+const LogoStyle = styled.div`
+    margin-left: 10px;
+    background: url("/logo.svg");
+    height: 40px;
+    width: 40px;
 `;
 
 const Title = styled.h1`
-    padding-left: 28px;
-    font-size: 22px;
-    font-style: italic;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 8px;
     margin-right: 20px;
+    a {
+        color: #fff;
+        text-decoration: none;
+        margin-right: 5px;
+    }
 `;
 
 const Version = styled.span`
@@ -92,15 +95,9 @@ const Buttons = styled.div`
     align-items: center;
 `;
 
-const SmallButton = styled.button`
-    height: 24px;
-    cursor: pointer;
-    margin-right: 6px;
-`;
-
 const FormatButton = styled.button`
-    background-color: #666;
-    color: white;
+    background-color: #fff;
+    color: #0C2B3E;
     border: none;
     padding: 8px 12px;
     font-size: 18px;

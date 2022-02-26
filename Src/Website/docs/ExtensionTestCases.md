@@ -1,0 +1,21 @@
+# Test Cases For Extensions
+
+- No installs at all
+  - show message to install globally or locally
+- Install globally
+  - shows for file outside solutions if solution has csharpier 
+  - should format after
+  - can uninstall globally after formatting
+- Install Locally
+  - works with existing tool manifest
+  - works with no tool manifest
+  - should format after
+- Formatting
+  - Existing open documents get warmed
+  - Edit warms
+  - Finds local version
+  - Finds global version
+  - Uses correct version - adding lines between methods is easy to test, 0.12 vs 0.14
+- Action (does not apply to vscode)
+  - is not shown on files that aren't c#
+  - run on save works
