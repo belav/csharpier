@@ -2,101 +2,6 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
-/* TODO some real edge cases
- 
- class ClassName
-{
-    void MethodName()
-    {
-        TraceWriterrrrrrrrrrrrrrrrrrr.Trace(
-            TraceLevel.Verbose,
-            traceJsonReader.GetDeserializedJsonMessage(),
-            null
-        );
-
-        TraceWriterrrrrrrrrrrrrrrrrrr!
-            .Trace(TraceLevel.Verbose, traceJsonReader.GetDeserializedJsonMessage(), null);
-
-        EnsureType(
-            reader,
-            keyValue,
-            CultureInfo.InvariantCulture,
-            contract.KeyContract,
-            contract.DictionaryKeyType
-        )
-            !;
-
-        object? createdObjectCollectiossssssssssssssn = property.ValueProvider!
-            .GetValue(createdObject);
-
-        object? createdObjectCollectiossssssssssssssn = property.ValueProvider.GetValue(
-            createdObject
-        );
-
-        string keyIdAsString = (string)revocationElement
-            .Element(KeyElementName)
-            .Attribute(IdAttributeName);
-
-        Assert.True(
-            ((call.Arguments[1] as ConstantExpression)!.Value as CultureInfo)!
-                .Equals(CultureInfo.InvariantCulture)
-        );
-        
-        Assert.True(
-            ((call.Arguments[1] as ConstantExpression)!.Value as CultureInfo)
-                .Equals(CultureInfo.InvariantCulture)
-        );
-    }
-}
-
- 
- 
- */
-
-/* TODO some edge cases just in case
- class ClassName
-{
-    private static readonly MethodInfo CallPropertySetterOpenGenericMethod =
-        typeof(PropertySetter).GetMethod(
-            nameof(CallPropertySetter),
-            BindingFlags.NonPublic | BindingFlags.Static
-        )!;
-
-    void MethodName()
-    {
-        this.DoSomething__________________________________________________()!
-            .DoSomething__________________________________________________()!
-            .DoSomething__________________________________________________();
-
-        this.DoSomething__________________________________________________()!
-            .DoSomething__________________________________________________()!
-            .DoSomething__________________________________________________()!;
-
-        NamingStrategy namingStrategy___________________________ =
-            JsonTypeReflector.GetContainerNamingStrategy(attribute)!;
-
-        IsUnion______________________________________ =
-            JsonTypeReflector.ReflectionDelegateFactory
-            .CreateMethodCall<object?>(isUnionMethodInfo)!;
-
-        MethodCall<object?, object> invoke_______ =
-            JsonTypeReflector.ReflectionDelegateFactory.CreateMethodCall<object?>(invokeFunc)!;
-
-        var deserialized =
-            (JSInProcessObjectReference)JsonSerializer
-            .Deserialize<IJSInProcessObjectReference>(json, JsonSerializerOptions)!;
-
-        _uiThreadId = (int)_window
-            .GetType()
-            .GetField("_managedThreadId", BindingFlags.NonPublic | BindingFlags.Instance)!
-            .GetValue(_window)!;
-    }
-}
-
- 
- */
-
-
 // This is based on prettier/src/language-js/print/member-chain.js
 // various discussions/prs about how to potentially improve the formatting
 // https://github.com/prettier/prettier/issues/5737
@@ -127,11 +32,26 @@ internal static class InvocationExpression
 
         var forceOneLine =
             groups.Count <= cutoff
-            && !groups
-                .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
-                .All(
-                    o => o.Last().Node is InvocationExpressionSyntax or PostfixUnaryExpressionSyntax
-                );
+            && (
+                groups
+                    .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
+                    .Any(
+                        o =>
+                            o.Last().Node
+                                is not (
+                                    InvocationExpressionSyntax
+                                    or PostfixUnaryExpressionSyntax
+                                    {
+                                        Operand: InvocationExpressionSyntax
+                                    }
+                                )
+                    )
+                // if the last group contains just a !, make sure it doesn't end up on a new line
+                || (
+                    groups.Last().Count == 1
+                    && groups.Last()[0].Node is PostfixUnaryExpressionSyntax
+                )
+            );
 
         if (forceOneLine)
         {
