@@ -19,6 +19,8 @@ public class ConfigurationFileOptions
         ILogger logger
     )
     {
+        DebugLogger.Log("Creating printer options for " + baseDirectoryPath);
+
         var configurationFileOptions = Create(baseDirectoryPath, fileSystem, logger);
 
         List<string[]> preprocessorSymbolSets;

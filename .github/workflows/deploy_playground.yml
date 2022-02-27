@@ -18,6 +18,6 @@ jobs:
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: 'ssh://dokku@bnt-studios.com:22/csharpier'
+          git_remote_url: 'ssh://dokku@bnt-studios.com:22/csharpier-playground'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           git_push_flags: --force

@@ -1,0 +1,13 @@
+FROM node:14-alpine AS base
+EXPOSE 80
+
+WORKDIR /src
+COPY ./Src/Website/package.json .
+COPY ./Src/Website/package-lock.json .
+
+RUN npm ci
+
+COPY ./Src/Website/ .
+RUN npm run build
+
+ENTRYPOINT npm run serve -- --port 80 --host 0.0.0.0

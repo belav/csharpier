@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+using Microsoft.VisualStudio.Text.Editor.OptionsExtensionMethods;
 using Process = System.Diagnostics.Process;
 
 namespace CSharpier.VisualStudio
@@ -11,9 +12,7 @@ namespace CSharpier.VisualStudio
     {
         private readonly Logger logger;
         private readonly Process process;
-        private readonly AutoResetEvent autoEvent = new AutoResetEvent(false);
-        private readonly StringBuilder output = new StringBuilder();
-        private readonly StringBuilder errorOutput = new StringBuilder();
+
         private readonly StreamWriter standardIn;
 
         public CSharpierProcessPipeMultipleFiles(string csharpierPath, Logger logger)
@@ -46,81 +45,34 @@ namespace CSharpier.VisualStudio
 
         public string FormatFile(string content, string filePath)
         {
-            this.output.Clear();
-            this.errorOutput.Clear();
-
             this.standardIn.Write(filePath);
             this.standardIn.Write('\u0003');
             this.standardIn.Write(content);
             this.standardIn.Write('\u0003');
             this.standardIn.Flush();
 
-            ThreadPool.QueueUserWorkItem(this.ReadOutput, this.autoEvent);
-            ThreadPool.QueueUserWorkItem(this.ReadError, this.autoEvent);
+            var stringBuilder = new StringBuilder();
 
-            this.autoEvent.WaitOne();
-
-            var errorResult = this.errorOutput.ToString();
-            var result = this.output.ToString();
-            if (string.IsNullOrEmpty(errorResult))
+            var nextCharacter = this.process.StandardOutput.Read();
+            while (nextCharacter != -1)
             {
-                if (string.IsNullOrEmpty(result))
+                if (nextCharacter == '\u0003')
                 {
-                    this.logger.Info("File is ignored by .csharpierignore");
-                    return string.Empty;
+                    break;
                 }
-                else
-                {
-                    return this.output.ToString();
-                }
+
+                stringBuilder.Append((char)nextCharacter);
+                nextCharacter = this.process.StandardOutput.Read();
             }
 
-            this.logger.Info("Got error output: " + errorResult);
-            return string.Empty;
-        }
+            var result = stringBuilder.ToString();
 
-        private void ReadOutput(object state)
-        {
-            this.ReadFromProcess(this.process.StandardOutput, this.output, (AutoResetEvent)state);
-        }
-
-        private void ReadError(object state)
-        {
-            this.ReadFromProcess(
-                this.process.StandardError,
-                this.errorOutput,
-                (AutoResetEvent)state
-            );
-        }
-
-        private void ReadFromProcess(
-            StreamReader reader,
-            StringBuilder stringBuilder,
-            AutoResetEvent autoResetEvent
-        )
-        {
-            try
+            if (string.IsNullOrEmpty(result))
             {
-                var nextCharacter = reader.Read();
-                while (nextCharacter != -1)
-                {
-                    if (nextCharacter == '\u0003')
-                    {
-                        return;
-                    }
+                this.logger.Debug("File is ignored by .csharpierignore or there was an error");
+            }
 
-                    stringBuilder.Append((char)nextCharacter);
-                    nextCharacter = reader.Read();
-                }
-            }
-            catch (Exception e)
-            {
-                this.logger.Error(e);
-            }
-            finally
-            {
-                autoResetEvent.Set();
-            }
+            return result;
         }
 
         public void Dispose()

@@ -1,3 +1,26 @@
+# 0.15.1
+
+[diff](https://github.com/belav/csharpier/compare/0.15.0...0.15.1)
+
+- Set CSharpier.MsBuild as DevelopmentDependency. [#607](https://github.com/belav/csharpier/pull/607)
+
+# 0.15.0
+
+[diff](https://github.com/belav/csharpier/compare/0.14.0...0.15.0)
+
+### Breaking Changes
+- `CSharpier.MsBuild` now requires .NET6 [#565](https://github.com/belav/csharpier/issues/565)
+
+### Changes
+- .csharpierignore causes csharpier to be significantly slower [#594](https://github.com/belav/csharpier/issues/594)
+- Support for // csharpier-ignore [#581](https://github.com/belav/csharpier/issues/581)
+- Multiline comments are not properly indented. [#580](https://github.com/belav/csharpier/issues/580)
+- Generics + ObjectCreationExpression should break consistently [#578](https://github.com/belav/csharpier/issues/578)
+- Extra blank lines should be removed at the end of a method [#575](https://github.com/belav/csharpier/issues/575)
+- Null conditional operator does not break consistently [#561](https://github.com/belav/csharpier/issues/561)
+- Enum members should follow the rules for new lines [#553](https://github.com/belav/csharpier/issues/553)
+
+
 # 0.14.0
 
 [diff](https://github.com/belav/csharpier/compare/0.13.0...0.14.0)

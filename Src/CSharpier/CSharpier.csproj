@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="../../CSharpier.Build.props" />
+    <Import Project="../../CSharpier.Build.props" />
     <PropertyGroup>
         <PackageId>CSharpier.Core</PackageId>
-        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+        <TargetFrameworks>net5.0;net6.0;netstandard2.0</TargetFrameworks>
         <RootNamespace>CSharpier</RootNamespace>
         <Nullable>enable</Nullable>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
@@ -26,6 +26,12 @@
     
     <ItemGroup>
         <ProjectReference Include="..\CSharpier.Generators\CSharpier.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <None Include="..\..\logo.png" Pack="true" PackagePath="">
+        <Link>logo.png</Link>
+      </None>
     </ItemGroup>
 
     <Target Name="RestoreTools" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(RESTORE_TOOLS)' != 0 and '$(IsCrossTargetingBuild)' == 'true'">

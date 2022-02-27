@@ -8,6 +8,7 @@
         -->
         <TargetFramework>netstandard2.0</TargetFramework>
         <PackageId>CSharpier.MsBuild</PackageId>
+        <DevelopmentDependency>true</DevelopmentDependency>
         <CSharpierOutputDir>../CSharpier.Cli/bin/$(Configuration)/net6.0</CSharpierOutputDir>
     </PropertyGroup>
 
@@ -20,6 +21,12 @@
         <Exec command="dotnet build -c $(Configuration)" WorkingDirectory="../CSharpier.Cli" />
     </Target>
 
+    <ItemGroup>
+        <None Include="..\..\logo.png" Pack="true" PackagePath="">
+            <Link>logo.png</Link>
+        </None>
+    </ItemGroup>
+    
     <ItemGroup>
         <Content Include="build/*" PackagePath="build/" />
         <Content Include="$(CSharpierOutputDir)/**" PackagePath="tools/csharpier" />

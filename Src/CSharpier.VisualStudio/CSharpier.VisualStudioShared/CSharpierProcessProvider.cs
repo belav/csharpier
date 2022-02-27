@@ -12,14 +12,10 @@ namespace CSharpier.VisualStudio
 
         private bool warnedForOldVersion;
 
-        private readonly Dictionary<string, bool> warmingByDirectory = new Dictionary<
-            string,
-            bool
-        >();
-        private readonly Dictionary<string, string> csharpierVersionByDirectory = new Dictionary<
-            string,
-            string
-        >();
+        private readonly Dictionary<string, bool> warmingByDirectory =
+            new Dictionary<string, bool>();
+        private readonly Dictionary<string, string> csharpierVersionByDirectory =
+            new Dictionary<string, string>();
         private readonly Dictionary<string, ICSharpierProcess> csharpierProcessesByVersion =
             new Dictionary<string, ICSharpierProcess>();
 
