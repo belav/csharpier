@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.2.2]
+- Adding support for macOS
+
 ## [1.2.1]
 - Fixing error when refactoring to move class to new file
 - Fixing occasional error when trying to update action
