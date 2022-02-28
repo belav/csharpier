@@ -158,25 +158,52 @@ internal class DocPrinter
 
     private void AppendComment(LeadingComment leadingComment, Indent indent)
     {
-        // when the indentation in front of multi line comments is changing
-        // this won't properly move the whole comment
-        // but understanding when to move the comment isn't easy, and not worth the effort
-        // moving around comments interferes with someone who commented out large blocks of code
-        // using multi line comments
-        // see https://github.com/belav/csharpier/releases/tag/comments for a potential solution
-        // it had other side effects though
-        if (leadingComment.Type is CommentType.MultiLine)
+        int CalculateIndentLength(string line)
         {
-            this.Output.Append(indent.Value);
-            this.Output.Append(leadingComment.Comment.TrimStart());
-            return;
+            var result = 0;
+            foreach (var character in line)
+            {
+                if (character == ' ')
+                {
+                    result += 1;
+                }
+                else if (character == '\t')
+                {
+                    result += 4;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return result;
         }
 
         var stringReader = new StringReader(leadingComment.Comment);
         var line = stringReader.ReadLine();
+        var numberOfSpacesToAddOrRemove = 0;
+        if (leadingComment.Type == CommentType.MultiLine && line != null)
+        {
+            // in order to maintain the formatting inside of a multiline comment
+            // we calculate how much the indentation of the first line is changing
+            // and then change the indentation of all other lines the same amount
+            var firstLineIndentLength = CalculateIndentLength(line);
+            var currentIndent = indent.Value.Length;
+            numberOfSpacesToAddOrRemove = currentIndent - firstLineIndentLength;
+        }
+
         while (line != null)
         {
-            this.Output.Append(indent.Value);
+            if (leadingComment.Type == CommentType.SingleLine)
+            {
+                this.Output.Append(indent.Value);
+            }
+            else
+            {
+                this.Output.Append(' ', CalculateIndentLength(line) + numberOfSpacesToAddOrRemove);
+            }
+
             this.Output.Append(line.Trim());
             line = stringReader.ReadLine();
             if (line == null)

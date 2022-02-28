@@ -148,9 +148,17 @@ internal static class Token
 
             void AddLeadingComment(CommentType commentType)
             {
-                docs.Add(
-                    Doc.LeadingComment(trivia.ToFullString().TrimEnd('\n', '\r'), commentType)
-                );
+                var comment = trivia.ToFullString().TrimEnd('\n', '\r');
+                if (
+                    commentType == CommentType.MultiLine
+                    && x > 0
+                    && leadingTrivia[x - 1].Kind() is SyntaxKind.WhitespaceTrivia
+                )
+                {
+                    comment = leadingTrivia[x - 1] + comment;
+                }
+
+                docs.Add(Doc.LeadingComment(comment, commentType));
             }
 
             if (IsSingleLineComment(kind))

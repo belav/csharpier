@@ -1,14 +1,14 @@
 public class ClassName
 {
-    /// multiline
+    /// singleLine documentation
     /// second line
     private string field;
 
     public void Method()
     {
-        /* this doesn't work well because the indentation is changing
-     *  multiline
-     */
+        /* this should keep the * aligned
+         * multiline
+         */
         var variable = true;
     }
 
@@ -33,9 +33,9 @@ public interface Interface
     ///	</summary> tab here before <
     void Method();
 
-    /* this also doesn't work well because of turning 2 tabs into 4 spaces
-		and it keeps the tabs here, which is maybe what we want
-		*/
+    /* this should ditch the tabs
+    that were in from of here
+    */
     void Method();
 }
 
