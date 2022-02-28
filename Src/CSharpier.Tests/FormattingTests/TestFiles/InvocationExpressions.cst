@@ -12,6 +12,10 @@ class ClassName
             ?.DoSomething___________________()
             ?.DoSomething___________________();
 
+        this.DoSomething___________________()!
+            .DoSomething___________________()!
+            .DoSomething___________________();
+
         base.DoSomething___________________()
             .DoSomething___________________()
             .DoSomething___________________();
@@ -40,6 +44,14 @@ class ClassName
         var someValue = someOtherValue.Where(o => someLongCondition).Where(o => someLongCondition);
 
         var someValue = someOtherValue
+            .Where(o => someLongCondition__________________________)
+            .Where(o => someLongCondition__________________________);
+
+        var someValue = someOtherValue!
+            .Where(o => someLongCondition__________________________)
+            .Where(o => someLongCondition__________________________);
+
+        var someValue = someOtherValue!.Thing!
             .Where(o => someLongCondition__________________________)
             .Where(o => someLongCondition__________________________);
 
@@ -79,11 +91,20 @@ class ClassName
                 someLongParameter____________________________
             );
 
-        string.Equals(
-            firstParameter__________,
-            secondParameter_________,
-            StringComparison.OrdinalIgnoreCase
+        someValue.CallMethod(
+            someLongParameter____________________________,
+            someLongParameter____________________________
         );
+
+        someValue!.CallMethod(
+            someLongParameter____________________________,
+            someLongParameter____________________________
+        );
+
+        CallSomeMethod(
+            someParameter____________________________________,
+            someParameter____________________________________
+        )!;
 
         var someVariable = someObject.Property.CallMethod(
             someValue => someValue.SomeProperty == someOtherValue___________________________________
@@ -193,5 +214,21 @@ class ClassName
 
         this.CallMethod()
             .CallMethod__________________(one_____________________, two_____________________);
+
+        var someValue = CallMethod__________________(longParameter________________________________)!
+            .CallMethod__________________();
+
+        var someValue = CallMethod__________________(longParameter________________________________)
+            .CallMethod__________________();
+
+        var someValue = CallMethod__________________(
+                longParameter_______________________________________
+            )!
+            .CallMethod__________________();
+
+        var someValue = CallMethod__________________(
+                longParameter_______________________________________
+            )
+            .CallMethod__________________();
     }
 }

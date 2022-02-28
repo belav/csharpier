@@ -32,9 +32,26 @@ internal static class InvocationExpression
 
         var forceOneLine =
             groups.Count <= cutoff
-            && !groups
-                .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
-                .All(o => o.Last().Node is InvocationExpressionSyntax);
+            && (
+                groups
+                    .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
+                    .Any(
+                        o =>
+                            o.Last().Node
+                                is not (
+                                    InvocationExpressionSyntax
+                                    or PostfixUnaryExpressionSyntax
+                                    {
+                                        Operand: InvocationExpressionSyntax
+                                    }
+                                )
+                    )
+                // if the last group contains just a !, make sure it doesn't end up on a new line
+                || (
+                    groups.Last().Count == 1
+                    && groups.Last()[0].Node is PostfixUnaryExpressionSyntax
+                )
+            );
 
         if (forceOneLine)
         {
@@ -113,6 +130,21 @@ internal static class InvocationExpression
             );
             FlattenAndPrintNodes(conditionalAccessExpressionSyntax.WhenNotNull, printedNodes);
         }
+        else if (
+            expression is PostfixUnaryExpressionSyntax
+            {
+                Operand: InvocationExpressionSyntax
+            } postfixUnaryExpression
+        )
+        {
+            FlattenAndPrintNodes(postfixUnaryExpression.Operand, printedNodes);
+            printedNodes.Add(
+                new PrintedNode(
+                    postfixUnaryExpression,
+                    Token.Print(postfixUnaryExpression.OperatorToken)
+                )
+            );
+        }
         else
         {
             printedNodes.Add(new PrintedNode(expression, Node.Print(expression)));
@@ -166,8 +198,11 @@ internal static class InvocationExpression
             for (; index + 1 < printedNodes.Count; ++index)
             {
                 if (
-                    IsMemberish(printedNodes[index].Node)
-                    && IsMemberish(printedNodes[index + 1].Node)
+                    (
+                        IsMemberish(printedNodes[index].Node)
+                        && IsMemberish(printedNodes[index + 1].Node)
+                    )
+                    || printedNodes[index].Node is PostfixUnaryExpressionSyntax
                 )
                 {
                     currentGroup.Add(printedNodes[index]);
