@@ -34,7 +34,7 @@ internal static class SwitchStatement
                     Doc.SoftLine
                 ),
                 Token.Print(node.CloseParenToken),
-                Doc.IfBreak(" ", Doc.Line, groupId),
+                node.Sections.Count == 0 ? " " : Doc.Line,
                 Token.Print(node.OpenBraceToken),
                 sections,
                 Token.Print(node.CloseBraceToken)
