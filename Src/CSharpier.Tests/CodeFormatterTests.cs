@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 
 namespace CSharpier.Tests;
@@ -47,5 +48,16 @@ internal class CodeFormatterTests
         var result = CodeFormatter.Format(code, new CodeFormatterOptions { Width = 10 });
 
         result.Should().Be("var someVariable =\n    someValue;\n");
+    }
+
+    [TestCase("\n")]
+    [TestCase("\r\n")]
+    public void Format_Should_Get_Line_Endings_With_SyntaxTree(string lineEnding)
+    {
+        var code = $"public class ClassName {{{lineEnding}}}";
+        var syntaxTree = CSharpSyntaxTree.ParseText(code);
+        var result = CodeFormatter.Format(syntaxTree);
+
+        result.Should().Be("public class ClassName { }" + lineEnding);
     }
 }
