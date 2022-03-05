@@ -8,7 +8,7 @@ CSharpier provides a few basic options that affect formatting and has no plans t
 ### Quick Start
 Install CSharpier globally using the following command.
 ```bash
-dotnet tool install csharpier
+dotnet tool install csharpier -g
 ```
 Then format the contents of a directory and its children with the following command.
 ```bash
