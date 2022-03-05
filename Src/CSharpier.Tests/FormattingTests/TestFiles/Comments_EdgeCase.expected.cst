@@ -22,6 +22,10 @@ public class ClassName
      */
     public class ClassName2 { }
 
+    /* start
+end */
+    public class ClassName2 { }
+
     /*
     public string String;
     */
