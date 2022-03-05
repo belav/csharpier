@@ -169,7 +169,7 @@ internal class DocPrinter
                 }
                 else if (character == '\t')
                 {
-                    result += 4;
+                    result += this.PrinterOptions.TabWidth;
                 }
                 else
                 {
