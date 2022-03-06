@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.2.3]
+- Change csharpier install path on windows to be consistent with other plugins
+
 ## [1.2.2]
 - Adding support for macOS
 

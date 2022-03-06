@@ -33,7 +33,7 @@ namespace CSharpier.VisualStudio
             }
 
             var arguments =
-                $"tool install csharpier --version {version} --tool-path {directoryForVersion} ";
+                $"tool install csharpier --version {version} --tool-path \"{directoryForVersion}\" ";
             ProcessHelper.ExecuteCommand("dotnet", arguments);
         }
 

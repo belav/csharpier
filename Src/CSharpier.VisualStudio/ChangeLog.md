@@ -1,4 +1,7 @@
-﻿## [1.2.1]
+﻿## [1.2.2]
+- Fix bug for usernames that contain a space not being able to format files
+
+## [1.2.1]
 - Fix bug that was leaving threads open
 
 ## [1.2.0]
