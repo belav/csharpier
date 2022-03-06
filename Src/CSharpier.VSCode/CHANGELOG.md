@@ -1,3 +1,6 @@
+## [1.2.1]
+- Fix bug for usernames that contain a space not being able to format files
+
 ## [1.2.0]
 - Fix bug with dotnet csharpier sometimes outputting .net welcome message
 - Run csharpier from custom tools location so that the global/local versions of the tool are not locked.
