@@ -201,7 +201,11 @@ internal class DocPrinter
             }
             else
             {
-                this.Output.Append(' ', CalculateIndentLength(line) + numberOfSpacesToAddOrRemove);
+                var spacesToAppend = CalculateIndentLength(line) + numberOfSpacesToAddOrRemove;
+                if (spacesToAppend > 0)
+                {
+                    this.Output.Append(' ', spacesToAppend);
+                }
             }
 
             this.Output.Append(line.Trim());

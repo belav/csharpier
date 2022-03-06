@@ -22,8 +22,8 @@ public class ClassName
      */
     public class ClassName2 { }
 
-    /* start
-end */
+    /* this doesn't fail
+by trying to move it left 4 spaces */
     public class ClassName2 { }
 
     /*
