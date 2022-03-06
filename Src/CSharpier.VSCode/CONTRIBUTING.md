@@ -7,4 +7,5 @@ Publishing
 - Update version in package.json
 - run `vsce package`
 - run `vsce publish`
-- upload to https://marketplace.visualstudio.com/manage/publishers/csharpier
+
+https://marketplace.visualstudio.com/manage/publishers/csharpier
