@@ -93,7 +93,6 @@ internal static class RightHandSide
             or InterpolatedStringExpressionSyntax
             or IsPatternExpressionSyntax
             or LiteralExpressionSyntax
-            or MemberAccessExpressionSyntax
             or StackAllocArrayCreationExpressionSyntax
             or QueryExpressionSyntax
               => Layout.BreakAfterOperator,

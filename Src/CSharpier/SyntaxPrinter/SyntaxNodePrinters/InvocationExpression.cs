@@ -24,7 +24,9 @@ internal static class InvocationExpression
 
         FlattenAndPrintNodes(node, printedNodes);
 
-        var groups = GroupPrintedNodes(printedNodes);
+        var groups = printedNodes.Any(o => o.Node is InvocationExpressionSyntax)
+          ? GroupPrintedNodesPrettierStyle(printedNodes)
+          : GroupPrintedNodesOnLines(printedNodes);
 
         var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
 
@@ -153,16 +155,16 @@ internal static class InvocationExpression
         }
     }
 
-    private static List<List<PrintedNode>> GroupPrintedNodes(List<PrintedNode> printedNodes)
+    private static List<List<PrintedNode>> GroupPrintedNodesOnLines(List<PrintedNode> printedNodes)
     {
         // We want to group the printed nodes in the following manner
         //
-        //   a()?.b!.c().d
+        //   a?.b.c!.d
 
         // so that we can print it like this if it breaks
-        //   a()
-        //     ?.b!
-        //     .c()
+        //   a
+        //     ?.b
+        //     .c!
         //     .d
 
         var groups = new List<List<PrintedNode>>();
@@ -195,7 +197,7 @@ internal static class InvocationExpression
         return groups;
     }
 
-    private static List<List<PrintedNode>> PrettierStyleGroupPrintedNodes(
+    private static List<List<PrintedNode>> GroupPrintedNodesPrettierStyle(
         List<PrintedNode> printedNodes
     )
     {

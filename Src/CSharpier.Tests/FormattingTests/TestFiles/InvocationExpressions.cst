@@ -52,8 +52,7 @@ class ClassName
             .Where(o => someLongCondition__________________________);
 
         var someValue = someOtherValue!
-            .Thing!
-            .Where(o => someLongCondition__________________________)
+            .Thing!.Where(o => someLongCondition__________________________)
             .Where(o => someLongCondition__________________________);
 
         var someValue = someOtherValue
@@ -78,8 +77,7 @@ class ClassName
                     this.SomeProperty.Setup(o => longThing_______________________________________)
             );
 
-        roleNames
-            .Value
+        roleNames.Value
             .Where(o => o.SomeProperty____________________________________)
             .Select(o => o.SomethingElse);
 
@@ -108,12 +106,9 @@ class ClassName
             someParameter____________________________________
         )!;
 
-        var someVariable = someObject
-            .Property
-            .CallMethod(
-                someValue =>
-                    someValue.SomeProperty == someOtherValue___________________________________
-            );
+        var someVariable = someObject.Property.CallMethod(
+            someValue => someValue.SomeProperty == someOtherValue___________________________________
+        );
 
         CallMethod(
                 firstParameter____________________________,
