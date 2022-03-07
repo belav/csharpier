@@ -82,6 +82,11 @@ internal static class RightHandSide
 
         return rightNode switch
         {
+            // TODO the ! at the end fucks with it too, this should be break after
+            // modelState = e.ControllerContext
+            // .Controller_________________________________________()
+            // .ViewData.ModelState____________________________________()!;
+
             InitializerExpressionSyntax => Layout.BasicConcatWithoutLine,
             BinaryExpressionSyntax
             or CastExpressionSyntax { Type: GenericNameSyntax }
@@ -91,8 +96,12 @@ internal static class RightHandSide
             }
             or ImplicitObjectCreationExpressionSyntax { Parent: EqualsValueClauseSyntax }
             or InterpolatedStringExpressionSyntax
+            // TODO ditch fluid?
+            // or InvocationExpressionSyntax
             or IsPatternExpressionSyntax
             or LiteralExpressionSyntax
+            // TODO ditch fluid?
+            // or MemberAccessExpressionSyntax
             or StackAllocArrayCreationExpressionSyntax
             or QueryExpressionSyntax
               => Layout.BreakAfterOperator,

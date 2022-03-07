@@ -162,6 +162,8 @@ internal static class InvocationExpression
         }
     }
 
+    // TODO maybe this should work more like prettier, where it makes groups in a way that they try to fill lines
+    // TODO also prettier doesn't seem to use fluid
     private static List<List<PrintedNode>> GroupPrintedNodesOnLines(List<PrintedNode> printedNodes)
     {
         // We want to group the printed nodes in the following manner
