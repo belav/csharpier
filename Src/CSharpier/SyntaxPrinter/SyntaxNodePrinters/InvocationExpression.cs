@@ -2,6 +2,13 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 // TODO review this still https://github.com/belav/csharpier-repos/pull/35/files
 
+// TODO why did this change?
+/*
+        var someValue = someOtherValue!.Thing!
+            .Where(o => someLongCondition__________________________)
+            .Where(o => someLongCondition__________________________);
+ */
+
 internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
 // This is based on prettier/src/language-js/print/member-chain.js
