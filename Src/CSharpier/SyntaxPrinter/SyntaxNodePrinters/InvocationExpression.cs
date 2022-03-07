@@ -1,6 +1,6 @@
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
-// TODO /roslyn/src/Compilers/Core/Portable/Operations/ControlFlowGraphBuilder.cs
+// TODO review this still https://github.com/belav/csharpier-repos/pull/35/files
 
 internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
