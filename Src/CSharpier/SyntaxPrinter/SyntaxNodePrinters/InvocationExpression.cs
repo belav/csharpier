@@ -133,7 +133,7 @@ internal static class InvocationExpression
         else if (
             expression is PostfixUnaryExpressionSyntax
             {
-                Operand: InvocationExpressionSyntax
+                Operand: InvocationExpressionSyntax or MemberAccessExpressionSyntax
             } postfixUnaryExpression
         )
         {
@@ -152,6 +152,50 @@ internal static class InvocationExpression
     }
 
     private static List<List<PrintedNode>> GroupPrintedNodes(List<PrintedNode> printedNodes)
+    {
+        // We want to group the printed nodes in the following manner
+        //
+        //   a()?.b!.c().d
+
+        // so that we can print it like this if it breaks
+        //   a()
+        //     ?.b!
+        //     .c()
+        //     .d
+
+        var groups = new List<List<PrintedNode>>();
+
+        var currentGroup = new List<PrintedNode> { printedNodes[0] };
+        groups.Add(currentGroup);
+
+        for (var index = 1; index < printedNodes.Count; index++)
+        {
+            if (printedNodes[index].Node is ConditionalAccessExpressionSyntax)
+            {
+                currentGroup = new List<PrintedNode>();
+                groups.Add(currentGroup);
+            }
+            else if (
+                printedNodes[index].Node
+                    is MemberAccessExpressionSyntax
+                        or MemberBindingExpressionSyntax
+                        or IdentifierNameSyntax
+                && printedNodes[index + -1].Node is not ConditionalAccessExpressionSyntax
+            )
+            {
+                currentGroup = new List<PrintedNode>();
+                groups.Add(currentGroup);
+            }
+
+            currentGroup.Add(printedNodes[index]);
+        }
+
+        return groups;
+    }
+
+    private static List<List<PrintedNode>> PrettierStyleGroupPrintedNodes(
+        List<PrintedNode> printedNodes
+    )
     {
         // We want to group the printed nodes in the following manner
         //
