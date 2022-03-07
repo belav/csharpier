@@ -1,6 +1,6 @@
 name: Deploy Playground
 on:
-  create:
+  push:
     tags:
       - '0.*'
       - '1.*'
