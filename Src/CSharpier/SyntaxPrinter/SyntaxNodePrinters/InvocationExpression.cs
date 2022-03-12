@@ -1,14 +1,5 @@
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
-// TODO review this still https://github.com/belav/csharpier-repos/pull/35/files
-
-// TODO why did this change?
-/*
-        var someValue = someOtherValue!.Thing!
-            .Where(o => someLongCondition__________________________)
-            .Where(o => someLongCondition__________________________);
- */
-
 internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
 // This is based on prettier/src/language-js/print/member-chain.js
@@ -257,7 +248,10 @@ internal static class InvocationExpression
                 if (
                     (
                         IsMemberish(printedNodes[index].Node)
-                        && IsMemberish(printedNodes[index + 1].Node)
+                        && (
+                            IsMemberish(printedNodes[index + 1].Node)
+                            || printedNodes[index + 1].Node is PostfixUnaryExpressionSyntax
+                        )
                     )
                     || printedNodes[index].Node is PostfixUnaryExpressionSyntax
                 )

@@ -82,11 +82,6 @@ internal static class RightHandSide
 
         return rightNode switch
         {
-            // TODO the ! at the end fucks with it too, this should be break after
-            // modelState = e.ControllerContext
-            // .Controller_________________________________________()
-            // .ViewData.ModelState____________________________________()!;
-
             InitializerExpressionSyntax => Layout.BasicConcatWithoutLine,
             BinaryExpressionSyntax
             or CastExpressionSyntax { Type: GenericNameSyntax }
