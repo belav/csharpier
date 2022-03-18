@@ -21,10 +21,11 @@ internal static class CommandLineFormatter
                 string directoryOrFile
             )
             {
-                var baseDirectoryPath =
-                    fileSystem.Path.GetExtension(directoryOrFile) == string.Empty
-                        ? directoryOrFile
-                        : fileSystem.Path.GetDirectoryName(directoryOrFile);
+                var isDirectory = fileSystem.Directory.Exists(directoryOrFile);
+
+                var baseDirectoryPath = isDirectory
+                    ? directoryOrFile
+                    : fileSystem.Path.GetDirectoryName(directoryOrFile);
 
                 var ignoreFile = await IgnoreFile.Create(
                     baseDirectoryPath,
