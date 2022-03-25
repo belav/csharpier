@@ -91,9 +91,12 @@ internal static class RightHandSide
             }
             or ImplicitObjectCreationExpressionSyntax { Parent: EqualsValueClauseSyntax }
             or InterpolatedStringExpressionSyntax
+            // TODO ditch fluid?
+            // or InvocationExpressionSyntax
             or IsPatternExpressionSyntax
             or LiteralExpressionSyntax
-            or MemberAccessExpressionSyntax
+            // TODO ditch fluid?
+            // or MemberAccessExpressionSyntax
             or StackAllocArrayCreationExpressionSyntax
             or QueryExpressionSyntax
               => Layout.BreakAfterOperator,

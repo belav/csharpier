@@ -55,6 +55,10 @@ class ClassName
             .Where(o => someLongCondition__________________________)
             .Where(o => someLongCondition__________________________);
 
+        var someValue = someOtherValue.Thing
+            .Where(o => someLongCondition__________________________)
+            .Where(o => someLongCondition__________________________);
+
         var someValue = someOtherValue
             .Where(o => someLongCondition__________________________)
             .Where(o => someLongCondition__________________________)

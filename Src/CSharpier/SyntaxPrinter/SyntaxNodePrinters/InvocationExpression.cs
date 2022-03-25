@@ -22,7 +22,9 @@ internal static class InvocationExpression
 
         FlattenAndPrintNodes(node, printedNodes);
 
-        var groups = GroupPrintedNodes(printedNodes);
+        var groups = printedNodes.Any(o => o.Node is InvocationExpressionSyntax)
+          ? GroupPrintedNodesPrettierStyle(printedNodes)
+          : GroupPrintedNodesOnLines(printedNodes);
 
         var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
 
@@ -133,7 +135,7 @@ internal static class InvocationExpression
         else if (
             expression is PostfixUnaryExpressionSyntax
             {
-                Operand: InvocationExpressionSyntax
+                Operand: InvocationExpressionSyntax or MemberAccessExpressionSyntax
             } postfixUnaryExpression
         )
         {
@@ -151,7 +153,53 @@ internal static class InvocationExpression
         }
     }
 
-    private static List<List<PrintedNode>> GroupPrintedNodes(List<PrintedNode> printedNodes)
+    // TODO maybe this should work more like prettier, where it makes groups in a way that they try to fill lines
+    // TODO also prettier doesn't seem to use fluid
+    private static List<List<PrintedNode>> GroupPrintedNodesOnLines(List<PrintedNode> printedNodes)
+    {
+        // We want to group the printed nodes in the following manner
+        //
+        //   a?.b.c!.d
+
+        // so that we can print it like this if it breaks
+        //   a
+        //     ?.b
+        //     .c!
+        //     .d
+
+        var groups = new List<List<PrintedNode>>();
+
+        var currentGroup = new List<PrintedNode> { printedNodes[0] };
+        groups.Add(currentGroup);
+
+        for (var index = 1; index < printedNodes.Count; index++)
+        {
+            if (printedNodes[index].Node is ConditionalAccessExpressionSyntax)
+            {
+                currentGroup = new List<PrintedNode>();
+                groups.Add(currentGroup);
+            }
+            else if (
+                printedNodes[index].Node
+                    is MemberAccessExpressionSyntax
+                        or MemberBindingExpressionSyntax
+                        or IdentifierNameSyntax
+                && printedNodes[index + -1].Node is not ConditionalAccessExpressionSyntax
+            )
+            {
+                currentGroup = new List<PrintedNode>();
+                groups.Add(currentGroup);
+            }
+
+            currentGroup.Add(printedNodes[index]);
+        }
+
+        return groups;
+    }
+
+    private static List<List<PrintedNode>> GroupPrintedNodesPrettierStyle(
+        List<PrintedNode> printedNodes
+    )
     {
         // We want to group the printed nodes in the following manner
         //
@@ -200,7 +248,10 @@ internal static class InvocationExpression
                 if (
                     (
                         IsMemberish(printedNodes[index].Node)
-                        && IsMemberish(printedNodes[index + 1].Node)
+                        && (
+                            IsMemberish(printedNodes[index + 1].Node)
+                            || printedNodes[index + 1].Node is PostfixUnaryExpressionSyntax
+                        )
                     )
                     || printedNodes[index].Node is PostfixUnaryExpressionSyntax
                 )
