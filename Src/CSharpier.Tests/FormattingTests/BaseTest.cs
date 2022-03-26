@@ -33,8 +33,9 @@ public class BaseTest
             "TestFiles",
             fileName + ".cst"
         );
-        var fileReaderResult =
-            FileReader.ReadFile(filePath, new FileSystem(), CancellationToken.None).Result;
+        var fileReaderResult = FileReader
+            .ReadFile(filePath, new FileSystem(), CancellationToken.None)
+            .Result;
 
         PreprocessorSymbols.Reset();
 
