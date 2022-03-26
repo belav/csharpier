@@ -318,6 +318,22 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public void Ignore_Should_Deal_With_Period()
+    {
+        var context = new TestContext();
+        var unformattedFilePath1 = @"Directory.WithPeriod\File1.cs";
+        context.WhenAFileExists(unformattedFilePath1, UnformattedClassContent);
+        context.WhenAFileExists("Directory.WithPeriod/.csharpierignore", "File1.cs");
+
+        var result = this.Format(context, directoryOrFilePaths: "Directory.WithPeriod");
+
+        result.Lines
+            .FirstOrDefault(o => o.StartsWith("Total files"))
+            .Should()
+            .Be("Total files: 0 ");
+    }
+    
+    [Test]
     public void Ignore_Should_Deal_With_Inconsistent_Slashes()
     {
         var context = new TestContext();
