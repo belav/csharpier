@@ -332,7 +332,7 @@ public class CommandLineFormatterTests
             .Should()
             .Be("Total files: 0 ");
     }
-    
+
     [Test]
     public void Ignore_Should_Deal_With_Inconsistent_Slashes()
     {
