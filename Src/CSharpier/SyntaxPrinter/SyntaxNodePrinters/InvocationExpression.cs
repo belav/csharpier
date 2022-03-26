@@ -328,7 +328,7 @@ internal static class InvocationExpression
         // without merging we get this
         this
             .CallMethod()
-            .CallMethod(); 
+            .CallMethod();
 
         // merging gives us this
         this.CallMethod()

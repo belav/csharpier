@@ -506,8 +506,8 @@ public class CommandLineFormatterTests
 
         var fakeConsole = new TestConsole();
         var testLogger = new ConsoleLogger(fakeConsole);
-        var exitCode =
-            CommandLineFormatter.Format(
+        var exitCode = CommandLineFormatter
+            .Format(
                 new CommandLineOptions
                 {
                     DirectoryOrFilePaths = directoryOrFilePaths,
@@ -520,7 +520,8 @@ public class CommandLineFormatterTests
                 fakeConsole,
                 testLogger,
                 CancellationToken.None
-            ).Result;
+            )
+            .Result;
 
         return new FormatResult(exitCode, fakeConsole.GetLines(), fakeConsole.GetErrorLines());
     }

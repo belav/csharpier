@@ -13,9 +13,9 @@ public static class HasMismatchedCliAndMsBuildVersions
             .EnumerateFiles(directory, "*.csproj", SearchOption.AllDirectories)
             .ToArray();
 
-        var versionOfDotnetTool = typeof(CommandLineFormatter).Assembly.GetName().Version!.ToString(
-            3
-        );
+        var versionOfDotnetTool = typeof(CommandLineFormatter).Assembly
+            .GetName()
+            .Version!.ToString(3);
 
         foreach (var pathToCsProj in csProjPaths)
         {
