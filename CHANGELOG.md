@@ -1,3 +1,16 @@
+# 0.16.0
+
+[diff](https://github.com/belav/csharpier/compare/0.15.1...0.16.0)
+
+- fix: ignore file detection when directory contains period [#634](https://github.com/belav/csharpier/pull/634)
+- Format switch statement consistently with other code. [#624](https://github.com/belav/csharpier/pull/624)
+- CodeFormatter should accept SyntaxTree [#621](https://github.com/belav/csharpier/issues/621)
+- Add support for netstandard 2.0 to CSharpier.Core [#619](https://github.com/belav/csharpier/pull/619)
+- Indent c style multiline comments correctly when they switch indentation. [#606](https://github.com/belav/csharpier/issues/606)
+- Member access should break [#600](https://github.com/belav/csharpier/issues/600)
+- SuppressNullableWarningExpression ( !. ) does not break consistenly [#596](https://github.com/belav/csharpier/issues/596)
+- Turn CSharpier.com into a proper website. [#505](https://github.com/belav/csharpier/issues/505)
+
 # 0.15.1
 
 [diff](https://github.com/belav/csharpier/compare/0.15.0...0.15.1)
