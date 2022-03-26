@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.2.4]
+- Support for 2022.1
+
 ## [1.2.3]
 - Change csharpier install path on windows to be consistent with other plugins
 
