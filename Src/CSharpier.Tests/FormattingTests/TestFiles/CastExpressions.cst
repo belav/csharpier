@@ -1,4 +1,21 @@
 class ClassName
 {
     private short x = (short)0;
+
+    void MethodName()
+    {
+        var someValue = (SomeType)someObject.CallMethod();
+        var someValue = (SomeType)(someObject.CallMethod());
+
+        var someValue = (SomeType)
+            someObject
+                .CallMethod____________________________()
+                .CallMethod____________________________();
+
+        var someValue = (SomeType)(
+            someObject
+                .CallMethod____________________________()
+                .CallMethod____________________________()
+        );
+    }
 }

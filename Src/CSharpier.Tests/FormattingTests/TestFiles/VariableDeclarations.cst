@@ -91,8 +91,8 @@ class ClassName
         var someLongValue_________________ = memberAccessExpression(elementAccessExpression)
             .theMember______________________________();
 
-        var someLongVariable_doesNotBreakArrayRank____________________________ =
-            (ArrayType[])CallMethod();
+        var someLongVariable_doesNotBreakArrayRank____________________________ = (ArrayType[])
+            CallMethod();
 
         var conditionalIndentation = someBoolean
             ? someLongValue____________________________________
@@ -124,9 +124,8 @@ class ClassName
             o => someLongValue___________________________________
         );
 
-        var variableDeclarator = (CastExpression)invocationExpression.SomeMethod(
-            someParameter______________________
-        );
+        var variableDeclarator = (CastExpression)
+            invocationExpression.SomeMethod(someParameter______________________);
 
         var someValue =
             (SomeLongGenericType<SomeType, SomeOtherType>)someLongValue___________________________;
