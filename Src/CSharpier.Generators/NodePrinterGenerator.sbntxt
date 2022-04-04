@@ -1,5 +1,6 @@
 using System;
 using CSharpier.DocTypes;
+using CSharpier.SyntaxPrinter;
 using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -38,7 +39,7 @@ namespace CSharpier.SyntaxPrinter
                         return {{ nodeType.PrinterName }}.Print({{ nodeType.VariableName }});
                     {{- end }}
                     default:
-                        throw new Exception("Can't handle " + syntaxNode.GetType().Name);
+                        return UnhandledNode.Print(syntaxNode);
                 }
             }
             finally

@@ -38,8 +38,8 @@ internal static class MembersWithForcedLines
             if (
                 member is MethodDeclarationSyntax methodDeclaration
                 && node is ClassDeclarationSyntax classDeclaration
-                && classDeclaration.Modifiers.Any(o => o.Kind() is SyntaxKind.AbstractKeyword)
-                && methodDeclaration.Modifiers.Any(o => o.Kind() is SyntaxKind.AbstractKeyword)
+                && classDeclaration.Modifiers.Any(o => o.IsKind(SyntaxKind.AbstractKeyword))
+                && methodDeclaration.Modifiers.Any(o => o.IsKind(SyntaxKind.AbstractKeyword))
             )
             {
                 blankLineIsForced = false;
@@ -62,7 +62,7 @@ internal static class MembersWithForcedLines
                     || (
                         member
                             .GetLeadingTrivia()
-                            .Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia || o.IsComment())
+                            .Any(o => o.IsKind(SyntaxKind.EndOfLineTrivia) || o.IsComment())
                     );
             }
 
@@ -87,9 +87,8 @@ internal static class MembersWithForcedLines
                     .GetLeadingTrivia()
                     .Any(
                         o =>
-                            o.Kind()
-                                is SyntaxKind.EndIfDirectiveTrivia
-                                    or SyntaxKind.EndRegionDirectiveTrivia
+                            o.IsKind(SyntaxKind.EndIfDirectiveTrivia)
+                            || o.IsKind(SyntaxKind.EndRegionDirectiveTrivia)
                     )
             )
             {

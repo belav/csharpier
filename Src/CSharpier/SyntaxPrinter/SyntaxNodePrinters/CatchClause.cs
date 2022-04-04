@@ -12,7 +12,7 @@ internal static class CatchClause
                         " ",
                         Token.Print(node.Declaration.OpenParenToken),
                         Node.Print(node.Declaration.Type),
-                        node.Declaration.Identifier.Kind() != SyntaxKind.None ? " " : Doc.Null,
+                        !node.Declaration.Identifier.IsKind(SyntaxKind.None) ? " " : Doc.Null,
                         Token.Print(node.Declaration.Identifier),
                         Token.Print(node.Declaration.CloseParenToken)
                     )

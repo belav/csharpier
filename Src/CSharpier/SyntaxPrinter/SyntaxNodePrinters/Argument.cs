@@ -10,7 +10,7 @@ internal static class Argument
             docs.Add(BaseExpressionColon.Print(node.NameColon));
         }
 
-        if (node.RefKindKeyword.Kind() != SyntaxKind.None)
+        if (!node.RefKindKeyword.IsKind(SyntaxKind.None))
         {
             docs.Add(Token.PrintWithSuffix(node.RefKindKeyword, " "));
         }

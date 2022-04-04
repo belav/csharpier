@@ -37,9 +37,10 @@ internal class PreprocessorSymbols
             return;
         }
 
-        var kind = trivia.Kind();
-
-        if (kind is SyntaxKind.IfDirectiveTrivia or SyntaxKind.ElifDirectiveTrivia)
+        if (
+            trivia.IsKind(SyntaxKind.IfDirectiveTrivia)
+            || trivia.IsKind(SyntaxKind.ElifDirectiveTrivia)
+        )
         {
             var ifDirectiveTriviaSyntax = trivia.GetStructure() as ConditionalDirectiveTriviaSyntax;
             AddSymbolSetForConditional(ifDirectiveTriviaSyntax!);

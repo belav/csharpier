@@ -14,7 +14,9 @@ namespace CSharpier.Tests;
 public class MissingTypeChecker
 {
     [Test]
-    // at this point this is just useful when a new version of c# comes out
+    [Ignore(
+        "this can be run to see what types are in a new language version that we don't handle yet"
+    )]
     public void Ensure_There_Are_No_Missing_Types()
     {
         var directory = new DirectoryInfo(Directory.GetCurrentDirectory());

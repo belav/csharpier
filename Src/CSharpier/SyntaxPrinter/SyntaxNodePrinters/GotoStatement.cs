@@ -9,7 +9,7 @@ internal static class GotoStatement
         return Doc.Concat(
             ExtraNewLines.Print(node),
             Token.Print(node.GotoKeyword),
-            node.CaseOrDefaultKeyword.Kind() != SyntaxKind.None ? " " : Doc.Null,
+            !node.CaseOrDefaultKeyword.IsKind(SyntaxKind.None) ? " " : Doc.Null,
             Token.Print(node.CaseOrDefaultKeyword),
             expression,
             Token.Print(node.SemicolonToken)

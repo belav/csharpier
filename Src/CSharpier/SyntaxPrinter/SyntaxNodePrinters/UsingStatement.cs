@@ -9,7 +9,7 @@ internal static class UsingStatement
             ExtraNewLines.Print(node),
             Doc.Group(
                 Token.Print(node.AwaitKeyword),
-                node.AwaitKeyword.Kind() != SyntaxKind.None ? " " : Doc.Null,
+                !node.AwaitKeyword.IsKind(SyntaxKind.None) ? " " : Doc.Null,
                 Token.Print(node.UsingKeyword),
                 " ",
                 Token.Print(node.OpenParenToken),
