@@ -245,6 +245,23 @@ internal static class InvocationExpression
         {
             for (; index + 1 < printedNodes.Count; ++index)
             {
+                /* this handles the special case where we want ?.Property on the same line
+                    someThing_______________________?.Property
+                        .CallMethod__________________()
+                        .CallMethod__________________();
+                 */
+                if (
+                    printedNodes[index].Node is ConditionalAccessExpressionSyntax
+                    && printedNodes[index + 1].Node
+                        is MemberBindingExpressionSyntax { Parent: MemberAccessExpressionSyntax }
+                )
+                {
+                    currentGroup.Add(printedNodes[index]);
+                    currentGroup.Add(printedNodes[index + 1]);
+                    index++;
+                    continue;
+                }
+
                 if (
                     (
                         IsMemberish(printedNodes[index].Node)

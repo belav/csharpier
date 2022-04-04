@@ -234,5 +234,13 @@ class ClassName
                 longParameter_______________________________________
             )
             .CallMethod__________________();
+
+        someThing_______________________.Property
+            .CallMethod__________________()
+            .CallMethod__________________();
+
+        someThing_______________________?.Property
+            .CallMethod__________________()
+            .CallMethod__________________();
     }
 }
