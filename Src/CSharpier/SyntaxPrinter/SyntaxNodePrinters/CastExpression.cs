@@ -4,13 +4,16 @@ internal static class CastExpression
 {
     public static Doc Print(CastExpressionSyntax node)
     {
-        // TODO review https://github.com/belav/csharpier-repos/pull/37/files for edge cases
-        return node.Expression is ParenthesizedExpressionSyntax parenthesizedExpression
+        return
+            node.Expression
+                is ParenthesizedExpressionSyntax
+                    or IdentifierNameSyntax
+                    or InvocationExpressionSyntax { Expression: IdentifierNameSyntax }
           ? Doc.Concat(
                 Token.Print(node.OpenParenToken),
                 Node.Print(node.Type),
                 Token.Print(node.CloseParenToken),
-                ParenthesizedExpression.Print(parenthesizedExpression)
+                Node.Print(node.Expression)
             )
           : Doc.Group(
                 Token.Print(node.OpenParenToken),

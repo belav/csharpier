@@ -17,5 +17,16 @@ class ClassName
                 .CallMethod____________________________()
                 .CallMethod____________________________()
         );
+
+        var someObject = (SomeType____________________)
+            arrayIndexerDoesNotBreak[typeof(SomeType____________________)];
+
+        return (T)CallMethod(
+            someArgument_______________________________,
+            someArgument_______________________________
+        );
+
+        var someValue____________________________ =
+            (SomeType)someIdentifier____________________________;
     }
 }
