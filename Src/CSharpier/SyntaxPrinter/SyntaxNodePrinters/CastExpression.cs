@@ -5,10 +5,13 @@ internal static class CastExpression
     public static Doc Print(CastExpressionSyntax node)
     {
         return
-            node.Expression
-                is ParenthesizedExpressionSyntax
-                    or IdentifierNameSyntax
-                    or InvocationExpressionSyntax { Expression: IdentifierNameSyntax }
+            node.Expression is ParenthesizedExpressionSyntax
+            || (
+                node.Expression
+                    is IdentifierNameSyntax
+                        or InvocationExpressionSyntax { Expression: IdentifierNameSyntax }
+                && node.Type is not GenericNameSyntax
+            )
           ? Doc.Concat(
                 Token.Print(node.OpenParenToken),
                 Node.Print(node.Type),

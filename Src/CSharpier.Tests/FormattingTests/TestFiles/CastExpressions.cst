@@ -26,6 +26,19 @@ class ClassName
             someArgument_______________________________
         );
 
+        return (SomeGenericType<T, T2>)
+            CallMethod(
+                someArgument_______________________________,
+                someArgument_______________________________
+            );
+
+        return (SomeGenericType<T, T2>)(
+            CallMethod(
+                someArgument_______________________________,
+                someArgument_______________________________
+            )
+        );
+
         var someValue____________________________ =
             (SomeType)someIdentifier____________________________;
     }
