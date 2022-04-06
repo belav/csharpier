@@ -124,9 +124,8 @@ class ClassName
             o => someLongValue___________________________________
         );
 
-        var variableDeclarator = (CastExpression)invocationExpression.SomeMethod(
-            someParameter______________________
-        );
+        var variableDeclarator = (CastExpression)
+            invocationExpression.SomeMethod(someParameter______________________);
 
         var someValue =
             (SomeLongGenericType<SomeType, SomeOtherType>)someLongValue___________________________;
