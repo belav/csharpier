@@ -1,4 +1,45 @@
 class ClassName
 {
     private short x = (short)0;
+
+    void MethodName()
+    {
+        var someValue = (SomeType)someObject.CallMethod();
+        var someValue = (SomeType)(someObject.CallMethod());
+
+        var someValue = (SomeType)
+            someObject
+                .CallMethod____________________________()
+                .CallMethod____________________________();
+
+        var someValue = (SomeType)(
+            someObject
+                .CallMethod____________________________()
+                .CallMethod____________________________()
+        );
+
+        var someObject = (SomeType____________________)
+            arrayIndexerDoesNotBreak[typeof(SomeType____________________)];
+
+        return (T)CallMethod(
+            someArgument_______________________________,
+            someArgument_______________________________
+        );
+
+        return (SomeGenericType<T, T2>)
+            CallMethod(
+                someArgument_______________________________,
+                someArgument_______________________________
+            );
+
+        return (SomeGenericType<T, T2>)(
+            CallMethod(
+                someArgument_______________________________,
+                someArgument_______________________________
+            )
+        );
+
+        var someValue____________________________ =
+            (SomeType)someIdentifier____________________________;
+    }
 }
