@@ -144,29 +144,29 @@ internal static class BinaryExpression
 
     private static int GetPrecedence(SyntaxToken syntaxToken)
     {
-        return syntaxToken.RawKind switch
+        return (SyntaxKind)syntaxToken.RawKind switch
         {
-            (int)SyntaxKind.QuestionQuestionToken => 1,
-            (int)SyntaxKind.BarBarToken => 2,
-            (int)SyntaxKind.AmpersandAmpersandToken => 3,
-            (int)SyntaxKind.BarToken => 4,
-            (int)SyntaxKind.CaretToken => 5,
-            (int)SyntaxKind.AmpersandToken => 6,
-            (int)SyntaxKind.ExclamationEqualsToken => 7,
-            (int)SyntaxKind.EqualsEqualsToken => 8,
-            (int)SyntaxKind.LessThanToken => 9,
-            (int)SyntaxKind.LessThanEqualsToken => 9,
-            (int)SyntaxKind.GreaterThanToken => 9,
-            (int)SyntaxKind.GreaterThanEqualsToken => 9,
-            (int)SyntaxKind.IsKeyword => 9,
-            (int)SyntaxKind.AsKeyword => 9,
-            (int)SyntaxKind.LessThanLessThanToken => 10,
-            (int)SyntaxKind.GreaterThanGreaterThanToken => 10,
-            (int)SyntaxKind.MinusToken => 11,
-            (int)SyntaxKind.PlusToken => 11,
-            (int)SyntaxKind.AsteriskToken => 12,
-            (int)SyntaxKind.SlashToken => 12,
-            (int)SyntaxKind.PercentToken => 12,
+            SyntaxKind.QuestionQuestionToken => 1,
+            SyntaxKind.BarBarToken => 2,
+            SyntaxKind.AmpersandAmpersandToken => 3,
+            SyntaxKind.BarToken => 4,
+            SyntaxKind.CaretToken => 5,
+            SyntaxKind.AmpersandToken => 6,
+            SyntaxKind.ExclamationEqualsToken => 7,
+            SyntaxKind.EqualsEqualsToken => 8,
+            SyntaxKind.LessThanToken => 9,
+            SyntaxKind.LessThanEqualsToken => 9,
+            SyntaxKind.GreaterThanToken => 9,
+            SyntaxKind.GreaterThanEqualsToken => 9,
+            SyntaxKind.IsKeyword => 9,
+            SyntaxKind.AsKeyword => 9,
+            SyntaxKind.LessThanLessThanToken => 10,
+            SyntaxKind.GreaterThanGreaterThanToken => 10,
+            SyntaxKind.MinusToken => 11,
+            SyntaxKind.PlusToken => 11,
+            SyntaxKind.AsteriskToken => 12,
+            SyntaxKind.SlashToken => 12,
+            SyntaxKind.PercentToken => 12,
             _ => throw new Exception($"No precedence defined for {syntaxToken}")
         };
     }
