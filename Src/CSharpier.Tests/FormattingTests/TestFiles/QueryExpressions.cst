@@ -16,6 +16,12 @@ class ClassName
 
         var whereQuery = from c in customers where c.Value == "true" select d;
 
+        var orderByQuery =
+            from c in customers
+            where c.Value == "true"
+            orderby c.FirstProperty, c.SecondProperty descending
+            select d;
+
         var complexWhere =
             from c in customers
             where
