@@ -75,7 +75,8 @@ export class CSharpierProcessProvider implements Disposable {
 
     private getCSharpierVersion = (directoryThatContainsFile: string): string => {
         let currentDirectory = directoryThatContainsFile;
-        while (true) {
+        let x = 0;
+        while (true && x < 20) {
             const dotnetToolsPath = path.join(currentDirectory, ".config/dotnet-tools.json");
             this.logger.debug(`Looking for ${dotnetToolsPath}`);
             if (fs.existsSync(dotnetToolsPath)) {
@@ -92,6 +93,7 @@ export class CSharpierProcessProvider implements Disposable {
                 break;
             }
             currentDirectory = nextDirectory;
+            x++;
         }
 
         this.logger.debug(
