@@ -16,6 +16,7 @@
   - Finds local version
   - Finds global version
   - Uses correct version - adding lines between methods is easy to test, 0.12 vs 0.14
+  - Unsaved document can be formatted (may just apply to vscode)
 - Action (does not apply to vscode)
   - is not shown on files that aren't c#
   - run on save works
