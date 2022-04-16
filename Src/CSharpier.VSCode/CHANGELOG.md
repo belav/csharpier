@@ -1,3 +1,6 @@
+## [1.2.3]
+- Proper fix for unsaved documents not formatting.
+
 ## [1.2.2]
 - Quick fix for unsaved documents not formatting.
 

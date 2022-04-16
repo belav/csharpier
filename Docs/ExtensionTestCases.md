@@ -15,7 +15,7 @@
   - Edit warms
   - Finds local version
   - Finds global version
-  - Uses correct version - adding lines between methods is easy to test, 0.12 vs 0.14
+  - Uses correct version - use 0.12.0, ensure that it adds blank lines between methods
   - Unsaved document can be formatted (may just apply to vscode)
 - Action (does not apply to vscode)
   - is not shown on files that aren't c#
