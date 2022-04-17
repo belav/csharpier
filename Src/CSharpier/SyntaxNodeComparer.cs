@@ -202,8 +202,12 @@ internal partial class SyntaxNodeComparer
         if (originalToken.Text.Replace("\r", "") != formattedToken.Text.Replace("\r", ""))
         {
             return NotEqual(
-                originalToken.IsKind(SyntaxKind.None) ? originalNode?.Span : originalToken.Span,
-                formattedToken.IsKind(SyntaxKind.None) ? formattedNode?.Span : formattedToken.Span
+                originalToken.RawSyntaxKind() == SyntaxKind.None
+                  ? originalNode?.Span
+                  : originalToken.Span,
+                formattedToken.RawSyntaxKind() == SyntaxKind.None
+                  ? formattedNode?.Span
+                  : formattedToken.Span
             );
         }
 
@@ -220,7 +224,7 @@ internal partial class SyntaxNodeComparer
 
     private CompareResult Compare(SyntaxTrivia originalTrivia, SyntaxTrivia formattedTrivia)
     {
-        if (originalTrivia.IsKind(SyntaxKind.DisabledTextTrivia))
+        if (originalTrivia.RawSyntaxKind() is SyntaxKind.DisabledTextTrivia)
         {
             return DisabledTextComparer.IsCodeBasicallyEqual(
                 originalTrivia.ToString(),

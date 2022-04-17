@@ -69,7 +69,7 @@ internal static class BinaryExpression
                 && binaryExpressionSyntax.Left is not IsPatternExpressionSyntax;
 
             // nested ?? have the next level on the right side, everything else has it on the left
-            var binaryOnTheRight = binaryExpressionSyntax.IsKind(SyntaxKind.CoalesceExpression);
+            var binaryOnTheRight = binaryExpressionSyntax.Kind() == SyntaxKind.CoalesceExpression;
             if (binaryOnTheRight)
             {
                 docs.Add(
@@ -144,7 +144,7 @@ internal static class BinaryExpression
 
     private static int GetPrecedence(SyntaxToken syntaxToken)
     {
-        return (SyntaxKind)syntaxToken.RawKind switch
+        return syntaxToken.RawSyntaxKind() switch
         {
             SyntaxKind.QuestionQuestionToken => 1,
             SyntaxKind.BarBarToken => 2,

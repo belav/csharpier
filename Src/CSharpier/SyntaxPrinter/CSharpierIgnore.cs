@@ -21,7 +21,7 @@ internal static class CSharpierIgnore
             .GetLeadingTrivia()
             .Any(
                 o =>
-                    o.IsKind(SyntaxKind.SingleLineCommentTrivia)
+                    o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
                     && o.ToString().Equals("// csharpier-ignore")
             );
     }

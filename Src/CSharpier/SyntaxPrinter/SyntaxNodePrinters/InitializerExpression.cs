@@ -9,7 +9,7 @@ internal static class InitializerExpression
             : Doc.Null;
 
         var alwaysBreak =
-            node.IsKind(SyntaxKind.ObjectInitializerExpression) && node.Expressions.Count >= 3;
+            node.Kind() == SyntaxKind.ObjectInitializerExpression && node.Expressions.Count >= 3;
 
         var result = Doc.Concat(
             separator,

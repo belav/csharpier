@@ -11,12 +11,12 @@ internal static class ExtraNewLines
     {
         foreach (var leadingTrivia in syntaxTriviaList)
         {
-            if (leadingTrivia.IsKind(SyntaxKind.EndOfLineTrivia))
+            if (leadingTrivia.RawSyntaxKind() == SyntaxKind.EndOfLineTrivia)
             {
                 // ensures we only print a single new line
                 return Doc.HardLine;
             }
-            if (!leadingTrivia.IsKind(SyntaxKind.WhitespaceTrivia))
+            if (leadingTrivia.RawSyntaxKind() != SyntaxKind.WhitespaceTrivia)
             {
                 return Doc.Null;
             }
