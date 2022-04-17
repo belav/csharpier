@@ -16,7 +16,7 @@ internal static class CommonForEachStatement
             ExtraNewLines.Print(node),
             Doc.Group(
                 Token.Print(node.AwaitKeyword),
-                !node.AwaitKeyword.IsKind(SyntaxKind.None) ? " " : Doc.Null,
+                node.AwaitKeyword.RawSyntaxKind() is not SyntaxKind.None ? " " : Doc.Null,
                 Token.Print(node.ForEachKeyword),
                 " ",
                 Token.Print(node.OpenParenToken),

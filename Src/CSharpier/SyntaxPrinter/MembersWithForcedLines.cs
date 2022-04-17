@@ -87,8 +87,9 @@ internal static class MembersWithForcedLines
                     .GetLeadingTrivia()
                     .Any(
                         o =>
-                            o.IsKind(SyntaxKind.EndIfDirectiveTrivia)
-                            || o.IsKind(SyntaxKind.EndRegionDirectiveTrivia)
+                            o.RawSyntaxKind()
+                                is SyntaxKind.EndIfDirectiveTrivia
+                                    or SyntaxKind.EndRegionDirectiveTrivia
                     )
             )
             {

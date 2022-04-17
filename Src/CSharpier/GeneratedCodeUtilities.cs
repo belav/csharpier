@@ -59,7 +59,8 @@ internal static class GeneratedCodeUtilities
 
     private static bool IsComment(SyntaxTrivia trivia)
     {
-        return trivia.IsKind(SyntaxKind.SingleLineCommentTrivia)
-            || trivia.IsKind(SyntaxKind.MultiLineCommentTrivia);
+        return trivia.RawSyntaxKind()
+            is SyntaxKind.SingleLineCommentTrivia
+                or SyntaxKind.MultiLineCommentTrivia;
     }
 }

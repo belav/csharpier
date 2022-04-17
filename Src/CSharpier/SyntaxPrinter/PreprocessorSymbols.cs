@@ -38,8 +38,7 @@ internal class PreprocessorSymbols
         }
 
         if (
-            trivia.IsKind(SyntaxKind.IfDirectiveTrivia)
-            || trivia.IsKind(SyntaxKind.ElifDirectiveTrivia)
+            trivia.RawSyntaxKind() is SyntaxKind.IfDirectiveTrivia or SyntaxKind.ElifDirectiveTrivia
         )
         {
             var ifDirectiveTriviaSyntax = trivia.GetStructure() as ConditionalDirectiveTriviaSyntax;

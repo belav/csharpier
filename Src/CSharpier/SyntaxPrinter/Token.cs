@@ -132,13 +132,13 @@ internal static class Token
         for (var x = 0; x < leadingTrivia.Count; x++)
         {
             var trivia = leadingTrivia[x];
-            var kind = trivia.RawKind;
+            var kind = trivia.RawSyntaxKind();
 
-            if (printNewLines && kind == (int)SyntaxKind.EndOfLineTrivia)
+            if (printNewLines && kind is SyntaxKind.EndOfLineTrivia)
             {
                 docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
             }
-            if (kind != (int)SyntaxKind.EndOfLineTrivia && kind != (int)SyntaxKind.WhitespaceTrivia)
+            if (kind is not (SyntaxKind.EndOfLineTrivia or SyntaxKind.WhitespaceTrivia))
             {
                 printNewLines = true;
             }
@@ -162,7 +162,7 @@ internal static class Token
             {
                 AddLeadingComment(CommentType.SingleLine);
                 docs.Add(
-                    kind == (int)SyntaxKind.SingleLineDocumentationCommentTrivia
+                    kind is SyntaxKind.SingleLineDocumentationCommentTrivia
                       ? Doc.HardLineSkipBreakIfFirstInGroup
                       : Doc.Null
                 );
@@ -171,7 +171,7 @@ internal static class Token
             {
                 AddLeadingComment(CommentType.MultiLine);
             }
-            else if (kind == (int)SyntaxKind.DisabledTextTrivia)
+            else if (kind == SyntaxKind.DisabledTextTrivia)
             {
                 docs.Add(Doc.Trim, trivia.ToString());
             }
@@ -208,33 +208,31 @@ internal static class Token
         return docs.Count > 0 ? Doc.Concat(docs) : Doc.Null;
     }
 
-    private static bool IsSingleLineComment(int kind) =>
+    private static bool IsSingleLineComment(SyntaxKind kind) =>
         kind
-            is (int)SyntaxKind.SingleLineDocumentationCommentTrivia
-                or (int)SyntaxKind.SingleLineCommentTrivia;
+            is SyntaxKind.SingleLineDocumentationCommentTrivia
+                or SyntaxKind.SingleLineCommentTrivia;
 
-    private static bool IsMultiLineComment(int kind) =>
+    private static bool IsMultiLineComment(SyntaxKind kind) =>
+        kind is SyntaxKind.MultiLineCommentTrivia or SyntaxKind.MultiLineDocumentationCommentTrivia;
+
+    private static bool IsDirective(SyntaxKind kind) =>
         kind
-            is (int)SyntaxKind.MultiLineCommentTrivia
-                or (int)SyntaxKind.MultiLineDocumentationCommentTrivia;
+            is SyntaxKind.IfDirectiveTrivia
+                or SyntaxKind.ElseDirectiveTrivia
+                or SyntaxKind.ElifDirectiveTrivia
+                or SyntaxKind.EndIfDirectiveTrivia
+                or SyntaxKind.LineDirectiveTrivia
+                or SyntaxKind.ErrorDirectiveTrivia
+                or SyntaxKind.WarningDirectiveTrivia
+                or SyntaxKind.PragmaWarningDirectiveTrivia
+                or SyntaxKind.PragmaChecksumDirectiveTrivia
+                or SyntaxKind.DefineDirectiveTrivia
+                or SyntaxKind.UndefDirectiveTrivia
+                or SyntaxKind.NullableDirectiveTrivia;
 
-    private static bool IsDirective(int kind) =>
-        kind
-            is (int)SyntaxKind.IfDirectiveTrivia
-                or (int)SyntaxKind.ElseDirectiveTrivia
-                or (int)SyntaxKind.ElifDirectiveTrivia
-                or (int)SyntaxKind.EndIfDirectiveTrivia
-                or (int)SyntaxKind.LineDirectiveTrivia
-                or (int)SyntaxKind.ErrorDirectiveTrivia
-                or (int)SyntaxKind.WarningDirectiveTrivia
-                or (int)SyntaxKind.PragmaWarningDirectiveTrivia
-                or (int)SyntaxKind.PragmaChecksumDirectiveTrivia
-                or (int)SyntaxKind.DefineDirectiveTrivia
-                or (int)SyntaxKind.UndefDirectiveTrivia
-                or (int)SyntaxKind.NullableDirectiveTrivia;
-
-    private static bool IsRegion(int kind) =>
-        kind is (int)SyntaxKind.RegionDirectiveTrivia or (int)SyntaxKind.EndRegionDirectiveTrivia;
+    private static bool IsRegion(SyntaxKind kind) =>
+        kind is SyntaxKind.RegionDirectiveTrivia or SyntaxKind.EndRegionDirectiveTrivia;
 
     private static Doc PrintTrailingTrivia(SyntaxToken node)
     {
@@ -263,11 +261,13 @@ internal static class Token
     {
         return syntaxToken.LeadingTrivia.Any(
                 o =>
-                    !(o.IsKind(SyntaxKind.WhitespaceTrivia) || o.IsKind(SyntaxKind.EndOfLineTrivia))
+                    o.RawSyntaxKind()
+                        is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
             )
             || syntaxToken.TrailingTrivia.Any(
                 o =>
-                    !(o.IsKind(SyntaxKind.WhitespaceTrivia) || o.IsKind(SyntaxKind.EndOfLineTrivia))
+                    o.RawSyntaxKind()
+                        is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
             );
     }
 }

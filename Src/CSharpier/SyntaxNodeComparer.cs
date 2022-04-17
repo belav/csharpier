@@ -270,9 +270,9 @@ internal partial class SyntaxNodeComparer
                 result = list[next];
                 next++;
             } while (
-                result.IsKind(SyntaxKind.EndOfLineTrivia)
-                || result.IsKind(SyntaxKind.WhitespaceTrivia)
+                result.RawSyntaxKind() is SyntaxKind.EndOfLineTrivia or SyntaxKind.WhitespaceTrivia
             );
+            ;
 
             return result;
         }

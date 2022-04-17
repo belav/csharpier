@@ -5,7 +5,7 @@ internal static class PostfixUnaryExpression
     public static Doc Print(PostfixUnaryExpressionSyntax node)
     {
         if (
-            node.IsKind(SyntaxKind.SuppressNullableWarningExpression)
+            node.Kind() is SyntaxKind.SuppressNullableWarningExpression
             && node.Operand is InvocationExpressionSyntax
         )
         {

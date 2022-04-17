@@ -37,7 +37,7 @@ internal static class InitializerExpression
                     or ImplicitArrayCreationExpressionSyntax
                     or ImplicitObjectCreationExpressionSyntax
                 )
-            && !node.IsKind(SyntaxKind.WithInitializerExpression)
+            && node.Kind() is not SyntaxKind.WithInitializerExpression
           ? Doc.Group(result)
           : result;
     }

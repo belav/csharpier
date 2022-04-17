@@ -61,7 +61,7 @@ internal static class BinaryExpression
 
             // This group ensures that something like == 0 does not end up on its own line
             var shouldGroup =
-                !binaryExpressionSyntax.IsKind(binaryExpressionSyntax.Parent!.Kind())
+                binaryExpressionSyntax.Kind() != binaryExpressionSyntax.Parent!.Kind()
                 && GetPrecedence(binaryExpressionSyntax)
                     != GetPrecedence(binaryExpressionSyntax.Parent!)
                 && binaryExpressionSyntax.Left.GetType() != binaryExpressionSyntax.GetType()

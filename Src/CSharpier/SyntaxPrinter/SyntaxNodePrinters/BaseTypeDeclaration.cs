@@ -116,11 +116,12 @@ internal static class BaseTypeDeclaration
                 Token.Print(node.CloseBraceToken)
             );
         }
-        else if (!node.OpenBraceToken.IsKind(SyntaxKind.None))
+        else if (node.OpenBraceToken.RawSyntaxKind() != SyntaxKind.None)
         {
             Doc separator = node.CloseBraceToken.LeadingTrivia.Any(
                 o =>
-                    !(o.IsKind(SyntaxKind.WhitespaceTrivia) || o.IsKind(SyntaxKind.EndOfLineTrivia))
+                    o.RawSyntaxKind()
+                        is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
             )
               ? Doc.Line
               : " ";
