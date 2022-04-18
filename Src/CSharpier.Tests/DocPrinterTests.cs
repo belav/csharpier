@@ -728,7 +728,7 @@ true || false"
     public void Scratch()
     {
         var doc = "";
-        PrintedDocShouldBe(doc, "", useTabs: true);
+        PrintedDocShouldBe(doc, "");
     }
 
     private static void PrintedDocShouldBe(
