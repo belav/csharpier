@@ -67,7 +67,7 @@ export class CSharpierProcessProvider implements Disposable {
 
         if (!version || !this.csharpierProcessesByVersion[version]) {
             // this shouldn't really happen, but just in case
-            this.logger.debug("returning NullCSharpierProcess");
+            this.logger.debug(`returning NullCSharpierProcess because there was no csharpierProcessesByVersion for ${version}`);
             return new NullCSharpierProcess();
         }
 
@@ -94,8 +94,8 @@ export class CSharpierProcessProvider implements Disposable {
 
     private getCSharpierVersion = (directoryThatContainsFile: string): string => {
         let currentDirectory = directoryThatContainsFile;
-        let x = 0;
-        while (true && x < 30) {
+        let loopNumber = 0;
+        while (loopNumber < 30) {
             const dotnetToolsPath = path.join(currentDirectory, ".config/dotnet-tools.json");
             this.logger.debug(`Looking for ${dotnetToolsPath}`);
             if (fs.existsSync(dotnetToolsPath)) {
@@ -112,7 +112,7 @@ export class CSharpierProcessProvider implements Disposable {
                 break;
             }
             currentDirectory = nextDirectory;
-            x++;
+            loopNumber++;
         }
 
         this.logger.debug(
@@ -158,6 +158,7 @@ export class CSharpierProcessProvider implements Disposable {
     private setupCSharpierProcess = (directory: string, version: string) => {
         try {
             if (!semver.valid(version)) {
+                this.logger.debug(`returning NullCSharpierProcess because version is not a valid version number.`);
                 return new NullCSharpierProcess();
             }
 
@@ -179,6 +180,7 @@ export class CSharpierProcessProvider implements Disposable {
             }
         } catch (ex: any) {
             this.logger.error(ex.output.toString());
+            this.logger.debug(`returning NullCSharpierProcess because of the previous error when trying to set up a csharpier process`);
             return new NullCSharpierProcess();
         }
     };
