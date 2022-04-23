@@ -93,11 +93,13 @@ internal class Indenter
             {
                 types.Add(IndentType.Instance);
             }
+
+            types.Add(nextIndentType);
         }
         else
         {
             var placeTab = false;
-            types = new List<IIndentType>(indent.TypesForTabs);
+            types = new List<IIndentType>(indent.TypesForTabs) { nextIndentType };
             for (var x = types.Count - 1; x >= 0; x--)
             {
                 if (types[x] == IndentType.Instance)
@@ -110,9 +112,18 @@ internal class Indenter
                     types[x] = IndentType.Instance;
                 }
             }
-        }
 
-        types.Add(nextIndentType);
+            // merge back to back aligns into tabs
+            for (var x = 0; x < types.Count - 1; x++)
+            {
+                if (types[x] is AlignType && types[x + 1] is AlignType)
+                {
+                    types[x] = IndentType.Instance;
+                    types.RemoveAt(x + 1);
+                    x -= 1;
+                }
+            }
+        }
 
         var length = 0;
         var value = new StringBuilder();
