@@ -4,12 +4,12 @@ internal static class GotoStatement
 {
     public static Doc Print(GotoStatementSyntax node)
     {
-        Doc expression =
+        var expression =
             node.Expression != null ? Doc.Concat(" ", Node.Print(node.Expression)) : string.Empty;
         return Doc.Concat(
             ExtraNewLines.Print(node),
             Token.Print(node.GotoKeyword),
-            node.CaseOrDefaultKeyword.Kind() != SyntaxKind.None ? " " : Doc.Null,
+            node.CaseOrDefaultKeyword.RawSyntaxKind() != SyntaxKind.None ? " " : Doc.Null,
             Token.Print(node.CaseOrDefaultKeyword),
             expression,
             Token.Print(node.SemicolonToken)

@@ -144,7 +144,7 @@ internal static class BinaryExpression
 
     private static int GetPrecedence(SyntaxToken syntaxToken)
     {
-        return syntaxToken.Kind() switch
+        return syntaxToken.RawSyntaxKind() switch
         {
             SyntaxKind.QuestionQuestionToken => 1,
             SyntaxKind.BarBarToken => 2,

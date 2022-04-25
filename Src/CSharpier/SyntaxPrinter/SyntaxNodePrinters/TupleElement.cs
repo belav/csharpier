@@ -6,7 +6,7 @@ internal static class TupleElement
     {
         return Doc.Concat(
             Node.Print(node.Type),
-            node.Identifier.Kind() != SyntaxKind.None
+            node.Identifier.RawSyntaxKind() != SyntaxKind.None
               ? Doc.Concat(" ", Token.Print(node.Identifier))
               : Doc.Null
         );

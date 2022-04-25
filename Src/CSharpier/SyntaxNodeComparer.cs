@@ -202,8 +202,12 @@ internal partial class SyntaxNodeComparer
         if (originalToken.Text.Replace("\r", "") != formattedToken.Text.Replace("\r", ""))
         {
             return NotEqual(
-                originalToken.Kind() == SyntaxKind.None ? originalNode?.Span : originalToken.Span,
-                formattedToken.Kind() == SyntaxKind.None ? formattedNode?.Span : formattedToken.Span
+                originalToken.RawSyntaxKind() == SyntaxKind.None
+                  ? originalNode?.Span
+                  : originalToken.Span,
+                formattedToken.RawSyntaxKind() == SyntaxKind.None
+                  ? formattedNode?.Span
+                  : formattedToken.Span
             );
         }
 
@@ -220,7 +224,7 @@ internal partial class SyntaxNodeComparer
 
     private CompareResult Compare(SyntaxTrivia originalTrivia, SyntaxTrivia formattedTrivia)
     {
-        if (originalTrivia.Kind() is SyntaxKind.DisabledTextTrivia)
+        if (originalTrivia.RawSyntaxKind() is SyntaxKind.DisabledTextTrivia)
         {
             return DisabledTextComparer.IsCodeBasicallyEqual(
                 originalTrivia.ToString(),
@@ -269,7 +273,9 @@ internal partial class SyntaxNodeComparer
 
                 result = list[next];
                 next++;
-            } while (result.Kind() is SyntaxKind.EndOfLineTrivia or SyntaxKind.WhitespaceTrivia);
+            } while (
+                result.RawSyntaxKind() is SyntaxKind.EndOfLineTrivia or SyntaxKind.WhitespaceTrivia
+            );
 
             return result;
         }
