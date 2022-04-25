@@ -4,12 +4,8 @@ internal static class UnhandledNode
 {
     public static Doc Print(SyntaxNode node)
     {
-        if (node == null)
-        {
-            return Doc.Null;
-        }
 #if DEBUG
-        return node.GetType().FullName;
+        return node.GetType().FullName ?? string.Empty;
 #else
         return node.ToString();
 #endif
