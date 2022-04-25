@@ -1,0 +1,143 @@
+public class ClassName
+{
+	public string Value = true ? "yes" : "no";
+
+	public string Value = someLongCondition______________________
+		? "someLongValue"
+		: "someOtherLongValue";
+
+	public bool CloseParenIndents = someCondition
+		? this.SomeMethodCallThatIsLonger____________________(
+				someLongValue,
+				someLongValue,
+				someLongValue
+		  )
+		: this.SomeMethodCallThatIsLonger____________________(
+				someLongValue,
+				someLongValue,
+				someLongValue
+		  );
+
+	void Method()
+	{
+		var nestedConditions = someCondition
+			? someOtherCondition______________
+				? someValue_______________________
+				: someOtherValue___________________
+			: someThirdCondition______________
+				? someThirdValue_________________
+				: someOtherThirdValue_______________________;
+
+		var value =
+			someLongValue__________________________________
+			&& someOtherValue__________________________________
+				? trueValue
+				: falseValue;
+
+		CallMethod(
+			someValue,
+			someCondition
+			  ? trueValue________________________________
+			  : falseValue_______________________________,
+			someCondition_____________________________________
+				&& someOtherCondition__________________________________
+			  ? trueValue________________________________
+			  : falseValue_______________________________,
+			someCondition_____________________________________
+				&& someOtherCondition__________________________________
+		);
+
+		var fileContents = File.ReadAllText(
+			file,
+			// leading here should break parameters and GetEncoding should still group
+			encoding
+			  ? File.GetEncoding________________________________(1252)
+			  : encoding_____________________,
+			cancellationToken
+		);
+
+		var fileContents = File.ReadAllText(
+			file,
+			// leading here should break parameters
+			encoding ? GetEncoding(1252) : encoding,
+			cancellationToken
+		);
+
+		return someLongCondition___________________________
+		  ? trueValue________________________________
+		  : falseValue________________________________;
+
+		return
+			someLongCondition____________________________________
+			&& someOtherLongCondition____________________________________
+		  ? trueValue________________________________
+		  : falseValue_______________________________;
+
+		return
+			someLongCondition____________________________________
+			is SomeLongType___________________________
+		  ? trueValue________________________________
+		  : falseValue_______________________________;
+
+		return (
+			someLongCondition____________________________________
+			&& someOtherLongCondition____________________________________
+		)
+		  ? trueValue________________________________
+		  : falseValue_______________________________;
+
+		return
+			someLongCondition____________________________________
+				== someThingElse______________________
+			&& someOtherLongCondition____________________________________
+		  ? trueValue________________________________
+		  : falseValue_______________________________;
+
+		return CallSomeMethod(
+			someLongCondition____________________________________,
+			someOtherLongCondition____________________________________
+		)
+		  ? trueValue________________________________
+		  : falseValue_______________________________;
+
+		return firstCondition
+		  ? firstValue
+		  : secondCondition
+			  ? secondValue
+			  : thirdCondition
+				  ? thirdValue
+				  : fourthValue;
+
+		return firstCondition
+		  ? secondCondition
+			  ? firstValue
+			  : secondValue
+		  : thirdCondition
+			  ? thirdValue
+			  : fourthValue;
+
+		return a ? b : c;
+
+		return a
+		  ? b
+		  : c
+			  ? d
+			  : e;
+
+		var invocationIndent = someCondition
+			? SomeObject
+			  .CallLongMethod__________________________________________()
+			  .CallLongMethod__________________________________________()
+			: SomeObject
+			  .CallLongMethod__________________________________________()
+			  .CallLongMethod__________________________________________();
+
+		CallMethod(
+			someCondition
+			  ? SomeValue
+			  : SomeObject
+				.CallMethod__________________________________()
+				.CallMethod__________________________________()
+		);
+	}
+}
