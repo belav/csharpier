@@ -68,11 +68,7 @@ namespace CSharpier
             {"
         );
 
-        var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly
-            .GetTypes()
-            .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o))
-            .OrderBy(o => o.Name)
-            .ToList();
+        var syntaxNodeTypes = ValidNodeTypes.Get();
 
         foreach (var syntaxNodeType in syntaxNodeTypes)
         {
