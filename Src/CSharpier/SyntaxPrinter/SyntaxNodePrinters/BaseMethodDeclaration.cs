@@ -158,11 +158,8 @@ internal static class BaseMethodDeclaration
                 declarationGroup.Add(
                     Doc.Group(
                         Doc.Indent(Doc.IfBreak(" ", Doc.Line, parameterGroupId)),
-                        Doc.IfBreak(
-                            Doc.Align(2, colonToken),
-                            Doc.Indent(colonToken),
-                            parameterGroupId
-                        ),
+                        // TODO this never seems to be hit? meaning this whole constructor initializer block
+                        Doc.Indent(colonToken),
                         Token.Print(constructorInitializer.ThisOrBaseKeyword),
                         Doc.IfBreak(argumentList, Doc.Indent(argumentList), parameterGroupId)
                     )

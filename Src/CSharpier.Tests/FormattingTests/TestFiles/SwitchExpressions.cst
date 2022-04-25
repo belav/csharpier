@@ -47,14 +47,14 @@ class ClassName
                     + "moreStrings"
                     + "andMoreStrings_________________________________________",
             SomeOtherObject
-                or AnotherObject
-                or OrEvenSomeOtherObject_________________
+            or AnotherObject
+            or OrEvenSomeOtherObject_________________
                 => CallSomeMethod(someValue),
             SomeOtherObject { SomeProperty: SomeOtherProject }
-                or AnotherObject
+            or AnotherObject
                 => CallSomeMethod(someValue),
             AnotherObject
-                or SomeOtherObject { SomeProperty: SomeOtherProject }
+            or SomeOtherObject { SomeProperty: SomeOtherProject }
                 => CallSomeMethod(someValue),
             SomeOtherObject { Property: true } => CallSomeMethod(someValue),
             SomeOtherObject { SomeProperty: YetAnotherObject { Property: true } }
@@ -85,7 +85,7 @@ class ClassName
                     ContainingType: { IsTupleType: true },
                     TupleElementIndex: var ui
                 } updatedField
-                )
+            )
                 => originalField.Type.Equals(updatedField.Type)
         };
     }

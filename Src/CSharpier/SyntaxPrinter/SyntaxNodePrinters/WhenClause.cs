@@ -4,7 +4,7 @@ internal static class WhenClause
 {
     public static Doc Print(WhenClauseSyntax node)
     {
-        var content = new Doc[]
+        var content = new[]
         {
             Doc.Line,
             Token.PrintWithSuffix(node.WhenKeyword, " "),
@@ -12,9 +12,7 @@ internal static class WhenClause
         };
 
         return Doc.Group(
-            node.Parent is CasePatternSwitchLabelSyntax
-              ? Doc.Align(6, content)
-              : Doc.Indent(content)
+            node.Parent is CasePatternSwitchLabelSyntax ? Doc.Concat(content) : Doc.Indent(content)
         );
     }
 }
