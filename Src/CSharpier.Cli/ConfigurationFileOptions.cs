@@ -9,6 +9,8 @@ namespace CSharpier.Cli;
 public class ConfigurationFileOptions
 {
     public int PrintWidth { get; init; } = 100;
+    public int TabWidth { get; init; } = 4;
+    public bool UseTabs { get; init; }
     public List<string>? PreprocessorSymbolSets { get; init; }
 
     private static readonly string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
@@ -43,8 +45,8 @@ public class ConfigurationFileOptions
 
         return new PrinterOptions
         {
-            TabWidth = 4,
-            UseTabs = false,
+            TabWidth = configurationFileOptions.TabWidth,
+            UseTabs = configurationFileOptions.UseTabs,
             Width = configurationFileOptions.PrintWidth,
             EndOfLine = EndOfLine.Auto,
             PreprocessorSymbolSets = preprocessorSymbolSets,

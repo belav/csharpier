@@ -10,14 +10,6 @@ namespace CSharpier.Tests;
 [Parallelizable(ParallelScope.Fixtures)]
 public class ConfigurationFileOptionsTests
 {
-    private MockFileSystem fileSystem;
-
-    [SetUp]
-    public void SetUp()
-    {
-        this.fileSystem = new MockFileSystem();
-    }
-
     [Test]
     public void Should_Return_Default_Options_With_Empty_Json()
     {
@@ -142,6 +134,28 @@ preprocessorSymbolSets:
     }
 
     [Test]
+    public void Should_Return_TabWidth_With_Json()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("c:/test/.csharpierrc", "{ \"tabWidth\": 10 }");
+
+        var result = context.CreateConfigurationOptions("c:/test");
+
+        result.TabWidth.Should().Be(10);
+    }
+
+    [Test]
+    public void Should_Return_UseTabs_With_Json()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("c:/test/.csharpierrc", "{ \"useTabs\": true }");
+
+        var result = context.CreateConfigurationOptions("c:/test");
+
+        result.UseTabs.Should().BeTrue();
+    }
+
+    [Test]
     public void Should_Return_PrintWidth_With_Yaml()
     {
         var context = new TestContext();
@@ -152,9 +166,33 @@ preprocessorSymbolSets:
         result.PrintWidth.Should().Be(10);
     }
 
+    [Test]
+    public void Should_Return_TabWidth_With_Yaml()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("c:/test/.csharpierrc", "tabWidth: 10");
+
+        var result = context.CreateConfigurationOptions("c:/test");
+
+        result.TabWidth.Should().Be(10);
+    }
+
+    [Test]
+    public void Should_Return_UseTabs_With_Yaml()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("c:/test/.csharpierrc", "useTabs: true");
+
+        var result = context.CreateConfigurationOptions("c:/test");
+
+        result.UseTabs.Should().BeTrue();
+    }
+
     private static void ShouldHaveDefaultOptions(ConfigurationFileOptions configurationFileOptions)
     {
         configurationFileOptions.PrintWidth.Should().Be(100);
+        configurationFileOptions.TabWidth.Should().Be(4);
+        configurationFileOptions.UseTabs.Should().BeFalse();
         configurationFileOptions.PreprocessorSymbolSets.Should().BeNull();
     }
 

@@ -671,6 +671,40 @@ true || false"
         PrintedDocShouldBe(doc, $"+ + 1{NewLine}\t\t  2", useTabs: true);
     }
 
+    [Test]
+    public void Align_Should_Merge()
+    {
+        var doc = Doc.Group(
+            Doc.Concat("return firstCondition"),
+            Doc.Align(
+                2,
+                Doc.HardLine,
+                Doc.Concat("? "),
+                Doc.Align(2, "firstValue"),
+                Doc.HardLine,
+                Doc.Concat(": "),
+                Doc.Align(
+                    2,
+                    "secondCondition",
+                    Doc.Align(
+                        2,
+                        Doc.Line,
+                        Doc.Concat("? "),
+                        Doc.Align(2, "secondValue"),
+                        Doc.Line,
+                        Doc.Concat(": "),
+                        Doc.Align(2, "thirdCondition;")
+                    )
+                )
+            )
+        );
+        PrintedDocShouldBe(
+            doc,
+            @$"return firstCondition{NewLine}  ? firstValue{NewLine}  : secondCondition{NewLine}	  ? secondValue{NewLine}	  : thirdCondition;",
+            useTabs: true
+        );
+    }
+
     [TestCase(0, "\n")]
     [TestCase(0, "\r\n")]
     [TestCase(1, "\n")]
