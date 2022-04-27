@@ -26,7 +26,7 @@ internal static class Token
         bool skipLeadingTrivia = false
     )
     {
-        if (syntaxToken.Kind() == SyntaxKind.None)
+        if (syntaxToken.RawSyntaxKind() == SyntaxKind.None)
         {
             return Doc.Null;
         }
@@ -45,11 +45,11 @@ internal static class Token
 
         if (
             (
-                syntaxToken.Kind() == SyntaxKind.StringLiteralToken
+                syntaxToken.RawSyntaxKind() == SyntaxKind.StringLiteralToken
                 && syntaxToken.Text.StartsWith("@")
             )
             || (
-                syntaxToken.Kind() == SyntaxKind.InterpolatedStringTextToken
+                syntaxToken.RawSyntaxKind() == SyntaxKind.InterpolatedStringTextToken
                 && syntaxToken.Parent!.Parent
                     is InterpolatedStringExpressionSyntax
                     {
@@ -87,7 +87,7 @@ internal static class Token
 
     public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
     {
-        var isClosingBrace = syntaxToken.Kind() == SyntaxKind.CloseBraceToken;
+        var isClosingBrace = syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken;
 
         Doc extraNewLines = Doc.Null;
 
@@ -135,13 +135,13 @@ internal static class Token
         for (var x = 0; x < leadingTrivia.Count; x++)
         {
             var trivia = leadingTrivia[x];
-            var kind = trivia.Kind();
+            var kind = trivia.RawSyntaxKind();
 
             if (printNewLines && kind == SyntaxKind.EndOfLineTrivia)
             {
                 docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
             }
-            if (kind != SyntaxKind.EndOfLineTrivia && kind != SyntaxKind.WhitespaceTrivia)
+            if (kind is not (SyntaxKind.EndOfLineTrivia or SyntaxKind.WhitespaceTrivia))
             {
                 printNewLines = true;
             }
@@ -152,7 +152,7 @@ internal static class Token
                 if (
                     commentType == CommentType.MultiLine
                     && x > 0
-                    && leadingTrivia[x - 1].Kind() is SyntaxKind.WhitespaceTrivia
+                    && leadingTrivia[x - 1].RawSyntaxKind() is SyntaxKind.WhitespaceTrivia
                 )
                 {
                     comment = leadingTrivia[x - 1] + comment;
@@ -184,7 +184,7 @@ internal static class Token
                 if (
                     IsRegion(kind)
                     && x > 0
-                    && leadingTrivia[x - 1].Kind() == SyntaxKind.WhitespaceTrivia
+                    && leadingTrivia[x - 1].RawSyntaxKind() == SyntaxKind.WhitespaceTrivia
                 )
                 {
                     triviaText = leadingTrivia[x - 1] + triviaText;
@@ -247,11 +247,11 @@ internal static class Token
         var docs = new List<Doc>();
         foreach (var trivia in trailingTrivia)
         {
-            if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
+            if (trivia.RawSyntaxKind() == SyntaxKind.SingleLineCommentTrivia)
             {
                 docs.Add(Doc.TrailingComment(trivia.ToString(), CommentType.SingleLine));
             }
-            else if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
+            else if (trivia.RawSyntaxKind() == SyntaxKind.MultiLineCommentTrivia)
             {
                 docs.Add(" ", Doc.TrailingComment(trivia.ToString(), CommentType.MultiLine));
             }
@@ -263,10 +263,14 @@ internal static class Token
     public static bool HasComments(SyntaxToken syntaxToken)
     {
         return syntaxToken.LeadingTrivia.Any(
-                o => o.Kind() is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
+                o =>
+                    o.RawSyntaxKind()
+                        is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
             )
             || syntaxToken.TrailingTrivia.Any(
-                o => o.Kind() is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
+                o =>
+                    o.RawSyntaxKind()
+                        is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
             );
     }
 }
