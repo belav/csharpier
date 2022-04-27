@@ -33,7 +33,7 @@ export class CSharpierProcessProvider implements Disposable {
     }
 
     private findAndWarmProcess(filePath: string) {
-        const directory = path.parse(filePath).dir;
+        const directory = this.getDirectoryOfFile(filePath);
         if (this.warmingByDirectory[directory]) {
             return;
         }
@@ -58,7 +58,7 @@ export class CSharpierProcessProvider implements Disposable {
     }
 
     public getProcessFor = (filePath: string) => {
-        const directory = path.parse(filePath).dir;
+        const directory = this.getDirectoryOfFile(filePath);
         let version = this.csharpierVersionByDirectory[directory];
         if (!version) {
             this.findAndWarmProcess(filePath);
@@ -67,15 +67,35 @@ export class CSharpierProcessProvider implements Disposable {
 
         if (!version || !this.csharpierProcessesByVersion[version]) {
             // this shouldn't really happen, but just in case
+            this.logger.debug(`returning NullCSharpierProcess because there was no csharpierProcessesByVersion for ${version}`);
             return new NullCSharpierProcess();
         }
 
         return this.csharpierProcessesByVersion[version]!;
     };
 
+    private getDirectoryOfFile = (filePath: string) => {
+        let directory = path.parse(filePath).dir;
+        if (directory) {
+            return directory;
+        }
+
+        if (workspace.workspaceFolders && workspace.workspaceFolders.length > 0) {
+            directory = workspace.workspaceFolders[0].uri.fsPath
+            this.logger.debug("Unsaved document has no directory, falling back to workspace folder: " + directory);
+        }
+        else {
+            directory = __dirname;
+            this.logger.debug("Unsaved document has no directory, falling back to __dirname: " + directory);
+        }
+
+        return directory;
+    };
+
     private getCSharpierVersion = (directoryThatContainsFile: string): string => {
         let currentDirectory = directoryThatContainsFile;
-        while (true) {
+        let parentNumber = 0;
+        while (parentNumber < 30) {
             const dotnetToolsPath = path.join(currentDirectory, ".config/dotnet-tools.json");
             this.logger.debug(`Looking for ${dotnetToolsPath}`);
             if (fs.existsSync(dotnetToolsPath)) {
@@ -92,6 +112,7 @@ export class CSharpierProcessProvider implements Disposable {
                 break;
             }
             currentDirectory = nextDirectory;
+            parentNumber++;
         }
 
         this.logger.debug(
@@ -106,7 +127,9 @@ export class CSharpierProcessProvider implements Disposable {
                 env: { ...process.env, DOTNET_NOLOGO: "1" },
             }).toString();
         } catch (error: any) {
-            this.logger.debug("dotnet csharpier --version failed with " + error.stderr.toString());
+            const message = !error.stderr ? error.toString() : error.stderr.toString();
+
+            this.logger.debug("dotnet csharpier --version failed with " + message);
             return "";
         }
 
@@ -135,6 +158,7 @@ export class CSharpierProcessProvider implements Disposable {
     private setupCSharpierProcess = (directory: string, version: string) => {
         try {
             if (!semver.valid(version)) {
+                this.logger.debug(`returning NullCSharpierProcess because version is not a valid version number.`);
                 return new NullCSharpierProcess();
             }
 
@@ -156,6 +180,7 @@ export class CSharpierProcessProvider implements Disposable {
             }
         } catch (ex: any) {
             this.logger.error(ex.output.toString());
+            this.logger.debug(`returning NullCSharpierProcess because of the previous error when trying to set up a csharpier process`);
             return new NullCSharpierProcess();
         }
     };
