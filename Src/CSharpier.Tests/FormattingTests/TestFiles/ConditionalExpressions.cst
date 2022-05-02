@@ -44,7 +44,7 @@ public class ClassName
                 ? trueValue________________________________
                 : falseValue_______________________________,
             someCondition_____________________________________
-            && someOtherCondition__________________________________
+                && someOtherCondition__________________________________
         );
 
         var fileContents = File.ReadAllText(

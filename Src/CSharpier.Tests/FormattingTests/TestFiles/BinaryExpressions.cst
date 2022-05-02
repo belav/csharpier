@@ -210,7 +210,7 @@ class TestClass
             someValue
                 == someLongThing__________________________________________________________________
                 || someOtherValue
-                    == someOtherLongThing________________________________________________,
+                    == someOtherLongThing_________________________________________________________,
             secondParameter
         );
     }

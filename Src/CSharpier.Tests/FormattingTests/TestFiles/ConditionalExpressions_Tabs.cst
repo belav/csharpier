@@ -126,18 +126,18 @@ public class ClassName
 
 		var invocationIndent = someCondition
 			? SomeObject
-			.CallLongMethod__________________________________________()
-			.CallLongMethod__________________________________________()
+				.CallLongMethod__________________________________________()
+				.CallLongMethod__________________________________________()
 			: SomeObject
-			.CallLongMethod__________________________________________()
-			.CallLongMethod__________________________________________();
+				.CallLongMethod__________________________________________()
+				.CallLongMethod__________________________________________();
 
 		CallMethod(
 			someCondition
 				? SomeValue
 				: SomeObject
-				.CallMethod__________________________________()
-				.CallMethod__________________________________()
+					.CallMethod__________________________________()
+					.CallMethod__________________________________()
 		);
 	}
 }

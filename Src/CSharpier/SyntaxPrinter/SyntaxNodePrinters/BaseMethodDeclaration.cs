@@ -150,12 +150,12 @@ internal static class BaseMethodDeclaration
 
         if (constructorInitializer != null)
         {
-            // TODOTODO this never seems to be hit? meaning this whole constructor initializer block
+            // TODOTODO this never seems to be hit? or no, this gets hit, maybe one of the branches below does not
             var colonToken = Token.PrintWithSuffix(constructorInitializer.ColonToken, " ");
             var argumentList = Doc.Group(ArgumentList.Print(constructorInitializer.ArgumentList));
 
-            declarationGroup.Add("TODOTODO1");
-            
+            // declarationGroup.Add("TODOTODO1");
+
             if (parameterGroupId != null)
             {
                 declarationGroup.Add(

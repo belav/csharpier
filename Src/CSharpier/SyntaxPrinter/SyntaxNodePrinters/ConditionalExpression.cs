@@ -8,9 +8,6 @@ internal static class ConditionalExpression
         {
             Doc.Line,
             Token.PrintWithSuffix(node.QuestionToken, " "),
-            // TODO it would be nice to indent invocation chains, but not indent method calls where the parameters indent
-            // something like this shows the problem
-            // IndentIf(node.WhenTrue is Invocation
             Doc.Concat(Node.Print(node.WhenTrue)),
             Doc.Line,
             Token.PrintWithSuffix(node.ColonToken, " "),

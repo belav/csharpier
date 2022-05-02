@@ -9,9 +9,7 @@ internal static class BinaryExpression
 
         var shouldNotIndent =
             node.Parent
-                // TODO this changes a few things, but fixes one case
-                is ArgumentSyntax
-                    or ArrowExpressionClauseSyntax
+                is ArrowExpressionClauseSyntax
                     or AssignmentExpressionSyntax
                     or CatchFilterClauseSyntax
                     or CheckedExpressionSyntax
