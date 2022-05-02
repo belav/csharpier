@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.2.5]
+- Error output loses characters
+
 ## [1.2.4]
 - Support for 2022.1
 
