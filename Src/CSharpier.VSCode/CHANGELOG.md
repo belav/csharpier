@@ -1,3 +1,9 @@
+## [1.2.3]
+- Proper fix for unsaved documents not formatting.
+
+## [1.2.2]
+- Quick fix for unsaved documents not formatting.
+
 ## [1.2.1]
 - Fix bug for usernames that contain a space not being able to format files
 
