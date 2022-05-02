@@ -150,15 +150,17 @@ internal static class BaseMethodDeclaration
 
         if (constructorInitializer != null)
         {
+            // TODOTODO this never seems to be hit? meaning this whole constructor initializer block
             var colonToken = Token.PrintWithSuffix(constructorInitializer.ColonToken, " ");
             var argumentList = Doc.Group(ArgumentList.Print(constructorInitializer.ArgumentList));
 
+            declarationGroup.Add("TODOTODO1");
+            
             if (parameterGroupId != null)
             {
                 declarationGroup.Add(
                     Doc.Group(
                         Doc.Indent(Doc.IfBreak(" ", Doc.Line, parameterGroupId)),
-                        // TODO this never seems to be hit? meaning this whole constructor initializer block
                         Doc.Indent(colonToken),
                         Token.Print(constructorInitializer.ThisOrBaseKeyword),
                         Doc.IfBreak(argumentList, Doc.Indent(argumentList), parameterGroupId)

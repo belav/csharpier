@@ -1,12 +1,7 @@
-CallMethod(
-            someValue,
-            someCondition
-                ? trueValue________________________________
-                : falseValue_______________________________,
-            someCondition_____________________________________
-                && someOtherCondition__________________________________
-                ? trueValue________________________________
-                : falseValue_______________________________,
-            someCondition_____________________________________
-                && someOtherCondition__________________________________
-        );
+using System.Web.Http;
+
+#if KEEP_LINE_ABOVE
+using System.Web.Http;
+#endif
+
+namespace Namespace { }
