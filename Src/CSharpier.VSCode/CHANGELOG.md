@@ -1,3 +1,6 @@
+## [1.2.4]
+- Error output loses characters
+
 ## [1.2.3]
 - Proper fix for unsaved documents not formatting.
 
