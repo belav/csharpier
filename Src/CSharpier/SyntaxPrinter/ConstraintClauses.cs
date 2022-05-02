@@ -4,14 +4,6 @@ internal static class ConstraintClauses
 {
     public static Doc Print(IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses)
     {
-        return Print(constraintClauses, null);
-    }
-
-    private static Doc Print(
-        IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses,
-        string? groupId
-    )
-    {
         var constraintClausesList = constraintClauses.ToList();
 
         if (constraintClausesList.Count == 0)
@@ -24,9 +16,6 @@ internal static class ConstraintClauses
             constraintClausesList.Select(TypeParameterConstraintClause.Print)
         );
 
-        return Doc.Group(
-            Doc.Indent(groupId != null ? Doc.IfBreak(" ", prefix, groupId) : prefix),
-            groupId != null ? "TODOTODO2" : Doc.Indent(body)
-        );
+        return Doc.Group(Doc.Indent(prefix, body));
     }
 }
