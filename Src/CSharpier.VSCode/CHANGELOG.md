@@ -1,5 +1,5 @@
 ## [1.2.4]
-- Error output loses characters
+- Remove error output display. It used to lose characters.
 
 ## [1.2.3]
 - Proper fix for unsaved documents not formatting.
