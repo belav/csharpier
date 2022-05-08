@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+
 namespace CSharpier.SyntaxPrinter;
 
 internal static class MembersWithForcedLines
@@ -59,48 +61,75 @@ internal static class MembersWithForcedLines
 
             var addBlankLine = blankLineIsForced || lastMemberForcedBlankLine;
 
-            if (!addBlankLine)
+            var triviaContainsCommentOrNewLine = false;
+            var printExtraNewLines = false;
+            var triviaContainsEndIfOrRegion = false;
+
+            var leadingTrivia = member
+                .GetLeadingTrivia()
+                .Select(o => o.RawSyntaxKind())
+                .ToImmutableHashSet();
+
+            foreach (var syntaxTrivia in leadingTrivia)
             {
-                addBlankLine =
-                    member.AttributeLists.Any()
-                    || (
-                        member
-                            .GetLeadingTrivia()
-                            .Any(
-                                o =>
-                                    o.RawSyntaxKind() is SyntaxKind.EndOfLineTrivia || o.IsComment()
-                            )
-                    );
+                if (syntaxTrivia is SyntaxKind.EndOfLineTrivia || syntaxTrivia.IsComment())
+                {
+                    triviaContainsCommentOrNewLine = true;
+                }
+                else if (
+                    syntaxTrivia
+                    is SyntaxKind.PragmaWarningDirectiveTrivia
+                        or SyntaxKind.PragmaChecksumDirectiveTrivia
+                        or SyntaxKind.IfDirectiveTrivia
+                        or SyntaxKind.EndRegionDirectiveTrivia
+                )
+                {
+                    printExtraNewLines = true;
+                }
+                else if (
+                    syntaxTrivia
+                    is SyntaxKind.EndIfDirectiveTrivia
+                        or SyntaxKind.EndRegionDirectiveTrivia
+                )
+                {
+                    triviaContainsEndIfOrRegion = true;
+                }
             }
 
-            if (
-                member
-                    .GetLeadingTrivia()
-                    .Any(
-                        o =>
-                            o.RawSyntaxKind()
-                                is SyntaxKind.PragmaWarningDirectiveTrivia
-                                    or SyntaxKind.PragmaChecksumDirectiveTrivia
-                                    or SyntaxKind.IfDirectiveTrivia
-                                    or SyntaxKind.EndRegionDirectiveTrivia
-                    )
-            )
+            if (!addBlankLine)
+            {
+                addBlankLine = member.AttributeLists.Any() || triviaContainsCommentOrNewLine;
+            }
+
+            if (printExtraNewLines)
             {
                 result.Add(ExtraNewLines.Print(member));
             }
-            else if (
-                addBlankLine
-                && !member
-                    .GetLeadingTrivia()
-                    .Any(
-                        o =>
-                            o.RawSyntaxKind()
-                                is SyntaxKind.EndIfDirectiveTrivia
-                                    or SyntaxKind.EndRegionDirectiveTrivia
-                    )
-            )
+            else if (addBlankLine && !triviaContainsEndIfOrRegion)
             {
                 result.Add(Doc.HardLine);
+            }
+
+            if (
+                addBlankLine
+                && !triviaContainsEndIfOrRegion
+                && leadingTrivia.Contains(SyntaxKind.IfDirectiveTrivia)
+                && !leadingTrivia.Contains(SyntaxKind.EndOfLineTrivia)
+            )
+            {
+                Token.NextTriviaNeedsLine = true;
+            }
+            else if (
+                addBlankLine
+                && triviaContainsEndIfOrRegion
+                && !leadingTrivia.Contains(SyntaxKind.IfDirectiveTrivia)
+                && !leadingTrivia.Contains(SyntaxKind.ElifDirectiveTrivia)
+                && !leadingTrivia.Contains(SyntaxKind.ElseDirectiveTrivia)
+                && !leadingTrivia.Contains(SyntaxKind.EndOfLineTrivia)
+                && !printExtraNewLines
+            )
+            {
+                Token.NextTriviaNeedsLine = true;
             }
 
             result.Add(Doc.HardLine, Node.Print(member));

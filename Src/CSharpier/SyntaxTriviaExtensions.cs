@@ -4,7 +4,12 @@ public static class SyntaxTriviaExtensions
 {
     public static bool IsComment(this SyntaxTrivia syntaxTrivia)
     {
-        return syntaxTrivia.RawSyntaxKind()
+        return syntaxTrivia.RawSyntaxKind().IsComment();
+    }
+
+    public static bool IsComment(this SyntaxKind syntaxKind)
+    {
+        return syntaxKind
             is SyntaxKind.SingleLineCommentTrivia
                 or SyntaxKind.MultiLineCommentTrivia
                 or SyntaxKind.SingleLineDocumentationCommentTrivia

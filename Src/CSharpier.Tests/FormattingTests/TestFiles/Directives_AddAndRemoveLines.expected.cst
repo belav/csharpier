@@ -4,28 +4,27 @@ public class ClassName
     public void Method1() { }
 #endif
 
-
     public void RemoveLineAbove() { }
 
 #if NET6_0_OR_GREATER
     public void Method2() { }
 #endif
+
     public void AddLineAbove() { }
-    
 
 #if NET6_0_OR_GREATER
     public void RemoveLineAbove() { }
 #endif
 
     public void Method3() { }
+
 #if NET6_0_OR_GREATER
     public void AddLineAbove() { }
 #endif
 
     public void Method4() { }
-    
+
 #if NET6_0_OR_GREATER
     public void RemoveLineBelow() { }
 #endif
-
 }
