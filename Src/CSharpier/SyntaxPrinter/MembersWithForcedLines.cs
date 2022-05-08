@@ -103,7 +103,7 @@ internal static class MembersWithForcedLines
 
             if (printExtraNewLines)
             {
-                result.Add(ExtraNewLines.Print(member));
+                Token.NextTriviaNeedsLine = true;
             }
             else if (addBlankLine && !triviaContainsEndIfOrRegion)
             {
