@@ -15,16 +15,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
-    private final ExecutorService executor;
     Logger logger = CSharpierLogger.getInstance();
 
     Process process = null;
     OutputStreamWriter stdin;
     BufferedReader stdOut;
-    BufferedReader stdError;
 
     public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8) {
-        this.executor = Executors.newCachedThreadPool();
         try {
             var processBuilder = new ProcessBuilder(csharpierPath, "--pipe-multiple-files");
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
@@ -34,7 +31,6 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
             this.stdin = new OutputStreamWriter(this.process.getOutputStream(), charset);
             this.stdOut = new BufferedReader(new InputStreamReader(this.process.getInputStream(), charset));
-            this.stdError = new BufferedReader(new InputStreamReader(this.process.getErrorStream(), charset));
         } catch (Exception e) {
             this.logger.error("error", e);
         }
@@ -48,8 +44,6 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     @Override
     public String formatFile(String content, String filePath) {
         try {
-            var output = new StringBuilder();
-            var errorOutput = new StringBuilder();
 
             this.stdin.write(filePath);
             this.stdin.write('\u0003');
@@ -57,28 +51,26 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
             this.stdin.write('\u0003');
             this.stdin.flush();
 
-            var callableTasks = new ArrayList<Callable<Object>>();
-            callableTasks.add(Executors.callable(CreateReadingThread(this.stdOut, output)));
-            callableTasks.add(Executors.callable(CreateReadingThread(this.stdError, errorOutput)));
-            this.executor.invokeAny(callableTasks);
+            var stringBuilder = new StringBuilder();
 
-            var result = output.toString();
-            var errorResult = errorOutput.toString();
-            if (errorResult == null || errorResult.isEmpty())
-            {
-                if (result == null || result.isEmpty())
-                {
-                    this.logger.info("File is ignored by .csharpierignore");
-                    return "";
+            var nextCharacter = this.stdOut.read();
+            while (nextCharacter != -1) {
+                if (nextCharacter == '\u0003') {
+                    break;
                 }
-                else
-                {
-                    return output.toString();
-                }
+                stringBuilder.append((char) nextCharacter);
+                nextCharacter = this.stdOut.read();
             }
 
-            this.logger.info("Got error output: " + errorResult);
-            return "";
+            var result = stringBuilder.toString();
+
+            if (result == null || result.isEmpty())
+            {
+                this.logger.info("File is ignored by .csharpierignore or there was an error");
+                return "";
+            }
+
+            return result;
 
         } catch (Exception e) {
             this.logger.error(e);
@@ -87,35 +79,8 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
         }
     }
 
-    private Runnable CreateReadingThread(BufferedReader reader, StringBuilder stringBuilder) {
-        var runnable = (Runnable) () -> {
-            try {
-                var nextCharacter = reader.read();
-                while (nextCharacter != -1) {
-                    if (nextCharacter == '\u0003') {
-                        break;
-                    }
-                    stringBuilder.append((char) nextCharacter);
-                    nextCharacter = reader.read();
-                }
-            } catch (Exception e) {
-                this.logger.error(e);
-            }
-
-        };
-        return runnable;
-    }
-
     @Override
     public void dispose() {
         this.process.destroy();
-        this.executor.shutdown();
-        try {
-            if (!this.executor.awaitTermination(800, TimeUnit.MILLISECONDS)) {
-                this.executor.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            this.executor.shutdownNow();
-        }
     }
 }

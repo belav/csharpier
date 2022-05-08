@@ -1,47 +1,49 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Playground", "Src\CSharpier.Playground\CSharpier.Playground.csproj", "{E7F03E73-82C7-4DB2-AF20-F25C45231A72}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier.Playground", "Src\CSharpier.Playground\CSharpier.Playground.csproj", "{E7F03E73-82C7-4DB2-AF20-F25C45231A72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier", "Src\CSharpier\CSharpier.csproj", "{F1DE8719-9961-4F83-8BE6-34639C96DA5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier", "Src\CSharpier\CSharpier.csproj", "{F1DE8719-9961-4F83-8BE6-34639C96DA5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests", "Src\CSharpier.Tests\CSharpier.Tests.csproj", "{A77E4297-FAA5-40AB-9856-ECF72AF5D859}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier.Tests", "Src\CSharpier.Tests\CSharpier.Tests.csproj", "{A77E4297-FAA5-40AB-9856-ECF72AF5D859}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{51C3E932-8A7B-4004-AA94-2AF89619B6F4}"
-ProjectSection(SolutionItems) = preProject
-	.gitignore = .gitignore
-	LICENSE = LICENSE
-	.csharpierignore = .csharpierignore
-	.config\dotnet-tools.json = .config\dotnet-tools.json
-	CSharpier.Build.props = CSharpier.Build.props
-	Dockerfile = Dockerfile
-	Dockerfile-Website = Dockerfile-Website
-	.dockerignore = .dockerignore
-	global.json = global.json
-	CSharpier.Build.targets = CSharpier.Build.targets
-	.husky\task-runner.json = .husky\task-runner.json
-	README.md = README.md
-	.husky\pre-commit = .husky\pre-commit
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		.csharpierignore = .csharpierignore
+		.dockerignore = .dockerignore
+		.gitignore = .gitignore
+		CSharpier.Build.props = CSharpier.Build.props
+		CSharpier.Build.targets = CSharpier.Build.targets
+		Dockerfile = Dockerfile
+		Dockerfile-Website = Dockerfile-Website
+		.config\dotnet-tools.json = .config\dotnet-tools.json
+		global.json = global.json
+		LICENSE = LICENSE
+		.husky\pre-commit = .husky\pre-commit
+		README.md = README.md
+		.husky\task-runner.json = .husky\task-runner.json
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Benchmarks", "Src\CSharpier.Benchmarks\CSharpier.Benchmarks.csproj", "{A338903F-69AD-4950-B827-8EE75F98B620}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier.Benchmarks", "Src\CSharpier.Benchmarks\CSharpier.Benchmarks.csproj", "{A338903F-69AD-4950-B827-8EE75F98B620}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Tests.Generators", "Src\CSharpier.Tests.Generators\CSharpier.Tests.Generators.csproj", "{3E1D074B-A4F3-4010-84E7-820459214202}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier.Tests.Generators", "Src\CSharpier.Tests.Generators\CSharpier.Tests.Generators.csproj", "{3E1D074B-A4F3-4010-84E7-820459214202}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Generators", "Src\CSharpier.Generators\CSharpier.Generators.csproj", "{D846F494-57FC-4315-A2A8-357343175D2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier.Generators", "Src\CSharpier.Generators\CSharpier.Generators.csproj", "{D846F494-57FC-4315-A2A8-357343175D2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Cli", "Src\CSharpier.Cli\CSharpier.Cli.csproj", "{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier.Cli", "Src\CSharpier.Cli\CSharpier.Cli.csproj", "{F2BF106F-BB0A-44AC-8249-91BC53FFC83A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxFinder", "Src\SyntaxFinder\SyntaxFinder.csproj", "{0B075DD3-1FEE-483E-8665-43C226188287}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyntaxFinder", "Src\SyntaxFinder\SyntaxFinder.csproj", "{0B075DD3-1FEE-483E-8665-43C226188287}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.Cli.Tests", "Src\CSharpier.Cli.Tests\CSharpier.Cli.Tests.csproj", "{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier.Cli.Tests", "Src\CSharpier.Cli.Tests\CSharpier.Cli.Tests.csproj", "{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Docs", "Docs\Docs.csproj", "{1E43290C-C7DA-43CA-ADC5-BD95786BA440}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Docs", "Docs\Docs.csproj", "{1E43290C-C7DA-43CA-ADC5-BD95786BA440}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripts", "Scripts\Scripts.csproj", "{3CFB200D-ABA6-4021-AF40-CFCF26DBCD66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scripts", "Scripts\Scripts.csproj", "{3CFB200D-ABA6-4021-AF40-CFCF26DBCD66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Github", ".github\Github.csproj", "{6D0C91DF-2FB7-48EC-8C1D-86FD4F6531A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Github", ".github\Github.csproj", "{6D0C91DF-2FB7-48EC-8C1D-86FD4F6531A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsBuild", "Src\CSharpier.MsBuild\MsBuild.csproj", "{19874634-1A44-4831-BB43-6E2B864AB3ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MsBuild", "Src\CSharpier.MsBuild\MsBuild.csproj", "{19874634-1A44-4831-BB43-6E2B864AB3ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,10 +67,6 @@ Global
 		{A338903F-69AD-4950-B827-8EE75F98B620}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A338903F-69AD-4950-B827-8EE75F98B620}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A338903F-69AD-4950-B827-8EE75F98B620}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3FE3D5DE-1284-45C6-95FC-8B3CDE63684B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FE3D5DE-1284-45C6-95FC-8B3CDE63684B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3FE3D5DE-1284-45C6-95FC-8B3CDE63684B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FE3D5DE-1284-45C6-95FC-8B3CDE63684B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E1D074B-A4F3-4010-84E7-820459214202}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E1D074B-A4F3-4010-84E7-820459214202}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E1D074B-A4F3-4010-84E7-820459214202}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -89,5 +87,19 @@ Global
 		{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E43290C-C7DA-43CA-ADC5-BD95786BA440}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E43290C-C7DA-43CA-ADC5-BD95786BA440}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CFB200D-ABA6-4021-AF40-CFCF26DBCD66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CFB200D-ABA6-4021-AF40-CFCF26DBCD66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D0C91DF-2FB7-48EC-8C1D-86FD4F6531A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D0C91DF-2FB7-48EC-8C1D-86FD4F6531A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19874634-1A44-4831-BB43-6E2B864AB3ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19874634-1A44-4831-BB43-6E2B864AB3ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {00B535B6-778C-44D7-8DEC-0429BAAE4DC2}
 	EndGlobalSection
 EndGlobal
