@@ -27,11 +27,7 @@ public class SyntaxNodeJsonWriterGenerator : ISourceGenerator
 
     private string GenerateSource()
     {
-        var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly
-            .GetTypes()
-            .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o))
-            .OrderBy(o => o.Name)
-            .ToList();
+        var syntaxNodeTypes = ValidNodeTypes.Get();
 
         var sourceBuilder = new StringBuilder();
         sourceBuilder.AppendLine("using System.Collections.Generic;");
