@@ -11,16 +11,16 @@ internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 // https://github.com/prettier/prettier/pull/7889
 internal static class InvocationExpression
 {
-    public static Doc Print(InvocationExpressionSyntax node)
+    public static Doc Print(InvocationExpressionSyntax node, FormattingContext context)
     {
-        return PrintMemberChain(node);
+        return PrintMemberChain(node, context);
     }
 
-    public static Doc PrintMemberChain(ExpressionSyntax node)
+    public static Doc PrintMemberChain(ExpressionSyntax node, FormattingContext context)
     {
         var printedNodes = new List<PrintedNode>();
 
-        FlattenAndPrintNodes(node, printedNodes);
+        FlattenAndPrintNodes(node, printedNodes, context);
 
         var groups = printedNodes.Any(o => o.Node is InvocationExpressionSyntax)
           ? GroupPrintedNodesPrettierStyle(printedNodes)
@@ -75,7 +75,8 @@ internal static class InvocationExpression
 
     private static void FlattenAndPrintNodes(
         ExpressionSyntax expression,
-        List<PrintedNode> printedNodes
+        List<PrintedNode> printedNodes,
+        FormattingContext context
     )
     {
         /*
@@ -100,37 +101,37 @@ internal static class InvocationExpression
         */
         if (expression is InvocationExpressionSyntax invocationExpressionSyntax)
         {
-            FlattenAndPrintNodes(invocationExpressionSyntax.Expression, printedNodes);
+            FlattenAndPrintNodes(invocationExpressionSyntax.Expression, printedNodes, context);
             printedNodes.Add(
                 new PrintedNode(
                     invocationExpressionSyntax,
-                    ArgumentList.Print(invocationExpressionSyntax.ArgumentList)
+                    ArgumentList.Print(invocationExpressionSyntax.ArgumentList, context)
                 )
             );
         }
         else if (expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax)
         {
-            FlattenAndPrintNodes(memberAccessExpressionSyntax.Expression, printedNodes);
+            FlattenAndPrintNodes(memberAccessExpressionSyntax.Expression, printedNodes, context);
             printedNodes.Add(
                 new PrintedNode(
                     memberAccessExpressionSyntax,
                     Doc.Concat(
-                        Token.Print(memberAccessExpressionSyntax.OperatorToken),
-                        Node.Print(memberAccessExpressionSyntax.Name)
+                        Token.Print(memberAccessExpressionSyntax.OperatorToken, context),
+                        Node.Print(memberAccessExpressionSyntax.Name, context)
                     )
                 )
             );
         }
         else if (expression is ConditionalAccessExpressionSyntax conditionalAccessExpressionSyntax)
         {
-            FlattenAndPrintNodes(conditionalAccessExpressionSyntax.Expression, printedNodes);
+            FlattenAndPrintNodes(conditionalAccessExpressionSyntax.Expression, printedNodes, context);
             printedNodes.Add(
                 new PrintedNode(
                     conditionalAccessExpressionSyntax,
-                    Token.Print(conditionalAccessExpressionSyntax.OperatorToken)
+                    Token.Print(conditionalAccessExpressionSyntax.OperatorToken, context)
                 )
             );
-            FlattenAndPrintNodes(conditionalAccessExpressionSyntax.WhenNotNull, printedNodes);
+            FlattenAndPrintNodes(conditionalAccessExpressionSyntax.WhenNotNull, printedNodes, context);
         }
         else if (
             expression is PostfixUnaryExpressionSyntax
@@ -139,17 +140,17 @@ internal static class InvocationExpression
             } postfixUnaryExpression
         )
         {
-            FlattenAndPrintNodes(postfixUnaryExpression.Operand, printedNodes);
+            FlattenAndPrintNodes(postfixUnaryExpression.Operand, printedNodes, context);
             printedNodes.Add(
                 new PrintedNode(
                     postfixUnaryExpression,
-                    Token.Print(postfixUnaryExpression.OperatorToken)
+                    Token.Print(postfixUnaryExpression.OperatorToken, context)
                 )
             );
         }
         else
         {
-            printedNodes.Add(new PrintedNode(expression, Node.Print(expression)));
+            printedNodes.Add(new PrintedNode(expression, Node.Print(expression, context)));
         }
     }
 

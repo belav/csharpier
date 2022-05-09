@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class InitializerExpression
 {
-    public static Doc Print(InitializerExpressionSyntax node)
+    public static Doc Print(InitializerExpressionSyntax node, FormattingContext context)
     {
         Doc separator = node.Parent is AssignmentExpressionSyntax or EqualsValueClauseSyntax
             ? Doc.Line
@@ -13,13 +13,13 @@ internal static class InitializerExpression
 
         var result = Doc.Concat(
             separator,
-            Token.Print(node.OpenBraceToken),
+            Token.Print(node.OpenBraceToken, context),
             Doc.Indent(
                 alwaysBreak ? Doc.HardLine : Doc.Line,
                 SeparatedSyntaxList.Print(
                     node.Expressions,
                     Node.Print,
-                    alwaysBreak ? Doc.HardLine : Doc.Line
+                    alwaysBreak ? Doc.HardLine : Doc.Line, context
                 )
             ),
             node.Expressions.Any()
@@ -27,7 +27,7 @@ internal static class InitializerExpression
                   ? Doc.HardLine
                   : Doc.Line
               : Doc.Null,
-            Token.Print(node.CloseBraceToken)
+            Token.Print(node.CloseBraceToken, context)
         );
         return
             node.Parent

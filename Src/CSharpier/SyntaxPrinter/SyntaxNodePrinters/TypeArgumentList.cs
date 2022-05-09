@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class TypeArgumentList
 {
-    public static Doc Print(TypeArgumentListSyntax node)
+    public static Doc Print(TypeArgumentListSyntax node, FormattingContext context)
     {
         Doc separator =
             node.Arguments.Count > 1 || node.Arguments.Any(o => o is GenericNameSyntax)
@@ -10,7 +10,7 @@ internal static class TypeArgumentList
                 : Doc.Null;
 
         return Doc.Concat(
-            Token.Print(node.LessThanToken),
+            Token.Print(node.LessThanToken, context),
             Doc.Indent(
                 separator,
                 SeparatedSyntaxList.Print(
@@ -18,11 +18,11 @@ internal static class TypeArgumentList
                     Node.Print,
                     node.Arguments.FirstOrDefault() is OmittedTypeArgumentSyntax
                       ? Doc.Null
-                      : Doc.Line
+                      : Doc.Line, context
                 )
             ),
             separator,
-            Token.Print(node.GreaterThanToken)
+            Token.Print(node.GreaterThanToken, context)
         );
     }
 }

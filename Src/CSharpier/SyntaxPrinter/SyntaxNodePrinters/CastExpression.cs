@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class CastExpression
 {
-    public static Doc Print(CastExpressionSyntax node)
+    public static Doc Print(CastExpressionSyntax node, FormattingContext context)
     {
         return
             node.Expression is ParenthesizedExpressionSyntax
@@ -13,16 +13,16 @@ internal static class CastExpression
                 && node.Type is not GenericNameSyntax
             )
           ? Doc.Concat(
-                Token.Print(node.OpenParenToken),
-                Node.Print(node.Type),
-                Token.Print(node.CloseParenToken),
-                Node.Print(node.Expression)
+                Token.Print(node.OpenParenToken, context),
+                Node.Print(node.Type, context),
+                Token.Print(node.CloseParenToken, context),
+                Node.Print(node.Expression, context)
             )
           : Doc.Group(
-                Token.Print(node.OpenParenToken),
-                Node.Print(node.Type),
-                Token.Print(node.CloseParenToken),
-                Doc.Indent(Doc.SoftLine, Node.Print(node.Expression))
+                Token.Print(node.OpenParenToken, context),
+                Node.Print(node.Type, context),
+                Token.Print(node.CloseParenToken, context),
+                Doc.Indent(Doc.SoftLine, Node.Print(node.Expression, context))
             );
     }
 }

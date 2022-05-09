@@ -24,8 +24,11 @@ public class ClassName
     
      */
 
-    public static List<Doc> Print<T>(CSharpSyntaxNode node, IReadOnlyList<T> members)
-        where T : MemberDeclarationSyntax
+    public static List<Doc> Print<T>(
+        CSharpSyntaxNode node,
+        IReadOnlyList<T> members,
+        FormattingContext context
+    ) where T : MemberDeclarationSyntax
     {
         var result = new List<Doc> { Doc.HardLine };
         var lastMemberForcedBlankLine = false;
@@ -35,7 +38,7 @@ public class ClassName
             {
                 if (members is SeparatedSyntaxList<T> list && x < list.SeparatorCount)
                 {
-                    result.Add(Token.Print(list.GetSeparator(x)));
+                    result.Add(Token.Print(list.GetSeparator(x), context));
                 }
             }
 
@@ -74,7 +77,7 @@ public class ClassName
             if (x == 0)
             {
                 lastMemberForcedBlankLine = blankLineIsForced;
-                result.Add(Node.Print(member));
+                result.Add(Node.Print(member, context));
                 AddSeparatorIfNeeded();
                 continue;
             }
@@ -161,7 +164,7 @@ public class ClassName
                 Token.NextTriviaNeedsLine = true;
             }
 
-            result.Add(Doc.HardLine, Node.Print(member));
+            result.Add(Doc.HardLine, Node.Print(member, context));
             AddSeparatorIfNeeded();
 
             lastMemberForcedBlankLine = blankLineIsForced;

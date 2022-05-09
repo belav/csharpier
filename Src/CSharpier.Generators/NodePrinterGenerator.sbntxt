@@ -12,7 +12,7 @@ namespace CSharpier.SyntaxPrinter
         [ThreadStatic]
         private static int depth;
 
-        public static Doc Print(SyntaxNode syntaxNode)
+        public static Doc Print(SyntaxNode syntaxNode, FormattingContext context)
         {
             if (syntaxNode == null)
             {
@@ -36,10 +36,10 @@ namespace CSharpier.SyntaxPrinter
                 {
                     {{- for nodeType in NodeTypes }}
                     case {{ nodeType.SyntaxNodeName }} {{ nodeType.VariableName }}:
-                        return {{ nodeType.PrinterName }}.Print({{ nodeType.VariableName }});
+                        return {{ nodeType.PrinterName }}.Print({{ nodeType.VariableName }}, context);
                     {{- end }}
                     default:
-                        return UnhandledNode.Print(syntaxNode);
+                        return UnhandledNode.Print(syntaxNode, context);
                 }
             }
             finally

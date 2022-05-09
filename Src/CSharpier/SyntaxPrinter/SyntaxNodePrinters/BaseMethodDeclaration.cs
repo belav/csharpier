@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BaseMethodDeclaration
 {
-    public static Doc Print(CSharpSyntaxNode node)
+    public static Doc Print(CSharpSyntaxNode node, FormattingContext context)
     {
         SyntaxList<AttributeListSyntax>? attributeLists = null;
         SyntaxTokenList? modifiers = null;
@@ -28,7 +28,7 @@ internal static class BaseMethodDeclaration
             {
                 returnType = methodDeclarationSyntax.ReturnType;
                 explicitInterfaceSpecifier = methodDeclarationSyntax.ExplicitInterfaceSpecifier;
-                identifier = () => Token.Print(methodDeclarationSyntax.Identifier);
+                identifier = () => Token.Print(methodDeclarationSyntax.Identifier, context);
                 typeParameterList = methodDeclarationSyntax.TypeParameterList;
                 constraintClauses = methodDeclarationSyntax.ConstraintClauses;
             }
@@ -36,13 +36,13 @@ internal static class BaseMethodDeclaration
             {
                 identifier = () =>
                     Doc.Concat(
-                        Token.Print(destructorDeclarationSyntax.TildeToken),
-                        Token.Print(destructorDeclarationSyntax.Identifier)
+                        Token.Print(destructorDeclarationSyntax.TildeToken, context),
+                        Token.Print(destructorDeclarationSyntax.Identifier, context)
                     );
             }
             else if (node is ConstructorDeclarationSyntax constructorDeclarationSyntax)
             {
-                identifier = () => Token.Print(constructorDeclarationSyntax.Identifier);
+                identifier = () => Token.Print(constructorDeclarationSyntax.Identifier, context);
                 constructorInitializer = constructorDeclarationSyntax.Initializer;
             }
 
@@ -53,7 +53,7 @@ internal static class BaseMethodDeclaration
             attributeLists = localFunctionStatementSyntax.AttributeLists;
             modifiers = localFunctionStatementSyntax.Modifiers;
             returnType = localFunctionStatementSyntax.ReturnType;
-            identifier = () => Token.Print(localFunctionStatementSyntax.Identifier);
+            identifier = () => Token.Print(localFunctionStatementSyntax.Identifier, context);
             typeParameterList = localFunctionStatementSyntax.TypeParameterList;
             parameterList = localFunctionStatementSyntax.ParameterList;
             constraintClauses = localFunctionStatementSyntax.ConstraintClauses;
@@ -71,23 +71,23 @@ internal static class BaseMethodDeclaration
 
         if (attributeLists is { Count: > 0 })
         {
-            docs.Add(AttributeLists.Print(node, attributeLists.Value));
+            docs.Add(AttributeLists.Print(node, attributeLists.Value, context));
         }
 
         if (modifiers is { Count: > 0 })
         {
-            docs.Add(Token.PrintLeadingTrivia(modifiers.Value[0]));
+            docs.Add(Token.PrintLeadingTrivia(modifiers.Value[0], context));
         }
         else if (returnType != null)
         {
-            docs.Add(Token.PrintLeadingTrivia(returnType.GetLeadingTrivia()));
+            docs.Add(Token.PrintLeadingTrivia(returnType.GetLeadingTrivia(), context));
         }
 
         var declarationGroup = new List<Doc>();
 
         if (modifiers.HasValue && modifiers.Value.Any())
         {
-            declarationGroup.Add(Modifiers.PrintWithoutLeadingTrivia(modifiers.Value));
+            declarationGroup.Add(Modifiers.PrintWithoutLeadingTrivia(modifiers.Value, context));
         }
 
         if (returnType != null)
@@ -97,15 +97,15 @@ internal static class BaseMethodDeclaration
                 Token.ShouldSkipNextLeadingTrivia = true;
             }
 
-            declarationGroup.Add(Node.Print(returnType), " ");
+            declarationGroup.Add(Node.Print(returnType, context), " ");
             Token.ShouldSkipNextLeadingTrivia = false;
         }
 
         if (explicitInterfaceSpecifier != null)
         {
             declarationGroup.Add(
-                Node.Print(explicitInterfaceSpecifier.Name),
-                Token.Print(explicitInterfaceSpecifier.DotToken)
+                Node.Print(explicitInterfaceSpecifier.Name, context),
+                Token.Print(explicitInterfaceSpecifier.DotToken, context)
             );
         }
 
@@ -119,38 +119,38 @@ internal static class BaseMethodDeclaration
             declarationGroup.Add(
                 Token.PrintWithSuffix(
                     conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword,
-                    " "
+                    " ", context
                 ),
-                Token.PrintWithSuffix(conversionOperatorDeclarationSyntax.OperatorKeyword, " "),
-                Node.Print(conversionOperatorDeclarationSyntax.Type)
+                Token.PrintWithSuffix(conversionOperatorDeclarationSyntax.OperatorKeyword, " ", context),
+                Node.Print(conversionOperatorDeclarationSyntax.Type, context)
             );
         }
         else if (node is OperatorDeclarationSyntax operatorDeclarationSyntax)
         {
             declarationGroup.Add(
-                Node.Print(operatorDeclarationSyntax.ReturnType),
+                Node.Print(operatorDeclarationSyntax.ReturnType, context),
                 " ",
-                Token.PrintWithSuffix(operatorDeclarationSyntax.OperatorKeyword, " "),
-                Token.Print(operatorDeclarationSyntax.OperatorToken)
+                Token.PrintWithSuffix(operatorDeclarationSyntax.OperatorKeyword, " ", context),
+                Token.Print(operatorDeclarationSyntax.OperatorToken, context)
             );
         }
 
         if (typeParameterList != null && typeParameterList.Parameters.Any())
         {
-            declarationGroup.Add(TypeParameterList.Print(typeParameterList));
+            declarationGroup.Add(TypeParameterList.Print(typeParameterList, context));
         }
 
         if (parameterList != null)
         {
             if (parameterList.Parameters.Any())
             {
-                declarationGroup.Add(ParameterList.Print(parameterList));
+                declarationGroup.Add(ParameterList.Print(parameterList, context));
             }
             else
             {
                 declarationGroup.Add(
-                    Token.Print(parameterList.OpenParenToken),
-                    Token.Print(parameterList.CloseParenToken)
+                    Token.Print(parameterList.OpenParenToken, context),
+                    Token.Print(parameterList.CloseParenToken, context)
                 );
             }
 
@@ -159,8 +159,8 @@ internal static class BaseMethodDeclaration
 
         if (constructorInitializer != null)
         {
-            var colonToken = Token.PrintWithSuffix(constructorInitializer.ColonToken, " ");
-            var argumentList = Doc.Group(ArgumentList.Print(constructorInitializer.ArgumentList));
+            var colonToken = Token.PrintWithSuffix(constructorInitializer.ColonToken, " ", context);
+            var argumentList = Doc.Group(ArgumentList.Print(constructorInitializer.ArgumentList, context));
 
             declarationGroup.Add(
                 Doc.Group(
@@ -176,24 +176,24 @@ internal static class BaseMethodDeclaration
 
         if (constraintClauses != null)
         {
-            docs.Add(ConstraintClauses.Print(constraintClauses));
+            docs.Add(ConstraintClauses.Print(constraintClauses, context));
         }
 
         if (body != null)
         {
-            docs.Add(Block.Print(body));
+            docs.Add(Block.Print(body, context));
         }
         else
         {
             if (expressionBody != null)
             {
-                docs.Add(ArrowExpressionClause.Print(expressionBody));
+                docs.Add(ArrowExpressionClause.Print(expressionBody, context));
             }
         }
 
         if (semicolonToken.HasValue)
         {
-            docs.Add(Token.Print(semicolonToken.Value));
+            docs.Add(Token.Print(semicolonToken.Value, context));
         }
 
         return Doc.Group(docs);

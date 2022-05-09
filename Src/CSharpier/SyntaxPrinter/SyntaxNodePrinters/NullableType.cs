@@ -2,8 +2,8 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class NullableType
 {
-    public static Doc Print(NullableTypeSyntax node)
+    public static Doc Print(NullableTypeSyntax node, FormattingContext context)
     {
-        return Doc.Concat(Node.Print(node.ElementType), Token.Print(node.QuestionToken));
+        return Doc.Concat(Node.Print(node.ElementType, context), Token.Print(node.QuestionToken, context));
     }
 }

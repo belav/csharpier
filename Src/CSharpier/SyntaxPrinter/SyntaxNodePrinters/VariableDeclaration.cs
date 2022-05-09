@@ -2,18 +2,18 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class VariableDeclaration
 {
-    public static Doc Print(VariableDeclarationSyntax node)
+    public static Doc Print(VariableDeclarationSyntax node, FormattingContext context)
     {
         if (node.Variables.Count > 1)
         {
             return Doc.Concat(
-                Node.Print(node.Type),
+                Node.Print(node.Type, context),
                 " ",
                 Doc.Indent(
                     SeparatedSyntaxList.Print(
                         node.Variables,
                         VariableDeclarator.Print,
-                        node.Parent is ForStatementSyntax ? Doc.Line : Doc.HardLine
+                        node.Parent is ForStatementSyntax ? Doc.Line : Doc.HardLine, context
                     )
                 )
             );
@@ -22,11 +22,11 @@ internal static class VariableDeclaration
         var variable = node.Variables[0];
 
         var leftDoc = Doc.Concat(
-            Node.Print(node.Type),
+            Node.Print(node.Type, context),
             " ",
-            Token.Print(variable.Identifier),
+            Token.Print(variable.Identifier, context),
             variable.ArgumentList != null
-              ? BracketedArgumentList.Print(variable.ArgumentList)
+              ? BracketedArgumentList.Print(variable.ArgumentList, context)
               : Doc.Null
         );
 
@@ -37,8 +37,8 @@ internal static class VariableDeclaration
           : RightHandSide.Print(
                 node,
                 Doc.Concat(leftDoc, " "),
-                Token.Print(initializer.EqualsToken),
-                initializer.Value
+                Token.Print(initializer.EqualsToken, context),
+                initializer.Value, context
             );
     }
 }

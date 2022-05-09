@@ -2,15 +2,15 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class RefValueExpression
 {
-    public static Doc Print(RefValueExpressionSyntax node)
+    public static Doc Print(RefValueExpressionSyntax node, FormattingContext context)
     {
         return Doc.Concat(
-            Token.Print(node.Keyword),
-            Token.Print(node.OpenParenToken),
-            Node.Print(node.Expression),
-            Token.PrintWithSuffix(node.Comma, " "),
-            Node.Print(node.Type),
-            Token.Print(node.CloseParenToken)
+            Token.Print(node.Keyword, context),
+            Token.Print(node.OpenParenToken, context),
+            Node.Print(node.Expression, context),
+            Token.PrintWithSuffix(node.Comma, " ", context),
+            Node.Print(node.Type, context),
+            Token.Print(node.CloseParenToken, context)
         );
     }
 }

@@ -2,14 +2,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class GroupClause
 {
-    public static Doc Print(GroupClauseSyntax node)
+    public static Doc Print(GroupClauseSyntax node, FormattingContext context)
     {
         return Doc.Concat(
-            Token.PrintWithSuffix(node.GroupKeyword, " "),
-            Node.Print(node.GroupExpression),
+            Token.PrintWithSuffix(node.GroupKeyword, " ", context),
+            Node.Print(node.GroupExpression, context),
             " ",
-            Token.PrintWithSuffix(node.ByKeyword, " "),
-            Node.Print(node.ByExpression)
+            Token.PrintWithSuffix(node.ByKeyword, " ", context),
+            Node.Print(node.ByExpression, context)
         );
     }
 }

@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class AttributeList
 {
-    public static Doc Print(AttributeListSyntax node)
+    public static Doc Print(AttributeListSyntax node, FormattingContext context)
     {
         var docs = new List<Doc>();
         if (
@@ -13,20 +13,20 @@ internal static class AttributeList
             docs.Add(ExtraNewLines.Print(node));
         }
 
-        docs.Add(Token.Print(node.OpenBracketToken));
+        docs.Add(Token.Print(node.OpenBracketToken, context));
         if (node.Target != null)
         {
             docs.Add(
-                Token.Print(node.Target.Identifier),
-                Token.PrintWithSuffix(node.Target.ColonToken, " ")
+                Token.Print(node.Target.Identifier, context),
+                Token.PrintWithSuffix(node.Target.ColonToken, " ", context)
             );
         }
 
         var printSeparatedSyntaxList = SeparatedSyntaxList.Print(
             node.Attributes,
-            attributeNode =>
+            (attributeNode, _) =>
             {
-                var name = Node.Print(attributeNode.Name);
+                var name = Node.Print(attributeNode.Name, context);
                 if (attributeNode.ArgumentList == null)
                 {
                     return name;
@@ -34,29 +34,34 @@ internal static class AttributeList
 
                 return Doc.Group(
                     name,
-                    Token.Print(attributeNode.ArgumentList.OpenParenToken),
+                    Token.Print(attributeNode.ArgumentList.OpenParenToken, context),
                     Doc.Indent(
                         Doc.SoftLine,
                         SeparatedSyntaxList.Print(
                             attributeNode.ArgumentList.Arguments,
-                            attributeArgumentNode =>
+                            (attributeArgumentNode, _) =>
                                 Doc.Concat(
                                     attributeArgumentNode.NameEquals != null
-                                      ? NameEquals.Print(attributeArgumentNode.NameEquals)
+                                      ? NameEquals.Print(attributeArgumentNode.NameEquals, context)
                                       : Doc.Null,
                                     attributeArgumentNode.NameColon != null
-                                      ? BaseExpressionColon.Print(attributeArgumentNode.NameColon)
+                                      ? BaseExpressionColon.Print(
+                                            attributeArgumentNode.NameColon,
+                                            context
+                                        )
                                       : Doc.Null,
-                                    Node.Print(attributeArgumentNode.Expression)
+                                    Node.Print(attributeArgumentNode.Expression, context)
                                 ),
-                            Doc.Line
+                            Doc.Line,
+                            context
                         )
                     ),
                     Doc.SoftLine,
-                    Token.Print(attributeNode.ArgumentList.CloseParenToken)
+                    Token.Print(attributeNode.ArgumentList.CloseParenToken, context)
                 );
             },
-            Doc.Line
+            Doc.Line,
+            context
         );
 
         docs.Add(
@@ -67,7 +72,7 @@ internal static class AttributeList
 
         docs.Add(
             node.Attributes.Count > 1 ? Doc.SoftLine : Doc.Null,
-            Token.Print(node.CloseBracketToken)
+            Token.Print(node.CloseBracketToken, context)
         );
 
         return Doc.Group(docs);

@@ -134,7 +134,7 @@ public class CodeFormatter
                 PreprocessorSymbols.Reset();
             }
 
-            var document = Node.Print(rootNode);
+            var document = Node.Print(rootNode, new FormattingContext());
             var lineEnding = GetLineEnding(syntaxTree.ToString(), printerOptions);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
 
@@ -148,7 +148,10 @@ public class CodeFormatter
                     return result;
                 }
 
-                document = Node.Print(await syntaxTree.GetRootAsync(cancellationToken));
+                document = Node.Print(
+                    await syntaxTree.GetRootAsync(cancellationToken),
+                    new FormattingContext()
+                );
                 formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
             }
 

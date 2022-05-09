@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BaseTypeDeclaration
 {
-    public static Doc Print(BaseTypeDeclarationSyntax node)
+    public static Doc Print(BaseTypeDeclarationSyntax node, FormattingContext context)
     {
         ParameterListSyntax? parameterList = null;
         TypeParameterListSyntax? typeParameterList = null;
@@ -67,40 +67,40 @@ internal static class BaseTypeDeclaration
         var docs = new List<Doc>();
         if (node.AttributeLists.Any())
         {
-            docs.Add(AttributeLists.Print(node, node.AttributeLists));
+            docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
         }
 
         if (node.Modifiers.Any())
         {
-            docs.Add(Modifiers.Print(node.Modifiers));
+            docs.Add(Modifiers.Print(node.Modifiers, context));
         }
 
         if (recordKeyword != null)
         {
-            docs.Add(Token.PrintWithSuffix(recordKeyword.Value, " "));
+            docs.Add(Token.PrintWithSuffix(recordKeyword.Value, " ", context));
         }
 
         if (keyword != null)
         {
-            docs.Add(Token.PrintWithSuffix(keyword.Value, " "));
+            docs.Add(Token.PrintWithSuffix(keyword.Value, " ", context));
         }
 
-        docs.Add(Token.Print(node.Identifier));
+        docs.Add(Token.Print(node.Identifier, context));
 
         if (typeParameterList != null)
         {
-            docs.Add(TypeParameterList.Print(typeParameterList));
+            docs.Add(TypeParameterList.Print(typeParameterList, context));
         }
 
         if (parameterList != null)
         {
-            docs.Add(ParameterList.Print(parameterList));
+            docs.Add(ParameterList.Print(parameterList, context));
         }
 
         if (node.BaseList != null)
         {
             var baseListDoc = Doc.Concat(
-                Token.Print(node.BaseList.ColonToken),
+                Token.Print(node.BaseList.ColonToken, context),
                 " ",
                 Node.Print(node.BaseList.Types.First()),
                 node.BaseList.Types.Count > 1
@@ -120,7 +120,7 @@ internal static class BaseTypeDeclaration
             docs.Add(Doc.Group(Doc.Indent(Doc.Line, baseListDoc)));
         }
 
-        docs.Add(ConstraintClauses.Print(constraintClauses));
+        docs.Add(ConstraintClauses.Print(constraintClauses, context));
 
         if (members != null)
         {
@@ -133,7 +133,7 @@ internal static class BaseTypeDeclaration
                 Token.Print(node.OpenBraceToken),
                 membersContent,
                 Doc.HardLine,
-                Token.Print(node.CloseBraceToken)
+                Token.Print(node.CloseBraceToken, context)
             );
         }
         else if (node.OpenBraceToken.RawSyntaxKind() != SyntaxKind.None)
@@ -148,15 +148,15 @@ internal static class BaseTypeDeclaration
 
             docs.Add(
                 separator,
-                Token.Print(node.OpenBraceToken),
+                Token.Print(node.OpenBraceToken, context),
                 separator,
-                Token.Print(node.CloseBraceToken)
+                Token.Print(node.CloseBraceToken, context)
             );
         }
 
         if (semicolonToken.HasValue)
         {
-            docs.Add(Token.Print(semicolonToken.Value));
+            docs.Add(Token.Print(semicolonToken.Value, context));
         }
 
         return Doc.Concat(docs);

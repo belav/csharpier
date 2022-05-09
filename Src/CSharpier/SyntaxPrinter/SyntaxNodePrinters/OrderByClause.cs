@@ -2,22 +2,22 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class OrderByClause
 {
-    public static Doc Print(OrderByClauseSyntax node)
+    public static Doc Print(OrderByClauseSyntax node, FormattingContext context)
     {
         return Doc.Concat(
-            Token.Print(node.OrderByKeyword),
+            Token.Print(node.OrderByKeyword, context),
             SeparatedSyntaxList.Print(
                 node.Orderings,
-                orderingNode =>
+                (orderingNode, _) =>
                     Doc.Concat(
                         " ",
-                        Node.Print(orderingNode.Expression),
+                        Node.Print(orderingNode.Expression, context),
                         string.IsNullOrEmpty(orderingNode.AscendingOrDescendingKeyword.Text)
                           ? Doc.Null
                           : " ",
-                        Token.Print(orderingNode.AscendingOrDescendingKeyword)
+                        Token.Print(orderingNode.AscendingOrDescendingKeyword, context)
                     ),
-                Doc.Null
+                Doc.Null, context
             )
         );
     }

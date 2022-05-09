@@ -2,14 +2,14 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class NamespaceLikePrinter
 {
-    public static void Print(BaseNamespaceDeclarationSyntax node, List<Doc> docs)
+    public static void Print(BaseNamespaceDeclarationSyntax node, List<Doc> docs, FormattingContext context)
     {
-        Print(node, node.Externs, node.Usings, node.Members, docs);
+        Print(node, node.Externs, node.Usings, node.Members, docs, context);
     }
 
-    public static void Print(CompilationUnitSyntax node, List<Doc> docs)
+    public static void Print(CompilationUnitSyntax node, List<Doc> docs, FormattingContext context)
     {
-        Print(node, node.Externs, node.Usings, node.Members, docs);
+        Print(node, node.Externs, node.Usings, node.Members, docs, context);
     }
 
     private static void Print(
@@ -17,12 +17,15 @@ internal static class NamespaceLikePrinter
         SyntaxList<ExternAliasDirectiveSyntax> externs,
         SyntaxList<UsingDirectiveSyntax> usings,
         SyntaxList<MemberDeclarationSyntax> members,
-        List<Doc> docs
+        List<Doc> docs,
+        FormattingContext context
     )
     {
         if (externs.Count > 0)
         {
-            docs.Add(Doc.Join(Doc.HardLine, externs.Select(ExternAliasDirective.Print)));
+            docs.Add(
+                Doc.Join(Doc.HardLine, externs.Select(o => ExternAliasDirective.Print(o, context)))
+            );
         }
 
         if (usings.Count > 0)
@@ -31,7 +34,7 @@ internal static class NamespaceLikePrinter
             {
                 docs.Add(Doc.HardLine);
             }
-            docs.Add(Doc.Join(Doc.HardLine, usings.Select(UsingDirective.Print)));
+            docs.Add(Doc.Join(Doc.HardLine, usings.Select(o => UsingDirective.Print(o, context))));
         }
 
         if (
@@ -56,7 +59,7 @@ internal static class NamespaceLikePrinter
             }
             docs.Add(
                 Doc.HardLine,
-                AttributeLists.Print(node, compilationUnitSyntax.AttributeLists)
+                AttributeLists.Print(node, compilationUnitSyntax.AttributeLists, context)
             );
         }
 
@@ -92,6 +95,6 @@ internal static class NamespaceLikePrinter
             }
         }
 
-        docs.AddRange(MembersWithForcedLines.Print(node, members));
+        docs.AddRange(MembersWithForcedLines.Print(node, members, context));
     }
 }

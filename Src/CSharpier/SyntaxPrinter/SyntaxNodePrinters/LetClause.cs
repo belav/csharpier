@@ -2,13 +2,13 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class LetClause
 {
-    public static Doc Print(LetClauseSyntax node)
+    public static Doc Print(LetClauseSyntax node, FormattingContext context)
     {
         return Doc.Concat(
-            Token.PrintWithSuffix(node.LetKeyword, " "),
-            Token.PrintWithSuffix(node.Identifier, " "),
-            Token.PrintWithSuffix(node.EqualsToken, " "),
-            Node.Print(node.Expression)
+            Token.PrintWithSuffix(node.LetKeyword, " ", context),
+            Token.PrintWithSuffix(node.Identifier, " ", context),
+            Token.PrintWithSuffix(node.EqualsToken, " ", context),
+            Node.Print(node.Expression, context)
         );
     }
 }

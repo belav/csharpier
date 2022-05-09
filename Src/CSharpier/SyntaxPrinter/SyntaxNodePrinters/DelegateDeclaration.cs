@@ -2,24 +2,24 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class DelegateDeclaration
 {
-    public static Doc Print(DelegateDeclarationSyntax node)
+    public static Doc Print(DelegateDeclarationSyntax node, FormattingContext context)
     {
         var docs = new List<Doc>
         {
-            AttributeLists.Print(node, node.AttributeLists),
-            Modifiers.Print(node.Modifiers),
-            Token.PrintWithSuffix(node.DelegateKeyword, " "),
-            Node.Print(node.ReturnType),
-            { " ", Token.Print(node.Identifier) }
+            AttributeLists.Print(node, node.AttributeLists, context),
+            Modifiers.Print(node.Modifiers, context),
+            Token.PrintWithSuffix(node.DelegateKeyword, " ", context),
+            Node.Print(node.ReturnType, context),
+            { " ", Token.Print(node.Identifier, context) }
         };
         if (node.TypeParameterList != null)
         {
-            docs.Add(Node.Print(node.TypeParameterList));
+            docs.Add(Node.Print(node.TypeParameterList, context));
         }
         docs.Add(
-            Node.Print(node.ParameterList),
-            ConstraintClauses.Print(node.ConstraintClauses),
-            Token.Print(node.SemicolonToken)
+            Node.Print(node.ParameterList, context),
+            ConstraintClauses.Print(node.ConstraintClauses, context),
+            Token.Print(node.SemicolonToken, context)
         );
         return Doc.Concat(docs);
     }

@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class TypeParameterList
 {
-    public static Doc Print(TypeParameterListSyntax node)
+    public static Doc Print(TypeParameterListSyntax node, FormattingContext context)
     {
         if (node.Parameters.Count == 0)
         {
@@ -13,13 +13,13 @@ internal static class TypeParameterList
             node.Parameters.Count > 1 || node.Parameters.First().AttributeLists.Any();
 
         return Doc.Group(
-            Token.Print(node.LessThanToken),
+            Token.Print(node.LessThanToken, context),
             Doc.Indent(
                 shouldBreakMore ? Doc.SoftLine : Doc.Null,
-                SeparatedSyntaxList.Print(node.Parameters, TypeParameter.Print, Doc.Line)
+                SeparatedSyntaxList.Print(node.Parameters, TypeParameter.Print, Doc.Line, context)
             ),
             shouldBreakMore ? Doc.SoftLine : Doc.Null,
-            Token.Print(node.GreaterThanToken)
+            Token.Print(node.GreaterThanToken, context)
         );
     }
 }

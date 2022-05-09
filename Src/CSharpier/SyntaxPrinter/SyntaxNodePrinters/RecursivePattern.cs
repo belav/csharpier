@@ -2,22 +2,26 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class RecursivePattern
 {
-    public static Doc PrintWithOutType(RecursivePatternSyntax node)
+    public static Doc PrintWithOutType(RecursivePatternSyntax node, FormattingContext context)
     {
-        return Print(node, false);
+        return Print(node, false, context);
     }
 
-    public static Doc Print(RecursivePatternSyntax node)
+    public static Doc Print(RecursivePatternSyntax node, FormattingContext context)
     {
-        return Print(node, true);
+        return Print(node, true, context);
     }
 
-    private static Doc Print(RecursivePatternSyntax node, bool includeType)
+    private static Doc Print(
+        RecursivePatternSyntax node,
+        bool includeType,
+        FormattingContext context
+    )
     {
         var result = new List<Doc>();
         if (node.Type != null && includeType)
         {
-            result.Add(Node.Print(node.Type));
+            result.Add(Node.Print(node.Type, context));
         }
 
         if (node.PositionalPatternClause != null)
@@ -26,25 +30,26 @@ internal static class RecursivePattern
                 node.Parent is SwitchExpressionArmSyntax or CasePatternSwitchLabelSyntax
                   ? Doc.Null
                   : Doc.SoftLine,
-                Token.PrintLeadingTrivia(node.PositionalPatternClause.OpenParenToken),
+                Token.PrintLeadingTrivia(node.PositionalPatternClause.OpenParenToken, context),
                 Doc.Group(
-                    Token.PrintWithoutLeadingTrivia(node.PositionalPatternClause.OpenParenToken),
+                    Token.PrintWithoutLeadingTrivia(node.PositionalPatternClause.OpenParenToken, context),
                     Doc.Indent(
                         Doc.SoftLine,
                         SeparatedSyntaxList.Print(
                             node.PositionalPatternClause.Subpatterns,
-                            subpatternNode =>
+                            (subpatternNode, _) =>
                                 Doc.Concat(
                                     subpatternNode.NameColon != null
-                                      ? BaseExpressionColon.Print(subpatternNode.NameColon)
+                                      ? BaseExpressionColon.Print(subpatternNode.NameColon, context)
                                       : Doc.Null,
-                                    Node.Print(subpatternNode.Pattern)
+                                    Node.Print(subpatternNode.Pattern, context)
                                 ),
-                            Doc.Line
+                            Doc.Line,
+                            context
                         )
                     ),
                     Doc.SoftLine,
-                    Token.Print(node.PositionalPatternClause.CloseParenToken)
+                    Token.Print(node.PositionalPatternClause.CloseParenToken, context)
                 )
             );
         }
@@ -62,26 +67,27 @@ internal static class RecursivePattern
             else
             {
                 result.Add(
-                    Token.PrintLeadingTrivia(node.PropertyPatternClause.OpenBraceToken),
+                    Token.PrintLeadingTrivia(node.PropertyPatternClause.OpenBraceToken, context),
                     Doc.Group(
                         node.Type != null ? Doc.Line : Doc.Null,
-                        Token.PrintWithoutLeadingTrivia(node.PropertyPatternClause.OpenBraceToken),
+                        Token.PrintWithoutLeadingTrivia(node.PropertyPatternClause.OpenBraceToken, context),
                         Doc.Indent(
                             node.PropertyPatternClause.Subpatterns.Any() ? Doc.Line : Doc.Null,
                             SeparatedSyntaxList.Print(
                                 node.PropertyPatternClause.Subpatterns,
-                                subpatternNode =>
+                                (subpatternNode, _) =>
                                     Doc.Group(
                                         subpatternNode.ExpressionColon != null
-                                          ? Node.Print(subpatternNode.ExpressionColon)
+                                          ? Node.Print(subpatternNode.ExpressionColon, context)
                                           : Doc.Null,
-                                        Node.Print(subpatternNode.Pattern)
+                                        Node.Print(subpatternNode.Pattern, context)
                                     ),
-                                Doc.Line
+                                Doc.Line,
+                                context
                             )
                         ),
                         Doc.Line,
-                        Token.Print(node.PropertyPatternClause.CloseBraceToken)
+                        Token.Print(node.PropertyPatternClause.CloseBraceToken, context)
                     )
                 );
             }
@@ -89,7 +95,7 @@ internal static class RecursivePattern
 
         if (node.Designation != null)
         {
-            result.Add(" ", Node.Print(node.Designation));
+            result.Add(" ", Node.Print(node.Designation, context));
         }
 
         return Doc.Concat(result);

@@ -2,47 +2,47 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class IsPatternExpression
 {
-    public static Doc Print(IsPatternExpressionSyntax node)
+    public static Doc Print(IsPatternExpressionSyntax node, FormattingContext context)
     {
         if (node.Parent is not (IfStatementSyntax or ParenthesizedExpressionSyntax))
         {
             return Doc.Group(
-                Node.Print(node.Expression),
-                Doc.Indent(Doc.Line, Token.Print(node.IsKeyword), " ", Node.Print(node.Pattern))
+                Node.Print(node.Expression, context),
+                Doc.Indent(Doc.Line, Token.Print(node.IsKeyword, context), " ", Node.Print(node.Pattern, context))
             );
         }
 
         if (node.Pattern is not RecursivePatternSyntax recursivePattern)
         {
             return Doc.Group(
-                Node.Print(node.Expression),
+                Node.Print(node.Expression, context),
                 Doc.Line,
-                Token.Print(node.IsKeyword),
+                Token.Print(node.IsKeyword, context),
                 " ",
-                Node.Print(node.Pattern)
+                Node.Print(node.Pattern, context)
             );
         }
 
         if (recursivePattern.Type is null)
         {
             return Doc.Group(
-                Node.Print(node.Expression),
+                Node.Print(node.Expression, context),
                 " ",
-                Token.Print(node.IsKeyword),
+                Token.Print(node.IsKeyword, context),
                 Doc.Line,
-                RecursivePattern.Print(recursivePattern)
+                RecursivePattern.Print(recursivePattern, context)
             );
         }
 
         return Doc.Group(
             Doc.Group(
-                Node.Print(node.Expression),
+                Node.Print(node.Expression, context),
                 Doc.Line,
-                Token.Print(node.IsKeyword),
+                Token.Print(node.IsKeyword, context),
                 " ",
-                Node.Print(recursivePattern.Type)
+                Node.Print(recursivePattern.Type, context)
             ),
-            RecursivePattern.PrintWithOutType(recursivePattern)
+            RecursivePattern.PrintWithOutType(recursivePattern, context)
         );
     }
 }

@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ArgumentList
 {
-    public static Doc Print(ArgumentListSyntax node)
+    public static Doc Print(ArgumentListSyntax node, FormattingContext context)
     {
         return Doc.Group(
             Doc.IndentIf(
@@ -27,7 +27,7 @@ internal static class ArgumentList
                                 Parent: { Parent: InvocationExpressionSyntax }
                             }
                     },
-                ArgumentListLike.Print(node.OpenParenToken, node.Arguments, node.CloseParenToken)
+                ArgumentListLike.Print(node.OpenParenToken, node.Arguments, node.CloseParenToken, context)
             )
         );
     }

@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class Block
 {
-    public static Doc Print(BlockSyntax node)
+    public static Doc Print(BlockSyntax node, FormattingContext context)
     {
         if (
             node.Statements.Count == 0
@@ -12,9 +12,9 @@ internal static class Block
         {
             return Doc.Concat(
                 " ",
-                Token.Print(node.OpenBraceToken),
+                Token.Print(node.OpenBraceToken, context),
                 " ",
-                Token.Print(node.CloseBraceToken)
+                Token.Print(node.CloseBraceToken, context)
             );
         }
 
@@ -29,7 +29,7 @@ internal static class Block
         {
             innerDoc = Doc.Indent(
                 statementSeparator,
-                Doc.Join(statementSeparator, node.Statements.Select(Node.Print))
+                Doc.Join(statementSeparator, node.Statements.Select(o => Node.Print(o, context)))
             );
 
             DocUtilities.RemoveInitialDoubleHardLine(innerDoc);
@@ -37,9 +37,9 @@ internal static class Block
 
         var result = Doc.Group(
             node.Parent is ParenthesizedLambdaExpressionSyntax or BlockSyntax ? Doc.Null : Doc.Line,
-            Token.Print(node.OpenBraceToken),
+            Token.Print(node.OpenBraceToken, context),
             node.Statements.Count == 0 ? " " : Doc.Concat(innerDoc, statementSeparator),
-            Token.Print(node.CloseBraceToken)
+            Token.Print(node.CloseBraceToken, context)
         );
 
         return node.Parent is BlockSyntax ? Doc.Concat(ExtraNewLines.Print(node), result) : result;

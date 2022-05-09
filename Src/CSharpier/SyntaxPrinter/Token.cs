@@ -8,23 +8,28 @@ internal static class Token
     [ThreadStatic]
     public static bool NextTriviaNeedsLine;
 
-    public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken)
+    public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken, FormattingContext context)
     {
-        return PrintSyntaxToken(syntaxToken, null, skipLeadingTrivia: true);
+        return PrintSyntaxToken(syntaxToken, context, skipLeadingTrivia: true);
     }
 
-    public static Doc Print(SyntaxToken syntaxToken)
+    public static Doc Print(SyntaxToken syntaxToken, FormattingContext context)
     {
-        return PrintSyntaxToken(syntaxToken);
+        return PrintSyntaxToken(syntaxToken, context);
     }
 
-    public static Doc PrintWithSuffix(SyntaxToken syntaxToken, Doc suffixDoc)
+    public static Doc PrintWithSuffix(
+        SyntaxToken syntaxToken,
+        Doc suffixDoc,
+        FormattingContext context
+    )
     {
-        return PrintSyntaxToken(syntaxToken, suffixDoc);
+        return PrintSyntaxToken(syntaxToken, context, suffixDoc);
     }
 
     private static Doc PrintSyntaxToken(
         SyntaxToken syntaxToken,
+        FormattingContext context,
         Doc? suffixDoc = null,
         bool skipLeadingTrivia = false
     )
@@ -37,7 +42,7 @@ internal static class Token
         var docs = new List<Doc>();
         if (!skipLeadingTrivia && !ShouldSkipNextLeadingTrivia)
         {
-            var leadingTrivia = PrintLeadingTrivia(syntaxToken);
+            var leadingTrivia = PrintLeadingTrivia(syntaxToken, context);
             if (leadingTrivia != Doc.Null)
             {
                 docs.Add(leadingTrivia);
@@ -88,7 +93,7 @@ internal static class Token
         };
     }
 
-    public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken)
+    public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken, FormattingContext context)
     {
         var isClosingBrace = syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken;
 
@@ -101,6 +106,7 @@ internal static class Token
 
         var printedTrivia = PrivatePrintLeadingTrivia(
             syntaxToken.LeadingTrivia,
+            context,
             skipLastHardline: isClosingBrace
         );
 
@@ -113,18 +119,22 @@ internal static class Token
           : printedTrivia;
     }
 
-    public static Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia)
+    public static Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, FormattingContext context)
     {
-        return PrivatePrintLeadingTrivia(leadingTrivia);
+        return PrivatePrintLeadingTrivia(leadingTrivia, context);
     }
 
-    public static Doc PrintLeadingTriviaWithNewLines(SyntaxTriviaList leadingTrivia)
+    public static Doc PrintLeadingTriviaWithNewLines(
+        SyntaxTriviaList leadingTrivia,
+        FormattingContext context
+    )
     {
-        return PrivatePrintLeadingTrivia(leadingTrivia, includeInitialNewLines: true);
+        return PrivatePrintLeadingTrivia(leadingTrivia, context, includeInitialNewLines: true);
     }
 
     private static Doc PrivatePrintLeadingTrivia(
         SyntaxTriviaList leadingTrivia,
+        FormattingContext context,
         bool includeInitialNewLines = false,
         bool skipLastHardline = false
     )

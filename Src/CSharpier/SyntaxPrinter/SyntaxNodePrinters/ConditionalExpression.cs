@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ConditionalExpression
 {
-    public static Doc Print(ConditionalExpressionSyntax node)
+    public static Doc Print(ConditionalExpressionSyntax node, FormattingContext context)
     {
         Doc[] innerContents =
         {
@@ -20,9 +20,9 @@ internal static class ConditionalExpression
             node.Parent is ReturnStatementSyntax
             && node.Condition is BinaryExpressionSyntax or IsPatternExpressionSyntax
                 ? Doc.Indent(
-                      Doc.Group(Doc.IfBreak(Doc.SoftLine, Doc.Null), Node.Print(node.Condition))
+                      Doc.Group(Doc.IfBreak(Doc.SoftLine, Doc.Null), Node.Print(node.Condition, context))
                   )
-                : Node.Print(node.Condition),
+                : Node.Print(node.Condition, context),
             node.Parent is ConditionalExpressionSyntax or ArgumentSyntax or ReturnStatementSyntax
             || node.Condition is InvocationExpressionSyntax
                 ? Doc.Indent(innerContents)

@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class WhenClause
 {
-    public static Doc Print(WhenClauseSyntax node)
+    public static Doc Print(WhenClauseSyntax node, FormattingContext context)
     {
         return Doc.Group(
             Doc.Indent(

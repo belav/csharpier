@@ -2,29 +2,29 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ArrayRankSpecifier
 {
-    public static Doc Print(ArrayRankSpecifierSyntax node)
+    public static Doc Print(ArrayRankSpecifierSyntax node, FormattingContext context)
     {
         if (node.Sizes.All(o => o is OmittedArraySizeExpressionSyntax))
         {
             return Doc.Concat(
-                Token.Print(node.OpenBracketToken),
-                SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.Null),
-                Token.Print(node.CloseBracketToken)
+                Token.Print(node.OpenBracketToken, context),
+                SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.Null, context),
+                Token.Print(node.CloseBracketToken, context)
             );
         }
 
         return Doc.Group(
-            Token.Print(node.OpenBracketToken),
+            Token.Print(node.OpenBracketToken, context),
             node.Sizes.Any()
               ? Doc.Concat(
                     Doc.Indent(
                         Doc.SoftLine,
-                        SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.Line)
+                        SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.Line, context)
                     ),
                     Doc.SoftLine
                 )
               : Doc.Null,
-            Token.Print(node.CloseBracketToken)
+            Token.Print(node.CloseBracketToken, context)
         );
     }
 }
