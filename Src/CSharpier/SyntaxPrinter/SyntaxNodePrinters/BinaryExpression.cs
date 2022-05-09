@@ -24,8 +24,11 @@ internal static class BinaryExpression
                     or SwitchStatementSyntax
                     or WhereClauseSyntax
                     or WhileStatementSyntax
-            || node.Parent is ConditionalExpressionSyntax
-                && node.Parent.Parent is not ArgumentSyntax;
+            || (
+                node.Parent is ConditionalExpressionSyntax conditionalExpressionSyntax
+                && conditionalExpressionSyntax.WhenTrue != node
+                && conditionalExpressionSyntax.WhenFalse != node
+            );
 
         return shouldNotIndent
           ? Doc.Group(docs)

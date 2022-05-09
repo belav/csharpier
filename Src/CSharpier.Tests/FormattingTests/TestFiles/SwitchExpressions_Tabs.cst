@@ -22,7 +22,7 @@ class ClassName
 			(DoorState.Locked, Action.Unlock, true) => DoorState.Closed,
 			(var state, _, _) => state,
 			(_, _, _)
-			  => DoorState.LongStateShouldNotGetExtraLine________________________________________
+				=> DoorState.LongStateShouldNotGetExtraLine________________________________________
 		};
 
 		return someValue switch
@@ -32,36 +32,36 @@ class ClassName
 			// this comment shouldn't affect the next line
 			{ IsParameter: false } => 0,
 			SomeLongObject someLongObject
-			  => CallSomeMethodWith____________________________(someLongObject),
+				=> CallSomeMethodWith____________________________(someLongObject),
 			YetAnotherObject
-			  => CallSomeMethod(
+				=> CallSomeMethod(
 					someValue,
 					andOtherParameters,
 					thatMakeThisLongEnoughToBreak___________________
-			  ),
+				),
 			VeryLongObject_______________________________________________________________
 				when count > 0
-			  => CallSomeMethod(someValue),
+				=> CallSomeMethod(someValue),
 			OneMore
-			  => "someStrings"
+				=> "someStrings"
 					+ "moreStrings"
 					+ "andMoreStrings_________________________________________",
 			SomeOtherObject
 			or AnotherObject
 			or OrEvenSomeOtherObject_________________
-			  => CallSomeMethod(someValue),
+				=> CallSomeMethod(someValue),
 			SomeOtherObject { SomeProperty: SomeOtherProject }
 			or AnotherObject
-			  => CallSomeMethod(someValue),
+				=> CallSomeMethod(someValue),
 			AnotherObject
 			or SomeOtherObject { SomeProperty: SomeOtherProject }
-			  => CallSomeMethod(someValue),
+				=> CallSomeMethod(someValue),
 			SomeOtherObject { Property: true } => CallSomeMethod(someValue),
 			SomeOtherObject { SomeProperty: YetAnotherObject { Property: true } }
-			  => CallSomeMethod(someValue),
+				=> CallSomeMethod(someValue),
 			{ } otherSyntax => CallSomeMethod(otherSyntax),
 			{ SomeProperty: true }
-			  => "Just because this is long, don't break the pattern                           ",
+				=> "Just because this is long, don't break the pattern                           ",
 			_ => CallSomeMethod(someValue)
 		};
 
@@ -69,7 +69,7 @@ class ClassName
 		{
 			{ IsParameter: true, } => noExtraLineAfterThis,
 			{ IsParameter: someLongValue____________________________________________, }
-			  => someOtherValue
+				=> someOtherValue
 		};
 
 		return (original, updated) switch
@@ -86,7 +86,7 @@ class ClassName
 					TupleElementIndex: var ui
 				} updatedField
 			)
-			  => originalField.Type.Equals(updatedField.Type)
+				=> originalField.Type.Equals(updatedField.Type)
 		};
 	}
 }
