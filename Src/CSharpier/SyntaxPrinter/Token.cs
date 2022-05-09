@@ -202,6 +202,7 @@ internal static class Token
                     Doc.HardLineSkipBreakIfFirstInGroup
                 );
 
+                // keep one line after an #endif if there is at least one
                 if (kind is SyntaxKind.EndIfDirectiveTrivia)
                 {
                     if (

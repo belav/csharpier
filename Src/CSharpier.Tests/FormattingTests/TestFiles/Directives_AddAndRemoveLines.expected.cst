@@ -28,3 +28,12 @@ public class ClassName
     public void RemoveLineBelow() { }
 #endif
 }
+
+public class ClassName
+{
+#if NET6_0_OR_GREATER
+    public void Method() { }
+#endif
+
+    public int AddLineAbove { get; set; }
+}

@@ -6,7 +6,7 @@ internal static class BasePropertyDeclaration
     {
         EqualsValueClauseSyntax? initializer = null;
         ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifierSyntax = null;
-        Doc identifier = Doc.Null;
+        Func<Doc>? identifier = null;
         Doc eventKeyword = Doc.Null;
         ArrowExpressionClauseSyntax? expressionBody = null;
         SyntaxToken? semicolonToken = null;
@@ -16,27 +16,56 @@ internal static class BasePropertyDeclaration
             expressionBody = propertyDeclarationSyntax.ExpressionBody;
             initializer = propertyDeclarationSyntax.Initializer;
             explicitInterfaceSpecifierSyntax = propertyDeclarationSyntax.ExplicitInterfaceSpecifier;
-            identifier = Token.Print(propertyDeclarationSyntax.Identifier);
+            identifier = () => Token.Print(propertyDeclarationSyntax.Identifier);
             semicolonToken = propertyDeclarationSyntax.SemicolonToken;
         }
         else if (node is IndexerDeclarationSyntax indexerDeclarationSyntax)
         {
             expressionBody = indexerDeclarationSyntax.ExpressionBody;
             explicitInterfaceSpecifierSyntax = indexerDeclarationSyntax.ExplicitInterfaceSpecifier;
-            identifier = Doc.Concat(
-                Token.Print(indexerDeclarationSyntax.ThisKeyword),
-                Node.Print(indexerDeclarationSyntax.ParameterList)
-            );
+            identifier = () =>
+                Doc.Concat(
+                    Token.Print(indexerDeclarationSyntax.ThisKeyword),
+                    Node.Print(indexerDeclarationSyntax.ParameterList)
+                );
             semicolonToken = indexerDeclarationSyntax.SemicolonToken;
         }
         else if (node is EventDeclarationSyntax eventDeclarationSyntax)
         {
             eventKeyword = Token.PrintWithSuffix(eventDeclarationSyntax.EventKeyword, " ");
             explicitInterfaceSpecifierSyntax = eventDeclarationSyntax.ExplicitInterfaceSpecifier;
-            identifier = Token.Print(eventDeclarationSyntax.Identifier);
+            identifier = () => Token.Print(eventDeclarationSyntax.Identifier);
             semicolonToken = eventDeclarationSyntax.SemicolonToken;
         }
 
+        var docs = new List<Doc> { AttributeLists.Print(node, node.AttributeLists) };
+
+        return Doc.Group(
+            Doc.Concat(
+                Doc.Concat(docs),
+                Modifiers.Print(node.Modifiers),
+                eventKeyword,
+                Node.Print(node.Type),
+                " ",
+                explicitInterfaceSpecifierSyntax != null
+                  ? Doc.Concat(
+                        Node.Print(explicitInterfaceSpecifierSyntax.Name),
+                        Token.Print(explicitInterfaceSpecifierSyntax.DotToken)
+                    )
+                  : Doc.Null,
+                identifier != null ? identifier() : Doc.Null,
+                Contents(node, expressionBody),
+                initializer != null ? EqualsValueClause.Print(initializer) : Doc.Null,
+                semicolonToken.HasValue ? Token.Print(semicolonToken.Value) : Doc.Null
+            )
+        );
+    }
+
+    private static Doc Contents(
+        BasePropertyDeclarationSyntax node,
+        ArrowExpressionClauseSyntax? expressionBody
+    )
+    {
         Doc contents = string.Empty;
         if (node.AccessorList != null)
         {
@@ -73,27 +102,7 @@ internal static class BasePropertyDeclaration
             contents = ArrowExpressionClause.Print(expressionBody);
         }
 
-        var docs = new List<Doc> { AttributeLists.Print(node, node.AttributeLists) };
-
-        return Doc.Group(
-            Doc.Concat(
-                Doc.Concat(docs),
-                Modifiers.Print(node.Modifiers),
-                eventKeyword,
-                Node.Print(node.Type),
-                " ",
-                explicitInterfaceSpecifierSyntax != null
-                  ? Doc.Concat(
-                        Node.Print(explicitInterfaceSpecifierSyntax.Name),
-                        Token.Print(explicitInterfaceSpecifierSyntax.DotToken)
-                    )
-                  : Doc.Null,
-                identifier,
-                contents,
-                initializer != null ? EqualsValueClause.Print(initializer) : Doc.Null,
-                semicolonToken.HasValue ? Token.Print(semicolonToken.Value) : Doc.Null
-            )
-        );
+        return contents;
     }
 
     private static Doc PrintAccessorDeclarationSyntax(AccessorDeclarationSyntax node, Doc separator)
