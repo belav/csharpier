@@ -31,6 +31,10 @@ public class Samples
         }
 
         var file = Path.Combine(directory.FullName, $"Samples/{fileName}.cst");
+        if (!File.Exists(file))
+        {
+            File.WriteAllText(file, "");
+        }
 
         var code = File.ReadAllText(file);
         var result = CodeFormatter.Format(

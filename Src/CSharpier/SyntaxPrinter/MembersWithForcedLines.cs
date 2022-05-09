@@ -4,11 +4,6 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class MembersWithForcedLines
 {
-    // TODO some edgecases to fix, see https://github.com/belav/csharpier-repos/pull/40/files
-    /*
-
-     */
-
     public static List<Doc> Print<T>(CSharpSyntaxNode node, IReadOnlyList<T> members)
         where T : MemberDeclarationSyntax
     {
@@ -70,7 +65,6 @@ internal static class MembersWithForcedLines
             var printExtraNewLines = false;
             var triviaContainsEndIfOrRegion = false;
 
-            // TODO test if this even matters, or if it makes memory worse
             var leadingTrivia = member
                 .GetLeadingTrivia()
                 .Select(o => o.RawSyntaxKind())
@@ -116,29 +110,31 @@ internal static class MembersWithForcedLines
                 result.Add(Doc.HardLine);
             }
 
-            // TODO clean this up, also some type of context should be passed around so that thread statics aren't necessary
+            // this handles inserting a new line after directives but before
+            // comments on members. The directives are printed by Token, so we can't
+            // directly print them here
             if (
                 addBlankLine
-                && !triviaContainsEndIfOrRegion
-                && leadingTrivia.Contains(SyntaxKind.IfDirectiveTrivia)
-                && !leadingTrivia.Contains(SyntaxKind.EndOfLineTrivia)
-            )
-            {
-                Token.NextTriviaNeedsLine = true;
-            }
-            else if (
-                addBlankLine
-                && triviaContainsEndIfOrRegion
-                && !leadingTrivia.Contains(SyntaxKind.IfDirectiveTrivia)
-                && !leadingTrivia.Contains(SyntaxKind.ElifDirectiveTrivia)
-                && !leadingTrivia.Contains(SyntaxKind.ElseDirectiveTrivia)
-                // single comments have an EndOfLine separate
-                // ideally we would just exclude if leadingTrivia contains EndOfLineTrivia
                 && (
-                    !leadingTrivia.Contains(SyntaxKind.EndOfLineTrivia)
-                    || leadingTrivia.Contains(SyntaxKind.SingleLineCommentTrivia)
+                    (
+                        !triviaContainsEndIfOrRegion
+                        && leadingTrivia.Contains(SyntaxKind.IfDirectiveTrivia)
+                        && !leadingTrivia.Contains(SyntaxKind.EndOfLineTrivia)
+                    )
+                    || (
+                        triviaContainsEndIfOrRegion
+                        && !leadingTrivia.Contains(SyntaxKind.IfDirectiveTrivia)
+                        && !leadingTrivia.Contains(SyntaxKind.ElifDirectiveTrivia)
+                        && !leadingTrivia.Contains(SyntaxKind.ElseDirectiveTrivia)
+                        // single comments have an EndOfLine separate
+                        // ideally we would just exclude if leadingTrivia contains EndOfLineTrivia
+                        && (
+                            !leadingTrivia.Contains(SyntaxKind.EndOfLineTrivia)
+                            || leadingTrivia.Contains(SyntaxKind.SingleLineCommentTrivia)
+                        )
+                        && !printExtraNewLines
+                    )
                 )
-                && !printExtraNewLines
             )
             {
                 Token.NextTriviaNeedsLine = true;

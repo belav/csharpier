@@ -41,9 +41,7 @@ public class ClassName
 public class ClassName
 {
 #if NET6_0_OR_GREATER
-
-
-    public void RemoveLinesAbove() { }
+    public void Method() { }
 #endif
 
     /// <summary>Summary</summary>
@@ -70,7 +68,7 @@ public class ClassName
     public void Method() { }
 #endif
 
-    public enum Enum
+    public enum LineAbove
     {
         Member,
     }

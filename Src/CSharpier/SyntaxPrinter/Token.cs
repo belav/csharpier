@@ -251,7 +251,6 @@ internal static class Token
                     docs.Insert(index + 1, Doc.HardLineSkipBreakIfFirstInGroup);
                 }
             }
-            DebugLogger.Log("Adding line");
             NextTriviaNeedsLine = false;
         }
 
