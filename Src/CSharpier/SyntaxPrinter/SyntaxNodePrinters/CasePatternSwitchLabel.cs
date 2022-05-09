@@ -8,7 +8,7 @@ internal static class CasePatternSwitchLabel
             ExtraNewLines.Print(node),
             Token.PrintWithSuffix(node.Keyword, " "),
             Node.Print(node.Pattern),
-            node.WhenClause != null ? Node.Print(node.WhenClause) : Doc.Null,
+            node.WhenClause != null ? WhenClause.Print(node.WhenClause) : Doc.Null,
             Token.Print(node.ColonToken)
         );
     }

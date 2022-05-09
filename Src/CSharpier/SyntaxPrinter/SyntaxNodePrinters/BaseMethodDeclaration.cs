@@ -17,8 +17,6 @@ internal static class BaseMethodDeclaration
         ArrowExpressionClauseSyntax? expressionBody = null;
         SyntaxToken? semicolonToken = null;
 
-        string? parameterGroupId = null;
-
         if (node is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax)
         {
             attributeLists = baseMethodDeclarationSyntax.AttributeLists;
@@ -164,32 +162,14 @@ internal static class BaseMethodDeclaration
             var colonToken = Token.PrintWithSuffix(constructorInitializer.ColonToken, " ");
             var argumentList = Doc.Group(ArgumentList.Print(constructorInitializer.ArgumentList));
 
-            if (parameterGroupId != null)
-            {
-                declarationGroup.Add(
-                    Doc.Group(
-                        Doc.Indent(Doc.IfBreak(" ", Doc.Line, parameterGroupId)),
-                        Doc.IfBreak(
-                            Doc.Align(2, colonToken),
-                            Doc.Indent(colonToken),
-                            parameterGroupId
-                        ),
-                        Token.Print(constructorInitializer.ThisOrBaseKeyword),
-                        Doc.IfBreak(argumentList, Doc.Indent(argumentList), parameterGroupId)
-                    )
-                );
-            }
-            else
-            {
-                declarationGroup.Add(
-                    Doc.Group(
-                        Doc.Indent(Doc.Line),
-                        Doc.Indent(colonToken),
-                        Token.Print(constructorInitializer.ThisOrBaseKeyword),
-                        Doc.Indent(argumentList)
-                    )
-                );
-            }
+            declarationGroup.Add(
+                Doc.Group(
+                    Doc.Indent(Doc.Line),
+                    Doc.Indent(colonToken),
+                    Token.Print(constructorInitializer.ThisOrBaseKeyword),
+                    Doc.Indent(argumentList)
+                )
+            );
         }
 
         docs.Add(Doc.Group(declarationGroup));

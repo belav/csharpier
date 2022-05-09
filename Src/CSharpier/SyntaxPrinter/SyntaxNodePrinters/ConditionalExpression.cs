@@ -8,10 +8,10 @@ internal static class ConditionalExpression
         {
             Doc.Line,
             Token.PrintWithSuffix(node.QuestionToken, " "),
-            Doc.Align(2, Node.Print(node.WhenTrue)),
+            Doc.Concat(Node.Print(node.WhenTrue)),
             Doc.Line,
             Token.PrintWithSuffix(node.ColonToken, " "),
-            Doc.Align(2, Node.Print(node.WhenFalse))
+            Doc.Concat(Node.Print(node.WhenFalse))
         };
 
         Doc[] outerContents =
@@ -25,7 +25,7 @@ internal static class ConditionalExpression
                 : Node.Print(node.Condition),
             node.Parent is ConditionalExpressionSyntax or ArgumentSyntax or ReturnStatementSyntax
             || node.Condition is InvocationExpressionSyntax
-                ? Doc.Align(2, innerContents)
+                ? Doc.Indent(innerContents)
                 : Doc.Indent(innerContents)
         };
 

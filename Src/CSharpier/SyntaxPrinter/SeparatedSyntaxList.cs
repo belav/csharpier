@@ -5,11 +5,12 @@ internal static class SeparatedSyntaxList
     public static Doc Print<T>(
         SeparatedSyntaxList<T> list,
         Func<T, Doc> printFunc,
-        Doc afterSeparator
+        Doc afterSeparator,
+        int startingIndex = 0
     ) where T : SyntaxNode
     {
         var docs = new List<Doc>();
-        for (var x = 0; x < list.Count; x++)
+        for (var x = startingIndex; x < list.Count; x++)
         {
             docs.Add(printFunc(list[x]));
 

@@ -54,9 +54,9 @@ class TestClass
 
         var conditionalIndentation = someBoolean
             ? someLongValue____________________________________
-              + someLongValue____________________________________
+                + someLongValue____________________________________
             : someLongValue____________________________________
-              + someLongValue____________________________________;
+                + someLongValue____________________________________;
 
         var someValue =
             value1__________________ == value2_________________

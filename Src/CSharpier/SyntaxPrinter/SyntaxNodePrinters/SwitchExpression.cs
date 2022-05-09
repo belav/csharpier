@@ -15,10 +15,7 @@ internal static class SwitchExpression
                             Doc.Group(
                                 Node.Print(o.Pattern),
                                 o.WhenClause != null ? Node.Print(o.WhenClause) : Doc.Null,
-                                // use align 2 here to make sure that the => never lines up with statements above it
-                                // it makes this more readable for big ugly switch expressions
-                                Doc.Align(
-                                    2,
+                                Doc.Indent(
                                     Doc.Concat(
                                         Doc.Line,
                                         Token.PrintWithSuffix(o.EqualsGreaterThanToken, " "),
