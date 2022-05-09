@@ -41,9 +41,7 @@ public class ClassName
 public class ClassName
 {
 #if NET6_0_OR_GREATER
-
-
-    public void RemoveLinesAbove() { }
+    public void Method() { }
 #endif
     /// <summary>Summary</summary>
     public void AddLineAboveSummary() { }
@@ -61,3 +59,15 @@ public class ClassName
     // Comment
     public void NoNewLineAbove() { }
 }
+
+public class ClassName
+{
+#if NET6_0_OR_GREATER
+    public void Method() { }
+#endif
+    public enum LineAbove
+    {
+        Member,
+    }
+}
+
