@@ -28,7 +28,12 @@ internal static class ForStatement
                         Doc.Line,
                         Doc.Group(
                             Doc.Indent(
-                                SeparatedSyntaxList.Print(node.Incrementors, Node.Print, Doc.Line, context)
+                                SeparatedSyntaxList.Print(
+                                    node.Incrementors,
+                                    Node.Print,
+                                    Doc.Line,
+                                    context
+                                )
                             )
                         )
                     ),

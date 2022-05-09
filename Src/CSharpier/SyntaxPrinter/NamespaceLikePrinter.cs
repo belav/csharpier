@@ -2,7 +2,11 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class NamespaceLikePrinter
 {
-    public static void Print(BaseNamespaceDeclarationSyntax node, List<Doc> docs, FormattingContext context)
+    public static void Print(
+        BaseNamespaceDeclarationSyntax node,
+        List<Doc> docs,
+        FormattingContext context
+    )
     {
         Print(node, node.Externs, node.Usings, node.Members, docs, context);
     }

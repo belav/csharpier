@@ -10,7 +10,12 @@ internal static class ParameterList
               ? Doc.Concat(
                     Doc.Indent(
                         Doc.SoftLine,
-                        SeparatedSyntaxList.Print(node.Parameters, Parameter.Print, Doc.Line, context)
+                        SeparatedSyntaxList.Print(
+                            node.Parameters,
+                            Parameter.Print,
+                            Doc.Line,
+                            context
+                        )
                     ),
                     Doc.SoftLine
                 )

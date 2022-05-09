@@ -11,7 +11,10 @@ internal static class SwitchStatement
                       Doc.Indent(
                           Doc.Concat(
                               Doc.HardLine,
-                              Doc.Join(Doc.HardLine, node.Sections.Select(o => SwitchSection.Print(o, context)))
+                              Doc.Join(
+                                  Doc.HardLine,
+                                  node.Sections.Select(o => SwitchSection.Print(o, context))
+                              )
                           )
                       ),
                       Doc.HardLine

@@ -32,7 +32,10 @@ internal static class RecursivePattern
                   : Doc.SoftLine,
                 Token.PrintLeadingTrivia(node.PositionalPatternClause.OpenParenToken, context),
                 Doc.Group(
-                    Token.PrintWithoutLeadingTrivia(node.PositionalPatternClause.OpenParenToken, context),
+                    Token.PrintWithoutLeadingTrivia(
+                        node.PositionalPatternClause.OpenParenToken,
+                        context
+                    ),
                     Doc.Indent(
                         Doc.SoftLine,
                         SeparatedSyntaxList.Print(
@@ -70,7 +73,10 @@ internal static class RecursivePattern
                     Token.PrintLeadingTrivia(node.PropertyPatternClause.OpenBraceToken, context),
                     Doc.Group(
                         node.Type != null ? Doc.Line : Doc.Null,
-                        Token.PrintWithoutLeadingTrivia(node.PropertyPatternClause.OpenBraceToken, context),
+                        Token.PrintWithoutLeadingTrivia(
+                            node.PropertyPatternClause.OpenBraceToken,
+                            context
+                        ),
                         Doc.Indent(
                             node.PropertyPatternClause.Subpatterns.Any() ? Doc.Line : Doc.Null,
                             SeparatedSyntaxList.Print(

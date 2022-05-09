@@ -10,7 +10,8 @@ internal static class BaseExpressionColon
                 node.ColonToken,
                 node.Parent is SubpatternSyntax { Pattern: RecursivePatternSyntax { Type: null } }
                   ? Doc.Line
-                  : " ", context
+                  : " ",
+                context
             )
         );
     }

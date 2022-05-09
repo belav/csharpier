@@ -8,7 +8,12 @@ internal static class IsPatternExpression
         {
             return Doc.Group(
                 Node.Print(node.Expression, context),
-                Doc.Indent(Doc.Line, Token.Print(node.IsKeyword, context), " ", Node.Print(node.Pattern, context))
+                Doc.Indent(
+                    Doc.Line,
+                    Token.Print(node.IsKeyword, context),
+                    " ",
+                    Node.Print(node.Pattern, context)
+                )
             );
         }
 

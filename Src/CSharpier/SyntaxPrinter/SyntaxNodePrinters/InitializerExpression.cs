@@ -19,7 +19,8 @@ internal static class InitializerExpression
                 SeparatedSyntaxList.Print(
                     node.Expressions,
                     Node.Print,
-                    alwaysBreak ? Doc.HardLine : Doc.Line, context
+                    alwaysBreak ? Doc.HardLine : Doc.Line,
+                    context
                 )
             ),
             node.Expressions.Any()

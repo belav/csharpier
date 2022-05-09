@@ -4,7 +4,10 @@ internal static class InterpolatedStringExpression
 {
     public static Doc Print(InterpolatedStringExpressionSyntax node, FormattingContext context)
     {
-        var docs = new List<Doc> { Token.PrintWithoutLeadingTrivia(node.StringStartToken, context) };
+        var docs = new List<Doc>
+        {
+            Token.PrintWithoutLeadingTrivia(node.StringStartToken, context)
+        };
 
         docs.AddRange(node.Contents.Select(o => Node.Print(o, context)));
         docs.Add(Token.Print(node.StringEndToken, context));

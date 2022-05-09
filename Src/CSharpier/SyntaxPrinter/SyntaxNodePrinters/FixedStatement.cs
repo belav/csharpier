@@ -10,7 +10,10 @@ internal static class FixedStatement
                 Token.Print(node.FixedKeyword, context),
                 " ",
                 Token.Print(node.OpenParenToken, context),
-                Doc.Group(Doc.Indent(Doc.SoftLine, Node.Print(node.Declaration, context)), Doc.SoftLine),
+                Doc.Group(
+                    Doc.Indent(Doc.SoftLine, Node.Print(node.Declaration, context)),
+                    Doc.SoftLine
+                ),
                 Token.Print(node.CloseParenToken, context),
                 Doc.IfBreak(Doc.Null, Doc.SoftLine)
             ),

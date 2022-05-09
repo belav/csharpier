@@ -12,6 +12,9 @@ internal static class PostfixUnaryExpression
             return InvocationExpression.PrintMemberChain(node, context);
         }
 
-        return Doc.Concat(Node.Print(node.Operand, context), Token.Print(node.OperatorToken, context));
+        return Doc.Concat(
+            Node.Print(node.Operand, context),
+            Token.Print(node.OperatorToken, context)
+        );
     }
 }

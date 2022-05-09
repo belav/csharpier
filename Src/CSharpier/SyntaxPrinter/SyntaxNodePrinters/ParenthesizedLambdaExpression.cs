@@ -8,7 +8,9 @@ internal static class ParenthesizedLambdaExpression
         {
             AttributeLists.Print(node, node.AttributeLists, context),
             Modifiers.Print(node.Modifiers, context),
-            node.ReturnType != null ? Doc.Concat(Node.Print(node.ReturnType, context), " ") : Doc.Null,
+            node.ReturnType != null
+                ? Doc.Concat(Node.Print(node.ReturnType, context), " ")
+                : Doc.Null,
             ParameterList.Print(node.ParameterList, context),
             " ",
             Token.Print(node.ArrowToken, context)

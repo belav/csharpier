@@ -2,7 +2,10 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ImplicitStackAllocArrayCreationExpression
 {
-    public static Doc Print(ImplicitStackAllocArrayCreationExpressionSyntax node, FormattingContext context)
+    public static Doc Print(
+        ImplicitStackAllocArrayCreationExpressionSyntax node,
+        FormattingContext context
+    )
     {
         return Doc.Concat(
             Token.Print(node.StackAllocKeyword, context),

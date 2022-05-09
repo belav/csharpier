@@ -6,7 +6,11 @@ internal static class ReturnStatement
     {
         return Doc.Group(
             ExtraNewLines.Print(node),
-            Token.PrintWithSuffix(node.ReturnKeyword, node.Expression != null ? " " : Doc.Null, context),
+            Token.PrintWithSuffix(
+                node.ReturnKeyword,
+                node.Expression != null ? " " : Doc.Null,
+                context
+            ),
             node.Expression != null
               ? node.Expression is BinaryExpressionSyntax
                   ? Doc.Indent(Node.Print(node.Expression, context))

@@ -27,7 +27,12 @@ internal static class ArgumentList
                                 Parent: { Parent: InvocationExpressionSyntax }
                             }
                     },
-                ArgumentListLike.Print(node.OpenParenToken, node.Arguments, node.CloseParenToken, context)
+                ArgumentListLike.Print(
+                    node.OpenParenToken,
+                    node.Arguments,
+                    node.CloseParenToken,
+                    context
+                )
             )
         );
     }

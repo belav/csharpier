@@ -17,7 +17,8 @@ internal static class OrderByClause
                           : " ",
                         Token.Print(orderingNode.AscendingOrDescendingKeyword, context)
                     ),
-                Doc.Null, context
+                Doc.Null,
+                context
             )
         );
     }

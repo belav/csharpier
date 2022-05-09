@@ -124,14 +124,22 @@ internal static class InvocationExpression
         }
         else if (expression is ConditionalAccessExpressionSyntax conditionalAccessExpressionSyntax)
         {
-            FlattenAndPrintNodes(conditionalAccessExpressionSyntax.Expression, printedNodes, context);
+            FlattenAndPrintNodes(
+                conditionalAccessExpressionSyntax.Expression,
+                printedNodes,
+                context
+            );
             printedNodes.Add(
                 new PrintedNode(
                     conditionalAccessExpressionSyntax,
                     Token.Print(conditionalAccessExpressionSyntax.OperatorToken, context)
                 )
             );
-            FlattenAndPrintNodes(conditionalAccessExpressionSyntax.WhenNotNull, printedNodes, context);
+            FlattenAndPrintNodes(
+                conditionalAccessExpressionSyntax.WhenNotNull,
+                printedNodes,
+                context
+            );
         }
         else if (
             expression is PostfixUnaryExpressionSyntax

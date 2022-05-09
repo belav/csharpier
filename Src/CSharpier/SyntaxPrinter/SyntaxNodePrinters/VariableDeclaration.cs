@@ -13,7 +13,8 @@ internal static class VariableDeclaration
                     SeparatedSyntaxList.Print(
                         node.Variables,
                         VariableDeclarator.Print,
-                        node.Parent is ForStatementSyntax ? Doc.Line : Doc.HardLine, context
+                        node.Parent is ForStatementSyntax ? Doc.Line : Doc.HardLine,
+                        context
                     )
                 )
             );
@@ -38,7 +39,8 @@ internal static class VariableDeclaration
                 node,
                 Doc.Concat(leftDoc, " "),
                 Token.Print(initializer.EqualsToken, context),
-                initializer.Value, context
+                initializer.Value,
+                context
             );
     }
 }

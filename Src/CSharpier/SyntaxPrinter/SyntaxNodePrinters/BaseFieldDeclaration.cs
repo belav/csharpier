@@ -14,7 +14,10 @@ internal static class BaseFieldDeclaration
             docs.Add(Token.PrintWithSuffix(eventFieldDeclarationSyntax.EventKeyword, " ", context));
         }
 
-        docs.Add(VariableDeclaration.Print(node.Declaration, context), Token.Print(node.SemicolonToken, context));
+        docs.Add(
+            VariableDeclaration.Print(node.Declaration, context),
+            Token.Print(node.SemicolonToken, context)
+        );
         return Doc.Concat(docs);
     }
 }

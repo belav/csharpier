@@ -13,7 +13,8 @@ internal static class AnonymousObjectCreationExpression
                     SeparatedSyntaxList.Print(
                         node.Initializers,
                         AnonymousObjectMemberDeclarator.Print,
-                        Doc.Line, context
+                        Doc.Line,
+                        context
                     )
                 )
               : Doc.Null,

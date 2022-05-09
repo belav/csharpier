@@ -8,7 +8,10 @@ internal static class CompilationUnit
 
         NamespaceLikePrinter.Print(node, docs, context);
 
-        var finalTrivia = Token.PrintLeadingTriviaWithNewLines(node.EndOfFileToken.LeadingTrivia, context);
+        var finalTrivia = Token.PrintLeadingTriviaWithNewLines(
+            node.EndOfFileToken.LeadingTrivia,
+            context
+        );
         if (finalTrivia != Doc.Null)
         {
             // even though we include the initialNewLines above, a literalLine from directives trims the hardline, so add an extra one here

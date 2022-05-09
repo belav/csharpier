@@ -1,6 +1,3 @@
 namespace CSharpier.SyntaxPrinter;
 
-public class FormattingContext
-{
-    
-}
+public class FormattingContext { }

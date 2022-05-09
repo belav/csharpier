@@ -4,7 +4,11 @@ internal static class Interpolation
 {
     public static Doc Print(InterpolationSyntax node, FormattingContext context)
     {
-        var docs = new List<Doc> { Token.Print(node.OpenBraceToken, context), Node.Print(node.Expression, context) };
+        var docs = new List<Doc>
+        {
+            Token.Print(node.OpenBraceToken, context),
+            Node.Print(node.Expression, context)
+        };
         if (node.AlignmentClause != null)
         {
             docs.Add(

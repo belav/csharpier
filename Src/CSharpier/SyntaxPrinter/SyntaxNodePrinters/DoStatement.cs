@@ -8,7 +8,8 @@ internal static class DoStatement
             ExtraNewLines.Print(node),
             Token.PrintWithSuffix(
                 node.DoKeyword,
-                node.Statement is not BlockSyntax ? " " : Doc.Null, context
+                node.Statement is not BlockSyntax ? " " : Doc.Null,
+                context
             ),
             Node.Print(node.Statement, context),
             node.Statement is BlockSyntax ? " " : Doc.HardLine,

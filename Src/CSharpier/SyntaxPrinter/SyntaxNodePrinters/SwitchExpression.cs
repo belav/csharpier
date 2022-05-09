@@ -18,7 +18,11 @@ internal static class SwitchExpression
                                 Doc.Indent(
                                     Doc.Concat(
                                         Doc.Line,
-                                        Token.PrintWithSuffix(o.EqualsGreaterThanToken, " ", context),
+                                        Token.PrintWithSuffix(
+                                            o.EqualsGreaterThanToken,
+                                            " ",
+                                            context
+                                        ),
                                         Node.Print(o.Expression, context)
                                     )
                                 )

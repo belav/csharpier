@@ -14,7 +14,8 @@ internal static class ObjectCreationExpression
                         ArgumentListLike.Print(
                             node.ArgumentList.OpenParenToken,
                             node.ArgumentList.Arguments,
-                            node.ArgumentList.CloseParenToken, context
+                            node.ArgumentList.CloseParenToken,
+                            context
                         )
                     )
                   : Doc.Null,

@@ -119,9 +119,14 @@ internal static class BaseMethodDeclaration
             declarationGroup.Add(
                 Token.PrintWithSuffix(
                     conversionOperatorDeclarationSyntax.ImplicitOrExplicitKeyword,
-                    " ", context
+                    " ",
+                    context
                 ),
-                Token.PrintWithSuffix(conversionOperatorDeclarationSyntax.OperatorKeyword, " ", context),
+                Token.PrintWithSuffix(
+                    conversionOperatorDeclarationSyntax.OperatorKeyword,
+                    " ",
+                    context
+                ),
                 Node.Print(conversionOperatorDeclarationSyntax.Type, context)
             );
         }
@@ -160,7 +165,9 @@ internal static class BaseMethodDeclaration
         if (constructorInitializer != null)
         {
             var colonToken = Token.PrintWithSuffix(constructorInitializer.ColonToken, " ", context);
-            var argumentList = Doc.Group(ArgumentList.Print(constructorInitializer.ArgumentList, context));
+            var argumentList = Doc.Group(
+                ArgumentList.Print(constructorInitializer.ArgumentList, context)
+            );
 
             declarationGroup.Add(
                 Doc.Group(
