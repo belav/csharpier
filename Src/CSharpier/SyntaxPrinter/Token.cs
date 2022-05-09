@@ -241,9 +241,17 @@ internal static class Token
                 {
                     index--;
                 }
-                docs.Insert(index + 1, Doc.HardLineSkipBreakIfFirstInGroup);
+                // this handles an edge case where we get here but already added the line
+                // it relates to the fact that single line comments include new line directives
+                if (
+                    index + 2 >= docs.Count
+                    || !(docs[index + 1] is HardLine && docs[index + 2] is HardLine)
+                )
+                {
+                    docs.Insert(index + 1, Doc.HardLineSkipBreakIfFirstInGroup);
+                }
             }
-
+            DebugLogger.Log("Adding line");
             NextTriviaNeedsLine = false;
         }
 

@@ -53,4 +53,11 @@ public class ClassName
 #endif
     // Comment
     public void AddLineAboveComment() { }
+    
+#if NET6_0_OR_GREATER
+    public void Method() { }
+#endif
+
+    // Comment
+    public void NoNewLineAbove() { }
 }
