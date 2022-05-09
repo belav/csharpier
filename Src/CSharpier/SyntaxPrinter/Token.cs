@@ -233,7 +233,15 @@ internal static class Token
             }
             else
             {
-                docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
+                var index = docs.Count - 1;
+                while (
+                    index >= 0
+                    && (docs[index] is HardLine or LeadingComment || docs[index] == Doc.Null)
+                )
+                {
+                    index--;
+                }
+                docs.Insert(index + 1, Doc.HardLineSkipBreakIfFirstInGroup);
             }
 
             NextTriviaNeedsLine = false;

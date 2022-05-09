@@ -37,3 +37,22 @@ public class ClassName
 
     public int AddLineAbove { get; set; }
 }
+
+public class ClassName
+{
+#if NET6_0_OR_GREATER
+
+
+    public void RemoveLinesAbove() { }
+#endif
+
+    /// <summary>Summary</summary>
+    public void AddLineAboveSummary() { }
+
+#if NET6_0_OR_GREATER
+    public void Method() { }
+#endif
+
+    // Comment
+    public void AddLineAboveComment() { }
+}
