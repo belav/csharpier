@@ -4,6 +4,16 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class MembersWithForcedLines
 {
+    // TODO some edgecases to fix, see https://github.com/belav/csharpier-repos/pull/40/files
+    // one of them is
+    //     public class ClassName
+    //     {
+    //     #if NET461
+    //         public void Blah () { }
+    //     #endif
+    //         public int Value { get; set; }
+    //     }
+
     public static List<Doc> Print<T>(CSharpSyntaxNode node, IReadOnlyList<T> members)
         where T : MemberDeclarationSyntax
     {
