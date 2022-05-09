@@ -26,14 +26,6 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
             env: { ...process.env, DOTNET_NOLOGO: "1" },
         });
 
-        csharpierProcess.stderr.on("data", chunk => {
-            this.logger.info("Got error: " + chunk.toString());
-            const callback = this.callbacks.shift();
-            if (callback) {
-                callback("");
-            }
-        });
-
         csharpierProcess.stdout.on("data", chunk => {
             this.logger.debug("Got chunk of size " + chunk.length);
             this.nextFile += chunk;
@@ -45,7 +37,7 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
                 const callback = this.callbacks.shift();
                 if (callback) {
                     if (!result) {
-                        this.logger.info("File is ignored by .csharpierignore");
+                        this.logger.info("File is ignored by .csharpierignore or there was an error");
                     }
 
                     callback(result);

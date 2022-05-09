@@ -2,14 +2,10 @@
     <Import Project="../../CSharpier.Build.props" />
     <PropertyGroup>
         <PackageId>CSharpier.Core</PackageId>
-        <TargetFrameworks>net5.0;net6.0;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
         <RootNamespace>CSharpier</RootNamespace>
         <Nullable>enable</Nullable>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
