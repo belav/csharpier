@@ -2,12 +2,6 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class Token
 {
-    [ThreadStatic]
-    public static bool ShouldSkipNextLeadingTrivia;
-
-    [ThreadStatic]
-    public static bool NextTriviaNeedsLine;
-
     public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken, FormattingContext context)
     {
         return PrintSyntaxToken(syntaxToken, context, skipLeadingTrivia: true);
@@ -40,7 +34,7 @@ internal static class Token
         }
 
         var docs = new List<Doc>();
-        if (!skipLeadingTrivia && !ShouldSkipNextLeadingTrivia)
+        if (!skipLeadingTrivia && !context.ShouldSkipNextLeadingTrivia)
         {
             var leadingTrivia = PrintLeadingTrivia(syntaxToken, context);
             if (leadingTrivia != Doc.Null)
@@ -49,7 +43,7 @@ internal static class Token
             }
         }
 
-        ShouldSkipNextLeadingTrivia = false;
+        context.ShouldSkipNextLeadingTrivia = false;
 
         if (
             (
@@ -235,7 +229,7 @@ internal static class Token
             docs.RemoveAt(docs.Count - 1);
         }
 
-        if (NextTriviaNeedsLine)
+        if (context.NextTriviaNeedsLine)
         {
             if (leadingTrivia.Any(o => o.RawSyntaxKind() is SyntaxKind.IfDirectiveTrivia))
             {
@@ -261,7 +255,7 @@ internal static class Token
                     docs.Insert(index + 1, Doc.HardLineSkipBreakIfFirstInGroup);
                 }
             }
-            NextTriviaNeedsLine = false;
+            context.NextTriviaNeedsLine = false;
         }
 
         return docs.Count > 0 ? Doc.Concat(docs) : Doc.Null;
