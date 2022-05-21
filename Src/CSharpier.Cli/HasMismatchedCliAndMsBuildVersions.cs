@@ -21,7 +21,20 @@ public static class HasMismatchedCliAndMsBuildVersions
         {
             // this could potentially use the Microsoft.CodeAnalysis.Project class, but that was
             // proving difficult to use
-            var csProjXElement = XElement.Load(fileSystem.File.OpenRead(pathToCsProj));
+            XElement csProjXElement;
+            try
+            {
+                csProjXElement = XElement.Load(fileSystem.File.OpenRead(pathToCsProj));
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning(
+                    $"The csproj at {pathToCsProj} failed to load with the following exception {ex.Message}"
+                );
+
+                continue;
+            }
+
             var csharpierMsBuildElement = csProjXElement
                 .XPathSelectElements("//PackageReference[@Include='CSharpier.MsBuild']")
                 .FirstOrDefault();
