@@ -7,11 +7,11 @@ internal static class ConditionalExpression
         Doc[] innerContents =
         {
             Doc.Line,
-            Token.PrintWithSuffix(node.QuestionToken, " "),
-            Doc.Concat(Node.Print(node.WhenTrue)),
+            Token.PrintWithSuffix(node.QuestionToken, " ", context),
+            Doc.Concat(Node.Print(node.WhenTrue, context)),
             Doc.Line,
-            Token.PrintWithSuffix(node.ColonToken, " "),
-            Doc.Concat(Node.Print(node.WhenFalse))
+            Token.PrintWithSuffix(node.ColonToken, " ", context),
+            Doc.Concat(Node.Print(node.WhenFalse, context))
         };
 
         Doc[] outerContents =

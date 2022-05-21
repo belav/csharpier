@@ -173,7 +173,7 @@ internal static class BaseMethodDeclaration
                 Doc.Group(
                     Doc.Indent(Doc.Line),
                     Doc.Indent(colonToken),
-                    Token.Print(constructorInitializer.ThisOrBaseKeyword),
+                    Token.Print(constructorInitializer.ThisOrBaseKeyword, context),
                     Doc.Indent(argumentList)
                 )
             );

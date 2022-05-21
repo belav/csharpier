@@ -6,10 +6,10 @@ internal static class CasePatternSwitchLabel
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),
-            Token.PrintWithSuffix(node.Keyword, " "),
-            Node.Print(node.Pattern),
-            node.WhenClause != null ? WhenClause.Print(node.WhenClause) : Doc.Null,
-            Token.Print(node.ColonToken)
+            Token.PrintWithSuffix(node.Keyword, " ", context),
+            Node.Print(node.Pattern, context),
+            node.WhenClause != null ? WhenClause.Print(node.WhenClause, context) : Doc.Null,
+            Token.Print(node.ColonToken, context)
         );
     }
 }

@@ -13,8 +13,8 @@ internal static class SwitchExpression
                         Doc.Concat(
                             ExtraNewLines.Print(o),
                             Doc.Group(
-                                Node.Print(o.Pattern),
-                                o.WhenClause != null ? Node.Print(o.WhenClause) : Doc.Null,
+                                Node.Print(o.Pattern, context),
+                                o.WhenClause != null ? Node.Print(o.WhenClause, context) : Doc.Null,
                                 Doc.Indent(
                                     Doc.Concat(
                                         Doc.Line,

@@ -22,7 +22,8 @@ internal static class BaseTypeDeclaration
                     Doc.Indent(
                         MembersWithForcedLines.Print(
                             typeDeclarationSyntax,
-                            typeDeclarationSyntax.Members
+                            typeDeclarationSyntax.Members,
+                            context
                         )
                     );
             }
@@ -55,7 +56,8 @@ internal static class BaseTypeDeclaration
                     Doc.Indent(
                         MembersWithForcedLines.Print(
                             enumDeclarationSyntax,
-                            enumDeclarationSyntax.Members
+                            enumDeclarationSyntax.Members,
+                            context
                         )
                     );
             }
@@ -102,15 +104,16 @@ internal static class BaseTypeDeclaration
             var baseListDoc = Doc.Concat(
                 Token.Print(node.BaseList.ColonToken, context),
                 " ",
-                Node.Print(node.BaseList.Types.First()),
+                Node.Print(node.BaseList.Types.First(), context),
                 node.BaseList.Types.Count > 1
                   ? Doc.Indent(
-                        Token.Print(node.BaseList.Types.GetSeparator(0)),
+                        Token.Print(node.BaseList.Types.GetSeparator(0), context),
                         Doc.Line,
                         SeparatedSyntaxList.Print(
                             node.BaseList.Types,
                             Node.Print,
                             Doc.Line,
+                            context,
                             startingIndex: 1
                         )
                     )
@@ -130,7 +133,7 @@ internal static class BaseTypeDeclaration
 
             docs.Add(
                 Doc.HardLine,
-                Token.Print(node.OpenBraceToken),
+                Token.Print(node.OpenBraceToken, context),
                 membersContent,
                 Doc.HardLine,
                 Token.Print(node.CloseBraceToken, context)

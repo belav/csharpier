@@ -7,8 +7,8 @@ internal static class WhenClause
         return Doc.Group(
             Doc.Indent(
                 Doc.Line,
-                Token.PrintWithSuffix(node.WhenKeyword, " "),
-                Node.Print(node.Condition)
+                Token.PrintWithSuffix(node.WhenKeyword, " ", context),
+                Node.Print(node.Condition, context)
             )
         );
     }

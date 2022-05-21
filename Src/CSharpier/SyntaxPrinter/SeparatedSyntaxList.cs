@@ -4,8 +4,9 @@ internal static class SeparatedSyntaxList
 {
     public static Doc Print<T>(
         SeparatedSyntaxList<T> list,
-        Func<T, Doc> printFunc,
+        Func<T, FormattingContext, Doc> printFunc,
         Doc afterSeparator,
+        FormattingContext context,
         int startingIndex = 0
     ) where T : SyntaxNode
     {

@@ -2,7 +2,10 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class ConstraintClauses
 {
-    public static Doc Print(IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses)
+    public static Doc Print(
+        IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses,
+        FormattingContext context
+    )
     {
         var constraintClausesList = constraintClauses.ToList();
 
