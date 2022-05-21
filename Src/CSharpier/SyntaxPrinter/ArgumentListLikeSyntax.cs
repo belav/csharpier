@@ -10,6 +10,8 @@ internal static class ArgumentListLike
     )
     {
         /*
+         https://github.com/belav/csharpier-repos/pull/41/files
+         
          prettier has a lot more logic around printing arguments, we could stick to just making () => better for now
          but it would be nice to get o => better as well, but that leads to more edge cases
          
@@ -17,6 +19,12 @@ internal static class ArgumentListLike
         {
             CallOtherMethod();
         });
+
+        // when there is no block, I think sticking with this is better
+        CallMethod(
+            () => CallOtherMethod___________________________________________________________()
+        );
+
 
         CallMethod(
             (
@@ -54,7 +62,8 @@ internal static class ArgumentListLike
             && arguments[0].Expression
                 is ParenthesizedLambdaExpressionSyntax
                 {
-                    ParameterList: { Parameters: { Count: 0 } }
+                    ParameterList: { Parameters: { Count: 0 } },
+                    Block: { }
                 }
         // TODO
         // or SimpleLambdaExpressionSyntax

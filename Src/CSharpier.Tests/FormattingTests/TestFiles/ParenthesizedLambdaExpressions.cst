@@ -37,6 +37,15 @@ public class ClassName
             ) => evenLongerParameter
         );
 
+        CallMethod(() =>
+        {
+            CallOtherMethod();
+        });
+
+        CallMethod(
+            () => CallOtherMethod___________________________________________________________()
+        );
+
         var task = Task.Factory.StartNew(async () =>
         {
             return await new WebClient().DownloadStringTaskAsync____________________(
