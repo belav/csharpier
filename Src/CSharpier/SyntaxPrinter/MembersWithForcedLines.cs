@@ -4,26 +4,6 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class MembersWithForcedLines
 {
-    // TODO some edgecases to fix, see https://github.com/belav/csharpier-repos/pull/40/files
-    /*
-     #if INTERNAL_ASYMMETRIC_IMPLEMENTATIONS
-public class ClassName
-{
-    public void MethodName { }
-#endif
-    public class NestedClass
-    {
-        private int field;
-    }
-#if INTERNAL_ASYMMETRIC_IMPLEMENTATIONS
-}
-#endif
-
-     
-    start from https://github.com/belav/csharpier-repos/pull/40/files#diff-cfd2c2802b10c6701ade623e79a187812b6ba0d69baa6e4a934e23354e82c103
-    
-     */
-
     public static List<Doc> Print<T>(
         CSharpSyntaxNode node,
         IReadOnlyList<T> members,
@@ -88,7 +68,6 @@ public class ClassName
             var printExtraNewLines = false;
             var triviaContainsEndIfOrRegion = false;
 
-            // TODO test if this even matters, or if it makes memory worse
             var leadingTrivia = member
                 .GetLeadingTrivia()
                 .Select(o => o.RawSyntaxKind())
@@ -127,7 +106,7 @@ public class ClassName
 
             if (printExtraNewLines)
             {
-                Token.NextTriviaNeedsLine = true;
+                result.Add(ExtraNewLines.Print(member));
             }
             else if (addBlankLine && !triviaContainsEndIfOrRegion)
             {
