@@ -3,9 +3,9 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 // this is loosely based on prettier/src/language-js/print/binaryish.js
 internal static class BinaryExpression
 {
-    public static Doc Print(BinaryExpressionSyntax node)
+    public static Doc Print(BinaryExpressionSyntax node, FormattingContext context)
     {
-        var docs = PrintBinaryExpression(node);
+        var docs = PrintBinaryExpression(node, context);
 
         var shouldNotIndent =
             node.Parent
@@ -45,11 +45,11 @@ internal static class BinaryExpression
         && three != four
         && five != six
      */
-    private static List<Doc> PrintBinaryExpression(SyntaxNode node)
+    private static List<Doc> PrintBinaryExpression(SyntaxNode node, FormattingContext context)
     {
         if (node is not BinaryExpressionSyntax binaryExpressionSyntax)
         {
-            return new List<Doc> { Doc.Group(Node.Print(node)) };
+            return new List<Doc> { Doc.Group(Node.Print(node, context)) };
         }
 
         if (depth > 200)
@@ -76,9 +76,9 @@ internal static class BinaryExpression
             if (binaryOnTheRight)
             {
                 docs.Add(
-                    Node.Print(binaryExpressionSyntax.Left),
+                    Node.Print(binaryExpressionSyntax.Left, context),
                     Doc.Line,
-                    Token.Print(binaryExpressionSyntax.OperatorToken),
+                    Token.Print(binaryExpressionSyntax.OperatorToken, context),
                     " "
                 );
             }
@@ -100,11 +100,11 @@ internal static class BinaryExpression
                 && ShouldFlatten(binaryExpressionSyntax.OperatorToken, childBinary.OperatorToken)
             )
             {
-                docs.AddRange(PrintBinaryExpression(childBinary));
+                docs.AddRange(PrintBinaryExpression(childBinary, context));
             }
             else
             {
-                docs.Add(Node.Print(possibleBinary));
+                docs.Add(Node.Print(possibleBinary, context));
             }
 
             if (binaryOnTheRight)
@@ -116,9 +116,9 @@ internal static class BinaryExpression
 
             var right = Doc.Concat(
                 Doc.Line,
-                Token.Print(binaryExpressionSyntax.OperatorToken),
+                Token.Print(binaryExpressionSyntax.OperatorToken, context),
                 " ",
-                Node.Print(binaryExpressionSyntax.Right)
+                Node.Print(binaryExpressionSyntax.Right, context)
             );
 
             docs.Add(shouldGroup ? Doc.Group(right) : right);

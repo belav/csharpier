@@ -2,24 +2,25 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ObjectCreationExpression
 {
-    public static Doc Print(ObjectCreationExpressionSyntax node)
+    public static Doc Print(ObjectCreationExpressionSyntax node, FormattingContext context)
     {
         return BreakParentIfNested(
             node,
             Doc.Group(
-                Token.PrintWithSuffix(node.NewKeyword, " "),
-                Node.Print(node.Type),
+                Token.PrintWithSuffix(node.NewKeyword, " ", context),
+                Node.Print(node.Type, context),
                 node.ArgumentList != null
                   ? Doc.Group(
                         ArgumentListLike.Print(
                             node.ArgumentList.OpenParenToken,
                             node.ArgumentList.Arguments,
-                            node.ArgumentList.CloseParenToken
+                            node.ArgumentList.CloseParenToken,
+                            context
                         )
                     )
                   : Doc.Null,
                 node.Initializer != null
-                  ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer))
+                  ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer, context))
                   : Doc.Null
             )
         );

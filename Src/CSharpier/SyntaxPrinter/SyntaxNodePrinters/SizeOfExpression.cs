@@ -2,13 +2,13 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class SizeOfExpression
 {
-    public static Doc Print(SizeOfExpressionSyntax node)
+    public static Doc Print(SizeOfExpressionSyntax node, FormattingContext context)
     {
         return Doc.Concat(
-            Token.Print(node.Keyword),
-            Token.Print(node.OpenParenToken),
-            Node.Print(node.Type),
-            Token.Print(node.CloseParenToken)
+            Token.Print(node.Keyword, context),
+            Token.Print(node.OpenParenToken, context),
+            Node.Print(node.Type, context),
+            Token.Print(node.CloseParenToken, context)
         );
     }
 }

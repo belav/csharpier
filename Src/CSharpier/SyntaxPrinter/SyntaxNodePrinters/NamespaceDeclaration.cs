@@ -2,15 +2,15 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class NamespaceDeclaration
 {
-    public static Doc Print(NamespaceDeclarationSyntax node)
+    public static Doc Print(NamespaceDeclarationSyntax node, FormattingContext context)
     {
         var docs = new List<Doc>
         {
-            AttributeLists.Print(node, node.AttributeLists),
-            Modifiers.Print(node.Modifiers),
-            Token.Print(node.NamespaceKeyword),
+            AttributeLists.Print(node, node.AttributeLists, context),
+            Modifiers.Print(node.Modifiers, context),
+            Token.Print(node.NamespaceKeyword, context),
             " ",
-            Node.Print(node.Name)
+            Node.Print(node.Name, context)
         };
 
         var innerDocs = new List<Doc>();
@@ -20,7 +20,7 @@ internal static class NamespaceDeclaration
         if (hasMembers || hasUsing || hasExterns)
         {
             innerDocs.Add(Doc.HardLine);
-            NamespaceLikePrinter.Print(node, innerDocs);
+            NamespaceLikePrinter.Print(node, innerDocs, context);
         }
         else
         {
@@ -32,11 +32,11 @@ internal static class NamespaceDeclaration
         docs.Add(
             Doc.Group(
                 Doc.Line,
-                Token.Print(node.OpenBraceToken),
+                Token.Print(node.OpenBraceToken, context),
                 Doc.Indent(innerDocs),
                 hasMembers || hasUsing || hasExterns ? Doc.HardLine : Doc.Null,
-                Token.Print(node.CloseBraceToken),
-                Token.Print(node.SemicolonToken)
+                Token.Print(node.CloseBraceToken, context),
+                Token.Print(node.SemicolonToken, context)
             )
         );
         return Doc.Concat(docs);

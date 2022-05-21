@@ -2,7 +2,11 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class AttributeLists
 {
-    public static Doc Print(SyntaxNode node, SyntaxList<AttributeListSyntax> attributeLists)
+    public static Doc Print(
+        SyntaxNode node,
+        SyntaxList<AttributeListSyntax> attributeLists,
+        FormattingContext context
+    )
     {
         if (attributeLists.Count == 0)
         {
@@ -16,7 +20,7 @@ internal static class AttributeLists
                 or ParenthesizedLambdaExpressionSyntax
             ? Doc.Line
             : Doc.HardLine;
-        docs.Add(Doc.Join(separator, attributeLists.Select(AttributeList.Print)));
+        docs.Add(Doc.Join(separator, attributeLists.Select(o => AttributeList.Print(o, context))));
 
         if (node is not (ParameterSyntax or TypeParameterSyntax))
         {

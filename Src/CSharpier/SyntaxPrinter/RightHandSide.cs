@@ -6,7 +6,8 @@ internal static class RightHandSide
         CSharpSyntaxNode leftNode,
         Doc leftDoc,
         Doc operatorDoc,
-        ExpressionSyntax rightNode
+        ExpressionSyntax rightNode,
+        FormattingContext context
     )
     {
         var layout = DetermineLayout(leftNode, rightNode);
@@ -16,27 +17,32 @@ internal static class RightHandSide
         return layout switch
         {
             Layout.BasicConcatWithoutLine
-              => Doc.Concat(leftDoc, operatorDoc, Node.Print(rightNode)),
+              => Doc.Concat(leftDoc, operatorDoc, Node.Print(rightNode, context)),
             Layout.BreakAfterOperator
               => Doc.Group(
                   Doc.Group(leftDoc),
                   operatorDoc,
-                  Doc.Group(Doc.Indent(Doc.Line, Node.Print(rightNode)))
+                  Doc.Group(Doc.Indent(Doc.Line, Node.Print(rightNode, context)))
               ),
             Layout.Chain
-              => Doc.Concat(Doc.Group(leftDoc), operatorDoc, Doc.Line, Node.Print(rightNode)),
+              => Doc.Concat(
+                  Doc.Group(leftDoc),
+                  operatorDoc,
+                  Doc.Line,
+                  Node.Print(rightNode, context)
+              ),
             Layout.ChainTail
               => Doc.Concat(
                   Doc.Group(leftDoc),
                   operatorDoc,
-                  Doc.Indent(Doc.Line, Node.Print(rightNode))
+                  Doc.Indent(Doc.Line, Node.Print(rightNode, context))
               ),
             Layout.Fluid
               => Doc.Group(
                   Doc.Group(leftDoc),
                   operatorDoc,
                   Doc.GroupWithId(groupId, Doc.Indent(Doc.Line)),
-                  Doc.IndentIfBreak(Node.Print(rightNode), groupId)
+                  Doc.IndentIfBreak(Node.Print(rightNode, context), groupId)
               ),
             _ => throw new Exception("The layout type of " + layout + " was not handled.")
         };

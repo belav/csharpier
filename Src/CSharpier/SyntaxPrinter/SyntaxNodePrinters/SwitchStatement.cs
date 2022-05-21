@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class SwitchStatement
 {
-    public static Doc Print(SwitchStatementSyntax node)
+    public static Doc Print(SwitchStatementSyntax node, FormattingContext context)
     {
         var sections =
             node.Sections.Count == 0
@@ -11,7 +11,10 @@ internal static class SwitchStatement
                       Doc.Indent(
                           Doc.Concat(
                               Doc.HardLine,
-                              Doc.Join(Doc.HardLine, node.Sections.Select(SwitchSection.Print))
+                              Doc.Join(
+                                  Doc.HardLine,
+                                  node.Sections.Select(o => SwitchSection.Print(o, context))
+                              )
                           )
                       ),
                       Doc.HardLine
@@ -23,21 +26,21 @@ internal static class SwitchStatement
 
         return Doc.Concat(
             ExtraNewLines.Print(node),
-            Token.PrintLeadingTrivia(node.SwitchKeyword),
+            Token.PrintLeadingTrivia(node.SwitchKeyword, context),
             Doc.Group(
-                Token.PrintWithoutLeadingTrivia(node.SwitchKeyword),
+                Token.PrintWithoutLeadingTrivia(node.SwitchKeyword, context),
                 " ",
-                Token.Print(node.OpenParenToken),
+                Token.Print(node.OpenParenToken, context),
                 Doc.GroupWithId(
                     groupId,
-                    Doc.Indent(Doc.SoftLine, Node.Print(node.Expression)),
+                    Doc.Indent(Doc.SoftLine, Node.Print(node.Expression, context)),
                     Doc.SoftLine
                 ),
-                Token.Print(node.CloseParenToken),
+                Token.Print(node.CloseParenToken, context),
                 node.Sections.Count == 0 ? " " : Doc.Line,
-                Token.Print(node.OpenBraceToken),
+                Token.Print(node.OpenBraceToken, context),
                 sections,
-                Token.Print(node.CloseBraceToken)
+                Token.Print(node.CloseBraceToken, context)
             )
         );
     }

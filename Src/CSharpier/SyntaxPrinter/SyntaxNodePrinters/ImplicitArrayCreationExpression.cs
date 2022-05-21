@@ -2,16 +2,16 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ImplicitArrayCreationExpression
 {
-    public static Doc Print(ImplicitArrayCreationExpressionSyntax node)
+    public static Doc Print(ImplicitArrayCreationExpressionSyntax node, FormattingContext context)
     {
-        var commas = node.Commas.Select(Token.Print).ToArray();
+        var commas = node.Commas.Select(o => Token.Print(o, context)).ToArray();
         return Doc.Group(
-            Token.Print(node.NewKeyword),
-            Token.Print(node.OpenBracketToken),
+            Token.Print(node.NewKeyword, context),
+            Token.Print(node.OpenBracketToken, context),
             Doc.Concat(commas),
-            Token.Print(node.CloseBracketToken),
+            Token.Print(node.CloseBracketToken, context),
             Doc.Line,
-            InitializerExpression.Print(node.Initializer)
+            InitializerExpression.Print(node.Initializer, context)
         );
     }
 }
