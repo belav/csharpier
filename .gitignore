@@ -54,3 +54,4 @@ publish
 debug.txt
 
 Src/CSharpier.VSCode/.idea/prettier.xml
+/Src/CSharpier.Tests/Samples/Scratch.cst

@@ -9,7 +9,7 @@ internal static class BaseMethodDeclaration
         TypeSyntax? returnType = null;
         ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier = null;
         TypeParameterListSyntax? typeParameterList = null;
-        Doc identifier = Doc.Null;
+        Func<Doc>? identifier = null;
         SyntaxList<TypeParameterConstraintClauseSyntax>? constraintClauses = null;
         ParameterListSyntax? parameterList = null;
         ConstructorInitializerSyntax? constructorInitializer = null;
@@ -28,20 +28,21 @@ internal static class BaseMethodDeclaration
             {
                 returnType = methodDeclarationSyntax.ReturnType;
                 explicitInterfaceSpecifier = methodDeclarationSyntax.ExplicitInterfaceSpecifier;
-                identifier = Token.Print(methodDeclarationSyntax.Identifier);
+                identifier = () => Token.Print(methodDeclarationSyntax.Identifier);
                 typeParameterList = methodDeclarationSyntax.TypeParameterList;
                 constraintClauses = methodDeclarationSyntax.ConstraintClauses;
             }
             else if (node is DestructorDeclarationSyntax destructorDeclarationSyntax)
             {
-                identifier = Doc.Concat(
-                    Token.Print(destructorDeclarationSyntax.TildeToken),
-                    Token.Print(destructorDeclarationSyntax.Identifier)
-                );
+                identifier = () =>
+                    Doc.Concat(
+                        Token.Print(destructorDeclarationSyntax.TildeToken),
+                        Token.Print(destructorDeclarationSyntax.Identifier)
+                    );
             }
             else if (node is ConstructorDeclarationSyntax constructorDeclarationSyntax)
             {
-                identifier = Token.Print(constructorDeclarationSyntax.Identifier);
+                identifier = () => Token.Print(constructorDeclarationSyntax.Identifier);
                 constructorInitializer = constructorDeclarationSyntax.Initializer;
             }
 
@@ -52,7 +53,7 @@ internal static class BaseMethodDeclaration
             attributeLists = localFunctionStatementSyntax.AttributeLists;
             modifiers = localFunctionStatementSyntax.Modifiers;
             returnType = localFunctionStatementSyntax.ReturnType;
-            identifier = Token.Print(localFunctionStatementSyntax.Identifier);
+            identifier = () => Token.Print(localFunctionStatementSyntax.Identifier);
             typeParameterList = localFunctionStatementSyntax.TypeParameterList;
             parameterList = localFunctionStatementSyntax.ParameterList;
             constraintClauses = localFunctionStatementSyntax.ConstraintClauses;
@@ -62,6 +63,7 @@ internal static class BaseMethodDeclaration
         }
 
         var docs = new List<Doc>();
+
         if (node is LocalFunctionStatementSyntax)
         {
             docs.Add(ExtraNewLines.Print(node));
@@ -70,6 +72,15 @@ internal static class BaseMethodDeclaration
         if (attributeLists is { Count: > 0 })
         {
             docs.Add(AttributeLists.Print(node, attributeLists.Value));
+        }
+
+        if (modifiers is { Count: > 0 })
+        {
+            docs.Add(Token.PrintLeadingTrivia(modifiers.Value[0]));
+        }
+        else if (returnType != null)
+        {
+            docs.Add(Token.PrintLeadingTrivia(returnType.GetLeadingTrivia()));
         }
 
         var declarationGroup = new List<Doc>();
@@ -81,7 +92,7 @@ internal static class BaseMethodDeclaration
 
         if (returnType != null)
         {
-            if (!(modifiers.HasValue && modifiers.Value.Count > 0))
+            if (modifiers is not { Count: > 0 })
             {
                 Token.ShouldSkipNextLeadingTrivia = true;
             }
@@ -98,9 +109,9 @@ internal static class BaseMethodDeclaration
             );
         }
 
-        if (identifier != Doc.Null)
+        if (identifier != null)
         {
-            declarationGroup.Add(identifier);
+            declarationGroup.Add(identifier());
         }
 
         if (node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax)
@@ -159,15 +170,6 @@ internal static class BaseMethodDeclaration
                     Doc.Indent(argumentList)
                 )
             );
-        }
-
-        if (modifiers is { Count: > 0 })
-        {
-            docs.Add(Token.PrintLeadingTrivia(modifiers.Value[0]));
-        }
-        else if (returnType != null)
-        {
-            docs.Add(Token.PrintLeadingTrivia(returnType.GetLeadingTrivia()));
         }
 
         docs.Add(Doc.Group(declarationGroup));

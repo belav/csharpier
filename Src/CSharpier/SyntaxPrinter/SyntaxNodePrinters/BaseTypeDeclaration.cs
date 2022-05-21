@@ -7,25 +7,24 @@ internal static class BaseTypeDeclaration
         ParameterListSyntax? parameterList = null;
         TypeParameterListSyntax? typeParameterList = null;
         var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
-        var hasMembers = false;
         SyntaxToken? recordKeyword = null;
         SyntaxToken? keyword = null;
-        Doc members = Doc.Null;
+        Func<Doc>? members = null;
         SyntaxToken? semicolonToken = null;
 
         if (node is TypeDeclarationSyntax typeDeclarationSyntax)
         {
             typeParameterList = typeDeclarationSyntax.TypeParameterList;
             constraintClauses = typeDeclarationSyntax.ConstraintClauses;
-            hasMembers = typeDeclarationSyntax.Members.Count > 0;
             if (typeDeclarationSyntax.Members.Count > 0)
             {
-                members = Doc.Indent(
-                    MembersWithForcedLines.Print(
-                        typeDeclarationSyntax,
-                        typeDeclarationSyntax.Members
-                    )
-                );
+                members = () =>
+                    Doc.Indent(
+                        MembersWithForcedLines.Print(
+                            typeDeclarationSyntax,
+                            typeDeclarationSyntax.Members
+                        )
+                    );
             }
             if (node is ClassDeclarationSyntax classDeclarationSyntax)
             {
@@ -50,10 +49,17 @@ internal static class BaseTypeDeclaration
         }
         else if (node is EnumDeclarationSyntax enumDeclarationSyntax)
         {
-            members = Doc.Indent(
-                MembersWithForcedLines.Print(enumDeclarationSyntax, enumDeclarationSyntax.Members)
-            );
-            hasMembers = enumDeclarationSyntax.Members.Count > 0;
+            if (enumDeclarationSyntax.Members.Count > 0)
+            {
+                members = () =>
+                    Doc.Indent(
+                        MembersWithForcedLines.Print(
+                            enumDeclarationSyntax,
+                            enumDeclarationSyntax.Members
+                        )
+                    );
+            }
+
             keyword = enumDeclarationSyntax.EnumKeyword;
             semicolonToken = enumDeclarationSyntax.SemicolonToken;
         }
@@ -116,14 +122,16 @@ internal static class BaseTypeDeclaration
 
         docs.Add(ConstraintClauses.Print(constraintClauses));
 
-        if (hasMembers)
+        if (members != null)
         {
-            DocUtilities.RemoveInitialDoubleHardLine(members);
+            var membersContent = members();
+
+            DocUtilities.RemoveInitialDoubleHardLine(membersContent);
 
             docs.Add(
                 Doc.HardLine,
                 Token.Print(node.OpenBraceToken),
-                members,
+                membersContent,
                 Doc.HardLine,
                 Token.Print(node.CloseBraceToken)
             );

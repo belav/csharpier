@@ -1,7 +1,0 @@
-using System.Web.Http;
-
-#if KEEP_LINE_ABOVE
-using System.Web.Http;
-#endif
-
-namespace Namespace { }

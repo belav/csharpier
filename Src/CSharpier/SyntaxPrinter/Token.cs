@@ -5,6 +5,9 @@ internal static class Token
     [ThreadStatic]
     public static bool ShouldSkipNextLeadingTrivia;
 
+    [ThreadStatic]
+    public static bool NextTriviaNeedsLine;
+
     public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken)
     {
         return PrintSyntaxToken(syntaxToken, null, skipLeadingTrivia: true);
@@ -198,14 +201,57 @@ internal static class Token
                     Doc.Directive(triviaText),
                     Doc.HardLineSkipBreakIfFirstInGroup
                 );
+
+                // keep one line after an #endif if there is at least one
+                if (kind is SyntaxKind.EndIfDirectiveTrivia)
+                {
+                    if (
+                        x + 1 < leadingTrivia.Count
+                        && leadingTrivia[x + 1].RawSyntaxKind() is SyntaxKind.EndOfLineTrivia
+                    )
+                    {
+                        x++;
+                        docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
+                    }
+                    printNewLines = false;
+                }
             }
 
             PreprocessorSymbols.AddSymbolSet(trivia);
         }
 
-        if (skipLastHardline && docs.Any() && docs.Last() is HardLine)
+        while (skipLastHardline && docs.Any() && docs.Last() is HardLine)
         {
             docs.RemoveAt(docs.Count - 1);
+        }
+
+        if (NextTriviaNeedsLine)
+        {
+            if (leadingTrivia.Any(o => o.RawSyntaxKind() is SyntaxKind.IfDirectiveTrivia))
+            {
+                docs.Insert(0, Doc.HardLineSkipBreakIfFirstInGroup);
+            }
+            else
+            {
+                var index = docs.Count - 1;
+                while (
+                    index >= 0
+                    && (docs[index] is HardLine or LeadingComment || docs[index] == Doc.Null)
+                )
+                {
+                    index--;
+                }
+                // this handles an edge case where we get here but already added the line
+                // it relates to the fact that single line comments include new line directives
+                if (
+                    index + 2 >= docs.Count
+                    || !(docs[index + 1] is HardLine && docs[index + 2] is HardLine)
+                )
+                {
+                    docs.Insert(index + 1, Doc.HardLineSkipBreakIfFirstInGroup);
+                }
+            }
+            NextTriviaNeedsLine = false;
         }
 
         return docs.Count > 0 ? Doc.Concat(docs) : Doc.Null;
