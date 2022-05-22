@@ -9,52 +9,6 @@ internal static class ArgumentListLike
         FormattingContext context
     )
     {
-        /*
-         https://github.com/belav/csharpier-repos/pull/41/files
-         
-         prettier has a lot more logic around printing arguments, we could stick to just making () => better for now
-         but it would be nice to get o => better as well, but that leads to more edge cases
-         
-        CallMethod(() =>
-        {
-            CallOtherMethod();
-        });
-
-        // when there is no block, I think sticking with this is better
-        CallMethod(
-            () => CallOtherMethod___________________________________________________________()
-        );
-
-
-        CallMethod(
-            (
-                longParameter_____________________________,
-                longParameter_____________________________,
-                longParameter_____________________________
-            ) =>
-            {
-                CallOtherMethod();
-            }
-        );
-
-        // this looks bad
-        var y = someList.Where(o =>
-            someLongValue_______________________
-            && theseShouldNotIndent_________________
-            && theseShouldNotIndent_________________
-                > butThisOneShould_________________________________________);
-
-        var y = someList.Where(o =>
-        {
-            return someLongValue_______________________
-                && theseShouldNotIndent_________________
-                && theseShouldNotIndent_________________
-                    > butThisOneShould_________________________________________;
-        });
-         
-         
-         */
-
         var docs = new List<Doc> { Token.Print(openParenToken, context) };
 
         if (
