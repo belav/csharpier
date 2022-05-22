@@ -17,11 +17,9 @@ public class ClassName
                 someOtherLongName_______________________________
         );
 
-        this.Where___________________(
-            superLongName________________________________ =>
-            {
-                return someOtherLongName__________________;
-            }
-        );
+        this.Where___________________(superLongName________________________________ =>
+        {
+            return someOtherLongName__________________;
+        });
     }
 }

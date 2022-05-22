@@ -61,12 +61,11 @@ internal static class ArgumentListLike
             arguments.Count == 1
             && arguments[0].Expression
                 is ParenthesizedLambdaExpressionSyntax
-                {
-                    ParameterList: { Parameters: { Count: 0 } },
-                    Block: { }
-                }
-        // TODO
-        // or SimpleLambdaExpressionSyntax
+                    {
+                        ParameterList.Parameters.Count: 0,
+                        Block: { }
+                    }
+                    or SimpleLambdaExpressionSyntax { Block: { } }
         )
         {
             docs.Add(Argument.Print(arguments[0], context));

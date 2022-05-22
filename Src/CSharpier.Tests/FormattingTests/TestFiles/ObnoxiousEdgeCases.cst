@@ -61,52 +61,44 @@ class ClassName
         >();
 
     private static readonly Action<IApplicationBuilder> ActionNotImplemented =
-        new Action<IApplicationBuilder>(
-            _ =>
-            {
-                throw new NotImplementedException();
-            }
-        );
+        new Action<IApplicationBuilder>(_ =>
+        {
+            throw new NotImplementedException();
+        });
 
     public void MapFrom<TResult>(Func<TSource, TDestination, TMember, TResult> mappingFunction)
     {
         if (true)
         {
-            PropertyMapActions.Add(
-                pm =>
-                {
-                    Expression<
-                        Func<TSource, TDestination, TMember, ResolutionContext, TResult>
-                    > expr = (src, dest, destMember, ctxt) =>
-                        mappingFunction(src, dest, destMember);
+            PropertyMapActions.Add(pm =>
+            {
+                Expression<Func<TSource, TDestination, TMember, ResolutionContext, TResult>> expr =
+                    (src, dest, destMember, ctxt) => mappingFunction(src, dest, destMember);
 
-                    pm.CustomMapFunction = expr;
-                }
-            );
+                pm.CustomMapFunction = expr;
+            });
         }
     }
 
     public void Condition(
         Func<ConditionParameters<TSource, TDestination, TMember>, bool> condition
     ) =>
-        PathMapActions.Add(
-            pm =>
-            {
-                Expression<
-                    Func<TSource, TDestination, TMember, TMember, ResolutionContext, bool>
-                > expr = (src, dest, srcMember, destMember, ctxt) =>
-                    condition(
-                        new ConditionParameters<TSource, TDestination, TMember>(
-                            src,
-                            dest,
-                            srcMember,
-                            destMember,
-                            ctxt
-                        )
-                    );
-                pm.Condition = expr;
-            }
-        );
+        PathMapActions.Add(pm =>
+        {
+            Expression<
+                Func<TSource, TDestination, TMember, TMember, ResolutionContext, bool>
+            > expr = (src, dest, srcMember, destMember, ctxt) =>
+                condition(
+                    new ConditionParameters<TSource, TDestination, TMember>(
+                        src,
+                        dest,
+                        srcMember,
+                        destMember,
+                        ctxt
+                    )
+                );
+            pm.Condition = expr;
+        });
 
     public override Type SourceType
     {
