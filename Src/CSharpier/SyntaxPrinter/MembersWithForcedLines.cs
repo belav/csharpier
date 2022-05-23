@@ -140,7 +140,7 @@ internal static class MembersWithForcedLines
                 )
             )
             {
-                Token.NextTriviaNeedsLine = true;
+                context.NextTriviaNeedsLine = true;
             }
 
             result.Add(Doc.HardLine, Node.Print(member, context));

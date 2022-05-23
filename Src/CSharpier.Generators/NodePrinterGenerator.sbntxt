@@ -9,9 +9,6 @@ namespace CSharpier.SyntaxPrinter
 {
     internal static class Node
     {
-        [ThreadStatic]
-        private static int depth;
-
         public static Doc Print(SyntaxNode syntaxNode, FormattingContext context)
         {
             if (syntaxNode == null)
@@ -19,7 +16,7 @@ namespace CSharpier.SyntaxPrinter
                 return Doc.Null;
             }
 
-            if (depth > 200)
+            if (context.PrintingDepth > 200)
             {
                 throw new InTooDeepException();
             }
@@ -29,7 +26,7 @@ namespace CSharpier.SyntaxPrinter
                 return CSharpierIgnore.PrintWithoutFormatting(syntaxNode);
             }
 
-            depth++;
+            context.PrintingDepth++;
             try
             {
                 switch (syntaxNode)
@@ -44,7 +41,7 @@ namespace CSharpier.SyntaxPrinter
             }
             finally
             {
-                depth--;
+                context.PrintingDepth--;
             }
         }
     }
