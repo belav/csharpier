@@ -11,7 +11,20 @@ internal static class ArgumentListLike
     {
         var docs = new List<Doc> { Token.Print(openParenToken, context) };
 
-        if (arguments.Any())
+        if (
+            arguments.Count == 1
+            && arguments[0].Expression
+                is ParenthesizedLambdaExpressionSyntax
+                    {
+                        ParameterList.Parameters.Count: 0,
+                        Block: { }
+                    }
+                    or SimpleLambdaExpressionSyntax { Block: { } }
+        )
+        {
+            docs.Add(Argument.Print(arguments[0], context));
+        }
+        else if (arguments.Any())
         {
             docs.Add(
                 Doc.Indent(

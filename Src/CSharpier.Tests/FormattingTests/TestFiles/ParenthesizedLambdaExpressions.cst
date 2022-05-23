@@ -37,14 +37,21 @@ public class ClassName
             ) => evenLongerParameter
         );
 
-        var task = Task.Factory.StartNew(
-            async () =>
-            {
-                return await new WebClient().DownloadStringTaskAsync____________________(
-                    "http://example.com"
-                );
-            }
+        CallMethod(() =>
+        {
+            CallOtherMethod();
+        });
+
+        CallMethod(
+            () => CallOtherMethod___________________________________________________________()
         );
+
+        var task = Task.Factory.StartNew(async () =>
+        {
+            return await new WebClient().DownloadStringTaskAsync____________________(
+                "http://example.com"
+            );
+        });
 
         Action find = () =>
             EntryPointDiscoverer.FindStaticEntryMethod(typeof(IEnumerable<>).Assembly);
@@ -62,12 +69,10 @@ public class ClassName
 
         var reusedCommand = new Command("reused")
         {
-            Handler = CommandHandler.Create(
-                () =>
-                {
-                    doSomething();
-                }
-            )
+            Handler = CommandHandler.Create(() =>
+            {
+                doSomething();
+            })
         };
 
         CallSomeMethod(

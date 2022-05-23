@@ -197,21 +197,17 @@ class ClassName
         // comment shouldn't do weird stuff
         SomeObject.CallMethod();
 
-        CallMethod(
-                lambdaWithBlock =>
-                {
-                    return;
-                }
-            )
+        CallMethod(lambdaWithBlock =>
+            {
+                return;
+            })
             .CallMethod()
             .CallMethod();
 
-        someObject.CallMethod(
-            lambdaWithBlock =>
-            {
-                return;
-            }
-        );
+        someObject.CallMethod(lambdaWithBlock =>
+        {
+            return;
+        });
 
         o.CallMethod(parameter_____________, parameter_____________)
             .CallMethod(parameter_____________, parameter_____________);
