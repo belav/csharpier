@@ -244,6 +244,18 @@ public class CliTests
         result.ExitCode.Should().Be(0);
     }
 
+    [Test]
+    public async Task Should_Not_Fail_On_Bad_Csproj()
+    {
+        await this.WriteFileAsync("Empty.csproj", "");
+
+        var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
+        result.Output.Should().StartWith("Warning The csproj at ");
+    }
+
     private async Task WriteFileAsync(string path, string content)
     {
         var fileInfo = new FileInfo(Path.Combine(testFileDirectory, path));
