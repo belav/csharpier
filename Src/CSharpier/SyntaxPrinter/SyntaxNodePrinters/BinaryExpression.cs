@@ -35,9 +35,6 @@ internal static class BinaryExpression
           : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
     }
 
-    [ThreadStatic]
-    private static int depth;
-
     // The goal of this is to group operators of the same precedence such that they all break or none of them break
     // for example the following should break on the && before it breaks on the !=
     /* (
@@ -52,12 +49,12 @@ internal static class BinaryExpression
             return new List<Doc> { Doc.Group(Node.Print(node, context)) };
         }
 
-        if (depth > 200)
+        if (context.PrintingDepth > 200)
         {
             throw new InTooDeepException();
         }
 
-        depth++;
+        context.PrintingDepth++;
         try
         {
             var docs = new List<Doc>();
@@ -126,7 +123,7 @@ internal static class BinaryExpression
         }
         finally
         {
-            depth--;
+            context.PrintingDepth--;
         }
     }
 

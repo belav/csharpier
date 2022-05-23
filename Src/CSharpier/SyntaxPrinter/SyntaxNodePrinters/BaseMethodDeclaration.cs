@@ -94,11 +94,11 @@ internal static class BaseMethodDeclaration
         {
             if (modifiers is not { Count: > 0 })
             {
-                Token.ShouldSkipNextLeadingTrivia = true;
+                context.ShouldSkipNextLeadingTrivia = true;
             }
 
             declarationGroup.Add(Node.Print(returnType, context), " ");
-            Token.ShouldSkipNextLeadingTrivia = false;
+            context.ShouldSkipNextLeadingTrivia = false;
         }
 
         if (explicitInterfaceSpecifier != null)
