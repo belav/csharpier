@@ -1,3 +1,17 @@
+# 0.17.0
+
+[diff](https://github.com/belav/csharpier/compare/0.16.0...0.17.0)
+
+- MSBuild Task target too late? Breakpoints are not hit [#674](https://github.com/belav/csharpier/issues/674)
+- Excessive indent level with lambda as the only method call argument [#669](https://github.com/belav/csharpier/issues/669)
+- Empty (or malformed) .csproj file will cause csharpier to fail. [#665](https://github.com/belav/csharpier/issues/665)
+- #endif retains extra blank lines [#660](https://github.com/belav/csharpier/issues/660)
+- Option for indentation  [#645](https://github.com/belav/csharpier/issues/645)
+- Small bug with formatting LINQ queries with multiple orderby fields [#643](https://github.com/belav/csharpier/issues/643)
+- Consistently Indent By 4 Spaces [#617](https://github.com/belav/csharpier/issues/617)
+- Conditional access edge cases [#603](https://github.com/belav/csharpier/issues/603)
+- Improve formatting for casting [#407](https://github.com/belav/csharpier/issues/407)
+
 # 0.16.0
 
 [diff](https://github.com/belav/csharpier/compare/0.15.1...0.16.0)

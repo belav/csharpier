@@ -11,12 +11,16 @@ JSON
 ```json
 {
     "printWidth": 100,
+    "useTabs": false,
+    "tabWidth": 4,
     "preprocessorSymbolSets": ["", "DEBUG", "DEBUG,CODE_STYLE"]
 }
 ```
 YAML
 ```yaml
 printWidth: 100
+useTabs: false
+tabWidth: 4
 preprocessorSymbolSets:
     - ""
     - "DEBUG"
@@ -27,6 +31,14 @@ preprocessorSymbolSets:
 Specify at what point the printer will wrap content. This is not a hard limit. Some lines will be shorter or longer.
 
 Default 100
+#### Use Tabs
+Indent lines with tabs instead of spaces.
+
+Default false
+#### Tab Width
+Specify the number of spaces used per indentation level.
+
+Default 4
 
 #### Preprocessor Symbol Sets
 Currently CSharpier only has basic support for understanding how to format code inside of `#if` directives.
@@ -46,4 +58,4 @@ For example in the following code block, the following symbol sets would be need
 
 When supplying symbol sets, they will be used for all files being formatted. This will slow down formatting, and determining all symbol sets needed across all files won't be straight forward.
 
-The long term plan is to improve Csharpier's ability to determine the symbol sets itself and to allow specifying the for individual files.
+The long term plan is to improve Csharpier's ability to determine the symbol sets itself and to allow specifying them for individual files.
