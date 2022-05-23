@@ -7,7 +7,7 @@
     <!-- Target invokes the copy of csharpier from this package on the current project -->
     <Target 
         Name="CSharpierFormat"
-        BeforeTargets="Build">
+        BeforeTargets="CoreCompile">
         <Exec Command="dotnet $(CSharpierDllPath) $(CSharpierArgs) $(MSBuildProjectDirectory)" />
     </Target>
 </Project>
