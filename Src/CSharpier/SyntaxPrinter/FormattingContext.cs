@@ -1,6 +1,6 @@
 namespace CSharpier.SyntaxPrinter;
 
-public class FormattingContext
+public record FormattingContext
 {
     public int PrintingDepth { get; set; }
     public bool NextTriviaNeedsLine { get; set; }
