@@ -25,17 +25,17 @@ jobs:
         with:
           dotnet-version: '6.0.201'
       - name: Publish CSharpier.Core library on version change
-        uses: rohith/publish-nuget@v2
+        uses: alirezanet/publish-nuget@v3.0.4
         with:
           PROJECT_FILE_PATH: Src/CSharpier/CSharpier.csproj
           TAG_FORMAT: "*"
       - name: Publish CSharpie dotnet tool on version change
-        uses: rohith/publish-nuget@v2
+        uses: alirezanet/publish-nuget@v3.0.4
         with:
           PROJECT_FILE_PATH: Src/CSharpier.Cli/CSharpier.Cli.csproj
           TAG_FORMAT: "*"
       - name: Publish CSharpier.MsBuild library on version change
-        uses: rohith/publish-nuget@v2
+        uses: alirezanet/publish-nuget@v3.0.4
         with:
           PROJECT_FILE_PATH: Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj
           TAG_FORMAT: "*"
