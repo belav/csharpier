@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.2.6]
+- Remove plugin until property so plugin doesn't need to be updated for each new rider version
+
 ## [1.2.5]
 - Error output loses characters
 
