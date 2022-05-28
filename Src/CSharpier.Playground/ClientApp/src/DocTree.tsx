@@ -15,8 +15,10 @@ const options = {
 const regex = /\s+Doc\.Null,/g;
 
 export const DocTree = () => {
-    const { doc, hideNull } = useAppContext();
+    const {doc, hideNull,} = useAppContext();
     const docToDisplay = hideNull ? doc.replaceAll(regex, "") : doc;
 
-    return <CodeMirror value={docToDisplay} options={options} onBeforeChange={() => {}} onChange={() => {}} />;
+    return <CodeMirror value={docToDisplay} options={options} onBeforeChange={() => {
+    }} onChange={() => {
+    }}/>;
 };

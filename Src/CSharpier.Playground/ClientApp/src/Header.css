@@ -1,0 +1,99 @@
+.header {
+    height: 60px;
+    background-color: #32576C;
+    display: flex;
+    align-items: center;
+
+}
+
+.header > div {
+    display: flex;
+}
+
+.left {
+    align-items: center;
+}
+
+.left25 {
+    width: calc(25% + 64px);
+}
+.left33 {
+    width: calc(33.3% + 64px);
+}
+.left50 {
+    width: calc(50% + 64px);
+}
+
+ @media (max-width: 768px) {
+     .left {
+         width: 100%;
+     }
+}
+
+.right {
+    display: flex;
+    justify-content: end;
+    flex-grow: 1;
+    padding-right: 20px;
+}
+
+.logo {
+    margin-left: 10px;
+    background: url("/logo.svg");
+    height: 40px;
+    width: 40px;
+}
+
+.title {
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 8px;
+    margin-right: 20px;
+}
+.title a {
+    color: #fff;
+    text-decoration: none;
+    margin-right: 5px;
+}
+
+.version {
+    font-size: 12px;
+}
+
+.buttons {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.formatButton {
+    background-color: #fff;
+    color: #0C2B3E;
+    border: none;
+    padding: 8px 12px;
+    font-size: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.headerLoading {
+    animation-name: spin;
+    animation-duration: 2000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
