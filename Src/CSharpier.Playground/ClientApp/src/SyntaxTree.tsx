@@ -1,7 +1,7 @@
 import React from "react";
 import ReactJson, { CollapsedFieldProps } from "react-json-view";
 import { useAppContext } from "./AppContext";
-import "./SyntaxTree.css"
+import "./SyntaxTree.css";
 
 const shouldCollapse = (field: CollapsedFieldProps) => {
     if (
@@ -35,5 +35,3 @@ export const SyntaxTree = () => {
         </div>
     );
 };
-
-

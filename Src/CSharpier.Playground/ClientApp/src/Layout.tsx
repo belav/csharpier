@@ -8,7 +8,7 @@ import { useAppContext } from "./AppContext";
 import { CodeEditor } from "./CodeEditor";
 import { FormattedCode } from "./FormattedCode";
 import { Controls } from "./Controls";
-import "./Layout.scss"
+import "./Layout.scss";
 
 export const Layout = () => {
     const { showDoc, showAst } = useAppContext();

@@ -24,7 +24,8 @@ export const Header = () => {
             <div className={`left left${width}`}>
                 <div className="logo" />
                 <h1 className="title">
-                    <a href="https://csharpier.com">CSharpier</a><span className="version">{version}</span>
+                    <a href="https://csharpier.com">CSharpier</a>
+                    <span className="version">{version}</span>
                 </h1>
                 <div className="buttons">
                     <button className="formatButton" onClick={formatCode} title="Ctrl-Enter">
