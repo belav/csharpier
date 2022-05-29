@@ -6,7 +6,14 @@ namespace CSharpier;
 
 public class CodeFormatter
 {
-    public static LanguageVersion LanguageVersion = LanguageVersion.CSharp10;
+    // TODO compile this and test on a computer without .net6, etc
+    // TODO generic attributes seem to work? add some tests
+    // TODO static abstract on interfaces seems to work, add some tests
+    // TODO what about newlines in $ ? detect that they exist, and don't force?
+    // TODO what about this >>> thing?  https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/breaking-changes/compiler%20breaking%20changes%20-%20dotnet%207#unsigned-right-shift-operator
+
+    // TODO using preview does not seem to affect existing formatting, but test again with the new code analysis dll
+    public static LanguageVersion LanguageVersion = LanguageVersion.Preview;
 
     public static string Format(string code, CodeFormatterOptions? options = null)
     {

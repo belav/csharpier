@@ -30,7 +30,13 @@ public static class Ignored
             { typeof(IndexerDeclarationSyntax), new[] { "semicolon" } },
             { typeof(SyntaxTrivia), new[] { "token" } },
             { typeof(SyntaxToken), new[] { "value", "valueText" } },
-            { typeof(ParameterSyntax), new[] { "exclamationExclamationToken" } }
+            { typeof(ParameterSyntax), new[] { "exclamationExclamationToken" } },
+            // TODO what are these? why do they makes things fail to compile?
+            // maybe this?? https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/breaking-changes/compiler%20breaking%20changes%20-%20dotnet%207#checked-operators-on-systemintptr-and-systemuintptr
+            { typeof(ConversionOperatorDeclarationSyntax), new[] { "checkedKeyword" } },
+            { typeof(OperatorDeclarationSyntax), new[] { "checkedKeyword" } },
+            { typeof(ConversionOperatorMemberCrefSyntax), new[] { "checkedKeyword" } },
+            { typeof(OperatorMemberCrefSyntax), new[] { "checkedKeyword" } }
         };
 
     public static readonly HashSet<string> UnsupportedNodes =
