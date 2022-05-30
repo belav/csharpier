@@ -14,7 +14,9 @@ $repositories += "https://github.com/dotnet/runtime.git"
 $tempLocation = "c:\temp\UpdateRepos"
 
 #TODO just pull it they exist already
-Remove-Item -Recurse -Force $tempLocation
+if (Test-Path $tempLocation) {
+    Remove-Item -Recurse -Force $tempLocation
+}
 
 New-Item $tempLocation -Force -ItemType Directory
 Set-Location $tempLocation
@@ -26,6 +28,7 @@ foreach ($repository in $repositories)
     & git clone $repository
 }
 
+#TODO make sure to switch to main/master
 $destination = "C:\projects\csharpier-repos\"
 
 Get-ChildItem $tempLocation | Copy-Item -Destination $destination -Filter *.cs -Recurse -Force
@@ -46,3 +49,5 @@ foreach ($item in $items) {
         Remove-Item -Force -Recurse $item.FullName
     }
 }
+
+# TODO commit and push
