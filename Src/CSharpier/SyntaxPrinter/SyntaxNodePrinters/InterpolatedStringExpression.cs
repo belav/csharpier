@@ -22,6 +22,7 @@ internal static class InterpolatedStringExpression
         return Doc.Concat(
             // pull out the leading trivia so it doesn't get forced flat
             Token.PrintLeadingTrivia(node.StringStartToken, context),
+            // things to review https://github.com/belav/csharpier-repos/pull/43/files
             node.StringStartToken.RawSyntaxKind() is SyntaxKind.InterpolatedVerbatimStringStartToken
               ? Doc.Concat(docs)
               : Doc.ForceFlat(docs)
