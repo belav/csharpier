@@ -12,10 +12,19 @@ internal static class InterpolatedStringExpression
         docs.AddRange(node.Contents.Select(o => Node.Print(o, context)));
         docs.Add(Token.Print(node.StringEndToken, context));
 
+        if (
+            node.StringStartToken.RawSyntaxKind() is SyntaxKind.InterpolatedVerbatimStringStartToken
+        )
+        {
+            return Doc.Concat(docs);
+        }
+
         return Doc.Concat(
             // pull out the leading trivia so it doesn't get forced flat
             Token.PrintLeadingTrivia(node.StringStartToken, context),
-            Doc.ForceFlat(docs)
+            node.StringStartToken.RawSyntaxKind() is SyntaxKind.InterpolatedVerbatimStringStartToken
+              ? Doc.Concat(docs)
+              : Doc.ForceFlat(docs)
         );
     }
 }
