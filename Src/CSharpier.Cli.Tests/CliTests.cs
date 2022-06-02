@@ -153,7 +153,7 @@ public class CliTests
         result.Output
             .Replace("\\", "/")
             .Should()
-            .StartWith("Warning /CheckUnformatted.cs - Was not formatted.");
+            .StartWith("Warning ./CheckUnformatted.cs - Was not formatted.");
         result.ExitCode.Should().Be(1);
     }
 
@@ -195,7 +195,7 @@ public class CliTests
         result.ErrorOutput
             .Should()
             .Be(
-                $"Error /InvalidFile.cs - Failed to compile so was not formatted.{Environment.NewLine}"
+                $"Error ./InvalidFile.cs - Failed to compile so was not formatted.{Environment.NewLine}"
             );
         result.ExitCode.Should().Be(1);
     }

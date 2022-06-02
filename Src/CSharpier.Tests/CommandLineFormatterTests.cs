@@ -30,7 +30,7 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .Be("Error /Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
     }
 
     [Test]
@@ -44,7 +44,7 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .Be("Error /Directory/Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Directory/Invalid.cs - Failed to compile so was not formatted.");
     }
 
     [Test]
@@ -58,7 +58,7 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .Be(@"Error /Unsupported.js - Is an unsupported file type.");
+            .Be(@"Error ./Unsupported.js - Is an unsupported file type.");
     }
 
     [Test]
@@ -195,7 +195,7 @@ public class CommandLineFormatterTests
 
         result.ExitCode.Should().Be(1);
         context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
-        result.Lines.First().Should().StartWith("Warning /Unformatted.cs - Was not formatted.");
+        result.Lines.First().Should().StartWith("Warning ./Unformatted.cs - Was not formatted.");
     }
 
     [Test]
@@ -422,7 +422,7 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .Be("Error /Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
     }
 
     [Test]

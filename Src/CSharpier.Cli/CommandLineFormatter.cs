@@ -253,7 +253,7 @@ internal static class CommandLineFormatter
         }
 
         var filePathLogger = new FileIssueLogger(
-            pathToFile.Replace('\\', '/')[baseDirectoryPath.Length..],
+            "." + pathToFile.Replace('\\', '/')[baseDirectoryPath.Length..],
             logger
         );
 
