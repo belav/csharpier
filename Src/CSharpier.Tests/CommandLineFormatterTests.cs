@@ -34,6 +34,20 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public void Format_Writes_Failed_To_Compile_For_Subdirectory()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Subdirectory/Invalid.cs", "asdfasfasdf");
+
+        var result = this.Format(context, directoryOrFilePaths: "Subdirectory");
+
+        result.ErrorLines
+            .First()
+            .Should()
+            .Be("Error ./Subdirectory/Invalid.cs - Failed to compile so was not formatted.");
+    }
+
+    [Test]
     public void Format_Writes_Failed_To_Compile_With_Directory()
     {
         var context = new TestContext();
