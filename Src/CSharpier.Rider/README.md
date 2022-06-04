@@ -22,3 +22,14 @@ Please report any [issues](https://github.com/belav/csharpier/issues)
 ---
 Plugin based on the [IntelliJ Platform Plugin Template][template].
 
+## Troubleshooting
+
+### Viewing CSharpier Logs
+- Use the action "Show Log in Explorer"
+- Look for entries for "CSharpierLogger"
+
+### Enable Debug Logging for CSharpier
+- Use the action "Debug Log Settings"
+- Add entry for "#com.intellij.csharpier.CSharpierLogger"
+- Restart Rider
+
