@@ -6,9 +6,6 @@ namespace CSharpier;
 
 public class CodeFormatter
 {
-    // TODO 11 compile this and test on a computer without .net6, etc
-    // TODO 11 generic attributes work, add some tests, any edge cases?
-    // TODO 11 static abstract on interfaces seems to work, add some tests
     // TODO 11 what about newlines in $ ? detect that they exist, and don't force?
     // TODO 11 what about this >>> thing?  https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/breaking-changes/compiler%20breaking%20changes%20-%20dotnet%207#unsigned-right-shift-operator
 
