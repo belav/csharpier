@@ -1,7 +1,7 @@
 import React from "react";
 import ReactJson, { CollapsedFieldProps } from "react-json-view";
-import styled from "styled-components";
 import { useAppContext } from "./AppContext";
+import "./SyntaxTree.css";
 
 const shouldCollapse = (field: CollapsedFieldProps) => {
     if (
@@ -22,7 +22,7 @@ export const SyntaxTree = () => {
     }
 
     return (
-        <ReactJsonStyle>
+        <div className="reactJson">
             <ReactJson
                 src={syntaxTree}
                 enableClipboard={false}
@@ -32,12 +32,6 @@ export const SyntaxTree = () => {
                 shouldCollapse={shouldCollapse}
                 name={false}
             />
-        </ReactJsonStyle>
+        </div>
     );
 };
-
-const ReactJsonStyle = styled.div`
-    height: 100%;
-    overflow-y: scroll;
-    border-left: 1px solid #ccc;
-`;

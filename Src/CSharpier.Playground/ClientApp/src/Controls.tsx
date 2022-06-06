@@ -1,12 +1,9 @@
 import React from "react";
-import styled from "styled-components";
-import { Loading } from "./Icons/Loading";
 import { useAppContext } from "./AppContext";
+import "./Controls.css";
 
 export const Controls = () => {
     const {
-        isLoading,
-        formatCode,
         showDoc,
         setShowDoc,
         hideNull,
@@ -17,18 +14,17 @@ export const Controls = () => {
         setEmptyClass,
         copyLeft,
     } = useAppContext();
-    const width = showDoc && showAst ? 25 : showDoc || showAst ? 33.3 : 50;
     return (
-        <Wrapper>
-            <SmallButton title="Shift-Ctrl-X" onClick={setEmptyMethod}>
+        <div className="controlsWrapper">
+            <button className="smallButton" title="Shift-Ctrl-X" onClick={setEmptyMethod}>
                 Empty Method
-            </SmallButton>
-            <SmallButton title="Shift-Ctrl-C" onClick={setEmptyClass}>
+            </button>
+            <button className="smallButton" title="Shift-Ctrl-C" onClick={setEmptyClass}>
                 Empty Class
-            </SmallButton>
-            <SmallButton title="Shift-Ctrl-S" onClick={copyLeft}>
+            </button>
+            <button className="smallButton" title="Shift-Ctrl-S" onClick={copyLeft}>
                 Copy Left
-            </SmallButton>
+            </button>
             <label>
                 <input
                     type="checkbox"
@@ -61,31 +57,6 @@ export const Controls = () => {
                 />
                 Show AST
             </label>
-        </Wrapper>
+        </div>
     );
 };
-
-const Wrapper = styled.div`
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    background-color: #f7f7f7;
-    padding: 10px;
-    > label {
-        display: block;
-        margin-top: 10px;
-    }
-    > button {
-        width: 100%;
-        margin-top: 10px;
-    }
-`;
-
-const SmallButton = styled.button`
-    background-color: #ccc;
-    border-radius: 4px;
-    color: #000;
-    border: none;
-    height: 24px;
-    cursor: pointer;
-    margin-right: 6px;
-`;
