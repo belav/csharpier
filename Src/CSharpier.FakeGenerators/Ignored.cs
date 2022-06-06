@@ -30,11 +30,7 @@ public static class Ignored
             { typeof(IndexerDeclarationSyntax), new[] { "semicolon" } },
             { typeof(SyntaxTrivia), new[] { "token" } },
             { typeof(SyntaxToken), new[] { "value", "valueText" } },
-            { typeof(ParameterSyntax), new[] { "exclamationExclamationToken" } },
-            { typeof(ConversionOperatorDeclarationSyntax), new[] { "checkedKeyword" } },
-            { typeof(OperatorDeclarationSyntax), new[] { "checkedKeyword" } },
-            { typeof(ConversionOperatorMemberCrefSyntax), new[] { "checkedKeyword" } },
-            { typeof(OperatorMemberCrefSyntax), new[] { "checkedKeyword" } }
+            { typeof(ParameterSyntax), new[] { "exclamationExclamationToken" } }
         };
 
     public static readonly HashSet<string> UnsupportedNodes =
