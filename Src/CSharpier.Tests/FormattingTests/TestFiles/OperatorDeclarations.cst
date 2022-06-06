@@ -14,4 +14,8 @@ class ClassName
     }
 
     static Complex operator checked -(Complex value);
+
+    static BigInteger IUnaryNegationOperators<BigInteger, BigInteger>.operator checked -(
+        BigInteger value
+    ) => -value;
 }
