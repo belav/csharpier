@@ -87,11 +87,11 @@ public class CustomWalker : CSharpSyntaxWalker
         this.file = file;
     }
 
-    public override void VisitCompilationUnit(CompilationUnitSyntax node)
-    {
-        this.VisitType(node, node.Members);
-        base.VisitCompilationUnit(node);
-    }
+    // public override void VisitCompilationUnit(CompilationUnitSyntax node)
+    // {
+    //     this.VisitType(node, node.Members);
+    //     base.VisitCompilationUnit(node);
+    // }
 
     private void VisitType(CSharpSyntaxNode node, SyntaxList<MemberDeclarationSyntax> members)
     {
@@ -115,26 +115,34 @@ public class CustomWalker : CSharpSyntaxWalker
 
     public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
     {
-        if (
-            (
-                node.Parent is TypeDeclarationSyntax typeDeclarationSyntax
-                && node == typeDeclarationSyntax.Members.First()
-            ) || node.GetLeadingTrivia().Any(o => o.IsComment() || node.AttributeLists.Any())
-        )
-        {
-            base.VisitMethodDeclaration(node);
-            return;
-        }
+        // if (
+        //     (
+        //         node.Parent is TypeDeclarationSyntax typeDeclarationSyntax
+        //         && node == typeDeclarationSyntax.Members.First()
+        //     ) || node.GetLeadingTrivia().Any(o => o.IsComment() || node.AttributeLists.Any())
+        // )
+        // {
+        //     base.VisitMethodDeclaration(node);
+        //     return;
+        // }
+        //
+        // Interlocked.Increment(ref Total);
+        // this.WriteCode(node.Parent!);
+        //
+        // if (node.GetLeadingTrivia().Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia))
+        // {
+        //     Interlocked.Increment(ref Matching);
+        // }
 
+        base.VisitMethodDeclaration(node);
+    }
+
+    public override void VisitListPattern(ListPatternSyntax node)
+    {
         Interlocked.Increment(ref Total);
         this.WriteCode(node.Parent!);
 
-        if (node.GetLeadingTrivia().Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia))
-        {
-            Interlocked.Increment(ref Matching);
-        }
-
-        base.VisitMethodDeclaration(node);
+        base.VisitListPattern(node);
     }
 
     private void WriteCode(SyntaxNode syntaxNode)

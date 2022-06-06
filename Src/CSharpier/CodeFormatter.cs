@@ -6,10 +6,6 @@ namespace CSharpier;
 
 public class CodeFormatter
 {
-    // TODO 11 what about newlines in $ ? detect that they exist, and don't force?
-    // TODO 11 what about this >>> thing?  https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/breaking-changes/compiler%20breaking%20changes%20-%20dotnet%207#unsigned-right-shift-operator
-
-    // TODO 11 using preview does not seem to affect existing formatting, but test again with the new code analysis dll
     public static LanguageVersion LanguageVersion = LanguageVersion.Preview;
 
     public static string Format(string code, CodeFormatterOptions? options = null)

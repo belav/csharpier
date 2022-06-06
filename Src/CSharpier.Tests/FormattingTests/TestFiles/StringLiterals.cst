@@ -153,5 +153,11 @@ four
                 // some comment
                 CallMethod()
             }    ";
+
+        var butKeepExistingBreaks =
+            $"    {
+                // some comment
+                CallMethod()
+            }    ";
     }
 }
