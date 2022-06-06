@@ -38,7 +38,7 @@ foreach ($item in $items) {
     if ($item.Name -eq ".git") {
         Remove-Item -Force -Recurse $item.FullName
     }
-    if ($item.Extension -ne ".cs") {
+    if ($item.Extension -ne ".cs" -and $item.Name -ne ".csharpierignore") {
         Remove-Item $item.FullName
     }
 }
