@@ -89,5 +89,14 @@ three
 four",
             "two"
         );
+
+        var expressionsInInterpolatedVerbatimStringDontBreak =
+            $@"{CallMethod_____________________________().CallMethod_____________________________().CallMethod_____________________________()}";
+
+        var butKeepExistingBreaks =
+            $@"    {
+                // some comment
+                CallMethod()
+            }    ";
     }
 }
