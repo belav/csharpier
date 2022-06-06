@@ -159,5 +159,7 @@ four
                 // some comment
                 CallMethod()
             }    ";
+
+        ReadOnlySpan<byte> utf8StringLiteral = "hello"u8;
     }
 }
