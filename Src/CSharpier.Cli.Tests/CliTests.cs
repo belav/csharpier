@@ -54,6 +54,27 @@ public class CliTests
         (await this.ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
     }
 
+    [TestCase("Subdirectory")]
+    [TestCase("./Subdirectory")]
+    public async Task Should_Format_Subdirectory(string subdirectory)
+    {
+        var formattedContent = "public class ClassName { }\n";
+        var unformattedContent = "public class ClassName {\n\n}";
+
+        await this.WriteFileAsync("Subdirectory/BasicFile.cs", unformattedContent);
+
+        var result = await new CsharpierProcess().WithArguments(subdirectory).ExecuteAsync();
+
+        result.Output.Should().StartWith("Total time:");
+        result.Output
+            .Should()
+            .Contain(
+                "Total files:                                                                           1"
+            );
+        result.ExitCode.Should().Be(0);
+        (await this.ReadAllTextAsync("Subdirectory/BasicFile.cs")).Should().Be(formattedContent);
+    }
+
     [Test]
     public async Task Should_Respect_Ignore_File_With_Subdirectory_When_DirectorOrFile_Is_Dot()
     {
