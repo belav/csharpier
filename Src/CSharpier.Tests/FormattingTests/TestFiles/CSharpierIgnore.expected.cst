@@ -17,29 +17,29 @@ public class ClassName
             var unformatted    = true;
         }
     }
-    
+
     void MethodName()
     {
-        var formatMe =    true;
+        var formatMe = true;
         // csharpier-ignore-start
         var unformatted =        true;
         var unformatted =        true;
         // csharpier-ignore-end
-        var formatMe =    true;
+        var formatMe = true;
     }
-    
+
     void MethodName()
     {
-        var formatMe =    true;
+        var formatMe = true;
         // csharpier-ignore-start
         var unformatted =        true;
         var unformatted =        true;
         // csharpier-ignore-end
     }
-    
+
     void MethodName()
     {
-        var formatMe =    true;
+        var formatMe = true;
         // csharpier-ignore-start
         var unformatted =        true;
         var unformatted =        true;
