@@ -1,28 +1,19 @@
-using System;
-using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
-namespace CSharpier.Generators;
+namespace CSharpier.FakeGenerators;
 
-[Generator]
-public class SyntaxNodeComparerGenerator : ISourceGenerator
+public class SyntaxNodeComparerGenerator
 {
-    public void Initialize(GeneratorInitializationContext context) { }
-
     // this would probably be easier to understand as a scriban template but is a lot of effort
     // to switch and doesn't really change at this point
-    public void Execute(GeneratorExecutionContext context)
+    public void Execute(CodeContext context)
     {
-        var sourceText = SourceText.From(this.GenerateSource(), Encoding.UTF8);
-
-        context.AddSource("SyntaxNodeComparer.generated", sourceText);
+        context.AddSource("SyntaxNodeComparer.generated", GenerateSource());
     }
 
-    private string GenerateSource()
+    private static string GenerateSource()
     {
         var sourceBuilder = new StringBuilder();
         sourceBuilder.AppendLine(
