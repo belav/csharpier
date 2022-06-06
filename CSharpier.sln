@@ -45,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Github", ".github\Github.cs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MsBuild", "Src\CSharpier.MsBuild\MsBuild.csproj", "{19874634-1A44-4831-BB43-6E2B864AB3ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpier.FakeGenerators", "Src\CSharpier.FakeGenerators\CSharpier.FakeGenerators.csproj", "{BD5D6F99-E1F8-4764-AE15-E70EF3F5CC43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{6D0C91DF-2FB7-48EC-8C1D-86FD4F6531A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19874634-1A44-4831-BB43-6E2B864AB3ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{19874634-1A44-4831-BB43-6E2B864AB3ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD5D6F99-E1F8-4764-AE15-E70EF3F5CC43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD5D6F99-E1F8-4764-AE15-E70EF3F5CC43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD5D6F99-E1F8-4764-AE15-E70EF3F5CC43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD5D6F99-E1F8-4764-AE15-E70EF3F5CC43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
