@@ -12,4 +12,6 @@ class ClassName
     {
         return a.Add(b);
     }
+
+    static Complex operator checked -(Complex value);
 }
