@@ -323,4 +323,14 @@ internal static class Token
                         is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
             );
     }
+
+    public static bool HasLeadingComment(SyntaxNode node, string comment)
+    {
+        return node.GetLeadingTrivia()
+            .Any(
+                o =>
+                    o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
+                    && o.ToString().Equals(comment)
+            );
+    }
 }

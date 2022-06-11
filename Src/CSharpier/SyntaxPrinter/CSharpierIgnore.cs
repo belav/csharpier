@@ -17,30 +17,27 @@ internal static class CSharpierIgnore
             return false;
         }
 
-        return (HasLeadingComment(syntaxNode, "// csharpier-ignore"));
+        return (Token.HasLeadingComment(syntaxNode, "// csharpier-ignore"));
     }
 
-    // TODO better name
-    // TODO members of types
-    // TODO these last two could get tricky because of the using vs members thing
-    // unless we don't support using
-    // TODO top level statements
-    // TODO compilation unit
-    public static List<Doc> GetPrintedNodes<T>(SyntaxList<T> list, FormattingContext context)
-        where T : SyntaxNode
+    // TODO tests for top level statements with and without namespace
+    // TODO tests for namespace - range around classes and usings
+    public static List<Doc> PrintNodesRespectingRangeIgnore<T>(
+        SyntaxList<T> list,
+        FormattingContext context
+    ) where T : SyntaxNode
     {
         var statements = new List<Doc>();
         var printUnformatted = false;
         // TODO what about if the end is the final line of the block?
         // TODO what about any kind of error detection? if they have multiple starts? or other cases
-        // TODO what about getting this into other areas? make it generic
         foreach (var node in list)
         {
-            if (HasLeadingComment(node, "// csharpier-ignore-end"))
+            if (Token.HasLeadingComment(node, "// csharpier-ignore-end"))
             {
                 printUnformatted = false;
             }
-            else if (HasLeadingComment(node, "// csharpier-ignore-start"))
+            else if (Token.HasLeadingComment(node, "// csharpier-ignore-start"))
             {
                 printUnformatted = true;
             }
@@ -51,16 +48,6 @@ internal static class CSharpierIgnore
         }
 
         return statements;
-    }
-
-    private static bool HasLeadingComment(SyntaxNode node, string comment)
-    {
-        return node.GetLeadingTrivia()
-            .Any(
-                o =>
-                    o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
-                    && o.ToString().Equals(comment)
-            );
     }
 
     public static Doc PrintWithoutFormatting(SyntaxNode syntaxNode)

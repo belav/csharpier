@@ -27,7 +27,7 @@ internal static class Block
 
         if (node.Statements.Count > 0)
         {
-            var statements = CSharpierIgnore.GetPrintedNodes(node.Statements, context);
+            var statements = CSharpierIgnore.PrintNodesRespectingRangeIgnore(node.Statements, context);
 
             innerDoc = Doc.Indent(statementSeparator, Doc.Join(statementSeparator, statements));
 

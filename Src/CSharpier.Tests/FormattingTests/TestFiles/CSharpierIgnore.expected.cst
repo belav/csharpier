@@ -45,3 +45,35 @@ public class ClassName
         var unformatted =        true;
     }
 }
+
+public class ClassName2
+{
+    // csharpier-ignore-start
+    private string    unformatted1;
+    // csharpier-ignore-end
+
+    private string formatMe;
+    // csharpier-ignore-start
+    private string    noNewLine;
+    // csharpier-ignore-end
+
+    // csharpier-ignore-start
+    private string keepNewLine;
+    // csharpier-ignore-end
+
+    public void Method()
+    {
+        // csharpier-ignore-start
+        string    unformatted1;
+        // csharpier-ignore-end
+
+        string formatMe;
+        // csharpier-ignore-start
+         string    noNewLine;
+        // csharpier-ignore-end
+
+        // csharpier-ignore-start
+        string keepNewLine;
+        // csharpier-ignore-end
+    }
+}
