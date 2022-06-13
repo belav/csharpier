@@ -203,21 +203,20 @@ public class CliTests
         results[1].Should().Be(formattedContent2);
     }
 
-    [Test]
-    public async Task Should_Write_Error_With_Multiple_Piped_Files()
+    [TestCase("InvalidFile.cs", "./InvalidFile.cs")]
+    [TestCase("./InvalidFile.cs", "./InvalidFile.cs")]
+    public async Task Should_Write_Error_With_Multiple_Piped_Files(string input, string output)
     {
         const string invalidFile = "public class ClassName { ";
 
         var result = await new CsharpierProcess()
             .WithArguments("--pipe-multiple-files")
-            .WithPipedInput($"InvalidFile.cs{'\u0003'}{invalidFile}{'\u0003'}")
+            .WithPipedInput($"{input}{'\u0003'}{invalidFile}{'\u0003'}")
             .ExecuteAsync();
 
         result.ErrorOutput
             .Should()
-            .Be(
-                $"Error ./InvalidFile.cs - Failed to compile so was not formatted.{Environment.NewLine}"
-            );
+            .Be($"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}");
         result.ExitCode.Should().Be(1);
     }
 

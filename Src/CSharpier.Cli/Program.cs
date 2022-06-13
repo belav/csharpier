@@ -134,6 +134,14 @@ public class Program
                     {
                         Path.Combine(Directory.GetCurrentDirectory(), fileName)
                     },
+                    OriginalDirectoryOrFilePaths = new[]
+                    {
+                        Path.IsPathRooted(fileName)
+                          ? fileName
+                          : fileName.StartsWith(".")
+                              ? fileName
+                              : "./" + fileName
+                    },
                     StandardInFileContents = stringBuilder.ToString(),
                     Fast = true,
                     WriteStdout = true

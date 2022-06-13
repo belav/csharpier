@@ -41,7 +41,10 @@ internal static class CommandLineFormatter
                     && !ignoreFile.IsIgnored(filePath)
                 )
                 {
-                    var fileIssueLogger = new FileIssueLogger(filePath, logger);
+                    var fileIssueLogger = new FileIssueLogger(
+                        commandLineOptions.OriginalDirectoryOrFilePaths[0],
+                        logger
+                    );
 
                     await PerformFormattingSteps(
                         fileToFormatInfo,
