@@ -1859,6 +1859,12 @@ namespace CSharpier
                 WriteBlockSyntax(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
+            if (syntaxNode.CheckedKeyword != default(SyntaxToken))
+            {
+                var checkedKeywordBuilder = new StringBuilder();
+                WriteSyntaxToken(checkedKeywordBuilder, syntaxNode.CheckedKeyword);
+                properties.Add($"\"checkedKeyword\":{checkedKeywordBuilder.ToString()}");
+            }
             if (syntaxNode.ExplicitInterfaceSpecifier != default(ExplicitInterfaceSpecifierSyntax))
             {
                 var explicitInterfaceSpecifierBuilder = new StringBuilder();
@@ -1921,6 +1927,12 @@ namespace CSharpier
             var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            if (syntaxNode.CheckedKeyword != default(SyntaxToken))
+            {
+                var checkedKeywordBuilder = new StringBuilder();
+                WriteSyntaxToken(checkedKeywordBuilder, syntaxNode.CheckedKeyword);
+                properties.Add($"\"checkedKeyword\":{checkedKeywordBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("hasLeadingTrivia", syntaxNode.HasLeadingTrivia));
             properties.Add(WriteBoolean("hasTrailingTrivia", syntaxNode.HasTrailingTrivia));
             if (syntaxNode.ImplicitOrExplicitKeyword != default(SyntaxToken))
@@ -5714,6 +5726,12 @@ namespace CSharpier
                 WriteBlockSyntax(bodyBuilder, syntaxNode.Body);
                 properties.Add($"\"body\":{bodyBuilder.ToString()}");
             }
+            if (syntaxNode.CheckedKeyword != default(SyntaxToken))
+            {
+                var checkedKeywordBuilder = new StringBuilder();
+                WriteSyntaxToken(checkedKeywordBuilder, syntaxNode.CheckedKeyword);
+                properties.Add($"\"checkedKeyword\":{checkedKeywordBuilder.ToString()}");
+            }
             if (syntaxNode.ExplicitInterfaceSpecifier != default(ExplicitInterfaceSpecifierSyntax))
             {
                 var explicitInterfaceSpecifierBuilder = new StringBuilder();
@@ -5776,6 +5794,12 @@ namespace CSharpier
             var properties = new List<string>();
             properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
             properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            if (syntaxNode.CheckedKeyword != default(SyntaxToken))
+            {
+                var checkedKeywordBuilder = new StringBuilder();
+                WriteSyntaxToken(checkedKeywordBuilder, syntaxNode.CheckedKeyword);
+                properties.Add($"\"checkedKeyword\":{checkedKeywordBuilder.ToString()}");
+            }
             properties.Add(WriteBoolean("hasLeadingTrivia", syntaxNode.HasLeadingTrivia));
             properties.Add(WriteBoolean("hasTrailingTrivia", syntaxNode.HasTrailingTrivia));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));

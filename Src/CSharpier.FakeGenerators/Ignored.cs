@@ -30,7 +30,7 @@ public static class Ignored
             { typeof(IndexerDeclarationSyntax), new[] { "semicolon" } },
             { typeof(SyntaxTrivia), new[] { "token" } },
             { typeof(SyntaxToken), new[] { "value", "valueText" } },
-            { typeof(ParameterSyntax), new[] { "exclamationExclamationToken" } }
+            { typeof(ParameterSyntax), new[] { "exclamationExclamationToken" } },
         };
 
     public static readonly HashSet<string> UnsupportedNodes =
