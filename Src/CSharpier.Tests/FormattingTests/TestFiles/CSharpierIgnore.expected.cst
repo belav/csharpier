@@ -17,29 +17,29 @@ public class ClassName
             var unformatted    = true;
         }
     }
-    
+
     void MethodName()
     {
-        var formatMe =    true;
+        var formatMe = true;
         // csharpier-ignore-start
         var unformatted =        true;
         var unformatted =        true;
         // csharpier-ignore-end
-        var formatMe =    true;
+        var formatMe = true;
     }
-    
+
     void MethodName()
     {
-        var formatMe =    true;
+        var formatMe = true;
         // csharpier-ignore-start
         var unformatted =        true;
         var unformatted =        true;
         // csharpier-ignore-end
     }
-    
+
     void MethodName()
     {
-        var formatMe =    true;
+        var formatMe = true;
         // csharpier-ignore-start
         var unformatted =        true;
         var unformatted =        true;
@@ -52,28 +52,28 @@ public class ClassName2
     private string    unformatted1;
     // csharpier-ignore-end
 
-    private string    formatMe;
+    private string formatMe;
     // csharpier-ignore-start
     private string    noNewLine;
     // csharpier-ignore-end
-    
+
     // csharpier-ignore-start
-    private string    keepNewLine;
+    private string keepNewLine;
     // csharpier-ignore-end
 
-    public void Method() 
+    public void Method()
     {
         // csharpier-ignore-start
         string    unformatted1;
         // csharpier-ignore-end
 
-         string    formatMe;
+        string formatMe;
         // csharpier-ignore-start
          string    noNewLine;
         // csharpier-ignore-end
 
         // csharpier-ignore-start
-         string    keepNewLine;
+        string keepNewLine;
         // csharpier-ignore-end
     }
 }

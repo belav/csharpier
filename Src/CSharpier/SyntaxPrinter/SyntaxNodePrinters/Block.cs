@@ -27,10 +27,12 @@ internal static class Block
 
         if (node.Statements.Count > 0)
         {
-            innerDoc = Doc.Indent(
-                statementSeparator,
-                Doc.Join(statementSeparator, node.Statements.Select(o => Node.Print(o, context)))
+            var statements = CSharpierIgnore.PrintNodesRespectingRangeIgnore(
+                node.Statements,
+                context
             );
+
+            innerDoc = Doc.Indent(statementSeparator, Doc.Join(statementSeparator, statements));
 
             DocUtilities.RemoveInitialDoubleHardLine(innerDoc);
         }
