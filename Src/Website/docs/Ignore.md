@@ -36,7 +36,7 @@ public class ClassName
     // csharpier-ignore
     public void MethodName(      ) {
         var unformatted =     "";
-}
+    }
 
     public void MethodName()
     {
@@ -51,4 +51,42 @@ public class ClassName
     }
 }
 
+```
+
+Use a ranged ignore to exclude multiple lines from formatting. A range is valid around statements and members.
+```c#
+// csharpier-ignore-start
+public class Unformatted1     { }
+public class Unformatted2     { }
+// csharpier-ignore-end
+
+public class ClassName
+{
+    // csharpier-ignore-start
+    private string    unformatted1;
+    private string    unformatted2;
+    public void MethodName(      ) {
+            var unformatted =     "";
+    }
+    // csharpier-ignore-end
+    public void MethodName()
+    {
+        // csharpier-ignore-start
+        var unformatted1    = true;
+        var unformatted2    = true;
+        if (false)     {
+            return;
+        }
+        // csharpier-ignore-end
+        if (true)
+        {
+            // csharpier-ignore-start
+            var unformatted3    = true;
+            var unformatted4    = true;
+            // csharpier-ignore-end
+            
+            var formatted = true;
+        }
+    }
+}
 ```

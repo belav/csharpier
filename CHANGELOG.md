@@ -1,3 +1,78 @@
+# 0.18.0
+## What's Changed
+#### Initial C# 11 support [#686](https://github.com/belav/csharpier/pull/686)
+CSharpier can format the following c# 11 features
+- Raw string literals
+- Generic attributes
+- Static abstract members in interfaces
+- Newlines in string interpolation expressions **CSharpier will leave existing new lines within expressions and not add new ones**
+- List Patterns
+- UTF8 string literals
+- Unsigned right shift operator
+- Checked operator
+- Generic math
+
+#### use relative file path in CommandLineFormatter [#680](https://github.com/belav/csharpier/pull/680)
+CSharpier now outputs relative or absolute file paths so that they are clickable in terminals.
+```
+dotnet csharpier .
+
+# csharpier 0.17.0
+Error Invalid.cs - Failed to compile so was not formatted.
+
+# csharpier 0.18.0
+Error ./Invalid.cs - Failed to compile so was not formatted.
+
+dotnet csharpier c:/src
+
+# csharpier 0.17.0
+Error Invalid.cs - Failed to compile so was not formatted.
+
+# csharpier 0.18.0
+Error c:/src/Invalid.cs - Failed to compile so was not formatted.
+```
+
+Thanks go to @dlech
+
+#### Invalid code for comments inside expressions in verbatim interpolated strings [#679](https://github.com/belav/csharpier/issues/679)
+```c#
+// input
+var someValue =
+    $@"
+    {
+        // comment
+        "hi"
+    }
+    ";
+// 0.17.0
+var someValue =
+    $@"
+    {
+        // comment "hi"}
+    ";
+// 0.18.0
+var someValue =
+    $@"
+    {
+        // comment
+        "hi"
+    }
+    ";
+```
+Thanks go to @ivan-razorenov
+#### CSharpier ranged ignore [#678](https://github.com/belav/csharpier/issues/678)
+CSharpier now has the ability to ignore a range of statements or members. See [Ignore](https://csharpier.com/docs/Ignore) for more details
+```c#
+// csharpier-ignore-start
+var unformatted =        true;
+var unformatted =        true;
+// csharpier-ignore-end
+```
+Thanks go to @pingzing
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.17.0...0.18.0
+
+
 # 0.17.0
 ## What's Changed
 
