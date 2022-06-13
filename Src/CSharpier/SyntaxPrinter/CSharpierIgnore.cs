@@ -20,8 +20,6 @@ internal static class CSharpierIgnore
         return (Token.HasLeadingComment(syntaxNode, "// csharpier-ignore"));
     }
 
-    // TODO tests for top level statements with and without namespace
-    // TODO tests for namespace - range around classes and usings
     public static List<Doc> PrintNodesRespectingRangeIgnore<T>(
         SyntaxList<T> list,
         FormattingContext context
@@ -29,8 +27,7 @@ internal static class CSharpierIgnore
     {
         var statements = new List<Doc>();
         var printUnformatted = false;
-        // TODO what about if the end is the final line of the block?
-        // TODO what about any kind of error detection? if they have multiple starts? or other cases
+
         foreach (var node in list)
         {
             if (Token.HasLeadingComment(node, "// csharpier-ignore-end"))

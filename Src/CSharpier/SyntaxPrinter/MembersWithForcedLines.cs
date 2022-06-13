@@ -13,10 +13,10 @@ internal static class MembersWithForcedLines
         var result = new List<Doc> { Doc.HardLine };
         var printUnformatted = false;
         var lastMemberForcedBlankLine = false;
-        for (var x = 0; x < members.Count; x++)
+        for (var memberIndex = 0; memberIndex < members.Count; memberIndex++)
         {
             var skipAddingLineBecauseIgnoreEnded = false;
-            var member = members[x];
+            var member = members[memberIndex];
 
             if (Token.HasLeadingComment(member, "// csharpier-ignore-end"))
             {
@@ -25,7 +25,7 @@ internal static class MembersWithForcedLines
             }
             else if (Token.HasLeadingComment(member, "// csharpier-ignore-start"))
             {
-                if (!printUnformatted)
+                if (!printUnformatted && memberIndex > 0)
                 {
                     result.Add(Doc.HardLine);
                     result.Add(ExtraNewLines.Print(member));
@@ -41,9 +41,9 @@ internal static class MembersWithForcedLines
 
             void AddSeparatorIfNeeded()
             {
-                if (members is SeparatedSyntaxList<T> list && x < list.SeparatorCount)
+                if (members is SeparatedSyntaxList<T> list && memberIndex < list.SeparatorCount)
                 {
-                    result.Add(Token.Print(list.GetSeparator(x), context));
+                    result.Add(Token.Print(list.GetSeparator(memberIndex), context));
                 }
             }
 
@@ -77,7 +77,7 @@ internal static class MembersWithForcedLines
                 blankLineIsForced = false;
             }
 
-            if (x == 0)
+            if (memberIndex == 0)
             {
                 lastMemberForcedBlankLine = blankLineIsForced;
                 result.Add(Node.Print(member, context));
