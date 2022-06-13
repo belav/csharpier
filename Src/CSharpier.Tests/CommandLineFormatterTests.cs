@@ -30,7 +30,40 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .Be("Error /Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
+    }
+
+    [Test]
+    public void Format_Writes_Failed_To_Compile_For_Subdirectory()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Subdirectory/Invalid.cs", "asdfasfasdf");
+
+        var result = this.Format(context, directoryOrFilePaths: "Subdirectory");
+
+        result.ErrorLines
+            .First()
+            .Should()
+            .Be("Error ./Subdirectory/Invalid.cs - Failed to compile so was not formatted.");
+    }
+
+    [Test]
+    public void Format_Writes_Failed_To_Compile_For_FullPath()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Subdirectory/Invalid.cs", "asdfasfasdf");
+
+        var result = this.Format(
+            context,
+            directoryOrFilePaths: Path.Combine(context.GetRootPath(), "Subdirectory")
+        );
+
+        result.ErrorLines
+            .First()
+            .Should()
+            .Be(
+                $"Error {context.GetRootPath().Replace('\\', '/')}/Subdirectory/Invalid.cs - Failed to compile so was not formatted."
+            );
     }
 
     [Test]
@@ -44,7 +77,7 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .Be("Error /Directory/Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Directory/Invalid.cs - Failed to compile so was not formatted.");
     }
 
     [Test]
@@ -58,7 +91,7 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .Be(@"Error /Unsupported.js - Is an unsupported file type.");
+            .Be(@"Error ./Unsupported.js - Is an unsupported file type.");
     }
 
     [Test]
@@ -195,7 +228,7 @@ public class CommandLineFormatterTests
 
         result.ExitCode.Should().Be(1);
         context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
-        result.Lines.First().Should().StartWith("Warning /Unformatted.cs - Was not formatted.");
+        result.Lines.First().Should().StartWith("Warning ./Unformatted.cs - Was not formatted.");
     }
 
     [Test]
@@ -422,7 +455,7 @@ public class CommandLineFormatterTests
         result.ErrorLines
             .First()
             .Should()
-            .Be("Error /Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
     }
 
     [Test]
@@ -493,9 +526,11 @@ public class CommandLineFormatterTests
         params string[] directoryOrFilePaths
     )
     {
+        var originalDirectoryOrFilePaths = directoryOrFilePaths;
         if (directoryOrFilePaths.Length == 0)
         {
             directoryOrFilePaths = new[] { context.GetRootPath() };
+            originalDirectoryOrFilePaths = new[] { "." };
         }
         else
         {
@@ -511,6 +546,7 @@ public class CommandLineFormatterTests
                 new CommandLineOptions
                 {
                     DirectoryOrFilePaths = directoryOrFilePaths,
+                    OriginalDirectoryOrFilePaths = originalDirectoryOrFilePaths,
                     SkipWrite = skipWrite,
                     Check = check,
                     WriteStdout = writeStdout || standardInFileContents != null,

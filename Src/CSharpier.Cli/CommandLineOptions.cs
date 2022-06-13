@@ -11,6 +11,7 @@ public class CommandLineOptions
     public bool WriteStdout { get; init; }
     public bool PipeMultipleFiles { get; init; }
     public string? StandardInFileContents { get; init; }
+    public string[] OriginalDirectoryOrFilePaths { get; init; } = Array.Empty<string>();
 
     internal delegate Task<int> Handler(
         string[] directoryOrFile,

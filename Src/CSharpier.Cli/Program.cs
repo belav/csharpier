@@ -38,6 +38,7 @@ public class Program
         }
 
         var directoryOrFileNotProvided = (directoryOrFile is null or { Length: 0 });
+        var originalDirectoryOrFile = directoryOrFile;
 
         string? standardInFileContents = null;
         if (Console.IsInputRedirected && directoryOrFileNotProvided)
@@ -49,6 +50,7 @@ public class Program
             standardInFileContents = await streamReader.ReadToEndAsync();
 
             directoryOrFile = new[] { Directory.GetCurrentDirectory() };
+            originalDirectoryOrFile = new[] { Directory.GetCurrentDirectory() };
         }
         else
         {
@@ -66,6 +68,7 @@ public class Program
         var commandLineOptions = new CommandLineOptions
         {
             DirectoryOrFilePaths = directoryOrFile!.ToArray(),
+            OriginalDirectoryOrFilePaths = originalDirectoryOrFile!,
             StandardInFileContents = standardInFileContents,
             Check = check,
             Fast = fast,
@@ -130,6 +133,14 @@ public class Program
                     DirectoryOrFilePaths = new[]
                     {
                         Path.Combine(Directory.GetCurrentDirectory(), fileName)
+                    },
+                    OriginalDirectoryOrFilePaths = new[]
+                    {
+                        Path.IsPathRooted(fileName)
+                          ? fileName
+                          : fileName.StartsWith(".")
+                              ? fileName
+                              : "./" + fileName
                     },
                     StandardInFileContents = stringBuilder.ToString(),
                     Fast = true,
