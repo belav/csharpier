@@ -7,8 +7,8 @@ internal static class ElseClause
         return Doc.Concat(
             Token.Print(node.ElseKeyword, context),
             node.Statement is IfStatementSyntax ifStatementSyntax
-              ? Doc.Concat(" ", IfStatement.Print(ifStatementSyntax, context))
-              : OptionalBraces.Print(node.Statement, context)
+                ? Doc.Concat(" ", IfStatement.Print(ifStatementSyntax, context))
+                : OptionalBraces.Print(node.Statement, context)
         );
     }
 }

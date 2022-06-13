@@ -42,14 +42,17 @@ internal static class AttributeList
                             (attributeArgumentNode, _) =>
                                 Doc.Concat(
                                     attributeArgumentNode.NameEquals != null
-                                      ? NameEquals.Print(attributeArgumentNode.NameEquals, context)
-                                      : Doc.Null,
+                                        ? NameEquals.Print(
+                                            attributeArgumentNode.NameEquals,
+                                            context
+                                        )
+                                        : Doc.Null,
                                     attributeArgumentNode.NameColon != null
-                                      ? BaseExpressionColon.Print(
+                                        ? BaseExpressionColon.Print(
                                             attributeArgumentNode.NameColon,
                                             context
                                         )
-                                      : Doc.Null,
+                                        : Doc.Null,
                                     Node.Print(attributeArgumentNode.Expression, context)
                                 ),
                             Doc.Line,
@@ -66,8 +69,8 @@ internal static class AttributeList
 
         docs.Add(
             node.Attributes.Count > 1
-              ? Doc.Indent(Doc.SoftLine, printSeparatedSyntaxList)
-              : printSeparatedSyntaxList
+                ? Doc.Indent(Doc.SoftLine, printSeparatedSyntaxList)
+                : printSeparatedSyntaxList
         );
 
         docs.Add(

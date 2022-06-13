@@ -13,8 +13,8 @@ internal static class OrderByClause
                         " ",
                         Node.Print(orderingNode.Expression, context),
                         string.IsNullOrEmpty(orderingNode.AscendingOrDescendingKeyword.Text)
-                          ? Doc.Null
-                          : " ",
+                            ? Doc.Null
+                            : " ",
                         Token.Print(orderingNode.AscendingOrDescendingKeyword, context)
                     ),
                 Doc.Null,

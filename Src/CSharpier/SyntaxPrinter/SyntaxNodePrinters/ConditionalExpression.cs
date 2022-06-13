@@ -20,11 +20,11 @@ internal static class ConditionalExpression
             node.Parent is ReturnStatementSyntax
             && node.Condition is BinaryExpressionSyntax or IsPatternExpressionSyntax
                 ? Doc.Indent(
-                      Doc.Group(
-                          Doc.IfBreak(Doc.SoftLine, Doc.Null),
-                          Node.Print(node.Condition, context)
-                      )
-                  )
+                    Doc.Group(
+                        Doc.IfBreak(Doc.SoftLine, Doc.Null),
+                        Node.Print(node.Condition, context)
+                    )
+                )
                 : Node.Print(node.Condition, context),
             node.Parent is ConditionalExpressionSyntax or ArgumentSyntax or ReturnStatementSyntax
             || node.Condition is InvocationExpressionSyntax
@@ -33,7 +33,7 @@ internal static class ConditionalExpression
         };
 
         return node.Parent is ConditionalExpressionSyntax
-          ? Doc.Concat(outerContents)
-          : Doc.Group(outerContents);
+            ? Doc.Concat(outerContents)
+            : Doc.Group(outerContents);
     }
 }

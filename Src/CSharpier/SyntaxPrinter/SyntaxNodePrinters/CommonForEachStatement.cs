@@ -7,13 +7,13 @@ internal static class CommonForEachStatement
         var variable = node switch
         {
             ForEachStatementSyntax forEach
-              => Doc.Concat(
-                  Node.Print(forEach.Type, context),
-                  " ",
-                  Token.Print(forEach.Identifier, context)
-              ),
+                => Doc.Concat(
+                    Node.Print(forEach.Type, context),
+                    " ",
+                    Token.Print(forEach.Identifier, context)
+                ),
             ForEachVariableStatementSyntax forEachVariable
-              => Node.Print(forEachVariable.Variable, context),
+                => Node.Print(forEachVariable.Variable, context),
             _ => Doc.Null
         };
 

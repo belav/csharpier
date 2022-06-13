@@ -8,8 +8,8 @@ internal static class FunctionPointerType
             Token.Print(node.DelegateKeyword, context),
             Token.PrintWithSuffix(node.AsteriskToken, " ", context),
             node.CallingConvention != null
-              ? PrintCallingConvention(node.CallingConvention, context)
-              : Doc.Null,
+                ? PrintCallingConvention(node.CallingConvention, context)
+                : Doc.Null,
             Token.Print(node.ParameterList.LessThanToken, context),
             Doc.Indent(
                 Doc.Group(
@@ -39,7 +39,7 @@ internal static class FunctionPointerType
         return Doc.Concat(
             Token.Print(node.ManagedOrUnmanagedKeyword, context),
             node.UnmanagedCallingConventionList != null
-              ? Doc.Concat(
+                ? Doc.Concat(
                     Token.Print(node.UnmanagedCallingConventionList.OpenBracketToken, context),
                     SeparatedSyntaxList.Print(
                         node.UnmanagedCallingConventionList.CallingConventions,
@@ -49,7 +49,7 @@ internal static class FunctionPointerType
                     ),
                     Token.Print(node.UnmanagedCallingConventionList.CloseBracketToken, context)
                 )
-              : Doc.Null
+                : Doc.Null
         );
     }
 }

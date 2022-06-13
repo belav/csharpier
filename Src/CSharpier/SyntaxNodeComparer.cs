@@ -203,11 +203,11 @@ internal partial class SyntaxNodeComparer
         {
             return NotEqual(
                 originalToken.RawSyntaxKind() == SyntaxKind.None
-                  ? originalNode?.Span
-                  : originalToken.Span,
+                    ? originalNode?.Span
+                    : originalToken.Span,
                 formattedToken.RawSyntaxKind() == SyntaxKind.None
-                  ? formattedNode?.Span
-                  : formattedToken.Span
+                    ? formattedNode?.Span
+                    : formattedToken.Span
             );
         }
 
@@ -230,8 +230,8 @@ internal partial class SyntaxNodeComparer
                 originalTrivia.ToString(),
                 formattedTrivia.ToString()
             )
-              ? Equal
-              : NotEqual(originalTrivia.Span, formattedTrivia.Span);
+                ? Equal
+                : NotEqual(originalTrivia.Span, formattedTrivia.Span);
         }
 
         if (originalTrivia.IsComment())
@@ -255,8 +255,8 @@ internal partial class SyntaxNodeComparer
         }
 
         return originalTrivia.ToString().TrimEnd() == formattedTrivia.ToString().TrimEnd()
-          ? Equal
-          : NotEqual(originalTrivia.Span, formattedTrivia.Span);
+            ? Equal
+            : NotEqual(originalTrivia.Span, formattedTrivia.Span);
     }
 
     private CompareResult Compare(SyntaxTriviaList originalList, SyntaxTriviaList formattedList)

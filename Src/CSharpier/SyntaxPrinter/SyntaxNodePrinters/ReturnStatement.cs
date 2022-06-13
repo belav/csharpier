@@ -12,10 +12,10 @@ internal static class ReturnStatement
                 context
             ),
             node.Expression != null
-              ? node.Expression is BinaryExpressionSyntax
-                  ? Doc.Indent(Node.Print(node.Expression, context))
-                  : Node.Print(node.Expression, context)
-              : Doc.Null,
+                ? node.Expression is BinaryExpressionSyntax
+                    ? Doc.Indent(Node.Print(node.Expression, context))
+                    : Node.Print(node.Expression, context)
+                : Doc.Null,
             Token.Print(node.SemicolonToken, context)
         );
     }

@@ -21,12 +21,10 @@ public class Startup
     {
         services.AddControllersWithViews();
 
-        services.AddSpaStaticFiles(
-            configuration =>
-            {
-                configuration.RootPath = "ClientApp/build";
-            }
-        );
+        services.AddSpaStaticFiles(configuration =>
+        {
+            configuration.RootPath = "ClientApp/build";
+        });
     }
 
     public void Configure(
@@ -53,28 +51,24 @@ public class Startup
 
         app.UseRouting();
 
-        app.UseEndpoints(
-            endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}"
-                );
-            }
-        );
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller}/{action=Index}/{id?}"
+            );
+        });
 
-        app.UseSpa(
-            spa =>
+        app.UseSpa(spa =>
+        {
+            spa.Options.SourcePath = "ClientApp";
+
+            if (env.IsDevelopment())
             {
                 spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    spa.Options.SourcePath = "ClientApp";
-                    spa.Options.DevServerPort = 3000;
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
+                spa.Options.DevServerPort = 3000;
+                spa.UseReactDevelopmentServer(npmScript: "start");
             }
-        );
+        });
     }
 }

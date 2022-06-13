@@ -8,8 +8,8 @@ internal static class StackAllocArrayCreationExpression
             Token.PrintWithSuffix(node.StackAllocKeyword, " ", context),
             Node.Print(node.Type, context),
             node.Initializer != null
-              ? Doc.Concat(" ", InitializerExpression.Print(node.Initializer, context))
-              : string.Empty
+                ? Doc.Concat(" ", InitializerExpression.Print(node.Initializer, context))
+                : string.Empty
         );
     }
 }

@@ -10,7 +10,7 @@ internal static class ObjectCreationExpression
                 Token.PrintWithSuffix(node.NewKeyword, " ", context),
                 Node.Print(node.Type, context),
                 node.ArgumentList != null
-                  ? Doc.Group(
+                    ? Doc.Group(
                         ArgumentListLike.Print(
                             node.ArgumentList.OpenParenToken,
                             node.ArgumentList.Arguments,
@@ -18,10 +18,10 @@ internal static class ObjectCreationExpression
                             context
                         )
                     )
-                  : Doc.Null,
+                    : Doc.Null,
                 node.Initializer != null
-                  ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer, context))
-                  : Doc.Null
+                    ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer, context))
+                    : Doc.Null
             )
         );
     }
@@ -45,7 +45,7 @@ internal static class ObjectCreationExpression
                 node.Initializer.Expressions.Count > 1
                 || parentInitializerExpressionSyntax.Expressions.Count > 1
             )
-          ? Doc.Concat(doc, Doc.BreakParent)
-          : doc;
+            ? Doc.Concat(doc, Doc.BreakParent)
+            : doc;
     }
 }

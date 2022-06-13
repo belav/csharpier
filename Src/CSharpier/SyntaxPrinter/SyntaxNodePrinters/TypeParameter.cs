@@ -11,8 +11,8 @@ internal static class TypeParameter
             AttributeLists.Print(node, node.AttributeLists, context),
             hasAttribute ? Doc.IndentIfBreak(Doc.Line, groupId) : Doc.Null,
             node.VarianceKeyword.RawSyntaxKind() != SyntaxKind.None
-              ? Token.PrintWithSuffix(node.VarianceKeyword, " ", context)
-              : Doc.Null,
+                ? Token.PrintWithSuffix(node.VarianceKeyword, " ", context)
+                : Doc.Null,
             Token.Print(node.Identifier, context)
         );
 

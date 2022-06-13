@@ -106,12 +106,12 @@ internal static class Token
         );
 
         return isClosingBrace && (printedTrivia != Doc.Null || extraNewLines != Doc.Null)
-          ? Doc.Concat(
+            ? Doc.Concat(
                 extraNewLines,
                 Doc.IndentIf(printedTrivia != Doc.Null, printedTrivia),
                 Doc.HardLine
             )
-          : printedTrivia;
+            : printedTrivia;
     }
 
     public static Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, FormattingContext context)
@@ -174,8 +174,8 @@ internal static class Token
                 AddLeadingComment(CommentType.SingleLine);
                 docs.Add(
                     kind == SyntaxKind.SingleLineDocumentationCommentTrivia
-                      ? Doc.HardLineSkipBreakIfFirstInGroup
-                      : Doc.Null
+                        ? Doc.HardLineSkipBreakIfFirstInGroup
+                        : Doc.Null
                 );
             }
             else if (IsMultiLineComment(kind))

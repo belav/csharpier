@@ -23,8 +23,8 @@ internal static class InvocationExpression
         FlattenAndPrintNodes(node, printedNodes, context);
 
         var groups = printedNodes.Any(o => o.Node is InvocationExpressionSyntax)
-          ? GroupPrintedNodesPrettierStyle(printedNodes)
-          : GroupPrintedNodesOnLines(printedNodes);
+            ? GroupPrintedNodesPrettierStyle(printedNodes)
+            : GroupPrintedNodesOnLines(printedNodes);
 
         var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
 
@@ -63,14 +63,14 @@ internal static class InvocationExpression
         var expanded = Doc.Concat(
             Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
             shouldMergeFirstTwoGroups
-              ? Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
-              : Doc.Null,
+                ? Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
+                : Doc.Null,
             PrintIndentedGroup(node, groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
         );
 
         return oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
-          ? expanded
-          : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
+            ? expanded
+            : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
     }
 
     private static void FlattenAndPrintNodes(

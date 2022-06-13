@@ -137,10 +137,10 @@ public class Program
                     OriginalDirectoryOrFilePaths = new[]
                     {
                         Path.IsPathRooted(fileName)
-                          ? fileName
-                          : fileName.StartsWith(".")
-                              ? fileName
-                              : "./" + fileName
+                            ? fileName
+                            : fileName.StartsWith(".")
+                                ? fileName
+                                : "./" + fileName
                     },
                     StandardInFileContents = stringBuilder.ToString(),
                     Fast = true,

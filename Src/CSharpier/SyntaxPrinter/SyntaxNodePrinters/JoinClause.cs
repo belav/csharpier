@@ -18,12 +18,12 @@ internal static class JoinClause
                 Token.PrintWithSuffix(node.EqualsKeyword, " ", context),
                 Node.Print(node.RightExpression, context),
                 node.Into != null
-                  ? Doc.Concat(
+                    ? Doc.Concat(
                         Doc.Line,
                         Token.PrintWithSuffix(node.Into.IntoKeyword, " ", context),
                         Token.Print(node.Into.Identifier, context)
                     )
-                  : Doc.Null
+                    : Doc.Null
             )
         );
     }

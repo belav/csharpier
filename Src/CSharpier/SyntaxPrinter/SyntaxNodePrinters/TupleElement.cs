@@ -7,8 +7,8 @@ internal static class TupleElement
         return Doc.Concat(
             Node.Print(node.Type, context),
             node.Identifier.RawSyntaxKind() != SyntaxKind.None
-              ? Doc.Concat(" ", Token.Print(node.Identifier, context))
-              : Doc.Null
+                ? Doc.Concat(" ", Token.Print(node.Identifier, context))
+                : Doc.Null
         );
     }
 }

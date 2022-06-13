@@ -12,13 +12,13 @@ internal static class CastExpression
                         or InvocationExpressionSyntax { Expression: IdentifierNameSyntax }
                 && node.Type is not GenericNameSyntax
             )
-          ? Doc.Concat(
+            ? Doc.Concat(
                 Token.Print(node.OpenParenToken, context),
                 Node.Print(node.Type, context),
                 Token.Print(node.CloseParenToken, context),
                 Node.Print(node.Expression, context)
             )
-          : Doc.Group(
+            : Doc.Group(
                 Token.Print(node.OpenParenToken, context),
                 Node.Print(node.Type, context),
                 Token.Print(node.CloseParenToken, context),

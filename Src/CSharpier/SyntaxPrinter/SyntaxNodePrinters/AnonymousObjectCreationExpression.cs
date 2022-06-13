@@ -8,7 +8,7 @@ internal static class AnonymousObjectCreationExpression
             Token.PrintWithSuffix(node.NewKeyword, Doc.Line, context),
             Token.Print(node.OpenBraceToken, context),
             node.Initializers.Any()
-              ? Doc.Indent(
+                ? Doc.Indent(
                     Doc.Line,
                     SeparatedSyntaxList.Print(
                         node.Initializers,
@@ -17,7 +17,7 @@ internal static class AnonymousObjectCreationExpression
                         context
                     )
                 )
-              : Doc.Null,
+                : Doc.Null,
             Doc.Line,
             Token.Print(node.CloseBraceToken, context)
         );

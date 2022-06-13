@@ -26,10 +26,10 @@ internal static class Modifiers
             Token.PrintWithoutLeadingTrivia(modifiers[0], context),
             " ",
             modifiers.Count > 1
-              ? Doc.Concat(
+                ? Doc.Concat(
                     modifiers.Skip(1).Select(o => Token.PrintWithSuffix(o, " ", context)).ToArray()
                 )
-              : Doc.Null
+                : Doc.Null
         );
     }
 }

@@ -9,8 +9,8 @@ internal static class BaseExpressionColon
             Token.PrintWithSuffix(
                 node.ColonToken,
                 node.Parent is SubpatternSyntax { Pattern: RecursivePatternSyntax { Type: null } }
-                  ? Doc.Line
-                  : " ",
+                    ? Doc.Line
+                    : " ",
                 context
             )
         );

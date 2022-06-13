@@ -50,9 +50,9 @@ namespace CSharpier.VisualStudio
 
             var message = isOnlyGlobal
                 ? (
-                      "CSharpier needs to be installed globally to format files in "
-                      + directoryThatContainsFile
-                  )
+                    "CSharpier needs to be installed globally to format files in "
+                    + directoryThatContainsFile
+                )
                 : "CSharpier needs to be installed to support formatting files";
 
             var actions = new List<InfoBarActionButton>

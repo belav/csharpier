@@ -24,10 +24,10 @@ internal static class InitializerExpression
                 )
             ),
             node.Expressions.Any()
-              ? alwaysBreak
-                  ? Doc.HardLine
-                  : Doc.Line
-              : Doc.Null,
+                ? alwaysBreak
+                    ? Doc.HardLine
+                    : Doc.Line
+                : Doc.Null,
             Token.Print(node.CloseBraceToken, context)
         );
         return
@@ -39,7 +39,7 @@ internal static class InitializerExpression
                     or ImplicitObjectCreationExpressionSyntax
                 )
             && node.Kind() is not SyntaxKind.WithInitializerExpression
-          ? Doc.Group(result)
-          : result;
+            ? Doc.Group(result)
+            : result;
     }
 }

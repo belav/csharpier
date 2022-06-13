@@ -63,8 +63,8 @@ namespace CSharpier.VisualStudio
                     "Skipping write because "
                         + (
                             string.IsNullOrEmpty(newText)
-                              ? "result is empty"
-                              : "current document equals result"
+                                ? "result is empty"
+                                : "current document equals result"
                         )
                 );
                 return;

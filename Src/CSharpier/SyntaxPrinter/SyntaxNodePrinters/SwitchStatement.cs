@@ -8,17 +8,17 @@ internal static class SwitchStatement
             node.Sections.Count == 0
                 ? " "
                 : Doc.Concat(
-                      Doc.Indent(
-                          Doc.Concat(
-                              Doc.HardLine,
-                              Doc.Join(
-                                  Doc.HardLine,
-                                  node.Sections.Select(o => SwitchSection.Print(o, context))
-                              )
-                          )
-                      ),
-                      Doc.HardLine
-                  );
+                    Doc.Indent(
+                        Doc.Concat(
+                            Doc.HardLine,
+                            Doc.Join(
+                                Doc.HardLine,
+                                node.Sections.Select(o => SwitchSection.Print(o, context))
+                            )
+                        )
+                    ),
+                    Doc.HardLine
+                );
 
         DocUtilities.RemoveInitialDoubleHardLine(sections);
 
