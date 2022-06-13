@@ -6,7 +6,7 @@ namespace CSharpier;
 
 public class CodeFormatter
 {
-    public static LanguageVersion LanguageVersion = LanguageVersion.CSharp10;
+    public static LanguageVersion LanguageVersion = LanguageVersion.Preview;
 
     public static string Format(string code, CodeFormatterOptions? options = null)
     {

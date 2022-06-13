@@ -16,6 +16,13 @@ var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
 while (!directory.Name.Equals("Src"))
 {
     directory = directory.Parent;
+    if (directory == null)
+    {
+        throw new Exception(
+            "Could not find the directory Src above the directory "
+                + Directory.GetCurrentDirectory()
+        );
+    }
 }
 
 var codeContext = new CodeContext(Path.Combine(directory.FullName, "CSharpier"));

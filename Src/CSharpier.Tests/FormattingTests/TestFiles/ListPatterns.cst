@@ -1,0 +1,10 @@
+var someValue = someArray is [1, 2, 3];
+
+var someValue =
+    triviaToMove
+        is [
+            ..,
+            { RawKind: (int)SyntaxKind.SingleLineCommentTrivia },
+            { RawKind: (int)SyntaxKind.SingleLineCommentTrivia },
+            { RawKind: (int)SyntaxKind.EndOfLineTrivia }
+        ];
