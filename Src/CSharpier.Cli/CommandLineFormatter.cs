@@ -17,32 +17,6 @@ internal static class CommandLineFormatter
     {
         try
         {
-            async Task<(IgnoreFile, PrinterOptions)> GetIgnoreFileAndPrinterOptions(
-                string directoryOrFile
-            )
-            {
-                var isDirectory = fileSystem.Directory.Exists(directoryOrFile);
-
-                var baseDirectoryPath = isDirectory
-                    ? directoryOrFile
-                    : fileSystem.Path.GetDirectoryName(directoryOrFile);
-
-                var ignoreFile = await IgnoreFile.Create(
-                    baseDirectoryPath,
-                    fileSystem,
-                    logger,
-                    cancellationToken
-                );
-
-                var printerOptions = ConfigurationFileOptions.CreatePrinterOptions(
-                    baseDirectoryPath,
-                    fileSystem,
-                    logger
-                );
-
-                return (ignoreFile, printerOptions);
-            }
-
             var stopwatch = Stopwatch.StartNew();
             var commandLineFormatterResult = new CommandLineFormatterResult();
 
@@ -55,19 +29,19 @@ internal static class CommandLineFormatter
                     console.InputEncoding
                 );
 
-                var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(filePath);
+                var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(
+                    filePath,
+                    fileSystem,
+                    logger,
+                    cancellationToken
+                );
 
                 if (
                     !GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
                     && !ignoreFile.IsIgnored(filePath)
                 )
                 {
-                    var fileIssueLogger = GetFileIssueLogger(
-                        filePath,
-                        filePath,
-                        fileSystem,
-                        logger
-                    );
+                    var fileIssueLogger = new FileIssueLogger(filePath, logger);
 
                     await PerformFormattingSteps(
                         fileToFormatInfo,
@@ -82,93 +56,18 @@ internal static class CommandLineFormatter
             }
             else
             {
-                IFormattedFileWriter? writer;
-                if (commandLineOptions.WriteStdout)
+                var result = await FormatPhysicalFiles(
+                    commandLineFormatterResult,
+                    commandLineOptions,
+                    fileSystem,
+                    console,
+                    logger,
+                    cancellationToken
+                );
+
+                if (result != 0)
                 {
-                    writer = new StdOutFormattedFileWriter(console);
-                }
-                else if (commandLineOptions.Check || commandLineOptions.SkipWrite)
-                {
-                    writer = new NullFormattedFileWriter();
-                }
-                else
-                {
-                    writer = new FileSystemFormattedFileWriter(fileSystem);
-                }
-
-                foreach (
-                    var directoryOrFile in commandLineOptions.DirectoryOrFilePaths.Select(
-                        o => o.Replace("\\", "/")
-                    )
-                )
-                {
-                    var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(
-                        directoryOrFile
-                    );
-
-                    async Task FormatFile(string filePath)
-                    {
-                        if (
-                            GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
-                            || ignoreFile.IsIgnored(filePath)
-                        )
-                        {
-                            return;
-                        }
-
-                        await FormatPhysicalFile(
-                            filePath,
-                            directoryOrFile,
-                            fileSystem,
-                            logger,
-                            commandLineFormatterResult,
-                            writer,
-                            commandLineOptions,
-                            printerOptions,
-                            cancellationToken
-                        );
-                    }
-
-                    if (fileSystem.File.Exists(directoryOrFile))
-                    {
-                        await FormatFile(directoryOrFile);
-                    }
-                    else if (fileSystem.Directory.Exists(directoryOrFile))
-                    {
-                        if (
-                            HasMismatchedCliAndMsBuildVersions.Check(
-                                directoryOrFile,
-                                fileSystem,
-                                logger
-                            )
-                        )
-                        {
-                            return 1;
-                        }
-
-                        var tasks = fileSystem.Directory
-                            .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
-                            .Select(FormatFile)
-                            .ToArray();
-                        try
-                        {
-                            Task.WaitAll(tasks, cancellationToken);
-                        }
-                        catch (OperationCanceledException ex)
-                        {
-                            if (ex.CancellationToken != cancellationToken)
-                            {
-                                throw;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        console.WriteErrorLine(
-                            "There was no file or directory found at " + directoryOrFile
-                        );
-                        return 1;
-                    }
+                    return result;
                 }
             }
 
@@ -196,9 +95,152 @@ internal static class CommandLineFormatter
         }
     }
 
-    private static async Task FormatPhysicalFile(
-        string filePath,
+    private static async Task<int> FormatPhysicalFiles(
+        CommandLineFormatterResult commandLineFormatterResult,
+        CommandLineOptions commandLineOptions,
+        IFileSystem fileSystem,
+        IConsole console,
+        ILogger logger,
+        CancellationToken cancellationToken
+    )
+    {
+        IFormattedFileWriter? writer;
+        if (commandLineOptions.WriteStdout)
+        {
+            writer = new StdOutFormattedFileWriter(console);
+        }
+        else if (commandLineOptions.Check || commandLineOptions.SkipWrite)
+        {
+            writer = new NullFormattedFileWriter();
+        }
+        else
+        {
+            writer = new FileSystemFormattedFileWriter(fileSystem);
+        }
+
+        for (var x = 0; x < commandLineOptions.DirectoryOrFilePaths.Length; x++)
+        {
+            var directoryOrFile = commandLineOptions.DirectoryOrFilePaths[x].Replace("\\", "/");
+            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[
+                x
+            ].Replace("\\", "/");
+
+            if (!Path.IsPathRooted(originalDirectoryOrFile))
+            {
+                if (!originalDirectoryOrFile.StartsWith("."))
+                {
+                    originalDirectoryOrFile = "./" + originalDirectoryOrFile;
+                }
+            }
+
+            var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(
+                directoryOrFile,
+                fileSystem,
+                logger,
+                cancellationToken
+            );
+
+            async Task FormatFile(string actualFilePath, string originalFilePath)
+            {
+                if (
+                    GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
+                    || ignoreFile.IsIgnored(actualFilePath)
+                )
+                {
+                    return;
+                }
+
+                await FormatPhysicalFile(
+                    actualFilePath,
+                    originalFilePath,
+                    fileSystem,
+                    logger,
+                    commandLineFormatterResult,
+                    writer,
+                    commandLineOptions,
+                    printerOptions,
+                    cancellationToken
+                );
+            }
+
+            if (fileSystem.File.Exists(directoryOrFile))
+            {
+                await FormatFile(directoryOrFile, originalDirectoryOrFile);
+            }
+            else if (fileSystem.Directory.Exists(directoryOrFile))
+            {
+                if (HasMismatchedCliAndMsBuildVersions.Check(directoryOrFile, fileSystem, logger))
+                {
+                    return 1;
+                }
+
+                var tasks = fileSystem.Directory
+                    .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
+                    .Select(
+                        o =>
+                            FormatFile(
+                                o,
+                                o.Replace("\\", "/")
+                                    .Replace(directoryOrFile, originalDirectoryOrFile)
+                            )
+                    )
+                    .ToArray();
+                try
+                {
+                    Task.WaitAll(tasks, cancellationToken);
+                }
+                catch (OperationCanceledException ex)
+                {
+                    if (ex.CancellationToken != cancellationToken)
+                    {
+                        throw;
+                    }
+                }
+            }
+            else
+            {
+                console.WriteErrorLine(
+                    "There was no file or directory found at " + directoryOrFile
+                );
+                return 1;
+            }
+        }
+
+        return 0;
+    }
+
+    private static async Task<(IgnoreFile, PrinterOptions)> GetIgnoreFileAndPrinterOptions(
         string directoryOrFile,
+        IFileSystem fileSystem,
+        ILogger logger,
+        CancellationToken cancellationToken
+    )
+    {
+        var isDirectory = fileSystem.Directory.Exists(directoryOrFile);
+
+        var baseDirectoryPath = isDirectory
+            ? directoryOrFile
+            : fileSystem.Path.GetDirectoryName(directoryOrFile);
+
+        var ignoreFile = await IgnoreFile.Create(
+            baseDirectoryPath,
+            fileSystem,
+            logger,
+            cancellationToken
+        );
+
+        var printerOptions = ConfigurationFileOptions.CreatePrinterOptions(
+            baseDirectoryPath,
+            fileSystem,
+            logger
+        );
+
+        return (ignoreFile, printerOptions);
+    }
+
+    private static async Task FormatPhysicalFile(
+        string actualFilePath,
+        string originalFilePath,
         IFileSystem fileSystem,
         ILogger logger,
         CommandLineFormatterResult commandLineFormatterResult,
@@ -209,14 +251,14 @@ internal static class CommandLineFormatter
     )
     {
         var fileToFormatInfo = await FileToFormatInfo.CreateFromFileSystem(
-            filePath,
+            actualFilePath,
             fileSystem,
             cancellationToken
         );
 
-        var fileIssueLogger = GetFileIssueLogger(directoryOrFile, filePath, fileSystem, logger);
+        var fileIssueLogger = new FileIssueLogger(originalFilePath, logger);
 
-        if (!filePath.EndsWithIgnoreCase(".cs") && !filePath.EndsWithIgnoreCase(".cst"))
+        if (!actualFilePath.EndsWithIgnoreCase(".cs") && !actualFilePath.EndsWithIgnoreCase(".cst"))
         {
             fileIssueLogger.WriteError("Is an unsupported file type.");
             return;
@@ -231,33 +273,6 @@ internal static class CommandLineFormatter
             commandLineOptions,
             cancellationToken
         );
-    }
-
-    private static FileIssueLogger GetFileIssueLogger(
-        string pathToDirectoryOrFile,
-        string pathToFile,
-        IFileSystem fileSystem,
-        ILogger logger
-    )
-    {
-        var normalizedPath = pathToDirectoryOrFile.Replace('\\', '/');
-        var baseDirectoryPath = fileSystem.Directory.Exists(normalizedPath)
-          ? normalizedPath
-          : fileSystem.Path.GetDirectoryName(normalizedPath);
-
-        if (baseDirectoryPath == null)
-        {
-            throw new Exception(
-                $"The path of {normalizedPath} does not appear to point to a directory or a file."
-            );
-        }
-
-        var filePathLogger = new FileIssueLogger(
-            "." + pathToFile.Replace('\\', '/')[baseDirectoryPath.Length..],
-            logger
-        );
-
-        return filePathLogger;
     }
 
     private static int ReturnExitCode(
