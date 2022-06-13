@@ -1150,6 +1150,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             originalStack.Push((originalNode.Body, originalNode));
             formattedStack.Push((formattedNode.Body, formattedNode));
+            result = this.Compare(originalNode.CheckedKeyword, formattedNode.CheckedKeyword, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
             originalStack.Push((originalNode.ExplicitInterfaceSpecifier, originalNode));
             formattedStack.Push((formattedNode.ExplicitInterfaceSpecifier, formattedNode));
             originalStack.Push((originalNode.ExpressionBody, originalNode));
@@ -1172,6 +1174,8 @@ namespace CSharpier
         private CompareResult CompareConversionOperatorMemberCrefSyntax(ConversionOperatorMemberCrefSyntax originalNode, ConversionOperatorMemberCrefSyntax formattedNode)
         {
             CompareResult result;
+            result = this.Compare(originalNode.CheckedKeyword, formattedNode.CheckedKeyword, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
             result = this.Compare(originalNode.ImplicitOrExplicitKeyword, formattedNode.ImplicitOrExplicitKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -2630,6 +2634,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             originalStack.Push((originalNode.Body, originalNode));
             formattedStack.Push((formattedNode.Body, formattedNode));
+            result = this.Compare(originalNode.CheckedKeyword, formattedNode.CheckedKeyword, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
             originalStack.Push((originalNode.ExplicitInterfaceSpecifier, originalNode));
             formattedStack.Push((formattedNode.ExplicitInterfaceSpecifier, formattedNode));
             originalStack.Push((originalNode.ExpressionBody, originalNode));
@@ -2652,6 +2658,8 @@ namespace CSharpier
         private CompareResult CompareOperatorMemberCrefSyntax(OperatorMemberCrefSyntax originalNode, OperatorMemberCrefSyntax formattedNode)
         {
             CompareResult result;
+            result = this.Compare(originalNode.CheckedKeyword, formattedNode.CheckedKeyword, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             result = this.Compare(originalNode.OperatorKeyword, formattedNode.OperatorKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;

@@ -18,6 +18,8 @@ internal static class RightHandSide
         {
             Layout.BasicConcatWithoutLine
               => Doc.Concat(leftDoc, operatorDoc, Node.Print(rightNode, context)),
+            Layout.BasicConcatWithSpace
+              => Doc.Concat(leftDoc, operatorDoc, " ", Node.Print(rightNode, context)),
             Layout.BreakAfterOperator
               => Doc.Group(
                   Doc.Group(leftDoc),
@@ -88,6 +90,15 @@ internal static class RightHandSide
 
         return rightNode switch
         {
+            LiteralExpressionSyntax
+            {
+                Token.RawKind: (int)SyntaxKind.MultiLineRawStringLiteralToken
+            }
+            or InterpolatedStringExpressionSyntax
+            {
+                StringStartToken.RawKind: (int)SyntaxKind.InterpolatedMultiLineRawStringStartToken
+            }
+              => Layout.BasicConcatWithSpace,
             InitializerExpressionSyntax => Layout.BasicConcatWithoutLine,
             BinaryExpressionSyntax
             or CastExpressionSyntax { Type: GenericNameSyntax }
@@ -113,6 +124,7 @@ internal static class RightHandSide
     private enum Layout
     {
         BasicConcatWithoutLine,
+        BasicConcatWithSpace,
         BreakAfterOperator,
         Chain,
         ChainTail,
