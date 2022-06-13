@@ -1,0 +1,25 @@
+.controlsWrapper {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    background-color: #f7f7f7;
+    padding: 10px;
+}
+
+.controlsWrapper > label {
+    display: block;
+    margin-top: 10px;
+}
+.controlsWrapper > button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.smallButton {
+    background-color: #ccc;
+    border-radius: 4px;
+    color: #000;
+    border: none;
+    height: 24px;
+    cursor: pointer;
+    margin-right: 6px;
+}

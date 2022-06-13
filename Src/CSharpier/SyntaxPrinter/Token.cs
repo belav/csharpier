@@ -59,6 +59,7 @@ internal static class Token
                         { RawKind: (int)SyntaxKind.InterpolatedVerbatimStringStartToken }
                     }
             )
+            || syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken
         )
         {
             var lines = syntaxToken.Text.Replace("\r", string.Empty).Split(new[] { '\n' });

@@ -102,3 +102,13 @@ class ClassName
     AnotherAttribute
 ]
 public class ClassName { }
+
+[GenericAttribute<string>()]
+public class ClassName { }
+
+[Generic<
+    LongName______________________,
+    LongName______________________,
+    LongName______________________
+>]
+public class ClassName { }

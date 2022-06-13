@@ -34,12 +34,12 @@ three
 
     private string stayOnLine1 =
         @"one
-jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
+two
 ";
 
     private string stayOnLine2 =
         $@"one
-jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
+two
 ";
 
     private string stayOnLine3 =
@@ -61,7 +61,7 @@ four";
 two
 three
 four
-jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
+five
 "
         );
 
@@ -70,7 +70,7 @@ jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksd
 two
 three
 four
-jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksdjlf
+five
 "
         );
 
@@ -79,7 +79,7 @@ jhaksdlfklasdfjlkasdjflaksdfklasldkjfljkasdljfkasljkdfakljsdfjlkaskfjlaskjldfksd
 two
 three
 four",
-            "two"
+            five
         );
 
         CallSomeLongMethod(
@@ -87,7 +87,79 @@ four",
 two
 three
 four",
-            "two"
+            five
         );
+
+        var multiLineRaw = """
+    This is a long message.
+    It has several lines.
+        Some are indented
+                more than others.
+    Some should start at the first column.
+    Some have "quoted text" in them.
+    """;
+
+        var multiLineRawInterpolated = $"""
+    This is a long message.
+    It has several lines.
+        Some are indented
+                more than others.
+    Some should start at the first column.
+    Some have "quoted text" in them.
+    """;
+
+        var shortRaw = """Short Raw String""";
+        var shortRawInterpolated = $"""Short Raw String""";
+        var longRaw =
+            """Long Raw String                                                                       """;
+        var longRawInterpolated =
+            $"""Long Raw String                                                                       """;
+
+        CallSomeLongMethod(
+            """
+one
+two
+three
+four
+five
+"""
+        );
+
+        CallSomeLongMethod(
+            """
+one
+two
+three
+four
+""",
+            five
+        );
+
+        CallSomeLongMethod(
+            one,
+            """
+two
+three
+four
+""",
+            five
+        );
+
+        var expressionsInInterpolatedVerbatimStringDontBreak =
+            $@"{CallMethod_____________________________().CallMethod_____________________________().CallMethod_____________________________()}";
+
+        var butKeepExistingBreaks =
+            $@"    {
+                // some comment
+                CallMethod()
+            }    ";
+
+        var butKeepExistingBreaks =
+            $"    {
+                // some comment
+                CallMethod()
+            }    ";
+
+        ReadOnlySpan<byte> utf8StringLiteral = "hello"u8;
     }
 }

@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace CSharpier.Generators;
+namespace CSharpier.FakeGenerators;
 
 public static class Ignored
 {
@@ -32,7 +30,7 @@ public static class Ignored
             { typeof(IndexerDeclarationSyntax), new[] { "semicolon" } },
             { typeof(SyntaxTrivia), new[] { "token" } },
             { typeof(SyntaxToken), new[] { "value", "valueText" } },
-            { typeof(ParameterSyntax), new[] { "exclamationExclamationToken" } }
+            { typeof(ParameterSyntax), new[] { "exclamationExclamationToken" } },
         };
 
     public static readonly HashSet<string> UnsupportedNodes =

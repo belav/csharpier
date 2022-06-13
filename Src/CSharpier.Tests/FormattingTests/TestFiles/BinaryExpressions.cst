@@ -213,5 +213,7 @@ class TestClass
                     == someOtherLongThing________________________________________________,
             secondParameter
         );
+
+        var x = one >>> two;
     }
 }
