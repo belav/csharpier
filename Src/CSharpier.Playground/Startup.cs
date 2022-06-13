@@ -70,6 +70,8 @@ public class Startup
 
                 if (env.IsDevelopment())
                 {
+                    spa.Options.SourcePath = "ClientApp";
+                    spa.Options.DevServerPort = 3000;
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             }

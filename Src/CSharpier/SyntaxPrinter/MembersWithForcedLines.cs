@@ -11,18 +11,41 @@ internal static class MembersWithForcedLines
     ) where T : MemberDeclarationSyntax
     {
         var result = new List<Doc> { Doc.HardLine };
+        var printUnformatted = false;
         var lastMemberForcedBlankLine = false;
-        for (var x = 0; x < members.Count; x++)
+        for (var memberIndex = 0; memberIndex < members.Count; memberIndex++)
         {
-            void AddSeparatorIfNeeded()
+            var skipAddingLineBecauseIgnoreEnded = false;
+            var member = members[memberIndex];
+
+            if (Token.HasLeadingComment(member, "// csharpier-ignore-end"))
             {
-                if (members is SeparatedSyntaxList<T> list && x < list.SeparatorCount)
+                skipAddingLineBecauseIgnoreEnded = true;
+                printUnformatted = false;
+            }
+            else if (Token.HasLeadingComment(member, "// csharpier-ignore-start"))
+            {
+                if (!printUnformatted && memberIndex > 0)
                 {
-                    result.Add(Token.Print(list.GetSeparator(x), context));
+                    result.Add(Doc.HardLine);
+                    result.Add(ExtraNewLines.Print(member));
                 }
+                printUnformatted = true;
             }
 
-            var member = members[x];
+            if (printUnformatted)
+            {
+                result.Add(CSharpierIgnore.PrintWithoutFormatting(member));
+                continue;
+            }
+
+            void AddSeparatorIfNeeded()
+            {
+                if (members is SeparatedSyntaxList<T> list && memberIndex < list.SeparatorCount)
+                {
+                    result.Add(Token.Print(list.GetSeparator(memberIndex), context));
+                }
+            }
 
             var blankLineIsForced = (
                 member is MethodDeclarationSyntax && node is not InterfaceDeclarationSyntax
@@ -54,7 +77,7 @@ internal static class MembersWithForcedLines
                 blankLineIsForced = false;
             }
 
-            if (x == 0)
+            if (memberIndex == 0)
             {
                 lastMemberForcedBlankLine = blankLineIsForced;
                 result.Add(Node.Print(member, context));
@@ -62,7 +85,7 @@ internal static class MembersWithForcedLines
                 continue;
             }
 
-            var addBlankLine = blankLineIsForced || lastMemberForcedBlankLine;
+            var addBlankLine = (blankLineIsForced || lastMemberForcedBlankLine);
 
             var triviaContainsCommentOrNewLine = false;
             var printExtraNewLines = false;
@@ -108,7 +131,9 @@ internal static class MembersWithForcedLines
             {
                 result.Add(ExtraNewLines.Print(member));
             }
-            else if (addBlankLine && !triviaContainsEndIfOrRegion)
+            else if (
+                addBlankLine && !triviaContainsEndIfOrRegion && !skipAddingLineBecauseIgnoreEnded
+            )
             {
                 result.Add(Doc.HardLine);
             }

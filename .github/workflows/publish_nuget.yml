@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.201'
+          dotnet-version: '6.0.300'
       - run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj
   publish-nuget:
     runs-on: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.201'
+          dotnet-version: '6.0.300'
       - name: Publish CSharpier.Core library on version change
         uses: alirezanet/publish-nuget@v3.0.4
         with:

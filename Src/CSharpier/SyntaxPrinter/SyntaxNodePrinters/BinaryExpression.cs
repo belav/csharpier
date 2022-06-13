@@ -162,6 +162,7 @@ internal static class BinaryExpression
             SyntaxKind.AsKeyword => 9,
             SyntaxKind.LessThanLessThanToken => 10,
             SyntaxKind.GreaterThanGreaterThanToken => 10,
+            SyntaxKind.GreaterThanGreaterThanGreaterThanToken => 10,
             SyntaxKind.MinusToken => 11,
             SyntaxKind.PlusToken => 11,
             SyntaxKind.AsteriskToken => 12,

@@ -59,6 +59,7 @@ internal static class Token
                         { RawKind: (int)SyntaxKind.InterpolatedVerbatimStringStartToken }
                     }
             )
+            || syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken
         )
         {
             var lines = syntaxToken.Text.Replace("\r", string.Empty).Split(new[] { '\n' });
@@ -321,6 +322,16 @@ internal static class Token
                 o =>
                     o.RawSyntaxKind()
                         is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
+            );
+    }
+
+    public static bool HasLeadingComment(SyntaxNode node, string comment)
+    {
+        return node.GetLeadingTrivia()
+            .Any(
+                o =>
+                    o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
+                    && o.ToString().Equals(comment)
             );
     }
 }

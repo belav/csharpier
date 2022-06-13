@@ -17,13 +17,34 @@ internal static class CSharpierIgnore
             return false;
         }
 
-        return syntaxNode
-            .GetLeadingTrivia()
-            .Any(
-                o =>
-                    o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
-                    && o.ToString().Equals("// csharpier-ignore")
+        return (Token.HasLeadingComment(syntaxNode, "// csharpier-ignore"));
+    }
+
+    public static List<Doc> PrintNodesRespectingRangeIgnore<T>(
+        SyntaxList<T> list,
+        FormattingContext context
+    ) where T : SyntaxNode
+    {
+        var statements = new List<Doc>();
+        var printUnformatted = false;
+
+        foreach (var node in list)
+        {
+            if (Token.HasLeadingComment(node, "// csharpier-ignore-end"))
+            {
+                printUnformatted = false;
+            }
+            else if (Token.HasLeadingComment(node, "// csharpier-ignore-start"))
+            {
+                printUnformatted = true;
+            }
+
+            statements.Add(
+                printUnformatted ? PrintWithoutFormatting(node) : Node.Print(node, context)
             );
+        }
+
+        return statements;
     }
 
     public static Doc PrintWithoutFormatting(SyntaxNode syntaxNode)
