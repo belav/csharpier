@@ -68,7 +68,7 @@ public class Program
         var commandLineOptions = new CommandLineOptions
         {
             DirectoryOrFilePaths = directoryOrFile!.ToArray(),
-            OriginalDirectoryOrFilePaths = originalDirectoryOrFile,
+            OriginalDirectoryOrFilePaths = originalDirectoryOrFile!,
             StandardInFileContents = standardInFileContents,
             Check = check,
             Fast = fast,
