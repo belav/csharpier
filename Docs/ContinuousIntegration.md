@@ -22,9 +22,9 @@ Normally when using a code formatter like CSharpier, you'll want to ensure that 
 2. Use your preferred CI/CD tool to run the following commands.
    ```bash
    dotnet tool restore
-   dotnet-csharpier --check
+   dotnet tool run dotnet-csharpier --check .
    ```   
-   An example of a github action to accomplish this
+   An example of a GitHub Actions to accomplish this
    ```yaml
    name: Validate PR
    on:
@@ -38,7 +38,7 @@ Normally when using a code formatter like CSharpier, you'll want to ensure that 
          - uses: actions/checkout@v2
          - run: |
            dotnet tool restore
-           dotnet csharpier --check
+           dotnet tool run dotnet-csharpier --check .
    
    ```
 
