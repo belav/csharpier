@@ -24,7 +24,7 @@ Normally when using a code formatter like CSharpier, you'll want to ensure that 
    dotnet tool restore
    dotnet tool run dotnet-csharpier --check .
    ```   
-   An example of a GitHub Actions to accomplish this
+   An example Github Actions workflow to accomplish this
    ```yaml
    name: Validate PR
    on:
