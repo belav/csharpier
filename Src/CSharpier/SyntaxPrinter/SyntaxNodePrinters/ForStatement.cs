@@ -16,14 +16,14 @@ internal static class ForStatement
                         Doc.SoftLine,
                         Doc.Group(
                             node.Declaration != null
-                              ? VariableDeclaration.Print(node.Declaration, context)
-                              : Doc.Null,
+                                ? VariableDeclaration.Print(node.Declaration, context)
+                                : Doc.Null,
                             SeparatedSyntaxList.Print(node.Initializers, Node.Print, " ", context),
                             Token.Print(node.FirstSemicolonToken, context)
                         ),
                         node.Condition != null
-                          ? Doc.Concat(Doc.Line, Node.Print(node.Condition, context))
-                          : Doc.Line,
+                            ? Doc.Concat(Doc.Line, Node.Print(node.Condition, context))
+                            : Doc.Line,
                         Token.Print(node.SecondSemicolonToken, context),
                         Doc.Line,
                         Doc.Group(

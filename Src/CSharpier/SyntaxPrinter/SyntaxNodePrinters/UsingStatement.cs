@@ -17,8 +17,8 @@ internal static class UsingStatement
                     Doc.Indent(
                         Doc.SoftLine,
                         node.Declaration != null
-                          ? VariableDeclaration.Print(node.Declaration, context)
-                          : Doc.Null,
+                            ? VariableDeclaration.Print(node.Declaration, context)
+                            : Doc.Null,
                         node.Expression != null ? Node.Print(node.Expression, context) : Doc.Null
                     ),
                     Doc.SoftLine

@@ -7,7 +7,7 @@ internal static class ParameterList
         return Doc.Group(
             Token.Print(node.OpenParenToken, context),
             node.Parameters.Count > 0
-              ? Doc.Concat(
+                ? Doc.Concat(
                     Doc.Indent(
                         Doc.SoftLine,
                         SeparatedSyntaxList.Print(
@@ -19,7 +19,7 @@ internal static class ParameterList
                     ),
                     Doc.SoftLine
                 )
-              : Doc.Null,
+                : Doc.Null,
             Token.Print(node.CloseParenToken, context)
         );
     }

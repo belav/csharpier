@@ -17,8 +17,8 @@ internal static class TypeArgumentList
                     node.Arguments,
                     Node.Print,
                     node.Arguments.FirstOrDefault() is OmittedTypeArgumentSyntax
-                      ? Doc.Null
-                      : Doc.Line,
+                        ? Doc.Null
+                        : Doc.Line,
                     context
                 )
             ),

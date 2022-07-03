@@ -11,6 +11,7 @@ public class CommandLineOptions
     public bool WriteStdout { get; init; }
     public bool PipeMultipleFiles { get; init; }
     public string? StandardInFileContents { get; init; }
+    public string[] OriginalDirectoryOrFilePaths { get; init; } = Array.Empty<string>();
 
     internal delegate Task<int> Handler(
         string[] directoryOrFile,
@@ -54,21 +55,19 @@ public class CommandLineOptions
             )
         };
 
-        rootCommand.AddValidator(
-            cmd =>
+        rootCommand.AddValidator(cmd =>
+        {
+            if (!Console.IsInputRedirected && cmd.Children.Contains("--pipe-multiple-files"))
             {
-                if (!Console.IsInputRedirected && cmd.Children.Contains("--pipe-multiple-files"))
-                {
-                    return "--pipe-multiple-files may only be used if you pipe stdin to CSharpier";
-                }
-                if (!Console.IsInputRedirected && !cmd.Children.Contains("directoryOrFile"))
-                {
-                    return "directoryOrFile is required when not piping stdin to CSharpier";
-                }
-
-                return null;
+                return "--pipe-multiple-files may only be used if you pipe stdin to CSharpier";
             }
-        );
+            if (!Console.IsInputRedirected && !cmd.Children.Contains("directoryOrFile"))
+            {
+                return "directoryOrFile is required when not piping stdin to CSharpier";
+            }
+
+            return null;
+        });
 
         return rootCommand;
     }

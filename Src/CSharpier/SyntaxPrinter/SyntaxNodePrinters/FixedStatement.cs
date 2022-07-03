@@ -18,8 +18,8 @@ internal static class FixedStatement
                 Doc.IfBreak(Doc.Null, Doc.SoftLine)
             ),
             node.Statement is BlockSyntax blockSyntax
-              ? Block.Print(blockSyntax, context)
-              : Doc.IndentIf(
+                ? Block.Print(blockSyntax, context)
+                : Doc.IndentIf(
                     node.Statement is not FixedStatementSyntax,
                     Doc.Concat(Doc.HardLine, Node.Print(node.Statement, context))
                 )

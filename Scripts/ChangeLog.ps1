@@ -2,7 +2,9 @@
 # you'll need to Set-GitHubAuthentication first
 
 param (
+    [Parameter(Mandatory=$true)]
     [string]$previousVersionNumber,
+    [Parameter(Mandatory=$true)]
     [string]$versionNumber
 )
 
@@ -29,15 +31,15 @@ $issues = Get-GitHubIssue -Uri https://github.com/belav/csharpier -MilestoneNumb
 
 $content = [System.Text.StringBuilder]::new()
 $content.AppendLine("# " + $versionNumber)
-$content.AppendLine()
-$content.AppendLine("[diff](https://github.com/belav/csharpier/compare/" + $previousVersionNumber + "..." + $versionNumber + ")")
-$content.AppendLine()
+$content.AppendLine("## What's Changed")
 foreach ($issue in $issues) {
     if ($issue.title.ToLower().Contains("checklist")) {
         continue
     }
     
-    $content.AppendLine("- " + $issue.title + " [#" + $issue.number +"](" + $issue.html_url + ")")
+    $content.AppendLine("#### " + $issue.title + " [#" + $issue.number +"](" + $issue.html_url + ")")
 }
+$content.AppendLine()
+$content.AppendLine("**Full Changelog**: https://github.com/belav/csharpier/compare/" + $previousVersionNumber + "..." + $versionNumber)
 
 Write-Output $content.ToString()

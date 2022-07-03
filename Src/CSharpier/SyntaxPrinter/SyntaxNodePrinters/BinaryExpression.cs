@@ -31,8 +31,8 @@ internal static class BinaryExpression
             );
 
         return shouldNotIndent
-          ? Doc.Group(docs)
-          : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
+            ? Doc.Group(docs)
+            : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
     }
 
     // The goal of this is to group operators of the same precedence such that they all break or none of them break
@@ -107,8 +107,8 @@ internal static class BinaryExpression
             if (binaryOnTheRight)
             {
                 return shouldGroup
-                  ? new List<Doc> { docs[0], Doc.Group(docs.Skip(1).ToList()) }
-                  : docs;
+                    ? new List<Doc> { docs[0], Doc.Group(docs.Skip(1).ToList()) }
+                    : docs;
             }
 
             var right = Doc.Concat(

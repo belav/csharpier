@@ -28,8 +28,8 @@ internal static class RecursivePattern
         {
             result.Add(
                 node.Parent is SwitchExpressionArmSyntax or CasePatternSwitchLabelSyntax
-                  ? Doc.Null
-                  : Doc.SoftLine,
+                    ? Doc.Null
+                    : Doc.SoftLine,
                 Token.PrintLeadingTrivia(node.PositionalPatternClause.OpenParenToken, context),
                 Doc.Group(
                     Token.PrintWithoutLeadingTrivia(
@@ -43,8 +43,11 @@ internal static class RecursivePattern
                             (subpatternNode, _) =>
                                 Doc.Concat(
                                     subpatternNode.NameColon != null
-                                      ? BaseExpressionColon.Print(subpatternNode.NameColon, context)
-                                      : Doc.Null,
+                                        ? BaseExpressionColon.Print(
+                                            subpatternNode.NameColon,
+                                            context
+                                        )
+                                        : Doc.Null,
                                     Node.Print(subpatternNode.Pattern, context)
                                 ),
                             Doc.Line,
@@ -84,8 +87,8 @@ internal static class RecursivePattern
                                 (subpatternNode, _) =>
                                     Doc.Group(
                                         subpatternNode.ExpressionColon != null
-                                          ? Node.Print(subpatternNode.ExpressionColon, context)
-                                          : Doc.Null,
+                                            ? Node.Print(subpatternNode.ExpressionColon, context)
+                                            : Doc.Null,
                                         Node.Print(subpatternNode.Pattern, context)
                                     ),
                                 Doc.Line,

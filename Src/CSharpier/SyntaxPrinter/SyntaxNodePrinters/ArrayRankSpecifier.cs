@@ -16,14 +16,14 @@ internal static class ArrayRankSpecifier
         return Doc.Group(
             Token.Print(node.OpenBracketToken, context),
             node.Sizes.Any()
-              ? Doc.Concat(
+                ? Doc.Concat(
                     Doc.Indent(
                         Doc.SoftLine,
                         SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.Line, context)
                     ),
                     Doc.SoftLine
                 )
-              : Doc.Null,
+                : Doc.Null,
             Token.Print(node.CloseBracketToken, context)
         );
     }

@@ -106,7 +106,7 @@ internal static class BaseTypeDeclaration
                 " ",
                 Node.Print(node.BaseList.Types.First(), context),
                 node.BaseList.Types.Count > 1
-                  ? Doc.Indent(
+                    ? Doc.Indent(
                         Token.Print(node.BaseList.Types.GetSeparator(0), context),
                         Doc.Line,
                         SeparatedSyntaxList.Print(
@@ -117,7 +117,7 @@ internal static class BaseTypeDeclaration
                             startingIndex: 1
                         )
                     )
-                  : Doc.Null
+                    : Doc.Null
             );
 
             docs.Add(Doc.Group(Doc.Indent(Doc.Line, baseListDoc)));
@@ -146,8 +146,8 @@ internal static class BaseTypeDeclaration
                     o.RawSyntaxKind()
                         is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
             )
-              ? Doc.Line
-              : " ";
+                ? Doc.Line
+                : " ";
 
             docs.Add(
                 separator,

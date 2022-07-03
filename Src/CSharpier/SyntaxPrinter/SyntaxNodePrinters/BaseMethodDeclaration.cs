@@ -141,8 +141,8 @@ internal static class BaseMethodDeclaration
                 Node.Print(operatorDeclarationSyntax.ReturnType, context),
                 " ",
                 operatorDeclarationSyntax.ExplicitInterfaceSpecifier is not null
-                  ? Node.Print(operatorDeclarationSyntax.ExplicitInterfaceSpecifier, context)
-                  : Doc.Null,
+                    ? Node.Print(operatorDeclarationSyntax.ExplicitInterfaceSpecifier, context)
+                    : Doc.Null,
                 Token.PrintWithSuffix(operatorDeclarationSyntax.OperatorKeyword, " ", context),
                 Token.PrintWithSuffix(operatorDeclarationSyntax.CheckedKeyword, " ", context),
                 Token.Print(operatorDeclarationSyntax.OperatorToken, context)

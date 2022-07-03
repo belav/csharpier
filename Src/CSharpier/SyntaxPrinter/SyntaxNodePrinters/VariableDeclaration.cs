@@ -27,15 +27,15 @@ internal static class VariableDeclaration
             " ",
             Token.Print(variable.Identifier, context),
             variable.ArgumentList != null
-              ? BracketedArgumentList.Print(variable.ArgumentList, context)
-              : Doc.Null
+                ? BracketedArgumentList.Print(variable.ArgumentList, context)
+                : Doc.Null
         );
 
         var initializer = variable.Initializer;
 
         return initializer == null
-          ? Doc.Group(leftDoc)
-          : RightHandSide.Print(
+            ? Doc.Group(leftDoc)
+            : RightHandSide.Print(
                 node,
                 Doc.Concat(leftDoc, " "),
                 Token.Print(initializer.EqualsToken, context),

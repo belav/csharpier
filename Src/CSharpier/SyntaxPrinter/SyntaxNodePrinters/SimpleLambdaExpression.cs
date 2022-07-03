@@ -10,8 +10,8 @@ internal static class SimpleLambdaExpression
             " ",
             Token.Print(node.ArrowToken, context),
             node.Body is BlockSyntax blockSyntax
-              ? Block.Print(blockSyntax, context)
-              : Doc.Indent(Doc.Line, Node.Print(node.Body, context))
+                ? Block.Print(blockSyntax, context)
+                : Doc.Indent(Doc.Line, Node.Print(node.Body, context))
         );
     }
 }
