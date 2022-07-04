@@ -2,7 +2,7 @@
     "name": "csharpier-vscode",
     "displayName": "CSharpier - Code formatter",
     "description": "Code formatter using csharpier",
-    "version": "1.2.4",
+    "version": "1.3.0",
     "publisher": "csharpier",
     "author": "CSharpier",
     "homepage": "https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode",
@@ -57,7 +57,7 @@
         "actualBuild": "webpack --env NODE_ENV=production",
         "build": "rimraf build && npm run actualBuild",
         "start": "rimraf build && webpack --env NODE_ENV=development --watch",
-        "prettier": "prettier . --write",
+        "prettier": "prettier ./**/*.{ts,js} --write",
         "vsix": "vsce package"
     },
     "devDependencies": {
@@ -72,6 +72,7 @@
         "ts-loader": "9.2.5",
         "typescript": "4.4.3",
         "webpack": "5.64.4",
-        "webpack-cli": "4.9.1"
+        "webpack-cli": "4.9.1",
+        "xml-js": "1.6.11"
     }
 }
