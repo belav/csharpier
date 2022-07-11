@@ -1,4 +1,7 @@
-﻿## [1.2.2]
+﻿## [1.2.3]
+- Modify options to be local to the solution that is open.
+
+## [1.2.2]
 - Fix bug for usernames that contain a space not being able to format files
 
 ## [1.2.1]
