@@ -19,45 +19,16 @@ namespace CSharpier.VisualStudio
         [Description("Log Debug Messages")]
         public bool LogDebugMessages { get; set; }
 
-        public enum StorageType
-        {
-            Global,
-            Local
-        }
-
-        [Category("CSharpier")]
-        [DisplayName("Storage type")]
-        [Description(
-            "Global options (same for all solutions) or local options (specific for each solution).\nLocal options are stored in a .suo file."
-        )]
-        public StorageType OptionStorageType
-        {
-            get => _storageType;
-            set
-            {
-                if (_storageType != value && value == StorageType.Local)
-                {
-                    this.AssignFromLocal();
-                }
-                _storageType = value;
-            }
-        }
-        private StorageType _storageType = StorageType.Global;
-
         public void OnOptionsLoaded(CSharpierOptions options)
         {
             this.localOptions = options;
-
-            if (this.OptionStorageType == StorageType.Local)
-            {
-                this.AssignFromLocal();
-            }
+            this.AssignFrom(this.localOptions);
         }
 
-        private void AssignFromLocal()
+        private void AssignFrom(CSharpierOptions options)
         {
-            this.RunOnSave = this.localOptions.RunOnSave;
-            this.LogDebugMessages = this.localOptions.LogDebugMessages;
+            this.RunOnSave = options.RunOnSave;
+            this.LogDebugMessages = options.LogDebugMessages;
         }
 
         private void AssignTo(CSharpierOptions options)
@@ -73,17 +44,17 @@ namespace CSharpier.VisualStudio
             return options;
         }
 
+        protected override void SaveSetting(PropertyDescriptor property)
+        {
+            base.SaveSetting(property);
+        }
+
         protected override void OnApply(PageApplyEventArgs e)
         {
-            if (this.OptionStorageType == StorageType.Local)
-            {
-                this.AssignTo(this.localOptions);
-                this.persistOptions?.Invoke();
-            }
-            else
-            {
-                base.OnApply(e);
-            }
+            base.OnApply(e);
+            
+            this.AssignTo(this.localOptions);
+            this.persistOptions?.Invoke();
         }
 
         internal void SetOnApply(Func<bool> persistOptions)

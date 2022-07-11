@@ -89,7 +89,7 @@ namespace CSharpier.VisualStudio
                 using var stream = new VSStreamWrapper(pOptionsStream);
                 using var sr = new StreamReader(stream);
                 var json = sr.ReadToEnd();
-                Logger.Instance.Info("Read-" + json);
+                Logger.Instance.Info("Loading Options: " + json);
                 this.options = JsonConvert.DeserializeObject<CSharpierOptions>(json);
             }
             catch (Exception e)
@@ -119,10 +119,7 @@ namespace CSharpier.VisualStudio
         int IVsPersistSolutionOpts.WriteUserOptions(IStream pOptionsStream, string pszKey)
         {
             var optionsPage = (CSharpierOptionsPage)GetDialogPage(typeof(CSharpierOptionsPage));
-            if (
-                this.options == null
-                || optionsPage.OptionStorageType != CSharpierOptionsPage.StorageType.Local
-            )
+            if (this.options == null)
             {
                 return VSConstants.S_OK;
             }
@@ -132,7 +129,7 @@ namespace CSharpier.VisualStudio
                 using var stream = new VSStreamWrapper(pOptionsStream);
                 using var sw = new StreamWriter(stream);
                 var json = JsonConvert.SerializeObject(this.options);
-                Logger.Instance.Info("Save-" + json);
+                Logger.Instance.Info("Saving Options: " + json);
                 sw.Write(json);
             }
             catch (Exception e)

@@ -14,6 +14,7 @@ namespace CSharpier.VisualStudio
         private readonly FormattingService formattingService;
         private readonly CSharpierOptionsPage options;
         private readonly CSharpierProcessProvider cSharpierProcessProvider;
+        private readonly CSharpierPackage package;
 
         private ReformatWithCSharpierOnSave(
             CSharpierPackage package,
@@ -21,6 +22,7 @@ namespace CSharpier.VisualStudio
             CSharpierOptionsPage options
         )
         {
+            this.package = package;
             this.dte = dte;
             this.runningDocumentTable = new RunningDocumentTable(package);
             this.formattingService = FormattingService.GetInstance(package);
@@ -40,6 +42,11 @@ namespace CSharpier.VisualStudio
 
         public int OnBeforeSave(uint docCookie)
         {
+            var runOnSave = package.GetDialogPage<CSharpierOptionsPage>().RunOnSave;
+
+            Logger.Instance.Info(runOnSave.ToString());
+            Logger.Instance.Info(this.options.RunOnSave.ToString());
+
             if (!this.options.RunOnSave)
             {
                 return VSConstants.S_OK;
