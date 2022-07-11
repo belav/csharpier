@@ -7,27 +7,17 @@ namespace CSharpier.VisualStudio
     public class Logger
     {
         private readonly IVsOutputWindowPane pane;
-        private readonly CSharpierOptionsPage options;
 
         public static Logger Instance { get; private set; }
 
         public static async Task InitializeAsync(CSharpierPackage package)
         {
             var outputWindow = await package.GetServiceAsync<IVsOutputWindow>();
-            var cSharpierOptions = package.GetDialogPage<CSharpierOptionsPage>();
-            Instance = new Logger(outputWindow, cSharpierOptions);
-
-            var solution = await package.GetServiceAsync<SVsSolution>() as IVsSolution;
-            solution.GetSolutionInfo(out var dir, out var fileName, out var userOptsFile);
-            Instance.Info(dir);
-            Instance.Info(fileName);
-            Instance.Info(userOptsFile);
+            Instance = new Logger(outputWindow);
         }
 
-        private Logger(IVsOutputWindow outputWindow, CSharpierOptionsPage options)
+        private Logger(IVsOutputWindow outputWindow)
         {
-            this.options = options;
-
             var guid = Guid.NewGuid();
 
             // if we do what this warning says, then things don't work
@@ -44,7 +34,7 @@ namespace CSharpier.VisualStudio
 
         public void Debug(string message)
         {
-            if (this.options.LogDebugMessages)
+            if (CSharpierOptions.Instance.LogDebugMessages)
             {
                 this.Log(message);
             }

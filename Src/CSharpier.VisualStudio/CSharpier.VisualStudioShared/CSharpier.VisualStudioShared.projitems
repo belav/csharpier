@@ -10,6 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AsyncPackageExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BaseOptionsModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BaseOptionsPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSharpierOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -27,6 +29,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)ProcessHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ReformatWithCSharpier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ReformatWithCSharpierOnSave.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)VSStreamWrapper.cs" />
   </ItemGroup>
 </Project>

@@ -1,13 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using EnvDTE;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Events;
 using Microsoft.VisualStudio.Shell.Interop;
-using Newtonsoft.Json;
+using SolutionEvents = Microsoft.VisualStudio.Shell.Events.SolutionEvents;
 using Task = System.Threading.Tasks.Task;
 
 namespace CSharpier.VisualStudio
@@ -18,12 +16,9 @@ namespace CSharpier.VisualStudio
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(CSharpierOptionsPage), "CSharpier", "General", 0, 0, true)]
     [ProvideProfile(typeof(CSharpierOptionsPage), "CSharpier", "General", 0, 0, true)]
-    public sealed class CSharpierPackage : AsyncPackage, IVsPersistSolutionOpts
+    public sealed class CSharpierPackage : AsyncPackage
     {
         public const string PackageGuidString = "d348ba73-11dc-46be-8660-6d9819fc2c52";
-        private const string OptionsStreamKey = "csharpier_options";
-
-        private CSharpierOptions options;
 
         protected override async Task InitializeAsync(
             CancellationToken cancellationToken,
@@ -34,8 +29,6 @@ namespace CSharpier.VisualStudio
             Logger.Instance.Info("Starting");
 
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-
-            LoadSettings();
 
             await InfoBarService.InitializeAsync(this);
             await ReformatWithCSharpierOnSave.InitializeAsync(this);
@@ -49,95 +42,13 @@ namespace CSharpier.VisualStudio
                     .GetInstance(this)
                     .FindAndWarmProcess(dte.ActiveDocument.FullName);
             }
+
+            SolutionEvents.OnAfterOpenSolution += HandleOpenSolution;
         }
 
-        public void LoadSettings()
+        private void HandleOpenSolution(object sender, OpenSolutionEventArgs e)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var solutionPersistence =
-                GetGlobalService(typeof(SVsSolutionPersistence)) as IVsSolutionPersistence;
-            solutionPersistence.LoadPackageUserOpts(this, OptionsStreamKey);
-        }
-
-        public bool PersistSettings()
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var solutionPersistence =
-                GetGlobalService(typeof(SVsSolutionPersistence)) as IVsSolutionPersistence;
-            return solutionPersistence.SavePackageUserOpts(this, OptionsStreamKey)
-                == VSConstants.S_OK;
-        }
-
-        // Called by the shell when a solution is opened and the SUO file is read.
-        int IVsPersistSolutionOpts.LoadUserOptions(
-            IVsSolutionPersistence pPersistence,
-            uint grfLoadOpts
-        )
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            return pPersistence.LoadPackageUserOpts(this, OptionsStreamKey);
-        }
-
-        // Called by the shell if the `key` section declared in LoadUserOptions() as
-        // being written by this package has been found in the suo file
-        int IVsPersistSolutionOpts.ReadUserOptions(IStream pOptionsStream, string pszKey)
-        {
-            this.options = null;
-
-            try
-            {
-                using var stream = new VSStreamWrapper(pOptionsStream);
-                using var sr = new StreamReader(stream);
-                var json = sr.ReadToEnd();
-                Logger.Instance.Info("Loading Options: " + json);
-                this.options = JsonConvert.DeserializeObject<CSharpierOptions>(json);
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error(e);
-            }
-
-            var optionsPage = (CSharpierOptionsPage)GetDialogPage(typeof(CSharpierOptionsPage));
-            optionsPage.SetOnApply(this.PersistSettings);
-
-            this.options ??= optionsPage.LoadDefaultOptions();
-
-            optionsPage.OnOptionsLoaded(this.options);
-
-            return this.options == null ? VSConstants.E_FAIL : VSConstants.S_OK;
-        }
-
-        // Called by the shell when the SUO file is saved when a solution is closed.
-        // The provider calls the shell back to let it know which options keys it will use in the suo file.
-        int IVsPersistSolutionOpts.SaveUserOptions(IVsSolutionPersistence pPersistence)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            return pPersistence.SavePackageUserOpts(this, OptionsStreamKey);
-        }
-
-        // Called by the shell to let the package write user options under the specified key.
-        int IVsPersistSolutionOpts.WriteUserOptions(IStream pOptionsStream, string pszKey)
-        {
-            var optionsPage = (CSharpierOptionsPage)GetDialogPage(typeof(CSharpierOptionsPage));
-            if (this.options == null)
-            {
-                return VSConstants.S_OK;
-            }
-
-            try
-            {
-                using var stream = new VSStreamWrapper(pOptionsStream);
-                using var sw = new StreamWriter(stream);
-                var json = JsonConvert.SerializeObject(this.options);
-                Logger.Instance.Info("Saving Options: " + json);
-                sw.Write(json);
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error(e);
-            }
-
-            return VSConstants.S_OK;
+            CSharpierOptions.Instance.Load();
         }
     }
 }
