@@ -349,7 +349,7 @@ internal static class InvocationExpression
         this
             .CallMethod()
             .CallMethod();
-
+   
         // merging gives us this
         this.CallMethod()
             .CallMethod();

@@ -10,6 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AsyncPackageExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BaseOptionModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BaseOptionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSharpierOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>

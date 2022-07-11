@@ -7,20 +7,26 @@ namespace CSharpier.VisualStudio
     public class Logger
     {
         private readonly IVsOutputWindowPane pane;
-        private readonly CSharpierOptionsPage cSharpierOptionsPage;
+        private readonly CSharpierOptions cSharpierOptions;
 
         public static Logger Instance { get; private set; }
 
         public static async Task InitializeAsync(CSharpierPackage package)
         {
             var outputWindow = await package.GetServiceAsync<IVsOutputWindow>();
-            var cSharpierOptionsPage = package.GetDialogPage<CSharpierOptionsPage>();
-            Instance = new Logger(outputWindow, cSharpierOptionsPage);
+            var cSharpierOptions = await CSharpierOptions.GetLiveInstanceAsync();
+            Instance = new Logger(outputWindow, cSharpierOptions);
+
+            var solution = await package.GetServiceAsync<SVsSolution>() as IVsSolution;
+            solution.GetSolutionInfo(out var dir, out var fileName, out var userOptsFile);
+            Instance.Info(dir);
+            Instance.Info(fileName);
+            Instance.Info(userOptsFile);
         }
 
-        private Logger(IVsOutputWindow outputWindow, CSharpierOptionsPage cSharpierOptionsPage)
+        private Logger(IVsOutputWindow outputWindow, CSharpierOptions cSharpierOptions)
         {
-            this.cSharpierOptionsPage = cSharpierOptionsPage;
+            this.cSharpierOptions = cSharpierOptions;
 
             var guid = Guid.NewGuid();
 
@@ -38,7 +44,7 @@ namespace CSharpier.VisualStudio
 
         public void Debug(string message)
         {
-            if (this.cSharpierOptionsPage.LogDebugMessages)
+            if (this.cSharpierOptions.LogDebugMessages)
             {
                 this.Log(message);
             }

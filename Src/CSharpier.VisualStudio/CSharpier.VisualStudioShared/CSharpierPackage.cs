@@ -13,6 +13,7 @@ namespace CSharpier.VisualStudio
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(CSharpierOptionsPage), "CSharpier", "General", 0, 0, true)]
+    [ProvideProfile(typeof(CSharpierOptionsPage), "CSharpier", "General", 0, 0, true)]
     public sealed class CSharpierPackage : AsyncPackage
     {
         public const string PackageGuidString = "d348ba73-11dc-46be-8660-6d9819fc2c52";

@@ -1,9 +1,10 @@
 using System.ComponentModel;
-using Microsoft.VisualStudio.Shell;
 
 namespace CSharpier.VisualStudio
 {
-    public class CSharpierOptionsPage : DialogPage
+    public class CSharpierOptionsPage : BaseOptionPage<CSharpierOptions> { }
+
+    public class CSharpierOptions : BaseOptionModel<CSharpierOptions>
     {
         [Category("CSharpier")]
         [DisplayName("Reformat with CSharpier on Save")]

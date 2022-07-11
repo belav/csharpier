@@ -12,35 +12,35 @@ namespace CSharpier.VisualStudio
         private readonly DTE dte;
         private readonly RunningDocumentTable runningDocumentTable;
         private readonly FormattingService formattingService;
-        private readonly CSharpierOptionsPage csharpierOptionsPage;
+        private readonly CSharpierOptions cSharpierOptions;
         private readonly CSharpierProcessProvider cSharpierProcessProvider;
 
         private ReformatWithCSharpierOnSave(
             CSharpierPackage package,
             DTE dte,
-            CSharpierOptionsPage csharpierOptionsPage
+            CSharpierOptions cSharpierOptions
         )
         {
             this.dte = dte;
             this.runningDocumentTable = new RunningDocumentTable(package);
             this.formattingService = FormattingService.GetInstance(package);
             this.cSharpierProcessProvider = CSharpierProcessProvider.GetInstance(package);
-            this.csharpierOptionsPage = csharpierOptionsPage;
+            this.cSharpierOptions = cSharpierOptions;
 
             this.runningDocumentTable.Advise(this);
         }
 
         public static async Task InitializeAsync(CSharpierPackage package)
         {
-            var cSharpierOptionsPage = package.GetDialogPage<CSharpierOptionsPage>();
+            var cSharpierOptions = await CSharpierOptions.GetLiveInstanceAsync();
 
             var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
-            new ReformatWithCSharpierOnSave(package, dte, cSharpierOptionsPage);
+            new ReformatWithCSharpierOnSave(package, dte, cSharpierOptions);
         }
 
         public int OnBeforeSave(uint docCookie)
         {
-            if (!this.csharpierOptionsPage.RunOnSave)
+            if (!this.cSharpierOptions.RunOnSave)
             {
                 return VSConstants.S_OK;
             }
