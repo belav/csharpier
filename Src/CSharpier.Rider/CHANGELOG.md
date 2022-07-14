@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.2.7]
+- Fix Null Reference Exception from CSharpierProcessPipeMultipleFiles if it fails to start process
+
 ## [1.2.6]
 - Remove plugin until property so plugin doesn't need to be updated for each new rider version
 

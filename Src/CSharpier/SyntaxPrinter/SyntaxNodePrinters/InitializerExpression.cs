@@ -4,7 +4,9 @@ internal static class InitializerExpression
 {
     public static Doc Print(InitializerExpressionSyntax node, FormattingContext context)
     {
-        Doc separator = node.Parent is AssignmentExpressionSyntax or EqualsValueClauseSyntax
+        Doc separator = node.Parent
+            is AssignmentExpressionSyntax
+                or EqualsValueClauseSyntax { Parent: not PropertyDeclarationSyntax }
             ? Doc.Line
             : Doc.Null;
 

@@ -81,6 +81,8 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
     @Override
     public void dispose() {
-        this.process.destroy();
+        if (this.process != null) {
+            this.process.destroy();
+        }
     }
 }
