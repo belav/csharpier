@@ -7,9 +7,7 @@ public class IgnoreFile
 {
     protected Ignore.Ignore Ignore { get; }
     protected string IgnoreBaseDirectoryPath { get; }
-    private static string[] alwaysIgnored = {
-        "**/node_modules/*.cs"
-    };
+    private static string[] alwaysIgnored = { "**/node_modules/*.cs" };
 
     protected IgnoreFile(Ignore.Ignore ignore, string ignoreBaseDirectoryPath)
     {
@@ -48,8 +46,8 @@ public class IgnoreFile
         DebugLogger.Log("Creating ignore file for " + baseDirectoryPath);
 
         var ignore = new Ignore.Ignore();
-        
-        foreach(var name in alwaysIgnored)
+
+        foreach (var name in alwaysIgnored)
         {
             ignore.Add(name);
         }
