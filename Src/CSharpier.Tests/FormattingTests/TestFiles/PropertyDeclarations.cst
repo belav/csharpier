@@ -77,4 +77,21 @@ public class ClassName
         new List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)>();
 
     public int[] ArrayWithoutSizesDoesntBreak { get; set; }
+
+    public int[] ArrayWithInitializer { get; set; } = { 1, 2, 3, 4, 5 };
+
+    public Guid[] BreakingArray1 { get; set; } =
+        { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
+
+    public Guid[] BreakingArray2 { get; set; } =
+        {
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid()
+        };
 }
