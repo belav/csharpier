@@ -37,7 +37,9 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
                 const callback = this.callbacks.shift();
                 if (callback) {
                     if (!result) {
-                        this.logger.info("File is ignored by .csharpierignore or there was an error");
+                        this.logger.info(
+                            "File is ignored by .csharpierignore or there was an error",
+                        );
                     }
 
                     callback(result);
