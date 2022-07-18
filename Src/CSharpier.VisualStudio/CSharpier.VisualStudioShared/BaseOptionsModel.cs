@@ -114,11 +114,6 @@
             }
 
             return null;
-            return Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "CSharpier",
-                "vs.json"
-            );
         }
     }
 }
