@@ -1,3 +1,6 @@
+## [1.3.0]
+- Adding support for detecting version of CSharpier.MsBuild from csproj
+
 ## [1.2.4]
 - Remove error output display. It used to lose characters.
 
