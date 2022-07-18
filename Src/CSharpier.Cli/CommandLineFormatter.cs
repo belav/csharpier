@@ -1,7 +1,9 @@
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO.Abstractions;
 using CSharpier.Utilities;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace CSharpier.Cli;
 
@@ -128,6 +130,22 @@ internal static class CommandLineFormatter
                 x
             ].Replace("\\", "/");
 
+            // https://github.com/prettier/prettier/pull/12800/files
+            // TODO where do we really store it?
+            // TODO what about msbuild?
+            var cacheFile = Path.Combine(directoryOrFile, ".cache");
+            IDictionary<string, string> cacheDictionary;
+            if (!File.Exists(cacheFile))
+            {
+                cacheDictionary = new ConcurrentDictionary<string, string>();
+            }
+            else
+            {
+                cacheDictionary = JsonConvert.DeserializeObject<
+                    ConcurrentDictionary<string, string>
+                >(await File.ReadAllTextAsync(cacheFile, cancellationToken));
+            }
+
             if (!Path.IsPathRooted(originalDirectoryOrFile))
             {
                 if (!originalDirectoryOrFile.StartsWith("."))
@@ -162,6 +180,7 @@ internal static class CommandLineFormatter
                     writer,
                     commandLineOptions,
                     printerOptions,
+                    cacheDictionary,
                     cancellationToken
                 );
             }
@@ -207,6 +226,12 @@ internal static class CommandLineFormatter
                 );
                 return 1;
             }
+
+            await File.WriteAllTextAsync(
+                cacheFile,
+                JsonConvert.SerializeObject(cacheDictionary),
+                cancellationToken
+            );
         }
 
         return 0;
@@ -250,6 +275,7 @@ internal static class CommandLineFormatter
         IFormattedFileWriter writer,
         CommandLineOptions commandLineOptions,
         PrinterOptions printerOptions,
+        IDictionary<string, string> cacheDictionary,
         CancellationToken cancellationToken
     )
     {
@@ -265,6 +291,21 @@ internal static class CommandLineFormatter
         {
             fileIssueLogger.WriteError("Is an unsupported file type.");
             return;
+        }
+
+        // TODO "hash" should include version of csharpier + csharpier options
+        // TODO we also may want date or a hash of the file contents
+        var hash = File.GetLastWriteTimeUtc(actualFilePath).ToString();
+        if (cacheDictionary.TryGetValue(actualFilePath, out var cachedHash))
+        {
+            if (hash == cachedHash)
+            {
+                return;
+            }
+        }
+        else
+        {
+            cacheDictionary.Add(actualFilePath, hash);
         }
 
         await PerformFormattingSteps(
