@@ -12,7 +12,7 @@
     },
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/belav/belav/issues"
+        "url": "https://github.com/belav/csharpier/issues"
     },
     "engines": {
         "vscode": "^1.60.0"
