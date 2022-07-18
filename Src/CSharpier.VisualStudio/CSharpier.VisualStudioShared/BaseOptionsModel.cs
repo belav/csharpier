@@ -47,6 +47,7 @@
                 var fileName = await this.GetOptionsFileNameAsync();
                 if (!File.Exists(fileName))
                 {
+                    this.LoadFrom(newInstance);
                     return;
                 }
 
@@ -76,12 +77,16 @@
             try
             {
                 var fileName = await this.GetOptionsFileNameAsync();
+                if (fileName == null)
+                {
+                    return;
+                }
                 var json = JsonConvert.SerializeObject(this);
                 var encodedText = Encoding.UTF8.GetBytes(json);
 
                 using var fileStream = new FileStream(
                     fileName,
-                    FileMode.Truncate,
+                    FileMode.Create,
                     FileAccess.Write,
                     FileShare.None,
                     bufferSize: 4096,
@@ -103,7 +108,17 @@
                 as IVsSolution;
             solution.GetSolutionInfo(out _, out _, out var userOptsFile);
 
-            return Path.Combine(Path.GetDirectoryName(userOptsFile), "csharpier.json");
+            if (userOptsFile != null)
+            {
+                return Path.Combine(Path.GetDirectoryName(userOptsFile), "csharpier.json");
+            }
+
+            return null;
+            return Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "CSharpier",
+                "vs.json"
+            );
         }
     }
 }
