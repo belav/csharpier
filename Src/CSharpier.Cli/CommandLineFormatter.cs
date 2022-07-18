@@ -130,21 +130,12 @@ internal static class CommandLineFormatter
                 x
             ].Replace("\\", "/");
 
-            // https://github.com/prettier/prettier/pull/12800/files
-            // TODO where do we really store it?
-            // TODO what about msbuild?
-            var cacheFile = Path.Combine(directoryOrFile, ".cache");
-            IDictionary<string, string> cacheDictionary;
-            if (!File.Exists(cacheFile))
-            {
-                cacheDictionary = new ConcurrentDictionary<string, string>();
-            }
-            else
-            {
-                cacheDictionary = JsonConvert.DeserializeObject<
-                    ConcurrentDictionary<string, string>
-                >(await File.ReadAllTextAsync(cacheFile, cancellationToken));
-            }
+            var formattingCache = await FormattingCacheFactory.InitializeAsync(
+                directoryOrFile,
+                commandLineOptions,
+                fileSystem,
+                cancellationToken
+            );
 
             if (!Path.IsPathRooted(originalDirectoryOrFile))
             {
@@ -180,7 +171,7 @@ internal static class CommandLineFormatter
                     writer,
                     commandLineOptions,
                     printerOptions,
-                    cacheDictionary,
+                    formattingCache,
                     cancellationToken
                 );
             }
@@ -227,11 +218,7 @@ internal static class CommandLineFormatter
                 return 1;
             }
 
-            await File.WriteAllTextAsync(
-                cacheFile,
-                JsonConvert.SerializeObject(cacheDictionary),
-                cancellationToken
-            );
+            await formattingCache.ResolveAsync(cancellationToken);
         }
 
         return 0;
@@ -275,7 +262,7 @@ internal static class CommandLineFormatter
         IFormattedFileWriter writer,
         CommandLineOptions commandLineOptions,
         PrinterOptions printerOptions,
-        IDictionary<string, string> cacheDictionary,
+        IFormattingCache formattingCache,
         CancellationToken cancellationToken
     )
     {
@@ -293,19 +280,9 @@ internal static class CommandLineFormatter
             return;
         }
 
-        // TODO "hash" should include version of csharpier + csharpier options
-        // TODO we also may want date or a hash of the file contents
-        var hash = File.GetLastWriteTimeUtc(actualFilePath).ToString();
-        if (cacheDictionary.TryGetValue(actualFilePath, out var cachedHash))
+        if (await formattingCache.CanSkipFormattingAsync(actualFilePath, cancellationToken))
         {
-            if (hash == cachedHash)
-            {
-                return;
-            }
-        }
-        else
-        {
-            cacheDictionary.Add(actualFilePath, hash);
+            return;
         }
 
         await PerformFormattingSteps(
