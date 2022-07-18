@@ -43,7 +43,7 @@ namespace CSharpier.VisualStudio
                     .FindAndWarmProcess(dte.ActiveDocument.FullName);
             }
 
-            SolutionEvents.OnAfterOpenSolution += HandleOpenSolution;
+            SolutionEvents.OnAfterOpenSolution += this.HandleOpenSolution;
         }
 
         private void HandleOpenSolution(object sender, OpenSolutionEventArgs e)

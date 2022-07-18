@@ -36,84 +36,32 @@
 
         public void Load()
         {
-            ThreadHelper.JoinableTaskFactory.Run(LoadAsync);
+            ThreadHelper.JoinableTaskFactory.Run(this.LoadAsync);
         }
 
-        private async Task LoadAsync()
-        {
-            var newInstance = new T();
-            try
-            {
-                var fileName = await this.GetOptionsFileNameAsync();
-                if (!File.Exists(fileName))
-                {
-                    this.LoadFrom(newInstance);
-                    return;
-                }
-
-                using var fileStream = File.Open(fileName, FileMode.Open);
-                var result = new byte[fileStream.Length];
-                await fileStream.ReadAsync(result, 0, (int)fileStream.Length);
-                var json = Encoding.UTF8.GetString(result);
-                newInstance = JsonConvert.DeserializeObject<T>(json);
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error(e);
-            }
-
-            this.LoadFrom(newInstance);
-        }
-
-        protected abstract void LoadFrom(T newInstance);
+        protected abstract Task LoadAsync();
 
         public void Save()
         {
-            ThreadHelper.JoinableTaskFactory.Run(SaveAsync);
+            ThreadHelper.JoinableTaskFactory.Run(this.SaveAsync);
         }
 
-        public async Task SaveAsync()
-        {
-            try
-            {
-                var fileName = await this.GetOptionsFileNameAsync();
-                if (fileName == null)
-                {
-                    return;
-                }
-                var json = JsonConvert.SerializeObject(this);
-                var encodedText = Encoding.UTF8.GetBytes(json);
+        protected abstract Task SaveAsync();
 
-                using var fileStream = new FileStream(
-                    fileName,
-                    FileMode.Create,
-                    FileAccess.Write,
-                    FileShare.None,
-                    bufferSize: 4096,
-                    useAsync: true
-                );
-
-                await fileStream.WriteAsync(encodedText, 0, encodedText.Length);
-            }
-            catch (Exception e)
-            {
-                Logger.Instance.Error(e);
-            }
-        }
-
-        private async Task<string> GetOptionsFileNameAsync()
+        protected async Task<string?> GetLocalOptionsFileNameAsync()
         {
             var solution =
                 await AsyncServiceProvider.GlobalProvider.GetServiceAsync(typeof(SVsSolution))
                 as IVsSolution;
             solution.GetSolutionInfo(out _, out _, out var userOptsFile);
 
-            if (userOptsFile != null)
-            {
-                return Path.Combine(Path.GetDirectoryName(userOptsFile), "csharpier.json");
-            }
+            return userOptsFile != null
+                ? Path.Combine(Path.GetDirectoryName(userOptsFile), "csharpier.json")
+                : null;
+        }
 
-            return null;
+        protected async Task<string> GetGlobalOptionsFileNameAsync()
+        {
             return Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "CSharpier",
