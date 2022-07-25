@@ -41,8 +41,9 @@ public class ReformatWithCSharpierAction extends AnAction {
         }
 
         var file = virtualFileString.substring(filePrefix.length());
-        e.getPresentation().setVisible(file.toLowerCase().endsWith(".cs"));
-        var canFormat = FormattingService.getInstance(e.getProject()).getCanFormat(file, e.getProject());
+        var isCSharpFile = file.toLowerCase().endsWith(".cs");
+        e.getPresentation().setVisible(isCSharpFile);
+        var canFormat = isCSharpFile && FormattingService.getInstance(e.getProject()).getCanFormat(file, e.getProject());
         e.getPresentation().setEnabled(canFormat);
     }
 

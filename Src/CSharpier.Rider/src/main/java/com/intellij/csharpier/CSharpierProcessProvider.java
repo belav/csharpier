@@ -14,7 +14,11 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.jetbrains.annotations.NotNull;
+import org.w3c.dom.Node;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -112,6 +116,12 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         var currentDirectory = Path.of(directoryThatContainsFile);
         try {
             while (true) {
+                var csProjVersion = this.FindVersionInCsProj(currentDirectory);
+                if (csProjVersion != null)
+                {
+                    return csProjVersion;
+                }
+
                 var configPath = Path.of(currentDirectory.toString(), ".config/dotnet-tools.json");
                 var dotnetToolsPath = configPath.toString();
                 var file = new File(dotnetToolsPath);
@@ -154,6 +164,33 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         this.logger.debug("dotnet csharpier --version output: " + version);
 
         return version == null ? "" : version;
+    }
+
+    private String FindVersionInCsProj(Path currentDirectory) {
+        for (var pathToCsProj : currentDirectory.toFile().listFiles((dir, name) -> name.toLowerCase().endsWith(".csproj"))) {
+
+            try {
+                var dbf = DocumentBuilderFactory.newInstance();
+                var db = dbf.newDocumentBuilder();
+                var xmlDocument = db.parse(pathToCsProj);
+
+                var selector = XPathFactory.newInstance().newXPath();
+                var node = (Node) selector.compile("//PackageReference[@Include='CSharpier.MsBuild']").evaluate(xmlDocument, XPathConstants.NODE);
+                if (node == null) {
+                    continue;
+                }
+
+                var versionOfMsBuildPackage = node.getAttributes().getNamedItem("Version").getNodeValue();
+                if (versionOfMsBuildPackage != null) {
+                    this.logger.debug("Found version " + versionOfMsBuildPackage + " in " + pathToCsProj);
+                    return versionOfMsBuildPackage;
+                }
+            } catch (Exception e) {
+                this.logger.warn("The csproj at " + pathToCsProj + " failed to load with the following exception " + e.getMessage());
+            }
+        }
+
+        return null;
     }
 
     private ICSharpierProcess setupCSharpierProcess(String directory, String version) {
