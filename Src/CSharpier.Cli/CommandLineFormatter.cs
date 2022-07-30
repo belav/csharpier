@@ -130,9 +130,17 @@ internal static class CommandLineFormatter
                 x
             ].Replace("\\", "/");
 
+            var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(
+                directoryOrFile,
+                fileSystem,
+                logger,
+                cancellationToken
+            );
+
             var formattingCache = await FormattingCacheFactory.InitializeAsync(
                 directoryOrFile,
                 commandLineOptions,
+                printerOptions,
                 fileSystem,
                 cancellationToken
             );
@@ -144,13 +152,6 @@ internal static class CommandLineFormatter
                     originalDirectoryOrFile = "./" + originalDirectoryOrFile;
                 }
             }
-
-            var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(
-                directoryOrFile,
-                fileSystem,
-                logger,
-                cancellationToken
-            );
 
             async Task FormatFile(string actualFilePath, string originalFilePath)
             {
@@ -280,7 +281,7 @@ internal static class CommandLineFormatter
             return;
         }
 
-        if (await formattingCache.CanSkipFormattingAsync(actualFilePath, cancellationToken))
+        if (formattingCache.CanSkipFormatting(fileToFormatInfo))
         {
             return;
         }

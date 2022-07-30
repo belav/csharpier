@@ -89,6 +89,12 @@ public class CliTests
         result.Should().Be(unformattedContent, $"The file at {filePath} should have been ignored");
     }
 
+    // TODO some tests for caching
+    // test to see that cache is faster
+    // test to see if file changes it formats
+    // test to see dif version of csharpier??
+    // TODO can't specify cache with piping files
+
     [Test]
     public async Task Should_Return_Error_When_No_DirectoryOrFile_And_Not_Piping_StdIn()
     {

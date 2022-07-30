@@ -1,13 +1,15 @@
 using System.Collections.Concurrent;
 using System.IO.Abstractions;
-using Newtonsoft.Json;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 
 namespace CSharpier.Cli;
 
 internal interface IFormattingCache
 {
     Task ResolveAsync(CancellationToken cancellationToken);
-    Task<bool> CanSkipFormattingAsync(string actualFilePath, CancellationToken cancellationToken);
+    bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo);
 }
 
 internal static class FormattingCacheFactory
@@ -15,18 +17,22 @@ internal static class FormattingCacheFactory
     public static async Task<IFormattingCache> InitializeAsync(
         string directoryOrFile,
         CommandLineOptions commandLineOptions,
+        PrinterOptions printerOptions,
         IFileSystem fileSystem,
         CancellationToken cancellationToken
     )
     {
-        // https://github.com/prettier/prettier/pull/12800/files
-
-        // TODO some option needs to be on to actually cache things
-        // return new AlwaysFormatCache();
+        if (!commandLineOptions.Cache)
+        {
+            return new AlwaysFormatCache();
+        }
 
         // TODO what about msbuild?
-
         // TODO where do we really store it?
+        // TODO how do we clear it out? if they run without --cache do we clear it?
+        // TODO total files count doesn't include cached files
+        // test after optimized, and in release build
+        // initial format with caching is probably a bit slower
         var cacheFile = Path.Combine(directoryOrFile, ".cache");
         ConcurrentDictionary<string, string> cacheDictionary;
         if (!File.Exists(cacheFile))
@@ -35,26 +41,30 @@ internal static class FormattingCacheFactory
         }
         else
         {
-            cacheDictionary = JsonConvert.DeserializeObject<ConcurrentDictionary<string, string>>(
-                await File.ReadAllTextAsync(cacheFile, cancellationToken)
-            );
+            cacheDictionary =
+                JsonSerializer.Deserialize<ConcurrentDictionary<string, string>>(
+                    await File.ReadAllTextAsync(cacheFile, cancellationToken)
+                ) ?? new();
         }
 
-        return new FormattingCache(cacheFile, cacheDictionary, fileSystem);
+        return new FormattingCache(printerOptions, cacheFile, cacheDictionary, fileSystem);
     }
 
     private class FormattingCache : IFormattingCache
     {
+        private readonly string optionsHash;
         private readonly string cacheFile;
         private readonly ConcurrentDictionary<string, string> cacheDictionary;
         private readonly IFileSystem fileSystem;
 
         public FormattingCache(
+            PrinterOptions printerOptions,
             string cacheFile,
             ConcurrentDictionary<string, string> cacheDictionary,
             IFileSystem fileSystem
         )
         {
+            this.optionsHash = GetOptionsHash(printerOptions);
             this.cacheFile = cacheFile;
             this.cacheDictionary = cacheDictionary;
             this.fileSystem = fileSystem;
@@ -63,34 +73,41 @@ internal static class FormattingCacheFactory
         public async Task ResolveAsync(CancellationToken cancellationToken)
         {
             await this.fileSystem.File.WriteAllTextAsync(
-                cacheFile,
-                JsonConvert.SerializeObject(cacheDictionary),
+                this.cacheFile,
+                JsonSerializer.Serialize(this.cacheDictionary),
                 cancellationToken
             );
         }
 
-        public async Task<bool> CanSkipFormattingAsync(
-            string actualFilePath,
-            CancellationToken cancellationToken
-        )
+        public bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo)
         {
-            // TODO "hash" should include version of csharpier + csharpier options
-            // TODO maybe the options should be outside of this dictionary somehow
-            // TODO we also may want date or a hash of the file contents
-            var hash = this.fileSystem.File.GetLastWriteTimeUtc(actualFilePath).ToString();
-            if (cacheDictionary.TryGetValue(actualFilePath, out var cachedHash))
+            var currentHash = Hash(fileToFormatInfo.FileContents) + this.optionsHash;
+            if (this.cacheDictionary.TryGetValue(fileToFormatInfo.Path, out var cachedHash))
             {
-                if (hash == cachedHash)
+                if (currentHash == cachedHash)
                 {
                     return true;
                 }
             }
             else
             {
-                this.cacheDictionary[actualFilePath] = hash;
+                this.cacheDictionary[fileToFormatInfo.Path] = currentHash;
             }
 
             return false;
+        }
+
+        private static string GetOptionsHash(PrinterOptions printerOptions)
+        {
+            var csharpierVersion = typeof(FormattingCache).Assembly.GetName().Version;
+            return Hash($"{csharpierVersion}_${JsonSerializer.Serialize(printerOptions)}");
+        }
+
+        private static string Hash(string input)
+        {
+            using var md5 = MD5.Create();
+            var result = md5.ComputeHash(Encoding.ASCII.GetBytes(input));
+            return Convert.ToHexString(result);
         }
     }
 
@@ -101,12 +118,9 @@ internal static class FormattingCacheFactory
             return Task.CompletedTask;
         }
 
-        public Task<bool> CanSkipFormattingAsync(
-            string actualFilePath,
-            CancellationToken cancellationToken
-        )
+        public bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo)
         {
-            return Task.FromResult(false);
+            return false;
         }
     }
 }

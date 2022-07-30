@@ -10,6 +10,7 @@ public class CommandLineOptions
     public bool SkipWrite { get; init; }
     public bool WriteStdout { get; init; }
     public bool PipeMultipleFiles { get; init; }
+    public bool Cache { get; init; }
     public string? StandardInFileContents { get; init; }
     public string[] OriginalDirectoryOrFilePaths { get; init; } = Array.Empty<string>();
 
@@ -20,6 +21,7 @@ public class CommandLineOptions
         bool skipWrite,
         bool writeStdout,
         bool pipeMultipleFiles,
+        bool cache,
         CancellationToken cancellationToken
     );
 
@@ -36,6 +38,10 @@ public class CommandLineOptions
             new Option(
                 new[] { "--check" },
                 "Check that files are formatted. Will not write any changes."
+            ),
+            new Option(
+                new[] { "--cache" },
+                "Use a cache to determine if a file needs to be formatted."
             ),
             new Option(
                 new[] { "--fast" },
@@ -57,6 +63,7 @@ public class CommandLineOptions
 
         rootCommand.AddValidator(cmd =>
         {
+            // TODO no cache with stdin
             if (!Console.IsInputRedirected && cmd.Children.Contains("--pipe-multiple-files"))
             {
                 return "--pipe-multiple-files may only be used if you pipe stdin to CSharpier";
@@ -71,4 +78,10 @@ public class CommandLineOptions
 
         return rootCommand;
     }
+}
+
+public enum CacheStrategy
+{
+    Content,
+    Metadata
 }
