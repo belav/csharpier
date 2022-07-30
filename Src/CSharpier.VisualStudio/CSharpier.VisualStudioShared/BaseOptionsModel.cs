@@ -8,6 +8,7 @@
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
     using Microsoft.VisualStudio.Threading;
+    using Task = System.Threading.Tasks.Task;
 
     public abstract class BaseOptionModel<T> where T : BaseOptionModel<T>, new()
     {
