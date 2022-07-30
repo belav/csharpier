@@ -170,9 +170,10 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         for (var pathToCsProj : currentDirectory.toFile().listFiles((dir, name) -> name.toLowerCase().endsWith(".csproj"))) {
 
             try {
-                var dbf = DocumentBuilderFactory.newInstance();
-                var db = dbf.newDocumentBuilder();
-                var xmlDocument = db.parse(pathToCsProj);
+                var xmlDocument = DocumentBuilderFactory
+                    .newInstance()
+                    .newDocumentBuilder()
+                    .parse(pathToCsProj);
 
                 var selector = XPathFactory.newInstance().newXPath();
                 var node = (Node) selector.compile("//PackageReference[@Include='CSharpier.MsBuild']").evaluate(xmlDocument, XPathConstants.NODE);
