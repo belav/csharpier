@@ -1,9 +1,7 @@
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO.Abstractions;
 using CSharpier.Utilities;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace CSharpier.Cli;
 
@@ -55,6 +53,7 @@ internal static class CommandLineFormatter
                         fileIssueLogger,
                         printerOptions,
                         commandLineOptions,
+                        FormattingCacheFactory.NullCache,
                         cancellationToken
                     );
                 }
@@ -190,14 +189,14 @@ internal static class CommandLineFormatter
 
                 var tasks = fileSystem.Directory
                     .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
-                    .Select(
-                        o =>
-                            FormatFile(
-                                o,
-                                o.Replace("\\", "/")
-                                    .Replace(directoryOrFile, originalDirectoryOrFile)
-                            )
-                    )
+                    .Select(o =>
+                    {
+                        var normalizedPath = o.Replace("\\", "/");
+                        return FormatFile(
+                            normalizedPath,
+                            normalizedPath.Replace(directoryOrFile, originalDirectoryOrFile)
+                        );
+                    })
                     .ToArray();
                 try
                 {
@@ -281,11 +280,6 @@ internal static class CommandLineFormatter
             return;
         }
 
-        if (formattingCache.CanSkipFormatting(fileToFormatInfo))
-        {
-            return;
-        }
-
         await PerformFormattingSteps(
             fileToFormatInfo,
             writer,
@@ -293,6 +287,7 @@ internal static class CommandLineFormatter
             fileIssueLogger,
             printerOptions,
             commandLineOptions,
+            formattingCache,
             cancellationToken
         );
     }
@@ -323,11 +318,20 @@ internal static class CommandLineFormatter
         FileIssueLogger fileIssueLogger,
         PrinterOptions printerOptions,
         CommandLineOptions commandLineOptions,
+        IFormattingCache formattingCache,
         CancellationToken cancellationToken
     )
     {
         if (fileToFormatInfo.FileContents.Length == 0)
         {
+            return;
+        }
+
+        Interlocked.Increment(ref commandLineFormatterResult.Files);
+
+        if (formattingCache.CanSkipFormatting(fileToFormatInfo))
+        {
+            Interlocked.Increment(ref commandLineFormatterResult.CachedFiles);
             return;
         }
 
@@ -359,10 +363,6 @@ internal static class CommandLineFormatter
             fileIssueLogger.WriteError("Threw exception while formatting.", ex);
             Interlocked.Increment(ref commandLineFormatterResult.ExceptionsFormatting);
             return;
-        }
-        finally
-        {
-            Interlocked.Increment(ref commandLineFormatterResult.Files);
         }
 
         if (codeFormattingResult.Errors.Any())
@@ -423,5 +423,6 @@ internal static class CommandLineFormatter
         }
 
         formattedFileWriter.WriteResult(codeFormattingResult, fileToFormatInfo);
+        formattingCache.CacheResult(codeFormattingResult.Code, fileToFormatInfo);
     }
 }

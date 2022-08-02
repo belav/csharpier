@@ -1,19 +1,16 @@
+using System.IO.Abstractions;
+
 namespace CSharpier.Utilities;
 
 internal static class DirectoryExtensions
 {
-    public static void EnsureDirectoryExists(this FileInfo fileInfo)
+    public static void EnsureDirectoryExists(this IFileInfo fileInfo)
     {
         fileInfo.Directory?.EnsureExists();
     }
 
-    public static void EnsureExists(this DirectoryInfo directoryInfo)
+    public static void EnsureExists(this IDirectoryInfo directoryInfo)
     {
-        if (directoryInfo.Name.EndsWith("$"))
-        {
-            return;
-        }
-
         directoryInfo.Parent?.EnsureExists();
 
         if (directoryInfo.Exists)

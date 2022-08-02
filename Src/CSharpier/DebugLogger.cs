@@ -4,16 +4,22 @@ namespace CSharpier;
 
 public class DebugLogger
 {
+    private static object lockObject = new();
+
     [Conditional("DEBUG")]
     public static void Log(string message)
     {
-        try
+        lock (lockObject)
         {
-            File.AppendAllText(@"C:\projects\csharpier\debug.txt", message + "\n");
-        }
-        catch (Exception)
-        {
-            // we don't care if this fails
+            try
+            {
+                File.AppendAllText(@"C:\projects\csharpier\debug.txt", message + "\n");
+            }
+            catch (Exception)
+            {
+                File.AppendAllText(@"C:\projects\csharpier\debug.txt", message + "\n");
+                // we don't care if this fails
+            }
         }
     }
 }

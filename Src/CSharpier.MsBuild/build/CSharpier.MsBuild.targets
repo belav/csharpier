@@ -2,6 +2,7 @@
     <PropertyGroup>
         <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/dotnet-csharpier.dll</CSharpierDllPath>
         <CSharpierArgs Condition="$(CSharpier_Check)">$(CSharpierArgs) --check</CSharpierArgs>
+        <CSharpierArgs Condition="$(CSharpier_Cache)">$(CSharpierArgs) --cache</CSharpierArgs>
     </PropertyGroup>
 
     <!-- Target invokes the copy of csharpier from this package on the current project -->

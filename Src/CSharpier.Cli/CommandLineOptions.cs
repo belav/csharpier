@@ -79,9 +79,3 @@ public class CommandLineOptions
         return rootCommand;
     }
 }
-
-public enum CacheStrategy
-{
-    Content,
-    Metadata
-}

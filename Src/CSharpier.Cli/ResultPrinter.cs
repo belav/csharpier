@@ -15,6 +15,11 @@ public static class ResultPrinter
         );
         PrintResultLine("Total files", result.Files, logger);
 
+        if (commandLineOptions.Cache)
+        {
+            PrintResultLine("Files with cached formatting result", result.CachedFiles, logger);
+        }
+
         if (!commandLineOptions.Fast)
         {
             if (result.FailedSyntaxTreeValidation != 0)
@@ -38,7 +43,7 @@ public static class ResultPrinter
             if (result.ExceptionsValidatingSource != 0)
             {
                 PrintResultLine(
-                    "files that threw exceptions while validating syntax tree",
+                    "Files that threw exceptions while validating syntax tree",
                     result.ExceptionsValidatingSource,
                     logger
                 );
@@ -47,7 +52,7 @@ public static class ResultPrinter
 
         if (commandLineOptions.Check)
         {
-            PrintResultLine("files that were not formatted", result.UnformattedFiles, logger);
+            PrintResultLine("Files that were not formatted", result.UnformattedFiles, logger);
         }
     }
 

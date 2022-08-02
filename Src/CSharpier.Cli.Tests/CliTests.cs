@@ -89,12 +89,6 @@ public class CliTests
         result.Should().Be(unformattedContent, $"The file at {filePath} should have been ignored");
     }
 
-    // TODO some tests for caching
-    // test to see that cache is faster
-    // test to see if file changes it formats
-    // test to see dif version of csharpier??
-    // TODO can't specify cache with piping files
-
     [Test]
     public async Task Should_Return_Error_When_No_DirectoryOrFile_And_Not_Piping_StdIn()
     {
@@ -281,6 +275,36 @@ public class CliTests
         result.ExitCode.Should().Be(0);
         result.Output.Should().StartWith("Warning The csproj at ");
     }
+
+    [Test]
+    public async Task Should_Cache()
+    {
+        var unformattedContent = "public class ClassName {     }\n";
+        var formattedContent = "public class ClassName { }\n";
+        await this.WriteFileAsync("Unformatted.cs", unformattedContent);
+
+        // TODO clean up the cache file?
+        var firstResult = await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
+        var secondResult = await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
+
+        firstResult.Output
+            .Should()
+            .Contain(
+                "Files with cached formatting result:                                                   0"
+            );
+        secondResult.Output
+            .Should()
+            .Contain(
+                "Files with cached formatting result:                                                   1"
+            );
+    }
+
+    // TODO specify file, caching fails. Will work later I am sure
+    // TODO some tests for caching
+    // test to see that cache is faster
+    // test to see if file changes it formats
+    // test to see dif version of csharpier??
+    // TODO can't specify cache with piping files
 
     private async Task WriteFileAsync(string path, string content)
     {

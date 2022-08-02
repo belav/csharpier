@@ -3,6 +3,7 @@ using System.IO.Abstractions;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using CSharpier.Utilities;
 
 namespace CSharpier.Cli;
 
@@ -10,10 +11,13 @@ internal interface IFormattingCache
 {
     Task ResolveAsync(CancellationToken cancellationToken);
     bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo);
+    void CacheResult(string code, FileToFormatInfo fileToFormatInfo);
 }
 
 internal static class FormattingCacheFactory
 {
+    public static readonly IFormattingCache NullCache = new AlwaysFormatCache();
+
     public static async Task<IFormattingCache> InitializeAsync(
         string directoryOrFile,
         CommandLineOptions commandLineOptions,
@@ -24,16 +28,16 @@ internal static class FormattingCacheFactory
     {
         if (!commandLineOptions.Cache)
         {
-            return new AlwaysFormatCache();
+            return NullCache;
         }
 
-        // TODO what about msbuild?
-        // TODO where do we really store it?
-        // TODO how do we clear it out? if they run without --cache do we clear it?
-        // TODO total files count doesn't include cached files
-        // test after optimized, and in release build
-        // initial format with caching is probably a bit slower
-        var cacheFile = Path.Combine(directoryOrFile, ".cache");
+        // TODO document how to delete it
+        var cacheFile = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "CSharpier",
+            ".formattingCache"
+        );
+
         ConcurrentDictionary<string, string> cacheDictionary;
         if (!File.Exists(cacheFile))
         {
@@ -70,31 +74,26 @@ internal static class FormattingCacheFactory
             this.fileSystem = fileSystem;
         }
 
-        public async Task ResolveAsync(CancellationToken cancellationToken)
-        {
-            await this.fileSystem.File.WriteAllTextAsync(
-                this.cacheFile,
-                JsonSerializer.Serialize(this.cacheDictionary),
-                cancellationToken
-            );
-        }
-
         public bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo)
         {
             var currentHash = Hash(fileToFormatInfo.FileContents) + this.optionsHash;
             if (this.cacheDictionary.TryGetValue(fileToFormatInfo.Path, out var cachedHash))
             {
+                DebugLogger.Log(fileToFormatInfo.Path + " " + currentHash + " " + cachedHash);
                 if (currentHash == cachedHash)
                 {
                     return true;
                 }
-            }
-            else
-            {
-                this.cacheDictionary[fileToFormatInfo.Path] = currentHash;
+
+                this.cacheDictionary.TryRemove(fileToFormatInfo.Path, out _);
             }
 
             return false;
+        }
+
+        public void CacheResult(string code, FileToFormatInfo fileToFormatInfo)
+        {
+            this.cacheDictionary[fileToFormatInfo.Path] = Hash(code) + this.optionsHash;
         }
 
         private static string GetOptionsHash(PrinterOptions printerOptions)
@@ -109,6 +108,23 @@ internal static class FormattingCacheFactory
             var result = md5.ComputeHash(Encoding.ASCII.GetBytes(input));
             return Convert.ToHexString(result);
         }
+
+        public async Task ResolveAsync(CancellationToken cancellationToken)
+        {
+            this.fileSystem.FileInfo.FromFileName(this.cacheFile).EnsureDirectoryExists();
+
+            await this.fileSystem.File.WriteAllTextAsync(
+                this.cacheFile,
+                JsonSerializer.Serialize(
+                    this.cacheDictionary
+#if DEBUG
+                    ,
+                    new JsonSerializerOptions { WriteIndented = true }
+#endif
+                ),
+                cancellationToken
+            );
+        }
     }
 
     private class AlwaysFormatCache : IFormattingCache
@@ -122,5 +138,7 @@ internal static class FormattingCacheFactory
         {
             return false;
         }
+
+        public void CacheResult(string code, FileToFormatInfo fileToFormatInfo) { }
     }
 }
