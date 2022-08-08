@@ -9,6 +9,8 @@ Usage:
 Arguments:
   <directoryOrFile>    One or more paths to a directory containing files to format or a file to format. If a path is not specified the current directory is used
 
+TODO cache
+
 Options:
   --check           Check that files are formatted. Will not write any changes.
   --fast            Skip comparing syntax tree of formatted file to original file to validate changes.

@@ -9,6 +9,9 @@ The printing process was ported from [prettier](https://github.com/prettier/pret
 
 CSharpier provides a few basic options that affect formatting and has no plans to add more. It follows the [Option Philosophy](https://prettier.io/docs/en/option-philosophy.html) of prettier.
 
+TODO cache add a quick start
+TODO cache update the playground with a better file
+
 ### Before
 ```csharp
 public class ClassName {

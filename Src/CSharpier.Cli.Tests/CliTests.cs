@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +25,11 @@ public class CliTests
     [SetUp]
     public void BeforeEachTest()
     {
+        if (File.Exists(FormattingCacheFactory.CacheFilePath))
+        {
+            File.Delete(FormattingCacheFactory.CacheFilePath);
+        }
+
         if (Directory.Exists(testFileDirectory))
         {
             Directory.Delete(testFileDirectory, true);
@@ -92,11 +96,8 @@ public class CliTests
     [Test]
     public async Task Should_Return_Error_When_No_DirectoryOrFile_And_Not_Piping_StdIn()
     {
-        if (Console.IsInputRedirected)
+        if (CannotRunTestWithRedirectedInput())
         {
-            // This test cannot run if Console.IsInputRedirected is true.
-            // Running it from the command line is required.
-            // See https://github.com/dotnet/runtime/issues/1147"
             return;
         }
 
@@ -277,16 +278,23 @@ public class CliTests
     }
 
     [Test]
-    public async Task Should_Cache()
+    public async Task Should_Cache_And_Validate_Too_Many_Things()
     {
+        if (CannotRunTestWithRedirectedInput())
+        {
+            return;
+        }
+
         var unformattedContent = "public class ClassName {     }\n";
         var formattedContent = "public class ClassName { }\n";
         await this.WriteFileAsync("Unformatted.cs", unformattedContent);
 
-        // TODO cache clean up the cache file?
         var firstResult = await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
         var secondResult = await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
+        await this.WriteFileAsync("Unformatted.cs", unformattedContent);
+        var thirdResult = await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
 
+        firstResult.ErrorOutput.Should().BeEmpty();
         firstResult.Output
             .Should()
             .Contain(
@@ -297,14 +305,90 @@ public class CliTests
             .Contain(
                 "Files with cached formatting result:                                                   1"
             );
+        thirdResult.Output
+            .Should()
+            .Contain(
+                "Files with cached formatting result:                                                   0"
+            );
+        (await this.ReadAllTextAsync("Unformatted.cs")).Should().Be(formattedContent);
     }
 
-    // TODO cache specify file, caching fails. Will work later I am sure
-    // TODO cache some tests for caching
-    // test to see that cache is faster
-    // test to see if file changes it formats
-    // test to see dif version of csharpier??
-    // TODO cache  can't specify cache with piping files
+    [Test]
+    public async Task Should_Reformat_When_Options_Change_With_Cache()
+    {
+        if (CannotRunTestWithRedirectedInput())
+        {
+            return;
+        }
+
+        var unformattedContent = "public class ClassName { \n// break\n }\n";
+
+        await this.WriteFileAsync("Unformatted.cs", unformattedContent);
+        await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
+        await this.WriteFileAsync(".csharpierrc", "useTabs: true");
+        await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
+
+        var result = await this.ReadAllTextAsync("Unformatted.cs");
+        result.Should().Contain("\n\t// break\n");
+    }
+
+    [Test]
+    public async Task Should_Work_With_Single_File_And_Cache()
+    {
+        if (CannotRunTestWithRedirectedInput())
+        {
+            return;
+        }
+
+        await this.WriteFileAsync("BasicFile.cs", "");
+
+        var result = await new CsharpierProcess()
+            .WithArguments("BasicFile.cs --cache")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.Output.Should().StartWith("Total time:");
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    public async Task Should_Not_Allow_Piping_And_Cache()
+    {
+        if (CannotRunTestWithRedirectedInput())
+        {
+            return;
+        }
+
+        var result = await new CsharpierProcess()
+            .WithPipedInput("public class   ClassName { }")
+            .WithArguments("--cache")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().Be("--cache may not be used when piping stdin to CSharpier");
+        result.ExitCode.Should().Be(1);
+    }
+
+    [Test]
+    public async Task Should_Not_Allow_Check_And_Cache()
+    {
+        if (CannotRunTestWithRedirectedInput())
+        {
+            return;
+        }
+
+        var result = await new CsharpierProcess().WithArguments("--cache --check").ExecuteAsync();
+
+        result.ErrorOutput.Should().Be("--cache may not be used with --check");
+        result.ExitCode.Should().Be(1);
+    }
+
+    private static bool CannotRunTestWithRedirectedInput()
+    {
+        // This test cannot run if Console.IsInputRedirected is true.
+        // Running it from the command line is required.
+        // See https://github.com/dotnet/runtime/issues/1147"
+        return Console.IsInputRedirected;
+    }
 
     private async Task WriteFileAsync(string path, string content)
     {

@@ -23,6 +23,7 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="CSharpier.Tests" />
+        <InternalsVisibleTo Include="CSharpier.Cli.Tests" />
     </ItemGroup>
 
     <ItemGroup>

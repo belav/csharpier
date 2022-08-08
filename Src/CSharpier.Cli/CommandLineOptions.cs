@@ -63,7 +63,14 @@ public class CommandLineOptions
 
         rootCommand.AddValidator(cmd =>
         {
-            // TODO cache no cache with stdin
+            if (cmd.Children.Contains("--cache") && cmd.Children.Contains("--check"))
+            {
+                return "--cache may not be used with --check";
+            }
+            if (Console.IsInputRedirected && cmd.Children.Contains("--cache"))
+            {
+                return "--cache may not be used when piping stdin to CSharpier";
+            }
             if (!Console.IsInputRedirected && cmd.Children.Contains("--pipe-multiple-files"))
             {
                 return "--pipe-multiple-files may only be used if you pipe stdin to CSharpier";

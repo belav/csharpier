@@ -137,7 +137,6 @@ internal static class CommandLineFormatter
             );
 
             var formattingCache = await FormattingCacheFactory.InitializeAsync(
-                directoryOrFile,
                 commandLineOptions,
                 printerOptions,
                 fileSystem,

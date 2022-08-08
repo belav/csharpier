@@ -1,11 +1,9 @@
 using System.Collections.Concurrent;
 using System.IO.Abstractions;
 using System.IO.Hashing;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using CSharpier.Utilities;
-using Standart.Hash.xxHash;
 
 namespace CSharpier.Cli;
 
@@ -20,8 +18,13 @@ internal static class FormattingCacheFactory
 {
     public static readonly IFormattingCache NullCache = new AlwaysFormatCache();
 
+    public static readonly string CacheFilePath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "CSharpier",
+        ".formattingCache"
+    );
+
     public static async Task<IFormattingCache> InitializeAsync(
-        string directoryOrFile,
         CommandLineOptions commandLineOptions,
         PrinterOptions printerOptions,
         IFileSystem fileSystem,
@@ -33,15 +36,8 @@ internal static class FormattingCacheFactory
             return NullCache;
         }
 
-        // TODO cache document how to delete it
-        var cacheFile = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "CSharpier",
-            ".formattingCache"
-        );
-
         ConcurrentDictionary<string, string> cacheDictionary;
-        if (!File.Exists(cacheFile))
+        if (!File.Exists(CacheFilePath))
         {
             cacheDictionary = new ConcurrentDictionary<string, string>();
         }
@@ -49,11 +45,11 @@ internal static class FormattingCacheFactory
         {
             cacheDictionary =
                 JsonSerializer.Deserialize<ConcurrentDictionary<string, string>>(
-                    await File.ReadAllTextAsync(cacheFile, cancellationToken)
+                    await File.ReadAllTextAsync(CacheFilePath, cancellationToken)
                 ) ?? new();
         }
 
-        return new FormattingCache(printerOptions, cacheFile, cacheDictionary, fileSystem);
+        return new FormattingCache(printerOptions, CacheFilePath, cacheDictionary, fileSystem);
     }
 
     private class FormattingCache : IFormattingCache
