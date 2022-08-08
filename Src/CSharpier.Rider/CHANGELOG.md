@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.3.0]
+- Adding support for detecting version of CSharpier.MsBuild from csproj
+
 ## [1.2.7]
 - Fix Null Reference Exception from CSharpierProcessPipeMultipleFiles if it fails to start process
 
