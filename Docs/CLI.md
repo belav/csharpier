@@ -1,6 +1,22 @@
 ---
 hide_table_of_contents: true
 ---
+Use the `dotnet csharpier` command to run CSharpier from the command line.
+
+In practice, it will look something like:
+```
+dotnet csharpier .
+```
+This command will format all c# files in the current directory and its children.
+
+You may want to set up an [ignore file](Ignore.md) or [configuration file](Configuration.md).
+
+You may also want to bypass code validation and use caching to get csharpier to run as fast as possible. When formatting a repository for the first time, you should avoid using `--fast` just in case you run into an edge case. `--cache` can take the time to format a folder of ~10,000 files from 30s to 3s after everything has been cached.
+```
+dotnet csharpier . --fast --cache
+```
+
+
 ### Command Line Options
 ```console
 Usage:
@@ -9,10 +25,9 @@ Usage:
 Arguments:
   <directoryOrFile>    One or more paths to a directory containing files to format or a file to format. If a path is not specified the current directory is used
 
-TODO cache
-
 Options:
   --check           Check that files are formatted. Will not write any changes.
+  --cache           Use a cache to determin if a file needs to be formatted.
   --fast            Skip comparing syntax tree of formatted file to original file to validate changes.
   --skip-write      Skip writing changes. Generally used for testing to ensure csharpier doesn't throw any errors or cause syntax tree validation failures.
   --write-stdout    Write the results of formatting any files to stdout.
@@ -34,6 +49,14 @@ If a list of paths is not supplied, then stdin is read.
 ### --check
 Used to check if your files are already formatted. Outputs any files that have not already been formatted.
 This will return exit code 1 if there are unformatted files which is useful for CI pipelines.
+
+### --cache
+When this option is enabled the following are used as cache keys and a file is only formatted if one of them has changed.
+* CSharpier Version
+* CSharpier Options
+* Content of the file
+
+The cache is stored at `[LocalApplicationData]/CSharpier/.formattingCache`.
 
 ### --fast
 CSharpier validates the changes it makes to a file.

@@ -14,11 +14,16 @@ By default this will
 - In Debug - on build will run `dotnet csharpier` in the project folder to format all files in the project.
 - In Release - on build will run `dotnet csharpier --check` in the project folder to validate that all files in the project have already been formatted.
 
-TODO cache
-
 You can control when `--check` is used with the following Property
 ```xml
   <PropertyGroup>
     <CSharpier_Check>false</CSharpier_Check>
+  </PropertyGroup>
+```
+
+You can use the `--cache` option to speed up formatting. This cannot be combined with `--check`.
+```xml
+  <PropertyGroup>
+    <CSharpier_Cache>true</CSharpier_Cache>
   </PropertyGroup>
 ```
