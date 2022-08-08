@@ -15,6 +15,7 @@
         <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />
         <PackageReference Include="System.IO.Abstractions" Version="13.2.29" />
         <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="13.2.29" />
+        <PackageReference Include="System.IO.Hashing" Version="7.0.0-preview.6.22324.4" />
         <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
         <PackageReference Include="UTF.Unknown" Version="2.3.0" />
         <PackageReference Include="YamlDotNet" Version="11.1.1" />

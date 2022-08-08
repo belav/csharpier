@@ -1,9 +1,11 @@
 using System.Collections.Concurrent;
 using System.IO.Abstractions;
+using System.IO.Hashing;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using CSharpier.Utilities;
+using Standart.Hash.xxHash;
 
 namespace CSharpier.Cli;
 
@@ -31,7 +33,7 @@ internal static class FormattingCacheFactory
             return NullCache;
         }
 
-        // TODO document how to delete it
+        // TODO cache document how to delete it
         var cacheFile = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "CSharpier",
@@ -104,8 +106,7 @@ internal static class FormattingCacheFactory
 
         private static string Hash(string input)
         {
-            using var md5 = MD5.Create();
-            var result = md5.ComputeHash(Encoding.ASCII.GetBytes(input));
+            var result = XxHash32.Hash(Encoding.ASCII.GetBytes(input));
             return Convert.ToHexString(result);
         }
 

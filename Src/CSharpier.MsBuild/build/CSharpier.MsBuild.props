@@ -2,7 +2,7 @@
     <PropertyGroup>
         <!-- Setting default value here, so it can be overwritten by caller -->
         <CSharpier_Check>false</CSharpier_Check>
-        <!-- TODO document and test this -->
+        <!-- TODO cache document and test this -->
         <CSharpier_Cache>false</CSharpier_Cache>
     </PropertyGroup>
 

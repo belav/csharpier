@@ -283,7 +283,7 @@ public class CliTests
         var formattedContent = "public class ClassName { }\n";
         await this.WriteFileAsync("Unformatted.cs", unformattedContent);
 
-        // TODO clean up the cache file?
+        // TODO cache clean up the cache file?
         var firstResult = await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
         var secondResult = await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
 
@@ -299,12 +299,12 @@ public class CliTests
             );
     }
 
-    // TODO specify file, caching fails. Will work later I am sure
-    // TODO some tests for caching
+    // TODO cache specify file, caching fails. Will work later I am sure
+    // TODO cache some tests for caching
     // test to see that cache is faster
     // test to see if file changes it formats
     // test to see dif version of csharpier??
-    // TODO can't specify cache with piping files
+    // TODO cache  can't specify cache with piping files
 
     private async Task WriteFileAsync(string path, string content)
     {
