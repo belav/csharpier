@@ -25,7 +25,7 @@ public class Program
         bool skipWrite,
         bool writeStdout,
         bool pipeMultipleFiles,
-        bool cache,
+        bool noCache,
         CancellationToken cancellationToken
     )
     {
@@ -72,7 +72,7 @@ public class Program
             OriginalDirectoryOrFilePaths = originalDirectoryOrFile!,
             StandardInFileContents = standardInFileContents,
             Check = check,
-            Cache = cache,
+            NoCache = noCache,
             Fast = fast,
             SkipWrite = skipWrite,
             WriteStdout = writeStdout || standardInFileContents != null

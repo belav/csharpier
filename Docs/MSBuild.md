@@ -20,10 +20,3 @@ You can control when `--check` is used with the following Property
     <CSharpier_Check>false</CSharpier_Check>
   </PropertyGroup>
 ```
-
-You can use the `--cache` option to speed up formatting. This cannot be combined with `--check`.
-```xml
-  <PropertyGroup>
-    <CSharpier_Cache>true</CSharpier_Cache>
-  </PropertyGroup>
-```

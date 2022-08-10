@@ -280,19 +280,14 @@ public class CliTests
     [Test]
     public async Task Should_Cache_And_Validate_Too_Many_Things()
     {
-        if (CannotRunTestWithRedirectedInput())
-        {
-            return;
-        }
-
         var unformattedContent = "public class ClassName {     }\n";
         var formattedContent = "public class ClassName { }\n";
         await this.WriteFileAsync("Unformatted.cs", unformattedContent);
 
-        var firstResult = await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
-        var secondResult = await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
+        var firstResult = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        var secondResult = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
         await this.WriteFileAsync("Unformatted.cs", unformattedContent);
-        var thirdResult = await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
+        var thirdResult = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
 
         firstResult.ErrorOutput.Should().BeEmpty();
         firstResult.Output
@@ -316,70 +311,15 @@ public class CliTests
     [Test]
     public async Task Should_Reformat_When_Options_Change_With_Cache()
     {
-        if (CannotRunTestWithRedirectedInput())
-        {
-            return;
-        }
-
         var unformattedContent = "public class ClassName { \n// break\n }\n";
 
         await this.WriteFileAsync("Unformatted.cs", unformattedContent);
-        await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
         await this.WriteFileAsync(".csharpierrc", "useTabs: true");
-        await new CsharpierProcess().WithArguments(". --cache").ExecuteAsync();
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
 
         var result = await this.ReadAllTextAsync("Unformatted.cs");
         result.Should().Contain("\n\t// break\n");
-    }
-
-    [Test]
-    public async Task Should_Work_With_Single_File_And_Cache()
-    {
-        if (CannotRunTestWithRedirectedInput())
-        {
-            return;
-        }
-
-        await this.WriteFileAsync("BasicFile.cs", "");
-
-        var result = await new CsharpierProcess()
-            .WithArguments("BasicFile.cs --cache")
-            .ExecuteAsync();
-
-        result.ErrorOutput.Should().BeEmpty();
-        result.Output.Should().StartWith("Total time:");
-        result.ExitCode.Should().Be(0);
-    }
-
-    [Test]
-    public async Task Should_Not_Allow_Piping_And_Cache()
-    {
-        if (CannotRunTestWithRedirectedInput())
-        {
-            return;
-        }
-
-        var result = await new CsharpierProcess()
-            .WithPipedInput("public class   ClassName { }")
-            .WithArguments("--cache")
-            .ExecuteAsync();
-
-        result.ErrorOutput.Should().Be("--cache may not be used when piping stdin to CSharpier");
-        result.ExitCode.Should().Be(1);
-    }
-
-    [Test]
-    public async Task Should_Not_Allow_Check_And_Cache()
-    {
-        if (CannotRunTestWithRedirectedInput())
-        {
-            return;
-        }
-
-        var result = await new CsharpierProcess().WithArguments("--cache --check").ExecuteAsync();
-
-        result.ErrorOutput.Should().Be("--cache may not be used with --check");
-        result.ExitCode.Should().Be(1);
     }
 
     private static bool CannotRunTestWithRedirectedInput()

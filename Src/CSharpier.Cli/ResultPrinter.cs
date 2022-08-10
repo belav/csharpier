@@ -15,7 +15,7 @@ public static class ResultPrinter
         );
         PrintResultLine("Total files", result.Files, logger);
 
-        if (commandLineOptions.Cache)
+        if (!commandLineOptions.NoCache)
         {
             PrintResultLine("Files with cached formatting result", result.CachedFiles, logger);
         }

@@ -11,12 +11,6 @@ This command will format all c# files in the current directory and its children.
 
 You may want to set up an [ignore file](Ignore.md) or [configuration file](Configuration.md).
 
-You may also want to bypass code validation and use caching to get csharpier to run as fast as possible. When formatting a repository for the first time, you should avoid using `--fast` just in case you run into an edge case. `--cache` can take the time to format a folder of ~10,000 files from 30s to 3s after everything has been cached.
-```
-dotnet csharpier . --fast --cache
-```
-
-
 ### Command Line Options
 ```console
 Usage:
@@ -27,7 +21,7 @@ Arguments:
 
 Options:
   --check           Check that files are formatted. Will not write any changes.
-  --cache           Use a cache to determin if a file needs to be formatted.
+  --no-cache        Bypass the cache to determine if a file needs to be formatted.
   --fast            Skip comparing syntax tree of formatted file to original file to validate changes.
   --skip-write      Skip writing changes. Generally used for testing to ensure csharpier doesn't throw any errors or cause syntax tree validation failures.
   --write-stdout    Write the results of formatting any files to stdout.
@@ -50,8 +44,9 @@ If a list of paths is not supplied, then stdin is read.
 Used to check if your files are already formatted. Outputs any files that have not already been formatted.
 This will return exit code 1 if there are unformatted files which is useful for CI pipelines.
 
-### --cache
-When this option is enabled the following are used as cache keys and a file is only formatted if one of them has changed.
+### --no-cache
+This option can be used to bypass the cache that is normally used to speed up formatting files.  
+By default the following are used as cache keys and a file is only formatted if one of them has changed.
 * CSharpier Version
 * CSharpier Options
 * Content of the file
@@ -62,7 +57,7 @@ The cache is stored at `[LocalApplicationData]/CSharpier/.formattingCache`.
 CSharpier validates the changes it makes to a file.
 It does this by comparing the syntax tree before and after formatting, but ignoring any whitespace trivia in the syntax tree.
 If a file fails validation, CSharpier will output the lines that differ. If this happens it indicates a bug in CSharpier's code.  
-This validation may be skipped by passing the --fast argument. Validation appears to increase the formatting time by ~50%.
+This validation may be skipped by passing the --fast argument.
 
 An example of CSharpier finding a file that failed validation.
 ```
