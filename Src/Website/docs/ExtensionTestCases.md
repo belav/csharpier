@@ -13,7 +13,8 @@
 - Formatting
   - Existing open documents get warmed
   - Edit warms
-  - Finds local version
+  - Finds msbuild version in csproj
+  - Finds local version in dotnet tools
   - Finds global version
   - Uses correct version - use 0.12.0, ensure that it adds blank lines between methods
   - Unsaved document can be formatted (may just apply to vscode)

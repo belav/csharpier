@@ -1,6 +1,16 @@
 ---
 hide_table_of_contents: true
 ---
+Use the `dotnet csharpier` command to run CSharpier from the command line.
+
+In practice, it will look something like:
+```
+dotnet csharpier .
+```
+This command will format all c# files in the current directory and its children.
+
+You may want to set up an [ignore file](Ignore.md) or [configuration file](Configuration.md).
+
 ### Command Line Options
 ```console
 Usage:
@@ -11,6 +21,7 @@ Arguments:
 
 Options:
   --check           Check that files are formatted. Will not write any changes.
+  --no-cache        Bypass the cache to determine if a file needs to be formatted.
   --fast            Skip comparing syntax tree of formatted file to original file to validate changes.
   --skip-write      Skip writing changes. Generally used for testing to ensure csharpier doesn't throw any errors or cause syntax tree validation failures.
   --write-stdout    Write the results of formatting any files to stdout.
@@ -33,11 +44,20 @@ If a list of paths is not supplied, then stdin is read.
 Used to check if your files are already formatted. Outputs any files that have not already been formatted.
 This will return exit code 1 if there are unformatted files which is useful for CI pipelines.
 
+### --no-cache
+This option can be used to bypass the cache that is normally used to speed up formatting files.  
+By default the following are used as cache keys and a file is only formatted if one of them has changed.
+* CSharpier Version
+* CSharpier Options
+* Content of the file
+
+The cache is stored at `[LocalApplicationData]/CSharpier/.formattingCache`.
+
 ### --fast
 CSharpier validates the changes it makes to a file.
 It does this by comparing the syntax tree before and after formatting, but ignoring any whitespace trivia in the syntax tree.
 If a file fails validation, CSharpier will output the lines that differ. If this happens it indicates a bug in CSharpier's code.  
-This validation may be skipped by passing the --fast argument. Validation appears to increase the formatting time by ~50%.
+This validation may be skipped by passing the --fast argument.
 
 An example of CSharpier finding a file that failed validation.
 ```
