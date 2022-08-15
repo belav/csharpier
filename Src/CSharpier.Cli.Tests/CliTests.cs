@@ -283,26 +283,22 @@ public class CliTests
     {
         var unformattedContent = "public class ClassName {     }\n";
         var formattedContent = "public class ClassName { }\n";
-        await this.WriteFileAsync("Unformatted.cs", unformattedContent);
+        var filePath = "Unformatted.cs";
+        await this.WriteFileAsync(filePath, unformattedContent);
 
-        var firstResult = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
-        var secondResult = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
-        await this.WriteFileAsync("Unformatted.cs", unformattedContent);
-        var thirdResult = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        var firstModifiedDate = GetLastWriteTime(filePath);
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        var secondModifiedDate = GetLastWriteTime(filePath);
+        await this.WriteFileAsync(filePath, unformattedContent);
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        var thirdModifiedDate = GetLastWriteTime(filePath);
 
-        firstResult.ErrorOutput.Should().BeEmpty();
-        var regex = new Regex(@"Total time:\s+(\d+)ms");
+        // I don't know that this exactly validates caching, because I don't think we write out a file unless it changes.
+        firstModifiedDate.Should().Be(secondModifiedDate);
+        secondModifiedDate.Should().BeBefore(thirdModifiedDate);
 
-        int GetValue(string output) => int.Parse(regex.Match(output).Groups[1].Value);
-
-        var firstTime = GetValue(firstResult.Output);
-        var secondTime = GetValue(secondResult.Output);
-        var thirdTime = GetValue(thirdResult.Output);
-        (await this.ReadAllTextAsync("Unformatted.cs")).Should().Be(formattedContent);
-
-        // not sure how else to validate this. The output about files cached felt weird
-        firstTime.Should().BeGreaterThan(secondTime);
-        thirdTime.Should().BeGreaterThan(secondTime);
+        (await this.ReadAllTextAsync(filePath)).Should().Be(formattedContent);
     }
 
     [Test]
@@ -325,6 +321,11 @@ public class CliTests
         // Running it from the command line is required.
         // See https://github.com/dotnet/runtime/issues/1147"
         return Console.IsInputRedirected;
+    }
+
+    private DateTime GetLastWriteTime(string path)
+    {
+        return File.GetLastWriteTime(Path.Combine(testFileDirectory, path));
     }
 
     private async Task WriteFileAsync(string path, string content)
