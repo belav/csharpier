@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CliWrap;
 using CliWrap.Buffered;
@@ -290,22 +291,18 @@ public class CliTests
         var thirdResult = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
 
         firstResult.ErrorOutput.Should().BeEmpty();
-        firstResult.Output
-            .Should()
-            .Contain(
-                "Files with cached formatting result:                                                   0"
-            );
-        secondResult.Output
-            .Should()
-            .Contain(
-                "Files with cached formatting result:                                                   1"
-            );
-        thirdResult.Output
-            .Should()
-            .Contain(
-                "Files with cached formatting result:                                                   0"
-            );
+        var regex = new Regex(@"Total time:\s+(\d+)ms");
+
+        int GetValue(string output) => int.Parse(regex.Match(output).Groups[1].Value);
+
+        var firstTime = GetValue(firstResult.Output);
+        var secondTime = GetValue(secondResult.Output);
+        var thirdTime = GetValue(thirdResult.Output);
         (await this.ReadAllTextAsync("Unformatted.cs")).Should().Be(formattedContent);
+
+        // not sure how else to validate this. The output about files cached felt weird
+        firstTime.Should().BeGreaterThan(secondTime);
+        thirdTime.Should().BeGreaterThan(secondTime);
     }
 
     [Test]

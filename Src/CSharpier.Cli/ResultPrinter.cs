@@ -15,11 +15,6 @@ public static class ResultPrinter
         );
         PrintResultLine("Total files", result.Files, logger);
 
-        if (!commandLineOptions.NoCache)
-        {
-            PrintResultLine("Files with cached formatting result", result.CachedFiles, logger);
-        }
-
         if (!commandLineOptions.Fast)
         {
             if (result.FailedSyntaxTreeValidation != 0)

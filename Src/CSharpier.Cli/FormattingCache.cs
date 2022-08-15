@@ -31,7 +31,7 @@ internal static class FormattingCacheFactory
         CancellationToken cancellationToken
     )
     {
-        if (commandLineOptions.NoCache)
+        if (commandLineOptions.NoCache || commandLineOptions.Check)
         {
             return NullCache;
         }
