@@ -53,6 +53,7 @@ internal static class CommandLineFormatter
                         fileIssueLogger,
                         printerOptions,
                         commandLineOptions,
+                        FormattingCacheFactory.NullCache,
                         cancellationToken
                     );
                 }
@@ -128,6 +129,20 @@ internal static class CommandLineFormatter
                 x
             ].Replace("\\", "/");
 
+            var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(
+                directoryOrFile,
+                fileSystem,
+                logger,
+                cancellationToken
+            );
+
+            var formattingCache = await FormattingCacheFactory.InitializeAsync(
+                commandLineOptions,
+                printerOptions,
+                fileSystem,
+                cancellationToken
+            );
+
             if (!Path.IsPathRooted(originalDirectoryOrFile))
             {
                 if (!originalDirectoryOrFile.StartsWith("."))
@@ -135,13 +150,6 @@ internal static class CommandLineFormatter
                     originalDirectoryOrFile = "./" + originalDirectoryOrFile;
                 }
             }
-
-            var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(
-                directoryOrFile,
-                fileSystem,
-                logger,
-                cancellationToken
-            );
 
             async Task FormatFile(string actualFilePath, string originalFilePath)
             {
@@ -162,6 +170,7 @@ internal static class CommandLineFormatter
                     writer,
                     commandLineOptions,
                     printerOptions,
+                    formattingCache,
                     cancellationToken
                 );
             }
@@ -179,14 +188,14 @@ internal static class CommandLineFormatter
 
                 var tasks = fileSystem.Directory
                     .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
-                    .Select(
-                        o =>
-                            FormatFile(
-                                o,
-                                o.Replace("\\", "/")
-                                    .Replace(directoryOrFile, originalDirectoryOrFile)
-                            )
-                    )
+                    .Select(o =>
+                    {
+                        var normalizedPath = o.Replace("\\", "/");
+                        return FormatFile(
+                            normalizedPath,
+                            normalizedPath.Replace(directoryOrFile, originalDirectoryOrFile)
+                        );
+                    })
                     .ToArray();
                 try
                 {
@@ -207,6 +216,8 @@ internal static class CommandLineFormatter
                 );
                 return 1;
             }
+
+            await formattingCache.ResolveAsync(cancellationToken);
         }
 
         return 0;
@@ -250,6 +261,7 @@ internal static class CommandLineFormatter
         IFormattedFileWriter writer,
         CommandLineOptions commandLineOptions,
         PrinterOptions printerOptions,
+        IFormattingCache formattingCache,
         CancellationToken cancellationToken
     )
     {
@@ -274,6 +286,7 @@ internal static class CommandLineFormatter
             fileIssueLogger,
             printerOptions,
             commandLineOptions,
+            formattingCache,
             cancellationToken
         );
     }
@@ -304,11 +317,20 @@ internal static class CommandLineFormatter
         FileIssueLogger fileIssueLogger,
         PrinterOptions printerOptions,
         CommandLineOptions commandLineOptions,
+        IFormattingCache formattingCache,
         CancellationToken cancellationToken
     )
     {
         if (fileToFormatInfo.FileContents.Length == 0)
         {
+            return;
+        }
+
+        Interlocked.Increment(ref commandLineFormatterResult.Files);
+
+        if (formattingCache.CanSkipFormatting(fileToFormatInfo))
+        {
+            Interlocked.Increment(ref commandLineFormatterResult.CachedFiles);
             return;
         }
 
@@ -340,10 +362,6 @@ internal static class CommandLineFormatter
             fileIssueLogger.WriteError("Threw exception while formatting.", ex);
             Interlocked.Increment(ref commandLineFormatterResult.ExceptionsFormatting);
             return;
-        }
-        finally
-        {
-            Interlocked.Increment(ref commandLineFormatterResult.Files);
         }
 
         if (codeFormattingResult.Errors.Any())
@@ -404,5 +422,6 @@ internal static class CommandLineFormatter
         }
 
         formattedFileWriter.WriteResult(codeFormattingResult, fileToFormatInfo);
+        formattingCache.CacheResult(codeFormattingResult.Code, fileToFormatInfo);
     }
 }

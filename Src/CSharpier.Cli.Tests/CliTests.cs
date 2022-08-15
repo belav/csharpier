@@ -1,7 +1,7 @@
 using System;
-using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CliWrap;
 using CliWrap.Buffered;
@@ -26,6 +26,11 @@ public class CliTests
     [SetUp]
     public void BeforeEachTest()
     {
+        if (File.Exists(FormattingCacheFactory.CacheFilePath))
+        {
+            File.Delete(FormattingCacheFactory.CacheFilePath);
+        }
+
         if (Directory.Exists(testFileDirectory))
         {
             Directory.Delete(testFileDirectory, true);
@@ -92,11 +97,8 @@ public class CliTests
     [Test]
     public async Task Should_Return_Error_When_No_DirectoryOrFile_And_Not_Piping_StdIn()
     {
-        if (Console.IsInputRedirected)
+        if (CannotRunTestWithRedirectedInput())
         {
-            // This test cannot run if Console.IsInputRedirected is true.
-            // Running it from the command line is required.
-            // See https://github.com/dotnet/runtime/issues/1147"
             return;
         }
 
@@ -274,6 +276,56 @@ public class CliTests
         result.ErrorOutput.Should().BeEmpty();
         result.ExitCode.Should().Be(0);
         result.Output.Should().StartWith("Warning The csproj at ");
+    }
+
+    [Test]
+    public async Task Should_Cache_And_Validate_Too_Many_Things()
+    {
+        var unformattedContent = "public class ClassName {     }\n";
+        var formattedContent = "public class ClassName { }\n";
+        var filePath = "Unformatted.cs";
+        await this.WriteFileAsync(filePath, unformattedContent);
+
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        var firstModifiedDate = GetLastWriteTime(filePath);
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        var secondModifiedDate = GetLastWriteTime(filePath);
+        await this.WriteFileAsync(filePath, unformattedContent);
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        var thirdModifiedDate = GetLastWriteTime(filePath);
+
+        // I don't know that this exactly validates caching, because I don't think we write out a file unless it changes.
+        firstModifiedDate.Should().Be(secondModifiedDate);
+        secondModifiedDate.Should().BeBefore(thirdModifiedDate);
+
+        (await this.ReadAllTextAsync(filePath)).Should().Be(formattedContent);
+    }
+
+    [Test]
+    public async Task Should_Reformat_When_Options_Change_With_Cache()
+    {
+        var unformattedContent = "public class ClassName { \n// break\n }\n";
+
+        await this.WriteFileAsync("Unformatted.cs", unformattedContent);
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        await this.WriteFileAsync(".csharpierrc", "useTabs: true");
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+
+        var result = await this.ReadAllTextAsync("Unformatted.cs");
+        result.Should().Contain("\n\t// break\n");
+    }
+
+    private static bool CannotRunTestWithRedirectedInput()
+    {
+        // This test cannot run if Console.IsInputRedirected is true.
+        // Running it from the command line is required.
+        // See https://github.com/dotnet/runtime/issues/1147"
+        return Console.IsInputRedirected;
+    }
+
+    private DateTime GetLastWriteTime(string path)
+    {
+        return File.GetLastWriteTime(Path.Combine(testFileDirectory, path));
     }
 
     private async Task WriteFileAsync(string path, string content)
