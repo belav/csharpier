@@ -3,7 +3,9 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Events;
 using Microsoft.VisualStudio.Shell.Interop;
+using SolutionEvents = Microsoft.VisualStudio.Shell.Events.SolutionEvents;
 using Task = System.Threading.Tasks.Task;
 
 namespace CSharpier.VisualStudio
@@ -13,6 +15,7 @@ namespace CSharpier.VisualStudio
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(CSharpierOptionsPage), "CSharpier", "General", 0, 0, true)]
+    [ProvideProfile(typeof(CSharpierOptionsPage), "CSharpier", "General", 0, 0, true)]
     public sealed class CSharpierPackage : AsyncPackage
     {
         public const string PackageGuidString = "d348ba73-11dc-46be-8660-6d9819fc2c52";
@@ -39,6 +42,13 @@ namespace CSharpier.VisualStudio
                     .GetInstance(this)
                     .FindAndWarmProcess(dte.ActiveDocument.FullName);
             }
+
+            SolutionEvents.OnAfterOpenSolution += HandleOpenSolution;
+        }
+
+        private void HandleOpenSolution(object sender, OpenSolutionEventArgs e)
+        {
+            CSharpierOptions.Instance.Load();
         }
     }
 }

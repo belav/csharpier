@@ -9,31 +9,38 @@ The printing process was ported from [prettier](https://github.com/prettier/pret
 
 CSharpier provides a few basic options that affect formatting and has no plans to add more. It follows the [Option Philosophy](https://prettier.io/docs/en/option-philosophy.html) of prettier.
 
-### Before
-```csharp
-public class ClassName {
-    public string ShortPropertyName {
-        get;
-        set; 
-    }
+### Quick Start
+Install CSharpier globally using the following command.
+```bash
+dotnet tool install csharpier -g
+```
+Then format the contents of a directory and its children with the following command.
+```bash
+dotnet csharpier .
+```
 
-    public void LongUglyMethod(string longParameter1, string longParameter2, string longParameter3) { 
+CSharpier can also format [on save in your editor](https://csharpier.com/docs/Editors) or as a [pre-commit hook](https://csharpier.com/docs/Pre-commit). Then you can ensure code was formatted with a [CI/CD tool](https://csharpier.com/docs/ContinuousIntegration).
+
+---
+
+[Try it out](https://playground.csharpier.com)
+
+---
+
+### Before
+```c#
+public class ClassName {
+    public void CallMethod() { 
         this.LongUglyMethod("1234567890", "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     }
 }
 ```
 
 ### After
-```csharp
+```c#
 public class ClassName
 {
-    public string ShortPropertyName { get; set; }
-
-    public void LongUglyMethod(
-        string longParameter1,
-        string longParameter2,
-        string longParameter3
-    )
+    public void CallMethod()
     {
         this.LongUglyMethod(
             "1234567890",
@@ -42,3 +49,4 @@ public class ClassName
         );
     }
 }
+```

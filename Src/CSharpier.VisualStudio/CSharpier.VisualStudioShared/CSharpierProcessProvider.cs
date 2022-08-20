@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Xml;
 using Newtonsoft.Json;
 
 namespace CSharpier.VisualStudio
@@ -95,6 +97,12 @@ namespace CSharpier.VisualStudio
             {
                 while (true)
                 {
+                    var csProjVersion = this.FindVersionInCsProj(currentDirectory);
+                    if (csProjVersion != null)
+                    {
+                        return csProjVersion;
+                    }
+
                     var dotnetToolsPath = Path.Combine(
                         currentDirectory.FullName,
                         ".config/dotnet-tools.json"
@@ -142,6 +150,42 @@ namespace CSharpier.VisualStudio
             this.logger.Debug("dotnet csharpier --version output: " + versionFromCommand);
 
             return versionFromCommand;
+        }
+
+        private string? FindVersionInCsProj(DirectoryInfo currentDirectory)
+        {
+            foreach (var pathToCsProj in currentDirectory.GetFiles("*.csproj"))
+            {
+                var csProjXmlDocument = new XmlDocument();
+                try
+                {
+                    csProjXmlDocument.Load(pathToCsProj.FullName);
+                }
+                catch (Exception ex)
+                {
+                    this.logger.Warn(
+                        $"The csproj at {pathToCsProj} failed to load with the following exception {ex.Message}"
+                    );
+
+                    continue;
+                }
+
+                var csharpierMsBuildElement = csProjXmlDocument
+                    .SelectNodes("//PackageReference[@Include='CSharpier.MsBuild']")
+                    .Cast<XmlNode>()
+                    .FirstOrDefault();
+
+                var versionOfMsBuildPackage = csharpierMsBuildElement?.Attributes["Version"]?.Value;
+                if (versionOfMsBuildPackage != null)
+                {
+                    this.logger.Debug(
+                        "Found version " + versionOfMsBuildPackage + " in " + pathToCsProj.FullName
+                    );
+                    return versionOfMsBuildPackage;
+                }
+            }
+
+            return null;
         }
 
         private ICSharpierProcess SetupCSharpierProcess(string directory, string version)

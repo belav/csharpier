@@ -9,5 +9,6 @@ public class CommandLineFormatterResult
     public int ExceptionsValidatingSource;
     public int Files;
     public int UnformattedFiles;
+    public int CachedFiles;
     public long ElapsedMilliseconds;
 }

@@ -1,3 +1,42 @@
+# 0.19.0
+## What's Changed
+#### Adding a cache to speed up formatting. [#692](https://github.com/belav/csharpier/issues/692)
+CSharpier now caches information about files that it has formatted to speed up subsequent runs.  
+By default the following are used as cache keys and a file is only formatted if one of them has changed.
+
+- CSharpier Version
+- CSharpier Options
+- Content of the file
+
+The cache is stored at [LocalApplicationData]/CSharpier/.formattingCache.
+
+#### Ignore node_modules [#699](https://github.com/belav/csharpier/issues/699)
+
+CSharpier now ignores any files within a node_modules folder.
+
+Thanks go to @RichiCoder1 for the suggestion and @SubjectAlpha for the implementation.
+
+#### Extra space before curly brace in array initializer [#693](https://github.com/belav/csharpier/issues/693)
+
+```c#
+// 0.18.0
+public class ClassName
+{
+    public int[] SomeArray { get; set; } =  { 1, 2, 3 };
+}
+// 0.19.0
+public class MyClass
+{
+    public int[] SomeArray { get; set; } = { 1, 2, 3 };
+}
+
+```
+
+Thanks go to @TiraelSedai for reporting the bug.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.18.0...0.19.0
+
+
 # 0.18.0
 ## What's Changed
 #### Initial C# 11 support [#686](https://github.com/belav/csharpier/pull/686)
