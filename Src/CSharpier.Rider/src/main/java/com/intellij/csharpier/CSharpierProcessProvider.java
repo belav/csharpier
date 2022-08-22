@@ -106,7 +106,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
         if (version == null || !this.csharpierProcessesByVersion.containsKey(version)) {
             // this shouldn't really happen, but just in case
-            return new NullCSharpierProcess();
+            return NullCSharpierProcess.Instance;
         }
 
         return this.csharpierProcessesByVersion.get(version);
@@ -196,7 +196,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
     private ICSharpierProcess setupCSharpierProcess(String directory, String version) {
         if (version == null || version.equals("")) {
-            return new NullCSharpierProcess();
+            return NullCSharpierProcess.Instance;
         }
 
         try {
@@ -231,7 +231,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
             this.logger.error(ex);
         }
 
-        return new NullCSharpierProcess();
+        return NullCSharpierProcess.Instance;
     }
 
     @Override

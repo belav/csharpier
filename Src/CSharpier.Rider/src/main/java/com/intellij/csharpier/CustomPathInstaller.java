@@ -5,6 +5,8 @@ import org.apache.commons.lang.SystemUtils;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CustomPathInstaller {
     Logger logger = CSharpierLogger.getInstance();
@@ -13,15 +15,44 @@ public class CustomPathInstaller {
         if (version == null || version.equals("")) {
             return;
         }
-        var directoryForVersion = getDirectoryForVersion(version);
-        var file = new File(directoryForVersion);
-        if (file.exists()) {
-            this.logger.debug("File at " + directoryForVersion + " already exists");
-            return;
+        var pathToDirectoryForVersion = getDirectoryForVersion(version);
+        var directoryForVersion = new File(pathToDirectoryForVersion);
+        if (directoryForVersion.exists()) {
+            try {
+                Map<String, String> env = new HashMap<>();
+                env.put("DOTNET_NOLOGO", "1");
+
+                var command = new String[] { getPathForVersion(version), "--version" };
+                var output = ProcessHelper.ExecuteCommand(command, env, new File(pathToDirectoryForVersion));
+
+                this.logger.debug("dotnet csharpier --version output: " + output);
+
+                if (output.equals(version))
+                {
+                    this.logger.debug("CSharpier at " + pathToDirectoryForVersion + " already exists");
+                    return;
+                }
+            }
+            catch (Exception ex) {
+                logger.warn("Exception while running 'dotnet csharpier --version' in " + pathToDirectoryForVersion, ex);
+            }
+
+            // if we got here something isn't right in the current directory
+            deleteDirectory(directoryForVersion);
         }
 
-        var command = new String[]{"dotnet", "tool", "install", "csharpier", "--version", version, "--tool-path", directoryForVersion};
+        var command = new String[]{"dotnet", "tool", "install", "csharpier", "--version", version, "--tool-path", pathToDirectoryForVersion};
         ProcessHelper.ExecuteCommand(command, null, null);
+    }
+
+    boolean deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
     }
 
     private String getDirectoryForVersion(String version) throws Exception {
