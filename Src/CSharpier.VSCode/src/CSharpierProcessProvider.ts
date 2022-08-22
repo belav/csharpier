@@ -71,7 +71,7 @@ export class CSharpierProcessProvider implements Disposable {
             this.logger.debug(
                 `returning NullCSharpierProcess because there was no csharpierProcessesByVersion for ${version}`,
             );
-            return new NullCSharpierProcess();
+            return NullCSharpierProcess.instance;
         }
 
         return this.csharpierProcessesByVersion[version]!;
@@ -217,7 +217,7 @@ export class CSharpierProcessProvider implements Disposable {
                 this.logger.debug(
                     `returning NullCSharpierProcess because version is not a valid version number.`,
                 );
-                return new NullCSharpierProcess();
+                return NullCSharpierProcess.instance;
             }
 
             this.customPathInstaller.ensureVersionInstalled(version);
@@ -241,7 +241,7 @@ export class CSharpierProcessProvider implements Disposable {
             this.logger.debug(
                 `returning NullCSharpierProcess because of the previous error when trying to set up a csharpier process`,
             );
-            return new NullCSharpierProcess();
+            return NullCSharpierProcess.instance;
         }
     };
 
