@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace CSharpier.VisualStudio
@@ -25,15 +26,44 @@ namespace CSharpier.VisualStudio
             {
                 return;
             }
-            var directoryForVersion = this.GetDirectoryForVersion(version);
-            if (Directory.Exists(directoryForVersion))
+            var pathToDirectoryForVersion = this.GetDirectoryForVersion(version);
+            if (Directory.Exists(pathToDirectoryForVersion))
             {
-                this.logger.Debug("Directory at " + directoryForVersion + " already exists");
-                return;
+                try
+                {
+                    var env = new Dictionary<string, string> { { "DOTNET_NOLOGO", "1" } };
+
+                    var versionFromCommand = ProcessHelper.ExecuteCommand(
+                        this.GetPathForVersion(version),
+                        "--version",
+                        env
+                    );
+
+                    this.logger.Debug("dotnet csharpier --version output: " + versionFromCommand);
+
+                    if (versionFromCommand.Equals(version))
+                    {
+                        this.logger.Debug(
+                            "CSharpier at " + pathToDirectoryForVersion + " already exists"
+                        );
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    this.logger.Warn(
+                        "Exception while running 'dotnet csharpier --version' in "
+                            + pathToDirectoryForVersion
+                    );
+                    this.logger.Error(ex);
+                }
+
+                // if we got here something isn't right in the current directory
+                Directory.Delete(pathToDirectoryForVersion, true);
             }
 
             var arguments =
-                $"tool install csharpier --version {version} --tool-path \"{directoryForVersion}\" ";
+                $"tool install csharpier --version {version} --tool-path \"{pathToDirectoryForVersion}\" ";
             ProcessHelper.ExecuteCommand("dotnet", arguments);
         }
 
