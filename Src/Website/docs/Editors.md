@@ -12,3 +12,5 @@ Use the [official 2019 extension](https://marketplace.visualstudio.com/items?ite
 Use the [official extension](https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode)
 ### Rider
 Use the [official plugin](https://plugins.jetbrains.com/plugin/18243-csharpier)
+### Neovim
+Use [neoformat](https://github.com/sbdchd/neoformat)
