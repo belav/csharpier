@@ -7,6 +7,7 @@ Running CSharpier on save is recommended. It will speed up your development time
 
 ### Visual Studio
 Use the [official 2022 extension](https://marketplace.visualstudio.com/items?itemName=csharpier.CSharpier)
+\
 Use the [official 2019 extension](https://marketplace.visualstudio.com/items?itemName=csharpier.CSharpier2019)
 ### Visual Studio Code
 Use the [official extension](https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode)
