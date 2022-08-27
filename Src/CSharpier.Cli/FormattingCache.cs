@@ -110,17 +110,35 @@ internal static class FormattingCacheFactory
         {
             this.fileSystem.FileInfo.FromFileName(this.cacheFile).EnsureDirectoryExists();
 
-            await this.fileSystem.File.WriteAllTextAsync(
-                this.cacheFile,
-                JsonSerializer.Serialize(
-                    this.cacheDictionary
+            async Task WriteFile()
+            {
+                await this.fileSystem.File.WriteAllTextAsync(
+                    this.cacheFile,
+                    JsonSerializer.Serialize(
+                        this.cacheDictionary
 #if DEBUG
-                    ,
-                    new JsonSerializerOptions { WriteIndented = true }
+                        ,
+                        new JsonSerializerOptions { WriteIndented = true }
 #endif
-                ),
-                cancellationToken
-            );
+                    ),
+                    cancellationToken
+                );
+            }
+
+            var wait = 1;
+            for (var x = 0; x < 10; x++)
+            {
+                try
+                {
+                    await WriteFile();
+                    return;
+                }
+                catch (Exception)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(wait), cancellationToken);
+                    wait *= 2;
+                }
+            }
         }
     }
 
