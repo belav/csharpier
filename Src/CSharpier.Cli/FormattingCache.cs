@@ -125,8 +125,8 @@ internal static class FormattingCacheFactory
                 );
             }
 
-            var wait = 1;
-            for (var x = 0; x < 10; x++)
+            // in my testing we don't normally have to wait more than a couple MS, but just in case
+            for (var x = 0; x < 20; x++)
             {
                 try
                 {
@@ -135,8 +135,7 @@ internal static class FormattingCacheFactory
                 }
                 catch (Exception)
                 {
-                    await Task.Delay(TimeSpan.FromMilliseconds(wait), cancellationToken);
-                    wait *= 2;
+                    await Task.Delay(TimeSpan.FromMilliseconds(1), cancellationToken);
                 }
             }
         }
