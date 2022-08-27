@@ -36,17 +36,33 @@ internal static class FormattingCacheFactory
             return NullCache;
         }
 
-        ConcurrentDictionary<string, string> cacheDictionary;
-        if (!File.Exists(CacheFilePath))
+        var cacheDictionary = new ConcurrentDictionary<string, string>();
+        if (File.Exists(CacheFilePath))
         {
-            cacheDictionary = new ConcurrentDictionary<string, string>();
-        }
-        else
-        {
-            cacheDictionary =
-                JsonSerializer.Deserialize<ConcurrentDictionary<string, string>>(
-                    await File.ReadAllTextAsync(CacheFilePath, cancellationToken)
-                ) ?? new();
+            // in my testing we don't normally have to wait more than a couple MS, but just in case
+            const int attempts = 20;
+            for (var x = 0; x < attempts; x++)
+            {
+                try
+                {
+                    var newDictionary = JsonSerializer.Deserialize<
+                        ConcurrentDictionary<string, string>
+                    >(await File.ReadAllTextAsync(CacheFilePath, cancellationToken));
+                    if (newDictionary != null)
+                    {
+                        cacheDictionary = newDictionary;
+                    }
+                    break;
+                }
+                catch (Exception)
+                {
+                    if (x + 1 == attempts)
+                    {
+                        throw;
+                    }
+                    await Task.Delay(TimeSpan.FromMilliseconds(1), cancellationToken);
+                }
+            }
         }
 
         return new FormattingCache(printerOptions, CacheFilePath, cacheDictionary, fileSystem);
