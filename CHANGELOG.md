@@ -1,3 +1,14 @@
+# 0.19.1
+## What's Changed
+#### CSharpier crashes when run multiple times simultaneously [#728](https://github.com/belav/csharpier/issues/728)
+
+The new caching for CSharpier didn't properly handle multiple CSharpier processes formatting at the same time. This is most common when using CSharpier.MsBuild in a solution with multiple projects.
+
+Thanks go to @pingzing for reporting the bug.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.19.0...0.19.1
+
+
 # 0.19.0
 ## What's Changed
 #### Adding a cache to speed up formatting. [#692](https://github.com/belav/csharpier/issues/692)
