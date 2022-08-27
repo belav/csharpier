@@ -110,17 +110,34 @@ internal static class FormattingCacheFactory
         {
             this.fileSystem.FileInfo.FromFileName(this.cacheFile).EnsureDirectoryExists();
 
-            await this.fileSystem.File.WriteAllTextAsync(
-                this.cacheFile,
-                JsonSerializer.Serialize(
-                    this.cacheDictionary
+            async Task WriteFile()
+            {
+                await this.fileSystem.File.WriteAllTextAsync(
+                    this.cacheFile,
+                    JsonSerializer.Serialize(
+                        this.cacheDictionary
 #if DEBUG
-                    ,
-                    new JsonSerializerOptions { WriteIndented = true }
+                        ,
+                        new JsonSerializerOptions { WriteIndented = true }
 #endif
-                ),
-                cancellationToken
-            );
+                    ),
+                    cancellationToken
+                );
+            }
+
+            // in my testing we don't normally have to wait more than a couple MS, but just in case
+            for (var x = 0; x < 20; x++)
+            {
+                try
+                {
+                    await WriteFile();
+                    return;
+                }
+                catch (Exception)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(1), cancellationToken);
+                }
+            }
         }
     }
 

@@ -10,6 +10,10 @@ using NUnit.Framework;
 
 namespace CSharpier.Cli.Tests;
 
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata;
+
 // these tests are kind of nice as c# because they run in the same place.
 // except the one test that has issues with console input redirection
 // they used to be powershell, but doing the multiple file thing didn't work
@@ -313,6 +317,39 @@ public class CliTests
 
         var result = await this.ReadAllTextAsync("Unformatted.cs");
         result.Should().Contain("\n\t// break\n");
+    }
+
+    [Test]
+    public async Task Should_Handle_Concurrent_Processes()
+    {
+        var unformattedContent = "public class ClassName {     }\n";
+        var totalFolders = 10;
+        var filesPerFolder = 100;
+        var folders = new List<string>();
+        for (var x = 0; x < totalFolders; x++)
+        {
+            folders.Add("Folder" + x);
+        }
+
+        async Task WriteFiles(string folder)
+        {
+            for (var y = 0; y < filesPerFolder; y++)
+            {
+                await this.WriteFileAsync($"{folder}/File{y}.cs", unformattedContent);
+            }
+        }
+
+        var tasks = folders.Select(WriteFiles).ToArray();
+        Task.WaitAll(tasks);
+
+        async Task FormatFolder(string folder)
+        {
+            var result = await new CsharpierProcess().WithArguments(folder).ExecuteAsync();
+            result.ErrorOutput.Should().BeEmpty();
+        }
+
+        var formatTasks = folders.Select(FormatFolder).ToArray();
+        Task.WaitAll(formatTasks);
     }
 
     private static bool CannotRunTestWithRedirectedInput()

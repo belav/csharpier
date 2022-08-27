@@ -17,7 +17,6 @@ public class DebugLogger
             }
             catch (Exception)
             {
-                File.AppendAllText(@"C:\projects\csharpier\debug.txt", message + "\n");
                 // we don't care if this fails
             }
         }
