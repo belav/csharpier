@@ -49,7 +49,10 @@ public class InstallerService {
     }
 
     private boolean ignoreDirectory(String directoryThatContainsFile) {
-        return StringUtils.containsIgnoreCase(directoryThatContainsFile.replace('\\', '/'), "resharper-host/DecompilerCache")
-            || directoryThatContainsFile.equals("/");
+        var normalizedPath = directoryThatContainsFile.replace('\\', '/');
+        return StringUtils.containsIgnoreCase(normalizedPath, "resharper-host/DecompilerCache")
+            || StringUtils.containsIgnoreCase(normalizedPath, "resharper-host/SourcesCache")
+            || directoryThatContainsFile.equals("/")
+            || directoryThatContainsFile.equals("\\");
     }
 }

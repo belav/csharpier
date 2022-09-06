@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.3.6]
+- Disable "CSharpier must be installed globally" popup for sources cache files and the "\" path
+
 ## [1.3.5]
 - Attempt to detect and recover from csharpier not installing correctly to custom path
 - Disable "CSharpier must be installed globally" popup for decompiled files and the "/" path 
