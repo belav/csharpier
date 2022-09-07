@@ -60,6 +60,7 @@ internal static class FormattingCacheFactory
                 }
             }
 
+            // TODO if this fails, delete the file
             var newDictionary = JsonSerializer.Deserialize<ConcurrentDictionary<string, string>>(
                 content
             );
@@ -148,6 +149,8 @@ internal static class FormattingCacheFactory
 #endif
                     )
                 );
+
+                await fileStream.FlushAsync(cancellationToken);
             }
 
             // in my testing we don't normally have to wait more than a couple MS, but just in case

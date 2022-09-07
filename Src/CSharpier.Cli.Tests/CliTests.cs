@@ -353,12 +353,6 @@ public class CliTests
     }
 
     [Test]
-    // TODO if I don't delete the cache file between runs, and run this unit test twice, it will almost always recreate the problem
-    // the possible fix I have with FileShare.None does not seem to be working.
-    // switching over to not use async for writing does not seem to be working.
-    // for now, if the cache file gets corrupted, maybe this should just delete the file?
-    // that kind of hides the problem but this does seem to be an edge case
-    // prettier basically does the same thing..... so maybe it also has this issue but it has never come up.
     public async Task Should_Handle_Concurrent_Processes_2()
     {
         var unformattedContent = "public class ClassName {     }\n";
