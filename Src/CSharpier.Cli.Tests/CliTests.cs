@@ -358,7 +358,7 @@ public class CliTests
     // switching over to not use async for writing does not seem to be working.
     // for now, if the cache file gets corrupted, maybe this should just delete the file?
     // that kind of hides the problem but this does seem to be an edge case
-    // I should look into the library that prettier uses, and how it deals with storing this type of info
+    // prettier basically does the same thing..... so maybe it also has this issue but it has never come up.
     public async Task Should_Handle_Concurrent_Processes_2()
     {
         var unformattedContent = "public class ClassName {     }\n";
