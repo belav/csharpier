@@ -32,7 +32,7 @@ public class CliTests
     {
         if (File.Exists(FormattingCacheFactory.CacheFilePath))
         {
-            File.Delete(FormattingCacheFactory.CacheFilePath);
+            //File.Delete(FormattingCacheFactory.CacheFilePath);
         }
 
         if (Directory.Exists(testFileDirectory))
@@ -349,6 +349,45 @@ public class CliTests
         }
 
         var formatTasks = folders.Select(FormatFolder).ToArray();
+        Task.WaitAll(formatTasks);
+    }
+
+    [Test]
+    // TODO if I don't delete the cache file between runs, and run this unit test twice, it will almost always recreate the problem
+    // the possible fix I have with FileShare.None does not seem to be working.
+    // switching over to not use async for writing does not seem to be working.
+    // for now, if the cache file gets corrupted, maybe this should just delete the file?
+    // that kind of hides the problem but this does seem to be an edge case
+    // I should look into the library that prettier uses, and how it deals with storing this type of info
+    public async Task Should_Handle_Concurrent_Processes_2()
+    {
+        var unformattedContent = "public class ClassName {     }\n";
+        var filesPerFolder = 1000;
+
+        for (var x = 0; x < filesPerFolder; x++)
+        {
+            await this.WriteFileAsync($"{Guid.NewGuid()}.cs", unformattedContent);
+        }
+
+        var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        result.ErrorOutput.Should().BeEmpty();
+
+        var newFiles = new List<string>();
+
+        for (var x = 0; x < 100; x++)
+        {
+            var fileName = Guid.NewGuid() + ".cs";
+            await this.WriteFileAsync(fileName, unformattedContent);
+            newFiles.Add(fileName);
+        }
+
+        async Task FormatFile(string file)
+        {
+            var result = await new CsharpierProcess().WithArguments(file).ExecuteAsync();
+            result.ErrorOutput.Should().BeEmpty();
+        }
+
+        var formatTasks = newFiles.Select(FormatFile).ToArray();
         Task.WaitAll(formatTasks);
     }
 
