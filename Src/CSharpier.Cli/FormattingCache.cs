@@ -41,7 +41,7 @@ internal static class FormattingCacheFactory
         {
             // in my testing we don't normally have to wait more than a couple MS, but just in case
             const int attempts = 20;
-            string? content = null;
+            var content = string.Empty;
             for (var x = 0; x < attempts; x++)
             {
                 try

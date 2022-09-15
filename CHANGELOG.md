@@ -1,3 +1,13 @@
+# 0.19.2
+## What's Changed
+#### .NET Tool Crashes When Run Concurrently [#728](https://github.com/belav/csharpier/issues/733)
+
+Fixed another edge case with running csharpier concurrently.
+
+Thanks go to @Kurt-von-Laven for reporting the bug.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.19.1...0.19.2
+
 # 0.19.1
 ## What's Changed
 #### CSharpier crashes when run multiple times simultaneously [#728](https://github.com/belav/csharpier/issues/728)
