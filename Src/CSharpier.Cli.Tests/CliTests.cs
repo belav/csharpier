@@ -352,6 +352,42 @@ public class CliTests
         Task.WaitAll(formatTasks);
     }
 
+    [Test]
+    [Ignore(
+        "This is somewhat useful for testing locally, but doesn't reliably reproduce a problem and takes a while to run. Commenting out the delete cache file line helps to reproduce problems"
+    )]
+    public async Task Should_Handle_Concurrent_Processes_2()
+    {
+        var unformattedContent = "public class ClassName {     }\n";
+        var filesPerFolder = 1000;
+
+        for (var x = 0; x < filesPerFolder; x++)
+        {
+            await this.WriteFileAsync($"{Guid.NewGuid()}.cs", unformattedContent);
+        }
+
+        var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        result.ErrorOutput.Should().BeEmpty();
+
+        var newFiles = new List<string>();
+
+        for (var x = 0; x < 100; x++)
+        {
+            var fileName = Guid.NewGuid() + ".cs";
+            await this.WriteFileAsync(fileName, unformattedContent);
+            newFiles.Add(fileName);
+        }
+
+        async Task FormatFile(string file)
+        {
+            var result = await new CsharpierProcess().WithArguments(file).ExecuteAsync();
+            result.ErrorOutput.Should().BeEmpty();
+        }
+
+        var formatTasks = newFiles.Select(FormatFile).ToArray();
+        Task.WaitAll(formatTasks);
+    }
+
     private static bool CannotRunTestWithRedirectedInput()
     {
         // This test cannot run if Console.IsInputRedirected is true.

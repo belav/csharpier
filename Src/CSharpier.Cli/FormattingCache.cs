@@ -41,26 +41,45 @@ internal static class FormattingCacheFactory
         {
             // in my testing we don't normally have to wait more than a couple MS, but just in case
             const int attempts = 20;
+            var content = string.Empty;
             for (var x = 0; x < attempts; x++)
             {
                 try
                 {
-                    var newDictionary = JsonSerializer.Deserialize<
-                        ConcurrentDictionary<string, string>
-                    >(await File.ReadAllTextAsync(CacheFilePath, cancellationToken));
-                    if (newDictionary != null)
-                    {
-                        cacheDictionary = newDictionary;
-                    }
+                    content = await File.ReadAllTextAsync(CacheFilePath, cancellationToken);
                     break;
                 }
                 catch (Exception)
                 {
                     if (x + 1 == attempts)
                     {
-                        throw;
+                        // if we are still failing, fall back to this
+                        return NullCache;
                     }
                     await Task.Delay(TimeSpan.FromMilliseconds(1), cancellationToken);
+                }
+            }
+
+            try
+            {
+                var newDictionary = JsonSerializer.Deserialize<
+                    ConcurrentDictionary<string, string>
+                >(content);
+                if (newDictionary != null)
+                {
+                    cacheDictionary = newDictionary;
+                }
+            }
+            catch (Exception)
+            {
+                // file must be bad json
+                try
+                {
+                    File.Delete(CacheFilePath);
+                }
+                catch (Exception)
+                {
+                    // if it fails to delete it should still get overwritten at the end of formatting
                 }
             }
         }
@@ -128,17 +147,24 @@ internal static class FormattingCacheFactory
 
             async Task WriteFile()
             {
-                await this.fileSystem.File.WriteAllTextAsync(
+                await using var fileStream = this.fileSystem.File.Open(
                     this.cacheFile,
+                    FileMode.OpenOrCreate,
+                    FileAccess.ReadWrite,
+                    FileShare.None
+                );
+                await using var streamWriter = new StreamWriter(fileStream);
+                await streamWriter.WriteAsync(
                     JsonSerializer.Serialize(
                         this.cacheDictionary
 #if DEBUG
                         ,
                         new JsonSerializerOptions { WriteIndented = true }
 #endif
-                    ),
-                    cancellationToken
+                    )
                 );
+
+                await fileStream.FlushAsync(cancellationToken);
             }
 
             // in my testing we don't normally have to wait more than a couple MS, but just in case
