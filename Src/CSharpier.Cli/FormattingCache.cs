@@ -60,13 +60,27 @@ internal static class FormattingCacheFactory
                 }
             }
 
-            // TODO if this fails, delete the file
-            var newDictionary = JsonSerializer.Deserialize<ConcurrentDictionary<string, string>>(
-                content
-            );
-            if (newDictionary != null)
+            try
             {
-                cacheDictionary = newDictionary;
+                var newDictionary = JsonSerializer.Deserialize<
+                    ConcurrentDictionary<string, string>
+                >(content);
+                if (newDictionary != null)
+                {
+                    cacheDictionary = newDictionary;
+                }
+            }
+            catch (Exception)
+            {
+                // file must be bad json
+                try
+                {
+                    File.Delete(CacheFilePath);
+                }
+                catch (Exception)
+                {
+                    // if it fails to delete it should still get overwritten at the end of formatting
+                }
             }
         }
 

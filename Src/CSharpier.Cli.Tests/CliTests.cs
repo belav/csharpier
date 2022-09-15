@@ -32,7 +32,7 @@ public class CliTests
     {
         if (File.Exists(FormattingCacheFactory.CacheFilePath))
         {
-            //File.Delete(FormattingCacheFactory.CacheFilePath);
+            File.Delete(FormattingCacheFactory.CacheFilePath);
         }
 
         if (Directory.Exists(testFileDirectory))
@@ -353,6 +353,9 @@ public class CliTests
     }
 
     [Test]
+    [Ignore(
+        "This is somewhat useful for testing locally, but doesn't reliably reproduce a problem and takes a while to run. Commenting out the delete cache file line helps to reproduce problems"
+    )]
     public async Task Should_Handle_Concurrent_Processes_2()
     {
         var unformattedContent = "public class ClassName {     }\n";
