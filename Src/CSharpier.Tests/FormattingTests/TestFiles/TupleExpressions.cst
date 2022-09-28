@@ -20,4 +20,35 @@ class ClassName
 
         var (a, b) = await (c(), d());
     }
+
+    public async Task<(
+        ILookup<string, int> someLookup,
+        ILookup<int, string> reverseLookup,
+        ILookup<string, ClassName> thirdLookup
+    )> CreateLookups()
+    {
+        return (null, null);
+    }
+
+    public async (
+        ILookup<string, int> someLookup,
+        ILookup<int, string> reverseLookup,
+        ILookup<string, ClassName> thirdLookup
+    ) CreateLookups()
+    {
+        return (null, null);
+    }
+
+    // TODO tbd on if this is what it should be
+    public void TuplesAsInput(
+        (
+            int myInt,
+            string myString,
+            ClassName myClassNameInstance,
+            Dictionary<int, string> wordList
+        ) inputArgs
+    )
+    {
+        // do something
+    }
 }
