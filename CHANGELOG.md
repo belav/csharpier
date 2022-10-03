@@ -1,3 +1,56 @@
+# 0.20.0
+## What's Changed
+#### Improve Tuple formatting [#735](https://github.com/belav/csharpier/issues/#735)
+Tuples would break poorly in some cases
+```c#
+// 0.19.2
+
+public async Task<(ILookup<string, int> someLookup, ILookup<int, string> reverseLookup, ILookup<
+        string,
+        ClassName
+    > thirdLookup)> CreateLookups()
+{
+    return (null, null);
+}
+
+public void TuplesAsInput(
+    (int myInt, string myString, ClassName myClassNameInstance, Dictionary<
+        int,
+        string
+    > wordList) inputArgs
+)
+{
+    // do something
+}
+
+// 0.20.0
+public async Task<(
+    ILookup<string, int> someLookup,
+    ILookup<int, string> reverseLookup,
+    ILookup<string, ClassName> thirdLookup
+)> CreateLookups()
+{
+  return (null, null);
+}
+
+public void TuplesAsInput(
+    (
+        int myInt,
+        string myString,
+        ClassName myClassNameInstance,
+        Dictionary<int, string> wordList
+    ) inputArgs
+ )
+ {
+   // do something
+ }
+```
+
+Thanks go to @BenjaBobs for reporting the bug.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.19.2...0.20.0
+
+
 # 0.19.2
 ## What's Changed
 #### .NET Tool Crashes When Run Concurrently [#728](https://github.com/belav/csharpier/issues/733)
