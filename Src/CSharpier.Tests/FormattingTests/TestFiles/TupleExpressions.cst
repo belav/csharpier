@@ -27,7 +27,7 @@ class ClassName
         ILookup<string, ClassName> thirdLookup
     )> CreateLookups()
     {
-        return (null, null);
+        // do something
     }
 
     public async (
@@ -36,10 +36,9 @@ class ClassName
         ILookup<string, ClassName> thirdLookup
     ) CreateLookups()
     {
-        return (null, null);
+        // do something
     }
 
-    // TODO tbd on if this is what it should be
     public void TuplesAsInput(
         (
             int myInt,

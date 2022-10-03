@@ -13,23 +13,30 @@ $repositories += "https://github.com/dotnet/runtime.git"
 
 $tempLocation = "c:\temp\UpdateRepos"
 
-#TODO just pull it they exist already
-if (Test-Path $tempLocation) {
-    Remove-Item -Recurse -Force $tempLocation
+if (-not (Test-Path $tempLocation)) {
+    New-Item $tempLocation -Force -ItemType Directory
 }
 
-New-Item $tempLocation -Force -ItemType Directory
 Set-Location $tempLocation
 
 $ErrorActionPreference = "Continue"
 
 foreach ($repository in $repositories)
 {
-    & git clone $repository
+    $repoFolder = $tempLocation + "/" + (Split-Path $repositories -Leaf).Replace(".git", "")
+    if (Test-Path $repoFolder) {
+        Set-Location $repoFolder
+        & git pull origin
+        Set-Location $tempLocation
+    }
+    else {
+        & git clone $repository    
+    }
 }
 
-#TODO make sure to switch to main/master
 $destination = "C:\projects\csharpier-repos\"
+Set-Location $destination
+& git checkout main
 
 Get-ChildItem $tempLocation | Copy-Item -Destination $destination -Filter *.cs -Recurse -Force
 
@@ -45,9 +52,14 @@ foreach ($item in $items) {
 
 $items = Get-ChildItem C:\projects\csharpier-repos -Directory
 foreach ($item in $items) {
+    # TODO this seems to not actually remove the .git repos
     if ($item.Name -eq ".git") {
         Remove-Item -Force -Recurse $item.FullName
     }
 }
 
-# TODO commit and push
+Set-Location $destination
+
+& git add .
+& git commit -m "Updating repos"
+& git push origin
