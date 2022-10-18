@@ -8,7 +8,9 @@ internal static class AwaitExpression
 
         return Doc.Concat(
             Token.PrintWithSuffix(node.AwaitKeyword, " ", context),
-            precedesQueryExpression ? Doc.Indent(Doc.Line, Node.Print(node.Expression, context)) : Node.Print(node.Expression, context)
+            precedesQueryExpression
+                ? Doc.Indent(Doc.Line, Node.Print(node.Expression, context))
+                : Node.Print(node.Expression, context)
         );
     }
 }
