@@ -22,12 +22,14 @@ internal static class Modifiers
             return Doc.Null;
         }
 
+        var sortedModifiers = modifiers.OrderBy(o => o.Text);
+
         return Doc.Group(
-            Token.PrintWithoutLeadingTrivia(modifiers[0], context),
+            Token.PrintWithoutLeadingTrivia(sortedModifiers.First(), context),
             " ",
-            modifiers.Count > 1
+            sortedModifiers.Count() > 1
                 ? Doc.Concat(
-                    modifiers.Skip(1).Select(o => Token.PrintWithSuffix(o, " ", context)).ToArray()
+                    sortedModifiers.Skip(1).Select(o => Token.PrintWithSuffix(o, " ", context)).ToArray()
                 )
                 : Doc.Null
         );

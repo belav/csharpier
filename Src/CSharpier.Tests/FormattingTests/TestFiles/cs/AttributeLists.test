@@ -29,7 +29,7 @@ class ClassName
     private volatile int f2;
 
     [DllImport("kernel32", SetLastError = true)]
-    static extern bool NameEquals(string name, SecurityAttribute sa);
+    extern static bool NameEquals(string name, SecurityAttribute sa);
 
     [Obsolete("Error", error: true)]
     void NameColon() { }

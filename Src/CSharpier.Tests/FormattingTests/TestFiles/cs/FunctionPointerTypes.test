@@ -19,7 +19,7 @@ class ClassName
         return;
     }
 
-    public static extern unsafe int InvokeCallbackFuncPtr_Inline_NoGCTransition(
+    extern public static unsafe int InvokeCallbackFuncPtr_Inline_NoGCTransition(
         delegate* unmanaged[Cdecl]<int, int> cb,
         int* n
     );

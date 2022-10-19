@@ -11,7 +11,7 @@ class ClassName
         return new() { (href: "one", title: "two") };
     }
 
-    public async Task TupleAssignment()
+    async public Task TupleAssignment()
     {
         var (noteTexts, matcher) = await (
             GetAndAnalyzeNoteTexts(),
@@ -21,7 +21,7 @@ class ClassName
         var (a, b) = await (c(), d());
     }
 
-    public async Task<(
+    async public Task<(
         ILookup<string, int> someLookup,
         ILookup<int, string> reverseLookup,
         ILookup<string, ClassName> thirdLookup
@@ -30,7 +30,7 @@ class ClassName
         // do something
     }
 
-    public async (
+    async public (
         ILookup<string, int> someLookup,
         ILookup<int, string> reverseLookup,
         ILookup<string, ClassName> thirdLookup
