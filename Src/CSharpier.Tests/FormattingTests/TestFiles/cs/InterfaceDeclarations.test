@@ -8,7 +8,7 @@ public interface BasicInterface : BaseInterface { }
 public interface BasicInterface
 {
     void SomeMethod();
-    abstract static void SomeOtherMethod();
+    static abstract void SomeOtherMethod();
 }
 
 interface CoContra<out T, in K> { }
