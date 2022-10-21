@@ -8,7 +8,7 @@ public class ClassName
     string PropertyWithModifiersThatIsLongEnoughToBreak
     {
         protected internal get;
-        internal protected set;
+        protected internal set;
     }
 
     private string backingValue;

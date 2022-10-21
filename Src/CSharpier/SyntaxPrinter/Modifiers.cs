@@ -2,16 +2,6 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class Modifiers
 {
-    public static Doc Print(SyntaxTokenList modifiers, FormattingContext context)
-    {
-        if (modifiers.Count == 0)
-        {
-            return Doc.Null;
-        }
-
-        return Doc.Group(Doc.Join(" ", modifiers.Select(o => Token.Print(o, context))), " ");
-    }
-
     class DefaultOrder : IComparer<string>
     {
         static readonly string[] DefaultOrdered = new string[]
@@ -42,6 +32,22 @@ internal static class Modifiers
     }
 
     private static readonly DefaultOrder Comparer = new();
+
+    public static Doc Print(SyntaxTokenList modifiers, FormattingContext context)
+    {
+        if (modifiers.Count == 0)
+        {
+            return Doc.Null;
+        }
+
+        return Doc.Group(
+            Doc.Join(
+                " ",
+                modifiers.OrderBy(o => o.Text, Comparer).Select(o => Token.Print(o, context))
+            ),
+            " "
+        );
+    }
 
     public static Doc PrintWithoutLeadingTrivia(
         SyntaxTokenList modifiers,
