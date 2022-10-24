@@ -320,7 +320,7 @@ public class CliTests
     }
 
     [Test]
-    public async Task Should_Handle_Concurrent_Processes()
+    public void Should_Handle_Concurrent_Processes()
     {
         var unformattedContent = "public class ClassName {     }\n";
         var totalFolders = 10;
