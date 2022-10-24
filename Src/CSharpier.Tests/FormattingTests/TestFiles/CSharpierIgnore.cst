@@ -76,4 +76,44 @@ public class ClassName2
          string    keepNewLine;
         // csharpier-ignore-end
     }
+    
+    public void KeepLines1()
+    {
+        // csharpier-ignore-start
+        var    unformattedWithLine1;
+    
+        var    unformattedWithLine2;
+        // csharpier-ignore-end
+    }
+    
+    public void KeepLines2()
+    {
+        // csharpier-ignore-start
+        string    unformattedWithLine1;
+    
+        string    unformattedWithLine2;
+        // csharpier-ignore-end
+        
+        string anotherValue;
+    }
+}
+
+public class KeepLines1
+{
+    // csharpier-ignore-start
+    private string    first;
+    
+    private string    second;
+    // csharpier-ignore-end
+}
+
+public class KeepLines2
+{
+    // csharpier-ignore-start
+    private string    first;
+    
+    private string    second;
+    // csharpier-ignore-end
+    
+    private string third;
 }

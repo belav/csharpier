@@ -2,6 +2,8 @@ using System.Collections.Immutable;
 
 namespace CSharpier.SyntaxPrinter;
 
+using System.Text;
+
 internal static class MembersWithForcedLines
 {
     public static List<Doc> Print<T>(
@@ -11,6 +13,7 @@ internal static class MembersWithForcedLines
     ) where T : MemberDeclarationSyntax
     {
         var result = new List<Doc> { Doc.HardLine };
+        var unFormattedCode = new StringBuilder();
         var printUnformatted = false;
         var lastMemberForcedBlankLine = false;
         for (var memberIndex = 0; memberIndex < members.Count; memberIndex++)
@@ -21,6 +24,8 @@ internal static class MembersWithForcedLines
             if (Token.HasLeadingComment(member, "// csharpier-ignore-end"))
             {
                 skipAddingLineBecauseIgnoreEnded = true;
+                result.Add(unFormattedCode.ToString().Trim());
+                unFormattedCode.Clear();
                 printUnformatted = false;
             }
             else if (Token.HasLeadingComment(member, "// csharpier-ignore-start"))
@@ -35,7 +40,7 @@ internal static class MembersWithForcedLines
 
             if (printUnformatted)
             {
-                result.Add(CSharpierIgnore.PrintWithoutFormatting(member));
+                unFormattedCode.Append(CSharpierIgnore.PrintWithoutFormatting(member));
                 continue;
             }
 
@@ -172,6 +177,11 @@ internal static class MembersWithForcedLines
             AddSeparatorIfNeeded();
 
             lastMemberForcedBlankLine = blankLineIsForced;
+        }
+
+        if (unFormattedCode.Length > 0)
+        {
+            result.Add(unFormattedCode.ToString().Trim());
         }
 
         return result;
