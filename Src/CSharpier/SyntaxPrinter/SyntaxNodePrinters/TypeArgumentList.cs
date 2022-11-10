@@ -11,15 +11,18 @@ internal static class TypeArgumentList
 
         return Doc.Concat(
             Token.Print(node.LessThanToken, context),
-            Doc.Indent(
-                separator,
-                SeparatedSyntaxList.Print(
-                    node.Arguments,
-                    Node.Print,
-                    node.Arguments.FirstOrDefault() is OmittedTypeArgumentSyntax
-                        ? Doc.Null
-                        : Doc.Line,
-                    context
+            Doc.IndentIf(
+                separator != Doc.Null,
+                Doc.Concat(
+                    separator,
+                    SeparatedSyntaxList.Print(
+                        node.Arguments,
+                        Node.Print,
+                        node.Arguments.FirstOrDefault() is OmittedTypeArgumentSyntax
+                            ? Doc.Null
+                            : Doc.Line,
+                        context
+                    )
                 )
             ),
             separator,

@@ -5,6 +5,7 @@ import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class InstallerService {
@@ -22,7 +23,7 @@ public class InstallerService {
     }
 
     public void displayInstallNeededMessage(String directoryThatContainsFile, IProcessKiller processKiller) {
-        if (this.warnedAlready) {
+        if (this.warnedAlready || ignoreDirectory(directoryThatContainsFile)) {
             return;
         }
         this.warnedAlready = true;
@@ -45,5 +46,13 @@ public class InstallerService {
         }
 
         notification.notify(this.project);
+    }
+
+    private boolean ignoreDirectory(String directoryThatContainsFile) {
+        var normalizedPath = directoryThatContainsFile.replace('\\', '/');
+        return StringUtils.containsIgnoreCase(normalizedPath, "resharper-host/DecompilerCache")
+            || StringUtils.containsIgnoreCase(normalizedPath, "resharper-host/SourcesCache")
+            || directoryThatContainsFile.equals("/")
+            || directoryThatContainsFile.equals("\\");
     }
 }

@@ -71,6 +71,6 @@ public class FormattingService {
 
     public boolean getCanFormat(String filePath, Project project) {
         var cSharpierProcess = CSharpierProcessProvider.getInstance(project).getProcessFor(filePath);
-        return !NullCSharpierProcess.class.isInstance(cSharpierProcess);
+        return !NullCSharpierProcess.Instance.equals(cSharpierProcess);
     }
 }

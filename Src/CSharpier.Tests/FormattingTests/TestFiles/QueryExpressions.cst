@@ -63,5 +63,11 @@ class ClassName
                 Country________________________ = g.Key,
                 CustCount____________________________ = g.Count()
             };
+
+        var asyncQuery = await
+            from c in customers
+            from u in users
+            from res in HandleAsync(c, u)
+            select res;
     }
 }

@@ -5,6 +5,10 @@ export interface ICSharpierProcess extends Disposable {
 }
 
 export class NullCSharpierProcess implements ICSharpierProcess {
+    static instance = new NullCSharpierProcess();
+
+    private constructor () { }
+
     formatFile(content: string, filePath: string): Promise<string> {
         return Promise.resolve("");
     }

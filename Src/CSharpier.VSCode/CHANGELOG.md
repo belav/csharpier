@@ -1,3 +1,6 @@
+## [1.3.5]
+- Attempt to detect and recover from csharpier not installing correctly to custom path
+
 ## [1.3.0]
 - Adding support for detecting version of CSharpier.MsBuild from csproj
 

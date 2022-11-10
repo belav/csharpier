@@ -1,3 +1,77 @@
+# 0.20.0
+## What's Changed
+#### Improve Tuple formatting [#735](https://github.com/belav/csharpier/issues/#735)
+Tuples would break poorly in some cases
+```c#
+// 0.19.2
+
+public async Task<(ILookup<string, int> someLookup, ILookup<int, string> reverseLookup, ILookup<
+        string,
+        ClassName
+    > thirdLookup)> CreateLookups()
+{
+    return (null, null);
+}
+
+public void TuplesAsInput(
+    (int myInt, string myString, ClassName myClassNameInstance, Dictionary<
+        int,
+        string
+    > wordList) inputArgs
+)
+{
+    // do something
+}
+
+// 0.20.0
+public async Task<(
+    ILookup<string, int> someLookup,
+    ILookup<int, string> reverseLookup,
+    ILookup<string, ClassName> thirdLookup
+)> CreateLookups()
+{
+  return (null, null);
+}
+
+public void TuplesAsInput(
+    (
+        int myInt,
+        string myString,
+        ClassName myClassNameInstance,
+        Dictionary<int, string> wordList
+    ) inputArgs
+ )
+ {
+   // do something
+ }
+```
+
+Thanks go to @BenjaBobs for reporting the bug.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.19.2...0.20.0
+
+
+# 0.19.2
+## What's Changed
+#### .NET Tool Crashes When Run Concurrently [#728](https://github.com/belav/csharpier/issues/733)
+
+Fixed another edge case with running csharpier concurrently.
+
+Thanks go to @Kurt-von-Laven for reporting the bug.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.19.1...0.19.2
+
+# 0.19.1
+## What's Changed
+#### CSharpier crashes when run multiple times simultaneously [#728](https://github.com/belav/csharpier/issues/728)
+
+The new caching for CSharpier didn't properly handle multiple CSharpier processes formatting at the same time. This is most common when using CSharpier.MsBuild in a solution with multiple projects.
+
+Thanks go to @pingzing for reporting the bug.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.19.0...0.19.1
+
+
 # 0.19.0
 ## What's Changed
 #### Adding a cache to speed up formatting. [#692](https://github.com/belav/csharpier/issues/692)
