@@ -134,8 +134,8 @@ public class CodeFormatter
                 PreprocessorSymbols.Reset();
             }
 
-            var document = Node.Print(rootNode, new FormattingContext());
             var lineEnding = GetLineEnding(syntaxTree.ToString(), printerOptions);
+            var document = Node.Print(rootNode, new FormattingContext { LineEnding = lineEnding });
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
 
             PreprocessorSymbols.StopCollecting();

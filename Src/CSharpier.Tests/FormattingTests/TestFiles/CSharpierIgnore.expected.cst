@@ -6,10 +6,12 @@ public class ClassName
     // csharpier-ignore
     private string    unformatted;
 
-    public void MethodName()
+    void BasicSingleIgnores()
     {
         // csharpier-ignore
         var unformatted    = true;
+        // csharpier-ignore
+        var trimsTrailingHere  = true;
 
         if (true)
         {
@@ -18,26 +20,29 @@ public class ClassName
         }
     }
 
-    void MethodName()
+    void RangeWithNodeAfter()
     {
         var formatMe = true;
         // csharpier-ignore-start
-        var unformatted =        true;
-        var unformatted =        true;
+        var trimsTrailing1 =        true;
+        var trimsTrailing2 =        true;
+        // csharpier-ignore-start
+        var unformatted1 =        true;
+        var unformatted2 =        true;
         // csharpier-ignore-end
         var formatMe = true;
     }
 
-    void MethodName()
+    void RangeToEndMethod()
     {
         var formatMe = true;
         // csharpier-ignore-start
-        var unformatted =        true;
-        var unformatted =        true;
+        var unformatted1 =        true;
+        var unformatted2 =        true;
         // csharpier-ignore-end
     }
 
-    void MethodName()
+    void RangeWithoutEnd()
     {
         var formatMe = true;
         // csharpier-ignore-start

@@ -38,7 +38,7 @@ internal static class CSharpierIgnore
 
             if (printUnformatted)
             {
-                unFormattedCode.Append(PrintWithoutFormatting(node));
+                unFormattedCode.Append(PrintWithoutFormatting(node, context));
             }
             else
             {
@@ -54,8 +54,8 @@ internal static class CSharpierIgnore
         return statements;
     }
 
-    public static string PrintWithoutFormatting(SyntaxNode syntaxNode)
+    public static string PrintWithoutFormatting(SyntaxNode syntaxNode, FormattingContext context)
     {
-        return syntaxNode.GetText().ToString();
+        return syntaxNode.GetText().ToString().TrimEnd() + context.LineEnding;
     }
 }

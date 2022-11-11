@@ -23,7 +23,7 @@ namespace CSharpier.SyntaxPrinter
 
             if (CSharpierIgnore.IsNodeIgnored(syntaxNode))
             {
-                return CSharpierIgnore.PrintWithoutFormatting(syntaxNode).Trim();
+                return CSharpierIgnore.PrintWithoutFormatting(syntaxNode, context).Trim();
             }
 
             context.PrintingDepth++;
