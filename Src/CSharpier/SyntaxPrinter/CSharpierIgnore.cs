@@ -1,23 +1,17 @@
 namespace CSharpier.SyntaxPrinter;
 
+using System.Text;
+
 internal static class CSharpierIgnore
 {
     public static bool IsNodeIgnored(SyntaxNode syntaxNode)
     {
-        if (
-            syntaxNode.Parent
-            is not (
-                BaseTypeDeclarationSyntax
-                or BlockSyntax
-                or CompilationUnitSyntax
-                or NamespaceDeclarationSyntax
-            )
-        )
-        {
-            return false;
-        }
-
-        return (Token.HasLeadingComment(syntaxNode, "// csharpier-ignore"));
+        return syntaxNode.Parent
+                is BaseTypeDeclarationSyntax
+                    or BlockSyntax
+                    or CompilationUnitSyntax
+                    or NamespaceDeclarationSyntax
+            && Token.HasLeadingComment(syntaxNode, "// csharpier-ignore");
     }
 
     public static List<Doc> PrintNodesRespectingRangeIgnore<T>(
@@ -26,12 +20,15 @@ internal static class CSharpierIgnore
     ) where T : SyntaxNode
     {
         var statements = new List<Doc>();
+        var unFormattedCode = new StringBuilder();
         var printUnformatted = false;
 
         foreach (var node in list)
         {
             if (Token.HasLeadingComment(node, "// csharpier-ignore-end"))
             {
+                statements.Add(unFormattedCode.ToString().Trim());
+                unFormattedCode.Clear();
                 printUnformatted = false;
             }
             else if (Token.HasLeadingComment(node, "// csharpier-ignore-start"))
@@ -39,16 +36,26 @@ internal static class CSharpierIgnore
                 printUnformatted = true;
             }
 
-            statements.Add(
-                printUnformatted ? PrintWithoutFormatting(node) : Node.Print(node, context)
-            );
+            if (printUnformatted)
+            {
+                unFormattedCode.Append(PrintWithoutFormatting(node, context));
+            }
+            else
+            {
+                statements.Add(Node.Print(node, context));
+            }
+        }
+
+        if (unFormattedCode.Length > 0)
+        {
+            statements.Add(unFormattedCode.ToString().Trim());
         }
 
         return statements;
     }
 
-    public static Doc PrintWithoutFormatting(SyntaxNode syntaxNode)
+    public static string PrintWithoutFormatting(SyntaxNode syntaxNode, FormattingContext context)
     {
-        return syntaxNode.GetText().ToString().Trim();
+        return syntaxNode.GetText().ToString().TrimEnd() + context.LineEnding;
     }
 }
