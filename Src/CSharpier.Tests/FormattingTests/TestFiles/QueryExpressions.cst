@@ -14,6 +14,15 @@ class ClassName
 
         var query2 = from Customer c in customers select c;
 
+        var selectBreak =
+            from Customer c in customers
+            select new
+            {
+                One = c.One,
+                Two = c.Two,
+                Three = C.Three
+            };
+
         var whereQuery = from c in customers where c.Value == "true" select d;
 
         var orderByQuery =
