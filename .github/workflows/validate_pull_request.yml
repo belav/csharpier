@@ -10,7 +10,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.300'
+          dotnet-version: | 
+            7.0.100
+            6.0.300
       - run: |
           dotnet build CSharpier.sln -c release
           dotnet test CSharpier.sln -c release
@@ -21,7 +23,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.300'
+          dotnet-version: |
+            7.0.100
+            6.0.300
       - run: |
           dotnet tool restore
           dotnet csharpier . --check
@@ -32,6 +36,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.300'
+          dotnet-version: |
+            7.0.100
+            6.0.300
       - run: |
           dotnet build Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj

@@ -14,10 +14,10 @@ jobs:
           path: csharpier
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.300'
+          dotnet-version: '7.0.100'
       - uses: actions/checkout@v2
         with:
           repository: belav/csharpier-repos
           path: csharpier-repos
       - run: dotnet build csharpier/Src/CSharpier.Cli/CSharpier.Cli.csproj -c release
-      - run: dotnet csharpier/Src/CSharpier.Cli/bin/release/net6.0/dotnet-csharpier.dll csharpier-repos --skip-write
+      - run: dotnet csharpier/Src/CSharpier.Cli/bin/release/net7.0/dotnet-csharpier.dll csharpier-repos --skip-write

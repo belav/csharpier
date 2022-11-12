@@ -1,5 +1,6 @@
 <Project>
     <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
         <Version>0.20.0</Version>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/belav/csharpier</RepositoryUrl>
