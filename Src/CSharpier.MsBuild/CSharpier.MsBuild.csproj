@@ -6,7 +6,7 @@
             and CSharpier.MSBuild just calls csharpier via command line so
             targeting other frameworks seems unnecessary
         -->
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
         <PackageId>CSharpier.MsBuild</PackageId>
         <DevelopmentDependency>true</DevelopmentDependency>
         <CSharpierOutputDir>../CSharpier.Cli/bin/$(Configuration)/net6.0</CSharpierOutputDir>
