@@ -7,7 +7,7 @@ namespace CSharpier.Playground.Controllers;
 public class VersionController : ControllerBase
 {
     [HttpGet]
-    public string Get()
+    public string? Get()
     {
         return typeof(CodeFormatter).Assembly.GetName().Version?.ToString(3);
     }

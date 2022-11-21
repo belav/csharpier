@@ -522,7 +522,7 @@ public class CommandLineFormatterTests
         bool skipWrite = false,
         bool check = false,
         bool writeStdout = false,
-        string standardInFileContents = null,
+        string? standardInFileContents = null,
         params string[] directoryOrFilePaths
     )
     {
@@ -612,7 +612,7 @@ public class CommandLineFormatterTests
         private string nextLine = string.Empty;
         private string nextErrorLine = string.Empty;
 
-        public void WriteLine(string line = null)
+        public void WriteLine(string? line = null)
         {
             while (line != null && line.Contains("  "))
             {
@@ -627,7 +627,7 @@ public class CommandLineFormatterTests
             }
         }
 
-        public void WriteErrorLine(string line = null)
+        public void WriteErrorLine(string? line = null)
         {
             while (line != null && line.Contains("  "))
             {
