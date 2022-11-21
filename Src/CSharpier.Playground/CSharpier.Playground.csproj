@@ -6,6 +6,7 @@
         <IsPackable>false</IsPackable>
         <SpaRoot>ClientApp\</SpaRoot>
         <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+        <Nullable>disable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

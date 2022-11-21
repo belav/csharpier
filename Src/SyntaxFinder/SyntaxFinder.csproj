@@ -2,8 +2,6 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <LangVersion>10</LangVersion>
-        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
