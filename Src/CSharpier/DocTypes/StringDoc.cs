@@ -10,4 +10,9 @@ internal class StringDoc : Doc
         this.Value = value;
         this.IsDirective = isDirective;
     }
+
+    public override bool ContainsDirective()
+    {
+        return this.IsDirective;
+    }
 }

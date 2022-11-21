@@ -12,4 +12,9 @@ internal class LineDoc : Doc
     public LineType Type { get; set; }
     public bool IsLiteral { get; set; }
     public bool Squash { get; set; }
+
+    public override bool ContainsDirective()
+    {
+        return false;
+    }
 }

@@ -8,4 +8,9 @@ internal class Concat : Doc
     {
         this.Contents = contents;
     }
+
+    public override bool ContainsDirective()
+    {
+        return this.Contents.Any(o => o.ContainsDirective());
+    }
 }
