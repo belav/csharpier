@@ -1,6 +1,4 @@
-using System.IO;
 using System.Text;
-using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -24,11 +22,7 @@ public class Samples
 
     public static void RunTest(string fileName)
     {
-        var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
-        while (directory.Name != "CSharpier.Tests")
-        {
-            directory = directory.Parent;
-        }
+        var directory = DirectoryFinder.FindParent("CSharpier.Tests");
 
         var file = Path.Combine(directory.FullName, $"Samples/{fileName}.cst");
         if (!File.Exists(file))

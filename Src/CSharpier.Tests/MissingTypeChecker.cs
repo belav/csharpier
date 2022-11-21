@@ -19,11 +19,7 @@ public class MissingTypeChecker
     )]
     public void Ensure_There_Are_No_Missing_Types()
     {
-        var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
-        while (directory.Name != "Src")
-        {
-            directory = directory.Parent;
-        }
+        var directory = DirectoryFinder.FindParent("Src");
 
         var files = Directory
             .GetFiles(

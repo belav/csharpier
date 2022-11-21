@@ -1,8 +1,5 @@
-using System;
-using System.IO;
 using System.IO.Abstractions;
 using System.Text;
-using System.Threading;
 using CSharpier.Cli;
 using CSharpier.SyntaxPrinter;
 using DiffEngine;
@@ -13,16 +10,14 @@ namespace CSharpier.Tests.FormattingTests;
 
 public class BaseTest
 {
+#pragma warning disable CS8618
     private DirectoryInfo rootDirectory;
+#pragma warning restore CS8618
 
     [OneTimeSetUp]
     public void Setup()
     {
-        this.rootDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-        while (this.rootDirectory.Name != "CSharpier.Tests")
-        {
-            this.rootDirectory = this.rootDirectory.Parent;
-        }
+        this.rootDirectory = DirectoryFinder.FindParent("CSharpier.Tests");
     }
 
     protected void RunTest(string fileName, bool useTabs = false)

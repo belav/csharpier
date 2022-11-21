@@ -11,16 +11,16 @@ namespace CSharpier.Playground.Controllers;
 
 public class FormatResult
 {
-    public string Code { get; set; }
-    public string Json { get; set; }
-    public string Doc { get; set; }
-    public List<FormatError> Errors { get; set; }
+    public required string Code { get; set; }
+    public required string Json { get; set; }
+    public required string Doc { get; set; }
+    public required List<FormatError> Errors { get; set; }
 }
 
 public class FormatError
 {
-    public FileLinePositionSpan LineSpan { get; set; }
-    public string Description { get; set; }
+    public required FileLinePositionSpan LineSpan { get; set; }
+    public required string Description { get; set; }
 }
 
 [ApiController]
@@ -64,7 +64,7 @@ public class FormatController : ControllerBase
 
     private FormatError ConvertError(Diagnostic diagnostic)
     {
-        var lineSpan = diagnostic.Location.SourceTree.GetLineSpan(diagnostic.Location.SourceSpan);
+        var lineSpan = diagnostic.Location.SourceTree!.GetLineSpan(diagnostic.Location.SourceSpan);
         return new FormatError { LineSpan = lineSpan, Description = diagnostic.ToString(), };
     }
 
@@ -80,7 +80,7 @@ public class FormatController : ControllerBase
         };
 
         var process = Process.Start(processStartInfo);
-        var output = process.StandardError.ReadToEnd();
+        var output = process!.StandardError.ReadToEnd();
         process.WaitForExit();
 
         this.logger.LogInformation(
