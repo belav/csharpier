@@ -1,0 +1,17 @@
+<Project>
+    <PropertyGroup>
+        <TargetFrameworks>net7.0</TargetFrameworks>
+        <LangVersion>10</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <!-- this is the warning generators get when they fail to generate a source file
+  this makes sure the error for it failing is obvious -->
+        <WarningsAsErrors>CS8032</WarningsAsErrors>
+        <!-- this is because we reference 4.3.0-1.final -->
+        <NoWarn>NU5104</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+</Project>

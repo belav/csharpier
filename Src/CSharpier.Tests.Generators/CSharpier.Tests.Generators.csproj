@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
         <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
         <NoWarn>SYSLIB0013</NoWarn>
