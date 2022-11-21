@@ -55,3 +55,5 @@ public class IdentityDbContext<TUser, TRole, TKey>
     where TUser : IdentityUser<TKey>
     where TRole : IdentityRole<TKey>
     where TKey : IEquatable<TKey> { }
+
+file class FileScopedType { }
