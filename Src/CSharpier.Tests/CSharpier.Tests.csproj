@@ -4,6 +4,7 @@
         <IsPackable>false</IsPackable>
         <RootNamespace>CSharpier.Tests</RootNamespace>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <Nullable>disable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

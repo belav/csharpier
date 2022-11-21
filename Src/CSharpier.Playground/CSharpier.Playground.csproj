@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
+        <!-- dotnet doesn't like to run when TargetFrameworks is used, even if it is a single framework -->
+        <TargetFramework>$(TargetFrameworks)</TargetFramework>
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
         <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
         <IsPackable>false</IsPackable>
         <SpaRoot>ClientApp\</SpaRoot>
         <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
-        <TargetFramework>$(TargetFrameworks)</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
