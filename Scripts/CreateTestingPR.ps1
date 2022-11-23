@@ -51,7 +51,7 @@ if ($firstRun)
     & git reset --hard
     & git checkout -b $preBranch
     
-    dotnet $csharpierDllPath . $fastParam
+    dotnet $csharpierDllPath . $fastParam --no-cache
 
     & git add -A
     & git commit -m "Before $branch"
@@ -70,7 +70,7 @@ if ($firstRun) {
     & git checkout $postBranch
 }
 
-dotnet $csharpierDllPath . $fastParam
+dotnet $csharpierDllPath . $fastParam --no-cache
 
 & git add -A
 & git commit -m "After $branch"
