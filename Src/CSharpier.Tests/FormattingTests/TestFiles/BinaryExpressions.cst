@@ -66,13 +66,17 @@ class TestClass
             one == two
             || someValue_______________
                 == thisWillIndent_______________________________________________________________
-        ) { }
+        )
+        {
+        }
 
         while (
             one == two
             || someValue_______________
                 == thisWillIndent_______________________________________________________________
-        ) { }
+        )
+        {
+        }
 
         switch (
             one == two
@@ -129,14 +133,18 @@ class TestClass
             || one - two > three
             || someLongThing - someOtherLongThing__________________________________
                 > anotherLongThing
-        ) { }
+        )
+        {
+        }
 
         if (
             CallSomeMethod(
                 someParameter_____________________________________,
                 someParameter_____________________________________
             ) == 0
-        ) { }
+        )
+        {
+        }
 
         if (
             someValue
@@ -144,7 +152,9 @@ class TestClass
                 someParameter_____________________________________,
                 someParameter_____________________________________
             ) == 0
-        ) { }
+        )
+        {
+        }
 
         if (
             CallSomeMethod(
@@ -152,7 +162,9 @@ class TestClass
                 someParameter_____________________________________
             ) == 0
             && someValue
-        ) { }
+        )
+        {
+        }
 
         if (
             CallMethod(
@@ -163,14 +175,18 @@ class TestClass
                 someParameter_____________________________________,
                 someParameter_____________________________________
             )
-        ) { }
+        )
+        {
+        }
 
         if (
             CallMethod(
                 someParameter_____________________________________,
                 someParameter_____________________________________
             ) || CallMethod(shortValue, "shortValue")
-        ) { }
+        )
+        {
+        }
 
         if (
             CallMethod(
@@ -179,12 +195,16 @@ class TestClass
             )
             || CallMethod(shortValue, "shortValue")
             || CallMethod(shortValue1, "shortValue1")
-        ) { }
+        )
+        {
+        }
 
         if (
             CallSomeMethod(someParameter)
             == someLongerValue_______________________________________________________________
-        ) { }
+        )
+        {
+        }
 
         return someValue != someOtherValue
             && someLongValue_____________________ == someOtherLongValue_____________________;

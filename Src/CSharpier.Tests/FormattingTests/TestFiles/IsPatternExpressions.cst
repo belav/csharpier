@@ -69,7 +69,9 @@ class ClassName
         if (
             someValue_________________________ is SomeType_________________ someType
             && someType.SomeProperty
-        ) { }
+        )
+        {
+        }
 
         var value = someOtherValue is { Property: true };
 
@@ -232,7 +234,9 @@ class ClassName
             someCondition
             && someLongName_____________
                 is { Kind: SomeObjectType, Value: "___________________________________" }
-        ) { }
+        )
+        {
+        }
 
         if (expr is { Property.Length: 5 })
         {

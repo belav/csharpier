@@ -118,7 +118,9 @@ class ClassName
                 (someCondition > someOtherLongCondition_______________________)
                     ? new byte[someValue]
                     : null
-        ) { }
+        )
+        {
+        }
 
         var variableDeclarator = conditionalAccessExpression?.invocationExpression(
             o => someLongValue___________________________________

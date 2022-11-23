@@ -3,7 +3,9 @@ public interface BasicInterface
     string Property { get; set; }
 }
 
-public interface BasicInterface : BaseInterface { }
+public interface BasicInterface : BaseInterface
+{
+}
 
 public interface BasicInterface
 {
@@ -11,4 +13,6 @@ public interface BasicInterface
     static abstract void SomeOtherMethod();
 }
 
-interface CoContra<out T, in K> { }
+interface CoContra<out T, in K>
+{
+}

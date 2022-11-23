@@ -11,9 +11,9 @@ internal static class Block
         )
         {
             return Doc.Concat(
-                " ",
+                Doc.HardLine,
                 Token.Print(node.OpenBraceToken, context),
-                " ",
+                Doc.HardLine,
                 Token.Print(node.CloseBraceToken, context)
             );
         }
@@ -40,7 +40,7 @@ internal static class Block
         var result = Doc.Group(
             node.Parent is ParenthesizedLambdaExpressionSyntax or BlockSyntax ? Doc.Null : Doc.Line,
             Token.Print(node.OpenBraceToken, context),
-            node.Statements.Count == 0 ? " " : Doc.Concat(innerDoc, statementSeparator),
+            node.Statements.Count == 0 ? Doc.HardLine : Doc.Concat(innerDoc, statementSeparator),
             Token.Print(node.CloseBraceToken, context)
         );
 

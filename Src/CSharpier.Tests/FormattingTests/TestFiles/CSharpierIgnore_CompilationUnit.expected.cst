@@ -4,5 +4,7 @@ namespace Namespace
     public class    Unformatted { }
     // csharpier-ignore-end
 
-    public class FormatMe { }
+    public class FormatMe
+    {
+    }
 }

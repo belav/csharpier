@@ -1,9 +1,13 @@
 class ClassName1
 {
-    public void MethodName1() { }
+    public void MethodName1()
+    {
+    }
 
 #if DEBUG
-    public void MethodName2() { }
+    public void MethodName2()
+    {
+    }
 #endif
 }
 
@@ -11,7 +15,9 @@ class ClassName1
 
 class ClassName2
 {
-    public void MethodName() { }
+    public void MethodName()
+    {
+    }
 }
 
 #endif

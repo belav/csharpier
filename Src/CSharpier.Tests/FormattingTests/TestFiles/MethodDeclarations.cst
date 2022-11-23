@@ -1,8 +1,12 @@
 public class ClassName
 {
-    public void MethodName() { }
+    public void MethodName()
+    {
+    }
 
-    public void LongMethodNameKeepsEmptyBraces__________________________________________________________() { }
+    public void LongMethodNameKeepsEmptyBraces__________________________________________________________()
+    {
+    }
 
     public void LongMethodNameKeepsEmptyBraces__________________________________________________________()
     {
@@ -22,7 +26,9 @@ public class ClassName
         string one,
         string two,
         string three
-    ) { }
+    )
+    {
+    }
 
     public void ReallyLongMethodNameWithoutAnyParametersShouldNewLineBrace_______()
     {
@@ -39,7 +45,9 @@ public class ClassName
         var x = 0;
     }
 
-    public void MethodName(string one, string two) { }
+    public void MethodName(string one, string two)
+    {
+    }
 
     public void MethodName()
     {
@@ -83,7 +91,9 @@ public class ClassName
 
 class ExplicitInterfaceSpecifier : IDisposable
 {
-    void IDisposable.Dispose() { }
+    void IDisposable.Dispose()
+    {
+    }
 }
 
 namespace SomeNamespace

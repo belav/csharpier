@@ -1,8 +1,12 @@
 public class ClassRules
 {
-    public void NeverLineBeforeFirstMember() { }
+    public void NeverLineBeforeFirstMember()
+    {
+    }
 
-    public void AlwaysLineBetweenMethods() { }
+    public void AlwaysLineBetweenMethods()
+    {
+    }
 
     public void EvenWithLambdaBody() => "";
 
@@ -18,21 +22,37 @@ public class ClassRules
         Two
     }
 
-    private class AlwaysLineBeforeClass { }
+    private class AlwaysLineBeforeClass
+    {
+    }
 
-    private class NoDoubleLines { }
+    private class NoDoubleLines
+    {
+    }
 
-    private interface IAlwaysLineBeforeInterface { }
+    private interface IAlwaysLineBeforeInterface
+    {
+    }
 
-    private interface INoDoubleLines { }
+    private interface INoDoubleLines
+    {
+    }
 
-    public ClassRules() { }
+    public ClassRules()
+    {
+    }
 
-    public ClassRules() { }
+    public ClassRules()
+    {
+    }
 
-    public ~ClassName() { }
+    public ~ClassName()
+    {
+    }
 
-    public ~ClassName() { }
+    public ~ClassName()
+    {
+    }
 
     public static implicit operator ClassRules(string s)
     {
@@ -48,9 +68,13 @@ public class ClassRules
 
     public record SomeRecord2(string property);
 
-    public struct SomeStruct1 { }
+    public struct SomeStruct1
+    {
+    }
 
-    public struct SomeStruct2 { }
+    public struct SomeStruct2
+    {
+    }
 
     static ClassRules operator +(ClassRules a, ClassRules b)
     {
@@ -95,7 +119,9 @@ public class ClassRules
     [AttributesForceALine]
     delegate void DelegateWithAttribute();
 
-    public void AlwaysLineBetweenMethods() { }
+    public void AlwaysLineBetweenMethods()
+    {
+    }
 
     private string FieldAfterMethodGetsLine;
 
@@ -105,16 +131,24 @@ public class ClassRules
     private string Field;
 #endif
 
-    public void SomeMethod() { }
+    public void SomeMethod()
+    {
+    }
 
 #pragma warning disable 0618
-    public void KeepLineAboveAndBelow() { }
+    public void KeepLineAboveAndBelow()
+    {
+    }
 #pragma warning restore 0618
 
-    public void SomeMethod() { }
+    public void SomeMethod()
+    {
+    }
 }
 
-public class LineBeforeClass { }
+public class LineBeforeClass
+{
+}
 
 public interface InterfaceRulesAreLikeClassesButMethodsFollowTheFieldRulesAbove
 {
@@ -129,12 +163,16 @@ public interface InterfaceRulesAreLikeClassesButMethodsFollowTheFieldRulesAbove
 
 abstract class AbstractClass
 {
-    abstract void NoLineHere() { }
+    abstract void NoLineHere()
+    {
+    }
 
     abstract void KeepTheLineHere();
     abstract void DoNotForceTheLineHere();
 
-    void ButForceLineForRealMethod() { }
+    void ButForceLineForRealMethod()
+    {
+    }
 }
 
 public class ClassName
@@ -152,9 +190,13 @@ public class ClassName
 {
 #region RegionWithSpaceBeforeAndAfterMethod
 
-    void SomeMethod() { }
+    void SomeMethod()
+    {
+    }
 
 #endregion
 
-    void SomeMethod() { }
+    void SomeMethod()
+    {
+    }
 }

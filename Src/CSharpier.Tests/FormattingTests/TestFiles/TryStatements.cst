@@ -19,11 +19,19 @@ class ClassName
             return;
         }
 
-        try { }
-        catch { }
+        try
+        {
+        }
+        catch
+        {
+        }
 
-        try { }
-        finally { }
+        try
+        {
+        }
+        finally
+        {
+        }
 
         try
         {

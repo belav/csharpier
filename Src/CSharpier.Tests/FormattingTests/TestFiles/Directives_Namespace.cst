@@ -12,5 +12,7 @@ namespace Namespace
     using System.Web.Routing;
 #endif
 
-    class ClassName { }
+    class ClassName
+    {
+    }
 }

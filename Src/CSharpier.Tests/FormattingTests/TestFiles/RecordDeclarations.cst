@@ -14,7 +14,9 @@ record MostlyWeeklyTemperature(
     public double Mean => (monday + monday + thursday + friday + sunday) / 5.0;
 }
 
-record PC(string x) : PrimaryConstructor(x) { }
+record PC(string x) : PrimaryConstructor(x)
+{
+}
 
 public record RecordWithProperty
 {
@@ -24,7 +26,9 @@ public record RecordWithProperty
 record RecordWithoutBody(string property);
 
 record LongerRecordNameWhatHappens_________________________________________(string x)
-    : R4<string>(x) { }
+    : R4<string>(x)
+{
+}
 
 record GenericRecord<T>(T Result);
 
@@ -46,7 +50,9 @@ public record LotsOfParametersWithBaseWithLots(
         "someExtraValueToMakeThisReallyLong"
     );
 
-public record SomeRecord : SomeBaseRecord { }
+public record SomeRecord : SomeBaseRecord
+{
+}
 
 public record struct StructRecord;
 
