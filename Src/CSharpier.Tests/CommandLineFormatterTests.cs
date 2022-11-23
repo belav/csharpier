@@ -231,6 +231,19 @@ public class CommandLineFormatterTests
         result.Lines.First().Should().StartWith("Warning ./Unformatted.cs - Was not formatted.");
     }
 
+    [TestCase("Src/node_modules/NodeFile.cs")]
+    [TestCase("node_modules/NodeFile.cs")]
+    [TestCase("node_modules/NodeFolder/NodeFile.cs")]
+    public void Format_Ignores_Node_Modules_File(string filePath)
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(filePath, UnformattedClassContent);
+
+        var result = this.Format(context, check: true);
+
+        result.ExitCode.Should().Be(0);
+    }
+
     [Test]
     public void Format_Checks_Formatted_File()
     {
