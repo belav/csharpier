@@ -7,7 +7,7 @@ public class IgnoreFile
 {
     protected Ignore.Ignore Ignore { get; }
     protected string IgnoreBaseDirectoryPath { get; }
-    private static string[] alwaysIgnored = { "**/node_modules/*.cs" };
+    private static readonly string[] alwaysIgnored = { "**/node_modules/**/*.cs" };
 
     protected IgnoreFile(Ignore.Ignore ignore, string ignoreBaseDirectoryPath)
     {
