@@ -4,21 +4,12 @@ using CSharpier.Cli;
 using CSharpier.SyntaxPrinter;
 using DiffEngine;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.FormattingTests;
 
 public class BaseTest
 {
-#pragma warning disable CS8618
-    private DirectoryInfo rootDirectory;
-#pragma warning restore CS8618
-
-    [OneTimeSetUp]
-    public void Setup()
-    {
-        this.rootDirectory = DirectoryFinder.FindParent("CSharpier.Tests");
-    }
+    private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent("CSharpier.Tests");
 
     protected void RunTest(string fileName, bool useTabs = false)
     {
