@@ -1,3 +1,97 @@
+# 0.21.0
+## What's Changed
+#### Support file scoped types [#748](https://github.com/belav/csharpier/issues/748)
+CSharpier now supports a file scoped type
+```c#
+file class FileScopedClass
+{
+    // implementation
+}
+```
+
+#### Csharpier removes empty lines in ignored blocks of code [#742](https://github.com/belav/csharpier/issues/742)
+In some instances csharpier was removing empty lines in `csharpier-ignore` blocks of code
+```c#
+// input
+public class KeepLines1
+{
+    // csharpier-ignore-start
+    private string    first;
+
+    private string    second;
+    // csharpier-ignore-end
+}
+
+// 0.20.0
+public class KeepLines1
+{
+    // csharpier-ignore-start
+    private string    first;private string    second;
+    // csharpier-ignore-end
+}
+```
+
+Thanks go to @MonstraG for reporting it
+
+#### Await + LINQ query syntax indents incorrectly [#740](https://github.com/belav/csharpier/issues/740)
+```c#
+// 0.20.0
+var result = await from thing in Things
+from otherThing in OtherThings
+from finalThing in SomethingAsync(thing, otherThing)
+select finalThing;
+
+// 0.21.0
+var result = await
+    from thing in Things
+    from otherThing in OtherThings
+    from finalThing in SomethingAsync(thing, otherThing)
+    select finalThing;
+```
+Thanks go to @domn1995 for reporting it.
+
+#### Break anonymous object creation when there are more than two properties [#753](https://github.com/belav/csharpier/issues/753)
+Object initializers break when they have more than two properties. For example
+```c#
+var x = new Thing
+{
+    Post = post,
+    Blog = blog,
+    SamePostNameCount = count
+};
+```
+
+Anonymous object initializers were not included in this logic prior to 0.21.0
+```c#
+// 0.20.0
+var result =
+    from post in Posts
+    select new { Post = post, Blog = blog, SamePostNameCount = count };
+
+// 0.21.0
+var result =
+    from post in Posts
+    select new
+    {
+        Post = post,
+        Blog = blog,
+        SamePostNameCount = count
+    };
+```
+
+Thanks go to @TwentyFourMinutes for reporting it.
+
+#### Support net7 [#756](https://github.com/belav/csharpier/pull/756)
+The CSharpier dotnet tool now works with net6 or net7.
+
+#### Fix for ignoring subfolders in node_modules [#762](https://github.com/belav/csharpier/pull/762)
+CSharpier was not properly ignoring .cs files when they were in a subfolder of node_modules
+
+Thanks go to @snebjorn for reporting the bug.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.20.0...0.21.0
+
+
 # 0.20.0
 ## What's Changed
 #### Improve Tuple formatting [#735](https://github.com/belav/csharpier/issues/#735)
