@@ -5,11 +5,12 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:7.0.100 AS build
 
 RUN apt-get update  && \
-	apt-get install curl gnupg -yq && \
-	curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-	apt-get install -y nodejs
+  apt-get install curl gnupg -yq && \
+  curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+  apt-get install -y nodejs
 
 WORKDIR /build
+COPY ./Directory.Build.props ./Directory.Packages.props ./
 COPY ./Src/CSharpier.Playground/CSharpier.Playground.csproj Src/CSharpier.Playground/
 COPY ./Src/CSharpier/CSharpier.csproj Src/CSharpier/
 ARG RESTORE_TOOLS=0
