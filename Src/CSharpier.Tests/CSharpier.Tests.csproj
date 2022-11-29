@@ -1,35 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <IsPackable>false</IsPackable>
-        <RootNamespace>CSharpier.Tests</RootNamespace>
-        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="DiffEngine" />
-        <PackageReference Include="FluentAssertions" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" />
-        <PackageReference Include="NUnit" />
-        <PackageReference Include="NUnit3TestAdapter" />
-        <PackageReference Include="UTF.Unknown" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\CSharpier.Cli\CSharpier.Cli.csproj" />
-      <ProjectReference Include="..\CSharpier.Tests.Generators\CSharpier.Tests.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-      <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <AdditionalFiles Include="FormattingTests\TestFiles\*.cst" />
-    </ItemGroup>
-    <ItemGroup>
-        <Content Include="FormattingTests\TestFiles\*.actual.cst">
-            <DependentUpon>$([System.String]::Copy(%(Filename)).Replace('.actual', '.cst'))</DependentUpon>
-        </Content>
-        <Content Include="FormattingTests\TestFiles\*.expected.cst">
-            <DependentUpon>$([System.String]::Copy(%(Filename)).Replace('.expected', '.cst'))</DependentUpon>
-        </Content>
-    </ItemGroup>
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>CSharpier.Tests</RootNamespace>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DiffEngine"/>
+    <PackageReference Include="FluentAssertions"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+    <PackageReference Include="NUnit"/>
+    <PackageReference Include="NUnit3TestAdapter"/>
+    <PackageReference Include="UTF.Unknown"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CSharpier.Cli\CSharpier.Cli.csproj"/>
+    <ProjectReference Include="..\CSharpier.Tests.Generators\CSharpier.Tests.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+    <ProjectReference Include="..\CSharpier\CSharpier.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="FormattingTests\TestFiles\*.cst"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FormattingTests\TestFiles\*.actual.cst">
+      <DependentUpon>$([System.String]::Copy(%(Filename)).Replace('.actual', '.cst'))</DependentUpon>
+    </Content>
+    <Content Include="FormattingTests\TestFiles\*.expected.cst">
+      <DependentUpon>$([System.String]::Copy(%(Filename)).Replace('.expected', '.cst'))</DependentUpon>
+    </Content>
+  </ItemGroup>
 </Project>

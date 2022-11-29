@@ -1,38 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="../../CSharpier.Build.props" />
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <PackageId>CSharpier</PackageId>
-        <AssemblyName>dotnet-csharpier</AssemblyName>
-        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
-        <PackAsTool>true</PackAsTool>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Ignore" />
-        <PackageReference Include="Microsoft.Extensions.Logging" />
-        <PackageReference Include="System.CommandLine" />
-        <PackageReference Include="System.IO.Abstractions" />
-        <PackageReference Include="System.IO.Abstractions.TestingHelpers" />
-        <PackageReference Include="System.IO.Hashing" />
-        <PackageReference Include="System.Text.Encoding.CodePages" />
-        <PackageReference Include="UTF.Unknown" />
-        <PackageReference Include="YamlDotNet" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <InternalsVisibleTo Include="CSharpier.Tests" />
-        <InternalsVisibleTo Include="CSharpier.Cli.Tests" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="..\..\logo.png" Pack="true" PackagePath="">
-            <Link>logo.png</Link>
-        </None>
-    </ItemGroup>
-    
-    <ItemGroup>
-      <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
-    </ItemGroup>
-
+  <Import Project="../../CSharpier.Build.props"/>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <PackageId>CSharpier</PackageId>
+    <AssemblyName>dotnet-csharpier</AssemblyName>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <PackAsTool>true</PackAsTool>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Ignore"/>
+    <PackageReference Include="Microsoft.Extensions.Logging"/>
+    <PackageReference Include="System.CommandLine"/>
+    <PackageReference Include="System.IO.Abstractions"/>
+    <PackageReference Include="System.IO.Abstractions.TestingHelpers"/>
+    <PackageReference Include="System.IO.Hashing"/>
+    <PackageReference Include="System.Text.Encoding.CodePages"/>
+    <PackageReference Include="UTF.Unknown"/>
+    <PackageReference Include="YamlDotNet"/>
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="CSharpier.Tests"/>
+    <InternalsVisibleTo Include="CSharpier.Cli.Tests"/>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\logo.png" Pack="true" PackagePath="">
+      <Link>logo.png</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CSharpier\CSharpier.csproj"/>
+  </ItemGroup>
 </Project>
