@@ -92,9 +92,9 @@ public class ConfigurationFileOptions
     private static ConfigurationFileOptions ReadJson(string contents)
     {
         return JsonSerializer.Deserialize<ConfigurationFileOptions>(
-            contents,
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-        );
+                contents,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            ) ?? new();
     }
 
     private static ConfigurationFileOptions ReadYaml(string contents)
