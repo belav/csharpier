@@ -142,11 +142,15 @@ internal class DocPrinter
                 this.Output.TrimTrailingWhitespace();
                 this.Output.Append(' ').Append(trailingComment.Comment);
                 this.CurrentWidth = indent.Length;
-                this.NewLineNextStringValue = true;
-                this.SkipNextNewLine = true;
+                if (mode != PrintMode.ForceFlat)
+                {
+                    this.NewLineNextStringValue = true;
+                    this.SkipNextNewLine = true;
+                }
+
                 break;
             case ForceFlat forceFlat:
-                this.Push(forceFlat.Contents, PrintMode.Flat, indent);
+                this.Push(forceFlat.Contents, PrintMode.ForceFlat, indent);
                 break;
             case Align align:
                 this.Push(align.Contents, mode, this.Indenter.AddAlign(indent, align.Width));
@@ -301,7 +305,7 @@ internal class DocPrinter
     {
         if (mode is PrintMode.Flat or PrintMode.ForceFlat && !this.ShouldRemeasure)
         {
-            this.Push(group.Contents, group.Break ? PrintMode.Break : PrintMode.Flat, indent);
+            this.Push(group.Contents, group.Break ? PrintMode.Break : mode, indent);
         }
         else
         {

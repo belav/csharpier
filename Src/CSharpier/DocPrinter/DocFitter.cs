@@ -65,7 +65,7 @@ internal static class DocFitter
                 {
                     case LeadingComment:
                     case TrailingComment:
-                        if (output.Length > 0)
+                        if (output.Length > 0 && currentMode is not PrintMode.ForceFlat)
                         {
                             returnFalseIfMoreStringsFound = true;
                         }
@@ -136,7 +136,7 @@ internal static class DocFitter
                         }
                         break;
                     case ForceFlat flat:
-                        Push(flat.Contents, currentMode, currentIndent);
+                        Push(flat.Contents, PrintMode.ForceFlat, currentIndent);
                         break;
                     case BreakParent:
                         break;
