@@ -1,2 +1,6 @@
-You can test this by running the script at `[RepositoryRoot]/Scripts/BuildPackages.ps1`
-Then add a nuget source pointing to `[RepositoryRoot]/nupkg` and install the nuget package into a project
+This can be tested by
+
+- Making any changes you want
+- Running the script at `[RepositoryRoot]/Scripts/BuildPackages.ps1`
+- Running this from the root `docker build . -f /Src/CSharpier.MsBuild.Test/Dockerfile`
+
