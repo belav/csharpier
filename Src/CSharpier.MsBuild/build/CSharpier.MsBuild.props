@@ -2,7 +2,6 @@
     <PropertyGroup>
         <!-- Setting default value here, so it can be overwritten by caller -->
         <CSharpier_Check>false</CSharpier_Check>
-        <CSharpier_Cache>false</CSharpier_Cache>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
