@@ -50,9 +50,8 @@ foreach ($item in $items) {
     }
 }
 
-$items = Get-ChildItem C:\projects\csharpier-repos -Directory
+$items = Get-ChildItem C:\projects\csharpier-repos -Directory -Recurse
 foreach ($item in $items) {
-    # TODO this seems to not actually remove the .git repos
     if ($item.Name -eq ".git") {
         Remove-Item -Force -Recurse $item.FullName
     }
