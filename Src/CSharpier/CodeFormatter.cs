@@ -1,6 +1,6 @@
 using System.Text;
 using CSharpier.SyntaxPrinter;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace CSharpier;
 
@@ -214,9 +214,9 @@ public class CodeFormatter
     {
         var stringBuilder = new StringBuilder();
         SyntaxNodeJsonWriter.WriteCompilationUnitSyntax(stringBuilder, rootNode);
-        return JsonConvert.SerializeObject(
-            JsonConvert.DeserializeObject(stringBuilder.ToString()),
-            Formatting.Indented
+        return JsonSerializer.Serialize(
+            JsonSerializer.Deserialize<object>(stringBuilder.ToString()),
+            new JsonSerializerOptions { WriteIndented = false }
         );
     }
 }
