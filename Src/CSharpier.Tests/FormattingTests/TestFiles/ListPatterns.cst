@@ -11,4 +11,11 @@ var someValue =
 
 var someValue = someString is [var firstCharacter, .. var rest];
 
-var someValue = someLongerStringString is [var firstCharacter____________, var secondCharacter__________, var thirdCharacter, .. var rest];
+var someValue =
+    someLongerStringString
+        is [
+            var firstCharacter____________,
+            var secondCharacter__________,
+            var thirdCharacter,
+            .. var rest
+        ];
