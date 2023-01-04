@@ -1,6 +1,6 @@
-using Newtonsoft.Json;
-
 namespace CSharpier;
+
+using System.Text.Json;
 
 internal partial class SyntaxNodeJsonWriter
 {
@@ -18,7 +18,7 @@ internal partial class SyntaxNodeJsonWriter
     {
         if (!string.IsNullOrEmpty(value))
         {
-            return $"\"{name}\":{JsonConvert.ToString(value, '"', StringEscapeHandling.Default)}";
+            return $"\"{name}\":\"{JsonEncodedText.Encode(value)}\"";
         }
 
         return null;

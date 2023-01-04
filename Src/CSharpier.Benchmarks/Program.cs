@@ -46,7 +46,6 @@ using CSharpier.SyntaxPrinter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Newtonsoft.Json;
 
 namespace CSharpier
 {
