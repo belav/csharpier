@@ -1,6 +1,7 @@
 <Project>
     <PropertyGroup>
-        <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/dotnet-csharpier.dll</CSharpierDllPath>
+        <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' == ''">$(TargetFramework)</CSharpier_FrameworkVersion>
+        <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/$(CSharpier_FrameworkVersion)/dotnet-csharpier.dll</CSharpierDllPath>
         <CSharpierArgs Condition="$(CSharpier_Check)">$(CSharpierArgs) --check</CSharpierArgs>
     </PropertyGroup>
 
