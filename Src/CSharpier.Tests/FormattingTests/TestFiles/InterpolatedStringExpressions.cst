@@ -23,5 +23,6 @@ public class ClassName
         var s1 = $"x {1, -2:d}";
         var s2 = $"x {1, -2}";
         var s3 = $"x {1:d}";
+        var trailingComment = $"{someValue /* Comment shouldn't cause new line */}";
     }
 }
