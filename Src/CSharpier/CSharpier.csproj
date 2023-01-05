@@ -8,8 +8,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp"/>
-    <PackageReference Include="Newtonsoft.Json"/>
     <PackageReference Include="System.IO.Abstractions"/>
+    <PackageReference Include="System.Text.Json"/>
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="CSharpier.Benchmarks"/>

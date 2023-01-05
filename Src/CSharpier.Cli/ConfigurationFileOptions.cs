@@ -1,10 +1,10 @@
+namespace CSharpier.Cli;
+
 using System.IO.Abstractions;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-
-namespace CSharpier.Cli;
 
 public class ConfigurationFileOptions
 {
@@ -66,8 +66,7 @@ public class ConfigurationFileOptions
             var file = directoryInfo
                 .EnumerateFiles(".csharpierrc*", SearchOption.TopDirectoryOnly)
                 .Where(o => validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase))
-                .OrderBy(o => o.Extension)
-                .FirstOrDefault();
+                .MinBy(o => o.Extension);
 
             if (file == null)
             {
@@ -92,7 +91,10 @@ public class ConfigurationFileOptions
 
     private static ConfigurationFileOptions ReadJson(string contents)
     {
-        return JsonConvert.DeserializeObject<ConfigurationFileOptions>(contents);
+        return JsonSerializer.Deserialize<ConfigurationFileOptions>(
+                contents,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            ) ?? new();
     }
 
     private static ConfigurationFileOptions ReadYaml(string contents)
