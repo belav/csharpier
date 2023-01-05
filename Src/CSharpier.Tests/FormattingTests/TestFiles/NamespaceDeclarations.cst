@@ -16,5 +16,7 @@ namespace NamespaceWithUsingAndClass
 {
     using System;
 
-    public class BasicClass { }
+    public class BasicClass
+    {
+    }
 }

@@ -58,6 +58,6 @@ internal class CodeFormatterTests
         var syntaxTree = CSharpSyntaxTree.ParseText(code);
         var result = CodeFormatter.Format(syntaxTree);
 
-        result.Should().Be("public class ClassName { }" + lineEnding);
+        result.Should().Be($"public class ClassName{lineEnding}{{{lineEnding}}}{lineEnding}");
     }
 }

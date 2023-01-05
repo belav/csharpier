@@ -7,9 +7,13 @@ public class ClassName
             return;
         }
 
-        if (true == false) { }
+        if (true == false)
+        {
+        }
 
-        if (true && false) { }
+        if (true && false)
+        {
+        }
 
         if (true)
             DoSomething();
@@ -48,13 +52,21 @@ public class ClassName
         )
             return;
 
-        if (!true) { }
+        if (!true)
+        {
+        }
 
-        if (true != false) { }
+        if (true != false)
+        {
+        }
 
-        if (true || false) { }
+        if (true || false)
+        {
+        }
 
-        if (true && (true || false)) { }
+        if (true && (true || false))
+        {
+        }
 
         if (exactly100 || moreTextToMakeItWork_____________________________________________________)
         {

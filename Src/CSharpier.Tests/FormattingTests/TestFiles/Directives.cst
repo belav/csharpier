@@ -16,7 +16,9 @@ using static System.Linq.Enumerable;
 
 #endregion
 
-class ClassName { }
+class ClassName
+{
+}
 
 public class ClassName
 {
@@ -53,19 +55,25 @@ namespace Namespace
     using System.Linq;
 
 #pragma
-    class ExtraLineChecker { }
+    class ExtraLineChecker
+    {
+    }
 #pragma
     class ExtraLineChecker2
     {
 #pragma
-        void MethodName() { }
+        void MethodName()
+        {
+        }
     }
 }
 
 #region Region
 
     #region Nested
-class ClassName { }
+class ClassName
+{
+}
     #endregion Nested
 
 #endregion
@@ -75,7 +83,9 @@ public
 #else
 internal
 #endif
-static class ConditionallyPublic { }
+static class ConditionallyPublic
+{
+}
 
 class EdgeCases
 {

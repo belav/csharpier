@@ -15,16 +15,22 @@ public class ClassName
     /// <summary> no tabs here
     /// Tabs here
     /// </summary>
-    public class ClassName { }
+    public class ClassName
+    {
+    }
 
     /* this works fine
      * because indentation does not change
      */
-    public class ClassName2 { }
+    public class ClassName2
+    {
+    }
 
     /* this doesn't fail
 by trying to move it left 4 spaces */
-    public class ClassName2 { }
+    public class ClassName2
+    {
+    }
 
     /*
     public string String;

@@ -150,9 +150,9 @@ internal static class BaseTypeDeclaration
                 : " ";
 
             docs.Add(
-                separator,
+                Doc.HardLine,
                 Token.Print(node.OpenBraceToken, context),
-                separator,
+                Doc.HardLine,
                 Token.Print(node.CloseBraceToken, context)
             );
         }

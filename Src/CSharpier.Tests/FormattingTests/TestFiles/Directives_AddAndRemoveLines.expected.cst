@@ -1,38 +1,58 @@
 public class ClassName
 {
 #if NET6_0_OR_GREATER
-    public void Method1() { }
+    public void Method1()
+    {
+    }
 #endif
 
-    public void RemoveLineAbove() { }
+    public void RemoveLineAbove()
+    {
+    }
 
 #if NET6_0_OR_GREATER
-    public void Method2() { }
+    public void Method2()
+    {
+    }
 #endif
 
-    public void AddLineAbove() { }
+    public void AddLineAbove()
+    {
+    }
 
 #if NET6_0_OR_GREATER
-    public void RemoveLineAbove() { }
+    public void RemoveLineAbove()
+    {
+    }
 #endif
 
-    public void Method3() { }
+    public void Method3()
+    {
+    }
 
 #if NET6_0_OR_GREATER
-    public void AddLineAbove() { }
+    public void AddLineAbove()
+    {
+    }
 #endif
 
-    public void Method4() { }
+    public void Method4()
+    {
+    }
 
 #if NET6_0_OR_GREATER
-    public void RemoveLineBelow() { }
+    public void RemoveLineBelow()
+    {
+    }
 #endif
 }
 
 public class ClassName
 {
 #if NET6_0_OR_GREATER
-    public void Method() { }
+    public void Method()
+    {
+    }
 #endif
 
     public int AddLineAbove { get; set; }
@@ -41,31 +61,45 @@ public class ClassName
 public class ClassName
 {
 #if NET6_0_OR_GREATER
-    public void Method() { }
+    public void Method()
+    {
+    }
 #endif
 
     /// <summary>Summary</summary>
-    public void AddLineAboveSummary() { }
+    public void AddLineAboveSummary()
+    {
+    }
 
 #if NET6_0_OR_GREATER
-    public void Method() { }
+    public void Method()
+    {
+    }
 #endif
 
     // Comment
-    public void AddLineAboveComment() { }
+    public void AddLineAboveComment()
+    {
+    }
 
 #if NET6_0_OR_GREATER
-    public void Method() { }
+    public void Method()
+    {
+    }
 #endif
 
     // Comment
-    public void NoNewLineAbove() { }
+    public void NoNewLineAbove()
+    {
+    }
 }
 
 public class ClassName
 {
 #if NET6_0_OR_GREATER
-    public void Method() { }
+    public void Method()
+    {
+    }
 #endif
 
     public enum LineAbove

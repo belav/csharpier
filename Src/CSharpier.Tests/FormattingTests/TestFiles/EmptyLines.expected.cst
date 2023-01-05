@@ -1,10 +1,16 @@
 ﻿namespace Namespace
 {
-    public class RemovesLineBefore { }
+    public class RemovesLineBefore
+    {
+    }
 
-    public class RemovesDoubledLines { }
+    public class RemovesDoubledLines
+    {
+    }
 
-    public class RemoveTrailingLine { }
+    public class RemoveTrailingLine
+    {
+    }
 }
 
 public class ClassName
