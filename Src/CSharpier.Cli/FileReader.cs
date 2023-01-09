@@ -25,6 +25,9 @@ internal static class FileReader
         {
             await using var fileStream = fileSystem.File.OpenRead(filePath);
 
+            // this is kind of a "hack" - read the file without the BOM then
+            // streamReader.CurrentEncoding below will correctly be UTF8 or UTF8-BOM
+            // https://stackoverflow.com/a/27976558
             using var streamReader = new StreamReader(fileStream, new UTF8Encoding(false));
 
             var fileContents = await streamReader.ReadToEndAsync();
