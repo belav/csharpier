@@ -15,7 +15,7 @@ public class ConfigurationFileOptions
 
     private static readonly string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
 
-    internal static PrinterOptions CreatePrinterOptions(
+    internal static PrinterOptions FindPrinterOptionsForDirectory(
         string baseDirectoryPath,
         IFileSystem fileSystem,
         ILogger logger
@@ -25,6 +25,29 @@ public class ConfigurationFileOptions
 
         var configurationFileOptions = Create(baseDirectoryPath, fileSystem, logger);
 
+        return ConvertToPrinterOptions(configurationFileOptions);
+    }
+
+    internal static PrinterOptions CreatePrinterOptionsFromPath(
+        string configPath,
+        IFileSystem fileSystem,
+        ILogger logger
+    )
+    {
+        // TODO this should load the file directly, instead of trying to find it in the directory
+        var configurationFileOptions = Create(
+            Path.GetDirectoryName(configPath),
+            fileSystem,
+            logger
+        );
+
+        return ConvertToPrinterOptions(configurationFileOptions);
+    }
+
+    private static PrinterOptions ConvertToPrinterOptions(
+        ConfigurationFileOptions configurationFileOptions
+    )
+    {
         List<string[]> preprocessorSymbolSets;
         if (configurationFileOptions.PreprocessorSymbolSets == null)
         {

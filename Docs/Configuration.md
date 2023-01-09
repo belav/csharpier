@@ -6,6 +6,8 @@ CSharpier has support for a configuration file. You can use any of the following
 - A ```.csharpierrc``` file in JSON or YAML.
 - A ```.csharpierrc.json``` or ```.csharpierrc.yaml``` file.
 
+The configuration file will be resolved starting from the location of the file being formatted, and searching up the file tree until a config file is (or isn’t) found.
+
 ### Configuration Options
 JSON
 ```json

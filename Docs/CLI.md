@@ -26,6 +26,7 @@ Options:
   --skip-write      Skip writing changes. Generally used for testing to ensure csharpier doesn't throw any errors or cause syntax tree validation failures.
   --write-stdout    Write the results of formatting any files to stdout.
   --pipe-multiple-files  Keep csharpier running so that multiples files can be piped to it via stdin
+  --config-path     Path to the CSharpier configuration file
   --version         Show version information
   -?, -h, --help    Show help and usage information
 
@@ -121,4 +122,11 @@ public class ClassName
 {
     public string Field;
 }
+```
+
+### --config-path
+If your configuration file lives in a location that CSharpier would not normally resolve it (such as in a config folder) 
+you can pass the path for the configuration file to CSharpier.
+```bash
+dotnet csharpier . --config-path "./config/.csharpierrc"
 ```
