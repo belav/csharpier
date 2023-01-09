@@ -14,7 +14,8 @@ public class ThisIsSomeLongNameAndItShouldFormatWell1
 		AndYetAnotherLongClassName,
 		AndStillOneMore { }
 
-public class SimpleGeneric<T> where T : new() { }
+public class SimpleGeneric<T>
+	where T : new() { }
 
 public class LongTypeConstraints<T>
 	where T : SomeLongNameThatJustKeepsGoing,
@@ -32,7 +33,8 @@ public class LongerClassNameWithLotsOfGenerics<
 	TThirdLongName__________________
 > : SomeBaseClass<TLongName> { }
 
-public class SimpleGeneric<T> : BaseClass<T> where T : new() { }
+public class SimpleGeneric<T> : BaseClass<T>
+	where T : new() { }
 
 public class ThisIsSomeLongNameAndItShouldFormatWell2<T, T2, T3>
 	: AnotherLongClassName<T>,
