@@ -1,6 +1,5 @@
 using System.IO.Abstractions;
 using System.Text;
-using UtfUnknown;
 
 namespace CSharpier.Cli;
 
