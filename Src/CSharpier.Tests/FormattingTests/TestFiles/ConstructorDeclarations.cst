@@ -23,9 +23,11 @@ public class BasicClass
 
 public class Initializers : BasicClass
 {
-    public Initializers() : this(true) { }
+    public Initializers()
+        : this(true) { }
 
-    public Initializers(string value) : base(value) { }
+    public Initializers(string value)
+        : base(value) { }
 
     public Initializers(
         string longParameter_______________________________________________________________________________
@@ -46,11 +48,13 @@ public class Initializers : BasicClass
 
     public Initializers(
         string longParameter____________________________________________________________
-    ) : base(false) { }
+    )
+        : base(false) { }
 
     public Initializers(
         string longParameter____________________________________________________________
-    ) : base(false)
+    )
+        : base(false)
     {
         WithBody();
     }
@@ -94,9 +98,11 @@ public class Initializers : BasicClass
     public LongParametersWithEmptyBody(string parameter, bool anotherParameter__________________)
     { }
 
-    public LongInitializerWithEmptyBody() : base(parameter, anotherParameter___________________) { }
+    public LongInitializerWithEmptyBody()
+        : base(parameter, anotherParameter___________________) { }
 
-    public LongInitializerWithEmptyBody() : base(parameter, anotherParameter__________________) { }
+    public LongInitializerWithEmptyBody()
+        : base(parameter, anotherParameter__________________) { }
 
     public LongInitializerWithEmptyBody()
         : base(parameter______________, anotherParameter___________________________________________)

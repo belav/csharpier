@@ -180,7 +180,7 @@ internal static class BaseMethodDeclaration
 
             declarationGroup.Add(
                 Doc.Group(
-                    Doc.Indent(Doc.Line),
+                    Doc.Indent(Doc.HardLine),
                     Doc.Indent(colonToken),
                     Token.Print(constructorInitializer.ThisOrBaseKeyword, context),
                     Doc.Indent(argumentList)
