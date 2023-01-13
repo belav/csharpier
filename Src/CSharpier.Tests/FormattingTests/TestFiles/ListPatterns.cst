@@ -8,3 +8,14 @@ var someValue =
             { RawKind: (int)SyntaxKind.SingleLineCommentTrivia },
             { RawKind: (int)SyntaxKind.EndOfLineTrivia }
         ];
+
+var someValue = someString is [var firstCharacter, .. var rest];
+
+var someValue =
+    someLongerStringString
+        is [
+            var firstCharacter____________,
+            var secondCharacter__________,
+            var thirdCharacter,
+            .. var rest
+        ];
