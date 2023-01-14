@@ -14,7 +14,7 @@
         CSharpier is a net6.0 project with <PackAsTool> and this is neither.
     -->
     <Target Name="BuildCSharpier" BeforeTargets="Build">
-        <Exec command="dotnet build -c $(Configuration)" WorkingDirectory="../CSharpier.Cli" />
+        <Exec command="dotnet build -c $(Configuration) -f $(TargetFramework)" WorkingDirectory="../CSharpier.Cli" />
     </Target>
 
     <ItemGroup>
