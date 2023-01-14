@@ -14,7 +14,13 @@
         CSharpier is a net6.0 project with <PackAsTool> and this is neither.
     -->
     <Target Name="BuildCSharpier" BeforeTargets="Build">
-        <Exec command="dotnet build -c $(Configuration) -f $(TargetFramework)" WorkingDirectory="../CSharpier.Cli" />
+      <!-- 
+          we run these commands in parallel with two frameworks 
+          and letting dotnet build do the restore results in a failure with file locks
+          restore retries when a file is locked
+        -->
+      <Exec command="dotnet restore" WorkingDirectory="../CSharpier.Cli" />
+      <Exec command="dotnet build --no-restore -c $(Configuration)" WorkingDirectory="../CSharpier.Cli" />
     </Target>
 
     <ItemGroup>
