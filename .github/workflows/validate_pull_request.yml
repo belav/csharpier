@@ -40,5 +40,4 @@ jobs:
             7.0.100
             6.0.300
       - run: |
-          dotnet restore Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj
           dotnet build Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj

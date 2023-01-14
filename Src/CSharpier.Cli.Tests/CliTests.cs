@@ -222,7 +222,9 @@ public class CliTests
 
         result.ErrorOutput
             .Should()
-            .Be($"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}");
+            .Be(
+                $"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}  (1,26): error CS1513: }} expected{Environment.NewLine}"
+            );
         result.ExitCode.Should().Be(1);
     }
 
