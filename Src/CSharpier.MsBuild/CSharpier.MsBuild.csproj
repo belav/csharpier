@@ -13,14 +13,8 @@
         make it a dependency in the output package, which causes all sorts of issues as
         CSharpier is a net6.0 project with <PackAsTool> and this is neither.
     -->
-    <Target Name="BuildCSharpier" BeforeTargets="Build">
-      <!-- 
-          we run these commands in parallel with two frameworks 
-          and letting dotnet build do the restore results in a failure with file locks
-          restore by itself retries when a file is locked
-        -->
-      <Exec command="dotnet restore" WorkingDirectory="../CSharpier.Cli" />
-      <Exec command="dotnet build --no-restore -c $(Configuration)" WorkingDirectory="../CSharpier.Cli" />
+    <Target Name="BuildCSharpier" BeforeTargets="Restore">
+      <Exec command="dotnet build -c $(Configuration)" WorkingDirectory="../CSharpier.Cli" />
     </Target>
 
     <ItemGroup>
