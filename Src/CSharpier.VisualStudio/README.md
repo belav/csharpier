@@ -9,3 +9,8 @@ To use it:
 - Optionally configure `Reformat with CSharpier on Save` under Tools | Options | CSharpier | General
 
 Please report any [issues](https://github.com/belav/csharpier/issues)
+
+### Troubleshooting
+CSharpier will log messages and errors to Output | Show output from: CSharpier  
+Debug logging can be turned on under Tools | Options | CSharpier | Log Debug Messages  
+The extension installs CSharpier to `C:\Users\{CurrentUser}\AppData\Local\CSharpier`. Closing the extension and deleting this folder can fix issues with bad installs.
