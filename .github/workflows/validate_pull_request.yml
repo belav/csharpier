@@ -40,4 +40,5 @@ jobs:
             7.0.100
             6.0.300
       - run: |
+          dotnet build CSharpier.sln -c release
           dotnet build Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj
