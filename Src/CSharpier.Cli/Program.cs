@@ -30,14 +30,16 @@ public class Program
         CancellationToken cancellationToken
     )
     {
+        // System.CommandLine passes string.empty instead of null when this isn't supplied even if we use string?
+        var actualConfigPath = string.IsNullOrEmpty(configPath) ? null : configPath;
+
         DebugLogger.Log("Starting");
-        DebugLogger.Log(configPath);
         var console = new SystemConsole();
         var logger = new ConsoleLogger(console);
 
         if (pipeMultipleFiles)
         {
-            return await PipeMultipleFiles(console, logger, configPath, cancellationToken);
+            return await PipeMultipleFiles(console, logger, actualConfigPath, cancellationToken);
         }
 
         var directoryOrFileNotProvided = directoryOrFile is null or { Length: 0 };
@@ -78,7 +80,7 @@ public class Program
             Fast = fast,
             SkipWrite = skipWrite,
             WriteStdout = writeStdout || standardInFileContents != null,
-            ConfigPath = configPath
+            ConfigPath = actualConfigPath
         };
 
         return await CommandLineFormatter.Format(

@@ -203,7 +203,7 @@ preprocessorSymbolSets:
         public ConfigurationFileOptions CreateConfigurationOptions(string baseDirectoryPath)
         {
             this.fileSystem.AddDirectory(baseDirectoryPath);
-            return ConfigurationFileOptions.Create(baseDirectoryPath, this.fileSystem);
+            return ConfigurationFileOptions.FindForDirectory(baseDirectoryPath, this.fileSystem);
         }
 
         public void WhenAFileExists(string path, string contents)

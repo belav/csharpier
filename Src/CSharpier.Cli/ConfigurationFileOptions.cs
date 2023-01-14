@@ -23,7 +23,11 @@ public class ConfigurationFileOptions
     {
         DebugLogger.Log("Creating printer options for " + baseDirectoryPath);
 
-        var configurationFileOptions = Create(baseDirectoryPath, fileSystem, logger);
+        var configurationFileOptions = FindForDirectory(
+            baseDirectoryPath,
+            fileSystem,
+            logger
+        );
 
         return ConvertToPrinterOptions(configurationFileOptions);
     }
@@ -34,12 +38,7 @@ public class ConfigurationFileOptions
         ILogger logger
     )
     {
-        // TODO this should load the file directly, instead of trying to find it in the directory
-        var configurationFileOptions = Create(
-            Path.GetDirectoryName(configPath),
-            fileSystem,
-            logger
-        );
+        var configurationFileOptions = Create(configPath, fileSystem, logger);
 
         return ConvertToPrinterOptions(configurationFileOptions);
     }
@@ -76,7 +75,7 @@ public class ConfigurationFileOptions
         };
     }
 
-    public static ConfigurationFileOptions Create(
+    public static ConfigurationFileOptions FindForDirectory(
         string baseDirectoryPath,
         IFileSystem fileSystem,
         ILogger? logger = null
@@ -91,25 +90,33 @@ public class ConfigurationFileOptions
                 .Where(o => validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase))
                 .MinBy(o => o.Extension);
 
-            if (file == null)
+            if (file != null)
             {
-                directoryInfo = directoryInfo.Parent;
-                continue;
+                return Create(file.FullName, fileSystem, logger);
             }
 
-            var contents = fileSystem.File.ReadAllText(file.FullName);
-
-            if (string.IsNullOrWhiteSpace(contents))
-            {
-                logger?.LogWarning("The configuration file at " + file.FullName + " was empty.");
-
-                return new();
-            }
-
-            return contents.TrimStart().StartsWith("{") ? ReadJson(contents) : ReadYaml(contents);
+            directoryInfo = directoryInfo.Parent;
         }
 
         return new ConfigurationFileOptions();
+    }
+
+    public static ConfigurationFileOptions Create(
+        string configPath,
+        IFileSystem fileSystem,
+        ILogger? logger = null
+    )
+    {
+        var contents = fileSystem.File.ReadAllText(configPath);
+
+        if (!string.IsNullOrWhiteSpace(contents))
+        {
+            return contents.TrimStart().StartsWith("{") ? ReadJson(contents) : ReadYaml(contents);
+        }
+
+        logger?.LogWarning("The configuration file at " + configPath + " was empty.");
+
+        return new();
     }
 
     private static ConfigurationFileOptions ReadJson(string contents)

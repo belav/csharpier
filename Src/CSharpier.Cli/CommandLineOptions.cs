@@ -23,7 +23,7 @@ public class CommandLineOptions
         bool writeStdout,
         bool pipeMultipleFiles,
         bool noCache,
-        string? config,
+        string config,
         CancellationToken cancellationToken
     );
 
