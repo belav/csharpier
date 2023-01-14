@@ -23,11 +23,7 @@ public class ConfigurationFileOptions
     {
         DebugLogger.Log("Creating printer options for " + baseDirectoryPath);
 
-        var configurationFileOptions = FindForDirectory(
-            baseDirectoryPath,
-            fileSystem,
-            logger
-        );
+        var configurationFileOptions = FindForDirectory(baseDirectoryPath, fileSystem, logger);
 
         return ConvertToPrinterOptions(configurationFileOptions);
     }
