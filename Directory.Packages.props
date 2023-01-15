@@ -26,7 +26,6 @@
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="6.0.0"/>
     <PackageVersion Include="System.Text.Json" Version="7.0.0" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4"/>
-    <PackageVersion Include="UTF.Unknown" Version="2.3.0"/>
     <PackageVersion Include="YamlDotNet" Version="11.1.1"/>
   </ItemGroup>
 </Project>

@@ -15,7 +15,6 @@
     <PackageReference Include="System.IO.Abstractions.TestingHelpers"/>
     <PackageReference Include="System.IO.Hashing"/>
     <PackageReference Include="System.Text.Encoding.CodePages"/>
-    <PackageReference Include="UTF.Unknown"/>
     <PackageReference Include="YamlDotNet"/>
   </ItemGroup>
   <ItemGroup>
