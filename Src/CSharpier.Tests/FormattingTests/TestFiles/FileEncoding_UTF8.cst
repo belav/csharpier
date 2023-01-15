@@ -2,3 +2,9 @@ public class ClassName
 {
     public void MethodName() { }
 }
+
+public enum MeetingLocation
+{
+    Café,
+    Restaurant
+}

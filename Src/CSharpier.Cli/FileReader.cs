@@ -1,6 +1,5 @@
 using System.IO.Abstractions;
 using System.Text;
-using UtfUnknown;
 
 namespace CSharpier.Cli;
 
@@ -25,24 +24,22 @@ internal static class FileReader
         try
         {
             await using var fileStream = fileSystem.File.OpenRead(filePath);
-            var detectionResult = CharsetDetector.DetectFromStream(fileStream);
-            var encoding = detectionResult?.Detected?.Encoding;
-            if (encoding == null)
-            {
-                unableToDetectEncoding = true;
-                encoding = Encoding.Default;
-            }
 
-            fileStream.Seek(0, SeekOrigin.Begin);
-
-            // this fixes an issue with ANSI encoded files like csharpier-repos\AutoMapper\src\UnitTests\Internationalization.cs
-            var encodingToRead = encoding.CodePage == 852 ? Encoding.GetEncoding(1252) : encoding;
-
-            using var streamReader = new StreamReader(fileStream, encodingToRead);
+            // this is kind of a "hack" - read the file without the BOM then
+            // streamReader.CurrentEncoding below will correctly be UTF8 or UTF8-BOM
+            // https://stackoverflow.com/a/27976558
+            using var streamReader = new StreamReader(
+                fileStream,
+                new UTF8Encoding(encoderShouldEmitUTF8Identifier: false)
+            );
 
             var fileContents = await streamReader.ReadToEndAsync();
 
-            return new FileReaderResult(encoding, fileContents, unableToDetectEncoding);
+            return new FileReaderResult(
+                streamReader.CurrentEncoding,
+                fileContents,
+                unableToDetectEncoding
+            );
         }
         finally
         {

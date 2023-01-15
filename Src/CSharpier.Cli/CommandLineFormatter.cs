@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
+using System.Text;
+
 internal static class CommandLineFormatter
 {
     public static async Task<int> Format(
@@ -371,7 +373,13 @@ internal static class CommandLineFormatter
 
         if (codeFormattingResult.Errors.Any())
         {
-            fileIssueLogger.WriteError("Failed to compile so was not formatted.");
+            var errorMessage = new StringBuilder();
+            errorMessage.AppendLine("Failed to compile so was not formatted.");
+            foreach (var message in codeFormattingResult.Errors)
+            {
+                errorMessage.AppendLine(message.ToString());
+            }
+            fileIssueLogger.WriteError(errorMessage.ToString());
             Interlocked.Increment(ref commandLineFormatterResult.FailedCompilation);
             return;
         }
