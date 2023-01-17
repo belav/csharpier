@@ -2,7 +2,8 @@
 
 namespace CSharpier.VisualStudio
 {
-    public class BaseOptionPage<T> : DialogPage where T : BaseOptionModel<T>, new()
+    public class BaseOptionPage<T> : DialogPage
+        where T : BaseOptionModel<T>, new()
     {
         private readonly BaseOptionModel<T> model;
 

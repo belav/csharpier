@@ -10,7 +10,8 @@ internal static class MembersWithForcedLines
         CSharpSyntaxNode node,
         IReadOnlyList<T> members,
         FormattingContext context
-    ) where T : MemberDeclarationSyntax
+    )
+        where T : MemberDeclarationSyntax
     {
         var result = new List<Doc> { Doc.HardLine };
         var unFormattedCode = new StringBuilder();
