@@ -8,7 +8,8 @@ internal static class SeparatedSyntaxList
         Doc afterSeparator,
         FormattingContext context,
         int startingIndex = 0
-    ) where T : SyntaxNode
+    )
+        where T : SyntaxNode
     {
         var docs = new List<Doc>();
         for (var x = startingIndex; x < list.Count; x++)

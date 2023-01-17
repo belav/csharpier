@@ -10,7 +10,8 @@
     using Microsoft.VisualStudio.Threading;
     using Task = System.Threading.Tasks.Task;
 
-    public abstract class BaseOptionModel<T> where T : BaseOptionModel<T>, new()
+    public abstract class BaseOptionModel<T>
+        where T : BaseOptionModel<T>, new()
     {
         private static readonly AsyncLazy<T> liveModel = new AsyncLazy<T>(
             CreateAsync,
