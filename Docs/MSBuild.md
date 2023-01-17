@@ -1,3 +1,4 @@
+
 ---
 title: MsBuild Package
 hide_table_of_contents: true
@@ -9,8 +10,8 @@ Install-Package CSharpier.MSBuild
 ```
 
 ## Target Frameworks
-By default CSharpier.MsBuild will run CSharpier using the target framework of the project it is running on.  
-This can be controlled with the following property. This property is required if the csproj is targeting < net6.0 (netstandard2.0, net48, etc)
+CSharpier.MSBuild will be run with net6.0 or net7.0 if the project targets one of the two frameworks. In cases where the project targets something else (net48, netstandard2.0) `CSharpier_FrameworkVersion` will default to net7.0
+This can be controlled with the following property. This property is required if the csproj is targeting < net6.0 (netstandard2.0, net48, etc) and net7.0 is not installed.
 ```xml
   <PropertyGroup>
     <CSharpier_FrameworkVersion>net6.0</CSharpier_FrameworkVersion>

@@ -1,3 +1,10 @@
+# 0.22.1
+## What's Changed
+#### Fix for CSharpier.MsBuild so it selects a compatible framework if the project does not target net6 or net7 [#797](https://github.com/belav/csharpier/pull/797)
+This fix auto selects `net7.0` for projects that do not target `net6.0` or `net7.0`. This means the `CSharpier_FrameworkVersion` property is only required if a project is targeting < `net6.0` and `net7.0` is not installed.
+
+Thanks go to @samtrion for submitting the fix.
+
 # 0.22.0
 ## Breaking Changes
 #### Support only UTF8 and UTF8-BOM files [#787](https://github.com/belav/csharpier/pull/787)
@@ -23,12 +30,17 @@ CSharpier now only supports UTF8 & UTF8-BOM files. This is consistent with the I
 
 Thanks go to @Meligy for reporting the problem.
 
+#### CSharpier.MSBuild support for .NET 7 [#773](https://github.com/belav/csharpier/issues/773)
+CSharpier.MSBuild now multi-targets net6.0 and net7.0. As a side effect of multi-targeting, the `CSharpier_FrameworkVersion` property is now required for projects that do not target `net6.0` or `net7.0`. See https://csharpier.com/docs/MsBuild#target-frameworks
+
+Thanks go to @OneCyrus for reporting it
+
 ## What's Changed
 #### Fix for CSharpier.MsBuild "Specified condition "$(CSharpier_Check)" evaluates to "" instead of a boolean" [#788](https://github.com/belav/csharpier/pull/788)
 When projects referencing CSharpier.MsBuild were reloaded, they would get the error "Specified condition "$(CSharpier_Check)" evaluates to "" instead of a boolean" and fail to load.
 
 
-Thanks go to @samtrion for reporting it
+Thanks go to @samtrion for submitting the fix.
 
 #### List Pattern support for subpattern within a slice [#779](https://github.com/belav/csharpier/issues/779)
 
@@ -63,11 +75,6 @@ var trailingComment = $"{someValue /* Comment shouldn't cause new line */}";
 ```
 
 Thanks go to @IT-CASADO for reporting it
-
-#### CSharpier.MSBuild not working with .NET 7 [#773](https://github.com/belav/csharpier/issues/773)
-CSharpier.MSBuild now multi-targets net6.0 and net7.0.
-
-Thanks go to @OneCyrus for reporting it
 
 #### Always put generic type constraints onto a new line [#527](https://github.com/belav/csharpier/issues/527)
 ```c#
