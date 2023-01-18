@@ -42,10 +42,9 @@ dotnet_diagnostic.SA1501.severity = none
 dotnet_diagnostic.SA1502.severity = none
 dotnet_diagnostic.SA1504.severity = none
 dotnet_diagnostic.SA1516.severity = none
-                                    
-# will be changed with https://github.com/belav/csharpier/issues/527
+
+# for csharpier <= 0.21.0
 dotnet_diagnostic.SA1127.severity = none
-# will be changed with https://github.com/belav/csharpier/issues/526
 dotnet_diagnostic.SA1128.severity = none
 ```
 
@@ -87,6 +86,8 @@ dotnet_diagnostic.SA1114.severity = none
 dotnet_diagnostic.SA1115.severity = none
 dotnet_diagnostic.SA1116.severity = none
 dotnet_diagnostic.SA1117.severity = none
+dotnet_diagnostic.SA1127.severity = none
+dotnet_diagnostic.SA1128.severity = none
 dotnet_diagnostic.SA1136.severity = none
 dotnet_diagnostic.SA1505.severity = none
 dotnet_diagnostic.SA1506.severity = none

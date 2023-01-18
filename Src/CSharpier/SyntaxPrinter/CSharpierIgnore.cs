@@ -17,7 +17,8 @@ internal static class CSharpierIgnore
     public static List<Doc> PrintNodesRespectingRangeIgnore<T>(
         SyntaxList<T> list,
         FormattingContext context
-    ) where T : SyntaxNode
+    )
+        where T : SyntaxNode
     {
         var statements = new List<Doc>();
         var unFormattedCode = new StringBuilder();

@@ -10,6 +10,10 @@
   - works with existing tool manifest
   - works with no tool manifest
   - should format after
+- Bad Install
+  - Leave directory at C:\Users\[User]\AppData\Local\CSharpier\X, restart plugin
+  - Replace dotnet-csharpier at C:\Users\[User]\AppData\Local\CSharpier\X with bad file, restart plugin
+  - Repeat with ~/.cache/csharpier/X on ubuntu
 - Formatting
   - Existing open documents get warmed
   - Edit warms

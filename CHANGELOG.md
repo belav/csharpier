@@ -1,3 +1,108 @@
+# 0.22.1
+## What's Changed
+#### Fix for CSharpier.MsBuild so it selects a compatible framework if the project does not target net6 or net7 [#797](https://github.com/belav/csharpier/pull/797)
+This fix auto selects `net7.0` for projects that do not target `net6.0` or `net7.0`. This means the `CSharpier_FrameworkVersion` property is only required if a project is targeting < `net6.0` and `net7.0` is not installed.
+
+Thanks go to @samtrion for submitting the fix.
+
+# 0.22.0
+## Breaking Changes
+#### Support only UTF8 and UTF8-BOM files [#787](https://github.com/belav/csharpier/pull/787)
+Previously UTF.Unknown was used to try to determine file encodings. 
+This was problematic because if a file was too small it would not properly detect the encoding.
+```c#
+public enum MeetingLocation
+{
+  Café,
+  Restaurant
+}
+```
+This file saved as UTF8 would be detected as SBCSCodePageEncoding and result in CSharpier trying to parse the following file
+```c#
+public enum MeetingLocation
+{
+  CafÄ‚Â©,
+  Restaurant
+}
+```
+
+CSharpier now only supports UTF8 & UTF8-BOM files. This is consistent with the IDE plugins, which stream files to CSharpier as UTF8.
+
+Thanks go to @Meligy for reporting the problem.
+
+#### CSharpier.MSBuild support for .NET 7 [#773](https://github.com/belav/csharpier/issues/773)
+CSharpier.MSBuild now multi-targets net6.0 and net7.0. As a side effect of multi-targeting, the `CSharpier_FrameworkVersion` property is now required for projects that do not target `net6.0` or `net7.0`. See https://csharpier.com/docs/MsBuild#target-frameworks
+
+Thanks go to @OneCyrus for reporting it
+
+## What's Changed
+#### Fix for CSharpier.MsBuild "Specified condition "$(CSharpier_Check)" evaluates to "" instead of a boolean" [#788](https://github.com/belav/csharpier/pull/788)
+When projects referencing CSharpier.MsBuild were reloaded, they would get the error "Specified condition "$(CSharpier_Check)" evaluates to "" instead of a boolean" and fail to load.
+
+
+Thanks go to @samtrion for submitting the fix.
+
+#### List Pattern support for subpattern within a slice [#779](https://github.com/belav/csharpier/issues/779)
+
+CSharpier did not have proper support for the new c# 11 slice pattern. When a slice contained a pattern, that pattern would be lost.
+
+```c#
+// input
+var someValue = someString is [var firstCharacter, .. var rest];
+
+// 0.21.0
+var someValue = someString is [var firstCharacter, ..];
+
+// 0.22.0
+var someValue = someString is [var firstCharacter, .. var rest];
+```
+
+Thanks go to @domn1995 for reporting it
+
+#### Fix for comments within expressions in interpolated strings [#774](https://github.com/belav/csharpier/issues/774)
+When an interpolated string contained a comment within an expression, CSharpier was inserting a line break that resulted in invalid code.
+
+```c#
+// input
+var trailingComment = $"{someValue /* Comment shouldn't cause new line */}";
+
+// 0.21.0
+var trailingComment = $"{someValue /* Comment shouldn't cause new line */
+    }";
+
+// 0.22.0
+var trailingComment = $"{someValue /* Comment shouldn't cause new line */}";
+```
+
+Thanks go to @IT-CASADO for reporting it
+
+#### Always put generic type constraints onto a new line [#527](https://github.com/belav/csharpier/issues/527)
+```c#
+// 0.21.0
+public class SimpleGeneric<T> where T : new() { }
+
+// 0.22.0 
+public class SimpleGeneric<T>
+    where T : new() { }
+```
+#### Always put constructor initializers on their own line [#526](https://github.com/belav/csharpier/issues/526)
+```c#
+// 0.21.0
+public Initializers() : this(true) { }
+
+public Initializers(string value) : base(value) { }
+
+// 0.22.0
+public Initializers()
+    : this(true) { }
+
+public Initializers(string value)
+    : base(value) { }
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.21.0...0.22.0
+
+
 # 0.21.0
 ## What's Changed
 #### Support file scoped types [#748](https://github.com/belav/csharpier/issues/748)
