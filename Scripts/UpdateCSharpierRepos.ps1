@@ -10,6 +10,8 @@ $repositories += "https://github.com/moq/moq4.git"
 $repositories += "https://github.com/JamesNK/Newtonsoft.Json.git"
 $repositories += "https://github.com/dotnet/roslyn.git"
 $repositories += "https://github.com/dotnet/runtime.git"
+$repositories += "https://github.com/mono/mono.git"
+$repositories += "https://github.com/increase-POS/Res-Server.git"
 
 $tempLocation = "c:\temp\UpdateRepos"
 
@@ -21,8 +23,7 @@ Set-Location $tempLocation
 
 $ErrorActionPreference = "Continue"
 
-foreach ($repository in $repositories)
-{
+foreach ($repository in $repositories) {
     $repoFolder = $tempLocation + "/" + (Split-Path $repositories -Leaf).Replace(".git", "")
     if (Test-Path $repoFolder) {
         Set-Location $repoFolder
@@ -30,7 +31,7 @@ foreach ($repository in $repositories)
         Set-Location $tempLocation
     }
     else {
-        & git clone $repository    
+        & git clone $repository
     }
 }
 
