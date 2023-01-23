@@ -15,9 +15,9 @@
     -->
     <Target Name="BuildCSharpier" BeforeTargets="Build">
       <!-- 
-          we run these commands in parallel with two frameworks 
-          and letting dotnet build do the restore results in a failure with file locks
-          restore by itself retries when a file is locked
+          We run these commands in parallel with two frameworks 
+          If we let dotnet build do the restore then we get a failure with file locks
+          Doing the restore by itself retries when a file is locked and avoids the failure
         -->
       <Exec command="dotnet restore" WorkingDirectory="../CSharpier.Cli" />
       <Exec command="dotnet build --no-restore -c $(Configuration)" WorkingDirectory="../CSharpier.Cli" />
