@@ -136,34 +136,17 @@ export class CSharpierProcessProvider implements Disposable {
             outputFromCsharpier = execSync(`dotnet csharpier --version`, {
                 cwd: directoryThatContainsFile,
                 env: { ...process.env, DOTNET_NOLOGO: "1" },
-            }).toString();
+            }).toString().trim();
+
+            this.logger.debug(`dotnet csharpier --version output ${outputFromCsharpier}`);
+            return outputFromCsharpier;
+
         } catch (error: any) {
             const message = !error.stderr ? error.toString() : error.stderr.toString();
 
             this.logger.debug("dotnet csharpier --version failed with " + message);
             return "";
         }
-
-        this.logger.debug(`dotnet csharpier --version output ${outputFromCsharpier}`);
-
-        const lines = outputFromCsharpier.split(/\r?\n/);
-
-        // sometimes .net outputs more than just the version
-        for (let x = lines.length - 1; x >= 0; x--) {
-            const version = lines[x].trim();
-            if (version !== "") {
-                return version;
-            }
-        }
-
-        this.logger.debug(
-            "Could not find version in output from dotnet csharpier --version in cwd " +
-                directoryThatContainsFile +
-                ". Output was \n" +
-                outputFromCsharpier,
-        );
-
-        return "";
     };
 
     private findVersionInCsProj = (currentDirectory: string) => {
