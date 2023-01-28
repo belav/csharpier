@@ -5,8 +5,22 @@ hide_table_of_contents: true
 
 CSharpier can be used with a pre-commit hook to ensure that all staged files are formatted before being committed.
 
+## [pre-commit](https://pre-commit.com)
+
+Add the following to your `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+    - repo: https://github.com/belav/csharpier
+      rev: 0.23.0 # Replace with the latest Git tag.
+      hooks:
+        - id: csharpier
+```
+
+[Install pre-commit via your preferred Python package manager.](https://pre-commit.com/#install)
+[Run `pre-commit install` to install the Git hook scripts.](https://pre-commit.com/#3-install-the-git-hook-scripts)
+
 ## [Husky.Net](https://github.com/alirezanet/husky.net)
-Husky.Net makes setting up a pre-commit hook simple. 
 
 From the root of your repository
 ```bash
