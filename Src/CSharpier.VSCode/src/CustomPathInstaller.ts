@@ -19,7 +19,7 @@ export class CustomPathInstaller {
             try {
                 const output = execSync(`${this.getPathForVersion(version)} --version`, {
                     env: { ...process.env, DOTNET_NOLOGO: "1" },
-                }).toString();
+                }).toString().trim();
 
                 this.logger.debug("dotnet csharpier --version output: " + output);
 
@@ -38,7 +38,7 @@ export class CustomPathInstaller {
                 );
             }
 
-            // if we got here something isn't right in the current directory
+            this.logger.debug(`Removing directory at ${pathToDirectoryForVersion} because it appears to be corrupted`)
             fs.rmdirSync(pathToDirectoryForVersion, { recursive: true });
         }
 

@@ -1,3 +1,6 @@
+## [1.3.6]
+- Fix bug where 2nd instance of VSCode was not able to format code
+
 ## [1.3.5]
 - Attempt to detect and recover from csharpier not installing correctly to custom path
 
