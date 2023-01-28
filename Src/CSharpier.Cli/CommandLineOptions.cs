@@ -12,6 +12,7 @@ public class CommandLineOptions
     public bool PipeMultipleFiles { get; init; }
     public bool NoCache { get; init; }
     public string? StandardInFileContents { get; init; }
+    public string? ConfigPath { get; init; }
     public string[] OriginalDirectoryOrFilePaths { get; init; } = Array.Empty<string>();
 
     internal delegate Task<int> Handler(
@@ -22,6 +23,7 @@ public class CommandLineOptions
         bool writeStdout,
         bool pipeMultipleFiles,
         bool noCache,
+        string config,
         CancellationToken cancellationToken
     );
 
@@ -58,6 +60,10 @@ public class CommandLineOptions
             new Option(
                 new[] { "--pipe-multiple-files" },
                 "Keep csharpier running so that multiples files can be piped to it via stdin"
+            ),
+            new Option<string>(
+                new[] { "--config-path" },
+                "Path to the CSharpier configuration file"
             )
         };
 

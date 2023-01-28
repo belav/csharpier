@@ -26,19 +26,23 @@ public class Program
         bool writeStdout,
         bool pipeMultipleFiles,
         bool noCache,
+        string configPath,
         CancellationToken cancellationToken
     )
     {
+        // System.CommandLine passes string.empty instead of null when this isn't supplied even if we use string?
+        var actualConfigPath = string.IsNullOrEmpty(configPath) ? null : configPath;
+
         DebugLogger.Log("Starting");
         var console = new SystemConsole();
         var logger = new ConsoleLogger(console);
 
         if (pipeMultipleFiles)
         {
-            return await PipeMultipleFiles(console, logger, cancellationToken);
+            return await PipeMultipleFiles(console, logger, actualConfigPath, cancellationToken);
         }
 
-        var directoryOrFileNotProvided = (directoryOrFile is null or { Length: 0 });
+        var directoryOrFileNotProvided = directoryOrFile is null or { Length: 0 };
         var originalDirectoryOrFile = directoryOrFile;
 
         string? standardInFileContents = null;
@@ -75,7 +79,8 @@ public class Program
             NoCache = noCache,
             Fast = fast,
             SkipWrite = skipWrite,
-            WriteStdout = writeStdout || standardInFileContents != null
+            WriteStdout = writeStdout || standardInFileContents != null,
+            ConfigPath = actualConfigPath
         };
 
         return await CommandLineFormatter.Format(
@@ -90,6 +95,7 @@ public class Program
     private static async Task<int> PipeMultipleFiles(
         SystemConsole console,
         ILogger logger,
+        string? configPath,
         CancellationToken cancellationToken
     )
     {
@@ -146,7 +152,8 @@ public class Program
                     },
                     StandardInFileContents = stringBuilder.ToString(),
                     Fast = true,
-                    WriteStdout = true
+                    WriteStdout = true,
+                    ConfigPath = configPath
                 };
 
                 try

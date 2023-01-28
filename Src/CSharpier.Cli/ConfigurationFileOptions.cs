@@ -15,7 +15,7 @@ public class ConfigurationFileOptions
 
     private static readonly string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
 
-    internal static PrinterOptions CreatePrinterOptions(
+    internal static PrinterOptions FindPrinterOptionsForDirectory(
         string baseDirectoryPath,
         IFileSystem fileSystem,
         ILogger logger
@@ -23,8 +23,26 @@ public class ConfigurationFileOptions
     {
         DebugLogger.Log("Creating printer options for " + baseDirectoryPath);
 
-        var configurationFileOptions = Create(baseDirectoryPath, fileSystem, logger);
+        var configurationFileOptions = FindForDirectory(baseDirectoryPath, fileSystem, logger);
 
+        return ConvertToPrinterOptions(configurationFileOptions);
+    }
+
+    internal static PrinterOptions CreatePrinterOptionsFromPath(
+        string configPath,
+        IFileSystem fileSystem,
+        ILogger logger
+    )
+    {
+        var configurationFileOptions = Create(configPath, fileSystem, logger);
+
+        return ConvertToPrinterOptions(configurationFileOptions);
+    }
+
+    private static PrinterOptions ConvertToPrinterOptions(
+        ConfigurationFileOptions configurationFileOptions
+    )
+    {
         List<string[]> preprocessorSymbolSets;
         if (configurationFileOptions.PreprocessorSymbolSets == null)
         {
@@ -53,7 +71,7 @@ public class ConfigurationFileOptions
         };
     }
 
-    public static ConfigurationFileOptions Create(
+    public static ConfigurationFileOptions FindForDirectory(
         string baseDirectoryPath,
         IFileSystem fileSystem,
         ILogger? logger = null
@@ -68,25 +86,33 @@ public class ConfigurationFileOptions
                 .Where(o => validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase))
                 .MinBy(o => o.Extension);
 
-            if (file == null)
+            if (file != null)
             {
-                directoryInfo = directoryInfo.Parent;
-                continue;
+                return Create(file.FullName, fileSystem, logger);
             }
 
-            var contents = fileSystem.File.ReadAllText(file.FullName);
-
-            if (string.IsNullOrWhiteSpace(contents))
-            {
-                logger?.LogWarning("The configuration file at " + file.FullName + " was empty.");
-
-                return new();
-            }
-
-            return contents.TrimStart().StartsWith("{") ? ReadJson(contents) : ReadYaml(contents);
+            directoryInfo = directoryInfo.Parent;
         }
 
         return new ConfigurationFileOptions();
+    }
+
+    public static ConfigurationFileOptions Create(
+        string configPath,
+        IFileSystem fileSystem,
+        ILogger? logger = null
+    )
+    {
+        var contents = fileSystem.File.ReadAllText(configPath);
+
+        if (!string.IsNullOrWhiteSpace(contents))
+        {
+            return contents.TrimStart().StartsWith("{") ? ReadJson(contents) : ReadYaml(contents);
+        }
+
+        logger?.LogWarning("The configuration file at " + configPath + " was empty.");
+
+        return new();
     }
 
     private static ConfigurationFileOptions ReadJson(string contents)

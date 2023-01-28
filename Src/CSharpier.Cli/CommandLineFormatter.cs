@@ -33,6 +33,7 @@ internal static class CommandLineFormatter
 
                 var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(
                     filePath,
+                    commandLineOptions.ConfigPath,
                     fileSystem,
                     logger,
                     cancellationToken
@@ -133,6 +134,7 @@ internal static class CommandLineFormatter
 
             var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(
                 directoryOrFile,
+                commandLineOptions.ConfigPath,
                 fileSystem,
                 logger,
                 cancellationToken
@@ -227,6 +229,7 @@ internal static class CommandLineFormatter
 
     private static async Task<(IgnoreFile, PrinterOptions)> GetIgnoreFileAndPrinterOptions(
         string directoryOrFile,
+        string? configPath,
         IFileSystem fileSystem,
         ILogger logger,
         CancellationToken cancellationToken
@@ -245,11 +248,13 @@ internal static class CommandLineFormatter
             cancellationToken
         );
 
-        var printerOptions = ConfigurationFileOptions.CreatePrinterOptions(
-            baseDirectoryPath,
-            fileSystem,
-            logger
-        );
+        var printerOptions = configPath is null
+            ? ConfigurationFileOptions.FindPrinterOptionsForDirectory(
+                baseDirectoryPath,
+                fileSystem,
+                logger
+            )
+            : ConfigurationFileOptions.CreatePrinterOptionsFromPath(configPath, fileSystem, logger);
 
         return (ignoreFile, printerOptions);
     }
