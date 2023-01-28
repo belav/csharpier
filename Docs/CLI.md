@@ -129,4 +129,7 @@ If your configuration file lives in a location that CSharpier would not normally
 you can pass the path for the configuration file to CSharpier.
 ```bash
 dotnet csharpier . --config-path "./config/.csharpierrc"
+
+# also supports any name for the config file
+dotnet csharpier . --config-path "./config/csharpier.yaml"
 ```
