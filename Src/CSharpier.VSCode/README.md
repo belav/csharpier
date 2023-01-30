@@ -42,3 +42,12 @@ You can turn on format-on-save on a per-language basis by scoping the setting:
 ## Limitations
 
 Format Selection is not supported.
+
+Only `"editor.formatOnSaveMode" : "file"` is supported. If using other modes, you can set `file` by scoping the setting:
+```json
+"editor.formatOnSave": true,
+"editor.formatOnSaveMode": "modifications"
+"[csharp]": {
+    "editor.formatOnSaveMode": "file"
+}
+```
