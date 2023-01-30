@@ -92,36 +92,53 @@ internal static class Token
     {
         var isClosingBrace = syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken;
 
-        Doc extraNewLines = Doc.Null;
-
-        var hasDirective = syntaxToken.LeadingTrivia.Any(o => o.IsDirective);
-        if (isClosingBrace && (hasDirective || syntaxToken.LeadingTrivia.Any(o => o.IsComment())))
-        {
-            extraNewLines = ExtraNewLines.Print(syntaxToken.LeadingTrivia);
-        }
-
         var printedTrivia = PrivatePrintLeadingTrivia(
             syntaxToken.LeadingTrivia,
             context,
             skipLastHardline: isClosingBrace
         );
 
-        if (hasDirective)
+        if (syntaxToken.RawSyntaxKind() != SyntaxKind.CloseBraceToken)
         {
-            // the leading trivia "always fits" for purposes of deciding when to break Lines, so the method call after a false #if directive doesn't break when it actually fits
-            /*
-            #if CONDITION
-                        if (true)
-                        {
-                            return;
-                        }
-            #endif
-            SomeObject.CallMethod().CallOtherMethod(shouldNotBreak);
-            */
-            printedTrivia = Doc.AlwaysFits(printedTrivia);
+            return printedTrivia;
         }
 
-        return isClosingBrace && (printedTrivia != Doc.Null || extraNewLines != Doc.Null)
+        Doc extraNewLines = Doc.Null;
+
+        if (syntaxToken.LeadingTrivia.Any(o => o.IsDirective || o.IsComment()))
+        {
+            extraNewLines = ExtraNewLines.Print(syntaxToken.LeadingTrivia);
+        }
+
+        if (
+            syntaxToken.LeadingTrivia.Any(
+                o => o.RawSyntaxKind() is SyntaxKind.EndRegionDirectiveTrivia
+            )
+            && syntaxToken.LeadingTrivia.All(
+                o =>
+                    o.RawSyntaxKind()
+                        is SyntaxKind.EndOfLineTrivia
+                            or SyntaxKind.WhitespaceTrivia
+                            or SyntaxKind.EndRegionDirectiveTrivia
+            )
+        )
+        {
+            var docs = new List<Doc> { extraNewLines };
+            foreach (
+                var trivia in syntaxToken.LeadingTrivia.Where(
+                    o => o.RawSyntaxKind() is SyntaxKind.EndRegionDirectiveTrivia
+                )
+            )
+            {
+                docs.Add(trivia.ToFullString().TrimEnd('\n', '\r'));
+                docs.Add(Doc.HardLine);
+            }
+            docs.RemoveAt(docs.Count - 1);
+
+            return Doc.Concat(Doc.EnsureIndent(Doc.Concat(docs)), Doc.HardLine);
+        }
+
+        return printedTrivia != Doc.Null || extraNewLines != Doc.Null
             ? Doc.Concat(
                 extraNewLines,
                 Doc.IndentIf(printedTrivia != Doc.Null, printedTrivia),
@@ -205,21 +222,14 @@ internal static class Token
             else if (IsDirective(kind) || IsRegion(kind))
             {
                 var triviaText = trivia.ToString();
-                if (
-                    IsRegion(kind)
-                    && x > 0
-                    && leadingTrivia[x - 1].RawSyntaxKind() == SyntaxKind.WhitespaceTrivia
-                )
-                {
-                    triviaText = leadingTrivia[x - 1] + triviaText;
-                }
 
                 docs.Add(
                     // adding two of these to ensure we get a new line when a directive follows a trailing comment
                     Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
                     Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
-                    Doc.Trim,
-                    Doc.Directive(triviaText),
+                    IsRegion(kind)
+                        ? Doc.Indent(triviaText)
+                        : Doc.Concat(Doc.Trim, Doc.Directive(triviaText)),
                     Doc.HardLineSkipBreakIfFirstInGroup
                 );
 

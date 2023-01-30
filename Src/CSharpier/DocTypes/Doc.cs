@@ -114,6 +114,9 @@ internal abstract class Doc
 
     public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
 
+    public static IndentDoc EnsureIndent(params Doc[] contents) =>
+        new() { Contents = Concat(contents), Ensure = true };
+
     public static Doc IndentIf(bool condition, Doc contents)
     {
         return condition ? Indent(contents) : contents;
