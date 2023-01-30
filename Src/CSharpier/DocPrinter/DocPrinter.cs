@@ -74,89 +74,86 @@ internal class DocPrinter
             return;
         }
 
-        switch (doc)
+        if (doc is StringDoc stringDoc)
         {
-            case StringDoc stringDoc:
-                this.ProcessString(stringDoc, indent);
-                break;
-            case Concat concat:
+            this.ProcessString(stringDoc, indent);
+        }
+        else if (doc is Concat concat)
+        {
+            for (var x = concat.Contents.Count - 1; x >= 0; x--)
             {
-                for (var x = concat.Contents.Count - 1; x >= 0; x--)
-                {
-                    this.Push(concat.Contents[x], mode, indent);
-                }
-                break;
+                this.Push(concat.Contents[x], mode, indent);
             }
-            case IndentDoc indentDoc:
-                this.Push(indentDoc.Contents, mode, this.Indenter.IncreaseIndent(indent));
-                break;
-            case Trim:
-                this.CurrentWidth -= this.Output.TrimTrailingWhitespace();
-                this.NewLineNextStringValue = false;
-                break;
-            case Group group:
-                this.ProcessGroup(@group, mode, indent);
-                break;
-            case IfBreak ifBreak:
+        }
+        else if (doc is IndentDoc indentDoc)
+        {
+            this.Push(indentDoc.Contents, mode, this.Indenter.IncreaseIndent(indent));
+        }
+        else if (doc is Trim)
+        {
+            this.CurrentWidth -= this.Output.TrimTrailingWhitespace();
+            this.NewLineNextStringValue = false;
+        }
+        else if (doc is Group group)
+        {
+            this.ProcessGroup(group, mode, indent);
+        }
+        else if (doc is IfBreak ifBreak)
+        {
+            var groupMode = mode;
+            if (ifBreak.GroupId != null)
             {
-                var groupMode = mode;
-                if (ifBreak.GroupId != null)
+                if (!this.GroupModeMap.TryGetValue(ifBreak.GroupId, out groupMode))
                 {
-                    if (!this.GroupModeMap.TryGetValue(ifBreak.GroupId, out groupMode))
-                    {
-                        throw new Exception(
-                            "You cannot use an ifBreak before the group it targets."
-                        );
-                    }
+                    throw new Exception("You cannot use an ifBreak before the group it targets.");
                 }
-
-                var contents =
-                    groupMode == PrintMode.Break ? ifBreak.BreakContents : ifBreak.FlatContents;
-                this.Push(contents, mode, indent);
-                break;
             }
-            case LineDoc line:
-                this.ProcessLine(line, mode, indent);
-                break;
-            case BreakParent:
-                break;
-            case LeadingComment leadingComment:
+
+            var contents =
+                groupMode == PrintMode.Break ? ifBreak.BreakContents : ifBreak.FlatContents;
+            this.Push(contents, mode, indent);
+        }
+        else if (doc is LineDoc line)
+        {
+            this.ProcessLine(line, mode, indent);
+        }
+        else if (doc is BreakParent) { }
+        else if (doc is LeadingComment leadingComment)
+        {
+            this.Output.TrimTrailingWhitespace();
+            if ((this.Output.Length != 0 && this.Output[^1] != '\n') || this.NewLineNextStringValue)
             {
-                this.Output.TrimTrailingWhitespace();
-                if (
-                    (this.Output.Length != 0 && this.Output[^1] != '\n')
-                    || this.NewLineNextStringValue
-                )
-                {
-                    this.Output.Append(this.EndOfLine);
-                }
-
-                this.AppendComment(leadingComment, indent);
-
-                this.CurrentWidth = indent.Length;
-                this.NewLineNextStringValue = false;
-                this.SkipNextNewLine = false;
-                break;
+                this.Output.Append(this.EndOfLine);
             }
-            case TrailingComment trailingComment:
-                this.Output.TrimTrailingWhitespace();
-                this.Output.Append(' ').Append(trailingComment.Comment);
-                this.CurrentWidth = indent.Length;
-                if (mode != PrintMode.ForceFlat)
-                {
-                    this.NewLineNextStringValue = true;
-                    this.SkipNextNewLine = true;
-                }
 
-                break;
-            case ForceFlat forceFlat:
-                this.Push(forceFlat.Contents, PrintMode.ForceFlat, indent);
-                break;
-            case Align align:
-                this.Push(align.Contents, mode, this.Indenter.AddAlign(indent, align.Width));
-                break;
-            default:
-                throw new Exception("didn't handle " + doc);
+            this.AppendComment(leadingComment, indent);
+
+            this.CurrentWidth = indent.Length;
+            this.NewLineNextStringValue = false;
+            this.SkipNextNewLine = false;
+        }
+        else if (doc is TrailingComment trailingComment)
+        {
+            this.Output.TrimTrailingWhitespace();
+            this.Output.Append(' ').Append(trailingComment.Comment);
+            this.CurrentWidth = indent.Length;
+            if (mode != PrintMode.ForceFlat)
+            {
+                this.NewLineNextStringValue = true;
+                this.SkipNextNewLine = true;
+            }
+        }
+        else if (doc is ForceFlat forceFlat)
+        {
+            this.Push(forceFlat.Contents, PrintMode.ForceFlat, indent);
+        }
+        else if (doc is Align align)
+        {
+            this.Push(align.Contents, mode, this.Indenter.AddAlign(indent, align.Width));
+        }
+        else
+        {
+            throw new Exception("didn't handle " + doc);
         }
     }
 
