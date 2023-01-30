@@ -73,6 +73,21 @@ class ClassName
                 CustCount____________________________ = g.Count()
             };
 
+        var complexQuerySupportsNewLines =
+            from c in customers
+
+            let d = c
+
+            where d != null
+
+            join c1 in customers1 on c1 equals c
+
+            group c by c.Country into g
+
+            orderby g.Count() ascending
+
+            select new { Country = g.Key, CustCount = g.Count() };
+
         var asyncQuery = await
             from c in customers
             from u in users

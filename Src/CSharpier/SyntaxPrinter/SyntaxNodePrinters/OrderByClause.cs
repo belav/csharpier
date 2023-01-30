@@ -5,6 +5,7 @@ internal static class OrderByClause
     public static Doc Print(OrderByClauseSyntax node, FormattingContext context)
     {
         return Doc.Concat(
+            ExtraNewLines.Print(node),
             Token.Print(node.OrderByKeyword, context),
             SeparatedSyntaxList.Print(
                 node.Orderings,
