@@ -78,5 +78,10 @@ class ClassName
             from u in users
             from res in HandleAsync(c, u)
             select res;
+
+        return from i in Enumerable.Range(0, 10)
+            let i2 = i * i
+            where i2 < 100
+            select new { Square = i2, Root = i };
     }
 }
