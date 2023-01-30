@@ -39,6 +39,19 @@ You can turn on format-on-save on a per-language basis by scoping the setting:
 }
 ```
 
+### Devcontainers
+
+CSharpier supports DevContainers if it is installed as a local dotnet tool.
+```bash
+# if no .config/dotnet-tools.json file exists
+dotnet new tool-manifest
+
+# add csharpier to manifest
+dotnet tool install csharpier
+
+# rebuild container image
+```
+
 ## Limitations
 
 Format Selection is not supported.
