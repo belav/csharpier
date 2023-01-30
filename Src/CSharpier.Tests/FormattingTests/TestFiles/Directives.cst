@@ -70,6 +70,28 @@ class ClassName { }
 
 #endregion
 
+public class ClassName
+{
+    public void MethodName()
+    {
+#if !IF_STATEMENT_HERE_SHOULD_NOT_BREAK_INVOCATION_AFTER_ENDIF
+        if (true)
+        {
+            return;
+        }
+#endif
+        SomeObject.CallMethod().CallOtherMethod(shouldNotBreak);
+
+#if IF_STATEMENT_HERE_SHOULD_NOT_BREAK_INVOCATION_AFTER_ENDIF
+        if (true)
+        {
+            return;
+        }
+#endif
+        SomeObject.CallMethod().CallOtherMethod(shouldNotBreak);
+    }
+}
+
 #if DIRECTIVES_AROUND_MODIFIERS_BREAK_CORRECTLY
 public
 #else
