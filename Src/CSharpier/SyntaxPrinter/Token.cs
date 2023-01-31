@@ -221,6 +221,13 @@ internal static class Token
             }
             else if (IsDirective(kind) || IsRegion(kind))
             {
+                // look at https://github.com/belav/csharpier-repos/pull/55/files
+                // replace any tabs with spaces in the pre branch to get rid of
+                // a lot of those diffs
+                // definitely a few issues in there
+                // also consider reworking how regions work, new doc type for them
+                // keep track of ones we run int, and indent of the opening one
+
                 var triviaText = trivia.ToString();
 
                 docs.Add(
