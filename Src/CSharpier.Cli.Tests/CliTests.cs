@@ -35,10 +35,24 @@ public class CliTests
             File.Delete(FormattingCacheFactory.CacheFilePath);
         }
 
-        if (Directory.Exists(testFileDirectory))
+        void DeleteDirectory()
         {
-            Directory.Delete(testFileDirectory, true);
+            if (Directory.Exists(testFileDirectory))
+            {
+                Directory.Delete(testFileDirectory, true);
+            }
         }
+
+        try
+        {
+            DeleteDirectory();
+        }
+        catch (Exception e)
+        {
+            Thread.Sleep(TimeSpan.FromMilliseconds(100));
+            DeleteDirectory();
+        }
+
         Directory.CreateDirectory(testFileDirectory);
     }
 

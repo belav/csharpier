@@ -61,94 +61,99 @@ internal static class DocFitter
             }
             else if (currentDoc != Doc.Null)
             {
-                switch (currentDoc)
+                if (currentDoc is LeadingComment or TrailingComment)
                 {
-                    case LeadingComment:
-                    case TrailingComment:
-                        if (output.Length > 0 && currentMode is not PrintMode.ForceFlat)
+                    if (output.Length > 0 && currentMode is not PrintMode.ForceFlat)
+                    {
+                        returnFalseIfMoreStringsFound = true;
+                    }
+                }
+                else if (currentDoc is Concat concat)
+                {
+                    for (var i = concat.Contents.Count - 1; i >= 0; i--)
+                    {
+                        Push(concat.Contents[i], currentMode, currentIndent);
+                    }
+                }
+                else if (currentDoc is IndentDoc indent)
+                {
+                    Push(indent.Contents, currentMode, indenter.IncreaseIndent(currentIndent));
+                }
+                else if (currentDoc is Trim)
+                {
+                    remainingWidth += output.TrimTrailingWhitespace();
+                }
+                else if (currentDoc is Group group)
+                {
+                    var groupMode = group.Break ? PrintMode.Break : currentMode;
+
+                    // when determining if something fits, use the last option from a conditionalGroup, which should be the most expanded one
+                    var groupContents =
+                        groupMode == PrintMode.Break && group is ConditionalGroup conditionalGroup
+                            ? conditionalGroup.Options.Last()
+                            : group.Contents;
+                    Push(groupContents, groupMode, currentIndent);
+
+                    if (group.GroupId != null)
+                    {
+                        groupModeMap![group.GroupId] = groupMode;
+                    }
+                }
+                else if (currentDoc is IfBreak ifBreak)
+                {
+                    var ifBreakMode =
+                        ifBreak.GroupId != null && groupModeMap!.ContainsKey(ifBreak.GroupId)
+                            ? groupModeMap[ifBreak.GroupId]
+                            : currentMode;
+
+                    var contents =
+                        ifBreakMode == PrintMode.Break
+                            ? ifBreak.BreakContents
+                            : ifBreak.FlatContents;
+
+                    Push(contents, currentMode, currentIndent);
+                }
+                else if (currentDoc is LineDoc line)
+                {
+                    if (currentMode is PrintMode.Flat or PrintMode.ForceFlat)
+                    {
+                        if (currentDoc is HardLine { SkipBreakIfFirstInGroup: true })
                         {
-                            returnFalseIfMoreStringsFound = true;
+                            returnFalseIfMoreStringsFound = false;
                         }
-                        break;
-                    case Concat concat:
-                        for (var i = concat.Contents.Count - 1; i >= 0; i--)
-                        {
-                            Push(concat.Contents[i], currentMode, currentIndent);
-                        }
-                        break;
-                    case IndentDoc indent:
-                        Push(indent.Contents, currentMode, indenter.IncreaseIndent(currentIndent));
-                        break;
-                    case Trim:
-                        remainingWidth += output.TrimTrailingWhitespace();
-                        break;
-                    case Group group:
-                        var groupMode = group.Break ? PrintMode.Break : currentMode;
-
-                        // when determining if something fits, use the last option from a conditionalGroup, which should be the most expanded one
-                        var groupContents =
-                            groupMode == PrintMode.Break
-                            && group is ConditionalGroup conditionalGroup
-                                ? conditionalGroup.Options.Last()
-                                : group.Contents;
-                        Push(groupContents, groupMode, currentIndent);
-
-                        if (group.GroupId != null)
-                        {
-                            groupModeMap![group.GroupId] = groupMode;
-                        }
-                        break;
-                    case IfBreak ifBreak:
-                        var ifBreakMode =
-                            ifBreak.GroupId != null && groupModeMap!.ContainsKey(ifBreak.GroupId)
-                                ? groupModeMap[ifBreak.GroupId]
-                                : currentMode;
-
-                        var contents =
-                            ifBreakMode == PrintMode.Break
-                                ? ifBreak.BreakContents
-                                : ifBreak.FlatContents;
-
-                        Push(contents, currentMode, currentIndent);
-                        break;
-                    case LineDoc line:
-                        if (currentMode is PrintMode.Flat or PrintMode.ForceFlat)
-                        {
-                            if (currentDoc is HardLine { SkipBreakIfFirstInGroup: true })
-                            {
-                                returnFalseIfMoreStringsFound = false;
-                            }
-                            else if (line.Type == LineDoc.LineType.Hard)
-                            {
-                                return true;
-                            }
-
-                            if (line.Type != LineDoc.LineType.Soft)
-                            {
-                                output.Append(' ');
-
-                                remainingWidth -= 1;
-                            }
-                        }
-                        else
+                        else if (line.Type == LineDoc.LineType.Hard)
                         {
                             return true;
                         }
-                        break;
-                    case ForceFlat flat:
-                        Push(flat.Contents, PrintMode.ForceFlat, currentIndent);
-                        break;
-                    case BreakParent:
-                        break;
-                    case Align align:
-                        Push(
-                            align.Contents,
-                            currentMode,
-                            indenter.AddAlign(currentIndent, align.Width)
-                        );
-                        break;
-                    default:
-                        throw new Exception("Can't handle " + currentDoc.GetType());
+
+                        if (line.Type != LineDoc.LineType.Soft)
+                        {
+                            output.Append(' ');
+
+                            remainingWidth -= 1;
+                        }
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else if (currentDoc is ForceFlat flat)
+                {
+                    Push(flat.Contents, PrintMode.ForceFlat, currentIndent);
+                }
+                else if (currentDoc is BreakParent) { }
+                else if (currentDoc is Align align)
+                {
+                    Push(
+                        align.Contents,
+                        currentMode,
+                        indenter.AddAlign(currentIndent, align.Width)
+                    );
+                }
+                else
+                {
+                    throw new Exception("Can't handle " + currentDoc.GetType());
                 }
             }
         }
