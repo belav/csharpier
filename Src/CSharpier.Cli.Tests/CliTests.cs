@@ -47,7 +47,7 @@ public class CliTests
         {
             DeleteDirectory();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             Thread.Sleep(TimeSpan.FromMilliseconds(100));
             DeleteDirectory();
