@@ -201,6 +201,11 @@ internal static class DocSerializer
                 $"Doc.TrailingComment(\"{trailingComment.Comment}\", CommentType.{trailingComment.Type})"
             );
         }
+        else if (doc is Region region)
+        {
+            AppendIndent();
+            result.Append($"Doc.Region()");
+        }
         else
         {
             throw new Exception("Can't handle " + doc);

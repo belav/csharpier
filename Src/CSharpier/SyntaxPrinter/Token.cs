@@ -110,33 +110,33 @@ internal static class Token
             extraNewLines = ExtraNewLines.Print(syntaxToken.LeadingTrivia);
         }
 
-        if (
-            syntaxToken.LeadingTrivia.Any(
-                o => o.RawSyntaxKind() is SyntaxKind.EndRegionDirectiveTrivia
-            )
-            && syntaxToken.LeadingTrivia.All(
-                o =>
-                    o.RawSyntaxKind()
-                        is SyntaxKind.EndOfLineTrivia
-                            or SyntaxKind.WhitespaceTrivia
-                            or SyntaxKind.EndRegionDirectiveTrivia
-            )
-        )
-        {
-            var docs = new List<Doc> { extraNewLines };
-            foreach (
-                var trivia in syntaxToken.LeadingTrivia.Where(
-                    o => o.RawSyntaxKind() is SyntaxKind.EndRegionDirectiveTrivia
-                )
-            )
-            {
-                docs.Add(trivia.ToFullString().TrimEnd('\n', '\r'));
-                docs.Add(Doc.HardLine);
-            }
-            docs.RemoveAt(docs.Count - 1);
-
-            return Doc.Concat(Doc.EnsureIndent(Doc.Concat(docs)), Doc.HardLine);
-        }
+        // if (
+        //     syntaxToken.LeadingTrivia.Any(
+        //         o => o.RawSyntaxKind() is SyntaxKind.EndRegionDirectiveTrivia
+        //     )
+        //     && syntaxToken.LeadingTrivia.All(
+        //         o =>
+        //             o.RawSyntaxKind()
+        //                 is SyntaxKind.EndOfLineTrivia
+        //                     or SyntaxKind.WhitespaceTrivia
+        //                     or SyntaxKind.EndRegionDirectiveTrivia
+        //     )
+        // )
+        // {
+        //     var docs = new List<Doc> { extraNewLines };
+        //     foreach (
+        //         var trivia in syntaxToken.LeadingTrivia.Where(
+        //             o => o.RawSyntaxKind() is SyntaxKind.EndRegionDirectiveTrivia
+        //         )
+        //     )
+        //     {
+        //         docs.Add(trivia.ToFullString().TrimEnd('\n', '\r'));
+        //         docs.Add(Doc.HardLine);
+        //     }
+        //     docs.RemoveAt(docs.Count - 1);
+        //
+        //     return Doc.Concat(Doc.EnsureIndent(Doc.Concat(docs)), Doc.HardLine);
+        // }
 
         return printedTrivia != Doc.Null || extraNewLines != Doc.Null
             ? Doc.Concat(
@@ -218,6 +218,18 @@ internal static class Token
             else if (kind == SyntaxKind.DisabledTextTrivia)
             {
                 docs.Add(Doc.Trim, trivia.ToString());
+            }
+            else if (IsRegion(kind))
+            {
+                var triviaText = trivia.ToString();
+                docs.Add(Doc.HardLineIfNoPreviousLine);
+                docs.Add(Doc.Trim);
+                docs.Add(
+                    kind == SyntaxKind.RegionDirectiveTrivia
+                        ? Doc.BeginRegion(triviaText)
+                        : Doc.EndRegion(triviaText)
+                );
+                docs.Add(Doc.HardLine);
             }
             else if (IsDirective(kind) || IsRegion(kind))
             {
