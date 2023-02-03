@@ -110,34 +110,6 @@ internal static class Token
             extraNewLines = ExtraNewLines.Print(syntaxToken.LeadingTrivia);
         }
 
-        // if (
-        //     syntaxToken.LeadingTrivia.Any(
-        //         o => o.RawSyntaxKind() is SyntaxKind.EndRegionDirectiveTrivia
-        //     )
-        //     && syntaxToken.LeadingTrivia.All(
-        //         o =>
-        //             o.RawSyntaxKind()
-        //                 is SyntaxKind.EndOfLineTrivia
-        //                     or SyntaxKind.WhitespaceTrivia
-        //                     or SyntaxKind.EndRegionDirectiveTrivia
-        //     )
-        // )
-        // {
-        //     var docs = new List<Doc> { extraNewLines };
-        //     foreach (
-        //         var trivia in syntaxToken.LeadingTrivia.Where(
-        //             o => o.RawSyntaxKind() is SyntaxKind.EndRegionDirectiveTrivia
-        //         )
-        //     )
-        //     {
-        //         docs.Add(trivia.ToFullString().TrimEnd('\n', '\r'));
-        //         docs.Add(Doc.HardLine);
-        //     }
-        //     docs.RemoveAt(docs.Count - 1);
-        //
-        //     return Doc.Concat(Doc.EnsureIndent(Doc.Concat(docs)), Doc.HardLine);
-        // }
-
         return printedTrivia != Doc.Null || extraNewLines != Doc.Null
             ? Doc.Concat(
                 extraNewLines,
@@ -231,24 +203,16 @@ internal static class Token
                 );
                 docs.Add(Doc.HardLine);
             }
-            else if (IsDirective(kind) || IsRegion(kind))
+            else if (IsDirective(kind))
             {
-                // look at https://github.com/belav/csharpier-repos/pull/55/files
-                // replace any tabs with spaces in the pre branch to get rid of
-                // a lot of those diffs
-                // definitely a few issues in there
-                // also consider reworking how regions work, new doc type for them
-                // keep track of ones we run int, and indent of the opening one
-
                 var triviaText = trivia.ToString();
 
                 docs.Add(
                     // adding two of these to ensure we get a new line when a directive follows a trailing comment
                     Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
                     Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
-                    IsRegion(kind)
-                        ? Doc.Indent(triviaText)
-                        : Doc.Concat(Doc.Trim, Doc.Directive(triviaText)),
+                    Doc.Trim,
+                    Doc.Directive(triviaText),
                     Doc.HardLineSkipBreakIfFirstInGroup
                 );
 

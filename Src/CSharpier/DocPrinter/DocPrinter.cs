@@ -88,15 +88,7 @@ internal class DocPrinter
         }
         else if (doc is IndentDoc indentDoc)
         {
-            var nextIndent = this.Indenter.IncreaseIndent(indent);
-
-            if (indentDoc.Ensure)
-            {
-                this.Output.TrimTrailingWhitespace();
-                this.Output.Append(nextIndent.Value);
-            }
-
-            this.Push(indentDoc.Contents, mode, nextIndent);
+            this.Push(indentDoc.Contents, mode, this.Indenter.IncreaseIndent(indent));
         }
         else if (doc is Trim)
         {

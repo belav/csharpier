@@ -114,9 +114,6 @@ internal abstract class Doc
 
     public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
 
-    public static IndentDoc EnsureIndent(params Doc[] contents) =>
-        new() { Contents = Concat(contents), Ensure = true };
-
     public static Doc IndentIf(bool condition, Doc contents)
     {
         return condition ? Indent(contents) : contents;
@@ -151,17 +148,6 @@ internal abstract class Doc
     public static Region BeginRegion(string text) => new(text);
 
     public static Region EndRegion(string text) => new(text) { IsEnd = true };
-}
-
-internal class Region : Doc
-{
-    public Region(string text)
-    {
-        this.Text = text;
-    }
-
-    public string Text { get; set; }
-    public bool IsEnd { get; set; }
 }
 
 internal enum CommentType
