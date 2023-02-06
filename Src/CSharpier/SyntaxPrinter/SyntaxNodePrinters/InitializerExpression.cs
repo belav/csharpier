@@ -13,9 +13,12 @@ internal static class InitializerExpression
         var alwaysBreak =
             (
                 node.Expressions.Count >= 3
-                && node.Kind()
-                    is SyntaxKind.ObjectInitializerExpression
-                        or SyntaxKind.CollectionInitializerExpression
+                && (
+                    node.Kind() is SyntaxKind.ObjectInitializerExpression
+                    || node.Kind() is SyntaxKind.CollectionInitializerExpression
+                        && node.Expressions.FirstOrDefault()?.Kind()
+                            is SyntaxKind.ComplexElementInitializerExpression
+                )
             )
             || (
                 node.Kind() is SyntaxKind.ArrayInitializerExpression
