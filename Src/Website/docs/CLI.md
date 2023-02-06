@@ -45,6 +45,8 @@ Used to check if your files are already formatted. Outputs any files that have n
 This will return exit code 1 if there are unformatted files which is useful for CI pipelines.
 
 ### --no-cache
+_First available in 0.19.0_
+
 This option can be used to bypass the cache that is normally used to speed up formatting files.  
 By default the following are used as cache keys and a file is only formatted if one of them has changed.
 * CSharpier Version
