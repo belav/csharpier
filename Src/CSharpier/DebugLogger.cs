@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace CSharpier;
 
-public class DebugLogger
+internal class DebugLogger
 {
     private static object lockObject = new();
 

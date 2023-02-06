@@ -1,6 +1,6 @@
 namespace CSharpier;
 
-public static class SyntaxTriviaExtensions
+internal static class SyntaxTriviaExtensions
 {
     public static bool IsComment(this SyntaxTrivia syntaxTrivia)
     {

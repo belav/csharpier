@@ -1,6 +1,6 @@
 namespace CSharpier;
 
-public static class SyntaxTokenExtensions
+internal static class SyntaxTokenExtensions
 {
     public static SyntaxKind RawSyntaxKind(this SyntaxToken token)
     {
