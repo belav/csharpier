@@ -32,8 +32,26 @@ internal static class InvocationExpression
 
         var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
 
+        var hasDirective = printedNodes.Any(o => o.Doc.ContainsDirective());
+
+        /*
+         this kinda fixes it, but we still leave this empty line and the semicolon does not indent
+         also curious how it performs
+         
+        var query = _context.Products
+#if OLD_FROM_SQL
+            .FromSql(sql)
+#else
+            .FromSqlRaw(sql)
+#endif
+
+        ;
+         
+         */
+
         var forceOneLine =
-            groups.Count <= cutoff
+            !hasDirective
+            && groups.Count <= cutoff
             && (
                 groups
                     .Skip(shouldMergeFirstTwoGroups ? 1 : 0)

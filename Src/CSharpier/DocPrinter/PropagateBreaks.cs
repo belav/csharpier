@@ -2,7 +2,13 @@ namespace CSharpier.DocPrinter;
 
 internal static class PropagateBreaks
 {
-    private class MarkerDoc : Doc { }
+    private class MarkerDoc : Doc
+    {
+        public override bool ContainsDirective()
+        {
+            return false;
+        }
+    }
 
     private static readonly MarkerDoc TraverseDocOnExitStackMarker = new();
 

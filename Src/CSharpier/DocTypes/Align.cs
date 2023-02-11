@@ -15,4 +15,9 @@ internal class Align : Doc, IHasContents
         this.Width = width;
         this.Contents = contents;
     }
+
+    public override bool ContainsDirective()
+    {
+        return this.Contents.ContainsDirective();
+    }
 }

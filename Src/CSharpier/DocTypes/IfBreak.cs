@@ -2,9 +2,14 @@ namespace CSharpier.DocTypes;
 
 internal class IfBreak : Doc
 {
-    public Doc FlatContents { get; set; } = Null;
-    public Doc BreakContents { get; set; } = Null;
-    public string? GroupId { get; set; }
+    public Doc FlatContents { get; init; } = Null;
+    public Doc BreakContents { get; init; } = Null;
+    public string? GroupId { get; init; }
+
+    public override bool ContainsDirective()
+    {
+        return this.FlatContents.ContainsDirective() || this.BreakContents.ContainsDirective();
+    }
 }
 
 internal class IndentIfBreak : IfBreak
