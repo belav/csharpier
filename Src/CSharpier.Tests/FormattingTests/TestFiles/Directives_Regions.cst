@@ -34,7 +34,6 @@ public class ClassName
 
     private int y;
 
-    // TODO is this a real thing?
     string RegionsIndentAndNewLineProperly =
         #region one
         @"using System;"

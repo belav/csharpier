@@ -31,7 +31,15 @@ internal static class DocSerializer
             AppendIndent();
             result.Append("Doc.Null");
         }
-        else if (doc is AlwaysFits) { }
+        else if (doc is AlwaysFits alwaysFits)
+        {
+            AppendIndent();
+            result.AppendLine("Doc.AlwaysFits(");
+            Serialize(alwaysFits.Contents, result, indent + 1, doc);
+            result.AppendLine();
+            AppendIndent();
+            result.Append(")");
+        }
         else if (doc is Trim)
         {
             AppendIndent();
@@ -204,7 +212,14 @@ internal static class DocSerializer
         else if (doc is Region region)
         {
             AppendIndent();
-            result.Append($"Doc.Region()");
+            if (region.IsEnd)
+            {
+                result.Append($"""Doc.EndRegion("{region.Text}")""");
+            }
+            else
+            {
+                result.Append($"""Doc.BeginRegion("{region.Text}")""");
+            }
         }
         else
         {
