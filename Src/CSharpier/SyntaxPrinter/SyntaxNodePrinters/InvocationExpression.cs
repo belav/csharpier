@@ -68,7 +68,14 @@ internal static class InvocationExpression
             PrintIndentedGroup(node, groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
         );
 
-        return oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
+        return
+            oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
+            || groups[0].Any(
+                o =>
+                    o.Node
+                        is ArrayCreationExpressionSyntax
+                            or ObjectCreationExpressionSyntax { Initializer: not null }
+            )
             ? expanded
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
     }
