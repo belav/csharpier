@@ -11,7 +11,20 @@ internal static class InitializerExpression
             : Doc.Null;
 
         var alwaysBreak =
-            node.Kind() == SyntaxKind.ObjectInitializerExpression && node.Expressions.Count >= 3;
+            (
+                node.Expressions.Count >= 3
+                && (
+                    node.Kind() is SyntaxKind.ObjectInitializerExpression
+                    || node.Kind() is SyntaxKind.CollectionInitializerExpression
+                        && node.Expressions.FirstOrDefault()?.Kind()
+                            is SyntaxKind.ComplexElementInitializerExpression
+                )
+            )
+            || (
+                node.Kind() is SyntaxKind.ArrayInitializerExpression
+                && node.Expressions.FirstOrDefault()?.Kind()
+                    is SyntaxKind.ArrayInitializerExpression
+            );
 
         var result = Doc.Concat(
             separator,

@@ -142,6 +142,30 @@ class ClassName
             Two = 2
         };
 
+        var listInitializer = new List<int> { 1, 2, 3 };
+        var dictionaryInitializer = new Dictionary<int, string>
+        {
+            { 1, "" },
+            { 2, "a" },
+            { 3, "b" }
+        };
+        int[,,] cube =
+        {
+            {
+                { 111, 112 },
+                { 121, 122 }
+            },
+            {
+                { 211, 212 },
+                { 221, 222 }
+            }
+        };
+        int[][] jagged =
+        {
+            { 111 },
+            { 121, 122 }
+        };
+
         var conditionalsAndInvocations = new List<SomeObject>
         {
             this.CallSomeMethod________________________________________()
