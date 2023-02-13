@@ -92,19 +92,13 @@ internal static class Token
     {
         var isClosingBrace = syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken;
 
-        Doc extraNewLines = Doc.Null;
-
-        var hasDirective = syntaxToken.LeadingTrivia.Any(o => o.IsDirective);
-        if (isClosingBrace && (hasDirective || syntaxToken.LeadingTrivia.Any(o => o.IsComment())))
-        {
-            extraNewLines = ExtraNewLines.Print(syntaxToken.LeadingTrivia);
-        }
-
         var printedTrivia = PrivatePrintLeadingTrivia(
             syntaxToken.LeadingTrivia,
             context,
             skipLastHardline: isClosingBrace
         );
+
+        var hasDirective = syntaxToken.LeadingTrivia.Any(o => o.IsDirective);
 
         if (hasDirective)
         {
@@ -121,7 +115,19 @@ internal static class Token
             printedTrivia = Doc.AlwaysFits(printedTrivia);
         }
 
-        return isClosingBrace && (printedTrivia != Doc.Null || extraNewLines != Doc.Null)
+        if (syntaxToken.RawSyntaxKind() != SyntaxKind.CloseBraceToken)
+        {
+            return printedTrivia;
+        }
+
+        Doc extraNewLines = Doc.Null;
+
+        if (hasDirective || syntaxToken.LeadingTrivia.Any(o => o.IsComment()))
+        {
+            extraNewLines = ExtraNewLines.Print(syntaxToken.LeadingTrivia);
+        }
+
+        return printedTrivia != Doc.Null || extraNewLines != Doc.Null
             ? Doc.Concat(
                 extraNewLines,
                 Doc.IndentIf(printedTrivia != Doc.Null, printedTrivia),
@@ -202,17 +208,21 @@ internal static class Token
             {
                 docs.Add(Doc.Trim, trivia.ToString());
             }
-            else if (IsDirective(kind) || IsRegion(kind))
+            else if (IsRegion(kind))
             {
                 var triviaText = trivia.ToString();
-                if (
-                    IsRegion(kind)
-                    && x > 0
-                    && leadingTrivia[x - 1].RawSyntaxKind() == SyntaxKind.WhitespaceTrivia
-                )
-                {
-                    triviaText = leadingTrivia[x - 1] + triviaText;
-                }
+                docs.Add(Doc.HardLineIfNoPreviousLine);
+                docs.Add(Doc.Trim);
+                docs.Add(
+                    kind == SyntaxKind.RegionDirectiveTrivia
+                        ? Doc.BeginRegion(triviaText)
+                        : Doc.EndRegion(triviaText)
+                );
+                docs.Add(Doc.HardLine);
+            }
+            else if (IsDirective(kind))
+            {
+                var triviaText = trivia.ToString();
 
                 docs.Add(
                     // adding two of these to ensure we get a new line when a directive follows a trailing comment

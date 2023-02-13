@@ -68,6 +68,10 @@ internal static class DocFitter
                         returnFalseIfMoreStringsFound = true;
                     }
                 }
+                else if (currentDoc is Region)
+                {
+                    return false;
+                }
                 else if (currentDoc is Concat concat)
                 {
                     for (var i = concat.Contents.Count - 1; i >= 0; i--)

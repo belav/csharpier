@@ -144,6 +144,10 @@ internal abstract class Doc
     {
         return new AlwaysFits(printedTrivia);
     }
+
+    public static Region BeginRegion(string text) => new(text);
+
+    public static Region EndRegion(string text) => new(text) { IsEnd = true };
 }
 
 internal enum CommentType

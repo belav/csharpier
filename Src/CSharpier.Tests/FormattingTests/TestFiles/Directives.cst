@@ -11,19 +11,11 @@
 #endif
 #undef foo
 #line 6
-#region Region
-using static System.Linq.Enumerable;
-
-#endregion
 
 class ClassName { }
 
 public class ClassName
 {
-    #region Region
-    private int x; // trailing comment here shouldn't give extra indent to the endregion after it
-    #endregion
-
     public bool SomeProperty =>
 #if !DEBUG
         someValue
@@ -62,14 +54,6 @@ namespace Namespace
     }
 }
 
-#region Region
-
-    #region Nested
-class ClassName { }
-    #endregion Nested
-
-#endregion
-
 public class ClassName
 {
     public void MethodName()
@@ -101,12 +85,6 @@ static class ConditionallyPublic { }
 
 class EdgeCases
 {
-    string RegionsIndentAndNewLineProperly =
-        #region one
-        @"using System;"
-        #endregion one
-    ;
-
     void MethodWithNestedIfsDoesNotGetExtraLineBreak()
     {
 #if DEBUG
