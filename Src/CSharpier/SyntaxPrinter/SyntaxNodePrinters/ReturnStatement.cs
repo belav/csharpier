@@ -12,7 +12,7 @@ internal static class ReturnStatement
                 context
             ),
             node.Expression != null
-                ? node.Expression is BinaryExpressionSyntax
+                ? node.Expression is BinaryExpressionSyntax or QueryExpressionSyntax
                     ? Doc.Indent(Node.Print(node.Expression, context))
                     : Node.Print(node.Expression, context)
                 : Doc.Null,
