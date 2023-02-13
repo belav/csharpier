@@ -98,6 +98,23 @@ internal static class Token
             skipLastHardline: isClosingBrace
         );
 
+        var hasDirective = syntaxToken.LeadingTrivia.Any(o => o.IsDirective);
+        
+        if (hasDirective)
+        {
+            // the leading trivia "always fits" for purposes of deciding when to break Lines, so the method call after a false #if directive doesn't break when it actually fits
+            /*
+            #if CONDITION
+                        if (true)
+                        {
+                            return;
+                        }
+            #endif
+            SomeObject.CallMethod().CallOtherMethod(shouldNotBreak);
+            */
+            printedTrivia = Doc.AlwaysFits(printedTrivia);
+        }
+        
         if (syntaxToken.RawSyntaxKind() != SyntaxKind.CloseBraceToken)
         {
             return printedTrivia;
@@ -105,7 +122,7 @@ internal static class Token
 
         Doc extraNewLines = Doc.Null;
 
-        if (syntaxToken.LeadingTrivia.Any(o => o.IsDirective || o.IsComment()))
+        if (hasDirective || syntaxToken.LeadingTrivia.Any(o => o.IsComment()))
         {
             extraNewLines = ExtraNewLines.Print(syntaxToken.LeadingTrivia);
         }
