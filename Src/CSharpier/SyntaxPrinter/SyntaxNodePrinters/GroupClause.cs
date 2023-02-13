@@ -5,6 +5,7 @@ internal static class GroupClause
     public static Doc Print(GroupClauseSyntax node, FormattingContext context)
     {
         return Doc.Concat(
+            ExtraNewLines.Print(node),
             Token.PrintWithSuffix(node.GroupKeyword, " ", context),
             Node.Print(node.GroupExpression, context),
             " ",

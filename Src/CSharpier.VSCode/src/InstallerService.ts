@@ -1,8 +1,9 @@
 import { Logger } from "./Logger";
-import { window, workspace } from "vscode";
+import { Extension, window, workspace } from "vscode";
 import { execSync } from "child_process";
 import * as path from "path";
 import * as fs from "fs";
+import * as vscode from "vscode";
 
 export class InstallerService {
     rejectedError = false;
@@ -11,22 +12,34 @@ export class InstallerService {
     globalErrorVisible = false;
     logger: Logger;
     killRunningProcesses: () => void;
+    extension: Extension<unknown>;
 
-    constructor(logger: Logger, killRunningProcesses: () => void) {
+    constructor(logger: Logger, killRunningProcesses: () => void, extension: Extension<unknown>) {
         this.logger = logger;
         this.killRunningProcesses = killRunningProcesses;
+        this.extension = extension;
     }
 
     public displayInstallNeededMessage = (directoryThatContainsFile: string) => {
         this.logger.error("CSharpier was not found so files may not be formatted.");
 
-        const items = ["Install CSharpier Globally"];
+        this.logger.info(this.extension.extensionKind);
+
+        if (this.extension.extensionKind === vscode.ExtensionKind.Workspace) {
+            window.showErrorMessage("CSharpier must be installed as a local dotnet tool in ./.config/dotnet-tools.json using `dotnet tool install csharpier` and the devcontainer rebuilt to support formatting files.");
+            return;
+        }
+
+        const globalButton = "Install as global tool";
+        const localButton = "Install as local tool";
+
+        const items = [globalButton];
         let solutionRoot: string;
         if (workspace.workspaceFolders) {
             for (const folder of workspace.workspaceFolders) {
                 if (directoryThatContainsFile.startsWith(folder.uri.fsPath)) {
                     solutionRoot = folder.uri.fsPath;
-                    items.unshift("Install CSharpier Locally");
+                    items.unshift(localButton);
                     break;
                 }
             }
@@ -54,12 +67,12 @@ export class InstallerService {
 
         window.showErrorMessage(message, ...items).then(
             selection => {
-                if (selection === "Install CSharpier Globally") {
+                if (selection === globalButton) {
                     const command = "dotnet tool install -g csharpier";
                     this.logger.info("Installing csharpier globally with " + command);
                     const output = execSync(command).toString();
                     this.logger.info(output);
-                } else if (selection === "Install CSharpier Locally") {
+                } else if (selection === localButton) {
                     if (solutionRoot) {
                         try {
                             const manifestPath = path.join(
