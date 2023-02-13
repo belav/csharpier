@@ -34,10 +34,14 @@ Specify at what point the printer will wrap content. This is not a hard limit. S
 
 Default 100
 #### Use Tabs
+_First available in 0.17.0_
+
 Indent lines with tabs instead of spaces.
 
 Default false
 #### Tab Width
+_First available in 0.17.0_
+
 Specify the number of spaces used per indentation level.
 
 Default 4

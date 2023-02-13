@@ -139,6 +139,11 @@ internal abstract class Doc
 
     public static Align Align(int alignment, params Doc[] contents) =>
         new(alignment, Concat(contents));
+
+    public static AlwaysFits AlwaysFits(Doc printedTrivia)
+    {
+        return new AlwaysFits(printedTrivia);
+    }
 }
 
 internal enum CommentType

@@ -22,7 +22,7 @@ const initPlugin = async (context: ExtensionContext) => {
 
     logger.info("Initializing " + (process.env as any).EXTENSION_NAME);
 
-    const csharpierProcessProvider = new CSharpierProcessProvider(logger);
+    const csharpierProcessProvider = new CSharpierProcessProvider(logger, context.extension);
     new FormattingService(logger, csharpierProcessProvider);
 
     context.subscriptions.push(csharpierProcessProvider);
