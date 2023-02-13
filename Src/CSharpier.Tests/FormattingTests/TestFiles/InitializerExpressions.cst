@@ -186,6 +186,52 @@ class ClassName
                 ? one
                 : two
         };
+
+        var someObject = new SomeObject
+        {
+            SomeArray = new SomeOtherObject[]
+            {
+                new SomeOtherObject { SomeProperty = 1 },
+                new SomeOtherObject()
+            }
+                .CallMethod()
+                .CallMethod()
+        };
+
+        var result = SomeType
+            .CallMethod()
+            .CallOtherMethod(someParameter, new SomeObjectType().SomeProperty.SomeOtherProperty);
+
+        var someObject = new SomeObject
+        {
+            SomeArray = new SomeOtherObject
+            {
+                new SomeOtherObject { SomeProperty = 1 },
+                new SomeOtherObject()
+            }
+                .CallMethod()
+                .CallMethod()
+        };
+
+        var someObject = new SomeObject
+        {
+            SomeArray = new SomeOtherObject[]
+            {
+                new SomeOtherObject { SomeProperty = 1 },
+                new SomeOtherObject()
+            }
+        };
+
+        var someObject = new SomeObject
+        {
+            SomeArray = new SomeOtherObject[]
+            {
+                new SomeOtherObject_________________________________(),
+                new SomeOtherObject_________________________________()
+            }
+                .CallMethod()
+                .CallMethod()
+        };
     }
 
     private SomeObject someObject =

@@ -31,6 +31,7 @@ internal static class DocSerializer
             AppendIndent();
             result.Append("Doc.Null");
         }
+        else if (doc is AlwaysFits) { }
         else if (doc is Trim)
         {
             AppendIndent();
