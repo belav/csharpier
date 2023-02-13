@@ -151,6 +151,7 @@ internal static class DocFitter
                         indenter.AddAlign(currentIndent, align.Width)
                     );
                 }
+                else if (currentDoc is AlwaysFits) { }
                 else
                 {
                     throw new Exception("Can't handle " + currentDoc.GetType());

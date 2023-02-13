@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../../CSharpier.Build.props"/>
+  <Import Project="../../CSharpier.Build.props" />
   <PropertyGroup>
     <PackageId>CSharpier.Core</PackageId>
     <TargetFrameworks>net6.0;net7.0;netstandard2.0</TargetFrameworks>
@@ -7,18 +7,18 @@
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp"/>
-    <PackageReference Include="System.IO.Abstractions"/>
-    <PackageReference Include="System.Text.Json"/>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="System.IO.Abstractions" />
+    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
   <ItemGroup>
-    <InternalsVisibleTo Include="CSharpier.Benchmarks"/>
-    <InternalsVisibleTo Include="CSharpier.Playground"/>
-    <InternalsVisibleTo Include="CSharpier.Tests"/>
-    <InternalsVisibleTo Include="dotnet-csharpier"/>
+    <InternalsVisibleTo Include="CSharpier.Benchmarks" />
+    <InternalsVisibleTo Include="CSharpier.Playground" />
+    <InternalsVisibleTo Include="CSharpier.Tests" />
+    <InternalsVisibleTo Include="dotnet-csharpier" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpier.Generators\CSharpier.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+    <ProjectReference Include="..\CSharpier.Generators\CSharpier.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\logo.png" Pack="true" PackagePath="">
@@ -26,7 +26,7 @@
     </None>
   </ItemGroup>
   <Target Name="RestoreTools" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(RESTORE_TOOLS)' != 0 and '$(IsCrossTargetingBuild)' == 'true'">
-    <Exec Command="dotnet tool restore" StandardOutputImportance="Low" StandardErrorImportance="High"/>
-    <Exec Command="dotnet husky install" StandardOutputImportance="Low" StandardErrorImportance="High" WorkingDirectory="../../"/>
+    <Exec Command="dotnet tool restore" StandardOutputImportance="Low" StandardErrorImportance="High" />
+    <Exec Command="dotnet husky install" StandardOutputImportance="Low" StandardErrorImportance="High" WorkingDirectory="../../" />
   </Target>
 </Project>

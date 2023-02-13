@@ -151,6 +151,10 @@ internal class DocPrinter
         {
             this.Push(align.Contents, mode, this.Indenter.AddAlign(indent, align.Width));
         }
+        else if (doc is AlwaysFits temp)
+        {
+            this.Push(temp.Contents, mode, indent);
+        }
         else
         {
             throw new Exception("didn't handle " + doc);

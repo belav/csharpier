@@ -1,4 +1,4 @@
-import { Disposable, TextEditor, window, workspace } from "vscode";
+import {Disposable, Extension, TextEditor, window, workspace} from "vscode";
 import { Logger } from "./Logger";
 import * as path from "path";
 import * as semver from "semver";
@@ -20,10 +20,10 @@ export class CSharpierProcessProvider implements Disposable {
     csharpierVersionByDirectory: Record<string, string | undefined> = {};
     csharpierProcessesByVersion: Record<string, ICSharpierProcess | undefined> = {};
 
-    constructor(logger: Logger) {
+    constructor(logger: Logger, extension: Extension<unknown>) {
         this.logger = logger;
         this.customPathInstaller = new CustomPathInstaller(logger);
-        this.installerService = new InstallerService(this.logger, this.killRunningProcesses);
+        this.installerService = new InstallerService(this.logger, this.killRunningProcesses, extension);
 
         window.onDidChangeActiveTextEditor((event: TextEditor | undefined) => {
             if (event?.document?.languageId !== "csharp") {
@@ -78,6 +78,7 @@ export class CSharpierProcessProvider implements Disposable {
     };
 
     private getDirectoryOfFile = (filePath: string) => {
+        this.logger.debug(__dirname);
         let directory = path.parse(filePath).dir;
         if (directory) {
             return directory;
