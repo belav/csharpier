@@ -99,7 +99,7 @@ internal static class Token
         );
 
         var hasDirective = syntaxToken.LeadingTrivia.Any(o => o.IsDirective);
-        
+
         if (hasDirective)
         {
             // the leading trivia "always fits" for purposes of deciding when to break Lines, so the method call after a false #if directive doesn't break when it actually fits
@@ -114,7 +114,7 @@ internal static class Token
             */
             printedTrivia = Doc.AlwaysFits(printedTrivia);
         }
-        
+
         if (syntaxToken.RawSyntaxKind() != SyntaxKind.CloseBraceToken)
         {
             return printedTrivia;
