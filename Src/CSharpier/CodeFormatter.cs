@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace CSharpier;
 
-public class CodeFormatter
+public static class CodeFormatter
 {
     public static LanguageVersion LanguageVersion = LanguageVersion.Preview;
 

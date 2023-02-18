@@ -1,3 +1,4 @@
+#pragma warning disable RS0016
 #if NETSTANDARD2_0
 
 using System.Runtime.CompilerServices;
