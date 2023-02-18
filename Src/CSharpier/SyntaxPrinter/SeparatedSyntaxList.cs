@@ -23,8 +23,18 @@ internal static class SeparatedSyntaxList
 
             var isTrailingSeparator = x == list.Count - 1;
 
-            docs.Add(Token.Print(list.GetSeparator(x), context));
-            if (!isTrailingSeparator)
+            var syntaxToken = list.GetSeparator(x);
+
+            docs.Add(Token.Print(syntaxToken, context));
+
+            if (
+                afterSeparator is LineDoc
+                && syntaxToken.LeadingTrivia.Any(o => o.IsDirective || o.IsComment())
+            )
+            {
+                docs.Add(" ");
+            }
+            else if (!isTrailingSeparator)
             {
                 docs.Add(afterSeparator);
             }

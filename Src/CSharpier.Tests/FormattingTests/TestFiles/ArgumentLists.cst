@@ -1,9 +1,16 @@
-public class ClassName
-{
-    public void MethodName()
-    {
-        this.Method(true);
+CallMethod(true);
 
-        this.NamedArguments(b: true, c: "false");
-    }
-}
+NamedArguments(b: true, c: "false");
+
+CallMethod(
+    long______________________________________________
+    // tester
+    , long______________________________________________
+);
+
+CallMethod(
+    long______________________________________________
+#if DEBUG
+    , long______________________________________________
+#endif
+);

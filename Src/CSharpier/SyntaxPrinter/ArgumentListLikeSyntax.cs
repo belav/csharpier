@@ -12,14 +12,17 @@ internal static class ArgumentListLike
         var docs = new List<Doc> { Token.Print(openParenToken, context) };
 
         if (
-            arguments.Count == 1
-            && arguments[0].Expression
-                is ParenthesizedLambdaExpressionSyntax
-                    {
-                        ParameterList.Parameters.Count: 0,
-                        Block: { }
-                    }
-                    or SimpleLambdaExpressionSyntax { Block: { } }
+            arguments
+            is [
+                {
+                    Expression: ParenthesizedLambdaExpressionSyntax
+                        {
+                            ParameterList.Parameters.Count: 0,
+                            Block: { }
+                        }
+                        or SimpleLambdaExpressionSyntax { Block: { } }
+                }
+            ]
         )
         {
             docs.Add(Argument.Print(arguments[0], context));
