@@ -54,7 +54,7 @@ public class BaseTest
 
         var comparer = new SyntaxNodeComparer(expectedCode, normalizedCode, CancellationToken.None);
 
-        result.Errors.Should().BeEmpty();
+        result.CompilationErrors.Should().BeEmpty();
         result.FailureMessage.Should().BeEmpty();
 
         if (normalizedCode != expectedCode && !BuildServerDetector.Detected)

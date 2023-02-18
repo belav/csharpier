@@ -6,14 +6,15 @@ namespace CSharpier;
 
 public static class CodeFormatter
 {
-    public static LanguageVersion LanguageVersion = LanguageVersion.Preview;
+    internal static readonly LanguageVersion LanguageVersion = LanguageVersion.Preview;
 
-    public static string Format(string code, CodeFormatterOptions? options = null)
+#pragma warning disable RS0026 // I know these are breaking and I can't seem to get Unshipped/Shipped happy with me doing it
+    public static CodeFormatterResult Format(string code, CodeFormatterOptions? options = null)
     {
         return FormatAsync(code, options).Result;
     }
 
-    public static async Task<string> FormatAsync(
+    public static Task<CodeFormatterResult> FormatAsync(
         string code,
         CodeFormatterOptions? options = null,
         CancellationToken cancellationToken = default
@@ -21,20 +22,18 @@ public static class CodeFormatter
     {
         options ??= new();
 
-        var result = await FormatAsync(
-            code,
-            new PrinterOptions { Width = options.Width },
-            cancellationToken
-        );
-        return result.Code;
+        return FormatAsync(code, new PrinterOptions { Width = options.Width }, cancellationToken);
     }
 
-    public static string Format(SyntaxTree syntaxTree, CodeFormatterOptions? options = null)
+    public static CodeFormatterResult Format(
+        SyntaxTree syntaxTree,
+        CodeFormatterOptions? options = null
+    )
     {
         return FormatAsync(syntaxTree, options).Result;
     }
 
-    public static async Task<string> FormatAsync(
+    public static Task<CodeFormatterResult> FormatAsync(
         SyntaxTree syntaxTree,
         CodeFormatterOptions? options = null,
         CancellationToken cancellationToken = default
@@ -42,13 +41,13 @@ public static class CodeFormatter
     {
         options ??= new();
 
-        var result = await FormatAsync(
+        return FormatAsync(
             syntaxTree,
             new PrinterOptions { Width = options.Width },
             cancellationToken
         );
-        return result.Code;
     }
+#pragma warning restore RS0026
 
     internal static CodeFormatterResult Format(string code, PrinterOptions printerOptions)
     {
@@ -94,7 +93,7 @@ public static class CodeFormatter
 
         bool TryGetCompilationFailure(out CodeFormatterResult compilationResult)
         {
-            var diagnostics = syntaxTree!
+            var diagnostics = syntaxTree
                 .GetDiagnostics(cancellationToken)
                 .Where(o => o.Severity == DiagnosticSeverity.Error && o.Id != "CS1029")
                 .ToList();
@@ -103,7 +102,7 @@ public static class CodeFormatter
                 compilationResult = new CodeFormatterResult
                 {
                     Code = syntaxTree.ToString(),
-                    Errors = diagnostics,
+                    CompilationErrors = diagnostics,
                     AST = printerOptions.IncludeAST ? PrintAST(rootNode) : string.Empty
                 };
 
@@ -221,14 +220,17 @@ public static class CodeFormatter
     }
 }
 
-internal class CodeFormatterResult
+public class CodeFormatterResult
 {
-    public string Code { get; init; } = string.Empty;
-    public string DocTree { get; init; } = string.Empty;
-    public string AST { get; init; } = string.Empty;
-    public IEnumerable<Diagnostic> Errors { get; init; } = Enumerable.Empty<Diagnostic>();
+    internal CodeFormatterResult() { }
 
-    public string FailureMessage { get; init; } = string.Empty;
+    public string Code { get; internal init; } = string.Empty;
+    internal string DocTree { get; init; } = string.Empty;
+    internal string AST { get; init; } = string.Empty;
+    public IEnumerable<Diagnostic> CompilationErrors { get; internal init; } =
+        Enumerable.Empty<Diagnostic>();
 
-    public static readonly CodeFormatterResult Null = new();
+    internal string FailureMessage { get; init; } = string.Empty;
+
+    internal static readonly CodeFormatterResult Null = new();
 }

@@ -15,7 +15,7 @@ internal class CodeFormatterTests
         var code = "tester\n";
         var result = CodeFormatter.GetLineEnding(
             code,
-            new PrinterOptions() { EndOfLine = endOfLine }
+            new PrinterOptions { EndOfLine = endOfLine }
         );
 
         result.Should().Be(expected);
