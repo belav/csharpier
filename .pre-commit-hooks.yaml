@@ -1,7 +1,0 @@
-- id: csharpier
-  name: Run CSharpier on C# files
-  entry: dotnet tool run dotnet-csharpier
-  language: dotnet
-  types:
-    - c#
-  description: CSharpier is an opinionated C# formatter inspired by Prettier.

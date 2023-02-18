@@ -150,11 +150,11 @@ public class ClassName
 
 public class ClassName
 {
-#region RegionWithSpaceBeforeAndAfterMethod
+    #region RegionWithSpaceBeforeAndAfterMethod
 
     void SomeMethod() { }
 
-#endregion
+    #endregion
 
     void SomeMethod() { }
 }

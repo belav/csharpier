@@ -14,6 +14,7 @@ internal class DocPrinter
     protected readonly string EndOfLine;
     protected readonly PrinterOptions PrinterOptions;
     protected readonly Indenter Indenter;
+    protected Stack<Indent> RegionIndents = new();
 
     protected DocPrinter(Doc doc, PrinterOptions printerOptions, string endOfLine)
     {
@@ -150,6 +151,25 @@ internal class DocPrinter
         else if (doc is Align align)
         {
             this.Push(align.Contents, mode, this.Indenter.AddAlign(indent, align.Width));
+        }
+        else if (doc is Region region)
+        {
+            if (region.IsEnd)
+            {
+                var regionIndent = this.RegionIndents.Pop();
+                this.Output.Append(regionIndent.Value);
+            }
+            else
+            {
+                this.Output.Append(indent.Value);
+                this.RegionIndents.Push(indent);
+            }
+
+            this.Output.Append(region.Text);
+        }
+        else if (doc is AlwaysFits temp)
+        {
+            this.Push(temp.Contents, mode, indent);
         }
         else
         {
