@@ -1,7 +1,6 @@
 ---
 hide_table_of_contents: true
 ---
-
 CSharpier can be used to programmatically format code.
 
 This requires adding the [CSharpier.Core](https://www.nuget.org/packages/CSharpier.Core/) nuget package to your project.
