@@ -5,7 +5,8 @@ internal static class TypeArgumentList
     public static Doc Print(TypeArgumentListSyntax node, FormattingContext context)
     {
         Doc separator =
-            node.Arguments.Count > 1 || node.Arguments.Any(o => o is GenericNameSyntax)
+            node.Arguments.FirstOrDefault() is not OmittedTypeArgumentSyntax
+            && (node.Arguments.Count > 1 || node.Arguments.Any(o => o is GenericNameSyntax))
                 ? Doc.SoftLine
                 : Doc.Null;
 
