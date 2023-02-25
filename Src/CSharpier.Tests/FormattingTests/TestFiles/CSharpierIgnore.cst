@@ -1,6 +1,12 @@
 // csharpier-ignore
 public class Unformatted     { }
 
+// csharpier-ignore - also ignored
+public class Unformatted     { }
+
+// csharpier-ignore-not ignored
+public class Unformatted     { }
+
 public class ClassName
 {
     // csharpier-ignore
@@ -57,6 +63,14 @@ public class ClassName2
     // csharpier-ignore-start
     private string    unformatted1;
     // csharpier-ignore-end
+    
+    // csharpier-ignore-start - also ignored
+    private string    unformatted1;
+    // csharpier-ignore-end - also ignored
+    
+    // csharpier-ignore-start-not ignored
+    private string    unformatted1;
+    // csharpier-ignore-end-not ignored
 
     private string    formatMe;
     // csharpier-ignore-start

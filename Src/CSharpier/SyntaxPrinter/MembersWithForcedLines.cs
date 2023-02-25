@@ -22,14 +22,14 @@ internal static class MembersWithForcedLines
             var skipAddingLineBecauseIgnoreEnded = false;
             var member = members[memberIndex];
 
-            if (Token.HasLeadingComment(member, "// csharpier-ignore-end"))
+            if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
             {
                 skipAddingLineBecauseIgnoreEnded = true;
                 result.Add(unFormattedCode.ToString().Trim());
                 unFormattedCode.Clear();
                 printUnformatted = false;
             }
-            else if (Token.HasLeadingComment(member, "// csharpier-ignore-start"))
+            else if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreStartRegex))
             {
                 if (!printUnformatted && memberIndex > 0)
                 {
