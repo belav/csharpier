@@ -305,7 +305,7 @@ internal partial class SyntaxNodeComparer
     }
 }
 
-public struct CompareResult
+internal struct CompareResult
 {
     public bool IsInvalid;
     public TextSpan? OriginalSpan;

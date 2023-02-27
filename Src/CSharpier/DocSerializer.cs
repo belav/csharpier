@@ -38,7 +38,7 @@ internal static class DocSerializer
             Serialize(alwaysFits.Contents, result, indent + 1, doc);
             result.AppendLine();
             AppendIndent();
-            result.Append(")");
+            result.Append(')');
         }
         else if (doc is Trim)
         {

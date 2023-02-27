@@ -15,7 +15,7 @@ internal class CodeFormatterTests
         var code = "tester\n";
         var result = CodeFormatter.GetLineEnding(
             code,
-            new PrinterOptions() { EndOfLine = endOfLine }
+            new PrinterOptions { EndOfLine = endOfLine }
         );
 
         result.Should().Be(expected);
@@ -38,7 +38,18 @@ internal class CodeFormatterTests
         var code = "var someVariable = someValue;";
         var result = CodeFormatter.Format(code);
 
-        result.Should().Be("var someVariable = someValue;\n");
+        result.Code.Should().Be("var someVariable = someValue;\n");
+        result.CompilationErrors.Should().BeEmpty();
+    }
+
+    [Test]
+    public void Format_Should_Return_Compilation_Errors()
+    {
+        var code = "var someVariable = someValue";
+        var result = CodeFormatter.Format(code);
+
+        result.Code.Should().Be(code);
+        result.CompilationErrors.Should().ContainSingle();
     }
 
     [Test]
@@ -47,7 +58,7 @@ internal class CodeFormatterTests
         var code = "var someVariable = someValue;";
         var result = CodeFormatter.Format(code, new CodeFormatterOptions { Width = 10 });
 
-        result.Should().Be("var someVariable =\n    someValue;\n");
+        result.Code.Should().Be("var someVariable =\n    someValue;\n");
     }
 
     [TestCase("\n")]
@@ -58,6 +69,6 @@ internal class CodeFormatterTests
         var syntaxTree = CSharpSyntaxTree.ParseText(code);
         var result = CodeFormatter.Format(syntaxTree);
 
-        result.Should().Be("public class ClassName { }" + lineEnding);
+        result.Code.Should().Be("public class ClassName { }" + lineEnding);
     }
 }

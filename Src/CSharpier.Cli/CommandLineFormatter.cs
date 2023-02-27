@@ -371,11 +371,11 @@ internal static class CommandLineFormatter
             return;
         }
 
-        if (codeFormattingResult.Errors.Any())
+        if (codeFormattingResult.CompilationErrors.Any())
         {
             var errorMessage = new StringBuilder();
             errorMessage.AppendLine("Failed to compile so was not formatted.");
-            foreach (var message in codeFormattingResult.Errors)
+            foreach (var message in codeFormattingResult.CompilationErrors)
             {
                 errorMessage.AppendLine(message.ToString());
             }
