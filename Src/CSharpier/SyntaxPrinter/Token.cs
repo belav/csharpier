@@ -1,5 +1,7 @@
 namespace CSharpier.SyntaxPrinter;
 
+using System.Text.RegularExpressions;
+
 internal static class Token
 {
     public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken, FormattingContext context)
@@ -351,13 +353,13 @@ internal static class Token
             );
     }
 
-    public static bool HasLeadingComment(SyntaxNode node, string comment)
+    public static bool HasLeadingCommentMatching(SyntaxNode node, Regex regex)
     {
         return node.GetLeadingTrivia()
             .Any(
                 o =>
                     o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
-                    && o.ToString().Equals(comment)
+                    && regex.IsMatch(o.ToString())
             );
     }
 }

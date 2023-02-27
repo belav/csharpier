@@ -1,9 +1,14 @@
 namespace CSharpier.SyntaxPrinter;
 
 using System.Text;
+using System.Text.RegularExpressions;
 
 internal static class CSharpierIgnore
 {
+    private static readonly Regex IgnoreRegex = new("^// csharpier-ignore($| -)");
+    public static readonly Regex IgnoreStartRegex = new("^// csharpier-ignore-start($| -)");
+    public static readonly Regex IgnoreEndRegex = new("^// csharpier-ignore-end($| -)");
+
     public static bool IsNodeIgnored(SyntaxNode syntaxNode)
     {
         return syntaxNode.Parent
@@ -11,7 +16,7 @@ internal static class CSharpierIgnore
                     or BlockSyntax
                     or CompilationUnitSyntax
                     or NamespaceDeclarationSyntax
-            && Token.HasLeadingComment(syntaxNode, "// csharpier-ignore");
+            && Token.HasLeadingCommentMatching(syntaxNode, IgnoreRegex);
     }
 
     public static List<Doc> PrintNodesRespectingRangeIgnore<T>(
@@ -26,13 +31,13 @@ internal static class CSharpierIgnore
 
         foreach (var node in list)
         {
-            if (Token.HasLeadingComment(node, "// csharpier-ignore-end"))
+            if (Token.HasLeadingCommentMatching(node, IgnoreEndRegex))
             {
                 statements.Add(unFormattedCode.ToString().Trim());
                 unFormattedCode.Clear();
                 printUnformatted = false;
             }
-            else if (Token.HasLeadingComment(node, "// csharpier-ignore-start"))
+            else if (Token.HasLeadingCommentMatching(node, IgnoreStartRegex))
             {
                 printUnformatted = true;
             }
