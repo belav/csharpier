@@ -1,4 +1,7 @@
-﻿## [1.3.5]
+﻿## [1.3.6]
+- Disable "CSharpier must be installed globally" popup for some temporary files
+
+## [1.3.5]
 - Attempt to detect and recover from csharpier not installing correctly to custom path
 
 ## [1.3.0]
