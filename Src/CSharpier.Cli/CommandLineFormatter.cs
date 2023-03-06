@@ -421,8 +421,7 @@ internal static class CommandLineFormatter
         }
 
         if (
-            commandLineOptions.Check
-            && !commandLineOptions.WriteStdout
+            commandLineOptions is { Check: true, WriteStdout: false }
             && codeFormattingResult.Code != fileToFormatInfo.FileContents
         )
         {
@@ -430,7 +429,7 @@ internal static class CommandLineFormatter
                 codeFormattingResult.Code,
                 fileToFormatInfo.FileContents
             );
-            fileIssueLogger.WriteWarning($"Was not formatted.\n{difference}");
+            fileIssueLogger.WriteWarning($"Was not formatted.\n{difference}\n");
             Interlocked.Increment(ref commandLineFormatterResult.UnformattedFiles);
         }
 

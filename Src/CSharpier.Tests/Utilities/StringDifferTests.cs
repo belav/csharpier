@@ -55,10 +55,7 @@ value→
 
         result
             .Should()
-            .Be(
-                @"The file contained different line endings than formatting it would result in.
-"
-            );
+            .Be("The file contained different line endings than formatting it would result in.");
     }
 
     [Test]
@@ -128,6 +125,32 @@ three
 four
 "
             );
+    }
+
+    [Test]
+    public void PrintDifference_Should_Make_Extra_New_Line_Obvious()
+    {
+        var result = PrintDifference(
+            @"}
+",
+            @"}
+
+"
+        );
+
+        result.Should().Be("The file did not end with a single newline.");
+    }
+
+    [Test]
+    public void PrintDifference_Should_Make_Missing_New_Line_Obvious()
+    {
+        var result = PrintDifference(
+            @"}
+",
+            @"}"
+        );
+
+        result.Should().Be("The file did not end with a single newline.");
     }
 
     private static string PrintDifference(string expected, string actual)
