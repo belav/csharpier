@@ -1,3 +1,218 @@
+# 0.23.0
+## Breaking Changes
+#### Make compile errors public when using CSharpier.Core [#799](https://github.com/belav/csharpier/issues/799)
+Previously `CodeFormatter.Format(unformattedCode)` and its overloads returned only the formatted code. It now returns a result object.
+```c#
+public class CodeFormatterResult
+{
+    public string Code { get; }
+    public IEnumerable<Diagnostic> CompilationErrors { get; }
+}
+```
+
+This is a breaking change. There were also a number of types that should not have been `public` that were made `internal`.
+
+Thanks go to @verdverm for the suggestion
+## What's Changed
+#### Allow comment-description suffix on csharpier-ignore comments [#835](https://github.com/belav/csharpier/issues/835)
+It is now possible to include a suffix on `csharpier-ignore` comments. The description must be seperated from the comment by at least one - character.
+```c#
+// csharpier-ignore - class copied as-is from another project
+public class Unformatted     { 
+        private string     unformatted;
+}
+
+// csharpier-ignore-start -- class copied as-is from another project
+public class Unformatted1     { }
+public class Unformatted2     { }
+// csharpier-ignore-end
+```
+Thanks go to @strepto for the suggestion
+
+#### Fix formatting for open generics [#832](https://github.com/belav/csharpier/issues/832)
+```c#
+// 0.22.1
+typeof(AnExceptionallyLongAndElaborateClassNameToMakeAnExampleRegardingOpenGenerics<
+    ,
+>).MakeGenericType(typeof(string), typeof(int));
+
+// 0.23.0
+typeof(AnExceptionallyLongAndElaborateClassNameToMakeAnExampleRegardingOpenGenerics<,>).MakeGenericType(
+    typeof(string),
+    typeof(int)
+);
+```
+
+
+Thanks go to @jonstodle for reporting the issue
+
+#### #region should be indented based on context [#812](https://github.com/belav/csharpier/issues/812)
+Previously the preceding whitespace was left as is on `#region` and `#endregion` which resulted undesired formatting.
+```c#
+// 0.22.1
+public class ClassName
+{
+            #region Ugly methods
+    public int LongUglyMethod()
+    {    
+        return 42;
+    }
+            #endregion
+}
+
+// 0.23.0
+public class ClassName
+{
+    #region Ugly methods
+    public int LongUglyMethod()
+    {    
+        return 42;
+    }
+    #endregion
+}
+```
+Thanks go to @jods4 for reporting the issue
+#### Return statement followed by linq query syntax not indenting correctly [#811](https://github.com/belav/csharpier/issues/811)
+```c#
+// 0.22.1
+return from i in Enumerable.Range(0, 10)
+let i2 = i * i
+where i2 < 100
+select new { Square = i2, Root = i };
+
+// 0.23.0
+return from i in Enumerable.Range(0, 10)
+    let i2 = i * i
+    where i2 < 100
+    select new { Square = i2, Root = i };
+```
+
+Thanks go to @jods4 for reporting the issue
+
+#### Array and dictionary initializers should break in some cases to improve readability [#809](https://github.com/belav/csharpier/issues/809)
+```c#
+// 0.22.1
+var dictionaryInitializer = new Dictionary<int, string> { { 1, "" }, { 2, "a" }, { 3, "b" } };
+int[,,] cube = { { { 111, 112 }, { 121, 122 } }, { { 211, 212 }, { 221, 222 } } };
+int[][] jagged = { { 111 }, { 121, 122 } };
+
+// 0.23.0
+var dictionaryInitializer = new Dictionary<int, string>
+{
+    { 1, "" },
+    { 2, "a" },
+    { 3, "b" }
+};
+int[,,] cube =
+{
+    {
+        { 111, 112 },
+        { 121, 122 }
+    },
+    {
+        { 211, 212 },
+        { 221, 222 }
+    }
+};
+int[][] jagged =
+{
+    { 111 },
+    { 121, 122 }
+};
+```
+#### List initializer inside object initializer breaks poorly [#802](https://github.com/belav/csharpier/issues/802)
+```c#
+// 0.22.1
+var someObject = new SomeObject { SomeArray = new SomeOtherObject[]
+    {
+        new SomeOtherObject { SomeProperty = 1 },
+        new SomeOtherObject()
+    }.CallMethod().CallMethod() };
+
+// 0.23.0
+var someObject = new SomeObject
+{
+    SomeArray = new SomeOtherObject[]
+    {
+        new SomeOtherObject { SomeProperty = 1 },
+        new SomeOtherObject()
+    }
+        .CallMethod()
+        .CallMethod()
+};
+
+```
+
+Thanks go to @shocklateboy92 for reporting the issue
+#### Allow passing --config-path to cli [#777](https://github.com/belav/csharpier/issues/777)
+It is now possible to pass `--config-path` to the cli for cases where it is not in the root or you want to bypass the auto location and speed up formatting requests.
+```bash
+dotnet csharpier . --config-path "./config/.csharpierrc"
+```
+
+Thanks go to @bdovaz for the suggestion
+
+#### Allow blank lines in query syntax [#754](https://github.com/belav/csharpier/issues/754)
+It is now possible to add blank lines in query syntax expressions which can aid in readability
+```c#
+var result = await (
+    from post in dbContext.Posts
+    join blog in dbContext.Blogs on post.BlogId equals blog.Id
+    
+    let count = dbContext.Posts.Count(p => p.Name == post.Name)
+    
+    where post.Id == 1
+    select new 
+    {
+         Post = post,
+         Blog = blog,
+         SamePostNameCount = count
+    }
+)
+    .AsNoTracking()
+    .FirstAsync();
+```
+
+Thanks go to @TwentyFourMinutes for the suggestion
+
+#### #if causes line after it to break when it contains an if [#666](https://github.com/belav/csharpier/issues/666)
+```c#
+// 0.22.1
+class ClassName
+{
+    public void MethodName()
+    {
+#if !IF_STATEMENT_HERE_SHOULD_NOT_BREAK_INVOCATION_AFTER_ENDIF
+        if (true)
+        {
+            return;
+        }
+#endif
+        SomeObject
+            .CallMethod()
+            .CallOtherMethod(shouldNotBreak);
+    }
+}
+
+// 0.23.0
+class ClassName
+{
+    public void MethodName()
+    {
+#if !IF_STATEMENT_HERE_SHOULD_NOT_BREAK_INVOCATION_AFTER_ENDIF
+        if (true)
+        {
+            return;
+        }
+#endif
+        SomeObject.CallMethod().CallOtherMethod(shouldNotBreak);
+    }
+}
+
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.22.0...0.23.0
+
 # 0.22.1
 ## What's Changed
 #### Fix for CSharpier.MsBuild so it selects a compatible framework if the project does not target net6 or net7 [#797](https://github.com/belav/csharpier/pull/797)

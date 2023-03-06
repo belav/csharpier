@@ -90,3 +90,17 @@ public class ClassName
     }
 }
 ```
+
+As of 0.23.0 both types of ignores can include a description as part of the comment. The description must be seperated from the comment by at least one - character.
+
+```c#
+// csharpier-ignore - class copied as-is from another project
+public class Unformatted     { 
+        private string     unformatted;
+}
+
+// csharpier-ignore-start -- class copied as-is from another project
+public class Unformatted1     { }
+public class Unformatted2     { }
+// csharpier-ignore-end
+```
