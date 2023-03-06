@@ -58,7 +58,7 @@ namespace CSharpier.VisualStudio
             infoBarUIElement.Close();
         }
 
-        public void ShowInfoBar(string message, IEnumerable<InfoBarActionButton>? buttons = null)
+        public void ShowInfoBar(string message, IEnumerable<InfoBarActionButton> buttons = null)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
