@@ -31,10 +31,11 @@ namespace CSharpier.VisualStudio
             IProcessKiller processKiller
         )
         {
-            if (this.warnedAlready)
+            if (this.warnedAlready || this.IgnoreDirectory(directoryThatContainsFile))
             {
                 return;
             }
+
             this.warnedAlready = true;
             this.logger.Warn("CSharpier was not found so files may not be formatted.");
 
@@ -106,6 +107,17 @@ namespace CSharpier.VisualStudio
             }
 
             InfoBarService.Instance.ShowInfoBar(message, actions);
+        }
+
+        private bool IgnoreDirectory(string directoryThatContainsFile)
+        {
+            var normalizedPath = directoryThatContainsFile.Replace("\\", "/");
+            return normalizedPath.IndexOf("Temp/TFSTemp", System.StringComparison.OrdinalIgnoreCase)
+                    >= 0
+                || normalizedPath.IndexOf(
+                    "Temp/MetadataAsSource",
+                    System.StringComparison.OrdinalIgnoreCase
+                ) >= 0;
         }
     }
 

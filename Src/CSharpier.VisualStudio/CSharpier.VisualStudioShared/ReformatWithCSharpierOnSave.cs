@@ -61,7 +61,7 @@ namespace CSharpier.VisualStudio
             return VSConstants.S_OK;
         }
 
-        private Document? FindDocument(uint docCookie)
+        private Document FindDocument(uint docCookie)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 

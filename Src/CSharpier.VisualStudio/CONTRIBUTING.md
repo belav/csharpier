@@ -5,6 +5,7 @@ to installed? Turning off the 2019 build for debug seems to have helped
 
 Publishing
 - Update version in BOTH files at CSharpier.VisualStudio[2019]/source.extension.vsixmanifest
+- Update ChangeLog.md
 - build solution in release (can this happen via command line?)
 - go to https://marketplace.visualstudio.com/manage/publishers/csharpier (with personal microsoft account)
 - three dots - edit - add new vsix
