@@ -15,7 +15,26 @@ internal static class StringDiffer
             return string.Empty;
         }
 
-        var stringBuilder = new StringBuilder();
+        var x = 1;
+        while (x <= expected.Length && x <= actual.Length)
+        {
+            var endOfExpected = expected[^x];
+            var endOfActual = actual[^x];
+            var expectedIsNewLine = endOfExpected is '\r' or '\n';
+            var actualIsNewLine = endOfActual is '\r' or '\n';
+            if (expectedIsNewLine && actualIsNewLine)
+            {
+                x++;
+                continue;
+            }
+
+            if (!expectedIsNewLine && !actualIsNewLine)
+            {
+                break;
+            }
+
+            return "The file did not end with a single newline.";
+        }
 
         using var expectedReader = new StringReader(expected);
         using var actualReader = new StringReader(actual);
@@ -25,6 +44,7 @@ internal static class StringDiffer
         var line = 1;
         string? previousExpectedLine = null;
         string? previousActualLine = null;
+        var stringBuilder = new StringBuilder();
         while (expectedLine != null || actualLine != null)
         {
             if (expectedLine == actualLine)
@@ -68,11 +88,7 @@ internal static class StringDiffer
             return stringBuilder.ToString();
         }
 
-        stringBuilder.AppendLine(
-            "The file contained different line endings than formatting it would result in."
-        );
-
-        return stringBuilder.ToString();
+        return "The file contained different line endings than formatting it would result in.";
     }
 
     private static string? MakeWhiteSpaceVisible(string? value)
