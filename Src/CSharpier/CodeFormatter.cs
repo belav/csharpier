@@ -211,12 +211,25 @@ public static class CodeFormatter
 
     private static string PrintAST(CompilationUnitSyntax rootNode)
     {
-        var stringBuilder = new StringBuilder();
-        SyntaxNodeJsonWriter.WriteCompilationUnitSyntax(stringBuilder, rootNode);
-        return JsonSerializer.Serialize(
-            JsonSerializer.Deserialize<object>(stringBuilder.ToString()),
-            new JsonSerializerOptions { WriteIndented = false }
-        );
+        try
+        {
+            var stringBuilder = new StringBuilder();
+            SyntaxNodeJsonWriter.WriteCompilationUnitSyntax(stringBuilder, rootNode);
+            // SyntaxNodeJsonWriter doesn't write things indented, so this cleans it up for us
+            return JsonSerializer.Serialize(
+                JsonSerializer.Deserialize<object>(stringBuilder.ToString()),
+                new JsonSerializerOptions { WriteIndented = false }
+            );
+        }
+        // in some cases with new unsupported c# language features
+        // SyntaxNodeJsonWriter will not produce valid json
+        catch (JsonException ex)
+        {
+            return JsonSerializer.Serialize(
+                new { exception = ex.ToString() },
+                new JsonSerializerOptions { WriteIndented = false }
+            );
+        }
     }
 }
 

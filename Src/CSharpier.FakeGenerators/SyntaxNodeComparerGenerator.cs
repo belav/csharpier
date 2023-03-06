@@ -73,7 +73,11 @@ namespace CSharpier
 
         sourceBuilder.AppendLine(
             @"                default:
+#if DEBUG
                     throw new Exception(""Can't handle "" + originalNode.GetType().Name);
+#else
+                    return Equal;
+#endif
             }
         }
         "

@@ -398,6 +398,8 @@ namespace CSharpier
                     return this.CompareRelationalPatternSyntax(relationalPatternSyntax, formattedNode as RelationalPatternSyntax);
                 case ReturnStatementSyntax returnStatementSyntax:
                     return this.CompareReturnStatementSyntax(returnStatementSyntax, formattedNode as ReturnStatementSyntax);
+                case ScopedTypeSyntax scopedTypeSyntax:
+                    return this.CompareScopedTypeSyntax(scopedTypeSyntax, formattedNode as ScopedTypeSyntax);
                 case SelectClauseSyntax selectClauseSyntax:
                     return this.CompareSelectClauseSyntax(selectClauseSyntax, formattedNode as SelectClauseSyntax);
                 case ShebangDirectiveTriviaSyntax shebangDirectiveTriviaSyntax:
@@ -513,7 +515,11 @@ namespace CSharpier
                 case YieldStatementSyntax yieldStatementSyntax:
                     return this.CompareYieldStatementSyntax(yieldStatementSyntax, formattedNode as YieldStatementSyntax);
                 default:
+#if DEBUG
                     throw new Exception("Can't handle " + originalNode.GetType().Name);
+#else
+                    return Equal;
+#endif
             }
         }
         
@@ -3173,6 +3179,21 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
+            return Equal;
+        }
+        private CompareResult CompareScopedTypeSyntax(ScopedTypeSyntax originalNode, ScopedTypeSyntax formattedNode)
+        {
+            CompareResult result;
+            if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
+            if (originalNode.IsNint != formattedNode.IsNint) return NotEqual(originalNode, formattedNode);
+            if (originalNode.IsNotNull != formattedNode.IsNotNull) return NotEqual(originalNode, formattedNode);
+            if (originalNode.IsNuint != formattedNode.IsNuint) return NotEqual(originalNode, formattedNode);
+            if (originalNode.IsUnmanaged != formattedNode.IsUnmanaged) return NotEqual(originalNode, formattedNode);
+            if (originalNode.IsVar != formattedNode.IsVar) return NotEqual(originalNode, formattedNode);
+            result = this.Compare(originalNode.ScopedKeyword, formattedNode.ScopedKeyword, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            originalStack.Push((originalNode.Type, originalNode));
+            formattedStack.Push((formattedNode.Type, formattedNode));
             return Equal;
         }
         private CompareResult CompareSelectClauseSyntax(SelectClauseSyntax originalNode, SelectClauseSyntax formattedNode)

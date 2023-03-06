@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier
 {
-    internal partial class SyntaxNodeJsonWriter
+    internal static partial class SyntaxNodeJsonWriter
     {
         public static void WriteSyntaxNode(StringBuilder builder, SyntaxNode syntaxNode)
         {
@@ -192,6 +192,7 @@ namespace CSharpier
             if (syntaxNode is RegionDirectiveTriviaSyntax) WriteRegionDirectiveTriviaSyntax(builder, syntaxNode as RegionDirectiveTriviaSyntax);
             if (syntaxNode is RelationalPatternSyntax) WriteRelationalPatternSyntax(builder, syntaxNode as RelationalPatternSyntax);
             if (syntaxNode is ReturnStatementSyntax) WriteReturnStatementSyntax(builder, syntaxNode as ReturnStatementSyntax);
+            if (syntaxNode is ScopedTypeSyntax) WriteScopedTypeSyntax(builder, syntaxNode as ScopedTypeSyntax);
             if (syntaxNode is SelectClauseSyntax) WriteSelectClauseSyntax(builder, syntaxNode as SelectClauseSyntax);
             if (syntaxNode is ShebangDirectiveTriviaSyntax) WriteShebangDirectiveTriviaSyntax(builder, syntaxNode as ShebangDirectiveTriviaSyntax);
             if (syntaxNode is SimpleBaseTypeSyntax) WriteSimpleBaseTypeSyntax(builder, syntaxNode as SimpleBaseTypeSyntax);
@@ -7088,6 +7089,35 @@ namespace CSharpier
                 var semicolonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
+            builder.Append(string.Join(",", properties.Where(o => o != null)));
+            builder.Append("}");
+        }
+        public static void WriteScopedTypeSyntax(StringBuilder builder, ScopedTypeSyntax syntaxNode)
+        {
+            builder.Append("{");
+            var properties = new List<string>();
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add(WriteBoolean("hasLeadingTrivia", syntaxNode.HasLeadingTrivia));
+            properties.Add(WriteBoolean("hasTrailingTrivia", syntaxNode.HasTrailingTrivia));
+            properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
+            properties.Add(WriteBoolean("isNint", syntaxNode.IsNint));
+            properties.Add(WriteBoolean("isNotNull", syntaxNode.IsNotNull));
+            properties.Add(WriteBoolean("isNuint", syntaxNode.IsNuint));
+            properties.Add(WriteBoolean("isUnmanaged", syntaxNode.IsUnmanaged));
+            properties.Add(WriteBoolean("isVar", syntaxNode.IsVar));
+            if (syntaxNode.ScopedKeyword != default(SyntaxToken))
+            {
+                var scopedKeywordBuilder = new StringBuilder();
+                WriteSyntaxToken(scopedKeywordBuilder, syntaxNode.ScopedKeyword);
+                properties.Add($"\"scopedKeyword\":{scopedKeywordBuilder.ToString()}");
+            }
+            if (syntaxNode.Type != default(TypeSyntax))
+            {
+                var typeBuilder = new StringBuilder();
+                WriteSyntaxNode(typeBuilder, syntaxNode.Type);
+                properties.Add($"\"type\":{typeBuilder.ToString()}");
             }
             builder.Append(string.Join(",", properties.Where(o => o != null)));
             builder.Append("}");
