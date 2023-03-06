@@ -127,6 +127,7 @@ public class ClassName
 ```
 
 ### --config-path
+_First available in 0.23.0_
 If your configuration file lives in a location that CSharpier would not normally resolve it (such as in a config folder) 
 you can pass the path for the configuration file to CSharpier.
 ```bash

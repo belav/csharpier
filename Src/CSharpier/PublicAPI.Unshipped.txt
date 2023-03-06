@@ -1,11 +1,1 @@
-﻿CSharpier.CodeFormatterResult
-CSharpier.CodeFormatterResult.Code.get -> string!
-CSharpier.CodeFormatterResult.CompilationErrors.get -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Diagnostic!>!
-static CSharpier.CodeFormatter.Format(Microsoft.CodeAnalysis.SyntaxTree! syntaxTree, CSharpier.CodeFormatterOptions? options = null) -> CSharpier.CodeFormatterResult!
-static CSharpier.CodeFormatter.Format(string! code, CSharpier.CodeFormatterOptions? options = null) -> CSharpier.CodeFormatterResult!
-static CSharpier.CodeFormatter.FormatAsync(Microsoft.CodeAnalysis.SyntaxTree! syntaxTree, CSharpier.CodeFormatterOptions? options = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<CSharpier.CodeFormatterResult!>!
-static CSharpier.CodeFormatter.FormatAsync(string! code, CSharpier.CodeFormatterOptions? options = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<CSharpier.CodeFormatterResult!>!
-*REMOVED*static CSharpier.CodeFormatter.Format(Microsoft.CodeAnalysis.SyntaxTree! syntaxTree, CSharpier.CodeFormatterOptions? options = null) -> string!
-*REMOVED*static CSharpier.CodeFormatter.Format(string! code, CSharpier.CodeFormatterOptions? options = null) -> string!
-*REMOVED*static CSharpier.CodeFormatter.FormatAsync(Microsoft.CodeAnalysis.SyntaxTree! syntaxTree, CSharpier.CodeFormatterOptions? options = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<string!>!
-*REMOVED*static CSharpier.CodeFormatter.FormatAsync(string! code, CSharpier.CodeFormatterOptions? options = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<string!>!
+﻿
