@@ -31,7 +31,7 @@ public class SyntaxNodeJsonWriterGenerator
         sourceBuilder.AppendLine();
         sourceBuilder.AppendLine("namespace CSharpier");
         sourceBuilder.AppendLine("{");
-        sourceBuilder.AppendLine("    internal partial class SyntaxNodeJsonWriter");
+        sourceBuilder.AppendLine("    internal static partial class SyntaxNodeJsonWriter");
         sourceBuilder.AppendLine("    {");
 
         sourceBuilder.AppendLine(

@@ -2,46 +2,28 @@ namespace CSharpier;
 
 using System.Text.Json;
 
-internal partial class SyntaxNodeJsonWriter
+internal static partial class SyntaxNodeJsonWriter
 {
     private static string? WriteBoolean(string name, bool value)
     {
-        if (value)
-        {
-            return $"\"{name}\":true";
-        }
-
-        return null;
+        return value ? $"\"{name}\":true" : null;
     }
 
     private static string? WriteString(string name, string value)
     {
-        if (!string.IsNullOrEmpty(value))
-        {
-            return $"\"{name}\":\"{JsonEncodedText.Encode(value)}\"";
-        }
-
-        return null;
+        return !string.IsNullOrEmpty(value)
+            ? $"\"{name}\":\"{JsonEncodedText.Encode(value)}\""
+            : null;
     }
 
     private static string? WriteInt(string name, int value)
     {
-        if (value != 0)
-        {
-            return $"\"{name}\":{value}";
-        }
-
-        return null;
+        return value != 0 ? $"\"{name}\":{value}" : null;
     }
 
-    private static string? GetNodeType(Type type)
+    private static string GetNodeType(Type type)
     {
         var name = type.Name;
-        if (name.EndsWith("Syntax"))
-        {
-            return name.Substring(0, name.Length - "Syntax".Length);
-        }
-
-        return name;
+        return name.EndsWith("Syntax") ? name[..^"Syntax".Length] : name;
     }
 }
