@@ -1,28 +1,25 @@
-namespace CSharpier.VisualStudio
+namespace CSharpier.VisualStudio;
+
+using Microsoft.VisualStudio.Shell;
+
+public class CSharpierOptionsPage : DialogPage
 {
-    using Microsoft.VisualStudio.Shell;
+    private readonly CSharpierOptions model;
 
-    public class CSharpierOptionsPage : DialogPage
+    public CSharpierOptionsPage()
     {
-        private readonly CSharpierOptions model;
+        this.model = ThreadHelper.JoinableTaskFactory.Run(CSharpierOptions.GetLiveInstanceAsync);
+    }
 
-        public CSharpierOptionsPage()
-        {
-            this.model = ThreadHelper.JoinableTaskFactory.Run(
-                CSharpierOptions.GetLiveInstanceAsync
-            );
-        }
+    public override object AutomationObject => this.model;
 
-        public override object AutomationObject => this.model;
+    public override void LoadSettingsFromStorage()
+    {
+        this.model.Load();
+    }
 
-        public override void LoadSettingsFromStorage()
-        {
-            this.model.Load();
-        }
-
-        public override void SaveSettingsToStorage()
-        {
-            this.model.Save();
-        }
+    public override void SaveSettingsToStorage()
+    {
+        this.model.Save();
     }
 }

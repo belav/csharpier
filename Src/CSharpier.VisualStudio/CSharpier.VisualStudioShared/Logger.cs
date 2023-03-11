@@ -34,14 +34,7 @@ namespace CSharpier.VisualStudio
 
         public void Debug(string message)
         {
-            var logDebug =
-                CSharpierOptions.Instance.SolutionLogDebugMessages is true
-                || (
-                    CSharpierOptions.Instance.SolutionLogDebugMessages is null
-                    && CSharpierOptions.Instance.GlobalLogDebugMessages is true
-                );
-
-            if (logDebug)
+            if (CSharpierOptions.Instance.GlobalLogDebugMessages)
             {
                 this.Log(message);
             }

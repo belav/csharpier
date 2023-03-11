@@ -1,5 +1,4 @@
-﻿#nullable enable
-namespace CSharpier.VisualStudio;
+﻿namespace CSharpier.VisualStudio;
 
 using System;
 using System.ComponentModel;
@@ -19,11 +18,6 @@ public class CSharpierOptions
     [Description("Reformat with CSharpier on Save - this option is saved locally to the solution")]
     public bool? SolutionRunOnSave { get; set; }
 
-    [Category("CSharpier - Solution")]
-    [DisplayName("Log Debug Messages")]
-    [Description("Log Debug Messages - this option is saved locally to the solution")]
-    public bool? SolutionLogDebugMessages { get; set; }
-
     [Category("CSharpier - Global")]
     [DisplayName("Reformat with CSharpier on Save")]
     [Description(
@@ -34,12 +28,11 @@ public class CSharpierOptions
     [Category("CSharpier - Global")]
     [DisplayName("Log Debug Messages")]
     [Description("Log Debug Messages - this option is saved globally to this computer")]
-    public bool? GlobalLogDebugMessages { get; set; }
+    public bool GlobalLogDebugMessages { get; set; }
 
     protected void LoadFrom(CSharpierOptions newInstance)
     {
         this.SolutionRunOnSave = newInstance.SolutionRunOnSave;
-        this.SolutionLogDebugMessages = newInstance.SolutionLogDebugMessages;
         this.GlobalRunOnSave = newInstance.GlobalRunOnSave;
         this.GlobalLogDebugMessages = newInstance.GlobalLogDebugMessages;
     }
@@ -102,7 +95,6 @@ public class CSharpierOptions
             o =>
             {
                 newInstance.SolutionRunOnSave = o.RunOnSave;
-                newInstance.SolutionLogDebugMessages = o.LogDebugMessages;
             }
         );
 
@@ -156,11 +148,7 @@ public class CSharpierOptions
 
         await SaveOptions(
             this.GetSolutionOptionsFileNameAsync,
-            new OptionsDto
-            {
-                RunOnSave = this.SolutionRunOnSave,
-                LogDebugMessages = this.SolutionLogDebugMessages
-            }
+            new OptionsDto { RunOnSave = this.SolutionRunOnSave, }
         );
 
         await SaveOptions(
@@ -201,6 +189,6 @@ public class CSharpierOptions
     private class OptionsDto
     {
         public bool? RunOnSave { get; set; }
-        public bool? LogDebugMessages { get; set; }
+        public bool LogDebugMessages { get; set; }
     }
 }

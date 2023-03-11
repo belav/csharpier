@@ -96,7 +96,7 @@ namespace CSharpier.VisualStudio
                 isCloseButtonVisible: true
             );
 
-#pragma warning disable VSTHRD002
+#pragma warning disable VSTHRD002, VSSDK006
             var factory =
                 this.package.GetServiceAsync(typeof(SVsInfoBarUIFactory)).Result
                 as IVsInfoBarUIFactory;

@@ -10,8 +10,6 @@ using Task = System.Threading.Tasks.Task;
 
 namespace CSharpier.VisualStudio
 {
-    using System.Threading.Tasks;
-
     [Guid(PackageGuidString)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
@@ -37,7 +35,9 @@ namespace CSharpier.VisualStudio
             await ReformatWithCSharpier.InitializeAsync(this);
             await InstallerService.InitializeAsync(this);
 
+#pragma warning disable VSSDK006
             var dte = await this.GetServiceAsync(typeof(DTE)) as DTE;
+#pragma warning restore
             if (dte?.ActiveDocument != null)
             {
                 CSharpierProcessProvider
