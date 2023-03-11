@@ -1,4 +1,7 @@
-﻿## [1.3.6]
+﻿## [1.4.0]
+- Add ability to configure "Reformat on save" at the global level
+
+## [1.3.6]
 - Disable "CSharpier must be installed globally" popup for some temporary files
 
 ## [1.3.5]
