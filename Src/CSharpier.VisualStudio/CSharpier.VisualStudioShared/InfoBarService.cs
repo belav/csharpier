@@ -98,7 +98,8 @@ namespace CSharpier.VisualStudio
 
 #pragma warning disable VSTHRD002
             var factory =
-                this.package.GetServiceAsync<SVsInfoBarUIFactory>().Result as IVsInfoBarUIFactory;
+                this.package.GetServiceAsync(typeof(SVsInfoBarUIFactory)).Result
+                as IVsInfoBarUIFactory;
 #pragma warning restore
             var element = factory!.CreateInfoBar(infoBarModel);
             element.Advise(this, out this.cookie);

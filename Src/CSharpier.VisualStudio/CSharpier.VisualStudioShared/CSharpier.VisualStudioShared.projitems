@@ -28,5 +28,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ProcessHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ReformatWithCSharpier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ReformatWithCSharpierOnSave.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StringExtensions.cs" />
   </ItemGroup>
 </Project>

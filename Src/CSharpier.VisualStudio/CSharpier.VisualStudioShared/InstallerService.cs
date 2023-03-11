@@ -112,12 +112,9 @@ namespace CSharpier.VisualStudio
         private bool IgnoreDirectory(string directoryThatContainsFile)
         {
             var normalizedPath = directoryThatContainsFile.Replace("\\", "/");
-            return normalizedPath.IndexOf("Temp/TFSTemp", System.StringComparison.OrdinalIgnoreCase)
-                    >= 0
-                || normalizedPath.IndexOf(
-                    "Temp/MetadataAsSource",
-                    System.StringComparison.OrdinalIgnoreCase
-                ) >= 0;
+            return normalizedPath.ContainsIgnoreCase("Temp/TFSTemp")
+                || normalizedPath.ContainsIgnoreCase("Temp/MetadataAsSource")
+                || normalizedPath.ContainsIgnoreCase("MSBuild/Current/Bin");
         }
     }
 

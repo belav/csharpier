@@ -21,11 +21,12 @@ namespace CSharpier.VisualStudio
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
-            var commandService = await package.GetServiceAsync<IMenuCommandService>();
+            var commandService =
+                await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
 
-            var dte = await package.GetServiceAsync<DTE>();
+            var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
 
-            Instance = new ReformatWithCSharpier(package, commandService, dte);
+            Instance = new ReformatWithCSharpier(package, commandService!, dte!);
         }
 
         private ReformatWithCSharpier(

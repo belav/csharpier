@@ -37,8 +37,8 @@ namespace CSharpier.VisualStudio
             await ReformatWithCSharpier.InitializeAsync(this);
             await InstallerService.InitializeAsync(this);
 
-            var dte = await this.GetServiceAsync<DTE>();
-            if (dte.ActiveDocument != null)
+            var dte = await this.GetServiceAsync(typeof(DTE)) as DTE;
+            if (dte?.ActiveDocument != null)
             {
                 CSharpierProcessProvider
                     .GetInstance(this)
@@ -51,12 +51,6 @@ namespace CSharpier.VisualStudio
         private void HandleOpenSolution(object sender, OpenSolutionEventArgs e)
         {
             CSharpierOptions.Instance.Load();
-        }
-
-        private async Task<T> GetServiceAsync<T>()
-            where T : class
-        {
-            return (await this.GetServiceAsync(typeof(T)) as T)!;
         }
     }
 }

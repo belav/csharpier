@@ -10,11 +10,5 @@ namespace CSharpier.VisualStudio
         {
             return asyncPackage.GetServiceAsync<T, T>();
         }
-
-        public static T GetDialogPage<T>(this AsyncPackage asyncPackage)
-            where T : DialogPage
-        {
-            return (T)asyncPackage.GetDialogPage(typeof(T));
-        }
     }
 }
