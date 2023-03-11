@@ -10,6 +10,8 @@ using Task = System.Threading.Tasks.Task;
 
 namespace CSharpier.VisualStudio
 {
+    using System.Threading.Tasks;
+
     [Guid(PackageGuidString)]
     [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
@@ -35,7 +37,7 @@ namespace CSharpier.VisualStudio
             await ReformatWithCSharpier.InitializeAsync(this);
             await InstallerService.InitializeAsync(this);
 
-            var dte = await this.GetServiceAsync(typeof(DTE)) as DTE;
+            var dte = await this.GetServiceAsync<DTE>();
             if (dte.ActiveDocument != null)
             {
                 CSharpierProcessProvider
@@ -49,6 +51,12 @@ namespace CSharpier.VisualStudio
         private void HandleOpenSolution(object sender, OpenSolutionEventArgs e)
         {
             CSharpierOptions.Instance.Load();
+        }
+
+        private async Task<T> GetServiceAsync<T>()
+            where T : class
+        {
+            return (await this.GetServiceAsync(typeof(T)) as T)!;
         }
     }
 }

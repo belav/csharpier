@@ -8,7 +8,7 @@ namespace CSharpier.VisualStudio
     {
         private readonly IVsOutputWindowPane pane;
 
-        public static Logger Instance { get; private set; }
+        public static Logger Instance { get; private set; } = default!;
 
         public static async Task InitializeAsync(CSharpierPackage package)
         {
@@ -34,7 +34,14 @@ namespace CSharpier.VisualStudio
 
         public void Debug(string message)
         {
-            if (CSharpierOptions.Instance.LogDebugMessages)
+            var logDebug =
+                CSharpierOptions.Instance.SolutionLogDebugMessages is true
+                || (
+                    CSharpierOptions.Instance.SolutionLogDebugMessages is null
+                    && CSharpierOptions.Instance.GlobalLogDebugMessages is true
+                );
+
+            if (logDebug)
             {
                 this.Log(message);
             }

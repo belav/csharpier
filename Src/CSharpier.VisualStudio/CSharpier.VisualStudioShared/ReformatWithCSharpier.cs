@@ -10,33 +10,30 @@ namespace CSharpier.VisualStudio
     {
         public const int CommandId = 0x0100;
 
-        public static readonly Guid CommandSet = new Guid("3675aa7e-5cd1-4ea2-a077-17e6eefdc3b1");
+        public static readonly Guid CommandSet = new("3675aa7e-5cd1-4ea2-a077-17e6eefdc3b1");
 
-        private readonly CSharpierPackage package;
         private readonly DTE dte;
         private readonly FormattingService formattingService;
 
-        public static ReformatWithCSharpier Instance { get; private set; }
+        public static ReformatWithCSharpier Instance { get; private set; } = default!;
 
         public static async Task InitializeAsync(CSharpierPackage package)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
-            var commandService =
-                await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
+            var commandService = await package.GetServiceAsync<IMenuCommandService>();
 
-            var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
+            var dte = await package.GetServiceAsync<DTE>();
 
             Instance = new ReformatWithCSharpier(package, commandService, dte);
         }
 
         private ReformatWithCSharpier(
             CSharpierPackage package,
-            OleMenuCommandService commandService,
+            IMenuCommandService commandService,
             DTE dte
         )
         {
-            this.package = package;
             this.dte = dte;
 
             var menuCommandId = new CommandID(CommandSet, CommandId);

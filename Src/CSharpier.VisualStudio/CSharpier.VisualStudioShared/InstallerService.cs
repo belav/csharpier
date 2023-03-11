@@ -12,12 +12,12 @@ namespace CSharpier.VisualStudio
 
         private bool warnedAlready;
 
-        public static InstallerService Instance { get; private set; }
+        public static InstallerService Instance { get; private set; } = default!;
 
         public static async Task InitializeAsync(CSharpierPackage package)
         {
             var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
-            Instance = new InstallerService(dte);
+            Instance = new InstallerService(dte!);
         }
 
         private InstallerService(DTE dte)
@@ -58,7 +58,7 @@ namespace CSharpier.VisualStudio
 
             var actions = new List<InfoBarActionButton>
             {
-                new InfoBarActionButton
+                new()
                 {
                     Text = "Install CSharpier Globally",
                     Context = "InstallGlobally",

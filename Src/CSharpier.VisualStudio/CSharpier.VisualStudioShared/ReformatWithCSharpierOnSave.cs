@@ -27,12 +27,19 @@ namespace CSharpier.VisualStudio
         public static async Task InitializeAsync(CSharpierPackage package)
         {
             var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
-            new ReformatWithCSharpierOnSave(package, dte);
+            new ReformatWithCSharpierOnSave(package, dte!);
         }
 
         public int OnBeforeSave(uint docCookie)
         {
-            if (!CSharpierOptions.Instance.RunOnSave)
+            var runOnSave =
+                CSharpierOptions.Instance.SolutionRunOnSave is true
+                || (
+                    CSharpierOptions.Instance.SolutionRunOnSave is null
+                    && CSharpierOptions.Instance.GlobalRunOnSave is true
+                );
+
+            if (!runOnSave)
             {
                 return VSConstants.S_OK;
             }
@@ -61,7 +68,7 @@ namespace CSharpier.VisualStudio
             return VSConstants.S_OK;
         }
 
-        private Document FindDocument(uint docCookie)
+        private Document? FindDocument(uint docCookie)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
