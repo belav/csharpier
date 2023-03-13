@@ -5,12 +5,20 @@ using System.Text.RegularExpressions;
 
 internal static class CSharpierIgnore
 {
-    private static readonly Regex IgnoreRegex = new("^// csharpier-ignore($| -)");
+    public static readonly Regex IgnoreRegex = new("^// csharpier-ignore($| -)");
     public static readonly Regex IgnoreStartRegex = new("^// csharpier-ignore-start($| -)");
     public static readonly Regex IgnoreEndRegex = new("^// csharpier-ignore-end($| -)");
 
     public static bool IsNodeIgnored(SyntaxNode syntaxNode)
     {
+        if (
+            syntaxNode is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax
+            && baseMethodDeclarationSyntax.AttributeLists.Any()
+        )
+        {
+            return false;
+        }
+
         return syntaxNode.Parent
                 is BaseTypeDeclarationSyntax
                     or BlockSyntax

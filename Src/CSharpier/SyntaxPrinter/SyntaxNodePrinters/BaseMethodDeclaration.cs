@@ -85,7 +85,7 @@ internal static class BaseMethodDeclaration
 
         var declarationGroup = new List<Doc>();
 
-        if (modifiers.HasValue && modifiers.Value.Any())
+        if (modifiers is { Count: > 0 })
         {
             declarationGroup.Add(Modifiers.PrintWithoutLeadingTrivia(modifiers.Value, context));
         }
