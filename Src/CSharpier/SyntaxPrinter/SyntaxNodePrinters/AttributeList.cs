@@ -4,10 +4,7 @@ internal static class AttributeList
 {
     public static Doc Print(AttributeListSyntax node, FormattingContext context)
     {
-        if (
-            node.Parent is BaseMethodDeclarationSyntax
-            && Token.HasLeadingCommentMatching(node, CSharpierIgnore.IgnoreRegex)
-        )
+        if (node.Parent is BaseMethodDeclarationSyntax && CSharpierIgnore.HasIgnoreComment(node))
         {
             return CSharpierIgnore.PrintWithoutFormatting(node, context).Trim();
         }
