@@ -39,6 +39,15 @@ public class ClassName
         var formatMe = true;
     }
 
+    void MultipleStatements()
+    {
+        // csharpier-ignore-start
+        var packet =              new List<byte>();
+        packet.Add(0x0f); packet.Add(0x00);
+        packet.Add(0x0f); packet.Add(0x00);
+        // csharpier-ignore-end
+    }
+
     void RangeToEndMethod()
     {
         var formatMe = true;
@@ -101,7 +110,7 @@ public class ClassName2
     {
         // csharpier-ignore-start
         var    unformattedWithLine1;
-    
+
         var    unformattedWithLine2;
         // csharpier-ignore-end
     }
@@ -110,7 +119,7 @@ public class ClassName2
     {
         // csharpier-ignore-start
         string    unformattedWithLine1;
-    
+
         string    unformattedWithLine2;
         // csharpier-ignore-end
 
@@ -122,7 +131,7 @@ public class KeepLines1
 {
     // csharpier-ignore-start
     private string    first;
-    
+
     private string    second;
     // csharpier-ignore-end
 }
@@ -131,7 +140,7 @@ public class KeepLines2
 {
     // csharpier-ignore-start
     private string    first;
-    
+
     private string    second;
     // csharpier-ignore-end
 

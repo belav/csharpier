@@ -40,6 +40,15 @@ public class ClassName
         var formatMe =    true;
     }
     
+    void MultipleStatements()
+    {
+        // csharpier-ignore-start
+        var packet =              new List<byte>();
+        packet.Add(0x0f); packet.Add(0x00);
+        packet.Add(0x0f); packet.Add(0x00);
+        // csharpier-ignore-end
+    }
+    
     void RangeToEndMethod()
     {
         var formatMe =    true;
