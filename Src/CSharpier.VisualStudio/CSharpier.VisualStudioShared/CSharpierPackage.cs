@@ -35,8 +35,10 @@ namespace CSharpier.VisualStudio
             await ReformatWithCSharpier.InitializeAsync(this);
             await InstallerService.InitializeAsync(this);
 
+#pragma warning disable VSSDK006
             var dte = await this.GetServiceAsync(typeof(DTE)) as DTE;
-            if (dte.ActiveDocument != null)
+#pragma warning restore
+            if (dte?.ActiveDocument != null)
             {
                 CSharpierProcessProvider
                     .GetInstance(this)

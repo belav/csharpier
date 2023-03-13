@@ -1,27 +1,28 @@
-using System.ComponentModel;
-
 namespace CSharpier.VisualStudio
 {
-    public class CSharpierOptionsPage : BaseOptionPage<CSharpierOptions> { }
+    using Microsoft.VisualStudio.Shell;
 
-    public class CSharpierOptions : BaseOptionModel<CSharpierOptions>
+    public class CSharpierOptionsPage : DialogPage
     {
-        [Category("CSharpier")]
-        [DisplayName("Reformat with CSharpier on Save")]
-        [Description(
-            "Reformat with CSharpier on Save - this option is saved locally to the solution"
-        )]
-        public bool RunOnSave { get; set; }
+        private readonly CSharpierOptions model;
 
-        [Category("CSharpier")]
-        [DisplayName("Log Debug Messages")]
-        [Description("Log Debug Messages - this option is saved locally to the solution")]
-        public bool LogDebugMessages { get; set; }
-
-        protected override void LoadFrom(CSharpierOptions newInstance)
+        public CSharpierOptionsPage()
         {
-            this.RunOnSave = newInstance.RunOnSave;
-            this.LogDebugMessages = newInstance.LogDebugMessages;
+            this.model = ThreadHelper.JoinableTaskFactory.Run(
+                CSharpierOptions.GetLiveInstanceAsync
+            );
+        }
+
+        public override object AutomationObject => this.model;
+
+        public override void LoadSettingsFromStorage()
+        {
+            this.model.Load();
+        }
+
+        public override void SaveSettingsToStorage()
+        {
+            this.model.Save();
         }
     }
 }

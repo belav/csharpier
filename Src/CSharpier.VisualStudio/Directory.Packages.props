@@ -1,0 +1,3 @@
+<Project>
+  <!-- CPM breaks VS2019 and we don't need it for the extensions anyway -->
+</Project>

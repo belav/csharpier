@@ -13,7 +13,7 @@ namespace CSharpier.VisualStudio
         private readonly Logger logger;
         private readonly CSharpierPackage package;
         private uint cookie;
-        private Dictionary<string, Action> buttonActions = new Dictionary<string, Action>();
+        private readonly Dictionary<string, Action> buttonActions = new();
 
         private InfoBarService(CSharpierPackage package)
         {
@@ -21,7 +21,7 @@ namespace CSharpier.VisualStudio
             this.logger = Logger.Instance;
         }
 
-        public static InfoBarService Instance { get; private set; }
+        public static InfoBarService Instance { get; private set; } = default!;
 
         public static Task InitializeAsync(CSharpierPackage package)
         {
@@ -58,18 +58,19 @@ namespace CSharpier.VisualStudio
             infoBarUIElement.Close();
         }
 
-        public void ShowInfoBar(string message, IEnumerable<InfoBarActionButton> buttons = null)
+        public void ShowInfoBar(string message, IEnumerable<InfoBarActionButton>? buttons = null)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var shell = this.package.GetServiceAsync(typeof(SVsShell)).Result as IVsShell;
-            if (shell == null)
+#pragma warning disable VSSDK006, VSTHRD002
+            if (this.package.GetServiceAsync(typeof(SVsShell)).Result is not IVsShell shell)
             {
                 return;
             }
+#pragma warning restore
 
             shell.GetProperty((int)__VSSPROPID7.VSSPROPID_MainWindowInfoBarHost, out var property);
-            if (!(property is IVsInfoBarHost infoBarHost))
+            if (property is not IVsInfoBarHost infoBarHost)
             {
                 return;
             }
@@ -95,10 +96,12 @@ namespace CSharpier.VisualStudio
                 isCloseButtonVisible: true
             );
 
+#pragma warning disable VSTHRD002, VSSDK006
             var factory =
                 this.package.GetServiceAsync(typeof(SVsInfoBarUIFactory)).Result
                 as IVsInfoBarUIFactory;
-            var element = factory.CreateInfoBar(infoBarModel);
+#pragma warning restore
+            var element = factory!.CreateInfoBar(infoBarModel);
             element.Advise(this, out this.cookie);
             infoBarHost.AddInfoBar(element);
         }
@@ -106,8 +109,8 @@ namespace CSharpier.VisualStudio
 
     public class InfoBarActionButton
     {
-        public string Text { get; set; }
-        public string Context { get; set; }
-        public Action OnClicked { get; set; }
+        public string Text { get; set; } = string.Empty;
+        public string Context { get; set; } = string.Empty;
+        public Action OnClicked { get; set; } = default!;
     }
 }

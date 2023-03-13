@@ -7,6 +7,7 @@ To use it:
 - Use the `Reformat with CSharpier` right click context menu action.
 - Optionally configure a keyboard shortcut for `EditorContextMenus.CodeWindow.ReformatWithCSharpier`
 - Optionally configure `Reformat with CSharpier on Save` under Tools | Options | CSharpier | General
+  - This option can be configured at the solution level or at the global level. 
 
 Please report any [issues](https://github.com/belav/csharpier/issues)
 
