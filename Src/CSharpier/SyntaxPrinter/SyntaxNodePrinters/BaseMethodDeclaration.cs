@@ -1,7 +1,6 @@
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 using System.Text.RegularExpressions;
-using Microsoft.CodeAnalysis.Text;
 
 internal static class BaseMethodDeclaration
 {
@@ -77,7 +76,7 @@ internal static class BaseMethodDeclaration
         {
             docs.Add(AttributeLists.Print(node, attributeLists.Value, context));
 
-            void PrintMethodIgnoredWithoutAttributes(SyntaxTriviaList syntaxTriviaList)
+            void PrintMethodUnformattedWithoutAttributes(SyntaxTriviaList syntaxTriviaList)
             {
                 var attributeStart = attributeLists.Value[0]
                     .GetLeadingTrivia()
@@ -103,13 +102,13 @@ internal static class BaseMethodDeclaration
             {
                 if (CSharpierIgnore.HasIgnoreComment(modifiers.Value[0]))
                 {
-                    PrintMethodIgnoredWithoutAttributes(modifiers.Value[0].LeadingTrivia);
+                    PrintMethodUnformattedWithoutAttributes(modifiers.Value[0].LeadingTrivia);
                     return Doc.Group(docs);
                 }
             }
             else if (returnType is not null && CSharpierIgnore.HasIgnoreComment(returnType))
             {
-                PrintMethodIgnoredWithoutAttributes(returnType.GetLeadingTrivia());
+                PrintMethodUnformattedWithoutAttributes(returnType.GetLeadingTrivia());
                 return Doc.Group(docs);
             }
         }

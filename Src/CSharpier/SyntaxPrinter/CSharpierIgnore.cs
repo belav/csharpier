@@ -17,6 +17,7 @@ internal static class CSharpierIgnore
 
     public static bool IsNodeIgnored(SyntaxNode syntaxNode)
     {
+        // this get handled in BaseMethodDeclaration and/or AttributeList
         if (
             syntaxNode is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax
             && baseMethodDeclarationSyntax.AttributeLists.Any()
