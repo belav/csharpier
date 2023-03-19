@@ -62,6 +62,7 @@ internal static class CSharpierIgnore
 
     public static string PrintWithoutFormatting(SyntaxNode syntaxNode, FormattingContext context)
     {
-        return syntaxNode.GetText().ToString().TrimEnd() + context.LineEnding;
+        // trim trailing whitespace + replace only existing line endings
+        return Regex.Replace(syntaxNode.GetText().ToString(), @"\s*(\r\n?|\n)", context.LineEnding);
     }
 }
