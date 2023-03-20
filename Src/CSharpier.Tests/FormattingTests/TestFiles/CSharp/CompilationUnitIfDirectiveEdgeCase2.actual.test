@@ -1,0 +1,12 @@
+#if DONT_ADD_EXTRA_LINES
+using System.Net.Http;
+#else
+using System.Web.Routing;
+#endif
+
+#if DONT_ADD_EXTRA_LINES
+namespace System.Web.Http.Routing.Constraints
+#else
+namespace System.Web.Mvc.Routing.Constraints
+#endif
+{ }

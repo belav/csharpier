@@ -1,0 +1,82 @@
+public class ClassName
+{
+    public void MethodName()
+    {
+        if (true)
+        {
+            return;
+        }
+
+        if (true == false) { }
+
+        if (true && false) { }
+
+        if (true)
+            DoSomething();
+        else if (false)
+            DoSomething();
+        else
+            DoSomething;
+
+        if (true)
+            while (true)
+                foreach (var x in y)
+                    CallMethod(x);
+
+        if (someLongCondition != someOtherCondition)
+            DoSomeLongMethodCall_________________________();
+        else if (someLongCondition == someOtherCondition)
+            DoSomeLongMethodCall_________________________();
+        else
+            DoSomeLongMethodCall________________________________________();
+
+        if (
+            longStatementName
+            && longerStatementName
+            && evenLongerStatementName
+            && superLongStatementName
+        )
+        {
+            return;
+        }
+
+        if (
+            longStatementName
+            && longerStatementName
+            && evenLongerStatementName
+            && superLongStatementName
+        )
+            return;
+
+        if (!true) { }
+
+        if (true != false) { }
+
+        if (true || false) { }
+
+        if (true && (true || false)) { }
+
+        if (exactly100 || moreTextToMakeItWork_____________________________________________________)
+        {
+            return;
+        }
+
+        // leading comment doesn't break differently
+        if (exactly100 || moreTextToMakeItWork_____________________________________________________)
+        {
+            return;
+        }
+
+        if (
+            justOver100 || moreTextToMakeItWork_____________________________________________________
+        )
+        {
+            return;
+        }
+
+        if (true)
+        {
+            // indent
+        }
+    }
+}

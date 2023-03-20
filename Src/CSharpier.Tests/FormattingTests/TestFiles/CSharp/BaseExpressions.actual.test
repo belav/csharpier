@@ -1,0 +1,7 @@
+class ClassName
+{
+    void MethodName()
+    {
+        return base.MethodName();
+    }
+}

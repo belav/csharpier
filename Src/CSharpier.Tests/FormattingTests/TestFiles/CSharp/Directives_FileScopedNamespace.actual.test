@@ -1,0 +1,15 @@
+namespace FileScoped;
+
+#if NO_EXTRA_LINES
+extern alias Foo1;
+#else
+extern alias Foo2;
+#endif
+
+#if NO_EXTRA_LINES
+using System.Net.Http;
+#else
+using System.Web.Routing;
+#endif
+
+class ClassName { }

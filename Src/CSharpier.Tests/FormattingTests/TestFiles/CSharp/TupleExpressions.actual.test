@@ -1,0 +1,53 @@
+class ClassName
+{
+    void MethodName()
+    {
+        (int, int) t1;
+        var res = t1 == (1, 2);
+    }
+
+    List<(string x, string y)> TupleWithIdentifier()
+    {
+        return new() { (href: "one", title: "two") };
+    }
+
+    public async Task TupleAssignment()
+    {
+        var (noteTexts, matcher) = await (
+            GetAndAnalyzeNoteTexts(),
+            _wordInfoCollectionManager.BuildWordMatcher()
+        );
+
+        var (a, b) = await (c(), d());
+    }
+
+    public async Task<(
+        ILookup<string, int> someLookup,
+        ILookup<int, string> reverseLookup,
+        ILookup<string, ClassName> thirdLookup
+    )> CreateLookups()
+    {
+        // do something
+    }
+
+    public async (
+        ILookup<string, int> someLookup,
+        ILookup<int, string> reverseLookup,
+        ILookup<string, ClassName> thirdLookup
+    ) CreateLookups()
+    {
+        // do something
+    }
+
+    public void TuplesAsInput(
+        (
+            int myInt,
+            string myString,
+            ClassName myClassNameInstance,
+            Dictionary<int, string> wordList
+        ) inputArgs
+    )
+    {
+        // do something
+    }
+}

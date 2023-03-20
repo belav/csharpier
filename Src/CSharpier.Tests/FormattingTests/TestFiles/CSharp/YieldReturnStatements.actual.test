@@ -1,0 +1,8 @@
+class ClassName
+{
+    void MethodName()
+    {
+        yield return null;
+        yield break;
+    }
+}

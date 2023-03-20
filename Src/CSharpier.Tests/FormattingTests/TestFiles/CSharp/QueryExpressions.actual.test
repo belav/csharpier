@@ -1,0 +1,102 @@
+class ClassName
+{
+    void MethodName()
+    {
+        var query1 = from c in customers select c;
+        query1 = from c in customers select c into d select d;
+        query1 =
+            from c in customers
+            join c1 in customers_____________________________
+                on c1.GetHashCode() equals c.GetHashCode()
+                into e
+            select c into d
+            select d;
+
+        var query2 = from Customer c in customers select c;
+
+        var selectBreak =
+            from Customer c in customers
+            select new
+            {
+                One = c.One,
+                Two = c.Two,
+                Three = C.Three
+            };
+
+        var whereQuery = from c in customers where c.Value == "true" select d;
+
+        var orderByQuery =
+            from c in customers
+            where c.Value == "true"
+            orderby c.FirstProperty, c.SecondProperty descending
+            select d;
+
+        var complexWhere =
+            from c in customers
+            where
+                c.Value == "true"
+                && someLongValueThatForcesABreak_________________________ != someOtherValue
+            select d;
+
+        var selectIntoQuery = from c in customers select c into d select d;
+
+        var longJoin =
+            from c in customers
+            join c1 in customers_____________________________
+                on c1.GetHashCode() equals c.GetHashCode()
+                into e
+            select c into d
+            select d;
+
+        var joinWitType =
+            from c in customers
+            join Customers c1 in customers_____________________________
+                on c1.GetHashCode() equals c.GetHashCode()
+                into e
+            select c into d
+            select d;
+
+        var complexQuery =
+            from c in customers
+            let d = c
+            where d != null
+            join c1 in customers1 on c1 equals c
+            join c1 in customers__________________________________
+                on c1.GetHashCode() equals c.GetHashCode()
+                into e
+            group c by c.Country into g
+            orderby g.Count() ascending
+            orderby g.Key descending
+            select new
+            {
+                Country________________________ = g.Key,
+                CustCount____________________________ = g.Count()
+            };
+
+        var complexQuerySupportsNewLines =
+            from c in customers
+
+            let d = c
+
+            where d != null
+
+            join c1 in customers1 on c1 equals c
+
+            group c by c.Country into g
+
+            orderby g.Count() ascending
+
+            select new { Country = g.Key, CustCount = g.Count() };
+
+        var asyncQuery = await
+            from c in customers
+            from u in users
+            from res in HandleAsync(c, u)
+            select res;
+
+        return from i in Enumerable.Range(0, 10)
+            let i2 = i * i
+            where i2 < 100
+            select new { Square = i2, Root = i };
+    }
+}

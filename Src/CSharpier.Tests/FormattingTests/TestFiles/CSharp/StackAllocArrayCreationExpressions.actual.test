@@ -1,0 +1,10 @@
+class ClassName
+{
+    void MethodName()
+    {
+        Span<int> a = stackalloc int[3];
+        Span<int> a = stackalloc int[3] { 1, 2, 3 };
+        Span<int> a = stackalloc int[] { 1, 2, 3 };
+        Span<int> a = stackalloc[] { 1, 2, 3 };
+    }
+}

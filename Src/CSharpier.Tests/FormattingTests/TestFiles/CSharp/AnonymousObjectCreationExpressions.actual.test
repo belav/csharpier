@@ -1,0 +1,18 @@
+public class ClassName
+{
+    public dynamic ShortValue = new { Property = true };
+
+    public dynamic LongValue = new
+    {
+        One = "One",
+        Two = "Two",
+        ThreeThreeThree = "ThreeThreeThree"
+    };
+
+    public dynamic Value = new { NoName };
+
+    public void Method()
+    {
+        var x = new { };
+    }
+}

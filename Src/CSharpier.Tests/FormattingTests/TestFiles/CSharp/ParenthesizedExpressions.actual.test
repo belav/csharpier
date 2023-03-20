@@ -1,0 +1,16 @@
+class ClassName
+{
+    void MethodName()
+    {
+        var x =
+            query
+            && (
+                currentChar == '='
+                || currentChar == '<'
+                || currentChar == '!'
+                || currentChar == '>'
+                || currentChar == '|'
+                || currentChar == '&'
+            );
+    }
+}

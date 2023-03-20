@@ -1,0 +1,114 @@
+[assembly: System.Copyright("(C) 2009")]
+[module: System.Copyright("\n\t\u0123(C) \"2009" + "\u0123")]
+
+[Obsolete]
+class ClassName
+{
+    [Obsolete]
+    private string Field;
+
+    [Obsolete]
+    public string Property
+    {
+        [Obsolete]
+        get;
+        [Obsolete]
+        set;
+    }
+
+    [Obsolete, NonSerialized]
+    void MethodName([In] string value) { }
+
+    [
+        Obsolete,
+        System.NonSerialized,
+        NonSerialized,
+        CLSCompliant(true || false & true),
+        AnotherRandomAttribute
+    ]
+    private volatile int f2;
+
+    [DllImport("kernel32", SetLastError = true)]
+    static extern bool NameEquals(string name, SecurityAttribute sa);
+
+    [Obsolete("Error", error: true)]
+    void NameColon() { }
+
+    [return: Obsolete]
+    [method: Obsolete]
+    void Targets() { }
+
+    // leading
+    [Obsolete] // trailing
+    class ClassOne { }
+
+    // leading with new line
+    [Obsolete] // more trailing
+    // leading before class
+    class ClassTwo { }
+
+    [LongAttributeWithParametersBreaking(
+        "someValue_____________",
+        "someValue_____________",
+        "someValue_____________"
+    )]
+    void LongAttribute() { }
+
+    public void MethodName([FromBody] SomeParameter parameter)
+    {
+        return;
+    }
+
+    public void MethodName(
+        int someParameter,
+        [ShortAttributeName] AnotherObject anotherObject,
+        [VeryLongAttributeName(SomeFlag.SomeValue, SomeOtherFlag.SomeOtherLongValue)]
+            string tabbedBreakParameter,
+        bool anotherParameter
+    )
+    {
+        return;
+    }
+
+    public void MethodWithAttributesOnTypeParameters<[SomeShort] T, K>() { }
+
+    public void MethodWithAttributesOnTypeParameters<
+        [SomeLongAttribute__________________________] T,
+        K
+    >() { }
+
+    public void MethodWithAttributesOnTypeParameters<
+        [SomeLongAttribute__________________________]
+            TSomeMuchLongerName___________________________________,
+        K
+    >() { }
+
+    public void MethodWithAttributesOnTypeParameters<
+        [SomeAttributeWithParameters(
+            longParameter_____________________________,
+            longParameter_____________________________
+        )]
+            TSomeMuchLongerName___________________________________,
+        K
+    >() { }
+}
+
+[
+    LongAttributeWithParametersBreaking(
+        "someValue_____________",
+        "someValue_____________",
+        "someValue_____________"
+    ),
+    AnotherAttribute
+]
+public class ClassName { }
+
+[GenericAttribute<string>()]
+public class ClassName { }
+
+[Generic<
+    LongName______________________,
+    LongName______________________,
+    LongName______________________
+>]
+public class ClassName { }

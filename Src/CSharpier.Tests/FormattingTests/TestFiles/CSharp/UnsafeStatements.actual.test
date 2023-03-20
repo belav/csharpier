@@ -1,0 +1,10 @@
+class ClassName
+{
+    void MethodName()
+    {
+        unsafe
+        {
+            int* p = null;
+        }
+    }
+}

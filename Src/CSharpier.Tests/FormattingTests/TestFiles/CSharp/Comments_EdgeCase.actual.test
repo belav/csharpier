@@ -1,0 +1,51 @@
+public class ClassName
+{
+    /// singleLine documentation
+    /// second line
+    private string field;
+
+    public void Method()
+    {
+        /* this should keep the * aligned
+         * multiline
+         */
+        var variable = true;
+    }
+
+    /// <summary> no tabs here
+    /// Tabs here
+    /// </summary>
+    public class ClassName { }
+
+    /* this works fine
+     * because indentation does not change
+     */
+    public class ClassName2 { }
+
+    /* this doesn't fail
+by trying to move it left 4 spaces */
+    public class ClassName2 { }
+
+    /*
+    public string String;
+    */
+}
+
+public interface Interface
+{
+    /// <summary>
+    ///	</summary> tab here before <
+    void Method();
+
+    /* this should ditch the tabs
+    that were in from of here
+    */
+    void Method();
+}
+
+/*
+public class CommentedCodeShouldKeepFormatting
+{
+    void MethodName() { }
+}
+*/

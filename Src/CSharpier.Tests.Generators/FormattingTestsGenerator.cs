@@ -24,7 +24,7 @@ public class FormattingTestsGenerator : TemplatedGenerator
                     new
                     {
                         Name = Path.GetFileNameWithoutExtension(o.Path),
-                        Type = new FileInfo(o.Path).Directory.Name,
+                        Type = new FileInfo(o.Path).Directory!.Name,
                         UseTabs = Path.GetFileNameWithoutExtension(o.Path).EndsWith("_Tabs")
                     }
             );
