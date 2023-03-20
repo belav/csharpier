@@ -1,6 +1,0 @@
-using System.Runtime.CompilerServices;
-
-#if KEEP_LINE_ABOVE
-[assembly: Attribute]
-#endif
-[assembly: Attribute]

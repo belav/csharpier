@@ -1,5 +1,0 @@
-using System;
-
-[assembly: SomeAttribute]
-
-namespace Namespace { }

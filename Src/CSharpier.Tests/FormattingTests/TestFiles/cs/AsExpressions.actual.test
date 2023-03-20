@@ -1,7 +1,0 @@
-class ClassName
-{
-    void MethodName()
-    {
-        var x = null as object ?? null;
-    }
-}

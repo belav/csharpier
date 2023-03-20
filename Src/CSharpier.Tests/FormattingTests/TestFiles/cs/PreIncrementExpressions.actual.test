@@ -1,7 +1,0 @@
-class ClassName
-{
-    void MethodName()
-    {
-        ++i;
-    }
-}

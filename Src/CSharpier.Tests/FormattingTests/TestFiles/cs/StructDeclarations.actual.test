@@ -1,3 +1,0 @@
-struct BasicStruct { }
-
-public readonly struct ReadonlyStruct { }
