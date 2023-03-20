@@ -1,0 +1,13 @@
+enum AnEnum
+{
+    One,
+    Two,
+    Three
+}
+
+public enum E
+{
+    A,
+    B = A,
+    C = 2 + A
+}

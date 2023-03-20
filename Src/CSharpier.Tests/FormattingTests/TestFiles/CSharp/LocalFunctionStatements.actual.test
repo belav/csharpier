@@ -1,0 +1,20 @@
+public class ClassName
+{
+    public void MethodName()
+    {
+        void LocalFunction()
+        {
+            return;
+        }
+
+        void LocalFunctionWithParameters(
+            string one,
+            string two,
+            string three,
+            string four_______________
+        )
+        {
+            return;
+        }
+    }
+}

@@ -1,0 +1,6 @@
+using System.Runtime.CompilerServices;
+#if NO_EXTRA_LINES_WITH_ATTRIBUTE
+using System.Runtime.CompilerServices;
+#endif
+
+[assembly: Attribute]

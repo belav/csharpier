@@ -1,0 +1,99 @@
+#error Error message
+#warning Warning new line test
+
+#pragma warning disable 414, 3021
+#pragma warning restore 3021
+#pragma checksum "file.txt" "{00000000-0000-0000-0000-000000000000}" "2453"
+#define foo // Comment in directive
+#if foo
+#elif bar
+#else
+#endif
+#undef foo
+#line 6
+
+class ClassName { }
+
+public class ClassName
+{
+    public bool SomeProperty =>
+#if !DEBUG
+        someValue
+        && // trailing comment with endif should work properly
+#endif
+        someOtherValue;
+
+    void MethodWithOnlyDisabled()
+    {
+#if DEBUG
+        Console.WriteLine("Rosyln does not parse this because DEBUG is not defined");
+#endif
+    }
+
+    void MethodWithDisabledAfterAnotherStatement()
+    {
+        var x = 1;
+#if DEBUG
+        Console.WriteLine("Rosyln does not parse this because DEBUG is not defined");
+#endif
+    }
+}
+
+namespace Namespace
+{
+#pragma
+    using System.Linq;
+
+#pragma
+    class ExtraLineChecker { }
+#pragma
+    class ExtraLineChecker2
+    {
+#pragma
+        void MethodName() { }
+    }
+}
+
+public class ClassName
+{
+    public void MethodName()
+    {
+#if !IF_STATEMENT_HERE_SHOULD_NOT_BREAK_INVOCATION_AFTER_ENDIF
+        if (true)
+        {
+            return;
+        }
+#endif
+        SomeObject.CallMethod().CallOtherMethod(shouldNotBreak);
+
+#if IF_STATEMENT_HERE_SHOULD_NOT_BREAK_INVOCATION_AFTER_ENDIF
+        if (true)
+        {
+            return;
+        }
+#endif
+        SomeObject.CallMethod().CallOtherMethod(shouldNotBreak);
+    }
+}
+
+#if DIRECTIVES_AROUND_MODIFIERS_BREAK_CORRECTLY
+public
+#else
+internal
+#endif
+static class ConditionallyPublic { }
+
+class EdgeCases
+{
+    void MethodWithNestedIfsDoesNotGetExtraLineBreak()
+    {
+#if DEBUG
+        var x = 1;
+#if NO_EXTRA_BREAK_ABOVE_ME
+        x = 2;
+#endif
+#endif
+    }
+}
+
+// trivia at end of file should not get extra space in front of it

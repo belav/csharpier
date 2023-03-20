@@ -1,0 +1,14 @@
+public interface BasicInterface
+{
+    string Property { get; set; }
+}
+
+public interface BasicInterface : BaseInterface { }
+
+public interface BasicInterface
+{
+    void SomeMethod();
+    static abstract void SomeOtherMethod();
+}
+
+interface CoContra<out T, in K> { }

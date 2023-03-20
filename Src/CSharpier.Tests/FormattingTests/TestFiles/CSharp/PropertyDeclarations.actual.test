@@ -1,0 +1,105 @@
+public class ClassName
+{
+    public string Property { get; set; }
+    public string Interface.Property { get; set; }
+
+    string ShortModifiers { get; private set; }
+
+    string PropertyWithModifiersThatIsLongEnoughToBreak
+    {
+        protected internal get;
+        internal protected set;
+    }
+
+    private string backingValue;
+    public string PropertyWithBackingValue
+    {
+        get { return backingValue; }
+        set { backingValue = value; }
+    }
+
+    public string First { get; set; } = "First"; // trailing initializer comment
+
+    public string LambdaAccessors
+    {
+        get => this.Property;
+        set => this.Property = value;
+    }
+
+    public string LambdaBod => this.Property;
+
+    public string LongNameForcesALineBreakSoWeCanTestEvenLonger____________________ =>
+        this.Property;
+
+    public string Property
+    {
+        get { return this.Property; }
+    }
+
+    public string GetMultiLines
+    {
+        set { value = value; }
+        get
+        {
+            var x = "test";
+            return x;
+        }
+    }
+
+    public string Property
+    {
+        [Obsolete]
+        get;
+        [Obsolete]
+        set;
+    }
+
+    public virtual ICollection<SomeObject> SomeLongNameThatForcesALineBreak______________________ { get; set; } =
+        new HashSet<SomeObject>();
+
+    public Dictionary<string, string> Properties_________________ { get; set; } =
+        new Dictionary<string, string>();
+
+    public IReadOnlyCollection<Action<One, Two>> SomeName => true;
+
+    public IReadOnlyCollection<
+        Action<SomeRandomType, IAnotherRandomType>
+    > SomeRandomLongName___________________ => someRandomResult_________________;
+
+    public IReadOnlyCollection<
+        Action<SomeRandomType, IAnotherRandomType>,
+        SomethingElse
+    > SomeRandomLongName___________________ => someRandomResult_________________;
+
+    public virtual LongerPropertyConfiguration LongerPropertyConfiguration { get; set; }
+
+    public List<(
+        ClaimsPrincipal user,
+        object resource,
+        IEnumerable<IAuthorizationRequirement> requirements
+    )> AuthorizeCalls { get; } =
+        new List<(
+            ClaimsPrincipal user,
+            object resource,
+            IEnumerable<IAuthorizationRequirement> requirements
+        )>();
+
+    public int[] ArrayWithoutSizesDoesntBreak { get; set; }
+
+    public int[] ArrayWithInitializer { get; set; } = { 1, 2, 3, 4, 5 };
+
+    public Guid[] BreakingArray1 { get; set; } =
+        { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
+
+    public Guid[] BreakingArray2 { get; set; } =
+        {
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid()
+        };
+}

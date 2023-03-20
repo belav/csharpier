@@ -1,0 +1,5 @@
+class ClassName
+{
+    [SomeAttribute]
+    ~ClassName() { }
+}

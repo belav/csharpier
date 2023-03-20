@@ -1,0 +1,21 @@
+var someValue = someArray is [1, 2, 3];
+
+var someValue =
+    triviaToMove
+        is [
+            ..,
+            { RawKind: (int)SyntaxKind.SingleLineCommentTrivia },
+            { RawKind: (int)SyntaxKind.SingleLineCommentTrivia },
+            { RawKind: (int)SyntaxKind.EndOfLineTrivia }
+        ];
+
+var someValue = someString is [var firstCharacter, .. var rest];
+
+var someValue =
+    someLongerStringString
+        is [
+            var firstCharacter____________,
+            var secondCharacter__________,
+            var thirdCharacter,
+            .. var rest
+        ];

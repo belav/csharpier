@@ -1,0 +1,6 @@
+#if NO_DOUBLE_LINE_WITH_FILE_SCOPED
+using System;
+
+#endif
+
+namespace Namespace;

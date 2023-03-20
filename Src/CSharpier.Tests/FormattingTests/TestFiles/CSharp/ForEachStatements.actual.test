@@ -1,0 +1,123 @@
+public class ClassName
+{
+    public void MethodName()
+    {
+        foreach (var x in y)
+        {
+            x = 1;
+        }
+
+        foreach (
+            var x in this.SomeMethodCall()
+                .SomeChainedCall()
+                .AnotherChainedCall__________________________()
+        )
+        {
+            break;
+        }
+
+        foreach (
+            var x // trailing
+            in y
+        )
+        {
+            return;
+        }
+
+        foreach (var exactly100 in Something_______________________________________________________)
+        {
+            return;
+        }
+
+        // leading comment doesn't break differently
+        foreach (var exactly100 in Something_______________________________________________________)
+        {
+            return;
+        }
+
+        // leading comment doesn't break differently
+        await foreach (var exactly100 in Something_________________________________________________)
+        {
+            return;
+        }
+
+        foreach (
+            var justOver100 in Something_______________________________________________________
+        )
+        {
+            return;
+        }
+
+        // leading await
+        await
+        // leading using
+        foreach (var y in Something())
+        {
+            return;
+        }
+
+        foreach (var x in y)
+            CallSomething(x);
+
+        foreach (var someLongerNameThatMakesThis in BreakAndLongName____________________)
+            CallSomething(x);
+
+        foreach (
+            var someLongerNameThatMakesThis in BreakInAnotherWay_______________________________________
+        )
+            CallSomething(x);
+
+        foreach (var x in y)
+            switch (x)
+            {
+                case 1:
+                    return;
+            }
+
+        foreach (var (x, y) in thing)
+        {
+            this.DoOtherThing();
+        }
+
+        foreach (
+            (
+                (int l2, int l3),
+                (int longName________________________, string[] anotherLongName___________)
+            ) in (
+                from l2 in Enumerable.Range(1, 7)
+                from l3 in Enumerable.Range(1, 7)
+                select (l2, l3)
+            )
+                .AsParallel()
+                .Select(l => (l, res: GenerateTable(l.l2, l.l3, cutOff)))
+                .OrderBy(v => v.res.Total)
+        )
+        {
+            return;
+        }
+
+        foreach (var x in y)
+        {
+            continue;
+        }
+
+        foreach (var x in y)
+        {
+            KeepNewLine();
+
+            continue;
+        }
+
+        foreach (var x in y)
+        {
+            break;
+        }
+
+        foreach (var x in y)
+        {
+            KeepNewLine();
+
+            break;
+        }
+    }
+}

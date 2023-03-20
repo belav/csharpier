@@ -1,0 +1,165 @@
+[assembly: System.Copyright(
+    @"(C)""
+2009"
+)]
+
+class ClassName
+{
+    private string bothLineEndingsPersist = @"\r\n \n";
+    private string interpolatedVersion = @$"\r\n \n";
+
+    private string emptyLines =
+        @"one
+
+two
+
+
+three
+";
+
+    private string interpolatedEmptyLines =
+        @$"one
+
+two
+
+
+three
+";
+
+    public void VerbatimNewlineInInterpolated()
+    {
+        return @$"{CallMethod(o => @"
+    IndentedAfterNewLine")}";
+    }
+
+    private string stayOnLine1 =
+        @"one
+two
+";
+
+    private string stayOnLine2 =
+        $@"one
+two
+";
+
+    private string stayOnLine3 =
+        @"one
+two
+three
+four";
+
+    private string stayOnLine4 =
+        @$"one
+two
+three
+four";
+
+    private void MethodName()
+    {
+        CallSomeLongMethod(
+            @"one
+two
+three
+four
+five
+"
+        );
+
+        CallSomeLongMethod(
+            $@"one
+two
+three
+four
+five
+"
+        );
+
+        CallSomeLongMethod(
+            @"one
+two
+three
+four",
+            five
+        );
+
+        CallSomeLongMethod(
+            $@"one
+two
+three
+four",
+            five
+        );
+
+        var multiLineRaw = """
+    This is a long message.
+    It has several lines.
+        Some are indented
+                more than others.
+    Some should start at the first column.
+    Some have "quoted text" in them.
+    """;
+
+        var multiLineRawInterpolated = $"""
+    This is a long message.
+    It has several lines.
+        Some are indented
+                more than others.
+    Some should start at the first column.
+    Some have "quoted text" in them.
+    """;
+
+        var shortRaw = """Short Raw String""";
+        var shortRawInterpolated = $"""Short Raw String""";
+        var longRaw =
+            """Long Raw String                                                                       """;
+        var longRawInterpolated =
+            $"""Long Raw String                                                                       """;
+
+        CallSomeLongMethod(
+            """
+one
+two
+three
+four
+five
+"""
+        );
+
+        CallSomeLongMethod(
+            """
+one
+two
+three
+four
+""",
+            five
+        );
+
+        CallSomeLongMethod(
+            one,
+            """
+two
+three
+four
+""",
+            five
+        );
+
+        var expressionsInInterpolatedVerbatimStringDontBreak =
+            $@"{CallMethod_____________________________().CallMethod_____________________________().CallMethod_____________________________()}";
+
+        var butKeepExistingBreaks =
+            $@"    {
+                // some comment
+                CallMethod()
+            }    ";
+
+        var butKeepExistingBreaks =
+            $"    {
+                // some comment
+                CallMethod()
+            }    ";
+
+        ReadOnlySpan<byte> utf8StringLiteral = "hello"u8;
+    }
+}

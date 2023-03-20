@@ -1,0 +1,148 @@
+// csharpier-ignore
+public class Unformatted     { }
+
+// csharpier-ignore - also ignored
+public class Unformatted     { }
+
+// csharpier-ignore-not ignored
+public class Unformatted { }
+
+public class ClassName
+{
+    // csharpier-ignore
+    private string    unformatted;
+
+    void BasicSingleIgnores()
+    {
+        // csharpier-ignore
+        var unformatted    = true;
+        // csharpier-ignore
+        var trimsTrailingHere  = true;
+
+        if (true)
+        {
+            // csharpier-ignore
+            var unformatted    = true;
+        }
+    }
+
+    void RangeWithNodeAfter()
+    {
+        var formatMe = true;
+        // csharpier-ignore-start
+        var trimsTrailing1 =        true;
+        var trimsTrailing2 =        true;
+        // csharpier-ignore-start
+        var unformatted1 =        true;
+        var unformatted2 =        true;
+        // csharpier-ignore-end
+        var formatMe = true;
+    }
+
+    void MultipleStatements()
+    {
+        // csharpier-ignore-start
+        var packet =              new List<byte>();
+        packet.Add(0x0f); packet.Add(0x00);
+        packet.Add(0x0f); packet.Add(0x00);
+        // csharpier-ignore-end
+    }
+
+    void RangeToEndMethod()
+    {
+        var formatMe = true;
+        // csharpier-ignore-start
+        var unformatted1 =        true;
+        var unformatted2 =        true;
+        // csharpier-ignore-end
+    }
+
+    void RangeWithoutEnd()
+    {
+        var formatMe = true;
+        // csharpier-ignore-start
+        var unformatted =        true;
+        var unformatted =        true;
+    }
+}
+
+public class ClassName2
+{
+    // csharpier-ignore-start
+    private string    unformatted1;
+    // csharpier-ignore-end
+
+    // csharpier-ignore-start - also ignored
+    private string unformatted1;
+    // csharpier-ignore-end - also ignored
+
+    // csharpier-ignore-start-not ignored
+    private string unformatted1;
+
+    // csharpier-ignore-end-not ignored
+
+    private string formatMe;
+    // csharpier-ignore-start
+    private string    noNewLine;
+    // csharpier-ignore-end
+
+    // csharpier-ignore-start
+    private string keepNewLine;
+    // csharpier-ignore-end
+
+    public void Method()
+    {
+        // csharpier-ignore-start
+        string    unformatted1;
+        // csharpier-ignore-end
+
+        string formatMe;
+        // csharpier-ignore-start
+         string    noNewLine;
+        // csharpier-ignore-end
+
+        // csharpier-ignore-start
+        string keepNewLine;
+        // csharpier-ignore-end
+    }
+
+    public void KeepLines1()
+    {
+        // csharpier-ignore-start
+        var    unformattedWithLine1;
+
+        var    unformattedWithLine2;
+        // csharpier-ignore-end
+    }
+
+    public void KeepLines2()
+    {
+        // csharpier-ignore-start
+        string    unformattedWithLine1;
+
+        string    unformattedWithLine2;
+        // csharpier-ignore-end
+
+        string anotherValue;
+    }
+}
+
+public class KeepLines1
+{
+    // csharpier-ignore-start
+    private string    first;
+
+    private string    second;
+    // csharpier-ignore-end
+}
+
+public class KeepLines2
+{
+    // csharpier-ignore-start
+    private string    first;
+
+    private string    second;
+    // csharpier-ignore-end
+
+    private string third;
+}

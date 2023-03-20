@@ -1,0 +1,7 @@
+class ClassName
+{
+    async void MethodName()
+    {
+        await System.Threading.Tasks.Task.Delay(0);
+    }
+}

@@ -1,0 +1,130 @@
+public class BasicClass
+{
+    public BasicClass() { }
+
+    [Obsolete]
+    public BasicClass(string one) { }
+
+    public ClassName() => this.Value = 1;
+
+    public BasicClass(int two, string exactly100___________________________________________________)
+    {
+        return;
+    }
+
+    public BasicClass(
+        int two,
+        string justOver100___________________________________________________
+    )
+    {
+        return;
+    }
+}
+
+public class Initializers : BasicClass
+{
+    public Initializers()
+        : this(true) { }
+
+    public Initializers(string value)
+        : base(value) { }
+
+    public Initializers(
+        string longParameter_______________________________________________________________________________
+    )
+        : base(
+            longParameter_______________________________________________________________________________
+        ) { }
+
+    public Initializers(
+        string longParameter_______________________________________________________________________________
+    )
+        : base(
+            longParameter_______________________________________________________________________________
+        )
+    {
+        WithBody();
+    }
+
+    public Initializers(
+        string longParameter____________________________________________________________
+    )
+        : base(false) { }
+
+    public Initializers(
+        string longParameter____________________________________________________________
+    )
+        : base(false)
+    {
+        WithBody();
+    }
+
+    public LongMethodName___________________________________________________________________________()
+        : base(false) { }
+
+    public WithParameters(string parameter)
+        : base(
+            longParameter____________________________________________________________________________
+        ) { }
+
+    // this may change, see #372
+    public WithParameters(string parameter)
+        : base(
+            longParameter____________________________________________________________________________
+        )
+    {
+        WithBody();
+    }
+
+    public LongMethodName___________________________________________________________________________()
+        : base(
+            longParameter____________________________________________________________________________
+        ) { }
+
+    public Initializers(string value) /*Comment*/
+        : base(value) { }
+
+    public LongMethodName___________________________________________________________()
+        /*Comment*/: base(false) { }
+
+    public LongInitializerBreaksAtEdgeCase()
+        : this(someParameter, someOtherParameter___________________________________________________)
+    {
+        WithBody();
+    }
+
+    public LongParametersWithEmptyBody(string parameter, bool anotherParameter_________________) { }
+
+    public LongParametersWithEmptyBody(string parameter, bool anotherParameter__________________)
+    { }
+
+    public LongInitializerWithEmptyBody()
+        : base(parameter, anotherParameter___________________) { }
+
+    public LongInitializerWithEmptyBody()
+        : base(parameter, anotherParameter__________________) { }
+
+    public LongInitializerWithEmptyBody()
+        : base(parameter______________, anotherParameter___________________________________________)
+    { }
+}
+
+public class Exactly100
+{
+    public Exactly100()
+        : this(someParameter, someOtherParameter___________________________________________________)
+    {
+        WithBody();
+    }
+
+    public Exactly100(int longParameter____________________________________________________________)
+    {
+        return;
+    }
+
+    // leading comments don't affect this
+    public Exactly100(int longParameter____________________________________________________________)
+    {
+        return;
+    }
+}

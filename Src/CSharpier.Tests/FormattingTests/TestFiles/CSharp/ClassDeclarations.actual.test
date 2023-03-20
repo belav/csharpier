@@ -1,0 +1,61 @@
+public class EmptyClass { }
+
+public static abstract class MoreModifiers { }
+
+class NoModifiers { }
+
+public class WithInterface : IInterface { }
+
+public class WithReallyLongNameInterface
+    : IReallyLongNameLetsMakeThisBreak___________________________ { }
+
+public class ThisIsSomeLongNameAndItShouldFormatWell1
+    : AnotherLongClassName,
+        AndYetAnotherLongClassName,
+        AndStillOneMore { }
+
+public class SimpleGeneric<T>
+    where T : new() { }
+
+public class LongTypeConstraints<T>
+    where T : SomeLongNameThatJustKeepsGoing,
+        AndThenAnotherOneThatIsEvenLonger____________________ { }
+
+public class LongerClassNameWithLotsOfGenerics<
+    TLongName,
+    TAnotherLongName,
+    TThirdLongName__________________
+> { }
+
+public class LongerClassNameWithLotsOfGenerics<
+    TLongName,
+    TAnotherLongName,
+    TThirdLongName__________________
+> : SomeBaseClass<TLongName> { }
+
+public class SimpleGeneric<T> : BaseClass<T>
+    where T : new() { }
+
+public class ThisIsSomeLongNameAndItShouldFormatWell2<T, T2, T3>
+    : AnotherLongClassName<T>,
+        AnotherClassName
+    where T : new(), AnotherTypeConstraint
+    where T2 : new()
+    where T3 : new() { }
+
+public class IdentityDbContext<TUser, TRole, TKey>
+    : IdentityDbContext<
+        TUser,
+        TRole,
+        TKey,
+        IdentityUserClaim<TKey>,
+        IdentityUserRole<TKey>,
+        IdentityUserLogin<TKey>,
+        IdentityRoleClaim<TKey>,
+        IdentityUserToken<TKey>
+    >
+    where TUser : IdentityUser<TKey>
+    where TRole : IdentityRole<TKey>
+    where TKey : IEquatable<TKey> { }
+
+file class FileScopedType { }

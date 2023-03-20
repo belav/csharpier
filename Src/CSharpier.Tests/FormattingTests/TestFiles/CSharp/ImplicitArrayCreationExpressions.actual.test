@@ -1,0 +1,36 @@
+class ClassName
+{
+    int[] array = new[] { 1, 2 };
+
+    int[,] array = new[,]
+    {
+        { 1, 2 },
+        { 3, 4 }
+    };
+
+    private string[] SomeArray = new[]
+    {
+        "SomeValue_____________________",
+        "SomeValue_____________________",
+    };
+
+    public HashSet<string> TheArrayShouldNotBreak = new HashSet<string>(
+        new[] { ".dll", "exe", ".winmd" },
+        StringComparer.OrdinalIgnoreCase
+    );
+
+    void MethodName()
+    {
+        var implicitArrayShouldBreak = new[]
+        {
+            "someLongValue",
+            "anotherLongValue",
+            "yetAnotherLongValue"
+        };
+
+        return TheArrayInHereShouldAlsoNotBreak(
+            SomeLongThing__________,
+            new[] { one, two, three, found }
+        );
+    }
+}
