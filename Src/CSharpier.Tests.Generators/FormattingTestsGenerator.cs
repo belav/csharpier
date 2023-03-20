@@ -6,6 +6,8 @@ using System.Text;
 using Microsoft.CodeAnalysis.Text;
 using Scriban;
 
+// the magic command to get source generators to actually regenerate when they get stuck with old code
+// dotnet build-server shutdown
 [Generator]
 public class FormattingTestsGenerator : ISourceGenerator
 {
@@ -15,7 +17,8 @@ public class FormattingTestsGenerator : ISourceGenerator
     {
         var template = Template.Parse(this.GetContent(this.GetType().Name + ".sbntxt"));
 
-        foreach (var extension in this.GetExtensions(context))
+        var extensions = this.GetExtensions(context).ToList();
+        foreach (var extension in extensions)
         {
             var renderedSource = template.Render(
                 this.GetModel(context, extension),
@@ -37,7 +40,8 @@ public class FormattingTestsGenerator : ISourceGenerator
                     && !o.Path.EndsWith(".actual.test")
                     && !o.Path.EndsWith(".expected.test")
             )
-            .Select(o => new FileInfo(o.Path).DirectoryName!);
+            .Select(o => new FileInfo(o.Path).Directory!.Name)
+            .Distinct();
     }
 
     protected object GetModel(GeneratorExecutionContext context, string extension)
@@ -48,7 +52,7 @@ public class FormattingTestsGenerator : ISourceGenerator
                     o.Path.EndsWith(".test")
                     && !o.Path.EndsWith(".actual.test")
                     && !o.Path.EndsWith(".expected.test")
-                    && new FileInfo(o.Path).DirectoryName == extension
+                    && new FileInfo(o.Path).Directory!.Name == extension
             )
             .Select(
                 o =>

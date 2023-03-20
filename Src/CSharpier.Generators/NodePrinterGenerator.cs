@@ -1,11 +1,12 @@
-﻿using Microsoft.CodeAnalysis;
-
-namespace CSharpier.Generators;
+﻿namespace CSharpier.Generators;
 
 using System.Text;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Scriban;
 
+// the magic command to get source generators to actually regenerate when they get stuck with old code
+// dotnet build-server shutdown
 [Generator]
 public class NodePrinterGenerator : ISourceGenerator
 {
