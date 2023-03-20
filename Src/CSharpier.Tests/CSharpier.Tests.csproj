@@ -17,14 +17,14 @@
     <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="FormattingTests\TestFiles\*.cst" />
+    <AdditionalFiles Include="FormattingTests\TestFiles\**\*.test" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FormattingTests\TestFiles\*.actual.cst">
-      <DependentUpon>$([System.String]::Copy(%(Filename)).Replace('.actual', '.cst'))</DependentUpon>
+    <Content Include="FormattingTests\TestFiles\**\*.actual.test">
+      <DependentUpon>$([System.String]::Copy(%(Filename)).Replace('.actual', '.test'))</DependentUpon>
     </Content>
-    <Content Include="FormattingTests\TestFiles\*.expected.cst">
-      <DependentUpon>$([System.String]::Copy(%(Filename)).Replace('.expected', '.cst'))</DependentUpon>
+    <Content Include="FormattingTests\TestFiles\**\*.expected.test">
+      <DependentUpon>$([System.String]::Copy(%(Filename)).Replace('.expected', '.test'))</DependentUpon>
     </Content>
   </ItemGroup>
 </Project>

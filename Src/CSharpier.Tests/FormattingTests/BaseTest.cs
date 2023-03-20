@@ -11,13 +11,14 @@ public class BaseTest
 {
     private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent("CSharpier.Tests");
 
-    protected void RunTest(string fileName, bool useTabs = false)
+    protected void RunTest(string fileName, string type, bool useTabs = false)
     {
         var filePath = Path.Combine(
             this.rootDirectory.FullName,
             "FormattingTests",
             "TestFiles",
-            fileName + ".cst"
+            type,
+            fileName + ".test"
         );
         var fileReaderResult = FileReader
             .ReadFile(filePath, new FileSystem(), CancellationToken.None)
@@ -30,7 +31,7 @@ public class BaseTest
             new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs }
         );
 
-        var actualFilePath = filePath.Replace(".cst", ".actual.cst");
+        var actualFilePath = filePath.Replace(".test", ".actual.test");
         File.WriteAllText(actualFilePath, result.Code, fileReaderResult.Encoding);
 
         var filePathToChange = filePath;
