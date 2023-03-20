@@ -1,7 +1,3 @@
-using System.Text;
-using CSharpier.SyntaxPrinter;
-using System.Text.Json;
-
 namespace CSharpier;
 
 public static class CodeFormatter
@@ -47,5 +43,27 @@ public static class CodeFormatter
             new PrinterOptions { Width = options.Width },
             cancellationToken
         );
+    }
+
+    internal static Task<CodeFormatterResult> FormatAsync(
+        string fileContents,
+        string fileExtension,
+        PrinterOptions options,
+        CancellationToken cancellationToken
+    )
+    {
+        var loweredExtension = fileExtension.ToLower();
+
+        if (loweredExtension is "cs")
+        {
+            return CSharpFormatter.FormatAsync(fileContents, options, cancellationToken);
+        }
+
+        if (loweredExtension is "csproj" or "props" or "targets" or "xml")
+        {
+            return XmlFormatter.FormatAsync(fileContents, options, cancellationToken);
+        }
+
+        throw new Exception("Cannot format file with extension " + fileExtension);
     }
 }

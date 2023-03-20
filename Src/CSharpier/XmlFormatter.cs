@@ -1,13 +1,13 @@
 namespace CSharpier;
 
-internal class XmlFormatter : IFormatter
+internal static class XmlFormatter
 {
-    public Task<CodeFormatterResult> FormatAsync(
+    internal static async Task<CodeFormatterResult> FormatAsync(
         string code,
         PrinterOptions printerOptions,
         CancellationToken cancellationToken
     )
     {
-        throw new NotImplementedException();
+        return new CodeFormatterResult { Code = code };
     }
 }

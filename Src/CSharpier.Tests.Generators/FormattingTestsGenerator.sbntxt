@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace CSharpier.Tests.FormattingTests
+namespace CSharpier.Tests.FormattingTests.{{ FileExtension }}
 {
     [TestFixture]
     [Parallelizable(ParallelScope.All)]

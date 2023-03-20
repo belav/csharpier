@@ -4,18 +4,9 @@ using System.Text;
 using System.Text.Json;
 using CSharpier.SyntaxPrinter;
 
-internal class CSharpFormatter : IFormatter
+internal static class CSharpFormatter
 {
     internal static readonly LanguageVersion LanguageVersion = LanguageVersion.Preview;
-
-    Task<CodeFormatterResult> IFormatter.FormatAsync(
-        string code,
-        PrinterOptions printerOptions,
-        CancellationToken cancellationToken
-    )
-    {
-        return FormatAsync(code, printerOptions, cancellationToken);
-    }
 
     internal static Task<CodeFormatterResult> FormatAsync(
         string code,

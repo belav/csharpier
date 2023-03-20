@@ -28,9 +28,9 @@ public class BaseTest
 
         PreprocessorSymbols.Reset();
 
-        // TODO xml use proper formatter
-        var result = await CSharpFormatter.FormatAsync(
+        var result = await CodeFormatter.FormatAsync(
             fileReaderResult.FileContents,
+            fileExtension,
             new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs },
             CancellationToken.None
         );
