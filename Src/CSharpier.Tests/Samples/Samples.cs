@@ -24,7 +24,7 @@ public class Samples
     {
         var directory = DirectoryFinder.FindParent("CSharpier.Tests");
 
-        var file = Path.Combine(directory.FullName, $"Samples/{fileName}.cst");
+        var file = Path.Combine(directory.FullName, $"Samples/{fileName}.test");
         if (!File.Exists(file))
         {
             await File.WriteAllTextAsync(file, "");
@@ -42,7 +42,7 @@ public class Samples
         compareResult.Should().BeEmpty();
 
         await File.WriteAllTextAsync(
-            file.Replace(".cst", ".actual.cst"),
+            file.Replace(".cst", ".actual.test"),
             result.Code,
             Encoding.UTF8
         );
