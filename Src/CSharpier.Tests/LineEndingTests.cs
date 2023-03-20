@@ -8,7 +8,7 @@ namespace CSharpier.Tests;
 internal class LineEndingTests
 {
     [Test]
-    public void LineEndings_Should_Not_Affect_Printed_Output_With_Verbatim_String()
+    public async Task LineEndings_Should_Not_Affect_Printed_Output_With_Verbatim_String()
     {
         // this is a verbatim string that is just the right size to format differently if it has \n vs \r\n in it
         var code =
@@ -24,14 +24,14 @@ four"";
         var codeWithCrLf = codeWithLf.Replace("\n", "\r\n");
 
         var printerOptions = new PrinterOptions { EndOfLine = EndOfLine.Auto, Width = 80 };
-        var lfResult = CodeFormatter.Format(codeWithLf, printerOptions);
-        var crLfResult = CodeFormatter.Format(codeWithCrLf, printerOptions);
+        var lfResult = await CSharpFormatter.FormatAsync(codeWithLf, printerOptions);
+        var crLfResult = await CSharpFormatter.FormatAsync(codeWithCrLf, printerOptions);
 
         lfResult.Code.Should().Be(crLfResult.Code.Replace("\r\n", "\n"));
     }
 
     [Test]
-    public void LineEndings_Should_Not_Affect_Printed_Output_With_Interpolated_String()
+    public async Task LineEndings_Should_Not_Affect_Printed_Output_With_Interpolated_String()
     {
         // this is a interpolated verbatim string that is just the right size to format differently if it has \n vs \r\n in it
         var code =
@@ -47,15 +47,15 @@ four"";
         var codeWithCrLf = codeWithLf.Replace("\n", "\r\n");
 
         var printerOptions = new PrinterOptions { EndOfLine = EndOfLine.Auto, Width = 80 };
-        var lfResult = CodeFormatter.Format(codeWithLf, printerOptions);
-        var crLfResult = CodeFormatter.Format(codeWithCrLf, printerOptions);
+        var lfResult = await CSharpFormatter.FormatAsync(codeWithLf, printerOptions);
+        var crLfResult = await CSharpFormatter.FormatAsync(codeWithCrLf, printerOptions);
 
         lfResult.Code.Should().Be(crLfResult.Code.Replace("\r\n", "\n"));
     }
 
     [TestCase("\r\n", EndOfLine.LF)]
     [TestCase("\n", EndOfLine.CRLF)]
-    public void LineEndings_In_Verbatim_String_Should_Respect_Options(
+    public async Task LineEndings_In_Verbatim_String_Should_Respect_Options(
         string newLine,
         EndOfLine endOfLine
     )
@@ -67,13 +67,13 @@ four"";
 }}
 ";
         var printerOptions = new PrinterOptions { EndOfLine = endOfLine };
-        var result = CodeFormatter.Format(code, printerOptions);
+        var result = await CSharpFormatter.FormatAsync(code, printerOptions);
         result.Code.Should().NotContain($"one{newLine}two");
     }
 
     [TestCase("\\r\\n", EndOfLine.LF)]
     [TestCase("\\n", EndOfLine.CRLF)]
-    public void Escaped_LineEndings_In_Verbatim_String_Should_Remain(
+    public async Task Escaped_LineEndings_In_Verbatim_String_Should_Remain(
         string escapedNewLine,
         EndOfLine endOfLine
     )
@@ -85,7 +85,7 @@ four"";
 }}
 ";
         var printerOptions = new PrinterOptions { EndOfLine = endOfLine };
-        var result = CodeFormatter.Format(code, printerOptions);
+        var result = await CSharpFormatter.FormatAsync(code, printerOptions);
         result.Code.Should().Contain(escapedNewLine);
     }
 }

@@ -41,9 +41,9 @@ public class FormatController : ControllerBase
     }
 
     [HttpPost]
-    public FormatResult Post([FromBody] string content)
+    public async Task<FormatResult> Post([FromBody] string content)
     {
-        var result = CodeFormatter.Format(
+        var result = await CSharpFormatter.FormatAsync(
             content,
             new PrinterOptions
             {
