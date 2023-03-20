@@ -15,15 +15,16 @@ public class FormattingTestsGenerator : TemplatedGenerator
         var tests = context.AdditionalFiles
             .Where(
                 o =>
-                    o.Path.EndsWith(".cst")
-                    && !o.Path.EndsWith(".actual.cst")
-                    && !o.Path.EndsWith(".expected.cst")
+                    o.Path.EndsWith(".test")
+                    && !o.Path.EndsWith(".actual.test")
+                    && !o.Path.EndsWith(".expected.test")
             )
             .Select(
                 o =>
                     new
                     {
                         Name = Path.GetFileNameWithoutExtension(o.Path),
+                        Type = new FileInfo(o.Path).Directory.Name,
                         UseTabs = Path.GetFileNameWithoutExtension(o.Path).EndsWith("_Tabs")
                     }
             );

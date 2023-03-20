@@ -10,7 +10,7 @@ namespace CSharpier.Tests.FormattingTests
         [Test]
         public void {{ test.Name }}()
         {
-            this.RunTest("{{ test.Name }}"{{ if test.UseTabs }}, true{{ end }});
+            this.RunTest("{{ test.Name }}", "{{ test.Type }}"{{ if test.UseTabs }}, true{{ end }});
         }
         {{- end }}
     }
