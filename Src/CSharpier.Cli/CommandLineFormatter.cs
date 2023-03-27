@@ -191,7 +191,14 @@ internal static class CommandLineFormatter
                 }
 
                 var tasks = fileSystem.Directory
-                    .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
+                    .EnumerateFiles(directoryOrFile, "*.*", SearchOption.AllDirectories)
+                    .Where(
+                        o =>
+                            o.EndsWith(".cs")
+                            || o.EndsWith(".csproj")
+                            || o.EndsWith(".props")
+                            || o.EndsWith(".targets")
+                    )
                     .Select(o =>
                     {
                         var normalizedPath = o.Replace("\\", "/");
@@ -354,12 +361,24 @@ internal static class CommandLineFormatter
 
         try
         {
-            // TODO xml find correct formatter
-            codeFormattingResult = await CSharpFormatter.FormatAsync(
-                fileToFormatInfo.FileContents,
-                printerOptions,
-                cancellationToken
-            );
+            var extension = Path.GetExtension(fileToFormatInfo.Path).ToLower();
+            codeFormattingResult = extension switch
+            {
+                "csproj"
+                or "props"
+                or "targets"
+                    => await XmlFormatter.FormatAsync(
+                        fileToFormatInfo.FileContents,
+                        printerOptions,
+                        cancellationToken
+                    ),
+                _
+                    => await CSharpFormatter.FormatAsync(
+                        fileToFormatInfo.FileContents,
+                        printerOptions,
+                        cancellationToken
+                    )
+            };
         }
         catch (OperationCanceledException)
         {

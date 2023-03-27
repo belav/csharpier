@@ -11,9 +11,8 @@ internal static class XmlFormatter
         CancellationToken cancellationToken
     )
     {
-        // TODO width
-        // TODO test other things
-        // TODO get this working from CLI
+        // TODO xml width?
+        // TODO xml test other things
         var stringBuilder = new StringWriter();
 
         var settings = new XmlWriterSettings
