@@ -153,10 +153,10 @@ public class AttributesAndMethods
     [Attribute]
     [Attribute]
     // csharpier-ignore - just the method
-    public void MethodThatShouldFormat(           ) { }
+    public void MethodThatShouldNotFormat(           ) { }
 
     [Attribute]
     [Attribute]
     // csharpier-ignore - just the method
-    void MethodThatShouldFormat(           ) { }
+    void MethodThatShouldNotFormat(           ) { }
 }
