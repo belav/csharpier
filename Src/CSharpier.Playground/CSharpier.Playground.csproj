@@ -9,37 +9,37 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions"/>
-    <PackageReference Include="Serilog.Extensions.Logging.File"/>
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" />
+    <PackageReference Include="Serilog.Extensions.Logging.File" />
   </ItemGroup>
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
-    <Content Remove="$(SpaRoot)**"/>
-    <None Remove="$(SpaRoot)**"/>
-    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**"/>
-    <None Remove="App_Data\Uploads\**"/>
-    <Content Remove="App_Data\Uploads\**"/>
+    <Content Remove="$(SpaRoot)**" />
+    <None Remove="$(SpaRoot)**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    <None Remove="App_Data\Uploads\**" />
+    <Content Remove="App_Data\Uploads\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="App_Data\Uploads\**"/>
+    <Compile Remove="App_Data\Uploads\**" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Remove="App_Data\Uploads\**"/>
+    <EmbeddedResource Remove="App_Data\Uploads\**" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpier\CSharpier.csproj"/>
+    <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <Exec Command="node --version" ContinueOnError="true">
-      <Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
     </Exec>
-    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE."/>
-    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..."/>
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install"/>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
   </Target>
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <ItemGroup>
-      <BuildFiles Include="$(SpaRoot)build\**"/>
+      <BuildFiles Include="$(SpaRoot)build\**" />
       <ResolvedFileToPublish Include="@(BuildFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(BuildFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

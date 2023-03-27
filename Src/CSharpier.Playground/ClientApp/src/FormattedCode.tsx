@@ -1,9 +1,10 @@
 import { Controlled as CodeMirror } from "react-codemirror2";
 import React from "react";
-import { useAppContext } from "./AppContext";
 import { useOptions } from "./Hooks";
+import { useAppContext } from "./AppContext";
+import { observer } from "mobx-react-lite";
 
-export const FormattedCode = () => {
+export const FormattedCode = observer(() => {
     const { formattedCode, setFormattedCodeEditor } = useAppContext();
     const options = useOptions();
 
@@ -20,4 +21,4 @@ export const FormattedCode = () => {
             onChange={() => {}}
         />
     );
-};
+});

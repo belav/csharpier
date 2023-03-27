@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
-using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Playground.Controllers;
 
@@ -27,39 +22,55 @@ public class FormatError
 [Route("[controller]")]
 public class FormatController : ControllerBase
 {
-    private readonly IWebHostEnvironment webHostEnvironment;
     private readonly ILogger logger;
 
-    // ReSharper disable once SuggestBaseTypeForParameter
-    public FormatController(
-        IWebHostEnvironment webHostEnvironment,
-        ILogger<FormatController> logger
-    )
+    public FormatController(ILogger<FormatController> logger)
     {
-        this.webHostEnvironment = webHostEnvironment;
         this.logger = logger;
     }
 
     [HttpPost]
-    public async Task<FormatResult> Post([FromBody] string content)
+    public async Task<FormatResult> Post([FromBody] string content, string fileExtension)
     {
-        var result = await CSharpFormatter.FormatAsync(
-            content,
-            new PrinterOptions
-            {
-                IncludeAST = true,
-                IncludeDocTree = true,
-                Width = PrinterOptions.WidthUsedByTests
-            }
-        );
-
-        return new FormatResult
+        if (fileExtension == "cs")
         {
-            Code = result.Code,
-            Json = result.AST,
-            Doc = result.DocTree,
-            Errors = result.CompilationErrors.Select(this.ConvertError).ToList(),
-        };
+            var result = await CSharpFormatter.FormatAsync(
+                content,
+                new PrinterOptions
+                {
+                    IncludeAST = true,
+                    IncludeDocTree = true,
+                    Width = PrinterOptions.WidthUsedByTests
+                }
+            );
+
+            return new FormatResult
+            {
+                Code = result.Code,
+                Json = result.AST,
+                Doc = result.DocTree,
+                Errors = result.CompilationErrors.Select(this.ConvertError).ToList(),
+            };
+        }
+
+        if (fileExtension == "csproj")
+        {
+            var result = await XmlFormatter.FormatAsync(
+                content,
+                new PrinterOptions { Width = PrinterOptions.WidthUsedByTests },
+                CancellationToken.None
+            );
+
+            return new FormatResult
+            {
+                Code = result.Code,
+                Json = "{}",
+                Doc = string.Empty,
+                Errors = new List<FormatError>()
+            };
+        }
+
+        throw new Exception("Cannot handle file extension " + fileExtension);
     }
 
     private FormatError ConvertError(Diagnostic diagnostic)

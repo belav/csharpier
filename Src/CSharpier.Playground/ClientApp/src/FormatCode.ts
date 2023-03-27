@@ -2,9 +2,9 @@ let gutters: any[] = [];
 let marks: any[] = [];
 let editor: any = undefined;
 
-export const formatCode = async (code: string) => {
+export const formatCode = async (code: string, fileExtension: string) => {
     const makeRequest = async () => {
-        const response = await fetch("/Format", {
+        const response = await fetch("/Format?fileExtension=" + fileExtension, {
             method: "POST",
             body: JSON.stringify(code),
             headers: {
