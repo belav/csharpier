@@ -5,11 +5,7 @@ using System.Xml;
 
 internal static class XmlFormatter
 {
-    internal static async Task<CodeFormatterResult> FormatAsync(
-        string code,
-        PrinterOptions printerOptions,
-        CancellationToken cancellationToken
-    )
+    internal static CodeFormatterResult Format(string code, PrinterOptions printerOptions)
     {
         // TODO xml width?
         // TODO xml test other things

@@ -55,10 +55,9 @@ public class FormatController : ControllerBase
 
         if (fileExtension == "csproj")
         {
-            var result = await XmlFormatter.FormatAsync(
+            var result = XmlFormatter.Format(
                 content,
-                new PrinterOptions { Width = PrinterOptions.WidthUsedByTests },
-                CancellationToken.None
+                new PrinterOptions { Width = PrinterOptions.WidthUsedByTests }
             );
 
             return new FormatResult

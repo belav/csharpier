@@ -367,11 +367,7 @@ internal static class CommandLineFormatter
                 "csproj"
                 or "props"
                 or "targets"
-                    => await XmlFormatter.FormatAsync(
-                        fileToFormatInfo.FileContents,
-                        printerOptions,
-                        cancellationToken
-                    ),
+                    => XmlFormatter.Format(fileToFormatInfo.FileContents, printerOptions),
                 _
                     => await CSharpFormatter.FormatAsync(
                         fileToFormatInfo.FileContents,

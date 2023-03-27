@@ -45,7 +45,8 @@ public static class CodeFormatter
         );
     }
 
-    internal static Task<CodeFormatterResult> FormatAsync(
+    // TODO XML make use of this?
+    internal static async Task<CodeFormatterResult> FormatAsync(
         string fileContents,
         string fileExtension,
         PrinterOptions options,
@@ -56,12 +57,12 @@ public static class CodeFormatter
 
         if (loweredExtension is "cs")
         {
-            return CSharpFormatter.FormatAsync(fileContents, options, cancellationToken);
+            return await CSharpFormatter.FormatAsync(fileContents, options, cancellationToken);
         }
 
         if (loweredExtension is "csproj" or "props" or "targets" or "xml")
         {
-            return XmlFormatter.FormatAsync(fileContents, options, cancellationToken);
+            return XmlFormatter.Format(fileContents, options);
         }
 
         throw new Exception("Cannot format file with extension " + fileExtension);
