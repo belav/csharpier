@@ -1,5 +1,7 @@
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
+using System.Text.RegularExpressions;
+
 internal static class BaseMethodDeclaration
 {
     public static Doc Print(CSharpSyntaxNode node, FormattingContext context)
@@ -63,6 +65,7 @@ internal static class BaseMethodDeclaration
         }
 
         var docs = new List<Doc>();
+        var declarationGroup = new List<Doc>();
 
         if (node is LocalFunctionStatementSyntax)
         {
@@ -72,21 +75,47 @@ internal static class BaseMethodDeclaration
         if (attributeLists is { Count: > 0 })
         {
             docs.Add(AttributeLists.Print(node, attributeLists.Value, context));
+
+            void PrintMethodUnformattedWithoutAttributes(SyntaxTriviaList syntaxTriviaList)
+            {
+                var attributeStart = attributeLists.Value[0]
+                    .GetLeadingTrivia()
+                    .First()
+                    .GetLocation()
+                    .SourceSpan.Start;
+
+                var methodWithoutAttributes = node.GetText()
+                    .Replace(
+                        0,
+                        syntaxTriviaList.First().GetLocation().SourceSpan.Start - attributeStart,
+                        string.Empty
+                    )
+                    .ToString()
+                    .Trim();
+
+                docs.Add(
+                    Regex.Replace(methodWithoutAttributes, @"\s*(\r\n?|\n)", context.LineEnding)
+                );
+            }
+
+            if (modifiers is { Count: > 0 })
+            {
+                if (CSharpierIgnore.HasIgnoreComment(modifiers.Value[0]))
+                {
+                    PrintMethodUnformattedWithoutAttributes(modifiers.Value[0].LeadingTrivia);
+                    return Doc.Group(docs);
+                }
+            }
+            else if (returnType is not null && CSharpierIgnore.HasIgnoreComment(returnType))
+            {
+                PrintMethodUnformattedWithoutAttributes(returnType.GetLeadingTrivia());
+                return Doc.Group(docs);
+            }
         }
 
         if (modifiers is { Count: > 0 })
         {
             docs.Add(Token.PrintLeadingTrivia(modifiers.Value[0], context));
-        }
-        else if (returnType != null)
-        {
-            docs.Add(Token.PrintLeadingTrivia(returnType.GetLeadingTrivia(), context));
-        }
-
-        var declarationGroup = new List<Doc>();
-
-        if (modifiers.HasValue && modifiers.Value.Any())
-        {
             declarationGroup.Add(Modifiers.PrintWithoutLeadingTrivia(modifiers.Value, context));
         }
 
@@ -94,6 +123,7 @@ internal static class BaseMethodDeclaration
         {
             if (modifiers is not { Count: > 0 })
             {
+                docs.Add(Token.PrintLeadingTrivia(returnType.GetLeadingTrivia(), context));
                 context.ShouldSkipNextLeadingTrivia = true;
             }
 

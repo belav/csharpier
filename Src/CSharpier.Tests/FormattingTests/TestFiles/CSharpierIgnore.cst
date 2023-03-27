@@ -146,3 +146,26 @@ public class KeepLines2
     
     private string third;
 }
+
+public class AttributesAndMethods
+{
+    // csharpier-ignore - only the first attribute
+    [Attribute          ]
+    [Attribute          ]
+    public void MethodThatShouldFormat()     { }
+
+    [Attribute]
+    // csharpier-ignore - only the second attribute
+    [Attribute         ]
+    public void MethodThatShouldFormat()     { }
+
+    [Attribute  ]
+    [Attribute  ]
+    // csharpier-ignore - just the method
+    public void MethodThatShouldNotFormat(           ) { }
+    
+    [Attribute  ]
+    [Attribute  ]
+    // csharpier-ignore - just the method
+    void MethodThatShouldNotFormat(           ) { }
+}
