@@ -55,16 +55,16 @@ public static class CodeFormatter
     {
         var loweredExtension = fileExtension.ToLower();
 
-        if (loweredExtension is "cs")
+        if (loweredExtension is ".cs")
         {
             return await CSharpFormatter.FormatAsync(fileContents, options, cancellationToken);
         }
 
-        if (loweredExtension is "csproj" or "props" or "targets" or "xml")
+        if (loweredExtension is ".csproj" or ".props" or ".targets" or ".xml")
         {
             return XmlFormatter.Format(fileContents, options);
         }
 
-        throw new Exception("Cannot format file with extension " + fileExtension);
+        return new CodeFormatterResult { FailureMessage = "Is an unsupported file type." };
     }
 }

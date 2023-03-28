@@ -287,12 +287,6 @@ internal static class CommandLineFormatter
 
         var fileIssueLogger = new FileIssueLogger(originalFilePath, logger);
 
-        if (!actualFilePath.EndsWithIgnoreCase(".cs") && !actualFilePath.EndsWithIgnoreCase(".cst"))
-        {
-            fileIssueLogger.WriteError("Is an unsupported file type.");
-            return;
-        }
-
         await PerformFormattingSteps(
             fileToFormatInfo,
             writer,
@@ -357,24 +351,16 @@ internal static class CommandLineFormatter
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        CodeFormatterResult codeFormattingResult;
+        CodeFormatterResult? codeFormattingResult;
 
         try
         {
-            var extension = Path.GetExtension(fileToFormatInfo.Path).ToLower();
-            codeFormattingResult = extension switch
-            {
-                "csproj"
-                or "props"
-                or "targets"
-                    => XmlFormatter.Format(fileToFormatInfo.FileContents, printerOptions),
-                _
-                    => await CSharpFormatter.FormatAsync(
-                        fileToFormatInfo.FileContents,
-                        printerOptions,
-                        cancellationToken
-                    )
-            };
+            codeFormattingResult = await CodeFormatter.FormatAsync(
+                fileToFormatInfo.FileContents,
+                Path.GetExtension(fileToFormatInfo.Path),
+                printerOptions,
+                cancellationToken
+            );
         }
         catch (OperationCanceledException)
         {
@@ -406,7 +392,17 @@ internal static class CommandLineFormatter
             return;
         }
 
-        if (!commandLineOptions.Fast)
+        // TODO xml the old style csproj is losing the <?xml stuff
+        // TODO xml there should be some better way to skip this for xml files
+        // TODO xml https://github.com/belav/csharpier-repos/pull/63/files?diff=split&w=1#diff-728cec53af202d35e1f3cad47603161109fd1e388c8531ba730b355e794983de
+        // it moves things onto the same line?
+        // TODO xml https://github.com/belav/csharpier-repos/pull/63/files?diff=split&w=1#diff-72b043fe7bcca0e90a5d8e4fe5245ef98565a2cf5ba36e4ece99b5deff7dc6dc
+        // this one has conditions, we'd have to understand the msbuild syntax for that to work
+        // TODO https://github.com/belav/csharpier-repos/pull/63/files?diff=split&w=1#diff-bd08b8684f5eba71601efe0b04bb5c04faa1c7ee4362c1c05744a03b1461003b
+        // auto collapse nodes with no content?
+        // TODO https://github.com/belav/csharpier-repos/pull/63/files?diff=split&w=1#diff-75c74095e49441988711783ff9cf04ef4d64c82f967356d9258151c929e7aae9
+        // this one is real ugly, ugh, why is it collapsing new lines?
+        if (!commandLineOptions.Fast && fileToFormatInfo.Path.EndsWithIgnoreCase(".cs"))
         {
             var syntaxNodeComparer = new SyntaxNodeComparer(
                 fileToFormatInfo.FileContents,
