@@ -10,7 +10,7 @@ public class SetUpFixture
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        EmptyFiles.Extensions.AddTextExtension(".cst");
+        EmptyFiles.Extensions.AddTextExtension(".test");
         DiffTools.AddToolBasedOn(
             DiffTool.WinMerge,
             name: "WritableWinMerge",

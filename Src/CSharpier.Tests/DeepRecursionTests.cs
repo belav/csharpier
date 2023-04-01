@@ -7,10 +7,10 @@ namespace CSharpier.Tests;
 public class DeepRecursionTests
 {
     [Test]
-    public void Format_Should_Return_Error_For_Deep_Recursion()
+    public async Task Format_Should_Return_Error_For_Deep_Recursion()
     {
         var code = this.uglyLongConcatenatedString;
-        var result = CodeFormatter.Format(code, new PrinterOptions());
+        var result = await CSharpFormatter.FormatAsync(code, new PrinterOptions());
 
         result.FailureMessage.Should().Be("We can't handle this deep of recursion yet.");
     }

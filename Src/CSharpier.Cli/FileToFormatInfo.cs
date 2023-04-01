@@ -20,7 +20,7 @@ internal class FileToFormatInfo
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var (encoding, fileContents, unableToDetectEncoding) = await FileReader.ReadFile(
+        var (encoding, fileContents, unableToDetectEncoding) = await FileReader.ReadFileAsync(
             path,
             fileSystem,
             cancellationToken

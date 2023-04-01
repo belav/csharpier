@@ -9,31 +9,31 @@ namespace CSharpier.Tests.Samples;
 public class Samples
 {
     [Test]
-    public void Scratch()
+    public async Task Scratch()
     {
-        RunTest("Scratch");
+        await RunTest("Scratch");
     }
 
     [Test]
-    public void AllInOne()
+    public async Task AllInOne()
     {
-        RunTest("AllInOne");
+        await RunTest("AllInOne");
     }
 
-    public static void RunTest(string fileName)
+    public static async Task RunTest(string fileName)
     {
         var directory = DirectoryFinder.FindParent("CSharpier.Tests");
 
-        var file = Path.Combine(directory.FullName, $"Samples/{fileName}.cst");
+        var file = Path.Combine(directory.FullName, $"Samples/{fileName}.test");
         if (!File.Exists(file))
         {
-            File.WriteAllText(file, "");
+            await File.WriteAllTextAsync(file, "");
         }
 
-        var code = File.ReadAllText(file);
-        var result = CodeFormatter.Format(
+        var code = await File.ReadAllTextAsync(file);
+        var result = await CSharpFormatter.FormatAsync(
             code,
-            new PrinterOptions { IncludeDocTree = true, IncludeAST = true, }
+            new PrinterOptions { IncludeDocTree = true, IncludeAST = true }
         );
 
         var syntaxNodeComparer = new SyntaxNodeComparer(code, result.Code, CancellationToken.None);
@@ -41,7 +41,15 @@ public class Samples
         var compareResult = syntaxNodeComparer.CompareSource();
         compareResult.Should().BeEmpty();
 
-        File.WriteAllText(file.Replace(".cst", ".actual.cst"), result.Code, Encoding.UTF8);
-        File.WriteAllText(file.Replace(".cst", ".doctree.txt"), result.DocTree, Encoding.UTF8);
+        await File.WriteAllTextAsync(
+            file.Replace(".cst", ".actual.test"),
+            result.Code,
+            Encoding.UTF8
+        );
+        await File.WriteAllTextAsync(
+            file.Replace(".cst", ".doctree.txt"),
+            result.DocTree,
+            Encoding.UTF8
+        );
     }
 }

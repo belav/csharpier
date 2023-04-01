@@ -4,6 +4,7 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
+// TODO xml move these around
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
 internal class CodeFormatterTests
@@ -13,7 +14,7 @@ internal class CodeFormatterTests
     public void GetLineEndings_Should_Return_Easy_Cases(EndOfLine endOfLine, string expected)
     {
         var code = "tester\n";
-        var result = CodeFormatter.GetLineEnding(
+        var result = PrinterOptions.GetLineEnding(
             code,
             new PrinterOptions { EndOfLine = endOfLine }
         );
@@ -27,7 +28,7 @@ internal class CodeFormatterTests
     [TestCase("tester", "\n")]
     public void GetLineEndings_With_Auto_Should_Detect(string code, string expected)
     {
-        var result = CodeFormatter.GetLineEnding(code, new PrinterOptions());
+        var result = PrinterOptions.GetLineEnding(code, new PrinterOptions());
 
         result.Should().Be(expected);
     }

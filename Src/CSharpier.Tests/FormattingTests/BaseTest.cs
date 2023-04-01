@@ -11,27 +11,32 @@ public class BaseTest
 {
     private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent("CSharpier.Tests");
 
-    protected void RunTest(string fileName, bool useTabs = false)
+    protected async Task RunTest(string fileName, string fileExtension, bool useTabs = false)
     {
         var filePath = Path.Combine(
             this.rootDirectory.FullName,
             "FormattingTests",
             "TestFiles",
-            fileName + ".cst"
+            fileExtension,
+            fileName + ".test"
         );
-        var fileReaderResult = FileReader
-            .ReadFile(filePath, new FileSystem(), CancellationToken.None)
-            .Result;
+        var fileReaderResult = await FileReader.ReadFileAsync(
+            filePath,
+            new FileSystem(),
+            CancellationToken.None
+        );
 
         PreprocessorSymbols.Reset();
 
-        var result = CodeFormatter.Format(
+        // TODO xml use proper formatter
+        var result = await CSharpFormatter.FormatAsync(
             fileReaderResult.FileContents,
-            new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs }
+            new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs },
+            CancellationToken.None
         );
 
-        var actualFilePath = filePath.Replace(".cst", ".actual.cst");
-        File.WriteAllText(actualFilePath, result.Code, fileReaderResult.Encoding);
+        var actualFilePath = filePath.Replace(".test", ".actual.test");
+        await File.WriteAllTextAsync(actualFilePath, result.Code, fileReaderResult.Encoding);
 
         var filePathToChange = filePath;
         var expectedFilePath = actualFilePath.Replace(".actual.", ".expected.");
@@ -40,7 +45,7 @@ public class BaseTest
 
         if (File.Exists(expectedFilePath))
         {
-            expectedCode = File.ReadAllText(expectedFilePath, Encoding.UTF8);
+            expectedCode = await File.ReadAllTextAsync(expectedFilePath, Encoding.UTF8);
             filePathToChange = expectedFilePath;
         }
 
@@ -59,7 +64,7 @@ public class BaseTest
 
         if (normalizedCode != expectedCode && !BuildServerDetector.Detected)
         {
-            DiffRunner.Launch(filePathToChange, actualFilePath);
+            await DiffRunner.LaunchAsync(filePathToChange, actualFilePath);
         }
         normalizedCode.Should().Be(expectedCode);
 

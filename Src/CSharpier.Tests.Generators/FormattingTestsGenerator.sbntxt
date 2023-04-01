@@ -8,9 +8,9 @@ namespace CSharpier.Tests.FormattingTests
     {
         {{- for test in Tests }}
         [Test]
-        public void {{ test.Name }}()
+        public Task {{ test.Name }}()
         {
-            this.RunTest("{{ test.Name }}"{{ if test.UseTabs }}, true{{ end }});
+            return this.RunTest("{{ test.Name }}", "{{ test.FileExtension }}"{{ if test.UseTabs }}, true{{ end }});
         }
         {{- end }}
     }

@@ -20,7 +20,7 @@ internal partial class SyntaxNodeComparer
         this.OriginalSourceCode = originalSourceCode;
         this.NewSourceCode = newSourceCode;
 
-        var cSharpParseOptions = new CSharpParseOptions(CodeFormatter.LanguageVersion);
+        var cSharpParseOptions = new CSharpParseOptions(CSharpFormatter.LanguageVersion);
         this.OriginalSyntaxTree = CSharpSyntaxTree.ParseText(
             this.OriginalSourceCode,
             cSharpParseOptions,

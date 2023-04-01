@@ -12,7 +12,7 @@ internal static class FileReader
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
 
-    public static async Task<FileReaderResult> ReadFile(
+    public static async Task<FileReaderResult> ReadFileAsync(
         string filePath,
         IFileSystem fileSystem,
         CancellationToken cancellationToken
