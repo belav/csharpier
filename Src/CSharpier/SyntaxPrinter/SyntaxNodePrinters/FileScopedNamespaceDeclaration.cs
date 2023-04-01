@@ -13,6 +13,7 @@ internal static class FileScopedNamespaceDeclaration
             Node.Print(node.Name, context),
             Token.Print(node.SemicolonToken, context),
             Doc.HardLine
+            // , Doc.HardLine
         };
 
         NamespaceLikePrinter.Print(node, docs, context);

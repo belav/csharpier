@@ -34,11 +34,19 @@ internal static class NamespaceLikePrinter
 
         if (usings.Count > 0)
         {
-            if (externs.Any())
+            if (externs.Count > 0)
             {
                 docs.Add(Doc.HardLine);
             }
-            docs.Add(Doc.Join(Doc.HardLine, usings.Select(o => UsingDirective.Print(o, context))));
+            
+            docs.Add(
+                Doc.Join(
+                    Doc.HardLine,
+                    usings.Select(
+                        (o, i) => UsingDirective.Print(o, context, printExtraLines: i != 0)
+                    )
+                )
+            );
         }
 
         if (
@@ -48,18 +56,13 @@ internal static class NamespaceLikePrinter
         {
             if (externs.Any() || usings.Any())
             {
-                if (
+                docs.Add(
                     compilationUnitSyntax.AttributeLists[0]
                         .GetLeadingTrivia()
                         .Any(o => o.IsDirective)
-                )
-                {
-                    docs.Add(ExtraNewLines.Print(compilationUnitSyntax.AttributeLists[0]));
-                }
-                else
-                {
-                    docs.Add(Doc.HardLine);
-                }
+                        ? ExtraNewLines.Print(compilationUnitSyntax.AttributeLists[0])
+                        : Doc.HardLine
+                );
             }
             docs.Add(
                 Doc.HardLine,
@@ -80,7 +83,7 @@ internal static class NamespaceLikePrinter
             {
                 if (
                     (
-                        node is not CompilationUnitSyntax { AttributeLists: { Count: > 0 } }
+                        node is not CompilationUnitSyntax { AttributeLists.Count: > 0 }
                         && directiveTrivia.All(
                             o => o.RawSyntaxKind() is SyntaxKind.EndIfDirectiveTrivia
                         )
@@ -93,7 +96,7 @@ internal static class NamespaceLikePrinter
                     docs.Add(ExtraNewLines.Print(members[0]));
                 }
             }
-            else if (node is not CompilationUnitSyntax { AttributeLists: { Count: > 0 } })
+            else if (node is not CompilationUnitSyntax { AttributeLists.Count: > 0 })
             {
                 docs.Add(Doc.HardLine);
             }
