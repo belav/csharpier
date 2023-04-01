@@ -1,7 +1,7 @@
 name: Publish Nuget
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 jobs:
   test:
     runs-on: ubuntu-latest

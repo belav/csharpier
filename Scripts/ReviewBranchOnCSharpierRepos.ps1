@@ -18,8 +18,8 @@ $ErrorActionPreference = "Stop"
 
 $branch = & git branch --show-current
 
-if ($branch -eq "master") {
-    Write-Output "You must be on the branch you want to test. You are currently on master"
+if ($branch -eq "main") {
+    Write-Output "You must be on the branch you want to test. You are currently on main"
     exit 1
 }
 
@@ -42,7 +42,7 @@ if ($firstRun)
 {
     Set-Location $repositoryRoot
     # TODO this should make sure the working tree is clean
-    & git checkout master
+    & git checkout main
     Build-CSharpier
 
     Set-Location $pathToTestingRepo
