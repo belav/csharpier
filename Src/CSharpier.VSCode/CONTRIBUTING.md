@@ -5,7 +5,8 @@ Local Testing
 
 Publishing
 - Update version in package.json
-- run `vsce package`
-- run `vsce publish`
+- run `npx vsce package`
+- run `npx vsce publish`
+- run 'npx ovsx publish -p <token>'
 
 https://marketplace.visualstudio.com/manage/publishers/csharpier

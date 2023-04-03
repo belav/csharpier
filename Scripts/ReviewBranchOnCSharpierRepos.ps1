@@ -52,6 +52,10 @@ if ($firstRun)
     & git checkout -b $preBranch
     
     dotnet $csharpierDllPath . $fastParam --no-cache
+    # there is some weirdness with a couple files with #if where
+    # they need to be formatted twice to get them stable
+    # it isn't worth fixing in csharpier, because it only really affects this
+    dotnet $csharpierDllPath . $fastParam
 
     & git add -A
     & git commit -m "Before $branch"
