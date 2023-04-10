@@ -59,11 +59,15 @@ internal static class NamespaceLikePrinter
             );
         }
 
+        var isCompilationUnitWithAttributes = false;
+
         if (
             node is CompilationUnitSyntax compilationUnitSyntax
             && compilationUnitSyntax.AttributeLists.Any()
         )
         {
+            isCompilationUnitWithAttributes = true;
+
             if (externs.Any() || usings.Any())
             {
                 docs.Add(
@@ -112,6 +116,15 @@ internal static class NamespaceLikePrinter
             }
         }
 
-        docs.AddRange(MembersWithForcedLines.Print(node, members, context));
+        docs.AddRange(
+            MembersWithForcedLines.Print(
+                node,
+                members,
+                context,
+                skipFirstHardLine: !usings.Any()
+                    && !externs.Any()
+                    && !isCompilationUnitWithAttributes
+            )
+        );
     }
 }
