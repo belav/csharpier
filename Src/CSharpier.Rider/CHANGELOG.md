@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.3.7]
+- Support for 2023.1-beta
+
 ## [1.3.6]
 - Disable "CSharpier must be installed globally" popup for sources cache files and the "\" path
 

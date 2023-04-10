@@ -205,11 +205,12 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
             this.logger.debug("Adding new version " + version + " process for " + directory);
 
-            var installedVersion = new ComparableVersion(version);
-            var pipeFilesVersion = new ComparableVersion("0.12.0");
-            var utf8Version = new ComparableVersion("0.14.0");
+            // ComparableVersion was unhappy in rider 2023, this code should probably just go away
+            // but there are still 0.12 and 0.14 downloads happening
+            var installedVersion = version.split("\\.");
+            var versionWeCareAbout = Integer.parseInt(installedVersion[1]);
 
-            if (installedVersion.compareTo(pipeFilesVersion) < 0) {
+            if (versionWeCareAbout < 12) {
                 if (!this.warnedForOldVersion) {
                     var content = "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.";
                     NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
@@ -223,7 +224,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
                 return new CSharpierProcessSingleFile(customPath);
             }
 
-            var useUtf8 = installedVersion.compareTo(utf8Version) >= 0;
+            var useUtf8 = versionWeCareAbout >= 14;
 
             return new CSharpierProcessPipeMultipleFiles(customPath, useUtf8);
 
