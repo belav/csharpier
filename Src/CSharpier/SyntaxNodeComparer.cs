@@ -275,6 +275,8 @@ internal partial class SyntaxNodeComparer
                 next++;
             } while (
                 result.RawSyntaxKind() is SyntaxKind.EndOfLineTrivia or SyntaxKind.WhitespaceTrivia
+                || result.RawSyntaxKind() is SyntaxKind.DisabledTextTrivia
+                    && string.IsNullOrWhiteSpace(result.ToString())
             );
 
             return result;
