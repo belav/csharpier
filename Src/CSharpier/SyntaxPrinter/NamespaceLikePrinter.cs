@@ -28,7 +28,7 @@ internal static class NamespaceLikePrinter
         if (externs.Count > 0)
         {
             docs.Add(
-                Doc.Join(Doc.HardLine, externs.Select(o => ExternAliasDirective.Print(o, context)))
+                Doc.Join(Doc.HardLine, externs.Select((o, i) => ExternAliasDirective.Print(o, context, printExtraLines: i != 0)))
             );
         }
 
@@ -38,12 +38,17 @@ internal static class NamespaceLikePrinter
             {
                 docs.Add(Doc.HardLine);
             }
-            
+
             docs.Add(
                 Doc.Join(
                     Doc.HardLine,
                     usings.Select(
-                        (o, i) => UsingDirective.Print(o, context, printExtraLines: i != 0)
+                        (o, i) =>
+                            UsingDirective.Print(
+                                o,
+                                context,
+                                printExtraLines: i != 0 || externs.Count != 0
+                            )
                     )
                 )
             );
