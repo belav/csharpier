@@ -28,7 +28,12 @@ internal static class NamespaceLikePrinter
         if (externs.Count > 0)
         {
             docs.Add(
-                Doc.Join(Doc.HardLine, externs.Select((o, i) => ExternAliasDirective.Print(o, context, printExtraLines: i != 0)))
+                Doc.Join(
+                    Doc.HardLine,
+                    externs.Select(
+                        (o, i) => ExternAliasDirective.Print(o, context, printExtraLines: i != 0)
+                    )
+                )
             );
         }
 
