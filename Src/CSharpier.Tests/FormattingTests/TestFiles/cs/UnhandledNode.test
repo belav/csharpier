@@ -1,0 +1,2 @@
+// make sure to print leading trivia on unhandled nodes
+scoped Span<byte> byteBuffer;
