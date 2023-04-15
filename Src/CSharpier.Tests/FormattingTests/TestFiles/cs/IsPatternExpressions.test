@@ -238,12 +238,12 @@ class ClassName
         {
             return;
         }
-        
+
         if (
             e is
-        #pragma warning disable CS0618
+#pragma warning disable CS0618
             BadHttpRequestException
-        #pragma warning restore CS0618
+#pragma warning restore CS0618
             {
                 Message: "______________________________________________________________________________________________________________"
             }
