@@ -1,0 +1,10 @@
+class ClassName
+{
+    void MethodName()
+    {
+        // make sure to print leading trivia on unhandled nodes
+        scoped Span<byte> byteBuffer;
+
+        scoped Span<byte> byteBuffer;
+    }
+}
