@@ -11,7 +11,11 @@ public class BaseTest
 {
     private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent("CSharpier.Tests");
 
-    protected async Task RunTest(string fileName, string fileExtensionWithoutDot, bool useTabs = false)
+    protected async Task RunTest(
+        string fileName,
+        string fileExtensionWithoutDot,
+        bool useTabs = false
+    )
     {
         var filePath = Path.Combine(
             this.rootDirectory.FullName,

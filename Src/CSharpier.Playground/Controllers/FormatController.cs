@@ -34,7 +34,7 @@ public class FormatController : ControllerBase
     [HttpPost]
     public async Task<FormatResult> Post([FromBody] string content, string fileExtension)
     {
-        // TODO use the proper formatter class?
+        // TODO xml use the proper formatter class?
         if (fileExtension == "cs")
         {
             var result = await CSharpFormatter.FormatAsync(
