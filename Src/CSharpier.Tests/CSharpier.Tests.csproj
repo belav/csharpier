@@ -27,4 +27,7 @@
       <DependentUpon>$([System.String]::Copy(%(Filename)).Replace('.expected', '.test'))</DependentUpon>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FormattingTests\TestFiles\csproj\" />
+  </ItemGroup>
 </Project>

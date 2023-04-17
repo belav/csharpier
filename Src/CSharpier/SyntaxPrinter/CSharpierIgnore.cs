@@ -9,14 +9,29 @@ internal static class CSharpierIgnore
     public static readonly Regex IgnoreStartRegex = new("^// csharpier-ignore-start($| -)");
     public static readonly Regex IgnoreEndRegex = new("^// csharpier-ignore-end($| -)");
 
+    public static bool HasIgnoreComment(SyntaxNode syntaxNode) =>
+        Token.HasLeadingCommentMatching(syntaxNode, IgnoreRegex);
+
+    public static bool HasIgnoreComment(SyntaxToken syntaxToken) =>
+        Token.HasLeadingCommentMatching(syntaxToken, IgnoreRegex);
+
     public static bool IsNodeIgnored(SyntaxNode syntaxNode)
     {
+        // this get handled in BaseMethodDeclaration and/or AttributeList
+        if (
+            syntaxNode is BaseMethodDeclarationSyntax baseMethodDeclarationSyntax
+            && baseMethodDeclarationSyntax.AttributeLists.Any()
+        )
+        {
+            return false;
+        }
+
         return syntaxNode.Parent
                 is BaseTypeDeclarationSyntax
                     or BlockSyntax
                     or CompilationUnitSyntax
                     or NamespaceDeclarationSyntax
-            && Token.HasLeadingCommentMatching(syntaxNode, IgnoreRegex);
+            && HasIgnoreComment(syntaxNode);
     }
 
     public static List<Doc> PrintNodesRespectingRangeIgnore<T>(

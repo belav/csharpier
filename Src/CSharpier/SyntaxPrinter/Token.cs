@@ -362,4 +362,13 @@ internal static class Token
                     && regex.IsMatch(o.ToString())
             );
     }
+
+    public static bool HasLeadingCommentMatching(SyntaxToken token, Regex regex)
+    {
+        return token.LeadingTrivia.Any(
+            o =>
+                o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
+                && regex.IsMatch(o.ToString())
+        );
+    }
 }

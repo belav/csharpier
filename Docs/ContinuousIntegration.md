@@ -29,7 +29,7 @@ Normally when using a code formatter like CSharpier, you'll want to ensure that 
    name: Validate PR
    on:
      pull_request:
-       branches: [ master ]
+       branches: [ main ]
    jobs:
      check_formatting:
        runs-on: ubuntu-latest

@@ -20,6 +20,7 @@ internal static class AttributeLists
                 or ParenthesizedLambdaExpressionSyntax
             ? Doc.Line
             : Doc.HardLine;
+
         docs.Add(Doc.Join(separator, attributeLists.Select(o => AttributeList.Print(o, context))));
 
         if (node is not (ParameterSyntax or TypeParameterSyntax))

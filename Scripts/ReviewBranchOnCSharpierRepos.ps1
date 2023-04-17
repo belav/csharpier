@@ -18,8 +18,8 @@ $ErrorActionPreference = "Stop"
 
 $branch = & git branch --show-current
 
-if ($branch -eq "master") {
-    Write-Output "You must be on the branch you want to test. You are currently on master"
+if ($branch -eq "main") {
+    Write-Output "You must be on the branch you want to test. You are currently on main"
     exit 1
 }
 
@@ -42,7 +42,7 @@ if ($firstRun)
 {
     Set-Location $repositoryRoot
     # TODO this should make sure the working tree is clean
-    & git checkout master
+    & git checkout main
     Build-CSharpier
 
     Set-Location $pathToTestingRepo
@@ -52,6 +52,10 @@ if ($firstRun)
     & git checkout -b $preBranch
     
     dotnet $csharpierDllPath . $fastParam --no-cache
+    # there is some weirdness with a couple files with #if where
+    # they need to be formatted twice to get them stable
+    # it isn't worth fixing in csharpier, because it only really affects this
+    dotnet $csharpierDllPath . $fastParam
 
     & git add -A
     & git commit -m "Before $branch"

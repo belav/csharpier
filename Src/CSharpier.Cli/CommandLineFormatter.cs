@@ -355,7 +355,8 @@ internal static class CommandLineFormatter
 
         try
         {
-            codeFormattingResult = await CodeFormatter.FormatAsync(
+            // TODO xml find correct formatter
+            codeFormattingResult = await CSharpFormatter.FormatAsync(
                 fileToFormatInfo.FileContents,
                 Path.GetExtension(fileToFormatInfo.Path),
                 printerOptions,

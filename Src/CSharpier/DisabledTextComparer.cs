@@ -52,6 +52,7 @@ internal class DisabledTextComparer
                             or '>'
                             or ':'
                             or ';'
+                            or '?'
                         )
                 )
                 {
@@ -81,6 +82,7 @@ internal class DisabledTextComparer
                         or '>'
                         or ';'
                         or ':'
+                        or '?'
                 && result.Length > 0
                 && result[^1] is ' '
             )

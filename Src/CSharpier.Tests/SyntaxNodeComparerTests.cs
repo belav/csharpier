@@ -348,6 +348,40 @@ public class ClassName { }
         result.Should().BeEmpty();
     }
 
+    [Test]
+    public void Handles_Ternary_In_Disabled_Text()
+    {
+        var left =
+            @"namespace Namespace;
+#if DEBUG
+class Class
+{
+    void MethodName()
+    {
+        var x = true?1:2;
+    }
+}
+#endif
+";
+
+        var right =
+            @"namespace Namespace;
+#if DEBUG
+class Class
+{
+    void MethodName()
+    {
+        var x = true ? 1 : 2;
+    }
+}
+#endif
+";
+
+        var result = AreEqual(left, right);
+
+        result.Should().BeEmpty();
+    }
+
     private static void ResultShouldBe(string result, string be)
     {
         if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
