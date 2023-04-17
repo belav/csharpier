@@ -34,50 +34,25 @@ public class FormatController : ControllerBase
     [HttpPost]
     public async Task<FormatResult> Post([FromBody] string content, string fileExtension)
     {
-        // TODO xml use the proper formatter class?
-        if (fileExtension == "cs")
-        {
-            var result = await CSharpFormatter.FormatAsync(
-                content,
-                new PrinterOptions
-                {
-                    IncludeAST = true,
-                    IncludeDocTree = true,
-                    Width = PrinterOptions.WidthUsedByTests
-                }
-            );
-
-            return new FormatResult
+        var result = await CodeFormatter.FormatAsync(
+            content,
+            fileExtension,
+            new PrinterOptions
             {
-                Code = result.Code,
-                Json = result.AST,
-                Doc = result.DocTree,
-                Errors = result.CompilationErrors.Select(this.ConvertError).ToList(),
-            };
-        }
+                IncludeAST = true,
+                IncludeDocTree = true,
+                Width = PrinterOptions.WidthUsedByTests
+            },
+            CancellationToken.None
+        );
 
-        if (fileExtension == "xml")
+        return new FormatResult
         {
-            var result = XmlFormatter.Format(
-                content,
-                new PrinterOptions
-                {
-                    Width = PrinterOptions.WidthUsedByTests,
-                    IncludeAST = true,
-                    IncludeDocTree = true,
-                }
-            );
-
-            return new FormatResult
-            {
-                Code = result.Code,
-                Json = result.AST,
-                Doc = result.DocTree,
-                Errors = new List<FormatError>()
-            };
-        }
-
-        throw new Exception("Cannot handle file extension " + fileExtension);
+            Code = result.Code,
+            Json = result.AST,
+            Doc = result.DocTree,
+            Errors = result.CompilationErrors.Select(this.ConvertError).ToList(),
+        };
     }
 
     private FormatError ConvertError(Diagnostic diagnostic)

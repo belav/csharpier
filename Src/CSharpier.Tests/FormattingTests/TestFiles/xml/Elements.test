@@ -2,4 +2,10 @@
     <Element />
     <Element></Element>
     <ElementWithText>Text</ElementWithText>
+    <SystemRuntimeSerializationPrimitivesPackageVersion
+        >4.3.0</SystemRuntimeSerializationPrimitivesPackageVersion
+    >
+    <RoslynToolPath Condition=" '$(RoslynToolPath)' == '' "
+        >$(MSBuildThisFileDirectory)..\..\tools\roslynlatest</RoslynToolPath
+    >
 </Root>

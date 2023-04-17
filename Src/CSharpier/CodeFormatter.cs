@@ -47,7 +47,6 @@ public static class CodeFormatter
         );
     }
 
-    // TODO XML make use of this?
     internal static async Task<CodeFormatterResult> FormatAsync(
         string fileContents,
         string fileExtension,
@@ -62,6 +61,7 @@ public static class CodeFormatter
             return await CSharpFormatter.FormatAsync(fileContents, options, cancellationToken);
         }
 
+        // TODO XML maybe make this opt in until it is better tested?
         // TODO XML maybe don't include xml by default?
         if (loweredExtension is ".csproj" or ".props" or ".targets" or ".xml")
         {

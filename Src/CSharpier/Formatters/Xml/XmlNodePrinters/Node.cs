@@ -34,6 +34,11 @@ internal static class Node
             return xmlNode.OuterXml;
         }
 
+        if (xmlNode is XmlComment)
+        {
+            return xmlNode.OuterXml;
+        }
+
         throw new Exception("Need to handle + " + xmlNode);
     }
 }

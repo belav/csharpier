@@ -355,7 +355,6 @@ internal static class CommandLineFormatter
 
         try
         {
-            // TODO xml find correct formatter
             codeFormattingResult = await CodeFormatter.FormatAsync(
                 fileToFormatInfo.FileContents,
                 Path.GetExtension(fileToFormatInfo.Path),
@@ -393,13 +392,10 @@ internal static class CommandLineFormatter
             return;
         }
 
-        // TODO xml there should be some better way to skip this for xml files
-        // TODO xml https://github.com/belav/csharpier-repos/pull/63/files?diff=split&w=1#diff-728cec53af202d35e1f3cad47603161109fd1e388c8531ba730b355e794983de
-        // it moves things onto the same line?
-        // TODO https://github.com/belav/csharpier-repos/pull/63/files?diff=split&w=1#diff-bd08b8684f5eba71601efe0b04bb5c04faa1c7ee4362c1c05744a03b1461003b
-        // auto collapse nodes with no content?
-        // TODO https://github.com/belav/csharpier-repos/pull/63/files?diff=split&w=1#diff-75c74095e49441988711783ff9cf04ef4d64c82f967356d9258151c929e7aae9
-        // this one is real ugly, ugh, why is it collapsing new lines?
+        // TODO xml implement this stuff - maybe new PR?
+        // https://github.com/belav/csharpier/pull/858#issuecomment-1487385384
+        // TODO xml review this https://github.com/belav/csharpier-repos/pull/67
+        // TODO xml what about allowing lines between elements?
         if (!commandLineOptions.Fast && fileToFormatInfo.Path.EndsWithIgnoreCase(".cs"))
         {
             var syntaxNodeComparer = new SyntaxNodeComparer(
