@@ -43,6 +43,8 @@ export const Controls = observer(() => {
                     <button className="smallButton" title="Shift-Ctrl-S" onClick={copyLeft}>
                         Copy Left
                     </button>
+                </>
+                    )}
                     <label>
                         <input
                             type="checkbox"
@@ -75,8 +77,8 @@ export const Controls = observer(() => {
                         />
                         Show AST
                     </label>
-                </>
-            )}
+                
+            
         </div>
     );
 });

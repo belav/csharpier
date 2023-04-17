@@ -1,5 +1,7 @@
 namespace CSharpier;
 
+using CSharpier.Formatters.Xml;
+
 public static class CodeFormatter
 {
     public static CodeFormatterResult Format(string code, CodeFormatterOptions? options = null)

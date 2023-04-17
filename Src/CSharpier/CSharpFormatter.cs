@@ -110,8 +110,8 @@ internal static class CSharpFormatter
             }
 
             var lineEnding = PrinterOptions.GetLineEnding(syntaxTree.ToString(), printerOptions);
-            var document = Node.Print(rootNode, new FormattingContext { LineEnding = lineEnding });
-            var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
+            var doc = Node.Print(rootNode, new FormattingContext { LineEnding = lineEnding });
+            var formattedCode = DocPrinter.DocPrinter.Print(doc, printerOptions, lineEnding);
 
             PreprocessorSymbols.StopCollecting();
             foreach (var symbolSet in PreprocessorSymbols.GetSymbolSets())
@@ -123,18 +123,18 @@ internal static class CSharpFormatter
                     return result;
                 }
 
-                document = Node.Print(
+                doc = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),
                     new FormattingContext()
                 );
-                formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
+                formattedCode = DocPrinter.DocPrinter.Print(doc, printerOptions, lineEnding);
             }
 
             return new CodeFormatterResult
             {
                 Code = formattedCode,
                 DocTree = printerOptions.IncludeDocTree
-                    ? DocSerializer.Serialize(document)
+                    ? DocSerializer.Serialize(doc)
                     : string.Empty,
                 AST = printerOptions.IncludeAST ? PrintAST(rootNode) : string.Empty
             };

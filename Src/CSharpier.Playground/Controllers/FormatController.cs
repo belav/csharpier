@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Playground.Controllers;
 
+using CSharpier.Formatters.Xml;
+
 public class FormatResult
 {
     public required string Code { get; set; }
@@ -32,6 +34,7 @@ public class FormatController : ControllerBase
     [HttpPost]
     public async Task<FormatResult> Post([FromBody] string content, string fileExtension)
     {
+        // TODO use the proper formatter class?
         if (fileExtension == "cs")
         {
             var result = await CSharpFormatter.FormatAsync(
@@ -57,14 +60,19 @@ public class FormatController : ControllerBase
         {
             var result = XmlFormatter.Format(
                 content,
-                new PrinterOptions { Width = PrinterOptions.WidthUsedByTests }
+                new PrinterOptions
+                {
+                    Width = PrinterOptions.WidthUsedByTests,
+                    IncludeAST = true,
+                    IncludeDocTree = true,
+                }
             );
 
             return new FormatResult
             {
                 Code = result.Code,
-                Json = "{}",
-                Doc = string.Empty,
+                Json = result.AST,
+                Doc = result.DocTree,
                 Errors = new List<FormatError>()
             };
         }
