@@ -6,10 +6,13 @@ internal static class Element
 {
     internal static Doc Print(XmlElement element)
     {
+        if (element.IsEmpty)
+        {
+            return Doc.Group("<" + element.Name, PrintAttributes(element), Doc.Line, "/>");
+        }
+
         return Doc.Group(
-            "<" + element.Name,
-            PrintAttributes(element),
-            ">",
+            Doc.Group("<" + element.Name, PrintAttributes(element), Doc.SoftLine, ">"),
             PrintChildren(element),
             "</" + element.Name + ">"
         );
@@ -20,11 +23,11 @@ internal static class Element
         var result = new List<Doc>();
         foreach (XmlAttribute attribute in element.Attributes)
         {
-            result.Add(" ");
-            result.Add(attribute.OuterXml);
+            // TODO XML replace line endings in Value with the proper ones
+            result.Add(Doc.Line, attribute.Name, "=\"", attribute.Value, "\"");
         }
 
-        return Doc.Concat(result);
+        return Doc.Indent(result);
     }
 
     private static Doc PrintChildren(XmlElement element)

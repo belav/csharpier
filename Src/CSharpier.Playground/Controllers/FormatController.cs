@@ -56,7 +56,7 @@ public class FormatController : ControllerBase
             };
         }
 
-        if (fileExtension == "csproj")
+        if (fileExtension == "xml")
         {
             var result = XmlFormatter.Format(
                 content,

@@ -28,7 +28,7 @@ export const Controls = observer(() => {
                 Language
                 <select value={fileExtension} onChange={onChange}>
                     <option value="cs">C#</option>
-                    <option value="csproj">csproj</option>
+                    <option value="xml">Xml</option>
                 </select>
             </label>
             {fileExtension === "cs" && (

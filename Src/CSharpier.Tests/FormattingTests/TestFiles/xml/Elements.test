@@ -1,4 +1,5 @@
 <Root>
+    <Element />
     <Element></Element>
     <ElementWithText>Text</ElementWithText>
 </Root>

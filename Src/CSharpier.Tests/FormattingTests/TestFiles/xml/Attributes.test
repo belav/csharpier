@@ -1,0 +1,14 @@
+<Root>
+    <Element Attribute="Value" />
+    <Element
+        Attribute1____________________="Value"
+        Attribute2____________________="Value"
+        Attribute3____________________="Value"
+        Attribute4____________________="Value"
+    />
+    <Element
+        AttributeWithLineBreaks=" '$(MSBuildProjectName)' != 'Microsoft.TestCommon'
+            AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetCore.Test'
+            AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' "
+    />
+</Root>

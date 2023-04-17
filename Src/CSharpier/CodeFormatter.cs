@@ -62,6 +62,7 @@ public static class CodeFormatter
             return await CSharpFormatter.FormatAsync(fileContents, options, cancellationToken);
         }
 
+        // TODO XML maybe don't include xml by default?
         if (loweredExtension is ".csproj" or ".props" or ".targets" or ".xml")
         {
             return XmlFormatter.Format(fileContents, options);
