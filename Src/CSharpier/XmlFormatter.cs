@@ -1,6 +1,5 @@
 namespace CSharpier;
 
-using System.Text;
 using System.Xml;
 
 internal static class XmlFormatter
@@ -8,7 +7,6 @@ internal static class XmlFormatter
     internal static CodeFormatterResult Format(string code, PrinterOptions printerOptions)
     {
         // TODO xml width?
-        // TODO xml test other things
         var stringBuilder = new StringWriter();
 
         var settings = new XmlWriterSettings
@@ -16,7 +14,7 @@ internal static class XmlFormatter
             Indent = true,
             IndentChars = printerOptions.UseTabs ? "\t" : new string(' ', printerOptions.TabWidth),
             NewLineChars = PrinterOptions.GetLineEnding(code, printerOptions),
-            OmitXmlDeclaration = true
+            OmitXmlDeclaration = !code.Trim().StartsWith("<?xml")
         };
 
         var xmlTextWriter = XmlWriter.Create(stringBuilder, settings);

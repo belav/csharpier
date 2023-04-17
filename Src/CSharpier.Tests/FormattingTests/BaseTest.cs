@@ -11,13 +11,13 @@ public class BaseTest
 {
     private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent("CSharpier.Tests");
 
-    protected async Task RunTest(string fileName, string fileExtension, bool useTabs = false)
+    protected async Task RunTest(string fileName, string fileExtensionWithDot, bool useTabs = false)
     {
         var filePath = Path.Combine(
             this.rootDirectory.FullName,
             "FormattingTests",
             "TestFiles",
-            fileExtension,
+            fileExtensionWithDot,
             fileName + ".test"
         );
         var fileReaderResult = await FileReader.ReadFileAsync(
@@ -30,7 +30,7 @@ public class BaseTest
 
         var result = await CodeFormatter.FormatAsync(
             fileReaderResult.FileContents,
-            fileExtension,
+            "." + fileExtensionWithDot,
             new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs },
             CancellationToken.None
         );
