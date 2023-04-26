@@ -169,3 +169,20 @@ public class AttributesAndMethods
     // csharpier-ignore - just the method
     void MethodThatShouldNotFormat(           ) { }
 }
+
+public class KeepLineBreaks
+{
+    // csharpier-ignore
+    public string Example
+    {
+      get
+         {
+           if (_example is not null)
+             return _example;
+
+           var number = Random.Shared.Next();
+
+           return _example = number.ToString();
+         }
+    }
+}
