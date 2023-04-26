@@ -1,3 +1,165 @@
+# 0.24.0
+## What's Changed
+#### Formatting named list patterns loses code and causes compilation error [#876](https://github.com/belav/csharpier/issues/876)
+```c#
+// input & expected output
+return list switch
+{
+    [var elem] => elem * elem,
+    [] => 0,
+    [..] elems => elems.Sum(e => e + e),
+};
+
+// 0.23.0
+return list switch
+{
+    [var elem] => elem * elem,
+    [] => 0,
+    [..] => elems.Sum(e => e + e),
+};
+
+```
+
+Thanks go to @Dragemil for reporting the bug
+
+#### CSharpier.MSBuild does not support usernames or project paths with spaces [#872](https://github.com/belav/csharpier/issues/872)
+CSharpier.MSBuild would throw an exception when building a project if the username had a space, or if the project path had a space.
+
+Thanks go to @ooo2003003v2 for reporting the bug.
+
+#### #pragma with long line introduces extra line break [#865](https://github.com/belav/csharpier/issues/865)
+```c#
+// input & expected output
+if (
+    e is
+#pragma warning disable CS0618
+    BadHttpRequestException
+#pragma warning restore CS0618
+    {
+        Message: "______________________________________________________________________________________________________________"
+    }
+) { }
+
+// 0.23.0
+if (
+    e is
+#pragma warning disable CS0618
+    BadHttpRequestException
+#pragma warning restore CS0618
+
+    {
+        Message: "______________________________________________________________________________________________________________"
+    }
+) { }
+```
+
+Thanks go to @Denton-L for reporting the bug
+
+#### Better support for ignore on method attributes [#848](https://github.com/belav/csharpier/issues/848)
+```c#
+// input
+public class AttributesAndMethods
+{
+    // csharpier-ignore - only the first attribute
+    [Attribute          ]
+    [Attribute          ]
+    public void MethodThatShouldFormat()     { }
+
+    [Attribute]
+    // csharpier-ignore - only the second attribute
+    [Attribute         ]
+    public void MethodThatShouldFormat()     { }
+
+    [Attribute  ]
+    [Attribute  ]
+    // csharpier-ignore - just the method
+    public void MethodThatShouldNotFormat(           ) { }
+}
+
+// 0.23.0
+public class AttributesAndMethods
+{
+    // csharpier-ignore - only the first attribute
+    [Attribute          ]
+    [Attribute          ]
+    public void MethodThatShouldFormat()     { }
+
+    [Attribute]
+    // csharpier-ignore - only the second attribute
+    [Attribute]
+    public void MethodThatShouldFormat() { }
+
+    [Attribute]
+    [Attribute]
+    // csharpier-ignore - just the method
+    public void MethodThatShouldNotFormat() { }
+}
+
+// 0.24.0
+public class AttributesAndMethods
+{
+    // csharpier-ignore - only the first attribute
+    [Attribute          ]
+    [Attribute]
+    public void MethodThatShouldFormat() { }
+
+    [Attribute]
+    // csharpier-ignore - only the second attribute
+    [Attribute]
+    public void MethodThatShouldFormat() { }
+
+    [Attribute]
+    [Attribute]
+    // csharpier-ignore - just the method
+    public void MethodThatShouldNotFormat() { }
+}
+```
+
+Thanks go to @Billuc for reporting the bug
+
+#### Ranged ignore applies some formatting when multiple statements are on a line [#846](https://github.com/belav/csharpier/issues/846)
+```c#
+// input & expected output
+void MethodName()
+{
+    // csharpier-ignore-start
+    var packet = new List<byte>();
+    packet.Add(0x0f); packet.Add(0x00);
+    packet.Add(0x00); packet.Add(0x00);
+    // csharpier-ignore-end
+}
+
+// 0.23.0
+void MethodName()
+{
+    // csharpier-ignore-start
+    var packet = new List<byte>();
+    packet.Add(0x0f);
+packet.Add(0x00);
+    packet.Add(0x00);
+packet.Add(0x00);
+    // csharpier-ignore-end
+}
+```
+
+Thanks go to @Billuc for reporting the bug
+
+#### Support scoped variables (better handling of unrecognized syntax nodes) [#839](https://github.com/belav/csharpier/issues/839)
+Scoped variables are a language proposal. CSharpier has some support for printing unrecognized syntax nodes but the validation logic didn't account for them and would throw an exception
+```c#
+scoped Span<byte> span;
+```
+Thanks go to @Dragemil for reporting the bug
+#### Unrecognized syntax nodes lose comments [#869](https://github.com/belav/csharpier/issues/869)
+CSharpier now supports printing commends on unrecognized nodes.
+```c#
+// comment on unrecognized node
+scoped Span<byte> span;
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.23.0...0.24.0
+
+
 # 0.23.0
 ## Breaking Changes
 #### Make compile errors public when using CSharpier.Core [#799](https://github.com/belav/csharpier/issues/799)
