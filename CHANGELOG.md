@@ -1,3 +1,43 @@
+# 0.24.1
+## What's Changed
+#### 0.24.0 Regression csharpier-ignore causes blank lines between statements to be removed. [#879](https://github.com/belav/csharpier/issues/879)
+```c#
+// input & expected output
+
+// csharpier-ignore
+public string Example
+{
+  get
+     {
+       if (_example is not null)
+         return _example;
+
+       var number = Random.Shared.Next();
+
+       return _example = number.ToString();
+     }
+}
+
+// 0.24.0
+
+// csharpier-ignore
+public string Example
+{
+  get
+     {
+       if (_example is not null)
+         return _example;
+       var number = Random.Shared.Next();
+       return _example = number.ToString();
+     }
+}
+```
+
+Thanks go to @Pentadome for reporting the regression bug.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.24.0...0.24.1
+
+
 # 0.24.0
 ## What's Changed
 #### Formatting named list patterns loses code and causes compilation error [#876](https://github.com/belav/csharpier/issues/876)
