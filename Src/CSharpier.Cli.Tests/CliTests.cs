@@ -113,6 +113,31 @@ public class CliTests
     }
 
     [Test]
+    public async Task Do_Stuff()
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.Append("class Unformatted\n");
+        stringBuilder.Append("{\n");
+        stringBuilder.Append("    void MethodName()\n");
+        stringBuilder.Append("    {\n");
+        stringBuilder.Append("        // csharpier-ignore\n");
+        stringBuilder.Append("        CallMethod()\n");
+        stringBuilder.Append("            .Should()\n");
+        stringBuilder.Append("            .BeNull();\n");
+        stringBuilder.Append("    }\n");
+        stringBuilder.Append("}\n");
+
+        var unformattedContent = stringBuilder.ToString();
+
+        await this.WriteFileAsync("IgnoredFile.cs", unformattedContent);
+
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        var result = await this.ReadAllTextAsync("IgnoredFile.cs");
+
+        result.Should().Be(unformattedContent);
+    }
+
+    [Test]
     public async Task Should_Support_Config_Path()
     {
         const string fileContent = "var myVariable = someLongValue;";
