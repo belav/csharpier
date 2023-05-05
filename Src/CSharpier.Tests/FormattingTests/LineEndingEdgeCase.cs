@@ -11,7 +11,10 @@ internal class LineEndingEdgeCase
     [TestCase("\r\n", EndOfLine.LF)]
     [TestCase("\n", EndOfLine.CRLF)]
     [TestCase("\r\n", EndOfLine.CRLF)]
-    public async Task DoStuff(string lineEnding, EndOfLine endOfLine)
+    public async Task Preprocessor_Symbols_With_CSharpier_Ignore_Gets_Proper_Line_Endings(
+        string lineEnding,
+        EndOfLine endOfLine
+    )
     {
         var stringBuilder = new StringBuilder();
 
