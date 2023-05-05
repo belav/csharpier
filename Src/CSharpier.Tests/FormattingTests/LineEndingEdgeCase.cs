@@ -2,7 +2,6 @@ namespace CSharpier.Tests.FormattingTests;
 
 using System.Text;
 using FluentAssertions;
-using Microsoft.Extensions.Primitives;
 using NUnit.Framework;
 
 [TestFixture]
@@ -35,7 +34,11 @@ internal class LineEndingEdgeCase
 
         var result = await CSharpFormatter.FormatAsync(
             stringBuilder.ToString(),
-            new PrinterOptions { EndOfLine = endOfLine },
+            new PrinterOptions
+            {
+                EndOfLine = endOfLine,
+                PreprocessorSymbolSets = new List<string[]> { new[] { "" }, new[] { "DEBUG" } }
+            },
             CancellationToken.None
         );
 
