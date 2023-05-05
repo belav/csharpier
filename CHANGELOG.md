@@ -1,3 +1,18 @@
+# 0.24.2
+## What's Changed
+#### csharpier-ignore comments force CRLF line endings [#884](https://github.com/belav/csharpier/issues/884)
+In a case where 
+- a file on windows (which defaults to CRLF) contained only LF
+- the file contained `// csharpier-ignore` on a multi-line statement
+- the file was formatted in multiple passes due to preprocessor symbols (such as an `#if DEBUG`)
+
+CSharpier would end up formatting the file with `CRLF` on the `// csharpier-ignore` statement but `LF` in the rest of the file. The file would then fail the formatting check.
+
+Thanks go to @pingzing for the bug report and detailed reproduction steps.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.24.1...0.24.2
+
+
 # 0.24.1
 ## What's Changed
 #### 0.24.0 Regression csharpier-ignore causes blank lines between statements to be removed. [#879](https://github.com/belav/csharpier/issues/879)
