@@ -1,4 +1,7 @@
-﻿## [1.4.0]
+﻿## [1.4.1]
+- Fix for bug where CSharpier hangs when file doesn't compile and Format on Save is also installed.
+
+## [1.4.0]
 - Add ability to configure "Reformat on save" at the global level
 
 ## [1.3.6]
