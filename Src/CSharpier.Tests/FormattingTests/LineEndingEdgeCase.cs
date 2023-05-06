@@ -16,41 +16,28 @@ internal class LineEndingEdgeCase
         EndOfLine endOfLine
     )
     {
-        var stringBuilder = new StringBuilder();
-
-        void Append(string value)
-        {
-            stringBuilder.Append(value);
-            stringBuilder.Append(lineEnding);
-        }
-
-        Append("class Unformatted");
-        Append("{");
-        Append("    void MethodName()");
-        Append("    {");
-        Append("        // csharpier-ignore");
-        Append("        CallMethod()");
-        Append("            .Should()");
-        Append("            .BeNull();");
-        Append("    }");
-        Append("}");
+        var unformattedCode = @"class Unformatted
+{
+    void MethodName()
+    {
+        // csharpier-ignore
+        CallMethod()
+            .Should()
+            .BeNull();
+#if DEBUG
+#endif
+    }
+}
+".ReplaceLineEndings(lineEnding);
 
         var result = await CSharpFormatter.FormatAsync(
-            stringBuilder.ToString(),
-            new PrinterOptions
-            {
-                EndOfLine = endOfLine,
-                PreprocessorSymbolSets = new List<string[]> { new[] { "" }, new[] { "DEBUG" } }
-            },
+            unformattedCode,
+            new PrinterOptions { EndOfLine = endOfLine },
             CancellationToken.None
         );
 
         result.Code
             .Should()
-            .Be(
-                stringBuilder
-                    .ToString()
-                    .ReplaceLineEndings(endOfLine == EndOfLine.LF ? "\n" : "\r\n")
-            );
+            .Be(unformattedCode.ReplaceLineEndings(endOfLine == EndOfLine.LF ? "\n" : "\r\n"));
     }
 }

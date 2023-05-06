@@ -69,7 +69,7 @@ public string Example
     {
         return CSharpierIgnore.PrintWithoutFormatting(
             code,
-            new FormattingContext { LineEnding = Environment.NewLine }
+            new FormattingContext(Environment.NewLine)
         );
     }
 }
