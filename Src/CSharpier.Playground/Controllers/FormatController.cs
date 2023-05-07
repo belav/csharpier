@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
-using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Playground.Controllers;
+
+using CSharpier.Formatters.Xml;
 
 public class FormatResult
 {
@@ -27,30 +24,26 @@ public class FormatError
 [Route("[controller]")]
 public class FormatController : ControllerBase
 {
-    private readonly IWebHostEnvironment webHostEnvironment;
     private readonly ILogger logger;
 
-    // ReSharper disable once SuggestBaseTypeForParameter
-    public FormatController(
-        IWebHostEnvironment webHostEnvironment,
-        ILogger<FormatController> logger
-    )
+    public FormatController(ILogger<FormatController> logger)
     {
-        this.webHostEnvironment = webHostEnvironment;
         this.logger = logger;
     }
 
     [HttpPost]
-    public async Task<FormatResult> Post([FromBody] string content)
+    public async Task<FormatResult> Post([FromBody] string content, string fileExtension)
     {
-        var result = await CSharpFormatter.FormatAsync(
+        var result = await CodeFormatter.FormatAsync(
             content,
+            fileExtension,
             new PrinterOptions
             {
                 IncludeAST = true,
                 IncludeDocTree = true,
                 Width = PrinterOptions.WidthUsedByTests
-            }
+            },
+            CancellationToken.None
         );
 
         return new FormatResult

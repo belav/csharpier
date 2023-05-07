@@ -191,7 +191,14 @@ internal static class CommandLineFormatter
                 }
 
                 var tasks = fileSystem.Directory
-                    .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
+                    .EnumerateFiles(directoryOrFile, "*.*", SearchOption.AllDirectories)
+                    .Where(
+                        o =>
+                            o.EndsWith(".cs")
+                            || o.EndsWith(".csproj")
+                            || o.EndsWith(".props")
+                            || o.EndsWith(".targets")
+                    )
                     .Select(o =>
                     {
                         var normalizedPath = o.Replace("\\", "/");
@@ -280,12 +287,6 @@ internal static class CommandLineFormatter
 
         var fileIssueLogger = new FileIssueLogger(originalFilePath, logger);
 
-        if (!actualFilePath.EndsWithIgnoreCase(".cs") && !actualFilePath.EndsWithIgnoreCase(".cst"))
-        {
-            fileIssueLogger.WriteError("Is an unsupported file type.");
-            return;
-        }
-
         await PerformFormattingSteps(
             fileToFormatInfo,
             writer,
@@ -350,13 +351,13 @@ internal static class CommandLineFormatter
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        CodeFormatterResult codeFormattingResult;
+        CodeFormatterResult? codeFormattingResult;
 
         try
         {
-            // TODO xml find correct formatter
-            codeFormattingResult = await CSharpFormatter.FormatAsync(
+            codeFormattingResult = await CodeFormatter.FormatAsync(
                 fileToFormatInfo.FileContents,
+                Path.GetExtension(fileToFormatInfo.Path),
                 printerOptions,
                 cancellationToken
             );
@@ -391,7 +392,11 @@ internal static class CommandLineFormatter
             return;
         }
 
-        if (!commandLineOptions.Fast)
+        // TODO xml implement this stuff - maybe new PR?
+        // https://github.com/belav/csharpier/pull/858#issuecomment-1487385384
+        // TODO xml review this https://github.com/belav/csharpier-repos/pull/67
+        // TODO xml what about allowing lines between elements?
+        if (!commandLineOptions.Fast && fileToFormatInfo.Path.EndsWithIgnoreCase(".cs"))
         {
             var syntaxNodeComparer = new SyntaxNodeComparer(
                 fileToFormatInfo.FileContents,

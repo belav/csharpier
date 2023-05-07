@@ -42,12 +42,12 @@ public class Samples
         compareResult.Should().BeEmpty();
 
         await File.WriteAllTextAsync(
-            file.Replace(".test", ".actual.test"),
+            file.Replace(".cst", ".actual.test"),
             result.Code,
             Encoding.UTF8
         );
         await File.WriteAllTextAsync(
-            file.Replace(".test", ".doctree.txt"),
+            file.Replace(".cst", ".doctree.txt"),
             result.DocTree,
             Encoding.UTF8
         );

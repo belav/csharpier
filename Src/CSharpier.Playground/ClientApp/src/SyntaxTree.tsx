@@ -1,7 +1,8 @@
 import React from "react";
 import ReactJson, { CollapsedFieldProps } from "react-json-view";
-import { useAppContext } from "./AppContext";
 import "./SyntaxTree.css";
+import { useAppContext } from "./AppContext";
+import { observer } from "mobx-react-lite";
 
 const shouldCollapse = (field: CollapsedFieldProps) => {
     if (
@@ -15,7 +16,7 @@ const shouldCollapse = (field: CollapsedFieldProps) => {
     return false;
 };
 
-export const SyntaxTree = () => {
+export const SyntaxTree = observer(() => {
     const { syntaxTree } = useAppContext();
     if (!syntaxTree) {
         return null;
@@ -34,4 +35,4 @@ export const SyntaxTree = () => {
             />
         </div>
     );
-};
+});

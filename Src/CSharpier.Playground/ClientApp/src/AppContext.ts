@@ -1,111 +1,95 @@
-import React, { useContext, useState } from "react";
+import { createContext, useContext } from "react";
+import { makeAutoObservable, runInAction } from "mobx";
 import { formatCode, setFormattedCodeEditor } from "./FormatCode";
 
-export const AppContext = React.createContext({
-    showAst: false,
-    setShowAst: (value: boolean) => {},
-    showDoc: false,
-    setShowDoc: (value: boolean) => {},
-    hideNull: false,
-    setHideNull: (value: boolean) => {},
-    doc: "",
-    setDoc: (doc: string) => {},
-    isLoading: false,
-    setIsLoading: (isLoading: boolean) => {},
-    hasErrors: false,
-    setHasErrors: (hasErrors: boolean) => {},
-    syntaxTree: undefined as object | undefined,
-    setSyntaxTree: (syntaxTree: undefined | object) => {},
-    formattedCode: "",
-    setFormattedCode: (formattedCode: string) => {},
-    enteredCode: "",
-    setEnteredCode: (enteredCode: string) => {},
-    formatCode: () => {},
-    setFormattedCodeEditor: (value: unknown) => {},
-    setEmptyMethod: () => {},
-    setEmptyClass: () => {},
-    copyLeft: () => {},
-});
+class AppState {
+    fileExtension = window.sessionStorage.getItem("fileExtension") ?? "cs";
+    showAst = window.sessionStorage.getItem("showAst") === "true";
+    showDoc = window.sessionStorage.getItem("showDoc") === "true";
+    hideNull = window.sessionStorage.getItem("hideNull") === "true";
+    doc = "";
+    isLoading = false;
+    hasErrors = false;
+    syntaxTree = undefined as object | undefined;
+    formattedCode = "";
+    enteredCode = window.sessionStorage.getItem("enteredCode") ?? defaultCs;
 
-export const useAppContext = () => useContext(AppContext);
+    constructor() {
+        makeAutoObservable(this);
+    }
 
-// I regret trying out this approach to managing state....
-export const useSetupAppContext = () => {
-    const [doc, setDoc] = useState("");
-    const [showAst, setShowAst] = useState(getInitialShowAst());
-    const [showDoc, setShowDoc] = useState(getInitialShowDoc());
-    const [hideNull, setHideNull] = useState(getInitialHideNull());
-    const [formattedCode, setFormattedCode] = useState("");
-    const [enteredCode, setEnteredCode] = useState(getInitialCode());
-    const [isLoading, setIsLoading] = useState(false);
-    const [hasErrors, setHasErrors] = useState(false);
-    const [syntaxTree, setSyntaxTree] = useState<object | undefined>(undefined);
+    setFileExtension = (value: string) => {
+        window.sessionStorage.setItem("fileExtension", value);
+        this.fileExtension = value;
+        if (value === "cs") {
+            this.setEnteredCode(defaultCs);
+        } else {
+            this.setEnteredCode(defaultCsProj);
+        }
+        this.formatCode();
+    };
 
-    return {
-        doc,
-        showAst,
-        setShowAst: (value: boolean) => {
-            window.sessionStorage.setItem("showAst", value.toString());
-            setShowAst(value);
-        },
-        showDoc,
-        setShowDoc: (value: boolean) => {
-            window.sessionStorage.setItem("showDoc", value.toString());
-            setShowDoc(value);
-        },
-        hideNull,
-        setHideNull: (value: boolean) => {
-            window.sessionStorage.setItem("hideNull", value.toString());
-            setHideNull(value);
-        },
-        setDoc,
-        isLoading,
-        setIsLoading,
-        hasErrors,
-        setHasErrors,
-        syntaxTree,
-        setSyntaxTree,
-        formattedCode,
-        setFormattedCode,
-        enteredCode,
-        setEnteredCode: (value: string) => {
-            window.sessionStorage.setItem("enteredCode", value);
-            setEnteredCode(value);
-        },
-        formatCode: async () => {
-            setIsLoading(true);
+    setShowAst = (value: boolean) => {
+        window.sessionStorage.setItem("showAst", value.toString());
+        this.showAst = value;
+    };
 
-            const { syntaxTree, formattedCode, doc, hasErrors } = await formatCode(enteredCode);
+    setShowDoc = (value: boolean) => {
+        window.sessionStorage.setItem("showDoc", value.toString());
+        this.showDoc = value;
+    };
 
-            setIsLoading(false);
-            setSyntaxTree(syntaxTree);
-            setFormattedCode(formattedCode);
-            setDoc(doc);
-            setHasErrors(hasErrors);
-        },
-        setFormattedCodeEditor: setFormattedCodeEditor,
-        setEmptyMethod: () => {
-            setEnteredCode(`class ClassName
+    setHideNull = (value: boolean) => {
+        window.sessionStorage.setItem("hideNull", value.toString());
+        this.hideNull = value;
+    };
+
+    setEnteredCode = (value: string) => {
+        window.sessionStorage.setItem("enteredCode", value);
+        this.enteredCode = value;
+    };
+
+    setEmptyMethod = () => {
+        this.setEnteredCode(`class ClassName
 {
     void MethodName()
     {
         HERE
     }
 }`);
-        },
-        setEmptyClass: () => {
-            setEnteredCode(`class ClassName
+    };
+
+    setEmptyClass = () => {
+        this.setEnteredCode(`class ClassName
 {
     HERE
 }`);
-        },
-        copyLeft: () => {
-            setEnteredCode(formattedCode);
-        },
     };
-};
 
-const defaultCode = `public class ClassName {
+    copyLeft = () => {
+        this.setEnteredCode(this.formattedCode);
+    };
+
+    formatCode = () => {
+        (async () => {
+            this.isLoading = true;
+
+            const { syntaxTree, formattedCode, doc, hasErrors } = await formatCode(this.enteredCode, this.fileExtension);
+
+            runInAction(() => {
+                this.isLoading = false;
+                this.syntaxTree = syntaxTree;
+                this.formattedCode = formattedCode;
+                this.doc = doc;
+                this.hasErrors = hasErrors;
+            });
+        })();
+    };
+
+    setFormattedCodeEditor = setFormattedCodeEditor;
+}
+
+export const defaultCs = `public class ClassName {
     public string ShortPropertyName {
         get;
         set; 
@@ -116,15 +100,14 @@ const defaultCode = `public class ClassName {
     }
 }`;
 
-const getInitialCode = () => {
-    return window.sessionStorage.getItem("enteredCode") ?? defaultCode;
-};
-const getInitialShowAst = () => {
-    return window.sessionStorage.getItem("showAst") === "true";
-};
-const getInitialShowDoc = () => {
-    return window.sessionStorage.getItem("showDoc") === "true";
-};
-const getInitialHideNull = () => {
-    return window.sessionStorage.getItem("hideNull") === "true";
-};
+const defaultCsProj = `<Project Sdk="Microsoft.NET.Sdk">
+      <PropertyGroup>
+    <LangVersion>4</LangVersion>
+  </PropertyGroup>
+</Project>`;
+
+export { AppState };
+
+export const AppStateContext = createContext<AppState>({} as any);
+
+export const useAppContext = () => useContext(AppStateContext);

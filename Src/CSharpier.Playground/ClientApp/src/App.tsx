@@ -1,11 +1,18 @@
-import { AppContext, useSetupAppContext } from "./AppContext";
 import React from "react";
 import { Layout } from "./Layout";
+import { AppState, AppStateContext } from "./AppContext";
+import { configure } from "mobx";
+
+const appState = new AppState();
+
+configure({
+    enforceActions: "always",
+});
 
 export const App = () => {
     return (
-        <AppContext.Provider value={useSetupAppContext()}>
+        <AppStateContext.Provider value={appState}>
             <Layout />
-        </AppContext.Provider>
+        </AppStateContext.Provider>
     );
 };

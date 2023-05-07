@@ -4,18 +4,9 @@ using System.Text;
 using System.Text.Json;
 using CSharpier.SyntaxPrinter;
 
-internal class CSharpFormatter : IFormatter
+internal static class CSharpFormatter
 {
     internal static readonly LanguageVersion LanguageVersion = LanguageVersion.Preview;
-
-    Task<CodeFormatterResult> IFormatter.FormatAsync(
-        string code,
-        PrinterOptions printerOptions,
-        CancellationToken cancellationToken
-    )
-    {
-        return FormatAsync(code, printerOptions, cancellationToken);
-    }
 
     internal static Task<CodeFormatterResult> FormatAsync(
         string code,
@@ -119,8 +110,8 @@ internal class CSharpFormatter : IFormatter
             }
 
             var lineEnding = PrinterOptions.GetLineEnding(syntaxTree.ToString(), printerOptions);
-            var document = Node.Print(rootNode, new FormattingContext { LineEnding = lineEnding });
-            var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
+            var doc = Node.Print(rootNode, new FormattingContext { LineEnding = lineEnding });
+            var formattedCode = DocPrinter.DocPrinter.Print(doc, printerOptions, lineEnding);
 
             PreprocessorSymbols.StopCollecting();
             foreach (var symbolSet in PreprocessorSymbols.GetSymbolSets())
@@ -132,18 +123,18 @@ internal class CSharpFormatter : IFormatter
                     return result;
                 }
 
-                document = Node.Print(
+                doc = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),
                     new FormattingContext { LineEnding = lineEnding }
                 );
-                formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
+                formattedCode = DocPrinter.DocPrinter.Print(doc, printerOptions, lineEnding);
             }
 
             return new CodeFormatterResult
             {
                 Code = formattedCode,
                 DocTree = printerOptions.IncludeDocTree
-                    ? DocSerializer.Serialize(document)
+                    ? DocSerializer.Serialize(doc)
                     : string.Empty,
                 AST = printerOptions.IncludeAST ? PrintAST(rootNode) : string.Empty
             };

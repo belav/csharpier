@@ -5,15 +5,10 @@
     <NoWarn>SYSLIB0013</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Common"/>
-    <PackageReference Include="Scriban" IncludeAssets="Build"/>
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+    <PackageReference Include="Scriban" IncludeAssets="Build" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbntxt'))"/>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\CSharpier.Generators\TemplatedGenerator.cs">
-      <Link>TemplatedGenerator.cs</Link>
-    </Compile>
+    <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbntxt'))" />
   </ItemGroup>
 </Project>

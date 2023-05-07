@@ -1,8 +1,6 @@
-using System.Text;
-using CSharpier.SyntaxPrinter;
-using System.Text.Json;
-
 namespace CSharpier;
+
+using CSharpier.Formatters.Xml;
 
 public static class CodeFormatter
 {
@@ -47,5 +45,29 @@ public static class CodeFormatter
             new PrinterOptions { Width = options.Width },
             cancellationToken
         );
+    }
+
+    internal static async Task<CodeFormatterResult> FormatAsync(
+        string fileContents,
+        string fileExtension,
+        PrinterOptions options,
+        CancellationToken cancellationToken
+    )
+    {
+        var loweredExtension = fileExtension.ToLower();
+
+        if (loweredExtension is ".cs")
+        {
+            return await CSharpFormatter.FormatAsync(fileContents, options, cancellationToken);
+        }
+
+        // TODO XML maybe make this opt in until it is better tested?
+        // TODO XML maybe don't include xml by default?
+        if (loweredExtension is ".csproj" or ".props" or ".targets" or ".xml")
+        {
+            return XmlFormatter.Format(fileContents, options);
+        }
+
+        return new CodeFormatterResult { FailureMessage = "Is an unsupported file type." };
     }
 }

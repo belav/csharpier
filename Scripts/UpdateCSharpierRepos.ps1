@@ -39,14 +39,17 @@ $destination = "C:\projects\csharpier-repos\"
 Set-Location $destination
 & git checkout main
 
-Get-ChildItem $tempLocation | Copy-Item -Destination $destination -Filter *.cs -Recurse -Force
+Get-ChildItem $tempLocation | Copy-Item -Destination $destination -Recurse -Force
+
+$extensions = (".cs", ".csproj", ".props", ".targets")
 
 $items = Get-ChildItem -Recurse C:\projects\csharpier-repos -File
 foreach ($item in $items) {
     if ($item.Name -eq ".git") {
         Remove-Item -Force -Recurse $item.FullName
     }
-    if ($item.Extension -ne ".cs" -and $item.Name -ne ".csharpierignore") {
+    
+    if (-not ($extensions.Contains($item.Extension)) -and  $item.Name -ne ".csharpierignore") {
         Remove-Item $item.FullName
     }
 }
