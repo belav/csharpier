@@ -1,0 +1,13 @@
+public class Foo
+{
+	/**
+	 * comment
+	 */
+	public class Bar
+	{
+		/**
+		 * comment
+		 */
+		var x = 0;
+	}
+}
