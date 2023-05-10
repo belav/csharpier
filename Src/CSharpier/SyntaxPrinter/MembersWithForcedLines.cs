@@ -9,11 +9,17 @@ internal static class MembersWithForcedLines
     public static List<Doc> Print<T>(
         CSharpSyntaxNode node,
         IReadOnlyList<T> members,
-        FormattingContext context
+        FormattingContext context,
+        bool skipFirstHardLine = false
     )
         where T : MemberDeclarationSyntax
     {
-        var result = new List<Doc> { Doc.HardLine };
+        var result = new List<Doc>();
+        if (!skipFirstHardLine)
+        {
+            result.Add(Doc.HardLine);
+        }
+        ;
         var unFormattedCode = new StringBuilder();
         var printUnformatted = false;
         var lastMemberForcedBlankLine = false;
