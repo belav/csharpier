@@ -11,7 +11,9 @@ internal static class ListPattern
                 SeparatedSyntaxList.Print(node.Patterns, Node.Print, Doc.Line, context)
             ),
             Doc.SoftLine,
-            Token.Print(node.CloseBracketToken, context)
+            Token.Print(node.CloseBracketToken, context),
+            node.Designation is not null ? " " : Doc.Null,
+            Node.Print(node.Designation, context)
         );
     }
 }

@@ -75,7 +75,12 @@ internal static class RecursivePattern
                 result.Add(
                     Token.PrintLeadingTrivia(node.PropertyPatternClause.OpenBraceToken, context),
                     Doc.Group(
-                        node.Type != null ? Doc.Line : Doc.Null,
+                        node.Type != null
+                        && !node.PropertyPatternClause.OpenBraceToken.LeadingTrivia.Any(
+                            o => o.IsDirective || o.IsComment()
+                        )
+                            ? Doc.Line
+                            : Doc.Null,
                         Token.PrintWithoutLeadingTrivia(
                             node.PropertyPatternClause.OpenBraceToken,
                             context

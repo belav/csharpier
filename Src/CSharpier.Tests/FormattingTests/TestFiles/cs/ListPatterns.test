@@ -19,3 +19,10 @@ var someValue =
             var thirdCharacter,
             .. var rest
         ];
+
+return list switch
+{
+    [var elem] => elem * elem,
+    [] => 0,
+    [..] elems => elems.Sum(e => e + e),
+};

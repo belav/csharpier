@@ -210,7 +210,7 @@ internal class DocPrinter
             // we calculate how much the indentation of the first line is changing
             // and then change the indentation of all other lines the same amount
             var firstLineIndentLength = CalculateIndentLength(line);
-            var currentIndent = indent.Value.Length;
+            var currentIndent = CalculateIndentLength(indent.Value);
             numberOfSpacesToAddOrRemove = currentIndent - firstLineIndentLength;
         }
 
@@ -223,6 +223,15 @@ internal class DocPrinter
             else
             {
                 var spacesToAppend = CalculateIndentLength(line) + numberOfSpacesToAddOrRemove;
+                if (this.PrinterOptions.UseTabs)
+                {
+                    var indentLength = CalculateIndentLength(indent.Value);
+                    if (spacesToAppend >= indentLength)
+                    {
+                        this.Output.Append(indent.Value);
+                        spacesToAppend -= indentLength;
+                    }
+                }
                 if (spacesToAppend > 0)
                 {
                     this.Output.Append(' ', spacesToAppend);

@@ -10,6 +10,6 @@
     <Target 
         Name="CSharpierFormat"
         BeforeTargets="CoreCompile">
-        <Exec Command="dotnet $(CSharpierDllPath) $(CSharpierArgs) $(MSBuildProjectDirectory)" />
+        <Exec Command="dotnet &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) &quot;$(MSBuildProjectDirectory)&quot;" />
     </Target>
 </Project>

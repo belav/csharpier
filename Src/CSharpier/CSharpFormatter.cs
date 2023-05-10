@@ -134,7 +134,7 @@ internal class CSharpFormatter : IFormatter
 
                 document = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),
-                    new FormattingContext()
+                    new FormattingContext { LineEnding = lineEnding }
                 );
                 formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
             }

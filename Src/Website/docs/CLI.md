@@ -112,7 +112,7 @@ This option keeps csharpier running so that multiple files can be formatted. Thi
 to drastically improve formatting time.  
 The input is a '\u0003' delimited list of file names followed by file contents.  
 The results are written to stdout delimited by \u0003.  
-For an example of implementing this in code see [this example](https://github.com/belav/csharpier/blob/master/Src/CSharpier.VSCode/src/CSharpierProcessPipeMultipleFiles.ts)
+For an example of implementing this in code see [this example](https://github.com/belav/csharpier/blob/main/Src/CSharpier.VSCode/src/CSharpierProcessPipeMultipleFiles.ts)
 ```bash
 $ [FullPathToFile]\u0003[FileContents]\u0003[FullPathToFile]\u0003[FileContents]\u0003 | dotnet csharpier --pipe-multiple-files
 public class ClassName

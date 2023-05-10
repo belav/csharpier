@@ -1,3 +1,220 @@
+# 0.24.2
+## What's Changed
+#### csharpier-ignore comments force CRLF line endings [#884](https://github.com/belav/csharpier/issues/884)
+In a case where 
+- a file on windows (which defaults to CRLF) contained only LF
+- the file contained `// csharpier-ignore` on a multi-line statement
+- the file was formatted in multiple passes due to preprocessor symbols (such as an `#if DEBUG`)
+
+CSharpier would end up formatting the file with `CRLF` on the `// csharpier-ignore` statement but `LF` in the rest of the file. The file would then fail the formatting check.
+
+Thanks go to @pingzing for the bug report and detailed reproduction steps.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.24.1...0.24.2
+
+
+# 0.24.1
+## What's Changed
+#### 0.24.0 Regression csharpier-ignore causes blank lines between statements to be removed. [#879](https://github.com/belav/csharpier/issues/879)
+```c#
+// input & expected output
+
+// csharpier-ignore
+public string Example
+{
+  get
+     {
+       if (_example is not null)
+         return _example;
+
+       var number = Random.Shared.Next();
+
+       return _example = number.ToString();
+     }
+}
+
+// 0.24.0
+
+// csharpier-ignore
+public string Example
+{
+  get
+     {
+       if (_example is not null)
+         return _example;
+       var number = Random.Shared.Next();
+       return _example = number.ToString();
+     }
+}
+```
+
+Thanks go to @Pentadome for reporting the regression bug.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.24.0...0.24.1
+
+
+# 0.24.0
+## What's Changed
+#### Formatting named list patterns loses code and causes compilation error [#876](https://github.com/belav/csharpier/issues/876)
+```c#
+// input & expected output
+return list switch
+{
+    [var elem] => elem * elem,
+    [] => 0,
+    [..] elems => elems.Sum(e => e + e),
+};
+
+// 0.23.0
+return list switch
+{
+    [var elem] => elem * elem,
+    [] => 0,
+    [..] => elems.Sum(e => e + e),
+};
+
+```
+
+Thanks go to @Dragemil for reporting the bug
+
+#### CSharpier.MSBuild does not support usernames or project paths with spaces [#872](https://github.com/belav/csharpier/issues/872)
+CSharpier.MSBuild would throw an exception when building a project if the username had a space, or if the project path had a space.
+
+Thanks go to @ooo2003003v2 for reporting the bug.
+
+#### #pragma with long line introduces extra line break [#865](https://github.com/belav/csharpier/issues/865)
+```c#
+// input & expected output
+if (
+    e is
+#pragma warning disable CS0618
+    BadHttpRequestException
+#pragma warning restore CS0618
+    {
+        Message: "______________________________________________________________________________________________________________"
+    }
+) { }
+
+// 0.23.0
+if (
+    e is
+#pragma warning disable CS0618
+    BadHttpRequestException
+#pragma warning restore CS0618
+
+    {
+        Message: "______________________________________________________________________________________________________________"
+    }
+) { }
+```
+
+Thanks go to @Denton-L for reporting the bug
+
+#### Better support for ignore on method attributes [#848](https://github.com/belav/csharpier/issues/848)
+```c#
+// input
+public class AttributesAndMethods
+{
+    // csharpier-ignore - only the first attribute
+    [Attribute          ]
+    [Attribute          ]
+    public void MethodThatShouldFormat()     { }
+
+    [Attribute]
+    // csharpier-ignore - only the second attribute
+    [Attribute         ]
+    public void MethodThatShouldFormat()     { }
+
+    [Attribute  ]
+    [Attribute  ]
+    // csharpier-ignore - just the method
+    public void MethodThatShouldNotFormat(           ) { }
+}
+
+// 0.23.0
+public class AttributesAndMethods
+{
+    // csharpier-ignore - only the first attribute
+    [Attribute          ]
+    [Attribute          ]
+    public void MethodThatShouldFormat()     { }
+
+    [Attribute]
+    // csharpier-ignore - only the second attribute
+    [Attribute]
+    public void MethodThatShouldFormat() { }
+
+    [Attribute]
+    [Attribute]
+    // csharpier-ignore - just the method
+    public void MethodThatShouldNotFormat() { }
+}
+
+// 0.24.0
+public class AttributesAndMethods
+{
+    // csharpier-ignore - only the first attribute
+    [Attribute          ]
+    [Attribute]
+    public void MethodThatShouldFormat() { }
+
+    [Attribute]
+    // csharpier-ignore - only the second attribute
+    [Attribute]
+    public void MethodThatShouldFormat() { }
+
+    [Attribute]
+    [Attribute]
+    // csharpier-ignore - just the method
+    public void MethodThatShouldNotFormat() { }
+}
+```
+
+Thanks go to @Billuc for reporting the bug
+
+#### Ranged ignore applies some formatting when multiple statements are on a line [#846](https://github.com/belav/csharpier/issues/846)
+```c#
+// input & expected output
+void MethodName()
+{
+    // csharpier-ignore-start
+    var packet = new List<byte>();
+    packet.Add(0x0f); packet.Add(0x00);
+    packet.Add(0x00); packet.Add(0x00);
+    // csharpier-ignore-end
+}
+
+// 0.23.0
+void MethodName()
+{
+    // csharpier-ignore-start
+    var packet = new List<byte>();
+    packet.Add(0x0f);
+packet.Add(0x00);
+    packet.Add(0x00);
+packet.Add(0x00);
+    // csharpier-ignore-end
+}
+```
+
+Thanks go to @Billuc for reporting the bug
+
+#### Support scoped variables (better handling of unrecognized syntax nodes) [#839](https://github.com/belav/csharpier/issues/839)
+Scoped variables are a language proposal. CSharpier has some support for printing unrecognized syntax nodes but the validation logic didn't account for them and would throw an exception
+```c#
+scoped Span<byte> span;
+```
+Thanks go to @Dragemil for reporting the bug
+#### Unrecognized syntax nodes lose comments [#869](https://github.com/belav/csharpier/issues/869)
+CSharpier now supports printing commends on unrecognized nodes.
+```c#
+// comment on unrecognized node
+scoped Span<byte> span;
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.23.0...0.24.0
+
+
 # 0.23.0
 ## Breaking Changes
 #### Make compile errors public when using CSharpier.Core [#799](https://github.com/belav/csharpier/issues/799)
