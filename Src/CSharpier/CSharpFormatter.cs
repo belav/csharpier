@@ -119,7 +119,7 @@ internal class CSharpFormatter : IFormatter
             }
 
             var lineEnding = PrinterOptions.GetLineEnding(syntaxTree.ToString(), printerOptions);
-            var document = Node.Print(rootNode, new FormattingContext(lineEnding));
+            var document = Node.Print(rootNode, new FormattingContext { LineEnding = lineEnding });
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
 
             PreprocessorSymbols.StopCollecting();
@@ -134,7 +134,7 @@ internal class CSharpFormatter : IFormatter
 
                 document = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),
-                    new FormattingContext(lineEnding)
+                    new FormattingContext { LineEnding = lineEnding }
                 );
                 formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
             }

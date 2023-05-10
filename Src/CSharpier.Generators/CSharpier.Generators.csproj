@@ -7,13 +7,17 @@
     <NoWarn>SYSLIB0013</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Common"/>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp"/>
-    <PackageReference Include="Scriban" IncludeAssets="Build"/>
-    <PackageReference Include="Microsoft.CSharp"/>
-    <PackageReference Include="System.Threading.Tasks.Extensions"/>
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="PolySharp">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Scriban" IncludeAssets="Build" />
+    <PackageReference Include="Microsoft.CSharp" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbntxt'))"/>
+    <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbntxt'))" />
   </ItemGroup>
 </Project>
