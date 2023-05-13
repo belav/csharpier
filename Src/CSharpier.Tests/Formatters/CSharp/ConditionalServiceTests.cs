@@ -1,9 +1,8 @@
-using System;
-using System.Linq;
+namespace CSharpier.Tests.Formatters.CSharp;
+
+using CSharpier.Formatters.CSharp;
 using FluentAssertions;
 using NUnit.Framework;
-
-namespace CSharpier.Tests;
 
 [TestFixture]
 public class ConditionalServiceTests
@@ -11,7 +10,7 @@ public class ConditionalServiceTests
     [Test]
     public void GetSymbolSets_Should_Handle_Basic_If()
     {
-        RunTest(
+        this.RunTest(
             @"#if DEBUG
 public class Tester { }
 #endif
@@ -19,62 +18,60 @@ public class Tester { }
             new[] { "DEBUG" }
         );
     }
-    
+
     [Test]
     public void GetSymbolSets_Should_Handle_And()
     {
-        RunTest(
+        this.RunTest(
             @"#if ONE && TWO
 public class Tester { }
 #endif
 ",
-            new[] { "DEBUG" }
+            new[] { "ONE", "TWO" }
         );
     }
-    
+
     [Test]
     public void GetSymbolSets_Should_Handle_Or()
     {
-        RunTest(
+        this.RunTest(
             @"#if ONE || TWO
 public class Tester { }
 #endif
 ",
-            new[] { "DEBUG" }
+            new[] { "ONE" }
         );
     }
 
     [Test]
     public void GetSymbolSets_Should_Handle_Basic_Not_If()
     {
-        RunTest(
+        this.RunTest(
             @"#if !DEBUG
 public class Tester { }
 #endif
-",
-            Array.Empty<string>()
+"
         );
     }
 
     [Test]
     public void GetSymbolSets_Should_Handle_Basic_If_With_Else()
     {
-        RunTest(
+        this.RunTest(
             @"#if DEBUG
 public class Tester { }
 #else
 public class Tester2 { }
 #endif
 ",
-            new[] { "DEBUG" },
-            Array.Empty<string>()
+            new[] { "DEBUG" }
         );
     }
 
     [Test]
     public void GetSymbolSets_Should_Handle_Basic_If_With_ElseIf()
     {
-        RunTest(
+        this.RunTest(
             @"#if ONE
 public class Tester { }
 #elif TWO
@@ -86,18 +83,25 @@ public class Tester2 { }
         );
     }
 
+    [Test]
+    public void GetSymbolSets_Should_Handle_Parens()
+    {
+        this.RunTest(
+            @"#if (ONE || TWO) && THREE
+public class Tester { }
+#endif
+",
+            new[] { "ONE", "THREE" }
+        );
+    }
+
+    // TODO lots more tests
+
     private void RunTest(string code, params string[][] symbolSets)
     {
+        // TODO we should always include an empty symbol set
         var result = ConditionalService.GetSymbolSets(code);
 
-        result.Should().HaveCount(symbolSets.Length);
-        for (var x = 0; x < symbolSets.Length; x++)
-        {
-            result[x].Should().HaveCount(symbolSets[x].Length);
-            foreach (var symbol in symbolSets[x])
-            {
-                result[x].Should().Contain(symbol);
-            }
-        }
+        result.Should().BeEquivalentTo(symbolSets);
     }
 }
