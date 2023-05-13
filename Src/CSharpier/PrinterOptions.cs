@@ -9,7 +9,6 @@ internal class PrinterOptions
     public int Width { get; init; } = 100;
     public EndOfLine EndOfLine { get; init; } = EndOfLine.Auto;
     public bool TrimInitialLines { get; init; } = true;
-    public List<string[]>? PreprocessorSymbolSets { get; init; }
 
     public const int WidthUsedByTests = 100;
 

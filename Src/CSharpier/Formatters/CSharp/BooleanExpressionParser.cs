@@ -13,6 +13,11 @@ internal abstract class BooleanExpressionParser
 
     private static List<Token> Tokenize(string input)
     {
+        bool IsPartOfValue(char character)
+        {
+            return char.IsLetter(character) || char.IsNumber(character) || character == '_';
+        }
+
         var tokens = new List<Token>();
         for (var x = 0; x < input.Length; x++)
         {
@@ -22,14 +27,28 @@ internal abstract class BooleanExpressionParser
                 continue;
             }
 
-            if (char.IsLetter(character))
+            if (IsPartOfValue(character))
             {
                 var start = x;
-                while (x < input.Length && char.IsLetter(input[x]))
+                while (x < input.Length && IsPartOfValue(input[x]))
                 {
                     x++;
                 }
-                tokens.Add(new Token { Type = TokenType.Variable, Value = input[start..x] });
+
+                var value = input[start..x];
+
+                if (value is "true")
+                {
+                    tokens.Add(new Token { Type = TokenType.True });
+                }
+                else if (value is "false")
+                {
+                    tokens.Add(new Token { Type = TokenType.False });
+                }
+                else
+                {
+                    tokens.Add(new Token { Type = TokenType.Variable, Value = value });
+                }
             }
             else if (character == '(')
             {
@@ -49,13 +68,26 @@ internal abstract class BooleanExpressionParser
                 x++;
                 tokens.Add(new Token { Type = TokenType.Or });
             }
+            else if (character == '=')
+            {
+                x++;
+                tokens.Add(new Token { Type = TokenType.Equals });
+            }
             else if (character == '!')
             {
-                tokens.Add(new Token { Type = TokenType.Not });
+                if (input[x + 1] == '=')
+                {
+                    x++;
+                    tokens.Add(new Token { Type = TokenType.NotEquals });
+                }
+                else
+                {
+                    tokens.Add(new Token { Type = TokenType.Not });
+                }
             }
             else
             {
-                throw new ArgumentException("Invalid character in input.");
+                throw new ArgumentException($"Invalid character in input. '{character}'");
             }
         }
         return tokens;
@@ -69,14 +101,20 @@ internal abstract class BooleanExpressionParser
         {
             switch (token.Type)
             {
+                case TokenType.False:
+                case TokenType.True:
                 case TokenType.Variable:
                     output.Enqueue(token);
                     break;
                 case TokenType.And:
                 case TokenType.Or:
                 case TokenType.Not:
+                case TokenType.Equals:
+                case TokenType.NotEquals:
                     while (operators.Count > 0 && operators.Peek().Type != TokenType.LeftParen)
+                    {
                         output.Enqueue(operators.Pop());
+                    }
                     operators.Push(token);
                     break;
                 case TokenType.LeftParen:
@@ -84,9 +122,13 @@ internal abstract class BooleanExpressionParser
                     break;
                 case TokenType.RightParen:
                     while (operators.Peek().Type != TokenType.LeftParen)
+                    {
                         output.Enqueue(operators.Pop());
-                    operators.Pop(); // Pop the left parenthesis.
+                    }
+                    operators.Pop();
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -135,6 +177,22 @@ internal abstract class BooleanExpressionParser
                     var operand = stack.Pop();
                     stack.Push(Expression.Not(operand));
                     break;
+                case TokenType.Equals:
+                    var rightEquals = stack.Pop();
+                    var leftEquals = stack.Pop();
+                    stack.Push(Expression.Equal(leftEquals, rightEquals));
+                    break;
+                case TokenType.NotEquals:
+                    var rightNotEquals = stack.Pop();
+                    var leftNotEquals = stack.Pop();
+                    stack.Push(Expression.NotEqual(leftNotEquals, rightNotEquals));
+                    break;
+                case TokenType.True:
+                    stack.Push(Expression.Constant(true));
+                    break;
+                case TokenType.False:
+                    stack.Push(Expression.Constant(false));
+                    break;
             }
         }
         var expression = stack.Pop();
@@ -151,7 +209,11 @@ internal enum TokenType
     Not,
     Variable,
     LeftParen,
-    RightParen
+    RightParen,
+    Equals,
+    True,
+    False,
+    NotEquals
 }
 
 internal class Token

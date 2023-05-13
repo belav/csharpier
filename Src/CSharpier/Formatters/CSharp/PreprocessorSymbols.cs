@@ -1,13 +1,13 @@
 namespace CSharpier.Formatters.CSharp;
 
-internal class ConditionalService
+internal static class PreprocessorSymbols
 {
-    public static List<string[]> GetSymbolSets(string code)
+    public static List<string[]> GetSets(string code)
     {
-        return GetSymbolSets(CSharpSyntaxTree.ParseText(code));
+        return GetSets(CSharpSyntaxTree.ParseText(code));
     }
 
-    public static List<string[]> GetSymbolSets(SyntaxTree syntaxTree)
+    public static List<string[]> GetSets(SyntaxTree syntaxTree)
     {
         var customWalker = new CustomWalker();
         customWalker.Visit(syntaxTree.GetRoot());
@@ -60,6 +60,12 @@ internal class ConditionalService
         {
             this.DoThing(node.Condition);
         }
+        
+        public override void VisitElseDirectiveTrivia(ElseDirectiveTriviaSyntax node)
+        {
+            // TODO do we need to do this? there are probably some edge cases
+            // IF the only way to get in the else is with a specific symbol set
+        }
 
         private void DoThing(ExpressionSyntax expression)
         {
@@ -79,11 +85,20 @@ internal class ConditionalService
                     possibleParameters => function(possibleParameters)
                 );
 
-                if (possibleParameters != null)
+                if (possibleParameters == null)
                 {
-                    this.symbolSets.Add(
-                        possibleParameters.Where(o => o.Value).Select(o => o.Key).ToArray()
-                    );
+                    return;
+                }
+
+                var symbolSet = possibleParameters
+                    .Where(o => o.Value)
+                    .Select(o => o.Key)
+                    .OrderBy(o => o)
+                    .ToArray();
+
+                if (symbolSet.Length > 0)
+                {
+                    this.symbolSets.Add(symbolSet);
                 }
             }
         }
@@ -116,12 +131,6 @@ internal class ConditionalService
             }
 
             return combinations;
-        }
-
-        public override void VisitElseDirectiveTrivia(ElseDirectiveTriviaSyntax node)
-        {
-            // TODO do we need to do this? there are probably some edge cases
-            // IF the only way to get in the else is with a specific symbol set
         }
     }
 }
