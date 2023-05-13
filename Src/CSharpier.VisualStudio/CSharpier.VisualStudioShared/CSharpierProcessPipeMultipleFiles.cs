@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.Text.Editor.OptionsExtensionMethods;
 using Process = System.Diagnostics.Process;
 
@@ -11,14 +12,20 @@ namespace CSharpier.VisualStudio
     public class CSharpierProcessPipeMultipleFiles : ICSharpierProcess
     {
         private readonly Logger logger;
-        private readonly Process process;
-
-        private readonly StreamWriter standardIn;
+        private Process process;
+        private readonly string csharpierPath;
+        private StreamWriter standardIn;
 
         public CSharpierProcessPipeMultipleFiles(string csharpierPath, Logger logger)
         {
             this.logger = logger;
+            this.csharpierPath = csharpierPath;
 
+            this.StartProcess();
+        }
+
+        private void StartProcess()
+        {
             var processStartInfo = new ProcessStartInfo(csharpierPath, " --pipe-multiple-files")
             {
                 RedirectStandardInput = true,
@@ -45,24 +52,37 @@ namespace CSharpier.VisualStudio
 
         public string FormatFile(string content, string filePath)
         {
-            this.standardIn.Write(filePath);
-            this.standardIn.Write('\u0003');
-            this.standardIn.Write(content);
-            this.standardIn.Write('\u0003');
-            this.standardIn.Flush();
-
             var stringBuilder = new StringBuilder();
 
-            var nextCharacter = this.process.StandardOutput.Read();
-            while (nextCharacter != -1)
+            var task = Task.Run(() =>
             {
-                if (nextCharacter == '\u0003')
-                {
-                    break;
-                }
+                this.standardIn.Write(filePath);
+                this.standardIn.Write('\u0003');
+                this.standardIn.Write(content);
+                this.standardIn.Write('\u0003');
+                this.standardIn.Flush();
 
-                stringBuilder.Append((char)nextCharacter);
-                nextCharacter = this.process.StandardOutput.Read();
+                var nextCharacter = this.process.StandardOutput.Read();
+                while (nextCharacter != -1)
+                {
+                    if (nextCharacter == '\u0003')
+                    {
+                        break;
+                    }
+
+                    stringBuilder.Append((char)nextCharacter);
+                    nextCharacter = this.process.StandardOutput.Read();
+                }
+            });
+
+            // csharpier will freeze in some instances when "Format on Save" is also installed and the file has compilation errors
+            // this detects that and recovers from it
+            if (!task.Wait(TimeSpan.FromSeconds(3)))
+            {
+                this.logger.Warn("CSharpier process appears to be hung, restarting it.");
+                this.process.Kill();
+                this.StartProcess();
+                return string.Empty;
             }
 
             var result = stringBuilder.ToString();

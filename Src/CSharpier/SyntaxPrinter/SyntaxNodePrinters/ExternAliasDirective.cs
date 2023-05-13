@@ -2,10 +2,14 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ExternAliasDirective
 {
-    public static Doc Print(ExternAliasDirectiveSyntax node, FormattingContext context)
+    public static Doc Print(
+        ExternAliasDirectiveSyntax node,
+        FormattingContext context,
+        bool printExtraLines = true
+    )
     {
         return Doc.Concat(
-            ExtraNewLines.Print(node),
+            printExtraLines ? ExtraNewLines.Print(node) : Doc.Null,
             Token.PrintWithSuffix(node.ExternKeyword, " ", context),
             Token.PrintWithSuffix(node.AliasKeyword, " ", context),
             Token.Print(node.Identifier, context),

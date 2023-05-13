@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-using Generators;
+﻿using Generators;
 using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Tests.Generators;
