@@ -6,7 +6,7 @@ namespace CSharpier.Formatters.CSharp;
 internal class PreprocessorSymbols
 {
     private readonly List<string[]> symbolSets = new();
-    private List<BooleanExpression> booleanExpressions;
+    private List<BooleanExpression> booleanExpressions = new();
 
     public static List<string[]> GetSets(string code)
     {
@@ -107,6 +107,10 @@ internal class PreprocessorSymbols
 
     private void ParseExpression(string expression)
     {
+        if (expression.IndexOf("/") > 0)
+        {
+            expression = expression[..expression.IndexOf("/")];
+        }
         // TODO we can do some form of caching here, possibly with the solution instead of just the data
         var booleanExpression = BooleanExpressionParser.Parse(expression);
         this.booleanExpressions.Add(booleanExpression);

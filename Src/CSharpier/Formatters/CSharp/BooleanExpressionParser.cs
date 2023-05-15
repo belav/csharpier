@@ -154,7 +154,7 @@ internal abstract class BooleanExpressionParser
                     {
                         param = Expression.Property(
                             paramDict,
-                            typeof(Dictionary<string, bool>).GetProperty("Item"),
+                            typeof(Dictionary<string, bool>).GetProperty("Item")!,
                             Expression.Constant(token.Value)
                         );
                         variables[token.Value] = param;
@@ -220,6 +220,6 @@ internal enum TokenType
 
 internal class Token
 {
-    public TokenType Type { get; set; }
-    public string Value { get; set; }
+    public TokenType Type { get; init; }
+    public string Value { get; init; } = string.Empty;
 }

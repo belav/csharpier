@@ -220,6 +220,35 @@ public class PreprocessorSymbolsTests
         );
     }
 
+    [Test]
+    public void GetSets_Should_Handle_Comments()
+    {
+        this.RunTest(
+            @"#if ONE // comment
+// ONE
+#endif
+",
+            "ONE"
+        );
+    }
+
+    [Test]
+    public void Blah()
+    {
+        this.RunTest(
+            @"
+#if ONE && !TWO
+// the boolean expression parser doesn't properly deal with this, ugh!!!
+// time to understand wtf is going on in more details
+#endif
+",
+            "ONE"
+        );
+    }
+    
+    // TODO what about #if false
+    // TODO what about #if true
+
     private void RunTest(string code, params string[] symbolSets)
     {
         var result = PreprocessorSymbols.GetSets(code);
