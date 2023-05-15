@@ -14,10 +14,10 @@ public class PreprocessorSymbolsTests
     {
         this.RunTest(
             $@"#if {symbol}
-public class Tester {{ }}
+// {symbol}
 #endif
 ",
-            new[] { symbol }
+            symbol
         );
     }
 
@@ -26,10 +26,10 @@ public class Tester {{ }}
     {
         this.RunTest(
             @"#if ONE && TWO
-public class Tester { }
+// ONE,TWO
 #endif
 ",
-            new[] { "ONE", "TWO" }
+            "ONE,TWO"
         );
     }
 
@@ -38,10 +38,10 @@ public class Tester { }
     {
         this.RunTest(
             @"#if ONE || TWO
-public class Tester { }
+// ONE
 #endif
 ",
-            new[] { "ONE" }
+            "ONE"
         );
     }
 
@@ -50,7 +50,7 @@ public class Tester { }
     {
         this.RunTest(
             @"#if !DEBUG
-public class Tester { }
+//
 #endif
 "
         );
@@ -61,12 +61,12 @@ public class Tester { }
     {
         this.RunTest(
             @"#if DEBUG
-public class Tester { }
+// DEBUG
 #else
-public class Tester2 { }
+//
 #endif
 ",
-            new[] { "DEBUG" }
+            "DEBUG"
         );
     }
 
@@ -75,13 +75,13 @@ public class Tester2 { }
     {
         this.RunTest(
             @"#if ONE
-public class Tester { }
+// ONE
 #elif TWO
-public class Tester2 { }
+// TWO
 #endif
 ",
-            new[] { "ONE" },
-            new[] { "TWO" }
+            "ONE",
+            "TWO"
         );
     }
 
@@ -90,10 +90,10 @@ public class Tester2 { }
     {
         this.RunTest(
             @"#if (ONE || TWO) && THREE
-public class Tester { }
+// ONE,THREE
 #endif
 ",
-            new[] { "ONE", "THREE" }
+            "ONE,THREE"
         );
     }
 
@@ -101,11 +101,11 @@ public class Tester { }
     public void GetSets_Should_Handle_Equals_True()
     {
         this.RunTest(
-            @"#if EQUALS_TRUE == true
-public class Tester { }
+            @"#if ONE == true
+// ONE
 #endif
 ",
-            new[] { "EQUALS_TRUE" }
+            "ONE"
         );
     }
 
@@ -113,8 +113,8 @@ public class Tester { }
     public void GetSets_Should_Handle_Equals_False()
     {
         this.RunTest(
-            @"#if EQUALS_TRUE == false
-public class Tester { }
+            @"#if ONE == false
+//
 #endif
 "
         );
@@ -124,8 +124,8 @@ public class Tester { }
     public void GetSets_Should_Handle_NotEquals_True()
     {
         this.RunTest(
-            @"#if NOT_EQUALS_TRUE != true
-public class Tester { }
+            @"#if ONE != true
+//
 #endif
 "
         );
@@ -135,38 +135,97 @@ public class Tester { }
     public void GetSets_Should_Handle_NotEquals_False()
     {
         this.RunTest(
-            @"#if NOT_EQUALS_FALSE != false
-public class Tester { }
+            @"#if ONE != false
+// ONE
 #endif
 ",
-            new[] { "NOT_EQUALS_FALSE" }
+            "ONE"
         );
     }
 
     [Test]
     public void GetSets_Should_Handle_Else()
     {
-        // TODO we need to keep track of symbols for the whole if/elseif/else block
-        // TODO also need a test that uses an elseif and an else
-        // TODO and also an else
-        // TODO and we need to make sure we can get into the elseif and else if at all possible
         this.RunTest(
-            @"#if !NOT_IF
-public class Tester1 { }
+            @"#if !ONE
+//
 #else
-public class Tester2 { }
+// ONE
 #endif
 ",
-            new[] { "NOT_IF" }
+            "ONE"
         );
     }
 
-    // TODO lots more tests
+    [Test]
+    public void GetSets_Should_Handle_Else_If()
+    {
+        this.RunTest(
+            @"#if ONE
+// ONE
+#elif TWO
+// TWO
+#endif
+",
+            "ONE",
+            "TWO"
+        );
+    }
 
-    private void RunTest(string code, params string[][] symbolSets)
+    [Test]
+    public void GetSets_Should_Handle_Else_If_And_Else()
+    {
+        this.RunTest(
+            @"#if ONE
+// ONE
+#elif !TWO
+// !TWO
+#else
+// TWO
+#endif
+",
+            "ONE",
+            "TWO"
+        );
+    }
+
+    [Test]
+    public void GetSets_Should_Handle_Nested_If()
+    {
+        // TODO we need to handle more complicated cases of this
+        this.RunTest(
+            @"#if ONE
+# IF TWO
+// ONE,TWO
+
+#endif
+#endif
+",
+            "ONE,TWO"
+        );
+    }
+
+    [Test]
+    public void GetSets_Should_Handle_Duplicate_If()
+    {
+        this.RunTest(
+            @"#if ONE
+// ONE
+#endif
+#if ONE
+// ONE
+#endif
+",
+            "ONE"
+        );
+    }
+
+    private void RunTest(string code, params string[] symbolSets)
     {
         var result = PreprocessorSymbols.GetSets(code);
 
-        result.Should().BeEquivalentTo(symbolSets);
+        var actualSymbolSets = symbolSets.Select(o => o.Split(',').ToList()).ToList();
+
+        result.Should().BeEquivalentTo(actualSymbolSets);
     }
 }

@@ -107,7 +107,7 @@ internal class CSharpFormatter : IFormatter
             var document = Node.Print(rootNode, new FormattingContext { LineEnding = lineEnding });
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
 
-            foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
+            foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree.ToString()))
             {
                 syntaxTree = ParseText(formattedCode, symbolSet, cancellationToken);
 

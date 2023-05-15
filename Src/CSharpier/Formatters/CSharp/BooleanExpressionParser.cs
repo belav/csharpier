@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 internal abstract class BooleanExpressionParser
 {
-    public static (Func<Dictionary<string, bool>, bool>, List<string>) Parse(string input)
+    public static BooleanExpression Parse(string input)
     {
         var tokens = Tokenize(input);
         var postfix = ShuntingYard(tokens);
@@ -139,9 +139,7 @@ internal abstract class BooleanExpressionParser
         return output;
     }
 
-    private static (Func<Dictionary<string, bool>, bool>, List<string>) BuildFunction(
-        Queue<Token> tokens
-    )
+    private static BooleanExpression BuildFunction(Queue<Token> tokens)
     {
         var variables = new Dictionary<string, IndexExpression>();
         var paramDict = Expression.Parameter(typeof(Dictionary<string, bool>), "dict");
@@ -198,7 +196,11 @@ internal abstract class BooleanExpressionParser
         var expression = stack.Pop();
         var lambda = Expression.Lambda<Func<Dictionary<string, bool>, bool>>(expression, paramDict);
 
-        return (lambda.Compile(), variables.Select(o => o.Key).ToList());
+        return new BooleanExpression
+        {
+            Function = lambda.Compile(),
+            Parameters = variables.Select(o => o.Key).ToList()
+        };
     }
 }
 
