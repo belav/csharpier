@@ -233,21 +233,28 @@ public class PreprocessorSymbolsTests
     }
 
     [Test]
-    public void Blah()
+    public void GetSets_Should_Handle_true()
+    {
+        this.RunTest(
+            @"#if true
+//
+#endif
+"
+        );
+    }
+
+    [Test]
+    public void GetSets_Should_Handle_And_With_Not()
     {
         this.RunTest(
             @"
 #if ONE && !TWO
-// the boolean expression parser doesn't properly deal with this, ugh!!!
-// time to understand wtf is going on in more details
+// ONE
 #endif
 ",
             "ONE"
         );
     }
-    
-    // TODO what about #if false
-    // TODO what about #if true
 
     private void RunTest(string code, params string[] symbolSets)
     {

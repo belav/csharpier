@@ -108,7 +108,6 @@ internal abstract class BooleanExpressionParser
                     break;
                 case TokenType.And:
                 case TokenType.Or:
-                case TokenType.Not:
                 case TokenType.Equals:
                 case TokenType.NotEquals:
                     while (operators.Count > 0 && operators.Peek().Type != TokenType.LeftParen)
@@ -117,6 +116,7 @@ internal abstract class BooleanExpressionParser
                     }
                     operators.Push(token);
                     break;
+                case TokenType.Not:
                 case TokenType.LeftParen:
                     operators.Push(token);
                     break;
