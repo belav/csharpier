@@ -1,31 +1,36 @@
 namespace CSharpier.Formatters.CSharp;
 
+// TODO the current method pulls in #endif from verbatim and literal strings, ugh
+// we can always catch and warn on things, and deal with it later?
+// we could also handle the #ifndef thing
+// and then do the try catch in a smaller area, to still handle some of the symbols in the relevant files
+
 // using an actual syntax walker doesn't handle the case of nested #ifs
 // because the inner #if may not be parsed as trivia unless the proper
 // preprocessor symbols are passed when parsing the syntax tree
 internal class PreprocessorSymbols
 {
     private readonly List<string[]> symbolSets = new();
-    private List<BooleanExpression> booleanExpressions = new();
+    private readonly HashSet<string> squashedSymbolSets = new();
+    private SymbolContext CurrentContext =
+        new() { ParentContext = new SymbolContext { ParentContext = null! } };
+
+    private PreprocessorSymbols() { }
 
     public static List<string[]> GetSets(string code)
     {
         return new PreprocessorSymbols().GetSymbolSets(code);
     }
 
-    private PreprocessorSymbols() { }
-
-    public List<string[]> GetSymbolSets(string code)
+    private List<string[]> GetSymbolSets(string code)
     {
         using var reader = new StringReader(code);
         while (reader.ReadLine()?.Trim() is { } line)
         {
-            // TODO we need to keep track of the current parent expression for if/elseif/else
-            // that can probably be a stack? as long as we keep track of
-            // all the grandparents too
             if (line.StartsWith("#if "))
             {
-                this.booleanExpressions = new List<BooleanExpression>();
+                this.CurrentContext = new SymbolContext { ParentContext = this.CurrentContext };
+
                 this.ParseExpression(line[4..]);
             }
             else if (line.StartsWith("#elif "))
@@ -47,12 +52,12 @@ internal class PreprocessorSymbols
 
     private void Else()
     {
-        var allParameters = this.booleanExpressions
+        var allParameters = this.CurrentContext.booleanExpressions
             .SelectMany(o => o.Parameters)
             .Distinct()
             .ToList();
         var combinations = GenerateCombinations(allParameters);
-        var functions = this.booleanExpressions.Select(o => o.Function).ToList();
+        var functions = this.CurrentContext.booleanExpressions.Select(o => o.Function).ToList();
 
         var combination = combinations.FirstOrDefault(
             combination => functions.All(o => !o(combination))
@@ -63,46 +68,61 @@ internal class PreprocessorSymbols
             return;
         }
 
-        // TODO it would be more efficient to not add a new one of these, because we know the values we ant.
-        this.booleanExpressions.Add(
+        // TODO it would be more efficient to not add a new boolean expression, because we know which
+        // symbols we need
+        this.CurrentContext.booleanExpressions.Add(
             new BooleanExpression
             {
                 Parameters = combination.Where(o => o.Value).Select(o => o.Key).ToList(),
-                Function = (o => o.All(p => p.Value))
+                Function = o => o.All(p => p.Value)
             }
         );
     }
 
     private void EndIf()
     {
-        foreach (var booleanExpression in this.booleanExpressions)
+        var parentSymbols = Array.Empty<string>();
+        // TODO this only works one level deep
+        // TODO this also assumes the last expression added is the one we want
+        if (this.CurrentContext.ParentContext.booleanExpressions.Any())
         {
-            var combinations = GenerateCombinations(booleanExpression.Parameters);
+            parentSymbols = GetSymbols(this.CurrentContext.ParentContext.booleanExpressions.Last());
+        }
 
-            var possibleParameters = combinations.FirstOrDefault(
-                possibleParameters => booleanExpression.Function(possibleParameters)
-            );
-
-            if (possibleParameters == null)
-            {
-                return;
-            }
-
-            var symbolSet = possibleParameters
-                .Where(o => o.Value)
-                .Select(o => o.Key)
-                .OrderBy(o => o)
+        foreach (var booleanExpression in this.CurrentContext.booleanExpressions)
+        {
+            var symbolSet = GetSymbols(booleanExpression)
+                .Concat(parentSymbols)
+                .Distinct()
                 .ToArray();
 
-            if (symbolSet.Length > 0)
+            if (symbolSet.Length <= 0)
             {
-                // TODO we can make this way more efficient
-                if (this.symbolSets.All(o => string.Join(",", o) != string.Join(",", symbolSet)))
-                {
-                    this.symbolSets.Add(symbolSet);
-                }
+                continue;
+            }
+
+            var squashedSymbolSet = string.Join(",", symbolSet);
+            if (!this.squashedSymbolSets.Contains(squashedSymbolSet))
+            {
+                this.symbolSets.Add(symbolSet);
+                this.squashedSymbolSets.Add(squashedSymbolSet);
             }
         }
+
+        this.CurrentContext = this.CurrentContext.ParentContext;
+    }
+
+    private string[] GetSymbols(BooleanExpression booleanExpression)
+    {
+        var combinations = GenerateCombinations(booleanExpression.Parameters);
+
+        var possibleParameters = combinations.FirstOrDefault(
+            possibleParameters => booleanExpression.Function(possibleParameters)
+        );
+
+        return possibleParameters == null
+            ? Array.Empty<string>()
+            : possibleParameters.Where(o => o.Value).Select(o => o.Key).OrderBy(o => o).ToArray();
     }
 
     private void ParseExpression(string expression)
@@ -113,7 +133,7 @@ internal class PreprocessorSymbols
         }
         // TODO we can do some form of caching here, possibly with the solution instead of just the data
         var booleanExpression = BooleanExpressionParser.Parse(expression);
-        this.booleanExpressions.Add(booleanExpression);
+        this.CurrentContext.booleanExpressions.Add(booleanExpression);
     }
 
     private static List<Dictionary<string, bool>> GenerateCombinations(List<string> parameterNames)
@@ -142,5 +162,11 @@ internal class PreprocessorSymbols
         }
 
         return combinations;
+    }
+
+    private class SymbolContext
+    {
+        public required SymbolContext ParentContext { get; init; }
+        public List<BooleanExpression> booleanExpressions { get; } = new();
     }
 }

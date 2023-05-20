@@ -195,13 +195,14 @@ public class PreprocessorSymbolsTests
         // TODO we need to handle more complicated cases of this
         this.RunTest(
             @"#if ONE
-# IF TWO
+#if TWO
 // ONE,TWO
-
 #endif
 #endif
 ",
-            "ONE,TWO"
+            // TODO because the second is a subset of the first, we don't actually need it
+            "ONE,TWO",
+            "ONE"
         );
     }
 
