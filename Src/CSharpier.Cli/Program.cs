@@ -26,6 +26,7 @@ public class Program
         bool writeStdout,
         bool pipeMultipleFiles,
         bool noCache,
+        bool noMSBuildCheck,
         string configPath,
         CancellationToken cancellationToken
     )
@@ -77,6 +78,7 @@ public class Program
             StandardInFileContents = standardInFileContents,
             Check = check,
             NoCache = noCache,
+            NoMSBuildCheck = noMSBuildCheck,
             Fast = fast,
             SkipWrite = skipWrite,
             WriteStdout = writeStdout || standardInFileContents != null,

@@ -7,8 +7,6 @@ namespace CSharpier.Cli;
 
 public static class HasMismatchedCliAndMsBuildVersions
 {
-    // TODO really this check should be bypassed when msbuild is the one running csharpier
-    // but these changes are still good to have
     public static bool Check(string directory, IFileSystem fileSystem, ILogger logger)
     {
         var csProjPaths = fileSystem.Directory
@@ -21,7 +19,7 @@ public static class HasMismatchedCliAndMsBuildVersions
 
         string? GetPackagesVersion(string pathToCsProj)
         {
-            var directory = new DirectoryInfo(Path.GetDirectoryName(pathToCsProj));
+            var directory = new DirectoryInfo(Path.GetDirectoryName(pathToCsProj)!);
             while (directory != null)
             {
                 var filePath = Path.Combine(directory.FullName, "Directory.Packages.props");
@@ -38,7 +36,7 @@ public static class HasMismatchedCliAndMsBuildVersions
                             $"The file at {filePath} failed to load with the following exception {ex.Message}"
                         );
 
-                        continue;
+                        return null;
                     }
 
                     var csharpierMsBuildElement = packagesXElement
@@ -84,14 +82,12 @@ public static class HasMismatchedCliAndMsBuildVersions
             {
                 versionOfMsBuildPackage = GetPackagesVersion(pathToCsProj);
 
-                // TODO an unknown version should also probably just be a pass, if we aren't sure, don't fail it
                 if (versionOfMsBuildPackage == null)
                 {
-                    logger.LogError(
+                    logger.LogWarning(
                         $"The csproj at {pathToCsProj} uses an unknown version of CSharpier.MsBuild"
-                            + $" which is a mismatch with version {versionOfDotnetTool}"
                     );
-                    return true;
+                    continue;
                 }
             }
 

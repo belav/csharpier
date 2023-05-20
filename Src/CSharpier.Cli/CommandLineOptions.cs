@@ -11,6 +11,7 @@ public class CommandLineOptions
     public bool WriteStdout { get; init; }
     public bool PipeMultipleFiles { get; init; }
     public bool NoCache { get; init; }
+    public bool NoMSBuildCheck { get; init; }
     public string? StandardInFileContents { get; init; }
     public string? ConfigPath { get; init; }
     public string[] OriginalDirectoryOrFilePaths { get; init; } = Array.Empty<string>();
@@ -23,6 +24,7 @@ public class CommandLineOptions
         bool writeStdout,
         bool pipeMultipleFiles,
         bool noCache,
+        bool noMSBuildCheck,
         string config,
         CancellationToken cancellationToken
     );
@@ -44,6 +46,10 @@ public class CommandLineOptions
             new Option(
                 new[] { "--no-cache" },
                 "Bypass the cache to determine if a file needs to be formatted."
+            ),
+            new Option(
+                new[] { "--no-msbuild-check" },
+                "Bypass the check to determine if a csproj files references a different version of CSharpier.MsBuild."
             ),
             new Option(
                 new[] { "--fast" },

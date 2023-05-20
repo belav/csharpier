@@ -1,4 +1,3 @@
-using System.IO.Abstractions.TestingHelpers;
 using System.Text;
 using CSharpier.Cli;
 using FluentAssertions;
@@ -20,10 +19,12 @@ public class CommandLineFormatterTests
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        Directory.Delete(
-            Path.Combine(Directory.GetCurrentDirectory(), "CommandLineFormatterTests"),
-            true
-        );
+        var testsPath = Path.Combine(Directory.GetCurrentDirectory(), "CommandLineFormatterTests");
+
+        if (Directory.Exists(testsPath))
+        {
+            Directory.Delete(testsPath, true);
+        }
     }
 
     [Test]
@@ -170,13 +171,11 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context);
 
-        result.ExitCode.Should().Be(1);
-        result.ErrorLines
+        result.ExitCode.Should().Be(0);
+        result.Lines
             .First()
             .Should()
-            .EndWith(
-                $"Test.csproj uses an unknown version of CSharpier.MsBuild which is a mismatch with version {currentVersion}"
-            );
+            .EndWith($"Test.csproj uses an unknown version of CSharpier.MsBuild");
     }
 
     [TestCase("0.9.0", false)]
