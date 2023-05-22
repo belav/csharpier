@@ -10,10 +10,16 @@ public static class ResultPrinter
         CommandLineOptions commandLineOptions
     )
     {
-        logger.LogInformation(
-            PadToSize("Total time: ", 80) + ReversePad(result.ElapsedMilliseconds + "ms")
-        );
-        PrintResultLine("Total files", result.Files, logger);
+        // TODO logs can msbuild pass log level to this too?
+        // TODO logs what each level should be
+        // Debug - show each file that is being formatted?
+        // Information - default level, should maybe show some basic message? could output the current stats better
+        // Warning - where do syntax tree validation and exceptions while formatting fall? What about can't compile files?
+        // Error -
+        // None - show nothing
+
+        // TODO logs do we need any of this information?
+        logger.LogInformation($"Formatted {result.Files} files in {result.ElapsedMilliseconds}ms.");
 
         if (!commandLineOptions.Fast)
         {

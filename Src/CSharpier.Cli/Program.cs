@@ -28,6 +28,7 @@ public class Program
         bool noCache,
         bool noMSBuildCheck,
         string configPath,
+        LogLevel logLevel,
         CancellationToken cancellationToken
     )
     {
@@ -36,7 +37,7 @@ public class Program
 
         DebugLogger.Log("Starting");
         var console = new SystemConsole();
-        var logger = new ConsoleLogger(console);
+        var logger = new ConsoleLogger(console, logLevel);
 
         if (pipeMultipleFiles)
         {

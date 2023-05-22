@@ -6,6 +6,8 @@ using System.IO.Abstractions.TestingHelpers;
 
 namespace CSharpier.Tests;
 
+using Microsoft.Extensions.Logging;
+
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
 public class CommandLineFormatterTests
@@ -557,7 +559,7 @@ public class CommandLineFormatterTests
         }
 
         var fakeConsole = new TestConsole();
-        var testLogger = new ConsoleLogger(fakeConsole);
+        var testLogger = new ConsoleLogger(fakeConsole, LogLevel.Information);
         var exitCode = CommandLineFormatter
             .Format(
                 new CommandLineOptions

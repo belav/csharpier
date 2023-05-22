@@ -67,12 +67,7 @@ public class CliTests
 
         var result = await new CsharpierProcess().WithArguments("BasicFile.cs").ExecuteAsync();
 
-        result.Output.Should().StartWith("Total time:");
-        result.Output
-            .Should()
-            .Contain(
-                "Total files:                                                                           1"
-            );
+        result.Output.Should().StartWith("Formatted 1 files in ");
         result.ExitCode.Should().Be(0);
         (await this.ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
     }
@@ -88,12 +83,7 @@ public class CliTests
 
         var result = await new CsharpierProcess().WithArguments(subdirectory).ExecuteAsync();
 
-        result.Output.Should().StartWith("Total time:");
-        result.Output
-            .Should()
-            .Contain(
-                "Total files:                                                                           1"
-            );
+        result.Output.Should().StartWith("Formatted 1 files in ");
         result.ExitCode.Should().Be(0);
         (await this.ReadAllTextAsync("Subdirectory/BasicFile.cs")).Should().Be(formattedContent);
     }
@@ -298,7 +288,7 @@ public class CliTests
 
         var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
 
-        result.Output.Should().StartWith("Total time:");
+        result.Output.Should().StartWith("Formatted 0 files in ");
         result.ErrorOutput.Should().BeEmpty();
         result.ExitCode.Should().Be(0);
     }
@@ -333,7 +323,7 @@ public class CliTests
 
         result.ErrorOutput.Should().BeEmpty();
         result.ExitCode.Should().Be(0);
-        result.Output.Should().StartWith("Total time:");
+        result.Output.Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]

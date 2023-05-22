@@ -2,6 +2,8 @@ using System.CommandLine;
 
 namespace CSharpier.Cli;
 
+using Microsoft.Extensions.Logging;
+
 public class CommandLineOptions
 {
     public string[] DirectoryOrFilePaths { get; init; } = Array.Empty<string>();
@@ -26,6 +28,7 @@ public class CommandLineOptions
         bool noCache,
         bool noMSBuildCheck,
         string config,
+        LogLevel logLevel,
         CancellationToken cancellationToken
     );
 
@@ -42,6 +45,11 @@ public class CommandLineOptions
             new Option(
                 new[] { "--check" },
                 "Check that files are formatted. Will not write any changes."
+            ),
+            new Option<string>(
+                new[] { "--loglevel" },
+                () => LogLevel.Information.ToString(),
+                "Specify the log level - Debug, Information (default), Warning, Error, None"
             ),
             new Option(
                 new[] { "--no-cache" },

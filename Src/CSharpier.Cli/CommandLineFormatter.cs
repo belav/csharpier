@@ -289,6 +289,16 @@ internal static class CommandLineFormatter
             return;
         }
 
+        // what does this look like if the file has an issue?
+        if (commandLineOptions.Check)
+        {
+            logger.LogDebug($"Checking - {originalFilePath}");
+        }
+        else
+        {
+            logger.LogDebug($"Formatting - {originalFilePath}");
+        }
+
         await PerformFormattingSteps(
             fileToFormatInfo,
             writer,
