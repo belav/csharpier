@@ -9,7 +9,10 @@
   </PropertyGroup>
 
   <Target Name="CSharpierFormatInner">
-    <Exec Command="dotnet &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check &quot;$(MSBuildProjectDirectory)&quot;" ConsoleToMSBuild="true" />
+    <Exec
+      ConsoleToMSBuild="true"
+      StdOutEncoding="utf-8"
+      Command="dotnet &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check &quot;$(MSBuildProjectDirectory)&quot;" />
   </Target>
 
   <!-- getting this to run a single time for projects that target multiple frameworks requires all of this
