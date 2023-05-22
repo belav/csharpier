@@ -12,9 +12,6 @@ public class ConfigurationFileOptions
     public int TabWidth { get; init; } = 4;
     public bool UseTabs { get; init; }
 
-    // TODO warn user that this option no longer exists?
-    public List<string>? PreprocessorSymbolSets { get; init; }
-
     private static readonly string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
 
     internal static PrinterOptions FindPrinterOptionsForDirectory(
@@ -110,6 +107,7 @@ public class ConfigurationFileOptions
     {
         var deserializer = new DeserializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .IgnoreUnmatchedProperties()
             .Build();
 
         return deserializer.Deserialize<ConfigurationFileOptions>(contents);

@@ -192,7 +192,6 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Nested_If()
     {
-        // TODO we need to handle more complicated cases of this
         this.RunTest(
             @"#if ONE
 #if TWO
@@ -201,6 +200,7 @@ public class PreprocessorSymbolsTests
 #endif
 ",
             // TODO because the second is a subset of the first, we don't actually need it
+            // but it's more work to figure that out for now
             "ONE,TWO",
             "ONE"
         );

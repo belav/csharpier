@@ -1,14 +1,26 @@
 namespace CSharpier.Formatters.CSharp;
 
+using System.Collections.Concurrent;
 using System.Linq.Expressions;
 
 internal abstract class BooleanExpressionParser
 {
+    private static readonly ConcurrentDictionary<string, BooleanExpression> parsedExpressions =
+        new();
+
     public static BooleanExpression Parse(string input)
     {
+        if (parsedExpressions.TryGetValue(input, out var booleanExpression))
+        {
+            return booleanExpression;
+        }
+
         var tokens = Tokenize(input);
         var postfix = ShuntingYard(tokens);
-        return BuildFunction(postfix);
+        booleanExpression = BuildFunction(postfix);
+        parsedExpressions.TryAdd(input, booleanExpression);
+
+        return booleanExpression;
     }
 
     private static List<Token> Tokenize(string input)

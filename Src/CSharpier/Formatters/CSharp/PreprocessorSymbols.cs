@@ -1,56 +1,69 @@
 namespace CSharpier.Formatters.CSharp;
 
-// TODO the current method pulls in #endif from verbatim and literal strings, ugh
-// we can always catch and warn on things, and deal with it later?
-// we could also handle the #ifndef thing
-// and then do the try catch in a smaller area, to still handle some of the symbols in the relevant files
-
-// using an actual syntax walker doesn't handle the case of nested #ifs
-// because the inner #if may not be parsed as trivia unless the proper
-// preprocessor symbols are passed when parsing the syntax tree
-internal class PreprocessorSymbols
+internal class PreprocessorSymbols : CSharpSyntaxWalker
 {
     private readonly List<string[]> symbolSets = new();
     private readonly HashSet<string> squashedSymbolSets = new();
     private SymbolContext CurrentContext =
         new() { ParentContext = new SymbolContext { ParentContext = null! } };
 
-    private PreprocessorSymbols() { }
+    private PreprocessorSymbols()
+        : base(SyntaxWalkerDepth.Trivia) { }
 
     public static List<string[]> GetSets(string code)
     {
-        return new PreprocessorSymbols().GetSymbolSets(code);
+        return GetSets(CSharpSyntaxTree.ParseText(code));
     }
 
-    private List<string[]> GetSymbolSets(string code)
+    public static List<string[]> GetSets(SyntaxTree syntaxTree)
     {
-        using var reader = new StringReader(code);
-        while (reader.ReadLine()?.Trim() is { } line)
-        {
-            if (line.StartsWith("#if "))
-            {
-                this.CurrentContext = new SymbolContext { ParentContext = this.CurrentContext };
+        return new PreprocessorSymbols().GetSymbolSets(syntaxTree);
+    }
 
-                this.ParseExpression(line[4..]);
-            }
-            else if (line.StartsWith("#elif "))
-            {
-                this.ParseExpression(line[6..]);
-            }
-            else if (line == "#else")
-            {
-                this.Else();
-            }
-            else if (line.StartsWith("#endif"))
-            {
-                this.EndIf();
-            }
-        }
+    private List<string[]> GetSymbolSets(SyntaxTree syntaxTree)
+    {
+        this.Visit(syntaxTree.GetRoot());
 
         return this.symbolSets;
     }
 
-    private void Else()
+    public override void VisitLeadingTrivia(SyntaxToken token)
+    {
+        if (!token.HasLeadingTrivia)
+        {
+            return;
+        }
+
+        foreach (
+            var syntaxTrivia in token.LeadingTrivia.Where(
+                syntaxTrivia =>
+                    syntaxTrivia.RawSyntaxKind()
+                        is SyntaxKind.IfDirectiveTrivia
+                            or SyntaxKind.ElifDirectiveTrivia
+                            or SyntaxKind.ElseDirectiveTrivia
+                            or SyntaxKind.EndIfDirectiveTrivia
+            )
+        )
+        {
+            this.Visit((CSharpSyntaxNode)syntaxTrivia.GetStructure()!);
+        }
+    }
+
+    public override void VisitIfDirectiveTrivia(IfDirectiveTriviaSyntax node)
+    {
+        // TODO in this or the elif, if node.Condition is IdentifierNameSyntax, we know the symbol already
+        // and don't need to parse it, but there isn't a good way to deal with that
+        this.CurrentContext = new SymbolContext { ParentContext = this.CurrentContext };
+
+        this.ParseExpression(node.Condition.ToFullString());
+    }
+
+    public override void VisitElifDirectiveTrivia(ElifDirectiveTriviaSyntax node)
+    {
+        this.ParseExpression(node.Condition.ToFullString());
+    }
+
+    public override void VisitElseDirectiveTrivia(ElseDirectiveTriviaSyntax node)
     {
         var allParameters = this.CurrentContext.booleanExpressions
             .SelectMany(o => o.Parameters)
@@ -79,11 +92,9 @@ internal class PreprocessorSymbols
         );
     }
 
-    private void EndIf()
+    public override void VisitEndIfDirectiveTrivia(EndIfDirectiveTriviaSyntax node)
     {
         var parentSymbols = Array.Empty<string>();
-        // TODO this only works one level deep
-        // TODO this also assumes the last expression added is the one we want
         if (this.CurrentContext.ParentContext.booleanExpressions.Any())
         {
             parentSymbols = GetSymbols(this.CurrentContext.ParentContext.booleanExpressions.Last());
@@ -114,6 +125,9 @@ internal class PreprocessorSymbols
 
     private string[] GetSymbols(BooleanExpression booleanExpression)
     {
+        // TODO some type of caching on finding the symbols from the expression would speed things up
+        // maybe we can solve these when constructing them, so they are all stored in the same spot
+        // but the else works a bit different
         var combinations = GenerateCombinations(booleanExpression.Parameters);
 
         var possibleParameters = combinations.FirstOrDefault(
@@ -131,7 +145,6 @@ internal class PreprocessorSymbols
         {
             expression = expression[..expression.IndexOf("/")];
         }
-        // TODO we can do some form of caching here, possibly with the solution instead of just the data
         var booleanExpression = BooleanExpressionParser.Parse(expression);
         this.CurrentContext.booleanExpressions.Add(booleanExpression);
     }
