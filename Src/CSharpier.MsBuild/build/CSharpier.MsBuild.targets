@@ -1,15 +1,20 @@
 <Project>
-    <PropertyGroup>
-        <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' == ''">$(TargetFramework)</CSharpier_FrameworkVersion>
-        <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' != 'net6.0' and '$(CSharpier_FrameworkVersion)' != 'net7.0'">net7.0</CSharpier_FrameworkVersion>
-        <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/$(CSharpier_FrameworkVersion)/dotnet-csharpier.dll</CSharpierDllPath>
-        <CSharpierArgs Condition="'$(CSharpier_Check)' == 'true'">$(CSharpierArgs) --check</CSharpierArgs>
-    </PropertyGroup>
+  <PropertyGroup>
+    <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' == ''">$(TargetFramework)</CSharpier_FrameworkVersion>
+    <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' != 'net6.0' and '$(CSharpier_FrameworkVersion)' != 'net7.0'">net7.0</CSharpier_FrameworkVersion>
+    <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/$(CSharpier_FrameworkVersion)/dotnet-csharpier.dll</CSharpierDllPath>
+    <CSharpierArgs Condition="'$(CSharpier_Check)' == 'true'">$(CSharpierArgs) --check</CSharpierArgs>
+    <FirstTargetFramework Condition=" '$(TargetFrameworks)' == '' ">$(TargetFramework)</FirstTargetFramework>
+    <FirstTargetFramework Condition=" '$(FirstTargetFrameworks)' == '' ">$(TargetFrameworks.Split(';')[0])</FirstTargetFramework>
+  </PropertyGroup>
 
-    <!-- Target invokes the copy of csharpier from this package on the current project -->
-    <Target 
-        Name="CSharpierFormat"
-        BeforeTargets="CoreCompile">
-        <Exec Command="dotnet &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check &quot;$(MSBuildProjectDirectory)&quot;" />
-    </Target>
+  <Target Name="CSharpierFormatInner">
+    <Exec Command="dotnet &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check &quot;$(MSBuildProjectDirectory)&quot;" ConsoleToMSBuild="true" />
+  </Target>
+
+  <!-- getting this to run a single time for projects that target multiple frameworks requires all of this
+   see https://github.com/dotnet/msbuild/issues/2781 -->
+  <Target Name="CSharpierFormat" BeforeTargets="DispatchToInnerBuilds;BeforeBuild">
+    <MSBuild Projects="$(MSBuildProjectFile)" Targets="CSharpierFormatInner" Properties="TargetFramework=$(FirstTargetFramework)" />
+  </Target>
 </Project>
