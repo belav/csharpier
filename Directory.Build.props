@@ -6,8 +6,6 @@
     <Nullable>enable</Nullable>
     <!-- this is the warning generators get when they fail to generate a source file this makes sure the error for it failing is obvious -->
     <WarningsAsErrors>CS8032</WarningsAsErrors>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 </Project>

@@ -17,10 +17,44 @@ public static class HasMismatchedCliAndMsBuildVersions
             .GetName()
             .Version!.ToString(3);
 
+        string? GetPackagesVersion(string pathToCsProj)
+        {
+            var directory = new DirectoryInfo(Path.GetDirectoryName(pathToCsProj)!);
+            while (directory != null)
+            {
+                var filePath = Path.Combine(directory.FullName, "Directory.Packages.props");
+                if (fileSystem.File.Exists(filePath))
+                {
+                    XElement packagesXElement;
+                    try
+                    {
+                        packagesXElement = XElement.Load(fileSystem.File.OpenRead(filePath));
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogWarning(
+                            $"The file at {filePath} failed to load with the following exception {ex.Message}"
+                        );
+
+                        return null;
+                    }
+
+                    var csharpierMsBuildElement = packagesXElement
+                        .XPathSelectElements("//PackageVersion[@Include='CSharpier.MsBuild']")
+                        .FirstOrDefault();
+                    return csharpierMsBuildElement?.Attribute("Version")?.Value;
+                }
+
+                directory = directory.Parent;
+            }
+
+            return null;
+        }
+
         foreach (var pathToCsProj in csProjPaths)
         {
-            // this could potentially use the Microsoft.CodeAnalysis.Project class, but that was
-            // proving difficult to use
+            // this could potentially use the Microsoft.Build.Evaluation class, but that was
+            // throwing exceptions trying to load project files with "The SDK 'Microsoft.NET.Sdk' specified could not be found."
             XElement csProjXElement;
             try
             {
@@ -46,11 +80,15 @@ public static class HasMismatchedCliAndMsBuildVersions
             var versionOfMsBuildPackage = csharpierMsBuildElement.Attribute("Version")?.Value;
             if (versionOfMsBuildPackage == null)
             {
-                logger.LogError(
-                    $"The csproj at {pathToCsProj} uses an unknown version of CSharpier.MsBuild"
-                        + $" which is a mismatch with version {versionOfDotnetTool}"
-                );
-                return true;
+                versionOfMsBuildPackage = GetPackagesVersion(pathToCsProj);
+
+                if (versionOfMsBuildPackage == null)
+                {
+                    logger.LogWarning(
+                        $"The csproj at {pathToCsProj} uses an unknown version of CSharpier.MsBuild"
+                    );
+                    continue;
+                }
             }
 
             if (versionOfDotnetTool != versionOfMsBuildPackage)

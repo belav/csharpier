@@ -316,6 +316,47 @@ public class CliTests
     }
 
     [Test]
+    public async Task Should_Not_Fail_On_Mismatched_MSBuild_With_No_Check()
+    {
+        await this.WriteFileAsync(
+            "Test.csproj",
+            @"<Project Sdk=""Microsoft.NET.Sdk"">
+    <ItemGroup>
+        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
+    </ItemGroup>
+</Project>"
+        );
+
+        var result = await new CsharpierProcess()
+            .WithArguments("--no-msbuild-check .")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
+        result.Output.Should().StartWith("Total time:");
+    }
+
+    [Test]
+    public async Task Should_Fail_On_Mismatched_MSBuild()
+    {
+        await this.WriteFileAsync(
+            "Test.csproj",
+            @"<Project Sdk=""Microsoft.NET.Sdk"">
+    <ItemGroup>
+        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
+    </ItemGroup>
+</Project>"
+        );
+
+        var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+
+        result.ErrorOutput
+            .Should()
+            .Contain("uses version 99 of CSharpier.MsBuild which is a mismatch with version");
+        result.ExitCode.Should().Be(1);
+    }
+
+    [Test]
     public async Task Should_Cache_And_Validate_Too_Many_Things()
     {
         var unformattedContent = "public class ClassName {     }\n";
