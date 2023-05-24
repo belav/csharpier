@@ -185,7 +185,10 @@ internal static class CommandLineFormatter
             }
             else if (fileSystem.Directory.Exists(directoryOrFile))
             {
-                if (HasMismatchedCliAndMsBuildVersions.Check(directoryOrFile, fileSystem, logger))
+                if (
+                    !commandLineOptions.NoMSBuildCheck
+                    && HasMismatchedCliAndMsBuildVersions.Check(directoryOrFile, fileSystem, logger)
+                )
                 {
                     return 1;
                 }
