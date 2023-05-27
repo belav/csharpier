@@ -2,11 +2,9 @@ using System.Text;
 using CSharpier.Cli;
 using FluentAssertions;
 using NUnit.Framework;
+using System.IO.Abstractions.TestingHelpers;
 
 namespace CSharpier.Tests;
-
-using System.IO.Abstractions;
-using CSharpier.Utilities;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
@@ -15,17 +13,6 @@ public class CommandLineFormatterTests
     private const string UnformattedClassContent = "public class ClassName { public int Field; }";
     private const string FormattedClassContent =
         "public class ClassName\n{\n    public int Field;\n}\n";
-
-    [OneTimeSetUp]
-    public void OneTimeSetUp()
-    {
-        var testsPath = Path.Combine(Directory.GetCurrentDirectory(), "CommandLineFormatterTests");
-
-        if (Directory.Exists(testsPath))
-        {
-            Directory.Delete(testsPath, true);
-        }
-    }
 
     [Test]
     public void Format_Writes_Failed_To_Compile()
@@ -635,35 +622,28 @@ public class CommandLineFormatterTests
 
     private class TestContext
     {
-        private readonly string rootPath;
-        public readonly FileSystem FileSystem = new();
+        public readonly MockFileSystem FileSystem = new();
 
         public TestContext()
         {
-            this.rootPath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "CommandLineFormatterTests",
-                Guid.NewGuid().ToString()
-            );
-            Directory.CreateDirectory(this.rootPath);
+            this.FileSystem.AddDirectory(this.GetRootPath());
         }
 
         public string WhenAFileExists(string path, string contents)
         {
-            path = this.FileSystem.Path.Combine(this.rootPath, path).Replace('\\', '/');
-            this.FileSystem.Directory.CreateDirectory(Path.GetDirectoryName(path)).EnsureExists();
-            this.FileSystem.File.WriteAllText(path, contents);
+            path = this.FileSystem.Path.Combine(this.GetRootPath(), path).Replace('\\', '/');
+            this.FileSystem.AddFile(path, new MockFileData(contents));
             return path;
         }
 
         public string GetRootPath()
         {
-            return this.rootPath;
+            return OperatingSystem.IsWindows() ? @"c:\test" : "/Test";
         }
 
         public string GetFileContent(string path)
         {
-            path = this.FileSystem.Path.Combine(this.rootPath, path);
+            path = this.FileSystem.Path.Combine(this.GetRootPath(), path);
             return this.FileSystem.File.ReadAllText(path);
         }
     }
