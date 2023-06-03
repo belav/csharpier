@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Abstractions.TestingHelpers;
-using System.Linq;
 using System.Text;
-using System.Threading;
 using CSharpier.Cli;
 using FluentAssertions;
 using NUnit.Framework;
+using System.IO.Abstractions.TestingHelpers;
 
 namespace CSharpier.Tests;
 
@@ -163,13 +158,63 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context);
 
-        result.ExitCode.Should().Be(1);
-        result.ErrorLines
+        result.ExitCode.Should().Be(0);
+        result.Lines
             .First()
             .Should()
-            .EndWith(
-                $"Test.csproj uses an unknown version of CSharpier.MsBuild which is a mismatch with version {currentVersion}"
-            );
+            .EndWith($"Test.csproj uses an unknown version of CSharpier.MsBuild");
+    }
+
+    [TestCase("0.9.0", false)]
+    [TestCase("9999.0.0", false)]
+    [TestCase("current", true)]
+    public void Works_With_MSBuild_Version_Checking_When_No_Version_Specified_With_Directory_Props(
+        string version,
+        bool shouldPass
+    )
+    {
+        var context = new TestContext();
+        var currentVersion = typeof(CommandLineFormatter).Assembly.GetName().Version!.ToString(3);
+
+        var versionToTest = version == "current" ? currentVersion : version;
+
+        context.WhenAFileExists(
+            "Test.csproj",
+            $@"<Project Sdk=""Microsoft.NET.Sdk"">
+    <ItemGroup>
+        <PackageReference Include=""CSharpier.MsBuild"" />
+    </ItemGroup>
+</Project>
+"
+        );
+
+        context.WhenAFileExists(
+            "Directory.Packages.props",
+            $@"<Project>
+  <ItemGroup>
+    <PackageVersion Include=""CSharpier.MsBuild"" Version=""{versionToTest}"" />
+  </ItemGroup>
+</Project>
+"
+        );
+
+        var result = this.Format(context);
+
+        if (shouldPass)
+        {
+            result.ExitCode.Should().Be(0);
+            result.ErrorLines.Should().BeEmpty();
+        }
+        else
+        {
+            result.ExitCode.Should().Be(1);
+            result.ErrorLines
+                .First()
+                .Should()
+                .EndWith(
+                    $@"Test.csproj uses version {version} of CSharpier.MsBuild which is a mismatch with version {currentVersion}"
+                );
+        }
     }
 
     [Test]
@@ -278,7 +323,7 @@ public class CommandLineFormatterTests
     [TestCase("Debug/Logs/File.cs", "Logs/")]
     [TestCase("Debug/Logs/File.cs", "Debug/Logs/File.cs")]
     [TestCase(
-        @"\Src\CSharpier.Playground\App_Data\Uploads\f45e11a81b926de2af29459af6974bb8.cs",
+        @"Src/CSharpier.Playground/App_Data/Uploads/f45e11a81b926de2af29459af6974bb8.cs",
         "Uploads/"
     )]
     public void File_In_Ignore_Skips_Formatting(string fileName, string ignoreContents)

@@ -19,7 +19,7 @@ jobs:
     name: publish nuget
     needs: test
     env:
-      VERSION_FILE_PATH: CSharpier.Build.props
+      VERSION_FILE_PATH: /Nuget/Build.props
       NUGET_KEY: ${{secrets.NUGET_API_KEY}}
     steps:
       - uses: actions/checkout@v2
