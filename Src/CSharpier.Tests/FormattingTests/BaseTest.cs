@@ -26,8 +26,6 @@ public class BaseTest
             CancellationToken.None
         );
 
-        PreprocessorSymbols.Reset();
-
         // TODO xml use proper formatter
         var result = await CSharpFormatter.FormatAsync(
             fileReaderResult.FileContents,

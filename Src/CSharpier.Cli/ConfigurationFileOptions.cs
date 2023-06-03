@@ -11,7 +11,6 @@ public class ConfigurationFileOptions
     public int PrintWidth { get; init; } = 100;
     public int TabWidth { get; init; } = 4;
     public bool UseTabs { get; init; }
-    public List<string>? PreprocessorSymbolSets { get; init; }
 
     private static readonly string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
 
@@ -43,31 +42,12 @@ public class ConfigurationFileOptions
         ConfigurationFileOptions configurationFileOptions
     )
     {
-        List<string[]> preprocessorSymbolSets;
-        if (configurationFileOptions.PreprocessorSymbolSets == null)
-        {
-            preprocessorSymbolSets = new();
-        }
-        else
-        {
-            preprocessorSymbolSets = configurationFileOptions.PreprocessorSymbolSets
-                .Select(
-                    o =>
-                        o.Split(
-                            ",",
-                            StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries
-                        )
-                )
-                .ToList();
-        }
-
         return new PrinterOptions
         {
             TabWidth = configurationFileOptions.TabWidth,
             UseTabs = configurationFileOptions.UseTabs,
             Width = configurationFileOptions.PrintWidth,
-            EndOfLine = EndOfLine.Auto,
-            PreprocessorSymbolSets = preprocessorSymbolSets,
+            EndOfLine = EndOfLine.Auto
         };
     }
 
@@ -127,6 +107,7 @@ public class ConfigurationFileOptions
     {
         var deserializer = new DeserializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .IgnoreUnmatchedProperties()
             .Build();
 
         return deserializer.Deserialize<ConfigurationFileOptions>(contents);

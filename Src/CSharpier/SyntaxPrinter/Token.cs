@@ -249,8 +249,6 @@ internal static class Token
                     printNewLines = false;
                 }
             }
-
-            PreprocessorSymbols.AddSymbolSet(trivia);
         }
 
         while (skipLastHardline && docs.Any() && docs.Last() is HardLine)

@@ -57,7 +57,6 @@ public class ConfigurationFileOptionsTests
         var result = context.CreateConfigurationOptions("c:/test");
 
         result.PrintWidth.Should().Be(10);
-        result.PreprocessorSymbolSets.Should().BeEquivalentTo(new List<string> { "1,2", "3" });
     }
 
     [TestCase("yaml")]
@@ -78,7 +77,6 @@ preprocessorSymbolSets:
         var result = context.CreateConfigurationOptions("c:/test");
 
         result.PrintWidth.Should().Be(10);
-        result.PreprocessorSymbolSets.Should().BeEquivalentTo(new List<string> { "1,2", "3" });
     }
 
     [TestCase("{ \"printWidth\": 10 }")]
@@ -193,7 +191,6 @@ preprocessorSymbolSets:
         configurationFileOptions.PrintWidth.Should().Be(100);
         configurationFileOptions.TabWidth.Should().Be(4);
         configurationFileOptions.UseTabs.Should().BeFalse();
-        configurationFileOptions.PreprocessorSymbolSets.Should().BeNull();
     }
 
     private class TestContext

@@ -516,47 +516,6 @@ public class CommandLineFormatterTests
             .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
     }
 
-    [Test]
-    public void File_Should_Format_With_Supplied_Symbols()
-    {
-        var context = new TestContext();
-        context.WhenAFileExists(".csharpierrc", @"{ ""preprocessorSymbolSets"": [""FORMAT""] }");
-        context.WhenAFileExists(
-            "file1.cs",
-            @"public class ClassName
-{
-#if FORMAT
-    public     string ShortPropertyName;
-#elif NO_FORMAT
-    public     string ShortPropertyName;
-#else
-    public     string ShortPropertyName;
-#endif
-}
-"
-        );
-
-        this.Format(context);
-
-        var result = context.GetFileContent("file1.cs");
-
-        result
-            .Should()
-            .Be(
-                @"public class ClassName
-{
-#if FORMAT
-    public string ShortPropertyName;
-#elif NO_FORMAT
-    public     string ShortPropertyName;
-#else
-    public     string ShortPropertyName;
-#endif
-}
-"
-            );
-    }
-
     [TestCase(".csharpierrc")]
     [TestCase(".csharpierrc.json")]
     [TestCase(".csharpierrc.yaml")]

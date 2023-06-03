@@ -2,6 +2,7 @@ namespace CSharpier;
 
 using System.Text;
 using System.Text.Json;
+using CSharpier.Formatters.CSharp;
 using CSharpier.SyntaxPrinter;
 
 internal class CSharpFormatter : IFormatter
@@ -28,10 +29,7 @@ internal class CSharpFormatter : IFormatter
         CancellationToken cancellationToken
     )
     {
-        // if a user supplied symbolSets, then we should start with the first one
-        var initialSymbolSet = printerOptions.PreprocessorSymbolSets is { Count: > 0 }
-            ? printerOptions.PreprocessorSymbolSets.First()
-            : Array.Empty<string>();
+        var initialSymbolSet = Array.Empty<string>();
 
         return FormatAsync(
             ParseText(code, initialSymbolSet, cancellationToken),
@@ -42,7 +40,7 @@ internal class CSharpFormatter : IFormatter
 
     private static SyntaxTree ParseText(
         string codeToFormat,
-        string[] preprocessorSymbols,
+        IEnumerable<string> preprocessorSymbols,
         CancellationToken cancellationToken
     )
     {
@@ -105,25 +103,11 @@ internal class CSharpFormatter : IFormatter
 
         try
         {
-            if (printerOptions.PreprocessorSymbolSets is { Count: > 0 })
-            {
-                PreprocessorSymbols.StopCollecting();
-                PreprocessorSymbols.SetSymbolSets(
-                    // we already formatted with the first set above
-                    printerOptions.PreprocessorSymbolSets.Skip(1).ToList()
-                );
-            }
-            else
-            {
-                PreprocessorSymbols.Reset();
-            }
-
             var lineEnding = PrinterOptions.GetLineEnding(syntaxTree.ToString(), printerOptions);
             var document = Node.Print(rootNode, new FormattingContext { LineEnding = lineEnding });
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
 
-            PreprocessorSymbols.StopCollecting();
-            foreach (var symbolSet in PreprocessorSymbols.GetSymbolSets())
+            foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
             {
                 syntaxTree = ParseText(formattedCode, symbolSet, cancellationToken);
 
