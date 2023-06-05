@@ -383,7 +383,7 @@ class Class
     }
 
     [Test]
-    public void Sorted_Modifiers()
+    public void Unsorted_Modifiers_Pass_Validation()
     {
         var left = @"static public class { }";
 

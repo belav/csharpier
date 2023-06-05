@@ -166,13 +166,6 @@ namespace CSharpier
                     $"            formattedStack.Push((formattedNode.{propertyName}, formattedNode));"
                 );
             }
-            else if (propertyType == typeof(SyntaxTokenList) && propertyName == "Modifiers")
-            {
-                sourceBuilder.AppendLine(
-                    $"            result = this.CompareModifiers(originalNode.{propertyName}, formattedNode.{propertyName}, originalNode.Span, formattedNode.Span);"
-                );
-                sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
-            }
             else if (
                 propertyType == typeof(SyntaxTokenList)
                 || (
@@ -182,6 +175,10 @@ namespace CSharpier
             )
             {
                 var compare = propertyType == typeof(SyntaxTokenList) ? "Compare" : "null";
+                if (propertyName == "Modifiers")
+                {
+                    propertyName += ".OrderBy(o => o.Text).ToList()";
+                }
                 sourceBuilder.AppendLine(
                     $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, {compare}, o => o.Span, originalNode.Span, formattedNode.Span);"
                 );
