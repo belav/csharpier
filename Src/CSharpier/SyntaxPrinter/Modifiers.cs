@@ -24,13 +24,17 @@ internal static class Modifiers
             "required",
             "volatile",
             "async",
-            // not in the default list but needs to be last or it causes compilation errors
-            "const"
         };
 
         public int Compare(string? x, string? y)
         {
-            return Array.IndexOf(DefaultOrdered, x) - Array.IndexOf(DefaultOrdered, y);
+            int GetIndex(string? value)
+            {
+                var result = Array.IndexOf(DefaultOrdered, value);
+                return result == -1 ? int.MaxValue : result;
+            }
+
+            return GetIndex(x) - GetIndex(y);
         }
     }
 
