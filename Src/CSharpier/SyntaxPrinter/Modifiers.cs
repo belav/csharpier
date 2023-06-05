@@ -42,17 +42,10 @@ internal static class Modifiers
 
     public static Doc Print(SyntaxTokenList modifiers, FormattingContext context)
     {
-        if (modifiers.Count == 0)
-        {
-            return Doc.Null;
-        }
-
-        return Doc.Group(
-            Doc.Join(
-                " ",
-                modifiers.OrderBy(o => o.Text, Comparer).Select(o => Token.Print(o, context))
-            ),
-            " "
+        return PrintWithSortedModifiers(
+            modifiers,
+            sortedModifiers =>
+                Doc.Group(Doc.Join(" ", sortedModifiers.Select(o => Token.Print(o, context))), " ")
         );
     }
 
@@ -61,27 +54,40 @@ internal static class Modifiers
         FormattingContext context
     )
     {
+        return PrintWithSortedModifiers(
+            modifiers,
+            sortedModifiers =>
+                Doc.Group(
+                    Token.PrintWithoutLeadingTrivia(sortedModifiers.First(), context),
+                    " ",
+                    sortedModifiers.Count() > 1
+                        ? Doc.Concat(
+                            sortedModifiers
+                                .Skip(1)
+                                .Select(o => Token.PrintWithSuffix(o, " ", context))
+                                .ToArray()
+                        )
+                        : Doc.Null
+                )
+        );
+    }
+
+    private static Doc PrintWithSortedModifiers(
+        SyntaxTokenList modifiers,
+        Func<IEnumerable<SyntaxToken>, Doc> print
+    )
+    {
         if (modifiers.Count == 0)
         {
             return Doc.Null;
         }
 
         // reordering modifiers inside of #ifs can lead to code that doesn't compile
-        var sortedModifiers = modifiers.Any(o => o.LeadingTrivia.Any(p => p.IsDirective))
-            ? modifiers.AsEnumerable()
-            : modifiers.OrderBy(o => o.Text, Comparer);
+        var sortedModifiers =
+            modifiers.Count == 1 || modifiers.Any(o => o.LeadingTrivia.Any(p => p.IsDirective))
+                ? modifiers.AsEnumerable()
+                : modifiers.OrderBy(o => o.Text, Comparer);
 
-        return Doc.Group(
-            Token.PrintWithoutLeadingTrivia(sortedModifiers.First(), context),
-            " ",
-            sortedModifiers.Count() > 1
-                ? Doc.Concat(
-                    sortedModifiers
-                        .Skip(1)
-                        .Select(o => Token.PrintWithSuffix(o, " ", context))
-                        .ToArray()
-                )
-                : Doc.Null
-        );
+        return print(sortedModifiers);
     }
 }

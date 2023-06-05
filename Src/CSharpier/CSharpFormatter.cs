@@ -109,6 +109,8 @@ internal class CSharpFormatter : IFormatter
 
             foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
             {
+                DebugLogger.Log(formattedCode);
+
                 syntaxTree = ParseText(formattedCode, symbolSet, cancellationToken);
 
                 if (TryGetCompilationFailure(out result))
