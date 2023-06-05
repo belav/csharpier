@@ -2,3 +2,5 @@ public class ClassName
 {
     public static async MethodName() { }
 }
+
+public partial class PartialClass { }

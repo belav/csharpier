@@ -1,0 +1,15 @@
+public class DontReorderThis
+{
+#if !SILVERLIGHT
+    [SecuritySafeCritical]
+#endif
+    internal
+#if !SILVERLIGHT
+    unsafe
+#endif
+    static String Method() { }
+
+#if MONO
+    public void NewSymbolSet() { }
+#endif
+}

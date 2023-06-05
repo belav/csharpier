@@ -66,7 +66,10 @@ internal static class Modifiers
             return Doc.Null;
         }
 
-        var sortedModifiers = modifiers.OrderBy(o => o.Text, Comparer);
+        // reordering modifiers inside of #ifs can lead to code that doesn't compile
+        var sortedModifiers = modifiers.Any(o => o.LeadingTrivia.Any(p => p.IsDirective))
+            ? modifiers.AsEnumerable()
+            : modifiers.OrderBy(o => o.Text, Comparer);
 
         return Doc.Group(
             Token.PrintWithoutLeadingTrivia(sortedModifiers.First(), context),
