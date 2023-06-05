@@ -2,9 +2,10 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class Modifiers
 {
-    class DefaultOrder : IComparer<string>
+    private class DefaultOrder : IComparer<string>
     {
-        static readonly string[] DefaultOrdered = new string[]
+        // use the default order from https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0036
+        private static readonly string[] DefaultOrdered =
         {
             "public",
             "private",
@@ -22,7 +23,9 @@ internal static class Modifiers
             "unsafe",
             "required",
             "volatile",
-            "async"
+            "async",
+            // not in the default list but needs to be last or it causes compilation errors
+            "const"
         };
 
         public int Compare(string? x, string? y)

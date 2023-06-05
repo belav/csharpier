@@ -163,6 +163,38 @@ internal partial class SyntaxNodeComparer
         return Equal;
     }
 
+    private CompareResult CompareModifiers(
+        SyntaxTokenList originalList,
+        SyntaxTokenList formattedList,
+        TextSpan originalParentSpan,
+        TextSpan newParentSpan
+    )
+    {
+        var orderedOriginalList = originalList.OrderBy(o => o.Text).ToList();
+        var orderedFormattedList = formattedList.OrderBy(o => o.Text).ToList();
+
+        for (var x = 0; x < orderedOriginalList.Count || x < orderedFormattedList.Count; x++)
+        {
+            if (x == orderedOriginalList.Count)
+            {
+                return NotEqual(originalParentSpan, orderedFormattedList[x].Span);
+            }
+
+            if (x == orderedFormattedList.Count)
+            {
+                return NotEqual(orderedOriginalList[x].Span, newParentSpan);
+            }
+
+            var result = this.Compare(orderedOriginalList[x], orderedFormattedList[x]);
+            if (result.IsInvalid)
+            {
+                return result;
+            }
+        }
+
+        return Equal;
+    }
+
     private static CompareResult NotEqual(SyntaxNode? originalNode, SyntaxNode? formattedNode)
     {
         return new()

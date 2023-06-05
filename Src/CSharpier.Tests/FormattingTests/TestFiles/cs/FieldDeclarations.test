@@ -1,6 +1,6 @@
 public class ClassName
 {
-    const private static string SomeName = "1";
+    private static const string SomeName = "1";
     public SomeClass SomeName;
 
     private string SomeFieldWithSadsfasdfasdfasdfuperLongNameYeahMan =

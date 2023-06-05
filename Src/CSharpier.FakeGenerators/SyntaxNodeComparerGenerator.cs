@@ -166,6 +166,13 @@ namespace CSharpier
                     $"            formattedStack.Push((formattedNode.{propertyName}, formattedNode));"
                 );
             }
+            else if (propertyType == typeof(SyntaxTokenList) && propertyName == "Modifiers")
+            {
+                sourceBuilder.AppendLine(
+                    $"            result = this.CompareModifiers(originalNode.{propertyName}, formattedNode.{propertyName}, originalNode.Span, formattedNode.Span);"
+                );
+                sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
+            }
             else if (
                 propertyType == typeof(SyntaxTokenList)
                 || (
