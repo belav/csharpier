@@ -17,7 +17,7 @@ class ClassName
             return await !a;
         };
 
-        Func<bool, bool> f4 = async static delegate(bool a)
+        Func<bool, bool> f4 = static async delegate(bool a)
         {
             return await !a;
         };

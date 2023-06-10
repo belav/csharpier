@@ -382,6 +382,18 @@ class Class
         result.Should().BeEmpty();
     }
 
+    [Test]
+    public void Unsorted_Modifiers_Pass_Validation()
+    {
+        var left = @"static public class { }";
+
+        var right = @"public static class { }";
+
+        var result = AreEqual(left, right);
+
+        result.Should().BeEmpty();
+    }
+
     private static void ResultShouldBe(string result, string be)
     {
         if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)

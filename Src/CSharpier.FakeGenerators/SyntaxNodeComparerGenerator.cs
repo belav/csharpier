@@ -175,6 +175,10 @@ namespace CSharpier
             )
             {
                 var compare = propertyType == typeof(SyntaxTokenList) ? "Compare" : "null";
+                if (propertyName == "Modifiers")
+                {
+                    propertyName += ".OrderBy(o => o.Text).ToList()";
+                }
                 sourceBuilder.AppendLine(
                     $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, {compare}, o => o.Span, originalNode.Span, formattedNode.Span);"
                 );

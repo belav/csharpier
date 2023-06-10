@@ -1,0 +1,6 @@
+public class ClassName
+{
+    async static public MethodName() { }
+}
+
+public partial class PartialClass { }

@@ -1,0 +1,10 @@
+class AnotherEdgeCase
+{
+#if MONO
+    static internal string Field1;
+#endif
+
+#if DEBUG
+    // some comment
+#endif
+}
