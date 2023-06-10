@@ -198,10 +198,10 @@ public class CliTests
             .WithArguments("CheckUnformatted.cs --check")
             .ExecuteAsync();
 
-        result.Output
+        result.ErrorOutput
             .Replace("\\", "/")
             .Should()
-            .StartWith("Warning ./CheckUnformatted.cs - Was not formatted.");
+            .StartWith("Error ./CheckUnformatted.cs - Was not formatted.");
         result.ExitCode.Should().Be(1);
     }
 

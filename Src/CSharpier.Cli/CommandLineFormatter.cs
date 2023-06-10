@@ -391,7 +391,16 @@ internal static class CommandLineFormatter
             {
                 errorMessage.AppendLine(message.ToString());
             }
-            fileIssueLogger.WriteWarning(errorMessage.ToString());
+
+            if (commandLineOptions.WriteStdout)
+            {
+                fileIssueLogger.WriteError(errorMessage.ToString());
+            }
+            else
+            {
+                fileIssueLogger.WriteWarning(errorMessage.ToString());
+            }
+
             Interlocked.Increment(ref commandLineFormatterResult.FailedCompilation);
             return;
         }
