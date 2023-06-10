@@ -136,7 +136,8 @@ internal class CSharpFormatter : IFormatter
         {
             return new CodeFormatterResult
             {
-                FailureMessage = "We can't handle this deep of recursion yet."
+                FailureMessage =
+                    "Recursion was too deep. This doesn't appear to happen in the real world."
             };
         }
     }

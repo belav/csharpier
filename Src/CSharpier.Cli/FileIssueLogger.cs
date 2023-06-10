@@ -15,13 +15,11 @@ internal class FileIssueLogger
 
     public void WriteError(string value, Exception? exception = null)
     {
-        // TODO logs review everything that calls this
         this.logger.LogError(exception, $"{this.GetPath()} - {value}");
     }
 
     public void WriteWarning(string value)
     {
-        // TODO logs review everything that calls this
         this.logger.LogWarning($"{this.GetPath()} - {value}");
     }
 
