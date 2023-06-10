@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+  <Import Project="../../Nuget/Build.props"/>
+  
   <PropertyGroup>
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <OutputType>library</OutputType>
@@ -9,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSharpier.MsBuild" Version="0.22.0">
+    <PackageReference Include="CSharpier.MsBuild" Version="$(Version)">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
