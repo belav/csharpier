@@ -21,4 +21,7 @@ public class DontReorderThis
     static
 #endif
     string Field;
+
+    // comment should not reorder modifiers
+    static public void Method() { }
 }
