@@ -28,13 +28,13 @@ internal static class Modifiers
 
         public int Compare(string? x, string? y)
         {
-            int GetIndex(string? value)
-            {
-                var result = Array.IndexOf(DefaultOrdered, value);
-                return result == -1 ? int.MaxValue : result;
-            }
-
             return GetIndex(x) - GetIndex(y);
+        }
+
+        private static int GetIndex(string? value)
+        {
+            var result = Array.IndexOf(DefaultOrdered, value);
+            return result == -1 ? int.MaxValue : result;
         }
     }
 
@@ -58,9 +58,9 @@ internal static class Modifiers
             modifiers,
             sortedModifiers =>
                 Doc.Group(
-                    Token.PrintWithoutLeadingTrivia(sortedModifiers.First(), context),
+                    Token.PrintWithoutLeadingTrivia(sortedModifiers[0], context),
                     " ",
-                    sortedModifiers.Count() > 1
+                    sortedModifiers.Count > 1
                         ? Doc.Concat(
                             sortedModifiers
                                 .Skip(1)
@@ -74,7 +74,7 @@ internal static class Modifiers
 
     private static Doc PrintWithSortedModifiers(
         SyntaxTokenList modifiers,
-        Func<IEnumerable<SyntaxToken>, Doc> print
+        Func<IReadOnlyList<SyntaxToken>, Doc> print
     )
     {
         if (modifiers.Count == 0)
@@ -88,6 +88,6 @@ internal static class Modifiers
                 ? modifiers.AsEnumerable()
                 : modifiers.OrderBy(o => o.Text, Comparer);
 
-        return print(sortedModifiers);
+        return print(sortedModifiers.ToArray());
     }
 }
