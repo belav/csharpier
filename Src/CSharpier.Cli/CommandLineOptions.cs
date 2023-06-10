@@ -46,7 +46,6 @@ public class CommandLineOptions
                 new[] { "--check" },
                 "Check that files are formatted. Will not write any changes."
             ),
-            // TODO logs can msbuild call this?
             new Option<string>(
                 new[] { "--loglevel" },
                 () => LogLevel.Information.ToString(),
