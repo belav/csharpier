@@ -81,7 +81,9 @@ internal static class CommandLineFormatter
             commandLineFormatterResult.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
             if (!commandLineOptions.WriteStdout)
             {
-                ResultPrinter.PrintResults(commandLineFormatterResult, logger, commandLineOptions);
+                logger.LogInformation(
+                    $"Formatted {commandLineFormatterResult.Files} files in {commandLineFormatterResult.ElapsedMilliseconds}ms."
+                );
             }
 
             return ReturnExitCode(commandLineOptions, commandLineFormatterResult);
@@ -285,9 +287,15 @@ internal static class CommandLineFormatter
 
         if (!actualFilePath.EndsWithIgnoreCase(".cs") && !actualFilePath.EndsWithIgnoreCase(".cst"))
         {
-            fileIssueLogger.WriteError("Is an unsupported file type.");
+            fileIssueLogger.WriteWarning("Is an unsupported file type.");
             return;
         }
+
+        logger.LogDebug(
+            commandLineOptions.Check
+                ? $"Checking - {originalFilePath}"
+                : $"Formatting - {originalFilePath}"
+        );
 
         await PerformFormattingSteps(
             fileToFormatInfo,
@@ -383,7 +391,16 @@ internal static class CommandLineFormatter
             {
                 errorMessage.AppendLine(message.ToString());
             }
-            fileIssueLogger.WriteError(errorMessage.ToString());
+
+            if (commandLineOptions.WriteStdout)
+            {
+                fileIssueLogger.WriteError(errorMessage.ToString());
+            }
+            else
+            {
+                fileIssueLogger.WriteWarning(errorMessage.ToString());
+            }
+
             Interlocked.Increment(ref commandLineFormatterResult.FailedCompilation);
             return;
         }
@@ -433,7 +450,7 @@ internal static class CommandLineFormatter
                 codeFormattingResult.Code,
                 fileToFormatInfo.FileContents
             );
-            fileIssueLogger.WriteWarning($"Was not formatted.\n{difference}\n");
+            fileIssueLogger.WriteError($"Was not formatted.\n{difference}\n");
             Interlocked.Increment(ref commandLineFormatterResult.UnformattedFiles);
         }
 

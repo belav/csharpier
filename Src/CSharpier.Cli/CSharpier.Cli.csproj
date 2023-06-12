@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../../Nuget/Build.props"/>
+  <Import Project="../../Nuget/Build.props" />
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <PackageId>CSharpier</PackageId>
@@ -8,18 +8,18 @@
     <PackAsTool>true</PackAsTool>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ignore"/>
-    <PackageReference Include="Microsoft.Extensions.Logging"/>
-    <PackageReference Include="System.CommandLine"/>
-    <PackageReference Include="System.IO.Abstractions"/>
-    <PackageReference Include="System.IO.Abstractions.TestingHelpers"/>
-    <PackageReference Include="System.IO.Hashing"/>
-    <PackageReference Include="System.Text.Encoding.CodePages"/>
-    <PackageReference Include="YamlDotNet"/>
+    <PackageReference Include="Ignore" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="System.IO.Abstractions" />
+    <PackageReference Include="System.IO.Abstractions.TestingHelpers" />
+    <PackageReference Include="System.IO.Hashing" />
+    <PackageReference Include="System.Text.Encoding.CodePages" />
+    <PackageReference Include="YamlDotNet" />
   </ItemGroup>
   <ItemGroup>
-    <InternalsVisibleTo Include="CSharpier.Tests"/>
-    <InternalsVisibleTo Include="CSharpier.Cli.Tests"/>
+    <InternalsVisibleTo Include="CSharpier.Tests" />
+    <InternalsVisibleTo Include="CSharpier.Cli.Tests" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\logo.png" Pack="true" PackagePath="">
@@ -27,6 +27,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpier\CSharpier.csproj"/>
+    <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
   </ItemGroup>
 </Project>
