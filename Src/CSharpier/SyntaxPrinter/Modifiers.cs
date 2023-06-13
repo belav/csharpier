@@ -44,6 +44,7 @@ internal static class Modifiers
     {
         return PrintWithSortedModifiers(
             modifiers,
+            context,
             sortedModifiers =>
                 Doc.Group(Doc.Join(" ", sortedModifiers.Select(o => Token.Print(o, context))), " ")
         );
@@ -56,6 +57,7 @@ internal static class Modifiers
     {
         return PrintWithSortedModifiers(
             modifiers,
+            context,
             sortedModifiers =>
                 Doc.Group(
                     Token.PrintWithoutLeadingTrivia(sortedModifiers[0], context),
@@ -74,6 +76,7 @@ internal static class Modifiers
 
     private static Doc PrintWithSortedModifiers(
         SyntaxTokenList modifiers,
+        FormattingContext context,
         Func<IReadOnlyList<SyntaxToken>, Doc> print
     )
     {
@@ -83,11 +86,23 @@ internal static class Modifiers
         }
 
         // reordering modifiers inside of #ifs can lead to code that doesn't compile
-        var sortedModifiers =
+        var willReorderModifiers =
             modifiers.Count == 1
-            || modifiers.Any(o => o.LeadingTrivia.Any(p => p.IsDirective || p.IsComment()))
+            || modifiers.Any(o => o.LeadingTrivia.Any(p => p.IsDirective || p.IsComment()));
+
+        var sortedModifiers = (
+            willReorderModifiers
                 ? modifiers.AsEnumerable()
-                : modifiers.OrderBy(o => o.Text, Comparer);
+                : modifiers.OrderBy(o => o.Text, Comparer)
+        ).ToArray();
+
+        if (
+            willReorderModifiers
+            && sortedModifiers.Zip(modifiers, (original, sorted) => original != sorted).Any()
+        )
+        {
+            context.ReorderedModifiers = true;
+        }
 
         return print(sortedModifiers.ToArray());
     }

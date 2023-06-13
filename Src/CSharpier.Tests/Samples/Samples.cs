@@ -36,7 +36,12 @@ public class Samples
             new PrinterOptions { IncludeDocTree = true, IncludeAST = true }
         );
 
-        var syntaxNodeComparer = new SyntaxNodeComparer(code, result.Code, CancellationToken.None);
+        var syntaxNodeComparer = new SyntaxNodeComparer(
+            code,
+            result.Code,
+            false,
+            CancellationToken.None
+        );
 
         var compareResult = syntaxNodeComparer.CompareSource();
         compareResult.Should().BeEmpty();

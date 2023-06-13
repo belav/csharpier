@@ -503,6 +503,28 @@ public class CommandLineFormatterTests
             .Be("Warning ./Invalid.cs - Failed to compile so was not formatted.");
     }
 
+    [Test]
+    public void File_With_Reorder_Modifiers_In_If_Directive_Should_Pass_Validation()
+    {
+        var context = new TestContext();
+        var contents =
+            @"class ClassName
+{
+#if DEBUG
+    private void MethodName() { }
+
+    static public void ReorderModifiers() { }
+#endif
+}
+";
+        context.WhenAFileExists("file1.cs", contents);
+
+        var result = this.Format(context);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        result.OutputLines.First().Should().StartWith("Formatted 1 files in");
+    }
+
     [TestCase(".csharpierrc")]
     [TestCase(".csharpierrc.json")]
     [TestCase(".csharpierrc.yaml")]

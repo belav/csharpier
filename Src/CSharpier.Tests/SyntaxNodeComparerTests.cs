@@ -406,7 +406,12 @@ class Class
 
     private static string AreEqual(string left, string right)
     {
-        var result = new SyntaxNodeComparer(left, right, CancellationToken.None).CompareSource();
+        var result = new SyntaxNodeComparer(
+            left,
+            right,
+            false,
+            CancellationToken.None
+        ).CompareSource();
 
         if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
         {

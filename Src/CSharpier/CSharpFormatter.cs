@@ -104,8 +104,10 @@ internal class CSharpFormatter : IFormatter
         try
         {
             var lineEnding = PrinterOptions.GetLineEnding(syntaxTree.ToString(), printerOptions);
-            var document = Node.Print(rootNode, new FormattingContext { LineEnding = lineEnding });
+            var formattingContext = new FormattingContext { LineEnding = lineEnding };
+            var document = Node.Print(rootNode, formattingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
+            var reorderedModifiers = formattingContext.ReorderedModifiers;
 
             foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
             {
@@ -116,11 +118,13 @@ internal class CSharpFormatter : IFormatter
                     return result;
                 }
 
+                var formattingContext2 = new FormattingContext { LineEnding = lineEnding };
                 document = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),
-                    new FormattingContext { LineEnding = lineEnding }
+                    formattingContext2
                 );
                 formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
+                reorderedModifiers = reorderedModifiers || formattingContext2.ReorderedModifiers;
             }
 
             return new CodeFormatterResult
@@ -129,7 +133,8 @@ internal class CSharpFormatter : IFormatter
                 DocTree = printerOptions.IncludeDocTree
                     ? DocSerializer.Serialize(document)
                     : string.Empty,
-                AST = printerOptions.IncludeAST ? PrintAST(rootNode) : string.Empty
+                AST = printerOptions.IncludeAST ? PrintAST(rootNode) : string.Empty,
+                ReorderedModifiers = reorderedModifiers
             };
         }
         catch (InTooDeepException)

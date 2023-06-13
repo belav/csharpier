@@ -55,7 +55,12 @@ public class BaseTest
             normalizedCode = normalizedCode.Replace("\r\n", "\n");
         }
 
-        var comparer = new SyntaxNodeComparer(expectedCode, normalizedCode, CancellationToken.None);
+        var comparer = new SyntaxNodeComparer(
+            expectedCode,
+            normalizedCode,
+            false,
+            CancellationToken.None
+        );
 
         result.CompilationErrors.Should().BeEmpty();
         result.FailureMessage.Should().BeEmpty();

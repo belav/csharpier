@@ -20,6 +20,7 @@ public class Benchmarks
         var syntaxNodeComparer = new SyntaxNodeComparer(
             this.code,
             this.code,
+            false,
             CancellationToken.None
         );
         syntaxNodeComparer.CompareSource();

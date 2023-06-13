@@ -8,17 +8,20 @@ internal partial class SyntaxNodeComparer
     protected string NewSourceCode { get; }
     protected SyntaxTree OriginalSyntaxTree { get; }
     protected SyntaxTree NewSyntaxTree { get; }
+    protected bool IgnoreDisabledText { get; }
 
     private static readonly CompareResult Equal = new();
 
     public SyntaxNodeComparer(
         string originalSourceCode,
         string newSourceCode,
+        bool ignoreDisabledText,
         CancellationToken cancellationToken
     )
     {
         this.OriginalSourceCode = originalSourceCode;
         this.NewSourceCode = newSourceCode;
+        this.IgnoreDisabledText = ignoreDisabledText;
 
         var cSharpParseOptions = new CSharpParseOptions(CSharpFormatter.LanguageVersion);
         this.OriginalSyntaxTree = CSharpSyntaxTree.ParseText(
@@ -226,6 +229,11 @@ internal partial class SyntaxNodeComparer
     {
         if (originalTrivia.RawSyntaxKind() is SyntaxKind.DisabledTextTrivia)
         {
+            if (this.IgnoreDisabledText)
+            {
+                return Equal;
+            }
+
             return DisabledTextComparer.IsCodeBasicallyEqual(
                 originalTrivia.ToString(),
                 formattedTrivia.ToString()
