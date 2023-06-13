@@ -506,12 +506,8 @@ public class CommandLineFormatterTests
             .Be("Warning ./Invalid.cs - Failed to compile so was not formatted.");
     }
 
-    [Test]
-    public void File_With_Reorder_Modifiers_In_If_Directive_Should_Pass_Validation()
-    {
-        var context = new TestContext();
-        var contents =
-            @"class ClassName
+    [TestCase(
+        @"class ClassName
 {
 #if DEBUG
     private void MethodName() { }
@@ -519,11 +515,33 @@ public class CommandLineFormatterTests
     static public void ReorderModifiers() { }
 #endif
 }
-";
+"
+    )]
+    [TestCase(
+        @"#if DEBUG
+
+class ClassName
+{
+    private static string field1;
+
+    static public string reorderedField;
+}
+
+#endif
+"
+    )]
+    public void File_With_Reorder_Modifiers_In_If_Directive_Should_Pass_Validation(string contents)
+    {
+        var context = new TestContext();
+
         context.WhenAFileExists("file1.cs", contents);
 
         var result = this.Format(context);
 
+        context
+            .GetFileContent("file1.cs")
+            .Should()
+            .Be(contents.Replace("static public", "public static"));
         result.ErrorOutputLines.Should().BeEmpty();
         result.OutputLines.First().Should().StartWith("Formatted 1 files in");
     }

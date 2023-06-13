@@ -87,13 +87,13 @@ internal static class Modifiers
 
         // reordering modifiers inside of #ifs can lead to code that doesn't compile
         var willReorderModifiers =
-            modifiers.Count == 1
-            || modifiers.Any(o => o.LeadingTrivia.Any(p => p.IsDirective || p.IsComment()));
+            modifiers.Count > 1
+            && !modifiers.Any(o => o.LeadingTrivia.Any(p => p.IsDirective || p.IsComment()));
 
         var sortedModifiers = (
             willReorderModifiers
-                ? modifiers.AsEnumerable()
-                : modifiers.OrderBy(o => o.Text, Comparer)
+                ? modifiers.OrderBy(o => o.Text, Comparer)
+                : modifiers.AsEnumerable()
         ).ToArray();
 
         if (
