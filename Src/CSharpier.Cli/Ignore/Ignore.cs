@@ -59,7 +59,12 @@ namespace Ignore
             return ignore;
         }
 
-
+        /// <summary>
+        /// Filters the input paths as per the rules specified in the
+        /// class ctor.
+        /// </summary>
+        /// <param name="paths">List of input file paths.</param>
+        /// <returns>List of filtered paths (the paths that are not ignored).</returns>
         public IEnumerable<string> Filter(IEnumerable<string> paths)
         {
             var filteredPaths = new List<string>();
