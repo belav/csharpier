@@ -23,7 +23,7 @@ You can control when `--check` is used with the following Property
   </PropertyGroup>
 ```
 
-### Skip
+### Bypass
 
 You can bypass running CSharpier using the `CSharpier_Bypass` Property
 ```xml
