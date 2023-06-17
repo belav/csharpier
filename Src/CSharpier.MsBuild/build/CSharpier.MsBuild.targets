@@ -18,7 +18,7 @@
 
   <!-- getting this to run a single time for projects that target multiple frameworks requires all of this
    see https://github.com/dotnet/msbuild/issues/2781 -->
-  <Target Name="CSharpierFormat" BeforeTargets="DispatchToInnerBuilds;BeforeBuild">
+  <Target Name="CSharpierFormat" BeforeTargets="DispatchToInnerBuilds;BeforeBuild" Condition="'$(CSharpier_Bypass)' != 'true'">
     <MSBuild Projects="$(MSBuildProjectFile)" Targets="CSharpierFormatInner" Properties="TargetFramework=$(FirstTargetFramework)" />
   </Target>
 </Project>
