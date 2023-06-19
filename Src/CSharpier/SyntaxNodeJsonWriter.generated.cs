@@ -1505,6 +1505,12 @@ namespace CSharpier
                 WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
                 properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
             }
+            if (syntaxNode.ParameterList != default(ParameterListSyntax))
+            {
+                var parameterListBuilder = new StringBuilder();
+                WriteParameterListSyntax(parameterListBuilder, syntaxNode.ParameterList);
+                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+            }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
                 var semicolonTokenBuilder = new StringBuilder();
@@ -4399,6 +4405,12 @@ namespace CSharpier
                 var openBraceTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
                 properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.ParameterList != default(ParameterListSyntax))
+            {
+                var parameterListBuilder = new StringBuilder();
+                WriteParameterListSyntax(parameterListBuilder, syntaxNode.ParameterList);
+                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
             }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
@@ -7465,6 +7477,12 @@ namespace CSharpier
                 WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
                 properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
             }
+            if (syntaxNode.ParameterList != default(ParameterListSyntax))
+            {
+                var parameterListBuilder = new StringBuilder();
+                WriteParameterListSyntax(parameterListBuilder, syntaxNode.ParameterList);
+                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+            }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
                 var semicolonTokenBuilder = new StringBuilder();
@@ -8251,6 +8269,12 @@ namespace CSharpier
                 WriteSyntaxNode(nameBuilder, syntaxNode.Name);
                 properties.Add($"\"name\":{nameBuilder.ToString()}");
             }
+            if (syntaxNode.NamespaceOrType != default(TypeSyntax))
+            {
+                var namespaceOrTypeBuilder = new StringBuilder();
+                WriteSyntaxNode(namespaceOrTypeBuilder, syntaxNode.NamespaceOrType);
+                properties.Add($"\"namespaceOrType\":{namespaceOrTypeBuilder.ToString()}");
+            }
             if (syntaxNode.SemicolonToken != default(SyntaxToken))
             {
                 var semicolonTokenBuilder = new StringBuilder();
@@ -8262,6 +8286,12 @@ namespace CSharpier
                 var staticKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(staticKeywordBuilder, syntaxNode.StaticKeyword);
                 properties.Add($"\"staticKeyword\":{staticKeywordBuilder.ToString()}");
+            }
+            if (syntaxNode.UnsafeKeyword != default(SyntaxToken))
+            {
+                var unsafeKeywordBuilder = new StringBuilder();
+                WriteSyntaxToken(unsafeKeywordBuilder, syntaxNode.UnsafeKeyword);
+                properties.Add($"\"unsafeKeyword\":{unsafeKeywordBuilder.ToString()}");
             }
             if (syntaxNode.UsingKeyword != default(SyntaxToken))
             {

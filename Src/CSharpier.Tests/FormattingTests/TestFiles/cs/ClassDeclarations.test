@@ -59,3 +59,17 @@ public class IdentityDbContext<TUser, TRole, TKey>
     where TKey : IEquatable<TKey> { }
 
 file class FileScopedType { }
+
+public class NamedItem(string name)
+{
+    public string Name => name;
+}
+
+public class NamedItem2(
+    string name1________________________________,
+    string name2________________________________
+)
+{
+    public string Name1 => name1;
+    public string Name2 => name1;
+}
