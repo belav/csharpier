@@ -9,7 +9,7 @@
     <FirstTargetFramework Condition=" '$(FirstTargetFrameworks)' == '' ">$(TargetFrameworks.Split(';')[0])</FirstTargetFramework>
   </PropertyGroup>
 
-  <Target Name="CSharpierFormatInner">
+  <Target Name="CSharpierFormatInner" Condition="'$(CSharpier_Bypass)' != 'true'">
     <Exec
       ConsoleToMSBuild="true"
       StdOutEncoding="utf-8"
@@ -18,7 +18,11 @@
 
   <!-- getting this to run a single time for projects that target multiple frameworks requires all of this
    see https://github.com/dotnet/msbuild/issues/2781 -->
-  <Target Name="CSharpierFormat" BeforeTargets="DispatchToInnerBuilds;BeforeBuild" Condition="'$(CSharpier_Bypass)' != 'true'">
+  <Target Name="CSharpierFormat" BeforeTargets="DispatchToInnerBuilds;BeforeBuild">
     <MSBuild Projects="$(MSBuildProjectFile)" Targets="CSharpierFormatInner" Properties="TargetFramework=$(FirstTargetFramework)" />
+  </Target>
+
+  <Target Name="CSharpierLogBypass" BeforeTargets="CSharpierFormatInner" Condition="'$(CSharpier_Bypass)' == 'true'">
+    <Message Text="CSharpier bypassed because CSharpier_Bypass is set to 'true'" Importance="high" />
   </Target>
 </Project>
