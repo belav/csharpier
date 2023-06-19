@@ -1,4 +1,3 @@
-
 ---
 title: MsBuild Package
 hide_table_of_contents: true

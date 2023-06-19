@@ -1,4 +1,3 @@
-
 ---
 title: MsBuild Package
 hide_table_of_contents: true
@@ -22,6 +21,19 @@ You can control when `--check` is used with the following Property
   <PropertyGroup>
     <CSharpier_Check>false</CSharpier_Check>
   </PropertyGroup>
+```
+
+### Bypass
+
+You can bypass running CSharpier using the `CSharpier_Bypass` Property
+```xml
+  <PropertyGroup>
+    <CSharpier_Bypass>true</CSharpier_Bypass>
+  </PropertyGroup>
+```
+
+```bash
+dotnet publish -c release -o /app --no-restore /p:CSharpier_Bypass=true
 ```
 
 ### Log Level
