@@ -11,6 +11,7 @@ static // static trailing
 Third;
 
 using M = System.Math;
+using Point = (int x, int y);
 
 using static System.Math;
 

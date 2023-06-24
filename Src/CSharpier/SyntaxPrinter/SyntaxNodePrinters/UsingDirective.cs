@@ -14,7 +14,7 @@ internal static class UsingDirective
             Token.PrintWithSuffix(node.UsingKeyword, " ", context),
             Token.PrintWithSuffix(node.StaticKeyword, " ", context),
             node.Alias == null ? Doc.Null : NameEquals.Print(node.Alias, context),
-            Node.Print(node.Name, context),
+            Node.Print(node.NamespaceOrType, context),
             Token.Print(node.SemicolonToken, context)
         );
     }
