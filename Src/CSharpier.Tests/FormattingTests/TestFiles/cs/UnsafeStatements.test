@@ -6,5 +6,10 @@ class ClassName
         {
             int* p = null;
         }
+
+        unsafe
+        {
+            // should keep newline above this one
+        }
     }
 }
