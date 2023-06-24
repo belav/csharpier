@@ -1,1 +1,0 @@
-From https://github.com/goelhardik/ignore because it was not strong name signed.
