@@ -1023,6 +1023,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             originalStack.Push((originalNode.TypeParameterList, originalNode));
@@ -2130,6 +2132,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             originalStack.Push((originalNode.TypeParameterList, originalNode));
@@ -3325,6 +3329,8 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             originalStack.Push((originalNode.TypeParameterList, originalNode));
@@ -3641,9 +3647,13 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             originalStack.Push((originalNode.Name, originalNode));
             formattedStack.Push((formattedNode.Name, formattedNode));
+            originalStack.Push((originalNode.NamespaceOrType, originalNode));
+            formattedStack.Push((formattedNode.NamespaceOrType, formattedNode));
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.StaticKeyword, formattedNode.StaticKeyword, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            result = this.Compare(originalNode.UnsafeKeyword, formattedNode.UnsafeKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.UsingKeyword, formattedNode.UsingKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;

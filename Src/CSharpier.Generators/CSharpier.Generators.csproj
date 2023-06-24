@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>net6.0;net7.0;netstandard2.0</TargetFrameworks>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
     <LangVersion>10</LangVersion>
     <NoWarn>SYSLIB0013</NoWarn>

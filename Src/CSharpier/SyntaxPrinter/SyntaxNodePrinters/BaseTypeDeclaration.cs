@@ -30,6 +30,7 @@ internal static class BaseTypeDeclaration
             if (node is ClassDeclarationSyntax classDeclarationSyntax)
             {
                 keyword = classDeclarationSyntax.Keyword;
+                parameterList = classDeclarationSyntax.ParameterList;
             }
             else if (node is StructDeclarationSyntax structDeclarationSyntax)
             {
