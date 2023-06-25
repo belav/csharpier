@@ -1,3 +1,155 @@
+﻿# 0.25.0
+## Breaking Changes
+#### Improve if directive formatting [#404](https://github.com/belav/csharpier/issues/404)
+The `preprocessorSymbolSets` configuration option is no longer supported. 
+CSharpier can now parse and format the full range of `#if` preprocessor statements so it is no longer required.
+```
+// 0.24.2 - supported some basic versions of #if
+#if DEBUG
+// some code 
+#endif
+
+// 0.25.0 - supports the full range of #if including nested statements
+// would require the use of the preprocessorSymbolSets configuration option previously 
+#if (DEBUG && !NET48) || MONO
+// some code
+#if NET6_0
+// some other code
+#endif 
+#endif
+```
+
+## What's Changed
+#### Sort Modifiers [#725](https://github.com/belav/csharpier/issues/725)
+CSharpier will now sort modifiers according to the defaults for [IDE0036](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0036#csharp_preferred_modifier_order)
+```c#
+// input
+public override async Task Method1() { } 
+async public override Task Method2() { }
+
+// output
+public override async Task Method1() { } 
+public override async Task Method2() { }
+```
+
+Thanks go to @glmnet for the contribution
+
+#### Support c# 12 features [#883](https://github.com/belav/csharpier/issues/883)
+CSharpier now supports formatting 
+[Primary Constructors](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12#primary-constructors),
+[Alias any typ](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12#alias-any-type), and
+[Default lambda parameters](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12#default-lambda-parameters)
+
+#### Support for log levels [#875](https://github.com/belav/csharpier/issues/875)
+CSharpier now supports `--loglevel` with the CLI and `CSharpier_LogLevel` for MSBuild. This changes the level of logging output. Valid options are:
+- None
+- Error
+- Warning
+- Information (default)
+- Debug
+
+Thanks go to @samtrion for the suggestion
+
+#### CSharpier removes blank line before unsafe block [#917](https://github.com/belav/csharpier/issues/917)
+CSharpier was not honoring lines that appeared before `unsafe`
+```c#
+// input
+var x = 1;
+
+unsafe
+{
+    // should retain empty line
+}
+
+// 0.24.2
+var x = 1;
+unsafe
+{
+    // should retain empty line
+}
+
+// 0.25.0
+var x = 1;
+
+unsafe
+{
+    // should retain empty line
+}
+```
+
+Thanks go to @fgimian for reporting the bug
+
+#### Adding ability to bypass CSharpier when using CSharpier.MsBuild [#914](https://github.com/belav/csharpier/issues/914)
+In some instances it is desirable to completely bypass CSharpier.MsBuild, this can now be done with the `CSharpier_Bypass` property.
+```bash
+dotnet publish -c release -o /app --no-restore /p:CSharpier_Bypass=true
+```
+
+Thanks go to @OneCyrus for the suggestion
+
+#### Strong Name Sign Assemblies [#911](https://github.com/belav/csharpier/issues/911)
+CSharpier is now strong name signed so that it can be used in packages that are strong name signed.
+
+Thanks go to @TwentyFourMinutes for the suggestions and to @goelhardik for strong name signing [Ignore](https://github.com/goelhardik/ignore)
+
+#### Don't format files in obj folders [#910](https://github.com/belav/csharpier/pull/910)
+CSharpier will no longer format `cs` files that are in an `obj` folder.
+
+#### CSharpier.MsBuild runs once for each framework, can it be more efficient. [#900](https://github.com/belav/csharpier/issues/900)
+When CSharpier.MsBuild was in a csproj that had multiple target frameworks, it would run once for each target framework. It will now run just a single time. 
+
+#### CSharpier.MsBuild returns exit code 1 when ManagePackageVersionsCentrally is set to true [#898](https://github.com/belav/csharpier/issues/898)
+CSharpier.MsBuild was not running correctly when used in a project that had centrally managed package version.
+
+Thanks go to @adc-cjewett for reporting the bug
+
+#### Multiline comments always indented with spaces when formatting with tabs [#891](https://github.com/belav/csharpier/issues/891)
+With `useTabs: true`, CSharpier was formatting multiline comments with a space instead of a tab.
+```c#
+// input
+public class Foo
+{
+	/**
+	 * comment
+	 */
+	public class Bar { }
+}
+
+// 0.24.1
+public class Foo
+{
+ /**
+  * comment
+  */
+	public class Bar { }
+}
+
+// 0.25.0
+public class Foo
+{
+	/**
+	 * comment
+	 */
+	public class Bar { }
+}
+```
+
+Thanks go to @MonstraG for reporting the bug.
+
+#### File scoped namespaces should be followed by a blank line [#861](https://github.com/belav/csharpier/issues/861)
+CSharpier now adds an empty line after file scoped namespaces if there is not already one
+```c#
+// input
+namespace Namespace;
+using System;
+
+// 0.25.0
+namespace Namespace;
+
+using System;
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.24.2...0.25.0
 # 0.24.2
 ## What's Changed
 #### csharpier-ignore comments force CRLF line endings [#884](https://github.com/belav/csharpier/issues/884)
@@ -1072,3 +1224,4 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+

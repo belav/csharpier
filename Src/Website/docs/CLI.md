@@ -21,6 +21,7 @@ Arguments:
 
 Options:
   --check           Check that files are formatted. Will not write any changes.
+  --loglevel        Specify the log level - Debug, Information (default), Warning, Error, None
   --no-cache        Bypass the cache to determine if a file needs to be formatted.
   --fast            Skip comparing syntax tree of formatted file to original file to validate changes.
   --skip-write      Skip writing changes. Generally used for testing to ensure csharpier doesn't throw any errors or cause syntax tree validation failures.
@@ -44,6 +45,15 @@ If a list of paths is not supplied, then stdin is read.
 ### --check
 Used to check if your files are already formatted. Outputs any files that have not already been formatted.
 This will return exit code 1 if there are unformatted files which is useful for CI pipelines.
+
+### --loglevel
+Changes the level of logging output. Valid options are:
+- None
+- Error
+- Warning
+- Information (default)
+- Debug
+
 
 ### --no-cache
 _First available in 0.19.0_

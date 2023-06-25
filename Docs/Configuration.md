@@ -14,8 +14,7 @@ JSON
 {
     "printWidth": 100,
     "useTabs": false,
-    "tabWidth": 4,
-    "preprocessorSymbolSets": ["", "DEBUG", "DEBUG,CODE_STYLE"]
+    "tabWidth": 4
 }
 ```
 YAML
@@ -23,10 +22,6 @@ YAML
 printWidth: 100
 useTabs: false
 tabWidth: 4
-preprocessorSymbolSets:
-    - ""
-    - "DEBUG"
-    - "DEBUG,CODE_STYLE"
 ```
 
 #### Print Width
@@ -47,6 +42,8 @@ Specify the number of spaces used per indentation level.
 Default 4
 
 #### Preprocessor Symbol Sets
+**Removed in 0.25.0**
+
 Currently CSharpier only has basic support for understanding how to format code inside of `#if` directives.
 It will attempt to determine which sets of preprocessor symbols are needed for roslyn to parse all the code in each file.
 
