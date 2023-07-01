@@ -1,5 +1,6 @@
 function CSH-ReviewBranch {
     param (
+        [string]$folder,
         [string]$pathToTestingRepo,
         [switch]$fast = $true
     )
@@ -7,14 +8,22 @@ function CSH-ReviewBranch {
     $repositoryRoot = Join-Path $PSScriptRoot ".."
     $csProjectPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/CSharpier.Cli.csproj"
     $csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/bin/release/net7.0/dotnet-csharpier.dll"
+
+    $location = Get-Location
+    
+    Set-Location $repositoryRoot
     
     if (!$pathToTestingRepo) {
         $pathToTestingRepo = "C:\Projects\csharpier-repos"
     }
+    if ($folder -ne $null) {
+        $pathToTestingRepo = Join-Path $pathToTestingRepo $folder 
+    }
+    
     if (!(Test-Path $pathToTestingRepo)) {
         Write-Output "No directory found at $($pathToTestingRepo)."
         Write-Output "Please checkout out https://github.com/belav/csharpier-repos there or supply -pathToTestingRepo"
-        exit 1
+        return
     }
 
     $ErrorActionPreference = "Stop"
@@ -28,8 +37,11 @@ function CSH-ReviewBranch {
 
     $preBranch = "pre-" + $branch
     $postBranch = "post-" + $branch
-
-    $location = Get-Location
+    
+    if ($folder -ne $null) {
+        $preBranch += "-" + $folder
+        $postBranch += "-" + $folder
+    }
     
     Set-Location $pathToTestingRepo
     & git reset --hard
