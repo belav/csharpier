@@ -58,8 +58,11 @@ function CSH-ReviewBranch {
     if ($firstRun)
     {
         Set-Location $repositoryRoot
-        # TODO this should make sure the working tree is clean
-        & git checkout main
+        $checkoutMainOutput = (git checkout main) | Out-String
+        if (-not $checkoutMainOutput.Contains("Your branch is up to date with ")) {
+            return
+        }
+        
         CSH-BuildProject
 
         Set-Location $pathToTestingRepo
@@ -99,7 +102,7 @@ function CSH-ReviewBranch {
 
     if ($firstRun) {
         #uses https://github.com/github/hub/releases
-        $newPr = & hub pull-request -b belav:$preBranch -m "Testing $branch"
+        $newPr = & hub pull-request -b belav:$preBranch -m "Testing $branch $folder"
         Write-Output $newPr
     }
 
