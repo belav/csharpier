@@ -44,19 +44,7 @@ internal static class NamespaceLikePrinter
                 docs.Add(Doc.HardLine);
             }
 
-            docs.Add(
-                Doc.Join(
-                    Doc.HardLine,
-                    usings.Select(
-                        (o, i) =>
-                            UsingDirective.Print(
-                                o,
-                                context,
-                                printExtraLines: i != 0 || externs.Count != 0
-                            )
-                    )
-                )
-            );
+            docs.Add(UsingDirectives.PrintWithSorting(usings, context, externs.Count != 0));
         }
 
         var isCompilationUnitWithAttributes = false;

@@ -44,22 +44,26 @@ function CSH-ReviewBranch {
     }
     
     Set-Location $pathToTestingRepo
-    & git reset --hard
-
-    git checkout $postBranch
-    $postBranchOutput = (git status) | Out-String
+    & git reset --hard *> $null
+    try {
+        & git checkout $postBranch 2>&1
+    }
+    catch { }
+    $postBranchOutput = (git status 2>&1) | Out-String
     $firstRun = -not $postBranchOutput.Contains("On branch $postBranch")
-
+    
     $fastParam = ""
     if ($fast -eq $true) {
         $fastParam = "--fast"
     }
 
-    if ($firstRun)
-    {
+    if ($firstRun) {
         Set-Location $repositoryRoot
-        $checkoutMainOutput = (git checkout main) | Out-String
-        if (-not $checkoutMainOutput.Contains("Your branch is up to date with ")) {
+        try  {
+            & git checkout main | Out-String
+        }
+        catch {
+            Write-Host "Could not checkout main on csharpier, working directory is probably not clean"
             return
         }
         
