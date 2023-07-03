@@ -32,7 +32,7 @@ function CSH-ReviewBranch {
 
     if ($branch -eq "main") {
         Write-Output "You must be on the branch you want to test. You are currently on main"
-        exit 1
+        return
     }
 
     $preBranch = "pre-" + $branch
@@ -59,13 +59,13 @@ function CSH-ReviewBranch {
 
     if ($firstRun) {
         Set-Location $repositoryRoot
-        try  {
-            & git checkout main | Out-String
-        }
-        catch {
-            Write-Host "Could not checkout main on csharpier, working directory is probably not clean"
-            return
-        }
+#        try  {
+            & git checkout main #2>&1 | Out-String
+#        }
+#        catch {
+#            Write-Host "Could not checkout main on csharpier, working directory is probably not clean"
+#            return
+#        }
         
         CSH-BuildProject
 
