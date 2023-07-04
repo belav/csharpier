@@ -14,6 +14,7 @@ internal static class UsingDirectives
      what about alias of any type?
      */
 
+    // TODO what about global::??
     // TODO alias!!
     // TODO https://github.com/belav/csharpier-repos/pull/80/files has one weird #else thingie
 
@@ -204,6 +205,11 @@ internal static class UsingDirectives
             if (y?.Name is null)
             {
                 return 1;
+            }
+
+            if (x.Alias is NameEqualsSyntax xAlias && y.Alias is NameEqualsSyntax yAlias)
+            {
+                return xAlias.ToFullString().CompareTo(yAlias.ToFullString());
             }
 
             var xIsSystem = IsSystemName(x.Name);
