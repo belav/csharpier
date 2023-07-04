@@ -43,10 +43,7 @@ internal static class ForStatement
             ),
             node.Statement switch
             {
-                CommonForEachStatementSyntax
-                or ForStatementSyntax
-                or WhileStatementSyntax
-                    => Doc.Group(Doc.HardLine, Node.Print(node.Statement, context)),
+                ForStatementSyntax => Doc.Group(Doc.HardLine, Node.Print(node.Statement, context)),
                 _ => OptionalBraces.Print(node.Statement, context)
             }
         };

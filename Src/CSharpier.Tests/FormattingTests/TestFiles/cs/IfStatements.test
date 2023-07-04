@@ -20,8 +20,8 @@ public class ClassName
 
         if (true)
             while (true)
-            foreach (var x in y)
-                CallMethod(x);
+                foreach (var x in y)
+                    CallMethod(x);
 
         if (someLongCondition != someOtherCondition)
             DoSomeLongMethodCall_________________________();
