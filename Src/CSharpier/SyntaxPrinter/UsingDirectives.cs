@@ -29,10 +29,31 @@ internal static class UsingDirectives
     {
         var docs = new List<Doc>();
 
-        // what is this is an #if? only comments
-        docs.Add(Token.PrintLeadingTrivia(usings.First().GetLeadingTrivia(), context));
+        var initialComments = new List<SyntaxTrivia>();
+        var otherStuff = new List<SyntaxTrivia>();
+        var foundOtherStuff = false;
+        foreach (var leadingTrivia in usings.First().GetLeadingTrivia())
+        {
+            if (leadingTrivia.RawSyntaxKind() == SyntaxKind.IfDirectiveTrivia)
+            {
+                foundOtherStuff = true;
+            }
+
+            if (foundOtherStuff)
+            {
+                otherStuff.Add(leadingTrivia);
+            }
+            else
+            {
+                initialComments.Add(leadingTrivia);
+            }
+        }
+
+        docs.Add(Token.PrintLeadingTrivia(new SyntaxTriviaList(initialComments), context));
         var isFirst = true;
-        foreach (var groupOfUsingData in GroupUsings(usings, context))
+        foreach (
+            var groupOfUsingData in GroupUsings(usings, new SyntaxTriviaList(otherStuff), context)
+        )
         {
             foreach (var usingData in groupOfUsingData)
             {
@@ -65,6 +86,7 @@ internal static class UsingDirectives
 
     private static IEnumerable<List<UsingData>> GroupUsings(
         SyntaxList<UsingDirectiveSyntax> usings,
+        SyntaxTriviaList otherStuff,
         FormattingContext context
     )
     {
@@ -72,10 +94,7 @@ internal static class UsingDirectives
         var regularUsings = new List<UsingData>();
         var staticUsings = new List<UsingData>();
         var aliasUsings = new List<UsingData>();
-        // TODO what about multiple ifs?
         var directiveGroup = new List<UsingData>();
-        // TODO this is leftovers for the first group
-        var leftOvers = new List<UsingData>();
         var ifCount = 0;
         var isFirst = true;
         foreach (var usingDirective in usings)
@@ -97,8 +116,8 @@ internal static class UsingDirectives
             {
                 // TODO what about something with comments and a close #endif?
                 return isFirst
-                    ? Doc.Null
-                    : Doc.Concat(Token.PrintLeadingTrivia(value.GetLeadingTrivia(), context));
+                    ? Token.PrintLeadingTrivia(otherStuff, context)
+                    : Token.PrintLeadingTrivia(value.GetLeadingTrivia(), context);
             }
 
             if (ifCount > 0)
@@ -115,7 +134,9 @@ internal static class UsingDirectives
             {
                 if (openIf)
                 {
-                    leftOvers.Add(new UsingData { LeadingTrivia = PrintStuff(usingDirective) });
+                    directiveGroup.Add(
+                        new UsingData { LeadingTrivia = PrintStuff(usingDirective) }
+                    );
                 }
 
                 var usingData = new UsingData
@@ -146,35 +167,11 @@ internal static class UsingDirectives
             isFirst = false;
         }
 
-        if (globalUsings.Any())
-        {
-            yield return globalUsings.OrderBy(o => o.Using!, Comparer).ToList();
-        }
-
-        if (regularUsings.Any())
-        {
-            yield return regularUsings.OrderBy(o => o.Using!, Comparer).ToList();
-        }
-
-        if (directiveGroup.Any())
-        {
-            yield return directiveGroup.OrderBy(o => o.Using!, Comparer).ToList();
-        }
-
-        if (leftOvers.Any())
-        {
-            yield return leftOvers;
-        }
-
-        if (staticUsings.Any())
-        {
-            yield return staticUsings.OrderBy(o => o.Using!, Comparer).ToList();
-        }
-
-        if (aliasUsings.Any())
-        {
-            yield return aliasUsings.OrderBy(o => o.Using!, Comparer).ToList();
-        }
+        yield return globalUsings.OrderBy(o => o.Using!, Comparer).ToList();
+        yield return regularUsings.OrderBy(o => o.Using!, Comparer).ToList();
+        yield return directiveGroup;
+        yield return staticUsings.OrderBy(o => o.Using!, Comparer).ToList();
+        yield return aliasUsings.OrderBy(o => o.Using!, Comparer).ToList();
     }
 
     private class UsingData
@@ -193,11 +190,6 @@ internal static class UsingDirectives
             }
             value = qualifiedNameSyntax.Left;
         }
-    }
-
-    private class UsingGroup
-    {
-        public required List<UsingDirectiveSyntax> Usings { get; init; }
     }
 
     private class DefaultOrder : IComparer<UsingDirectiveSyntax>
@@ -219,10 +211,6 @@ internal static class UsingDirectives
 
             int Return(int value)
             {
-                DebugLogger.Log(
-                    $"{x.ToFullString().Trim()} {xIsSystem} vs {y.ToFullString().Trim()} {yIsSystem} = {value}"
-                );
-
                 return value;
             }
 

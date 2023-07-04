@@ -107,6 +107,7 @@ internal class CSharpFormatter : IFormatter
             var formattingContext = new FormattingContext { LineEnding = lineEnding };
             var document = Node.Print(rootNode, formattingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
+            DebugLogger.Log(formattedCode);
             var reorderedModifiers = formattingContext.ReorderedModifiers;
 
             foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))

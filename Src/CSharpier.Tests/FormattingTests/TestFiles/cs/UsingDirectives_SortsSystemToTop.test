@@ -1,6 +1,4 @@
 using ZWord;
-
-using AWord; // the blank line above here tests that we don't add two blank lines between system and non-system
-
-using System.Web; // keeping the blank line above this in the expected is odd, but there isn't a good way to know which spaces to remove besides the first one
+using AWord;
+using System.Web;
 using System;

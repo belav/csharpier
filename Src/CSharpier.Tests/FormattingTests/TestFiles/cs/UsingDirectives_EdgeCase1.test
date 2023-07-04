@@ -4,4 +4,6 @@ using Microsoft.Build.Framework;
 
 namespace RepoTasks;
 
+class ClassName { }
+
 #endif
