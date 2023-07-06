@@ -1,0 +1,82 @@
+public class ClassName
+{
+    public void MethodName()
+    {
+        foreach (var subsequence in sequence)
+        foreach (var item in subsequence)
+            item.DoSomething();
+
+        foreach (var item in subsequence)
+            while (item.IsSomething())
+                item.DoSomething();
+
+        foreach (var item in sequence)
+            do item.DoSomething();
+            while (false);
+
+        foreach (var item in sequence)
+            for (; ; )
+                item.DoSomething();
+
+        foreach (var subsequence in sequence)
+        {
+            foreach (var item in subsequence)
+            {
+                item.DoSomething();
+                item.DoSomething();
+            }
+        }
+
+        await foreach (var subsequence in sequence)
+        await foreach (var item in subsequence)
+            item.DoSomething();
+
+        foreach (var subsequence in sequence)
+        await foreach (var item in subsequence)
+        {
+            item.DoSomething();
+            item.DoSomething();
+        }
+
+        while (true)
+            foreach (var item in sequence)
+                item.DoSomething();
+
+        while (true)
+        while (true)
+            do Console.WriteLine();
+            while (false);
+
+        while (true)
+            for (; ; )
+                Console.WriteLine();
+
+        while (true)
+        {
+            foreach (var item in sequence)
+                item.DoSomething();
+        }
+
+        for (; ; )
+            foreach (var item in sequence)
+                item.DoSomething();
+
+        for (; ; )
+            while (true)
+                Console.WriteLine();
+
+        for (; ; )
+            do Console.WriteLine();
+            while (false);
+
+        for (; ; )
+        for (; ; )
+            item.DoSomething();
+
+        for (; ; )
+        {
+            for (; ; )
+                Console.WriteLine();
+        }
+    }
+}
