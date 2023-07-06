@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Version>0.24.2</Version>
+    <Version>0.25.0</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/belav/csharpier</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -9,6 +9,6 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)\README.md" Pack="true" PackagePath="\"/>
+    <None Include="$(MSBuildThisFileDirectory)\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>
