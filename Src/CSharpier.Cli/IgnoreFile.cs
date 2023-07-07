@@ -43,7 +43,6 @@ public class IgnoreFile
     public static async Task<IgnoreFile> Create(
         string baseDirectoryPath,
         IFileSystem fileSystem,
-        ILogger logger,
         CancellationToken cancellationToken
     )
     {

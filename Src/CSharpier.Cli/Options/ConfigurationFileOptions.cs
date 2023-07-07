@@ -1,4 +1,4 @@
-namespace CSharpier.Cli;
+namespace CSharpier.Cli.Options;
 
 using System.IO.Abstractions;
 using System.Text.Json;
@@ -14,19 +14,6 @@ public class ConfigurationFileOptions
 
     private static readonly string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
 
-    internal static PrinterOptions FindPrinterOptionsForDirectory(
-        string baseDirectoryPath,
-        IFileSystem fileSystem,
-        ILogger logger
-    )
-    {
-        DebugLogger.Log("Creating printer options for " + baseDirectoryPath);
-
-        var configurationFileOptions = FindForDirectory(baseDirectoryPath, fileSystem, logger);
-
-        return ConvertToPrinterOptions(configurationFileOptions);
-    }
-
     internal static PrinterOptions CreatePrinterOptionsFromPath(
         string configPath,
         IFileSystem fileSystem,
@@ -38,7 +25,7 @@ public class ConfigurationFileOptions
         return ConvertToPrinterOptions(configurationFileOptions);
     }
 
-    private static PrinterOptions ConvertToPrinterOptions(
+    internal static PrinterOptions ConvertToPrinterOptions(
         ConfigurationFileOptions configurationFileOptions
     )
     {
@@ -51,13 +38,38 @@ public class ConfigurationFileOptions
         };
     }
 
-    public static ConfigurationFileOptions FindForDirectory(
-        string baseDirectoryPath,
+    internal static List<CSharpierConfigData> FindForDirectory2(
+        string directoryName,
         IFileSystem fileSystem,
-        ILogger? logger = null
+        ILogger logger
     )
     {
-        var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
+        var results = new List<CSharpierConfigData>();
+        var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(directoryName);
+
+        var filesByDirectory = directoryInfo
+            .EnumerateFiles(".csharpierrc*", SearchOption.AllDirectories)
+            .GroupBy(o => o.DirectoryName);
+
+        foreach (var group in filesByDirectory)
+        {
+            var firstFile = group
+                .Where(o => validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase))
+                .MinBy(o => o.Extension);
+
+            if (firstFile != null)
+            {
+                results.Add(
+                    new CSharpierConfigData(
+                        firstFile.DirectoryName,
+                        Create(firstFile.FullName, fileSystem, logger)
+                    )
+                );
+            }
+        }
+
+        // already found any in this directory above
+        directoryInfo = directoryInfo.Parent;
 
         while (directoryInfo is not null)
         {
@@ -68,16 +80,21 @@ public class ConfigurationFileOptions
 
             if (file != null)
             {
-                return Create(file.FullName, fileSystem, logger);
+                results.Add(
+                    new CSharpierConfigData(
+                        file.DirectoryName,
+                        Create(file.FullName, fileSystem, logger)
+                    )
+                );
             }
 
             directoryInfo = directoryInfo.Parent;
         }
 
-        return new ConfigurationFileOptions();
+        return results.OrderByDescending(o => o.DirectoryName.Length).ToList();
     }
 
-    public static ConfigurationFileOptions Create(
+    private static ConfigurationFileOptions Create(
         string configPath,
         IFileSystem fileSystem,
         ILogger? logger = null

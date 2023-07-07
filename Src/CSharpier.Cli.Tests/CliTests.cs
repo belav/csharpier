@@ -67,6 +67,7 @@ public class CliTests
 
         var result = await new CsharpierProcess().WithArguments("BasicFile.cs").ExecuteAsync();
 
+        result.ErrorOutput.Should().BeNullOrEmpty();
         result.Output.Should().StartWith("Formatted 1 files in ");
         result.ExitCode.Should().Be(0);
         (await this.ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
