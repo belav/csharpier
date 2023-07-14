@@ -41,10 +41,13 @@ internal class OptionsProvider
             : null;
 
         var csharpierConfigs = configPath is null
-            ? ConfigurationFileOptions.FindForDirectory2(directoryName, fileSystem, logger)
+            ? ConfigurationFileOptions.FindForDirectoryName(directoryName, fileSystem, logger)
             : Array.Empty<CSharpierConfigData>().ToList();
 
-        var editorConfigSections = EditorConfigParser.GetAllForDirectory(directoryName, fileSystem);
+        var editorConfigSections = EditorConfigParser.FindForDirectoryName(
+            directoryName,
+            fileSystem
+        );
         var ignoreFile = await IgnoreFile.Create(directoryName, fileSystem, cancellationToken);
 
         return new OptionsProvider(

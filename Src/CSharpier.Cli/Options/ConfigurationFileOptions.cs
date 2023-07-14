@@ -38,7 +38,8 @@ public class ConfigurationFileOptions
         };
     }
 
-    internal static List<CSharpierConfigData> FindForDirectory2(
+    /// <summary>Finds all configs above the given directory as well as within the subtree of this directory</summary>
+    internal static List<CSharpierConfigData> FindForDirectoryName(
         string directoryName,
         IFileSystem fileSystem,
         ILogger logger

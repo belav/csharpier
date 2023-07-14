@@ -4,11 +4,13 @@ namespace CSharpier.Cli.EditorConfig;
 
 internal static class EditorConfigParser
 {
-    public static List<EditorConfigSections> GetAllForDirectory(
+    /// <summary>Finds all configs above the given directory as well as within the subtree of this directory</summary>
+    public static List<EditorConfigSections> FindForDirectoryName(
         string directoryName,
         IFileSystem fileSystem
     )
     {
+        // TODO 1 this may not actually find things above the current directory
         if (directoryName is "")
         {
             return new List<EditorConfigSections>();
