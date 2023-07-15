@@ -1,5 +1,9 @@
 namespace CSharpier.Cli.EditorConfig;
 
+/// <summary>
+/// This is a representation of the editorconfig for the given directory along with
+/// sections from any parent files until a root file is found
+/// </summary>
 internal class EditorConfigSections
 {
     public required string DirectoryName { get; init; }

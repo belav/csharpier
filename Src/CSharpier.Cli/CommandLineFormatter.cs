@@ -144,11 +144,7 @@ internal static class CommandLineFormatter
 
             var directoryName = isFile
                 ? fileSystem.Path.GetDirectoryName(directoryOrFilePath)
-                : isDirectory
-                    ? directoryOrFilePath
-                    : throw new InvalidOperationException(
-                        "This should never happen because if there is no file or directory we shouldn't get this far"
-                    );
+                : directoryOrFilePath;
 
             var optionsProvider = await OptionsProvider.Create(
                 directoryName,
