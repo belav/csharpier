@@ -68,10 +68,10 @@ internal class OptionsProvider
 
         var directoryName = this.fileSystem.Path.GetDirectoryName(filePath);
         var resolvedEditorConfig = this.configs.FirstOrDefault(
-            o => o.DirectoryName.StartsWith(directoryName)
+            o => directoryName.StartsWith(o.DirectoryName)
         );
         var resolvedCSharpierConfig = this.csharpierConfigs.FirstOrDefault(
-            o => o.DirectoryName.StartsWith(directoryName)
+            o => directoryName.StartsWith(o.DirectoryName)
         );
 
         if (resolvedEditorConfig is null && resolvedCSharpierConfig is null)
@@ -80,8 +80,8 @@ internal class OptionsProvider
         }
 
         if (
-            (resolvedCSharpierConfig?.DirectoryName.Length ?? int.MaxValue)
-            < (resolvedEditorConfig?.DirectoryName.Length ?? int.MaxValue)
+            (resolvedCSharpierConfig?.DirectoryName.Length ?? int.MinValue)
+            >= (resolvedEditorConfig?.DirectoryName.Length ?? int.MinValue)
         )
         {
             return ConfigurationFileOptions.ConvertToPrinterOptions(

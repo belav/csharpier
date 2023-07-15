@@ -1,11 +1,11 @@
 namespace CSharpier.Cli.EditorConfig;
 
-using GlobExpressions;
+using DotNet.Globbing;
 
 public class Section
 {
     private readonly Glob matcher;
-    public string Glob { get; }
+    public string Pattern { get; }
     public string? IndentStyle { get; }
     public string? IndentSize { get; }
     public string? TabWidth { get; }
@@ -13,8 +13,8 @@ public class Section
 
     public Section(string name, string directory, Dictionary<string, string?> properties)
     {
-        this.Glob = FixGlob(name, directory);
-        this.matcher = new Glob(name);
+        this.Pattern = FixGlob(name, directory);
+        this.matcher = Glob.Parse(this.Pattern);
         this.IndentStyle = properties.TryGetValue("indent_style", out var indentStyle)
             ? indentStyle
             : null;

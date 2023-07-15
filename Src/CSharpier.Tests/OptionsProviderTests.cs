@@ -16,8 +16,7 @@ public class OptionsProviderTests
         var context = new TestContext();
         context.WhenAFileExists("c:/test/.csharpierrc", "{}");
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         ShouldHaveDefaultOptions(result);
     }
@@ -26,8 +25,7 @@ public class OptionsProviderTests
     public async Task Should_Return_Default_Options_With_No_File()
     {
         var context = new TestContext();
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         ShouldHaveDefaultOptions(result);
     }
@@ -39,8 +37,7 @@ public class OptionsProviderTests
     {
         var context = new TestContext();
         context.WhenAFileExists($"c:/test/{fileName}", string.Empty);
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         ShouldHaveDefaultOptions(result);
     }
@@ -57,8 +54,7 @@ public class OptionsProviderTests
 }"
         );
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.Width.Should().Be(10);
     }
@@ -78,8 +74,7 @@ preprocessorSymbolSets:
 "
         );
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.Width.Should().Be(10);
     }
@@ -91,8 +86,7 @@ preprocessorSymbolSets:
         var context = new TestContext();
         context.WhenAFileExists($"c:/test/.csharpierrc", contents);
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.Width.Should().Be(10);
     }
@@ -110,8 +104,10 @@ preprocessorSymbolSets:
         var context = new TestContext();
         context.WhenAFileExists($"c:/test/.csharpierrc{extension}", contents);
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test/subfolder");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test/subfolder",
+            "c:/test/subfolder/test.cs"
+        );
 
         result.Width.Should().Be(10);
     }
@@ -125,8 +121,7 @@ preprocessorSymbolSets:
         context.WhenAFileExists("c:/test/.csharpierrc.json", "{ \"printWidth\": 2 }");
         context.WhenAFileExists("c:/test/.csharpierrc.yaml", "printWidth: 3");
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.Width.Should().Be(1);
     }
@@ -137,8 +132,7 @@ preprocessorSymbolSets:
         var context = new TestContext();
         context.WhenAFileExists("c:/test/.csharpierrc", "{ \"printWidth\": 10 }");
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.Width.Should().Be(10);
     }
@@ -149,8 +143,7 @@ preprocessorSymbolSets:
         var context = new TestContext();
         context.WhenAFileExists("c:/test/.csharpierrc", "{ \"tabWidth\": 10 }");
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.TabWidth.Should().Be(10);
     }
@@ -161,8 +154,7 @@ preprocessorSymbolSets:
         var context = new TestContext();
         context.WhenAFileExists("c:/test/.csharpierrc", "{ \"useTabs\": true }");
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.UseTabs.Should().BeTrue();
     }
@@ -173,8 +165,7 @@ preprocessorSymbolSets:
         var context = new TestContext();
         context.WhenAFileExists("c:/test/.csharpierrc", "printWidth: 10");
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.Width.Should().Be(10);
     }
@@ -185,8 +176,7 @@ preprocessorSymbolSets:
         var context = new TestContext();
         context.WhenAFileExists("c:/test/.csharpierrc", "tabWidth: 10");
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.TabWidth.Should().Be(10);
     }
@@ -197,8 +187,7 @@ preprocessorSymbolSets:
         var context = new TestContext();
         context.WhenAFileExists("c:/test/.csharpierrc", "useTabs: true");
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.UseTabs.Should().BeTrue();
     }
@@ -217,8 +206,7 @@ max_line_length = 10
 "
         );
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.UseTabs.Should().BeFalse();
         result.TabWidth.Should().Be(2);
@@ -239,8 +227,7 @@ max_line_length = 10
     "
         );
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.UseTabs.Should().BeTrue();
         result.TabWidth.Should().Be(2);
@@ -260,8 +247,7 @@ max_line_length = 10
     "
         );
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.UseTabs.Should().BeTrue();
         result.TabWidth.Should().Be(3);
@@ -280,8 +266,7 @@ max_line_length = 10
     "
         );
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.TabWidth.Should().Be(3);
     }
@@ -291,7 +276,7 @@ max_line_length = 10
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/sub1/.editorConfig",
+            "c:/test/subfolder/.editorConfig",
             @"
     [*]
     indent_size = 1
@@ -307,8 +292,10 @@ max_line_length = 10
     "
         );
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test/sub1");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test/subfolder",
+            "c:/test/subfolder/test.cs"
+        );
         result.TabWidth.Should().Be(1);
         result.Width.Should().Be(10);
     }
@@ -318,7 +305,7 @@ max_line_length = 10
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/sub1/.editorConfig",
+            "c:/test/subfolder/.editorConfig",
             @"
     [*]
     indent_size = unset
@@ -333,13 +320,13 @@ max_line_length = 10
     "
         );
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test/sub1");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test/subfolder",
+            "c:/test/subfolder/test.cs"
+        );
         result.TabWidth.Should().Be(4);
     }
 
-    // TODO 1 fix this
-    // TODO 1 write some tests that check for csharpier vs editorconfig
     [Test]
     public async Task Should_Support_EditorConfig_Tabs_With_Globs()
     {
@@ -355,9 +342,87 @@ indent_size = 2
 "
         );
 
-        var optionsProvider = await context.CreateOptionsProvider("c:/test");
-        var result = optionsProvider.GetPrinterOptionsFor("c:/test/test.cs");
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
         result.TabWidth.Should().Be(2);
+    }
+
+    [Test]
+    public async Task Should_Find_EditorConfig_In_Parent_Directory()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorConfig",
+            @"
+[*.cs]
+indent_size = 2
+"
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test/subfolder",
+            "c:/test/subfolder/test.cs"
+        );
+        result.TabWidth.Should().Be(2);
+    }
+
+    [Test]
+    public async Task Should_Prefer_CSharpierrc_In_SameFolder()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorConfig",
+            @"
+[*.cs]
+indent_size = 2
+"
+        );
+        context.WhenAFileExists("c:/test/.csharpierrc", "tabWidth: 1");
+
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test/subfolder",
+            "c:/test/test.cs"
+        );
+        result.TabWidth.Should().Be(1);
+    }
+
+    [Test]
+    public async Task Should_Prefer_Closer_EditorConfig()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/subfolder/.editorConfig",
+            @"
+[*.cs]
+indent_size = 2
+"
+        );
+        context.WhenAFileExists("c:/test/.csharpierrc", "tabWidth: 1");
+
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test",
+            "c:/test/subfolder/test.cs"
+        );
+        result.TabWidth.Should().Be(2);
+    }
+
+    [Test]
+    public async Task Should_Prefer_Closer_CSharpierrc()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorConfig",
+            @"
+[*.cs]
+indent_size = 2
+"
+        );
+        context.WhenAFileExists("c:/test/subfolder/.csharpierrc", "tabWidth: 1");
+
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test",
+            "c:/test/subfolder/test.cs"
+        );
+        result.TabWidth.Should().Be(1);
     }
 
     private static void ShouldHaveDefaultOptions(PrinterOptions printerOptions)
@@ -376,16 +441,21 @@ indent_size = 2
             this.fileSystem.AddFile(path, new MockFileData(contents));
         }
 
-        public Task<OptionsProvider> CreateOptionsProvider(string directoryName)
+        public async Task<PrinterOptions> CreateProviderAndGetOptionsFor(
+            string directoryName,
+            string filePath
+        )
         {
             this.fileSystem.AddDirectory(directoryName);
-            return OptionsProvider.Create(
+            var provider = await OptionsProvider.Create(
                 directoryName,
                 null,
                 this.fileSystem,
                 NullLogger.Instance,
                 CancellationToken.None
             );
+
+            return provider.GetPrinterOptionsFor(filePath);
         }
     }
 }

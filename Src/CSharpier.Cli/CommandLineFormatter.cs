@@ -137,7 +137,7 @@ internal static class CommandLineFormatter
                 : isDirectory
                     ? directoryOrFilePath
                     : string.Empty;
-            // TODO 1 if single file don't look in subtree? just look for the one for this file
+
             var optionsProvider = await OptionsProvider.Create(
                 directoryName,
                 commandLineOptions.ConfigPath,

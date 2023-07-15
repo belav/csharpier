@@ -10,15 +10,31 @@ internal static class EditorConfigParser
         IFileSystem fileSystem
     )
     {
-        // TODO 1 this may not actually find things above the current directory
         if (directoryName is "")
         {
             return new List<EditorConfigSections>();
         }
 
-        var editorConfigFiles = fileSystem.DirectoryInfo
-            .FromDirectoryName(directoryName)
-            .EnumerateFiles(".editorconfig", SearchOption.AllDirectories);
+        var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(directoryName);
+        var editorConfigFiles = directoryInfo
+            .EnumerateFiles(".editorconfig", SearchOption.AllDirectories)
+            .ToList();
+
+        // already found any in this directory above
+        directoryInfo = directoryInfo.Parent;
+
+        while (directoryInfo is not null)
+        {
+            var file = fileSystem.FileInfo.FromFileName(
+                fileSystem.Path.Combine(directoryInfo.FullName, ".editorconfig")
+            );
+            if (file.Exists)
+            {
+                editorConfigFiles.Add(file);
+            }
+
+            directoryInfo = directoryInfo.Parent;
+        }
 
         return editorConfigFiles
             .Select(
@@ -29,7 +45,7 @@ internal static class EditorConfigParser
                         SectionsIncludingParentFiles = FindSections(o.FullName, fileSystem)
                     }
             )
-            .OrderBy(o => o.DirectoryName)
+            .OrderByDescending(o => o.DirectoryName.Length)
             .ToList();
     }
 
