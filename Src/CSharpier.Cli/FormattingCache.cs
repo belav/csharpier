@@ -134,8 +134,7 @@ internal static class FormattingCacheFactory
         private static string GetOptionsHash(OptionsProvider optionsProvider)
         {
             var csharpierVersion = typeof(FormattingCache).Assembly.GetName().Version;
-            // TODO 1 figure out how to really hash the optionsProvider
-            return Hash($"{csharpierVersion}_${JsonSerializer.Serialize(optionsProvider)}");
+            return Hash($"{csharpierVersion}_${optionsProvider.Serialize()}");
         }
 
         private static string Hash(string input)

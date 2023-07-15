@@ -130,13 +130,25 @@ internal static class CommandLineFormatter
         for (var x = 0; x < commandLineOptions.DirectoryOrFilePaths.Length; x++)
         {
             var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[x];
+            var directoryOrFile = directoryOrFilePath.Replace("\\", "/");
             var isFile = fileSystem.File.Exists(directoryOrFilePath);
             var isDirectory = fileSystem.Directory.Exists(directoryOrFilePath);
+
+            if (!isFile && !isDirectory)
+            {
+                console.WriteErrorLine(
+                    "There was no file or directory found at " + directoryOrFile
+                );
+                return 1;
+            }
+
             var directoryName = isFile
                 ? fileSystem.Path.GetDirectoryName(directoryOrFilePath)
                 : isDirectory
                     ? directoryOrFilePath
-                    : string.Empty;
+                    : throw new InvalidOperationException(
+                        "This should never happen because if there is no file or directory we shouldn't get this far"
+                    );
 
             var optionsProvider = await OptionsProvider.Create(
                 directoryName,
@@ -146,7 +158,6 @@ internal static class CommandLineFormatter
                 cancellationToken
             );
 
-            var directoryOrFile = directoryOrFilePath.Replace("\\", "/");
             var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[
                 x
             ].Replace("\\", "/");
@@ -227,13 +238,6 @@ internal static class CommandLineFormatter
                         throw;
                     }
                 }
-            }
-            else
-            {
-                console.WriteErrorLine(
-                    "There was no file or directory found at " + directoryOrFile
-                );
-                return 1;
             }
 
             await formattingCache.ResolveAsync(cancellationToken);

@@ -35,7 +35,6 @@ public class Program
         // System.CommandLine passes string.empty instead of null when this isn't supplied even if we use string?
         var actualConfigPath = string.IsNullOrEmpty(configPath) ? null : configPath;
 
-        DebugLogger.Log("Starting");
         var console = new SystemConsole();
         var logger = new ConsoleLogger(console, logLevel);
 
@@ -122,10 +121,8 @@ public class Program
                     return exitCode;
                 }
                 var character = Convert.ToChar(value);
-                DebugLogger.Log("Got " + character);
                 if (character == '\u0003')
                 {
-                    DebugLogger.Log("Got EOF");
                     break;
                 }
 

@@ -1,27 +1,28 @@
 namespace CSharpier.Cli.Options;
 
 using System.IO.Abstractions;
+using System.Text.Json;
 using CSharpier.Cli.EditorConfig;
 using Microsoft.Extensions.Logging;
 using PrinterOptions = CSharpier.PrinterOptions;
 
 internal class OptionsProvider
 {
-    private readonly List<EditorConfigSections> configs;
+    private readonly List<EditorConfigSections> editorConfigs;
     private readonly List<CSharpierConfigData> csharpierConfigs;
     private readonly IgnoreFile ignoreFile;
     private readonly PrinterOptions? specifiedPrinterOptions;
     private readonly IFileSystem fileSystem;
 
     private OptionsProvider(
-        List<EditorConfigSections> configs,
+        List<EditorConfigSections> editorConfigs,
         List<CSharpierConfigData> csharpierConfigs,
         IgnoreFile ignoreFile,
         PrinterOptions? specifiedPrinterOptions,
         IFileSystem fileSystem
     )
     {
-        this.configs = configs;
+        this.editorConfigs = editorConfigs;
         this.csharpierConfigs = csharpierConfigs;
         this.ignoreFile = ignoreFile;
         this.specifiedPrinterOptions = specifiedPrinterOptions;
@@ -67,7 +68,7 @@ internal class OptionsProvider
         }
 
         var directoryName = this.fileSystem.Path.GetDirectoryName(filePath);
-        var resolvedEditorConfig = this.configs.FirstOrDefault(
+        var resolvedEditorConfig = this.editorConfigs.FirstOrDefault(
             o => directoryName.StartsWith(o.DirectoryName)
         );
         var resolvedCSharpierConfig = this.csharpierConfigs.FirstOrDefault(
@@ -95,5 +96,17 @@ internal class OptionsProvider
     public bool IsIgnored(string actualFilePath)
     {
         return this.ignoreFile.IsIgnored(actualFilePath);
+    }
+
+    public string Serialize()
+    {
+        return JsonSerializer.Serialize(
+            new
+            {
+                specified = this.specifiedPrinterOptions,
+                csharpierConfigs = this.csharpierConfigs,
+                editorConfigs = this.editorConfigs
+            }
+        );
     }
 }
