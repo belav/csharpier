@@ -438,6 +438,11 @@ indent_size = 2
 
         public void WhenAFileExists(string path, string contents)
         {
+            if (!OperatingSystem.IsWindows())
+            {
+                path = path.Replace("c:", string.Empty);
+            }
+
             this.fileSystem.AddFile(path, new MockFileData(contents));
         }
 
@@ -446,6 +451,12 @@ indent_size = 2
             string filePath
         )
         {
+            if (!OperatingSystem.IsWindows())
+            {
+                directoryName = directoryName.Replace("c:", string.Empty);
+                filePath = filePath.Replace("c:", string.Empty);
+            }
+
             this.fileSystem.AddDirectory(directoryName);
             var provider = await OptionsProvider.Create(
                 directoryName,
