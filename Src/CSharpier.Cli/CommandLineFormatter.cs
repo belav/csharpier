@@ -129,15 +129,14 @@ internal static class CommandLineFormatter
 
         for (var x = 0; x < commandLineOptions.DirectoryOrFilePaths.Length; x++)
         {
-            var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[x];
-            var directoryOrFile = directoryOrFilePath.Replace("\\", "/");
+            var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[x].Replace("\\", "/");
             var isFile = fileSystem.File.Exists(directoryOrFilePath);
             var isDirectory = fileSystem.Directory.Exists(directoryOrFilePath);
 
             if (!isFile && !isDirectory)
             {
                 console.WriteErrorLine(
-                    "There was no file or directory found at " + directoryOrFile
+                    "There was no file or directory found at " + directoryOrFilePath
                 );
                 return 1;
             }
@@ -200,26 +199,30 @@ internal static class CommandLineFormatter
 
             if (isFile)
             {
-                await FormatFile(directoryOrFile, originalDirectoryOrFile);
+                await FormatFile(directoryOrFilePath, originalDirectoryOrFile);
             }
             else if (isDirectory)
             {
                 if (
                     !commandLineOptions.NoMSBuildCheck
-                    && HasMismatchedCliAndMsBuildVersions.Check(directoryOrFile, fileSystem, logger)
+                    && HasMismatchedCliAndMsBuildVersions.Check(
+                        directoryOrFilePath,
+                        fileSystem,
+                        logger
+                    )
                 )
                 {
                     return 1;
                 }
 
                 var tasks = fileSystem.Directory
-                    .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
+                    .EnumerateFiles(directoryOrFilePath, "*.cs", SearchOption.AllDirectories)
                     .Select(o =>
                     {
                         var normalizedPath = o.Replace("\\", "/");
                         return FormatFile(
                             normalizedPath,
-                            normalizedPath.Replace(directoryOrFile, originalDirectoryOrFile)
+                            normalizedPath.Replace(directoryOrFilePath, originalDirectoryOrFile)
                         );
                     })
                     .ToArray();
