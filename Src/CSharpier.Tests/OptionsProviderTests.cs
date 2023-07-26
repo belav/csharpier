@@ -197,7 +197,7 @@ preprocessorSymbolSets:
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/.editorConfig",
+            "c:/test/.editorconfig",
             @"
 [*]
 indent_style = space
@@ -219,7 +219,7 @@ max_line_length = 10
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/.editorConfig",
+            "c:/test/.editorconfig",
             $@"
     [*]
     indent_style = tab
@@ -238,7 +238,7 @@ max_line_length = 10
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/.editorConfig",
+            "c:/test/.editorconfig",
             @"
     [*]
     indent_style = tab
@@ -258,7 +258,7 @@ max_line_length = 10
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/.editorConfig",
+            "c:/test/.editorconfig",
             @"
     [*]
     indent_size = tab
@@ -276,7 +276,7 @@ max_line_length = 10
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/subfolder/.editorConfig",
+            "c:/test/subfolder/.editorconfig",
             @"
     [*]
     indent_size = 1
@@ -284,7 +284,7 @@ max_line_length = 10
         );
 
         context.WhenAFileExists(
-            "c:/test/.editorConfig",
+            "c:/test/.editorconfig",
             @"
     [*]
     indent_size = 2
@@ -305,7 +305,7 @@ max_line_length = 10
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/subfolder/.editorConfig",
+            "c:/test/subfolder/.editorconfig",
             @"
     [*]
     indent_size = unset
@@ -313,7 +313,7 @@ max_line_length = 10
         );
 
         context.WhenAFileExists(
-            "c:/test/.editorConfig",
+            "c:/test/.editorconfig",
             @"
     [*]
     indent_size = 2
@@ -332,7 +332,7 @@ max_line_length = 10
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/.editorConfig",
+            "c:/test/.editorconfig",
             @"
 [*]
 indent_size = 1
@@ -351,7 +351,7 @@ indent_size = 2
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/.editorConfig",
+            "c:/test/.editorconfig",
             @"
 [*.cs]
 indent_size = 2
@@ -370,7 +370,7 @@ indent_size = 2
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/.editorConfig",
+            "c:/test/.editorconfig",
             @"
 [*.cs]
 indent_size = 2
@@ -390,7 +390,7 @@ indent_size = 2
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/subfolder/.editorConfig",
+            "c:/test/subfolder/.editorconfig",
             @"
 [*.cs]
 indent_size = 2
@@ -410,7 +410,7 @@ indent_size = 2
     {
         var context = new TestContext();
         context.WhenAFileExists(
-            "c:/test/.editorConfig",
+            "c:/test/.editorconfig",
             @"
 [*.cs]
 indent_size = 2
