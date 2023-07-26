@@ -15,6 +15,7 @@
         <notificationGroup id="CSharpier" displayType="STICKY_BALLOON"/>
         <postStartupActivity implementation="com.intellij.csharpier.CSharpierStartup"/>
         <projectConfigurable
+                displayName="CSharpier"
                 parentId="tools"
                 id="com.intellij.csharpier.CSharpierSettingsComponent"
                 instance="com.intellij.csharpier.CSharpierSettingsComponent"/>
