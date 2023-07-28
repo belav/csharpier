@@ -16,7 +16,12 @@ internal static class WhileStatement
                 ),
                 Token.Print(node.CloseParenToken, context)
             ),
-            OptionalBraces.Print(node.Statement, context)
+            node.Statement switch
+            {
+                WhileStatementSyntax
+                    => Doc.Group(Doc.HardLine, Node.Print(node.Statement, context)),
+                _ => OptionalBraces.Print(node.Statement, context)
+            }
         );
 
         return result;

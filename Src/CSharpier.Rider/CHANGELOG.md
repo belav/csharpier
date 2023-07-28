@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.3.8]
+- Add displayName attribute to CSharpier options window to speed up Settings dialog.
+
 ## [1.3.7]
 - Support for 2023.1-beta
 

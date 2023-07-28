@@ -1,4 +1,7 @@
-﻿## [1.4.1]
+﻿## [1.4.2]
+- Recompile with VS2022 17.7 preview 4 - fixes the format on save for 17.7 preview 4.
+
+## [1.4.1]
 - Fix for bug where CSharpier hangs when file doesn't compile and Format on Save is also installed.
 
 ## [1.4.0]
