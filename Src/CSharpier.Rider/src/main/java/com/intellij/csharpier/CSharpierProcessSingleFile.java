@@ -1,11 +1,9 @@
 package com.intellij.csharpier;
 
-import com.esotericsoftware.minlog.Log;
 import com.intellij.openapi.diagnostic.Logger;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 
 public class CSharpierProcessSingleFile implements ICSharpierProcess {
     Logger logger = CSharpierLogger.getInstance();
@@ -44,7 +42,7 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
                 return result;
             }
             else {
-                Log.error(result);
+                this.logger.error(result);
             }
         } catch (Exception e) {
             this.logger.error("error", e);
