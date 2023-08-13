@@ -8,7 +8,7 @@ using Task = System.Threading.Tasks.Task;
 namespace CSharpier.VisualStudio
 {
     public class ReformatWithCSharpierOnSave : IVsRunningDocTableEvents3
-#if !Dev16
+#if !DEV16
             , IVsRunningDocTableEvents7
 #endif
 
@@ -30,17 +30,18 @@ namespace CSharpier.VisualStudio
 
         public static async Task InitializeAsync(CSharpierPackage package)
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
             new ReformatWithCSharpierOnSave(package, dte!);
         }
 
-        public IVsTask OnBeforeSaveAsync(uint cookie, uint flags, IVsTask? saveTask)
+        public IVsTask? OnBeforeSaveAsync(uint cookie, uint flags, IVsTask? saveTask)
         {
             return ThreadHelper.JoinableTaskFactory.RunAsyncAsVsTask(
-                VsTaskRunContext.UIThreadBackgroundPriority,
-                async cancellationToken =>
+                VsTaskRunContext.UIThreadNormalPriority,
+                async _ =>
                 {
-                    await Task.Yield();
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     return this.OnBeforeSave(cookie);
                 }
             );
@@ -123,14 +124,7 @@ namespace CSharpier.VisualStudio
 
         public IVsTask? OnAfterSaveAsync(uint cookie, uint flags)
         {
-            return ThreadHelper.JoinableTaskFactory.RunAsyncAsVsTask(
-                VsTaskRunContext.UIThreadBackgroundPriority,
-                async cancellationToken =>
-                {
-                    await Task.Yield();
-                    return VSConstants.S_OK;
-                }
-            );
+            return null;
         }
 
         public int OnAfterAttributeChange(uint docCookie, uint grfAttribs)
