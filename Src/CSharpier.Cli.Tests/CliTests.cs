@@ -180,6 +180,34 @@ public class CliTests
     }
 
     [Test]
+    public async Task Should_Format_Further_Nested_Lambda()
+    {
+        var unformattedContent = "var result = outerLambda(innerLambda1 => { return innerLambda2(() => { return innerLambda3(() => { return innerLambda4(); }); }); });";
+
+        await this.WriteFileAsync("FurtherNestedLambda.cs", unformattedContent);
+
+        var result = await new CsharpierProcess()
+            .WithArguments("FurtherNestedLambda.cs")
+            .ExecuteAsync();
+
+        var expectedContent =
+@"
+var result = outerLambda(innerLambda1 =>
+{
+    return innerLambda2(() =>
+    {
+        return innerLambda3(() =>
+        {
+            return innerLambdsa4();
+        });
+    });
+});
+";
+
+        result.Output.Should().Be(expectedContent);
+    }
+
+    [Test]
     public async Task Should_Print_NotFound()
     {
         var result = await new CsharpierProcess().WithArguments("/BasicFile.cs").ExecuteAsync();
