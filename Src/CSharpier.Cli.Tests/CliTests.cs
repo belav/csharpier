@@ -164,6 +164,22 @@ public class CliTests
     }
 
     [Test]
+    public async Task Should_Format_Nested_Lambda()
+    {
+        var unformattedContent = "var result = outerLambda(innerLambda => { return innerLambda(); });";
+
+        await this.WriteFileAsync("NestedLambda.cs", unformattedContent);
+
+        var result = await new CsharpierProcess()
+            .WithArguments("NestedLambda.cs")
+            .ExecuteAsync();
+
+        var expectedContent = "var result = outerLambda(innerLambda => { return innerLambda(); });";
+
+        result.Output.Should().Be(expectedContent);
+    }
+
+    [Test]
     public async Task Should_Print_NotFound()
     {
         var result = await new CsharpierProcess().WithArguments("/BasicFile.cs").ExecuteAsync();
