@@ -1,7 +1,9 @@
 Local Testing
-- npm run start
-- then start extension from vscode
-- ctrl r to reload window (Developer: Reload Window)
+- open this folder with vscode
+- npm install
+- npm run start (this will watch and recompile any changes you make)
+- in vscode you can use Run - Start Debugging or Run - Run Without Debugging
+- After you are running the extension in vscode you can use ctrl r to reload window (Developer: Reload Window) when you make changes to the extension.
 
 Publishing
 - Update version in package.json
