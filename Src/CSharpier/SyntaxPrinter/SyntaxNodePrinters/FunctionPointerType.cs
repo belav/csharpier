@@ -22,7 +22,7 @@ internal static class FunctionPointerType
                                 Modifiers.Print(o.Modifiers, context),
                                 Node.Print(o.Type, context)
                             ),
-                        Doc.Line,
+                        Doc.IfBreak(Doc.Line, " "),
                         context
                     )
                 )

@@ -8,9 +8,8 @@ internal static class TupleType
             Token.Print(node.OpenParenToken, context),
             Doc.Indent(
                 Doc.SoftLine,
-                SeparatedSyntaxList.Print(node.Elements, Node.Print, Doc.Line, context)
+                SeparatedSyntaxList.Print(node.Elements, Node.Print, Doc.IfBreak(Doc.Line, " "), context)
             ),
-            Doc.SoftLine,
             Token.Print(node.CloseParenToken, context)
         );
     }

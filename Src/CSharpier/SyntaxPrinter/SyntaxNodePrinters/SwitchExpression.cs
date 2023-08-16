@@ -28,8 +28,9 @@ internal static class SwitchExpression
                                 )
                             )
                         ),
-                    Doc.HardLine,
-                    context
+                    Doc.IfBreak(Doc.HardLine, ""),
+                    context,
+                    addTrailingSeparator: true
                 )
             ),
             Doc.HardLine
@@ -41,7 +42,7 @@ internal static class SwitchExpression
             Node.Print(node.GoverningExpression, context),
             " ",
             Token.Print(node.SwitchKeyword, context),
-            Doc.HardLine,
+            " ",
             Token.Print(node.OpenBraceToken, context),
             sections,
             Token.Print(node.CloseBraceToken, context)

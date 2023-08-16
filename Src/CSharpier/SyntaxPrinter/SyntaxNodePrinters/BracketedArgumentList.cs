@@ -8,7 +8,7 @@ internal static class BracketedArgumentList
             Token.Print(node.OpenBracketToken, context),
             Doc.Indent(
                 Doc.SoftLine,
-                SeparatedSyntaxList.Print(node.Arguments, Node.Print, Doc.Line, context)
+                SeparatedSyntaxList.Print(node.Arguments, Node.Print, Doc.IfBreak(Doc.Line, " "), context)
             ),
             Doc.SoftLine,
             Token.Print(node.CloseBracketToken, context)

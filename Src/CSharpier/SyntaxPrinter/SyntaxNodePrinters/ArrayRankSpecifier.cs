@@ -19,7 +19,7 @@ internal static class ArrayRankSpecifier
                 ? Doc.Concat(
                     Doc.Indent(
                         Doc.SoftLine,
-                        SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.Line, context)
+                        SeparatedSyntaxList.Print(node.Sizes, Node.Print, Doc.IfBreak(Doc.Line, " "), context)
                     ),
                     Doc.SoftLine
                 )

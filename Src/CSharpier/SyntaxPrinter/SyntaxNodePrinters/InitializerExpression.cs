@@ -4,15 +4,9 @@ internal static class InitializerExpression
 {
     public static Doc Print(InitializerExpressionSyntax node, FormattingContext context)
     {
-        Doc separator = node.Parent
-            is AssignmentExpressionSyntax
-                or EqualsValueClauseSyntax { Parent: not PropertyDeclarationSyntax }
-            ? Doc.Line
-            : Doc.Null;
-
         var alwaysBreak =
             (
-                node.Expressions.Count >= 3
+                node.Expressions.Count >= 5
                 && (
                     node.Kind() is SyntaxKind.ObjectInitializerExpression
                     || node.Kind() is SyntaxKind.CollectionInitializerExpression
@@ -25,9 +19,9 @@ internal static class InitializerExpression
                 && node.Expressions.FirstOrDefault()?.Kind()
                     is SyntaxKind.ArrayInitializerExpression
             );
+        var addTrailingSeparator = node.Kind() is not SyntaxKind.ComplexElementInitializerExpression;
 
         var result = Doc.Concat(
-            separator,
             Token.Print(node.OpenBraceToken, context),
             Doc.Indent(
                 alwaysBreak ? Doc.HardLine : Doc.Line,
@@ -35,7 +29,9 @@ internal static class InitializerExpression
                     node.Expressions,
                     Node.Print,
                     alwaysBreak ? Doc.HardLine : Doc.Line,
-                    context
+                    context,
+                    addTrailingSeparator,
+                    separator: ","
                 )
             ),
             node.Expressions.Any()

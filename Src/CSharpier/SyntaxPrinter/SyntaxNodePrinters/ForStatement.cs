@@ -31,7 +31,7 @@ internal static class ForStatement
                                 SeparatedSyntaxList.Print(
                                     node.Incrementors,
                                     Node.Print,
-                                    Doc.Line,
+                                    Doc.IfBreak(Doc.Line, " "),
                                     context
                                 )
                             )

@@ -21,15 +21,7 @@ internal static class ParenthesizedLambdaExpression
         }
         else if (node.Block != null)
         {
-            if (node.Block.Statements.Count > 0)
-            {
-                docs.Add(Doc.HardLine);
-            }
-            else
-            {
-                docs.Add(" ");
-            }
-
+            docs.Add(Doc.IfBreak(Doc.Line, " "));
             docs.Add(Block.Print(node.Block, context));
         }
 

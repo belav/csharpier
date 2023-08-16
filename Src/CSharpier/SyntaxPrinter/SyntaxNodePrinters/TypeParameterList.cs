@@ -16,7 +16,7 @@ internal static class TypeParameterList
             Token.Print(node.LessThanToken, context),
             Doc.Indent(
                 shouldBreakMore ? Doc.SoftLine : Doc.Null,
-                SeparatedSyntaxList.Print(node.Parameters, TypeParameter.Print, Doc.Line, context)
+                SeparatedSyntaxList.Print(node.Parameters, TypeParameter.Print, Doc.IfBreak(Doc.Line, " "), context)
             ),
             shouldBreakMore ? Doc.SoftLine : Doc.Null,
             Token.Print(node.GreaterThanToken, context)

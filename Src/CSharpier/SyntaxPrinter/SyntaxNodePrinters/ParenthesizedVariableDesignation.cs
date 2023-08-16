@@ -8,7 +8,7 @@ internal static class ParenthesizedVariableDesignation
             Token.Print(node.OpenParenToken, context),
             Doc.Indent(
                 Doc.SoftLine,
-                SeparatedSyntaxList.Print(node.Variables, Node.Print, Doc.Line, context)
+                SeparatedSyntaxList.Print(node.Variables, Node.Print, Doc.IfBreak(Doc.Line, " "), context)
             ),
             Doc.SoftLine,
             Token.Print(node.CloseParenToken, context)

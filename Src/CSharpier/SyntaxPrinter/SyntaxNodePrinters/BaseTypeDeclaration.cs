@@ -133,7 +133,7 @@ internal static class BaseTypeDeclaration
             DocUtilities.RemoveInitialDoubleHardLine(membersContent);
 
             docs.Add(
-                Doc.HardLine,
+                " ",
                 Token.Print(node.OpenBraceToken, context),
                 membersContent,
                 Doc.HardLine,
@@ -151,7 +151,7 @@ internal static class BaseTypeDeclaration
                 : " ";
 
             docs.Add(
-                separator,
+                " ",
                 Token.Print(node.OpenBraceToken, context),
                 separator,
                 Token.Print(node.CloseBraceToken, context)

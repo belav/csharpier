@@ -9,7 +9,7 @@ internal static class TypeParameterConstraintClause
             Node.Print(node.Name, context),
             " ",
             Token.PrintWithSuffix(node.ColonToken, " ", context),
-            Doc.Indent(SeparatedSyntaxList.Print(node.Constraints, Node.Print, Doc.Line, context))
+            Doc.Indent(SeparatedSyntaxList.Print(node.Constraints, Node.Print, Doc.IfBreak(Doc.Line, " "), context))
         );
     }
 }

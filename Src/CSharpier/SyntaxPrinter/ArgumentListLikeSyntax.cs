@@ -29,9 +29,8 @@ internal static class ArgumentListLike
             docs.Add(
                 Doc.Indent(
                     Doc.SoftLine,
-                    SeparatedSyntaxList.Print(arguments, Argument.Print, Doc.Line, context)
-                ),
-                Doc.SoftLine
+                    SeparatedSyntaxList.Print(arguments, Argument.Print, Doc.IfBreak(Doc.Line, " "), context)
+                )
             );
         }
 

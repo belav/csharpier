@@ -60,7 +60,7 @@ internal static class AttributeList
                                         : Doc.Null,
                                     Node.Print(attributeArgumentNode.Expression, context)
                                 ),
-                            Doc.Line,
+                            Doc.IfBreak(Doc.Line, " "),
                             context
                         )
                     ),
@@ -68,7 +68,7 @@ internal static class AttributeList
                     Token.Print(attributeNode.ArgumentList.CloseParenToken, context)
                 );
             },
-            Doc.Line,
+            Doc.IfBreak(Doc.Line, " "),
             context
         );
 

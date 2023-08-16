@@ -38,7 +38,7 @@ internal static class Block
         }
 
         var result = Doc.Group(
-            node.Parent is ParenthesizedLambdaExpressionSyntax or BlockSyntax ? Doc.Null : Doc.Line,
+            node.Parent is ParenthesizedLambdaExpressionSyntax or BlockSyntax ? Doc.Null : " ",
             Token.Print(node.OpenBraceToken, context),
             node.Statements.Count == 0 ? " " : Doc.Concat(innerDoc, statementSeparator),
             Token.Print(node.CloseBraceToken, context)

@@ -98,8 +98,8 @@ internal static class RightHandSide
             {
                 StringStartToken.RawKind: (int)SyntaxKind.InterpolatedMultiLineRawStringStartToken
             }
+            or InitializerExpressionSyntax
                 => Layout.BasicConcatWithSpace,
-            InitializerExpressionSyntax => Layout.BasicConcatWithoutLine,
             BinaryExpressionSyntax
             or CastExpressionSyntax { Type: GenericNameSyntax }
             or ConditionalExpressionSyntax

@@ -20,7 +20,7 @@ internal static class ObjectCreationExpression
                     )
                     : Doc.Null,
                 node.Initializer != null
-                    ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer, context))
+                    ? Doc.Concat(" ", InitializerExpression.Print(node.Initializer, context))
                     : Doc.Null
             )
         );
