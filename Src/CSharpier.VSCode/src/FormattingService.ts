@@ -1,5 +1,5 @@
 import { performance } from "perf_hooks";
-import { languages, Range, TextDocument, TextEdit, window } from "vscode";
+import { languages, Range, TextDocument, TextEdit, TextEditor, window } from "vscode";
 import { CSharpierProcessProvider } from "./CSharpierProcessProvider";
 import { Logger } from "./Logger";
 
@@ -19,8 +19,15 @@ export class FormattingService {
     private provideDocumentRangeFormattingEdits = async (document: TextDocument, range: Range) => {
         this.logger.info("Formatting started for " + document.fileName + ".");
         const startTime = performance.now();
+
+        const editor = window.activeTextEditor;
+        const nonEmptyLine = editor?.document.lineAt(range.start.line);
+        const indentation = nonEmptyLine?.text.match(/^\s*/)?.[0] ?? "";
+
         const text = document.getText(range);
         const newText = await this.format(text, document.fileName);
+        const formattedText = newText.replace(/^(?!$)/gm, indentation);
+
         const endTime = performance.now();
         this.logger.info("Formatted in " + (endTime - startTime) + "ms");
         if (!newText || newText === text) {
@@ -32,7 +39,7 @@ export class FormattingService {
             return [];
         }
 
-        return [TextEdit.replace(range, newText)];
+        return [TextEdit.replace(range, formattedText)];
     };
 
     private format = async (content: string, filePath: string) => {
