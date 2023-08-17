@@ -22,9 +22,14 @@ export class FormattingService {
 
         const editor = window.activeTextEditor;
         const nonEmptyLine = editor?.document.lineAt(range.start.line);
-        const indentation = nonEmptyLine?.text.match(/^\s*/)?.[0] ?? "";
+        if (!nonEmptyLine) {
+            return [];
+        }
+        const indentation = nonEmptyLine.text.match(/^\s*/)?.[0] ?? "";
 
-        const text = document.getText(range);
+        const fullRange = new Range(nonEmptyLine.range.start, range.end);
+
+        const text = document.getText(fullRange);
         const newText = await this.format(text, document.fileName);
         const formattedText = newText.replace(/^(?!$)/gm, indentation);
 
@@ -39,7 +44,11 @@ export class FormattingService {
             return [];
         }
 
-        return [TextEdit.replace(range, formattedText)];
+        if (formattedText === text) {
+            return [];
+        }
+
+        return [TextEdit.replace(fullRange, formattedText)];
     };
 
     private format = async (content: string, filePath: string) => {
