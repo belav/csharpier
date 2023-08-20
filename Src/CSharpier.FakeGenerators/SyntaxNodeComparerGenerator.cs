@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace CSharpier.FakeGenerators;
 
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 public class SyntaxNodeComparerGenerator
 {
     // this would probably be easier to understand as a scriban template but is a lot of effort
@@ -174,14 +176,27 @@ namespace CSharpier
                 )
             )
             {
-                var compare = propertyType == typeof(SyntaxTokenList) ? "Compare" : "null";
-                if (propertyName == "Modifiers")
+                if (
+                    propertyType.IsGenericType
+                    && propertyType.GenericTypeArguments[0] == typeof(UsingDirectiveSyntax)
+                )
                 {
-                    propertyName += ".OrderBy(o => o.Text).ToList()";
+                    sourceBuilder.AppendLine(
+                        $"            result = this.CompareUsingDirectives(originalNode.{propertyName}, formattedNode.{propertyName}, originalNode, formattedNode);"
+                    );
                 }
-                sourceBuilder.AppendLine(
-                    $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, {compare}, o => o.Span, originalNode.Span, formattedNode.Span);"
-                );
+                else
+                {
+                    var compare = propertyType == typeof(SyntaxTokenList) ? "Compare" : "null";
+                    if (propertyName == "Modifiers")
+                    {
+                        propertyName += ".OrderBy(o => o.Text).ToList()";
+                    }
+                    sourceBuilder.AppendLine(
+                        $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, {compare}, o => o.Span, originalNode.Span, formattedNode.Span);"
+                    );
+                }
+
                 sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
             }
             else if (

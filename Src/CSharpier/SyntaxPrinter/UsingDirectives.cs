@@ -4,7 +4,33 @@ internal static class UsingDirectives
 {
     private static readonly DefaultOrder Comparer = new();
 
-    // TODO what about validation?
+    /* TODO these all fail still
+TODO review PRs, the full one is too big
+
+Warning ./mono/mcs/class/corlib/System.Runtime.InteropServices/Marshal.cs - Failed to compile so was not formatted.
+  (35,2): error CS1032: Cannot define/undefine preprocessor symbols after first token in file
+Warning ./mono/mcs/class/System/Mono.AppleTls/MonoCertificatePal.OSX.cs - Failed to compile so was not formatted.
+  (36,1): error CS1028: Unexpected preprocessor directive
+  (30,1): error CS0439: An extern alias declaration must precede all other elements defined in the namespace
+Warning ./mono/mcs/class/System/System.Security.Cryptography.X509Certificates/X509Certificate2ImplUnix.cs - Failed to compile so was not formatted.
+  (32,1): error CS0439: An extern alias declaration must precede all other elements defined in the namespace
+Warning ./mono/mcs/class/System/System.Security.Cryptography.X509Certificates/X509Helper2.cs - Failed to compile so was not formatted.
+  (33,1): error CS0439: An extern alias declaration must precede all other elements defined in the namespace
+Warning ./mono/mcs/class/System/System.Security.Cryptography.X509Certificates/X509Certificate2ImplMono.cs - Failed to compile so was not formatted.
+  (39,1): error CS0439: An extern alias declaration must precede all other elements defined in the namespace
+Warning ./mono/mcs/class/System/System.Security.Cryptography.X509Certificates/X509Certificate2.cs - Failed to compile so was not formatted.
+  (38,1): error CS0439: An extern alias declaration must precede all other elements defined in the namespace
+Warning ./mono/mcs/class/System/System.Net.Mail/SmtpClient.cs - Failed to compile so was not formatted.
+  (50,1): error CS1028: Unexpected preprocessor directive
+  (52,1): error CS1028: Unexpected preprocessor directive
+  (1538,1): error CS1027: #endif directive expected
+Warning ./mono/mcs/class/referencesource/System.Xml/System/Xml/XmlCharType.cs - Failed to compile so was not formatted.
+  (3,2): error CS1032: Cannot define/undefine preprocessor symbols after first token in file
+Warning ./mono/mcs/class/referencesource/mscorlib/system/diagnostics/eventing/TraceLogging/TraceLoggingEventSource.cs - Failed to compile so was not formatted.
+  (11,2): error CS1032: Cannot define/undefine preprocessor symbols after first token in file
+
+
+     */
 
     public static Doc PrintWithSorting(
         SyntaxList<UsingDirectiveSyntax> usings,

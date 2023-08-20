@@ -313,6 +313,37 @@ internal partial class SyntaxNodeComparer
 
         return Equal;
     }
+
+    private CompareResult CompareUsingDirectives(
+        SyntaxList<UsingDirectiveSyntax> original,
+        SyntaxList<UsingDirectiveSyntax> formatted,
+        SyntaxNode originalParent,
+        SyntaxNode formattedParent
+    )
+    {
+        if (original.Count != formatted.Count)
+        {
+            return NotEqual(originalParent, formattedParent);
+        }
+
+        var sortedOriginal = original.OrderBy(o => o.ToFullString().Trim()).ToList();
+        var sortedFormatted = formatted.OrderBy(o => o.ToFullString().Trim()).ToList();
+
+        for (var x = 0; x < original.Count; x++)
+        {
+            var result = this.Compare(
+                (sortedOriginal[x], originalParent),
+                (sortedFormatted[x], formattedParent)
+            );
+
+            if (result.IsInvalid)
+            {
+                return result;
+            }
+        }
+
+        return Equal;
+    }
 }
 
 internal struct CompareResult

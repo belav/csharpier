@@ -1053,7 +1053,7 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             result = this.CompareLists(originalNode.Members, formattedNode.Members, null, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
-            result = this.CompareLists(originalNode.Usings, formattedNode.Usings, null, o => o.Span, originalNode.Span, formattedNode.Span);
+            result = this.CompareUsingDirectives(originalNode.Usings, formattedNode.Usings, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             return Equal;
         }
@@ -1683,7 +1683,7 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            result = this.CompareLists(originalNode.Usings, formattedNode.Usings, null, o => o.Span, originalNode.Span, formattedNode.Span);
+            result = this.CompareUsingDirectives(originalNode.Usings, formattedNode.Usings, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             return Equal;
         }
@@ -2564,7 +2564,7 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
-            result = this.CompareLists(originalNode.Usings, formattedNode.Usings, null, o => o.Span, originalNode.Span, formattedNode.Span);
+            result = this.CompareUsingDirectives(originalNode.Usings, formattedNode.Usings, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             return Equal;
         }
