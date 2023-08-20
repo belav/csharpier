@@ -10,7 +10,7 @@ function CSH-ReviewBranch {
     $csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/bin/release/net7.0/dotnet-csharpier.dll"
 
     $location = Get-Location
-    
+
     Set-Location $repositoryRoot
     
     if (!$pathToTestingRepo) {
@@ -37,12 +37,12 @@ function CSH-ReviewBranch {
 
     $preBranch = "pre-" + $branch
     $postBranch = "post-" + $branch
-    
+
     if ($folder -ne $null) {
         $preBranch += "-" + $folder
         $postBranch += "-" + $folder
     }
-    
+
     Set-Location $pathToTestingRepo
     & git reset --hard *> $null
     try {
@@ -51,7 +51,7 @@ function CSH-ReviewBranch {
     catch { }
     $postBranchOutput = (git status 2>&1) | Out-String
     $firstRun = -not $postBranchOutput.Contains("On branch $postBranch")
-    
+
     $fastParam = ""
     if ($fast -eq $true) {
         $fastParam = "--fast"

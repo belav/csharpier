@@ -1,26 +1,10 @@
 namespace CSharpier.SyntaxPrinter;
 
-using System.Collections;
-
 internal static class UsingDirectives
 {
     private static readonly DefaultOrder Comparer = new();
 
-    /*
-     global first?
-     then system
-     then static
-     then alias, ordered by the alias?
-     what about alias of any type?
-     */
-
-    // TODO what about global::??
-    // TODO alias!!
-    // TODO https://github.com/belav/csharpier-repos/pull/80/files has one weird #else thingie
-
-    // TODO what does the analyzer do with some of these sorts?
     // TODO what about validation?
-    // TODO what about alias any type with c# 12?
 
     public static Doc PrintWithSorting(
         SyntaxList<UsingDirectiveSyntax> usings,
@@ -31,18 +15,18 @@ internal static class UsingDirectives
         var docs = new List<Doc>();
 
         var initialComments = new List<SyntaxTrivia>();
-        var otherStuff = new List<SyntaxTrivia>();
-        var foundOtherStuff = false;
+        var triviaWithinIf = new List<SyntaxTrivia>();
+        var foundIfDirective = false;
         foreach (var leadingTrivia in usings.First().GetLeadingTrivia())
         {
             if (leadingTrivia.RawSyntaxKind() == SyntaxKind.IfDirectiveTrivia)
             {
-                foundOtherStuff = true;
+                foundIfDirective = true;
             }
 
-            if (foundOtherStuff)
+            if (foundIfDirective)
             {
-                otherStuff.Add(leadingTrivia);
+                triviaWithinIf.Add(leadingTrivia);
             }
             else
             {
@@ -53,7 +37,11 @@ internal static class UsingDirectives
         docs.Add(Token.PrintLeadingTrivia(new SyntaxTriviaList(initialComments), context));
         var isFirst = true;
         foreach (
-            var groupOfUsingData in GroupUsings(usings, new SyntaxTriviaList(otherStuff), context)
+            var groupOfUsingData in GroupUsings(
+                usings,
+                new SyntaxTriviaList(triviaWithinIf),
+                context
+            )
         )
         {
             foreach (var usingData in groupOfUsingData)
@@ -67,15 +55,9 @@ internal static class UsingDirectives
                 {
                     docs.Add(usingData.LeadingTrivia);
                 }
-                if (usingData.Using is UsingDirectiveSyntax usingDirective)
+                if (usingData.Using is not null)
                 {
-                    docs.Add(
-                        UsingDirective.Print(
-                            usingDirective,
-                            context,
-                            printExtraLines // TODO keeping lines is hard, maybe don't? : printExtraLines || !isFirst
-                        )
-                    );
+                    docs.Add(UsingDirective.Print(usingData.Using, context, printExtraLines));
                 }
 
                 isFirst = false;
@@ -87,17 +69,20 @@ internal static class UsingDirectives
 
     private static IEnumerable<List<UsingData>> GroupUsings(
         SyntaxList<UsingDirectiveSyntax> usings,
-        SyntaxTriviaList otherStuff,
+        SyntaxTriviaList triviaOnFirstUsing,
         FormattingContext context
     )
     {
         var globalUsings = new List<UsingData>();
+        var systemUsings = new List<UsingData>();
+        var aliasNameUsings = new List<UsingData>();
         var regularUsings = new List<UsingData>();
         var staticUsings = new List<UsingData>();
         var aliasUsings = new List<UsingData>();
         var directiveGroup = new List<UsingData>();
         var ifCount = 0;
         var isFirst = true;
+
         foreach (var usingDirective in usings)
         {
             var openIf = ifCount > 0;
@@ -111,14 +96,6 @@ internal static class UsingDirectives
                 {
                     ifCount--;
                 }
-            }
-
-            Doc PrintStuff(UsingDirectiveSyntax value)
-            {
-                // TODO what about something with comments and a close #endif?
-                return isFirst
-                    ? Token.PrintLeadingTrivia(otherStuff, context)
-                    : Token.PrintLeadingTrivia(value.GetLeadingTrivia(), context);
             }
 
             if (ifCount > 0)
@@ -146,7 +123,6 @@ internal static class UsingDirectives
                     LeadingTrivia = !openIf ? PrintStuff(usingDirective) : Doc.Null
                 };
 
-                // TODO what about IF on these?
                 if (usingDirective.GlobalKeyword.RawSyntaxKind() != SyntaxKind.None)
                 {
                     globalUsings.Add(usingData);
@@ -159,20 +135,39 @@ internal static class UsingDirectives
                 {
                     aliasUsings.Add(usingData);
                 }
+                else if (usingDirective.Name is AliasQualifiedNameSyntax)
+                {
+                    aliasNameUsings.Add(usingData);
+                }
+                else if (usingDirective.Name is not null && IsSystemName(usingDirective.Name))
+                {
+                    systemUsings.Add(usingData);
+                }
                 else
                 {
                     regularUsings.Add(usingData);
                 }
             }
-
-            isFirst = false;
         }
 
         yield return globalUsings.OrderBy(o => o.Using!, Comparer).ToList();
+        yield return systemUsings.OrderBy(o => o.Using!, Comparer).ToList();
+        yield return aliasNameUsings.OrderBy(o => o.Using!, Comparer).ToList();
         yield return regularUsings.OrderBy(o => o.Using!, Comparer).ToList();
         yield return directiveGroup;
         yield return staticUsings.OrderBy(o => o.Using!, Comparer).ToList();
         yield return aliasUsings.OrderBy(o => o.Using!, Comparer).ToList();
+        yield break;
+
+        Doc PrintStuff(UsingDirectiveSyntax value)
+        {
+            var result = isFirst
+                ? Token.PrintLeadingTrivia(triviaOnFirstUsing, context)
+                : Token.PrintLeadingTrivia(value.GetLeadingTrivia(), context);
+
+            isFirst = false;
+            return result;
+        }
     }
 
     private class UsingData
@@ -207,30 +202,12 @@ internal static class UsingDirectives
                 return 1;
             }
 
-            if (x.Alias is NameEqualsSyntax xAlias && y.Alias is NameEqualsSyntax yAlias)
+            if (x.Alias is not null && y.Alias is not null)
             {
-                return xAlias.ToFullString().CompareTo(yAlias.ToFullString());
+                return x.Alias.ToFullString().CompareTo(y.Alias.ToFullString());
             }
 
-            var xIsSystem = IsSystemName(x.Name);
-            var yIsSystem = IsSystemName(y.Name);
-
-            int Return(int value)
-            {
-                return value;
-            }
-
-            if (xIsSystem && !yIsSystem)
-            {
-                return Return(-1);
-            }
-
-            if (!xIsSystem && yIsSystem)
-            {
-                return Return(1);
-            }
-
-            return Return(x.Name.ToFullString().CompareTo(y.Name.ToFullString()));
+            return x.Name.ToFullString().CompareTo(y.Name.ToFullString());
         }
     }
 }
