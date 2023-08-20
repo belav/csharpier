@@ -8,6 +8,10 @@ using Task = System.Threading.Tasks.Task;
 namespace CSharpier.VisualStudio
 {
     public class ReformatWithCSharpierOnSave : IVsRunningDocTableEvents3
+#if !DEV16
+            , IVsRunningDocTableEvents7
+#endif
+
     {
         private readonly DTE dte;
         private readonly RunningDocumentTable runningDocumentTable;
@@ -26,8 +30,21 @@ namespace CSharpier.VisualStudio
 
         public static async Task InitializeAsync(CSharpierPackage package)
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
             new ReformatWithCSharpierOnSave(package, dte!);
+        }
+
+        public IVsTask? OnBeforeSaveAsync(uint cookie, uint flags, IVsTask? saveTask)
+        {
+            return ThreadHelper.JoinableTaskFactory.RunAsyncAsVsTask(
+                VsTaskRunContext.UIThreadNormalPriority,
+                async _ =>
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    return this.OnBeforeSave(cookie);
+                }
+            );
         }
 
         public int OnBeforeSave(uint docCookie)
@@ -103,6 +120,11 @@ namespace CSharpier.VisualStudio
         public int OnAfterSave(uint docCookie)
         {
             return VSConstants.S_OK;
+        }
+
+        public IVsTask? OnAfterSaveAsync(uint cookie, uint flags)
+        {
+            return null;
         }
 
         public int OnAfterAttributeChange(uint docCookie, uint grfAttribs)
