@@ -7,6 +7,13 @@ internal static class BinaryExpression
     {
         var docs = PrintBinaryExpression(node, context);
 
+        if (node.Parent is IfStatementSyntax)
+        {
+            // avoid grouping here so that the ifBreaks in IfStatement can understand when
+            // this BinaryExpression breaks
+            return Doc.Concat(docs);
+        }
+
         var shouldNotIndent =
             node.Parent
                 is ArrowExpressionClauseSyntax
@@ -15,7 +22,6 @@ internal static class BinaryExpression
                     or CheckedExpressionSyntax
                     or DoStatementSyntax
                     or EqualsValueClauseSyntax
-                    or IfStatementSyntax
                     or ParenthesizedExpressionSyntax
                     or ParenthesizedLambdaExpressionSyntax
                     or SimpleLambdaExpressionSyntax
