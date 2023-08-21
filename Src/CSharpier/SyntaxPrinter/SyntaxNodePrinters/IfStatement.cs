@@ -11,16 +11,17 @@ internal static class IfStatement
         }
 
         docs.Add(
+            Token.Print(node.IfKeyword, context),
+            " ",
             Doc.Group(
-                Token.Print(node.IfKeyword, context),
-                " ",
                 Token.Print(node.OpenParenToken, context),
-                Doc.Group(
-                    Doc.Indent(Doc.SoftLine, Node.Print(node.Condition, context)),
-                    Doc.SoftLine
+                Doc.Indent(
+                    Doc.IfBreak(Doc.SoftLine, Doc.Null),
+                    Node.Print(node.Condition, context)
                 ),
-                Token.Print(node.CloseParenToken, context)
+                Doc.IfBreak(Doc.SoftLine, Doc.Null)
             ),
+            Token.Print(node.CloseParenToken, context),
             OptionalBraces.Print(node.Statement, context)
         );
 
