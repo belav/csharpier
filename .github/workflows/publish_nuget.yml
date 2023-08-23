@@ -1,7 +1,7 @@
 name: Publish Nuget
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -13,7 +13,11 @@ jobs:
           dotnet-version: |
             7.0.304
             6.0.300
-      - run: dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj
+      - run: >
+          dotnet test Src/CSharpier.Tests/CSharpier.Tests.csproj
+          --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
+          --
+          RunConfiguration.CollectSourceInformation=true
   publish-nuget:
     runs-on: ubuntu-latest
     name: publish nuget
