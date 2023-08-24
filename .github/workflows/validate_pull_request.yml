@@ -1,7 +1,7 @@
 name: Validate Pull Request
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 jobs:
   run_tests:
     runs-on: ubuntu-latest
@@ -10,12 +10,16 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: | 
+          dotnet-version: |
             7.0.304
             6.0.300
-      - run: |
-          dotnet build CSharpier.sln -c release
-          dotnet test CSharpier.sln -c release
+      - run: >
+          dotnet test CSharpier.sln
+          --configuration Release
+          --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
+          --
+          RunConfiguration.CollectSourceInformation=true
+
   check_formatting:
     runs-on: ubuntu-latest
     name: Check Formatting
