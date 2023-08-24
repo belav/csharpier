@@ -161,5 +161,18 @@ four
             }    ";
 
         ReadOnlySpan<byte> utf8StringLiteral = "hello"u8;
+
+        var rawLiteralWithExpressionThatWeDontFormat = new StringContent(
+            // this comment shouldn't go away
+            $$"""
+              {
+                  "params": "{{searchFilter switch
+        {
+            SearchFilter.Video => "EgIQAQ%3D%3D",
+            _ => null
+        }}}"
+              }
+              """
+        );
     }
 }
