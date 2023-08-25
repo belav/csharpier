@@ -1,4 +1,7 @@
-﻿## [1.4.2]
+﻿## [1.4.3]
+- Fix for format on save sometimes not working in VS2022 17.7
+
+## [1.4.2]
 - Recompile with VS2022 17.7 preview 4 - fixes the format on save for 17.7 preview 4.
 
 ## [1.4.1]
