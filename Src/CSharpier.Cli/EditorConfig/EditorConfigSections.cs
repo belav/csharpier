@@ -7,7 +7,7 @@ namespace CSharpier.Cli.EditorConfig;
 internal class EditorConfigSections
 {
     public required string DirectoryName { get; init; }
-    public required List<Section> SectionsIncludingParentFiles { get; init; }
+    public required IReadOnlyCollection<Section> SectionsIncludingParentFiles { get; init; }
 
     public PrinterOptions ConvertToPrinterOptions(string filePath)
     {

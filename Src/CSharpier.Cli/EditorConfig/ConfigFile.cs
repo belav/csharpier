@@ -2,6 +2,6 @@
 
 internal class ConfigFile
 {
-    public required List<Section> Sections { get; init; }
+    public required IReadOnlyCollection<Section> Sections { get; init; }
     public bool IsRoot { get; init; }
 }

@@ -51,13 +51,10 @@ internal static class EditorConfigParser
 
     private static List<Section> FindSections(string filePath, IFileSystem fileSystem)
     {
-        var editorConfigFiles = ParseConfigFiles(
-                fileSystem.Path.GetDirectoryName(filePath),
-                fileSystem
-            )
+        return ParseConfigFiles(fileSystem.Path.GetDirectoryName(filePath), fileSystem)
             .Reverse()
+            .SelectMany(configFile => configFile.Sections)
             .ToList();
-        return editorConfigFiles.SelectMany(configFile => configFile.Sections).ToList();
     }
 
     private static IEnumerable<ConfigFile> ParseConfigFiles(

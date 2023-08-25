@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="DotNet.Glob" />
     <PackageReference Include="Ignore" />
+    <PackageReference Include="ini-parser-netstandard" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="System.CommandLine" />
     <PackageReference Include="System.IO.Abstractions" />

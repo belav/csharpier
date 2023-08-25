@@ -1,6 +1,7 @@
 namespace CSharpier.Cli.EditorConfig;
 
 using DotNet.Globbing;
+using IniParser.Model;
 
 public class Section
 {
@@ -11,20 +12,14 @@ public class Section
     public string? TabWidth { get; }
     public string? MaxLineLength { get; }
 
-    public Section(string name, string directory, Dictionary<string, string?> properties)
+    public Section(SectionData section, string directory)
     {
-        this.Pattern = FixGlob(name, directory);
+        this.Pattern = FixGlob(section.SectionName, directory);
         this.matcher = Glob.Parse(this.Pattern);
-        this.IndentStyle = properties.TryGetValue("indent_style", out var indentStyle)
-            ? indentStyle
-            : null;
-        this.IndentSize = properties.TryGetValue("indent_size", out var indentSize)
-            ? indentSize
-            : null;
-        this.TabWidth = properties.TryGetValue("tab_width", out var tabWidth) ? tabWidth : null;
-        this.MaxLineLength = properties.TryGetValue("max_line_length", out var maxLineLenght)
-            ? maxLineLenght
-            : null;
+        this.IndentStyle = section.Keys["indent_style"];
+        this.IndentSize = section.Keys["indent_size"];
+        this.TabWidth = section.Keys["tab_width"];
+        this.MaxLineLength = section.Keys["max_line_length"];
     }
 
     public bool IsMatch(string fileName)

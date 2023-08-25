@@ -328,6 +328,35 @@ max_line_length = 10
     }
 
     [Test]
+    public async Task Should_Support_EditorConfig_Root()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/subfolder/.editorconfig",
+            @"
+    root = true
+
+    [*]
+    indent_size = 2
+    "
+        );
+
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            @"
+    [*]
+    max_line_length = 2
+    "
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test/subfolder",
+            "c:/test/subfolder/test.cs"
+        );
+        result.Width.Should().Be(100);
+    }
+
+    [Test]
     public async Task Should_Support_EditorConfig_Tabs_With_Globs()
     {
         var context = new TestContext();
