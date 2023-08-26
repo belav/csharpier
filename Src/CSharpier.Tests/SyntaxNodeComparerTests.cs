@@ -434,7 +434,18 @@ using Zebra;
 
         var result = CompareSource(left, right);
 
-        result.Should().BeEmpty();
+        ResultShouldBe(
+            result,
+            @"----------------------------- Original: Around Line 1 -----------------------------
+
+using Zebra;
+using Apple;
+----------------------------- Formatted: Around Line 0 -----------------------------
+using Apple;
+using Monday;
+using Zebra;
+"
+        );
     }
 
     [Test]
@@ -462,6 +473,11 @@ using Zebra;
     [Test]
     public void Usings_With_Directives_Pass_Validation()
     {
+        // TODO sorting the usings appear as trivia on the EndOfFile, class or namespace
+        // or if it is a top level statements file it could be something else
+        // UGH!
+        // can we ignore leading trivia on the first not in the compilation unit/namespace
+        // if that trivia contains usings??
         var left =
             @"#if DEBUG
 using System;
@@ -469,6 +485,8 @@ using System;
 using Microsoft;
 #endif
 using System.IO;
+
+private class Class { }
 ";
 
         var right =
@@ -478,6 +496,8 @@ using System;
 #else
 using Microsoft;
 #endif
+
+private class Class { }
 ";
 
         var result = CompareSource(left, right);

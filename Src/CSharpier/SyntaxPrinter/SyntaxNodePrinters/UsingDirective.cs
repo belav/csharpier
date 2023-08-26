@@ -9,9 +9,7 @@ internal static class UsingDirective
     )
     {
         return Doc.Concat(
-            // TODO when should this actually print?
             printExtraLines ? ExtraNewLines.Print(node) : Doc.Null,
-            // TODO should only skip on the first one that exists
             Token.PrintWithSuffix(node.GlobalKeyword, " ", context, skipLeadingTrivia: true),
             Token.PrintWithSuffix(node.UsingKeyword, " ", context, skipLeadingTrivia: true),
             Token.PrintWithSuffix(node.StaticKeyword, " ", context, skipLeadingTrivia: true),

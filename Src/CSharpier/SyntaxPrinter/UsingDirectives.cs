@@ -7,11 +7,6 @@ internal static class UsingDirectives
     /* TODO these all fail still
 TODO review PRs, the full one is too big
 
-Warning ./mono/mcs/class/corlib/System.Runtime.InteropServices/Marshal.cs - Failed to compile so was not formatted.
-  (35,2): error CS1032: Cannot define/undefine preprocessor symbols after first token in file
-Warning ./mono/mcs/class/System/Mono.AppleTls/MonoCertificatePal.OSX.cs - Failed to compile so was not formatted.
-  (36,1): error CS1028: Unexpected preprocessor directive
-  (30,1): error CS0439: An extern alias declaration must precede all other elements defined in the namespace
 Warning ./mono/mcs/class/System/System.Security.Cryptography.X509Certificates/X509Certificate2ImplUnix.cs - Failed to compile so was not formatted.
   (32,1): error CS0439: An extern alias declaration must precede all other elements defined in the namespace
 Warning ./mono/mcs/class/System/System.Security.Cryptography.X509Certificates/X509Helper2.cs - Failed to compile so was not formatted.
@@ -38,13 +33,39 @@ Warning ./mono/mcs/class/referencesource/mscorlib/system/diagnostics/eventing/Tr
         bool printExtraLines
     )
     {
+        if (usings.Count == 0)
+        {
+            return Doc.Null;
+        }
+
+        // TODO sorting we can maybe use this to ignore disabled text, but that doesn't quite work
+        // context.ReorderedModifiers = usings.Any(o => o.GetLeadingTrivia().Any(p => p.IsDirective));
+
         var docs = new List<Doc>();
+        var usingList = usings.ToList();
 
         var initialComments = new List<SyntaxTrivia>();
         var triviaWithinIf = new List<SyntaxTrivia>();
         var foundIfDirective = false;
-        foreach (var leadingTrivia in usings.First().GetLeadingTrivia())
+        var keepUsingsUntilEndIf = false;
+        foreach (var leadingTrivia in usings[0].GetLeadingTrivia())
         {
+            if (
+                leadingTrivia.RawSyntaxKind() == SyntaxKind.DisabledTextTrivia
+                && leadingTrivia.ToFullString().TrimStart().StartsWith("extern alias")
+            )
+            {
+                initialComments = usings[0].GetLeadingTrivia().ToList();
+                triviaWithinIf.Clear();
+                keepUsingsUntilEndIf = true;
+                break;
+            }
+            if (leadingTrivia.RawSyntaxKind() == SyntaxKind.DefineDirectiveTrivia)
+            {
+                initialComments = usings.First().GetLeadingTrivia().ToList();
+                triviaWithinIf.Clear();
+                break;
+            }
             if (leadingTrivia.RawSyntaxKind() == SyntaxKind.IfDirectiveTrivia)
             {
                 foundIfDirective = true;
@@ -61,10 +82,34 @@ Warning ./mono/mcs/class/referencesource/mscorlib/system/diagnostics/eventing/Tr
         }
 
         docs.Add(Token.PrintLeadingTrivia(new SyntaxTriviaList(initialComments), context));
+        if (keepUsingsUntilEndIf)
+        {
+            while (usingList.Any())
+            {
+                var firstUsing = usingList.First();
+
+                usingList.RemoveAt(0);
+                if (firstUsing != usings[0])
+                {
+                    docs.Add(Token.PrintLeadingTrivia(firstUsing.GetLeadingTrivia(), context));
+                }
+                docs.Add(UsingDirective.Print(firstUsing, context));
+
+                if (
+                    firstUsing
+                        .GetLeadingTrivia()
+                        .Any(o => o.RawSyntaxKind() == SyntaxKind.EndIfDirectiveTrivia)
+                )
+                {
+                    break;
+                }
+            }
+        }
+
         var isFirst = true;
         foreach (
             var groupOfUsingData in GroupUsings(
-                usings,
+                usingList,
                 new SyntaxTriviaList(triviaWithinIf),
                 context
             )
@@ -94,7 +139,7 @@ Warning ./mono/mcs/class/referencesource/mscorlib/system/diagnostics/eventing/Tr
     }
 
     private static IEnumerable<List<UsingData>> GroupUsings(
-        SyntaxList<UsingDirectiveSyntax> usings,
+        List<UsingDirectiveSyntax> usings,
         SyntaxTriviaList triviaOnFirstUsing,
         FormattingContext context
     )
