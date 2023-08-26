@@ -1,0 +1,13 @@
+#if MONO_SECURITY_ALIAS
+extern alias MonoSecurity;
+#endif
+
+#if MONO_SECURITY_ALIAS
+using MX = MonoSecurity::Mono.Security.X509;
+#else
+using MX = Mono.Security.X509;
+#endif
+
+using System.IO;
+using System.Text;
+using Mono;
