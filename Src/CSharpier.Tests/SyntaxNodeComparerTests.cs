@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -64,10 +62,9 @@ namespace Namespace { }
 
         var result = AreEqual(left, right);
 
-        result
-            .Should()
-            .Be(
-                @"----------------------------- Original: Around Line 2 -----------------------------
+        ResultShouldBe(
+            result,
+            @"----------------------------- Original: Around Line 2 -----------------------------
 public class ConstructorWithBase
 {
     public ConstructorWithBase(string value)
@@ -84,8 +81,8 @@ public class ConstructorWithBase
         return;
     }
 }
-"
-            );
+".ReplaceLineEndings()
+        );
     }
 
     [Test]
