@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
+    private final boolean useUtf8;
+    private final String csharpierPath;
     Logger logger = CSharpierLogger.getInstance();
 
     Process process = null;
@@ -22,12 +24,18 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     BufferedReader stdOut;
 
     public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8) {
+        this.csharpierPath = csharpierPath;
+        this.useUtf8 = useUtf8;
+        this.startProcess();
+    }
+
+    private void startProcess() {
         try {
-            var processBuilder = new ProcessBuilder(csharpierPath, "--pipe-multiple-files");
+            var processBuilder = new ProcessBuilder(this.csharpierPath, "--pipe-multiple-files");
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
             this.process = processBuilder.start();
 
-            var charset = useUtf8 ? "utf-8" : Charset.defaultCharset().toString();
+            var charset = this.useUtf8 ? "utf-8" : Charset.defaultCharset().toString();
 
             this.stdin = new OutputStreamWriter(this.process.getOutputStream(), charset);
             this.stdOut = new BufferedReader(new InputStreamReader(this.process.getInputStream(), charset));
@@ -43,40 +51,56 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
     @Override
     public String formatFile(String content, String filePath) {
-        try {
+        var stringBuilder = new StringBuilder();
 
-            this.stdin.write(filePath);
-            this.stdin.write('\u0003');
-            this.stdin.write(content);
-            this.stdin.write('\u0003');
-            this.stdin.flush();
+        Runnable task = () -> {
+            try {
+                this.stdin.write(filePath);
+                this.stdin.write('\u0003');
+                this.stdin.write(content);
+                this.stdin.write('\u0003');
+                this.stdin.flush();
 
-            var stringBuilder = new StringBuilder();
-
-            var nextCharacter = this.stdOut.read();
-            while (nextCharacter != -1) {
-                if (nextCharacter == '\u0003') {
-                    break;
+                var nextCharacter = this.stdOut.read();
+                while (nextCharacter != -1) {
+                    if (nextCharacter == '\u0003') {
+                        break;
+                    }
+                    stringBuilder.append((char) nextCharacter);
+                    nextCharacter = this.stdOut.read();
                 }
-                stringBuilder.append((char) nextCharacter);
-                nextCharacter = this.stdOut.read();
+            } catch (Exception e) {
+                this.logger.error(e);
+                e.printStackTrace();
             }
+        };
 
-            var result = stringBuilder.toString();
+        // csharpier will freeze in some instances when "Format on Save" is also installed and the file has compilation errors
+        // this detects that and recovers from it
+        var thread = new Thread(task);
+        thread.start();
+        try {
+            thread.join(3000);
+        } catch (InterruptedException e) {
+            // if we interrupt it we shouldn't log it
+        }
 
-            if (result == null || result.isEmpty())
-            {
-                this.logger.info("File is ignored by .csharpierignore or there was an error");
-                return "";
-            }
-
-            return result;
-
-        } catch (Exception e) {
-            this.logger.error(e);
-            e.printStackTrace();
+        if (thread.isAlive()) {
+            this.logger.warn("CSharpier process appears to be hung, restarting it.");
+            thread.interrupt();
+            this.process.destroy();
+            this.startProcess();
             return "";
         }
+
+        var result = stringBuilder.toString();
+
+        if (result == null || result.isEmpty()) {
+            this.logger.info("File is ignored by .csharpierignore or there was an error");
+            return "";
+        }
+
+        return result;
     }
 
     @Override

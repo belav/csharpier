@@ -1,4 +1,7 @@
-﻿## [1.4.3]
+﻿## [1.4.4]
+- Add support for ARM64
+
+## [1.4.3]
 - Fix for format on save sometimes not working in VS2022 17.7
 
 ## [1.4.2]

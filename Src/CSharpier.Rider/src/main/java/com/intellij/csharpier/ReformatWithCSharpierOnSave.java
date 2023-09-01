@@ -16,6 +16,7 @@ public class ReformatWithCSharpierOnSave implements AnActionListener {
     private final Logger logger = CSharpierLogger.getInstance();
 
     public ReformatWithCSharpierOnSave() {
+        // TODO this is deprecated and should be switched to https://plugins.jetbrains.com/docs/intellij/messaging-infrastructure.html#subscribing-to-a-topic
         Topics.subscribe(AnActionListener.TOPIC, null, this);
     }
 
