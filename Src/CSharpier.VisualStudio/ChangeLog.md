@@ -1,4 +1,7 @@
-﻿## [1.4.4]
+﻿## [1.4.5]
+- Handle error on startup in VS 17.8.0
+
+## [1.4.4]
 - Add support for ARM64
 
 ## [1.4.3]
