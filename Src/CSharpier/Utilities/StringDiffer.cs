@@ -93,6 +93,6 @@ internal static class StringDiffer
 
     private static string? MakeWhiteSpaceVisible(string? value)
     {
-        return value?.Replace(' ', '·').Replace('\t', '→');       
+        return value?.Replace(' ', '·').Replace('\t', '→');
     }
 }

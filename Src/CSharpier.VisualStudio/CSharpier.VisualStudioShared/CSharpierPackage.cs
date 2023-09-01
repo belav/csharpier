@@ -47,11 +47,10 @@ namespace CSharpier.VisualStudio
                         .FindAndWarmProcess(dte.ActiveDocument.FullName);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Instance.Error(ex);
             }
-
 
             SolutionEvents.OnAfterOpenSolution += HandleOpenSolution;
         }
