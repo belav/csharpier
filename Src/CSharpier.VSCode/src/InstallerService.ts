@@ -26,7 +26,9 @@ export class InstallerService {
         this.logger.info(this.extension.extensionKind);
 
         if (this.extension.extensionKind === vscode.ExtensionKind.Workspace) {
-            window.showErrorMessage("CSharpier must be installed as a local dotnet tool in ./.config/dotnet-tools.json using `dotnet tool install csharpier` and the devcontainer rebuilt to support formatting files.");
+            window.showErrorMessage(
+                "CSharpier must be installed as a local dotnet tool in ./.config/dotnet-tools.json using `dotnet tool install csharpier` and the devcontainer rebuilt to support formatting files.",
+            );
             return;
         }
 

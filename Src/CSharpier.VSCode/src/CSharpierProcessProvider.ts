@@ -1,4 +1,4 @@
-import {Disposable, Extension, TextEditor, window, workspace} from "vscode";
+import { Disposable, Extension, TextEditor, window, workspace } from "vscode";
 import { Logger } from "./Logger";
 import * as path from "path";
 import * as semver from "semver";
@@ -23,7 +23,11 @@ export class CSharpierProcessProvider implements Disposable {
     constructor(logger: Logger, extension: Extension<unknown>) {
         this.logger = logger;
         this.customPathInstaller = new CustomPathInstaller(logger);
-        this.installerService = new InstallerService(this.logger, this.killRunningProcesses, extension);
+        this.installerService = new InstallerService(
+            this.logger,
+            this.killRunningProcesses,
+            extension,
+        );
 
         window.onDidChangeActiveTextEditor((event: TextEditor | undefined) => {
             if (event?.document?.languageId !== "csharp") {
@@ -137,11 +141,12 @@ export class CSharpierProcessProvider implements Disposable {
             outputFromCsharpier = execSync(`dotnet csharpier --version`, {
                 cwd: directoryThatContainsFile,
                 env: { ...process.env, DOTNET_NOLOGO: "1" },
-            }).toString().trim();
+            })
+                .toString()
+                .trim();
 
             this.logger.debug(`dotnet csharpier --version output ${outputFromCsharpier}`);
             return outputFromCsharpier;
-
         } catch (error: any) {
             const message = !error.stderr ? error.toString() : error.stderr.toString();
 
