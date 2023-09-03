@@ -13,6 +13,7 @@
     <Exec
       ConsoleToMSBuild="true"
       StdOutEncoding="utf-8"
+      StdErrEncoding="utf-8"
       Command="dotnet &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check &quot;$(MSBuildProjectDirectory)&quot;" />
   </Target>
 
