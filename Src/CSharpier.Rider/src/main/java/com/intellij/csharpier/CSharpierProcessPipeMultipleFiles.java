@@ -3,16 +3,8 @@ package com.intellij.csharpier;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.diagnostic.Logger;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
     private final boolean useUtf8;
@@ -39,6 +31,12 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
             this.stdin = new OutputStreamWriter(this.process.getOutputStream(), charset);
             this.stdOut = new BufferedReader(new InputStreamReader(this.process.getInputStream(), charset));
+
+            // if we don't read the error stream, eventually too much is buffered on it and the plugin hangs
+            var errorGobbler = new StreamGobbler(this.process.getErrorStream());
+            errorGobbler.start();
+
+
         } catch (Exception e) {
             this.logger.error("error", e);
         }
@@ -107,6 +105,24 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     public void dispose() {
         if (this.process != null) {
             this.process.destroy();
+        }
+    }
+
+    private class StreamGobbler extends Thread {
+        InputStream inputStream;
+
+        private StreamGobbler(InputStream inputStream) {
+            this.inputStream = inputStream;
+        }
+
+        @Override
+        public void run() {
+            try {
+                var streamReader = new InputStreamReader(this.inputStream);
+                var reader = new BufferedReader(streamReader);
+                while (reader.readLine() != null) {}
+            }
+            catch (IOException ioe) { }
         }
     }
 }
