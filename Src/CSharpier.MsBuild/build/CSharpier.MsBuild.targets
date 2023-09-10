@@ -10,11 +10,12 @@
   </PropertyGroup>
 
   <Target Name="CSharpierFormatInner" Condition="'$(CSharpier_Bypass)' != 'true'">
+    <!-- &gt; Null suppresses the output from this so that compilation errors -->
     <Exec
       ConsoleToMSBuild="true"
       StdOutEncoding="utf-8"
       StdErrEncoding="utf-8"
-      Command="dotnet &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check &quot;$(MSBuildProjectDirectory)&quot;" />
+      Command="dotnet &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check &quot;$(MSBuildProjectDirectory)&quot; &gt; NUL" />
   </Target>
 
   <!-- getting this to run a single time for projects that target multiple frameworks requires all of this
