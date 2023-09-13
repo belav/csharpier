@@ -7,7 +7,6 @@ using Task = System.Threading.Tasks.Task;
 
 namespace CSharpier.VisualStudio
 {
-
     public class ReformatWithCSharpierOnSave : IVsRunningDocTableEvents3
     {
         private readonly DTE dte;
