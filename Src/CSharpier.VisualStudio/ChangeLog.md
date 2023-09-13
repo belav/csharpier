@@ -1,4 +1,7 @@
-﻿## [1.4.5]
+﻿## [1.4.6]
+- Possible fix for issue with VS2022 not reformatting on save
+
+## [1.4.5]
 - Handle error on startup in VS 17.8.0
 
 ## [1.4.4]
