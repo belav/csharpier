@@ -62,13 +62,14 @@ internal static class StringDiffer
             );
             if (previousExpectedLine != null)
             {
-                stringBuilder.AppendLine(MakeWhiteSpaceVisible(previousExpectedLine));
+                stringBuilder.AppendLine(previousExpectedLine);
             }
-            stringBuilder.AppendLine(MakeWhiteSpaceVisible(expectedLine));
+
+            stringBuilder.AppendLine(expectedLine);
             var nextExpectedLine = expectedReader.ReadLine();
             if (nextExpectedLine != null)
             {
-                stringBuilder.AppendLine(MakeWhiteSpaceVisible(nextExpectedLine));
+                stringBuilder.AppendLine(nextExpectedLine);
             }
 
             stringBuilder.AppendLine(
@@ -76,19 +77,52 @@ internal static class StringDiffer
             );
             if (previousActualLine != null)
             {
-                stringBuilder.AppendLine(MakeWhiteSpaceVisible(previousActualLine));
+                stringBuilder.AppendLine(previousActualLine);
             }
-            stringBuilder.AppendLine(MakeWhiteSpaceVisible(actualLine));
+
+            if (string.IsNullOrWhiteSpace(actualLine))
+            {
+                stringBuilder.AppendLine(MakeWhiteSpaceVisible(actualLine));
+            }
+            else
+            {
+                if (actualLine[^1] is ' ' or '\t')
+                {
+                    var lastNonWhitespace = FindIndexOfNonWhitespace(actualLine);
+                    stringBuilder.AppendLine(
+                        actualLine[..lastNonWhitespace]
+                            + MakeWhiteSpaceVisible(actualLine[lastNonWhitespace..])
+                    );
+                }
+                else
+                {
+                    stringBuilder.AppendLine(actualLine);
+                }
+            }
+
             var nextActualLine = actualReader.ReadLine();
             if (nextActualLine != null)
             {
-                stringBuilder.AppendLine(MakeWhiteSpaceVisible(nextActualLine));
+                stringBuilder.AppendLine(nextActualLine);
             }
 
             return stringBuilder.ToString();
         }
 
         return "The file contained different line endings than formatting it would result in.";
+    }
+
+    private static int FindIndexOfNonWhitespace(string input)
+    {
+        for (var x = input.Length - 1; x >= 0; x--)
+        {
+            if (input[x] is not (' ' or '\t'))
+            {
+                return x;
+            }
+        }
+
+        return -1;
     }
 
     private static string? MakeWhiteSpaceVisible(string? value)

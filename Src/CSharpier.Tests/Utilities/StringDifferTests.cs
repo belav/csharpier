@@ -102,6 +102,100 @@ four
     }
 
     [Test]
+    public void PrintDifference_Should_Show_Extra_Whitespace_On_Empty_Line()
+    {
+        var result = PrintDifference(
+            @"public class ClassName
+{
+    private string field1;
+
+    private string field2;
+}",
+            @"public class ClassName
+{
+    private string field1;
+    
+    private string field2;
+}"
+        );
+
+        result
+            .Should()
+            .Be(
+                @"----------------------------- Expected: Around Line 4 -----------------------------
+    private string field1;
+
+    private string field2;
+----------------------------- Actual: Around Line 4 -----------------------------
+    private string field1;
+····
+    private string field2;
+"
+            );
+    }
+
+    [Test]
+    public void PrintDifference_Should_Show_Extra_Whitespace_At_End_Of_Line()
+    {
+        var result = PrintDifference(
+            @"public class ClassName
+{
+    private string field1;
+}",
+            @"public class ClassName
+{
+    private string field1;    
+}"
+        );
+
+        result
+            .Should()
+            .Be(
+                @"----------------------------- Expected: Around Line 3 -----------------------------
+{
+    private string field1;
+}
+----------------------------- Actual: Around Line 3 -----------------------------
+{
+    private string field1;····
+}
+"
+            );
+    }
+
+    [Test]
+    public void PrintDifference_Should_Not_Show_Whitespace_In_Middle_Of_Line()
+    {
+        var result = PrintDifference("public class ClassName { }", "public class ClassName  { }");
+
+        result
+            .Should()
+            .Be(
+                @"----------------------------- Expected: Around Line 1 -----------------------------
+public class ClassName { }
+----------------------------- Actual: Around Line 1 -----------------------------
+public class ClassName  { }
+"
+            );
+    }
+
+    [Test]
+    public void PrintDifference_Should_Show_Extra_Whitespace_After_Line()
+    {
+        var result = PrintDifference("public class ClassName { }", "public class ClassName  { } ");
+
+        result
+            .Should()
+            .Be(
+                @"----------------------------- Expected: Around Line 1 -----------------------------
+public class ClassName { }
+----------------------------- Actual: Around Line 1 -----------------------------
+public class ClassName  { }·
+"
+            );
+    }
+
+    [Test]
     public void PrintDifference_Should_Print_Extra_Line_Difference()
     {
         var result = PrintDifference(

@@ -37,8 +37,8 @@ Normally when using a code formatter like CSharpier, you'll want to ensure that 
        steps:
          - uses: actions/checkout@v2
          - run: |
-           dotnet tool restore
-           dotnet csharpier --check .
+             dotnet tool restore
+             dotnet csharpier --check .
    
    ```
 

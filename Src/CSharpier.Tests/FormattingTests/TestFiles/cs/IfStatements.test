@@ -56,22 +56,31 @@ public class ClassName
 
         if (true && (true || false)) { }
 
-        if (exactly100 || moreTextToMakeItWork_____________________________________________________)
+        if (someLongStatement == true || someOtherStatement_______________________________ == false)
         {
-            return;
+            // just fits
         }
 
-        // leading comment doesn't break differently
-        if (exactly100 || moreTextToMakeItWork_____________________________________________________)
+        // comment doesn't affect fit
+        if (someLongStatement == true || someOtherStatement_______________________________ == false)
         {
-            return;
+            // just fits
         }
 
         if (
-            justOver100 || moreTextToMakeItWork_____________________________________________________
+            someLongStatement == true
+            || someOtherStatement________________________________ == false
         )
         {
-            return;
+            // just too big
+        }
+
+        if (
+            someLongStatement == true
+            || someOtherStatement_________________________________ == false
+        )
+        {
+            // also too big
         }
 
         if (true)
