@@ -45,6 +45,7 @@ function CSH-ReviewBranch {
 
     Set-Location $pathToTestingRepo
     & git reset --hard *> $null
+    & git pull
     try {
         & git checkout $postBranch 2>&1
     }

@@ -4,11 +4,6 @@ internal static class UsingDirectives
 {
     private static readonly DefaultOrder Comparer = new();
 
-    /* TODO added edgecases for the rest of the mono stuff, just don't sort if there is extern or define or undef?
-TODO review PRs, the full one is too big
-
-     */
-
     public static Doc PrintWithSorting(
         SyntaxList<UsingDirectiveSyntax> usings,
         FormattingContext context,
@@ -19,9 +14,6 @@ TODO review PRs, the full one is too big
         {
             return Doc.Null;
         }
-
-        // TODO sorting we can maybe use this to ignore disabled text, but that doesn't quite work
-        // context.ReorderedModifiers = usings.Any(o => o.GetLeadingTrivia().Any(p => p.IsDirective));
 
         var docs = new List<Doc>();
         var usingList = usings.ToList();
@@ -160,7 +152,7 @@ TODO review PRs, the full one is too big
                     new UsingData
                     {
                         Using = usingDirective,
-                        LeadingTrivia = PrintStuff(usingDirective)
+                        LeadingTrivia = PrintLeadingTrivia(usingDirective)
                     }
                 );
             }
@@ -169,14 +161,14 @@ TODO review PRs, the full one is too big
                 if (openIf)
                 {
                     directiveGroup.Add(
-                        new UsingData { LeadingTrivia = PrintStuff(usingDirective) }
+                        new UsingData { LeadingTrivia = PrintLeadingTrivia(usingDirective) }
                     );
                 }
 
                 var usingData = new UsingData
                 {
                     Using = usingDirective,
-                    LeadingTrivia = !openIf ? PrintStuff(usingDirective) : Doc.Null
+                    LeadingTrivia = !openIf ? PrintLeadingTrivia(usingDirective) : Doc.Null
                 };
 
                 if (usingDirective.GlobalKeyword.RawSyntaxKind() != SyntaxKind.None)
@@ -215,7 +207,7 @@ TODO review PRs, the full one is too big
         yield return aliasUsings.OrderBy(o => o.Using!, Comparer).ToList();
         yield break;
 
-        Doc PrintStuff(UsingDirectiveSyntax value)
+        Doc PrintLeadingTrivia(UsingDirectiveSyntax value)
         {
             var result = isFirst
                 ? Token.PrintLeadingTrivia(triviaOnFirstUsing, context)
@@ -234,14 +226,12 @@ TODO review PRs, the full one is too big
 
     private static bool IsSystemName(NameSyntax value)
     {
-        while (true)
+        while (value is QualifiedNameSyntax qualifiedNameSyntax)
         {
-            if (value is not QualifiedNameSyntax qualifiedNameSyntax)
-            {
-                return value is IdentifierNameSyntax { Identifier.Text: "System" };
-            }
             value = qualifiedNameSyntax.Left;
         }
+
+        return value is IdentifierNameSyntax { Identifier.Text: "System" };
     }
 
     private class DefaultOrder : IComparer<UsingDirectiveSyntax>
