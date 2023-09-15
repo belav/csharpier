@@ -1,4 +1,13 @@
-﻿## [1.4.3]
+﻿## [1.4.6]
+- Possible fix for issue with VS2022 not reformatting on save
+
+## [1.4.5]
+- Handle error on startup in VS 17.8.0
+
+## [1.4.4]
+- Add support for ARM64
+
+## [1.4.3]
 - Fix for format on save sometimes not working in VS2022 17.7
 
 ## [1.4.2]

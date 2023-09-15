@@ -739,6 +739,11 @@ true || false"
         bool useTabs = false
     )
     {
+        if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
+        {
+            expected = expected.Replace("\r\n", "\n");
+        }
+
         var result = Print(doc, width, trimInitialLines, useTabs);
 
         result.Should().Be(expected);

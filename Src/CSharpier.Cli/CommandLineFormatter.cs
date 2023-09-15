@@ -1,11 +1,11 @@
+using System.Text;
+using CSharpier.Cli.Options;
 using System.Diagnostics;
 using System.IO.Abstractions;
 using CSharpier.Utilities;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
-
-using System.Text;
 
 internal static class CommandLineFormatter
 {
@@ -31,8 +31,8 @@ internal static class CommandLineFormatter
                     console.InputEncoding
                 );
 
-                var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(
-                    filePath,
+                var optionsProvider = await OptionsProvider.Create(
+                    fileSystem.Path.GetDirectoryName(filePath),
                     commandLineOptions.ConfigPath,
                     fileSystem,
                     logger,
@@ -41,7 +41,7 @@ internal static class CommandLineFormatter
 
                 if (
                     !GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
-                    && !ignoreFile.IsIgnored(filePath)
+                    && !optionsProvider.IsIgnored(filePath)
                 )
                 {
                     var fileIssueLogger = new FileIssueLogger(
@@ -54,7 +54,7 @@ internal static class CommandLineFormatter
                         new StdOutFormattedFileWriter(console),
                         commandLineFormatterResult,
                         fileIssueLogger,
-                        printerOptions,
+                        optionsProvider.GetPrinterOptionsFor(filePath),
                         commandLineOptions,
                         FormattingCacheFactory.NullCache,
                         cancellationToken
@@ -129,22 +129,37 @@ internal static class CommandLineFormatter
 
         for (var x = 0; x < commandLineOptions.DirectoryOrFilePaths.Length; x++)
         {
-            var directoryOrFile = commandLineOptions.DirectoryOrFilePaths[x].Replace("\\", "/");
-            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[
-                x
-            ].Replace("\\", "/");
+            var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[x].Replace("\\", "/");
+            var isFile = fileSystem.File.Exists(directoryOrFilePath);
+            var isDirectory = fileSystem.Directory.Exists(directoryOrFilePath);
 
-            var (ignoreFile, printerOptions) = await GetIgnoreFileAndPrinterOptions(
-                directoryOrFile,
+            if (!isFile && !isDirectory)
+            {
+                console.WriteErrorLine(
+                    "There was no file or directory found at " + directoryOrFilePath
+                );
+                return 1;
+            }
+
+            var directoryName = isFile
+                ? fileSystem.Path.GetDirectoryName(directoryOrFilePath)
+                : directoryOrFilePath;
+
+            var optionsProvider = await OptionsProvider.Create(
+                directoryName,
                 commandLineOptions.ConfigPath,
                 fileSystem,
                 logger,
                 cancellationToken
             );
 
+            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[
+                x
+            ].Replace("\\", "/");
+
             var formattingCache = await FormattingCacheFactory.InitializeAsync(
                 commandLineOptions,
-                printerOptions,
+                optionsProvider,
                 fileSystem,
                 cancellationToken
             );
@@ -159,9 +174,10 @@ internal static class CommandLineFormatter
 
             async Task FormatFile(string actualFilePath, string originalFilePath)
             {
+                var printerOptions = optionsProvider.GetPrinterOptionsFor(actualFilePath);
                 if (
                     GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
-                    || ignoreFile.IsIgnored(actualFilePath)
+                    || optionsProvider.IsIgnored(actualFilePath)
                 )
                 {
                     return;
@@ -181,28 +197,32 @@ internal static class CommandLineFormatter
                 );
             }
 
-            if (fileSystem.File.Exists(directoryOrFile))
+            if (isFile)
             {
-                await FormatFile(directoryOrFile, originalDirectoryOrFile);
+                await FormatFile(directoryOrFilePath, originalDirectoryOrFile);
             }
-            else if (fileSystem.Directory.Exists(directoryOrFile))
+            else if (isDirectory)
             {
                 if (
                     !commandLineOptions.NoMSBuildCheck
-                    && HasMismatchedCliAndMsBuildVersions.Check(directoryOrFile, fileSystem, logger)
+                    && HasMismatchedCliAndMsBuildVersions.Check(
+                        directoryOrFilePath,
+                        fileSystem,
+                        logger
+                    )
                 )
                 {
                     return 1;
                 }
 
                 var tasks = fileSystem.Directory
-                    .EnumerateFiles(directoryOrFile, "*.cs", SearchOption.AllDirectories)
+                    .EnumerateFiles(directoryOrFilePath, "*.cs", SearchOption.AllDirectories)
                     .Select(o =>
                     {
                         var normalizedPath = o.Replace("\\", "/");
                         return FormatFile(
                             normalizedPath,
-                            normalizedPath.Replace(directoryOrFile, originalDirectoryOrFile)
+                            normalizedPath.Replace(directoryOrFilePath, originalDirectoryOrFile)
                         );
                     })
                     .ToArray();
@@ -218,50 +238,11 @@ internal static class CommandLineFormatter
                     }
                 }
             }
-            else
-            {
-                console.WriteErrorLine(
-                    "There was no file or directory found at " + directoryOrFile
-                );
-                return 1;
-            }
 
             await formattingCache.ResolveAsync(cancellationToken);
         }
 
         return 0;
-    }
-
-    private static async Task<(IgnoreFile, PrinterOptions)> GetIgnoreFileAndPrinterOptions(
-        string directoryOrFile,
-        string? configPath,
-        IFileSystem fileSystem,
-        ILogger logger,
-        CancellationToken cancellationToken
-    )
-    {
-        var isDirectory = fileSystem.Directory.Exists(directoryOrFile);
-
-        var baseDirectoryPath = isDirectory
-            ? directoryOrFile
-            : fileSystem.Path.GetDirectoryName(directoryOrFile);
-
-        var ignoreFile = await IgnoreFile.Create(
-            baseDirectoryPath,
-            fileSystem,
-            logger,
-            cancellationToken
-        );
-
-        var printerOptions = configPath is null
-            ? ConfigurationFileOptions.FindPrinterOptionsForDirectory(
-                baseDirectoryPath,
-                fileSystem,
-                logger
-            )
-            : ConfigurationFileOptions.CreatePrinterOptionsFromPath(configPath, fileSystem, logger);
-
-        return (ignoreFile, printerOptions);
     }
 
     private static async Task FormatPhysicalFile(

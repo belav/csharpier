@@ -7,6 +7,8 @@ using CSharpier.Utilities;
 
 namespace CSharpier.Cli;
 
+using CSharpier.Cli.Options;
+
 internal interface IFormattingCache
 {
     Task ResolveAsync(CancellationToken cancellationToken);
@@ -26,7 +28,7 @@ internal static class FormattingCacheFactory
 
     public static async Task<IFormattingCache> InitializeAsync(
         CommandLineOptions commandLineOptions,
-        PrinterOptions printerOptions,
+        OptionsProvider optionsProvider,
         IFileSystem fileSystem,
         CancellationToken cancellationToken
     )
@@ -84,7 +86,7 @@ internal static class FormattingCacheFactory
             }
         }
 
-        return new FormattingCache(printerOptions, CacheFilePath, cacheDictionary, fileSystem);
+        return new FormattingCache(optionsProvider, CacheFilePath, cacheDictionary, fileSystem);
     }
 
     private class FormattingCache : IFormattingCache
@@ -95,13 +97,13 @@ internal static class FormattingCacheFactory
         private readonly IFileSystem fileSystem;
 
         public FormattingCache(
-            PrinterOptions printerOptions,
+            OptionsProvider optionsProvider,
             string cacheFile,
             ConcurrentDictionary<string, string> cacheDictionary,
             IFileSystem fileSystem
         )
         {
-            this.optionsHash = GetOptionsHash(printerOptions);
+            this.optionsHash = GetOptionsHash(optionsProvider);
             this.cacheFile = cacheFile;
             this.cacheDictionary = cacheDictionary;
             this.fileSystem = fileSystem;
@@ -129,10 +131,10 @@ internal static class FormattingCacheFactory
             this.cacheDictionary[fileToFormatInfo.Path] = Hash(code) + this.optionsHash;
         }
 
-        private static string GetOptionsHash(PrinterOptions printerOptions)
+        private static string GetOptionsHash(OptionsProvider optionsProvider)
         {
             var csharpierVersion = typeof(FormattingCache).Assembly.GetName().Version;
-            return Hash($"{csharpierVersion}_${JsonSerializer.Serialize(printerOptions)}");
+            return Hash($"{csharpierVersion}_${optionsProvider.Serialize()}");
         }
 
         private static string Hash(string input)
