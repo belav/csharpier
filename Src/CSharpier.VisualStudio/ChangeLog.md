@@ -1,4 +1,7 @@
-﻿## [1.4.6]
+﻿## [1.4.7]
+- Log exception when finding document fails but don't throw it.
+
+## [1.4.6]
 - Possible fix for issue with VS2022 not reformatting on save
 
 ## [1.4.5]
