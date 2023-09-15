@@ -1,0 +1,15 @@
+// csharpier-ignore-start
+#if MONO_SECURITY_ALIAS
+extern alias MonoSecurity;
+#else
+using Mono.Security;
+#if !MONOTOUCH_WATCH
+using Mono.Security.Authenticode;
+#endif
+using MX = Mono.Security.X509;
+#endif
+
+using System.IO;
+// csharpier-ignore-end
+
+public class ClassName { }

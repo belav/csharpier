@@ -321,7 +321,7 @@ internal partial class SyntaxNodeComparer
         SyntaxNode formattedParent
     )
     {
-        if (original.First().GetLeadingTrivia().Any())
+        if (original.Count > 0 && original.First().GetLeadingTrivia().Any())
         {
             return Equal;
         }

@@ -42,7 +42,10 @@ TODO review PRs, the full one is too big
                 keepUsingsUntilEndIf = true;
                 break;
             }
-            if (leadingTrivia.RawSyntaxKind() == SyntaxKind.DefineDirectiveTrivia)
+            if (
+                leadingTrivia.RawSyntaxKind() == SyntaxKind.DefineDirectiveTrivia
+                || leadingTrivia.RawSyntaxKind() == SyntaxKind.UndefDirectiveTrivia
+            )
             {
                 initialComments = usings.First().GetLeadingTrivia().ToList();
                 triviaWithinIf.Clear();

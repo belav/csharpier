@@ -1,7 +1,6 @@
-#if DEBUG
-extern alias MonoSecurity;
-#else
-using Mono.Security.Cryptography;
+#if XMLCHARTYPE_GEN_RESOURCE
+#undef XMLCHARTYPE_USE_RESOURCE
 #endif
 
-using System;
+using System.Diagnostics;
+using System.Threading;

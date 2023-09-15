@@ -1,13 +1,6 @@
-#if MONO_SECURITY_ALIAS
-extern alias MonoSecurity;
+#if XMLCHARTYPE_GEN_RESOURCE
+#undef XMLCHARTYPE_USE_RESOURCE
 #endif
 
-#if MONO_SECURITY_ALIAS
-using MX = MonoSecurity::Mono.Security.X509;
-#else
-using MX = Mono.Security.X509;
-#endif
-
-using System.IO;
-using System.Text;
-using Mono;
+using System.Threading;
+using System.Diagnostics;
