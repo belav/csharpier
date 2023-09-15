@@ -11,6 +11,43 @@ internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 // https://github.com/prettier/prettier/pull/7889
 internal static class InvocationExpression
 {
+    /*
+     why do these break all weird on the array indexer?
+     
+     
+var x = someLongNameField.Method0().Property0.Property1.Property2.Method1().Property3.Array1[
+    1
+].Property4.Property5
+    .Method2()
+    .Method3("some input")
+    .Method2()
+    .Property6.Property7.Array2[2].Property8
+    .Method4("some input")
+    .Property9.Property10;
+
+someLongNameField.Method0().Property0.Property1.Property2.Method1().Property3.Array1[
+    1
+].Property4.Property5
+    .Method2()
+    .Method3("some input")
+    .Method2()
+    .Property6.Property7.Array2[2].Property8
+    .Method4("some input")
+    .Property9.Property10;
+
+someLongNameField.Method0().Property0.Property1.Property2.Method1().Property3.Array1[
+    1
+].Property4.Property5
+    .Method2()
+    .Method3("some input")
+    .Method2()
+    .Property6.Property7.Array2[2].Property8
+    .Method4("some input")
+    .Property9.Property10();
+
+
+     */
+
     public static Doc Print(InvocationExpressionSyntax node, FormattingContext context)
     {
         return PrintMemberChain(node, context);
