@@ -11,6 +11,7 @@ public class Section
     public string? IndentSize { get; }
     public string? TabWidth { get; }
     public string? MaxLineLength { get; }
+    public string? EndOfLine { get; }
 
     public Section(SectionData section, string directory)
     {
@@ -20,6 +21,7 @@ public class Section
         this.IndentSize = section.Keys["indent_size"];
         this.TabWidth = section.Keys["tab_width"];
         this.MaxLineLength = section.Keys["max_line_length"];
+        this.EndOfLine = section.Keys["end_of_line"];
     }
 
     public bool IsMatch(string fileName)

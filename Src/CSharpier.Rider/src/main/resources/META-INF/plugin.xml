@@ -7,7 +7,6 @@
     <depends>com.intellij.modules.rider</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.intellij.csharpier.ReformatWithCSharpierOnSave"/>
         <projectService serviceImplementation="com.intellij.csharpier.CSharpierProcessProvider"/>
         <projectService serviceImplementation="com.intellij.csharpier.FormattingService"/>
         <projectService serviceImplementation="com.intellij.csharpier.CSharpierSettings"/>
@@ -26,4 +25,8 @@
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
     </actions>
+    <applicationListeners>
+      <listener class="com.intellij.csharpier.ReformatWithCSharpierOnSave"
+                topic="com.intellij.openapi.actionSystem.ex.AnActionListener" />
+    </applicationListeners>
 </idea-plugin>
