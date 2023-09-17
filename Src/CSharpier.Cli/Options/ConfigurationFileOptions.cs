@@ -2,15 +2,19 @@ namespace CSharpier.Cli.Options;
 
 using System.IO.Abstractions;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-public class ConfigurationFileOptions
+internal class ConfigurationFileOptions
 {
     public int PrintWidth { get; init; } = 100;
     public int TabWidth { get; init; } = 4;
     public bool UseTabs { get; init; }
+
+    [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
+    public EndOfLine EndOfLine { get; init; }
 
     private static readonly string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
 
@@ -34,7 +38,7 @@ public class ConfigurationFileOptions
             TabWidth = configurationFileOptions.TabWidth,
             UseTabs = configurationFileOptions.UseTabs,
             Width = configurationFileOptions.PrintWidth,
-            EndOfLine = EndOfLine.Auto
+            EndOfLine = configurationFileOptions.EndOfLine
         };
     }
 

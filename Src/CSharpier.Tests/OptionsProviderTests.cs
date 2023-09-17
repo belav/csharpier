@@ -50,13 +50,14 @@ public class OptionsProviderTests
             "c:/test/.csharpierrc.json",
             @"{ 
     ""printWidth"": 10, 
-    ""preprocessorSymbolSets"": [""1,2"", ""3""]
+    ""endOfLine"": ""crlf""
 }"
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.Width.Should().Be(10);
+        result.EndOfLine.Should().Be(EndOfLine.CRLF);
     }
 
     [TestCase("yaml")]
@@ -68,15 +69,14 @@ public class OptionsProviderTests
             $"c:/test/.csharpierrc.{extension}",
             @"
 printWidth: 10
-preprocessorSymbolSets: 
-  - 1,2
-  - 3
+endOfLine: crlf
 "
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.Width.Should().Be(10);
+        result.EndOfLine.Should().Be(EndOfLine.CRLF);
     }
 
     [TestCase("{ \"printWidth\": 10 }")]
@@ -203,6 +203,7 @@ preprocessorSymbolSets:
 indent_style = space
 indent_size = 2
 max_line_length = 10
+end_of_line = crlf
 "
         );
 
@@ -211,6 +212,7 @@ max_line_length = 10
         result.UseTabs.Should().BeFalse();
         result.TabWidth.Should().Be(2);
         result.Width.Should().Be(10);
+        result.EndOfLine.Should().Be(EndOfLine.CRLF);
     }
 
     [TestCase("tab_width")]
@@ -459,6 +461,7 @@ indent_size = 2
         printerOptions.Width.Should().Be(100);
         printerOptions.TabWidth.Should().Be(4);
         printerOptions.UseTabs.Should().BeFalse();
+        printerOptions.EndOfLine.Should().Be(EndOfLine.Auto);
     }
 
     private class TestContext
