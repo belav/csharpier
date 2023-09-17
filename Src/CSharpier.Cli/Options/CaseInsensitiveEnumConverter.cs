@@ -20,7 +20,7 @@ internal class CaseInsensitiveEnumConverter<TEnum> : JsonConverter<TEnum>
         }
 
         var enumText = reader.GetString();
-        if (Enum.TryParse(enumText, true, out TEnum result))
+        if (Enum.TryParse(enumText, ignoreCase: true, out TEnum result))
         {
             return result;
         }
