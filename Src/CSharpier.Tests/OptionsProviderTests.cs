@@ -215,6 +215,35 @@ end_of_line = crlf
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
     }
 
+    [Test]
+    public async Task Should_Support_EditorConfig_With_Comments()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            @"
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+max_line_length = 10
+; Windows-style line endings
+end_of_line = crlf
+"
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+
+        result.UseTabs.Should().BeFalse();
+        result.TabWidth.Should().Be(2);
+        result.Width.Should().Be(10);
+        result.EndOfLine.Should().Be(EndOfLine.CRLF);
+    }
+
     [TestCase("tab_width")]
     [TestCase("indent_size")]
     public async Task Should_Support_EditorConfig_Tabs(string propertyName)
