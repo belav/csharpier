@@ -243,7 +243,7 @@ end_of_line = crlf
         result.Width.Should().Be(10);
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
     }
-    
+
     [TestCase("tab_width")]
     [TestCase("indent_size")]
     public async Task Should_Support_EditorConfig_Tabs(string propertyName)

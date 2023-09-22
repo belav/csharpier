@@ -11,12 +11,10 @@ internal static class ConfigFileParser
     // According to https://spec.editorconfig.org/#file-format
     // "Comment: starts with a ; or a #."
     private static readonly Regex CommentRegex = new("^[;#].*$");
-    
-    private static readonly IniParserConfiguration Configuration = new()
-    {
-        CommentRegex = CommentRegex,
-    };
-    
+
+    private static readonly IniParserConfiguration Configuration =
+        new() { CommentRegex = CommentRegex, };
+
     public static ConfigFile Parse(string filePath, IFileSystem fileSystem)
     {
         var parser = new FileIniDataParser(new IniDataParser(Configuration));
