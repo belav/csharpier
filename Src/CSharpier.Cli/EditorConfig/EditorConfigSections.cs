@@ -34,6 +34,11 @@ internal class EditorConfigSections
             printerOptions.TabWidth = resolvedConfiguration.IndentSize ?? printerOptions.TabWidth;
         }
 
+        if (resolvedConfiguration.EndOfLine is { } endOfLine)
+        {
+            printerOptions.EndOfLine = endOfLine;
+        }
+
         return printerOptions;
     }
 
@@ -43,6 +48,7 @@ internal class EditorConfigSections
         public int? IndentSize { get; }
         public int? TabWidth { get; }
         public int? MaxLineLength { get; }
+        public EndOfLine? EndOfLine { get; }
 
         public ResolvedConfiguration(List<Section> sections)
         {
@@ -80,6 +86,12 @@ internal class EditorConfigSections
                 this.TabWidth = int.TryParse(tabWidth, out var tabWidthValue)
                     ? tabWidthValue
                     : this.IndentSize;
+            }
+
+            var endOfLine = sections.LastOrDefault(o => o.EndOfLine != null)?.EndOfLine;
+            if (Enum.TryParse(endOfLine, true, out EndOfLine result))
+            {
+                this.EndOfLine = result;
             }
         }
     }

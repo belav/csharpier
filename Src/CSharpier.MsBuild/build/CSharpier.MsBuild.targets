@@ -7,14 +7,20 @@
     <CSharpierArgs Condition="'$(CSharpier_LogLevel)' != ''">$(CSharpierArgs) --loglevel $(CSharpier_LogLevel)</CSharpierArgs>
     <FirstTargetFramework Condition=" '$(TargetFrameworks)' == '' ">$(TargetFramework)</FirstTargetFramework>
     <FirstTargetFramework Condition=" '$(FirstTargetFrameworks)' == '' ">$(TargetFrameworks.Split(';')[0])</FirstTargetFramework>
+    <NullOutput>NUL</NullOutput>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(OS)' != 'Windows_NT' ">
+    <NullOutput>/dev/null</NullOutput>
   </PropertyGroup>
 
   <Target Name="CSharpierFormatInner" Condition="'$(CSharpier_Bypass)' != 'true'">
+    <!-- &gt; NullOutput suppresses the output from this so that compilation errors will show up a single time -->
     <Exec
       ConsoleToMSBuild="true"
       StdOutEncoding="utf-8"
       StdErrEncoding="utf-8"
-      Command="dotnet &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check &quot;$(MSBuildProjectDirectory)&quot;" />
+      Command="dotnet &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check &quot;$(MSBuildProjectDirectory)&quot; &gt; $(NullOutput) " />
   </Target>
 
   <!-- getting this to run a single time for projects that target multiple frameworks requires all of this

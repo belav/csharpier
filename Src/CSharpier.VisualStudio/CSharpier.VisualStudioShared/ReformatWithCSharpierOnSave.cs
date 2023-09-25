@@ -73,7 +73,7 @@ namespace CSharpier.VisualStudio
             return VSConstants.S_OK;
         }
 
-        private Document? FindDocument(uint docCookie)
+        private Document FindDocument(uint docCookie)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace CSharpier.VisualStudio
             catch (Exception ex)
             {
                 Logger.Instance.Error(ex);
-                throw;
+                return null;
             }
         }
 

@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.3.10]
+- Read from error stream to prevent the plugin hanging when the csharpier process writes too much to the error stream.
+
 ## [1.3.9]
 - Wait at most 3 seconds for csharpier to format otherwise consider it hung and restart it.
 
