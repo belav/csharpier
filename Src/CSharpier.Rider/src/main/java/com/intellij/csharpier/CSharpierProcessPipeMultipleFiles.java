@@ -19,6 +19,11 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
         this.csharpierPath = csharpierPath;
         this.useUtf8 = useUtf8;
         this.startProcess();
+
+        this.logger.debug("Warm CSharpier with initial format");
+        // warm by formatting a file twice, the 3rd time is when it gets really fast
+        this.formatFile("public class ClassName { }", "Test.cs");
+        this.formatFile("public class ClassName { }", "Test.cs");
     }
 
     private void startProcess() {
@@ -35,16 +40,9 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
             // if we don't read the error stream, eventually too much is buffered on it and the plugin hangs
             var errorGobbler = new StreamGobbler(this.process.getErrorStream());
             errorGobbler.start();
-
-
         } catch (Exception e) {
             this.logger.error("error", e);
         }
-
-        this.logger.debug("Warm CSharpier with initial format");
-        // warm by formatting a file twice, the 3rd time is when it gets really fast
-        this.formatFile("public class ClassName { }", "Test.cs");
-        this.formatFile("public class ClassName { }", "Test.cs");
     }
 
     @Override
@@ -52,24 +50,30 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
         var stringBuilder = new StringBuilder();
 
         Runnable task = () -> {
-            try {
-                this.stdin.write(filePath);
-                this.stdin.write('\u0003');
-                this.stdin.write(content);
-                this.stdin.write('\u0003');
-                this.stdin.flush();
+            var attempt = 1;
+            while (attempt < 5) {
+                try {
+                    this.stdin.write(filePath);
+                    this.stdin.write('\u0003');
+                    this.stdin.write(content);
+                    this.stdin.write('\u0003');
+                    this.stdin.flush();
 
-                var nextCharacter = this.stdOut.read();
-                while (nextCharacter != -1) {
-                    if (nextCharacter == '\u0003') {
-                        break;
+                    var nextCharacter = this.stdOut.read();
+                    while (nextCharacter != -1) {
+                        if (nextCharacter == '\u0003') {
+                            break;
+                        }
+                        stringBuilder.append((char) nextCharacter);
+                        nextCharacter = this.stdOut.read();
                     }
-                    stringBuilder.append((char) nextCharacter);
-                    nextCharacter = this.stdOut.read();
+                    break;
+                } catch (IOException e) {
+                    this.logger.warn(e);
+                    this.startProcess();
+                    stringBuilder.setLength(0);
+                    attempt++;
                 }
-            } catch (Exception e) {
-                this.logger.error(e);
-                e.printStackTrace();
             }
         };
 
