@@ -1,0 +1,9 @@
+var x = someLongNameField
+    .CallMethod____________________________________()
+    .AccessArray[1]
+    .Property_______________;
+
+var x = someLongNameField
+    .CallMethod____________________________________()
+    .CallMethod(1)
+    .Property_______________;
