@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: |
-            7.0.304
+            7.0.400
             6.0.300
       - run: >
           dotnet test CSharpier.sln
@@ -28,7 +28,7 @@ jobs:
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: |
-            7.0.304
+            7.0.400
             6.0.300
       - run: |
           dotnet tool restore
@@ -41,7 +41,7 @@ jobs:
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: |
-            7.0.304
+            7.0.400
             6.0.300
       - run: |
           dotnet build Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj
