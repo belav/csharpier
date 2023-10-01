@@ -242,7 +242,13 @@ class ClassName
             .CallMethod__________________()
             .CallMethod__________________();
 
-        someThing_______________________?.Property
+        someThing_______________________
+            ?.Property
+            .CallMethod__________________()
+            .CallMethod__________________();
+
+        someThing_______________________
+            .Property!
             .CallMethod__________________()
             .CallMethod__________________();
     }
