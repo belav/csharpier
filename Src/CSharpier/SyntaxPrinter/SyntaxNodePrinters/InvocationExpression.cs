@@ -179,8 +179,6 @@ internal static class InvocationExpression
         }
     }
 
-    // TODO maybe this should work more like prettier, where it makes groups in a way that they try to fill lines
-    // TODO also prettier doesn't seem to use fluid
     private static List<List<PrintedNode>> GroupPrintedNodesOnLines(List<PrintedNode> printedNodes)
     {
         // We want to group the printed nodes in the following manner
@@ -233,14 +231,16 @@ internal static class InvocationExpression
         // will be grouped as
         //   [
         //     [Identifier, InvocationExpression],
-        //     [MemberAccessExpression, MemberAccessExpression, InvocationExpression],
+        //     [MemberAccessExpression]
+        //     [MemberAccessExpression, InvocationExpression],
         //     [MemberAccessExpression, InvocationExpression],
         //     [MemberAccessExpression],
         //   ]
 
         // so that we can print it as
         //   a()
-        //     .b.c()
+        //     .b
+        //     .c()
         //     .d()
         //     .e
 
@@ -267,50 +267,44 @@ internal static class InvocationExpression
             }
         }
 
-        if (printedNodes[0].Node is not InvocationExpressionSyntax)
+        if (
+            printedNodes[0].Node is not (InvocationExpressionSyntax or PostfixUnaryExpressionSyntax)
+            && index + 1 < printedNodes.Count
+        )
         {
-            for (; index + 1 < printedNodes.Count; ++index)
+            /* this handles the special case where we want ?.Property on the same line
+                someThing_______________________?.Property
+                    .CallMethod__________________()
+                    .CallMethod__________________();
+             */
+            if (
+                printedNodes[index].Node is ConditionalAccessExpressionSyntax
+                && printedNodes[index + 1].Node
+                    is MemberBindingExpressionSyntax { Parent: MemberAccessExpressionSyntax }
+            )
             {
-                /* this handles the special case where we want ?.Property on the same line
-                    someThing_______________________?.Property
-                        .CallMethod__________________()
-                        .CallMethod__________________();
-                 */
-                if (
-                    printedNodes[index].Node is ConditionalAccessExpressionSyntax
-                    && printedNodes[index + 1].Node
-                        is MemberBindingExpressionSyntax { Parent: MemberAccessExpressionSyntax }
-                )
-                {
-                    currentGroup.Add(printedNodes[index]);
-                    currentGroup.Add(printedNodes[index + 1]);
-                    index++;
-                    continue;
-                }
-
-                if (printedNodes[index].Node is ElementAccessExpressionSyntax)
-                {
-                    currentGroup.Add(printedNodes[index]);
-                    continue;
-                }
-
-                if (
-                    (
-                        IsMemberish(printedNodes[index].Node)
-                        && (
-                            IsMemberish(printedNodes[index + 1].Node)
-                            || printedNodes[index + 1].Node is PostfixUnaryExpressionSyntax
-                        )
-                    )
-                    || printedNodes[index].Node is PostfixUnaryExpressionSyntax
-                )
-                {
-                    currentGroup.Add(printedNodes[index]);
-                }
-                else
-                {
-                    break;
-                }
+                currentGroup.Add(printedNodes[index]);
+                currentGroup.Add(printedNodes[index + 1]);
+                index += 2;
+            }
+            else if (printedNodes[index].Node is ElementAccessExpressionSyntax)
+            {
+                currentGroup.Add(printedNodes[index]);
+                index++;
+            }
+            else if (
+                IsMemberish(printedNodes[index].Node)
+                && printedNodes[index + 1].Node is PostfixUnaryExpressionSyntax
+            )
+            {
+                currentGroup.Add(printedNodes[index]);
+                currentGroup.Add(printedNodes[index + 1]);
+                index += 2;
+            }
+            else if (printedNodes[index].Node is PostfixUnaryExpressionSyntax)
+            {
+                currentGroup.Add(printedNodes[index]);
+                index++;
             }
         }
 

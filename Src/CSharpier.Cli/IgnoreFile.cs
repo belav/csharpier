@@ -46,8 +46,6 @@ public class IgnoreFile
         CancellationToken cancellationToken
     )
     {
-        DebugLogger.Log("Creating ignore file for " + baseDirectoryPath);
-
         var ignore = new Ignore.Ignore();
 
         foreach (var name in alwaysIgnored)

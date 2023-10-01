@@ -2,6 +2,11 @@ namespace CSharpier.DocTypes;
 
 internal abstract class Doc
 {
+    public string Print()
+    {
+        return DocPrinter.DocPrinter.Print(this, new PrinterOptions(), Environment.NewLine);
+    }
+
     public override string ToString()
     {
         return DocSerializer.Serialize(this);

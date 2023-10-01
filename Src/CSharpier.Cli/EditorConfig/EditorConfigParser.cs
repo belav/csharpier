@@ -70,7 +70,6 @@ internal static class EditorConfigParser
             {
                 var configFile = ConfigFileParser.Parse(potentialPath, fileSystem);
 
-                DebugLogger.Log(potentialPath);
                 yield return configFile;
                 if (configFile.IsRoot)
                 {
