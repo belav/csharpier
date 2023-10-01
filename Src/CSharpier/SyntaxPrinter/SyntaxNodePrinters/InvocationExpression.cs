@@ -244,6 +244,9 @@ internal static class InvocationExpression
         //     .d()
         //     .e
 
+        // TODO #451 this whole thing could possibly just turn into a big loop
+        // based on the current node, and the next/previous node, decide when to create new groups.
+        // certain nodes need to stay in the current group, other nodes indicate that a new group needs to be created.
         var groups = new List<List<PrintedNode>>();
         var currentGroup = new List<PrintedNode> { printedNodes[0] };
         var index = 1;
@@ -274,11 +277,11 @@ internal static class InvocationExpression
         groups.Add(currentGroup);
         currentGroup = new List<PrintedNode>();
 
-        var hasSeenInvocationExpression = false;
+        var hasSeenNodeThatRequiresBreak = false;
         for (; index < printedNodes.Count; index++)
         {
             if (
-                hasSeenInvocationExpression
+                hasSeenNodeThatRequiresBreak
                 && printedNodes[index].Node
                     is MemberAccessExpressionSyntax
                         or ConditionalAccessExpressionSyntax
@@ -286,7 +289,7 @@ internal static class InvocationExpression
             {
                 groups.Add(currentGroup);
                 currentGroup = new List<PrintedNode>();
-                hasSeenInvocationExpression = false;
+                hasSeenNodeThatRequiresBreak = false;
             }
 
             if (
@@ -299,7 +302,7 @@ internal static class InvocationExpression
                 )
             )
             {
-                hasSeenInvocationExpression = true;
+                hasSeenNodeThatRequiresBreak = true;
             }
             currentGroup.Add(printedNodes[index]);
         }
