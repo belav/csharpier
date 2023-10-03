@@ -14,7 +14,7 @@ jobs:
           path: csharpier
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '7.0.304'
+          dotnet-version: '7.0.400'
       - uses: actions/checkout@v2
         with:
           repository: belav/csharpier-repos
