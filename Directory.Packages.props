@@ -13,10 +13,10 @@
     <PackageVersion Include="Ignore" Version="0.1.48" />
     <PackageVersion Include="ini-parser-netstandard" Version="2.5.2" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.1" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.6.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.6.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.7.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
-    <PackageVersion Include="Microsoft.CSharp" Version="4.5.0" />
+    <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="5.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageVersion Include="NUnit" Version="3.12.0" />
@@ -29,8 +29,8 @@
     <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="13.2.29" />
     <PackageVersion Include="System.IO.Hashing" Version="7.0.0-preview.7.22375.6" />
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-    <PackageVersion Include="System.Text.Json" Version="7.0.0" />
+    <PackageVersion Include="System.Text.Json" Version="7.0.3" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-    <PackageVersion Include="YamlDotNet" Version="11.1.1" />
+    <PackageVersion Include="YamlDotNet" Version="13.4.0" />
   </ItemGroup>
 </Project>
