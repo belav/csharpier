@@ -8,11 +8,7 @@ jobs:
     name: Run Tests
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: |
-            7.0.400
-            6.0.300
+      - uses: actions/setup-dotnet@v3
       - run: >
           dotnet test CSharpier.sln
           --configuration Release
@@ -25,11 +21,7 @@ jobs:
     name: Check Formatting
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: |
-            7.0.400
-            6.0.300
+      - uses: actions/setup-dotnet@v3
       - run: |
           dotnet tool restore
           dotnet csharpier . --check
@@ -38,10 +30,6 @@ jobs:
     name: Build CSharpier.MSBuild
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: |
-            7.0.400
-            6.0.300
+      - uses: actions/setup-dotnet@v3
       - run: |
           dotnet build Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj
