@@ -114,7 +114,6 @@ internal static class FormattingCacheFactory
             var currentHash = Hash(fileToFormatInfo.FileContents) + this.optionsHash;
             if (this.cacheDictionary.TryGetValue(fileToFormatInfo.Path, out var cachedHash))
             {
-                DebugLogger.Log(fileToFormatInfo.Path + " " + currentHash + " " + cachedHash);
                 if (currentHash == cachedHash)
                 {
                     return true;

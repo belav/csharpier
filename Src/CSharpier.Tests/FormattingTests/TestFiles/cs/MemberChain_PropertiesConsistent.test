@@ -1,0 +1,33 @@
+var someVariable = someObject
+    .Property
+    .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________);
+
+var someVariable = someObject
+    .Property()
+    .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________);
+
+var someVariable = someObject
+    .Property
+    .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________)
+    .CallMethod();
+
+var someVariable = someObject
+    .Property()
+    .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________)
+    .CallMethod();
+
+// TODO too hard to change this for now, will do it in https://github.com/belav/csharpier/issues/451
+var someVariable = this.Property.CallMethod(
+    someValue => someValue.SomeProperty == someOtherValue___________________________
+);
+
+var someVariable = this.Property()
+    .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________);
+
+var someVariable = this.Property
+    .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________)
+    .CallMethod();
+
+var someVariable = this.Property()
+    .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________)
+    .CallMethod();
