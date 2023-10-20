@@ -62,11 +62,15 @@ internal static class Token
                         { RawKind: (int)SyntaxKind.InterpolatedVerbatimStringStartToken }
                     }
             )
-            || syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken
         )
         {
-            var lines = syntaxToken.Text.Replace("\r", string.Empty).Split(new[] { '\n' });
+            var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
             docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
+        }
+        else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
+        {
+            var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
+            docs.Add(Doc.Join(Doc.HardLine, lines.Select(o => new StringDoc(o.TrimStart()))));
         }
         else
         {
