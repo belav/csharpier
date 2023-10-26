@@ -1,5 +1,5 @@
 foreach ($file in Get-ChildItem $PSScriptRoot -Filter "*.psm1") {
-    Import-Module $file.FullName -DisableNameChecking
+    Import-Module $file.FullName -DisableNameChecking -Force
 }
 
 Write-Host -ForegroundColor DarkMagenta "Welcome to CSharpier shell"

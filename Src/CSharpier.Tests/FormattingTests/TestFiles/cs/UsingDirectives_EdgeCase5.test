@@ -1,0 +1,9 @@
+#if DEBUG
+using A;
+#else
+using B;
+#endif
+using C;
+#if !DEBUG
+using C;
+#endif

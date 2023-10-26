@@ -17,10 +17,11 @@ internal static class Token
     public static Doc PrintWithSuffix(
         SyntaxToken syntaxToken,
         Doc suffixDoc,
-        FormattingContext context
+        FormattingContext context,
+        bool skipLeadingTrivia = false
     )
     {
-        return PrintSyntaxToken(syntaxToken, context, suffixDoc);
+        return PrintSyntaxToken(syntaxToken, context, suffixDoc, skipLeadingTrivia);
     }
 
     private static Doc PrintSyntaxToken(
@@ -251,7 +252,7 @@ internal static class Token
             }
         }
 
-        while (skipLastHardline && docs.Any() && docs.Last() is HardLine)
+        while (skipLastHardline && docs.Any() && docs.Last() is HardLine or NullDoc)
         {
             docs.RemoveAt(docs.Count - 1);
         }

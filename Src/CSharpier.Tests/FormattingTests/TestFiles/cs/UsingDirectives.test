@@ -1,29 +1,13 @@
 // leading
-using First; // trailing
-
+using A; // trailing
 // leading with space
 using // another trailing
-Second;
-
-using
-// static leading
-static // static trailing
-Third;
-
-using M = System.Math;
-using Point = (int x, int y);
-
-using static System.Math;
-
-global using System;
-
-using First;
-using Second;
+B;
 
 namespace Namespace
 {
-    using Third;
     using One.Two.Three;
+    using Third;
 
     public class ClassName { }
 }

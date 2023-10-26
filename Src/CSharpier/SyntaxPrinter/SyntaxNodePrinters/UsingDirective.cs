@@ -10,9 +10,9 @@ internal static class UsingDirective
     {
         return Doc.Concat(
             printExtraLines ? ExtraNewLines.Print(node) : Doc.Null,
-            Token.PrintWithSuffix(node.GlobalKeyword, " ", context),
-            Token.PrintWithSuffix(node.UsingKeyword, " ", context),
-            Token.PrintWithSuffix(node.StaticKeyword, " ", context),
+            Token.PrintWithSuffix(node.GlobalKeyword, " ", context, skipLeadingTrivia: true),
+            Token.PrintWithSuffix(node.UsingKeyword, " ", context, skipLeadingTrivia: true),
+            Token.PrintWithSuffix(node.StaticKeyword, " ", context, skipLeadingTrivia: true),
             node.Alias == null ? Doc.Null : NameEquals.Print(node.Alias, context),
             Node.Print(node.NamespaceOrType, context),
             Token.Print(node.SemicolonToken, context)

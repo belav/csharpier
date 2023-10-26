@@ -1,0 +1,3 @@
+using A = Z;
+using M = A;
+using Z = M;

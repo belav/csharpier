@@ -1,0 +1,6 @@
+#if XMLCHARTYPE_GEN_RESOURCE
+#undef XMLCHARTYPE_USE_RESOURCE
+#endif
+
+using System.Diagnostics;
+using System.Threading;

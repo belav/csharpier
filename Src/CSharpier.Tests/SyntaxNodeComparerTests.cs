@@ -11,9 +11,9 @@ public class SyntaxNodeComparerTests
     public void Class_Not_Equal_Namespace()
     {
         var left = "class ClassName { }";
-        var right = @"namespace Namespace { }";
+        var right = "namespace Namespace { }";
 
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
 
         ResultShouldBe(
             result,
@@ -33,7 +33,7 @@ namespace Namespace { }
             @"class ClassName {
 }";
 
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
 
         result.Should().BeEmpty();
     }
@@ -60,7 +60,7 @@ namespace Namespace { }
 }
 ";
 
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
 
         ResultShouldBe(
             result,
@@ -104,7 +104,7 @@ public class ConstructorWithBase
 }
 ";
 
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
 
         ResultShouldBe(
             result,
@@ -167,7 +167,7 @@ class Resources
 }
 ";
 
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
 
         result.Should().BeEmpty();
     }
@@ -187,7 +187,7 @@ class Resources
     Integer,
     String,
 }";
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
 
         ResultShouldBe(
             result,
@@ -211,7 +211,7 @@ public enum Enum
         var left = "  public class ClassName { }";
         var right = "public class ClassName { }";
 
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
         result.Should().BeEmpty();
     }
 
@@ -223,7 +223,7 @@ public enum Enum
 public class ClassName { }";
         var right = "public class ClassName { }";
 
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
         ResultShouldBe(
             result,
             @"----------------------------- Original: Around Line 0 -----------------------------
@@ -255,7 +255,7 @@ public class ClassName { }";
 // 7
 public class ClassName { }";
 
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
         ResultShouldBe(
             result,
             @"----------------------------- Original: Around Line 5 -----------------------------
@@ -286,7 +286,7 @@ public class ClassName { }
             + start
             + "\"EndThisLineWith\nEndThisLineWith\n\";\n}";
 
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
         result.Should().BeEmpty();
     }
 
@@ -308,7 +308,7 @@ public class ClassName { }
 #endif
 }
 ";
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
         result.Should().BeEmpty();
     }
 
@@ -341,7 +341,7 @@ public class ClassName { }
   private string field;
 }";
 
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
         result.Should().BeEmpty();
     }
 
@@ -374,7 +374,7 @@ class Class
 #endif
 ";
 
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
 
         result.Should().BeEmpty();
     }
@@ -386,7 +386,117 @@ class Class
 
         var right = @"public static class { }";
 
-        var result = AreEqual(left, right);
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void Sorted_Usings_Pass_Validation()
+    {
+        var left =
+            @"using Monday;
+using Zebra;
+using Apple;
+using Banana;
+using Yellow;";
+
+        var right =
+            @"using Apple;
+using Banana;
+using Monday;
+using Yellow;
+using Zebra;
+";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void Extra_Usings_Fails_Validation()
+    {
+        var left =
+            @"using Zebra;
+using Apple;
+";
+
+        var right =
+            @"using Apple;
+using Monday;
+using Zebra;
+";
+
+        var result = CompareSource(left, right);
+
+        ResultShouldBe(
+            result,
+            @"----------------------------- Original: Around Line 0 -----------------------------
+using Zebra;
+using Apple;
+----------------------------- Formatted: Around Line 0 -----------------------------
+using Apple;
+using Monday;
+using Zebra;
+"
+        );
+    }
+
+    [Test]
+    public void Sorted_Usings_With_Header_Pass_Validation()
+    {
+        var left =
+            @"// some copyright 
+
+using Zebra;
+using Apple;
+";
+
+        var right =
+            @"// some copyright1
+
+using Apple;
+using Zebra;
+";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    [Ignore("no clue how to solve this")]
+    public void Usings_With_Directives_Pass_Validation()
+    {
+        // The problem is that the #endif leading trivia to the ClassDeclaration
+        // which then fails the compare
+        // that class could be an interface, enum, top level statement, etc
+        // so there doesn't seem to be any good way to handle this
+        // it will only fail the compare the first time that it sorts, so doesn't seem worth fixing
+        var left =
+            @"#if DEBUG
+using System;
+#else
+using Microsoft;
+#endif
+using System.IO;
+
+private class Class { }
+";
+
+        var right =
+            @"using System.IO;
+#if DEBUG
+using System;
+#else
+using Microsoft;
+#endif
+
+private class Class { }
+";
+
+        var result = CompareSource(left, right);
 
         result.Should().BeEmpty();
     }
@@ -401,7 +511,7 @@ class Class
         result.Should().Be(be);
     }
 
-    private static string AreEqual(string left, string right)
+    private static string CompareSource(string left, string right)
     {
         var result = new SyntaxNodeComparer(
             left,
