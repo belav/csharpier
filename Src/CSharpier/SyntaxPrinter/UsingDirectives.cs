@@ -198,13 +198,13 @@ internal static class UsingDirectives
             }
         }
 
-        yield return globalUsings.OrderBy(o => o.Using!, Comparer).ToList();
-        yield return systemUsings.OrderBy(o => o.Using!, Comparer).ToList();
-        yield return aliasNameUsings.OrderBy(o => o.Using!, Comparer).ToList();
-        yield return regularUsings.OrderBy(o => o.Using!, Comparer).ToList();
+        yield return globalUsings.OrderBy(o => o.Using, Comparer).ToList();
+        yield return systemUsings.OrderBy(o => o.Using, Comparer).ToList();
+        yield return aliasNameUsings.OrderBy(o => o.Using, Comparer).ToList();
+        yield return regularUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield return directiveGroup;
-        yield return staticUsings.OrderBy(o => o.Using!, Comparer).ToList();
-        yield return aliasUsings.OrderBy(o => o.Using!, Comparer).ToList();
+        yield return staticUsings.OrderBy(o => o.Using, Comparer).ToList();
+        yield return aliasUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield break;
 
         Doc PrintLeadingTrivia(UsingDirectiveSyntax value)
@@ -234,7 +234,7 @@ internal static class UsingDirectives
         return value is IdentifierNameSyntax { Identifier.Text: "System" };
     }
 
-    private class DefaultOrder : IComparer<UsingDirectiveSyntax>
+    private class DefaultOrder : IComparer<UsingDirectiveSyntax?>
     {
         public int Compare(UsingDirectiveSyntax? x, UsingDirectiveSyntax? y)
         {
