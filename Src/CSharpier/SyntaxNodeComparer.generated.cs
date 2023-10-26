@@ -114,6 +114,8 @@ namespace CSharpier
                     return this.CompareClassDeclarationSyntax(classDeclarationSyntax, formattedNode as ClassDeclarationSyntax);
                 case ClassOrStructConstraintSyntax classOrStructConstraintSyntax:
                     return this.CompareClassOrStructConstraintSyntax(classOrStructConstraintSyntax, formattedNode as ClassOrStructConstraintSyntax);
+                case CollectionExpressionSyntax collectionExpressionSyntax:
+                    return this.CompareCollectionExpressionSyntax(collectionExpressionSyntax, formattedNode as CollectionExpressionSyntax);
                 case CompilationUnitSyntax compilationUnitSyntax:
                     return this.CompareCompilationUnitSyntax(compilationUnitSyntax, formattedNode as CompilationUnitSyntax);
                 case ConditionalAccessExpressionSyntax conditionalAccessExpressionSyntax:
@@ -196,6 +198,8 @@ namespace CSharpier
                     return this.CompareExplicitInterfaceSpecifierSyntax(explicitInterfaceSpecifierSyntax, formattedNode as ExplicitInterfaceSpecifierSyntax);
                 case ExpressionColonSyntax expressionColonSyntax:
                     return this.CompareExpressionColonSyntax(expressionColonSyntax, formattedNode as ExpressionColonSyntax);
+                case ExpressionElementSyntax expressionElementSyntax:
+                    return this.CompareExpressionElementSyntax(expressionElementSyntax, formattedNode as ExpressionElementSyntax);
                 case ExpressionStatementSyntax expressionStatementSyntax:
                     return this.CompareExpressionStatementSyntax(expressionStatementSyntax, formattedNode as ExpressionStatementSyntax);
                 case ExternAliasDirectiveSyntax externAliasDirectiveSyntax:
@@ -416,6 +420,8 @@ namespace CSharpier
                     return this.CompareSkippedTokensTriviaSyntax(skippedTokensTriviaSyntax, formattedNode as SkippedTokensTriviaSyntax);
                 case SlicePatternSyntax slicePatternSyntax:
                     return this.CompareSlicePatternSyntax(slicePatternSyntax, formattedNode as SlicePatternSyntax);
+                case SpreadElementSyntax spreadElementSyntax:
+                    return this.CompareSpreadElementSyntax(spreadElementSyntax, formattedNode as SpreadElementSyntax);
                 case StackAllocArrayCreationExpressionSyntax stackAllocArrayCreationExpressionSyntax:
                     return this.CompareStackAllocArrayCreationExpressionSyntax(stackAllocArrayCreationExpressionSyntax, formattedNode as StackAllocArrayCreationExpressionSyntax);
                 case StructDeclarationSyntax structDeclarationSyntax:
@@ -1041,6 +1047,20 @@ namespace CSharpier
             if (result.IsInvalid) return result;
             return Equal;
         }
+        private CompareResult CompareCollectionExpressionSyntax(CollectionExpressionSyntax originalNode, CollectionExpressionSyntax formattedNode)
+        {
+            CompareResult result;
+            result = this.Compare(originalNode.CloseBracketToken, formattedNode.CloseBracketToken, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            result = this.CompareLists(originalNode.Elements, formattedNode.Elements, null, o => o.Span, originalNode.Span, formattedNode.Span);
+            if (result.IsInvalid) return result;
+            result = this.CompareLists(originalNode.Elements.GetSeparators().ToList(), formattedNode.Elements.GetSeparators().ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);
+            if (result.IsInvalid) return result;
+            if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
+            result = this.Compare(originalNode.OpenBracketToken, formattedNode.OpenBracketToken, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            return Equal;
+        }
         private CompareResult CompareCompilationUnitSyntax(CompilationUnitSyntax originalNode, CompilationUnitSyntax formattedNode)
         {
             CompareResult result;
@@ -1619,6 +1639,14 @@ namespace CSharpier
             CompareResult result;
             result = this.Compare(originalNode.ColonToken, formattedNode.ColonToken, originalNode, formattedNode);
             if (result.IsInvalid) return result;
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
+            if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
+            return Equal;
+        }
+        private CompareResult CompareExpressionElementSyntax(ExpressionElementSyntax originalNode, ExpressionElementSyntax formattedNode)
+        {
+            CompareResult result;
             originalStack.Push((originalNode.Expression, originalNode));
             formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
@@ -3293,6 +3321,16 @@ namespace CSharpier
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             originalStack.Push((originalNode.Pattern, originalNode));
             formattedStack.Push((formattedNode.Pattern, formattedNode));
+            return Equal;
+        }
+        private CompareResult CompareSpreadElementSyntax(SpreadElementSyntax originalNode, SpreadElementSyntax formattedNode)
+        {
+            CompareResult result;
+            originalStack.Push((originalNode.Expression, originalNode));
+            formattedStack.Push((formattedNode.Expression, formattedNode));
+            if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
+            result = this.Compare(originalNode.OperatorToken, formattedNode.OperatorToken, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
             return Equal;
         }
         private CompareResult CompareStackAllocArrayCreationExpressionSyntax(StackAllocArrayCreationExpressionSyntax originalNode, StackAllocArrayCreationExpressionSyntax formattedNode)
