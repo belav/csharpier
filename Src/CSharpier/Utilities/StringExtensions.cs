@@ -42,4 +42,26 @@ internal static class StringExtensions
     {
         return value.Length;
     }
+
+    public static int CalculateIndentLength(this string line, PrinterOptions printerOptions)
+    {
+        var result = 0;
+        foreach (var character in line)
+        {
+            if (character == ' ')
+            {
+                result += 1;
+            }
+            else if (character == '\t')
+            {
+                result += printerOptions.TabWidth;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return result;
+    }
 }

@@ -179,27 +179,7 @@ internal class DocPrinter
 
     private void AppendComment(LeadingComment leadingComment, Indent indent)
     {
-        int CalculateIndentLength(string line)
-        {
-            var result = 0;
-            foreach (var character in line)
-            {
-                if (character == ' ')
-                {
-                    result += 1;
-                }
-                else if (character == '\t')
-                {
-                    result += this.PrinterOptions.TabWidth;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return result;
-        }
+        int CalculateIndentLength(string line) => line.CalculateIndentLength(this.PrinterOptions);
 
         var stringReader = new StringReader(leadingComment.Comment);
         var line = stringReader.ReadLine();

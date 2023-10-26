@@ -69,8 +69,35 @@ internal static class Token
         }
         else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
         {
+            var contents = new List<Doc>();
             var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
-            docs.Add(Doc.Join(Doc.HardLine, lines.Select(o => new StringDoc(o.TrimStart()))));
+            // TODO get proper printerOptions
+            var printerOptions = new PrinterOptions();
+            var currentIndentation = lines[^1].CalculateIndentLength(printerOptions);
+            if (currentIndentation == 0)
+            {
+                contents.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
+            }
+            else
+            {
+                foreach (var line in lines)
+                {
+                    var indentation = line.CalculateIndentLength(printerOptions);
+                    var numberOfSpacesToAddOrRemove = indentation - currentIndentation;
+                    // TODO what about tabs!!
+                    var modifiedLine =
+                        numberOfSpacesToAddOrRemove > 0
+                            ? new string(' ', numberOfSpacesToAddOrRemove)
+                            : string.Empty;
+                    modifiedLine += line.TrimStart();
+                    contents.Add(modifiedLine);
+                    contents.Add(Doc.HardLine);
+                }
+
+                contents.RemoveAt(contents.Count - 1);
+            }
+
+            docs.Add(Doc.Indent(contents));
         }
         else
         {
