@@ -295,7 +295,11 @@ internal class DocPrinter
         {
             if (!this.SkipNextNewLine || !this.NewLineNextStringValue)
             {
-                this.Output.TrimTrailingWhitespace();
+                if (line is not HardLineNoTrim)
+                {
+                    this.Output.TrimTrailingWhitespace();
+                }
+
                 this.Output.Append(this.EndOfLine).Append(indent.Value);
                 this.CurrentWidth = indent.Length;
             }

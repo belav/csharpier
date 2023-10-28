@@ -91,7 +91,9 @@ internal static class Token
                             : string.Empty;
                     modifiedLine += line.TrimStart();
                     contents.Add(modifiedLine);
-                    contents.Add(Doc.HardLine);
+                    contents.Add(
+                        numberOfSpacesToAddOrRemove > 0 ? Doc.HardLineNoTrim : Doc.HardLine
+                    );
                 }
 
                 contents.RemoveAt(contents.Count - 1);
