@@ -84,6 +84,8 @@ internal static class UsingDirectives
         }
 
         var isFirst = true;
+        var index = 0;
+        var reorderedDirectives = false;
         foreach (
             var groupOfUsingData in GroupUsings(
                 usingList,
@@ -105,11 +107,22 @@ internal static class UsingDirectives
                 }
                 if (usingData.Using is not null)
                 {
+                    if (usingData.Using != usings[index])
+                    {
+                        reorderedDirectives = true;
+                    }
+
+                    index++;
                     docs.Add(UsingDirective.Print(usingData.Using, context, printExtraLines));
                 }
 
                 isFirst = false;
             }
+        }
+
+        if (reorderedDirectives)
+        {
+            context.IgnoreDisabledText = true;
         }
 
         return Doc.Concat(docs);

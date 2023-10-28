@@ -9,5 +9,7 @@ internal class FormattingContext
 
     // we need to keep track if we reordered modifiers because when modifiers are moved inside
     // of an #if, then we can't compare the before and after disabled text in the source file
-    public bool ReorderedModifiers { get; set; }
+    // we also need to keep track if we move around usings, because then the disabled text may end up on
+    // the first node after the usings, like namespace or class declaration
+    public bool IgnoreDisabledText { get; set; }
 }

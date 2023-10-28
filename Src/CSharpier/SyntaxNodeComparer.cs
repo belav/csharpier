@@ -198,6 +198,26 @@ internal partial class SyntaxNodeComparer
         SyntaxNode? formattedNode
     )
     {
+        if (
+            this.IgnoreDisabledText
+            && (
+                (
+                    formattedNode is NamespaceDeclarationSyntax nd
+                    && nd.NamespaceKeyword == formattedToken
+                )
+                || (
+                    formattedNode is FileScopedNamespaceDeclarationSyntax fsnd
+                    && fsnd.NamespaceKeyword == formattedToken
+                )
+            )
+        )
+        {
+            if (formattedNode.GetLeadingTrivia().ToFullString().Contains("#endif"))
+            {
+                return Equal;
+            }
+        }
+
         // when a verbatim string contains mismatched line endings they will become consistent
         // this validation will fail unless we also get them consistent here
         // adding a semi-complicated if check to determine when to do the string replacement

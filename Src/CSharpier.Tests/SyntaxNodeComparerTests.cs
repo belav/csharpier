@@ -465,9 +465,9 @@ using Zebra;
         result.Should().BeEmpty();
     }
 
-    [Test]
-    [Ignore("no clue how to solve this")]
-    public void Usings_With_Directives_Pass_Validation()
+    [TestCase("namespace Namespace { }")]
+    [TestCase("namespace Namespace;")]
+    public void Usings_With_Directives_Pass_Validation(string content)
     {
         // The problem is that the #endif leading trivia to the ClassDeclaration
         // which then fails the compare
@@ -475,28 +475,24 @@ using Zebra;
         // so there doesn't seem to be any good way to handle this
         // it will only fail the compare the first time that it sorts, so doesn't seem worth fixing
         var left =
-            @"#if DEBUG
+            @$"#if DEBUG
 using System;
-#else
-using Microsoft;
 #endif
 using System.IO;
 
-private class Class { }
+{content}
 ";
 
         var right =
-            @"using System.IO;
+            @$"using System.IO;
 #if DEBUG
-using System;
-#else
 using Microsoft;
 #endif
 
-private class Class { }
+{content}
 ";
 
-        var result = CompareSource(left, right);
+        var result = CompareSource(left, right, ignoreDisabledText: true);
 
         result.Should().BeEmpty();
     }
@@ -511,12 +507,12 @@ private class Class { }
         result.Should().Be(be);
     }
 
-    private static string CompareSource(string left, string right)
+    private static string CompareSource(string left, string right, bool ignoreDisabledText = false)
     {
         var result = new SyntaxNodeComparer(
             left,
             right,
-            false,
+            ignoreDisabledText,
             CancellationToken.None
         ).CompareSource();
 
