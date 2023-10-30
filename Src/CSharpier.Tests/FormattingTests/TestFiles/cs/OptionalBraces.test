@@ -1,0 +1,17 @@
+if (true)
+
+    CallMethod();
+else if (false)
+
+    CallMethod();
+else
+
+    CallMethod();
+
+for (; ; )
+
+    CallMethod();
+
+while (true)
+
+    CallMethod();
