@@ -24,6 +24,7 @@ export const formatCode = async (code: string) => {
                 formattedCode: data.code,
                 doc: data.doc,
                 hasErrors: !!data.errors.length,
+                syntaxValidation: data.syntaxValidation
             };
         } else {
             const text = await response.text();

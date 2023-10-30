@@ -59,6 +59,7 @@ public class BaseTest
             expectedCode,
             normalizedCode,
             false,
+            false,
             CancellationToken.None
         );
 

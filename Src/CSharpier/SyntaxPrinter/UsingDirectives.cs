@@ -120,9 +120,9 @@ internal static class UsingDirectives
             }
         }
 
-        if (reorderedDirectives)
+        if (reorderedDirectives && usings.Any(o => o.ToFullString().Contains("#endif")))
         {
-            context.IgnoreDisabledText = true;
+            context.ReorderedUsingsWithDisabledText = true;
         }
 
         return Doc.Concat(docs);

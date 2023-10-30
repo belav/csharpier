@@ -13,7 +13,7 @@ internal static class ConfigFileParser
     private static readonly Regex CommentRegex = new("^[;#].*$");
 
     private static readonly IniParserConfiguration Configuration =
-        new() { CommentRegex = CommentRegex, };
+        new() { CommentRegex = CommentRegex, AllowDuplicateKeys = true };
 
     public static ConfigFile Parse(string filePath, IFileSystem fileSystem)
     {

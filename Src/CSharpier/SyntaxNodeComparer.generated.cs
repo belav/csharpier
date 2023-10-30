@@ -473,6 +473,8 @@ namespace CSharpier
                 case UnsafeStatementSyntax unsafeStatementSyntax:
                     return this.CompareUnsafeStatementSyntax(unsafeStatementSyntax, formattedNode as UnsafeStatementSyntax);
                 case UsingDirectiveSyntax usingDirectiveSyntax:
+                    if (this.ReorderedModifiers)
+                        return Equal;
                     return this.CompareUsingDirectiveSyntax(usingDirectiveSyntax, formattedNode as UsingDirectiveSyntax);
                 case UsingStatementSyntax usingStatementSyntax:
                     return this.CompareUsingStatementSyntax(usingStatementSyntax, formattedNode as UsingStatementSyntax);

@@ -75,7 +75,12 @@ export const useSetupAppContext = () => {
         formatCode: async () => {
             setIsLoading(true);
 
-            const { syntaxTree, formattedCode, doc, hasErrors } = await formatCode(enteredCode);
+            const { syntaxTree, formattedCode, doc, hasErrors, syntaxValidation } = await formatCode(enteredCode);
+            
+            if (syntaxValidation) {
+                console.log(syntaxValidation);
+                console.log(new Date());
+            }
 
             setIsLoading(false);
             setSyntaxTree(syntaxTree);

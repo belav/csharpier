@@ -15,6 +15,7 @@ public class FormatResult
     public required string Json { get; set; }
     public required string Doc { get; set; }
     public required List<FormatError> Errors { get; set; }
+    public required string SyntaxValidation { get; set; }
 }
 
 public class FormatError
@@ -53,12 +54,21 @@ public class FormatController : ControllerBase
             }
         );
 
+        var comparer = new SyntaxNodeComparer(
+            content,
+            result.Code,
+            result.ReorderedModifiers,
+            result.ReorderedUsingsWithDisabledText,
+            CancellationToken.None
+        );
+
         return new FormatResult
         {
             Code = result.Code,
             Json = result.AST,
             Doc = result.DocTree,
             Errors = result.CompilationErrors.Select(this.ConvertError).ToList(),
+            SyntaxValidation = await comparer.CompareSourceAsync(CancellationToken.None)
         };
     }
 

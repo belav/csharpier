@@ -397,7 +397,8 @@ internal static class CommandLineFormatter
             var syntaxNodeComparer = new SyntaxNodeComparer(
                 fileToFormatInfo.FileContents,
                 codeFormattingResult.Code,
-                codeFormattingResult.IgnoreDisabledText,
+                codeFormattingResult.ReorderedModifiers,
+                codeFormattingResult.ReorderedUsingsWithDisabledText,
                 cancellationToken
             );
 

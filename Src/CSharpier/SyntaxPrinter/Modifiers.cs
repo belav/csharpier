@@ -101,7 +101,7 @@ internal static class Modifiers
             && sortedModifiers.Zip(modifiers, (original, sorted) => original != sorted).Any()
         )
         {
-            context.IgnoreDisabledText = true;
+            context.ReorderedModifiers = true;
         }
 
         return print(sortedModifiers.ToArray());

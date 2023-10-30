@@ -19,7 +19,8 @@ public class SyntaxNodeComparerGenerator
     {
         var sourceBuilder = new StringBuilder();
         sourceBuilder.AppendLine(
-            @"#pragma warning disable CS0168
+            """
+#pragma warning disable CS0168
 using System;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -58,7 +59,8 @@ namespace CSharpier
             }
 
             switch (originalNode)
-            {"
+            {
+"""
         );
 
         var syntaxNodeTypes = ValidNodeTypes.Get();
@@ -67,22 +69,41 @@ namespace CSharpier
         {
             var lowerCaseName =
                 syntaxNodeType.Name[0].ToString().ToLower() + syntaxNodeType.Name[1..];
-            sourceBuilder.AppendLine(
-                $@"                case {syntaxNodeType.Name} {lowerCaseName}:
-                    return this.Compare{syntaxNodeType.Name}({lowerCaseName}, formattedNode as {syntaxNodeType.Name});"
-            );
+
+            if (syntaxNodeType == typeof(UsingDirectiveSyntax))
+            {
+                sourceBuilder.AppendLine(
+                    $"""
+                case {syntaxNodeType.Name} {lowerCaseName}:
+                    if (this.IgnoreDisabledText)
+                        return Equal;
+                    return this.Compare{syntaxNodeType.Name}({lowerCaseName}, formattedNode as {syntaxNodeType.Name});
+"""
+                );
+            }
+            else
+            {
+                sourceBuilder.AppendLine(
+                    $"""
+             case {syntaxNodeType.Name} {lowerCaseName}:
+                 return this.Compare{syntaxNodeType.Name}({lowerCaseName}, formattedNode as {syntaxNodeType.Name});
+"""
+                );
+            }
         }
 
         sourceBuilder.AppendLine(
-            @"                default:
+            """
+                default:
 #if DEBUG
-                    throw new Exception(""Can't handle "" + originalNode.GetType().Name);
+                    throw new Exception("Can't handle " + originalNode.GetType().Name);
 #else
                     return Equal;
 #endif
             }
         }
-        "
+        
+"""
         );
 
         foreach (var syntaxNodeType in syntaxNodeTypes)
@@ -101,9 +122,11 @@ namespace CSharpier
     private static void GenerateMethod(StringBuilder sourceBuilder, Type type)
     {
         sourceBuilder.AppendLine(
-            @$"        private CompareResult Compare{type.Name}({type.Name} originalNode, {type.Name} formattedNode)
-        {{
-            CompareResult result;"
+            $$"""
+      private CompareResult Compare{{type.Name}}({{type.Name}} originalNode, {{type.Name}} formattedNode)
+      {
+          CompareResult result;
+"""
         );
 
         foreach (var propertyInfo in type.GetProperties().OrderBy(o => o.Name))

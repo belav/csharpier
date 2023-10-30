@@ -14,5 +14,6 @@ public class CodeFormatterResult
 
     internal static readonly CodeFormatterResult Null = new();
 
-    internal bool IgnoreDisabledText { get; init; }
+    internal bool ReorderedModifiers { get; init; }
+    internal bool ReorderedUsingsWithDisabledText { get; init; }
 }
