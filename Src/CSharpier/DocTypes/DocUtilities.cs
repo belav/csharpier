@@ -63,14 +63,14 @@ internal static class DocUtilities
 
             x++;
         }
-
-        return;
     }
 
-    public static void RemoveInitialDoubleHardLine(Doc doc)
+    public static Doc RemoveInitialDoubleHardLine(Doc doc)
     {
         var removeNextHardLine = false;
         RemoveInitialDoubleHardLine(doc, ref removeNextHardLine);
+
+        return doc;
     }
 
     private static void RemoveInitialDoubleHardLine(Doc doc, ref bool removeNextHardLine)
