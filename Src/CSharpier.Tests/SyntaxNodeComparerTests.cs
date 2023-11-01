@@ -492,7 +492,7 @@ using Microsoft;
 {content}
 ";
 
-        var result = CompareSource(left, right, ignoreDisabledText: true);
+        var result = CompareSource(left, right, reorderedUsingsWithDisabledText: true);
 
         result.Should().BeEmpty();
     }
@@ -507,12 +507,17 @@ using Microsoft;
         result.Should().Be(be);
     }
 
-    private static string CompareSource(string left, string right, bool ignoreDisabledText = false)
+    private static string CompareSource(
+        string left,
+        string right,
+        bool reorderedUsingsWithDisabledText = false
+    )
     {
         var result = new SyntaxNodeComparer(
             left,
             right,
-            ignoreDisabledText,
+            false,
+            reorderedUsingsWithDisabledText,
             CancellationToken.None
         ).CompareSource();
 

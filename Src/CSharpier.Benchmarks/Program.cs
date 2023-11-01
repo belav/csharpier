@@ -21,6 +21,7 @@ public class Benchmarks
             this.code,
             this.code,
             false,
+            false,
             CancellationToken.None
         );
         syntaxNodeComparer.CompareSource();

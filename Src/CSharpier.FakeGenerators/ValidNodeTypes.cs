@@ -5,7 +5,7 @@ namespace CSharpier.FakeGenerators;
 
 public static class ValidNodeTypes
 {
-    public static IEnumerable<Type> Get()
+    public static IList<Type> Get()
     {
         return typeof(CompilationUnitSyntax).Assembly
             .GetTypes()

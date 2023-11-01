@@ -107,7 +107,8 @@ internal class CSharpFormatter : IFormatter
             var formattingContext = new FormattingContext { LineEnding = lineEnding };
             var document = Node.Print(rootNode, formattingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
-            var ignoreDisabledText = formattingContext.IgnoreDisabledText;
+            var reorderedModifiers = formattingContext.ReorderedModifiers;
+            var reorderedUsingsWithDisabledText = formattingContext.ReorderedUsingsWithDisabledText;
 
             foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
             {
@@ -124,7 +125,8 @@ internal class CSharpFormatter : IFormatter
                     formattingContext2
                 );
                 formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
-                ignoreDisabledText = ignoreDisabledText || formattingContext2.IgnoreDisabledText;
+                reorderedModifiers = reorderedModifiers || formattingContext2.ReorderedModifiers;
+                reorderedUsingsWithDisabledText = reorderedUsingsWithDisabledText || formattingContext2.ReorderedUsingsWithDisabledText;
             }
 
             return new CodeFormatterResult
@@ -134,7 +136,8 @@ internal class CSharpFormatter : IFormatter
                     ? DocSerializer.Serialize(document)
                     : string.Empty,
                 AST = printerOptions.IncludeAST ? PrintAST(rootNode) : string.Empty,
-                IgnoreDisabledText = ignoreDisabledText
+                ReorderedModifiers = reorderedModifiers,
+                ReorderedUsingsWithDisabledText = reorderedUsingsWithDisabledText,
             };
         }
         catch (InTooDeepException)

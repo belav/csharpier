@@ -8,20 +8,23 @@ internal partial class SyntaxNodeComparer
     protected string NewSourceCode { get; }
     protected SyntaxTree OriginalSyntaxTree { get; }
     protected SyntaxTree NewSyntaxTree { get; }
-    protected bool IgnoreDisabledText { get; }
+    protected bool ReorderedModifiers { get; }
+    protected bool ReorderedUsingsWithDisabledText { get; }
 
     private static readonly CompareResult Equal = new();
 
     public SyntaxNodeComparer(
         string originalSourceCode,
         string newSourceCode,
-        bool ignoreDisabledText,
+        bool reorderedModifiers,
+        bool reorderedUsingsWithDisabledText,
         CancellationToken cancellationToken
     )
     {
         this.OriginalSourceCode = originalSourceCode;
         this.NewSourceCode = newSourceCode;
-        this.IgnoreDisabledText = ignoreDisabledText;
+        this.ReorderedModifiers = reorderedModifiers;
+        this.ReorderedUsingsWithDisabledText = reorderedUsingsWithDisabledText;
 
         var cSharpParseOptions = new CSharpParseOptions(CSharpFormatter.LanguageVersion);
         this.OriginalSyntaxTree = CSharpSyntaxTree.ParseText(
@@ -43,6 +46,14 @@ internal partial class SyntaxNodeComparer
 
     public async Task<string> CompareSourceAsync(CancellationToken cancellationToken)
     {
+        // this seems almost impossible to figure out with the current way this is written
+        // the usings could be in disabled text on namespaces, or on the modifiers of any base types.
+        // parts of the #if or #endif could be leading trivia in different places
+        if (this.ReorderedUsingsWithDisabledText)
+        {
+            return string.Empty;
+        }
+
         var result = this.AreEqualIgnoringWhitespace(
             await this.OriginalSyntaxTree.GetRootAsync(cancellationToken),
             await this.NewSyntaxTree.GetRootAsync(cancellationToken)
@@ -199,7 +210,7 @@ internal partial class SyntaxNodeComparer
     )
     {
         if (
-            this.IgnoreDisabledText
+            this.ReorderedModifiers
             && (
                 (
                     formattedNode is NamespaceDeclarationSyntax nd
@@ -249,7 +260,7 @@ internal partial class SyntaxNodeComparer
     {
         if (originalTrivia.RawSyntaxKind() is SyntaxKind.DisabledTextTrivia)
         {
-            if (this.IgnoreDisabledText)
+            if (this.ReorderedModifiers)
             {
                 return Equal;
             }

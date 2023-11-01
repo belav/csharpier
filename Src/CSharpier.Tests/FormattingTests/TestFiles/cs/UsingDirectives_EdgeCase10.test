@@ -1,0 +1,10 @@
+#if DEBUG
+namespace Namespace;
+
+using System.Runtime.Remoting; 
+using System;
+
+class ClassName { }
+
+#endif
+
