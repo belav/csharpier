@@ -126,7 +126,9 @@ internal class CSharpFormatter : IFormatter
                 );
                 formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
                 reorderedModifiers = reorderedModifiers || formattingContext2.ReorderedModifiers;
-                reorderedUsingsWithDisabledText = reorderedUsingsWithDisabledText || formattingContext2.ReorderedUsingsWithDisabledText;
+                reorderedUsingsWithDisabledText =
+                    reorderedUsingsWithDisabledText
+                    || formattingContext2.ReorderedUsingsWithDisabledText;
             }
 
             return new CodeFormatterResult
