@@ -1,8 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="../../Nuget/Build.props"/>
     <PropertyGroup>
-        <!-- See https://github.com/belav/csharpier/issues/481 and https://github.com/belav/csharpier/issues/773 -->
-        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+        <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
         <PackageId>CSharpier.MsBuild</PackageId>
         <DevelopmentDependency>true</DevelopmentDependency>
         <CSharpierOutputDir>../CSharpier.Cli/bin/$(Configuration)/$(TargetFramework)</CSharpierOutputDir>
