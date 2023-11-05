@@ -1,12 +1,8 @@
 using System;
-
-using SomeAlias = SomeNamespace;
 using static SomeOtherNamespace;
-
-#if NET6_0_OR_GREATER
-using Net6;
-#else
-using Else;
+using SomeAlias = SomeNamespace;
+#if DEBUG
+using SomeDebugNamespace;
 #endif
 
 public static class ODataEdmModelProvider { }
