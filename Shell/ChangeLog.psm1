@@ -19,8 +19,7 @@ function CSH-ChangeLog {
 
     $repository = "https://github.com/belav/csharpier"
 
-    # if this fails
-    # Install-Module -Name PowerShellForGitHub
+    Install-Module -Name PowerShellForGitHub -Force
     $milestones = Get-GitHubMilestone -Uri $repository -State "Open"
     $milestoneNumber = -1
     foreach ($milestone in $milestones)
