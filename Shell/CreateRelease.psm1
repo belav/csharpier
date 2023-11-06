@@ -8,7 +8,7 @@ function CSH-CreateRelease {
 
     git checkout main
     git pull
-    git checkout -b $versionNumber
+    git checkout -b "release-$versionNumber"
     
     $versionPropsPath = $PSScriptRoot + "/../Nuget/Build.props"
     $versionProps = [xml](Get-Content $versionPropsPath)
