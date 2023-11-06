@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <PackageId>CSharpier</PackageId>
     <AssemblyName>dotnet-csharpier</AssemblyName>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>True</SignAssembly>
