@@ -1,8 +1,8 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0.400 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 RUN apt-get update  && \
   apt-get install curl gnupg -yq && \
