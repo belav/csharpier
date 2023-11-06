@@ -1,0 +1,8 @@
+using System;
+using static SomeOtherNamespace;
+using SomeAlias = SomeNamespace;
+#if DEBUG
+using SomeDebugNamespace;
+#endif
+
+public static class ODataEdmModelProvider { }

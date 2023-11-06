@@ -135,6 +135,7 @@ internal static class UsingDirectives
     )
     {
         var globalUsings = new List<UsingData>();
+        var globalAliasUsings = new List<UsingData>();
         var systemUsings = new List<UsingData>();
         var aliasNameUsings = new List<UsingData>();
         var regularUsings = new List<UsingData>();
@@ -186,7 +187,9 @@ internal static class UsingDirectives
 
                 if (usingDirective.GlobalKeyword.RawSyntaxKind() != SyntaxKind.None)
                 {
-                    globalUsings.Add(usingData);
+                    (usingDirective.Alias is not null ? globalAliasUsings : globalUsings).Add(
+                        usingData
+                    );
                 }
                 else if (usingDirective.StaticKeyword.RawSyntaxKind() != SyntaxKind.None)
                 {
@@ -212,12 +215,15 @@ internal static class UsingDirectives
         }
 
         yield return globalUsings.OrderBy(o => o.Using, Comparer).ToList();
+        yield return globalAliasUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield return systemUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield return aliasNameUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield return regularUsings.OrderBy(o => o.Using, Comparer).ToList();
-        yield return directiveGroup;
         yield return staticUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield return aliasUsings.OrderBy(o => o.Using, Comparer).ToList();
+        // we need the directive groups at the end, the #endif directive
+        // will be attached to the first node after the usings making it very hard print it before any of these other groups
+        yield return directiveGroup;
         yield break;
 
         Doc PrintLeadingTrivia(UsingDirectiveSyntax value)

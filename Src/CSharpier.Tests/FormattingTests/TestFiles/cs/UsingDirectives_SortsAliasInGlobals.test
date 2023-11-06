@@ -1,0 +1,3 @@
+global using Nest7;
+global using Newtonsoft.Json;
+global using Nest = Nest7;
