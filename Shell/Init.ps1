@@ -1,3 +1,6 @@
+Set-StrictMode -Version 3.0
+$ErrorActionPreference = "Stop"
+
 foreach ($file in Get-ChildItem $PSScriptRoot -Filter "*.psm1") {
     Import-Module $file.FullName -DisableNameChecking -Force
 }
