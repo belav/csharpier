@@ -80,7 +80,7 @@ The long term plan is to improve Csharpier's ability to determine the symbol set
 
 ### EditorConfig
 
-CSharpier supports configuration via an `.editorconfig` file. A `.csahrpierrc*` file in the same directory will take priority.
+CSharpier supports configuration via an `.editorconfig` file. A `.csharpierrc*` file in the same directory will take priority.
 
 ```ini
 [*]
