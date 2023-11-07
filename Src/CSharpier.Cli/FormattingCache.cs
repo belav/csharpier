@@ -148,12 +148,14 @@ internal static class FormattingCacheFactory
 
             async Task WriteFile()
             {
-                await using var fileStream = this.fileSystem.File.Open(
-                    this.cacheFile,
-                    FileMode.OpenOrCreate,
-                    FileAccess.ReadWrite,
-                    FileShare.None
-                );
+                await using var fileStream = this.fileSystem
+                    .File
+                    .Open(
+                        this.cacheFile,
+                        FileMode.OpenOrCreate,
+                        FileAccess.ReadWrite,
+                        FileShare.None
+                    );
                 await using var streamWriter = new StreamWriter(fileStream);
                 await streamWriter.WriteAsync(
                     JsonSerializer.Serialize(

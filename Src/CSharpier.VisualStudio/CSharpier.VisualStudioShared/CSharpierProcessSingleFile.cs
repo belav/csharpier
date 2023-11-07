@@ -42,7 +42,8 @@ namespace CSharpier.VisualStudio
 
             var result = output.ToString();
             if (
-                process.ExitCode == 0 && !result.Contains("Failed to compile so was not formatted.")
+                process.ExitCode == 0
+                && !result.Contains("Failed to compile so was not formatted.")
             )
             {
                 return result;

@@ -78,11 +78,13 @@ internal static class BaseMethodDeclaration
 
             void PrintMethodUnformattedWithoutAttributes(SyntaxTriviaList syntaxTriviaList)
             {
-                var attributeStart = attributeLists.Value[0]
+                var attributeStart = attributeLists
+                    .Value[0]
                     .GetLeadingTrivia()
                     .First()
                     .GetLocation()
-                    .SourceSpan.Start;
+                    .SourceSpan
+                    .Start;
 
                 var methodWithoutAttributes = node.GetText()
                     .Replace(

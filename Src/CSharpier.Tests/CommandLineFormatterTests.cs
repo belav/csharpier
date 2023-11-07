@@ -1,8 +1,8 @@
+using System.IO.Abstractions.TestingHelpers;
 using System.Text;
 using CSharpier.Cli;
 using FluentAssertions;
 using NUnit.Framework;
-using System.IO.Abstractions.TestingHelpers;
 
 namespace CSharpier.Tests;
 
@@ -24,7 +24,8 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context);
 
-        result.OutputLines
+        result
+            .OutputLines
             .First()
             .Should()
             .Be("Warning ./Invalid.cs - Failed to compile so was not formatted.");
@@ -38,7 +39,8 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context, directoryOrFilePaths: "Subdirectory");
 
-        result.OutputLines
+        result
+            .OutputLines
             .First()
             .Should()
             .Be("Warning ./Subdirectory/Invalid.cs - Failed to compile so was not formatted.");
@@ -55,7 +57,8 @@ public class CommandLineFormatterTests
             directoryOrFilePaths: Path.Combine(context.GetRootPath(), "Subdirectory")
         );
 
-        result.OutputLines
+        result
+            .OutputLines
             .First()
             .Should()
             .Be(
@@ -71,7 +74,8 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context);
 
-        result.OutputLines
+        result
+            .OutputLines
             .First()
             .Should()
             .Be("Warning ./Directory/Invalid.cs - Failed to compile so was not formatted.");
@@ -85,7 +89,8 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context, directoryOrFilePaths: "Unsupported.js");
 
-        result.OutputLines
+        result
+            .OutputLines
             .First()
             .Should()
             .Be(@"Warning ./Unsupported.js - Is an unsupported file type.");
@@ -133,7 +138,8 @@ public class CommandLineFormatterTests
         else
         {
             result.ExitCode.Should().Be(1);
-            result.ErrorOutputLines
+            result
+                .ErrorOutputLines
                 .First()
                 .Should()
                 .EndWith(
@@ -161,7 +167,8 @@ public class CommandLineFormatterTests
         var result = this.Format(context);
 
         result.ExitCode.Should().Be(0);
-        result.OutputLines
+        result
+            .OutputLines
             .First()
             .Should()
             .EndWith($"Test.csproj uses an unknown version of CSharpier.MsBuild");
@@ -210,7 +217,8 @@ public class CommandLineFormatterTests
         else
         {
             result.ExitCode.Should().Be(1);
-            result.ErrorOutputLines
+            result
+                .ErrorOutputLines
                 .First()
                 .Should()
                 .EndWith(
@@ -275,7 +283,8 @@ public class CommandLineFormatterTests
 
         result.ExitCode.Should().Be(1);
         context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
-        result.ErrorOutputLines
+        result
+            .ErrorOutputLines
             .First()
             .Should()
             .StartWith("Error ./Unformatted.cs - Was not formatted.");
@@ -440,7 +449,8 @@ public class CommandLineFormatterTests
         var result = this.Format(context);
 
         result.ExitCode.Should().Be(1);
-        result.ErrorOutputLines
+        result
+            .ErrorOutputLines
             .First()
             .Replace("\\", "/")
             .Should()
@@ -500,7 +510,8 @@ public class CommandLineFormatterTests
         var result = this.Format(context);
 
         context.GetFileContent("Invalid.cs").Should().Be(contents);
-        result.OutputLines
+        result
+            .OutputLines
             .First()
             .Should()
             .Be("Warning ./Invalid.cs - Failed to compile so was not formatted.");
@@ -557,7 +568,8 @@ class ClassName
 
         var result = this.Format(context);
 
-        result.OutputLines
+        result
+            .OutputLines
             .First()
             .Replace("\\", "/")
             .Should()

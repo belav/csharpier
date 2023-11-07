@@ -1,7 +1,7 @@
-using System.Text;
-using CSharpier.Cli.Options;
 using System.Diagnostics;
 using System.IO.Abstractions;
+using System.Text;
+using CSharpier.Cli.Options;
 using CSharpier.Utilities;
 using Microsoft.Extensions.Logging;
 
@@ -153,9 +153,9 @@ internal static class CommandLineFormatter
                 cancellationToken
             );
 
-            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[
-                x
-            ].Replace("\\", "/");
+            var originalDirectoryOrFile = commandLineOptions
+                .OriginalDirectoryOrFilePaths[x]
+                .Replace("\\", "/");
 
             var formattingCache = await FormattingCacheFactory.InitializeAsync(
                 commandLineOptions,
@@ -215,7 +215,8 @@ internal static class CommandLineFormatter
                     return 1;
                 }
 
-                var tasks = fileSystem.Directory
+                var tasks = fileSystem
+                    .Directory
                     .EnumerateFiles(directoryOrFilePath, "*.cs", SearchOption.AllDirectories)
                     .Select(o =>
                     {

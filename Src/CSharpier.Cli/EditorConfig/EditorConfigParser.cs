@@ -25,9 +25,9 @@ internal static class EditorConfigParser
 
         while (directoryInfo is not null)
         {
-            var file = fileSystem.FileInfo.FromFileName(
-                fileSystem.Path.Combine(directoryInfo.FullName, ".editorconfig")
-            );
+            var file = fileSystem
+                .FileInfo
+                .FromFileName(fileSystem.Path.Combine(directoryInfo.FullName, ".editorconfig"));
             if (file.Exists)
             {
                 editorConfigFiles.Add(file);

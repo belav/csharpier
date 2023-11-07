@@ -59,7 +59,8 @@ internal static class NamespaceLikePrinter
             if (externs.Any() || usings.Any())
             {
                 docs.Add(
-                    compilationUnitSyntax.AttributeLists[0]
+                    compilationUnitSyntax
+                        .AttributeLists[0]
                         .GetLeadingTrivia()
                         .Any(o => o.IsDirective)
                         ? ExtraNewLines.Print(compilationUnitSyntax.AttributeLists[0])
