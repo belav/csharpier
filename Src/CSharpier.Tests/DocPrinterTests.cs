@@ -756,7 +756,8 @@ true || false"
         bool useTabs = false
     )
     {
-        return DocPrinter.DocPrinter
+        return DocPrinter
+            .DocPrinter
             .Print(
                 doc,
                 new PrinterOptions

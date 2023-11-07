@@ -131,7 +131,8 @@ public class CliTests
         var result = await new CsharpierProcess().ExecuteAsync();
 
         result.ExitCode.Should().Be(1);
-        result.ErrorOutput
+        result
+            .ErrorOutput
             .Should()
             .Contain("directoryOrFile is required when not piping stdin to CSharpier");
     }
@@ -170,7 +171,8 @@ public class CliTests
         var result = await new CsharpierProcess().WithArguments("/BasicFile.cs").ExecuteAsync();
 
         result.Output.Should().BeEmpty();
-        result.ErrorOutput
+        result
+            .ErrorOutput
             .Should()
             .StartWith("There was no file or directory found at /BasicFile.cs");
         result.ExitCode.Should().Be(1);
@@ -199,7 +201,8 @@ public class CliTests
             .WithArguments("CheckUnformatted.cs --check")
             .ExecuteAsync();
 
-        result.ErrorOutput
+        result
+            .ErrorOutput
             .Replace("\\", "/")
             .Should()
             .StartWith("Error ./CheckUnformatted.cs - Was not formatted.");
@@ -242,7 +245,8 @@ public class CliTests
             .WithPipedInput($"{input}{'\u0003'}{invalidFile}{'\u0003'}")
             .ExecuteAsync();
 
-        result.ErrorOutput
+        result
+            .ErrorOutput
             .Should()
             .Be(
                 $"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}  (1,26): error CS1513: }} expected{Environment.NewLine}"
@@ -341,7 +345,8 @@ public class CliTests
 
         var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
 
-        result.ErrorOutput
+        result
+            .ErrorOutput
             .Should()
             .Contain("uses version 99 of CSharpier.MsBuild which is a mismatch with version");
         result.ExitCode.Should().Be(1);
@@ -504,7 +509,8 @@ public class CliTests
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
 
-            this.command = CliWrap.Cli
+            this.command = CliWrap
+                .Cli
                 .Wrap("dotnet")
                 .WithArguments(path)
                 .WithWorkingDirectory(testFileDirectory)

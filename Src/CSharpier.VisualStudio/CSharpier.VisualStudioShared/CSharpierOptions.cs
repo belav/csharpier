@@ -5,11 +5,11 @@
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
-    using ThreadHelper = Microsoft.VisualStudio.Shell.ThreadHelper;
-    using AsyncServiceProvider = Microsoft.VisualStudio.Shell.AsyncServiceProvider;
     using Microsoft.VisualStudio.Shell.Interop;
     using Microsoft.VisualStudio.Threading;
     using Newtonsoft.Json;
+    using AsyncServiceProvider = Microsoft.VisualStudio.Shell.AsyncServiceProvider;
+    using ThreadHelper = Microsoft.VisualStudio.Shell.ThreadHelper;
 
     public class CSharpierOptions
     {

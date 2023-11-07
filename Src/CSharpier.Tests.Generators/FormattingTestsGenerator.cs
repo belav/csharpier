@@ -10,7 +10,8 @@ public class FormattingTestsGenerator : TemplatedGenerator
 
     protected override object GetModel(GeneratorExecutionContext context)
     {
-        var tests = context.AdditionalFiles
+        var tests = context
+            .AdditionalFiles
             .Where(
                 o =>
                     o.Path.EndsWith(".test")

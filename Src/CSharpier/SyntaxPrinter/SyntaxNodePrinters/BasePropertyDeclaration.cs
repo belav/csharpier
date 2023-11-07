@@ -72,13 +72,15 @@ internal static class BasePropertyDeclaration
         {
             Doc separator = " ";
             if (
-                node.AccessorList.Accessors.Any(
-                    o =>
-                        o.Body != null
-                        || o.ExpressionBody != null
-                        || o.Modifiers.Any()
-                        || o.AttributeLists.Any()
-                )
+                node.AccessorList
+                    .Accessors
+                    .Any(
+                        o =>
+                            o.Body != null
+                            || o.ExpressionBody != null
+                            || o.Modifiers.Any()
+                            || o.AttributeLists.Any()
+                    )
             )
             {
                 separator = Doc.Line;
@@ -89,7 +91,8 @@ internal static class BasePropertyDeclaration
                     separator,
                     Token.Print(node.AccessorList.OpenBraceToken, context),
                     Doc.Indent(
-                        node.AccessorList.Accessors
+                        node.AccessorList
+                            .Accessors
                             .Select(o => PrintAccessorDeclarationSyntax(o, separator, context))
                             .ToArray()
                     ),

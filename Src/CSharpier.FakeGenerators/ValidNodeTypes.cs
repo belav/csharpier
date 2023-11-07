@@ -7,7 +7,8 @@ public static class ValidNodeTypes
 {
     public static IList<Type> Get()
     {
-        return typeof(CompilationUnitSyntax).Assembly
+        return typeof(CompilationUnitSyntax)
+            .Assembly
             .GetTypes()
             .Where(
                 o =>
