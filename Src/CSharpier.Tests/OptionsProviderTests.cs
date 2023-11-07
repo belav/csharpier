@@ -446,7 +446,7 @@ indent_size = 2
     }
 
     [Test]
-    public async Task Should_Prefer_Closer_EditorConfig()
+    public async Task Should_Not_Prefer_Closer_EditorConfig()
     {
         var context = new TestContext();
         context.WhenAFileExists(
@@ -462,7 +462,7 @@ indent_size = 2
             "c:/test",
             "c:/test/subfolder/test.cs"
         );
-        result.TabWidth.Should().Be(2);
+        result.TabWidth.Should().Be(1);
     }
 
     [Test]

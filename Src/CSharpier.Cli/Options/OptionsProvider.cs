@@ -80,10 +80,7 @@ internal class OptionsProvider
             return new PrinterOptions();
         }
 
-        if (
-            (resolvedCSharpierConfig?.DirectoryName.Length ?? int.MinValue)
-            >= (resolvedEditorConfig?.DirectoryName.Length ?? int.MinValue)
-        )
+        if (resolvedCSharpierConfig is not null)
         {
             return ConfigurationFileOptions.ConvertToPrinterOptions(
                 resolvedCSharpierConfig!.CSharpierConfig
