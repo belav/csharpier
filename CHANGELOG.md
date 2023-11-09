@@ -20,7 +20,7 @@ Given the following setup
 /src/.csharpierrc
 ```
 
-Originally with 0.26.0, the `/src/ProjectName/.editorconfig` file would be used for determining the configuration options for a file within `src/ProjectName`. This resulted in the existing options on `.csharpierrc` being ignored.
+Originally with 0.26.0, the `/src/ProjectName/.editorconfig` file would be used for determining the configuration options for a file within `src/ProjectName`. This resulted in the existing options within `.csharpierrc` being ignored.
 
 With 0.26.1, if a `.csharpierrc` exists anywhere above a given file, it will be used to determine the configuration options.
 
