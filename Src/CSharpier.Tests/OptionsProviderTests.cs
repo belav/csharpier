@@ -244,6 +244,61 @@ end_of_line = crlf
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
     }
 
+    [Test]
+    public async Task Should_Support_EditorConfig_With_Duplicated_Sections()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            @"
+[*]
+indent_size = 2
+
+[*]
+indent_size = 4
+"
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+
+        result.TabWidth.Should().Be(4);
+    }
+
+    [Test]
+    public async Task Should_Support_EditorConfig_With_Duplicated_Rules()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            @"
+[*]
+indent_size = 2
+indent_size = 4
+"
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+
+        result.TabWidth.Should().Be(4);
+    }
+
+    [Test]
+    public async Task Should_Not_Fail_With_Bad_EditorConfig()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            @"
+[*
+indent_size==
+"
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+
+        result.TabWidth.Should().Be(4);
+    }
+
     [TestCase("tab_width")]
     [TestCase("indent_size")]
     public async Task Should_Support_EditorConfig_Tabs(string propertyName)
