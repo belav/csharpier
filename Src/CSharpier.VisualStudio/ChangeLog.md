@@ -1,4 +1,7 @@
-﻿## [1.4.7]
+﻿## [1.4.8]
+- Handle version 0.26.0 and higher which include a +[commitHash] in the version number
+
+## [1.4.7]
 - Log exception when finding document fails but don't throw it.
 
 ## [1.4.6]

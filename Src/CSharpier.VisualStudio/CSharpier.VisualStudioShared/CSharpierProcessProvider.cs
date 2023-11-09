@@ -149,6 +149,12 @@ namespace CSharpier.VisualStudio
 
             this.logger.Debug("dotnet csharpier --version output: " + versionFromCommand);
 
+            if (versionFromCommand.Contains("+"))
+            {
+                versionFromCommand = versionFromCommand.Split('+')[0];
+                this.logger.Debug($"Removing everything after + to use {versionFromCommand}");
+            }
+
             return versionFromCommand;
         }
 
