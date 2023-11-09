@@ -3,19 +3,20 @@ namespace CSharpier.Cli.Options;
 using System.IO.Abstractions;
 using System.Text.Json;
 using CSharpier.Cli.EditorConfig;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using PrinterOptions = CSharpier.PrinterOptions;
 
 internal class OptionsProvider
 {
-    private readonly List<EditorConfigSections> editorConfigs;
+    private readonly IList<EditorConfigSections> editorConfigs;
     private readonly List<CSharpierConfigData> csharpierConfigs;
     private readonly IgnoreFile ignoreFile;
     private readonly PrinterOptions? specifiedPrinterOptions;
     private readonly IFileSystem fileSystem;
 
     private OptionsProvider(
-        List<EditorConfigSections> editorConfigs,
+        IList<EditorConfigSections> editorConfigs,
         List<CSharpierConfigData> csharpierConfigs,
         IgnoreFile ignoreFile,
         PrinterOptions? specifiedPrinterOptions,
@@ -45,14 +46,24 @@ internal class OptionsProvider
             ? ConfigurationFileOptions.FindForDirectoryName(directoryName, fileSystem, logger)
             : Array.Empty<CSharpierConfigData>().ToList();
 
-        var editorConfigSections = EditorConfigParser.FindForDirectoryName(
-            directoryName,
-            fileSystem
-        );
+        IList<EditorConfigSections>? editorConfigSections = null;
+
+        try
+        {
+            editorConfigSections = EditorConfigParser.FindForDirectoryName(
+                directoryName,
+                fileSystem
+            );
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, $"Failure parsing editorconfig files for {directoryName}");
+        }
+
         var ignoreFile = await IgnoreFile.Create(directoryName, fileSystem, cancellationToken);
 
         return new OptionsProvider(
-            editorConfigSections,
+            editorConfigSections ?? Array.Empty<EditorConfigSections>(),
             csharpierConfigs,
             ignoreFile,
             specifiedPrinterOptions,
