@@ -1,4 +1,33 @@
-﻿# 0.26.0
+﻿# 0.26.1
+## What's Changed
+#### Editorconfig with duplicated sections was freezing IDE's [#989](https://github.com/belav/csharpier/issues/989)
+CSharpier was unable to parse an `.editorconfig` file that contained duplicate sections and would crash. This would result in a hung IDE.
+```
+[*]
+insert_final_newline = true
+
+[*]
+spelling_languages = en-us
+```
+
+Thanks go to @echoix for helping track this down.
+
+#### A .csharpierrc file anywhere above a file now takes priority over any .editorconfig [#987](https://github.com/belav/csharpier/issues/987)
+Given the following setup
+```
+/src/.editorconfig
+/src/ProjectName/.editorconfig
+/src/.csharpierrc
+```
+
+Originally with 0.26.0, the `/src/ProjectName/.editorconfig` file would be used for determining the configuration options for a file within `src/ProjectName`. This resulted in the existing options on `.csharpierrc` being ignored.
+
+With 0.26.1, if a `.csharpierrc` exists anywhere above a given file, it will be used to determine the configuration options.
+
+Thanks go to @parched for reporting the issue.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.26.0...0.26.1
+# 0.26.0
 ## What's Changed
 #### EditorConfig Support
 CSharpier will now read configuration options from an `.editorconfig`. See https://csharpier.com/docs/Configuration for more details.
@@ -1437,5 +1466,6 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
