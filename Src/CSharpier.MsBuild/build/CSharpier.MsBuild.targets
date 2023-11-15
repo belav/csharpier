@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' == ''">$(TargetFramework)</CSharpier_FrameworkVersion>
-    <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' != 'net6.0' and '$(CSharpier_FrameworkVersion)' != 'net7.0'">net7.0</CSharpier_FrameworkVersion>
+    <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' != 'net6.0' and '$(CSharpier_FrameworkVersion)' != 'net7.0' and '$(CSharpier_FrameworkVersion)' != 'net8.0'">net7.0</CSharpier_FrameworkVersion>
     <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/$(CSharpier_FrameworkVersion)/dotnet-csharpier.dll</CSharpierDllPath>
     <CSharpierArgs Condition="'$(CSharpier_Check)' == 'true'">$(CSharpierArgs) --check</CSharpierArgs>
     <CSharpierArgs Condition="'$(CSharpier_LogLevel)' != ''">$(CSharpierArgs) --loglevel $(CSharpier_LogLevel)</CSharpierArgs>
