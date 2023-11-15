@@ -134,6 +134,7 @@ internal static class UsingDirectives
         FormattingContext context
     )
     {
+        var globalSystemUsings = new List<UsingData>();
         var globalUsings = new List<UsingData>();
         var globalAliasUsings = new List<UsingData>();
         var systemUsings = new List<UsingData>();
@@ -187,9 +188,18 @@ internal static class UsingDirectives
 
                 if (usingDirective.GlobalKeyword.RawSyntaxKind() != SyntaxKind.None)
                 {
-                    (usingDirective.Alias is not null ? globalAliasUsings : globalUsings).Add(
-                        usingData
-                    );
+                    if (usingDirective.Alias is not null)
+                    {
+                        globalAliasUsings.Add(usingData);
+                    }
+                    else if (usingDirective.Name is not null && IsSystemName(usingDirective.Name))
+                    {
+                        globalSystemUsings.Add(usingData);
+                    }
+                    else
+                    {
+                        globalUsings.Add(usingData);
+                    }
                 }
                 else if (usingDirective.StaticKeyword.RawSyntaxKind() != SyntaxKind.None)
                 {
@@ -214,6 +224,7 @@ internal static class UsingDirectives
             }
         }
 
+        yield return globalSystemUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield return globalUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield return globalAliasUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield return systemUsings.OrderBy(o => o.Using, Comparer).ToList();
