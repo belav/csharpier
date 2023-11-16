@@ -1,4 +1,6 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS base
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
+
+COPY 
 
 COPY nupkg ./nupkg
 COPY Src/CSharpier.MsBuild.Test ./Src/CSharpier.MsBuild.Test

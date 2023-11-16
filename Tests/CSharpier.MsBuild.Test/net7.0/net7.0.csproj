@@ -4,12 +4,10 @@
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <OutputType>library</OutputType>
     <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSharpier.MsBuild" Version="0.26.0">
+    <PackageReference Include="CSharpier.MsBuild" Version="0.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
