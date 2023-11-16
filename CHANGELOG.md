@@ -1,4 +1,30 @@
-﻿# 0.26.1
+﻿# 0.26.2
+## What's Changed
+#### CSharpier.MsBuild does not support DotNet 8 [#1012](https://github.com/belav/csharpier/issues/1012)
+When using CSharpier.MsBuild in a setting where the project targeted net8.0 and only the net8 sdk was installed, CSharpier.MsBuild would attempt to run the net7.0 version of csharpier which failed.
+
+Thanks go to @aditnryn for the fix
+#### Global System using directives should be sorted first [#1003](https://github.com/belav/csharpier/issues/1003)
+Global using were not sorting `System` to the top, which was inconsistent with regular using.
+
+```c#
+// 0.26.1
+global using ZWord;
+global using AWord;
+global using System.Web;
+global using System;
+
+// 0.26.2
+global using System;
+global using System.Web;
+global using AWord;
+global using ZWord;
+```
+
+Thanks go to @vipentti for the fix
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.26.1...0.26.2
+# 0.26.1
 ## What's Changed
 #### Editorconfig with duplicated sections was freezing IDE's [#989](https://github.com/belav/csharpier/issues/989)
 CSharpier was unable to parse an `.editorconfig` file that contained duplicate sections and would crash. This would result in a hung IDE.
@@ -1466,6 +1492,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
