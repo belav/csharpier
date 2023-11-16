@@ -4,6 +4,7 @@
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <OutputType>library</OutputType>
     <TargetFramework>net48</TargetFramework>
+    <CSharpier_FrameworkVersion>net8.0</CSharpier_FrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup>
