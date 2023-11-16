@@ -31,7 +31,11 @@ internal static class CommandLineFormatter
                     console.InputEncoding
                 );
 
+                // TODO need to get the stuff into here for path to csharpier in the plugins
+                // doesn't seem OS specific
+                // could it be permissions specific?
                 var optionsProvider = await OptionsProvider.Create(
+                    // TODO what is this when we warm things with ./ ?
                     fileSystem.Path.GetDirectoryName(filePath),
                     commandLineOptions.ConfigPath,
                     fileSystem,
