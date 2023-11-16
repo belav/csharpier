@@ -26,7 +26,7 @@
   <!-- getting this to run a single time for projects that target multiple frameworks requires all of this
    see https://github.com/dotnet/msbuild/issues/2781 -->
   <Target Name="CSharpierFormat" BeforeTargets="DispatchToInnerBuilds;BeforeBuild">
-    <MSBuild Projects="$(MSBuildProjectFile)" Targets="CSharpierFormatInner" Properties="TargetFramework=$(FirstTargetFramework)" />
+    <MSBuild Projects="$(MSBuildProjectFile)" Targets="CSharpierFormatInner" Properties="TargetFramework=$(FirstTargetFramework);CSharpier_FrameworkVersion=$(CSharpier_FrameworkVersion)" />
   </Target>
 
   <Target Name="CSharpierLogBypass" BeforeTargets="CSharpierFormatInner" Condition="'$(CSharpier_Bypass)' == 'true'">
