@@ -48,19 +48,20 @@ internal class OptionsProvider
 
         IList<EditorConfigSections>? editorConfigSections = null;
 
+        var ignoreFile = await IgnoreFile.Create(directoryName, fileSystem, cancellationToken);
+        
         try
         {
             editorConfigSections = EditorConfigParser.FindForDirectoryName(
                 directoryName,
-                fileSystem
+                fileSystem,
+                ignoreFile
             );
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, $"Failure parsing editorconfig files for {directoryName}");
+            logger.LogError(ex, "Failure parsing editorconfig files for {DirectoryName}", directoryName);
         }
-
-        var ignoreFile = await IgnoreFile.Create(directoryName, fileSystem, cancellationToken);
 
         return new OptionsProvider(
             editorConfigSections ?? Array.Empty<EditorConfigSections>(),
