@@ -34,6 +34,9 @@ public class CustomPathInstaller {
                 }
             }
             catch (Exception ex) {
+                // TODO somehow I got a bunch of the versions to install that were missing dotnet-csharpier in the root of the custom path
+                // this needs to do a better job of figuring that out and reporting it.
+                // I think when this fails to install, then the other stuff gets stuck in an infinite loop
                 logger.warn("Exception while running 'dotnet csharpier --version' in " + pathToDirectoryForVersion, ex);
             }
 

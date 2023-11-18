@@ -26,11 +26,16 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
             env: { ...process.env, DOTNET_NOLOGO: "1" },
         });
 
+        csharpierProcess.stderr.on("data", chunk => {
+            this.logger.debug("Got error " + chunk);
+        });
+
         csharpierProcess.stdout.on("data", chunk => {
             this.logger.debug("Got chunk of size " + chunk.length);
             this.nextFile += chunk;
-            const number = this.nextFile.indexOf("\u0003");
-            if (number >= 0) {
+            // TODO figure out a way to test this, maybe throw a delay in csharpier somehow?
+            let number = this.nextFile.indexOf("\u0003");
+            while (number >= 0) {
                 this.logger.debug("Got last chunk with ETX at " + number);
                 const result = this.nextFile.substring(0, number);
                 this.nextFile = this.nextFile.substring(number + 1);
@@ -44,6 +49,8 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
 
                     callback(result);
                 }
+
+                number = this.nextFile.indexOf("\u0003");
             }
         });
 

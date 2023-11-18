@@ -47,6 +47,11 @@
                         "type": "boolean",
                         "default": false,
                         "description": "Enable debug logs."
+                    },
+                    "csharpier.dev.customPath": {
+                        "type": "string",
+                        "default": "",
+                        "description": "Path to dotnet-csharpier - used for testing the extension with new versions of csharpier."
                     }
                 }
             }
