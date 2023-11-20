@@ -60,9 +60,9 @@ const config = {
                     },
                     {
                         href: githubUrl,
-                        label: "GitHub",
+                        html: "<span aria-hidden=\"true\">GitHub</span>",
                         position: "right",
-                        class: "header-github-link",
+                        class: "navbar__item navbar__link header-github-link",
                     },
                 ],
             },

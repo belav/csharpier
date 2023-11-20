@@ -29,6 +29,16 @@ public class CSharpierSettings
         this.runOnSave = runOnSave;
     }
 
+    private String customPath;
+
+    public String getCustomPath() {
+        return this.customPath;
+    }
+
+    public void setCustomPath(String customPath) {
+        this.customPath = customPath;
+    }
+
     @Override
     public CSharpierSettings getState() {
         return this;
