@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CSharpierProcessProvider implements DocumentListener, Disposable, IProcessKiller {
-    private final CustomPathInstaller customPathInstaller = new CustomPathInstaller();
+    private final CustomPathInstaller customPathInstaller;
     private final Logger logger = CSharpierLogger.getInstance();
     private final Project project;
 
@@ -38,6 +38,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
     public CSharpierProcessProvider(@NotNull Project project) {
         this.project = project;
+        this.customPathInstaller = new CustomPathInstaller(CSharpierSettings.getInstance(project));
 
         for (var fileEditor : FileEditorManager.getInstance(project).getAllEditors()) {
             var path = fileEditor.getFile().getPath();
@@ -200,7 +201,11 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         }
 
         try {
-            this.customPathInstaller.ensureVersionInstalled(version);
+            if (!this.customPathInstaller.ensureVersionInstalled(version)) {
+                this.displayFailureMessage();
+                return NullCSharpierProcess.Instance;
+            }
+
             var customPath = this.customPathInstaller.getPathForVersion(version);
 
             this.logger.debug("Adding new version " + version + " process for " + directory);
@@ -226,13 +231,27 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
             var useUtf8 = versionWeCareAbout >= 14;
 
-            return new CSharpierProcessPipeMultipleFiles(customPath, useUtf8);
+            // TODO I don't know if VSCode shows a message if the process failed to start
+            var csharpierProcess = new CSharpierProcessPipeMultipleFiles(customPath, useUtf8);
+            if (csharpierProcess.processFailedToStart) {
+                this.displayFailureMessage();
+            }
 
         } catch (Exception ex) {
             this.logger.error(ex);
         }
 
         return NullCSharpierProcess.Instance;
+    }
+
+    // TODO VSCode should get this helpful link too
+    private void displayFailureMessage() {
+        var title = "CSharpier unable to format files";
+        var message = "CSharpier could not be set up properly so formatting is not currently supported. See log file for more details.";
+        var notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
+                .createNotification(title, message, NotificationType.WARNING);
+        notification.addAction(new OpenUrlAction("Read More","https://csharpier.com/docs/EditorsTroubleshooting"));
+        notification.notify(this.project);
     }
 
     @Override
