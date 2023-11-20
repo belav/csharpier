@@ -15,8 +15,6 @@ public static class DirectoryFinder
             rootDirectory = rootDirectory.Parent;
         }
 
-
-
         return rootDirectory;
     }
 }

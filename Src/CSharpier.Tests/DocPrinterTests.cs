@@ -12,8 +12,6 @@ public class DocPrinterTests
 {
     private static readonly string NewLine = Environment.NewLine;
 
-
-
     [Test]
     public void Lines_Allowed()
     {

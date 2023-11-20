@@ -7,6 +7,7 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     private callbacks: ((result: string) => void)[] = [];
     private logger: Logger;
     private nextFile: string = "";
+    private processFailedToStart = false;
 
     constructor(logger: Logger, csharpierPath: string, workingDirectory: string) {
         this.logger = logger;
@@ -26,14 +27,27 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
             env: { ...process.env, DOTNET_NOLOGO: "1" },
         });
 
+        csharpierProcess.on("error", data => {
+            this.logger.warn(
+                "Failed to spawn the needed csharpier process. Formatting cannot occur.",
+                data,
+            );
+            this.processFailedToStart = true;
+            while (this.callbacks.length > 0) {
+                const callback = this.callbacks.shift();
+                if (callback) {
+                    callback("");
+                }
+            }
+        });
+
         csharpierProcess.stderr.on("data", chunk => {
-            this.logger.debug("Got error " + chunk);
+            this.logger.warn("Received data on stderr from the running charpier process", chunk);
         });
 
         csharpierProcess.stdout.on("data", chunk => {
             this.logger.debug("Got chunk of size " + chunk.length);
             this.nextFile += chunk;
-            // TODO figure out a way to test this, maybe throw a delay in csharpier somehow?
             let number = this.nextFile.indexOf("\u0003");
             while (number >= 0) {
                 this.logger.debug("Got last chunk with ETX at " + number);
@@ -58,6 +72,13 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     };
 
     formatFile(content: string, filePath: string): Promise<string> {
+        if (this.processFailedToStart) {
+            this.logger.warn("CSharpier proccess failed to start. Formatting cannot occur.");
+            return new Promise<string>(resolve => {
+                resolve("");
+            });
+        }
+
         this.process.stdin.write(filePath);
         this.process.stdin.write("\u0003");
         this.process.stdin.write(content);

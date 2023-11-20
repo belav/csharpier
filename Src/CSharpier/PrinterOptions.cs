@@ -19,8 +19,6 @@ internal class PrinterOptions
             return printerOptions.EndOfLine == EndOfLine.CRLF ? "\r\n" : "\n";
         }
 
-        
-
         var lineIndex = code.IndexOf('\n');
         if (lineIndex <= 0)
         {

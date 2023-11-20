@@ -23,11 +23,6 @@ export class CustomPathInstaller {
             return true;
         }
 
-        // directory already exists, validate
-        // if validation fails, reinstall then validate
-
-        // if directory does not exist, reinstall then validate
-
         const pathToDirectoryForVersion = this.getDirectoryForVersion(version);
         if (fs.existsSync(pathToDirectoryForVersion)) {
             if (this.validateInstall(pathToDirectoryForVersion, version)) {
@@ -41,6 +36,7 @@ export class CustomPathInstaller {
         }
 
         const command = `dotnet tool install csharpier --version ${version} --tool-path "${pathToDirectoryForVersion}"`;
+        this.logger.debug("Running " + command);
         execSync(command);
 
         return this.validateInstall(pathToDirectoryForVersion, version);
@@ -87,8 +83,4 @@ export class CustomPathInstaller {
     public getPathForVersion(version: string) {
         return path.resolve(this.getDirectoryForVersion(version), "dotnet-csharpier");
     }
-}
-
-interface InstallResult {
-    wasSuccessful: boolean;
 }

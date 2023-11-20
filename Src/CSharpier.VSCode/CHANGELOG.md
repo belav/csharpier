@@ -1,3 +1,6 @@
+## [1.5.0]
+- Improved error handling and reporting around csharpier failing to install or run
+
 ## [1.3.6]
 - Fix bug where 2nd instance of VSCode was not able to format code
 
