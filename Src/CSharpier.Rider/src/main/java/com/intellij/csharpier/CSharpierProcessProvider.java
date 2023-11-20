@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class CSharpierProcessProvider implements DocumentListener, Disposable, IProcessKiller {
     private final CustomPathInstaller customPathInstaller;
@@ -163,6 +164,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         var version = ProcessHelper.ExecuteCommand(command, env, new File(directoryThatContainsFile));
 
         this.logger.debug("dotnet csharpier --version output: " + version);
+        version = version.split(Pattern.quote("+"))[0];
 
         return version == null ? "" : version;
     }
@@ -236,6 +238,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
             if (csharpierProcess.processFailedToStart) {
                 this.displayFailureMessage();
             }
+            return csharpierProcess;
 
         } catch (Exception ex) {
             this.logger.error(ex);
