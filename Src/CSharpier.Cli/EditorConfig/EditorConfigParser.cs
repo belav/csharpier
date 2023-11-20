@@ -2,6 +2,11 @@ using System.IO.Abstractions;
 
 namespace CSharpier.Cli.EditorConfig;
 
+// TODO for a given directory find the config in it and going up til root
+// keep track of directories + their corresponding configs
+// if searching a new directory and we go up to a parent that contains the first config, use that
+// how many directories would we run into? enough to matter?
+// TODO !!!!!!!!!!!!!!!!!! an easy fix, is to pass a flag to not go deeper when running this via piping files!!!
 internal static class EditorConfigParser
 {
     /// <summary>Finds all configs above the given directory as well as within the subtree of this directory</summary>
@@ -17,6 +22,7 @@ internal static class EditorConfigParser
         }
 
         var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(directoryName);
+        // TODO this is probably killing performance if nothing else when piping a single file
         var editorConfigFiles = directoryInfo
             .EnumerateFiles(".editorconfig", SearchOption.AllDirectories)
             .Where(x => !ignoreFile.IsIgnored(x.FullName))

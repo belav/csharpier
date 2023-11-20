@@ -111,6 +111,8 @@ public class Program
 
         var exitCode = 0;
 
+        // TODO warm file somewhere around here
+
         while (true)
         {
             while (true)

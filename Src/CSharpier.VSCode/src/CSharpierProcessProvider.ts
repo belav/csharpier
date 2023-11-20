@@ -209,7 +209,13 @@ export class CSharpierProcessProvider implements Disposable {
                 return NullCSharpierProcess.instance;
             }
 
-            this.customPathInstaller.ensureVersionInstalled(version);
+            if (!this.customPathInstaller.ensureVersionInstalled(version)) {
+                window.showErrorMessage(
+                    "CSharpier could not be set up properly so formatting is not currently supported. See Output - CSharpier for details.",
+                );
+                return NullCSharpierProcess.instance;
+            }
+
             const customPath = this.customPathInstaller.getPathForVersion(version);
 
             this.logger.debug(`Adding new version ${version} process for ${directory}`);
