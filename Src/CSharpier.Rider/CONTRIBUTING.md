@@ -3,6 +3,9 @@ Useful links
 - https://plugins.jetbrains.com/docs/intellij/welcome.html
 - https://developerlife.com/2021/03/13/ij-idea-plugin-advanced/
 
+Initial Setup
+- need the java 17 jdk
+
 Local testing
 - use "Run Plugin" configuration while in intellij to launch the plugin into a dev instance of rider
   - To see logs
