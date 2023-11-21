@@ -25,6 +25,7 @@ export class CustomPathInstaller {
 
         const pathToDirectoryForVersion = this.getDirectoryForVersion(version);
         if (fs.existsSync(pathToDirectoryForVersion)) {
+            this.logger.debug("Validating install at " + pathToDirectoryForVersion);
             if (this.validateInstall(pathToDirectoryForVersion, version)) {
                 return true;
             }
@@ -44,17 +45,22 @@ export class CustomPathInstaller {
 
     private validateInstall(pathToDirectoryForVersion: string, version: string): boolean {
         try {
-            const output = execSync(`${this.getPathForVersion(version)} --version`, {
+            const output = execSync(`"${this.getPathForVersion(version)}" --version`, {
                 env: { ...process.env, DOTNET_NOLOGO: "1" },
             })
                 .toString()
                 .trim();
 
-            this.logger.debug("dotnet csharpier --version output: " + output);
+            this.logger.debug(`"${this.getPathForVersion(version)}" --version output: ${output}`);
+            const versionWithoutHash = output.split("+")[0]
+            this.logger.debug(`Using ${versionWithoutHash} as the version number.`)
 
-            if (output.split("+")[0] === version) {
+            if (versionWithoutHash === version) {
                 this.logger.debug("CSharpier at " + pathToDirectoryForVersion + " already exists");
                 return true;
+            }
+            else {
+                this.logger.warn("Version of " + versionWithoutHash + " did not match expected version of " + version)
             }
         } catch (error: any) {
             const message = !error.stderr ? error.toString() : error.stderr.toString();
