@@ -24,11 +24,14 @@ internal static class CommandLineFormatter
 
             if (commandLineOptions.StandardInFileContents != null)
             {
-                // currently when piping stdin, this will always be a directory
-                var directoryPath = commandLineOptions.DirectoryOrFilePaths[0];
-                // but we need a filename to correctly find config files
-                // #288 should be done once we support csproj/xml, and possibly be required
-                var filePath = Path.Combine(directoryPath, "StdIn.cs");
+                var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[0];
+                var directoryPath = fileSystem.Directory.Exists(directoryOrFilePath)
+                    ? directoryOrFilePath
+                    : fileSystem.Path.GetDirectoryName(directoryOrFilePath);
+                var filePath =
+                    directoryOrFilePath != directoryPath
+                        ? directoryOrFilePath
+                        : Path.Combine(directoryPath, "StdIn.cs");
 
                 var fileToFormatInfo = FileToFormatInfo.Create(
                     filePath,
