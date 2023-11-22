@@ -12,7 +12,7 @@ if (Test-Path $basePath) {
 
 New-Item $basePath -ItemType Directory | Out-Null
 
-$hasFailure = $false
+$failureMessage = ""
 
 foreach ($scenario in $scenarios) {
     $scenarioPath = Join-Path $basePath $scenario.name
@@ -24,12 +24,12 @@ foreach ($scenario in $scenarios) {
 WORKDIR /app
 COPY ./nupkg ./nupkg
 COPY ./nuget.config ./nuget.config
-COPY ./GeneratedScenarios/$($scenario.name)/$($scenario.name).csproj ./
+COPY ./GeneratedScenarios/$($scenario.name)/Project.csproj ./
 RUN dotnet build -c Release
 "
 
 
-    $csprojFile = Join-Path $scenarioPath "$($scenario.name).csproj"
+    $csprojFile = Join-Path $scenarioPath "Project.csproj"
 
     Set-Content -Path $csprojFile -Value "<Project Sdk=`"Microsoft.NET.Sdk`">
   <PropertyGroup>
@@ -47,11 +47,12 @@ RUN dotnet build -c Release
     docker build . -f $dockerFile
 
     if ($LASTEXITCODE -ne 0) {
-        $hasFailure = $true
+        $failureMessage += "The scenario $($scenario.name) failed to build. See the logs above for details`n"
     }
 }
 
-if ($hasFailure) {
+if ($failureMessage -ne "") {
+    Write-Host $failureMessage
     exit 1
 }
 
