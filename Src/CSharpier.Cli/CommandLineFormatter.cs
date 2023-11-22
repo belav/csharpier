@@ -44,7 +44,8 @@ internal static class CommandLineFormatter
                     commandLineOptions.ConfigPath,
                     fileSystem,
                     logger,
-                    cancellationToken
+                    cancellationToken,
+                    limitEditorConfigSearch: true
                 );
 
                 if (

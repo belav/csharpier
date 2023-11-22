@@ -587,6 +587,48 @@ indent_size = 2
         result.TabWidth.Should().Be(1);
     }
 
+    [Test]
+    public async Task Should_Not_Look_For_Subfolders_EditorConfig_When_Limited()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/subfolder/.editorconfig",
+            @"
+    [*]
+    indent_size = 1
+    "
+        );
+
+        // this shouldn't happen in the real world, but validates we correctly limit
+        // the search to the top directory only
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test/",
+            "c:/test/subfolder/test.cs",
+            limitEditorConfigSearch: true
+        );
+        result.TabWidth.Should().Be(4);
+    }
+
+    [Test]
+    public async Task Should_Look_For_Subfolders_When_Limited()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            @"
+    [*]
+    indent_size = 1
+    "
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test/subfolder",
+            "c:/test/subfolder/test.cs",
+            limitEditorConfigSearch: true
+        );
+        result.TabWidth.Should().Be(1);
+    }
+
     private static void ShouldHaveDefaultOptions(PrinterOptions printerOptions)
     {
         printerOptions.Width.Should().Be(100);
@@ -611,7 +653,8 @@ indent_size = 2
 
         public async Task<PrinterOptions> CreateProviderAndGetOptionsFor(
             string directoryName,
-            string filePath
+            string filePath,
+            bool limitEditorConfigSearch = false
         )
         {
             if (!OperatingSystem.IsWindows())
@@ -626,7 +669,8 @@ indent_size = 2
                 null,
                 this.fileSystem,
                 NullLogger.Instance,
-                CancellationToken.None
+                CancellationToken.None,
+                limitEditorConfigSearch
             );
 
             return provider.GetPrinterOptionsFor(filePath);
