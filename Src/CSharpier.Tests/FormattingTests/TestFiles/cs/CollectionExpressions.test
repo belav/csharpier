@@ -1,6 +1,8 @@
-int[] a =  [ 1, 2, 3, 4, 5, 6, 7, 8 ];
+List<int> ids = [];
 
-Span<int> b =  [ 'a', 'b', 'c', 'd', 'e', 'f', 'h', 'i' ];
+int[] a = [1, 2, 3, 4, 5, 6, 7, 8];
+
+Span<int> b = ['a', 'b', 'c', 'd', 'e', 'f', 'h', 'i'];
 
 string[] c =
 [

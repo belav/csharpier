@@ -6,9 +6,12 @@ internal static class CollectionExpression
     {
         Doc separator = node.Parent
             is AssignmentExpressionSyntax
-                or EqualsValueClauseSyntax { Parent: not PropertyDeclarationSyntax }
+                or EqualsValueClauseSyntax
+                {
+                    Parent: not (PropertyDeclarationSyntax or VariableDeclaratorSyntax)
+                }
             ? Doc.Line
-            : Doc.Null;
+            : Doc.IfBreak(Doc.Line, Doc.Null);
 
         var alwaysBreak =
             node.Elements.FirstOrDefault()
@@ -17,19 +20,21 @@ internal static class CollectionExpression
         var result = Doc.Concat(
             separator,
             Token.Print(node.OpenBracketToken, context),
-            Doc.Indent(
-                alwaysBreak ? Doc.HardLine : Doc.Line,
-                SeparatedSyntaxList.Print(
-                    node.Elements,
-                    Node.Print,
-                    alwaysBreak ? Doc.HardLine : Doc.Line,
-                    context
+            node.Elements.Any()
+                ? Doc.Indent(
+                    alwaysBreak ? Doc.HardLine : Doc.IfBreak(Doc.Line, Doc.Null),
+                    SeparatedSyntaxList.Print(
+                        node.Elements,
+                        Node.Print,
+                        alwaysBreak ? Doc.HardLine : Doc.Line,
+                        context
+                    )
                 )
-            ),
+                : Doc.Null,
             node.Elements.Any()
                 ? alwaysBreak
                     ? Doc.HardLine
-                    : Doc.Line
+                    : Doc.IfBreak(Doc.Line, Doc.Null)
                 : Doc.Null,
             Token.Print(node.CloseBracketToken, context)
         );
