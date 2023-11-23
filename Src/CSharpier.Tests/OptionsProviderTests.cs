@@ -519,7 +519,7 @@ indent_size = 2
         );
         result.TabWidth.Should().Be(1);
     }
-    
+
     [Test]
     public async Task Should_Ignore_Invalid_EditorConfig()
     {
@@ -534,10 +534,10 @@ INVALID
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
-        
+
         result.TabWidth.Should().Be(4);
     }
-    
+
     [Test]
     public async Task Should_Ignore_Ignored_EditorConfig()
     {
@@ -557,11 +557,8 @@ INVALID
     indent_size = 1
     "
         );
-        
-        context.WhenAFileExists(
-            "c:/test/.csharpierignore",
-            "/subfolder/.editorconfig"
-        );
+
+        context.WhenAFileExists("c:/test/.csharpierignore", "/subfolder/.editorconfig");
 
         var result = await context.CreateProviderAndGetOptionsFor(
             "c:/test",
