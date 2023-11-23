@@ -24,7 +24,6 @@ internal static class EditorConfigParser
         }
 
         var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(directoryName);
-        // TODO this is probably killing performance if nothing else when piping a single file
         var editorConfigFiles = directoryInfo
             .EnumerateFiles(
                 ".editorconfig",
