@@ -1,17 +1,23 @@
 [
   {
-    "name": "sdk8-netstandard2.0",
+    "name": "sdk:8.0_netstandard2.0",
     "sdk": "mcr.microsoft.com/dotnet/sdk:8.0",
     "targetFrameworks": "netstandard2.0"
   },
   {
-    "name": "sdk8-net8-win",
+    "name": "sdk:8.0_net8.0-windows",
     "sdk": "mcr.microsoft.com/dotnet/sdk:8.0",
     "targetFrameworks": "net8.0-windows"
   },
   {
-    "name": "sdk8-net6-net7",
+    "name": "sdk:8.0_net6.0;net7.07",
     "sdk": "mcr.microsoft.com/dotnet/sdk:8.0",
     "targetFrameworks": "net6.0;net7.0"
+  },
+  {
+    "name": "sdk:8.0_csharpier-net8.0",
+    "sdk": "mcr.microsoft.com/dotnet/sdk:8.0",
+    "targetFrameworks": "netstandard2.0",
+    "csharpier_frameworkVersion": "net8.0"
   }
 ]

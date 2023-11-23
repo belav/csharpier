@@ -1,6 +1,10 @@
 Set-Location $PSScriptRoot
 
+Write-Host "::group::Build CSharpier.MsBuild::"
+
 dotnet pack ../../Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj -o nupkg /p:Version=0.0.1
+
+Write-Host "::endgroup::"
 
 $scenarios = Get-Content Scenarios.json | ConvertFrom-JSON
 
@@ -13,8 +17,6 @@ if (Test-Path $basePath) {
 New-Item $basePath -ItemType Directory | Out-Null
 
 $failureMessage = ""
-
-Write-Host "::group::Running Scenarios"
 
 foreach ($scenario in $scenarios) {
     Write-Host "::group::$($scenario.name)"
@@ -35,9 +37,17 @@ RUN dotnet build -c Release
 
     $csprojFile = Join-Path $scenarioPath "Project.csproj"
 
+    $csharpierFrameworkVersion = ""
+    if ($null -ne $scenario.csharpier_frameworkVersion) {
+        $csharpierFrameworkVersion = "
+    <CSharpier_FrameworkVersion>net8.0</CSharpier_FrameworkVersion>
+"
+    }
+
     Set-Content -Path $csprojFile -Value "<Project Sdk=`"Microsoft.NET.Sdk`">
   <PropertyGroup>
     <TargetFrameworks>$($scenario.targetFrameworks)</TargetFrameworks>
+    $csharpierFrameworkVersion
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include=`"CSharpier.MsBuild`" Version=`"0.0.1`">
@@ -56,8 +66,6 @@ RUN dotnet build -c Release
 
     Write-Host "::endgroup::"
 }
-
-Write-Host "::endgroup::"
 
 if ($failureMessage -ne "") {
     Write-Host $failureMessage
