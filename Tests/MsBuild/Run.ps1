@@ -14,7 +14,11 @@ New-Item $basePath -ItemType Directory | Out-Null
 
 $failureMessage = ""
 
+Write-Host "::group::Running Scenarios"
+
 foreach ($scenario in $scenarios) {
+    Write-Host "::group::$($scenario.name)"
+
     $scenarioPath = Join-Path $basePath $scenario.name
     New-Item $scenarioPath -ItemType Directory | Out-Null
 
@@ -47,9 +51,13 @@ RUN dotnet build -c Release
     docker build . -f $dockerFile
 
     if ($LASTEXITCODE -ne 0) {
-        $failureMessage += "The scenario $($scenario.name) failed to build. See the logs above for details`n"
+        $failureMessage += "::error::The scenario $($scenario.name) failed to build. See the logs above for details`n"
     }
+
+    Write-Host "::endgroup::"
 }
+
+Write-Host "::endgroup::"
 
 if ($failureMessage -ne "") {
     Write-Host $failureMessage
