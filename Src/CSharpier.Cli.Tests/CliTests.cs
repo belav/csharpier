@@ -153,6 +153,42 @@ public class CliTests
     }
 
     [Test]
+    public async Task Should_Format_Piped_File_With_Config()
+    {
+        await this.WriteFileAsync(".csharpierrc", "printWidth: 10");
+
+        var formattedContent1 = "var x =\n    _________________longName;\n";
+        var unformattedContent1 = "var x = _________________longName;\n";
+
+        var result = await new CsharpierProcess()
+            .WithPipedInput(unformattedContent1)
+            .ExecuteAsync();
+
+        result.Output.Should().Be(formattedContent1);
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    public async Task Should_Format_Piped_File_With_EditorConfig()
+    {
+        await this.WriteFileAsync(
+            ".editorconfig",
+            @"[*]
+max_line_length = 10"
+        );
+
+        var formattedContent1 = "var x =\n    _________________longName;\n";
+        var unformattedContent1 = "var x = _________________longName;\n";
+
+        var result = await new CsharpierProcess()
+            .WithPipedInput(unformattedContent1)
+            .ExecuteAsync();
+
+        result.Output.Should().Be(formattedContent1);
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
     public async Task Should_Format_Unicode()
     {
         // use the \u so that we don't accidentally reformat this to be '?'

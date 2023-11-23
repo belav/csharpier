@@ -7,7 +7,7 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     private callbacks: ((result: string) => void)[] = [];
     private logger: Logger;
     private nextFile: string = "";
-    private processFailedToStart = false;
+    public processFailedToStart = false;
 
     constructor(logger: Logger, csharpierPath: string, workingDirectory: string) {
         this.logger = logger;
