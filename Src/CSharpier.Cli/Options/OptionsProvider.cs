@@ -35,7 +35,8 @@ internal class OptionsProvider
         string? configPath,
         IFileSystem fileSystem,
         ILogger logger,
-        CancellationToken cancellationToken
+        CancellationToken cancellationToken,
+        bool limitEditorConfigSearch = false
     )
     {
         var specifiedPrinterOptions = configPath is not null
@@ -55,6 +56,7 @@ internal class OptionsProvider
             editorConfigSections = EditorConfigParser.FindForDirectoryName(
                 directoryName,
                 fileSystem,
+                limitEditorConfigSearch,
                 ignoreFile
             );
         }
