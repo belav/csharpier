@@ -1,6 +1,5 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Text;
 using Microsoft.Extensions.Logging;

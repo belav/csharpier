@@ -35,7 +35,8 @@ internal class OptionsProvider
         string? configPath,
         IFileSystem fileSystem,
         ILogger logger,
-        CancellationToken cancellationToken
+        CancellationToken cancellationToken,
+        bool limitEditorConfigSearch = false
     )
     {
         var specifiedPrinterOptions = configPath is not null
@@ -48,19 +49,25 @@ internal class OptionsProvider
 
         IList<EditorConfigSections>? editorConfigSections = null;
 
+        var ignoreFile = await IgnoreFile.Create(directoryName, fileSystem, cancellationToken);
+
         try
         {
             editorConfigSections = EditorConfigParser.FindForDirectoryName(
                 directoryName,
-                fileSystem
+                fileSystem,
+                limitEditorConfigSearch,
+                ignoreFile
             );
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, $"Failure parsing editorconfig files for {directoryName}");
+            logger.LogError(
+                ex,
+                "Failure parsing editorconfig files for {DirectoryName}",
+                directoryName
+            );
         }
-
-        var ignoreFile = await IgnoreFile.Create(directoryName, fileSystem, cancellationToken);
 
         return new OptionsProvider(
             editorConfigSections ?? Array.Empty<EditorConfigSections>(),

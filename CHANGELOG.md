@@ -1,4 +1,47 @@
-﻿# 0.26.2
+﻿# 0.26.3
+## What's Changed
+#### C#12 Collection expressions are prefixed with two spaces [#1009](https://github.com/belav/csharpier/issues/1009)
+```c#
+// 0.26.0
+List<int> ids =  [];
+
+// 0.26.3
+List<int> ids = [];
+```
+
+Thanks go to @Jackenmen for reporting the problem.
+#### CSharpier inserts extra spaces around the contents of collection expressions [#1002](https://github.com/belav/csharpier/issues/1002)
+```c#
+// 0.26.0
+List<int> ids = [ ];
+List<int> ids = [ 1, 2, 3 ];
+
+// 0.26.3
+List<int> ids = [];
+List<int> ids = [1, 2, 3];
+```
+
+Thanks go to @golavr for reporting the problem.
+#### Configuration files not respected for stdin [#1028](https://github.com/belav/csharpier/issues/1028)
+When piping a file to csharpier via stdin, CSharpier uses the working directory to locate any configuration files. This was broken with `0.26.0`.
+
+Thanks go to @kikniknik for reporting the problem.
+
+#### Modify CSharpier.MSBuild to use NETCoreSdkVersion to detect which sdk to use for running CSharpier [#1022](https://github.com/belav/csharpier/issues/1022) [#1027](https://github.com/belav/csharpier/issues/1027)
+Previously CSharpier.MSBuild was using `targetFramework` to determine which version of CSharpier to run. This was problematic when there were multiple target frameworks, or the project was targeting a superset such as `net8.0-windows`
+
+It now makes use of `NETCoreSdkVersion` to determine which version of CSharpier to run.
+
+Thanks go to @Tyrrrz for the suggestion and to @Cjewett for the contribution to make it work
+#### CSharpierIgnore not respected when recursively finding .editorconfig
+When looking for `.editorconfig` files, CSharpier looks for them recursively in the current directory. This logic was not taking into account any files or directories ignored by a `.csharpierignore`.
+
+Thanks go to @sebastieng84 for the contribution.
+#### Optimize editorconfig lookups when piping files [#1039](https://github.com/belav/csharpier/pull/1039)
+CSharpier now only looks for an `.editorconfig` for the file being piped to CSharpier. Under normal usage it recursively looks for all possible `.editorconfig` files for the given directory. 
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.26.2...0.26.3
+# 0.26.2
 ## What's Changed
 #### CSharpier.MsBuild does not support DotNet 8 [#1012](https://github.com/belav/csharpier/issues/1012)
 When using CSharpier.MsBuild in a setting where the project targeted net8.0 and only the net8 sdk was installed, CSharpier.MsBuild would attempt to run the net7.0 version of csharpier which failed.
@@ -1492,6 +1535,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
