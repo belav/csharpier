@@ -521,6 +521,53 @@ indent_size = 2
     }
 
     [Test]
+    public async Task Should_Ignore_Invalid_EditorConfig()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            @"
+[*]
+indent_size = 2
+INVALID
+"
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+
+        result.TabWidth.Should().Be(4);
+    }
+
+    [Test]
+    public async Task Should_Ignore_Ignored_EditorConfig()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/subfolder/.editorconfig",
+            @"
+    [*]
+    indent_size = 2
+    "
+        );
+
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            @"
+    [*]
+    indent_size = 1
+    "
+        );
+
+        context.WhenAFileExists("c:/test/.csharpierignore", "/subfolder/.editorconfig");
+
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test",
+            "c:/test/subfolder/test.cs"
+        );
+        result.TabWidth.Should().Be(1);
+    }
+
+    [Test]
     public async Task Should_Prefer_Closer_CSharpierrc()
     {
         var context = new TestContext();

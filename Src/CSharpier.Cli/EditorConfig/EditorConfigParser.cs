@@ -12,7 +12,8 @@ internal static class EditorConfigParser
     /// <summary>Finds all configs above the given directory as well as within the subtree of this directory</summary>
     public static List<EditorConfigSections> FindForDirectoryName(
         string directoryName,
-        IFileSystem fileSystem
+        IFileSystem fileSystem,
+        IgnoreFile ignoreFile
     )
     {
         if (directoryName is "")
@@ -24,6 +25,7 @@ internal static class EditorConfigParser
         // TODO this is probably killing performance if nothing else when piping a single file
         var editorConfigFiles = directoryInfo
             .EnumerateFiles(".editorconfig", SearchOption.AllDirectories)
+            .Where(x => !ignoreFile.IsIgnored(x.FullName))
             .ToList();
 
         // already found any in this directory above
