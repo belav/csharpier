@@ -8,32 +8,8 @@ public static class CodeFormatter
 {
     public static CodeFormatterResult Format(string code, CodeFormatterOptions? options = null)
     {
-    
-    
-    
         return FormatAsync(code, options).Result;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
     public static Task<CodeFormatterResult> FormatAsync(
         string code,

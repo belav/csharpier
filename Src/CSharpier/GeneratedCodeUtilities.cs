@@ -7,12 +7,6 @@ internal static class GeneratedCodeUtilities
         var fileName = Path.GetFileName(filePath);
         if (fileName.StartsWithIgnoreCase("TemporaryGeneratedFile_"))
         {
-            
-            
-            
-            
-            
-            
             return true;
         }
 
