@@ -56,7 +56,6 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
 
         var stringBuilder = new StringBuilder();
 
-        // TODO maybe pull in the retry stuff from here - https://github.com/belav/csharpier/commit/904bd14e1c028430a7b84571c320d1b54bf15500
         Runnable task = () -> {
             try {
                 this.stdin.write(filePath);

@@ -53,9 +53,11 @@ public class CustomPathInstaller {
             var command = new String[] { this.getPathForVersion(version), "--version" };
             var output = ProcessHelper.ExecuteCommand(command, env, new File(pathToDirectoryForVersion)).trim();
 
-            this.logger.debug("dotnet csharpier --version output: " + output);
+            this.logger.debug("dotnet csharpier --version output: " + version);
+            var versionWithoutHash = output.split(Pattern.quote("+"))[0];
+            this.logger.debug("Using " + versionWithoutHash + " as the version number.");
 
-            if (output.split(Pattern.quote("+"))[0].equals(version))
+            if (versionWithoutHash.equals(version))
             {
                 this.logger.debug("CSharpier at " + pathToDirectoryForVersion + " already exists");
                 return true;

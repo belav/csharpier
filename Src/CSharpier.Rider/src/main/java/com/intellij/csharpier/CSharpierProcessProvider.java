@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class CSharpierProcessProvider implements DocumentListener, Disposable, IProcessKiller {
     private final CustomPathInstaller customPathInstaller;
@@ -162,9 +163,14 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         var command = new String[]{"dotnet", "csharpier", "--version"};
         var version = ProcessHelper.ExecuteCommand(command, env, new File(directoryThatContainsFile));
 
+        if (version == null) {
+            version = "";
+        }
         this.logger.debug("dotnet csharpier --version output: " + version);
+        var versionWithoutHash = version.split(Pattern.quote("+"))[0];
+        this.logger.debug("Using " + versionWithoutHash + " as the version number.");
 
-        return version == null ? "" : version;
+        return versionWithoutHash;
     }
 
     private String FindVersionInCsProj(Path currentDirectory) {
@@ -231,11 +237,12 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
             var useUtf8 = versionWeCareAbout >= 14;
 
-            // TODO I don't know if VSCode shows a message if the process failed to start
             var csharpierProcess = new CSharpierProcessPipeMultipleFiles(customPath, useUtf8);
             if (csharpierProcess.processFailedToStart) {
                 this.displayFailureMessage();
             }
+
+            return csharpierProcess;
 
         } catch (Exception ex) {
             this.logger.error(ex);
@@ -244,7 +251,6 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         return NullCSharpierProcess.Instance;
     }
 
-    // TODO VSCode should get this helpful link too
     private void displayFailureMessage() {
         var title = "CSharpier unable to format files";
         var message = "CSharpier could not be set up properly so formatting is not currently supported. See log file for more details.";
