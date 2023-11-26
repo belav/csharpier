@@ -28,11 +28,10 @@ jobs:
           dotnet csharpier . --check
   test_msbuild:
     runs-on: ubuntu-latest
-    name: Build CSharpier.MSBuild
+    name: Test CSharpier.MSBuild
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v3
       - run: |
-          dotnet pack Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj -o nupkg /p:Version=0.0.1
-          docker build -f ./Tests/CSharpier.MsBuild.Test/Dockerfile .
+          pwsh ./Tests/MsBuild/Run.ps1
 
