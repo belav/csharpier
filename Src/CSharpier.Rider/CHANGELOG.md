@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.5.0]
+- Improved error handling and reporting around csharpier failing to install or run
+
 ## [1.3.10]
 - Read from error stream to prevent the plugin hanging when the csharpier process writes too much to the error stream.
 

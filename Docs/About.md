@@ -10,14 +10,16 @@ The printing process was ported from [prettier](https://github.com/prettier/pret
 CSharpier provides a few basic options that affect formatting and has no plans to add more. It follows the [Option Philosophy](https://prettier.io/docs/en/option-philosophy.html) of prettier.
 
 ### Quick Start
-Install CSharpier globally using the following command.
+Install CSharpier in a project with the following command.
 ```bash
-dotnet tool install csharpier -g
+dotnet tool install csharpier
 ```
-Then format the contents of a directory and its children with the following command.
+Then format the contents of the project
 ```bash
 dotnet csharpier .
 ```
+
+See [Install a local tool](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool) and [CLI Usage](https://csharpier.com/docs/CLI) for more information
 
 CSharpier can also format [on save in your editor](https://csharpier.com/docs/Editors), as a [pre-commit hook](https://csharpier.com/docs/Pre-commit), as [part of your build](https://csharpier.com/docs/MSBuild) or even [programatically](https://csharpier.com/docs/API). Then you can ensure code was formatted with a [CI/CD tool](https://csharpier.com/docs/ContinuousIntegration).
 
@@ -31,7 +33,7 @@ CSharpier can also format [on save in your editor](https://csharpier.com/docs/Ed
 ```c#
 public class ClassName {
     public void CallMethod() { 
-        this.LongUglyMethod("1234567890", "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        var shuffle = shuffle.Skip(26).LogQuery("Bottom Half").InterleaveSequenceWith(shuffle.Take(26).LogQuery("Top Half"), shuffle.Skip(26).LogQuery("Bottom Half")).LogQuery("Shuffle").ToArray();
     }
 }
 ```
@@ -42,11 +44,17 @@ public class ClassName
 {
     public void CallMethod()
     {
-        this.LongUglyMethod(
-            "1234567890",
-            "abcdefghijklmnopqrstuvwxyz",
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        );
+        var shuffle = shuffle
+            .Skip(26)
+            .LogQuery("Bottom Half")
+            .InterleaveSequenceWith(
+                shuffle.Take(26).LogQuery("Top Half"),
+                shuffle.Skip(26).LogQuery("Bottom Half")
+            )
+            .LogQuery("Shuffle")
+            .ToArray();
     }
 }
+
+
 ```
