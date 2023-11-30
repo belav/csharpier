@@ -280,10 +280,18 @@ internal static class UsingDirectives
 
             if (x.Alias is not null && y.Alias is not null)
             {
-                return x.Alias.ToFullString().CompareTo(y.Alias.ToFullString());
+                return String.Compare(
+                    x.Alias.ToFullString(),
+                    y.Alias.ToFullString(),
+                    StringComparison.Ordinal
+                );
             }
 
-            return x.Name.ToFullString().CompareTo(y.Name.ToFullString());
+            return String.Compare(
+                x.Name.ToFullString(),
+                y.Name.ToFullString(),
+                StringComparison.Ordinal
+            );
         }
     }
 }
