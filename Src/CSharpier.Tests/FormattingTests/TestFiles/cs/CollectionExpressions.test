@@ -37,6 +37,17 @@ items.AddRange(
     ]
 );
 
+someObject = new SomeObject
+{
+    Property1 = "one",
+    Property2 =
+    [
+        LongValue________________________________________________,
+        LongValue________________________________________________
+    ],
+    Property3 = "three"
+};
+
 someValue =
 [
     LongValue________________________________________________,

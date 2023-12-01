@@ -10,7 +10,11 @@ internal static class CollectionExpression
                 or ExpressionElementSyntax
                 or AssignmentExpressionSyntax
                 {
-                    Parent: not (ObjectCreationExpressionSyntax or ExpressionStatementSyntax)
+                    Parent: not (
+                        ObjectCreationExpressionSyntax
+                        or InitializerExpressionSyntax
+                        or ExpressionStatementSyntax
+                    )
                 }
                 or EqualsValueClauseSyntax
                 {
