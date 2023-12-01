@@ -37,6 +37,23 @@ items.AddRange(
     ]
 );
 
+someValue =
+[
+    LongValue________________________________________________,
+    LongValue________________________________________________
+];
+
+CallMethod(parameter1, parameterName: [1, 2]);
+
+CallMethod(
+    parameter1,
+    parameterName:
+    [
+        LongValue________________________________________________,
+        LongValue________________________________________________
+    ]
+);
+
 class MyClass
 {
     private readonly List<string> _items;

@@ -5,10 +5,13 @@ internal static class CollectionExpression
     public static Doc Print(CollectionExpressionSyntax node, FormattingContext context)
     {
         Doc separator = node.Parent
-            is ArgumentSyntax
+            is ArgumentSyntax { NameColon: null }
                 or ArrowExpressionClauseSyntax
                 or ExpressionElementSyntax
-                or AssignmentExpressionSyntax { Parent: not ObjectCreationExpressionSyntax }
+                or AssignmentExpressionSyntax
+                {
+                    Parent: not (ObjectCreationExpressionSyntax or ExpressionStatementSyntax)
+                }
                 or EqualsValueClauseSyntax
                 {
                     Parent: not (PropertyDeclarationSyntax or VariableDeclaratorSyntax)
