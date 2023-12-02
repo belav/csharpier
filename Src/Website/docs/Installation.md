@@ -18,3 +18,17 @@ Dotnet tools can also be installed globally with the following command.
 ```bash
 dotnet tool install -g csharpier
 ```
+
+To update an existing installation of CSharpier, run the dotnet update command.
+
+For local installations run the following command from the install directory.
+
+```bash
+dotnet tool update csharpier
+```
+
+For global installations run the following command from any location.
+
+```bash
+dotnet tool update csharpier -g
+```
