@@ -18,3 +18,83 @@ int[][] d =
     [4, 5, 6],
     [7, 8, 9]
 ];
+
+var a = new A { B = [1, 2, 3] };
+
+List<string> items =
+[
+    // My item
+    "Hello",
+];
+
+items.AddRange(
+    [
+        "More really long words",
+        "which span multiple lines",
+        "are added here",
+        "and something bad",
+        "happens"
+    ]
+);
+
+someObject = new SomeObject
+{
+    Property1 = "one",
+    Property2 =
+    [
+        LongValue________________________________________________,
+        LongValue________________________________________________
+    ],
+    Property3 = "three"
+};
+
+someValue =
+[
+    LongValue________________________________________________,
+    LongValue________________________________________________
+];
+
+CallMethod(parameter1, parameterName: [1, 2]);
+
+CallMethod(
+    parameter1,
+    parameterName:
+    [
+        LongValue________________________________________________,
+        LongValue________________________________________________
+    ]
+);
+
+class MyClass
+{
+    private readonly List<string> _items;
+
+    public MyClass()
+    {
+        _items = [];
+        _items ??= [];
+    }
+
+    public TheoryData<string[]> ArgsData =>
+        [
+            [],
+            [ArgConstants.UseProgramMain],
+            [ArgConstants.GlobalInteractivity, ArgConstants.WebAssemblyInteractivity],
+            [
+                ArgConstants.NoInteractivity,
+                ArgConstants.UseProgramMain,
+                ArgConstants.NoHttps,
+                ArgConstants.Empty
+            ],
+        ];
+
+    public ReadOnlySpan<HttpMethod> Methods() =>
+        [
+            HttpMethod.None,
+            HttpMethod.Put,
+            HttpMethod.Post,
+            HttpMethod.Patch,
+            HttpMethod.None,
+            HttpMethod.Connect,
+        ];
+}

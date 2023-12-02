@@ -5,12 +5,22 @@ internal static class CollectionExpression
     public static Doc Print(CollectionExpressionSyntax node, FormattingContext context)
     {
         Doc separator = node.Parent
-            is AssignmentExpressionSyntax
+            is ArgumentSyntax { NameColon: null }
+                or ArrowExpressionClauseSyntax
+                or ExpressionElementSyntax
+                or AssignmentExpressionSyntax
+                {
+                    Parent: not (
+                        ObjectCreationExpressionSyntax
+                        or InitializerExpressionSyntax
+                        or ExpressionStatementSyntax
+                    )
+                }
                 or EqualsValueClauseSyntax
                 {
                     Parent: not (PropertyDeclarationSyntax or VariableDeclaratorSyntax)
                 }
-            ? Doc.Line
+            ? Doc.Null
             : Doc.IfBreak(Doc.Line, Doc.Null);
 
         var alwaysBreak =
