@@ -1,4 +1,100 @@
-﻿# 0.26.3
+﻿# 0.26.4
+## What's Changed
+#### Spacing bugs related to C#12 collection expressions [#1049](https://github.com/belav/csharpier/issues/1049) [#1047](https://github.com/belav/csharpier/issues/1047)
+There were a number of cases where CSharpier was including extra blank lines, an extra space, or not formatting contents of collection expressions.
+```c#
+// 0.26.3
+var a = new A { B =  [1, 2, 3] };
+
+List<string> items = [// My item
+    "Hello",];
+
+items.AddRange(
+
+    [
+        LongValue________________________________________________,
+        LongValue________________________________________________
+    ]
+);
+
+items =  [];
+items ??=  [];
+
+class SomeClass
+{
+    public SomeValue SomeProperty =>
+
+        [
+            LongValue________________________________________________,
+            LongValue________________________________________________
+        ];
+
+    public SomeValue Method() =>
+
+        [
+            LongValue________________________________________________,
+            LongValue________________________________________________
+        ];
+}
+
+// 0.26.4
+var a = new A { B = [1, 2, 3] };
+
+List<string> items =
+[
+    // My item
+    "Hello",
+];
+
+items.AddRange(
+    [
+        LongValue________________________________________________,
+        LongValue________________________________________________
+    ]
+);
+
+items = [];
+items ??= [];
+
+class SomeClass
+{
+    public SomeValue SomeProperty =>
+        [
+            LongValue________________________________________________,
+            LongValue________________________________________________
+        ];
+
+    public SomeValue Method() =>
+        [
+            LongValue________________________________________________,
+            LongValue________________________________________________
+        ];
+}
+
+
+```
+
+
+Thanks go to @fgimian and @JoshWoodArup for reporting the issues
+#### Usings sorting differs based on system culture [#1051](https://github.com/belav/csharpier/issues/1051)
+The sorting of Usings was done in a culture specific manner, resulting in unexpected behavior.\
+In Czech (cs-CZ) the `ch` is a "single letter" which is placed between `h` and `i`, which resulted in the following sorting behavior.
+```c#
+// 0.26.3
+using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.ApplicationInsights.Channel;
+
+// 0.26.4
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.ApplicationInsights.Extensibility;
+```
+
+Thanks go to @davidkudera for the contribution
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.26.3...0.26.4
+# 0.26.3
 ## What's Changed
 #### C#12 Collection expressions are prefixed with two spaces [#1009](https://github.com/belav/csharpier/issues/1009)
 ```c#
@@ -1535,6 +1631,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
