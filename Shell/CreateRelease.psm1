@@ -25,7 +25,7 @@ function CSH-CreateRelease {
 
     Set-Content -Encoding UTF8 -Path $changeLogPath -Value ($changeLog + $changeLogValue)
 
-    foreach ($file in Get-ChildItem ($PSScriptRoot + "/../Docs") -Filter "*.md")
+    foreach ($file in Get-ChildItem ($PSScriptRoot + "/../docs") -Filter "*.md")
     {
         Copy-Item $file.FullName ($PSScriptRoot + "/../Src/Website/docs/" + $file.Name)
     }
