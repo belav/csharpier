@@ -40,13 +40,13 @@ When the extension is unable to format files, it is generally a problem with bei
 ## Troubleshooting Steps
 The following can help track down issues with the extension being unable to install/run CSharpier
 
-1. Validate the following command can run in the directory of your project\
+1. Validate the following command can run in the directory of your project \
 `dotnet csharpier --version`
-2. If the extension was able to install CSharpier it should exist at a path such as\  
-`C:\Users\[UserName]\AppData\Local\CSharpier\[CSharpierVersion]` or\
+2. If the extension was able to install CSharpier it should exist at a path such as \
+`C:\Users\[UserName]\AppData\Local\CSharpier\[CSharpierVersion]` or \
 `$Home/.cache/csharpier/[CSharpierVersion]`
-3. Assuming the directory above exists, attempt to run the following in that directory\
+3. Assuming the directory above exists, attempt to run the following in that directory \
 `dotnet-csharpier --version`
-4. If the installation appears to be corrupt, delete the directory and install CSharpier there yourself\
+4. If the installation appears to be corrupt, delete the directory and install CSharpier there yourself \
 `dotnet tool install csharpier --version [CSharpierVersion] --tool-path [PathFromStep2]`
 5. Repeat step 3 to validate the install
