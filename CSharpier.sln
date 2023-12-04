@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SyntaxFinder", "Src\SyntaxF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier.Cli.Tests", "Src\CSharpier.Cli.Tests\CSharpier.Cli.Tests.csproj", "{FDCC2871-9003-4EB8-B714-5C7E50FD5D04}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Docs", "Docs\Docs.csproj", "{1E43290C-C7DA-43CA-ADC5-BD95786BA440}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Docs", "docs\Docs.csproj", "{1E43290C-C7DA-43CA-ADC5-BD95786BA440}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scripts", "Scripts\Scripts.csproj", "{3CFB200D-ABA6-4021-AF40-CFCF26DBCD66}"
 EndProject
