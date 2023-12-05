@@ -283,14 +283,14 @@ internal static class UsingDirectives
                 return String.Compare(
                     x.Alias.ToFullString(),
                     y.Alias.ToFullString(),
-                    StringComparison.Ordinal
+                    StringComparison.OrdinalIgnoreCase
                 );
             }
 
             return String.Compare(
                 x.Name.ToFullString(),
                 y.Name.ToFullString(),
-                StringComparison.Ordinal
+                StringComparison.OrdinalIgnoreCase
             );
         }
     }
