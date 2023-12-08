@@ -93,7 +93,10 @@ internal static class Token
 
     public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken, FormattingContext context)
     {
-        var isClosingBrace = syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken;
+        var isClosingBrace =
+            syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken
+            || syntaxToken.Parent is CollectionExpressionSyntax
+                && syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBracketToken;
 
         var printedTrivia = PrivatePrintLeadingTrivia(
             syntaxToken.LeadingTrivia,
