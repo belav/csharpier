@@ -111,4 +111,15 @@ class MyClass
             HttpMethod.None,
             HttpMethod.Connect,
         ];
+
+    public List<DayOfWeek> DaysOfWeek { get; } =
+        [
+            DayOfWeek.Sunday,
+            DayOfWeek.Monday,
+            DayOfWeek.Tuesday,
+            DayOfWeek.Wednesday,
+            DayOfWeek.Thursday,
+            DayOfWeek.Friday,
+            DayOfWeek.Saturday
+        ];
 }

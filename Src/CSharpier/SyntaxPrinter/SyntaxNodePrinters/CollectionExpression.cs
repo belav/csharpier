@@ -16,10 +16,7 @@ internal static class CollectionExpression
                         or ExpressionStatementSyntax
                     )
                 }
-                or EqualsValueClauseSyntax
-                {
-                    Parent: not (PropertyDeclarationSyntax or VariableDeclaratorSyntax)
-                }
+                or EqualsValueClauseSyntax { Parent: not VariableDeclaratorSyntax }
             ? Doc.Null
             : Doc.IfBreak(Doc.Line, Doc.Null);
 
