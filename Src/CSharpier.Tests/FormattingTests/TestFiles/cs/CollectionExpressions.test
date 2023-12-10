@@ -65,6 +65,20 @@ CallMethod(
     ]
 );
 
+CallMethod(
+    [
+        // some comment
+    ]
+);
+
+CallMethod(
+    [
+        1,
+        // some comment
+        // and more
+    ]
+);
+
 class MyClass
 {
     private readonly List<string> _items;

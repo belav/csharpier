@@ -43,7 +43,13 @@ internal static class CollectionExpression
                     ? Doc.HardLine
                     : Doc.IfBreak(Doc.Line, Doc.Null)
                 : Doc.Null,
-            Token.Print(node.CloseBracketToken, context)
+            node.CloseBracketToken.LeadingTrivia.Any(o => o.IsComment())
+                ? Doc.Concat(
+                    Doc.Indent(Token.PrintLeadingTrivia(node.CloseBracketToken, context)),
+                    Doc.HardLine
+                )
+                : Doc.Null,
+            Token.PrintWithoutLeadingTrivia(node.CloseBracketToken, context)
         );
         return Doc.Group(result);
     }
