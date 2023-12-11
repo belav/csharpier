@@ -65,6 +65,20 @@ CallMethod(
     ]
 );
 
+CallMethod(
+    [
+        // some comment
+    ]
+);
+
+CallMethod(
+    [
+        1,
+        // some comment
+        // and more
+    ]
+);
+
 class MyClass
 {
     private readonly List<string> _items;
@@ -96,5 +110,16 @@ class MyClass
             HttpMethod.Patch,
             HttpMethod.None,
             HttpMethod.Connect,
+        ];
+
+    public List<DayOfWeek> DaysOfWeek { get; } =
+        [
+            DayOfWeek.Sunday,
+            DayOfWeek.Monday,
+            DayOfWeek.Tuesday,
+            DayOfWeek.Wednesday,
+            DayOfWeek.Thursday,
+            DayOfWeek.Friday,
+            DayOfWeek.Saturday
         ];
 }

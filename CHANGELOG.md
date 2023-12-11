@@ -1,4 +1,78 @@
-﻿# 0.26.4
+﻿# 0.26.5
+## What's Changed
+### 0.26.4 sorts `NSubstitute` before `Newtonsoft.Json` [#1061](https://github.com/belav/csharpier/issues/1061)
+The using sorting in `0.26.4` was taking into account case.
+
+```c#
+// 0.26.4
+using System;
+using NSubstitute;
+using Newtonsoft.Json;
+
+// 0.26.5
+using System;
+using Newtonsoft.Json;
+using NSubstitute;
+```
+
+Thanks go to @loraderon for contributing the fix.
+
+### Extra newline added when using a collection expression with { get; } [#1063](https://github.com/belav/csharpier/issues/1063)
+A collection expression in a property initializer was including an extra new line.
+```c#
+// 0.26.4
+public class ClassName
+{
+    public List<DayOfWeek> DaysOfWeek { get; } =
+
+        [
+            DayOfWeek.Sunday,
+            // snip
+            DayOfWeek.Saturday
+        ];    
+}
+
+// 0.26.5
+public class ClassName
+{
+    public List<DayOfWeek> DaysOfWeek { get; } =
+        [
+            DayOfWeek.Sunday,
+            // snip
+            DayOfWeek.Saturday
+        ];    
+}
+```
+Thanks go to @SapiensAnatis for contributing the fix.
+
+### Comments at the end of a collection expression should be indented [#1059](https://github.com/belav/csharpier/issues/1059)
+When the close bracket on a collection expression had a leading comment, it had the same indentation as the bracket.
+```c#
+// 0.26.4
+host.AddSection(
+    name: "Kontakt Libraries (Third Party)",
+    tags: Tags.SamplesUsed,
+    tasks:
+    [
+    // TODO: Add any used third party instruments below as you discover them.
+    ]
+);
+
+// 0.26.5
+host.AddSection(
+    name: "Kontakt Libraries (Third Party)",
+    tags: Tags.SamplesUsed,
+    tasks:
+    [
+        // TODO: Add any used third party instruments below as you discover them.
+    ]
+);
+```
+
+Thanks go to @fgimian for reporting the problem
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.26.4...0.26.5
+# 0.26.4
 ## What's Changed
 ### Spacing bugs related to C#12 collection expressions [#1049](https://github.com/belav/csharpier/issues/1049) [#1047](https://github.com/belav/csharpier/issues/1047)
 There were a number of cases where CSharpier was including extra blank lines, an extra space, or not formatting contents of collection expressions.
@@ -1631,6 +1705,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
