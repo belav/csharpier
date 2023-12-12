@@ -76,9 +76,8 @@ class ClassName
 
         roleNames
             .ToList()
-            .ForEach(
-                role =>
-                    this.SomeProperty.Setup(o => longThing_______________________________________)
+            .ForEach(role =>
+                this.SomeProperty.Setup(o => longThing_______________________________________)
             );
 
         roleNames
@@ -110,8 +109,8 @@ class ClassName
             someParameter____________________________________
         )!;
 
-        var someVariable = someObject.Property.CallMethod(
-            someValue => someValue.SomeProperty == someOtherValue___________________________________
+        var someVariable = someObject.Property.CallMethod(someValue =>
+            someValue.SomeProperty == someOtherValue___________________________________
         );
 
         CallMethod(

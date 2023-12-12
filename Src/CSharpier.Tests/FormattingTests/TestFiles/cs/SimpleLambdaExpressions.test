@@ -8,18 +8,146 @@ public class ClassName
 
         this.WhereAsync(static o => true);
 
-        this.Where___________________(
-            longName__________________ => someOtherLongName__________________
+        this.Select(o => new { o.Prop });
+
+        this.Select(o => new Entity { o.Prop });
+
+        this.Select(static o => new { o.Prop });
+
+        this.Select(static o => new Entity { o.Prop });
+
+        this.Select(selector: o => new { o.Prop });
+
+        this.Select(selector: o => new Entity { o.Prop });
+
+        this.Select(selector: static o => new { o.Prop });
+
+        this.Select(selector: static o => new Entity { o.Prop });
+
+        this.Where(x => x.IsSomething).Select(static o => new Entity { o.Prop });
+
+        this.Where(x => x.IsLongSomething______________________)
+            .Select(static o => new { o.Prop, });
+
+        this.Where(x => x.IsLongSomething______________________)
+            .Select(selector: static o => new { o.Prop, });
+
+        this.Where(x => x.IsLongSomething________________)
+            .Select(static o => new Entity { o.Prop, });
+
+        this.Where(x => x.IsSomeThing)
+            .Select(selector: static o => new
+            {
+                o.LongName_______________________,
+                o.LongName_______________________
+            });
+
+        this.Where(x => x.IsSomeThing)
+            .Select(selector: static o => new Entity
+            {
+                o.LongName_______________________,
+                o.LongName_______________________
+            });
+
+        this.Select_________________________________(
+            superLongName________________________________ => new
+            {
+                Prop = superLongName________________________________,
+            }
         );
 
-        this.Where___________________(
-            superLongName________________________________ =>
-                someOtherLongName_______________________________
+        this.Select_________________________________(
+            superLongName_________________________________ => new Entity
+            {
+                Prop = superLongName________________________________,
+            }
         );
 
-        this.Where___________________(superLongName________________________________ =>
+        this.Select_________________________________(
+            selector: static longName__________________ => new
+            {
+                Prop__________ = longName__________________
+            }
+        );
+
+        this.Select_________________________________(
+            selector: static longName__________________ => new Entity(
+                LongArgument_______________________,
+                LongArgument_______________________
+            )
+            {
+                Prop__________ = longName__________________
+            }
+        );
+
+        this.Select_________________________________(o => new Entity
         {
-            return someOtherLongName__________________;
+            o.LongName________________________________,
         });
+
+        this.Select_________________________________(static o => new
+        {
+            o.LongName________________________________,
+        });
+
+        this.Select_________________________________(static o => new Entity
+        {
+            o.LongName________________________________,
+        });
+
+        this.Where(x => x.IsSomeThing)
+            .Select(selector: static o => new Entity(
+                LongArgument_______________________,
+                LongArgument_______________________
+            )
+            {
+                o.LongName_______________________,
+                o.LongName_______________________
+            });
+
+        this.Where(t =>
+            t.SomeLongColumn________________________ || t.OtherLongColumn_______________________
+        );
+
+        this.Where(t =>
+            t.SomeVeryLongColumn________________________________
+            || t.OtherLongColumn________________________________
+        );
+
+        this.Select_________________________________________(
+            superLongName________________________________ => true
+        );
+        this.Select_________________________________________(selector: static longName________ =>
+            true
+        );
+
+        this.Select_________________________________________(
+            selector: static longName______________ =>
+                someOtherLongName________________________________
+        );
+
+        this.Where___________________(x =>
+        {
+            return x;
+        });
+
+        this.Where___________________(selector: static x =>
+        {
+            return x;
+        });
+
+        this.Where______________________________________(
+            superLongName________________________________ =>
+            {
+                return someOtherLongName__________________;
+            }
+        );
+
+        this.Where______________________________________(
+            selector: static longName_________________ =>
+            {
+                return someOtherLongName__________________;
+            }
+        );
     }
 }
