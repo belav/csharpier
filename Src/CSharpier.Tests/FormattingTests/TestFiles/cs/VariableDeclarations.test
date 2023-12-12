@@ -120,8 +120,8 @@ class ClassName
                     : null
         ) { }
 
-        var variableDeclarator = conditionalAccessExpression?.invocationExpression(
-            o => someLongValue___________________________________
+        var variableDeclarator = conditionalAccessExpression?.invocationExpression(o =>
+            someLongValue___________________________________
         );
 
         var variableDeclarator = (CastExpression)
