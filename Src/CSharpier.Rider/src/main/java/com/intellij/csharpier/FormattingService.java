@@ -56,6 +56,7 @@ public class FormattingService {
         this.logger.info("Formatting started for " + filePath + ".");
         var start = Instant.now();
         var result = cSharpierProcessProvider.getProcessFor(filePath).formatFile(currentDocumentText, filePath);
+
         var end = Instant.now();
         this.logger.info("Formatted in " + (Duration.between(start, end).toMillis()) + "ms");
 
@@ -63,8 +64,13 @@ public class FormattingService {
             this.logger.debug("Skipping write because " + (result.length() == 0 ? "result is empty" : "current document equals result"));
         } else {
             WriteCommandAction.runWriteCommandAction(project, () -> {
-                // why replace instead of setText?
-                document.replaceString(0, currentDocumentText.length(), result);
+                var finalResult = result;
+                if (result.indexOf('\r') >= 0) {
+                    // rider always wants \n in files so remove any \r
+                    finalResult = result.replaceAll("\\r", "");
+                }
+
+                document.replaceString(0, currentDocumentText.length(), finalResult);
             });
         }
     }
