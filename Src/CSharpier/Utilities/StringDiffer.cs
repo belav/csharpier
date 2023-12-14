@@ -15,24 +15,8 @@ internal static class StringDiffer
             return string.Empty;
         }
 
-        var x = 1;
-        while (x <= expected.Length && x <= actual.Length)
+        if (!EndsWithExactlyOneNewline(actual))
         {
-            var endOfExpected = expected[^x];
-            var endOfActual = actual[^x];
-            var expectedIsNewLine = endOfExpected is '\r' or '\n';
-            var actualIsNewLine = endOfActual is '\r' or '\n';
-            if (expectedIsNewLine && actualIsNewLine)
-            {
-                x++;
-                continue;
-            }
-
-            if (!expectedIsNewLine && !actualIsNewLine)
-            {
-                break;
-            }
-
             return "The file did not end with a single newline.";
         }
 
@@ -110,6 +94,12 @@ internal static class StringDiffer
         }
 
         return "The file contained different line endings than formatting it would result in.";
+    }
+
+    private static bool EndsWithExactlyOneNewline(string value)
+    {
+        return (!value.EndsWith("\r\n") && value.EndsWith("\n") && !value.EndsWith("\n\n"))
+            || (value.EndsWith("\r\n") && !value.EndsWith("\r\n\r\n"));
     }
 
     private static int FindIndexOfNonWhitespace(string input)
