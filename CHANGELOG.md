@@ -1,4 +1,14 @@
-﻿# 0.26.5
+﻿# 0.26.6
+## What's Changed
+### CSharpier incorrectly reports problems with differing line endings as "The file did not end with a single newline"[#1067](https://github.com/belav/csharpier/issues/1067)
+If CSharpier was validating that a file was formatted, and that file contained only `\n` but CSharpier was configured to use `\r\n`, then it would report the problem as `The file did not end with a single newline`
+
+CSharpier added support for reading line ending configuration from an `.editorconfig` which could contain `end_of_line = crlf` so some users were unknowingly configuring CSharpier to use `\r\n`
+
+CSharpier now correctly reports the problem as `The file contained different line endings than formatting it would result in.`
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.26.5...0.26.6
+# 0.26.5
 ## What's Changed
 ### 0.26.4 sorts `NSubstitute` before `Newtonsoft.Json` [#1061](https://github.com/belav/csharpier/issues/1061)
 The using sorting in `0.26.4` was taking into account case.
@@ -1705,6 +1715,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
