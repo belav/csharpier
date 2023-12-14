@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.5.1]
+- Ensure rider plugin always uses \n as a line separator
+
 ## [1.5.0]
 - Improved error handling and reporting around csharpier failing to install or run
 
