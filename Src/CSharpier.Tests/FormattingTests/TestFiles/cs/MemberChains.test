@@ -52,13 +52,11 @@ class ClassName
             .Where(o => someLongCondition__________________________);
 
         var someValue = someOtherValue!
-            .Thing!
-            .Where(o => someLongCondition__________________________)
+            .Thing!.Where(o => someLongCondition__________________________)
             .Where(o => someLongCondition__________________________);
 
         var someValue = someOtherValue
-            .Thing
-            .Where(o => someLongCondition__________________________)
+            .Thing.Where(o => someLongCondition__________________________)
             .Where(o => someLongCondition__________________________);
 
         var someValue = someOtherValue
@@ -84,8 +82,7 @@ class ClassName
             );
 
         roleNames
-            .Value
-            .Where(o => o.SomeProperty____________________________________)
+            .Value.Where(o => o.SomeProperty____________________________________)
             .Select(o => o.SomethingElse);
 
         return someCondition
@@ -113,12 +110,9 @@ class ClassName
             someParameter____________________________________
         )!;
 
-        var someVariable = someObject
-            .Property
-            .CallMethod(
-                someValue =>
-                    someValue.SomeProperty == someOtherValue___________________________________
-            );
+        var someVariable = someObject.Property.CallMethod(
+            someValue => someValue.SomeProperty == someOtherValue___________________________________
+        );
 
         CallMethod(
                 firstParameter____________________________,
@@ -238,8 +232,7 @@ class ClassName
             .CallMethod__________________();
 
         someThing_______________________
-            .Property
-            .CallMethod__________________()
+            .Property.CallMethod__________________()
             .CallMethod__________________();
 
         someThing_______________________
@@ -248,8 +241,7 @@ class ClassName
             .CallMethod__________________();
 
         someThing_______________________
-            .Property!
-            .CallMethod__________________()
+            .Property!.CallMethod__________________()
             .CallMethod__________________();
     }
 }

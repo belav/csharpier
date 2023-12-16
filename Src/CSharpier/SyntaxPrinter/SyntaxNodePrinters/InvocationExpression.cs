@@ -296,7 +296,6 @@ internal static class InvocationExpression
                 printedNodes[index].Node
                 is (
                     InvocationExpressionSyntax
-                    or MemberAccessExpressionSyntax
                     or ElementAccessExpressionSyntax
                     or MemberBindingExpressionSyntax
                 )
