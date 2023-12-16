@@ -1,4 +1,36 @@
-﻿# 0.26.6
+﻿# 0.26.7
+## What's Changed
+### Keep Field.Method() on the same line when breaking long method chain [#1010](https://github.com/belav/csharpier/issues/1010)
+0.26.0 introduced changes that broke long invocation chains on fields/properties as well as methods. That change has been reverted after community feedback.
+
+```c#
+// 0.26.0
+var loggerConfiguration = new LoggerConfiguration()
+    .Enrich
+    .FromLogContext()
+    .Enrich
+    .WithProperty("key", "value")
+    .Enrich
+    .WithProperty("key", "value")
+    .Enrich
+    .WithProperty("key", "value")
+    .Enrich
+    .WithProperty("key", "value")
+    .WriteTo
+    .Console(outputTemplate: "template");
+
+// 0.26.7
+var loggerConfiguration = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .Enrich.WithProperty("key", "value")
+    .Enrich.WithProperty("key", "value")
+    .Enrich.WithProperty("key", "value")
+    .Enrich.WithProperty("key", "value")
+    .WriteTo.Console(outputTemplate: "template");
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.26.6...0.26.7
+# 0.26.6
 ## What's Changed
 ### CSharpier incorrectly reports problems with differing line endings as "The file did not end with a single newline"[#1067](https://github.com/belav/csharpier/issues/1067)
 If CSharpier was validating that a file was formatted, and that file contained only `\n` but CSharpier was configured to use `\r\n`, then it would report the problem as `The file did not end with a single newline`
@@ -1715,6 +1747,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
