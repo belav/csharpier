@@ -10,6 +10,7 @@ internal static class ArgumentListLike
     )
     {
         var docs = new List<Doc> { Token.Print(openParenToken, context) };
+        var lambdaId = Guid.NewGuid();
 
         switch (arguments)
         {
@@ -17,7 +18,7 @@ internal static class ArgumentListLike
             {
                 docs.Add(
                     Doc.GroupWithId(
-                        "LambdaArguments",
+                        $"LambdaArguments{lambdaId}",
                         Doc.Indent(
                             Doc.SoftLine,
                             Argument.PrintModifiers(arg, context),
@@ -26,13 +27,13 @@ internal static class ArgumentListLike
                     ),
                     Doc.IndentIfBreak(
                         SimpleLambdaExpression.PrintBody(lambda, context),
-                        "LambdaArguments"
+                        $"LambdaArguments{lambdaId}"
                     ),
                     lambda.Body
                         is BlockSyntax
                             or ObjectCreationExpressionSyntax
                             or AnonymousObjectCreationExpressionSyntax
-                        ? Doc.IfBreak(Doc.SoftLine, Doc.Null, "LambdaArguments")
+                        ? Doc.IfBreak(Doc.SoftLine, Doc.Null, $"LambdaArguments{lambdaId}")
                         : Doc.SoftLine
                 );
                 break;
@@ -49,7 +50,7 @@ internal static class ArgumentListLike
             {
                 docs.Add(
                     Doc.GroupWithId(
-                        "LambdaArguments",
+                        $"LambdaArguments{lambdaId}",
                         Doc.Indent(
                             Doc.SoftLine,
                             Argument.PrintModifiers(arg, context),
@@ -58,9 +59,9 @@ internal static class ArgumentListLike
                     ),
                     Doc.IndentIfBreak(
                         ParenthesizedLambdaExpression.PrintBody(lambda, context),
-                        "LambdaArguments"
+                        $"LambdaArguments{lambdaId}"
                     ),
-                    Doc.IfBreak(Doc.SoftLine, Doc.Null, "LambdaArguments")
+                    Doc.IfBreak(Doc.SoftLine, Doc.Null, $"LambdaArguments{lambdaId}")
                 );
                 break;
             }

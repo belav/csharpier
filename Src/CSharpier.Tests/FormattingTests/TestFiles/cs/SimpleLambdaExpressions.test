@@ -149,5 +149,12 @@ public class ClassName
                 return someOtherLongName__________________;
             }
         );
+
+        this.Where______________________________________(
+            selector: static longName_________________ =>
+            {
+                return Method(x => x.Prop);
+            }
+        );
     }
 }
