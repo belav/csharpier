@@ -64,7 +64,7 @@ internal static class ArgumentListLike
                 );
                 break;
             }
-            default:
+            case [_, ..]:
             {
                 docs.Add(
                     Doc.Indent(
