@@ -30,18 +30,11 @@ internal static class DocFitter
                 return false;
             }
 
-            PrintCommand command;
-            if (newCommands.Count > 0)
+            var (currentIndent, currentMode, currentDoc) = newCommands switch
             {
-                command = newCommands.Pop();
-            }
-            else
-            {
-                command = remainingCommands.ElementAt(x);
-                x++;
-            }
-
-            var (currentIndent, currentMode, currentDoc) = command;
+                { Count: > 0 } => newCommands.Pop(),
+                _ => remainingCommands.ElementAt(x++)
+            };
 
             switch (currentDoc)
             {
