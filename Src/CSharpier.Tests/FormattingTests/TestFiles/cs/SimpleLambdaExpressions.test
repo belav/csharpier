@@ -114,10 +114,11 @@ public class ClassName
             || t.OtherLongColumn________________________________
         );
 
-        this.Select_________________________________________(
-            superLongName________________________________ => true
+        Select______________________________________(superLongName_________________________ =>
+            true
         );
-        this.Select_________________________________________(selector: static longName________ =>
+
+        this.Select_________________________________(selector: static longName_____________ =>
             true
         );
 

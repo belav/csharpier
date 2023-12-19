@@ -23,7 +23,8 @@ internal static class ArgumentListLike
                             SimpleLambdaExpression.PrintHead(lambda, context)
                         )
                     ),
-                    Doc.IndentIfBreak(
+                    Doc.IfBreak(
+                        Doc.Indent(Doc.Group(SimpleLambdaExpression.PrintBody(lambda, context))),
                         SimpleLambdaExpression.PrintBody(lambda, context),
                         $"LambdaArguments{lambdaId}"
                     ),
