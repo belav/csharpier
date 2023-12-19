@@ -9,14 +9,12 @@ internal static class ArgumentListLike
         FormattingContext context
     )
     {
-        var docs = new List<Doc> { Token.Print(openParenToken, context) };
         var lambdaId = Guid.NewGuid();
 
-        switch (arguments)
+        var args = arguments switch
         {
-            case [{ Expression: SimpleLambdaExpressionSyntax lambda } arg]:
-            {
-                docs.Add(
+            [{ Expression: SimpleLambdaExpressionSyntax lambda } arg]
+                => Doc.Concat(
                     Doc.GroupWithId(
                         $"LambdaArguments{lambdaId}",
                         Doc.Indent(
@@ -35,20 +33,10 @@ internal static class ArgumentListLike
                             or AnonymousObjectCreationExpressionSyntax
                         ? Doc.IfBreak(Doc.SoftLine, Doc.Null, $"LambdaArguments{lambdaId}")
                         : Doc.SoftLine
-                );
-                break;
-            }
-            case [
-                {
-                    Expression: ParenthesizedLambdaExpressionSyntax
-                    {
-                        ParameterList.Parameters.Count: 0,
-                        Block: { }
-                    } lambda
-                } arg
-            ]:
-            {
-                docs.Add(
+                ),
+            [{ Expression: ParenthesizedLambdaExpressionSyntax lambda } arg]
+                when lambda is { ParameterList.Parameters: [], Block: { } }
+                => Doc.Concat(
                     Doc.GroupWithId(
                         $"LambdaArguments{lambdaId}",
                         Doc.Indent(
@@ -62,24 +50,22 @@ internal static class ArgumentListLike
                         $"LambdaArguments{lambdaId}"
                     ),
                     Doc.IfBreak(Doc.SoftLine, Doc.Null, $"LambdaArguments{lambdaId}")
-                );
-                break;
-            }
-            case [_, ..]:
-            {
-                docs.Add(
+                ),
+            [_, ..]
+                => Doc.Concat(
                     Doc.Indent(
                         Doc.SoftLine,
                         SeparatedSyntaxList.Print(arguments, Argument.Print, Doc.Line, context)
                     ),
                     Doc.SoftLine
-                );
-                break;
-            }
-        }
+                ),
+            _ => Doc.Null
+        };
 
-        docs.Add(Token.Print(closeParenToken, context));
-
-        return Doc.Concat(docs);
+        return Doc.Concat(
+            Token.Print(openParenToken, context),
+            args,
+            Token.Print(closeParenToken, context)
+        );
     }
 }
