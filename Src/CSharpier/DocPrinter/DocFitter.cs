@@ -43,51 +43,51 @@ internal static class DocFitter
 
             var (currentIndent, currentMode, currentDoc) = command;
 
-            if (currentDoc is StringDoc stringDoc)
+            switch (currentDoc)
             {
-                // directives should not be considered when calculating if something fits
-                if (stringDoc.Value == null || stringDoc.IsDirective)
+                case NullDoc:
+                    break;
+                case StringDoc stringDoc:
                 {
-                    continue;
-                }
+                    // directives should not be considered when calculating if something fits
+                    if (stringDoc.Value == null || stringDoc.IsDirective)
+                        continue;
 
-                if (returnFalseIfMoreStringsFound)
-                {
-                    return false;
-                }
+                    if (returnFalseIfMoreStringsFound)
+                        return false;
 
-                output.Append(stringDoc.Value);
-                remainingWidth -= stringDoc.Value.GetPrintedWidth();
-            }
-            else if (currentDoc != Doc.Null)
-            {
-                if (currentDoc is LeadingComment or TrailingComment)
+                    output.Append(stringDoc.Value);
+                    remainingWidth -= stringDoc.Value.GetPrintedWidth();
+                    break;
+                }
+                case LeadingComment
+                or TrailingComment:
                 {
                     if (output.Length > 0 && currentMode is not PrintMode.ForceFlat)
                     {
                         returnFalseIfMoreStringsFound = true;
                     }
+
+                    break;
                 }
-                else if (currentDoc is Region)
-                {
+                case Region:
                     return false;
-                }
-                else if (currentDoc is Concat concat)
+                case Concat concat:
                 {
                     for (var i = concat.Contents.Count - 1; i >= 0; i--)
                     {
                         Push(concat.Contents[i], currentMode, currentIndent);
                     }
+
+                    break;
                 }
-                else if (currentDoc is IndentDoc indent)
-                {
+                case IndentDoc indent:
                     Push(indent.Contents, currentMode, indenter.IncreaseIndent(currentIndent));
-                }
-                else if (currentDoc is Trim)
-                {
+                    break;
+                case Trim:
                     remainingWidth += output.TrimTrailingWhitespace();
-                }
-                else if (currentDoc is Group group)
+                    break;
+                case Group group:
                 {
                     var groupMode = group.Break ? PrintMode.Break : currentMode;
 
@@ -102,8 +102,10 @@ internal static class DocFitter
                     {
                         groupModeMap![group.GroupId] = groupMode;
                     }
+
+                    break;
                 }
-                else if (currentDoc is IfBreak ifBreak)
+                case IfBreak ifBreak:
                 {
                     var ifBreakMode =
                         ifBreak.GroupId != null && groupModeMap!.ContainsKey(ifBreak.GroupId)
@@ -116,8 +118,9 @@ internal static class DocFitter
                             : ifBreak.FlatContents;
 
                     Push(contents, currentMode, currentIndent);
+                    break;
                 }
-                else if (currentDoc is LineDoc line)
+                case LineDoc line:
                 {
                     if (currentMode is PrintMode.Flat or PrintMode.ForceFlat)
                     {
@@ -136,30 +139,28 @@ internal static class DocFitter
 
                             remainingWidth -= 1;
                         }
+
+                        break;
                     }
-                    else
-                    {
-                        return true;
-                    }
+
+                    return true;
                 }
-                else if (currentDoc is ForceFlat flat)
-                {
+                case ForceFlat flat:
                     Push(flat.Contents, PrintMode.ForceFlat, currentIndent);
-                }
-                else if (currentDoc is BreakParent) { }
-                else if (currentDoc is Align align)
-                {
+                    break;
+                case BreakParent:
+                    break;
+                case Align align:
                     Push(
                         align.Contents,
                         currentMode,
                         indenter.AddAlign(currentIndent, align.Width)
                     );
-                }
-                else if (currentDoc is AlwaysFits) { }
-                else
-                {
+                    break;
+                case AlwaysFits:
+                    break;
+                default:
                     throw new Exception("Can't handle " + currentDoc.GetType());
-                }
             }
         }
 
