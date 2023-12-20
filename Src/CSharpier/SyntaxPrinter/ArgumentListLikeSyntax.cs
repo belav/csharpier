@@ -9,47 +9,37 @@ internal static class ArgumentListLike
         FormattingContext context
     )
     {
-        var docs = new List<Doc> { Token.Print(openParenToken, context) };
+        var lambdaId = Guid.NewGuid();
 
-        switch (arguments)
+        var args = arguments switch
         {
-            case [{ Expression: SimpleLambdaExpressionSyntax lambda } arg]:
-            {
-                docs.Add(
+            [{ Expression: SimpleLambdaExpressionSyntax lambda } arg]
+                => Doc.Concat(
                     Doc.GroupWithId(
-                        "LambdaArguments",
+                        $"LambdaArguments{lambdaId}",
                         Doc.Indent(
                             Doc.SoftLine,
                             Argument.PrintModifiers(arg, context),
                             SimpleLambdaExpression.PrintHead(lambda, context)
                         )
                     ),
-                    Doc.IndentIfBreak(
+                    Doc.IfBreak(
+                        Doc.Indent(Doc.Group(SimpleLambdaExpression.PrintBody(lambda, context))),
                         SimpleLambdaExpression.PrintBody(lambda, context),
-                        "LambdaArguments"
+                        $"LambdaArguments{lambdaId}"
                     ),
                     lambda.Body
                         is BlockSyntax
                             or ObjectCreationExpressionSyntax
                             or AnonymousObjectCreationExpressionSyntax
-                        ? Doc.IfBreak(Doc.SoftLine, Doc.Null, "LambdaArguments")
+                        ? Doc.IfBreak(Doc.SoftLine, Doc.Null, $"LambdaArguments{lambdaId}")
                         : Doc.SoftLine
-                );
-                break;
-            }
-            case [
-                {
-                    Expression: ParenthesizedLambdaExpressionSyntax
-                    {
-                        ParameterList.Parameters.Count: 0,
-                        Block: { }
-                    } lambda
-                } arg
-            ]:
-            {
-                docs.Add(
+                ),
+            [{ Expression: ParenthesizedLambdaExpressionSyntax lambda } arg]
+                when lambda is { ParameterList.Parameters: [], Block: { } }
+                => Doc.Concat(
                     Doc.GroupWithId(
-                        "LambdaArguments",
+                        $"LambdaArguments{lambdaId}",
                         Doc.Indent(
                             Doc.SoftLine,
                             Argument.PrintModifiers(arg, context),
@@ -58,27 +48,25 @@ internal static class ArgumentListLike
                     ),
                     Doc.IndentIfBreak(
                         ParenthesizedLambdaExpression.PrintBody(lambda, context),
-                        "LambdaArguments"
+                        $"LambdaArguments{lambdaId}"
                     ),
-                    Doc.IfBreak(Doc.SoftLine, Doc.Null, "LambdaArguments")
-                );
-                break;
-            }
-            default:
-            {
-                docs.Add(
+                    Doc.IfBreak(Doc.SoftLine, Doc.Null, $"LambdaArguments{lambdaId}")
+                ),
+            [_, ..]
+                => Doc.Concat(
                     Doc.Indent(
                         Doc.SoftLine,
                         SeparatedSyntaxList.Print(arguments, Argument.Print, Doc.Line, context)
                     ),
                     Doc.SoftLine
-                );
-                break;
-            }
-        }
+                ),
+            _ => Doc.Null
+        };
 
-        docs.Add(Token.Print(closeParenToken, context));
-
-        return Doc.Concat(docs);
+        return Doc.Concat(
+            Token.Print(openParenToken, context),
+            args,
+            Token.Print(closeParenToken, context)
+        );
     }
 }
