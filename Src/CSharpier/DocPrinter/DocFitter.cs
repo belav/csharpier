@@ -41,7 +41,6 @@ internal static class DocFitter
                 case NullDoc:
                     break;
                 case StringDoc stringDoc:
-                {
                     // directives should not be considered when calculating if something fits
                     if (stringDoc.Value == null || stringDoc.IsDirective)
                         continue;
@@ -52,28 +51,18 @@ internal static class DocFitter
                     output.Append(stringDoc.Value);
                     remainingWidth -= stringDoc.Value.GetPrintedWidth();
                     break;
-                }
                 case LeadingComment
                 or TrailingComment:
-                {
                     if (output.Length > 0 && currentMode is not PrintMode.ForceFlat)
-                    {
                         returnFalseIfMoreStringsFound = true;
-                    }
 
                     break;
-                }
                 case Region:
                     return false;
                 case Concat concat:
-                {
                     for (var i = concat.Contents.Count - 1; i >= 0; i--)
-                    {
                         Push(concat.Contents[i], currentMode, currentIndent);
-                    }
-
                     break;
-                }
                 case IndentDoc indent:
                     Push(indent.Contents, currentMode, indenter.IncreaseIndent(currentIndent));
                     break;
@@ -114,7 +103,6 @@ internal static class DocFitter
                     break;
                 }
                 case LineDoc line:
-                {
                     if (currentMode is PrintMode.Flat or PrintMode.ForceFlat)
                     {
                         if (currentDoc is HardLine { SkipBreakIfFirstInGroup: true })
@@ -137,7 +125,6 @@ internal static class DocFitter
                     }
 
                     return true;
-                }
                 case ForceFlat flat:
                     Push(flat.Contents, PrintMode.ForceFlat, currentIndent);
                     break;
