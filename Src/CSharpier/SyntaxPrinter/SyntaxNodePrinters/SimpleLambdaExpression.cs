@@ -4,7 +4,7 @@ internal static class SimpleLambdaExpression
 {
     public static Doc Print(SimpleLambdaExpressionSyntax node, FormattingContext context)
     {
-        return Doc.Concat(PrintHead(node, context), PrintBody(node, context));
+        return Doc.Group(PrintHead(node, context), PrintBody(node, context));
     }
 
     public static Doc PrintHead(SimpleLambdaExpressionSyntax node, FormattingContext context)
@@ -25,7 +25,7 @@ internal static class SimpleLambdaExpression
             ObjectCreationExpressionSyntax
             or AnonymousObjectCreationExpressionSyntax
                 => Doc.Group(" ", Node.Print(node.Body, context)),
-            _ => Doc.Indent(Doc.Group(Doc.Line, Node.Print(node.Body, context)))
+            _ => Doc.Indent(Doc.Line, Node.Print(node.Body, context))
         };
     }
 }

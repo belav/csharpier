@@ -242,5 +242,8 @@ class ClassName
         someThing_______________________
             .Property!.CallMethod__________________()
             .CallMethod__________________();
+
+        IEnumerable<ValueProviderFactory> valueProviderFactories =
+            new ModelBinderAttribute_______().GetValueProviderFactories(config);
     }
 }
