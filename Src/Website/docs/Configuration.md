@@ -80,6 +80,7 @@ When supplying symbol sets, they will be used for all files being formatted. Thi
 The long term plan is to improve Csharpier's ability to determine the symbol sets itself and to allow specifying them for individual files.
 
 ### EditorConfig
+_First available in 0.26.0_
 
 CSharpier supports configuration via an `.editorconfig` file. A `.csharpierrc*` file in the same directory will take priority.
 
