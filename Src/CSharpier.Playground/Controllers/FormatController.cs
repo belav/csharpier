@@ -41,21 +41,31 @@ public class FormatController : ControllerBase
         this.logger = logger;
     }
 
+    public class PostModel
+    {
+        public string Code { get; set; } = string.Empty;
+        public int PrintWidth { get; set; }
+        public int IndentSize { get; set; }
+        public bool UseTabs { get; set; }
+    }
+
     [HttpPost]
-    public async Task<FormatResult> Post([FromBody] string content)
+    public async Task<FormatResult> Post([FromBody] PostModel model)
     {
         var result = await CSharpFormatter.FormatAsync(
-            content,
+            model.Code,
             new PrinterOptions
             {
                 IncludeAST = true,
                 IncludeDocTree = true,
-                Width = PrinterOptions.WidthUsedByTests
+                Width = model.PrintWidth,
+                TabWidth = model.IndentSize,
+                UseTabs = model.UseTabs
             }
         );
 
         var comparer = new SyntaxNodeComparer(
-            content,
+            model.Code,
             result.Code,
             result.ReorderedModifiers,
             result.ReorderedUsingsWithDisabledText,

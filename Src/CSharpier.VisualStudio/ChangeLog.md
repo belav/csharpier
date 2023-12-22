@@ -1,4 +1,8 @@
-﻿## [1.4.8]
+﻿## [1.5.0]
+- Fix issues with using 0.26.X
+- Better error handling and logging
+
+## [1.4.8]
 - Handle version 0.26.0 and higher which include a +[commitHash] in the version number
 
 ## [1.4.7]
