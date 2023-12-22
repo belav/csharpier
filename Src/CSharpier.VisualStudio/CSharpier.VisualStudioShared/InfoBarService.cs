@@ -74,7 +74,12 @@ namespace CSharpier.VisualStudio
             }
 
             var actions = (buttons ?? Enumerable.Empty<InfoBarActionButton>())
-                .Select(o => o.IsHyperLink ? new InfoBarHyperlink(o.Text, o.Context) as InfoBarActionItem :  new InfoBarButton(o.Text, o.Context))
+                .Select(
+                    o =>
+                        o.IsHyperLink
+                            ? new InfoBarHyperlink(o.Text, o.Context) as InfoBarActionItem
+                            : new InfoBarButton(o.Text, o.Context)
+                )
                 .ToArray();
             var infoBarModel = new InfoBarModel(
                 spans,

@@ -1,4 +1,7 @@
-﻿## [1.5.0]
+﻿## [1.5.1]
+- Fix for occasional NRE
+
+## [1.5.0]
 - Fix issues with using 0.26.X
 - Better error handling and logging
 
