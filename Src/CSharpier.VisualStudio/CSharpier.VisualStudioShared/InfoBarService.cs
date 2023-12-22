@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -60,6 +61,33 @@ namespace CSharpier.VisualStudio
 
         public void ShowInfoBar(string message, IEnumerable<InfoBarActionButton>? buttons = null)
         {
+            var text = new InfoBarTextSpan(message);
+
+            var spans = new[] { text };
+
+            if (buttons != null)
+            {
+                foreach (var infoBarActionButton in buttons)
+                {
+                    this.buttonActions[infoBarActionButton.Context] = infoBarActionButton.OnClicked;
+                }
+            }
+
+            var actions = (buttons ?? Enumerable.Empty<InfoBarActionButton>())
+                .Select(o => o.IsHyperLink ? new InfoBarHyperlink(o.Text, o.Context) as InfoBarActionItem :  new InfoBarButton(o.Text, o.Context))
+                .ToArray();
+            var infoBarModel = new InfoBarModel(
+                spans,
+                actions,
+                KnownMonikers.StatusInformation,
+                isCloseButtonVisible: true
+            );
+
+            this.ShowInfoBar(infoBarModel);
+        }
+
+        public void ShowInfoBar(InfoBarModel infoBarModel)
+        {
             ThreadHelper.ThrowIfNotOnUIThread();
 
 #pragma warning disable VSSDK006, VSTHRD002
@@ -74,27 +102,6 @@ namespace CSharpier.VisualStudio
             {
                 return;
             }
-            var text = new InfoBarTextSpan(message);
-
-            var spans = new[] { text };
-
-            if (buttons != null)
-            {
-                foreach (var infoBarActionButton in buttons)
-                {
-                    this.buttonActions[infoBarActionButton.Context] = infoBarActionButton.OnClicked;
-                }
-            }
-
-            var actions = (buttons ?? Enumerable.Empty<InfoBarActionButton>())
-                .Select(o => new InfoBarButton(o.Text, o.Context))
-                .ToArray();
-            var infoBarModel = new InfoBarModel(
-                spans,
-                actions,
-                KnownMonikers.StatusInformation,
-                isCloseButtonVisible: true
-            );
 
 #pragma warning disable VSTHRD002, VSSDK006
             var factory =
@@ -109,6 +116,7 @@ namespace CSharpier.VisualStudio
 
     public class InfoBarActionButton
     {
+        public bool IsHyperLink { get; set; }
         public string Text { get; set; } = string.Empty;
         public string Context { get; set; } = string.Empty;
         public Action OnClicked { get; set; } = default!;
