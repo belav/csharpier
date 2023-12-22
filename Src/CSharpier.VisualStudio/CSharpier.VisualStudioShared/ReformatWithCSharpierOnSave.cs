@@ -28,7 +28,7 @@ namespace CSharpier.VisualStudio
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
-            new ReformatWithCSharpierOnSave(package, dte!);
+            _ = new ReformatWithCSharpierOnSave(package, dte!);
         }
 
         public int OnBeforeSave(uint docCookie)
@@ -73,7 +73,7 @@ namespace CSharpier.VisualStudio
             return VSConstants.S_OK;
         }
 
-        private Document FindDocument(uint docCookie)
+        private Document? FindDocument(uint docCookie)
         {
             try
             {
@@ -81,12 +81,7 @@ namespace CSharpier.VisualStudio
                 var documentInfo = this.runningDocumentTable.GetDocumentInfo(docCookie);
                 var documentPath = documentInfo.Moniker;
 
-                if (this.dte.ActiveDocument.FullName == documentPath)
-                {
-                    return this.dte.ActiveDocument;
-                }
-
-                return this.dte.Documents.Item(documentPath);
+                return this.dte.ActiveDocument?.FullName == documentPath ? this.dte.ActiveDocument : this.dte.Documents?.Item(documentPath);
             }
             catch (Exception ex)
             {
