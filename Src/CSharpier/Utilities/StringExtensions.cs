@@ -52,6 +52,11 @@ internal static class StringExtensions
             {
                 result += 1;
             }
+            // I'm not sure why this converts tabs to the size of an indent
+            // I'd think this should be based on if UseTabs is true or not
+            // if using tabs, this should be considered one
+            // but then how do we convert spaces to tabs?
+            // this seems to work, and it came from the comments code
             else if (character == '\t')
             {
                 result += indentSize;

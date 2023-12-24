@@ -87,7 +87,7 @@ internal static class Token
                     var modifiedLine =
                         numberOfSpacesToAddOrRemove > 0
                             ? context.UseTabs
-                                ? new string('\t', numberOfSpacesToAddOrRemove / 4)
+                                ? new string('\t', numberOfSpacesToAddOrRemove / context.IndentSize)
                                 : new string(' ', numberOfSpacesToAddOrRemove)
                             : string.Empty;
                     modifiedLine += line.TrimStart();
