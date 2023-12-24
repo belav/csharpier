@@ -23,7 +23,7 @@ internal static class EditorConfigParser
             return new List<EditorConfigSections>();
         }
 
-        var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(directoryName);
+        var directoryInfo = fileSystem.DirectoryInfo.New(directoryName);
         var editorConfigFiles = directoryInfo
             .EnumerateFiles(
                 ".editorconfig",
@@ -41,7 +41,7 @@ internal static class EditorConfigParser
         {
             var file = fileSystem
                 .FileInfo
-                .FromFileName(fileSystem.Path.Combine(directoryInfo.FullName, ".editorconfig"));
+                .New(fileSystem.Path.Combine(directoryInfo.FullName, ".editorconfig"));
             if (file.Exists)
             {
                 editorConfigFiles.Add(file);
@@ -55,7 +55,7 @@ internal static class EditorConfigParser
                 o =>
                     new EditorConfigSections
                     {
-                        DirectoryName = fileSystem.Path.GetDirectoryName(o.FullName),
+                        DirectoryName = fileSystem.Path.GetDirectoryName(o.FullName)!,
                         SectionsIncludingParentFiles = FindSections(o.FullName, fileSystem)
                     }
             )
@@ -65,7 +65,7 @@ internal static class EditorConfigParser
 
     private static List<Section> FindSections(string filePath, IFileSystem fileSystem)
     {
-        return ParseConfigFiles(fileSystem.Path.GetDirectoryName(filePath), fileSystem)
+        return ParseConfigFiles(fileSystem.Path.GetDirectoryName(filePath)!, fileSystem)
             .Reverse()
             .SelectMany(configFile => configFile.Sections)
             .ToList();
@@ -76,7 +76,7 @@ internal static class EditorConfigParser
         IFileSystem fileSystem
     )
     {
-        var directory = fileSystem.DirectoryInfo.FromDirectoryName(directoryPath);
+        var directory = fileSystem.DirectoryInfo.New(directoryPath);
         while (directory != null)
         {
             var potentialPath = fileSystem.Path.Combine(directory.FullName, ".editorconfig");

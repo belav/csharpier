@@ -77,12 +77,12 @@ public class IgnoreFile
             }
         }
 
-        return new IgnoreFile(ignore, fileSystem.Path.GetDirectoryName(ignoreFilePath));
+        return new IgnoreFile(ignore, fileSystem.Path.GetDirectoryName(ignoreFilePath)!);
     }
 
     private static string? FindIgnorePath(string baseDirectoryPath, IFileSystem fileSystem)
     {
-        var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
+        var directoryInfo = fileSystem.DirectoryInfo.New(baseDirectoryPath);
         while (directoryInfo != null)
         {
             var ignoreFilePath = fileSystem

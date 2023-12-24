@@ -85,7 +85,7 @@ internal class OptionsProvider
             return this.specifiedPrinterOptions;
         }
 
-        var directoryName = this.fileSystem.Path.GetDirectoryName(filePath);
+        var directoryName = this.fileSystem.Path.GetDirectoryName(filePath)!;
         var resolvedEditorConfig = this.editorConfigs.FirstOrDefault(
             o => directoryName.StartsWith(o.DirectoryName)
         );
