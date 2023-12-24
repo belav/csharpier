@@ -104,7 +104,12 @@ internal class CSharpFormatter : IFormatter
         try
         {
             var lineEnding = PrinterOptions.GetLineEnding(syntaxTree.ToString(), printerOptions);
-            var formattingContext = new FormattingContext { LineEnding = lineEnding };
+            var formattingContext = new FormattingContext
+            {
+                LineEnding = lineEnding,
+                IndentSize = printerOptions.IndentSize,
+                UseTabs = printerOptions.UseTabs,
+            };
             var document = Node.Print(rootNode, formattingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
             var reorderedModifiers = formattingContext.ReorderedModifiers;
@@ -119,7 +124,12 @@ internal class CSharpFormatter : IFormatter
                     return result;
                 }
 
-                var formattingContext2 = new FormattingContext { LineEnding = lineEnding };
+                var formattingContext2 = new FormattingContext
+                {
+                    LineEnding = lineEnding,
+                    IndentSize = printerOptions.IndentSize,
+                    UseTabs = printerOptions.UseTabs,
+                };
                 document = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),
                     formattingContext2

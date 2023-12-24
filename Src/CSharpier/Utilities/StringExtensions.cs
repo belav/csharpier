@@ -43,7 +43,7 @@ internal static class StringExtensions
         return value.Length;
     }
 
-    public static int CalculateIndentLength(this string line, PrinterOptions printerOptions)
+    public static int CalculateCurrentLeadingIndentation(this string line, int indentSize)
     {
         var result = 0;
         foreach (var character in line)
@@ -54,7 +54,7 @@ internal static class StringExtensions
             }
             else if (character == '\t')
             {
-                result += printerOptions.TabWidth;
+                result += indentSize;
             }
             else
             {

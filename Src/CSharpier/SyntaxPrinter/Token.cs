@@ -71,9 +71,9 @@ internal static class Token
         {
             var contents = new List<Doc>();
             var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
-            // TODO get proper printerOptions
-            var printerOptions = new PrinterOptions();
-            var currentIndentation = lines[^1].CalculateIndentLength(printerOptions);
+            var currentIndentation = lines[^1].CalculateCurrentLeadingIndentation(
+                context.IndentSize
+            );
             if (currentIndentation == 0)
             {
                 contents.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
@@ -82,12 +82,13 @@ internal static class Token
             {
                 foreach (var line in lines)
                 {
-                    var indentation = line.CalculateIndentLength(printerOptions);
+                    var indentation = line.CalculateCurrentLeadingIndentation(context.IndentSize);
                     var numberOfSpacesToAddOrRemove = indentation - currentIndentation;
-                    // TODO what about tabs!!
                     var modifiedLine =
                         numberOfSpacesToAddOrRemove > 0
-                            ? new string(' ', numberOfSpacesToAddOrRemove)
+                            ? context.UseTabs
+                                ? new string('\t', numberOfSpacesToAddOrRemove / 4)
+                                : new string(' ', numberOfSpacesToAddOrRemove)
                             : string.Empty;
                     modifiedLine += line.TrimStart();
                     contents.Add(modifiedLine);
