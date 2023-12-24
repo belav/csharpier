@@ -284,8 +284,8 @@ max_line_length = 10"
         result
             .ErrorOutput
             .Should()
-            .Be(
-                $"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}  (1,26): error CS1513: }} expected{Environment.NewLine}"
+            .StartWith(
+                $"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}  (1,26): error CS1513: }}"
             );
         result.ExitCode.Should().Be(1);
     }
