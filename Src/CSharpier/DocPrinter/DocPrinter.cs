@@ -180,7 +180,7 @@ internal class DocPrinter
     private void AppendComment(LeadingComment leadingComment, Indent indent)
     {
         int CalculateIndentLength(string line) =>
-            line.CalculateCurrentLeadingIndentation(this.PrinterOptions.IndentSize);
+            line.CalculateCurrentLeadingIndentation(this.PrinterOptions.TabWidth);
 
         var stringReader = new StringReader(leadingComment.Comment);
         var line = stringReader.ReadLine();

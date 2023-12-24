@@ -35,7 +35,7 @@ internal class ConfigurationFileOptions
     {
         return new PrinterOptions
         {
-            IndentSize = configurationFileOptions.TabWidth,
+            TabWidth = configurationFileOptions.TabWidth,
             UseTabs = configurationFileOptions.UseTabs,
             Width = configurationFileOptions.PrintWidth,
             EndOfLine = configurationFileOptions.EndOfLine

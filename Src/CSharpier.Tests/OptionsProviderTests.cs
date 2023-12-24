@@ -145,7 +145,7 @@ endOfLine: crlf
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
-        result.IndentSize.Should().Be(10);
+        result.TabWidth.Should().Be(10);
     }
 
     [Test]
@@ -178,7 +178,7 @@ endOfLine: crlf
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
-        result.IndentSize.Should().Be(10);
+        result.TabWidth.Should().Be(10);
     }
 
     [Test]
@@ -210,7 +210,7 @@ end_of_line = crlf
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.UseTabs.Should().BeFalse();
-        result.IndentSize.Should().Be(2);
+        result.TabWidth.Should().Be(2);
         result.Width.Should().Be(10);
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
     }
@@ -239,7 +239,7 @@ end_of_line = crlf
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.UseTabs.Should().BeFalse();
-        result.IndentSize.Should().Be(2);
+        result.TabWidth.Should().Be(2);
         result.Width.Should().Be(10);
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
     }
@@ -261,7 +261,7 @@ indent_size = 4
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
-        result.IndentSize.Should().Be(4);
+        result.TabWidth.Should().Be(4);
     }
 
     [Test]
@@ -279,7 +279,7 @@ indent_size = 4
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
-        result.IndentSize.Should().Be(4);
+        result.TabWidth.Should().Be(4);
     }
 
     [Test]
@@ -296,7 +296,7 @@ indent_size==
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
-        result.IndentSize.Should().Be(4);
+        result.TabWidth.Should().Be(4);
     }
 
     [TestCase("tab_width")]
@@ -316,7 +316,7 @@ indent_size==
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.UseTabs.Should().BeTrue();
-        result.IndentSize.Should().Be(2);
+        result.TabWidth.Should().Be(2);
     }
 
     [Test]
@@ -336,7 +336,7 @@ indent_size==
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.UseTabs.Should().BeTrue();
-        result.IndentSize.Should().Be(3);
+        result.TabWidth.Should().Be(3);
     }
 
     [Test]
@@ -354,7 +354,7 @@ indent_size==
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
-        result.IndentSize.Should().Be(3);
+        result.TabWidth.Should().Be(3);
     }
 
     [Test]
@@ -382,7 +382,7 @@ indent_size==
             "c:/test/subfolder",
             "c:/test/subfolder/test.cs"
         );
-        result.IndentSize.Should().Be(1);
+        result.TabWidth.Should().Be(1);
         result.Width.Should().Be(10);
     }
 
@@ -410,7 +410,7 @@ indent_size==
             "c:/test/subfolder",
             "c:/test/subfolder/test.cs"
         );
-        result.IndentSize.Should().Be(4);
+        result.TabWidth.Should().Be(4);
     }
 
     [Test]
@@ -458,7 +458,7 @@ indent_size = 2
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
-        result.IndentSize.Should().Be(2);
+        result.TabWidth.Should().Be(2);
     }
 
     [Test]
@@ -477,7 +477,7 @@ indent_size = 2
             "c:/test/subfolder",
             "c:/test/subfolder/test.cs"
         );
-        result.IndentSize.Should().Be(2);
+        result.TabWidth.Should().Be(2);
     }
 
     [Test]
@@ -497,7 +497,7 @@ indent_size = 2
             "c:/test/subfolder",
             "c:/test/test.cs"
         );
-        result.IndentSize.Should().Be(1);
+        result.TabWidth.Should().Be(1);
     }
 
     [Test]
@@ -517,7 +517,7 @@ indent_size = 2
             "c:/test",
             "c:/test/subfolder/test.cs"
         );
-        result.IndentSize.Should().Be(1);
+        result.TabWidth.Should().Be(1);
     }
 
     [Test]
@@ -535,7 +535,7 @@ INVALID
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
-        result.IndentSize.Should().Be(4);
+        result.TabWidth.Should().Be(4);
     }
 
     [Test]
@@ -564,7 +564,7 @@ INVALID
             "c:/test",
             "c:/test/subfolder/test.cs"
         );
-        result.IndentSize.Should().Be(1);
+        result.TabWidth.Should().Be(1);
     }
 
     [Test]
@@ -584,7 +584,7 @@ indent_size = 2
             "c:/test",
             "c:/test/subfolder/test.cs"
         );
-        result.IndentSize.Should().Be(1);
+        result.TabWidth.Should().Be(1);
     }
 
     [Test]
@@ -606,7 +606,7 @@ indent_size = 2
             "c:/test/subfolder/test.cs",
             limitEditorConfigSearch: true
         );
-        result.IndentSize.Should().Be(4);
+        result.TabWidth.Should().Be(4);
     }
 
     [Test]
@@ -626,13 +626,13 @@ indent_size = 2
             "c:/test/subfolder/test.cs",
             limitEditorConfigSearch: true
         );
-        result.IndentSize.Should().Be(1);
+        result.TabWidth.Should().Be(1);
     }
 
     private static void ShouldHaveDefaultOptions(PrinterOptions printerOptions)
     {
         printerOptions.Width.Should().Be(100);
-        printerOptions.IndentSize.Should().Be(4);
+        printerOptions.TabWidth.Should().Be(4);
         printerOptions.UseTabs.Should().BeFalse();
         printerOptions.EndOfLine.Should().Be(EndOfLine.Auto);
     }

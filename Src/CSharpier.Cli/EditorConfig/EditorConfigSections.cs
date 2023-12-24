@@ -27,12 +27,12 @@ internal class EditorConfigSections
 
         if (printerOptions.UseTabs)
         {
-            printerOptions.IndentSize = resolvedConfiguration.TabWidth ?? printerOptions.IndentSize;
+            printerOptions.TabWidth = resolvedConfiguration.TabWidth ?? printerOptions.TabWidth;
         }
         else
         {
-            printerOptions.IndentSize =
-                resolvedConfiguration.IndentSize ?? printerOptions.IndentSize;
+            printerOptions.TabWidth =
+                resolvedConfiguration.IndentSize ?? printerOptions.TabWidth;
         }
 
         if (resolvedConfiguration.EndOfLine is { } endOfLine)
