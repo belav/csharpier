@@ -31,6 +31,6 @@
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="7.0.0" />
     <PackageVersion Include="System.Text.Json" Version="7.0.3" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-    <PackageVersion Include="YamlDotNet" Version="13.4.0" />
+    <PackageVersion Include="YamlDotNet" Version="13.7.1" />
   </ItemGroup>
 </Project>
