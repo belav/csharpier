@@ -15,6 +15,7 @@ public class FormatResult
     public required string Json { get; set; }
     public required string Doc { get; set; }
     public required List<FormatError> Errors { get; set; }
+    public required string SyntaxValidation { get; set; }
 }
 
 public class FormatError
@@ -40,17 +41,35 @@ public class FormatController : ControllerBase
         this.logger = logger;
     }
 
+    public class PostModel
+    {
+        public string Code { get; set; } = string.Empty;
+        public int PrintWidth { get; set; }
+        public int IndentSize { get; set; }
+        public bool UseTabs { get; set; }
+    }
+
     [HttpPost]
-    public async Task<FormatResult> Post([FromBody] string content)
+    public async Task<FormatResult> Post([FromBody] PostModel model)
     {
         var result = await CSharpFormatter.FormatAsync(
-            content,
+            model.Code,
             new PrinterOptions
             {
                 IncludeAST = true,
                 IncludeDocTree = true,
-                Width = PrinterOptions.WidthUsedByTests
+                Width = model.PrintWidth,
+                TabWidth = model.IndentSize,
+                UseTabs = model.UseTabs
             }
+        );
+
+        var comparer = new SyntaxNodeComparer(
+            model.Code,
+            result.Code,
+            result.ReorderedModifiers,
+            result.ReorderedUsingsWithDisabledText,
+            CancellationToken.None
         );
 
         return new FormatResult
@@ -59,6 +78,7 @@ public class FormatController : ControllerBase
             Json = result.AST,
             Doc = result.DocTree,
             Errors = result.CompilationErrors.Select(this.ConvertError).ToList(),
+            SyntaxValidation = await comparer.CompareSourceAsync(CancellationToken.None)
         };
     }
 

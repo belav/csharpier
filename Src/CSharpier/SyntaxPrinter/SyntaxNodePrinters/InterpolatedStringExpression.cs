@@ -9,7 +9,10 @@ internal static class InterpolatedStringExpression
         // and new lines in expressions in them are rare.
         if (node.Contents.Any(o => o is InterpolationSyntax && o.ToString().Contains('\n')))
         {
-            return node.ToString();
+            return Doc.Concat(
+                Token.PrintLeadingTrivia(node.GetLeadingTrivia(), context),
+                node.ToString()
+            );
         }
 
         var docs = new List<Doc>

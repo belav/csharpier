@@ -1,15 +1,32 @@
 .controlsWrapper {
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border: 1px solid #ccc;
     background-color: #f7f7f7;
-    padding: 10px;
 }
 
-.controlsWrapper > label {
+.controlsWrapper h3 {
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.controlsWrapper > div {
+    font-size: 14px;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.controlsWrapper label {
     display: block;
     margin-top: 10px;
 }
-.controlsWrapper > button {
+
+.controlsWrapper input[type=number] {
+    display: block;
+    width: 100%;
+}
+
+.controlsWrapper button {
     width: 100%;
     margin-top: 10px;
 }

@@ -25,7 +25,7 @@ const config = {
             ({
                 docs: {
                     sidebarPath: require.resolve("./sidebars.js"),
-                    editUrl: githubUrl + "/tree/master/Docs/",
+                    editUrl: githubUrl + "/tree/master/",
                 },
                 theme: {
                     customCss: require.resolve("./src/css/custom.css"),
@@ -60,9 +60,9 @@ const config = {
                     },
                     {
                         href: githubUrl,
-                        label: "GitHub",
+                        html: "<span aria-hidden=\"true\">GitHub</span>",
                         position: "right",
-                        class: "header-github-link",
+                        class: "navbar__item navbar__link header-github-link",
                     },
                 ],
             },

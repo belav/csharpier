@@ -1,0 +1,6 @@
+#if DEBUG
+#define SYMBOL
+#endif
+
+using System;
+using System.Collections;

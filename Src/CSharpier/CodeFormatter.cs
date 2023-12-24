@@ -1,6 +1,6 @@
 using System.Text;
-using CSharpier.SyntaxPrinter;
 using System.Text.Json;
+using CSharpier.SyntaxPrinter;
 
 namespace CSharpier;
 

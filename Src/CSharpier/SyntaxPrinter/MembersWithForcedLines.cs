@@ -78,12 +78,12 @@ internal static class MembersWithForcedLines
             if (
                 member is MethodDeclarationSyntax methodDeclaration
                 && node is ClassDeclarationSyntax classDeclaration
-                && classDeclaration.Modifiers.Any(
-                    o => o.RawSyntaxKind() is SyntaxKind.AbstractKeyword
-                )
-                && methodDeclaration.Modifiers.Any(
-                    o => o.RawSyntaxKind() is SyntaxKind.AbstractKeyword
-                )
+                && classDeclaration
+                    .Modifiers
+                    .Any(o => o.RawSyntaxKind() is SyntaxKind.AbstractKeyword)
+                && methodDeclaration
+                    .Modifiers
+                    .Any(o => o.RawSyntaxKind() is SyntaxKind.AbstractKeyword)
             )
             {
                 blankLineIsForced = false;
@@ -144,7 +144,9 @@ internal static class MembersWithForcedLines
                 result.Add(ExtraNewLines.Print(member));
             }
             else if (
-                addBlankLine && !triviaContainsEndIfOrRegion && !skipAddingLineBecauseIgnoreEnded
+                addBlankLine
+                && !triviaContainsEndIfOrRegion
+                && !skipAddingLineBecauseIgnoreEnded
             )
             {
                 result.Add(Doc.HardLine);

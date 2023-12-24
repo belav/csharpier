@@ -1,0 +1,9 @@
+#if BUILD_MSI_TASKS
+using System;
+using Microsoft.Build.Framework;
+
+namespace RepoTasks;
+
+class ClassName { }
+
+#endif

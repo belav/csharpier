@@ -7,15 +7,18 @@ namespace CSharpier.Cli;
 
 public static class HasMismatchedCliAndMsBuildVersions
 {
-    public static bool Check(string directory, IFileSystem fileSystem, ILogger logger)
+    public static bool Check(string directoryName, IFileSystem fileSystem, ILogger logger)
     {
-        var csProjPaths = fileSystem.Directory
-            .EnumerateFiles(directory, "*.csproj", SearchOption.AllDirectories)
+        var csProjPaths = fileSystem
+            .Directory
+            .EnumerateFiles(directoryName, "*.csproj", SearchOption.AllDirectories)
             .ToArray();
 
-        var versionOfDotnetTool = typeof(CommandLineFormatter).Assembly
+        var versionOfDotnetTool = typeof(CommandLineFormatter)
+            .Assembly
             .GetName()
-            .Version!.ToString(3);
+            .Version!
+            .ToString(3);
 
         string? GetPackagesVersion(string pathToCsProj)
         {

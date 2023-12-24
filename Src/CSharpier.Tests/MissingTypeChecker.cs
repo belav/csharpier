@@ -28,7 +28,8 @@ public class MissingTypeChecker
             .Select(o => Path.GetFileNameWithoutExtension(o) + "Syntax")
             .ToList();
 
-        var syntaxNodeTypes = typeof(CompilationUnitSyntax).Assembly
+        var syntaxNodeTypes = typeof(CompilationUnitSyntax)
+            .Assembly
             .GetTypes()
             .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o))
             .ToList();

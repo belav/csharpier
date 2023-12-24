@@ -7,10 +7,10 @@ function CSH-ReviewBranch {
 
     $repositoryRoot = Join-Path $PSScriptRoot ".."
     $csProjectPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/CSharpier.Cli.csproj"
-    $csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/bin/release/net7.0/dotnet-csharpier.dll"
+    $csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/bin/release/net8.0/dotnet-csharpier.dll"
 
     $location = Get-Location
-    
+
     Set-Location $repositoryRoot
     
     if (!$pathToTestingRepo) {
@@ -32,22 +32,25 @@ function CSH-ReviewBranch {
 
     if ($branch -eq "main") {
         Write-Output "You must be on the branch you want to test. You are currently on main"
-        exit 1
+        return
     }
 
     $preBranch = "pre-" + $branch
     $postBranch = "post-" + $branch
-    
+
     if ($folder -ne $null) {
         $preBranch += "-" + $folder
         $postBranch += "-" + $folder
     }
-    
-    Set-Location $pathToTestingRepo
-    & git reset --hard
 
-    git checkout $postBranch
-    $postBranchOutput = (git status) | Out-String
+    Set-Location $pathToTestingRepo
+    & git reset --hard *> $null
+    & git pull
+    try {
+        & git checkout $postBranch 2>&1
+    }
+    catch { }
+    $postBranchOutput = (git status 2>&1) | Out-String
     $firstRun = -not $postBranchOutput.Contains("On branch $postBranch")
 
     $fastParam = ""
@@ -55,13 +58,15 @@ function CSH-ReviewBranch {
         $fastParam = "--fast"
     }
 
-    if ($firstRun)
-    {
+    if ($firstRun) {
         Set-Location $repositoryRoot
-        $checkoutMainOutput = (git checkout main) | Out-String
-        if (-not $checkoutMainOutput.Contains("Your branch is up to date with ")) {
-            return
-        }
+#        try  {
+            & git checkout main #2>&1 | Out-String
+#        }
+#        catch {
+#            Write-Host "Could not checkout main on csharpier, working directory is probably not clean"
+#            return
+#        }
         
         CSH-BuildProject
 
@@ -101,7 +106,9 @@ function CSH-ReviewBranch {
     & git push --set-upstream origin $postBranch
 
     if ($firstRun) {
-        #uses https://github.com/github/hub/releases
+        # uses https://github.com/github/hub/releases
+        # if this hangs run a command against this repo outside of here, it will store
+        # a token. Or I can just have a way to pass a GITHUB_TOKEN or store it in a .envc
         $newPr = & hub pull-request -b belav:$preBranch -m "Testing $branch $folder"
         Write-Output $newPr
     }

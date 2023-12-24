@@ -5,11 +5,11 @@
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
-    using ThreadHelper = Microsoft.VisualStudio.Shell.ThreadHelper;
-    using AsyncServiceProvider = Microsoft.VisualStudio.Shell.AsyncServiceProvider;
     using Microsoft.VisualStudio.Shell.Interop;
     using Microsoft.VisualStudio.Threading;
     using Newtonsoft.Json;
+    using AsyncServiceProvider = Microsoft.VisualStudio.Shell.AsyncServiceProvider;
+    using ThreadHelper = Microsoft.VisualStudio.Shell.ThreadHelper;
 
     public class CSharpierOptions
     {
@@ -32,11 +32,19 @@
         [Description("Log Debug Messages - this option is saved globally to this computer")]
         public bool GlobalLogDebugMessages { get; set; }
 
+        [Category("CSharpier - Developer")]
+        [DisplayName("Custom Path")]
+        [Description(
+            "Custom Path - Path to directory containing dotnet-csharpier - used for testing the extension with new versions of csharpier."
+        )]
+        public string? CustomPath { get; set; }
+
         protected void LoadFrom(CSharpierOptions newInstance)
         {
             this.SolutionRunOnSave = newInstance.SolutionRunOnSave;
             this.GlobalRunOnSave = newInstance.GlobalRunOnSave;
             this.GlobalLogDebugMessages = newInstance.GlobalLogDebugMessages;
+            this.CustomPath = newInstance.CustomPath;
         }
 
         private static readonly AsyncLazy<CSharpierOptions> liveModel =
@@ -109,6 +117,7 @@
                 {
                     newInstance.GlobalRunOnSave = o.RunOnSave;
                     newInstance.GlobalLogDebugMessages = o.LogDebugMessages;
+                    newInstance.CustomPath = o.CustomPath;
                 }
             );
 
@@ -161,7 +170,8 @@
                 new OptionsDto
                 {
                     RunOnSave = this.GlobalRunOnSave,
-                    LogDebugMessages = this.GlobalLogDebugMessages
+                    LogDebugMessages = this.GlobalLogDebugMessages,
+                    CustomPath = this.CustomPath
                 }
             );
         }
@@ -195,6 +205,7 @@
         {
             public bool? RunOnSave { get; set; }
             public bool LogDebugMessages { get; set; }
+            public string CustomPath { get; set; }
         }
     }
 }

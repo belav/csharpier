@@ -2,7 +2,7 @@
     "name": "csharpier-vscode",
     "displayName": "CSharpier - Code formatter",
     "description": "Code formatter using csharpier",
-    "version": "1.3.6",
+    "version": "1.5.1",
     "publisher": "csharpier",
     "author": "CSharpier",
     "homepage": "https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode",
@@ -47,6 +47,11 @@
                         "type": "boolean",
                         "default": false,
                         "description": "Enable debug logs."
+                    },
+                    "csharpier.dev.customPath": {
+                        "type": "string",
+                        "default": "",
+                        "description": "Path to directory containing dotnet-csharpier - used for testing the extension with new versions of csharpier."
                     }
                 }
             }

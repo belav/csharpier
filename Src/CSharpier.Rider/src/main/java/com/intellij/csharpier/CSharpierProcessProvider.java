@@ -25,9 +25,10 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class CSharpierProcessProvider implements DocumentListener, Disposable, IProcessKiller {
-    private final CustomPathInstaller customPathInstaller = new CustomPathInstaller();
+    private final CustomPathInstaller customPathInstaller;
     private final Logger logger = CSharpierLogger.getInstance();
     private final Project project;
 
@@ -38,6 +39,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
     public CSharpierProcessProvider(@NotNull Project project) {
         this.project = project;
+        this.customPathInstaller = new CustomPathInstaller(CSharpierSettings.getInstance(project));
 
         for (var fileEditor : FileEditorManager.getInstance(project).getAllEditors()) {
             var path = fileEditor.getFile().getPath();
@@ -161,9 +163,14 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         var command = new String[]{"dotnet", "csharpier", "--version"};
         var version = ProcessHelper.ExecuteCommand(command, env, new File(directoryThatContainsFile));
 
+        if (version == null) {
+            version = "";
+        }
         this.logger.debug("dotnet csharpier --version output: " + version);
+        var versionWithoutHash = version.split(Pattern.quote("+"))[0];
+        this.logger.debug("Using " + versionWithoutHash + " as the version number.");
 
-        return version == null ? "" : version;
+        return versionWithoutHash;
     }
 
     private String FindVersionInCsProj(Path currentDirectory) {
@@ -200,7 +207,11 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         }
 
         try {
-            this.customPathInstaller.ensureVersionInstalled(version);
+            if (!this.customPathInstaller.ensureVersionInstalled(version)) {
+                this.displayFailureMessage();
+                return NullCSharpierProcess.Instance;
+            }
+
             var customPath = this.customPathInstaller.getPathForVersion(version);
 
             this.logger.debug("Adding new version " + version + " process for " + directory);
@@ -226,13 +237,27 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
             var useUtf8 = versionWeCareAbout >= 14;
 
-            return new CSharpierProcessPipeMultipleFiles(customPath, useUtf8);
+            var csharpierProcess = new CSharpierProcessPipeMultipleFiles(customPath, useUtf8);
+            if (csharpierProcess.processFailedToStart) {
+                this.displayFailureMessage();
+            }
+
+            return csharpierProcess;
 
         } catch (Exception ex) {
             this.logger.error(ex);
         }
 
         return NullCSharpierProcess.Instance;
+    }
+
+    private void displayFailureMessage() {
+        var title = "CSharpier unable to format files";
+        var message = "CSharpier could not be set up properly so formatting is not currently supported. See log file for more details.";
+        var notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
+                .createNotification(title, message, NotificationType.WARNING);
+        notification.addAction(new OpenUrlAction("Read More","https://csharpier.com/docs/EditorsTroubleshooting"));
+        notification.notify(this.project);
     }
 
     @Override

@@ -59,3 +59,6 @@ Src/CSharpier.VSCode/.idea/prettier.xml
 
 .idea/.idea.CSharpier/.idea/riderMarkupCache.xml
 /Src/CSharpier.Benchmarks/BenchmarkDotNet.Artifacts/
+/Src/CSharpier.Tests/TestResults
+/Src/CSharpier.MsBuild.Test/.idea
+/Tests/MsBuild/GeneratedScenarios

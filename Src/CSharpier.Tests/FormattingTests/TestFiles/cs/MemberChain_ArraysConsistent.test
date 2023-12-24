@@ -1,0 +1,15 @@
+var x = someLongNameField
+    .CallMethod____________________________________()
+    .AccessArray[1]
+    .Property_______________;
+
+var x = someLongNameField
+    .CallMethod____________________________________()
+    .CallMethod(1)
+    .Property_______________;
+
+new Action(AssertConfigurationIsValid)
+    .ShouldThrow<AutoMapperConfigurationException>()
+    .Errors[0]
+    .UnmappedPropertyNames[0]
+    .ShouldBe(nameof(Destination.Count));

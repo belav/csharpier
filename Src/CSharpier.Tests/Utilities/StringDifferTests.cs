@@ -11,7 +11,7 @@ public class StringDifferTests
     [Test]
     public void PrintDifference_Should_Not_Print_Anything_If_Values_Are_Identical()
     {
-        var result = PrintDifference("value", "value");
+        var result = AddNewLinesAndFindDifference("value", "value");
 
         result.Should().BeNullOrEmpty();
     }
@@ -19,7 +19,7 @@ public class StringDifferTests
     [Test]
     public void PrintDifference_Should_Print_Visible_Spaces()
     {
-        var result = PrintDifference("value", "value   ");
+        var result = AddNewLinesAndFindDifference("value", "value   ");
 
         result
             .Should()
@@ -35,7 +35,7 @@ value···
     [Test]
     public void PrintDifference_Should_Print_Visible_Tabs()
     {
-        var result = PrintDifference("value", "value\t");
+        var result = AddNewLinesAndFindDifference("value", "value\t");
 
         result
             .Should()
@@ -51,7 +51,17 @@ value→
     [Test]
     public void PrintDifference_Should_Print_LineEnding_Message()
     {
-        var result = PrintDifference("lineEndings\r\ndiffer", "lineEndings\ndiffer");
+        var result = AddNewLinesAndFindDifference("lineEndings\r\ndiffer", "lineEndings\ndiffer");
+
+        result
+            .Should()
+            .Be("The file contained different line endings than formatting it would result in.");
+    }
+
+    [Test]
+    public void PrintDifference_Should_Print_LineEnding_Message2()
+    {
+        var result = PrintDifference("lineEndings\r\ndiffer\r\n", "lineEndings\ndiffer\n");
 
         result
             .Should()
@@ -61,7 +71,7 @@ value→
     [Test]
     public void PrintDifference_Should_Print_Single_Line_Difference()
     {
-        var result = PrintDifference("one", "two");
+        var result = AddNewLinesAndFindDifference("one", "two");
 
         result
             .Should()
@@ -80,11 +90,13 @@ two
         var result = PrintDifference(
             @"one
 two
-four",
+four
+",
             @"one
 two
 three
-four"
+four
+"
         );
 
         result
@@ -102,16 +114,122 @@ four
     }
 
     [Test]
+    public void PrintDifference_Should_Show_Extra_Whitespace_On_Empty_Line()
+    {
+        var result = PrintDifference(
+            @"public class ClassName
+{
+    private string field1;
+
+    private string field2;
+}
+",
+            @"public class ClassName
+{
+    private string field1;
+    
+    private string field2;
+}
+"
+        );
+
+        result
+            .Should()
+            .Be(
+                @"----------------------------- Expected: Around Line 4 -----------------------------
+    private string field1;
+
+    private string field2;
+----------------------------- Actual: Around Line 4 -----------------------------
+    private string field1;
+····
+    private string field2;
+"
+            );
+    }
+
+    [Test]
+    public void PrintDifference_Should_Show_Extra_Whitespace_At_End_Of_Line()
+    {
+        var result = PrintDifference(
+            @"public class ClassName
+{
+    private string field1;
+}
+",
+            @"public class ClassName
+{
+    private string field1;    
+}
+"
+        );
+
+        result
+            .Should()
+            .Be(
+                @"----------------------------- Expected: Around Line 3 -----------------------------
+{
+    private string field1;
+}
+----------------------------- Actual: Around Line 3 -----------------------------
+{
+    private string field1;····
+}
+"
+            );
+    }
+
+    [Test]
+    public void PrintDifference_Should_Not_Show_Whitespace_In_Middle_Of_Line()
+    {
+        var result = AddNewLinesAndFindDifference(
+            "public class ClassName { }",
+            "public class ClassName  { }"
+        );
+
+        result
+            .Should()
+            .Be(
+                @"----------------------------- Expected: Around Line 1 -----------------------------
+public class ClassName { }
+----------------------------- Actual: Around Line 1 -----------------------------
+public class ClassName  { }
+"
+            );
+    }
+
+    [Test]
+    public void PrintDifference_Should_Show_Extra_Whitespace_After_Line()
+    {
+        var result = AddNewLinesAndFindDifference(
+            "public class ClassName { }",
+            "public class ClassName  { } "
+        );
+
+        result
+            .Should()
+            .Be(
+                @"----------------------------- Expected: Around Line 1 -----------------------------
+public class ClassName { }
+----------------------------- Actual: Around Line 1 -----------------------------
+public class ClassName  { }·
+"
+            );
+    }
+
+    [Test]
     public void PrintDifference_Should_Print_Extra_Line_Difference()
     {
         var result = PrintDifference(
             @"one
 two
-three",
+three
+",
             @"one
 two
 three
-four"
+four
+"
         );
 
         result
@@ -127,30 +245,39 @@ four
             );
     }
 
-    [Test]
-    public void PrintDifference_Should_Make_Extra_New_Line_Obvious()
+    [TestCase("\r\n")]
+    [TestCase("\n")]
+    public void PrintDifference_Should_Make_Extra_New_Line_Obvious(string lineEnding)
     {
-        var result = PrintDifference(
-            @"}
-",
-            @"}
-
-"
-        );
+        var result = PrintDifference($";{lineEnding}", $";{lineEnding}{lineEnding}");
 
         result.Should().Be("The file did not end with a single newline.");
     }
 
-    [Test]
-    public void PrintDifference_Should_Make_Missing_New_Line_Obvious()
+    [TestCase("\r\n")]
+    [TestCase("\n")]
+    public void PrintDifference_Should_Make_Missing_New_Line_Obvious(string lineEnding)
     {
-        var result = PrintDifference(
-            @"}
-",
-            @"}"
-        );
+        var result = PrintDifference($";{lineEnding}", ";");
 
         result.Should().Be("The file did not end with a single newline.");
+    }
+
+    [TestCase("\r\n")]
+    [TestCase("\n")]
+    public void PrintDifference_Should_Pass_With_Proper_Line_Ending(string lineEnding)
+    {
+        var result = PrintDifference($";{lineEnding}", $";{lineEnding}");
+
+        result.Should().BeNullOrEmpty();
+    }
+
+    private static string AddNewLinesAndFindDifference(string expected, string actual)
+    {
+        return StringDiffer.PrintFirstDifference(
+            expected + Environment.NewLine,
+            actual + Environment.NewLine
+        );
     }
 
     private static string PrintDifference(string expected, string actual)

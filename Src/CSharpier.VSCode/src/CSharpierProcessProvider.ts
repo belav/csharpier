@@ -1,4 +1,4 @@
-import {Disposable, Extension, TextEditor, window, workspace} from "vscode";
+import { Disposable, Extension, TextEditor, window, workspace } from "vscode";
 import { Logger } from "./Logger";
 import * as path from "path";
 import * as semver from "semver";
@@ -23,7 +23,11 @@ export class CSharpierProcessProvider implements Disposable {
     constructor(logger: Logger, extension: Extension<unknown>) {
         this.logger = logger;
         this.customPathInstaller = new CustomPathInstaller(logger);
-        this.installerService = new InstallerService(this.logger, this.killRunningProcesses, extension);
+        this.installerService = new InstallerService(
+            this.logger,
+            this.killRunningProcesses,
+            extension,
+        );
 
         window.onDidChangeActiveTextEditor((event: TextEditor | undefined) => {
             if (event?.document?.languageId !== "csharp") {
@@ -137,11 +141,14 @@ export class CSharpierProcessProvider implements Disposable {
             outputFromCsharpier = execSync(`dotnet csharpier --version`, {
                 cwd: directoryThatContainsFile,
                 env: { ...process.env, DOTNET_NOLOGO: "1" },
-            }).toString().trim();
+            })
+                .toString()
+                .trim();
 
-            this.logger.debug(`dotnet csharpier --version output ${outputFromCsharpier}`);
-            return outputFromCsharpier;
-
+            this.logger.debug(`dotnet csharpier --version output: ${outputFromCsharpier}`);
+            const versionWithoutHash = outputFromCsharpier.split("+")[0]
+            this.logger.debug(`Using ${versionWithoutHash} as the version number.`)
+            return versionWithoutHash;
         } catch (error: any) {
             const message = !error.stderr ? error.toString() : error.stderr.toString();
 
@@ -204,7 +211,12 @@ export class CSharpierProcessProvider implements Disposable {
                 return NullCSharpierProcess.instance;
             }
 
-            this.customPathInstaller.ensureVersionInstalled(version);
+            if (!this.customPathInstaller.ensureVersionInstalled(version)) {
+                this.logger.debug(`Unable to validate install of version ${version}`)
+                this.displayFailureMessage();
+                return NullCSharpierProcess.instance;
+            }
+
             const customPath = this.customPathInstaller.getPathForVersion(version);
 
             this.logger.debug(`Adding new version ${version} process for ${directory}`);
@@ -218,7 +230,12 @@ export class CSharpierProcessProvider implements Disposable {
                 }
                 return new CSharpierProcessSingleFile(this.logger, customPath);
             } else {
-                return new CSharpierProcessPipeMultipleFiles(this.logger, customPath, directory);
+                const csharpierProcess = new CSharpierProcessPipeMultipleFiles(this.logger, customPath, directory);
+                if (csharpierProcess.processFailedToStart) {
+                    this.displayFailureMessage();
+                }
+
+                return csharpierProcess;
             }
         } catch (ex: any) {
             this.logger.error(ex.output.toString());
@@ -242,4 +259,10 @@ export class CSharpierProcessProvider implements Disposable {
         this.csharpierVersionByDirectory = {};
         this.csharpierProcessesByVersion = {};
     };
+
+    private displayFailureMessage() {
+        window.showErrorMessage(
+            "CSharpier could not be set up properly so formatting is not currently supported. See Output - CSharpier for details.",
+        );
+    }
 }

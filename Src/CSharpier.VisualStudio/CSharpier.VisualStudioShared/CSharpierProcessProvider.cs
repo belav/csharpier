@@ -1,8 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Security.Policy;
+using System.Windows.Forms;
 using System.Xml;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Newtonsoft.Json;
 
 namespace CSharpier.VisualStudio
@@ -10,16 +18,14 @@ namespace CSharpier.VisualStudio
     public class CSharpierProcessProvider : IProcessKiller
     {
         private readonly CustomPathInstaller customPathInstaller;
+        private readonly CSharpierPackage package;
         private readonly Logger logger;
 
         private bool warnedForOldVersion;
 
-        private readonly Dictionary<string, bool> warmingByDirectory =
-            new Dictionary<string, bool>();
-        private readonly Dictionary<string, string> csharpierVersionByDirectory =
-            new Dictionary<string, string>();
-        private readonly Dictionary<string, ICSharpierProcess> csharpierProcessesByVersion =
-            new Dictionary<string, ICSharpierProcess>();
+        private readonly Dictionary<string, bool> warmingByDirectory = new();
+        private readonly Dictionary<string, string> csharpierVersionByDirectory = new();
+        private readonly Dictionary<string, ICSharpierProcess> csharpierProcessesByVersion = new();
 
         private static CSharpierProcessProvider? instance;
 
@@ -32,6 +38,7 @@ namespace CSharpier.VisualStudio
         {
             this.logger = Logger.Instance;
             this.customPathInstaller = CustomPathInstaller.GetInstance(package);
+            this.package = package;
         }
 
         public void FindAndWarmProcess(string filePath)
@@ -84,7 +91,7 @@ namespace CSharpier.VisualStudio
             )
             {
                 // this shouldn't really happen, but just in case
-                return new NullCSharpierProcess();
+                return NullCSharpierProcess.Instance;
             }
 
             return cSharpierProcess;
@@ -148,8 +155,10 @@ namespace CSharpier.VisualStudio
             );
 
             this.logger.Debug("dotnet csharpier --version output: " + versionFromCommand);
+            var versionWithoutHash = versionFromCommand.Split('+')[0];
+            this.logger.Debug("Using " + versionWithoutHash + " as the version number.");
 
-            return versionFromCommand;
+            return versionWithoutHash;
         }
 
         private string? FindVersionInCsProj(DirectoryInfo currentDirectory)
@@ -192,13 +201,18 @@ namespace CSharpier.VisualStudio
         {
             if (string.IsNullOrEmpty(version))
             {
-                return new NullCSharpierProcess();
+                return NullCSharpierProcess.Instance;
             }
 
-            this.customPathInstaller.EnsureVersionInstalled(version);
-            var customPath = this.customPathInstaller.GetPathForVersion(version);
             try
             {
+                if (!this.customPathInstaller.EnsureVersionInstalled(version))
+                {
+                    this.DisplayFailureMessage();
+                    return NullCSharpierProcess.Instance;
+                }
+                var customPath = this.customPathInstaller.GetPathForVersion(version);
+
                 this.logger.Debug("Adding new version " + version + " process for " + directory);
 
                 var installedVersion = new Version(version);
@@ -215,14 +229,51 @@ namespace CSharpier.VisualStudio
 
                     return new CSharpierProcessSingleFile(customPath, this.logger);
                 }
-                return new CSharpierProcessPipeMultipleFiles(customPath, this.logger);
+                var csharpierProcess = new CSharpierProcessPipeMultipleFiles(
+                    customPath,
+                    this.logger
+                );
+                if (csharpierProcess.ProcessFailedToStart)
+                {
+                    this.DisplayFailureMessage();
+                }
+
+                return csharpierProcess;
             }
             catch (Exception ex)
             {
                 this.logger.Error(ex);
+                this.DisplayFailureMessage();
             }
 
-            return new NullCSharpierProcess();
+            return NullCSharpierProcess.Instance;
+        }
+
+        private void DisplayFailureMessage()
+        {
+            var actionButton = new InfoBarActionButton
+            {
+                IsHyperLink = true,
+                Text = "Read More",
+                Context = "ReadMore",
+                OnClicked = () =>
+                {
+                    Process.Start(
+                        new ProcessStartInfo
+                        {
+                            FileName = "https://csharpier.com/docs/EditorsTroubleshooting",
+                            UseShellExecute = true
+                        }
+                    );
+                }
+            };
+
+            InfoBarService
+                .Instance
+                .ShowInfoBar(
+                    "CSharpier could not be set up properly so formatting is not currently supported.",
+                    new[] { actionButton }
+                );
         }
 
         public void KillRunningProcesses()

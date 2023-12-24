@@ -1,0 +1,4 @@
+using System;
+#if DEBUG
+using Insite.Bad;
+#endif

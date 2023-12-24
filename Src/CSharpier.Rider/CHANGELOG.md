@@ -2,6 +2,18 @@
 
 # csharpier-rider Changelog
 
+## [1.5.1]
+- Ensure rider plugin always uses \n as a line separator
+
+## [1.5.0]
+- Improved error handling and reporting around csharpier failing to install or run
+
+## [1.3.10]
+- Read from error stream to prevent the plugin hanging when the csharpier process writes too much to the error stream.
+
+## [1.3.9]
+- Wait at most 3 seconds for csharpier to format otherwise consider it hung and restart it.
+
 ## [1.3.8]
 - Add displayName attribute to CSharpier options window to speed up Settings dialog.
 

@@ -1,3 +1,10 @@
+## [1.5.1]
+- Fixed bug with being unable to setup CSharpier when trying to use a global version of csharpier >= 0.26.0
+- Fixed bug with being unable to setup CSharpier with username containing space
+
+## [1.5.0]
+- Improved error handling and reporting around csharpier failing to install or run
+
 ## [1.3.6]
 - Fix bug where 2nd instance of VSCode was not able to format code
 

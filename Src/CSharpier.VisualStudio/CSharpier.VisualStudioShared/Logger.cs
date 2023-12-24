@@ -29,30 +29,30 @@ namespace CSharpier.VisualStudio
 
         public void Warn(string message)
         {
-            this.Log(message);
+            this.Log(message, "Warn");
         }
 
         public void Debug(string message)
         {
             if (CSharpierOptions.Instance.GlobalLogDebugMessages)
             {
-                this.Log(message);
+                this.Log(message, "Debug");
             }
         }
 
         public void Info(string message)
         {
-            this.Log(message);
+            this.Log(message, "Info");
         }
 
         public void Error(Exception ex)
         {
-            this.Log("Exception: " + ex);
+            this.Log(ex.ToString(), "Error");
         }
 
-        private void Log(string message)
+        private void Log(string message, string logLevel)
         {
-            this.pane.OutputStringThreadSafe(message + Environment.NewLine);
+            this.pane.OutputStringThreadSafe($"[{logLevel} - {DateTime.Now}] {message}\n");
         }
     }
 }

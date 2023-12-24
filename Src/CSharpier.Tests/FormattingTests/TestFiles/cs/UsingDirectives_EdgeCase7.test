@@ -1,0 +1,7 @@
+#if DEBUG
+extern alias MonoSecurity;
+#else
+using Mono.Security.Cryptography;
+#endif
+
+using System;

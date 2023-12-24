@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -8,10 +8,6 @@ using Task = System.Threading.Tasks.Task;
 namespace CSharpier.VisualStudio
 {
     public class ReformatWithCSharpierOnSave : IVsRunningDocTableEvents3
-#if !DEV16
-            , IVsRunningDocTableEvents7
-#endif
-
     {
         private readonly DTE dte;
         private readonly RunningDocumentTable runningDocumentTable;
@@ -32,23 +28,12 @@ namespace CSharpier.VisualStudio
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
-            new ReformatWithCSharpierOnSave(package, dte!);
-        }
-
-        public IVsTask? OnBeforeSaveAsync(uint cookie, uint flags, IVsTask? saveTask)
-        {
-            return ThreadHelper.JoinableTaskFactory.RunAsyncAsVsTask(
-                VsTaskRunContext.UIThreadNormalPriority,
-                async _ =>
-                {
-                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                    return this.OnBeforeSave(cookie);
-                }
-            );
+            _ = new ReformatWithCSharpierOnSave(package, dte!);
         }
 
         public int OnBeforeSave(uint docCookie)
         {
+            Logger.Instance.Debug("OnBeforeSave");
             var runOnSave =
                 CSharpierOptions.Instance.SolutionRunOnSave is true
                 || (
@@ -58,6 +43,7 @@ namespace CSharpier.VisualStudio
 
             if (!runOnSave)
             {
+                Logger.Instance.Debug("No RunOnSave");
                 return VSConstants.S_OK;
             }
 
@@ -65,11 +51,13 @@ namespace CSharpier.VisualStudio
 
             if (document == null)
             {
+                Logger.Instance.Debug("No Document");
                 return VSConstants.S_OK;
             }
 
+            Logger.Instance.Debug("Before format");
             this.formattingService.Format(document);
-
+            Logger.Instance.Debug("Done Format");
             return VSConstants.S_OK;
         }
 
@@ -87,14 +75,21 @@ namespace CSharpier.VisualStudio
 
         private Document? FindDocument(uint docCookie)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
+            try
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                var documentInfo = this.runningDocumentTable.GetDocumentInfo(docCookie);
+                var documentPath = documentInfo.Moniker;
 
-            var documentInfo = this.runningDocumentTable.GetDocumentInfo(docCookie);
-            var documentPath = documentInfo.Moniker;
-
-            return this.dte.Documents
-                .Cast<Document>()
-                .FirstOrDefault(o => o.FullName == documentPath);
+                return this.dte.ActiveDocument?.FullName == documentPath
+                    ? this.dte.ActiveDocument
+                    : this.dte.Documents?.Item(documentPath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error(ex);
+                return null;
+            }
         }
 
         public int OnAfterFirstDocumentLock(
@@ -120,11 +115,6 @@ namespace CSharpier.VisualStudio
         public int OnAfterSave(uint docCookie)
         {
             return VSConstants.S_OK;
-        }
-
-        public IVsTask? OnAfterSaveAsync(uint cookie, uint flags)
-        {
-            return null;
         }
 
         public int OnAfterAttributeChange(uint docCookie, uint grfAttribs)

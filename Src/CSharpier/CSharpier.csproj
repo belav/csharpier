@@ -2,7 +2,7 @@
   <Import Project="../../Nuget/Build.props" />
   <PropertyGroup>
     <PackageId>CSharpier.Core</PackageId>
-    <TargetFrameworks>net6.0;net7.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0;netstandard2.0</TargetFrameworks>
     <RootNamespace>CSharpier</RootNamespace>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>

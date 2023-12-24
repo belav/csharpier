@@ -11,7 +11,6 @@ To use it:
 - Optionally configure CSharpier to `Run on Save` under Preferences/Settings | Tools | CSharpier
 
 Please report any [issues](https://github.com/belav/csharpier/issues)
-<!-- Plugin description end -->
 
 ## Installation
 
@@ -20,7 +19,6 @@ Please report any [issues](https://github.com/belav/csharpier/issues)
   <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "CSharpier"</kbd> >
   <kbd>Install Plugin</kbd>
 ---
-Plugin based on the [IntelliJ Platform Plugin Template][template].
 
 ## Troubleshooting
 
@@ -32,4 +30,6 @@ Plugin based on the [IntelliJ Platform Plugin Template][template].
 - Use the action "Debug Log Settings"
 - Add entry for "#com.intellij.csharpier.CSharpierLogger"
 - Restart Rider
+
+<!-- Plugin description end -->
 

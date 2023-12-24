@@ -8,9 +8,9 @@ namespace CSharpier.VisualStudio
 
         public CSharpierOptionsPage()
         {
-            this.model = ThreadHelper.JoinableTaskFactory.Run(
-                CSharpierOptions.GetLiveInstanceAsync
-            );
+            this.model = ThreadHelper
+                .JoinableTaskFactory
+                .Run(CSharpierOptions.GetLiveInstanceAsync);
         }
 
         public override object AutomationObject => this.model;

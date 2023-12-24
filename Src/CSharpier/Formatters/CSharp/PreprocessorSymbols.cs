@@ -35,14 +35,16 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
         }
 
         foreach (
-            var syntaxTrivia in token.LeadingTrivia.Where(
-                syntaxTrivia =>
-                    syntaxTrivia.RawSyntaxKind()
-                        is SyntaxKind.IfDirectiveTrivia
-                            or SyntaxKind.ElifDirectiveTrivia
-                            or SyntaxKind.ElseDirectiveTrivia
-                            or SyntaxKind.EndIfDirectiveTrivia
-            )
+            var syntaxTrivia in token
+                .LeadingTrivia
+                .Where(
+                    syntaxTrivia =>
+                        syntaxTrivia.RawSyntaxKind()
+                            is SyntaxKind.IfDirectiveTrivia
+                                or SyntaxKind.ElifDirectiveTrivia
+                                or SyntaxKind.ElseDirectiveTrivia
+                                or SyntaxKind.EndIfDirectiveTrivia
+                )
         )
         {
             this.Visit((CSharpSyntaxNode)syntaxTrivia.GetStructure()!);
@@ -65,7 +67,8 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
 
     public override void VisitElseDirectiveTrivia(ElseDirectiveTriviaSyntax node)
     {
-        var allParameters = this.CurrentContext.booleanExpressions
+        var allParameters = this.CurrentContext
+            .booleanExpressions
             .SelectMany(o => o.Parameters)
             .Distinct()
             .ToList();
@@ -83,13 +86,15 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
 
         // TODO it would be more efficient to not add a new boolean expression, because we know which
         // symbols we need
-        this.CurrentContext.booleanExpressions.Add(
-            new BooleanExpression
-            {
-                Parameters = combination.Where(o => o.Value).Select(o => o.Key).ToList(),
-                Function = o => o.All(p => p.Value)
-            }
-        );
+        this.CurrentContext
+            .booleanExpressions
+            .Add(
+                new BooleanExpression
+                {
+                    Parameters = combination.Where(o => o.Value).Select(o => o.Key).ToList(),
+                    Function = o => o.All(p => p.Value)
+                }
+            );
     }
 
     public override void VisitEndIfDirectiveTrivia(EndIfDirectiveTriviaSyntax node)

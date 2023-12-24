@@ -78,9 +78,7 @@ namespace CSharpier.VisualStudio
         }
 
         public bool ProcessSupportsFormatting(Document document) =>
-            !(
-                this.cSharpierProcessProvider.GetProcessFor(document.FullName)
-                is NullCSharpierProcess
-            );
+            this.cSharpierProcessProvider.GetProcessFor(document.FullName)
+                is not NullCSharpierProcess;
     }
 }

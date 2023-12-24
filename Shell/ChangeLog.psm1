@@ -19,8 +19,8 @@ function CSH-ChangeLog {
 
     $repository = "https://github.com/belav/csharpier"
 
-    # if this fails
-    # Install-Module -Name PowerShellForGitHub
+    # if this fails, then run
+    # Install-Module -Name PowerShellForGitHub -Force
     $milestones = Get-GitHubMilestone -Uri $repository -State "Open"
     $milestoneNumber = -1
     foreach ($milestone in $milestones)
@@ -43,7 +43,7 @@ function CSH-ChangeLog {
             continue
         }
 
-        [void]$content.AppendLine("#### " + $issue.title + " [#" + $issue.number + "](" + $issue.html_url + ")")
+        [void]$content.AppendLine("### " + $issue.title + " [#" + $issue.number + "](" + $issue.html_url + ")")
     }
     [void]$content.AppendLine()
     [void]$content.AppendLine("**Full Changelog**: https://github.com/belav/csharpier/compare/" + $previousVersionNumber + "..." + $versionNumber)
