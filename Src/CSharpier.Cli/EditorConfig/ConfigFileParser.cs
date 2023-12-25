@@ -29,7 +29,10 @@ internal static class ConfigFileParser
         using var streamReader = new StreamReader(stream);
         var configData = parser.ReadData(streamReader);
 
-        var directory = fileSystem.Path.GetDirectoryName(filePath)!;
+        var directory = fileSystem.Path.GetDirectoryName(filePath);
+        
+        ArgumentNullException.ThrowIfNull(directory);
+        
         var sections = new List<Section>();
         foreach (var section in configData.Sections)
         {

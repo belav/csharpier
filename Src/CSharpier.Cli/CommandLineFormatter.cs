@@ -33,6 +33,8 @@ internal static class CommandLineFormatter
                         ? directoryOrFilePath
                         : Path.Combine(directoryPath, "StdIn.cs");
 
+                ArgumentNullException.ThrowIfNull(directoryPath);
+
                 var fileToFormatInfo = FileToFormatInfo.Create(
                     filePath,
                     commandLineOptions.StandardInFileContents,
@@ -40,7 +42,7 @@ internal static class CommandLineFormatter
                 );
 
                 var optionsProvider = await OptionsProvider.Create(
-                    directoryPath!,
+                    directoryPath,
                     commandLineOptions.ConfigPath,
                     fileSystem,
                     logger,
@@ -154,8 +156,10 @@ internal static class CommandLineFormatter
                 ? fileSystem.Path.GetDirectoryName(directoryOrFilePath)
                 : directoryOrFilePath;
 
+            ArgumentNullException.ThrowIfNull(directoryName);
+
             var optionsProvider = await OptionsProvider.Create(
-                directoryName!,
+                directoryName,
                 commandLineOptions.ConfigPath,
                 fileSystem,
                 logger,

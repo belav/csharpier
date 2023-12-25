@@ -55,11 +55,11 @@ internal static class EditorConfigParser
                 o =>
                     new EditorConfigSections
                     {
-                        DirectoryName = fileSystem.Path.GetDirectoryName(o.FullName)!,
+                        DirectoryName = fileSystem.Path.GetDirectoryName(o.FullName),
                         SectionsIncludingParentFiles = FindSections(o.FullName, fileSystem)
                     }
             )
-            .OrderByDescending(o => o.DirectoryName.Length)
+            .OrderByDescending(o => o.DirectoryName?.Length)
             .ToList();
     }
 

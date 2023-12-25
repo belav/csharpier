@@ -77,7 +77,11 @@ public class IgnoreFile
             }
         }
 
-        return new IgnoreFile(ignore, fileSystem.Path.GetDirectoryName(ignoreFilePath)!);
+        var directoryName = fileSystem.Path.GetDirectoryName(ignoreFilePath);
+
+        ArgumentNullException.ThrowIfNull(directoryName);
+
+        return new IgnoreFile(ignore, directoryName);
     }
 
     private static string? FindIgnorePath(string baseDirectoryPath, IFileSystem fileSystem)
