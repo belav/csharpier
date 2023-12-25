@@ -13,8 +13,8 @@
     <PackageVersion Include="Ignore" Version="0.1.48" />
     <PackageVersion Include="ini-parser-netstandard" Version="2.5.2" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.1" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.7.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.8.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="5.0.0" />
@@ -22,7 +22,7 @@
     <PackageVersion Include="NUnit" Version="4.0.1" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageVersion Include="PolySharp" Version="1.13.1" />
-    <PackageVersion Include="Scriban" Version="5.7.0" />
+    <PackageVersion Include="Scriban" Version="5.9.0" />
     <PackageVersion Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
     <PackageVersion Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />
     <PackageVersion Include="System.IO.Abstractions" Version="13.2.29" />
