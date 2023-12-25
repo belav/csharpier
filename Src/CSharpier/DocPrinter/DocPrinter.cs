@@ -179,27 +179,8 @@ internal class DocPrinter
 
     private void AppendComment(LeadingComment leadingComment, Indent indent)
     {
-        int CalculateIndentLength(string line)
-        {
-            var result = 0;
-            foreach (var character in line)
-            {
-                if (character == ' ')
-                {
-                    result += 1;
-                }
-                else if (character == '\t')
-                {
-                    result += this.PrinterOptions.TabWidth;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return result;
-        }
+        int CalculateIndentLength(string line) =>
+            line.CalculateCurrentLeadingIndentation(this.PrinterOptions.TabWidth);
 
         var stringReader = new StringReader(leadingComment.Comment);
         var line = stringReader.ReadLine();
@@ -315,7 +296,11 @@ internal class DocPrinter
         {
             if (!this.SkipNextNewLine || !this.NewLineNextStringValue)
             {
-                this.Output.TrimTrailingWhitespace();
+                if (line is not HardLineNoTrim)
+                {
+                    this.Output.TrimTrailingWhitespace();
+                }
+
                 this.Output.Append(this.EndOfLine).Append(indent.Value);
                 this.CurrentWidth = indent.Length;
             }
