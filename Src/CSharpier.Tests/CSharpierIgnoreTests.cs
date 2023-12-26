@@ -69,7 +69,12 @@ public string Example
     {
         return CSharpierIgnore.PrintWithoutFormatting(
             code,
-            new FormattingContext { LineEnding = Environment.NewLine }
+            new FormattingContext
+            {
+                LineEnding = Environment.NewLine,
+                IndentSize = 4,
+                UseTabs = false
+            }
         );
     }
 }
