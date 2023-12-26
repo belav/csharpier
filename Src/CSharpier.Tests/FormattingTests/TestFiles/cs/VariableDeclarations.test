@@ -180,5 +180,17 @@ withLineEnding"
             && someOtheLongCondition___________________________________
                 ? someValue
                 : someValue;
+
+        var someValue =
+            // Some Comment
+            CallSomeMethod()
+                // Ideally this would be consistent with the following example, but this is fairly edge case
+                .CallSomeMethod();
+
+        var someValue =
+            // Some Comment
+            (x + y)
+            // Another Comment
+            .CallSomeMethod();
     }
 }
