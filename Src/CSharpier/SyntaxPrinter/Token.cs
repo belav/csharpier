@@ -69,38 +69,59 @@ internal static class Token
         }
         else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
         {
+            // TODO can I cast this to something?
+            // TODO how do I get the """ parts? they can be more than 3
+            var lines = syntaxToken.Value!.ToString()!.Replace("\r", string.Empty).Split('\n');
             var contents = new List<Doc>();
-            var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
-            var currentIndentation = lines[^1].CalculateCurrentLeadingIndentation(
-                context.IndentSize
+            foreach (var line in lines)
+            {
+                contents.Add(line);
+                contents.Add(Doc.HardLine);
+            }
+
+            contents.RemoveAt(contents.Count - 1);
+
+            docs.Add(
+                Doc.IndentIf(syntaxToken.Parent?.Parent is not ArgumentSyntax, Doc.Concat(contents))
             );
-            if (currentIndentation == 0)
-            {
-                contents.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
-            }
-            else
-            {
-                foreach (var line in lines)
-                {
-                    var indentation = line.CalculateCurrentLeadingIndentation(context.IndentSize);
-                    var numberOfSpacesToAddOrRemove = indentation - currentIndentation;
-                    var modifiedLine =
-                        numberOfSpacesToAddOrRemove > 0
-                            ? context.UseTabs
-                                ? new string('\t', numberOfSpacesToAddOrRemove / context.IndentSize)
-                                : new string(' ', numberOfSpacesToAddOrRemove)
-                            : string.Empty;
-                    modifiedLine += line.TrimStart();
-                    contents.Add(modifiedLine);
-                    contents.Add(
-                        numberOfSpacesToAddOrRemove > 0 ? Doc.HardLineNoTrim : Doc.HardLine
-                    );
-                }
 
-                contents.RemoveAt(contents.Count - 1);
-            }
-
-            docs.Add(Doc.Indent(contents));
+            // TODO this doesn't work because of the line below
+            // TODO test out the rest of csharpier-repos
+            // var contents = new List<Doc>();
+            // var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
+            // var currentIndentation = lines[^1].CalculateCurrentLeadingIndentation(
+            //     context.IndentSize
+            // );
+            // if (currentIndentation == 0)
+            // {
+            //     contents.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
+            // }
+            // else
+            // {
+            //     foreach (var line in lines)
+            //     {
+            //         var indentation = line.CalculateCurrentLeadingIndentation(context.IndentSize);
+            //         var numberOfSpacesToAddOrRemove = indentation - currentIndentation;
+            //         var modifiedLine =
+            //             numberOfSpacesToAddOrRemove > 0
+            //                 ? context.UseTabs
+            //                     ? new string('\t', numberOfSpacesToAddOrRemove / context.IndentSize)
+            //                     : new string(' ', numberOfSpacesToAddOrRemove)
+            //                 : string.Empty;
+            //         modifiedLine += line.TrimStart();
+            //         contents.Add(modifiedLine);
+            //         // TODO we need to trim the starting stuff (outside of raw string bounds), but keep the trailing stuff
+            //         contents.Add(
+            //             numberOfSpacesToAddOrRemove > 0 ? Doc.HardLineNoTrim : Doc.HardLine
+            //         );
+            //     }
+            //
+            //     contents.RemoveAt(contents.Count - 1);
+            // }
+            //
+            // docs.Add(
+            //     Doc.IndentIf(syntaxToken.Parent?.Parent is not ArgumentSyntax, Doc.Concat(contents))
+            // );
         }
         else
         {
