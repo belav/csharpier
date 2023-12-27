@@ -37,3 +37,9 @@ CallMethod(
     TrailingSpaceHere 
     """
 );
+
+CallMethod(
+    $"""
+    TrailingSpaceHere 
+    """
+);
