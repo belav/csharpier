@@ -1,3 +1,7 @@
 var someString = """
     Indent based on previous line
     """;
+
+var someString = $"""
+    Indent based on previous line
+    """;

@@ -25,7 +25,7 @@ internal static class Token
         return PrintSyntaxToken(syntaxToken, context, suffixDoc, skipLeadingTrivia);
     }
 
-    internal static readonly string[] lineSeperators = new[] { "\r\n", "\r", "\n" };
+    internal static readonly string[] lineSeparators = new[] { "\r\n", "\r", "\n" };
 
     private static Doc PrintSyntaxToken(
         SyntaxToken syntaxToken,
@@ -72,12 +72,9 @@ internal static class Token
         }
         else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
         {
-            // TODO /runtime/src/libraries/System.Memory/ref/System.Memory.cs fails validation? something with reordering modifiers
-            // public static System.ReadOnlySpan<T> CreateReadOnlySpan<T>(scoped ref readonly T reference, int length) { throw null; }
-            // TODO test with """" and $"""
             var linesIncludingQuotes = syntaxToken
                 .Text
-                .Split(lineSeperators, StringSplitOptions.None);
+                .Split(lineSeparators, StringSplitOptions.None);
             var lastLineIsIndented = linesIncludingQuotes[^1][0] is '\t' or ' ';
             var contents = new List<Doc>
             {
@@ -85,7 +82,7 @@ internal static class Token
                 lastLineIsIndented ? Doc.HardLineNoTrim : Doc.LiteralLine
             };
 
-            var lines = syntaxToken.ValueText.Split(lineSeperators, StringSplitOptions.None);
+            var lines = syntaxToken.ValueText.Split(lineSeparators, StringSplitOptions.None);
             foreach (var line in lines)
             {
                 contents.Add(line);
@@ -103,6 +100,14 @@ internal static class Token
             docs.Add(
                 Doc.IndentIf(syntaxToken.Parent?.Parent is not ArgumentSyntax, Doc.Concat(contents))
             );
+        }
+        else if (
+            syntaxToken.RawSyntaxKind()
+            is SyntaxKind.InterpolatedMultiLineRawStringStartToken
+                or SyntaxKind.InterpolatedRawStringEndToken
+        )
+        {
+            docs.Add(syntaxToken.Text.Trim());
         }
         else
         {
