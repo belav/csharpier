@@ -14,6 +14,15 @@ Can also be installed in VS Code: Launch VS Code Quick Open (Ctrl+P), paste the 
 ext install csharpier.csharpier-vscode
 ```
 
+## Default Formatter
+To ensure that CSharpier is used to format c# files, be sure to set it as the default formatter.
+
+```json
+  "[csharp]": {
+    "editor.defaultFormatter": "csharpier.csharpier-vscode"
+  }
+```
+
 ## Usage
 
 ### Keyboard Shortcuts
