@@ -34,6 +34,7 @@ internal static class InvocationExpression
 
         var forceOneLine =
             groups.Count <= cutoff
+            && groups[0].First().Node is not ParenthesizedExpressionSyntax
             && (
                 groups
                     .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
