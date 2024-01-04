@@ -62,11 +62,45 @@ internal static class Token
                         { RawKind: (int)SyntaxKind.InterpolatedVerbatimStringStartToken }
                     }
             )
-            || syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken
         )
         {
-            var lines = syntaxToken.Text.Replace("\r", string.Empty).Split(new[] { '\n' });
+            var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
             docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
+        }
+        else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
+        {
+            var contents = new List<Doc>();
+            var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
+            var currentIndentation = lines[^1].CalculateCurrentLeadingIndentation(
+                context.IndentSize
+            );
+            if (currentIndentation == 0)
+            {
+                contents.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
+            }
+            else
+            {
+                foreach (var line in lines)
+                {
+                    var indentation = line.CalculateCurrentLeadingIndentation(context.IndentSize);
+                    var numberOfSpacesToAddOrRemove = indentation - currentIndentation;
+                    var modifiedLine =
+                        numberOfSpacesToAddOrRemove > 0
+                            ? context.UseTabs
+                                ? new string('\t', numberOfSpacesToAddOrRemove / context.IndentSize)
+                                : new string(' ', numberOfSpacesToAddOrRemove)
+                            : string.Empty;
+                    modifiedLine += line.TrimStart();
+                    contents.Add(modifiedLine);
+                    contents.Add(
+                        numberOfSpacesToAddOrRemove > 0 ? Doc.HardLineNoTrim : Doc.HardLine
+                    );
+                }
+
+                contents.RemoveAt(contents.Count - 1);
+            }
+
+            docs.Add(Doc.Indent(contents));
         }
         else
         {
