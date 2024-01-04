@@ -86,9 +86,9 @@ internal class OptionsProvider
         }
 
         var directoryName = this.fileSystem.Path.GetDirectoryName(filePath);
-        
+
         ArgumentNullException.ThrowIfNull(directoryName);
-        
+
         var resolvedEditorConfig = this.editorConfigs.FirstOrDefault(
             o => directoryName.StartsWith(o.DirectoryName)
         );
