@@ -19,5 +19,15 @@
     "sdk": "mcr.microsoft.com/dotnet/sdk:8.0",
     "targetFrameworks": "netstandard2.0",
     "csharpier_frameworkVersion": "net8.0"
+  },
+  {
+    "name": "sdk:5.0_netstandard2.0",
+    "sdk": "mcr.microsoft.com/dotnet/sdk:5.0",
+    "targetFrameworks": "netstandard2.0"
+  },
+  {
+    "name": "sdk:3.1_netstandard2.0",
+    "sdk": "mcr.microsoft.com/dotnet/sdk:3.1",
+    "targetFrameworks": "netstandard2.0"
   }
 ]
