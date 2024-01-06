@@ -30,11 +30,15 @@ internal static class ConfigFileParser
         var configData = parser.ReadData(streamReader);
 
         var directory = fileSystem.Path.GetDirectoryName(filePath);
+
+        ArgumentNullException.ThrowIfNull(directory);
+
         var sections = new List<Section>();
         foreach (var section in configData.Sections)
         {
             sections.Add(new Section(section, directory));
         }
+
         return new ConfigFile { IsRoot = configData.Global["root"] == "true", Sections = sections };
     }
 }

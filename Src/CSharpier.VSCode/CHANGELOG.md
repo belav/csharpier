@@ -1,3 +1,6 @@
+## [1.5.2]
+- Update Readme
+
 ## [1.5.1]
 - Fixed bug with being unable to setup CSharpier when trying to use a global version of csharpier >= 0.26.0
 - Fixed bug with being unable to setup CSharpier with username containing space
