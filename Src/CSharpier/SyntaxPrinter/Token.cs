@@ -72,7 +72,6 @@ internal static class Token
         }
         else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
         {
-            // TODO possibly still some issues in https://github.com/belav/csharpier-repos/pull/98/files
             var linesIncludingQuotes = syntaxToken
                 .Text
                 .Split(lineSeparators, StringSplitOptions.None);
