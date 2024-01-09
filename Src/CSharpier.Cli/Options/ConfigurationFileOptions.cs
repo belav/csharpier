@@ -50,7 +50,7 @@ internal class ConfigurationFileOptions
     )
     {
         var results = new List<CSharpierConfigData>();
-        var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(directoryName);
+        var directoryInfo = fileSystem.DirectoryInfo.New(directoryName);
 
         var filesByDirectory = directoryInfo
             .EnumerateFiles(".csharpierrc*", SearchOption.AllDirectories)
@@ -66,7 +66,7 @@ internal class ConfigurationFileOptions
             {
                 results.Add(
                     new CSharpierConfigData(
-                        firstFile.DirectoryName,
+                        firstFile.DirectoryName!,
                         Create(firstFile.FullName, fileSystem, logger)
                     )
                 );
@@ -87,7 +87,7 @@ internal class ConfigurationFileOptions
             {
                 results.Add(
                     new CSharpierConfigData(
-                        file.DirectoryName,
+                        file.DirectoryName!,
                         Create(file.FullName, fileSystem, logger)
                     )
                 );

@@ -144,7 +144,7 @@ internal static class FormattingCacheFactory
 
         public async Task ResolveAsync(CancellationToken cancellationToken)
         {
-            this.fileSystem.FileInfo.FromFileName(this.cacheFile).EnsureDirectoryExists();
+            this.fileSystem.FileInfo.New(this.cacheFile).EnsureDirectoryExists();
 
             async Task WriteFile()
             {
