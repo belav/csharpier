@@ -33,6 +33,8 @@ internal static class CommandLineFormatter
                         ? directoryOrFilePath
                         : Path.Combine(directoryPath, "StdIn.cs");
 
+                ArgumentNullException.ThrowIfNull(directoryPath);
+
                 var fileToFormatInfo = FileToFormatInfo.Create(
                     filePath,
                     commandLineOptions.StandardInFileContents,
@@ -49,8 +51,10 @@ internal static class CommandLineFormatter
                 );
 
                 if (
-                    !GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
-                    && !optionsProvider.IsIgnored(filePath)
+                    (
+                        commandLineOptions.IncludeGenerated
+                        || !GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
+                    ) && !optionsProvider.IsIgnored(filePath)
                 )
                 {
                     var fileIssueLogger = new FileIssueLogger(
@@ -58,12 +62,15 @@ internal static class CommandLineFormatter
                         logger
                     );
 
+                    var printerOptions = optionsProvider.GetPrinterOptionsFor(filePath);
+                    printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
+
                     await PerformFormattingSteps(
                         fileToFormatInfo,
                         new StdOutFormattedFileWriter(console),
                         commandLineFormatterResult,
                         fileIssueLogger,
-                        optionsProvider.GetPrinterOptionsFor(filePath),
+                        printerOptions,
                         commandLineOptions,
                         FormattingCacheFactory.NullCache,
                         cancellationToken
@@ -154,6 +161,8 @@ internal static class CommandLineFormatter
                 ? fileSystem.Path.GetDirectoryName(directoryOrFilePath)
                 : directoryOrFilePath;
 
+            ArgumentNullException.ThrowIfNull(directoryName);
+
             var optionsProvider = await OptionsProvider.Create(
                 directoryName,
                 commandLineOptions.ConfigPath,
@@ -183,14 +192,18 @@ internal static class CommandLineFormatter
 
             async Task FormatFile(string actualFilePath, string originalFilePath)
             {
-                var printerOptions = optionsProvider.GetPrinterOptionsFor(actualFilePath);
                 if (
-                    GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
-                    || optionsProvider.IsIgnored(actualFilePath)
+                    (
+                        !commandLineOptions.IncludeGenerated
+                        && GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
+                    ) || optionsProvider.IsIgnored(actualFilePath)
                 )
                 {
                     return;
                 }
+
+                var printerOptions = optionsProvider.GetPrinterOptionsFor(actualFilePath);
+                printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
 
                 await FormatPhysicalFile(
                     actualFilePath,

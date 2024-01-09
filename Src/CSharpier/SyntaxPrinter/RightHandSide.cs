@@ -52,6 +52,11 @@ internal static class RightHandSide
 
     private static Layout DetermineLayout(CSharpSyntaxNode leftNode, ExpressionSyntax rightNode)
     {
+        if (rightNode.GetLeadingTrivia().Any(o => o.IsComment()))
+        {
+            return Layout.BreakAfterOperator;
+        }
+
         var isTail = rightNode is not AssignmentExpressionSyntax;
         var shouldUseChainFormatting =
             leftNode is AssignmentExpressionSyntax
