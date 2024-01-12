@@ -79,6 +79,24 @@ CallMethod(
     ]
 );
 
+int[] someArray =
+[
+    1
+#if DEBUG
+    ,
+    2
+#endif
+];
+
+int[] someArray =
+[
+    1
+#if !DEBUG
+    ,
+    2
+#endif
+];
+
 class MyClass
 {
     private readonly List<string> _items;
