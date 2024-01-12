@@ -44,7 +44,7 @@ The following can help track down issues with the extension being unable to inst
    `dotnet csharpier --version`
 2. If the extension was able to install CSharpier it should exist at a path such as<br/>
    `C:\Users\[UserName]\AppData\Local\CSharpier\[CSharpierVersion]` or<br/>
-   `$Home/.cache/csharpier/[CSharpierVersion]`
+   `$HOME/.cache/csharpier/[CSharpierVersion]`
 3. Assuming the directory above exists, attempt to run the following in that directory<br/>
    `dotnet-csharpier --version`
 4. If the installation appears to be corrupt, delete the directory and install CSharpier there yourself<br/>
