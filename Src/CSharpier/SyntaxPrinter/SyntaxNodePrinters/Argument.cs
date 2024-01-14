@@ -4,10 +4,7 @@ internal static class Argument
 {
     public static Doc Print(ArgumentSyntax node, FormattingContext context)
     {
-        return Doc.Concat(
-            PrintModifiers(node, context),
-            Node.Print(node.Expression, context)
-        );
+        return Doc.Concat(PrintModifiers(node, context), Node.Print(node.Expression, context));
     }
 
     public static Doc PrintModifiers(ArgumentSyntax node, FormattingContext context)
