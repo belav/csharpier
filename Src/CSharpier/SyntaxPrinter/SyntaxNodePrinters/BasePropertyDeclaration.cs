@@ -43,7 +43,7 @@ internal static class BasePropertyDeclaration
         return Doc.Group(
             Doc.Concat(
                 Doc.Concat(docs),
-                Modifiers.Print(node.Modifiers, context),
+                Modifiers.PrintSorted(node.Modifiers, context),
                 eventKeyword,
                 Node.Print(node.Type, context),
                 " ",
@@ -126,7 +126,7 @@ internal static class BasePropertyDeclaration
         }
 
         docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
-        docs.Add(Modifiers.Print(node.Modifiers, context));
+        docs.Add(Modifiers.PrintSorted(node.Modifiers, context));
         docs.Add(Token.Print(node.Keyword, context));
 
         if (node.Body != null)
