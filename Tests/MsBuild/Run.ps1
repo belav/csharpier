@@ -40,7 +40,7 @@ RUN dotnet build -c Release
     $csharpierFrameworkVersion = ""
     if ($null -ne $scenario.csharpier_frameworkVersion) {
         $csharpierFrameworkVersion = "
-    <CSharpier_FrameworkVersion>net8.0</CSharpier_FrameworkVersion>
+    <CSharpier_FrameworkVersion>$($scenario.csharpier_frameworkVersion)</CSharpier_FrameworkVersion>
 "
     }
 

@@ -26,6 +26,7 @@ public class Program
         bool pipeMultipleFiles,
         bool noCache,
         bool noMSBuildCheck,
+        bool includeGenerated,
         string configPath,
         LogLevel logLevel,
         CancellationToken cancellationToken
@@ -81,6 +82,7 @@ public class Program
             Fast = fast,
             SkipWrite = skipWrite,
             WriteStdout = writeStdout || standardInFileContents != null,
+            IncludeGenerated = includeGenerated,
             ConfigPath = actualConfigPath
         };
 
