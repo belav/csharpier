@@ -1,6 +1,5 @@
 namespace CSharpier.SyntaxPrinter;
 
-using System.Globalization;
 using System.Text.RegularExpressions;
 
 internal static class Token
