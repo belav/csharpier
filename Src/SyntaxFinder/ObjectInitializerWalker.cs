@@ -28,7 +28,7 @@ public class ObjectInitializerWalker : CSharpSyntaxWalker
 
     private void VisitNode(InitializerExpressionSyntax node)
     {
-        total++;
+        Interlocked.Increment(ref total);
 
         totalExpressions += node.Expressions.Count;
 
@@ -38,7 +38,7 @@ public class ObjectInitializerWalker : CSharpSyntaxWalker
             )
         )
         {
-            matching++;
+            Interlocked.Increment(ref matching);
             matchingFiles.Add(
                 node.SyntaxTree.GetLineSpan(node.Span).StartLinePosition.Line + " - " + this.file
             );
