@@ -33,6 +33,11 @@
         public bool GlobalLogDebugMessages { get; set; }
 
         [Category("CSharpier - Developer")]
+        [DisplayName("Enable GRPC")]
+        [Description("Enable GRPC communication to csharpier - Experimental as of 0.27.0")]
+        public bool EnableGrpc { get; set; }
+
+        [Category("CSharpier - Developer")]
         [DisplayName("Custom Path")]
         [Description(
             "Custom Path - Path to directory containing dotnet-csharpier - used for testing the extension with new versions of csharpier."
@@ -44,6 +49,7 @@
             this.SolutionRunOnSave = newInstance.SolutionRunOnSave;
             this.GlobalRunOnSave = newInstance.GlobalRunOnSave;
             this.GlobalLogDebugMessages = newInstance.GlobalLogDebugMessages;
+            this.EnableGrpc = newInstance.EnableGrpc;
             this.CustomPath = newInstance.CustomPath;
         }
 
@@ -108,6 +114,8 @@
                 o =>
                 {
                     newInstance.SolutionRunOnSave = o.RunOnSave;
+                    newInstance.EnableGrpc = o.EnableGrpc;
+                    newInstance.CustomPath = o.CustomPath;
                 }
             );
 
@@ -162,7 +170,12 @@
 
             await SaveOptions(
                 this.GetSolutionOptionsFileNameAsync,
-                new OptionsDto { RunOnSave = this.SolutionRunOnSave, }
+                new OptionsDto
+                {
+                    RunOnSave = this.SolutionRunOnSave,
+                    EnableGrpc = this.EnableGrpc,
+                    CustomPath = this.CustomPath
+                }
             );
 
             await SaveOptions(
@@ -205,7 +218,8 @@
         {
             public bool? RunOnSave { get; set; }
             public bool LogDebugMessages { get; set; }
-            public string CustomPath { get; set; }
+            public bool EnableGrpc { get; set; }
+            public string CustomPath { get; set; } = string.Empty;
         }
     }
 }

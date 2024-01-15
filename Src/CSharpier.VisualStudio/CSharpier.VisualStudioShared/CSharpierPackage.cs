@@ -52,12 +52,18 @@ namespace CSharpier.VisualStudio
                 Logger.Instance.Error(ex);
             }
 
-            SolutionEvents.OnAfterOpenSolution += HandleOpenSolution;
+            SolutionEvents.OnAfterOpenSolution += this.HandleOpenSolution;
         }
 
         private void HandleOpenSolution(object sender, OpenSolutionEventArgs e)
         {
             CSharpierOptions.Instance.Load();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            CSharpierProcessProvider.GetInstance(this).KillRunningProcesses();
+            base.Dispose(disposing);
         }
     }
 }

@@ -15,6 +15,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)CSharpierPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSharpierProcessGrpc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSharpierProcessPipeMultipleFiles.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSharpierProcessSingleFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CSharpierProcessProvider.cs" />
