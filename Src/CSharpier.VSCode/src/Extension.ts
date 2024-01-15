@@ -20,8 +20,6 @@ const initPlugin = async (context: ExtensionContext) => {
     const logger = new Logger(enableDebugLogs);
     NullCSharpierProcess.create(logger);
 
-    const isDevelopment = (process.env as any).MODE === "development";
-
     logger.info("Initializing " + (process.env as any).EXTENSION_NAME);
 
     const csharpierProcessProvider = new CSharpierProcessProvider(logger, context.extension);

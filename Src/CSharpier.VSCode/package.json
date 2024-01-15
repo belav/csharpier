@@ -44,9 +44,15 @@
                 "title": "CSharpier",
                 "properties": {
                     "csharpier.enableDebugLogs": {
+                        "order": 0,
                         "type": "boolean",
                         "default": false,
                         "description": "Enable debug logs."
+                    },
+                    "csharpier.dev.enableGrpc": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Enable GRPC communication to csharpier - Experimental as of 0.27.0"
                     },
                     "csharpier.dev.customPath": {
                         "type": "string",
@@ -61,11 +67,15 @@
         "vscode:prepublish": "npm run build",
         "actualBuild": "webpack --env NODE_ENV=production",
         "build": "rimraf build && npm run actualBuild",
+        "build:proto": "proto-loader-gen-types --longs=String --enums=String --defaults --oneofs --grpcLib=@grpc/grpc-js --outDir=./src/generated/ ../CSharpier.Cli/protos/csharpier_service.proto",
+        "postinstall": "npm run build:proto",
         "start": "rimraf build && webpack --env NODE_ENV=development --watch",
         "prettier": "prettier ./**/*.{ts,js} --write",
         "vsix": "vsce package"
     },
     "devDependencies": {
+        "@grpc/grpc-js": "1.9.13",
+        "@grpc/proto-loader": "0.7.10",
         "@types/glob": "7.1.4",
         "@types/mocha": "9.0.0",
         "@types/node": "14.x",

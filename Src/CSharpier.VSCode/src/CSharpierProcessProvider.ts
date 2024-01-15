@@ -10,6 +10,7 @@ import { CSharpierProcessPipeMultipleFiles } from "./CSharpierProcessPipeMultipl
 import * as fs from "fs";
 import { InstallerService } from "./InstallerService";
 import { CustomPathInstaller } from "./CustomPathInstaller";
+import { CSharpierProcessGrpc } from "./CSharpierProcessGrpc";
 
 export class CSharpierProcessProvider implements Disposable {
     warnedForOldVersion = false;
@@ -19,6 +20,7 @@ export class CSharpierProcessProvider implements Disposable {
     warmingByDirectory: Record<string, boolean | undefined> = {};
     csharpierVersionByDirectory: Record<string, string | undefined> = {};
     csharpierProcessesByVersion: Record<string, ICSharpierProcess | undefined> = {};
+    enableGrpc: boolean;
 
     constructor(logger: Logger, extension: Extension<unknown>) {
         this.logger = logger;
@@ -28,6 +30,9 @@ export class CSharpierProcessProvider implements Disposable {
             this.killRunningProcesses,
             extension,
         );
+
+        this.enableGrpc =
+            workspace.getConfiguration("csharpier").get<boolean>("dev.enableGrpc") ?? false;
 
         window.onDidChangeActiveTextEditor((event: TextEditor | undefined) => {
             if (event?.document?.languageId !== "csharp") {
@@ -221,7 +226,9 @@ export class CSharpierProcessProvider implements Disposable {
 
             this.logger.debug(`Adding new version ${version} process for ${directory}`);
 
-            if (semver.lt(version, "0.12.0")) {
+            if (this.enableGrpc) {
+                return new CSharpierProcessGrpc(this.logger, customPath, directory);
+            } else if (semver.lt(version, "0.12.0")) {
                 if (!this.warnedForOldVersion) {
                     window.showInformationMessage(
                         "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.",
@@ -238,7 +245,7 @@ export class CSharpierProcessProvider implements Disposable {
                 return csharpierProcess;
             }
         } catch (ex: any) {
-            this.logger.error(ex.output.toString());
+            this.logger.error(ex);
             this.logger.debug(
                 `returning NullCSharpierProcess because of the previous error when trying to set up a csharpier process`,
             );

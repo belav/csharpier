@@ -39,6 +39,11 @@ module.exports = env => {
                         },
                     ],
                 },
+                {
+                    test: /\.proto$/,
+                    exclude: /node_modules/,
+                    type: "asset/resource",
+                },
             ],
         },
     };
