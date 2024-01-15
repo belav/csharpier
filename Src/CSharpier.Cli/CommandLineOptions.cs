@@ -11,7 +11,6 @@ public class CommandLineOptions
     public bool Fast { get; init; }
     public bool SkipWrite { get; init; }
     public bool WriteStdout { get; init; }
-    public bool PipeMultipleFiles { get; init; }
     public bool NoCache { get; init; }
     public bool NoMSBuildCheck { get; init; }
     public bool IncludeGenerated { get; init; }
@@ -26,6 +25,8 @@ public class CommandLineOptions
         bool skipWrite,
         bool writeStdout,
         bool pipeMultipleFiles,
+        bool grpc,
+        int? grpcPort,
         bool noCache,
         bool noMSBuildCheck,
         bool includeGenerated,
@@ -79,7 +80,15 @@ public class CommandLineOptions
             ),
             new Option(
                 new[] { "--pipe-multiple-files" },
-                "Keep csharpier running so that multiples files can be piped to it via stdin"
+                "Keep csharpier running so that multiples files can be piped to it via stdin."
+            ),
+            new Option(
+                new[] { "--grpc" },
+                "Run CSharpier as a service using GRPC so that multiple files may be formatted."
+            ),
+            new Option<int?>(
+                new[] { "--grpc-port" },
+                "Specify the port that CSharpier should start on. Defaults to a random unused port."
             ),
             new Option<string>(
                 new[] { "--config-path" },
@@ -93,7 +102,11 @@ public class CommandLineOptions
             {
                 return "--pipe-multiple-files may only be used if you pipe stdin to CSharpier";
             }
-            if (!Console.IsInputRedirected && !cmd.Children.Contains("directoryOrFile"))
+            if (
+                !Console.IsInputRedirected
+                && !cmd.Children.Contains("directoryOrFile")
+                && !cmd.Children.Contains("--grpc")
+            )
             {
                 return "directoryOrFile is required when not piping stdin to CSharpier";
             }
