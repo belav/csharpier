@@ -42,6 +42,16 @@ internal static class Modifiers
 
     public static Doc Print(SyntaxTokenList modifiers, FormattingContext context)
     {
+        if (modifiers.Count == 0)
+        {
+            return Doc.Null;
+        }
+
+        return Doc.Group(Doc.Join(" ", modifiers.Select(o => Token.Print(o, context))), " ");
+    }
+
+    public static Doc PrintSorted(SyntaxTokenList modifiers, FormattingContext context)
+    {
         return PrintWithSortedModifiers(
             modifiers,
             context,
@@ -50,7 +60,7 @@ internal static class Modifiers
         );
     }
 
-    public static Doc PrintWithoutLeadingTrivia(
+    public static Doc PrintSorterWithoutLeadingTrivia(
         SyntaxTokenList modifiers,
         FormattingContext context
     )

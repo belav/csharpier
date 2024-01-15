@@ -1,0 +1,6 @@
+class ClassName
+{
+    // we could add ref to the sorting logic to ensure this stays in the correct order of `ref readonly`
+    // but being explicit about only sorting Modifiers on specific SyntaxNodes seems safer long term
+    void Method(ref readonly int someParameter) { }
+}

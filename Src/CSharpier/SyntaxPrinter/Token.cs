@@ -24,6 +24,8 @@ internal static class Token
         return PrintSyntaxToken(syntaxToken, context, suffixDoc, skipLeadingTrivia);
     }
 
+    internal static readonly string[] lineSeparators = new[] { "\r\n", "\r", "\n" };
+
     private static Doc PrintSyntaxToken(
         SyntaxToken syntaxToken,
         FormattingContext context,
@@ -69,38 +71,42 @@ internal static class Token
         }
         else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
         {
-            var contents = new List<Doc>();
-            var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
-            var currentIndentation = lines[^1].CalculateCurrentLeadingIndentation(
-                context.IndentSize
+            var linesIncludingQuotes = syntaxToken
+                .Text
+                .Split(lineSeparators, StringSplitOptions.None);
+            var lastLineIsIndented = linesIncludingQuotes[^1][0] is '\t' or ' ';
+            var contents = new List<Doc>
+            {
+                linesIncludingQuotes[0],
+                lastLineIsIndented ? Doc.HardLineNoTrim : Doc.LiteralLine
+            };
+
+            var lines = syntaxToken.ValueText.Split(lineSeparators, StringSplitOptions.None);
+            foreach (var line in lines)
+            {
+                contents.Add(line);
+                contents.Add(
+                    lastLineIsIndented
+                        ? string.IsNullOrEmpty(line)
+                            ? Doc.HardLine
+                            : Doc.HardLineNoTrim
+                        : Doc.LiteralLine
+                );
+            }
+
+            contents.Add(linesIncludingQuotes[^1].TrimStart());
+
+            docs.Add(
+                Doc.IndentIf(syntaxToken.Parent?.Parent is not ArgumentSyntax, Doc.Concat(contents))
             );
-            if (currentIndentation == 0)
-            {
-                contents.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
-            }
-            else
-            {
-                foreach (var line in lines)
-                {
-                    var indentation = line.CalculateCurrentLeadingIndentation(context.IndentSize);
-                    var numberOfSpacesToAddOrRemove = indentation - currentIndentation;
-                    var modifiedLine =
-                        numberOfSpacesToAddOrRemove > 0
-                            ? context.UseTabs
-                                ? new string('\t', numberOfSpacesToAddOrRemove / context.IndentSize)
-                                : new string(' ', numberOfSpacesToAddOrRemove)
-                            : string.Empty;
-                    modifiedLine += line.TrimStart();
-                    contents.Add(modifiedLine);
-                    contents.Add(
-                        numberOfSpacesToAddOrRemove > 0 ? Doc.HardLineNoTrim : Doc.HardLine
-                    );
-                }
-
-                contents.RemoveAt(contents.Count - 1);
-            }
-
-            docs.Add(Doc.Indent(contents));
+        }
+        else if (
+            syntaxToken.RawSyntaxKind()
+            is SyntaxKind.InterpolatedMultiLineRawStringStartToken
+                or SyntaxKind.InterpolatedRawStringEndToken
+        )
+        {
+            docs.Add(syntaxToken.Text.Trim());
         }
         else
         {

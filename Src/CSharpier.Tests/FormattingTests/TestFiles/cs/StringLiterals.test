@@ -99,15 +99,6 @@ four",
             Some have "quoted text" in them.
             """;
 
-        var multiLineRawInterpolated = $"""
-    This is a long message.
-    It has several lines.
-        Some are indented
-                more than others.
-    Some should start at the first column.
-    Some have "quoted text" in them.
-    """;
-
         var shortRaw = """Short Raw String""";
         var shortRawInterpolated = $"""Short Raw String""";
         var longRaw =

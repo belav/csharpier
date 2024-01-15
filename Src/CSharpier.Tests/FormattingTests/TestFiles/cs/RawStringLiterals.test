@@ -25,3 +25,27 @@ var whatAboutWhiteSpace = """
       
     That last line is six
     """;
+
+var whatAboutWhiteSpace = $"""
+    Four Spaces
+      
+    That last line is six
+    """;
+
+CallMethod(
+    """
+    SomeString
+    """
+);
+
+CallMethod(
+    """
+    TrailingSpaceHere 
+    """
+);
+
+CallMethod(
+    $"""
+    TrailingSpaceHere 
+    """
+);
