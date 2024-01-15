@@ -233,7 +233,7 @@ internal partial class SyntaxNodeComparer
         // this validation will fail unless we also get them consistent here
         // adding a semi-complicated if check to determine when to do the string replacement
         // did not appear to have any performance benefits
-        if (originalToken.Text.Replace("\r", "") != formattedToken.Text.Replace("\r", ""))
+        if (originalToken.ValueText.Replace("\r", "") != formattedToken.ValueText.Replace("\r", ""))
         {
             return NotEqual(
                 originalToken.RawSyntaxKind() == SyntaxKind.None
