@@ -29,7 +29,7 @@ public class ClassName
     void RawString()
     {
         var multiLineRawInterpolated = $"""
-        this has the wrong indentation but because one the interpolation contains new lines we leave it
+        this has the wrong indentation but because the interpolation contains new lines we leave it
         {(someValue ?
         One : Two)
         }
