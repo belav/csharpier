@@ -76,7 +76,7 @@ internal static class BaseTypeDeclaration
 
         if (node.Modifiers.Any())
         {
-            docs.Add(Modifiers.Print(node.Modifiers, context));
+            docs.Add(Modifiers.PrintSorted(node.Modifiers, context));
         }
 
         if (recordKeyword != null)
