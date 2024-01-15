@@ -12,6 +12,12 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DotNet.Glob" />
+    <PackageReference Include="Google.Protobuf" />
+    <PackageReference Include="Grpc.Core" />
+    <PackageReference Include="Grpc.Tools">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Ignore" />
     <PackageReference Include="ini-parser-netstandard" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
@@ -31,6 +37,7 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
+    <Protobuf Include="protos\*.proto" />
     <None Include="..\..\logo.png" Pack="true" PackagePath="">
       <Link>logo.png</Link>
     </None>
