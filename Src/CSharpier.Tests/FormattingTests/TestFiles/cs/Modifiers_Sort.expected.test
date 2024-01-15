@@ -1,6 +1,16 @@
-public class ClassName
+CallMethod(static async () => { });
+
+CallMethod(static async o => { });
+
+public static class ClassName
 {
+    public static int Field;
+
+    public static int Property { public private get; set; }
+
     public static async MethodName() { }
 }
 
 public partial class PartialClass { }
+
+protected internal delegate void D();

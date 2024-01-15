@@ -10,7 +10,7 @@ internal static class SimpleLambdaExpression
     public static Doc PrintHead(SimpleLambdaExpressionSyntax node, FormattingContext context)
     {
         return Doc.Concat(
-            Modifiers.Print(node.Modifiers, context),
+            Modifiers.PrintSorted(node.Modifiers, context),
             Node.Print(node.Parameter, context),
             " ",
             Token.Print(node.ArrowToken, context)
