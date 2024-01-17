@@ -48,7 +48,7 @@ public class DocUtilitiesTests
 
         DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-        concat.Contents.Should().BeEquivalentTo(Doc.HardLine);
+        concat.Contents.Should().BeEquivalentTo(new[] { Doc.HardLine });
     }
 
     [Test]
@@ -70,7 +70,7 @@ public class DocUtilitiesTests
 
         DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-        concat.Contents.Should().BeEquivalentTo(Doc.HardLine);
+        concat.Contents.Should().BeEquivalentTo(new[] { Doc.HardLine });
     }
 
     [Test]

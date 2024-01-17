@@ -13,7 +13,7 @@ internal static class ParenthesizedLambdaExpression
     {
         return Doc.Concat(
             AttributeLists.Print(node, node.AttributeLists, context),
-            Modifiers.Print(node.Modifiers, context),
+            Modifiers.PrintSorted(node.Modifiers, context),
             node.ReturnType != null
                 ? Doc.Concat(Node.Print(node.ReturnType, context), " ")
                 : Doc.Null,

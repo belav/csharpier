@@ -1,0 +1,3 @@
+var someString = """
+			Indent based on previous line
+			""";

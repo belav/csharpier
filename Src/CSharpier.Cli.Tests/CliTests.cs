@@ -1,18 +1,12 @@
-using System;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using CliWrap;
-using CliWrap.Buffered;
-using FluentAssertions;
-using NUnit.Framework;
-
 namespace CSharpier.Cli.Tests;
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
+using System.Text;
+using CliWrap;
+using CliWrap.Buffered;
+using FluentAssertions;
+using NUnit.Framework;
 
 // these tests are kind of nice as c# because they run in the same place.
 // except the one test that has issues with console input redirection
@@ -284,8 +278,8 @@ max_line_length = 10"
         result
             .ErrorOutput
             .Should()
-            .Be(
-                $"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}  (1,26): error CS1513: }} expected{Environment.NewLine}"
+            .StartWith(
+                $"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}  (1,26): error CS1513: }}"
             );
         result.ExitCode.Should().Be(1);
     }

@@ -24,6 +24,8 @@ internal static class Token
         return PrintSyntaxToken(syntaxToken, context, suffixDoc, skipLeadingTrivia);
     }
 
+    internal static readonly string[] lineSeparators = new[] { "\r\n", "\r", "\n" };
+
     private static Doc PrintSyntaxToken(
         SyntaxToken syntaxToken,
         FormattingContext context,
@@ -62,11 +64,49 @@ internal static class Token
                         { RawKind: (int)SyntaxKind.InterpolatedVerbatimStringStartToken }
                     }
             )
-            || syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken
         )
         {
-            var lines = syntaxToken.Text.Replace("\r", string.Empty).Split(new[] { '\n' });
+            var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
             docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
+        }
+        else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
+        {
+            var linesIncludingQuotes = syntaxToken
+                .Text
+                .Split(lineSeparators, StringSplitOptions.None);
+            var lastLineIsIndented = linesIncludingQuotes[^1][0] is '\t' or ' ';
+            var contents = new List<Doc>
+            {
+                linesIncludingQuotes[0],
+                lastLineIsIndented ? Doc.HardLineNoTrim : Doc.LiteralLine
+            };
+
+            var lines = syntaxToken.ValueText.Split(lineSeparators, StringSplitOptions.None);
+            foreach (var line in lines)
+            {
+                contents.Add(line);
+                contents.Add(
+                    lastLineIsIndented
+                        ? string.IsNullOrEmpty(line)
+                            ? Doc.HardLine
+                            : Doc.HardLineNoTrim
+                        : Doc.LiteralLine
+                );
+            }
+
+            contents.Add(linesIncludingQuotes[^1].TrimStart());
+
+            docs.Add(
+                Doc.IndentIf(syntaxToken.Parent?.Parent is not ArgumentSyntax, Doc.Concat(contents))
+            );
+        }
+        else if (
+            syntaxToken.RawSyntaxKind()
+            is SyntaxKind.InterpolatedMultiLineRawStringStartToken
+                or SyntaxKind.InterpolatedRawStringEndToken
+        )
+        {
+            docs.Add(syntaxToken.Text.Trim());
         }
         else
         {

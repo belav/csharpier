@@ -1,0 +1,51 @@
+var someString = """
+    Indent based on previous line
+    """;
+
+var someString = """
+    Indent based on previous line
+        This should stay indented
+    """;
+
+var doNotIndentIfEndDelimiterIsAtZero = """
+Keep This
+    Where It
+Is
+""";
+
+var someOneWantsThisMuchIndentation = """
+          <element attr="content">
+            <body>
+            </body>
+          </element>
+""";
+
+var whatAboutWhiteSpace = """
+    Four Spaces
+      
+    That last line is six
+    """;
+
+var whatAboutWhiteSpace = $"""
+    Four Spaces
+      
+    That last line is six
+    """;
+
+CallMethod(
+    """
+    SomeString
+    """
+);
+
+CallMethod(
+    """
+    TrailingSpaceHere 
+    """
+);
+
+CallMethod(
+    $"""
+    TrailingSpaceHere 
+    """
+);

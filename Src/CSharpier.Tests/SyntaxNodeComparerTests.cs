@@ -497,6 +497,67 @@ using Microsoft;
         result.Should().BeEmpty();
     }
 
+    [Test]
+    public void RawStringLiterals_Work_With_Moving_Indentation()
+    {
+        var left = """
+public class ClassName
+{
+    public void MethodName()
+    {
+        CallMethod(
+                \"\"\"
+                SomeString
+                \"\"\"
+        );
+    }
+}
+""";
+
+        var right = """
+public class ClassName
+{
+   public void MethodName()
+   {
+       CallMethod(
+           \"\"\"
+           SomeString
+           \"\"\"
+       );
+   }
+}
+""";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void RawStringLiterals_Work_With_Moving_Indentation_2()
+    {
+        var left = """"
+                    CallMethod(CallMethod(
+                        """
+                        SomeString
+                        """, someValue));
+                    """";
+        var right = """"
+                    CallMethod(
+                        CallMethod(
+                            """
+                            SomeString
+                            """,
+                            someValue
+                        )
+                    );
+                    """";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
     private static void ResultShouldBe(string result, string be)
     {
         if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)

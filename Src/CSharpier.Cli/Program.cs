@@ -17,6 +17,8 @@ public class Program
         return await rootCommand.InvokeAsync(args);
     }
 
+    // TODO at some point (1.0?) the options should be cleaned up
+    // and use sub commands
     public static async Task<int> Run(
         string[]? directoryOrFile,
         bool check,
@@ -24,8 +26,11 @@ public class Program
         bool skipWrite,
         bool writeStdout,
         bool pipeMultipleFiles,
+        bool grpc,
+        int? grpcPort,
         bool noCache,
         bool noMSBuildCheck,
+        bool includeGenerated,
         string configPath,
         LogLevel logLevel,
         CancellationToken cancellationToken
@@ -39,7 +44,22 @@ public class Program
 
         if (pipeMultipleFiles)
         {
-            return await PipeMultipleFiles(console, logger, actualConfigPath, cancellationToken);
+            return await PipeMultipleFilesFormatter.StartServer(
+                console,
+                logger,
+                actualConfigPath,
+                cancellationToken
+            );
+        }
+
+        if (grpc)
+        {
+            return await GrpcFormatter.StartServer(
+                grpcPort,
+                logger,
+                actualConfigPath,
+                cancellationToken
+            );
         }
 
         var directoryOrFileNotProvided = directoryOrFile is null or { Length: 0 };
@@ -52,7 +72,11 @@ public class Program
                 Console.OpenStandardInput(),
                 console.InputEncoding
             );
-            standardInFileContents = await streamReader.ReadToEndAsync();
+            standardInFileContents = await streamReader.ReadToEndAsync(
+#if NET7_0_OR_GREATER
+                cancellationToken
+#endif
+            );
 
             directoryOrFile = new[] { Directory.GetCurrentDirectory() };
             originalDirectoryOrFile = new[] { Directory.GetCurrentDirectory() };
@@ -72,7 +96,7 @@ public class Program
 
         var commandLineOptions = new CommandLineOptions
         {
-            DirectoryOrFilePaths = directoryOrFile!.ToArray(),
+            DirectoryOrFilePaths = directoryOrFile.ToArray(),
             OriginalDirectoryOrFilePaths = originalDirectoryOrFile!,
             StandardInFileContents = standardInFileContents,
             Check = check,
@@ -81,6 +105,7 @@ public class Program
             Fast = fast,
             SkipWrite = skipWrite,
             WriteStdout = writeStdout || standardInFileContents != null,
+            IncludeGenerated = includeGenerated,
             ConfigPath = actualConfigPath
         };
 
@@ -91,97 +116,5 @@ public class Program
             logger,
             cancellationToken
         );
-    }
-
-    private static async Task<int> PipeMultipleFiles(
-        SystemConsole console,
-        ILogger logger,
-        string? configPath,
-        CancellationToken cancellationToken
-    )
-    {
-        using var streamReader = new StreamReader(
-            Console.OpenStandardInput(),
-            console.InputEncoding
-        );
-
-        var stringBuilder = new StringBuilder();
-        string? fileName = null;
-
-        var exitCode = 0;
-
-        // TODO warm file somewhere around here
-
-        while (true)
-        {
-            while (true)
-            {
-                var value = streamReader.Read();
-                if (value == -1)
-                {
-                    return exitCode;
-                }
-                var character = Convert.ToChar(value);
-                if (character == '\u0003')
-                {
-                    break;
-                }
-
-                stringBuilder.Append(character);
-            }
-
-            if (fileName == null)
-            {
-                fileName = stringBuilder.ToString();
-                stringBuilder.Clear();
-            }
-            else
-            {
-                var commandLineOptions = new CommandLineOptions
-                {
-                    DirectoryOrFilePaths = new[]
-                    {
-                        Path.Combine(Directory.GetCurrentDirectory(), fileName)
-                    },
-                    OriginalDirectoryOrFilePaths = new[]
-                    {
-                        Path.IsPathRooted(fileName)
-                            ? fileName
-                            : fileName.StartsWith(".")
-                                ? fileName
-                                : "./" + fileName
-                    },
-                    StandardInFileContents = stringBuilder.ToString(),
-                    Fast = true,
-                    WriteStdout = true,
-                    ConfigPath = configPath
-                };
-
-                try
-                {
-                    var result = await CommandLineFormatter.Format(
-                        commandLineOptions,
-                        new FileSystem(),
-                        console,
-                        logger,
-                        cancellationToken
-                    );
-
-                    console.Write('\u0003'.ToString());
-
-                    if (result != 0)
-                    {
-                        exitCode = result;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Failed!");
-                }
-
-                stringBuilder.Clear();
-                fileName = null;
-            }
-        }
     }
 }
