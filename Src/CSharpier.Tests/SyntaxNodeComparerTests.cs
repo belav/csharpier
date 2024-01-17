@@ -557,6 +557,50 @@ public class ClassName
 
         result.Should().BeEmpty();
     }
+    
+    [Test]
+    public void RawStringLiterals_Work_With_Moving_Indentation_3()
+    {
+        var left = """"
+                   CallMethod(CallMethod(
+                       $$"""
+                       SomeString
+                       """, someValue));
+                   """";
+        var right = """"
+                    CallMethod(
+                        CallMethod(
+                            $$"""
+                            SomeString
+                            """,
+                            someValue
+                        )
+                    );
+                    """";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void RawStringLiterals_Error_With_Adding_Indentation_When_There_Was_None()
+    {
+        var left = """"
+                   var x = $$"""
+                   
+                   """;
+                   """";
+        var right = """"
+                    var x = $$"""
+                        
+                        """;
+                    """";
+
+        var result = CompareSource(left, right);
+
+        result.Should().NotBeEmpty();
+    }
 
     private static void ResultShouldBe(string result, string be)
     {
