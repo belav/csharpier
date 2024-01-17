@@ -1,5 +1,82 @@
 ﻿# 0.27.0
 ## What's Changed
+### Improve formatting of lambda expressions [#1066](https://github.com/belav/csharpier/pull/1066)
+Many thanks go to @Rudomitori for contributing a number of improvements to the formatting of lambda expressions.
+
+Some examples of the improvements.
+```c#
+// input
+var affectedRows = await _dbContext.SomeEntities
+    .ExecuteUpdateAsync(
+        x => 
+            x.SetProperty(x => x.Name, x => command.NewName)
+                .SetProperty(x => x.Title, x => command.NewTItle)
+                .SetProperty(x => x.Count, x => x.Command.NewCount)
+    );
+
+// 0.27.0
+var affectedRows = await _dbContext.SomeEntities
+    .ExecuteUpdateAsync(x =>
+        x.SetProperty(x => x.Name, x => command.NewName)
+            .SetProperty(x => x.Title, x => command.NewTItle)
+            .SetProperty(x => x.Count, x => x.Command.NewCount)
+    );
+```
+
+```c#
+// input
+builder.Entity<IdentityUserToken<string>>(b =>
+{
+    b.HasKey(
+        l =>
+            new
+            {
+                l.UserId,
+                l.LoginProvider,
+                l.Name
+            }
+    );
+    b.ToTable("AspNetUserTokens");
+});
+
+// 0.27.0
+builder.Entity<IdentityUserToken<string>>(b =>
+{
+    b.HasKey(l => new
+    {
+        l.UserId,
+        l.LoginProvider,
+        l.Name
+    });
+    b.ToTable("AspNetUserTokens");
+});
+```
+
+```c#
+// input
+table.PrimaryKey(
+    "PK_AspNetUserTokens",
+    x =>
+        new
+        {
+            x.UserId,
+            x.LoginProvider,
+            x.Name
+        }
+);
+
+// 0.27.0
+table.PrimaryKey(
+    "PK_AspNetUserTokens",
+    x => new
+    {
+        x.UserId,
+        x.LoginProvider,
+        x.Name
+    }
+);
+```
+
 ### `readonly ref` is changed to `ref readonly` causing error CS9190 [#1123](https://github.com/belav/csharpier/issues/1123)
 CSharpier was sorting modifiers in all places they occurred. Resulting the following change that led to code that would not compile.
 ```c#
