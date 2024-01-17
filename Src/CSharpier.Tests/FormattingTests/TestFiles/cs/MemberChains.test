@@ -245,5 +245,9 @@ class ClassName
 
         IEnumerable<ValueProviderFactory> valueProviderFactories =
             new ModelBinderAttribute_______().GetValueProviderFactories(config);
+
+        var something________________________________________ = x.SomeProperty
+            .CallMethod(longParameter_____________, longParameter_____________)
+            .CallMethod();
     }
 }

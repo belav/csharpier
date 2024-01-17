@@ -229,16 +229,14 @@ internal static class InvocationExpression
         // will be grouped as
         //   [
         //     [Identifier, InvocationExpression],
-        //     [MemberAccessExpression]
-        //     [MemberAccessExpression, InvocationExpression],
+        //     [MemberAccessExpression], [MemberAccessExpression, InvocationExpression],
         //     [MemberAccessExpression, InvocationExpression],
         //     [MemberAccessExpression],
         //   ]
 
         // so that we can print it as
         //   a()
-        //     .b
-        //     .c()
+        //     .b.c()
         //     .d()
         //     .e
 
@@ -260,16 +258,45 @@ internal static class InvocationExpression
             }
         }
 
-        if (
-            printedNodes[0].Node is not (InvocationExpressionSyntax or PostfixUnaryExpressionSyntax)
-            && index < printedNodes.Count
-            && printedNodes[index].Node
-                is ElementAccessExpressionSyntax
-                    or PostfixUnaryExpressionSyntax
-        )
+        if (printedNodes[0].Node is not InvocationExpressionSyntax)
         {
-            currentGroup.Add(printedNodes[index]);
-            index++;
+            for (; index + 1 < printedNodes.Count; ++index)
+            {
+                /* this handles the special case where we want ?.Property on the same line
+                    someThing_______________________?.Property
+                        .CallMethod__________________()
+                        .CallMethod__________________();
+                 */
+                if (
+                    printedNodes[index].Node is ConditionalAccessExpressionSyntax
+                    && printedNodes[index + 1].Node
+                        is MemberBindingExpressionSyntax { Parent: MemberAccessExpressionSyntax }
+                )
+                {
+                    currentGroup.Add(printedNodes[index]);
+                    currentGroup.Add(printedNodes[index + 1]);
+                    index++;
+                    continue;
+                }
+
+                if (
+                    (
+                        IsMemberish(printedNodes[index].Node)
+                        && (
+                            IsMemberish(printedNodes[index + 1].Node)
+                            || printedNodes[index + 1].Node is PostfixUnaryExpressionSyntax
+                        )
+                    )
+                    || printedNodes[index].Node is PostfixUnaryExpressionSyntax
+                )
+                {
+                    currentGroup.Add(printedNodes[index]);
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         groups.Add(currentGroup);
@@ -312,6 +339,11 @@ internal static class InvocationExpression
         return groups;
     }
 
+    private static bool IsMemberish(CSharpSyntaxNode node)
+    {
+        return node is MemberAccessExpressionSyntax or ConditionalAccessExpressionSyntax;
+    }
+    
     private static Doc PrintIndentedGroup(ExpressionSyntax node, IList<List<PrintedNode>> groups)
     {
         if (groups.Count == 0)
