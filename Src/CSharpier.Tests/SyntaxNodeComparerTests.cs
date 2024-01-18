@@ -557,7 +557,7 @@ public class ClassName
 
         result.Should().BeEmpty();
     }
-    
+
     [Test]
     public void RawStringLiterals_Work_With_Moving_Indentation_3()
     {

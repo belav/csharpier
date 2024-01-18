@@ -229,10 +229,16 @@ internal partial class SyntaxNodeComparer
             }
         }
 
-        if (originalToken.Parent is InterpolatedStringExpressionSyntax && originalToken.Kind() is SyntaxKind.InterpolatedRawStringEndToken)
+        if (
+            originalToken.Parent is InterpolatedStringExpressionSyntax
+            && originalToken.Kind() is SyntaxKind.InterpolatedRawStringEndToken
+        )
         {
             // this detects if we added indentation when there was none, or removed all indentation when there was some
-            if (originalToken.ValueText.TrimStart(['\r', '\n'])[0] != formattedToken.ValueText.TrimStart(['\r', '\n'])[0])
+            if (
+                originalToken.ValueText.TrimStart([ '\r', '\n' ])[0]
+                != formattedToken.ValueText.TrimStart([ '\r', '\n' ])[0]
+            )
             {
                 return NotEqual(originalToken.Span, formattedNode!.Span);
             }
@@ -241,7 +247,9 @@ internal partial class SyntaxNodeComparer
         // this validation will fail unless we also get them consistent here
         // adding a semi-complicated if check to determine when to do the string replacement
         // did not appear to have any performance benefits
-        else if (originalToken.ValueText.Replace("\r", "") != formattedToken.ValueText.Replace("\r", ""))
+        else if (
+            originalToken.ValueText.Replace("\r", "") != formattedToken.ValueText.Replace("\r", "")
+        )
         {
             return NotEqual(
                 originalToken.RawSyntaxKind() == SyntaxKind.None
