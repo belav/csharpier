@@ -20,7 +20,8 @@ Note that the extension is versioned separately from CSharpier. It is designed t
 **Environments**
 - IDE Version:
 - Extension Version: 
-- CSharpier Version: (will NOT be the same as the extension version)
+- CSharpier Version:  
+*will NOT be the same as the extension version*
 - Operating System:
 - .csharpierrc Settings:
 - .editorconfig Settings:
