@@ -1,16 +1,16 @@
-using System.Net.NetworkInformation;
-using CSharpier.Proto;
-using Grpc.Core;
-using Microsoft.Extensions.Logging;
-
 namespace CSharpier.Cli;
 
 using System.IO.Abstractions;
+using System.Net;
+using System.Net.NetworkInformation;
 using CSharpier.Cli.Options;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
-public static class GrpcFormatter
+public static class IpcFormatter
 {
-    public static Task<int> StartServer(
+    public static async Task<int> StartServer(
         int? port,
         ConsoleLogger logger,
         string? actualConfigPath,
@@ -18,22 +18,30 @@ public static class GrpcFormatter
     )
     {
         var thePort = port ?? FindFreePort();
-        var server = new Server
-        {
-            Services =
-            {
-                CSharpierService.BindService(
-                    new CSharpierServiceImplementation(actualConfigPath, logger)
-                )
-            },
-            Ports = { new ServerPort("localhost", thePort, ServerCredentials.Insecure) }
-        };
-        server.Start();
-
+        var builder = WebApplication.CreateBuilder();
+        builder
+            .WebHost
+            .ConfigureKestrel(
+                (_, serverOptions) =>
+                {
+                    serverOptions.Listen(IPAddress.Any, thePort);
+                }
+            );
+        var app = builder.Build();
+        var service = new CSharpierServiceImplementation(actualConfigPath, logger);
+        app.MapGet("/", () => "all good");
+        app.MapPost(
+            "/format",
+            async (FormatFileDto formatFileDto, CancellationToken cancellationToken) =>
+                await service.FormatFile(formatFileDto, cancellationToken)
+        );
         logger.LogInformation("Started on " + thePort);
+
+        await app.RunAsync();
+
         Console.ReadKey();
 
-        return Task.FromResult(0);
+        return 0;
     }
 
     public static int FindFreePort()
@@ -63,7 +71,18 @@ public static class GrpcFormatter
     }
 }
 
-public class CSharpierServiceImplementation : CSharpierService.CSharpierServiceBase
+public class FormatFileDto
+{
+    public required string FileContents { get; set; }
+    public required string FileName { get; set; }
+}
+
+public class FormatFileResult
+{
+    public string? FormattedFile { get; set; }
+}
+
+public class CSharpierServiceImplementation
 {
     private readonly string? configPath;
     private readonly IFileSystem fileSystem;
@@ -76,14 +95,15 @@ public class CSharpierServiceImplementation : CSharpierService.CSharpierServiceB
         this.fileSystem = new FileSystem();
     }
 
-    public override async Task<FormatFileResult> FormatFile(
+    public async Task<FormatFileResult> FormatFile(
         FormatFileDto formatFileDto,
-        ServerCallContext context
+        CancellationToken cancellationToken
     )
     {
         try
         {
             var directoryName = this.fileSystem.Path.GetDirectoryName(formatFileDto.FileName);
+            DebugLogger.Log(directoryName ?? string.Empty);
             if (directoryName == null)
             {
                 // TODO proto we can probably still make this work, and just use default options
@@ -97,7 +117,7 @@ public class CSharpierServiceImplementation : CSharpierService.CSharpierServiceB
                 this.configPath,
                 this.fileSystem,
                 this.logger,
-                context.CancellationToken
+                cancellationToken
             );
 
             if (
@@ -112,7 +132,7 @@ public class CSharpierServiceImplementation : CSharpierService.CSharpierServiceB
             var result = await CSharpFormatter.FormatAsync(
                 formatFileDto.FileContents,
                 optionsProvider.GetPrinterOptionsFor(formatFileDto.FileName),
-                context.CancellationToken
+                cancellationToken
             );
 
             // TODO proto what about checking if this actually formatted?
