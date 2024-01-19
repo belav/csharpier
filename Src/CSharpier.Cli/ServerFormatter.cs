@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 
-public static class IpcFormatter
+public static class ServerFormatter
 {
     public static async Task<int> StartServer(
         int? port,
@@ -29,7 +29,6 @@ public static class IpcFormatter
             );
         var app = builder.Build();
         var service = new CSharpierServiceImplementation(actualConfigPath, logger);
-        app.MapGet("/", () => "all good");
         app.MapPost(
             "/format",
             async (FormatFileDto formatFileDto, CancellationToken cancellationToken) =>
@@ -106,7 +105,7 @@ public class CSharpierServiceImplementation
             DebugLogger.Log(directoryName ?? string.Empty);
             if (directoryName == null)
             {
-                // TODO proto we can probably still make this work, and just use default options
+                // TODO server we can probably still make this work, and just use default options
                 throw new Exception(
                     $"There was no directory found for file {formatFileDto.FileName}"
                 );
@@ -125,7 +124,7 @@ public class CSharpierServiceImplementation
                 || optionsProvider.IsIgnored(formatFileDto.FileName)
             )
             {
-                // TODO proto should we send back that this is ignored?
+                // TODO server should we send back that this is ignored?
                 return new FormatFileResult();
             }
 
@@ -135,13 +134,13 @@ public class CSharpierServiceImplementation
                 cancellationToken
             );
 
-            // TODO proto what about checking if this actually formatted?
+            // TODO server what about checking if this actually formatted?
             // could send back any error messages now
             return new FormatFileResult { FormattedFile = result.Code };
         }
         catch (Exception ex)
         {
-            // TODO proto should this return this as an error?
+            // TODO server should this return this as an error?
             DebugLogger.Log(ex.ToString());
             return new FormatFileResult();
         }

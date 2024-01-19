@@ -83,11 +83,11 @@ public class CommandLineOptions
                 "Keep csharpier running so that multiples files can be piped to it via stdin."
             ),
             new Option(
-                new[] { "--ipc" },
-                "Run CSharpier as a service using GRPC so that multiple files may be formatted."
+                new[] { "--server" },
+                "Run CSharpier as a server so that multiple files may be formatted."
             ),
             new Option<int?>(
-                new[] { "--ipc-port" },
+                new[] { "--server-port" },
                 "Specify the port that CSharpier should start on. Defaults to a random unused port."
             ),
             new Option<string>(
@@ -105,7 +105,7 @@ public class CommandLineOptions
             if (
                 !Console.IsInputRedirected
                 && !cmd.Children.Contains("directoryOrFile")
-                && !cmd.Children.Contains("--ipc")
+                && !cmd.Children.Contains("--server")
             )
             {
                 return "directoryOrFile is required when not piping stdin to CSharpier";

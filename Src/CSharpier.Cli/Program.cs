@@ -54,7 +54,7 @@ public class Program
 
         if (ipc)
         {
-            return await IpcFormatter.StartServer(
+            return await ServerFormatter.StartServer(
                 ipcPort,
                 logger,
                 actualConfigPath,
