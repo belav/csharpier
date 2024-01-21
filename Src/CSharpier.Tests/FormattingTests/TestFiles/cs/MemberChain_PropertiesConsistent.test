@@ -28,9 +28,10 @@ var someVariable = this.Property.CallMethod(someValue =>
 var someVariable = this.Property()
     .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________);
 
-var someVariable = this.Property.CallMethod(someValue =>
-    someValue.SomeProperty == someOtherValue___________________________
-)
+var someVariable = this
+    .Property.CallMethod(someValue =>
+        someValue.SomeProperty == someOtherValue___________________________
+    )
     .CallMethod();
 
 var someVariable = this.Property()
