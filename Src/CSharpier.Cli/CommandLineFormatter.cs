@@ -238,8 +238,11 @@ internal static class CommandLineFormatter
                 }
 
                 var tasks = fileSystem
-                    .Directory
-                    .EnumerateFiles(directoryOrFilePath, "*.cs", SearchOption.AllDirectories)
+                    .Directory.EnumerateFiles(
+                        directoryOrFilePath,
+                        "*.cs",
+                        SearchOption.AllDirectories
+                    )
                     .Select(o =>
                     {
                         var normalizedPath = o.Replace("\\", "/");

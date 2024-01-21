@@ -33,8 +33,8 @@ public class ObjectInitializerWalker : CSharpSyntaxWalker
         totalExpressions += node.Expressions.Count;
 
         if (
-            node.Expressions.Any(
-                o => o.GetLeadingTrivia().Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia)
+            node.Expressions.Any(o =>
+                o.GetLeadingTrivia().Any(o => o.Kind() is SyntaxKind.EndOfLineTrivia)
             )
         )
         {

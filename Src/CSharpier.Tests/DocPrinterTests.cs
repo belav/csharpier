@@ -757,8 +757,7 @@ true || false"
     )
     {
         return DocPrinter
-            .DocPrinter
-            .Print(
+            .DocPrinter.Print(
                 doc,
                 new PrinterOptions
                 {

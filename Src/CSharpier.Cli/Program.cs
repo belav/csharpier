@@ -84,12 +84,11 @@ public class Program
         else
         {
             directoryOrFile = directoryOrFile!
-                .Select(
-                    o =>
-                        o == "."
-                            // .csharpierignore gets confused by . so just don't include it
-                            ? Directory.GetCurrentDirectory()
-                            : Path.Combine(Directory.GetCurrentDirectory(), o)
+                .Select(o =>
+                    o == "."
+                        // .csharpierignore gets confused by . so just don't include it
+                        ? Directory.GetCurrentDirectory()
+                        : Path.Combine(Directory.GetCurrentDirectory(), o)
                 )
                 .ToArray();
         }

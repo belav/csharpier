@@ -42,7 +42,7 @@ Parallel.ForEach(
         var contents = File.ReadAllText(file);
         var tree = CSharpSyntaxTree.ParseText(contents);
 
-        var syntaxWalker = constructor.Invoke([ file ]) as CSharpSyntaxWalker;
+        var syntaxWalker = constructor.Invoke([file]) as CSharpSyntaxWalker;
         syntaxWalker!.Visit(tree.GetRoot());
     }
 );

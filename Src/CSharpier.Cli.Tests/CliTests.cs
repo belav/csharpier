@@ -126,8 +126,7 @@ public class CliTests
 
         result.ExitCode.Should().Be(1);
         result
-            .ErrorOutput
-            .Should()
+            .ErrorOutput.Should()
             .Contain("directoryOrFile is required when not piping stdin to CSharpier");
     }
 
@@ -202,8 +201,7 @@ max_line_length = 10"
 
         result.Output.Should().BeEmpty();
         result
-            .ErrorOutput
-            .Should()
+            .ErrorOutput.Should()
             .StartWith("There was no file or directory found at /BasicFile.cs");
         result.ExitCode.Should().Be(1);
     }
@@ -232,8 +230,7 @@ max_line_length = 10"
             .ExecuteAsync();
 
         result
-            .ErrorOutput
-            .Replace("\\", "/")
+            .ErrorOutput.Replace("\\", "/")
             .Should()
             .StartWith("Error ./CheckUnformatted.cs - Was not formatted.");
         result.ExitCode.Should().Be(1);
@@ -276,8 +273,7 @@ max_line_length = 10"
             .ExecuteAsync();
 
         result
-            .ErrorOutput
-            .Should()
+            .ErrorOutput.Should()
             .StartWith(
                 $"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}  (1,26): error CS1513: }}"
             );
@@ -376,8 +372,7 @@ max_line_length = 10"
         var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
 
         result
-            .ErrorOutput
-            .Should()
+            .ErrorOutput.Should()
             .Contain("uses version 99 of CSharpier.MsBuild which is a mismatch with version");
         result.ExitCode.Should().Be(1);
     }
@@ -540,8 +535,7 @@ max_line_length = 10"
             var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
 
             this.command = CliWrap
-                .Cli
-                .Wrap("dotnet")
+                .Cli.Wrap("dotnet")
                 .WithArguments(path)
                 .WithWorkingDirectory(testFileDirectory)
                 .WithValidation(CommandResultValidation.None)

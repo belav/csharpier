@@ -93,8 +93,7 @@ public class DocUtilitiesTests
         DocUtilities.RemoveInitialDoubleHardLine(doc);
 
         concat
-            .Contents
-            .Should()
+            .Contents.Should()
             .BeEquivalentTo(new List<Doc> { Doc.HardLine, Doc.Null, Doc.HardLine });
     }
 

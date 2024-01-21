@@ -15,9 +15,11 @@ internal class FileSystemFormattedFileWriter : IFormattedFileWriter
     {
         if (result.Code != fileToFormatInfo.FileContents)
         {
-            this.FileSystem
-                .File
-                .WriteAllText(fileToFormatInfo.Path, result.Code, fileToFormatInfo.Encoding);
+            this.FileSystem.File.WriteAllText(
+                fileToFormatInfo.Path,
+                result.Code,
+                fileToFormatInfo.Encoding
+            );
         }
     }
 }

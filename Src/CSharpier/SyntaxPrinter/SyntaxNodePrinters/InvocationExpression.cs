@@ -37,16 +37,15 @@ internal static class InvocationExpression
             && (
                 groups
                     .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
-                    .Any(
-                        o =>
-                            o.Last().Node
-                                is not (
-                                    InvocationExpressionSyntax
-                                    or PostfixUnaryExpressionSyntax
-                                    {
-                                        Operand: InvocationExpressionSyntax
-                                    }
-                                )
+                    .Any(o =>
+                        o.Last().Node
+                            is not (
+                                InvocationExpressionSyntax
+                                or PostfixUnaryExpressionSyntax
+                                {
+                                    Operand: InvocationExpressionSyntax
+                                }
+                            )
                     )
                 // if the last group contains just a !, make sure it doesn't end up on a new line
                 || (
@@ -70,11 +69,10 @@ internal static class InvocationExpression
 
         return
             oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
-            || groups[0].Any(
-                o =>
-                    o.Node
-                        is ArrayCreationExpressionSyntax
-                            or ObjectCreationExpressionSyntax { Initializer: not null }
+            || groups[0].Any(o =>
+                o.Node
+                    is ArrayCreationExpressionSyntax
+                        or ObjectCreationExpressionSyntax { Initializer: not null }
             )
             ? expanded
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
