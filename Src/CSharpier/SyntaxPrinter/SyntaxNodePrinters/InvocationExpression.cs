@@ -18,6 +18,7 @@ internal static class InvocationExpression
 
     public static Doc PrintMemberChain(ExpressionSyntax node, FormattingContext context)
     {
+        var parent = node.Parent;
         var printedNodes = new List<PrintedNode>();
 
         FlattenAndPrintNodes(node, printedNodes, context);
@@ -28,7 +29,7 @@ internal static class InvocationExpression
 
         var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
 
-        var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
+        var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups, parent);
 
         var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
 
@@ -37,15 +38,17 @@ internal static class InvocationExpression
             && (
                 groups
                     .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
-                    .Any(o =>
-                        o.Last().Node
-                            is not (
-                                InvocationExpressionSyntax
-                                or PostfixUnaryExpressionSyntax
-                                {
-                                    Operand: InvocationExpressionSyntax
-                                }
-                            )
+                    .Any(
+                        o =>
+                            o.Last().Node
+                                is not (
+                                    InvocationExpressionSyntax
+                                    or ElementAccessExpressionSyntax
+                                    or PostfixUnaryExpressionSyntax
+                                    {
+                                        Operand: InvocationExpressionSyntax
+                                    }
+                                )
                     )
                 // if the last group contains just a !, make sure it doesn't end up on a new line
                 || (
@@ -69,10 +72,11 @@ internal static class InvocationExpression
 
         return
             oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
-            || groups[0].Any(o =>
-                o.Node
-                    is ArrayCreationExpressionSyntax
-                        or ObjectCreationExpressionSyntax { Initializer: not null }
+            || groups[0].Any(
+                o =>
+                    o.Node
+                        is ArrayCreationExpressionSyntax
+                            or ObjectCreationExpressionSyntax { Initializer: not null }
             )
             ? expanded
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
@@ -198,7 +202,7 @@ internal static class InvocationExpression
         {
             if (printedNodes[index].Node is ConditionalAccessExpressionSyntax)
             {
-                currentGroup = [];
+                currentGroup =  [ ];
                 groups.Add(currentGroup);
             }
             else if (
@@ -209,7 +213,7 @@ internal static class InvocationExpression
                 && printedNodes[index + -1].Node is not ConditionalAccessExpressionSyntax
             )
             {
-                currentGroup = [];
+                currentGroup =  [ ];
                 groups.Add(currentGroup);
             }
 
@@ -271,7 +275,7 @@ internal static class InvocationExpression
         }
 
         groups.Add(currentGroup);
-        currentGroup = [];
+        currentGroup =  [ ];
 
         var hasSeenNodeThatRequiresBreak = false;
         for (; index < printedNodes.Count; index++)
@@ -284,7 +288,7 @@ internal static class InvocationExpression
             )
             {
                 groups.Add(currentGroup);
-                currentGroup = [];
+                currentGroup =  [ ];
                 hasSeenNodeThatRequiresBreak = false;
             }
 
@@ -336,7 +340,10 @@ internal static class InvocationExpression
         this.CallMethod()
             .CallMethod();
      */
-    private static bool ShouldMergeFirstTwoGroups(List<List<PrintedNode>> groups)
+    private static bool ShouldMergeFirstTwoGroups(
+        List<List<PrintedNode>> groups,
+        SyntaxNode? parent
+    )
     {
         if (groups.Count < 2 || groups[0].Count != 1)
         {
@@ -347,16 +354,26 @@ internal static class InvocationExpression
 
         if (
             firstNode
-                is IdentifierNameSyntax { Identifier.Text.Length: <= 4 }
-                    or ThisExpressionSyntax
-                    or PredefinedTypeSyntax
-                    or BaseExpressionSyntax
-            && (
-                groups[1].Count == 1
-                || groups[1].Skip(1).First().Node
-                    is InvocationExpressionSyntax
-                        or PostfixUnaryExpressionSyntax
+            is not (
+                IdentifierNameSyntax { Identifier.Text.Length: <= 4 }
+                or ThisExpressionSyntax
+                or PredefinedTypeSyntax
+                or BaseExpressionSyntax
             )
+        )
+        {
+            return false;
+        }
+
+        // TODO maybe some things to fix in here
+        // https://github.com/belav/csharpier-repos/pull/100/files
+        if (
+            groups[1].Count == 1
+            || parent is SimpleLambdaExpressionSyntax or ArgumentSyntax
+            || groups[1].Skip(1).First().Node
+                is InvocationExpressionSyntax
+                    or ElementAccessExpressionSyntax
+                    or PostfixUnaryExpressionSyntax
         )
         {
             return true;

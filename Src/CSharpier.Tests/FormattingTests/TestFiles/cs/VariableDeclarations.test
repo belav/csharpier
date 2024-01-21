@@ -80,9 +80,8 @@ class ClassName
             elementAccessExpression
         ].theMember______________________________;
 
-        var someLongValue_________________ = memberAccessExpression[
-            elementAccessExpression
-        ].theMember______________________________();
+        var someLongValue_________________ = memberAccessExpression[elementAccessExpression]
+            .theMember______________________________();
 
         var someLongValue_________________ = memberAccessExpression(
             elementAccessExpression

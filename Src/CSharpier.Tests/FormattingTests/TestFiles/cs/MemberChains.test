@@ -248,5 +248,16 @@ class ClassName
         var something________________________________________ = x
             .SomeProperty.CallMethod(longParameter_____________, longParameter_____________)
             .CallMethod();
+
+        CallMethod(o =>
+            o.Property.CallMethod_____________________________________________________()
+                .CallMethod_____________________________________________________()
+        );
+
+        CallMethod(
+            o,
+            o.Property.CallMethod_____________________________________________________()
+                .CallMethod_____________________________________________________()
+        );
     }
 }
