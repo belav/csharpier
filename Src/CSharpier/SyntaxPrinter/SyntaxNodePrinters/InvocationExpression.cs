@@ -369,7 +369,7 @@ internal static class InvocationExpression
         // https://github.com/belav/csharpier-repos/pull/100/files
         if (
             groups[1].Count == 1
-            || parent is SimpleLambdaExpressionSyntax or ArgumentSyntax
+            || parent is SimpleLambdaExpressionSyntax or ArgumentSyntax or BinaryExpressionSyntax
             || groups[1].Skip(1).First().Node
                 is InvocationExpressionSyntax
                     or ElementAccessExpressionSyntax
