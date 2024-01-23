@@ -65,10 +65,10 @@ internal static class InterpolatedStringExpression
                     continue;
                 }
 
-                var lines = textSyntax
-                    .TextToken
-                    .ValueText
-                    .Split(lineSeparators, StringSplitOptions.None);
+                var lines = textSyntax.TextToken.ValueText.Split(
+                    lineSeparators,
+                    StringSplitOptions.None
+                );
                 for (var index = 0; index < lines.Length; index++)
                 {
                     var line = lines[index];

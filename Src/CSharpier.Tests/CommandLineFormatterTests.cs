@@ -25,8 +25,7 @@ public class CommandLineFormatterTests
         var result = this.Format(context);
 
         result
-            .OutputLines
-            .First()
+            .OutputLines.First()
             .Should()
             .Be("Warning ./Invalid.cs - Failed to compile so was not formatted.");
     }
@@ -40,8 +39,7 @@ public class CommandLineFormatterTests
         var result = this.Format(context, directoryOrFilePaths: "Subdirectory");
 
         result
-            .OutputLines
-            .First()
+            .OutputLines.First()
             .Should()
             .Be("Warning ./Subdirectory/Invalid.cs - Failed to compile so was not formatted.");
     }
@@ -58,8 +56,7 @@ public class CommandLineFormatterTests
         );
 
         result
-            .OutputLines
-            .First()
+            .OutputLines.First()
             .Should()
             .Be(
                 $"Warning {context.GetRootPath().Replace('\\', '/')}/Subdirectory/Invalid.cs - Failed to compile so was not formatted."
@@ -75,8 +72,7 @@ public class CommandLineFormatterTests
         var result = this.Format(context);
 
         result
-            .OutputLines
-            .First()
+            .OutputLines.First()
             .Should()
             .Be("Warning ./Directory/Invalid.cs - Failed to compile so was not formatted.");
     }
@@ -90,8 +86,7 @@ public class CommandLineFormatterTests
         var result = this.Format(context, directoryOrFilePaths: "Unsupported.js");
 
         result
-            .OutputLines
-            .First()
+            .OutputLines.First()
             .Should()
             .Be(@"Warning ./Unsupported.js - Is an unsupported file type.");
     }
@@ -139,8 +134,7 @@ public class CommandLineFormatterTests
         {
             result.ExitCode.Should().Be(1);
             result
-                .ErrorOutputLines
-                .First()
+                .ErrorOutputLines.First()
                 .Should()
                 .EndWith(
                     $@"Test.csproj uses version {version} of CSharpier.MsBuild which is a mismatch with version {currentVersion}"
@@ -168,8 +162,7 @@ public class CommandLineFormatterTests
 
         result.ExitCode.Should().Be(0);
         result
-            .OutputLines
-            .First()
+            .OutputLines.First()
             .Should()
             .EndWith($"Test.csproj uses an unknown version of CSharpier.MsBuild");
     }
@@ -218,8 +211,7 @@ public class CommandLineFormatterTests
         {
             result.ExitCode.Should().Be(1);
             result
-                .ErrorOutputLines
-                .First()
+                .ErrorOutputLines.First()
                 .Should()
                 .EndWith(
                     $@"Test.csproj uses version {version} of CSharpier.MsBuild which is a mismatch with version {currentVersion}"
@@ -284,8 +276,7 @@ public class CommandLineFormatterTests
         result.ExitCode.Should().Be(1);
         context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
         result
-            .ErrorOutputLines
-            .First()
+            .ErrorOutputLines.First()
             .Should()
             .StartWith("Error ./Unformatted.cs - Was not formatted.");
     }
@@ -501,8 +492,7 @@ public class CommandLineFormatterTests
 
         result.ExitCode.Should().Be(1);
         result
-            .ErrorOutputLines
-            .First()
+            .ErrorOutputLines.First()
             .Replace("\\", "/")
             .Should()
             .Contain(
@@ -562,8 +552,7 @@ public class CommandLineFormatterTests
 
         context.GetFileContent("Invalid.cs").Should().Be(contents);
         result
-            .OutputLines
-            .First()
+            .OutputLines.First()
             .Should()
             .Be("Warning ./Invalid.cs - Failed to compile so was not formatted.");
     }
@@ -620,8 +609,7 @@ class ClassName
         var result = this.Format(context);
 
         result
-            .OutputLines
-            .First()
+            .OutputLines.First()
             .Replace("\\", "/")
             .Should()
             .Be($"Warning The configuration file at {configPath} was empty.");

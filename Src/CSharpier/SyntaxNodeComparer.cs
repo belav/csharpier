@@ -236,8 +236,8 @@ internal partial class SyntaxNodeComparer
         {
             // this detects if we added indentation when there was none, or removed all indentation when there was some
             if (
-                originalToken.ValueText.TrimStart([ '\r', '\n' ])[0]
-                != formattedToken.ValueText.TrimStart([ '\r', '\n' ])[0]
+                originalToken.ValueText.TrimStart(['\r', '\n'])[0]
+                != formattedToken.ValueText.TrimStart(['\r', '\n'])[0]
             )
             {
                 return NotEqual(originalToken.Span, formattedNode!.Span);

@@ -37,8 +37,7 @@ internal class LineEndingEdgeCase
         );
 
         result
-            .Code
-            .Should()
+            .Code.Should()
             .Be(unformattedCode.ReplaceLineEndings(endOfLine == EndOfLine.LF ? "\n" : "\r\n"));
     }
 }

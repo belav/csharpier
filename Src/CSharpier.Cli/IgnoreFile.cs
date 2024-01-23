@@ -89,9 +89,10 @@ public class IgnoreFile
         var directoryInfo = fileSystem.DirectoryInfo.New(baseDirectoryPath);
         while (directoryInfo != null)
         {
-            var ignoreFilePath = fileSystem
-                .Path
-                .Combine(directoryInfo.FullName, ".csharpierignore");
+            var ignoreFilePath = fileSystem.Path.Combine(
+                directoryInfo.FullName,
+                ".csharpierignore"
+            );
             if (fileSystem.File.Exists(ignoreFilePath))
             {
                 return ignoreFilePath;

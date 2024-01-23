@@ -235,8 +235,7 @@ class ClassName
             .CallMethod__________________();
 
         someThing_______________________
-            ?.Property
-            .CallMethod__________________()
+            ?.Property.CallMethod__________________()
             .CallMethod__________________();
 
         someThing_______________________
@@ -245,5 +244,25 @@ class ClassName
 
         IEnumerable<ValueProviderFactory> valueProviderFactories =
             new ModelBinderAttribute_______().GetValueProviderFactories(config);
+
+        var something________________________________________ = x
+            .SomeProperty.CallMethod(longParameter_____________, longParameter_____________)
+            .CallMethod();
+
+        CallMethod(o =>
+            o.Property.CallMethod_____________________________________________________()
+                .CallMethod_____________________________________________________()
+        );
+
+        CallMethod(
+            o,
+            o.Property.CallMethod_____________________________________________________()
+                .CallMethod_____________________________________________________()
+        );
+
+        var someValue =
+            someValue
+            && o.Property.CallMethod_____________________________________________________()
+                .CallMethod_____________________________________________________();
     }
 }

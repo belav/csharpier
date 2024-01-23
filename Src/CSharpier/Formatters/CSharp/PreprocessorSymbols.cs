@@ -35,16 +35,13 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
         }
 
         foreach (
-            var syntaxTrivia in token
-                .LeadingTrivia
-                .Where(
-                    syntaxTrivia =>
-                        syntaxTrivia.RawSyntaxKind()
-                            is SyntaxKind.IfDirectiveTrivia
-                                or SyntaxKind.ElifDirectiveTrivia
-                                or SyntaxKind.ElseDirectiveTrivia
-                                or SyntaxKind.EndIfDirectiveTrivia
-                )
+            var syntaxTrivia in token.LeadingTrivia.Where(syntaxTrivia =>
+                syntaxTrivia.RawSyntaxKind()
+                    is SyntaxKind.IfDirectiveTrivia
+                        or SyntaxKind.ElifDirectiveTrivia
+                        or SyntaxKind.ElseDirectiveTrivia
+                        or SyntaxKind.EndIfDirectiveTrivia
+            )
         )
         {
             this.Visit((CSharpSyntaxNode)syntaxTrivia.GetStructure()!);
@@ -67,16 +64,14 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
 
     public override void VisitElseDirectiveTrivia(ElseDirectiveTriviaSyntax node)
     {
-        var allParameters = this.CurrentContext
-            .booleanExpressions
-            .SelectMany(o => o.Parameters)
+        var allParameters = this.CurrentContext.booleanExpressions.SelectMany(o => o.Parameters)
             .Distinct()
             .ToList();
         var combinations = GenerateCombinations(allParameters);
         var functions = this.CurrentContext.booleanExpressions.Select(o => o.Function).ToList();
 
-        var combination = combinations.FirstOrDefault(
-            combination => functions.All(o => !o(combination))
+        var combination = combinations.FirstOrDefault(combination =>
+            functions.All(o => !o(combination))
         );
 
         if (combination == null)
@@ -86,15 +81,13 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
 
         // TODO it would be more efficient to not add a new boolean expression, because we know which
         // symbols we need
-        this.CurrentContext
-            .booleanExpressions
-            .Add(
-                new BooleanExpression
-                {
-                    Parameters = combination.Where(o => o.Value).Select(o => o.Key).ToList(),
-                    Function = o => o.All(p => p.Value)
-                }
-            );
+        this.CurrentContext.booleanExpressions.Add(
+            new BooleanExpression
+            {
+                Parameters = combination.Where(o => o.Value).Select(o => o.Key).ToList(),
+                Function = o => o.All(p => p.Value)
+            }
+        );
     }
 
     public override void VisitEndIfDirectiveTrivia(EndIfDirectiveTriviaSyntax node)
@@ -135,8 +128,8 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
         // but the else works a bit different
         var combinations = GenerateCombinations(booleanExpression.Parameters);
 
-        var possibleParameters = combinations.FirstOrDefault(
-            possibleParameters => booleanExpression.Function(possibleParameters)
+        var possibleParameters = combinations.FirstOrDefault(possibleParameters =>
+            booleanExpression.Function(possibleParameters)
         );
 
         return possibleParameters == null

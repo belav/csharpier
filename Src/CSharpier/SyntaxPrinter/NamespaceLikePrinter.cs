@@ -87,12 +87,12 @@ internal static class NamespaceLikePrinter
                 if (
                     (
                         node is not CompilationUnitSyntax { AttributeLists.Count: > 0 }
-                        && directiveTrivia.All(
-                            o => o.RawSyntaxKind() is SyntaxKind.EndIfDirectiveTrivia
+                        && directiveTrivia.All(o =>
+                            o.RawSyntaxKind() is SyntaxKind.EndIfDirectiveTrivia
                         )
                     )
-                    || !directiveTrivia.All(
-                        o => o.RawSyntaxKind() is SyntaxKind.EndIfDirectiveTrivia
+                    || !directiveTrivia.All(o =>
+                        o.RawSyntaxKind() is SyntaxKind.EndIfDirectiveTrivia
                     )
                 )
                 {

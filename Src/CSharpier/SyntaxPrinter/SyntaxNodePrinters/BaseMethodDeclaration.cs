@@ -83,8 +83,7 @@ internal static class BaseMethodDeclaration
                     .GetLeadingTrivia()
                     .First()
                     .GetLocation()
-                    .SourceSpan
-                    .Start;
+                    .SourceSpan.Start;
 
                 var methodWithoutAttributes = node.GetText()
                     .Replace(

@@ -71,9 +71,10 @@ internal static class Token
         }
         else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
         {
-            var linesIncludingQuotes = syntaxToken
-                .Text
-                .Split(lineSeparators, StringSplitOptions.None);
+            var linesIncludingQuotes = syntaxToken.Text.Split(
+                lineSeparators,
+                StringSplitOptions.None
+            );
             var lastLineIsIndented = linesIncludingQuotes[^1][0] is '\t' or ' ';
             var contents = new List<Doc>
             {
@@ -383,40 +384,27 @@ internal static class Token
 
     public static bool HasComments(SyntaxToken syntaxToken)
     {
-        return syntaxToken
-                .LeadingTrivia
-                .Any(
-                    o =>
-                        o.RawSyntaxKind()
-                            is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
-                )
-            || syntaxToken
-                .TrailingTrivia
-                .Any(
-                    o =>
-                        o.RawSyntaxKind()
-                            is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
-                );
+        return syntaxToken.LeadingTrivia.Any(o =>
+                o.RawSyntaxKind() is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
+            )
+            || syntaxToken.TrailingTrivia.Any(o =>
+                o.RawSyntaxKind() is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
+            );
     }
 
     public static bool HasLeadingCommentMatching(SyntaxNode node, Regex regex)
     {
         return node.GetLeadingTrivia()
-            .Any(
-                o =>
-                    o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
-                    && regex.IsMatch(o.ToString())
+            .Any(o =>
+                o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
+                && regex.IsMatch(o.ToString())
             );
     }
 
     public static bool HasLeadingCommentMatching(SyntaxToken token, Regex regex)
     {
-        return token
-            .LeadingTrivia
-            .Any(
-                o =>
-                    o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
-                    && regex.IsMatch(o.ToString())
-            );
+        return token.LeadingTrivia.Any(o =>
+            o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia && regex.IsMatch(o.ToString())
+        );
     }
 }
