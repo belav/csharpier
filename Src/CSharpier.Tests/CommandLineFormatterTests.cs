@@ -91,11 +91,12 @@ public class CommandLineFormatterTests
             .Be(@"Warning ./Unsupported.js - Is an unsupported file type.");
     }
 
-    [Test]
-    public void Format_Writes_File_With_Directory_Path()
+    [TestCase(".cs")]
+    [TestCase(".csx")]
+    public void Format_Writes_File_With_Directory_Path(string extension)
     {
         var context = new TestContext();
-        const string unformattedFilePath = "Unformatted.cs";
+        var unformattedFilePath = $"Unformatted.{extension}";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
         this.Format(context);

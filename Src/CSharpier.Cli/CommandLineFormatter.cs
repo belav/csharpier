@@ -240,9 +240,10 @@ internal static class CommandLineFormatter
                 var tasks = fileSystem
                     .Directory.EnumerateFiles(
                         directoryOrFilePath,
-                        "*.cs",
+                        "*.*",
                         SearchOption.AllDirectories
                     )
+                    .Where(o => o.EndsWithIgnoreCase(".cs") || o.EndsWithIgnoreCase(".csx"))
                     .Select(o =>
                     {
                         var normalizedPath = o.Replace("\\", "/");
@@ -292,7 +293,11 @@ internal static class CommandLineFormatter
 
         var fileIssueLogger = new FileIssueLogger(originalFilePath, logger);
 
-        if (!actualFilePath.EndsWithIgnoreCase(".cs") && !actualFilePath.EndsWithIgnoreCase(".cst"))
+        if (
+            !actualFilePath.EndsWithIgnoreCase(".cs")
+            && !actualFilePath.EndsWithIgnoreCase(".cst")
+            && !actualFilePath.EndsWithIgnoreCase(".csx")
+        )
         {
             fileIssueLogger.WriteWarning("Is an unsupported file type.");
             return;
