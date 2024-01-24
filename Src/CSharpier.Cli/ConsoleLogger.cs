@@ -110,6 +110,9 @@ public class ConsoleLogger : ILogger
     }
 
     public IDisposable BeginScope<TState>(TState state)
+#if NET7_0_OR_GREATER
+        where TState : notnull
+#endif
     {
         throw new NotImplementedException();
     }

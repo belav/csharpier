@@ -26,8 +26,8 @@ public class Program
         bool skipWrite,
         bool writeStdout,
         bool pipeMultipleFiles,
-        bool grpc,
-        int? grpcPort,
+        bool ipc,
+        int? ipcPort,
         bool noCache,
         bool noMSBuildCheck,
         bool includeGenerated,
@@ -52,10 +52,10 @@ public class Program
             );
         }
 
-        if (grpc)
+        if (ipc)
         {
-            return await GrpcFormatter.StartServer(
-                grpcPort,
+            return await ServerFormatter.StartServer(
+                ipcPort,
                 logger,
                 actualConfigPath,
                 cancellationToken
