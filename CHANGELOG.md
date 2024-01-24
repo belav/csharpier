@@ -1,4 +1,79 @@
-﻿# 0.27.0
+﻿# 0.27.1
+## What's Changed
+### Support for CSharp Script [#1141](https://github.com/belav/csharpier/issues/1141)
+Previously CSharpier would only format files matching `*.cs` which prevented it from formatting C# script files. It now formats `*.{cs,csx}`
+
+Thanks go to @Eptagone for the suggestion
+### Weird formatting of invocation chain [#1130](https://github.com/belav/csharpier/issues/1130)
+Invocation chains that started with an identifier <= 4 characters were causing a strange break in the first method call. There were other edge cases cleaned up while working on the fix.
+
+```c#
+// 0.27.0
+var something________________________________________ = x.SomeProperty.CallMethod(
+    longParameter_____________,
+    longParameter_____________
+)
+    .CallMethod();
+
+// 0.27.1
+var something________________________________________ = x
+    .SomeProperty.CallMethod(longParameter_____________, longParameter_____________)
+    .CallMethod();
+```
+
+```c#
+// 0.27.0
+var someLongValue_________________ = memberAccessExpression[
+    elementAccessExpression
+].theMember______________________________();
+
+// 0.27.1
+var someLongValue_________________ = memberAccessExpression[elementAccessExpression]
+    .theMember______________________________();
+```
+
+```c#
+// 0.27.0
+someThing_______________________
+    ?.Property
+    .CallMethod__________________()
+    .CallMethod__________________();
+
+// 0.27.1
+someThing_______________________
+    ?.Property.CallMethod__________________()
+    .CallMethod__________________();
+```
+
+Thanks go to @Rudomitori for reporting the issue
+### "Failed syntax tree validation" for raw string literals [#1129](https://github.com/belav/csharpier/issues/1129)
+When an interpolated raw string changed indentation due to CSharpier formatting, CSharpier was incorrectly reporting it as failing syntax tree validation.
+```c#
+// input
+CallMethod(CallMethod(
+   $$"""
+   SomeString
+   """, someValue));
+
+// output
+CallMethod(
+    CallMethod(
+        $$"""
+        SomeString
+        """,
+        someValue
+    )
+);
+```
+Thanks go to @Rudomitori for reporting the issue
+
+### Adding experimental support using HTTP for the extensions to communicate with CSharpier [#1137](https://github.com/belav/csharpier/pull/1137)
+The GRPC support added in 0.27.0 increased the size of the nuget package significantly and has been removed.
+
+CSharpier can now start a kestrel web server to support communication with the extensions once they are all updated.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.27.0...0.27.1
+# 0.27.0
 ## What's Changed
 ### Improve formatting of lambda expressions [#1066](https://github.com/belav/csharpier/pull/1066)
 Many thanks go to @Rudomitori for contributing a number of improvements to the formatting of lambda expressions.
@@ -1967,6 +2042,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
