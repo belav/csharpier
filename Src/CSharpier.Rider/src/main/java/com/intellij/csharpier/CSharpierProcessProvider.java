@@ -137,6 +137,10 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
                         if (csharpier != null) {
                             var version = csharpier.get("version").getAsString();
                             if (version != null) {
+                                if (version.Contains("+"))
+                                {
+                                    version = version.split(Pattern.quote("+"))[0]
+                                }
                                 this.logger.debug("Found version " + version + " in " + dotnetToolsPath);
                                 return version;
                             }
