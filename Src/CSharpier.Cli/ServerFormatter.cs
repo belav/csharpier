@@ -19,14 +19,12 @@ public static class ServerFormatter
     {
         var thePort = port ?? FindFreePort();
         var builder = WebApplication.CreateBuilder();
-        builder
-            .WebHost
-            .ConfigureKestrel(
-                (_, serverOptions) =>
-                {
-                    serverOptions.Listen(IPAddress.Any, thePort);
-                }
-            );
+        builder.WebHost.ConfigureKestrel(
+            (_, serverOptions) =>
+            {
+                serverOptions.Listen(IPAddress.Any, thePort);
+            }
+        );
         var app = builder.Build();
         var service = new CSharpierServiceImplementation(actualConfigPath, logger);
         app.MapPost(
