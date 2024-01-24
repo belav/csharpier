@@ -25,14 +25,22 @@ var someVariable = this.Property.CallMethod(someValue =>
     someValue.SomeProperty == someOtherValue___________________________
 );
 
-var someVariable = this.Property()
+var someVariable = this.CallMethod()
     .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________);
 
-var someVariable = this.Property.CallMethod(someValue =>
-    someValue.SomeProperty == someOtherValue___________________________
-)
+var someVariable = this.Array[1]
+    .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________);
+
+var someVariable = this
+    .Property.CallMethod(someValue =>
+        someValue.SomeProperty == someOtherValue___________________________
+    )
     .CallMethod();
 
-var someVariable = this.Property()
+var someVariable = this.CallMethod()
+    .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________)
+    .CallMethod();
+
+var someVariable = this.Array[1]
     .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________)
     .CallMethod();

@@ -21,6 +21,7 @@
     <PackageReference Include="System.IO.Hashing" />
     <PackageReference Include="System.Text.Encoding.CodePages" />
     <PackageReference Include="YamlDotNet" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
@@ -31,6 +32,7 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
+    <Protobuf Include="protos\*.proto" />
     <None Include="..\..\logo.png" Pack="true" PackagePath="">
       <Link>logo.png</Link>
     </None>

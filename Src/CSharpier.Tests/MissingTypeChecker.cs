@@ -29,8 +29,7 @@ public class MissingTypeChecker
             .ToList();
 
         var syntaxNodeTypes = typeof(CompilationUnitSyntax)
-            .Assembly
-            .GetTypes()
+            .Assembly.GetTypes()
             .Where(o => !o.IsAbstract && typeof(CSharpSyntaxNode).IsAssignableFrom(o))
             .ToList();
 

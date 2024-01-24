@@ -76,7 +76,7 @@ internal static class BaseTypeDeclaration
 
         if (node.Modifiers.Any())
         {
-            docs.Add(Modifiers.Print(node.Modifiers, context));
+            docs.Add(Modifiers.PrintSorted(node.Modifiers, context));
         }
 
         if (recordKeyword != null)
@@ -143,13 +143,9 @@ internal static class BaseTypeDeclaration
         }
         else if (node.OpenBraceToken.RawSyntaxKind() != SyntaxKind.None)
         {
-            Doc separator = node.CloseBraceToken
-                .LeadingTrivia
-                .Any(
-                    o =>
-                        o.RawSyntaxKind()
-                            is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
-                )
+            Doc separator = node.CloseBraceToken.LeadingTrivia.Any(o =>
+                o.RawSyntaxKind() is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
+            )
                 ? Doc.Line
                 : " ";
 

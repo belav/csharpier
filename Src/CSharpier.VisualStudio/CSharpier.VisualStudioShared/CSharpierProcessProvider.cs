@@ -268,12 +268,10 @@ namespace CSharpier.VisualStudio
                 }
             };
 
-            InfoBarService
-                .Instance
-                .ShowInfoBar(
-                    "CSharpier could not be set up properly so formatting is not currently supported.",
-                    new[] { actionButton }
-                );
+            InfoBarService.Instance.ShowInfoBar(
+                "CSharpier could not be set up properly so formatting is not currently supported.",
+                new[] { actionButton }
+            );
         }
 
         public void KillRunningProcesses()

@@ -86,11 +86,14 @@ internal class OptionsProvider
         }
 
         var directoryName = this.fileSystem.Path.GetDirectoryName(filePath);
-        var resolvedEditorConfig = this.editorConfigs.FirstOrDefault(
-            o => directoryName.StartsWith(o.DirectoryName)
+
+        ArgumentNullException.ThrowIfNull(directoryName);
+
+        var resolvedEditorConfig = this.editorConfigs.FirstOrDefault(o =>
+            directoryName.StartsWith(o.DirectoryName)
         );
-        var resolvedCSharpierConfig = this.csharpierConfigs.FirstOrDefault(
-            o => directoryName.StartsWith(o.DirectoryName)
+        var resolvedCSharpierConfig = this.csharpierConfigs.FirstOrDefault(o =>
+            directoryName.StartsWith(o.DirectoryName)
         );
 
         if (resolvedEditorConfig is null && resolvedCSharpierConfig is null)

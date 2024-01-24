@@ -1,4 +1,299 @@
-﻿# 0.26.7
+﻿# 0.27.1
+## What's Changed
+### Support for CSharp Script [#1141](https://github.com/belav/csharpier/issues/1141)
+Previously CSharpier would only format files matching `*.cs` which prevented it from formatting C# script files. It now formats `*.{cs,csx}`
+
+Thanks go to @Eptagone for the suggestion
+### Weird formatting of invocation chain [#1130](https://github.com/belav/csharpier/issues/1130)
+Invocation chains that started with an identifier <= 4 characters were causing a strange break in the first method call. There were other edge cases cleaned up while working on the fix.
+
+```c#
+// 0.27.0
+var something________________________________________ = x.SomeProperty.CallMethod(
+    longParameter_____________,
+    longParameter_____________
+)
+    .CallMethod();
+
+// 0.27.1
+var something________________________________________ = x
+    .SomeProperty.CallMethod(longParameter_____________, longParameter_____________)
+    .CallMethod();
+```
+
+```c#
+// 0.27.0
+var someLongValue_________________ = memberAccessExpression[
+    elementAccessExpression
+].theMember______________________________();
+
+// 0.27.1
+var someLongValue_________________ = memberAccessExpression[elementAccessExpression]
+    .theMember______________________________();
+```
+
+```c#
+// 0.27.0
+someThing_______________________
+    ?.Property
+    .CallMethod__________________()
+    .CallMethod__________________();
+
+// 0.27.1
+someThing_______________________
+    ?.Property.CallMethod__________________()
+    .CallMethod__________________();
+```
+
+Thanks go to @Rudomitori for reporting the issue
+### "Failed syntax tree validation" for raw string literals [#1129](https://github.com/belav/csharpier/issues/1129)
+When an interpolated raw string changed indentation due to CSharpier formatting, CSharpier was incorrectly reporting it as failing syntax tree validation.
+```c#
+// input
+CallMethod(CallMethod(
+   $$"""
+   SomeString
+   """, someValue));
+
+// output
+CallMethod(
+    CallMethod(
+        $$"""
+        SomeString
+        """,
+        someValue
+    )
+);
+```
+Thanks go to @Rudomitori for reporting the issue
+
+### Adding experimental support using HTTP for the extensions to communicate with CSharpier [#1137](https://github.com/belav/csharpier/pull/1137)
+The GRPC support added in 0.27.0 increased the size of the nuget package significantly and has been removed.
+
+CSharpier can now start a kestrel web server to support communication with the extensions once they are all updated.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.27.0...0.27.1
+# 0.27.0
+## What's Changed
+### Improve formatting of lambda expressions [#1066](https://github.com/belav/csharpier/pull/1066)
+Many thanks go to @Rudomitori for contributing a number of improvements to the formatting of lambda expressions.
+
+Some examples of the improvements.
+```c#
+// input
+var affectedRows = await _dbContext.SomeEntities
+    .ExecuteUpdateAsync(
+        x => 
+            x.SetProperty(x => x.Name, x => command.NewName)
+                .SetProperty(x => x.Title, x => command.NewTItle)
+                .SetProperty(x => x.Count, x => x.Command.NewCount)
+    );
+
+// 0.27.0
+var affectedRows = await _dbContext.SomeEntities
+    .ExecuteUpdateAsync(x =>
+        x.SetProperty(x => x.Name, x => command.NewName)
+            .SetProperty(x => x.Title, x => command.NewTItle)
+            .SetProperty(x => x.Count, x => x.Command.NewCount)
+    );
+```
+
+```c#
+// input
+builder.Entity<IdentityUserToken<string>>(b =>
+{
+    b.HasKey(
+        l =>
+            new
+            {
+                l.UserId,
+                l.LoginProvider,
+                l.Name
+            }
+    );
+    b.ToTable("AspNetUserTokens");
+});
+
+// 0.27.0
+builder.Entity<IdentityUserToken<string>>(b =>
+{
+    b.HasKey(l => new
+    {
+        l.UserId,
+        l.LoginProvider,
+        l.Name
+    });
+    b.ToTable("AspNetUserTokens");
+});
+```
+
+```c#
+// input
+table.PrimaryKey(
+    "PK_AspNetUserTokens",
+    x =>
+        new
+        {
+            x.UserId,
+            x.LoginProvider,
+            x.Name
+        }
+);
+
+// 0.27.0
+table.PrimaryKey(
+    "PK_AspNetUserTokens",
+    x => new
+    {
+        x.UserId,
+        x.LoginProvider,
+        x.Name
+    }
+);
+```
+
+### `readonly ref` is changed to `ref readonly` causing error CS9190 [#1123](https://github.com/belav/csharpier/issues/1123)
+CSharpier was sorting modifiers in all places they occurred. Resulting the following change that led to code that would not compile.
+```c#
+// input
+void Method(ref readonly int someParameter) { }
+
+// 0.26.7
+void Method(readonly ref int someParameter) { }
+
+// 0.27.0
+void Method(ref readonly int someParameter) { }
+```
+Thanks go to @aurnoi1 for reporting the bug
+### #if at the end of collection expression gets eaten [#1119](https://github.com/belav/csharpier/issues/1119)
+When a collection expression contained a directive immediately before the closing bracket, that directive was not included in the output.
+
+```c#
+// input
+int[] someArray =
+[
+    1
+#if DEBUG
+    ,
+    2
+#endif
+];
+
+// 0.26.7
+int[] someArray = [1];
+
+// 0.27.0
+int[] someArray =
+[
+    1
+#if DEBUG
+    ,
+    2
+#endif
+];
+```
+
+Thanks go to @Meowtimer for reporting the bug
+### CSharpier.MsBuild - Set Fallback for dotnetcore3.1 or net5.0 applications [#1111](https://github.com/belav/csharpier/pull/1111)
+CSharpier.MsBuild made an assumption that the project being built would be built using net6-net8 and failed when the project was built with earlier versions of dotnet.
+
+It now falls back to trying to use `net8`
+
+Thanks go to @samtrion for the contribution
+### Allow empty/blank lines in object initializers [#1110](https://github.com/belav/csharpier/issues/1110)
+Large object initializers now retain single empty lines between initializers.
+
+```c#
+vvar someObject = new SomeObject
+{
+    NoLineAllowedAboveHere = 1,
+
+    ThisLineIsOkay = 2,
+
+    // comment
+    AndThisLine = 3,
+    DontAddLines = 4,
+};
+```
+
+Thanks go to @Qtax for the suggestion
+### Add option to allow formatting auto generated files. [#1055](https://github.com/belav/csharpier/issues/1055
+By default CSharpier will not format files that were generated by the SDK, or files that begin with `<autogenerated />` comments.
+
+Passing the option `--include-generated` to the CLI will cause those files to be formatted.
+
+### Format raw string literals indentation [#975](https://github.com/belav/csharpier/issues/975)
+CSharpier now adjusts the indentation of raw string literals if the end delimiter is indented.
+
+```c#
+// input
+var someString = """
+            Indent based on previous line
+            """;
+
+var doNotIndentIfEndDelimiterIsAtZero = """
+Keep This
+    Where It
+Is
+""";
+
+// 0.26.7
+var someString = """
+            Indent based on previous line
+            """;
+
+var doNotIndentIfEndDelimiterIsAtZero = """
+Keep This
+    Where It
+Is
+""";
+
+// 0.27.0
+var someString = """
+    Indent based on previous line
+    """;
+
+var doNotIndentIfEndDelimiterIsAtZero = """
+Keep This
+    Where It
+Is
+""";
+```
+
+Thanks go to @jods4 for reporting the issue
+### Incorrect indentation on a multi-line statement split by comments [#968](https://github.com/belav/csharpier/issues/968
+CSharpier was not properly indenting an invocation chain when it was being split by comments.
+```c#
+// input
+var someValue =
+    // Some Comment
+    CallSomeMethod()
+        // Another Comment
+        .CallSomeMethod();
+
+// 0.26.7
+var someValue =
+// Some Comment
+CallSomeMethod()
+    // Another Comment
+    .CallSomeMethod();
+
+// 0.27.0
+var someValue =
+    // Some Comment
+    CallSomeMethod()
+        // Another Comment
+        .CallSomeMethod();
+```
+
+Thanks go to @tyrrrz for reporting the issue
+### Adding experimental support for GRPC for the extensions to communicate with CSharpier [#944](https://github.com/belav/csharpier/pull/944)
+Currently the extensions for CSharpier send data to a running instance of CSharpier by piping stdin/stdout back and forth. This approach has proved problematic and hard to extend.
+
+As of 0.27.0, CSharpier can run a GRPC server to allow communication with the extensions once they are all updated.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.26.7...0.27.0
+# 0.26.7
 ## What's Changed
 ### Keep Field.Method() on the same line when breaking long method chain [#1010](https://github.com/belav/csharpier/issues/1010)
 0.26.0 introduced changes that broke long invocation chains on fields/properties as well as methods. That change has been reverted after community feedback.
@@ -1747,6 +2042,8 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
+
 
 
 

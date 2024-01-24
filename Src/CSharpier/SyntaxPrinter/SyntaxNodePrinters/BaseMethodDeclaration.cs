@@ -83,8 +83,7 @@ internal static class BaseMethodDeclaration
                     .GetLeadingTrivia()
                     .First()
                     .GetLocation()
-                    .SourceSpan
-                    .Start;
+                    .SourceSpan.Start;
 
                 var methodWithoutAttributes = node.GetText()
                     .Replace(
@@ -118,7 +117,9 @@ internal static class BaseMethodDeclaration
         if (modifiers is { Count: > 0 })
         {
             docs.Add(Token.PrintLeadingTrivia(modifiers.Value[0], context));
-            declarationGroup.Add(Modifiers.PrintWithoutLeadingTrivia(modifiers.Value, context));
+            declarationGroup.Add(
+                Modifiers.PrintSorterWithoutLeadingTrivia(modifiers.Value, context)
+            );
         }
 
         if (returnType != null)

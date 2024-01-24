@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <TargetFrameworks>net8.0</TargetFrameworks>
-    <LangVersion>11</LangVersion>
+    <LangVersion>12</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <!-- this is the warning generators get when they fail to generate a source file this makes sure the error for it failing is obvious -->

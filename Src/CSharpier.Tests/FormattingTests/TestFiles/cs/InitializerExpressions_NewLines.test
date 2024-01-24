@@ -1,0 +1,10 @@
+var someObject = new SomeObject
+{
+
+    NoLineAboveHere = 1,
+
+    ThisLineIsOkay = 2,
+
+    // comment
+    AndThisLine = 3,
+};

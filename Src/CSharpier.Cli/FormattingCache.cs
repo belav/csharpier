@@ -144,18 +144,16 @@ internal static class FormattingCacheFactory
 
         public async Task ResolveAsync(CancellationToken cancellationToken)
         {
-            this.fileSystem.FileInfo.FromFileName(this.cacheFile).EnsureDirectoryExists();
+            this.fileSystem.FileInfo.New(this.cacheFile).EnsureDirectoryExists();
 
             async Task WriteFile()
             {
-                await using var fileStream = this.fileSystem
-                    .File
-                    .Open(
-                        this.cacheFile,
-                        FileMode.OpenOrCreate,
-                        FileAccess.ReadWrite,
-                        FileShare.None
-                    );
+                await using var fileStream = this.fileSystem.File.Open(
+                    this.cacheFile,
+                    FileMode.OpenOrCreate,
+                    FileAccess.ReadWrite,
+                    FileShare.None
+                );
                 await using var streamWriter = new StreamWriter(fileStream);
                 await streamWriter.WriteAsync(
                     JsonSerializer.Serialize(

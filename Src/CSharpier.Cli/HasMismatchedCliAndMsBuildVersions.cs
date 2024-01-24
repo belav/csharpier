@@ -10,15 +10,12 @@ public static class HasMismatchedCliAndMsBuildVersions
     public static bool Check(string directoryName, IFileSystem fileSystem, ILogger logger)
     {
         var csProjPaths = fileSystem
-            .Directory
-            .EnumerateFiles(directoryName, "*.csproj", SearchOption.AllDirectories)
+            .Directory.EnumerateFiles(directoryName, "*.csproj", SearchOption.AllDirectories)
             .ToArray();
 
         var versionOfDotnetTool = typeof(CommandLineFormatter)
-            .Assembly
-            .GetName()
-            .Version!
-            .ToString(3);
+            .Assembly.GetName()
+            .Version!.ToString(3);
 
         string? GetPackagesVersion(string pathToCsProj)
         {
