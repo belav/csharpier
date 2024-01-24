@@ -12,12 +12,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DotNet.Glob" />
-    <PackageReference Include="Google.Protobuf" />
-    <PackageReference Include="Grpc.Core" />
-    <PackageReference Include="Grpc.Tools">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Ignore" />
     <PackageReference Include="ini-parser-netstandard" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
@@ -27,6 +21,7 @@
     <PackageReference Include="System.IO.Hashing" />
     <PackageReference Include="System.Text.Encoding.CodePages" />
     <PackageReference Include="YamlDotNet" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
