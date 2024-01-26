@@ -1,12 +1,14 @@
 # csharpier-rider
 
 <!-- Plugin description -->
-This plugin adds support for [CSharpier](https://github.com/belav/csharpier), an opinionated code formatter for c#. 
+This plugin makes use of the dotnet tool [CSharpier](https://github.com/belav/csharpier) to format your code. CSharpier an opinionated code formatter for c#. 
 It uses Roslyn to parse your code and re-prints it using its own rules. 
 The printing process was ported from [prettier](https://prettier.io/) but has evolved over time.
 
-To use it:
-- Install csharpier globally with `dotnet tool install -g csharpier`
+### To format files:
+- Install csharpier
+  - as a local tool versioned to your project with `dotnet tool install csharpier`
+  - globally with `dotnet tool install -g csharpier`
 - Use the `Reformat with CSharpier` action.
 - Optionally configure CSharpier to `Run on Save` under Preferences/Settings | Tools | CSharpier
 
@@ -21,6 +23,10 @@ Please report any [issues](https://github.com/belav/csharpier/issues)
 ---
 
 ## Troubleshooting
+
+See [Editor Troubleshooting](https://csharpier.com/docs/EditorsTroubleshooting) for more information.
+
+**Note** This plugin does not do any formatting and is versioned separately from CSharpier.
 
 ### Viewing CSharpier Logs
 - Use the action "Show Log in Explorer"

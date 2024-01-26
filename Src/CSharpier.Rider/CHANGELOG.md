@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.5.2]
+- Support for a CSharpier version format of 0.X.Y+HASH in dotnet-tools.json
+
 ## [1.5.1]
 - Ensure rider plugin always uses \n as a line separator
 
