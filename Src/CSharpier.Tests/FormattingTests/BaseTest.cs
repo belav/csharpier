@@ -7,6 +7,9 @@ using FluentAssertions;
 
 namespace CSharpier.Tests.FormattingTests;
 
+using CSharpier.Utilities;
+using Microsoft.CodeAnalysis;
+
 public class BaseTest
 {
     private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent("CSharpier.Tests");
@@ -26,10 +29,10 @@ public class BaseTest
             CancellationToken.None
         );
 
-        // TODO xml use proper formatter
         var result = await CSharpFormatter.FormatAsync(
             fileReaderResult.FileContents,
             new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs },
+            fileExtension.EqualsIgnoreCase("csx") ? SourceCodeKind.Script : SourceCodeKind.Regular,
             CancellationToken.None
         );
 
@@ -60,6 +63,7 @@ public class BaseTest
             normalizedCode,
             false,
             false,
+            SourceCodeKind.Regular,
             CancellationToken.None
         );
 

@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
+using Microsoft.CodeAnalysis;
+
 internal static class CommandLineFormatter
 {
     public static async Task<int> Format(
@@ -375,12 +377,16 @@ internal static class CommandLineFormatter
 
         CodeFormatterResult codeFormattingResult;
 
+        var sourceCodeKind = Path.GetExtension(fileToFormatInfo.Path).EqualsIgnoreCase(".csx")
+            ? SourceCodeKind.Script
+            : SourceCodeKind.Regular;
+
         try
         {
-            // TODO xml find correct formatter
             codeFormattingResult = await CSharpFormatter.FormatAsync(
                 fileToFormatInfo.FileContents,
                 printerOptions,
+                sourceCodeKind,
                 cancellationToken
             );
         }
@@ -430,6 +436,7 @@ internal static class CommandLineFormatter
                 codeFormattingResult.Code,
                 codeFormattingResult.ReorderedModifiers,
                 codeFormattingResult.ReorderedUsingsWithDisabledText,
+                sourceCodeKind,
                 cancellationToken
             );
 

@@ -1,0 +1,5 @@
+#!/usr/bin/env dotnet-script
+#r "Microsoft.WindowsAzure.Storage"
+#load "mylogger.csx"
+
+public static void Run() { }

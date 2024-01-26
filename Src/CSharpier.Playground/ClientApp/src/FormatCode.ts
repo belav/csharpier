@@ -2,11 +2,11 @@ let gutters: any[] = [];
 let marks: any[] = [];
 let editor: any = undefined;
 
-export const formatCode = async (code: string, printWidth: number, indentSize: number, useTabs: boolean) => {
+export const formatCode = async (code: string, printWidth: number, indentSize: number, useTabs: boolean, parser: string) => {
     const makeRequest = async () => {
         const response = await fetch("/Format", {
             method: "POST",
-            body: JSON.stringify({ code, printWidth, indentSize, useTabs }),
+            body: JSON.stringify({ code, printWidth, indentSize, useTabs, parser }),
             headers: {
                 "Content-Type": "application/json",
                 "cache-control": "no-cache",

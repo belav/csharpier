@@ -18,6 +18,7 @@ internal partial class SyntaxNodeComparer
         string newSourceCode,
         bool reorderedModifiers,
         bool reorderedUsingsWithDisabledText,
+        SourceCodeKind sourceCodeKind,
         CancellationToken cancellationToken
     )
     {
@@ -26,7 +27,10 @@ internal partial class SyntaxNodeComparer
         this.ReorderedModifiers = reorderedModifiers;
         this.ReorderedUsingsWithDisabledText = reorderedUsingsWithDisabledText;
 
-        var cSharpParseOptions = new CSharpParseOptions(CSharpFormatter.LanguageVersion);
+        var cSharpParseOptions = new CSharpParseOptions(
+            CSharpFormatter.LanguageVersion,
+            kind: sourceCodeKind
+        );
         this.OriginalSyntaxTree = CSharpSyntaxTree.ParseText(
             this.OriginalSourceCode,
             cSharpParseOptions,

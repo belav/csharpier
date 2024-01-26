@@ -267,7 +267,7 @@ internal static class Token
                 );
                 docs.Add(Doc.HardLine);
             }
-            else if (IsDirective(kind))
+            else if (trivia.IsDirective)
             {
                 var triviaText = trivia.ToString();
 
@@ -340,21 +340,6 @@ internal static class Token
 
     private static bool IsMultiLineComment(SyntaxKind kind) =>
         kind is SyntaxKind.MultiLineCommentTrivia or SyntaxKind.MultiLineDocumentationCommentTrivia;
-
-    private static bool IsDirective(SyntaxKind kind) =>
-        kind
-            is SyntaxKind.IfDirectiveTrivia
-                or SyntaxKind.ElseDirectiveTrivia
-                or SyntaxKind.ElifDirectiveTrivia
-                or SyntaxKind.EndIfDirectiveTrivia
-                or SyntaxKind.LineDirectiveTrivia
-                or SyntaxKind.ErrorDirectiveTrivia
-                or SyntaxKind.WarningDirectiveTrivia
-                or SyntaxKind.PragmaWarningDirectiveTrivia
-                or SyntaxKind.PragmaChecksumDirectiveTrivia
-                or SyntaxKind.DefineDirectiveTrivia
-                or SyntaxKind.UndefDirectiveTrivia
-                or SyntaxKind.NullableDirectiveTrivia;
 
     private static bool IsRegion(SyntaxKind kind) =>
         kind is SyntaxKind.RegionDirectiveTrivia or SyntaxKind.EndRegionDirectiveTrivia;

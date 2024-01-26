@@ -5,6 +5,8 @@ using BenchmarkDotNet.Running;
 
 namespace CSharpier.Benchmarks;
 
+using Microsoft.CodeAnalysis;
+
 [MemoryDiagnoser]
 public class Benchmarks
 {
@@ -22,6 +24,7 @@ public class Benchmarks
             this.code,
             false,
             false,
+            SourceCodeKind.Regular,
             CancellationToken.None
         );
         syntaxNodeComparer.CompareSource();
