@@ -12,7 +12,6 @@ import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Node;
 
@@ -119,8 +118,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         try {
             while (true) {
                 var csProjVersion = this.FindVersionInCsProj(currentDirectory);
-                if (csProjVersion != null)
-                {
+                if (csProjVersion != null) {
                     return csProjVersion;
                 }
 
@@ -180,9 +178,9 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
             try {
                 var xmlDocument = DocumentBuilderFactory
-                    .newInstance()
-                    .newDocumentBuilder()
-                    .parse(pathToCsProj);
+                        .newInstance()
+                        .newDocumentBuilder()
+                        .parse(pathToCsProj);
 
                 var selector = XPathFactory.newInstance().newXPath();
                 var node = (Node) selector.compile("//PackageReference[@Include='CSharpier.MsBuild']").evaluate(xmlDocument, XPathConstants.NODE);
@@ -223,6 +221,10 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
             var installedVersion = version.split("\\.");
             var versionWeCareAbout = Integer.parseInt(installedVersion[1]);
 
+            if (CSharpierSettings.getInstance(this.project).getUseServer()) {
+                return new CSharpierProcessServer(customPath);
+            }
+
             if (versionWeCareAbout < 12) {
                 if (!this.warnedForOldVersion) {
                     var content = "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.";
@@ -258,7 +260,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         var message = "CSharpier could not be set up properly so formatting is not currently supported. See log file for more details.";
         var notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
                 .createNotification(title, message, NotificationType.WARNING);
-        notification.addAction(new OpenUrlAction("Read More","https://csharpier.com/docs/EditorsTroubleshooting"));
+        notification.addAction(new OpenUrlAction("Read More", "https://csharpier.com/docs/EditorsTroubleshooting"));
         notification.notify(this.project);
     }
 

@@ -13,7 +13,8 @@ import javax.swing.*;
 public class CSharpierSettingsComponent implements SearchableConfigurable {
     private final Project project;
     private JCheckBox runOnSaveCheckBox = new JCheckBox("Run on Save");
-    private JTextField customPathTextField = new JTextField("Path to directory containing dotnet-csharpier - used for testing the extension with new versions of csharpier.");
+    private JCheckBox useServerCheckBox = new JCheckBox("Use CSharpier Server - experimental support as of 0.27.1");
+    private JTextField customPathTextField = new JTextField();
 
     public CSharpierSettingsComponent(@NotNull Project project) {
         this.project = project;
@@ -35,7 +36,9 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     public @Nullable JComponent createComponent() {
         return FormBuilder.createFormBuilder()
                 .addComponent(this.runOnSaveCheckBox)
+                .addComponent(new JLabel("Path to directory containing dotnet-csharpier - used for testing the extension with new versions of csharpier."))
                 .addComponent(this.customPathTextField)
+                .addComponent(this.useServerCheckBox)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
     }
@@ -43,6 +46,7 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     @Override
     public boolean isModified() {
         return CSharpierSettings.getInstance(this.project).getRunOnSave() != this.runOnSaveCheckBox.isSelected()
+                || CSharpierSettings.getInstance(this.project).getUseServer() != this.useServerCheckBox.isSelected()
                 || CSharpierSettings.getInstance(this.project).getCustomPath() != this.customPathTextField.getText();
     }
 
@@ -52,12 +56,14 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
 
         settings.setRunOnSave(this.runOnSaveCheckBox.isSelected());
         settings.setCustomPath(this.customPathTextField.getText());
+        settings.setUseServer(this.useServerCheckBox.isSelected());
     }
 
     @Override
     public void reset() {
         var settings = CSharpierSettings.getInstance(this.project);
         this.runOnSaveCheckBox.setSelected(settings.getRunOnSave());
+        this.useServerCheckBox.setSelected(settings.getUseServer());
         this.customPathTextField.setText(settings.getCustomPath());
     }
 }

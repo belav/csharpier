@@ -6,7 +6,7 @@ using FluentAssertions;
 using NUnit.Framework;
 
 [TestFixture]
-public class IpcTests
+public class ServerTests
 {
     private static readonly HttpClient httpClient = new HttpClient();
 
@@ -15,12 +15,11 @@ public class IpcTests
     // ignore file
     // option file
     [Test]
-    [Ignore("not working on GH/linux")]
     public async Task Stuff()
     {
         var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
 
-        var processStartInfo = new ProcessStartInfo("dotnet", $"{path} --ipc")
+        var processStartInfo = new ProcessStartInfo("dotnet", $"{path} --server")
         {
             UseShellExecute = false,
             ErrorDialog = false,
@@ -43,8 +42,8 @@ public class IpcTests
             var port = int.Parse(portString);
             var data = new FormatFileDto
             {
-                FileName = "/Temp/test.cs",
-                FileContents = "public class TestClass    { }"
+                fileName = "/Temp/test.cs",
+                fileContents = "public class TestClass    { }"
             };
 
             var response = await httpClient.PostAsJsonAsync(
@@ -58,7 +57,7 @@ public class IpcTests
                 Assert.Fail("Result is null");
             }
 
-            result!.FormattedFile!.TrimEnd().Should().Be("public class TestClass { }");
+            result!.formattedFile!.TrimEnd().Should().Be("public class TestClass { }");
         }
         finally
         {
