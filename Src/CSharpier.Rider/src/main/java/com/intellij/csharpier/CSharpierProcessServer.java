@@ -10,7 +10,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import com.intellij.util.io.HttpRequests;
 import com.google.gson.Gson;
 
 public class CSharpierProcessServer implements ICSharpierProcess, Disposable {
@@ -45,10 +44,11 @@ public class CSharpierProcessServer implements ICSharpierProcess, Disposable {
 
             String output = null;
             try {
-                output = future.get(5, TimeUnit.SECONDS); // Timeout of 5 seconds
+                output = future.get(2, TimeUnit.SECONDS);
             } catch (TimeoutException e) {
                 this.logger.warn("Spawning the csharpier server timed out. Formatting cannot occur.");
                 this.process.destroy();
+                return;
             }
 
             if (!this.process.isAlive()) {
@@ -71,7 +71,7 @@ public class CSharpierProcessServer implements ICSharpierProcess, Disposable {
     @Override
     public String formatFile(String content, String filePath) {
         if (this.processFailedToStart) {
-            this.logger.warn("CSharpier proccess failed to start. Formatting cannot occur.");
+            this.logger.warn("CSharpier process failed to start. Formatting cannot occur.");
             return "";
         }
 

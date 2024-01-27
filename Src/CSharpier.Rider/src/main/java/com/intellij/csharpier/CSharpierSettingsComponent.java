@@ -10,10 +10,13 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
+// TODO clean up the display of this
+// TODO double check and release 0.27.2 with this + csx formatting
+// TODO check on linux
 public class CSharpierSettingsComponent implements SearchableConfigurable {
     private final Project project;
     private JCheckBox runOnSaveCheckBox = new JCheckBox("Run on Save");
-    private JCheckBox useServerCheckBox = new JCheckBox("Use CSharpier Server - experimental support as of 0.27.1");
+    private JCheckBox useServerCheckBox = new JCheckBox("Use CSharpier Server - experimental support as of 0.27.2");
     private JTextField customPathTextField = new JTextField();
 
     public CSharpierSettingsComponent(@NotNull Project project) {

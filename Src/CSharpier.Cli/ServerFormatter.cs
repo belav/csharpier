@@ -3,7 +3,6 @@ namespace CSharpier.Cli;
 using System.IO.Abstractions;
 using System.Net;
 using System.Net.NetworkInformation;
-using System.Text.Json;
 using CSharpier.Cli.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
