@@ -1,4 +1,35 @@
-﻿# 0.27.1
+﻿# 0.27.2
+## What's Changed
+### Orphan variable since 0.27.1 [#1153](https://github.com/belav/csharpier/issues/1153)
+0.27.1 introduced the following formatting regression, resulting in short variables being orphaned on a line
+```c#
+// 0.27.1
+o
+    .Property.CallMethod(
+        someParameter_____________________________,
+        someParameter_____________________________
+    )
+    .CallMethod()
+    .CallMethod();
+
+// 0.27.2
+o.Property.CallMethod(
+    someParameter_____________________________,
+    someParameter_____________________________
+)
+    .CallMethod()
+    .CallMethod();
+```
+
+Thanks go to @aurnoi1 for reporting the bug
+
+### Better support for CSharp Script [#1141](https://github.com/belav/csharpier/issues/1141)
+Version 0.27.1 parsed `.csx` files as if they were C#, so it could only format simple ones. It now parses them as CSharpScript files so it can format them properly.
+
+Thanks go to @Eptagone for reporting the bug.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.27.1...0.27.2
+# 0.27.1
 ## What's Changed
 ### Support for CSharp Script [#1141](https://github.com/belav/csharpier/issues/1141)
 Previously CSharpier would only format files matching `*.cs` which prevented it from formatting C# script files. It now formats `*.{cs,csx}`
@@ -2042,6 +2073,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
