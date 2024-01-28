@@ -7,14 +7,13 @@ import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
-import org.jdesktop.swingx.JXHeader;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-// TODO clean up the display of this
+
 public class CSharpierSettingsComponent implements SearchableConfigurable {
     private final Project project;
     private JBCheckBox runOnSaveCheckBox = new JBCheckBox("Run on Save");
