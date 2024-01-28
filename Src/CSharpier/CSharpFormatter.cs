@@ -5,6 +5,8 @@ using System.Text.Json;
 using CSharpier.Formatters.CSharp;
 using CSharpier.SyntaxPrinter;
 
+internal class CSharpScriptFormatter : CSharpFormatter { }
+
 internal class CSharpFormatter : IFormatter
 {
     internal static readonly LanguageVersion LanguageVersion = LanguageVersion.Preview;
@@ -27,13 +29,21 @@ internal class CSharpFormatter : IFormatter
         string code,
         PrinterOptions printerOptions,
         CancellationToken cancellationToken
+    ) => FormatAsync(code, printerOptions, SourceCodeKind.Regular, cancellationToken);
+
+    internal static Task<CodeFormatterResult> FormatAsync(
+        string code,
+        PrinterOptions printerOptions,
+        SourceCodeKind sourceCodeKind,
+        CancellationToken cancellationToken
     )
     {
         var initialSymbolSet = Array.Empty<string>();
 
         return FormatAsync(
-            ParseText(code, initialSymbolSet, cancellationToken),
+            ParseText(code, initialSymbolSet, sourceCodeKind, cancellationToken),
             printerOptions,
+            sourceCodeKind,
             cancellationToken
         );
     }
@@ -41,6 +51,7 @@ internal class CSharpFormatter : IFormatter
     private static SyntaxTree ParseText(
         string codeToFormat,
         IEnumerable<string> preprocessorSymbols,
+        SourceCodeKind sourceCodeKind,
         CancellationToken cancellationToken
     )
     {
@@ -49,7 +60,8 @@ internal class CSharpFormatter : IFormatter
             new CSharpParseOptions(
                 LanguageVersion,
                 DocumentationMode.Diagnose,
-                preprocessorSymbols: preprocessorSymbols
+                preprocessorSymbols: preprocessorSymbols,
+                kind: sourceCodeKind
             ),
             cancellationToken: cancellationToken
         );
@@ -58,6 +70,7 @@ internal class CSharpFormatter : IFormatter
     internal static async Task<CodeFormatterResult> FormatAsync(
         SyntaxTree syntaxTree,
         PrinterOptions printerOptions,
+        SourceCodeKind sourceCodeKind,
         CancellationToken cancellationToken
     )
     {
@@ -120,7 +133,7 @@ internal class CSharpFormatter : IFormatter
 
             foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
             {
-                syntaxTree = ParseText(formattedCode, symbolSet, cancellationToken);
+                syntaxTree = ParseText(formattedCode, symbolSet, sourceCodeKind, cancellationToken);
 
                 if (TryGetCompilationFailure(out result))
                 {

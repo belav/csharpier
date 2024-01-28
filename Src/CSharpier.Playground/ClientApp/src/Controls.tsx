@@ -19,6 +19,8 @@ export const Controls = () => {
         setIndentSize,
         useTabs,
         setUseTabs,
+        parser,
+        setParser,
     } = useAppContext();
     return (
         <div className="controlsWrapper">
@@ -38,6 +40,11 @@ export const Controls = () => {
                     />
                     Use Tabs
                 </label>
+                <label>Parser</label>
+                <select value={parser} onChange={e => setParser(e.target.value)}>
+                    <option value="CSharp">C#</option>
+                    <option value="CSharpScript">C# Script</option>
+                </select>
             </div>
             <div>
                 <h3>Debug</h3>

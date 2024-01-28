@@ -45,6 +45,7 @@ public static class CodeFormatter
         return CSharpFormatter.FormatAsync(
             syntaxTree,
             new PrinterOptions { Width = options.Width },
+            SourceCodeKind.Regular,
             cancellationToken
         );
     }

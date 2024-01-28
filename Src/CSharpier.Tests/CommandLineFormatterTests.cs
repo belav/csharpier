@@ -91,17 +91,47 @@ public class CommandLineFormatterTests
             .Be(@"Warning ./Unsupported.js - Is an unsupported file type.");
     }
 
-    [TestCase(".cs")]
-    [TestCase(".csx")]
-    public void Format_Writes_File_With_Directory_Path(string extension)
+    public void Format_Writes_File_With_Directory_Path()
     {
         var context = new TestContext();
-        var unformattedFilePath = $"Unformatted.{extension}";
+        var unformattedFilePath = $"Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
         this.Format(context);
 
         context.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
+    }
+
+    [Test]
+    public void Formats_CSX_File()
+    {
+        var context = new TestContext();
+        var unformattedFilePath = "Unformatted.csx";
+        context.WhenAFileExists(
+            unformattedFilePath,
+            """
+            #r "Microsoft.WindowsAzure.Storage"
+
+            public static void Run()
+            {
+            }
+            """
+        );
+
+        var result = this.Format(context);
+        result.OutputLines.First().Should().StartWith("Formatted 1 files");
+
+        context
+            .GetFileContent(unformattedFilePath)
+            .Should()
+            .Be(
+                """
+                #r "Microsoft.WindowsAzure.Storage"
+
+                public static void Run() { }
+
+                """
+            );
     }
 
     [TestCase("0.9.0", false)]

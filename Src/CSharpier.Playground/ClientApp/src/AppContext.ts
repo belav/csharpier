@@ -8,6 +8,8 @@ export const AppContext = React.createContext({
     setIndentSize: (value: number) => {},
     useTabs: false,
     setUseTabs: (value: boolean) => {},
+    parser: "CSharp",
+    setParser: (value: string) => {},
     showAst: false,
     setShowAst: (value: boolean) => {},
     showDoc: false,
@@ -41,6 +43,7 @@ export const useSetupAppContext = () => {
     const [printWidth, setPrintWidth] = useState(100);
     const [indentSize, setIndentSize] = useState(4);
     const [useTabs, setUseTabs] = useState(false);
+    const [parser, setParser] = useState("CSharp");
     const [showAst, setShowAst] = useState(getInitialShowAst());
     const [showDoc, setShowDoc] = useState(getInitialShowDoc());
     const [hideNull, setHideNull] = useState(getInitialHideNull());
@@ -58,6 +61,8 @@ export const useSetupAppContext = () => {
         setIndentSize,
         useTabs,
         setUseTabs,
+        parser,
+        setParser,
         showAst,
         setShowAst: (value: boolean) => {
             window.sessionStorage.setItem("showAst", value.toString());
@@ -95,6 +100,7 @@ export const useSetupAppContext = () => {
                 printWidth,
                 indentSize,
                 useTabs,
+                parser,
             );
 
             if (syntaxValidation) {

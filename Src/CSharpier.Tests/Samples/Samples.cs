@@ -4,6 +4,8 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests.Samples;
 
+using Microsoft.CodeAnalysis;
+
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
 public class Samples
@@ -41,6 +43,7 @@ public class Samples
             result.Code,
             false,
             false,
+            SourceCodeKind.Regular,
             CancellationToken.None
         );
 

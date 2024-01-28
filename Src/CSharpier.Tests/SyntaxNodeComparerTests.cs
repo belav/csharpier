@@ -3,6 +3,8 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
+using Microsoft.CodeAnalysis;
+
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
 public class SyntaxNodeComparerTests
@@ -623,6 +625,7 @@ public class ClassName
             right,
             false,
             reorderedUsingsWithDisabledText,
+            SourceCodeKind.Regular,
             CancellationToken.None
         ).CompareSource();
 

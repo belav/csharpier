@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Playground.Controllers;
 
+using CSharpier.Utilities;
+
 public class FormatResult
 {
     public required string Code { get; set; }
@@ -47,11 +49,18 @@ public class FormatController : ControllerBase
         public int PrintWidth { get; set; }
         public int IndentSize { get; set; }
         public bool UseTabs { get; set; }
+        public string Parser { get; set; } = string.Empty;
     }
 
     [HttpPost]
-    public async Task<FormatResult> Post([FromBody] PostModel model)
+    public async Task<FormatResult> Post(
+        [FromBody] PostModel model,
+        CancellationToken cancellationToken
+    )
     {
+        var sourceCodeKind = model.Parser.EqualsIgnoreCase("CSharp")
+            ? SourceCodeKind.Regular
+            : SourceCodeKind.Script;
         var result = await CSharpFormatter.FormatAsync(
             model.Code,
             new PrinterOptions
@@ -61,7 +70,9 @@ public class FormatController : ControllerBase
                 Width = model.PrintWidth,
                 TabWidth = model.IndentSize,
                 UseTabs = model.UseTabs
-            }
+            },
+            sourceCodeKind,
+            cancellationToken
         );
 
         var comparer = new SyntaxNodeComparer(
@@ -69,7 +80,8 @@ public class FormatController : ControllerBase
             result.Code,
             result.ReorderedModifiers,
             result.ReorderedUsingsWithDisabledText,
-            CancellationToken.None
+            sourceCodeKind,
+            cancellationToken
         );
 
         return new FormatResult
