@@ -39,6 +39,16 @@ public class CSharpierSettings
         this.customPath = customPath;
     }
 
+    private boolean useServer;
+
+    public boolean getUseServer() {
+        return this.useServer;
+    }
+
+    public void setUseServer(boolean useServer) {
+        this.useServer = useServer;
+    }
+
     @Override
     public CSharpierSettings getState() {
         return this;

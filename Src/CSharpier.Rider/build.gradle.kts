@@ -5,11 +5,11 @@ fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.6.0"
-    id("org.jetbrains.intellij") version "1.3.0"
-    id("org.jetbrains.changelog") version "1.3.1"
+    id("org.jetbrains.kotlin.jvm") version "1.9.21"
+    id("org.jetbrains.intellij") version "1.17.0"
+    id("org.jetbrains.changelog") version "2.2.0"
     id("org.jetbrains.qodana") version "0.1.13"
-    id("com.jetbrains.rdgen") version "2021.3.4"
+    id("com.jetbrains.rdgen") version "2023.3.2"
 }
 
 group = properties("pluginGroup")
@@ -45,17 +45,6 @@ qodana {
 }
 
 tasks {
-    // Set the JVM compatibility versions
-    properties("javaVersion").let {
-        withType<JavaCompile> {
-            sourceCompatibility = it
-            targetCompatibility = it
-        }
-        withType<KotlinCompile> {
-            kotlinOptions.jvmTarget = it
-        }
-    }
-
     runIde {
         maxHeapSize = "1500m"
         // maybe autoReloadPlugins = false

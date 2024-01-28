@@ -3,6 +3,9 @@ package com.intellij.csharpier;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.components.JBCheckBox;
+import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -10,10 +13,12 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
+
 public class CSharpierSettingsComponent implements SearchableConfigurable {
     private final Project project;
-    private JCheckBox runOnSaveCheckBox = new JCheckBox("Run on Save");
-    private JTextField customPathTextField = new JTextField("Path to directory containing dotnet-csharpier - used for testing the extension with new versions of csharpier.");
+    private JBCheckBox runOnSaveCheckBox = new JBCheckBox("Run on Save");
+    private JBCheckBox useServerCheckBox = new JBCheckBox("Use CSharpier Server - experimental support as of 0.27.2");
+    private JBTextField customPathTextField = new JBTextField();
 
     public CSharpierSettingsComponent(@NotNull Project project) {
         this.project = project;
@@ -33,9 +38,18 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
 
     @Override
     public @Nullable JComponent createComponent() {
+        var leftIndent = 20;
+        var topInset = 10;
+
         return FormBuilder.createFormBuilder()
-                .addComponent(this.runOnSaveCheckBox)
-                .addComponent(this.customPathTextField)
+                .addLabeledComponent(new JBLabel("General Settings"), new JSeparator())
+                .setFormLeftIndent(leftIndent)
+                .addComponent(this.runOnSaveCheckBox, topInset)
+                .setFormLeftIndent(0)
+                .addLabeledComponent(new JBLabel("Developer Settings"), new JSeparator(), 20)
+                .setFormLeftIndent(leftIndent)
+                .addLabeledComponent(new JBLabel("Directory of custom dotnet-csharpier:"), this.customPathTextField, topInset, false)
+                .addComponent(this.useServerCheckBox, topInset)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
     }
@@ -43,6 +57,7 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     @Override
     public boolean isModified() {
         return CSharpierSettings.getInstance(this.project).getRunOnSave() != this.runOnSaveCheckBox.isSelected()
+                || CSharpierSettings.getInstance(this.project).getUseServer() != this.useServerCheckBox.isSelected()
                 || CSharpierSettings.getInstance(this.project).getCustomPath() != this.customPathTextField.getText();
     }
 
@@ -52,12 +67,14 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
 
         settings.setRunOnSave(this.runOnSaveCheckBox.isSelected());
         settings.setCustomPath(this.customPathTextField.getText());
+        settings.setUseServer(this.useServerCheckBox.isSelected());
     }
 
     @Override
     public void reset() {
         var settings = CSharpierSettings.getInstance(this.project);
         this.runOnSaveCheckBox.setSelected(settings.getRunOnSave());
+        this.useServerCheckBox.setSelected(settings.getUseServer());
         this.customPathTextField.setText(settings.getCustomPath());
     }
 }
