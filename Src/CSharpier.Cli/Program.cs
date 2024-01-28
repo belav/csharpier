@@ -26,8 +26,8 @@ public class Program
         bool skipWrite,
         bool writeStdout,
         bool pipeMultipleFiles,
-        bool ipc,
-        int? ipcPort,
+        bool server,
+        int? serverPort,
         bool noCache,
         bool noMSBuildCheck,
         bool includeGenerated,
@@ -52,10 +52,10 @@ public class Program
             );
         }
 
-        if (ipc)
+        if (server)
         {
             return await ServerFormatter.StartServer(
-                ipcPort,
+                serverPort,
                 logger,
                 actualConfigPath,
                 cancellationToken

@@ -29,8 +29,8 @@ public static class ServerFormatter
         var service = new CSharpierServiceImplementation(actualConfigPath, logger);
         app.MapPost(
             "/format",
-            async (FormatFileDto formatFileDto, CancellationToken cancellationToken) =>
-                await service.FormatFile(formatFileDto, cancellationToken)
+            (FormatFileDto formatFileDto, CancellationToken cancellationToken) =>
+                service.FormatFile(formatFileDto, cancellationToken)
         );
         logger.LogInformation("Started on " + thePort);
 
@@ -70,13 +70,13 @@ public static class ServerFormatter
 
 public class FormatFileDto
 {
-    public required string FileContents { get; set; }
-    public required string FileName { get; set; }
+    public required string fileContents { get; set; }
+    public required string fileName { get; set; }
 }
 
 public class FormatFileResult
 {
-    public string? FormattedFile { get; set; }
+    public string? formattedFile { get; set; }
 }
 
 public class CSharpierServiceImplementation
@@ -99,13 +99,13 @@ public class CSharpierServiceImplementation
     {
         try
         {
-            var directoryName = this.fileSystem.Path.GetDirectoryName(formatFileDto.FileName);
+            var directoryName = this.fileSystem.Path.GetDirectoryName(formatFileDto.fileName);
             DebugLogger.Log(directoryName ?? string.Empty);
             if (directoryName == null)
             {
                 // TODO server we can probably still make this work, and just use default options
                 throw new Exception(
-                    $"There was no directory found for file {formatFileDto.FileName}"
+                    $"There was no directory found for file {formatFileDto.fileName}"
                 );
             }
 
@@ -118,8 +118,8 @@ public class CSharpierServiceImplementation
             );
 
             if (
-                GeneratedCodeUtilities.IsGeneratedCodeFile(formatFileDto.FileName)
-                || optionsProvider.IsIgnored(formatFileDto.FileName)
+                GeneratedCodeUtilities.IsGeneratedCodeFile(formatFileDto.fileName)
+                || optionsProvider.IsIgnored(formatFileDto.fileName)
             )
             {
                 // TODO server should we send back that this is ignored?
@@ -127,14 +127,14 @@ public class CSharpierServiceImplementation
             }
 
             var result = await CSharpFormatter.FormatAsync(
-                formatFileDto.FileContents,
-                optionsProvider.GetPrinterOptionsFor(formatFileDto.FileName),
+                formatFileDto.fileContents,
+                optionsProvider.GetPrinterOptionsFor(formatFileDto.fileName),
                 cancellationToken
             );
 
             // TODO server what about checking if this actually formatted?
             // could send back any error messages now
-            return new FormatFileResult { FormattedFile = result.Code };
+            return new FormatFileResult { formattedFile = result.Code };
         }
         catch (Exception ex)
         {
