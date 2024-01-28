@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.5.3]
+- Add experimental support for CSharpier server
+
 ## [1.5.2]
 - Support for a CSharpier version format of 0.X.Y+HASH in dotnet-tools.json
 
