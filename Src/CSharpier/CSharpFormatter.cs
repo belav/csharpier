@@ -17,6 +17,8 @@ internal class CSharpFormatter : IFormatter
         CancellationToken cancellationToken
     )
     {
+
+        
         return FormatAsync(code, printerOptions, cancellationToken);
     }
 

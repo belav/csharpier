@@ -1,15 +1,17 @@
 import { Logger } from "./Logger";
 import * as path from "path";
 import * as fs from "fs";
-import { execSync } from "child_process";
 import { workspace } from "vscode";
+import { ExecDotNet } from "./DotNetProvider";
 
 export class CustomPathInstaller {
     logger: Logger;
     customPath: string;
+    execDotNet: ExecDotNet;
 
-    constructor(logger: Logger) {
+    constructor(logger: Logger, execDotNet: ExecDotNet) {
         this.logger = logger;
+        this.execDotNet = execDotNet;
         this.customPath =
             workspace.getConfiguration("csharpier").get<string>("dev.customPath") ?? "";
     }
@@ -38,34 +40,39 @@ export class CustomPathInstaller {
 
         const command = `dotnet tool install csharpier --version ${version} --tool-path "${pathToDirectoryForVersion}"`;
         this.logger.debug("Running " + command);
-        execSync(command);
+        this.execDotNet(command);
 
         return this.validateInstall(pathToDirectoryForVersion, version);
     }
 
     private validateInstall(pathToDirectoryForVersion: string, version: string): boolean {
         try {
-            const output = execSync(`"${this.getPathForVersion(version)}" --version`, {
+            // TODO this fails if we use dotnetPath, we really need to set it as DOTNET_ROOT
+            const output = this.execDotNet(`"${this.getPathForVersion(version)}" --version`, {
                 env: { ...process.env, DOTNET_NOLOGO: "1" },
             })
                 .toString()
                 .trim();
 
             this.logger.debug(`"${this.getPathForVersion(version)}" --version output: ${output}`);
-            const versionWithoutHash = output.split("+")[0]
-            this.logger.debug(`Using ${versionWithoutHash} as the version number.`)
+            const versionWithoutHash = output.split("+")[0];
+            this.logger.debug(`Using ${versionWithoutHash} as the version number.`);
 
             if (versionWithoutHash === version) {
                 this.logger.debug("CSharpier at " + pathToDirectoryForVersion + " already exists");
                 return true;
-            }
-            else {
-                this.logger.warn("Version of " + versionWithoutHash + " did not match expected version of " + version)
+            } else {
+                this.logger.warn(
+                    "Version of " +
+                        versionWithoutHash +
+                        " did not match expected version of " +
+                        version,
+                );
             }
         } catch (error: any) {
             const message = !error.stderr ? error.toString() : error.stderr.toString();
             this.logger.warn(
-                "Exception while running 'dotnet csharpier --version' in " +
+                "Exception while running 'dotnet-csharpier --version' in " +
                     pathToDirectoryForVersion,
                 message,
             );
