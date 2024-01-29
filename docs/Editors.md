@@ -23,3 +23,6 @@ Use the [official plugin](https://plugins.jetbrains.com/plugin/18243-csharpier)
 It can be installed via the Plugins dialog.
 ### Neovim
 Use [neoformat](https://github.com/sbdchd/neoformat)
+
+### Emacs
+Use [format-all](https://github.com/lassik/emacs-format-all-the-code)
