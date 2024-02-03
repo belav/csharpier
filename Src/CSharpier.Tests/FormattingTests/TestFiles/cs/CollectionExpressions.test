@@ -141,3 +141,19 @@ class MyClass
             DayOfWeek.Saturday
         ];
 }
+
+[SomeAttribute(
+    [
+        someValue,
+        someValue,
+        someValue,
+        someValue,
+        someValue,
+        someValue,
+        someValue,
+        someValue,
+        someValue,
+        someValue,
+    ]
+)]
+class ClassName { }
