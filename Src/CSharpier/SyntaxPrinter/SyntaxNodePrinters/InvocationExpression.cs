@@ -71,11 +71,12 @@ internal static class InvocationExpression
 
         return
             oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
-            || groups[0].Any(o =>
-                o.Node
-                    is ArrayCreationExpressionSyntax
-                        or ObjectCreationExpressionSyntax { Initializer: not null }
-            )
+            || groups[0]
+                .Any(o =>
+                    o.Node
+                        is ArrayCreationExpressionSyntax
+                            or ObjectCreationExpressionSyntax { Initializer: not null }
+                )
             ? expanded
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
     }
