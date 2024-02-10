@@ -77,7 +77,7 @@ export class InstallerService {
         window.showErrorMessage(message, ...items).then(
             selection => {
                 if (selection === globalButton) {
-                    const command = "dotnet tool install -g csharpier";
+                    const command = "tool install -g csharpier";
                     this.logger.info("Installing csharpier globally with " + command);
                     const output = this.execDotNet(command).toString();
                     this.logger.info(output);
@@ -90,9 +90,9 @@ export class InstallerService {
                             );
                             this.logger.info("Installing csharpier in " + manifestPath);
                             if (!fs.existsSync(manifestPath)) {
-                                this.execDotNet("dotnet new tool-manifest", { cwd: solutionRoot });
+                                this.execDotNet("new tool-manifest", { cwd: solutionRoot });
                             }
-                            this.execDotNet("dotnet tool install csharpier", { cwd: solutionRoot });
+                            this.execDotNet("tool install csharpier", { cwd: solutionRoot });
                         } catch (error) {
                             this.logger.error("Installing failed with ", error);
                         }

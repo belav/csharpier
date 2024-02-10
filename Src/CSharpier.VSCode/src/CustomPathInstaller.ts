@@ -38,7 +38,7 @@ export class CustomPathInstaller {
             fs.rmSync(pathToDirectoryForVersion, { recursive: true, force: true });
         }
 
-        const command = `dotnet tool install csharpier --version ${version} --tool-path "${pathToDirectoryForVersion}"`;
+        const command = `tool install csharpier --version ${version} --tool-path "${pathToDirectoryForVersion}"`;
         this.logger.debug("Running " + command);
         this.execDotNet(command);
 
@@ -46,9 +46,10 @@ export class CustomPathInstaller {
     }
 
     private validateInstall(pathToDirectoryForVersion: string, version: string): boolean {
+        let command = `"${this.getPathForVersion(version)}" --version`;
         try {
-            // TODO this fails if we use dotnetPath, we really need to set it as DOTNET_ROOT
-            const output = this.execDotNet(`"${this.getPathForVersion(version)}" --version`, {
+            // TODO this needs to set DOTNET_ROOT, and I don't think it should use execDotNet
+            const output = this.execDotNet(command, {
                 env: { ...process.env, DOTNET_NOLOGO: "1" },
             })
                 .toString()
@@ -72,8 +73,7 @@ export class CustomPathInstaller {
         } catch (error: any) {
             const message = !error.stderr ? error.toString() : error.stderr.toString();
             this.logger.warn(
-                "Exception while running 'dotnet-csharpier --version' in " +
-                    pathToDirectoryForVersion,
+                `Exception while running '${command}' in ${pathToDirectoryForVersion}`,
                 message,
             );
         }

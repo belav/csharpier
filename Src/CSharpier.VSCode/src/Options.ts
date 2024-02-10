@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 
+// TODO move our options into here too, it is handy
 export interface Options {
     readonly dotNetCliPaths: string[];
     readonly dotnetPath: string;

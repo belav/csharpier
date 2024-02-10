@@ -141,7 +141,7 @@ export class CSharpierProcessProvider implements Disposable {
         let outputFromCsharpier: string;
 
         try {
-            outputFromCsharpier = this.execDotNet(`dotnet csharpier --version`, {
+            outputFromCsharpier = this.execDotNet(`csharpier --version`, {
                 cwd: directoryThatContainsFile,
                 env: { ...process.env, DOTNET_NOLOGO: "1" },
             })
