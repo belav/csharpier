@@ -2,7 +2,6 @@ import { Disposable, Extension, TextEditor, window, workspace } from "vscode";
 import { Logger } from "./Logger";
 import * as path from "path";
 import * as semver from "semver";
-import { execSync } from "child_process";
 import * as convert from "xml-js";
 import { ICSharpierProcess, NullCSharpierProcess } from "./CSharpierProcess";
 import { CSharpierProcessSingleFile } from "./CSharpierProcessSingleFile";
@@ -10,6 +9,7 @@ import { CSharpierProcessPipeMultipleFiles } from "./CSharpierProcessPipeMultipl
 import * as fs from "fs";
 import { InstallerService } from "./InstallerService";
 import { CustomPathInstaller } from "./CustomPathInstaller";
+import { ExecDotNet } from "./DotNetProvider";
 
 export class CSharpierProcessProvider implements Disposable {
     warnedForOldVersion = false;
@@ -19,14 +19,17 @@ export class CSharpierProcessProvider implements Disposable {
     warmingByDirectory: Record<string, boolean | undefined> = {};
     csharpierVersionByDirectory: Record<string, string | undefined> = {};
     csharpierProcessesByVersion: Record<string, ICSharpierProcess | undefined> = {};
+    execDotNet: ExecDotNet;
 
-    constructor(logger: Logger, extension: Extension<unknown>) {
+    constructor(logger: Logger, extension: Extension<unknown>, execDotNet: ExecDotNet) {
         this.logger = logger;
-        this.customPathInstaller = new CustomPathInstaller(logger);
+        this.execDotNet = execDotNet;
+        this.customPathInstaller = new CustomPathInstaller(logger, execDotNet);
         this.installerService = new InstallerService(
             this.logger,
             this.killRunningProcesses,
             extension,
+            execDotNet,
         );
 
         window.onDidChangeActiveTextEditor((event: TextEditor | undefined) => {
@@ -138,7 +141,7 @@ export class CSharpierProcessProvider implements Disposable {
         let outputFromCsharpier: string;
 
         try {
-            outputFromCsharpier = execSync(`dotnet csharpier --version`, {
+            outputFromCsharpier = this.execDotNet(`dotnet csharpier --version`, {
                 cwd: directoryThatContainsFile,
                 env: { ...process.env, DOTNET_NOLOGO: "1" },
             })
@@ -146,8 +149,8 @@ export class CSharpierProcessProvider implements Disposable {
                 .trim();
 
             this.logger.debug(`dotnet csharpier --version output: ${outputFromCsharpier}`);
-            const versionWithoutHash = outputFromCsharpier.split("+")[0]
-            this.logger.debug(`Using ${versionWithoutHash} as the version number.`)
+            const versionWithoutHash = outputFromCsharpier.split("+")[0];
+            this.logger.debug(`Using ${versionWithoutHash} as the version number.`);
             return versionWithoutHash;
         } catch (error: any) {
             const message = !error.stderr ? error.toString() : error.stderr.toString();
@@ -212,7 +215,7 @@ export class CSharpierProcessProvider implements Disposable {
             }
 
             if (!this.customPathInstaller.ensureVersionInstalled(version)) {
-                this.logger.debug(`Unable to validate install of version ${version}`)
+                this.logger.debug(`Unable to validate install of version ${version}`);
                 this.displayFailureMessage();
                 return NullCSharpierProcess.instance;
             }
@@ -230,7 +233,11 @@ export class CSharpierProcessProvider implements Disposable {
                 }
                 return new CSharpierProcessSingleFile(this.logger, customPath);
             } else {
-                const csharpierProcess = new CSharpierProcessPipeMultipleFiles(this.logger, customPath, directory);
+                const csharpierProcess = new CSharpierProcessPipeMultipleFiles(
+                    this.logger,
+                    customPath,
+                    directory,
+                );
                 if (csharpierProcess.processFailedToStart) {
                     this.displayFailureMessage();
                 }
