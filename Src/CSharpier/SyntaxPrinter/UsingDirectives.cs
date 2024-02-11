@@ -268,28 +268,28 @@ internal static class UsingDirectives
     {
         public int Compare(UsingDirectiveSyntax? x, UsingDirectiveSyntax? y)
         {
-            if (x?.Name is null)
+            if (x?.Name is null && y?.Name is not null)
             {
                 return -1;
             }
 
-            if (y?.Name is null)
+            if (y?.Name is null && x?.Name is not null)
             {
                 return 1;
             }
 
-            if (x.Alias is not null && y.Alias is not null)
+            if (x?.Alias is not null && y?.Alias is not null)
             {
-                return String.Compare(
+                return string.Compare(
                     x.Alias.ToFullString(),
                     y.Alias.ToFullString(),
                     StringComparison.OrdinalIgnoreCase
                 );
             }
 
-            return String.Compare(
-                x.Name.ToFullString(),
-                y.Name.ToFullString(),
+            return string.Compare(
+                x?.Name?.ToFullString(),
+                y?.Name?.ToFullString(),
                 StringComparison.OrdinalIgnoreCase
             );
         }
