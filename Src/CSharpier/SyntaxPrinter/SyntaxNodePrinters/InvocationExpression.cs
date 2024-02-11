@@ -78,6 +78,10 @@ internal static class InvocationExpression
                             or ObjectCreationExpressionSyntax { Initializer: not null }
                 )
             ? expanded
+            // TODO somehow this conditional group is causing the problem
+            // TODO or maybe it has something to do with what is in the raw string? but that has a hardline, so it should force things to break
+            // TODO maybe this is a bug with DocFitter/DocPrinter but the ConditionalGroup is definitely involved somehow
+            // TODO the same problem exists with multiline verbatim strings
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
     }
 

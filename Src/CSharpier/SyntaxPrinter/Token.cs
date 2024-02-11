@@ -97,8 +97,10 @@ internal static class Token
 
             contents.Add(linesIncludingQuotes[^1].TrimStart());
 
+            var hasArgumentParent = syntaxToken.Parent.HasParent(typeof(ArgumentSyntax));
+            
             docs.Add(
-                Doc.IndentIf(syntaxToken.Parent?.Parent is not ArgumentSyntax, Doc.Concat(contents))
+                Doc.IndentIf(!hasArgumentParent, Doc.Concat(contents))
             );
         }
         else if (
