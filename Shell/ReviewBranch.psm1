@@ -14,7 +14,7 @@ function CSH-ReviewBranch {
     Set-Location $repositoryRoot
     
     if (!$pathToTestingRepo) {
-        $pathToTestingRepo = "C:\Projects\csharpier-repos"
+        $pathToTestingRepo = Join-Path $PSScriptRoot "../../csharpier-repos"
     }
     if ($folder -ne $null) {
         $pathToTestingRepo = Join-Path $pathToTestingRepo $folder 
