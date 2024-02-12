@@ -3,7 +3,7 @@ import { Extension, window, workspace } from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 import * as vscode from "vscode";
-import { ExecDotNet } from "./DotNetProvider";
+import { execDotNet } from "./DotNetProvider";
 
 export class InstallerService {
     rejectedError = false;
@@ -13,18 +13,11 @@ export class InstallerService {
     logger: Logger;
     killRunningProcesses: () => void;
     extension: Extension<unknown>;
-    execDotNet: ExecDotNet;
 
-    constructor(
-        logger: Logger,
-        killRunningProcesses: () => void,
-        extension: Extension<unknown>,
-        execDotNet: ExecDotNet,
-    ) {
+    constructor(logger: Logger, killRunningProcesses: () => void, extension: Extension<unknown>) {
         this.logger = logger;
         this.killRunningProcesses = killRunningProcesses;
         this.extension = extension;
-        this.execDotNet = execDotNet;
     }
 
     public displayInstallNeededMessage = (directoryThatContainsFile: string) => {
@@ -79,7 +72,7 @@ export class InstallerService {
                 if (selection === globalButton) {
                     const command = "dotnet tool install -g csharpier";
                     this.logger.info("Installing csharpier globally with " + command);
-                    const output = this.execDotNet(command).toString();
+                    const output = execDotNet(command).toString();
                     this.logger.info(output);
                 } else if (selection === localButton) {
                     if (solutionRoot) {
@@ -90,9 +83,9 @@ export class InstallerService {
                             );
                             this.logger.info("Installing csharpier in " + manifestPath);
                             if (!fs.existsSync(manifestPath)) {
-                                this.execDotNet("dotnet new tool-manifest", { cwd: solutionRoot });
+                                execDotNet("new tool-manifest", solutionRoot);
                             }
-                            this.execDotNet("dotnet tool install csharpier", { cwd: solutionRoot });
+                            execDotNet("tool install csharpier", solutionRoot);
                         } catch (error) {
                             this.logger.error("Installing failed with ", error);
                         }

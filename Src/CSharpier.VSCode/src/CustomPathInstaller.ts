@@ -2,16 +2,15 @@ import { Logger } from "./Logger";
 import * as path from "path";
 import * as fs from "fs";
 import { workspace } from "vscode";
-import { ExecDotNet } from "./DotNetProvider";
+import { getDotNetRoot, execDotNet } from "./DotNetProvider";
+import { execSync } from "child_process";
 
 export class CustomPathInstaller {
     logger: Logger;
     customPath: string;
-    execDotNet: ExecDotNet;
 
-    constructor(logger: Logger, execDotNet: ExecDotNet) {
+    constructor(logger: Logger) {
         this.logger = logger;
-        this.execDotNet = execDotNet;
         this.customPath =
             workspace.getConfiguration("csharpier").get<string>("dev.customPath") ?? "";
     }
@@ -40,16 +39,15 @@ export class CustomPathInstaller {
 
         const command = `dotnet tool install csharpier --version ${version} --tool-path "${pathToDirectoryForVersion}"`;
         this.logger.debug("Running " + command);
-        this.execDotNet(command);
+        execDotNet(command);
 
         return this.validateInstall(pathToDirectoryForVersion, version);
     }
 
     private validateInstall(pathToDirectoryForVersion: string, version: string): boolean {
         try {
-            // TODO this fails if we use dotnetPath, we really need to set it as DOTNET_ROOT
-            const output = this.execDotNet(`"${this.getPathForVersion(version)}" --version`, {
-                env: { ...process.env, DOTNET_NOLOGO: "1" },
+            const output = execSync(`"${this.getPathForVersion(version)}" --version`, {
+                env: { ...process.env, DOTNET_ROOT: getDotNetRoot() },
             })
                 .toString()
                 .trim();

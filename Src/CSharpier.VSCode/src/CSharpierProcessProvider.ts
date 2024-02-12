@@ -9,7 +9,7 @@ import { CSharpierProcessPipeMultipleFiles } from "./CSharpierProcessPipeMultipl
 import * as fs from "fs";
 import { InstallerService } from "./InstallerService";
 import { CustomPathInstaller } from "./CustomPathInstaller";
-import { ExecDotNet } from "./DotNetProvider";
+import { execDotNet } from "./DotNetProvider";
 
 export class CSharpierProcessProvider implements Disposable {
     warnedForOldVersion = false;
@@ -19,17 +19,14 @@ export class CSharpierProcessProvider implements Disposable {
     warmingByDirectory: Record<string, boolean | undefined> = {};
     csharpierVersionByDirectory: Record<string, string | undefined> = {};
     csharpierProcessesByVersion: Record<string, ICSharpierProcess | undefined> = {};
-    execDotNet: ExecDotNet;
 
-    constructor(logger: Logger, extension: Extension<unknown>, execDotNet: ExecDotNet) {
+    constructor(logger: Logger, extension: Extension<unknown>) {
         this.logger = logger;
-        this.execDotNet = execDotNet;
-        this.customPathInstaller = new CustomPathInstaller(logger, execDotNet);
+        this.customPathInstaller = new CustomPathInstaller(logger);
         this.installerService = new InstallerService(
             this.logger,
             this.killRunningProcesses,
             extension,
-            execDotNet,
         );
 
         window.onDidChangeActiveTextEditor((event: TextEditor | undefined) => {
@@ -141,10 +138,7 @@ export class CSharpierProcessProvider implements Disposable {
         let outputFromCsharpier: string;
 
         try {
-            outputFromCsharpier = this.execDotNet(`dotnet csharpier --version`, {
-                cwd: directoryThatContainsFile,
-                env: { ...process.env, DOTNET_NOLOGO: "1" },
-            })
+            outputFromCsharpier = execDotNet(`csharpier --version`, directoryThatContainsFile)
                 .toString()
                 .trim();
 

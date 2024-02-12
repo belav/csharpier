@@ -9,14 +9,14 @@ import { EOL } from "os";
 import { DotnetInfo, RuntimeInfo } from "./dotnetinfo";
 import * as fs from "fs";
 import * as cp from "child_process";
+import { Logger } from "../Logger";
 
 // This function calls `dotnet --info` and returns the result as a DotnetInfo object.
-export async function getDotnetInfo(dotNetCliPaths: string[]): Promise<DotnetInfo> {
+export async function getDotnetInfo(dotNetCliPaths: string[], logger: Logger): Promise<DotnetInfo> {
     const dotnetExecutablePath = getDotNetExecutablePath(dotNetCliPaths);
 
-    const data = await runDotnetInfo(dotnetExecutablePath);
-    const dotnetInfo = await parseDotnetInfo(data, dotnetExecutablePath);
-    return dotnetInfo;
+    const data = await runDotnetInfo(dotnetExecutablePath, logger);
+    return await parseDotnetInfo(data, dotnetExecutablePath);
 }
 
 export function getDotNetExecutablePath(dotNetCliPaths: string[]): string | undefined {
@@ -33,18 +33,37 @@ export function getDotNetExecutablePath(dotNetCliPaths: string[]): string | unde
     return dotnetExecutablePath;
 }
 
-async function runDotnetInfo(dotnetExecutablePath: string | undefined): Promise<string> {
+async function runDotnetInfo(
+    dotnetExecutablePath: string | undefined,
+    logger: Logger,
+): Promise<string> {
+    if (dotnetExecutablePath == undefined) {
+        logger.debug("Trying to find dotnet on PATH using 'dotnet --info' ");
+    }
+
+    const env = {
+        ...process.env,
+        DOTNET_CLI_UI_LANGUAGE: "en-US",
+    };
+
     try {
-        const env = {
-            ...process.env,
-            DOTNET_CLI_UI_LANGUAGE: "en-US",
-        };
         const command = dotnetExecutablePath ? `"${dotnetExecutablePath}"` : "dotnet";
-        const data = await execChildProcess(`${command} --info`, process.cwd(), env);
-        return data;
+        return await execChildProcess(`${command} --info`, process.cwd(), env);
     } catch (error) {
-        const message = error instanceof Error ? error.message : `${error}`;
-        throw new Error(`Error running dotnet --info: ${message}`);
+        logger.error(error);
+
+        if (process.platform !== "win32") {
+            logger.debug("Trying to find dotnet on PATH using 'sh -c \"dotnet --info\"'");
+            try {
+                return await execChildProcess(`sh -c "dotnet --info"`, process.cwd(), env);
+            } catch (error) {
+                const message = error instanceof Error ? error.message : `${error}`;
+                throw new Error(`Error running dotnet --info: ${message}`);
+            }
+        } else {
+            const message = error instanceof Error ? error.message : `${error}`;
+            throw new Error(`Error running dotnet --info: ${message}`);
+        }
     }
 }
 
@@ -54,21 +73,14 @@ async function parseDotnetInfo(
 ): Promise<DotnetInfo> {
     try {
         const cliPath = dotnetExecutablePath;
-        const fullInfo = dotnetInfo;
 
         let version: string | undefined;
-        let runtimeId: string | undefined;
-        let architecture: string | undefined;
 
         let lines = dotnetInfo.replace(/\r/gm, "").split("\n");
         for (const line of lines) {
             let match: RegExpMatchArray | null;
             if ((match = /^\s*Version:\s*([^\s].*)$/.exec(line))) {
                 version = match[1];
-            } else if ((match = /^ RID:\s*([\w\-.]+)$/.exec(line))) {
-                runtimeId = match[1];
-            } else if ((match = /^\s*Architecture:\s*(.*)/.exec(line))) {
-                architecture = match[1];
             }
         }
 
@@ -102,15 +114,10 @@ async function parseDotnetInfo(
         }
 
         if (version !== undefined) {
-            const dotnetInfo: DotnetInfo = {
+            return {
                 CliPath: cliPath,
-                FullInfo: fullInfo,
-                Version: version,
-                RuntimeId: runtimeId,
-                Architecture: architecture,
                 Runtimes: runtimeVersions,
             };
-            return dotnetInfo;
         }
 
         throw new Error("Failed to parse dotnet version information");

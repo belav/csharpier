@@ -2,6 +2,7 @@ import { Logger } from "./Logger";
 import { spawn } from "child_process";
 import { ICSharpierProcess } from "./CSharpierProcess";
 import * as path from "path";
+import { getDotNetRoot } from "./DotNetProvider";
 
 export class CSharpierProcessSingleFile implements ICSharpierProcess {
     private readonly csharpierPath: string;
@@ -18,7 +19,7 @@ export class CSharpierProcessSingleFile implements ICSharpierProcess {
             const csharpier = spawn(this.csharpierPath, ["--write-stdout"], {
                 stdio: "pipe",
                 cwd: directory,
-                env: { ...process.env, DOTNET_NOLOGO: "1" },
+                env: { ...process.env, DOTNET_NOLOGO: "1", DOTNET_ROOT: getDotNetRoot() },
             });
 
             let output = "";

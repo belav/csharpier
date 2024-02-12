@@ -1,6 +1,7 @@
 import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import { Logger } from "./Logger";
 import { ICSharpierProcess } from "./CSharpierProcess";
+import { getDotNetRoot } from "./DotNetProvider";
 
 export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     private process: ChildProcessWithoutNullStreams;
@@ -24,7 +25,7 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
         const csharpierProcess = spawn(csharpierPath, ["--pipe-multiple-files"], {
             stdio: "pipe",
             cwd: workingDirectory,
-            env: { ...process.env, DOTNET_NOLOGO: "1" },
+            env: { ...process.env, DOTNET_NOLOGO: "1", DOTNET_ROOT: getDotNetRoot() },
         });
 
         csharpierProcess.on("error", data => {
@@ -42,7 +43,10 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
         });
 
         csharpierProcess.stderr.on("data", chunk => {
-            this.logger.warn("Received data on stderr from the running charpier process", chunk);
+            this.logger.warn(
+                "Received data on stderr from the running charpier process",
+                chunk.toString(),
+            );
         });
 
         csharpierProcess.stdout.on("data", chunk => {
