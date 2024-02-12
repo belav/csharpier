@@ -210,7 +210,7 @@ internal static class UsingDirectives
                     }
                     else
                     {
-                        staticUsings.Add(usingData);    
+                        staticUsings.Add(usingData);
                     }
                 }
                 else if (usingDirective.Alias is not null)
