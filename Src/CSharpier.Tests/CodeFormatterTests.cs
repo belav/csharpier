@@ -61,30 +61,39 @@ internal class CodeFormatterTests
 
         result.Code.Should().Be("var someVariable =\n    someValue;\n");
     }
-    
+
     [Test]
     public void Format_Should_Use_IndentStyle()
     {
         var code = "void someMethod() { var someVariable = someValue; }";
-        var result = CodeFormatter.Format(code, new CodeFormatterOptions { IndentStyle = IndentStyle.Tabs, IndentSize = 1});
+        var result = CodeFormatter.Format(
+            code,
+            new CodeFormatterOptions { IndentStyle = IndentStyle.Tabs, IndentSize = 1 }
+        );
 
         result.Code.Should().Be("void someMethod()\n{\n\tvar someVariable = someValue;\n}\n");
     }
-    
+
     [Test]
     public void Format_Should_Use_IndentWidth()
     {
         var code = "void someMethod() { var someVariable = someValue; }";
-        var result = CodeFormatter.Format(code, new CodeFormatterOptions { IndentStyle = IndentStyle.Spaces, IndentSize = 1});
+        var result = CodeFormatter.Format(
+            code,
+            new CodeFormatterOptions { IndentStyle = IndentStyle.Spaces, IndentSize = 1 }
+        );
 
         result.Code.Should().Be("void someMethod()\n{\n var someVariable = someValue;\n}\n");
     }
-    
+
     [Test]
     public void Format_Should_Use_EndOfLine()
     {
         var code = "var someVariable = someValue;";
-        var result = CodeFormatter.Format(code, new CodeFormatterOptions { EndOfLine = EndOfLine.CRLF });
+        var result = CodeFormatter.Format(
+            code,
+            new CodeFormatterOptions { EndOfLine = EndOfLine.CRLF }
+        );
 
         result.Code.Should().Be("var someVariable = someValue;\r\n");
     }
