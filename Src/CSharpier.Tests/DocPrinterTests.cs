@@ -735,7 +735,7 @@ true || false"
             Doc.SoftLine,
             "3"
         );
-        // this seems odd, but this is how conditional breaks work
+        // this seems odd, but this is how conditional groups work
         // I assume partly because if only one of the potential groups contains a hardline
         // then you don't want to always break the conditional group
         PrintedDocShouldBe(
