@@ -60,7 +60,6 @@ internal static class InvocationExpression
             forceOneLine
             // this handles the case of a multiline string being part of an invocation chain
             // conditional groups don't propagate breaks so we need to avoid the conditional group
-            // there are some edge cases that don't work well, but invocations on multiline strings are rare
             || groups[0]
                 .Any(o =>
                     o.Node
