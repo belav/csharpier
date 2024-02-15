@@ -725,6 +725,29 @@ true || false"
     }
 
     [Test]
+    public void ConditionalGroup_Does_Not_Propagate_Breaks()
+    {
+        var doc = Doc.Group(
+            Doc.ConditionalGroup(
+                Doc.Concat("1", Doc.HardLine, "2"),
+                Doc.Concat("1", Doc.HardLine, "2")
+            ),
+            Doc.SoftLine,
+            "3"
+        );
+        // this seems odd, but this is how conditional breaks work
+        // I assume partly because if only one of the potential groups contains a hardline
+        // then you don't want to always break the conditional group
+        PrintedDocShouldBe(
+            doc,
+            """
+            1
+            23
+            """
+        );
+    }
+
+    [Test]
     public void Scratch()
     {
         var doc = "";
