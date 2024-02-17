@@ -239,9 +239,12 @@ internal partial class SyntaxNodeComparer
         )
         {
             // this detects if we added indentation when there was none, or removed all indentation when there was some
+            // and handles the case of changing /t to " "
+            var originalFirst = originalToken.ValueText.TrimStart(['\r', '\n'])[0];
+            var formattedFirst = formattedToken.ValueText.TrimStart(['\r', '\n'])[0];
             if (
-                originalToken.ValueText.TrimStart(['\r', '\n'])[0]
-                != formattedToken.ValueText.TrimStart(['\r', '\n'])[0]
+                originalFirst != formattedFirst
+                && (originalFirst is not (' ' or '\t') || formattedFirst is not (' ' or '\t'))
             )
             {
                 return NotEqual(originalToken.Span, formattedNode!.Span);
