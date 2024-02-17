@@ -165,5 +165,23 @@ four
               }
               """
         );
+
+        CallMethod(
+            @"
+SomeVerbatimString
+".CallMethod()
+        );
+
+        CallMethod(
+            @"
+SomeVerbatimString
+".CallMethod().CallMethod()
+        );
+
+        CallMethod(
+            @"
+SomeVerbatimString
+".CallMethod().CallMethod().CallMethod()
+        );
     }
 }
