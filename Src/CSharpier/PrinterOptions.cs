@@ -33,10 +33,3 @@ internal class PrinterOptions
         return "\n";
     }
 }
-
-internal enum EndOfLine
-{
-    Auto,
-    CRLF,
-    LF
-}
