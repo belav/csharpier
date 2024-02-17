@@ -140,6 +140,7 @@ internal static class UsingDirectives
         var systemUsings = new List<UsingData>();
         var aliasNameUsings = new List<UsingData>();
         var regularUsings = new List<UsingData>();
+        var staticSystemUsings = new List<UsingData>();
         var staticUsings = new List<UsingData>();
         var aliasUsings = new List<UsingData>();
         var directiveGroup = new List<UsingData>();
@@ -203,7 +204,14 @@ internal static class UsingDirectives
                 }
                 else if (usingDirective.StaticKeyword.RawSyntaxKind() != SyntaxKind.None)
                 {
-                    staticUsings.Add(usingData);
+                    if (usingDirective.Name is not null && IsSystemName(usingDirective.Name))
+                    {
+                        staticSystemUsings.Add(usingData);
+                    }
+                    else
+                    {
+                        staticUsings.Add(usingData);
+                    }
                 }
                 else if (usingDirective.Alias is not null)
                 {
@@ -230,6 +238,7 @@ internal static class UsingDirectives
         yield return systemUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield return aliasNameUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield return regularUsings.OrderBy(o => o.Using, Comparer).ToList();
+        yield return staticSystemUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield return staticUsings.OrderBy(o => o.Using, Comparer).ToList();
         yield return aliasUsings.OrderBy(o => o.Using, Comparer).ToList();
         // we need the directive groups at the end, the #endif directive
