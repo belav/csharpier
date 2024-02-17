@@ -56,7 +56,30 @@ internal static class InvocationExpression
                 )
             );
 
-        if (forceOneLine)
+        if (
+            forceOneLine
+            // this handles the case of a multiline string being part of an invocation chain
+            // conditional groups don't propagate breaks so we need to avoid the conditional group
+            || groups[0]
+                .Any(o =>
+                    o.Node
+                        is LiteralExpressionSyntax
+                            {
+                                Token.RawKind: (int)SyntaxKind.MultiLineRawStringLiteralToken
+                            }
+                            or InterpolatedStringExpressionSyntax
+                            {
+                                StringStartToken.RawKind: (int)
+                                    SyntaxKind.InterpolatedMultiLineRawStringStartToken
+                            }
+                    || o.Node
+                        is LiteralExpressionSyntax
+                        {
+                            Token.Text.Length: > 0
+                        } literalExpressionSyntax
+                        && literalExpressionSyntax.Token.Text.Contains('\n')
+                )
+        )
         {
             return Doc.Group(oneLine);
         }

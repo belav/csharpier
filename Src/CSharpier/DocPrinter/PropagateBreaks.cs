@@ -51,12 +51,10 @@ internal static class PropagateBreaks
             {
                 canSkipBreak = true;
                 groupStack.Push(group);
-                if (alreadyVisitedSet.Contains(group))
+                if (!alreadyVisitedSet.Add(group))
                 {
                     return false;
                 }
-
-                alreadyVisitedSet.Add(group);
             }
             else if (doc is StringDoc { IsDirective: false })
             {
