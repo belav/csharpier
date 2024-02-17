@@ -586,6 +586,48 @@ public class ClassName
     }
 
     [Test]
+    public void RawStringLiterals_Work_With_Moving_Indentation_And_Tabs_To_Spaces()
+    {
+        var left = """"
+	var someValue = $"""
+		SomeRawStringWithTab
+	""";
+
+"""";
+        var right = """"
+    var someValue = $"""
+        	SomeRawStringWithTab
+        """;
+
+"""";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void RawStringLiterals_Errors_When_Tabs_Change_To_Spaces()
+    {
+        var left = """"
+var someValue = $"""
+    	SomeRawStringWithTab
+    """;
+
+"""";
+        var right = """"
+var someValue = $"""
+        SomeRawStringWithTab
+    """;
+
+"""";
+
+        var result = CompareSource(left, right);
+
+        result.Should().NotBeEmpty();
+    }
+
+    [Test]
     public void RawStringLiterals_Error_With_Adding_Indentation_When_There_Was_None()
     {
         var left = """"
