@@ -2,7 +2,7 @@
     "name": "csharpier-vscode",
     "displayName": "CSharpier - Code formatter",
     "description": "Code formatter using csharpier",
-    "version": "1.5.3-beta1",
+    "version": "1.6.0",
     "publisher": "csharpier",
     "author": "CSharpier",
     "homepage": "https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode",
