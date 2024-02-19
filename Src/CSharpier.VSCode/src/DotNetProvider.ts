@@ -41,7 +41,7 @@ export const findDotNet = async (logger: Logger) => {
                 env: { ...process.env, DOTNET_NOLOGO: "1" },
             };
 
-            return execSync(dotnetExecutablePath + " " + command, options);
+            return execSync(`"${dotnetExecutablePath}" ${command}`, options);
         };
 
         return true;
