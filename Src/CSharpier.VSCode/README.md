@@ -17,7 +17,7 @@ ext install csharpier.csharpier-vscode
 ```
 
 ## CSharpier Version
-The extension determines which version of csharpier is needed to format a give file by looking for a dotnet manifest file. If one is not found it looks for a globally installed version of CSharpier.
+The extension determines which version of csharpier is needed to format a given file by looking for a dotnet manifest file. If one is not found it looks for a globally installed version of CSharpier.
 
 ## Dotnet Commands
 The extension makes use of `dotnet` commands and uses the following logic to locate `dotnet`.
