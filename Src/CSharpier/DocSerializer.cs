@@ -14,6 +14,7 @@ internal static class DocSerializer
         Serialize(doc, result, 0);
         return result.ToString();
 
+
     }
 
     public static void Serialize(Doc doc, StringBuilder result, int indent, Doc? parent = null)

@@ -11,16 +11,6 @@ public static class CodeFormatter
         return FormatAsync(code, options).Result;
     }
 
-
-
-
-
-
-
-
-
-
-
     public static Task<CodeFormatterResult> FormatAsync(
         string code,
         CodeFormatterOptions? options = null,
