@@ -6,6 +6,7 @@ internal static class CollectionExpression
     {
         Doc separator = node.Parent
             is ArgumentSyntax { NameColon: null }
+                or AttributeArgumentSyntax
                 or ArrowExpressionClauseSyntax
                 or ExpressionElementSyntax
                 or AssignmentExpressionSyntax
