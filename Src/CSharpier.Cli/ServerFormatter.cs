@@ -22,9 +22,10 @@ public static class ServerFormatter
         builder.WebHost.ConfigureKestrel(
             (_, serverOptions) =>
             {
-                serverOptions.Listen(IPAddress.Any, thePort);
+                serverOptions.Listen(IPAddress.Loopback, thePort);
             }
         );
+
         var app = builder.Build();
         var service = new CSharpierServiceImplementation(actualConfigPath, logger);
         app.MapPost(
