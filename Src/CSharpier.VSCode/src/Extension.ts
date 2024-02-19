@@ -1,8 +1,10 @@
-import { ExtensionContext, workspace } from "vscode";
+import { ExtensionContext, window, workspace } from "vscode";
 import { CSharpierProcessProvider } from "./CSharpierProcessProvider";
 import { FormattingService } from "./FormattingService";
 import { Logger } from "./Logger";
 import { NullCSharpierProcess } from "./CSharpierProcess";
+import { findDotNet } from "./DotNetProvider";
+import { options } from "./Options";
 
 export async function activate(context: ExtensionContext) {
     if (!workspace.isTrusted) {
@@ -18,11 +20,21 @@ const initPlugin = async (context: ExtensionContext) => {
         workspace.getConfiguration("csharpier").get<boolean>("enableDebugLogs") ?? false;
 
     const logger = new Logger(enableDebugLogs);
-    NullCSharpierProcess.create(logger);
-
-    const isDevelopment = (process.env as any).MODE === "development";
 
     logger.info("Initializing " + (process.env as any).EXTENSION_NAME);
+
+    if (!(await findDotNet(logger))) {
+        // add to path via sudo ln -s ~/.dotnet/dotnet /usr/bin/dotnet
+        logger.debug("PATH: " + process.env.PATH);
+        logger.debug("dotnet.dotnetPath: " + options.dotnetPath);
+        logger.debug("omnisharp.dotNetCliPaths: " + options.dotNetCliPaths);
+        window.showErrorMessage(
+            "CSharpier was unable to find a way to run 'dotnet' commands. If a .NET SDK is installed make sure it can be found on PATH. Alternatively set dotnet.dotnetPath or omnisharp.dotNetCliPaths. You will need to restart VSCode after making any changes.",
+        );
+        return;
+    }
+
+    NullCSharpierProcess.create(logger);
 
     const csharpierProcessProvider = new CSharpierProcessProvider(logger, context.extension);
     new FormattingService(logger, csharpierProcessProvider);

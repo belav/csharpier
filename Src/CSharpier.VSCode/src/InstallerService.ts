@@ -1,9 +1,9 @@
 import { Logger } from "./Logger";
 import { Extension, window, workspace } from "vscode";
-import { execSync } from "child_process";
 import * as path from "path";
 import * as fs from "fs";
 import * as vscode from "vscode";
+import { execDotNet } from "./DotNetProvider";
 
 export class InstallerService {
     rejectedError = false;
@@ -72,7 +72,7 @@ export class InstallerService {
                 if (selection === globalButton) {
                     const command = "dotnet tool install -g csharpier";
                     this.logger.info("Installing csharpier globally with " + command);
-                    const output = execSync(command).toString();
+                    const output = execDotNet(command).toString();
                     this.logger.info(output);
                 } else if (selection === localButton) {
                     if (solutionRoot) {
@@ -83,9 +83,9 @@ export class InstallerService {
                             );
                             this.logger.info("Installing csharpier in " + manifestPath);
                             if (!fs.existsSync(manifestPath)) {
-                                execSync("dotnet new tool-manifest", { cwd: solutionRoot });
+                                execDotNet("new tool-manifest", solutionRoot);
                             }
-                            execSync("dotnet tool install csharpier", { cwd: solutionRoot });
+                            execDotNet("tool install csharpier", solutionRoot);
                         } catch (error) {
                             this.logger.error("Installing failed with ", error);
                         }

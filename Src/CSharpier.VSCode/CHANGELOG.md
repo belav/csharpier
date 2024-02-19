@@ -1,3 +1,11 @@
+## [1.6.0]
+- Better support for dotnet commands. The extension will now try to locate dotnet by doing the following.
+  - If `dotnet.dotnetPath` is set, will try using that to find `dotnet`
+  - If `omnisharp.dotNetCliPaths` is set, will try using that to find `dotnet`
+  - Try running `dotnet --info` to see if `dotnet` is on the PATH
+  - For non-windows - Try running `sh -c "dotnet --info"` to see if `dotnet` is on the PATH
+- When `dotnet` is not found, show an error message indicating the problem and disable any attempts at formatting.
+
 ## [1.5.2]
 - Update Readme
 
