@@ -52,7 +52,8 @@ namespace CSharpier.VisualStudio
             this.logger.Info("Formatting started for " + document.FullName + ".");
             var stopwatch = Stopwatch.StartNew();
 
-            var newText = this.cSharpierProcessProvider.GetProcessFor(document.FullName)
+            var newText = this
+                .cSharpierProcessProvider.GetProcessFor(document.FullName)
                 .FormatFile(text, document.FullName);
 
             this.logger.Info("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");

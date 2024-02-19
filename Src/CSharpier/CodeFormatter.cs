@@ -11,16 +11,6 @@ public static class CodeFormatter
         return FormatAsync(code, options).Result;
     }
 
-
-
-
-
-
-
-
-
-
-
     public static Task<CodeFormatterResult> FormatAsync(
         string code,
         CodeFormatterOptions? options = null,
@@ -31,7 +21,13 @@ public static class CodeFormatter
 
         return CSharpFormatter.FormatAsync(
             code,
-            new PrinterOptions { Width = options.Width },
+            new PrinterOptions
+            {
+                Width = options.Width,
+                UseTabs = options.IndentStyle == IndentStyle.Tabs,
+                TabWidth = options.IndentSize,
+                EndOfLine = options.EndOfLine
+            },
             cancellationToken
         );
     }
@@ -54,7 +50,13 @@ public static class CodeFormatter
 
         return CSharpFormatter.FormatAsync(
             syntaxTree,
-            new PrinterOptions { Width = options.Width },
+            new PrinterOptions
+            {
+                Width = options.Width,
+                UseTabs = options.IndentStyle == IndentStyle.Tabs,
+                TabWidth = options.IndentSize,
+                EndOfLine = options.EndOfLine
+            },
             SourceCodeKind.Regular,
             cancellationToken
         );

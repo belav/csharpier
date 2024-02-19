@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using System.Reflection;
+using Microsoft.CodeAnalysis.CSharp;
 using SyntaxFinder;
 
 var files = Directory.EnumerateFiles(
@@ -47,4 +48,4 @@ Parallel.ForEach(
     }
 );
 
-// ObjectInitializerWalker.WriteResult();
+typeToRun.GetMethod("WriteResult")?.Invoke(null, null);

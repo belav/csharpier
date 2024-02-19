@@ -64,7 +64,8 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
 
     public override void VisitElseDirectiveTrivia(ElseDirectiveTriviaSyntax node)
     {
-        var allParameters = this.CurrentContext.booleanExpressions.SelectMany(o => o.Parameters)
+        var allParameters = this
+            .CurrentContext.booleanExpressions.SelectMany(o => o.Parameters)
             .Distinct()
             .ToList();
         var combinations = GenerateCombinations(allParameters);
