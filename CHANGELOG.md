@@ -1,4 +1,138 @@
-﻿# 0.27.2
+﻿# 0.27.3
+## What's Changed
+### Add more options to CodeFormatterOptions [#1172](https://github.com/belav/csharpier/issues/1172)
+The API for CSharpier was only exposing `CodeFormatterOptions.PrintWidth`. It is now in sync with the CLI and exposes all of the available options
+```c#
+public class CodeFormatterOptions
+{
+    public int Width { get; init; } = 100;
+    public IndentStyle IndentStyle { get; init; } = IndentStyle.Spaces;
+    public int IndentSize { get; init; } = 4;
+    public EndOfLine EndOfLine { get; init; } = EndOfLine.Auto;
+}
+```
+
+Thanks go to @Phault for the contribution
+### Extra indent when call method on RawStringLiteral [#1169](https://github.com/belav/csharpier/issues/1169)
+When a raw string literal was the first argument to a method call, it was getting an extra indent.
+
+```c#
+// input & expected output
+CallMethod(
+    """
+    SomeRawString
+    """.CallMethod()
+);
+
+// 0.27.2
+CallMethod(
+    """
+        SomeRawString
+        """.CallMethod()
+);
+
+```
+
+Thanks go to @Rudomitori for reporting the bug.
+### Using aliases sorting is not always the same depending on the input order [#1168](https://github.com/belav/csharpier/issues/1168)
+Using aliases were not sorting properly, resulting differing outputs and unstable formatting.
+
+Inputs of
+
+```c#
+using A = string;
+using B = string;
+using C = string;
+using D = string;
+```
+And
+```c#
+using D = string;
+using C = string;
+using B = string;
+using A = string;
+```
+Now always result in properly sorted output of
+```c#
+using A = string;
+using B = string;
+using C = string;
+using D = string;
+```
+
+Thanks go to @Araxor for reporting the bug.
+### Spread (in collection expression) are not formatted [#1167](https://github.com/belav/csharpier/issues/1167)
+The spread element was unformatted, and left as is. It is now formatted as follows.
+```c#
+int[] someArray = [.. someOtherArray];
+int[] someOtherArray = [.. value1, .. value2, .. value3];
+
+int[] someOtherArray =
+[
+    .. value1________________________________,
+    .. value2________________________________,
+    .. value3________________________________
+];
+```
+
+Thanks go to @jods4 for reporting the bug.
+### Fix empty line before collection expression in attribute [#1164](https://github.com/belav/csharpier/pull/1160)
+A collection expression in an attribute resulted in an extra line before the collection expression.
+```c#
+// input & expected output
+[SomeAttribute(
+    [
+        someValue_______________________________________________,
+        someValue_______________________________________________,
+
+    ]
+)]
+class ClassName { }
+
+// 0.27.2
+[SomeAttribute(
+
+    [
+        someValue_______________________________________________,
+        someValue_______________________________________________,
+    ]
+)]
+class ClassName { }
+
+```
+
+Thanks go to @Rudomitori for reporting the bug.
+### using static System.* usings not ordered before other static usings like using System.* ones [#1162](https://github.com/belav/csharpier/issues/1162)
+Static usings were not following the rule that `System.*` should be sorted to the top.
+```c#
+// input & expected output
+using static System;
+using static System.Web;
+using static AWord;
+using static ZWord;
+
+// 0.27.2
+using static AWord;
+using static System;
+using static System.Web;
+using static ZWord;
+```
+
+### Remove hash from version [#1144](https://github.com/belav/csharpier/issues/1144)
+When `.net8` support was added, CSharpier started including a commit hash in the version number output. This was due to a [breaking change](https://github.com/dotnet/sdk/issues/34568) in the sdk.
+```bash
+> dotnet csharpier --version
+0.27.2+b456544aad8957d0e2026afe1a37544bb74552ba
+```
+
+CSharpier no longer includes the commit hash
+```bash
+> dotnet csharpier --version
+0.27.3
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.27.2...0.27.3
+# 0.27.2
 ## What's Changed
 ### Orphan variable since 0.27.1 [#1153](https://github.com/belav/csharpier/issues/1153)
 0.27.1 introduced the following formatting regression, resulting in short variables being orphaned on a line
@@ -2073,6 +2207,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
