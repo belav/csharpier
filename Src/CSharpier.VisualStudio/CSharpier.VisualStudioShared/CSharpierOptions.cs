@@ -39,11 +39,17 @@
         )]
         public string? CustomPath { get; set; }
 
+        [Category("CSharpier - Developer")]
+        [DisplayName("Use CSharpier Server")]
+        [Description("Use http communication to csharpier - Experimental as of 0.27.2")]
+        public bool UseServer { get; set; }
+
         protected void LoadFrom(CSharpierOptions newInstance)
         {
             this.SolutionRunOnSave = newInstance.SolutionRunOnSave;
             this.GlobalRunOnSave = newInstance.GlobalRunOnSave;
             this.GlobalLogDebugMessages = newInstance.GlobalLogDebugMessages;
+            this.UseServer = newInstance.UseServer;
             this.CustomPath = newInstance.CustomPath;
         }
 
@@ -118,6 +124,7 @@
                     newInstance.GlobalRunOnSave = o.RunOnSave;
                     newInstance.GlobalLogDebugMessages = o.LogDebugMessages;
                     newInstance.CustomPath = o.CustomPath;
+                    newInstance.UseServer = o.UseServer;
                 }
             );
 
@@ -171,7 +178,8 @@
                 {
                     RunOnSave = this.GlobalRunOnSave,
                     LogDebugMessages = this.GlobalLogDebugMessages,
-                    CustomPath = this.CustomPath
+                    CustomPath = this.CustomPath,
+                    UseServer = this.UseServer
                 }
             );
         }
@@ -205,7 +213,8 @@
         {
             public bool? RunOnSave { get; set; }
             public bool LogDebugMessages { get; set; }
-            public string CustomPath { get; set; }
+            public string? CustomPath { get; set; }
+            public bool UseServer { get; set; }
         }
     }
 }

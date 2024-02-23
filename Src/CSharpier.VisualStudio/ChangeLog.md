@@ -1,4 +1,7 @@
-﻿## [1.5.1]
+﻿## [1.5.2]
+- Experimental support for CSharpier Server
+
+## [1.5.1]
 - Fix for occasional NRE
 
 ## [1.5.0]

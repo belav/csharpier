@@ -217,6 +217,10 @@ namespace CSharpier.VisualStudio
 
                 var installedVersion = new Version(version);
                 var pipeFilesVersion = new Version("0.12.0");
+                if (CSharpierOptions.Instance.UseServer)
+                {
+                    return new CSharpierProcessServer(customPath, this.logger);
+                }
                 if (installedVersion.CompareTo(pipeFilesVersion) < 0)
                 {
                     if (!this.warnedForOldVersion)
