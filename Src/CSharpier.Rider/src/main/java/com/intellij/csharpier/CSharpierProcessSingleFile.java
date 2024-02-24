@@ -18,6 +18,7 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
         try {
             this.logger.debug("Running " + this.csharpierPath + " --write-stdout");
             var processBuilder = new ProcessBuilder(this.csharpierPath, "--write-stdout");
+            // TODO DOTNET_ROOT
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
             processBuilder.redirectErrorStream(true);
             var process = processBuilder.start();

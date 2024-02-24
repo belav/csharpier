@@ -30,6 +30,7 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     private void startProcess() {
         try {
             var processBuilder = new ProcessBuilder(this.csharpierPath, "--pipe-multiple-files");
+            // TODO DOTNET_ROOT
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
             this.process = processBuilder.start();
 

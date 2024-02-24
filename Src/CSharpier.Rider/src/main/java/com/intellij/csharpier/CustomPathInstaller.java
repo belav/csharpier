@@ -1,20 +1,24 @@
 package com.intellij.csharpier;
 
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
 import org.apache.commons.lang.SystemUtils;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 public class CustomPathInstaller {
+    private final DotNetProvider dotNetProvider;
     Logger logger = CSharpierLogger.getInstance();
     String customPath;
 
-    public CustomPathInstaller(CSharpierSettings settings) {
-        this.customPath = settings.getCustomPath();
+    public CustomPathInstaller(Project project) {
+        this.customPath = CSharpierSettings.getInstance(project).getCustomPath();
+        this.dotNetProvider = DotNetProvider.getInstance(project);
     }
 
     public boolean ensureVersionInstalled(String version) throws Exception {
@@ -39,21 +43,20 @@ public class CustomPathInstaller {
             deleteDirectory(directoryForVersion);
         }
 
-        var command = new String[]{"dotnet", "tool", "install", "csharpier", "--version", version, "--tool-path", pathToDirectoryForVersion};
-        ProcessHelper.ExecuteCommand(command, null, null);
+        var command = List.of("tool", "install", "csharpier", "--version", version, "--tool-path", pathToDirectoryForVersion);
+        this.dotNetProvider.execDotNet(command, null);
 
         return this.validateInstall(pathToDirectoryForVersion, version);
     }
 
     private boolean validateInstall(String pathToDirectoryForVersion, String version) {
         try {
-            Map<String, String> env = new HashMap<>();
-            env.put("DOTNET_NOLOGO", "1");
+            var env = Map.of("DOTNET_ROOT", this.dotNetProvider.getDotNetROot());
 
-            var command = new String[] { this.getPathForVersion(version), "--version" };
-            var output = ProcessHelper.ExecuteCommand(command, env, new File(pathToDirectoryForVersion)).trim();
+            var command = List.of(this.getPathForVersion(version), "--version" );
+            var output = ProcessHelper.executeCommand(command, env, new File(pathToDirectoryForVersion)).trim();
 
-            this.logger.debug("dotnet csharpier --version output: " + version);
+            this.logger.debug(this.getPathForVersion(version) +"--version output: " + version);
             var versionWithoutHash = output.split(Pattern.quote("+"))[0];
             this.logger.debug("Using " + versionWithoutHash + " as the version number.");
 

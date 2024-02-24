@@ -38,10 +38,10 @@ public class InstallerService {
         var notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
                 .createNotification(message, NotificationType.WARNING);
 
-        notification.addAction(new InstallGlobalAction("Install CSharpier Globally", processKiller));
+        notification.addAction(new InstallGlobalAction("Install CSharpier Globally", processKiller, this.project));
         if (!isOnlyGlobal) {
             notification.addAction(
-                new InstallLocalAction("Install CSharpier Locally", project.getBasePath(), processKiller)
+                new InstallLocalAction("Install CSharpier Locally", processKiller, project)
             );
         }
 

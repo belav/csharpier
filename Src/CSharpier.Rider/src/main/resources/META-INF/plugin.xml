@@ -8,6 +8,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <projectService serviceImplementation="com.intellij.csharpier.CSharpierProcessProvider"/>
+        <projectService serviceImplementation="com.intellij.csharpier.DotNetProvider"/>
         <projectService serviceImplementation="com.intellij.csharpier.FormattingService"/>
         <projectService serviceImplementation="com.intellij.csharpier.CSharpierSettings"/>
         <projectService serviceImplementation="com.intellij.csharpier.InstallerService"/>

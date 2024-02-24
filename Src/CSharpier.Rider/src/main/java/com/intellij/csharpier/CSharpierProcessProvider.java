@@ -38,7 +38,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
     public CSharpierProcessProvider(@NotNull Project project) {
         this.project = project;
-        this.customPathInstaller = new CustomPathInstaller(CSharpierSettings.getInstance(project));
+        this.customPathInstaller = new CustomPathInstaller(project);
 
         for (var fileEditor : FileEditorManager.getInstance(project).getAllEditors()) {
             var path = fileEditor.getFile().getPath();
@@ -157,11 +157,8 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
                 "Unable to find dotnet-tools.json, falling back to running dotnet csharpier --version"
         );
 
-        Map<String, String> env = new HashMap<>();
-        env.put("DOTNET_NOLOGO", "1");
-
         var command = new String[]{"dotnet", "csharpier", "--version"};
-        var version = ProcessHelper.ExecuteCommand(command, env, new File(directoryThatContainsFile));
+        var version = DotNetProvider.getInstance(this.project).execDotNet(command, new File(directoryThatContainsFile));
 
         if (version == null) {
             version = "";

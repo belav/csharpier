@@ -3,17 +3,18 @@ package com.intellij.csharpier;
 import org.apache.commons.lang.SystemUtils;
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ProcessHelper {
 
-    public static String ExecuteCommand(String[] command, Map<String, String> env, File workingDirectory) {
+    public static String executeCommand(List<String> command, Map<String, String> env, File workingDirectory) {
         var logger = CSharpierLogger.getInstance();
         try {
             var directoryToLog = workingDirectory == null ? "" : " in " + workingDirectory;
 
             logger.debug("Running " + String.join(" ", command) + directoryToLog);
-            var processBuilder = new ProcessBuilder(GetShellCommandIfNeeded(command));
+            var processBuilder = new ProcessBuilder(command);
 
             if (env == null) {
                 env = new HashMap<>();
@@ -71,14 +72,15 @@ public class ProcessHelper {
         return path;
     }
 
-    // For Mac, we'll have updated the PATH to include the .NET binary. However, setting
-    // the PATH doesn't affect the ProcessBuilder's command, but it will apply to
-    // spawned processes, so we'll run the desired command in the OS's default shell.
-    private static String[] GetShellCommandIfNeeded(String[] command) {
-        if (SystemUtils.IS_OS_MAC) {
-            return new String[] {"/bin/zsh", "-c", String.join(" ", command)};
-        }
-
-        return command;
-    }
+    // TODO see if I can get someone to verify this
+//    // For Mac, we'll have updated the PATH to include the .NET binary. However, setting
+//    // the PATH doesn't affect the ProcessBuilder's command, but it will apply to
+//    // spawned processes, so we'll run the desired command in the OS's default shell.
+//    private static String[] GetShellCommandIfNeeded(String[] command) {
+//        if (SystemUtils.IS_OS_MAC) {
+//            return new String[] {"/bin/zsh", "-c", String.join(" ", command)};
+//        }
+//
+//        return command;
+//    }
 }
