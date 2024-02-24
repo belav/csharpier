@@ -2,6 +2,7 @@ package com.intellij.csharpier;
 
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -9,6 +10,7 @@ import java.nio.charset.Charset;
 public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
     private final boolean useUtf8;
     private final String csharpierPath;
+    private final DotNetProvider dotNetProvider;
     private Logger logger = CSharpierLogger.getInstance();
 
     private Process process = null;
@@ -16,9 +18,10 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     private BufferedReader stdOut;
     public boolean processFailedToStart;
 
-    public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8) {
+    public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8, Project project) {
         this.csharpierPath = csharpierPath;
         this.useUtf8 = useUtf8;
+        this.dotNetProvider = DotNetProvider.getInstance(project);
         this.startProcess();
 
         this.logger.debug("Warm CSharpier with initial format");
@@ -30,8 +33,8 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     private void startProcess() {
         try {
             var processBuilder = new ProcessBuilder(this.csharpierPath, "--pipe-multiple-files");
-            // TODO DOTNET_ROOT
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
+            processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetROot());
             this.process = processBuilder.start();
 
             var charset = this.useUtf8 ? "utf-8" : Charset.defaultCharset().toString();

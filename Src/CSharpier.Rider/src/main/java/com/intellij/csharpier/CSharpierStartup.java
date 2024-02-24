@@ -4,9 +4,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
-import com.jetbrains.rider.NetCoreRuntime;
-import com.jetbrains.rider.runtime.RiderDotNetActiveRuntimeHost;
-import com.jetbrains.rider.RiderEnvironment;
 import org.jetbrains.annotations.NotNull;
 
 public class CSharpierStartup implements StartupActivity, DumbAware {

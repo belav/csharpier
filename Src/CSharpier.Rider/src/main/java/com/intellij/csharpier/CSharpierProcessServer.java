@@ -11,17 +11,20 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import com.google.gson.Gson;
+import com.intellij.openapi.project.Project;
 
 public class CSharpierProcessServer implements ICSharpierProcess, Disposable {
     private final Gson gson = new Gson();
     private final String csharpierPath;
+    private final DotNetProvider dotNetProvider;
     private Logger logger = CSharpierLogger.getInstance();
     private int port;
     private Process process = null;
     public boolean processFailedToStart;
 
-    public CSharpierProcessServer(String csharpierPath) {
+    public CSharpierProcessServer(String csharpierPath, Project project) {
         this.csharpierPath = csharpierPath;
+        this.dotNetProvider = DotNetProvider.getInstance(project);
         this.startProcess();
 
         this.logger.debug("Warm CSharpier with initial format");
@@ -34,8 +37,8 @@ public class CSharpierProcessServer implements ICSharpierProcess, Disposable {
         try {
             var processBuilder = new ProcessBuilder(this.csharpierPath, "--server");
             processBuilder.redirectErrorStream(true);
-            // TODO DOTNET_ROOT
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
+            processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetROot());
             this.process = processBuilder.start();
 
             var reader = new BufferedReader(new InputStreamReader(this.process.getInputStream()));
@@ -43,7 +46,7 @@ public class CSharpierProcessServer implements ICSharpierProcess, Disposable {
             var executor = Executors.newSingleThreadExecutor();
             var future = executor.submit(() -> reader.readLine());
 
-            String output = null;
+            String output;
             try {
                 output = future.get(2, TimeUnit.SECONDS);
             } catch (TimeoutException e) {

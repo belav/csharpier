@@ -5,6 +5,9 @@ This plugin makes use of the dotnet tool [CSharpier](https://github.com/belav/cs
 It uses Roslyn to parse your code and re-prints it using its own rules. 
 The printing process was ported from [prettier](https://prettier.io/) but has evolved over time.
 
+## CSharpier Version
+The plugin determines which version of csharpier is needed to format a give file by looking for a dotnet manifest file. If one is not found it looks for a globally installed version of CSharpier.
+
 ### To format files:
 - Install csharpier
   - as a local tool versioned to your project with `dotnet tool install csharpier`

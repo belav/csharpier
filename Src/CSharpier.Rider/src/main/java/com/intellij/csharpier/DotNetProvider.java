@@ -1,6 +1,7 @@
 package com.intellij.csharpier;
 
-import com.intellij.execution.util.ExecUtil;
+import com.intellij.notification.NotificationGroupManager;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.jetbrains.rider.runtime.RiderDotNetActiveRuntimeHost;
@@ -9,22 +10,28 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 
-// TODO https://github.com/belav/csharpier/pull/1183/files
 public class DotNetProvider {
     private final Logger logger = CSharpierLogger.getInstance();
     private final Project project;
     private String dotNetRoot;
-    private String cliExePath;
     private DotNetCoreRuntime dotNetCoreRuntime;
 
     public DotNetProvider(@NotNull Project project) {
         this.project = project;
 
-        // TODO how do we prevent other things from happening?
-        this.findDotNet();
+        var foundDotNet = this.findDotNet();
+        if (!foundDotNet) {
+
+            var title = "CSharpier unable to run dotnet commands";
+            var message = "CSharpier was unable to determine how to run dotnet commands. Ensure that '.NET CLI executable path' is set properly in your settings and restart.";
+            var notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
+                    .createNotification(title, message, NotificationType.WARNING);
+            notification.notify(this.project);
+        }
     }
 
     static DotNetProvider getInstance(@NotNull Project project) {
@@ -33,16 +40,15 @@ public class DotNetProvider {
 
     private boolean findDotNet() {
         try {
-            this.dotNetCoreRuntime =  RiderDotNetActiveRuntimeHost.Companion.getInstance(project).getDotNetCoreRuntime().getValue();
+            this.dotNetCoreRuntime = RiderDotNetActiveRuntimeHost.Companion.getInstance(project).getDotNetCoreRuntime().getValue();
 
             if (dotNetCoreRuntime.getCliExePath() != null) {
                 logger.debug("Using dotnet found from RiderDotNetActiveRuntimeHost at " + dotNetCoreRuntime.getCliExePath());
-            }
-            else {
+            } else {
                 return false;
             }
 
-            dotNetRoot = Paths.get(this.cliExePath).getParent().toString();
+            dotNetRoot = Paths.get(dotNetCoreRuntime.getCliExePath()).getParent().toString();
 
             return true;
         } catch (Exception ex) {
@@ -53,7 +59,7 @@ public class DotNetProvider {
     }
 
     public String execDotNet(List<String> command, File workingDirectory) {
-        var commands = List.copyOf(command);
+        var commands = new ArrayList<>(command);
         commands.add(0, this.dotNetCoreRuntime.getCliExePath());
 
         var env = Map.of(

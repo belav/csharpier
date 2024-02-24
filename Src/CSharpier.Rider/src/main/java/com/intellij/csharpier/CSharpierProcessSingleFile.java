@@ -1,25 +1,29 @@
 package com.intellij.csharpier;
 
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class CSharpierProcessSingleFile implements ICSharpierProcess {
-    Logger logger = CSharpierLogger.getInstance();
-    String csharpierPath;
+    private final DotNetProvider dotNetProvider;
+    private final Logger logger = CSharpierLogger.getInstance();
+    private final String csharpierPath;
 
-    public CSharpierProcessSingleFile(String csharpierPath) {
+    public CSharpierProcessSingleFile(String csharpierPath, Project project) {
         this.csharpierPath = csharpierPath;
+        this.dotNetProvider = DotNetProvider.getInstance(project);
     }
 
     @Override
     public String formatFile(String content, String fileName) {
+
         try {
             this.logger.debug("Running " + this.csharpierPath + " --write-stdout");
             var processBuilder = new ProcessBuilder(this.csharpierPath, "--write-stdout");
-            // TODO DOTNET_ROOT
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
+            processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetROot());
             processBuilder.redirectErrorStream(true);
             var process = processBuilder.start();
 
@@ -33,7 +37,7 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
 
             var nextCharacter = stdOut.read();
             while (nextCharacter != -1) {
-                output.append((char)nextCharacter);
+                output.append((char) nextCharacter);
                 nextCharacter = stdOut.read();
             }
 
@@ -41,8 +45,7 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
 
             if (process.exitValue() == 0 && !result.contains("Failed to compile so was not formatted.")) {
                 return result;
-            }
-            else {
+            } else {
                 this.logger.error(result);
             }
         } catch (Exception e) {
