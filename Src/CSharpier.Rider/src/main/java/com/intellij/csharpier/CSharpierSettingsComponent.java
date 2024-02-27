@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 
 
 public class CSharpierSettingsComponent implements SearchableConfigurable {
@@ -36,17 +38,42 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
         return "CSharpier";
     }
 
+    private JComponent createSectionHeader(String label) {
+        var panel = new JPanel(new GridBagLayout());
+        var gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+
+        panel.add(new JBLabel(label), gbc);
+
+        gbc = new GridBagConstraints();
+        gbc.gridy = 0;
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(1, 6, 0, 0);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        var separator = new JSeparator(SwingConstants.HORIZONTAL);
+        panel.add(separator, gbc);
+
+        return panel;
+    }
+
     @Override
     public @Nullable JComponent createComponent() {
         var leftIndent = 20;
         var topInset = 10;
 
+
+
+
         return FormBuilder.createFormBuilder()
-                .addLabeledComponent(new JBLabel("General Settings"), new JSeparator())
+                .addComponent(createSectionHeader("General Settings"))
                 .setFormLeftIndent(leftIndent)
                 .addComponent(this.runOnSaveCheckBox, topInset)
                 .setFormLeftIndent(0)
-                .addLabeledComponent(new JBLabel("Developer Settings"), new JSeparator(), 20)
+                .addComponent(createSectionHeader("Developer Settings"), 20)
                 .setFormLeftIndent(leftIndent)
                 .addLabeledComponent(new JBLabel("Directory of custom dotnet-csharpier:"), this.customPathTextField, topInset, false)
                 .addComponent(this.useServerCheckBox, topInset)

@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -38,7 +39,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
     public CSharpierProcessProvider(@NotNull Project project) {
         this.project = project;
-        this.customPathInstaller = new CustomPathInstaller(CSharpierSettings.getInstance(project));
+        this.customPathInstaller = new CustomPathInstaller(project);
 
         for (var fileEditor : FileEditorManager.getInstance(project).getAllEditors()) {
             var path = fileEditor.getFile().getPath();
@@ -55,7 +56,6 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         return project.getService(CSharpierProcessProvider.class);
     }
 
-    // TODO ideally this would warm on document open/focus. But there doesn't seem to be an event for focus
     @Override
     public void documentChanged(@NotNull DocumentEvent event) {
         var document = event.getDocument();
@@ -157,11 +157,8 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
                 "Unable to find dotnet-tools.json, falling back to running dotnet csharpier --version"
         );
 
-        Map<String, String> env = new HashMap<>();
-        env.put("DOTNET_NOLOGO", "1");
-
-        var command = new String[]{"dotnet", "csharpier", "--version"};
-        var version = ProcessHelper.ExecuteCommand(command, env, new File(directoryThatContainsFile));
+        var command = List.of("csharpier", "--version");
+        var version = DotNetProvider.getInstance(this.project).execDotNet(command, new File(directoryThatContainsFile));
 
         if (version == null) {
             version = "";
@@ -222,7 +219,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
             var versionWeCareAbout = Integer.parseInt(installedVersion[1]);
 
             if (CSharpierSettings.getInstance(this.project).getUseServer()) {
-                return new CSharpierProcessServer(customPath);
+                return new CSharpierProcessServer(customPath, this.project);
             }
 
             if (versionWeCareAbout < 12) {
@@ -236,12 +233,12 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
                 }
 
 
-                return new CSharpierProcessSingleFile(customPath);
+                return new CSharpierProcessSingleFile(customPath, this.project);
             }
 
             var useUtf8 = versionWeCareAbout >= 14;
 
-            var csharpierProcess = new CSharpierProcessPipeMultipleFiles(customPath, useUtf8);
+            var csharpierProcess = new CSharpierProcessPipeMultipleFiles(customPath, useUtf8, this.project);
             if (csharpierProcess.processFailedToStart) {
                 this.displayFailureMessage();
             }

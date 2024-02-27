@@ -2,6 +2,11 @@
 
 # csharpier-rider Changelog
 
+## [1.6.0]
+- Better support for dotnet commands.
+  - Uses the Rider setting for '.NET CLI executable path' for running dotnet commands
+  - If unable to run dotnet commands, show an error message
+
 ## [1.5.3]
 - Add experimental support for CSharpier server
 
