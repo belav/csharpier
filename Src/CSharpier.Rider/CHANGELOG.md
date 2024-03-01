@@ -2,6 +2,10 @@
 
 # csharpier-rider Changelog
 
+## [1.6.1]
+- Delay lookup of '.NET CLI executable path' until it is needed
+- Fall back to looking for dotnet on PATH if '.NET CLI executable path' is not available
+
 ## [1.6.0]
 - Better support for dotnet commands.
   - Uses the Rider setting for '.NET CLI executable path' for running dotnet commands

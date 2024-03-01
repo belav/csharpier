@@ -41,13 +41,6 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         this.project = project;
         this.customPathInstaller = new CustomPathInstaller(project);
 
-        for (var fileEditor : FileEditorManager.getInstance(project).getAllEditors()) {
-            var path = fileEditor.getFile().getPath();
-            if (path.toLowerCase().endsWith(".cs")) {
-                this.findAndWarmProcess(path);
-            }
-        }
-
         EditorFactory.getInstance().getEventMulticaster().addDocumentListener(this, this);
     }
 
@@ -72,6 +65,9 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
     }
 
     private void findAndWarmProcess(String filePath) {
+        if (!DotNetProvider.getInstance(this.project).foundDotNet()) {
+            return;
+        }
         var directory = Path.of(filePath).getParent().toString();
         var now = Instant.now().toEpochMilli();
         var lastWarmed = this.lastWarmedByDirectory.getOrDefault(directory, Long.valueOf(0));
@@ -98,6 +94,10 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
     }
 
     public ICSharpierProcess getProcessFor(String filePath) {
+        if (!DotNetProvider.getInstance(this.project).foundDotNet()) {
+            return NullCSharpierProcess.Instance;
+        }
+
         var directory = Path.of(filePath).getParent().toString();
         var version = this.csharpierVersionByDirectory.getOrDefault(directory, null);
         if (version == null) {

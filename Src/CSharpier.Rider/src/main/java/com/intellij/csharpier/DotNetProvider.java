@@ -5,20 +5,17 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.jetbrains.rider.runtime.RiderDotNetActiveRuntimeHost;
-import com.jetbrains.rider.runtime.dotNetCore.DotNetCoreRuntime;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 
 public class DotNetProvider {
     private final Logger logger = CSharpierLogger.getInstance();
     private final Project project;
     private String dotNetRoot;
-    private DotNetCoreRuntime dotNetCoreRuntime;
+    private String cliExePath;
 
     public DotNetProvider(@NotNull Project project) {
         this.project = project;
@@ -27,9 +24,8 @@ public class DotNetProvider {
         if (!foundDotNet) {
 
             var title = "CSharpier unable to run dotnet commands";
-            var message = "CSharpier was unable to determine how to run dotnet commands. Ensure that '.NET CLI executable path' is set properly in your settings and restart.";
-            var notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
-                    .createNotification(title, message, NotificationType.WARNING);
+            var message = "CSharpier was unable to determine how to run dotnet commands. Ensure that '.NET CLI executable path' is set properly in your settings or dotnet is available on PATH and restart.";
+            var notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier").createNotification(title, message, NotificationType.WARNING);
             notification.notify(this.project);
         }
     }
@@ -40,15 +36,23 @@ public class DotNetProvider {
 
     private boolean findDotNet() {
         try {
-            this.dotNetCoreRuntime = RiderDotNetActiveRuntimeHost.Companion.getInstance(project).getDotNetCoreRuntime().getValue();
+            var dotNetCoreRuntime = RiderDotNetActiveRuntimeHost.Companion.getInstance(project).getDotNetCoreRuntime().getValue();
 
-            if (dotNetCoreRuntime.getCliExePath() != null) {
-                logger.debug("Using dotnet found from RiderDotNetActiveRuntimeHost at " + dotNetCoreRuntime.getCliExePath());
+            if (!CSharpierSettings.getInstance(this.project).getSkipCliExePath()
+                    && dotNetCoreRuntime != null
+                    && dotNetCoreRuntime.getCliExePath() != null) {
+                this.logger.debug("Using dotnet found from RiderDotNetActiveRuntimeHost at " + dotNetCoreRuntime.getCliExePath());
+                this.cliExePath = dotNetCoreRuntime.getCliExePath();
             } else {
-                return false;
+                this.cliExePath = DotNetFinder.findOnPath(this.logger);
+
+                if (this.cliExePath == null) {
+                    return false;
+                }
+                this.logger.debug("Found dotnet at " + this.cliExePath);
             }
 
-            dotNetRoot = Paths.get(dotNetCoreRuntime.getCliExePath()).getParent().toString();
+            this.dotNetRoot = Paths.get(this.cliExePath).getParent().toString();
 
             return true;
         } catch (Exception ex) {
@@ -60,17 +64,20 @@ public class DotNetProvider {
 
     public String execDotNet(List<String> command, File workingDirectory) {
         var commands = new ArrayList<>(command);
-        commands.add(0, this.dotNetCoreRuntime.getCliExePath());
+        commands.add(0, this.cliExePath);
 
-        var env = Map.of(
-                "DOTNET_NOLOGO", "1",
-                "DOTNET_CLI_TELEMETRY_OPTOUT", "1",
-                "DOTNET_SKIP_FIRST_TIME_EXPERIENCE", "1");
+        var env = Map.of("DOTNET_NOLOGO", "1", "DOTNET_CLI_TELEMETRY_OPTOUT", "1", "DOTNET_SKIP_FIRST_TIME_EXPERIENCE", "1");
 
         return ProcessHelper.executeCommand(commands, env, workingDirectory);
     }
 
-    public String getDotNetROot() {
+    public String getDotNetRoot() {
         return this.dotNetRoot;
     }
+
+    public boolean foundDotNet() {
+        return this.cliExePath != null;
+    }
+
+
 }
