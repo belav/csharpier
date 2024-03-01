@@ -27,7 +27,7 @@ public class DotNetFinder {
 
         String version = null;
 
-        String[] lines = dotnetInfo.split("\\r?\\n");
+        var lines = dotnetInfo.split("\\r?\\n");
         for (var line : lines) {
             var pattern = Pattern.compile("^\\s*Version:\\s*([^\\s].*)$");
             var matcher = pattern.matcher(line);

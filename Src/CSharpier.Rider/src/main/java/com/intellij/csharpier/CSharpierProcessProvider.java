@@ -65,6 +65,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
     }
 
     private void findAndWarmProcess(String filePath) {
+        // if we didn't find dotnet bail out so we don't get extra errors about being unable to format
         if (!DotNetProvider.getInstance(this.project).foundDotNet()) {
             return;
         }
@@ -94,6 +95,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
     }
 
     public ICSharpierProcess getProcessFor(String filePath) {
+        // if we didn't find dotnet bail out so we don't get extra errors about being unable to format
         if (!DotNetProvider.getInstance(this.project).foundDotNet()) {
             return NullCSharpierProcess.Instance;
         }
