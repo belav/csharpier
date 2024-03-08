@@ -16,9 +16,20 @@ public class DotNetProvider {
     private final Project project;
     private String dotNetRoot;
     private String cliExePath;
+    private boolean isInitialized;
 
     public DotNetProvider(@NotNull Project project) {
         this.project = project;
+    }
+
+    static DotNetProvider getInstance(@NotNull Project project) {
+        return project.getService(DotNetProvider.class);
+    }
+
+    private synchronized void initializeIfNeeded() {
+        if (this.isInitialized) {
+            return;
+        }
 
         var foundDotNet = this.findDotNet();
         if (!foundDotNet) {
@@ -28,10 +39,8 @@ public class DotNetProvider {
             var notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier").createNotification(title, message, NotificationType.WARNING);
             notification.notify(this.project);
         }
-    }
 
-    static DotNetProvider getInstance(@NotNull Project project) {
-        return project.getService(DotNetProvider.class);
+        this.isInitialized = true;
     }
 
     private boolean findDotNet() {
@@ -63,6 +72,7 @@ public class DotNetProvider {
     }
 
     public String execDotNet(List<String> command, File workingDirectory) {
+        this.initializeIfNeeded();
         var commands = new ArrayList<>(command);
         commands.add(0, this.cliExePath);
 
@@ -72,10 +82,12 @@ public class DotNetProvider {
     }
 
     public String getDotNetRoot() {
+        this.initializeIfNeeded();
         return this.dotNetRoot;
     }
 
     public boolean foundDotNet() {
+        this.initializeIfNeeded();
         return this.cliExePath != null;
     }
 

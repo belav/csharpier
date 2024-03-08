@@ -1,6 +1,7 @@
 package com.intellij.csharpier;
 
 import com.intellij.openapi.diagnostic.Logger;
+import org.apache.commons.lang.SystemUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
 public class DotNetFinder {
 
     public static String findOnPath(Logger logger) {
-        logger.debug("Trying to find dotnet on PATH");
+        logger.debug("Trying to find dotnet on PATH using dotnet --info");
 
         var env = Map.of(
                 "DOTNET_CLI_UI_LANGUAGE", "en-US",
@@ -21,6 +22,23 @@ public class DotNetFinder {
                 "DOTNET_CLI_TELEMETRY_OPTOUT", "1",
                 "DOTNET_SKIP_FIRST_TIME_EXPERIENCE", "1");
         var dotnetInfo = ProcessHelper.executeCommand(List.of("dotnet", "--info"), env, null);
+        if (dotnetInfo == null && !SystemUtils.IS_OS_WINDOWS)
+        {
+            logger.debug("Trying to find dotnet on PATH using sh -c dotnet --info");
+            dotnetInfo = ProcessHelper.executeCommand(List.of("sh", "-c", "dotnet --info"), env, null);
+        }
+        if (dotnetInfo == null && SystemUtils.IS_OS_MAC) {
+            logger.debug("Trying to find dotnet on PATH using /bin/zsh -c dotnet --info");
+
+            // For Mac, the .NET binary isn't available for ProcessBuilder, so we'll add the default
+            // installation location to the PATH. We'll prefer the ARM version and fallback to the x64.
+            var path = System.getenv("PATH");
+            path += ":/usr/local/share/dotnet:/usr/local/share/dotnet/x64/dotnet";
+            env = new HashMap<>(env);
+            env.put("PATH", path);
+            dotnetInfo = ProcessHelper.executeCommand(List.of("/bin/zsh", "-c", "dotnet --info"), env, null);
+        }
+
         if (dotnetInfo == null) {
             return null;
         }
