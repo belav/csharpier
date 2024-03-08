@@ -2,6 +2,10 @@
 
 # csharpier-rider Changelog
 
+## [1.6.2]
+- Fix issues with lookup of '.NET CLI executable path', csharpier will now wait until rider is ready with the information.
+- No more falling back to `PATH`
+
 ## [1.6.1]
 - Delay lookup of '.NET CLI executable path' until it is needed
 - Fall back to looking for dotnet on PATH if '.NET CLI executable path' is not available

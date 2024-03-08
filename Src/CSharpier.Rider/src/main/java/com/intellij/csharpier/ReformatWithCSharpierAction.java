@@ -27,6 +27,7 @@ public class ReformatWithCSharpierAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
+        logger.info("update!");
         var virtualFile = e.getData(PlatformDataKeys.VIRTUAL_FILE);
         if (virtualFile == null) {
             e.getPresentation().setVisible(false);

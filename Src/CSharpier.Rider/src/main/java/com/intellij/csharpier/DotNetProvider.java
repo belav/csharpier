@@ -16,7 +16,6 @@ public class DotNetProvider {
     private final Project project;
     private String dotNetRoot;
     private String cliExePath;
-    private boolean isInitialized;
 
     public DotNetProvider(@NotNull Project project) {
         this.project = project;
@@ -26,11 +25,7 @@ public class DotNetProvider {
         return project.getService(DotNetProvider.class);
     }
 
-    private synchronized void initializeIfNeeded() {
-        if (this.isInitialized) {
-            return;
-        }
-
+    void initialize() {
         var foundDotNet = this.findDotNet();
         if (!foundDotNet) {
 
@@ -39,26 +34,17 @@ public class DotNetProvider {
             var notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier").createNotification(title, message, NotificationType.WARNING);
             notification.notify(this.project);
         }
-
-        this.isInitialized = true;
     }
 
     private boolean findDotNet() {
         try {
             var dotNetCoreRuntime = RiderDotNetActiveRuntimeHost.Companion.getInstance(project).getDotNetCoreRuntime().getValue();
 
-            if (!CSharpierSettings.getInstance(this.project).getSkipCliExePath()
-                    && dotNetCoreRuntime != null
-                    && dotNetCoreRuntime.getCliExePath() != null) {
+            if (dotNetCoreRuntime != null && dotNetCoreRuntime.getCliExePath() != null) {
                 this.logger.debug("Using dotnet found from RiderDotNetActiveRuntimeHost at " + dotNetCoreRuntime.getCliExePath());
                 this.cliExePath = dotNetCoreRuntime.getCliExePath();
             } else {
-                this.cliExePath = DotNetFinder.findOnPath(this.logger);
-
-                if (this.cliExePath == null) {
-                    return false;
-                }
-                this.logger.debug("Found dotnet at " + this.cliExePath);
+                return false;
             }
 
             this.dotNetRoot = Paths.get(this.cliExePath).getParent().toString();
@@ -72,7 +58,6 @@ public class DotNetProvider {
     }
 
     public String execDotNet(List<String> command, File workingDirectory) {
-        this.initializeIfNeeded();
         var commands = new ArrayList<>(command);
         commands.add(0, this.cliExePath);
 
@@ -82,12 +67,10 @@ public class DotNetProvider {
     }
 
     public String getDotNetRoot() {
-        this.initializeIfNeeded();
         return this.dotNetRoot;
     }
 
     public boolean foundDotNet() {
-        this.initializeIfNeeded();
         return this.cliExePath != null;
     }
 
