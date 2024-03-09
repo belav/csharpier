@@ -11,7 +11,7 @@ Use `csharpier-ignore` comments to bypass formatting specific parts of files.
 Add a `.csharpierignore` file to ignore additional files and folders. The file uses [gitignore syntax](https://git-scm.com/docs/gitignore#_pattern_format)
 
 Example
-```
+```ignore
 Uploads/
 **/App_Data/*.cs
 ```
@@ -38,7 +38,7 @@ _See [Configuration](CLI.md) for including these files_
 
 Add a `// csharpier-ignore` comment to exclude the next node from formatting. This is valid on statements and members.
 
-```c#
+```csharp
 
 // csharpier-ignore
 public class Unformatted     { 
@@ -71,7 +71,7 @@ public class ClassName
 ```
 
 Use a ranged ignore to exclude multiple lines from formatting. A range is valid around statements and members.
-```c#
+```csharp
 // csharpier-ignore-start
 public class Unformatted1     { }
 public class Unformatted2     { }
@@ -110,7 +110,7 @@ public class ClassName
 
 As of 0.23.0 both types of ignores can include a description as part of the comment. The description must be seperated from the comment by at least one - character.
 
-```c#
+```csharp
 // csharpier-ignore - class copied as-is from another project
 public class Unformatted     { 
         private string     unformatted;
