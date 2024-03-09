@@ -13,7 +13,6 @@ import java.util.concurrent.TimeoutException;
 import com.google.gson.Gson;
 import com.intellij.openapi.project.Project;
 
-// TODO split these changes out into another PR. maybe queue them up with any other rider changes
 public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
     private final Gson gson = new Gson();
     private final String csharpierPath;
