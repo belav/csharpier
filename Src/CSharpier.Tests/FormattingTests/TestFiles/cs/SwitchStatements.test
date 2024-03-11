@@ -112,5 +112,20 @@ public class ClassName
             case (_, SomeValue) when !isEquality:
                 return;
         }
+
+        switch (someValue)
+        {
+            case 0:
+            {
+                // dedented because the only statement is a block
+                break;
+            }
+
+            case 1:
+                {
+                    // indented because there are two statements, a block then a break
+                }
+                break;
+        }
     }
 }
