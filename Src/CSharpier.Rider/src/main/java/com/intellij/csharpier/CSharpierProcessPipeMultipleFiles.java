@@ -34,7 +34,7 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
         try {
             var processBuilder = new ProcessBuilder(this.csharpierPath, "--pipe-multiple-files");
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
-            processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetROot());
+            processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
             this.process = processBuilder.start();
 
             var charset = this.useUtf8 ? "utf-8" : Charset.defaultCharset().toString();
