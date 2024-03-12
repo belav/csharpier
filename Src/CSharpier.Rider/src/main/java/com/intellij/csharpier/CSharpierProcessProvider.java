@@ -220,7 +220,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
             var installedVersion = version.split("\\.");
             var versionWeCareAbout = Integer.parseInt(installedVersion[1]);
 
-            if (CSharpierSettings.getInstance(this.project).getUseServer()) {
+            if (versionWeCareAbout >= 28 || CSharpierSettings.getInstance(this.project).getUseServer()) {
                 return new CSharpierProcessServer(customPath, this.project);
             }
 
