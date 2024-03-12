@@ -20,7 +20,6 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     private final Project project;
     private JBCheckBox runOnSaveCheckBox = new JBCheckBox("Run on Save");
     private JBCheckBox useServerCheckBox = new JBCheckBox("Use CSharpier Server - experimental support as of 0.27.2");
-    private JBCheckBox skipCliExePath = new JBCheckBox("Skip CLI executable path");
     private JBTextField customPathTextField = new JBTextField();
 
     public CSharpierSettingsComponent(@NotNull Project project) {
@@ -78,7 +77,6 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
                 .setFormLeftIndent(leftIndent)
                 .addLabeledComponent(new JBLabel("Directory of custom dotnet-csharpier:"), this.customPathTextField, topInset, false)
                 .addComponent(this.useServerCheckBox, topInset)
-                .addComponent(this.skipCliExePath, topInset)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
     }
@@ -87,7 +85,6 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     public boolean isModified() {
         return CSharpierSettings.getInstance(this.project).getRunOnSave() != this.runOnSaveCheckBox.isSelected()
                 || CSharpierSettings.getInstance(this.project).getUseServer() != this.useServerCheckBox.isSelected()
-                || CSharpierSettings.getInstance(this.project).getSkipCliExePath() != this.skipCliExePath.isSelected()
                 || CSharpierSettings.getInstance(this.project).getCustomPath() != this.customPathTextField.getText();
     }
 
@@ -98,7 +95,6 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
         settings.setRunOnSave(this.runOnSaveCheckBox.isSelected());
         settings.setCustomPath(this.customPathTextField.getText());
         settings.setUseServer(this.useServerCheckBox.isSelected());
-        settings.setSkipCliExePath(this.skipCliExePath.isSelected());
     }
 
     @Override
@@ -107,6 +103,5 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
         this.runOnSaveCheckBox.setSelected(settings.getRunOnSave());
         this.useServerCheckBox.setSelected(settings.getUseServer());
         this.customPathTextField.setText(settings.getCustomPath());
-        this.skipCliExePath.setSelected(settings.getSkipCliExePath());
     }
 }

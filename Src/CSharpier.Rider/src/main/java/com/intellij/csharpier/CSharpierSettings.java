@@ -49,16 +49,6 @@ public class CSharpierSettings
         this.useServer = useServer;
     }
 
-    private boolean skipCliExePath;
-
-    public boolean getSkipCliExePath() {
-        return this.skipCliExePath;
-    }
-
-    public void setSkipCliExePath(boolean skipCliExePath) {
-        this.skipCliExePath = skipCliExePath;
-    }
-
     @Override
     public CSharpierSettings getState() {
         return this;
