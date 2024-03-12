@@ -1,13 +1,1 @@
-﻿CSharpier.CodeFormatterOptions.EndOfLine.get -> CSharpier.EndOfLine
-CSharpier.CodeFormatterOptions.EndOfLine.init -> void
-CSharpier.CodeFormatterOptions.IndentSize.get -> int
-CSharpier.CodeFormatterOptions.IndentSize.init -> void
-CSharpier.CodeFormatterOptions.IndentStyle.get -> CSharpier.IndentStyle
-CSharpier.CodeFormatterOptions.IndentStyle.init -> void
-CSharpier.EndOfLine
-CSharpier.EndOfLine.Auto = 0 -> CSharpier.EndOfLine
-CSharpier.EndOfLine.CRLF = 1 -> CSharpier.EndOfLine
-CSharpier.EndOfLine.LF = 2 -> CSharpier.EndOfLine
-CSharpier.IndentStyle
-CSharpier.IndentStyle.Spaces = 0 -> CSharpier.IndentStyle
-CSharpier.IndentStyle.Tabs = 1 -> CSharpier.IndentStyle
+﻿

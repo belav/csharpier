@@ -88,7 +88,7 @@ public class Program
                     o == "."
                         // .csharpierignore gets confused by . so just don't include it
                         ? Directory.GetCurrentDirectory()
-                        : Path.Combine(Directory.GetCurrentDirectory(), o)
+                        : Path.GetFullPath(o)
                 )
                 .ToArray();
         }
