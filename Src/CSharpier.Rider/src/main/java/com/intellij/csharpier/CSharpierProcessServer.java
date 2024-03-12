@@ -38,7 +38,7 @@ public class CSharpierProcessServer implements ICSharpierProcess, Disposable {
             var processBuilder = new ProcessBuilder(this.csharpierPath, "--server");
             processBuilder.redirectErrorStream(true);
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
-            processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetROot());
+            processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
             this.process = processBuilder.start();
 
             var reader = new BufferedReader(new InputStreamReader(this.process.getInputStream()));
