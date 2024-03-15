@@ -64,7 +64,7 @@ Currently CSharpier only has basic support for understanding how to format code 
 It will attempt to determine which sets of preprocessor symbols are needed for roslyn to parse all the code in each file.
 
 For example in the following code block, the following symbol sets would be needed ["FIRST", "SECOND,THIRD", ""]
-```c#
+```csharp
 #if FIRST
 // some code
 #elif SECOND && THIRD

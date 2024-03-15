@@ -47,8 +47,8 @@ export default function Home() {
                         <li>Supports validating the changes it makes.</li>
                     </ul>
                 </div>
-                <div class="codeContainer">
-                    <div class="codeExample" />
+                <div className="codeContainer">
+                    <div className="codeExample" />
                 </div>
             </main>
         </Layout>

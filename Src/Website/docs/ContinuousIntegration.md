@@ -41,4 +41,3 @@ Normally when using a code formatter like CSharpier, you'll want to ensure that 
              dotnet csharpier --check .
    
    ```
-
