@@ -6,7 +6,6 @@ import org.apache.commons.lang.SystemUtils;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -51,7 +50,7 @@ public class CustomPathInstaller {
 
     private boolean validateInstall(String pathToDirectoryForVersion, String version) {
         try {
-            var env = Map.of("DOTNET_ROOT", this.dotNetProvider.getDotNetROot());
+            var env = Map.of("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
 
             var command = List.of(this.getPathForVersion(version), "--version" );
             var output = ProcessHelper.executeCommand(command, env, new File(pathToDirectoryForVersion)).trim();

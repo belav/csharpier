@@ -28,7 +28,11 @@ public class ReformatWithCSharpierAction extends AnAction {
     @Override
     public void update(@NotNull AnActionEvent e) {
         var virtualFile = e.getData(PlatformDataKeys.VIRTUAL_FILE);
-        if (virtualFile == null) {
+
+        if (virtualFile == null
+                // this update can get hit before CSharpierStartup is done
+                // so bail early if we didn't find dotnet yet, it should be there when startup is done
+                || !DotNetProvider.getInstance(e.getProject()).foundDotNet()) {
             e.getPresentation().setVisible(false);
             return;
         }

@@ -2,6 +2,17 @@
 
 # csharpier-rider Changelog
 
+## [1.6.3]
+- Fix issue with occasional exception "java.lang.IllegalStateException: |E| Wrong thread RdOptionalProperty"
+
+## [1.6.2]
+- Fix issues with lookup of '.NET CLI executable path', csharpier will now wait until rider is ready with the information.
+- No more falling back to `PATH`
+
+## [1.6.1]
+- Delay lookup of '.NET CLI executable path' until it is needed
+- Fall back to looking for dotnet on PATH if '.NET CLI executable path' is not available
+
 ## [1.6.0]
 - Better support for dotnet commands.
   - Uses the Rider setting for '.NET CLI executable path' for running dotnet commands
