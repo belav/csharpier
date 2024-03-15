@@ -24,6 +24,7 @@ const config = {
             ({
                 docs: {
                     sidebarPath: require.resolve("./sidebars.js"),
+                    breadcrumbs: false,
                     editUrl: githubUrl + "/tree/master/",
                 },
                 theme: {
@@ -37,7 +38,7 @@ const config = {
         /** @type {import("@docusaurus/preset-classic").ThemeConfig} */
         ({
             colorMode: {
-                disableSwitch: true,
+                respectPrefersColorScheme: true,
             },
             navbar: {
                 title: "CSharpier",
