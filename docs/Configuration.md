@@ -90,6 +90,8 @@ CSharpier supports configuration via an `.editorconfig` file. A `.csharpierrc*` 
 charset = utf-8
 insert_final_newline = true
 trim_trailing_whitespace = true
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
 
 # Configurable behaviors
 # end_of_line = lf - there is no 'auto' with a .editorconfig
