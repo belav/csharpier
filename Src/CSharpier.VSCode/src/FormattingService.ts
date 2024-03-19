@@ -1,5 +1,5 @@
 import { performance } from "perf_hooks";
-import { languages, Range, TextDocument, TextEdit } from "vscode";
+import { languages, Range, TextDocument, TextEdit, TextEditor, window } from "vscode";
 import { CSharpierProcessProvider } from "./CSharpierProcessProvider";
 import { Logger } from "./Logger";
 
@@ -11,34 +11,45 @@ export class FormattingService {
         this.logger = logger;
         this.csharpierProcessProvider = csharpierProcessProvider;
 
-        languages.registerDocumentFormattingEditProvider("csharp", {
-            provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
+        languages.registerDocumentRangeFormattingEditProvider("csharp", {
+            provideDocumentRangeFormattingEdits: this.provideDocumentRangeFormattingEdits,
         });
     }
 
-    private provideDocumentFormattingEdits = async (document: TextDocument) => {
+    private provideDocumentRangeFormattingEdits = async (document: TextDocument, range: Range) => {
         this.logger.info("Formatting started for " + document.fileName + ".");
         const startTime = performance.now();
-        const text = document.getText();
+
+        const editor = window.activeTextEditor;
+        const nonEmptyLine = editor?.document.lineAt(range.start.line);
+        if (!nonEmptyLine) {
+            return [];
+        }
+        const indentation = nonEmptyLine.text.match(/^\s*/)?.[0] ?? "";
+
+        const fullRange = new Range(nonEmptyLine.range.start, range.end);
+
+        const text = document.getText(fullRange);
         const newText = await this.format(text, document.fileName);
+        const formattedText = newText.replace(/^(?!$)/gm, indentation);
+
         const endTime = performance.now();
         this.logger.info("Formatted in " + (endTime - startTime) + "ms");
         if (!newText || newText === text) {
-            this.logger.debug(
-                "Skipping write because " + !newText
-                    ? "result is empty"
-                    : "current document equals result",
-            );
+            const errorMessage = "Skipping write because " + !newText
+                    ? "File is empty or selected text is an incomplete code region"
+                    : "current document equals result";
+            
+            console.warn("Error formatting document: " + errorMessage);
             return [];
         }
 
-        return [TextEdit.replace(FormattingService.fullDocumentRange(document), newText)];
-    };
+        if (formattedText === text) {
+            return [];
+        }
 
-    private static fullDocumentRange(document: TextDocument): Range {
-        const lastLineId = document.lineCount - 1;
-        return new Range(0, 0, lastLineId, document.lineAt(lastLineId).text.length);
-    }
+        return [TextEdit.replace(fullRange, formattedText)];
+    };
 
     private format = async (content: string, filePath: string) => {
         return this.csharpierProcessProvider.getProcessFor(filePath).formatFile(content, filePath);
