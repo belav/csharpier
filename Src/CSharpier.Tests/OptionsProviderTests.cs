@@ -462,6 +462,44 @@ indent_size = 2
     }
 
     [Test]
+    public async Task Should_Support_EditorConfig_Tabs_With_Glob_Braces()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            @"
+[*]
+indent_size = 1
+
+[*.{cs}]
+indent_size = 2
+"
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+        result.TabWidth.Should().Be(2);
+    }
+
+    [Test]
+    public async Task Should_Support_EditorConfig_Tabs_With_Glob_Braces_Multiples()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            @"
+[*]
+indent_size = 1
+
+[*.{csx,cs}]
+indent_size = 2
+"
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+        result.TabWidth.Should().Be(2);
+    }
+
+    [Test]
     public async Task Should_Find_EditorConfig_In_Parent_Directory()
     {
         var context = new TestContext();

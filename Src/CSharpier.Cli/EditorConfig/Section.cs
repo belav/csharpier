@@ -1,12 +1,20 @@
 namespace CSharpier.Cli.EditorConfig;
 
-using DotNet.Globbing;
 using IniParser.Model;
 
 public class Section
 {
-    private readonly Glob matcher;
-    public string Pattern { get; }
+    private static readonly GlobMatcherOptions globOptions =
+        new()
+        {
+            MatchBase = true,
+            Dot = true,
+            AllowWindowsPaths = true,
+            AllowSingleBraceSets = true,
+        };
+
+    private readonly GlobMatcher matcher;
+
     public string? IndentStyle { get; }
     public string? IndentSize { get; }
     public string? TabWidth { get; }
@@ -15,8 +23,8 @@ public class Section
 
     public Section(SectionData section, string directory)
     {
-        this.Pattern = FixGlob(section.SectionName, directory);
-        this.matcher = Glob.Parse(this.Pattern);
+        var pattern = FixGlob(section.SectionName, directory);
+        this.matcher = GlobMatcher.Create(pattern, globOptions);
         this.IndentStyle = section.Keys["indent_style"];
         this.IndentSize = section.Keys["indent_size"];
         this.TabWidth = section.Keys["tab_width"];
