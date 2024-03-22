@@ -83,14 +83,7 @@ public class Program
         }
         else
         {
-            directoryOrFile = directoryOrFile!
-                .Select(o =>
-                    o == "."
-                        // .csharpierignore gets confused by . so just don't include it
-                        ? Directory.GetCurrentDirectory()
-                        : Path.GetFullPath(o)
-                )
-                .ToArray();
+            directoryOrFile = directoryOrFile!.Select(Path.GetFullPath).ToArray();
         }
 
         var commandLineOptions = new CommandLineOptions

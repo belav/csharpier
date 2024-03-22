@@ -194,15 +194,14 @@ max_line_length = 10"
         result.ExitCode.Should().Be(0);
     }
 
-    [Test]
-    public async Task Should_Print_NotFound()
+    [TestCase("BasicFile.cs")]
+    [TestCase("./BasicFile.cs")]
+    public async Task Should_Print_NotFound(string path)
     {
-        var result = await new CsharpierProcess().WithArguments("/BasicFile.cs").ExecuteAsync();
+        var result = await new CsharpierProcess().WithArguments(path).ExecuteAsync();
 
         result.Output.Should().BeEmpty();
-        result
-            .ErrorOutput.Should()
-            .StartWith("There was no file or directory found at /BasicFile.cs");
+        result.ErrorOutput.Should().StartWith("There was no file or directory found at " + path);
         result.ExitCode.Should().Be(1);
     }
 
