@@ -42,7 +42,7 @@ public class ClassName
 }
 
 class ClassName
-{    
+{
     #region Region
     // csharpier-ignore-start
     public string   Field;
