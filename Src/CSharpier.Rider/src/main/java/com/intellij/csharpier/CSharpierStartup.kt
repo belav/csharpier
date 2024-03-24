@@ -33,7 +33,6 @@ class CSharpierStartup : StartupActivity, DumbAware {
                 }
 
                 CSharpierProcessProvider.getInstance(project)
-                ApplicationManager.getApplication().getService(ReformatWithCSharpierOnSave::class.java)
                 DotNetProvider.getInstance(project).initialize();
 
                 return@adviseUntil true
