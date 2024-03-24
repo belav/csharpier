@@ -2,9 +2,10 @@ package com.intellij.csharpier;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileDocumentManagerListener;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class ReformatWithCSharpierOnSaveListener implements FileDocumentManagerListener {
@@ -28,12 +29,12 @@ public class ReformatWithCSharpierOnSaveListener implements FileDocumentManagerL
     }
 
     private Project GetProject(@NotNull Document document) {
-        var editors = EditorFactory.getInstance().getEditors(document);
-        if (editors.length > 0) {
-            return editors[0].getProject();
+        var virtualFile = FileDocumentManager.getInstance().getFile(document);
+        if (virtualFile == null) {
+            return null;
         }
 
-        return null;
+        return ProjectUtil.guessProjectForContentFile(virtualFile);
     }
 
 }
