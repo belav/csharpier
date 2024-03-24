@@ -40,3 +40,12 @@ public class ClassName
         #endregion one
     ;
 }
+
+class ClassName
+{
+    #region Region
+    // csharpier-ignore-start
+    public string   Field;
+    // csharpier-ignore-end
+    #endregion
+}
