@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.6.4]
+- Better support for format on save - now works when files are saved via building/running the project.
+
 ## [1.6.3]
 - Fix issue with occasional exception "java.lang.IllegalStateException: |E| Wrong thread RdOptionalProperty"
 
