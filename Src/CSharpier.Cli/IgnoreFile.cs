@@ -2,7 +2,7 @@ using System.IO.Abstractions;
 
 namespace CSharpier.Cli;
 
-public class IgnoreFile
+internal class IgnoreFile
 {
     protected Ignore.Ignore Ignore { get; }
     protected string IgnoreBaseDirectoryPath { get; }
@@ -105,7 +105,7 @@ public class IgnoreFile
     }
 }
 
-public class InvalidIgnoreFileException : Exception
+internal class InvalidIgnoreFileException : Exception
 {
     public InvalidIgnoreFileException(string message, Exception exception)
         : base(message, exception) { }

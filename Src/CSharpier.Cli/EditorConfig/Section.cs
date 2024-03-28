@@ -3,7 +3,7 @@ namespace CSharpier.Cli.EditorConfig;
 using DotNet.Globbing;
 using IniParser.Model;
 
-public class Section
+internal class Section
 {
     private readonly Glob matcher;
     public string Pattern { get; }

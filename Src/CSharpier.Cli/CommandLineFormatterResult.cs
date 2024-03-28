@@ -1,6 +1,6 @@
 namespace CSharpier.Cli;
 
-public class CommandLineFormatterResult
+internal class CommandLineFormatterResult
 {
     // these are fields instead of properties so that Interlocked.Increment may be used on them.
     public int FailedSyntaxTreeValidation;
