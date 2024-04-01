@@ -6,6 +6,7 @@ public class CodeFormatterOptions
     public IndentStyle IndentStyle { get; init; } = IndentStyle.Spaces;
     public int IndentSize { get; init; } = 4;
     public EndOfLine EndOfLine { get; init; } = EndOfLine.Auto;
+    public bool IncludeGenerated { get; init; }
 }
 
 public enum IndentStyle

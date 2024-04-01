@@ -196,6 +196,7 @@ max_line_length = 10"
 
     [TestCase("BasicFile.cs")]
     [TestCase("./BasicFile.cs")]
+    [TestCase("/BasicFile.cs")]
     public async Task Should_Print_NotFound(string path)
     {
         var result = await new CsharpierProcess().WithArguments(path).ExecuteAsync();
