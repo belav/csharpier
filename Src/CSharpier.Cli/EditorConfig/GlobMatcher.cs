@@ -19,7 +19,7 @@ using System.Text.RegularExpressions;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
 ///<summary>Contains options that control how Minimatch matches strings.</summary>
-public class GlobMatcherOptions
+internal class GlobMatcherOptions
 {
     ///<summary>Suppresses the behavior of treating # at the start of a pattern as a comment.</summary>
     public bool NoComment { get; set; }
@@ -63,7 +63,7 @@ public class GlobMatcherOptions
 /// <summary>
 /// A simple glob matcher implementation, if you want a proper one please use a full fletched one from nuget.
 /// </summary>
-public class GlobMatcher
+internal class GlobMatcher
 {
     private readonly GlobMatcherOptions myOptions;
     private readonly List<PatternCase> mySet;
