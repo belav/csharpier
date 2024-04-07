@@ -62,7 +62,7 @@ internal static class EditorConfigParser
                     SectionsIncludingParentFiles = FindSections(o.FullName, fileSystem)
                 };
             })
-            .OrderByDescending(o => o.DirectoryName?.Length)
+            .OrderByDescending(o => o.DirectoryName.Length)
             .ToList();
     }
 
