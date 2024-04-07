@@ -1,4 +1,121 @@
-﻿# 0.27.3
+﻿# 0.28.0
+## What's Changed
+### Fix dedented method call if there is a long chain [#1154](https://github.com/belav/csharpier/issues/1154)
+In some cases of method chains, the first invocation would end up dedented.
+
+```c#
+// 0.27.3
+o.Property.CallMethod(
+    someParameter_____________________________,
+    someParameter_____________________________
+)
+    .CallMethod()
+    .CallMethod();
+
+// 0.28.0
+o.Property.CallMethod(
+        someParameter_____________________________,
+        someParameter_____________________________
+    )
+    .CallMethod()
+    .CallMethod();
+```
+### Extra newline in switch case statement with curly braces [#1192](https://github.com/belav/csharpier/issues/1192
+If a case statement started with a block it would get an extra new line
+```c#
+// 0.27.3
+switch (someValue)
+{
+    case 0:
+    {
+        // dedented because the only statement is a block
+        break;
+    }
+
+    case 1:
+
+        {
+            // indented because there are two statements, a block then a break
+        }
+        break;
+}
+
+// 0.28.0
+// 0.27.3
+switch (someValue)
+{
+    case 0:
+    {
+        // dedented because the only statement is a block
+        break;
+    }
+
+    case 1:
+        {
+            // indented because there are two statements, a block then a break
+        }
+        break;
+}
+```
+
+Thanks go to @emberTrev for reporting the bug.
+
+### Handle more editorconfig glob patterns. [#1214](https://github.com/belav/csharpier/issues/1214)
+The editorconfig parsing was not handling glob patterns that contained braces.
+```editorconfig
+# worked in 0.27.3
+[*.cs]
+indent_size = 4
+tab_width = 4
+
+# did not work in 0.27.3
+[*.{cs,csx}]
+indent_size = 4
+tab_width = 4
+
+# did not work in 0.27.3
+[*.{cs}]
+indent_size = 4
+tab_width = 4
+```
+
+Thanks go to @kada-v for reporting the bug 
+
+### Ignore-start combined with regions throws exception [#1197](https://github.com/belav/csharpier/issues/1197)
+The following code would throw an exception, it is now working as expected.
+```c#
+class ClassName
+{
+    #region Region
+    // csharpier-ignore-start
+    public string   Field;
+    // csharpier-ignore-end
+    #endregion
+}
+```
+Thanks go to @davidescapolan01 for reporting the bug
+
+### Cannot format project containing editorconfig [#1194](https://github.com/belav/csharpier/issues/1194)
+On some OSs the following would cause an exception.
+```bash
+dotnet new console -n foo
+cd foo
+dotnet new editorconfig
+dotnet csharpier ./
+```
+
+Thanks go to @hashitaku for contributing the fix.
+
+### Expose IncludeGenerated in CodeFormatterOptions [#1215](https://github.com/belav/csharpier/issues/1215)
+`CodeFormatterOptions.IncludeGenerated` is now available for the SDK.
+
+### Returning errors + status from csharpier http server [#1191](https://github.com/belav/csharpier/pull/1191)
+Improved the http server that CSharpier will soon use to facilitate formatting by plugins. The formatting request now returns errors and a status for each file formatted.
+This allows the plugin to provide more information to the user when they attempt to format a file. The plugins will be updated to use the http server option for CSharpier 0.28.0+
+
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.27.3...0.28.0
+# 0.27.3
 ## What's Changed
 ### Add more options to CodeFormatterOptions [#1172](https://github.com/belav/csharpier/issues/1172)
 The API for CSharpier was only exposing `CodeFormatterOptions.PrintWidth`. It is now in sync with the CLI and exposes all of the available options
@@ -2207,6 +2324,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
