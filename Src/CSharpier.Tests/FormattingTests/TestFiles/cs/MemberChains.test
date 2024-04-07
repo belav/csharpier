@@ -262,8 +262,8 @@ var someValue =
         .CallMethod_____________________________________________________();
 
 o.Property.CallMethod(
-    someParameter_____________________________,
-    someParameter_____________________________
-)
+        someParameter_____________________________,
+        someParameter_____________________________
+    )
     .CallMethod()
     .CallMethod();
