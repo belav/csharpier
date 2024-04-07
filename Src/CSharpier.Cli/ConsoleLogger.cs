@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
-public class ConsoleLogger : ILogger
+internal class ConsoleLogger : ILogger
 {
     private static readonly object ConsoleLock = new();
 

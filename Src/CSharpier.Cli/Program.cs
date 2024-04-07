@@ -6,7 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
-public class Program
+using CSharpier.Cli.Server;
+
+internal class Program
 {
     public static async Task<int> Main(string[] args)
     {

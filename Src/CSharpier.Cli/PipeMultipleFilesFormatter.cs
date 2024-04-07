@@ -4,7 +4,7 @@ using System.IO.Abstractions;
 using System.Text;
 using Microsoft.Extensions.Logging;
 
-public static class PipeMultipleFilesFormatter
+internal static class PipeMultipleFilesFormatter
 {
     public static async Task<int> StartServer(
         SystemConsole console,
@@ -80,8 +80,6 @@ public static class PipeMultipleFilesFormatter
                         cancellationToken
                     );
 
-                    console.Write('\u0003'.ToString());
-
                     if (result != 0)
                     {
                         exitCode = result;
@@ -90,6 +88,10 @@ public static class PipeMultipleFilesFormatter
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "Failed!");
+                }
+                finally
+                {
+                    console.Write('\u0003'.ToString());
                 }
 
                 stringBuilder.Clear();

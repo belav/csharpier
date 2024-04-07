@@ -4,7 +4,7 @@ namespace CSharpier.Cli;
 
 using Microsoft.Extensions.Logging;
 
-public class CommandLineOptions
+internal class CommandLineOptions
 {
     public string[] DirectoryOrFilePaths { get; init; } = Array.Empty<string>();
     public bool Check { get; init; }
