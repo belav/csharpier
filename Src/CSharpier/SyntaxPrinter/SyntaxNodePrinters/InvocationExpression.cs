@@ -87,7 +87,10 @@ internal static class InvocationExpression
         var expanded = Doc.Concat(
             Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
             shouldMergeFirstTwoGroups
-                ? Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
+                ? Doc.IndentIf(
+                    groups.Count > 2 && groups[1].Last().Doc is not Group { Contents: IndentDoc },
+                    Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
+                )
                 : Doc.Null,
             PrintIndentedGroup(node, groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
         );
