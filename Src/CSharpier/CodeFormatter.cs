@@ -26,7 +26,8 @@ public static class CodeFormatter
                 Width = options.Width,
                 UseTabs = options.IndentStyle == IndentStyle.Tabs,
                 TabWidth = options.IndentSize,
-                EndOfLine = options.EndOfLine
+                EndOfLine = options.EndOfLine,
+                IncludeGenerated = options.IncludeGenerated
             },
             cancellationToken
         );

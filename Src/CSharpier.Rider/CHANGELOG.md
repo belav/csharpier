@@ -2,6 +2,12 @@
 
 # csharpier-rider Changelog
 
+## [1.6.4]
+- Better support for format on save - now works when files are saved via building/running the project.
+
+## [1.6.3]
+- Fix issue with occasional exception "java.lang.IllegalStateException: |E| Wrong thread RdOptionalProperty"
+
 ## [1.6.2]
 - Fix issues with lookup of '.NET CLI executable path', csharpier will now wait until rider is ready with the information.
 - No more falling back to `PATH`

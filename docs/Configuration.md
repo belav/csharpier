@@ -64,7 +64,7 @@ Currently CSharpier only has basic support for understanding how to format code 
 It will attempt to determine which sets of preprocessor symbols are needed for roslyn to parse all the code in each file.
 
 For example in the following code block, the following symbol sets would be needed ["FIRST", "SECOND,THIRD", ""]
-```c#
+```csharp
 #if FIRST
 // some code
 #elif SECOND && THIRD
@@ -90,6 +90,8 @@ CSharpier supports configuration via an `.editorconfig` file. A `.csharpierrc*` 
 charset = utf-8
 insert_final_newline = true
 trim_trailing_whitespace = true
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
 
 # Configurable behaviors
 # end_of_line = lf - there is no 'auto' with a .editorconfig

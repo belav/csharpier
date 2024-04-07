@@ -4,7 +4,7 @@ hide_table_of_contents: true
 Use the `dotnet csharpier` command to run CSharpier from the command line.
 
 In practice, it will look something like:
-```
+```shell
 dotnet csharpier .
 ```
 This command will format all c# files in the current directory and its children.
@@ -37,8 +37,8 @@ Options:
 
 ```
 
-### \[<directoryOrFile\>]
- 
+### `[<directoryOrFile\>]`
+
 If a list of paths is supplied
 - if the path points to an existing file, CSharpier will format that file
 - if the path points to an existing directory, CSharpier will recursively format the contents of that directory
@@ -109,7 +109,7 @@ By default CSharpier will format files in place. This option allows you to write
 If you pipe input to CSharpier it will also write the formatting results to stdout.
 
 *TestFile.cs*
-```c#
+```csharp
 public class ClassName
 {
     public string Field;

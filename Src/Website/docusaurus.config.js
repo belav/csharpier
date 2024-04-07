@@ -1,8 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("prism-react-renderer/themes/github");
-const darkCodeTheme = require("prism-react-renderer/themes/dracula");
+const prismReactRenderer = require("prism-react-renderer");
 
 const githubUrl = "https://github.com/belav/csharpier";
 
@@ -25,6 +24,7 @@ const config = {
             ({
                 docs: {
                     sidebarPath: require.resolve("./sidebars.js"),
+                    breadcrumbs: false,
                     editUrl: githubUrl + "/tree/master/",
                 },
                 theme: {
@@ -38,7 +38,7 @@ const config = {
         /** @type {import("@docusaurus/preset-classic").ThemeConfig} */
         ({
             colorMode: {
-                disableSwitch: true,
+                respectPrefersColorScheme: true,
             },
             navbar: {
                 title: "CSharpier",
@@ -60,7 +60,7 @@ const config = {
                     },
                     {
                         href: githubUrl,
-                        html: "<span aria-hidden=\"true\">GitHub</span>",
+                        html: '<span aria-hidden="true">GitHub</span>',
                         position: "right",
                         class: "navbar__item navbar__link header-github-link",
                     },
@@ -110,9 +110,9 @@ const config = {
                 ],
             },
             prism: {
-                additionalLanguages: ["csharp"],
-                theme: lightCodeTheme,
-                darkTheme: darkCodeTheme,
+                additionalLanguages: ["csharp", "bash", "powershell", "json", "editorconfig", "yaml", "ignore"],
+                theme: prismReactRenderer.themes.github,
+                darkTheme: prismReactRenderer.themes.dracula,
             },
         }),
 };

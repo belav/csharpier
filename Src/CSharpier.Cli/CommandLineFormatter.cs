@@ -154,7 +154,8 @@ internal static class CommandLineFormatter
             if (!isFile && !isDirectory)
             {
                 console.WriteErrorLine(
-                    "There was no file or directory found at " + directoryOrFilePath
+                    "There was no file or directory found at "
+                        + commandLineOptions.OriginalDirectoryOrFilePaths[x]
                 );
                 return 1;
             }
