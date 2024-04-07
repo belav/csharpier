@@ -1,1 +1,19 @@
 ﻿#nullable enable
+CSharpier.Cli.Server.FormatFileParameter
+CSharpier.Cli.Server.FormatFileParameter.fileContents.get -> string!
+CSharpier.Cli.Server.FormatFileParameter.fileContents.set -> void
+CSharpier.Cli.Server.FormatFileParameter.fileName.get -> string!
+CSharpier.Cli.Server.FormatFileParameter.fileName.set -> void
+CSharpier.Cli.Server.FormatFileParameter.FormatFileParameter() -> void
+CSharpier.Cli.Server.FormatFileResult
+CSharpier.Cli.Server.FormatFileResult.errorMessage.get -> string?
+CSharpier.Cli.Server.FormatFileResult.errorMessage.set -> void
+CSharpier.Cli.Server.FormatFileResult.FormatFileResult(CSharpier.Cli.Server.Status status) -> void
+CSharpier.Cli.Server.FormatFileResult.formattedFile.get -> string?
+CSharpier.Cli.Server.FormatFileResult.formattedFile.set -> void
+CSharpier.Cli.Server.FormatFileResult.status.get -> CSharpier.Cli.Server.Status
+CSharpier.Cli.Server.FormatFileResult.status.set -> void
+CSharpier.Cli.Server.Status
+CSharpier.Cli.Server.Status.Failed = 2 -> CSharpier.Cli.Server.Status
+CSharpier.Cli.Server.Status.Formatted = 0 -> CSharpier.Cli.Server.Status
+CSharpier.Cli.Server.Status.Ignored = 1 -> CSharpier.Cli.Server.Status
