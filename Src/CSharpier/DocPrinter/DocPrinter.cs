@@ -14,7 +14,7 @@ internal class DocPrinter
     protected readonly string EndOfLine;
     protected readonly PrinterOptions PrinterOptions;
     protected readonly Indenter Indenter;
-    protected Stack<Indent> RegionIndents = new();
+    protected readonly Stack<Indent> RegionIndents = new();
 
     protected DocPrinter(Doc doc, PrinterOptions printerOptions, string endOfLine)
     {
@@ -156,8 +156,17 @@ internal class DocPrinter
         {
             if (region.IsEnd)
             {
-                var regionIndent = this.RegionIndents.Pop();
-                this.Output.Append(regionIndent.Value);
+                // in the case where regions are combined with ignored ranges, the start region
+                // ends up printing inside the unformatted nodes, so we don't have a matching
+                // start region to go with this end region
+                if (this.RegionIndents.TryPop(out var regionIndent))
+                {
+                    this.Output.Append(regionIndent.Value);
+                }
+                else
+                {
+                    this.Output.Append(indent.Value);
+                }
             }
             else
             {

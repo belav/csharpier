@@ -27,7 +27,7 @@
         </action>
     </actions>
     <applicationListeners>
-      <listener class="com.intellij.csharpier.ReformatWithCSharpierOnSave"
-                topic="com.intellij.openapi.actionSystem.ex.AnActionListener" />
+      <listener class="com.intellij.csharpier.ReformatWithCSharpierOnSaveListener"
+                topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener"/>
     </applicationListeners>
 </idea-plugin>

@@ -2,6 +2,7 @@ namespace CSharpier.Cli.Tests;
 
 using System.Diagnostics;
 using System.Net.Http.Json;
+using CSharpier.Cli.Server;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -15,7 +16,7 @@ public class ServerTests
     // ignore file
     // option file
     [Test]
-    [Ignore("Not working on GH, test on linux?")]
+    [Ignore("Not working on GH, test locally on linux?")]
     public async Task Stuff()
     {
         var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
@@ -41,7 +42,7 @@ public class ServerTests
                 string.Empty
             );
             var port = int.Parse(portString);
-            var data = new FormatFileDto
+            var data = new FormatFileParameter
             {
                 fileName = "/Temp/test.cs",
                 fileContents = "public class TestClass    { }"
@@ -58,6 +59,7 @@ public class ServerTests
                 Assert.Fail("Result is null");
             }
 
+            result!.status.Should().Be(Status.Formatted);
             result!.formattedFile!.TrimEnd().Should().Be("public class TestClass { }");
         }
         finally

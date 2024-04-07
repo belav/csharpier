@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
-public static class HasMismatchedCliAndMsBuildVersions
+internal static class HasMismatchedCliAndMsBuildVersions
 {
     public static bool Check(string directoryName, IFileSystem fileSystem, ILogger logger)
     {

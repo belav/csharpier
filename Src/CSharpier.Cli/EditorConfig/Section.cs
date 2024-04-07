@@ -2,7 +2,7 @@ namespace CSharpier.Cli.EditorConfig;
 
 using IniParser.Model;
 
-public class Section
+internal class Section
 {
     private static readonly GlobMatcherOptions globOptions =
         new()
