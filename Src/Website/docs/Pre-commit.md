@@ -49,19 +49,6 @@ repos:
         description: CSharpier is an opinionated C# formatter inspired by Prettier.
 ```
 
-Add the following to your `.config/dotnet-tools.json`:
-
-```json
-{
-  "tools": {
-    "CSharpier": {
-      "version": "0.22.1",
-      "commands": ["dotnet-csharpier"]
-    }
-  }
-}
-```
-
 ## [Husky.Net](https://github.com/alirezanet/husky.net)
 
 From the root of your repository
