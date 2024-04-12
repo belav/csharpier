@@ -13,18 +13,20 @@ import java.util.concurrent.TimeoutException;
 import com.google.gson.Gson;
 import com.intellij.openapi.project.Project;
 
-public class CSharpierProcessServer implements ICSharpierProcess, Disposable {
+public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
     private final Gson gson = new Gson();
     private final String csharpierPath;
     private final DotNetProvider dotNetProvider;
+    private final String version;
     private Logger logger = CSharpierLogger.getInstance();
     private int port;
     private Process process = null;
     public boolean processFailedToStart;
 
-    public CSharpierProcessServer(String csharpierPath, Project project) {
+    public CSharpierProcessServer(String csharpierPath, String version, Project project) {
         this.csharpierPath = csharpierPath;
         this.dotNetProvider = DotNetProvider.getInstance(project);
+        this.version = version;
         this.startProcess();
 
         this.logger.debug("Warm CSharpier with initial format");
@@ -73,15 +75,11 @@ public class CSharpierProcessServer implements ICSharpierProcess, Disposable {
     }
 
     @Override
-    public String formatFile(String content, String filePath) {
+    public FormatFileResult formatFile(FormatFileParameter parameter) {
         if (this.processFailedToStart) {
             this.logger.warn("CSharpier process failed to start. Formatting cannot occur.");
-            return "";
+            return null;
         }
-
-        var data = new FormatFileDto();
-        data.fileContents = content;
-        data.fileName = filePath;
 
         var url = "http://localhost:" + this.port + "/format";
 
@@ -95,20 +93,22 @@ public class CSharpierProcessServer implements ICSharpierProcess, Disposable {
 
             connection.setRequestProperty("Content-Type", "application/json; utf-8");
 
+            connection.setConnectTimeout(2000);
             connection.setDoOutput(true);
             connection.setDoInput(true);
 
             var outputStream = connection.getOutputStream();
             var writer = new OutputStreamWriter(outputStream, "UTF-8");
-            writer.write(this.gson.toJson(data));
+            writer.write(this.gson.toJson(parameter));
             writer.flush();
             writer.close();
             outputStream.close();
 
             var responseCode = connection.getResponseCode();
             if (responseCode != 200) {
+                this.logger.warn("Csharpier server returned non-200 status code of " + responseCode);
                 connection.disconnect();
-                return "";
+                return null;
             }
 
             InputStreamReader reader = new InputStreamReader(connection.getInputStream());
@@ -117,13 +117,28 @@ public class CSharpierProcessServer implements ICSharpierProcess, Disposable {
 
             connection.disconnect();
 
-            return result.formattedFile != null ? result.formattedFile : "";
+            return result;
 
         } catch (Exception e) {
             this.logger.warn("Failed posting to the csharpier server.", e);
         }
 
-        return "";
+        return null;
+    }
+
+    @Override
+    public String getVersion() {
+        return this.version;
+    }
+
+    @Override
+    public String formatFile(String content, String fileName) {
+        var parameter = new FormatFileParameter();
+        parameter.fileName = fileName;
+        parameter.fileContents = content;
+
+        var result = this.formatFile(parameter);
+        return result == null ? null : result.formattedFile;
     }
 
     @Override
@@ -131,14 +146,5 @@ public class CSharpierProcessServer implements ICSharpierProcess, Disposable {
         if (this.process != null) {
             this.process.destroy();
         }
-    }
-
-    private class FormatFileDto {
-        public String fileContents;
-        public String fileName;
-    }
-
-    private class FormatFileResult {
-        public String formattedFile;
     }
 }

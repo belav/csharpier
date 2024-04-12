@@ -220,8 +220,8 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
             var installedVersion = version.split("\\.");
             var versionWeCareAbout = Integer.parseInt(installedVersion[1]);
 
-            if (CSharpierSettings.getInstance(this.project).getUseServer()) {
-                return new CSharpierProcessServer(customPath, this.project);
+            if (versionWeCareAbout >= 28) {
+                return new CSharpierProcessServer(customPath, version, this.project);
             }
 
             if (versionWeCareAbout < 12) {
@@ -235,12 +235,12 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
                 }
 
 
-                return new CSharpierProcessSingleFile(customPath, this.project);
+                return new CSharpierProcessSingleFile(customPath, version, this.project);
             }
 
             var useUtf8 = versionWeCareAbout >= 14;
 
-            var csharpierProcess = new CSharpierProcessPipeMultipleFiles(customPath, useUtf8, this.project);
+            var csharpierProcess = new CSharpierProcessPipeMultipleFiles(customPath, useUtf8, version, this.project);
             if (csharpierProcess.processFailedToStart) {
                 this.displayFailureMessage();
             }

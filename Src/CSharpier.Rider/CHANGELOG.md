@@ -2,6 +2,11 @@
 
 # csharpier-rider Changelog
 
+## [1.7.0]
+- Fix deprecated function warning
+- Use CSharpier Http Server for 0.28.0+
+- Log version of CSharpier used to format a given file
+
 ## [1.6.4]
 - Better support for format on save - now works when files are saved via building/running the project.
 

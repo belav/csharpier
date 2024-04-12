@@ -28,7 +28,6 @@ public class DotNetProvider {
     void initialize() {
         var foundDotNet = this.findDotNet();
         if (!foundDotNet) {
-
             var title = "CSharpier unable to run dotnet commands";
             var message = "CSharpier was unable to determine how to run dotnet commands. Ensure that '.NET CLI executable path' is set properly in your settings or dotnet is available on PATH and restart.";
             var notification = NotificationGroupManager.getInstance().getNotificationGroup("CSharpier").createNotification(title, message, NotificationType.WARNING);
