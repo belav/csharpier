@@ -1,24 +1,31 @@
 import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import { Logger } from "./Logger";
-import { ICSharpierProcess } from "./CSharpierProcess";
+import { ICSharpierProcess } from "./ICSharpierProcess";
 import { getDotNetRoot } from "./DotNetProvider";
+import * as process from "process";
 
 export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     private process: ChildProcessWithoutNullStreams;
     private callbacks: ((result: string) => void)[] = [];
     private logger: Logger;
     private nextFile: string = "";
-    public processFailedToStart = false;
+    private processFailedToStart = false;
+    private version: string;
 
-    constructor(logger: Logger, csharpierPath: string, workingDirectory: string) {
+    constructor(logger: Logger, csharpierPath: string, workingDirectory: string, version: string) {
         this.logger = logger;
         this.process = this.spawnProcess(csharpierPath, workingDirectory);
+        this.version = version;
 
         this.logger.debug("Warm CSharpier with initial format");
         // warm by formatting a file twice, the 3rd time is when it gets really fast
         this.formatFile("public class ClassName { }", "Test.cs").then(() => {
             this.formatFile("public class ClassName { }", "Test.cs");
         });
+    }
+
+    getProcessFailedToStart(): boolean {
+        return this.processFailedToStart;
     }
 
     private spawnProcess = (csharpierPath: string, workingDirectory: string) => {
@@ -95,5 +102,9 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     dispose() {
         (this.process.stdin as any).pause();
         this.process.kill();
+    }
+
+    getVersion(): string {
+        return this.version;
     }
 }

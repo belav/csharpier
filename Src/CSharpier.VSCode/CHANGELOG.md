@@ -1,3 +1,7 @@
+## [1.7.0]
+- Use CSharpier Http Server for 0.28.0+
+- Log version of CSharpier used to format a given file
+
 ## [1.6.0]
 - Better support for dotnet commands. The extension will now try to locate dotnet by doing the following.
   - If `dotnet.dotnetPath` is set, will try using that to find `dotnet`
