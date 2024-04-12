@@ -19,7 +19,6 @@ import java.awt.*;
 public class CSharpierSettingsComponent implements SearchableConfigurable {
     private final Project project;
     private JBCheckBox runOnSaveCheckBox = new JBCheckBox("Run on Save");
-    private JBCheckBox useServerCheckBox = new JBCheckBox("Use CSharpier Server - experimental support as of 0.27.2");
     private JBTextField customPathTextField = new JBTextField();
 
     public CSharpierSettingsComponent(@NotNull Project project) {
@@ -76,7 +75,6 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
                 .addComponent(createSectionHeader("Developer Settings"), 20)
                 .setFormLeftIndent(leftIndent)
                 .addLabeledComponent(new JBLabel("Directory of custom dotnet-csharpier:"), this.customPathTextField, topInset, false)
-                .addComponent(this.useServerCheckBox, topInset)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
     }
@@ -84,24 +82,21 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     @Override
     public boolean isModified() {
         return CSharpierSettings.getInstance(this.project).getRunOnSave() != this.runOnSaveCheckBox.isSelected()
-                || CSharpierSettings.getInstance(this.project).getUseServer() != this.useServerCheckBox.isSelected()
                 || CSharpierSettings.getInstance(this.project).getCustomPath() != this.customPathTextField.getText();
     }
 
     @Override
-    public void apply() throws ConfigurationException {
+    public void apply() {
         var settings = CSharpierSettings.getInstance(this.project);
 
         settings.setRunOnSave(this.runOnSaveCheckBox.isSelected());
         settings.setCustomPath(this.customPathTextField.getText());
-        settings.setUseServer(this.useServerCheckBox.isSelected());
     }
 
     @Override
     public void reset() {
         var settings = CSharpierSettings.getInstance(this.project);
         this.runOnSaveCheckBox.setSelected(settings.getRunOnSave());
-        this.useServerCheckBox.setSelected(settings.getUseServer());
         this.customPathTextField.setText(settings.getCustomPath());
     }
 }

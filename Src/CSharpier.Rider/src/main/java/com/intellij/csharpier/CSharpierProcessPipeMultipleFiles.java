@@ -11,6 +11,7 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     private final boolean useUtf8;
     private final String csharpierPath;
     private final DotNetProvider dotNetProvider;
+    private final String version;
     private Logger logger = CSharpierLogger.getInstance();
 
     private Process process = null;
@@ -18,10 +19,11 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     private BufferedReader stdOut;
     public boolean processFailedToStart;
 
-    public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8, Project project) {
+    public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8, String version, Project project) {
         this.csharpierPath = csharpierPath;
         this.useUtf8 = useUtf8;
         this.dotNetProvider = DotNetProvider.getInstance(project);
+        this.version = version;
         this.startProcess();
 
         this.logger.debug("Warm CSharpier with initial format");
@@ -49,6 +51,11 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
             this.logger.warn("Failed to spawn the needed csharpier process. Formatting cannot occur.", e);
             this.processFailedToStart = true;
         }
+    }
+
+    @Override
+    public String getVersion() {
+        return this.version;
     }
 
     @Override

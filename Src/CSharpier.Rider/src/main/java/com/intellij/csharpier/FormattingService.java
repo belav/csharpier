@@ -51,7 +51,7 @@ public class FormattingService {
         var currentDocumentText = document.getText();
 
         var csharpierProcess = CSharpierProcessProvider.getInstance(project).getProcessFor(filePath);
-        this.logger.info("Formatting started for " + filePath + ".");
+        this.logger.info("Formatting started for " + filePath + " using CSharpier " + csharpierProcess.getVersion());
         var start = Instant.now();
         if (csharpierProcess instanceof ICSharpierProcess2) {
             var csharpierProcess2 = (ICSharpierProcess2) csharpierProcess;

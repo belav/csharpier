@@ -10,10 +10,17 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
     private final DotNetProvider dotNetProvider;
     private final Logger logger = CSharpierLogger.getInstance();
     private final String csharpierPath;
+    private final String version;
 
-    public CSharpierProcessSingleFile(String csharpierPath, Project project) {
+    public CSharpierProcessSingleFile(String csharpierPath, String version, Project project) {
         this.csharpierPath = csharpierPath;
         this.dotNetProvider = DotNetProvider.getInstance(project);
+        this.version = version;
+    }
+
+    @Override
+    public String getVersion() {
+        return this.version;
     }
 
     @Override

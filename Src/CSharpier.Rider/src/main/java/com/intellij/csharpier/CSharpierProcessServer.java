@@ -17,14 +17,16 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
     private final Gson gson = new Gson();
     private final String csharpierPath;
     private final DotNetProvider dotNetProvider;
+    private final String version;
     private Logger logger = CSharpierLogger.getInstance();
     private int port;
     private Process process = null;
     public boolean processFailedToStart;
 
-    public CSharpierProcessServer(String csharpierPath, Project project) {
+    public CSharpierProcessServer(String csharpierPath, String version, Project project) {
         this.csharpierPath = csharpierPath;
         this.dotNetProvider = DotNetProvider.getInstance(project);
+        this.version = version;
         this.startProcess();
 
         this.logger.debug("Warm CSharpier with initial format");
@@ -122,6 +124,11 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
         }
 
         return null;
+    }
+
+    @Override
+    public String getVersion() {
+        return this.version;
     }
 
     @Override

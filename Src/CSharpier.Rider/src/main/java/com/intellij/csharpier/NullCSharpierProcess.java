@@ -6,6 +6,11 @@ public class NullCSharpierProcess implements ICSharpierProcess {
     private NullCSharpierProcess() {}
 
     @Override
+    public String getVersion() {
+        return "NULL";
+    }
+
+    @Override
     public String formatFile(String content, String fileName) {
         return "";
     }
