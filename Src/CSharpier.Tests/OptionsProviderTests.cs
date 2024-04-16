@@ -559,7 +559,7 @@ indent_size = 2
     }
 
     [Test]
-    public async Task Should_Ignore_Invalid_EditorConfig()
+    public async Task Should_Ignore_Invalid_EditorConfig_Lines()
     {
         var context = new TestContext();
         context.WhenAFileExists(
@@ -573,7 +573,7 @@ INVALID
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
-        result.TabWidth.Should().Be(4);
+        result.TabWidth.Should().Be(2);
     }
 
     [Test]
