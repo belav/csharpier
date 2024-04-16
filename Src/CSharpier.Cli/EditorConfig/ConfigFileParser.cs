@@ -18,27 +18,33 @@ internal static class ConfigFileParser
             CommentRegex = CommentRegex,
             AllowDuplicateKeys = true,
             AllowDuplicateSections = true,
-            OverrideDuplicateKeys = true
+            OverrideDuplicateKeys = true,
+            SkipInvalidLines = true,
+            ThrowExceptionsOnError = false
         };
 
     public static ConfigFile Parse(string filePath, IFileSystem fileSystem)
     {
+        var directory = fileSystem.Path.GetDirectoryName(filePath);
+
+        ArgumentNullException.ThrowIfNull(directory);
+
         var parser = new FileIniDataParser(new IniDataParser(Configuration));
 
         using var stream = fileSystem.File.OpenRead(filePath);
         using var streamReader = new StreamReader(stream);
         var configData = parser.ReadData(streamReader);
 
-        var directory = fileSystem.Path.GetDirectoryName(filePath);
-
-        ArgumentNullException.ThrowIfNull(directory);
-
         var sections = new List<Section>();
-        foreach (var section in configData.Sections)
+        if (configData is not null)
         {
-            sections.Add(new Section(section, directory));
+            sections.AddRange(configData.Sections.Select(s => new Section(s, directory)));
         }
 
-        return new ConfigFile { IsRoot = configData.Global["root"] == "true", Sections = sections };
+        return new ConfigFile
+        {
+            IsRoot = configData?.Global["root"] == "true",
+            Sections = sections
+        };
     }
 }
