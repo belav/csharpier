@@ -1,4 +1,13 @@
-﻿# 0.28.0
+﻿# 0.28.1
+## What's Changed
+### Third party .editorconfig leading to: Error Failure parsing editorconfig files [#1227](https://github.com/belav/csharpier/issues/1227)
+When CSharpier encountered an invalid `.editorconfig` file, it would throw an exception and not format files. These files could appear in 3rd party code (for example within node_modules). CSharpier now ignores invalid lines in `.editorconfigs`
+
+
+Thanks go to @K0Te for reporting the issue
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.28.0...0.28.1
+# 0.28.0
 ## What's Changed
 ### Fix dedented method call if there is a long chain [#1154](https://github.com/belav/csharpier/issues/1154)
 In some cases of method chains, the first invocation would end up dedented.
@@ -2324,6 +2333,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 

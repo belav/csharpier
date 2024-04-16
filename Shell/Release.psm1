@@ -1,4 +1,4 @@
-function CSH-CreateRelease {
+function CSH-Release {
     param (
         [Parameter(Mandatory=$true)]
         [string]$versionNumber
