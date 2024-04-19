@@ -33,7 +33,6 @@ namespace CSharpier.VisualStudio
 
         public int OnBeforeSave(uint docCookie)
         {
-            Logger.Instance.Debug("OnBeforeSave");
             var runOnSave =
                 CSharpierOptions.Instance.SolutionRunOnSave is true
                 || (
@@ -43,7 +42,6 @@ namespace CSharpier.VisualStudio
 
             if (!runOnSave)
             {
-                Logger.Instance.Debug("No RunOnSave");
                 return VSConstants.S_OK;
             }
 
@@ -51,13 +49,10 @@ namespace CSharpier.VisualStudio
 
             if (document == null)
             {
-                Logger.Instance.Debug("No Document");
                 return VSConstants.S_OK;
             }
 
-            Logger.Instance.Debug("Before format");
             this.formattingService.Format(document);
-            Logger.Instance.Debug("Done Format");
             return VSConstants.S_OK;
         }
 

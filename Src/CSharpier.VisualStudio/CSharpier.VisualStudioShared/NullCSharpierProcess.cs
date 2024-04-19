@@ -6,6 +6,9 @@ namespace CSharpier.VisualStudio
 
         private NullCSharpierProcess() { }
 
+        public string Version => "NULL";
+        public bool ProcessFailedToStart => false;
+
         public string FormatFile(string content, string fileName)
         {
             return string.Empty;

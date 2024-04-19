@@ -2,9 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.Text.Editor.OptionsExtensionMethods;
 using Process = System.Diagnostics.Process;
 
 namespace CSharpier.VisualStudio
@@ -16,10 +14,18 @@ namespace CSharpier.VisualStudio
         private readonly string csharpierPath;
         private StreamWriter standardIn;
 
-        public CSharpierProcessPipeMultipleFiles(string csharpierPath, Logger logger)
+        public string Version { get; }
+        public bool ProcessFailedToStart { get; private set; }
+
+        public CSharpierProcessPipeMultipleFiles(
+            string csharpierPath,
+            string version,
+            Logger logger
+        )
         {
             this.logger = logger;
             this.csharpierPath = csharpierPath;
+            this.Version = version;
 
             this.StartProcess();
 
@@ -28,8 +34,6 @@ namespace CSharpier.VisualStudio
             this.FormatFile("public class ClassName { }", "Test.cs");
             this.FormatFile("public class ClassName { }", "Test.cs");
         }
-
-        public bool ProcessFailedToStart { get; set; }
 
         private void StartProcess()
         {

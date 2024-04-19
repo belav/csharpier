@@ -217,11 +217,22 @@ namespace CSharpier.VisualStudio
 
                 var installedVersion = new Version(version);
                 var pipeFilesVersion = new Version("0.12.0");
-                if (CSharpierOptions.Instance.UseServer)
+                var serverVersion = new Version("0.28.0");
+                ICSharpierProcess cSharpierProcess;
+
+                if (installedVersion.CompareTo(serverVersion) >= 0)
                 {
-                    return new CSharpierProcessServer(customPath, this.logger);
+                    cSharpierProcess = new CSharpierProcessServer(customPath, version, this.logger);
                 }
-                if (installedVersion.CompareTo(pipeFilesVersion) < 0)
+                else if (installedVersion.CompareTo(pipeFilesVersion) >= 0)
+                {
+                    cSharpierProcess = new CSharpierProcessPipeMultipleFiles(
+                        customPath,
+                        version,
+                        this.logger
+                    );
+                }
+                else
                 {
                     if (!this.warnedForOldVersion)
                     {
@@ -231,18 +242,19 @@ namespace CSharpier.VisualStudio
                         this.warnedForOldVersion = true;
                     }
 
-                    return new CSharpierProcessSingleFile(customPath, this.logger);
+                    cSharpierProcess = new CSharpierProcessSingleFile(
+                        customPath,
+                        version,
+                        this.logger
+                    );
                 }
-                var csharpierProcess = new CSharpierProcessPipeMultipleFiles(
-                    customPath,
-                    this.logger
-                );
-                if (csharpierProcess.ProcessFailedToStart)
+
+                if (cSharpierProcess.ProcessFailedToStart)
                 {
                     this.DisplayFailureMessage();
                 }
 
-                return csharpierProcess;
+                return cSharpierProcess;
             }
             catch (Exception ex)
             {

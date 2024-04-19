@@ -2,22 +2,27 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using CSharpier.VisualStudio;
 using Newtonsoft.Json;
 
-public class CSharpierProcessServer : ICSharpierProcess, IDisposable
+public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
 {
     private readonly string csharpierPath;
     private readonly Logger logger;
     private int port;
     private Process? process;
-    public bool ProcessFailedToStart;
+    public bool ProcessFailedToStart { get; private set; }
 
-    public CSharpierProcessServer(string csharpierPath, Logger logger)
+    public string Version { get; }
+
+    public CSharpierProcessServer(string csharpierPath, string version, Logger logger)
     {
         this.logger = logger;
         this.csharpierPath = csharpierPath;
+        this.Version = version;
+
         this.StartProcess();
 
         this.logger.Debug("Warm CSharpier with initial format");
@@ -80,13 +85,19 @@ public class CSharpierProcessServer : ICSharpierProcess, IDisposable
 
     public string FormatFile(string content, string filePath)
     {
+        var parameter = new FormatFileParameter { fileName = filePath, fileContents = content };
+
+        var result = this.formatFile(parameter);
+        return result?.formattedFile ?? string.Empty;
+    }
+
+    public FormatFileResult? formatFile(FormatFileParameter parameter)
+    {
         if (this.ProcessFailedToStart)
         {
             this.logger.Warn("CSharpier process failed to start. Formatting cannot occur.");
-            return "";
+            return null;
         }
-
-        var data = new FormatFileDto { fileContents = content, fileName = filePath };
 
         var url = "http://localhost:" + this.port + "/format";
 
@@ -98,23 +109,26 @@ public class CSharpierProcessServer : ICSharpierProcess, IDisposable
 
             using (var streamWriter = new StreamWriter(request.GetRequestStream()))
             {
-                streamWriter.Write(JsonConvert.SerializeObject(data));
+                streamWriter.Write(JsonConvert.SerializeObject(parameter));
             }
 
             var response = (HttpWebResponse)request.GetResponse();
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
+                this.logger.Warn(
+                    "Csharpier server returned non-200 status code of " + response.StatusCode
+                );
                 response.Close();
-                return "";
+                return null;
             }
 
-            using (var streamReader = new StreamReader(response.GetResponseStream()))
+            using (var streamReader = new StreamReader(response.GetResponseStream(), Encoding.UTF8))
             {
                 var result = JsonConvert.DeserializeObject<FormatFileResult>(
                     streamReader.ReadToEnd()
                 );
-                return result.formattedFile ?? "";
+                return result;
             }
         }
         catch (Exception e)
@@ -122,22 +136,11 @@ public class CSharpierProcessServer : ICSharpierProcess, IDisposable
             this.logger.Warn("Failed posting to the csharpier server. " + e);
         }
 
-        return "";
+        return null;
     }
 
     public void Dispose()
     {
-        this.process?.Dispose();
-    }
-
-    private class FormatFileDto
-    {
-        public string fileContents;
-        public string fileName;
-    }
-
-    private class FormatFileResult
-    {
-        public string? formattedFile;
+        this.process?.Kill();
     }
 }

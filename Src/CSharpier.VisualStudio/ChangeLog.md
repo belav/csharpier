@@ -1,4 +1,7 @@
-﻿## [1.5.2]
+﻿## [1.7.0]
+- Use CSharpier Server for 0.28.0+
+
+## [1.5.2]
 - Experimental support for CSharpier Server
 
 ## [1.5.1]
