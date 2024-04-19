@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.7.1]
+- Fix unicode issue with csharpier 0.28.0+
+
 ## [1.7.0]
 - Fix deprecated function warning
 - Use CSharpier Http Server for 0.28.0+
