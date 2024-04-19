@@ -11,6 +11,11 @@ public class NullCSharpierProcess implements ICSharpierProcess {
     }
 
     @Override
+    public boolean getProcessFailedToStart() {
+        return false;
+    }
+
+    @Override
     public String formatFile(String content, String fileName) {
         return "";
     }

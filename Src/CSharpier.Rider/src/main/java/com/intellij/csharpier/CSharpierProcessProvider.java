@@ -220,11 +220,15 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
             var installedVersion = version.split("\\.");
             var versionWeCareAbout = Integer.parseInt(installedVersion[1]);
 
+            ICSharpierProcess csharpierProcess;
             if (versionWeCareAbout >= 28) {
-                return new CSharpierProcessServer(customPath, version, this.project);
-            }
+                csharpierProcess = new CSharpierProcessServer(customPath, version, this.project);
+            } else if (versionWeCareAbout >= 12) {
+                var useUtf8 = versionWeCareAbout >= 14;
 
-            if (versionWeCareAbout < 12) {
+                csharpierProcess = new CSharpierProcessPipeMultipleFiles(customPath, useUtf8, version, this.project);
+            }
+            else {
                 if (!this.warnedForOldVersion) {
                     var content = "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.";
                     NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
@@ -234,14 +238,10 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
                     this.warnedForOldVersion = true;
                 }
 
-
-                return new CSharpierProcessSingleFile(customPath, version, this.project);
+                csharpierProcess =  new CSharpierProcessSingleFile(customPath, version, this.project);
             }
 
-            var useUtf8 = versionWeCareAbout >= 14;
-
-            var csharpierProcess = new CSharpierProcessPipeMultipleFiles(customPath, useUtf8, version, this.project);
-            if (csharpierProcess.processFailedToStart) {
+            if (csharpierProcess.getProcessFailedToStart()) {
                 this.displayFailureMessage();
             }
 
