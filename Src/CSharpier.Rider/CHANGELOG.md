@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.7.2]
+- Better error message when csharpier server fails to start
+
 ## [1.7.1]
 - Fix unicode issue with csharpier 0.28.0+
 

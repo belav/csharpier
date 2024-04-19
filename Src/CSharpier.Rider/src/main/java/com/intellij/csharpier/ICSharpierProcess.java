@@ -2,6 +2,7 @@ package com.intellij.csharpier;
 
 interface ICSharpierProcess {
     String getVersion();
+    boolean getProcessFailedToStart();
     String formatFile(String content, String fileName);
     void dispose();
 }

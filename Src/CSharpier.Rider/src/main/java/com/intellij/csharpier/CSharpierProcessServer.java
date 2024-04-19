@@ -21,7 +21,7 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
     private Logger logger = CSharpierLogger.getInstance();
     private int port;
     private Process process = null;
-    public boolean processFailedToStart;
+    private boolean processFailedToStart;
 
     public CSharpierProcessServer(String csharpierPath, String version, Project project) {
         this.csharpierPath = csharpierPath;
@@ -129,6 +129,11 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
     @Override
     public String getVersion() {
         return this.version;
+    }
+
+    @Override
+    public boolean getProcessFailedToStart() {
+        return this.processFailedToStart;
     }
 
     @Override

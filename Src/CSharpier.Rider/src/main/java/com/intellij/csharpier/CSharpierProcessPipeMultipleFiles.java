@@ -17,7 +17,7 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     private Process process = null;
     private OutputStreamWriter stdin;
     private BufferedReader stdOut;
-    public boolean processFailedToStart;
+    private boolean processFailedToStart;
 
     public CSharpierProcessPipeMultipleFiles(String csharpierPath, boolean useUtf8, String version, Project project) {
         this.csharpierPath = csharpierPath;
@@ -56,6 +56,11 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     @Override
     public String getVersion() {
         return this.version;
+    }
+
+    @Override
+    public boolean getProcessFailedToStart() {
+        return this.processFailedToStart;
     }
 
     @Override

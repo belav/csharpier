@@ -24,6 +24,11 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
     }
 
     @Override
+    public boolean getProcessFailedToStart() {
+        return false;
+    }
+
+    @Override
     public String formatFile(String content, String fileName) {
 
         try {
