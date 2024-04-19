@@ -89,8 +89,8 @@ internal static class BasePropertyDeclaration
                     Token.Print(node.AccessorList.OpenBraceToken, context),
                     Doc.Indent(
                         node.AccessorList.Accessors.Select(o =>
-                            PrintAccessorDeclarationSyntax(o, separator, context)
-                        )
+                                PrintAccessorDeclarationSyntax(o, separator, context)
+                            )
                             .ToArray()
                     ),
                     separator,
