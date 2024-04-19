@@ -111,7 +111,7 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
                 return null;
             }
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            InputStreamReader reader = new InputStreamReader(connection.getInputStream(), "UTF-8");
             var result = gson.fromJson(reader, FormatFileResult.class);
             reader.close();
 
