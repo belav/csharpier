@@ -8,10 +8,14 @@ namespace CSharpier.VisualStudio
         private readonly string csharpierPath;
         private readonly Logger logger;
 
-        public CSharpierProcessSingleFile(string csharpierPath, Logger logger)
+        public string Version { get; }
+        public bool ProcessFailedToStart => false;
+
+        public CSharpierProcessSingleFile(string csharpierPath, string version, Logger logger)
         {
             this.csharpierPath = csharpierPath;
             this.logger = logger;
+            this.Version = version;
         }
 
         public string FormatFile(string content, string fileName)
