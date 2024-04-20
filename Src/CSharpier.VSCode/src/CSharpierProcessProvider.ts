@@ -3,13 +3,16 @@ import { Logger } from "./Logger";
 import * as path from "path";
 import * as semver from "semver";
 import * as convert from "xml-js";
-import { ICSharpierProcess, NullCSharpierProcess } from "./CSharpierProcess";
+import { ICSharpierProcess } from "./ICSharpierProcess";
 import { CSharpierProcessSingleFile } from "./CSharpierProcessSingleFile";
 import { CSharpierProcessPipeMultipleFiles } from "./CSharpierProcessPipeMultipleFiles";
 import * as fs from "fs";
 import { InstallerService } from "./InstallerService";
 import { CustomPathInstaller } from "./CustomPathInstaller";
 import { execDotNet } from "./DotNetProvider";
+import { NullCSharpierProcess } from "./NullCSharpierProcess";
+import { CSharpierProcessServer } from "./CSharpierProcessServer";
+import { ICSharpierProcess2 } from "./ICSharpierProcess";
 
 export class CSharpierProcessProvider implements Disposable {
     warnedForOldVersion = false;
@@ -18,7 +21,10 @@ export class CSharpierProcessProvider implements Disposable {
     installerService: InstallerService;
     warmingByDirectory: Record<string, boolean | undefined> = {};
     csharpierVersionByDirectory: Record<string, string | undefined> = {};
-    csharpierProcessesByVersion: Record<string, ICSharpierProcess | undefined> = {};
+    csharpierProcessesByVersion: Record<
+        string,
+        ICSharpierProcess | ICSharpierProcess2 | undefined
+    > = {};
 
     constructor(logger: Logger, extension: Extension<unknown>) {
         this.logger = logger;
@@ -62,7 +68,7 @@ export class CSharpierProcessProvider implements Disposable {
         delete this.warmingByDirectory[directory];
     }
 
-    public getProcessFor = (filePath: string) => {
+    public getProcessFor = (filePath: string): ICSharpierProcess | ICSharpierProcess2 => {
         const directory = this.getDirectoryOfFile(filePath);
         let version = this.csharpierVersionByDirectory[directory];
         if (!version) {
@@ -218,26 +224,37 @@ export class CSharpierProcessProvider implements Disposable {
 
             this.logger.debug(`Adding new version ${version} process for ${directory}`);
 
-            if (semver.lt(version, "0.12.0")) {
+            let csharpierProcess: ICSharpierProcess;
+
+            if (semver.gte(version, "0.28.0")) {
+                csharpierProcess = new CSharpierProcessServer(
+                    this.logger,
+                    customPath,
+                    directory,
+                    version,
+                );
+            } else if (semver.gte(version, "0.12.0")) {
+                csharpierProcess = new CSharpierProcessPipeMultipleFiles(
+                    this.logger,
+                    customPath,
+                    directory,
+                    version,
+                );
+            } else {
                 if (!this.warnedForOldVersion) {
                     window.showInformationMessage(
                         "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.",
                     );
                     this.warnedForOldVersion = true;
                 }
-                return new CSharpierProcessSingleFile(this.logger, customPath);
-            } else {
-                const csharpierProcess = new CSharpierProcessPipeMultipleFiles(
-                    this.logger,
-                    customPath,
-                    directory,
-                );
-                if (csharpierProcess.processFailedToStart) {
-                    this.displayFailureMessage();
-                }
-
-                return csharpierProcess;
+                csharpierProcess = new CSharpierProcessSingleFile(this.logger, customPath, version);
             }
+
+            if (csharpierProcess.getProcessFailedToStart()) {
+                this.displayFailureMessage();
+            }
+
+            return csharpierProcess;
         } catch (ex: any) {
             this.logger.error(ex.output.toString());
             this.logger.debug(

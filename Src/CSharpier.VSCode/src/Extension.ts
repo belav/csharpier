@@ -2,9 +2,9 @@ import { ExtensionContext, window, workspace } from "vscode";
 import { CSharpierProcessProvider } from "./CSharpierProcessProvider";
 import { FormattingService } from "./FormattingService";
 import { Logger } from "./Logger";
-import { NullCSharpierProcess } from "./CSharpierProcess";
 import { findDotNet } from "./DotNetProvider";
 import { options } from "./Options";
+import { NullCSharpierProcess } from "./NullCSharpierProcess";
 
 export async function activate(context: ExtensionContext) {
     if (!workspace.isTrusted) {

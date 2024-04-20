@@ -1,16 +1,23 @@
 import { Logger } from "./Logger";
 import { spawn } from "child_process";
-import { ICSharpierProcess } from "./CSharpierProcess";
+import { ICSharpierProcess } from "./ICSharpierProcess";
 import * as path from "path";
 import { getDotNetRoot } from "./DotNetProvider";
+import * as process from "process";
 
 export class CSharpierProcessSingleFile implements ICSharpierProcess {
     private readonly csharpierPath: string;
     private logger: Logger;
+    private version: string;
 
-    constructor(logger: Logger, csharpierPath: string) {
+    constructor(logger: Logger, csharpierPath: string, version: string) {
         this.logger = logger;
         this.csharpierPath = csharpierPath;
+        this.version = version;
+    }
+
+    getProcessFailedToStart(): boolean {
+        return false;
     }
 
     formatFile(content: string, filePath: string): Promise<string> {
@@ -40,4 +47,8 @@ export class CSharpierProcessSingleFile implements ICSharpierProcess {
     }
 
     dispose() {}
+
+    getVersion(): string {
+        return this.version;
+    }
 }
