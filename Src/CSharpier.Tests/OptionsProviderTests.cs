@@ -648,6 +648,28 @@ indent_size = 2
     }
 
     [Test]
+    public async Task Should_Not_Look_For_Subfolders_CSharpierRc_When_Limited()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/subfolder/.csharpierrc",
+            @"
+    [*]
+    tabWidth: 1
+    "
+        );
+
+        // this shouldn't happen in the real world, but validates we correctly limit
+        // the search to the top directory only
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test/",
+            "c:/test/subfolder/test.cs",
+            limitEditorConfigSearch: true
+        );
+        result.TabWidth.Should().Be(4);
+    }
+
+    [Test]
     public async Task Should_Look_For_Subfolders_When_Limited()
     {
         var context = new TestContext();

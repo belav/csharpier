@@ -49,7 +49,7 @@ internal static class CommandLineFormatter
                     fileSystem,
                     logger,
                     cancellationToken,
-                    limitEditorConfigSearch: true
+                    limitConfigSearch: true
                 );
 
                 if (
