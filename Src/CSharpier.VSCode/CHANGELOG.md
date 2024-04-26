@@ -1,3 +1,6 @@
+## [1.7.1]
+- Fix issue with csharpier server not supporting dotnet root
+
 ## [1.7.0]
 - Use CSharpier Http Server for 0.28.0+
 - Log version of CSharpier used to format a given file
