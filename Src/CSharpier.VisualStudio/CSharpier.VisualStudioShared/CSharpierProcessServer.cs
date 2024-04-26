@@ -99,7 +99,7 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
             return null;
         }
 
-        var url = "http://localhost:" + this.port + "/format";
+        var url = "http://127.0.0.1:" + this.port + "/format";
 
         try
         {
