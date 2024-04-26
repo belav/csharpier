@@ -1,4 +1,15 @@
-﻿# 0.28.1
+﻿# 0.28.2
+## What's Changed
+### Pipe to `dotnet csharpier` fails when subdirectory is inaccessible [#1240](https://github.com/belav/csharpier/pull/1240)
+When running the following CSharpier would look for config files in subdirectories of the `pwd`. This could lead to exceptions if some of those directories were inaccessible.
+```
+echo "namespace Foo { public class Bar { public string Baz {get;set;}}}" | dotnet csharpier
+```
+
+Thanks go to @jamesfoster for reporting the issue.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.28.1...0.28.2
+# 0.28.1
 ## What's Changed
 ### Third party .editorconfig leading to: Error Failure parsing editorconfig files [#1227](https://github.com/belav/csharpier/issues/1227)
 When CSharpier encountered an invalid `.editorconfig` file, it would throw an exception and not format files. These files could appear in 3rd party code (for example within node_modules). CSharpier now ignores invalid lines in `.editorconfigs`
@@ -2333,6 +2344,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
