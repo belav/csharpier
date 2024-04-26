@@ -1,4 +1,7 @@
-﻿## [1.7.0]
+﻿## [1.7.1]
+- Fix issue with csharpier server not working when localhost resolved to IPv6 ::1
+
+## [1.7.0]
 - Use CSharpier Server for 0.28.0+
 
 ## [1.5.2]

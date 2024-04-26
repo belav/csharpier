@@ -1,3 +1,6 @@
+## [1.7.2]
+- Fix issue with csharpier server not working when localhost resolved to IPv6 ::1
+
 ## [1.7.1]
 - Fix issue with csharpier server not supporting dotnet root
 

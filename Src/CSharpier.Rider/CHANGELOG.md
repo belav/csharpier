@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.7.3]
+- Fix issue with csharpier server not working when localhost resolved to IPv6 ::1
+
 ## [1.7.2]
 - Better error message when csharpier server fails to start
 
