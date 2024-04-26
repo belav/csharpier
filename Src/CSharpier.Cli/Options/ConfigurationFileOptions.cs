@@ -46,14 +46,20 @@ internal class ConfigurationFileOptions
     internal static List<CSharpierConfigData> FindForDirectoryName(
         string directoryName,
         IFileSystem fileSystem,
-        ILogger logger
+        ILogger logger,
+        bool limitEditorConfigSearch
     )
     {
         var results = new List<CSharpierConfigData>();
         var directoryInfo = fileSystem.DirectoryInfo.New(directoryName);
 
         var filesByDirectory = directoryInfo
-            .EnumerateFiles(".csharpierrc*", SearchOption.AllDirectories)
+            .EnumerateFiles(
+                ".csharpierrc*",
+                limitEditorConfigSearch
+                    ? SearchOption.TopDirectoryOnly
+                    : SearchOption.AllDirectories
+            )
             .GroupBy(o => o.DirectoryName);
 
         foreach (var group in filesByDirectory)
