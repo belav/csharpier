@@ -36,7 +36,7 @@ internal class OptionsProvider
         IFileSystem fileSystem,
         ILogger logger,
         CancellationToken cancellationToken,
-        bool limitEditorConfigSearch = false
+        bool limitConfigSearch = false
     )
     {
         var specifiedPrinterOptions = configPath is not null
@@ -44,7 +44,12 @@ internal class OptionsProvider
             : null;
 
         var csharpierConfigs = configPath is null
-            ? ConfigurationFileOptions.FindForDirectoryName(directoryName, fileSystem, logger)
+            ? ConfigurationFileOptions.FindForDirectoryName(
+                directoryName,
+                fileSystem,
+                logger,
+                limitConfigSearch
+            )
             : Array.Empty<CSharpierConfigData>().ToList();
 
         IList<EditorConfigSections>? editorConfigSections = null;
@@ -56,7 +61,7 @@ internal class OptionsProvider
             editorConfigSections = EditorConfigParser.FindForDirectoryName(
                 directoryName,
                 fileSystem,
-                limitEditorConfigSearch,
+                limitConfigSearch,
                 ignoreFile
             );
         }

@@ -2,6 +2,7 @@ import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import { Logger } from "./Logger";
 import { FormatFileParameter, FormatFileResult, ICSharpierProcess2 } from "./ICSharpierProcess";
 import fetch from "node-fetch";
+import { getDotNetRoot } from "./DotNetProvider";
 
 export class CSharpierProcessServer implements ICSharpierProcess2 {
     private csharpierPath: string;
@@ -19,8 +20,9 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
 
         this.logger.debug("Warm CSharpier with initial format");
         // warm by formatting a file twice, the 3rd time is when it gets really fast
-        this.formatFile("public class ClassName { }", "/Temp/Test.cs").then(() => {
-            this.formatFile("public class ClassName { }", "/Temp/Test.cs");
+        // make sure we give a path that should not exist to avoid any errors when trying to find config files etc.
+        this.formatFile("public class ClassName { }", `/${Date.now()}/Test.cs`).then(() => {
+            this.formatFile("public class ClassName { }", `/${Date.now()}/Test.cs`);
         });
     }
 
@@ -32,7 +34,7 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
         const csharpierProcess = spawn(csharpierPath, ["--server"], {
             stdio: "pipe",
             cwd: workingDirectory,
-            env: { ...process.env, DOTNET_NOLOGO: "1" },
+            env: { ...process.env, DOTNET_NOLOGO: "1", DOTNET_ROOT: getDotNetRoot() },
         });
 
         csharpierProcess.on("error", data => {
@@ -41,6 +43,16 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
                 data,
             );
             this.processFailedToStart = true;
+        });
+
+        csharpierProcess.on("exit", () => {
+            if (csharpierProcess.exitCode !== null && csharpierProcess.exitCode > 0) {
+                this.processFailedToStart = true;
+            }
+        });
+
+        csharpierProcess.stderr.on("data", data => {
+            this.logger.warn("CSharpier process return the following error: ", data.toString());
         });
 
         let output = "";
@@ -72,7 +84,7 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
         }
 
         if (typeof this.process === "undefined") {
-            await new Promise(r => setTimeout(r, 2000));
+            await new Promise(r => setTimeout(r, 1000));
         }
 
         if (this.processFailedToStart || typeof this.process === "undefined") {
@@ -81,7 +93,7 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
         }
 
         try {
-            const url = "http://localhost:" + this.port + "/format";
+            const url = "http://127.0.0.1:" + this.port + "/format";
 
             const response = await fetch(url, {
                 method: "POST",
