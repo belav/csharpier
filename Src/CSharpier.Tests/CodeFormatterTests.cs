@@ -4,6 +4,8 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
+using CSharpier.Utilities;
+
 // TODO xml move these around
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
@@ -60,6 +62,28 @@ internal class CodeFormatterTests
         var result = CodeFormatter.Format(code, new CodeFormatterOptions { Width = 10 });
 
         result.Code.Should().Be("var someVariable =\n    someValue;\n");
+    }
+
+    [Test]
+    public void Format_Should_Measure_Regular_Characters()
+    {
+        var code = """
+            var x = "123456";
+            """;
+        var result = CodeFormatter.Format(code, new CodeFormatterOptions { Width = 20 });
+
+        result.Code.Should().Be("var x = \"123456\";\n");
+    }
+
+    [Test]
+    public void Format_Should_Measure_Wide_Characters()
+    {
+        var code = """
+            var x = "가가가가가가";
+            """;
+        var result = CodeFormatter.Format(code, new CodeFormatterOptions { Width = 20 });
+
+        result.Code.Should().Be("var x =\n    \"가가가가가가\";\n");
     }
 
     [Test]
