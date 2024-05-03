@@ -56,8 +56,11 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
             {
                 this.logger.Warn(
                     "Spawning the csharpier server timed out. Formatting cannot occur."
+                        + Environment.NewLine
+                        + output
                 );
                 this.process!.Kill();
+                this.ProcessFailedToStart = true;
                 return;
             }
 
