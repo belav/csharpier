@@ -1,7 +1,8 @@
 Local Testing
-- I have run into cases of the extension not working. Uninstalling both csharpier and 
-csharpier 2019 from the test instance and restarting seems to fix it. Maybe it happens because both seem to
-to installed? Turning off the 2019 build for debug seems to have helped
+- Open this project in VisualStudio
+- Use VS to start the extension with/without debugging
+- I have run into cases of the extension not working, it seems to sometimes install the 2022 and 2019 version into the instance of VS used to test  
+Uninstalling both csharpier and csharpier 2019 from the test instance and restarting seems to fix it. 
 
 Publishing
 - Update version in BOTH files at CSharpier.VisualStudio[2019]/source.extension.vsixmanifest
