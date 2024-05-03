@@ -193,6 +193,25 @@ endOfLine: crlf
     }
 
     [Test]
+    public async Task Should_Things()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.csharpierrc",
+            """
+            overrides:
+                - extensions: ".cst"
+                  formatter: "csharp"
+                  tabWidth: 2
+            """
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cst");
+
+        result.TabWidth.Should().Be(2);
+    }
+
+    [Test]
     public async Task Should_Support_EditorConfig_Basic()
     {
         var context = new TestContext();

@@ -44,7 +44,7 @@ internal class OptionsProvider
             : null;
 
         var csharpierConfigs = configPath is null
-            ? ConfigurationFileOptions.FindForDirectoryName(
+            ? ConfigurationFileParser.FindForDirectoryName(
                 directoryName,
                 fileSystem,
                 logger,
