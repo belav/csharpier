@@ -13,7 +13,8 @@ internal class EditorConfigSections
     {
         var sections = this.SectionsIncludingParentFiles.Where(o => o.IsMatch(filePath)).ToList();
         var resolvedConfiguration = new ResolvedConfiguration(sections);
-        var printerOptions = new PrinterOptions();
+        // TODO overrides always this?
+        var printerOptions = new PrinterOptions { Formatter = "csharp" };
 
         if (resolvedConfiguration.MaxLineLength is { } maxLineLength)
         {

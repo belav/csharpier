@@ -88,13 +88,14 @@ public class CommandLineFormatterTests
         result
             .OutputLines.First()
             .Should()
-            .Be(@"Warning ./Unsupported.js - Is an unsupported file type.");
+            .Be("Warning ./Unsupported.js - Is an unsupported file type.");
     }
 
+    [Test]
     public void Format_Writes_File_With_Directory_Path()
     {
         var context = new TestContext();
-        var unformattedFilePath = $"Unformatted.cs";
+        var unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
         this.Format(context);
@@ -133,6 +134,29 @@ public class CommandLineFormatterTests
                 """
             );
     }
+
+    [Test]
+    public void Formats_Overrides_File()
+    {
+        var context = new TestContext();
+        var unformattedFilePath = "Unformatted.cst";
+        context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
+        context.WhenAFileExists(
+            ".csharpierrc",
+            """
+            overrides:
+              - files: "*.cst"
+                formatter: "csharp"
+            """
+        );
+
+        var result = this.Format(context);
+        result.OutputLines.First().Should().StartWith("Formatted 1 files");
+
+        context.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
+    }
+
+    // TODO overrides more tests?
 
     [TestCase("0.9.0", false)]
     [TestCase("9999.0.0", false)]

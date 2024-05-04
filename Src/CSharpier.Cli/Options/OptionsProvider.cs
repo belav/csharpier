@@ -4,7 +4,6 @@ using System.IO.Abstractions;
 using System.Text.Json;
 using CSharpier.Cli.EditorConfig;
 using Microsoft.Extensions.Logging;
-using PrinterOptions = CSharpier.PrinterOptions;
 
 internal class OptionsProvider
 {
@@ -82,7 +81,7 @@ internal class OptionsProvider
         );
     }
 
-    public PrinterOptions GetPrinterOptionsFor(string filePath)
+    public PrinterOptions? GetPrinterOptionsFor(string filePath)
     {
         if (this.specifiedConfigFile is not null)
         {
@@ -110,7 +109,13 @@ internal class OptionsProvider
             return resolvedEditorConfig.ConvertToPrinterOptions(filePath);
         }
 
-        return new PrinterOptions();
+        // TODO overrides I should see how prettier deals with some of this
+        if (filePath.EndsWith(".cs") || filePath.EndsWith(".csx"))
+        {
+            return new PrinterOptions { Formatter = "csharp" };
+        }
+
+        return null;
     }
 
     public bool IsIgnored(string actualFilePath)

@@ -50,7 +50,8 @@ internal class CSharpierServiceImplementation
 
             var result = await CSharpFormatter.FormatAsync(
                 formatFileParameter.fileContents,
-                optionsProvider.GetPrinterOptionsFor(formatFileParameter.fileName),
+                // TODO overrides really?
+                optionsProvider.GetPrinterOptionsFor(formatFileParameter.fileName)!,
                 cancellationToken
             );
 

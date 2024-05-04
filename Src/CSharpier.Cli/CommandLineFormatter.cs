@@ -65,18 +65,21 @@ internal static class CommandLineFormatter
                     );
 
                     var printerOptions = optionsProvider.GetPrinterOptionsFor(filePath);
-                    printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
+                    if (printerOptions is not null)
+                    {
+                        printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
 
-                    await PerformFormattingSteps(
-                        fileToFormatInfo,
-                        new StdOutFormattedFileWriter(console),
-                        commandLineFormatterResult,
-                        fileIssueLogger,
-                        printerOptions,
-                        commandLineOptions,
-                        FormattingCacheFactory.NullCache,
-                        cancellationToken
-                    );
+                        await PerformFormattingSteps(
+                            fileToFormatInfo,
+                            new StdOutFormattedFileWriter(console),
+                            commandLineFormatterResult,
+                            fileIssueLogger,
+                            printerOptions,
+                            commandLineOptions,
+                            FormattingCacheFactory.NullCache,
+                            cancellationToken
+                        );
+                    }
                 }
             }
             else
@@ -206,20 +209,23 @@ internal static class CommandLineFormatter
                 }
 
                 var printerOptions = optionsProvider.GetPrinterOptionsFor(actualFilePath);
-                printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
 
-                await FormatPhysicalFile(
-                    actualFilePath,
-                    originalFilePath,
-                    fileSystem,
-                    logger,
-                    commandLineFormatterResult,
-                    writer,
-                    commandLineOptions,
-                    printerOptions,
-                    formattingCache,
-                    cancellationToken
-                );
+                if (printerOptions is not null)
+                {
+                    printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
+                    await FormatPhysicalFile(
+                        actualFilePath,
+                        originalFilePath,
+                        fileSystem,
+                        logger,
+                        commandLineFormatterResult,
+                        writer,
+                        commandLineOptions,
+                        printerOptions,
+                        formattingCache,
+                        cancellationToken
+                    );
+                }
             }
 
             if (isFile)
@@ -246,7 +252,6 @@ internal static class CommandLineFormatter
                         "*.*",
                         SearchOption.AllDirectories
                     )
-                    .Where(o => o.EndsWithIgnoreCase(".cs") || o.EndsWithIgnoreCase(".csx"))
                     .Select(o =>
                     {
                         var normalizedPath = o.Replace("\\", "/");

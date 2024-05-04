@@ -5,7 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 
 [TestFixture]
-public class ConfigurationFileParserTests
+public class ConfigFileParserTests
 {
     [Test]
     public void Should_Parse_Yaml_With_Overrides()

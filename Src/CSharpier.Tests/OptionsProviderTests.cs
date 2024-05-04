@@ -752,7 +752,8 @@ indent_size = 2
                 limitEditorConfigSearch
             );
 
-            return provider.GetPrinterOptionsFor(filePath);
+            // TODO overrides, ugh
+            return provider.GetPrinterOptionsFor(filePath)!;
         }
     }
 }

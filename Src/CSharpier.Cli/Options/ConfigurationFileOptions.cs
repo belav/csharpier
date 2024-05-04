@@ -14,7 +14,7 @@ internal class ConfigurationFileOptions
 
     public Override[] Overrides { get; init; } = [];
 
-    public PrinterOptions ConvertToPrinterOptions(string filePath)
+    public PrinterOptions? ConvertToPrinterOptions(string filePath)
     {
         var matchingOverride = this.Overrides.LastOrDefault(o => o.IsMatch(filePath));
         if (matchingOverride is not null)
@@ -24,17 +24,24 @@ internal class ConfigurationFileOptions
                 TabWidth = matchingOverride.TabWidth,
                 UseTabs = matchingOverride.UseTabs,
                 Width = matchingOverride.PrintWidth,
-                EndOfLine = matchingOverride.EndOfLine
+                EndOfLine = matchingOverride.EndOfLine,
+                Formatter = matchingOverride.Formatter
             };
         }
 
-        return new PrinterOptions
+        if (filePath.EndsWith(".cs") || filePath.EndsWith(".csx"))
         {
-            TabWidth = this.TabWidth,
-            UseTabs = this.UseTabs,
-            Width = this.PrintWidth,
-            EndOfLine = this.EndOfLine
-        };
+            return new PrinterOptions
+            {
+                TabWidth = this.TabWidth,
+                UseTabs = this.UseTabs,
+                Width = this.PrintWidth,
+                EndOfLine = this.EndOfLine,
+                Formatter = "csharp"
+            };
+        }
+
+        return null;
     }
 
     public void Init(string directory)
