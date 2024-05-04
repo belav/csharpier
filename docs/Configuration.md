@@ -80,7 +80,7 @@ When supplying symbol sets, they will be used for all files being formatted. Thi
 The long term plan is to improve Csharpier's ability to determine the symbol sets itself and to allow specifying them for individual files.
 
 ### Configuration Overrides ###
-TODO
+TODO overrides
 override config options by extension  
 specify formatter by extension (currently only csharp)  
 by default cs and csx are formatted  

@@ -10,10 +10,10 @@ public class ConfigurationFileParserTests
     [Test]
     public void Should_Parse_Yaml_With_Overrides()
     {
-        var options = ConfigurationFileParser.CreateFromContent(
+        var options = ConfigFileParser.CreateFromContent(
             """
             overrides:
-                - extensions: [".cst"]
+                - files: "*.cst"
                   formatter: "csharp"
                   tabWidth: 2
                   useTabs: true
@@ -23,8 +23,7 @@ public class ConfigurationFileParserTests
         );
 
         options.Overrides.Should().HaveCount(1);
-        options.Overrides.First().Extensions.Should().HaveCount(1);
-        options.Overrides.First().Extensions.First().Should().Be(".cst");
+        options.Overrides.First().Files.Should().Be("*.cst");
         options.Overrides.First().Formatter.Should().Be("csharp");
         options.Overrides.First().TabWidth.Should().Be(2);
         options.Overrides.First().UseTabs.Should().Be(true);
@@ -35,12 +34,12 @@ public class ConfigurationFileParserTests
     [Test]
     public void Should_Parse_Json_With_Overrides()
     {
-        var options = ConfigurationFileParser.CreateFromContent(
+        var options = ConfigFileParser.CreateFromContent(
             """
             {
                 "overrides": [
                     {
-                       "extensions": [".cst"],
+                       "files": "*.cst",
                        "formatter": "csharp",
                        "tabWidth": 2,
                        "useTabs": true,
@@ -53,8 +52,7 @@ public class ConfigurationFileParserTests
         );
 
         options.Overrides.Should().HaveCount(1);
-        options.Overrides.First().Extensions.Should().HaveCount(1);
-        options.Overrides.First().Extensions.First().Should().Be(".cst");
+        options.Overrides.First().Files.Should().Be("*.cst");
         options.Overrides.First().Formatter.Should().Be("csharp");
         options.Overrides.First().TabWidth.Should().Be(2);
         options.Overrides.First().UseTabs.Should().Be(true);

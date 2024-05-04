@@ -1,8 +1,7 @@
 namespace CSharpier.Cli.Options;
 
-using System.IO.Abstractions;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.Logging;
+using CSharpier.Cli.EditorConfig;
 
 internal class ConfigurationFileOptions
 {
@@ -10,53 +9,67 @@ internal class ConfigurationFileOptions
     public int TabWidth { get; init; } = 4;
     public bool UseTabs { get; init; }
 
-    public Override[] Overrides { get; init; } = [];
-
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
     public EndOfLine EndOfLine { get; init; }
 
-    internal static PrinterOptions CreatePrinterOptionsFromPath(
-        string configPath,
-        IFileSystem fileSystem,
-        ILogger logger
-    )
-    {
-        var configurationFileOptions = ConfigurationFileParser.Create(
-            configPath,
-            fileSystem,
-            logger
-        );
+    public Override[] Overrides { get; init; } = [];
 
-        return ConvertToPrinterOptions(configurationFileOptions);
-    }
-
-    internal static PrinterOptions ConvertToPrinterOptions(
-        ConfigurationFileOptions configurationFileOptions
-    )
+    public PrinterOptions ConvertToPrinterOptions(string filePath)
     {
+        var matchingOverride = this.Overrides.LastOrDefault(o => o.IsMatch(filePath));
+        if (matchingOverride is not null)
+        {
+            return new PrinterOptions
+            {
+                TabWidth = matchingOverride.TabWidth,
+                UseTabs = matchingOverride.UseTabs,
+                Width = matchingOverride.PrintWidth,
+                EndOfLine = matchingOverride.EndOfLine
+            };
+        }
+
         return new PrinterOptions
         {
-            TabWidth = configurationFileOptions.TabWidth,
-            UseTabs = configurationFileOptions.UseTabs,
-            Width = configurationFileOptions.PrintWidth,
-            EndOfLine = configurationFileOptions.EndOfLine
+            TabWidth = this.TabWidth,
+            UseTabs = this.UseTabs,
+            Width = this.PrintWidth,
+            EndOfLine = this.EndOfLine
         };
+    }
+
+    public void Init(string directory)
+    {
+        foreach (var thing in this.Overrides)
+        {
+            thing.Init(directory);
+        }
     }
 }
 
-// TODO actually make use of all of this
 internal class Override
 {
-    // TODO figure out dealing with .cst vs cst
-    public string[] Extensions { get; init; } = [];
+    private GlobMatcher? matcher;
 
-    // TODO what about specifying this in editorconfig?
-    // TODO need to format files with non-standard extensions
-    public string Formatter { get; init; } = string.Empty;
     public int PrintWidth { get; init; } = 100;
     public int TabWidth { get; init; } = 4;
     public bool UseTabs { get; init; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
     public EndOfLine EndOfLine { get; init; }
+
+    public string Files { get; init; } = string.Empty;
+
+    // TODO overrides what about specifying this in editorconfig?
+    // TODO overrides need to format files with non-standard extensions
+    public string Formatter { get; init; } = string.Empty;
+
+    public void Init(string directory)
+    {
+        this.matcher = Globber.Create(this.Files, directory);
+    }
+
+    public bool IsMatch(string fileName)
+    {
+        return this.matcher?.IsMatch(fileName) ?? false;
+    }
 }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-internal static class ConfigurationFileParser
+internal static class ConfigFileParser
 {
     private static readonly string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
 
@@ -79,11 +79,14 @@ internal static class ConfigurationFileParser
         ILogger? logger = null
     )
     {
+        var directoryName = fileSystem.Path.GetDirectoryName(configPath)!;
         var content = fileSystem.File.ReadAllText(configPath);
 
         if (!string.IsNullOrWhiteSpace(content))
         {
-            return CreateFromContent(content);
+            var configFile = CreateFromContent(content);
+            configFile.Init(directoryName);
+            return configFile;
         }
 
         logger?.LogWarning("The configuration file at " + configPath + " was empty.");

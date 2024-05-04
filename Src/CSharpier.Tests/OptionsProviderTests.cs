@@ -193,14 +193,14 @@ endOfLine: crlf
     }
 
     [Test]
-    public async Task Should_Things()
+    public async Task Should_Return_TabWidth_For_Overrid()
     {
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.csharpierrc",
             """
             overrides:
-                - extensions: ".cst"
+                - files: "*.cst"
                   formatter: "csharp"
                   tabWidth: 2
             """
