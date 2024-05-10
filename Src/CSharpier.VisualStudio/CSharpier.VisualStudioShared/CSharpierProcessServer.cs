@@ -48,6 +48,68 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
         }
     }
 
+    private bool ActuallyStartProcess(int portToUse = -1)
+    {
+        try
+        {
+            var arguments = "--server";
+            if (portToUse > 0)
+            {
+                arguments += " --server-port " + portToUse;
+            }
+
+            this.logger.Debug("Running " + this.csharpierPath + " " + arguments);
+
+            var processStartInfo = new ProcessStartInfo(this.csharpierPath, arguments)
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                Environment = { ["DOTNET_NOLOGO"] = "1" }
+            };
+            this.process = Process.Start(processStartInfo);
+
+            var output = string.Empty;
+
+            var task = Task.Run(() =>
+            {
+                output = this.process!.StandardOutput.ReadLine();
+            });
+
+            if (!task.Wait(TimeSpan.FromSeconds(2)))
+            {
+                this.process!.Kill();
+                this.logger.Warn(
+                    "Spawning the csharpier server timed out."
+                        + Environment.NewLine
+                        + this.process!.StandardError.ReadToEnd()
+                );
+                return false;
+            }
+
+            if (this.process!.HasExited)
+            {
+                this.logger.Warn(
+                    "Spawning the csharpier server failed because it exited. "
+                        + this.process!.StandardError.ReadToEnd()
+                );
+                return false;
+            }
+
+            var portString = output.Replace("Started on ", "");
+            this.port = int.Parse(portString);
+
+            this.logger.Debug("Connecting via port " + portString);
+            return true;
+        }
+        catch (Exception e)
+        {
+            this.logger.Warn("Failed to spawn the needed csharpier server." + e);
+            return false;
+        }
+    }
+
     private int FindFreePort()
     {
         this.logger.Debug("Trying to find free port in extension");
@@ -80,66 +142,6 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
         throw new InvalidOperationException(
             $"Could not find any free TCP port between ports {startPort}-{endPort}"
         );
-    }
-
-    private bool ActuallyStartProcess(int portToUse = -1)
-    {
-        try
-        {
-            var arguments = "--server";
-            if (portToUse > 0)
-            {
-                arguments += " --server-port " + portToUse;
-            }
-
-            this.logger.Debug("Running " + this.csharpierPath + " " + arguments);
-
-            var processStartInfo = new ProcessStartInfo(this.csharpierPath, arguments)
-            {
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                Environment = { ["DOTNET_NOLOGO"] = "1" }
-            };
-            this.process = Process.Start(processStartInfo);
-
-            var output = string.Empty;
-
-            var task = Task.Run(() =>
-            {
-                output = this.process!.StandardOutput.ReadLine();
-            });
-
-            if (!task.Wait(TimeSpan.FromSeconds(2)))
-            {
-                this.logger.Warn(
-                    "Spawning the csharpier server timed out." + Environment.NewLine + output
-                );
-                this.process!.Kill();
-                return false;
-            }
-
-            if (this.process!.HasExited)
-            {
-                this.logger.Warn(
-                    "Spawning the csharpier server failed because it exited. "
-                        + this.process!.StandardError.ReadToEnd()
-                );
-                return false;
-            }
-
-            var portString = output.Replace("Started on ", "");
-            this.port = int.Parse(portString);
-
-            this.logger.Debug("Connecting via port " + portString);
-            return true;
-        }
-        catch (Exception e)
-        {
-            this.logger.Warn("Failed to spawn the needed csharpier server." + e);
-            return false;
-        }
     }
 
     public string FormatFile(string content, string filePath)
