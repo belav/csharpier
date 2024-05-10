@@ -1,7 +1,10 @@
 using System;
+using System.CodeDom;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using CSharpier.VisualStudio;
@@ -33,9 +36,65 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
 
     private void StartProcess()
     {
+        if (this.ActuallyStartProcess())
+        {
+            return;
+        }
+
+        var portToUse = this.FindFreePort();
+        if (!this.ActuallyStartProcess(portToUse))
+        {
+            this.ProcessFailedToStart = true;
+        }
+    }
+
+    private int FindFreePort()
+    {
+        this.logger.Debug("Trying to find free port in extension");
+        const int startPort = 49152;
+        const int endPort = 65535;
+        var ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
+        var tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
+        var ipEndPoint = ipGlobalProperties.GetActiveTcpListeners();
+
+        var usedPorts = ipEndPoint
+            .Where(o => o.Port >= startPort)
+            .Select(o => o.Port)
+            .Concat(
+                tcpConnInfoArray
+                    .Where(o => o.LocalEndPoint.Port >= startPort)
+                    .Select(o => o.LocalEndPoint.Port)
+            )
+            .ToHashSet();
+
+        this.logger.Debug($"Found {usedPorts.Count} used ports that could conflict");
+
+        for (var i = startPort; i < endPort; i++)
+        {
+            if (!usedPorts.Contains(i))
+            {
+                return i;
+            }
+        }
+
+        throw new InvalidOperationException(
+            $"Could not find any free TCP port between ports {startPort}-{endPort}"
+        );
+    }
+
+    private bool ActuallyStartProcess(int portToUse = -1)
+    {
         try
         {
-            var processStartInfo = new ProcessStartInfo(this.csharpierPath, "--server")
+            var arguments = "--server";
+            if (portToUse > 0)
+            {
+                arguments += " --server-port " + portToUse;
+            }
+
+            this.logger.Debug("Running " + this.csharpierPath + " " + arguments);
+
+            var processStartInfo = new ProcessStartInfo(this.csharpierPath, arguments)
             {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -55,13 +114,10 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
             if (!task.Wait(TimeSpan.FromSeconds(2)))
             {
                 this.logger.Warn(
-                    "Spawning the csharpier server timed out. Formatting cannot occur."
-                        + Environment.NewLine
-                        + output
+                    "Spawning the csharpier server timed out." + Environment.NewLine + output
                 );
                 this.process!.Kill();
-                this.ProcessFailedToStart = true;
-                return;
+                return false;
             }
 
             if (this.process!.HasExited)
@@ -70,19 +126,19 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
                     "Spawning the csharpier server failed because it exited. "
                         + this.process!.StandardError.ReadToEnd()
                 );
-                this.ProcessFailedToStart = true;
-                return;
+                return false;
             }
 
             var portString = output.Replace("Started on ", "");
             this.port = int.Parse(portString);
 
             this.logger.Debug("Connecting via port " + portString);
+            return true;
         }
         catch (Exception e)
         {
             this.logger.Warn("Failed to spawn the needed csharpier server." + e);
-            this.ProcessFailedToStart = true;
+            return false;
         }
     }
 

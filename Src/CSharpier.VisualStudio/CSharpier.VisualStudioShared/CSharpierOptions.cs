@@ -39,12 +39,20 @@
         )]
         public string? CustomPath { get; set; }
 
+        [Category("CSharpier - Developer")]
+        [DisplayName("Disable CSharpier Server")]
+        [Description(
+            "Disable CSharpier Server - Use the legacy version of piping stdin to csharpier for formatting files."
+        )]
+        public bool DisableCSharpierServer { get; set; }
+
         protected void LoadFrom(CSharpierOptions newInstance)
         {
             this.SolutionRunOnSave = newInstance.SolutionRunOnSave;
             this.GlobalRunOnSave = newInstance.GlobalRunOnSave;
             this.GlobalLogDebugMessages = newInstance.GlobalLogDebugMessages;
             this.CustomPath = newInstance.CustomPath;
+            this.DisableCSharpierServer = newInstance.DisableCSharpierServer;
         }
 
         private static readonly AsyncLazy<CSharpierOptions> liveModel =
@@ -118,6 +126,7 @@
                     newInstance.GlobalRunOnSave = o.RunOnSave;
                     newInstance.GlobalLogDebugMessages = o.LogDebugMessages;
                     newInstance.CustomPath = o.CustomPath;
+                    newInstance.DisableCSharpierServer = o.DisableCSharpierServer;
                 }
             );
 
@@ -172,6 +181,7 @@
                     RunOnSave = this.GlobalRunOnSave,
                     LogDebugMessages = this.GlobalLogDebugMessages,
                     CustomPath = this.CustomPath,
+                    DisableCSharpierServer = this.DisableCSharpierServer,
                 }
             );
         }
@@ -206,6 +216,7 @@
             public bool? RunOnSave { get; set; }
             public bool LogDebugMessages { get; set; }
             public string? CustomPath { get; set; }
+            public bool DisableCSharpierServer { get; set; }
         }
     }
 }
