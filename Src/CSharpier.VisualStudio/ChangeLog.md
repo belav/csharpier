@@ -1,4 +1,8 @@
-﻿## [1.7.2]
+﻿## [1.7.3]
+- If CSharpier doesn't respond when trying to find a port, then try to find a port in extension
+- Add option to bypass csharpier server.
+
+## [1.7.2]
 - Fix bad code path when csharpier server failed to start
 
 ## [1.7.1]

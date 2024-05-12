@@ -49,9 +49,14 @@ internal static class ServerFormatter
         var ipEndPoint = ipGlobalProperties.GetActiveTcpListeners();
 
         var usedPorts = ipEndPoint
+            .Where(o => o.Port >= startPort)
             .Select(o => o.Port)
-            .Concat(tcpConnInfoArray.Select(o => o.LocalEndPoint.Port))
-            .ToList();
+            .Concat(
+                tcpConnInfoArray
+                    .Where(o => o.LocalEndPoint.Port >= startPort)
+                    .Select(o => o.LocalEndPoint.Port)
+            )
+            .ToHashSet();
 
         for (var i = startPort; i < endPort; i++)
         {

@@ -220,12 +220,25 @@ namespace CSharpier.VisualStudio
                 var serverVersion = new Version("0.28.0");
                 ICSharpierProcess cSharpierProcess;
 
-                if (installedVersion.CompareTo(serverVersion) >= 0)
+                if (
+                    installedVersion.CompareTo(serverVersion) >= 0
+                    && !CSharpierOptions.Instance.DisableCSharpierServer
+                )
                 {
                     cSharpierProcess = new CSharpierProcessServer(customPath, version, this.logger);
                 }
                 else if (installedVersion.CompareTo(pipeFilesVersion) >= 0)
                 {
+                    if (
+                        installedVersion.CompareTo(serverVersion) >= 0
+                        && CSharpierOptions.Instance.DisableCSharpierServer
+                    )
+                    {
+                        this.logger.Debug(
+                            "CSharpier server is disabled, falling back to piping via stdin"
+                        );
+                    }
+
                     cSharpierProcess = new CSharpierProcessPipeMultipleFiles(
                         customPath,
                         version,
