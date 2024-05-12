@@ -9,11 +9,17 @@ internal class EditorConfigSections
     public required string DirectoryName { get; init; }
     public required IReadOnlyCollection<Section> SectionsIncludingParentFiles { get; init; }
 
-    public PrinterOptions ConvertToPrinterOptions(string filePath)
+    public PrinterOptions? ConvertToPrinterOptions(string filePath)
     {
+        // TODO overrides what about specifying this in editorconfig? new ticket
+        if (!(filePath.EndsWith(".cs") || filePath.EndsWith(".csx")))
+        {
+            return null;
+        }
+
         var sections = this.SectionsIncludingParentFiles.Where(o => o.IsMatch(filePath)).ToList();
         var resolvedConfiguration = new ResolvedConfiguration(sections);
-        // TODO overrides always this?
+
         var printerOptions = new PrinterOptions { Formatter = "csharp" };
 
         if (resolvedConfiguration.MaxLineLength is { } maxLineLength)

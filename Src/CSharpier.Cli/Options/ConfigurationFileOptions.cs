@@ -16,6 +16,7 @@ internal class ConfigurationFileOptions
 
     public PrinterOptions? ConvertToPrinterOptions(string filePath)
     {
+        DebugLogger.Log("finding options for " + filePath);
         var matchingOverride = this.Overrides.LastOrDefault(o => o.IsMatch(filePath));
         if (matchingOverride is not null)
         {
@@ -66,8 +67,6 @@ internal class Override
 
     public string Files { get; init; } = string.Empty;
 
-    // TODO overrides what about specifying this in editorconfig?
-    // TODO overrides need to format files with non-standard extensions
     public string Formatter { get; init; } = string.Empty;
 
     public void Init(string directory)

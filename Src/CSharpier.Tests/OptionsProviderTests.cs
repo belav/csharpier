@@ -752,7 +752,7 @@ indent_size = 2
                 limitEditorConfigSearch
             );
 
-            // TODO overrides, ugh
+            // TODO overrides do we need tests for when this is null? also this ! sucks
             return provider.GetPrinterOptionsFor(filePath)!;
         }
     }

@@ -4,11 +4,7 @@ internal abstract class Doc
 {
     public string Print()
     {
-        return DocPrinter.DocPrinter.Print(
-            this,
-            new PrinterOptions { Formatter = "csharp" },
-            Environment.NewLine
-        );
+        return DocPrinter.DocPrinter.Print(this, new PrinterOptions(), Environment.NewLine);
     }
 
     public override string ToString()

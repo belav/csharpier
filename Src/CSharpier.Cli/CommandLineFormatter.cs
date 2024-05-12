@@ -196,7 +196,11 @@ internal static class CommandLineFormatter
                 }
             }
 
-            async Task FormatFile(string actualFilePath, string originalFilePath)
+            async Task FormatFile(
+                string actualFilePath,
+                string originalFilePath,
+                bool warnForUnsupported = false
+            )
             {
                 if (
                     (
@@ -226,11 +230,16 @@ internal static class CommandLineFormatter
                         cancellationToken
                     );
                 }
+                else if (warnForUnsupported)
+                {
+                    var fileIssueLogger = new FileIssueLogger(originalFilePath, logger);
+                    fileIssueLogger.WriteWarning("Is an unsupported file type.");
+                }
             }
 
             if (isFile)
             {
-                await FormatFile(directoryOrFilePath, originalDirectoryOrFile);
+                await FormatFile(directoryOrFilePath, originalDirectoryOrFile, true);
             }
             else if (isDirectory)
             {
@@ -300,16 +309,6 @@ internal static class CommandLineFormatter
         );
 
         var fileIssueLogger = new FileIssueLogger(originalFilePath, logger);
-
-        if (
-            !actualFilePath.EndsWithIgnoreCase(".cs")
-            && !actualFilePath.EndsWithIgnoreCase(".cst")
-            && !actualFilePath.EndsWithIgnoreCase(".csx")
-        )
-        {
-            fileIssueLogger.WriteWarning("Is an unsupported file type.");
-            return;
-        }
 
         logger.LogDebug(
             commandLineOptions.Check

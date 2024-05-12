@@ -10,8 +10,6 @@ internal class PrinterOptions
     public EndOfLine EndOfLine { get; set; } = EndOfLine.Auto;
     public bool TrimInitialLines { get; init; } = true;
     public bool IncludeGenerated { get; set; }
-
-    // TODO overrides require this?
     public string Formatter { get; init; } = string.Empty;
 
     public const int WidthUsedByTests = 100;

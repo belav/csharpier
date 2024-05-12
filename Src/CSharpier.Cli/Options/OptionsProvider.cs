@@ -106,10 +106,10 @@ internal class OptionsProvider
 
         if (resolvedEditorConfig is not null)
         {
+            DebugLogger.Log("has editorconfig");
             return resolvedEditorConfig.ConvertToPrinterOptions(filePath);
         }
 
-        // TODO overrides I should see how prettier deals with some of this
         if (filePath.EndsWith(".cs") || filePath.EndsWith(".csx"))
         {
             return new PrinterOptions { Formatter = "csharp" };

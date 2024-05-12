@@ -90,6 +90,21 @@ public class CommandLineFormatterTests
             .Should()
             .Be("Warning ./Unsupported.js - Is an unsupported file type.");
     }
+    
+    
+    [Test]
+    public void Format_Does_Not_Write_Unsupported_When_Formatting_Directory()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Unsupported.js", "asdfasfasdf");
+
+        var result = this.Format(context);
+
+        result
+            .OutputLines.First()
+            .Should()
+            .StartWith("Formatted 0 files");
+    }
 
     [Test]
     public void Format_Writes_File_With_Directory_Path()
@@ -155,8 +170,6 @@ public class CommandLineFormatterTests
 
         context.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
     }
-
-    // TODO overrides more tests?
 
     [TestCase("0.9.0", false)]
     [TestCase("9999.0.0", false)]

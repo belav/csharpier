@@ -50,7 +50,7 @@ internal class CSharpierServiceImplementation
 
             var result = await CSharpFormatter.FormatAsync(
                 formatFileParameter.fileContents,
-                // TODO overrides really?
+                // TODO overrides will this really not be null? how are the IDEs going to format non-standard files?
                 optionsProvider.GetPrinterOptionsFor(formatFileParameter.fileName)!,
                 cancellationToken
             );
