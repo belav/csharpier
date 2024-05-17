@@ -280,7 +280,10 @@ namespace CSharpier.VisualStudio
 
             // handle semver versions
             // regex from https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
-            var regex = Regex.Match("0.27.3-dg.13", @"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$");
+            var regex = Regex.Match(
+                "0.27.3-dg.13",
+                @"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+            );
             if (regex.Success && regex.Groups.Count > 3)
             {
                 return new Version($"{regex.Groups[1]}.{regex.Groups[2]}.{regex.Groups[3]}");
