@@ -39,7 +39,7 @@ internal static class Token
         }
 
         var docs = new List<Doc>();
-        if (!skipLeadingTrivia && !context.ShouldSkipNextLeadingTrivia)
+        if (!skipLeadingTrivia && !context.SkipNextLeadingTrivia)
         {
             var leadingTrivia = PrintLeadingTrivia(syntaxToken, context);
             if (leadingTrivia != Doc.Null)
@@ -48,7 +48,7 @@ internal static class Token
             }
         }
 
-        context.ShouldSkipNextLeadingTrivia = false;
+        context.SkipNextLeadingTrivia = false;
 
         if (
             (
