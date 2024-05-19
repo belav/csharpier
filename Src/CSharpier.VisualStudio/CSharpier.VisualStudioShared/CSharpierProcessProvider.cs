@@ -1,11 +1,17 @@
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Net;
+using System.Security.Policy;
+using System.Windows.Forms;
 using System.Xml;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using Newtonsoft.Json;
 
 namespace CSharpier.VisualStudio
 {
