@@ -214,8 +214,7 @@ namespace CSharpier.VisualStudio
                 var customPath = this.customPathInstaller.GetPathForVersion(version);
 
                 this.logger.Debug("Adding new version " + version + " process for " + directory);
-
-                var installedVersion = new Version(version);
+                var installedVersion = GetInstalledVersion(version);
                 var pipeFilesVersion = new Version("0.12.0");
                 var serverVersion = new Version("0.28.0");
                 ICSharpierProcess cSharpierProcess;
@@ -276,6 +275,27 @@ namespace CSharpier.VisualStudio
             }
 
             return NullCSharpierProcess.Instance;
+        }
+
+        private Version GetInstalledVersion(string version)
+        {
+            if (Version.TryParse(version, out var installedVersion) && installedVersion != null)
+            {
+                return installedVersion;
+            }
+
+            // handle semver versions
+            // regex from https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+            var regex = Regex.Match(
+                version,
+                @"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+            );
+            if (regex.Success && regex.Groups.Count > 3)
+            {
+                return new Version($"{regex.Groups[1]}.{regex.Groups[2]}.{regex.Groups[3]}");
+            }
+
+            throw new ArgumentException($"Unable to parse version '{version}'", nameof(version));
         }
 
         private void DisplayFailureMessage()
