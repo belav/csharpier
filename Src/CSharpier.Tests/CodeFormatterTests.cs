@@ -76,6 +76,48 @@ internal class CodeFormatterTests
     }
 
     [Test]
+    public void Format_Should_UseBrackets_If()
+    {
+        var code = """
+if (true) {
+if (true) {
+    int aaa = 0;
+}
+}
+""";
+        var result = CodeFormatter.Format(code, new CodeFormatterOptions {  });
+
+        result.Code.Should().Be("""
+if (true) {
+    if (true) {
+        int aaa = 0;
+    }
+}
+
+""");
+    }
+
+    [Test]
+    public void Format_Should_UseBrackets_For()
+    {
+        var code = """
+for (var index = 0; index < 10; index++)
+{
+    Console.WriteLine($"{index}");
+}
+""";
+        var result = CodeFormatter.Format(code, new CodeFormatterOptions {  });
+
+        result.Code.Should().Be("""
+for (var index = 0; index < 10; index++)
+{
+    Console.WriteLine($"{index}");
+}
+
+""");
+    }
+
+    [Test]
     public void Format_Should_Measure_Wide_Characters()
     {
         var code = """
