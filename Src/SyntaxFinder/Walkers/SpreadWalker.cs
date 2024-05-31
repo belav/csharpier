@@ -1,7 +1,5 @@
-namespace SyntaxFinder;
+namespace SyntaxFinder.Walkers;
 
-using System.Collections.Concurrent;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 

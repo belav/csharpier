@@ -12,6 +12,10 @@ internal static class SwitchExpression
                     (o, _) =>
                         Doc.Concat(
                             ExtraNewLines.Print(o),
+                            Token.PrintLeadingTrivia(
+                                o.Pattern.GetLeadingTrivia(),
+                                context.WithSkipNextLeadingTrivia()
+                            ),
                             Doc.Group(
                                 Node.Print(o.Pattern, context),
                                 o.WhenClause != null ? Node.Print(o.WhenClause, context) : Doc.Null,

@@ -88,5 +88,19 @@ class ClassName
             )
                 => originalField.Type.Equals(updatedField.Type)
         };
+
+        return someValue switch
+        {
+            // comment
+            Some.One => 1,
+            Some.Two => 2,
+        };
+
+        return someValue switch
+        {
+            Some.One => 1,
+            // comment
+            Some.Two => 2,
+        };
     }
 }

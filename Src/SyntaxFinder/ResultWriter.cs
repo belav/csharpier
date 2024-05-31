@@ -4,6 +4,11 @@ public static class ResultWriter
 {
     public static void WriteMatching(int total, int matching)
     {
+        if (total == 0)
+        {
+            return;
+        }
+
         if (matching > total)
         {
             Console.WriteLine("Matching was > than Total, so you did something wrong.");

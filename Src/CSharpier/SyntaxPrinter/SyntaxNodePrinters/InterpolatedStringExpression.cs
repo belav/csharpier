@@ -31,12 +31,13 @@ internal static class InterpolatedStringExpression
         };
 
         docs.AddRange(node.Contents.Select(o => Node.Print(o, context)));
-        docs.Add(Token.Print(node.StringEndToken, context));
+        docs.Add(Token.PrintWithoutTrailingTrivia(node.StringEndToken, context));
 
         return Doc.Concat(
-            // pull out the leading trivia so it doesn't get forced flat
+            // pull out the trivia so it doesn't get forced flat
             Token.PrintLeadingTrivia(node.StringStartToken, context),
-            Doc.ForceFlat(docs)
+            Doc.ForceFlat(docs),
+            Token.PrintTrailingTrivia(node.StringEndToken)
         );
     }
 

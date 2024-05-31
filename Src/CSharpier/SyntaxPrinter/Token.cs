@@ -9,6 +9,11 @@ internal static class Token
         return PrintSyntaxToken(syntaxToken, context, skipLeadingTrivia: true);
     }
 
+    public static Doc PrintWithoutTrailingTrivia(SyntaxToken syntaxToken, FormattingContext context)
+    {
+        return PrintSyntaxToken(syntaxToken, context, skipTrailingTrivia: true);
+    }
+
     public static Doc Print(SyntaxToken syntaxToken, FormattingContext context)
     {
         return PrintSyntaxToken(syntaxToken, context);
@@ -30,7 +35,8 @@ internal static class Token
         SyntaxToken syntaxToken,
         FormattingContext context,
         Doc? suffixDoc = null,
-        bool skipLeadingTrivia = false
+        bool skipLeadingTrivia = false,
+        bool skipTrailingTrivia = false
     )
     {
         if (syntaxToken.RawSyntaxKind() == SyntaxKind.None)
@@ -39,7 +45,7 @@ internal static class Token
         }
 
         var docs = new List<Doc>();
-        if (!skipLeadingTrivia && !context.ShouldSkipNextLeadingTrivia)
+        if (!skipLeadingTrivia && !context.SkipNextLeadingTrivia)
         {
             var leadingTrivia = PrintLeadingTrivia(syntaxToken, context);
             if (leadingTrivia != Doc.Null)
@@ -48,7 +54,7 @@ internal static class Token
             }
         }
 
-        context.ShouldSkipNextLeadingTrivia = false;
+        context.SkipNextLeadingTrivia = false;
 
         if (
             (
@@ -113,10 +119,14 @@ internal static class Token
         {
             docs.Add(syntaxToken.Text);
         }
-        var trailingTrivia = PrintTrailingTrivia(syntaxToken);
-        if (trailingTrivia != Doc.Null)
+
+        if (!skipTrailingTrivia)
         {
-            docs.Add(trailingTrivia);
+            var trailingTrivia = PrintTrailingTrivia(syntaxToken);
+            if (trailingTrivia != Doc.Null)
+            {
+                docs.Add(trailingTrivia);
+            }
         }
 
         if (suffixDoc != null)
@@ -344,7 +354,7 @@ internal static class Token
     private static bool IsRegion(SyntaxKind kind) =>
         kind is SyntaxKind.RegionDirectiveTrivia or SyntaxKind.EndRegionDirectiveTrivia;
 
-    private static Doc PrintTrailingTrivia(SyntaxToken node)
+    public static Doc PrintTrailingTrivia(SyntaxToken node)
     {
         return PrintTrailingTrivia(node.TrailingTrivia);
     }
