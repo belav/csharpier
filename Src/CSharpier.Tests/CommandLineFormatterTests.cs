@@ -90,8 +90,7 @@ public class CommandLineFormatterTests
             .Should()
             .Be("Warning ./Unsupported.js - Is an unsupported file type.");
     }
-    
-    
+
     [Test]
     public void Format_Does_Not_Write_Unsupported_When_Formatting_Directory()
     {
@@ -100,10 +99,7 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context);
 
-        result
-            .OutputLines.First()
-            .Should()
-            .StartWith("Formatted 0 files");
+        result.OutputLines.First().Should().StartWith("Formatted 0 files");
     }
 
     [Test]
