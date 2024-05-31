@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.Logging;
 
 internal static class ServerFormatter
@@ -15,59 +16,38 @@ internal static class ServerFormatter
         CancellationToken cancellationToken
     )
     {
-        var thePort = port ?? FindFreePort();
         var builder = WebApplication.CreateBuilder();
         builder.WebHost.ConfigureKestrel(
             (_, serverOptions) =>
             {
-                serverOptions.Listen(IPAddress.Loopback, thePort);
+                serverOptions.Listen(IPAddress.Loopback, 0);
             }
         );
 
         var app = builder.Build();
+        app.Lifetime.ApplicationStarted.Register(() =>
+        {
+            foreach (
+                var address in (app as IApplicationBuilder)
+                    .ServerFeatures.Get<IServerAddressesFeature>()
+                    ?.Addresses ?? []
+            )
+            {
+                var uri = new Uri(address);
+                logger.LogInformation("Started on " + uri.Port);
+            }
+        });
         var service = new CSharpierServiceImplementation(actualConfigPath, logger);
         app.MapPost(
             "/format",
             (FormatFileParameter formatFileDto, CancellationToken cancellationToken) =>
                 service.FormatFile(formatFileDto, cancellationToken)
         );
-        logger.LogInformation("Started on " + thePort);
 
         await app.RunAsync();
 
         Console.ReadKey();
 
         return 0;
-    }
-
-    public static int FindFreePort()
-    {
-        const int startPort = 49152;
-        const int endPort = 65535;
-        var ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
-        var tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
-        var ipEndPoint = ipGlobalProperties.GetActiveTcpListeners();
-
-        var usedPorts = ipEndPoint
-            .Where(o => o.Port >= startPort)
-            .Select(o => o.Port)
-            .Concat(
-                tcpConnInfoArray
-                    .Where(o => o.LocalEndPoint.Port >= startPort)
-                    .Select(o => o.LocalEndPoint.Port)
-            )
-            .ToHashSet();
-
-        for (var i = startPort; i < endPort; i++)
-        {
-            if (!usedPorts.Contains(i))
-            {
-                return i;
-            }
-        }
-
-        throw new InvalidOperationException(
-            $"Could not find any free TCP port between ports {startPort}-{endPort}"
-        );
     }
 }
