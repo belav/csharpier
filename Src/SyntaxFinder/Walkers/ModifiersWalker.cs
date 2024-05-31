@@ -1,6 +1,5 @@
-namespace SyntaxFinder;
+namespace SyntaxFinder.Walkers;
 
-using System.Collections.Concurrent;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public class ModifiersWalker : SyntaxFinderWalker

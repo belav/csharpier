@@ -8,6 +8,10 @@ public class ClassName
         // comment stays on this line
         $"two";
 
+    public string TrailingComment = someCondition
+        ? $"empty" // trailing comment
+        : someString;
+
     public string TwoValues = $"{SomeValue}{SomeOtherValue}";
 
     public string ForceFlatInString =

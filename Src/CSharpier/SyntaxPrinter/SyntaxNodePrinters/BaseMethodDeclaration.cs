@@ -127,11 +127,11 @@ internal static class BaseMethodDeclaration
             if (modifiers is not { Count: > 0 })
             {
                 docs.Add(Token.PrintLeadingTrivia(returnType.GetLeadingTrivia(), context));
-                context.ShouldSkipNextLeadingTrivia = true;
+                context.SkipNextLeadingTrivia = true;
             }
 
             declarationGroup.Add(Node.Print(returnType, context), " ");
-            context.ShouldSkipNextLeadingTrivia = false;
+            context.SkipNextLeadingTrivia = false;
         }
 
         if (explicitInterfaceSpecifier != null)

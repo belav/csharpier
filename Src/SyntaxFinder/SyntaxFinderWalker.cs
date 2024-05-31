@@ -3,17 +3,11 @@ namespace SyntaxFinder;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-public abstract class SyntaxFinderWalker : CSharpSyntaxWalker
+public abstract class SyntaxFinderWalker(string file) : CSharpSyntaxWalker
 {
     private bool wroteFile;
     private readonly int maxCodeWrites = 250;
-    private static int codeWrites = 0;
-    private readonly string file;
-
-    protected SyntaxFinderWalker(string file)
-    {
-        this.file = file;
-    }
+    private static int codeWrites;
 
     protected void WriteCode(SyntaxNode syntaxNode)
     {
@@ -34,7 +28,7 @@ public abstract class SyntaxFinderWalker : CSharpSyntaxWalker
 
         if (!this.wroteFile)
         {
-            Console.WriteLine(this.file);
+            Console.WriteLine(file);
             this.wroteFile = true;
         }
     }

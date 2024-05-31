@@ -1,24 +1,15 @@
-namespace SyntaxFinder;
+namespace SyntaxFinder.Walkers;
 
 using System.Collections.Concurrent;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-public class ExampleWalker : CSharpSyntaxWalker
+public class ExampleWalker(string file) : SyntaxFinderWalker(file)
 {
     public static readonly ConcurrentDictionary<string, List<string>> MembersInType = new();
     public static int Total;
     public static int Matching;
-    private readonly string file;
-    private bool wroteFile;
-    private readonly int maxCodeWrites = 250;
-    private int codeWrites = 0;
-
-    public ExampleWalker(string file)
-    {
-        this.file = file;
-    }
 
     public override void VisitCompilationUnit(CompilationUnitSyntax node)
     {
@@ -68,24 +59,6 @@ public class ExampleWalker : CSharpSyntaxWalker
         }
 
         base.VisitMethodDeclaration(node);
-    }
-
-    private void WriteCode(SyntaxNode syntaxNode)
-    {
-        if (this.codeWrites < this.maxCodeWrites)
-        {
-            Interlocked.Increment(ref this.codeWrites);
-            Console.WriteLine(syntaxNode.SyntaxTree.GetText().ToString(syntaxNode.Span));
-        }
-    }
-
-    private void WriteFilePath()
-    {
-        if (!this.wroteFile)
-        {
-            Console.WriteLine(this.file);
-            this.wroteFile = true;
-        }
     }
 
     private static bool IsMultiline(SyntaxNode syntaxNode)
