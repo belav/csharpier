@@ -27,7 +27,13 @@ internal static class RecursivePattern
         if (node.PositionalPatternClause != null)
         {
             result.Add(
-                node.Parent is SwitchExpressionArmSyntax or CasePatternSwitchLabelSyntax
+                node.Parent
+                    is SwitchExpressionArmSyntax
+                        or CasePatternSwitchLabelSyntax
+                        or BinaryPatternSyntax
+                        {
+                            Parent: SwitchExpressionArmSyntax or CasePatternSwitchLabelSyntax
+                        }
                     ? Doc.Null
                     : Doc.SoftLine,
                 Doc.Group(
