@@ -81,7 +81,7 @@ The long term plan is to improve Csharpier's ability to determine the symbol set
 
 ### Configuration Overrides ###
 _First available in 0.29.0_
-Overrides allows you to specify different configuration options based on glob patterns. This can be used to format non-standard extensions, or to change options based on file path.
+Overrides allows you to specify different configuration options based on glob patterns. This can be used to format non-standard extensions, or to change options based on file path. Top level options will apply to `**/*.{cs,csx}`
 
 ```json
 {
