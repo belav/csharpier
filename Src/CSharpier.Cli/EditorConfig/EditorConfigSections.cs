@@ -11,7 +11,6 @@ internal class EditorConfigSections
 
     public PrinterOptions? ConvertToPrinterOptions(string filePath)
     {
-        // TODO overrides what about specifying this in editorconfig? new ticket
         if (!(filePath.EndsWith(".cs") || filePath.EndsWith(".csx")))
         {
             return null;

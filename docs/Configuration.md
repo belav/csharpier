@@ -80,16 +80,14 @@ When supplying symbol sets, they will be used for all files being formatted. Thi
 The long term plan is to improve Csharpier's ability to determine the symbol sets itself and to allow specifying them for individual files.
 
 ### Configuration Overrides ###
-TODO overrides
-override config options by extension  
-specify formatter by extension (currently only csharp)  
-by default cs and csx are formatted  
+_First available in 0.29.0_
+Overrides allows you to specify different configuration options based on glob patterns. This can be used to format non-standard extensions, or to change options based on file path.
 
 ```json
 {
     "overrides": [
         {
-           "extensions": [".cst"],
+           "files": ["*.cst"],
            "formatter": "csharp",
            "tabWidth": 2,
            "useTabs": true,
@@ -102,7 +100,7 @@ by default cs and csx are formatted
 
 ```yaml
 overrides:
-    - extensions: [".cst"]
+    - files: ["*.cst"]
       formatter: "csharp"
       tabWidth: 2
       useTabs: true

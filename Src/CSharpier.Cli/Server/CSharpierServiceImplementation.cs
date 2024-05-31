@@ -48,10 +48,15 @@ internal class CSharpierServiceImplementation
                 return new FormatFileResult(Status.Ignored);
             }
 
+            var printerOptions = optionsProvider.GetPrinterOptionsFor(formatFileParameter.fileName);
+            if (printerOptions == null)
+            {
+                return new FormatFileResult(Status.UnsupportedFile);
+            }
+
             var result = await CSharpFormatter.FormatAsync(
                 formatFileParameter.fileContents,
-                // TODO overrides will this really not be null? how are the IDEs going to format non-standard files?
-                optionsProvider.GetPrinterOptionsFor(formatFileParameter.fileName)!,
+                printerOptions,
                 cancellationToken
             );
 

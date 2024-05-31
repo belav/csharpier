@@ -22,12 +22,22 @@ public class OptionsProviderTests
     }
 
     [Test]
-    public async Task Should_Return_Default_Options_With_No_File()
+    public async Task Should_Return_Default_Options_With_No_File_And_Known_Extension()
     {
         var context = new TestContext();
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         ShouldHaveDefaultOptions(result);
+    }
+
+    [Test]
+    public async Task Should_Return_Default_Options_With_No_File_And_Unknown_Extension()
+    {
+        var context = new TestContext();
+        var result = async () =>
+            await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cst");
+
+        await result.Should().ThrowAsync<Exception>();
     }
 
     [TestCase(".csharpierrc")]
@@ -752,8 +762,14 @@ indent_size = 2
                 limitEditorConfigSearch
             );
 
-            // TODO overrides do we need tests for when this is null? also this ! sucks
-            return provider.GetPrinterOptionsFor(filePath)!;
+            var printerOptions = provider.GetPrinterOptionsFor(filePath);
+
+            if (printerOptions is null)
+            {
+                throw new Exception("PrinterOptions was null");
+            }
+
+            return printerOptions;
         }
     }
 }
