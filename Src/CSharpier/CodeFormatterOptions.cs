@@ -8,6 +8,9 @@ public class CodeFormatterOptions
     public EndOfLine EndOfLine { get; init; } = EndOfLine.Auto;
     public bool IncludeGenerated { get; init; }
     public BraceNewLine NewLineBeforeOpenBrace { get; init; } = BraceNewLine.All;
+    public bool NewLineBeforeElse { get; init; } = true;
+    public bool NewLineBeforeCatch { get; init; } = true;
+    public bool NewLineBeforeFinally { get; init; } = true;
 }
 
 public enum IndentStyle

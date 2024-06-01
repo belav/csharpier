@@ -11,6 +11,9 @@ internal class FormattingContext
     public required bool UseTabs { get; init; }
 
     public required BraceNewLine NewLineBeforeOpenBrace { get; init; }
+    public required bool NewLineBeforeElse { get; init; }
+    public required bool NewLineBeforeCatch { get; init; }
+    public required bool NewLineBeforeFinally { get; init; }
 
     // TODO the rest of these go into State
     // context.State.PrintingDepth

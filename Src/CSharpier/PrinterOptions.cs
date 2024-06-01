@@ -11,6 +11,9 @@ internal class PrinterOptions
     public bool TrimInitialLines { get; init; } = true;
     public bool IncludeGenerated { get; set; } = false;
     public BraceNewLine NewLineBeforeOpenBrace { get; set; } = BraceNewLine.All;
+    public bool NewLineBeforeElse { get; set; } = true;
+    public bool NewLineBeforeCatch { get; set; } = true;
+    public bool NewLineBeforeFinally { get; set; } = true;
 
     public const int WidthUsedByTests = 100;
 
