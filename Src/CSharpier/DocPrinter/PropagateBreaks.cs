@@ -20,7 +20,7 @@ internal static class PropagateBreaks
                 var parentGroup = groupStack.Peek();
                 if (parentGroup is not ConditionalGroup)
                 {
-//                    parentGroup.Break = true;
+                    parentGroup.Break = true;
                 }
             }
         }

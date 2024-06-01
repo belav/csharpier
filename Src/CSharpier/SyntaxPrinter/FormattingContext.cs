@@ -10,6 +10,8 @@ internal class FormattingContext
     public required int IndentSize { get; init; }
     public required bool UseTabs { get; init; }
 
+    public required BraceNewLine NewLineBeforeOpenBrace { get; init; }
+
     // TODO the rest of these go into State
     // context.State.PrintingDepth
     public int PrintingDepth { get; set; }

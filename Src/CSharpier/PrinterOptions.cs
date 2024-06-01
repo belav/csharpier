@@ -10,6 +10,7 @@ internal class PrinterOptions
     public EndOfLine EndOfLine { get; set; } = EndOfLine.Auto;
     public bool TrimInitialLines { get; init; } = true;
     public bool IncludeGenerated { get; set; } = false;
+    public BraceNewLine NewLineBeforeOpenBrace { get; set; } = BraceNewLine.All;
 
     public const int WidthUsedByTests = 100;
 

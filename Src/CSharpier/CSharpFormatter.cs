@@ -125,6 +125,7 @@ internal class CSharpFormatter : IFormatter
                 LineEnding = lineEnding,
                 IndentSize = printerOptions.TabWidth,
                 UseTabs = printerOptions.UseTabs,
+                NewLineBeforeOpenBrace = printerOptions.NewLineBeforeOpenBrace
             };
             var document = Node.Print(rootNode, formattingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
@@ -145,6 +146,7 @@ internal class CSharpFormatter : IFormatter
                     LineEnding = lineEnding,
                     IndentSize = printerOptions.TabWidth,
                     UseTabs = printerOptions.UseTabs,
+                    NewLineBeforeOpenBrace= printerOptions.NewLineBeforeOpenBrace
                 };
                 document = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),

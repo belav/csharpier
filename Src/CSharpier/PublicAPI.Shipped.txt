@@ -10,6 +10,8 @@ CSharpier.CodeFormatterOptions.IndentSize.get -> int
 CSharpier.CodeFormatterOptions.IndentSize.init -> void
 CSharpier.CodeFormatterOptions.IndentStyle.get -> CSharpier.IndentStyle
 CSharpier.CodeFormatterOptions.IndentStyle.init -> void
+CSharpier.CodeFormatterOptions.NewLineBeforeOpenBrace.get -> CSharpier.BraceNewLine
+CSharpier.CodeFormatterOptions.NewLineBeforeOpenBrace.init -> void
 CSharpier.CodeFormatterResult
 CSharpier.CodeFormatterResult.Code.get -> string!
 CSharpier.CodeFormatterResult.CompilationErrors.get -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Diagnostic!>!
@@ -24,3 +26,18 @@ CSharpier.EndOfLine.LF = 2 -> CSharpier.EndOfLine
 CSharpier.IndentStyle
 CSharpier.IndentStyle.Spaces = 0 -> CSharpier.IndentStyle
 CSharpier.IndentStyle.Tabs = 1 -> CSharpier.IndentStyle
+CSharpier.BraceNewLine
+CSharpier.BraceNewLine.None = 0 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.Accessors = 1 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.AnonymousMethods = 2 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.AnonymousTypes = 4 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.ControlBlocks = 8 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.Events = 16 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.Indexers = 32 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.Lambdas = 64 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.LocalFunctions = 128 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.Methods = 256 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.ObjectCollectionArrayInitializers = 512 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.Properties = 1024 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.Types = 2048 -> CSharpier.BraceNewLine
+CSharpier.BraceNewLine.All = 65535 -> CSharpier.BraceNewLine
