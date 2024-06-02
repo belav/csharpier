@@ -14,6 +14,7 @@
     <PackageReference Include="Ignore" />
     <PackageReference Include="ini-parser-netstandard" />
     <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="NReco.Logging.File" />
     <PackageReference Include="System.CommandLine" />
     <PackageReference Include="System.IO.Abstractions" />
     <PackageReference Include="System.IO.Abstractions.TestingHelpers" />
