@@ -56,12 +56,7 @@ internal class Program
 
         if (server)
         {
-            return await ServerFormatter.StartServer(
-                serverPort,
-                logger,
-                actualConfigPath,
-                cancellationToken
-            );
+            return await ServerFormatter.StartServer(serverPort, logger, actualConfigPath);
         }
 
         var directoryOrFileNotProvided = directoryOrFile is null or { Length: 0 };
