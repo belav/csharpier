@@ -140,7 +140,29 @@ for (var index = 0; index < 10; index++)
         while (true) {
             var list = new List<int>();
             foreach (var number in list)     { Console.WriteLine($"{index}"); }
+
+            try
+
+            {
+                int abc = Convert.ToInt32("hello");
+
+            }catch { Console.WriteLine("Error"); }
+
+            try {
+                int abc = Convert.ToInt32("hello");
+
+            }catch(Exception ex) { Console.WriteLine("Error"); }
+
+            try {
+                int abc = Convert.ToInt32("hello");
+
+            }catch(Exception) { Console.WriteLine("Error"); } finally {
+                int abc = 0;
+            }
         }
+    }else
+    {   int abc = 0;
+    
     }
 }
 """;
@@ -158,7 +180,42 @@ for (var index = 0; index < 10; index++)
             {
                 Console.WriteLine($"{index}");
             }
+
+            try
+            {
+                int abc = Convert.ToInt32("hello");
+            }
+            catch
+            {
+                Console.WriteLine("Error");
+            }
+
+            try
+            {
+                int abc = Convert.ToInt32("hello");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error");
+            }
+
+            try
+            {
+                int abc = Convert.ToInt32("hello");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Error");
+            }
+            finally
+            {
+                int abc = 0;
+            }
         }
+    }
+    else
+    {
+        int abc = 0;
     }
 }
 
@@ -176,11 +233,42 @@ for (var index = 0; index < 10; index++)
         while (true) {
             var list = new List<int>();
             foreach (var number in list)     { Console.WriteLine($"{index}"); }
+
+            try
+
+            {
+                int abc = Convert.ToInt32("hello");
+
+            }catch { Console.WriteLine("Error"); }
+
+            try {
+                int abc = Convert.ToInt32("hello");
+
+            }catch(Exception ex) { Console.WriteLine("Error"); }
+
+            try {
+                int abc = Convert.ToInt32("hello");
+
+            }catch(Exception) { Console.WriteLine("Error"); } finally {
+                int abc = 0;
+            }
         }
+    }else
+    {   int abc = 0;
+    
     }
 }
 """;
-        var result = CodeFormatter.Format(code, new CodeFormatterOptions { NewLineBeforeOpenBrace = BraceNewLine.All & ~BraceNewLine.ControlBlocks });
+        var result = CodeFormatter.Format(
+            code,
+            new CodeFormatterOptions
+            {
+                NewLineBeforeOpenBrace = BraceNewLine.All & ~BraceNewLine.ControlBlocks,
+                NewLineBeforeElse = false,
+                NewLineBeforeCatch = false,
+                NewLineBeforeFinally = false
+            }
+        );
 
         result.Code.Should().Be("""
 for (var index = 0; index < 10; index++) {
@@ -190,7 +278,29 @@ for (var index = 0; index < 10; index++) {
             foreach (var number in list) {
                 Console.WriteLine($"{index}");
             }
+
+            try {
+                int abc = Convert.ToInt32("hello");
+            } catch {
+                Console.WriteLine("Error");
+            }
+
+            try {
+                int abc = Convert.ToInt32("hello");
+            } catch (Exception ex) {
+                Console.WriteLine("Error");
+            }
+
+            try {
+                int abc = Convert.ToInt32("hello");
+            } catch (Exception) {
+                Console.WriteLine("Error");
+            } finally {
+                int abc = 0;
+            }
         }
+    } else {
+        int abc = 0;
     }
 }
 

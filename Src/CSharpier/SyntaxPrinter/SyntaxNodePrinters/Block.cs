@@ -41,7 +41,7 @@ internal static class Block
             node.Parent switch
             {
                 ParenthesizedLambdaExpressionSyntax or BlockSyntax => Doc.Null,
-                IfStatementSyntax or ForStatementSyntax or ForEachStatementSyntax or WhileStatementSyntax =>
+                IfStatementSyntax or ElseClauseSyntax or ForStatementSyntax or ForEachStatementSyntax or WhileStatementSyntax or TryStatementSyntax or CatchClauseSyntax or FinallyClauseSyntax =>
                     context.NewLineBeforeOpenBrace.HasFlag(BraceNewLine.ControlBlocks) ? Doc.Line : " ",
                 _ => Doc.Line
             },

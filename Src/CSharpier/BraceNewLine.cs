@@ -1,5 +1,6 @@
 ﻿namespace CSharpier;
 
+// https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/csharp-formatting-options#csharp_new_line_before_open_brace
 [Flags]
 public enum BraceNewLine
 {

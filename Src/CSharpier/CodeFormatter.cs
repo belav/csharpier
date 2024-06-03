@@ -28,7 +28,10 @@ public static class CodeFormatter
                 TabWidth = options.IndentSize,
                 EndOfLine = options.EndOfLine,
                 IncludeGenerated = options.IncludeGenerated,
-                NewLineBeforeOpenBrace = options.NewLineBeforeOpenBrace
+                NewLineBeforeOpenBrace = options.NewLineBeforeOpenBrace,
+                NewLineBeforeElse = options.NewLineBeforeElse,
+                NewLineBeforeCatch = options.NewLineBeforeCatch,
+                NewLineBeforeFinally = options.NewLineBeforeFinally
             },
             cancellationToken
         );
