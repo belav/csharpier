@@ -35,7 +35,8 @@ internal static class CollectionExpression
                         node.Elements,
                         Node.Print,
                         alwaysBreak ? Doc.HardLine : Doc.Line,
-                        context
+                        context,
+                        trailingSeparator: TrailingComma.Print(node.CloseBracketToken, context)
                     )
                 )
                 : Doc.Null,

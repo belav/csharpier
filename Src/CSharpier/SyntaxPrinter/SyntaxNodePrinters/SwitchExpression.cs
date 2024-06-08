@@ -33,7 +33,8 @@ internal static class SwitchExpression
                             )
                         ),
                     Doc.HardLine,
-                    context
+                    context,
+                    trailingSeparator: TrailingComma.Print(node.CloseBraceToken, context)
                 )
             ),
             Doc.HardLine

@@ -7,7 +7,8 @@ internal static class SeparatedSyntaxList
         Func<T, FormattingContext, Doc> printFunc,
         Doc afterSeparator,
         FormattingContext context,
-        int startingIndex = 0
+        int startingIndex = 0,
+        Doc? trailingSeparator = null
     )
         where T : SyntaxNode
     {
@@ -16,12 +17,17 @@ internal static class SeparatedSyntaxList
         {
             docs.Add(printFunc(list[x], context));
 
+            var isTrailingSeparator = x == list.Count - 1;
+
             if (x >= list.SeparatorCount)
             {
+                if (isTrailingSeparator && trailingSeparator != null)
+                {
+                    docs.Add(trailingSeparator);
+                }
+
                 continue;
             }
-
-            var isTrailingSeparator = x == list.Count - 1;
 
             docs.Add(Token.Print(list.GetSeparator(x), context));
             if (!isTrailingSeparator)
