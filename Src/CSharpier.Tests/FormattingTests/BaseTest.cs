@@ -31,7 +31,12 @@ public class BaseTest
 
         var result = await CSharpFormatter.FormatAsync(
             fileReaderResult.FileContents,
-            new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs },
+            new PrinterOptions
+            {
+                Width = PrinterOptions.WidthUsedByTests,
+                UseTabs = useTabs,
+                UsePrettierStyleTrailingCommas = true,
+            },
             fileExtension.EqualsIgnoreCase("csx") ? SourceCodeKind.Script : SourceCodeKind.Regular,
             CancellationToken.None
         );

@@ -6,7 +6,7 @@ var someValue =
             ..,
             { RawKind: (int)SyntaxKind.SingleLineCommentTrivia },
             { RawKind: (int)SyntaxKind.SingleLineCommentTrivia },
-            { RawKind: (int)SyntaxKind.EndOfLineTrivia }
+            { RawKind: (int)SyntaxKind.EndOfLineTrivia },
         ];
 
 var someValue = someString is [var firstCharacter, .. var rest];
@@ -17,7 +17,7 @@ var someValue =
             var firstCharacter____________,
             var secondCharacter__________,
             var thirdCharacter,
-            .. var rest
+            .. var rest,
         ];
 
 return list switch

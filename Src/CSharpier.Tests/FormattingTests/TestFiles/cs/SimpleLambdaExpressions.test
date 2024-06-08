@@ -39,14 +39,14 @@ public class ClassName
             .Select(selector: static o => new
             {
                 o.LongName_______________________,
-                o.LongName_______________________
+                o.LongName_______________________,
             });
 
         this.Where(x => x.IsSomeThing)
             .Select(selector: static o => new Entity
             {
                 o.LongName_______________________,
-                o.LongName_______________________
+                o.LongName_______________________,
             });
 
         this.Select_________________________________(
@@ -66,7 +66,7 @@ public class ClassName
         this.Select_________________________________(
             selector: static longName__________________ => new
             {
-                Prop__________ = longName__________________
+                Prop__________ = longName__________________,
             }
         );
 
@@ -76,7 +76,7 @@ public class ClassName
                 LongArgument_______________________
             )
             {
-                Prop__________ = longName__________________
+                Prop__________ = longName__________________,
             }
         );
 
@@ -102,7 +102,7 @@ public class ClassName
             )
             {
                 o.LongName_______________________,
-                o.LongName_______________________
+                o.LongName_______________________,
             });
 
         this.Where(t =>

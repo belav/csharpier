@@ -5,7 +5,7 @@ class ClassName
     int[,] array = new[,]
     {
         { 1, 2 },
-        { 3, 4 }
+        { 3, 4 },
     };
 
     private string[] SomeArray = new[]
@@ -25,7 +25,7 @@ class ClassName
         {
             "someLongValue",
             "anotherLongValue",
-            "yetAnotherLongValue"
+            "yetAnotherLongValue",
         };
 
         return TheArrayInHereShouldAlsoNotBreak(
