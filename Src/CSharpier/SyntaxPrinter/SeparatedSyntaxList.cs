@@ -29,14 +29,13 @@ internal static class SeparatedSyntaxList
                 continue;
             }
 
-            docs.Add(
-                isTrailingSeparator && context.UsePrettierStyleTrailingCommas
-                    ? Doc.IfBreak(Token.Print(list.GetSeparator(x), context), Doc.Null)
-                    : Token.Print(list.GetSeparator(x), context)
-            );
-
-            if (!isTrailingSeparator)
+            if (isTrailingSeparator)
             {
+                docs.Add(Doc.IfBreak(Token.Print(list.GetSeparator(x), context), Doc.Null));
+            }
+            else
+            {
+                docs.Add(Token.Print(list.GetSeparator(x), context));
                 docs.Add(afterSeparator);
             }
         }

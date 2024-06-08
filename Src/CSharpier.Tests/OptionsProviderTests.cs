@@ -160,20 +160,6 @@ endOfLine: crlf
     }
 
     [Test]
-    public async Task Should_Return_UsePrettierStyleTrailingCommas_With_Json()
-    {
-        var context = new TestContext();
-        context.WhenAFileExists(
-            "c:/test/.csharpierrc",
-            "{ \"usePrettierStyleTrailingCommas\": true }"
-        );
-
-        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
-
-        result.UsePrettierStyleTrailingCommas.Should().BeTrue();
-    }
-
-    [Test]
     public async Task Should_Return_PrintWidth_With_Yaml()
     {
         var context = new TestContext();
@@ -204,17 +190,6 @@ endOfLine: crlf
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.UseTabs.Should().BeTrue();
-    }
-
-    [Test]
-    public async Task Should_Return_UsePrettierStyleTrailingCommas_With_Yaml()
-    {
-        var context = new TestContext();
-        context.WhenAFileExists("c:/test/.csharpierrc", "usePrettierStyleTrailingCommas: true");
-
-        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
-
-        result.UsePrettierStyleTrailingCommas.Should().BeTrue();
     }
 
     [Test]
@@ -720,7 +695,6 @@ indent_size = 2
         printerOptions.TabWidth.Should().Be(4);
         printerOptions.UseTabs.Should().BeFalse();
         printerOptions.EndOfLine.Should().Be(EndOfLine.Auto);
-        printerOptions.UsePrettierStyleTrailingCommas.Should().BeFalse();
     }
 
     private class TestContext

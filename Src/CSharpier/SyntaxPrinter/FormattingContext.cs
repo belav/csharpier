@@ -9,7 +9,6 @@ internal class FormattingContext
     public required string LineEnding { get; init; }
     public required int IndentSize { get; init; }
     public required bool UseTabs { get; init; }
-    public required bool UsePrettierStyleTrailingCommas { get; set; }
 
     // TODO the rest of these go into State
     // context.State.PrintingDepth

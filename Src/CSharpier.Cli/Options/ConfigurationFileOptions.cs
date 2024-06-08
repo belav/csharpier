@@ -16,8 +16,6 @@ internal class ConfigurationFileOptions
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
     public EndOfLine EndOfLine { get; init; }
 
-    public bool UsePrettierStyleTrailingCommas { get; init; }
-
     private static readonly string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
 
     internal static PrinterOptions CreatePrinterOptionsFromPath(
@@ -40,8 +38,7 @@ internal class ConfigurationFileOptions
             TabWidth = configurationFileOptions.TabWidth,
             UseTabs = configurationFileOptions.UseTabs,
             Width = configurationFileOptions.PrintWidth,
-            EndOfLine = configurationFileOptions.EndOfLine,
-            UsePrettierStyleTrailingCommas = configurationFileOptions.UsePrettierStyleTrailingCommas
+            EndOfLine = configurationFileOptions.EndOfLine
         };
     }
 
