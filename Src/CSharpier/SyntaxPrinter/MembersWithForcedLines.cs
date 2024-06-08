@@ -62,14 +62,10 @@ internal static class MembersWithForcedLines
                     else if (
                         node is EnumDeclarationSyntax enumDeclarationSyntax
                         && member is EnumMemberDeclarationSyntax
-                        && context.UsePrettierStyleTrailingCommas
-                        && !enumDeclarationSyntax.CloseBraceToken.LeadingTrivia.Any(o =>
-                            o.IsDirective
-                        )
                     )
                     {
                         result.Add(
-                            Token.Print(SyntaxFactory.Token(SyntaxKind.CommaToken), context)
+                            TrailingComma.Print(enumDeclarationSyntax.CloseBraceToken, context)
                         );
                     }
                 }
