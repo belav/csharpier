@@ -11,23 +11,25 @@ internal static class ConditionalExpression
             && node.WhenFalse is ConditionalExpressionSyntax
         )
         {
-            return DoNewThing(node, context);
+            return PrintWithChainedFormatting(node, context);
         }
         else
         {
-            return DoOldThing(node, context);
+            return PrintWithRegularFormatting(node, context);
         }
     }
 
-    // TODO get better names on this
-    public static Doc DoOldThing(ConditionalExpressionSyntax node, FormattingContext context)
+    public static Doc PrintWithRegularFormatting(
+        ConditionalExpressionSyntax node,
+        FormattingContext context
+    )
     {
         var whenTrue = node.WhenTrue is ConditionalExpressionSyntax c1
-            ? DoOldThing(c1, context)
+            ? PrintWithRegularFormatting(c1, context)
             : Node.Print(node.WhenTrue, context);
 
         var whenFalse = node.WhenFalse is ConditionalExpressionSyntax c2
-            ? DoOldThing(c2, context)
+            ? PrintWithRegularFormatting(c2, context)
             : Node.Print(node.WhenFalse, context);
 
         Doc[] innerContents =
@@ -66,14 +68,20 @@ internal static class ConditionalExpression
             : Doc.Group(outerContents);
     }
 
-    private static Doc DoNewThing(ConditionalExpressionSyntax node, FormattingContext context)
+    // Chained ternary - the WhenTrue expressions are not a ConditionalExpression
+    // and one or more of the WhenFalse expressions are ConditionalExpressions.
+    // they are essentially a switch expression
+    private static Doc PrintWithChainedFormatting(
+        ConditionalExpressionSyntax node,
+        FormattingContext context
+    )
     {
         var whenTrue = node.WhenTrue is ConditionalExpressionSyntax c1
-            ? DoNewThing(c1, context)
+            ? PrintWithChainedFormatting(c1, context)
             : Node.Print(node.WhenTrue, context);
 
         var whenFalse = node.WhenFalse is ConditionalExpressionSyntax c2
-            ? DoNewThing(c2, context)
+            ? PrintWithChainedFormatting(c2, context)
             : Node.Print(node.WhenFalse, context);
 
         var contents = Doc.Group(
