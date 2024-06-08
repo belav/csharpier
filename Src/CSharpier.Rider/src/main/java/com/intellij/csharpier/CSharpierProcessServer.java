@@ -27,7 +27,11 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
         this.csharpierPath = csharpierPath;
         this.dotNetProvider = DotNetProvider.getInstance(project);
         this.version = version;
-        this.startProcess();
+
+        if (!this.startProcess()) {
+            this.processFailedToStart = true;
+            return;
+        }
 
         this.logger.debug("Warm CSharpier with initial format");
         // warm by formatting a file twice, the 3rd time is when it gets really fast
@@ -35,7 +39,7 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
         this.formatFile("public class ClassName { }", "/Temp/Test.cs");
     }
 
-    private void startProcess() {
+    private boolean startProcess() {
         try {
             var processBuilder = new ProcessBuilder(this.csharpierPath, "--server");
             processBuilder.redirectErrorStream(true);
@@ -54,23 +58,23 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
             } catch (TimeoutException e) {
                 this.logger.warn("Spawning the csharpier server timed out. Formatting cannot occur.");
                 this.process.destroy();
-                return;
+                return false;
             }
 
             if (!this.process.isAlive()) {
                 this.logger.warn("Spawning the csharpier server failed because it exited. " + output);
-                this.processFailedToStart = true;
-                return;
+                return false;
             }
 
             var portString = output.replace("Started on ", "");
             this.port = Integer.parseInt(portString);
 
             this.logger.debug("Connecting via port " + portString);
+            return true;
 
         } catch (Exception e) {
             this.logger.warn("Failed to spawn the needed csharpier server.", e);
-            this.processFailedToStart = true;
+            return false;
         }
     }
 

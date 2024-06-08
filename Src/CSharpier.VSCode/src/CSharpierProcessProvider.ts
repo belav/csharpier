@@ -25,6 +25,7 @@ export class CSharpierProcessProvider implements Disposable {
         string,
         ICSharpierProcess | ICSharpierProcess2 | undefined
     > = {};
+    disableCSharpierServer: boolean;
 
     constructor(logger: Logger, extension: Extension<unknown>) {
         this.logger = logger;
@@ -34,6 +35,9 @@ export class CSharpierProcessProvider implements Disposable {
             this.killRunningProcesses,
             extension,
         );
+
+        this.disableCSharpierServer =
+            workspace.getConfiguration("csharpier").get<boolean>("dev.disableCSharpierServer") ?? false;
 
         window.onDidChangeActiveTextEditor((event: TextEditor | undefined) => {
             if (event?.document?.languageId !== "csharp") {
@@ -226,7 +230,9 @@ export class CSharpierProcessProvider implements Disposable {
 
             let csharpierProcess: ICSharpierProcess;
 
-            if (semver.gte(version, "0.28.0")) {
+            const serverVersion = "0.29.0";
+
+            if (semver.gte(version, serverVersion) && !this.disableCSharpierServer) {
                 csharpierProcess = new CSharpierProcessServer(
                     this.logger,
                     customPath,
@@ -234,6 +240,16 @@ export class CSharpierProcessProvider implements Disposable {
                     version,
                 );
             } else if (semver.gte(version, "0.12.0")) {
+                if (
+                    semver.gte(version, serverVersion)
+                    && this.disableCSharpierServer
+                )
+                {
+                    this.logger.debug(
+                        "CSharpier server is disabled, falling back to piping via stdin"
+                    );
+                }
+
                 csharpierProcess = new CSharpierProcessPipeMultipleFiles(
                     this.logger,
                     customPath,
