@@ -11,6 +11,8 @@ internal class PrinterOptions
     public bool TrimInitialLines { get; init; } = true;
     public bool IncludeGenerated { get; set; } = false;
 
+    public bool UsePrettierStyleTrailingCommas { get; set; } = false;
+    
     public const int WidthUsedByTests = 100;
 
     internal static string GetLineEnding(string code, PrinterOptions printerOptions)
