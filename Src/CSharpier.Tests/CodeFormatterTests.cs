@@ -76,238 +76,6 @@ internal class CodeFormatterTests
     }
 
     [Test]
-    public void Format_Should_UseBrackets_If_Allman()
-    {
-        var code = """
-if (true)
-{
-if (true)
-
-{
-    int aaa = 0;
-}
-}
-""";
-
-        var result = CodeFormatter.Format(code, new CodeFormatterOptions {  });
-
-        result.Code.Should().Be("""
-if (true)
-{
-    if (true)
-    {
-        int aaa = 0;
-    }
-}
-
-""");
-    }
-
-    [Test]
-    public void Format_Should_UseBrackets_If_KeR()
-    {
-        var code = """
-if (true)
-{
-if (true)
-
-{
-    int aaa = 0;
-}
-}
-""";
-
-        var result = CodeFormatter.Format(code, new CodeFormatterOptions { NewLineBeforeOpenBrace = BraceNewLine.All & ~BraceNewLine.ControlBlocks });
-
-        result.Code.Should().Be("""
-if (true) {
-    if (true) {
-        int aaa = 0;
-    }
-}
-
-""");
-    }
-
-    [Test]
-    public void Format_Should_UseBrackets_ControlBlocks_Allman()
-    {
-        var code = """
-for (var index = 0; index < 10; index++)
-{
-    if (true)
-    {
-        while (true) {
-            var list = new List<int>();
-            foreach (var number in list)     { Console.WriteLine($"{index}"); }
-
-            try
-
-            {
-                int abc = Convert.ToInt32("hello");
-
-            }catch { Console.WriteLine("Error"); }
-
-            try {
-                int abc = Convert.ToInt32("hello");
-
-            }catch(Exception ex) { Console.WriteLine("Error"); }
-
-            try {
-                int abc = Convert.ToInt32("hello");
-
-            }catch(Exception) { Console.WriteLine("Error"); } finally {
-                int abc = 0;
-            }
-        }
-    }else
-    {   int abc = 0;
-    
-    }
-}
-""";
-        var result = CodeFormatter.Format(code, new CodeFormatterOptions {  });
-
-        result.Code.Should().Be("""
-for (var index = 0; index < 10; index++)
-{
-    if (true)
-    {
-        while (true)
-        {
-            var list = new List<int>();
-            foreach (var number in list)
-            {
-                Console.WriteLine($"{index}");
-            }
-
-            try
-            {
-                int abc = Convert.ToInt32("hello");
-            }
-            catch
-            {
-                Console.WriteLine("Error");
-            }
-
-            try
-            {
-                int abc = Convert.ToInt32("hello");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error");
-            }
-
-            try
-            {
-                int abc = Convert.ToInt32("hello");
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Error");
-            }
-            finally
-            {
-                int abc = 0;
-            }
-        }
-    }
-    else
-    {
-        int abc = 0;
-    }
-}
-
-""");
-    }
-
-    [Test]
-    public void Format_Should_UseBrackets_ControlBlocks_KeR()
-    {
-        var code = """
-for (var index = 0; index < 10; index++)
-{
-    if (true)
-    {
-        while (true) {
-            var list = new List<int>();
-            foreach (var number in list)     { Console.WriteLine($"{index}"); }
-
-            try
-
-            {
-                int abc = Convert.ToInt32("hello");
-
-            }catch { Console.WriteLine("Error"); }
-
-            try {
-                int abc = Convert.ToInt32("hello");
-
-            }catch(Exception ex) { Console.WriteLine("Error"); }
-
-            try {
-                int abc = Convert.ToInt32("hello");
-
-            }catch(Exception) { Console.WriteLine("Error"); } finally {
-                int abc = 0;
-            }
-        }
-    }else
-    {   int abc = 0;
-    
-    }
-}
-""";
-        var result = CodeFormatter.Format(
-            code,
-            new CodeFormatterOptions
-            {
-                NewLineBeforeOpenBrace = BraceNewLine.All & ~BraceNewLine.ControlBlocks,
-                NewLineBeforeElse = false,
-                NewLineBeforeCatch = false,
-                NewLineBeforeFinally = false
-            }
-        );
-
-        result.Code.Should().Be("""
-for (var index = 0; index < 10; index++) {
-    if (true) {
-        while (true) {
-            var list = new List<int>();
-            foreach (var number in list) {
-                Console.WriteLine($"{index}");
-            }
-
-            try {
-                int abc = Convert.ToInt32("hello");
-            } catch {
-                Console.WriteLine("Error");
-            }
-
-            try {
-                int abc = Convert.ToInt32("hello");
-            } catch (Exception ex) {
-                Console.WriteLine("Error");
-            }
-
-            try {
-                int abc = Convert.ToInt32("hello");
-            } catch (Exception) {
-                Console.WriteLine("Error");
-            } finally {
-                int abc = 0;
-            }
-        }
-    } else {
-        int abc = 0;
-    }
-}
-
-""");
-    }
-
-    [Test]
     public void Format_Should_Measure_Wide_Characters()
     {
         var code = """
@@ -391,5 +159,56 @@ var someVariable =   someValue;
         var result = CodeFormatter.Format(syntaxTree);
 
         result.Code.Should().Be("public class ClassName { }" + lineEnding);
+    }
+
+    [Test]
+    public void Format_Should_UseBrackets_Types_KeR()
+    {
+        var code = """
+class ClassAbc { public int Value; }
+""";
+        var result = CodeFormatter.Format(
+            code,
+            new CodeFormatterOptions
+            {
+                NewLineBeforeOpenBrace = BraceNewLine.All & ~BraceNewLine.Types
+            }
+        );
+
+        result.Code.Should().Be("""
+for (var index = 0; index < 10; index++) {
+    if (true) {
+        while (true) {
+            var list = new List<int>();
+            foreach (var number in list) {
+                Console.WriteLine($"{index}");
+            }
+
+            try {
+                int abc = Convert.ToInt32("hello");
+            } catch {
+                Console.WriteLine("Error");
+            }
+
+            try {
+                int abc = Convert.ToInt32("hello");
+            } catch (Exception ex) {
+                Console.WriteLine("Error");
+            }
+
+            try {
+                int abc = Convert.ToInt32("hello");
+            } catch (Exception) {
+                Console.WriteLine("Error");
+            } finally {
+                int abc = 0;
+            }
+        }
+    } else {
+        int abc = 0;
+    }
+}
+
+""");
     }
 }
