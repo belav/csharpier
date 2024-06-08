@@ -26,14 +26,13 @@ public class ClassName
 
         this.Where(x => x.IsSomething).Select(static o => new Entity { o.Prop });
 
-        this.Where(x => x.IsLongSomething______________________)
-            .Select(static o => new { o.Prop, });
+        this.Where(x => x.IsLongSomething______________________).Select(static o => new { o.Prop });
 
         this.Where(x => x.IsLongSomething______________________)
-            .Select(selector: static o => new { o.Prop, });
+            .Select(selector: static o => new { o.Prop });
 
         this.Where(x => x.IsLongSomething________________)
-            .Select(static o => new Entity { o.Prop, });
+            .Select(static o => new Entity { o.Prop });
 
         this.Where(x => x.IsSomeThing)
             .Select(selector: static o => new

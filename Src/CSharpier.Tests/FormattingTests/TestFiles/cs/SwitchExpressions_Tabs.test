@@ -67,8 +67,8 @@ class ClassName
 
 		return someValue switch
 		{
-			{ IsParameter: true, } => noExtraLineAfterThis,
-			{ IsParameter: someLongValue____________________________________________, }
+			{ IsParameter: true } => noExtraLineAfterThis,
+			{ IsParameter: someLongValue____________________________________________ }
 				=> someOtherValue,
 		};
 
