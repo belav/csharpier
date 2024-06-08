@@ -824,11 +824,14 @@ var someValue = $"""
     public void EnumDeclaration_Work_With_Adding_Trailing_Comma_When_There_Was_None()
     {
         var left = """"
-            public enum Enum { Foo = 1, }
+            public enum Enum
+            {
+                Foo = 1
+            }
             """";
         var right = """"
-            public enum Enum 
-            { 
+            public enum Enum
+            {
                 Foo = 1,
             }
             """";
@@ -839,17 +842,14 @@ var someValue = $"""
     }
 
     [Test]
-    public void EnumDeclaration_Work_With_Removing_Trailing_Comma_When_There_Was_One()
+    public void EnumDeclaration_Work_Without_Removing_Trailing_Comma_When_There_Already_Was_One()
     {
         var left = """"
-            public enum Enum 
-            { 
-                Foo = 1
-            }
+            public enum Enum { Foo = 1, }
             """";
         var right = """"
-            public enum Enum 
-            { 
+            public enum Enum
+            {
                 Foo = 1,
             }
             """";
