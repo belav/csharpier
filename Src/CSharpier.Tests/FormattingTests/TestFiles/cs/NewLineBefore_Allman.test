@@ -1,5 +1,4 @@
-﻿public class ClassName
-{
+﻿public class ClassName {
     public void MethodName()
     {
         for (var index = 0; index < 10; index++)

@@ -1,0 +1,16 @@
+﻿public class ClassName
+{
+    public int Property
+    {
+        get
+        {
+            int abc = 0;
+            return 0;
+        }
+
+        set {
+            int abc = value;
+            int def = 0;
+        }
+    }
+}
