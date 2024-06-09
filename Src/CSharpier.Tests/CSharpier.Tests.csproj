@@ -32,16 +32,31 @@
   </ItemGroup>
   <ItemGroup>
     <Content Remove="FormattingTests\TestFiles\cs\ControlBlocks_Allman.expected.test" />
+    <Content Remove="FormattingTests\TestFiles\cs\ControlBlocks_Catch_KeR.expected.test" />
+    <Content Remove="FormattingTests\TestFiles\cs\ControlBlocks_Else_KeR.expected.test" />
+    <Content Remove="FormattingTests\TestFiles\cs\ControlBlocks_Finally_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\ControlBlocks_KeR.expected.test" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_Allman.expected.test" />
     <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_Allman.test" />
+    <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_Catch_KeR.expected.test" />
+    <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_Catch_KeR.printerOptions.json" />
+    <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_Catch_KeR.test" />
+    <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_Else_KeR.expected.test" />
+    <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_Else_KeR.printerOptions.json" />
+    <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_Else_KeR.test" />
+    <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_Finally_KeR.expected.test" />
+    <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_Finally_KeR.printerOptions.json" />
+    <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_Finally_KeR.test" />
     <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_KeR.expected.test" />
     <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_KeR.printerOptions.json" />
     <None Remove="FormattingTests\TestFiles\cs\ControlBlocks_KeR.test" />
   </ItemGroup>
   <ItemGroup>
+    <AdditionalFiles Include="FormattingTests\TestFiles\cs\ControlBlocks_Finally_KeR.printerOptions.json" />
+    <AdditionalFiles Include="FormattingTests\TestFiles\cs\ControlBlocks_Catch_KeR.printerOptions.json" />
+    <AdditionalFiles Include="FormattingTests\TestFiles\cs\ControlBlocks_Else_KeR.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\ControlBlocks_KeR.printerOptions.json" />
   </ItemGroup>
   <ItemGroup>
