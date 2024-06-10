@@ -7,6 +7,14 @@ assignees: ''
 
 ---
 
+<!--
+
+BEFORE SUBMITTING AN ISSUE:
+
+Option requests are out of scope for CSharpier, they will be closed without discussion.
+
+-->
+
 **Environments:**
 
 - CSharpier Version:
