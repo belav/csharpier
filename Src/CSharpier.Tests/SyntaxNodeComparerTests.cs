@@ -19,11 +19,13 @@ public class SyntaxNodeComparerTests
 
         ResultShouldBe(
             result,
-            @"----------------------------- Original: Around Line 0 -----------------------------
-class ClassName { }
------------------------------ Formatted: Around Line 0 -----------------------------
-namespace Namespace { }
-"
+            """
+            ----------------------------- Original: Around Line 0 -----------------------------
+            class ClassName { }
+            ----------------------------- Formatted: Around Line 0 -----------------------------
+            namespace Namespace { }
+
+            """
         );
     }
 
@@ -859,14 +861,9 @@ var someValue = $"""
         result.Should().BeEmpty();
     }
 
-    private static void ResultShouldBe(string result, string be)
+    private static void ResultShouldBe(string actual, string expected)
     {
-        if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
-        {
-            be = be.Replace("\r\n", "\n");
-        }
-
-        result.Should().Be(be);
+        actual.ReplaceLineEndings().Should().Be(expected.ReplaceLineEndings());
     }
 
     private static string CompareSource(

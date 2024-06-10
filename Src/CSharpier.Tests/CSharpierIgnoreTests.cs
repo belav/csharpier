@@ -16,7 +16,7 @@ public class CSharpierIgnoreTests
 1
 
 2
-";
+".ReplaceLineEndings("\n");
 
         var result = PrintWithoutFormatting(testCode);
 
@@ -28,7 +28,7 @@ public class CSharpierIgnoreTests
     {
         var testCode =
             @"1    
-2";
+2".ReplaceLineEndings("\n");
 
         var result = PrintWithoutFormatting(testCode);
 
@@ -58,7 +58,7 @@ public string Example
        return _example = number.ToString();
      }
 }
-";
+".ReplaceLineEndings("\n");
 
         var result = PrintWithoutFormatting(testCode);
 
@@ -75,6 +75,6 @@ public string Example
                 IndentSize = 4,
                 UseTabs = false
             }
-        );
+        ).ReplaceLineEndings("\n");
     }
 }
