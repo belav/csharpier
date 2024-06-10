@@ -11,6 +11,8 @@ assignees: ''
 
 BEFORE SUBMITTING AN ISSUE:
 
+Option requests are out of scope for CSharpier, they will be closed without discussion.
+
 See [Editor Troubleshooting](https://csharpier.com/docs/EditorsTroubleshooting) for how to view logs and troubleshoot some issues with csharpier not installing/running.
 
 Note that the extension is versioned separately from CSharpier. It is designed to work with any version of CSharpier.
