@@ -16,7 +16,7 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
     private readonly Logger logger;
     private int port;
     private Process? process;
-    public bool ProcessFailedToStart { get; private set; }
+    public bool ProcessFailedToStart { get; }
 
     public string Version { get; }
 
@@ -26,7 +26,11 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
         this.csharpierPath = csharpierPath;
         this.Version = version;
 
-        this.StartProcess();
+        if (!this.StartProcess())
+        {
+            this.ProcessFailedToStart = true;
+            return;
+        }
 
         this.logger.Debug("Warm CSharpier with initial format");
         // warm by formatting a file twice, the 3rd time is when it gets really fast
@@ -34,31 +38,13 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
         this.FormatFile("public class ClassName { }", "/Temp/Test.cs");
     }
 
-    private void StartProcess()
-    {
-        if (this.ActuallyStartProcess())
-        {
-            return;
-        }
-
-        var portToUse = this.FindFreePort();
-        if (!this.ActuallyStartProcess(portToUse))
-        {
-            this.ProcessFailedToStart = true;
-        }
-    }
-
-    private bool ActuallyStartProcess(int portToUse = -1)
+    private bool StartProcess()
     {
         try
         {
-            var arguments = "--server";
-            if (portToUse > 0)
-            {
-                arguments += " --server-port " + portToUse;
-            }
+            const string arguments = "--server";
 
-            this.logger.Debug("Running " + this.csharpierPath + " " + arguments);
+            this.logger.Debug("Running " + this.csharpierPath + " --server");
 
             var processStartInfo = new ProcessStartInfo(this.csharpierPath, arguments)
             {
@@ -108,40 +94,6 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
             this.logger.Warn("Failed to spawn the needed csharpier server." + e);
             return false;
         }
-    }
-
-    private int FindFreePort()
-    {
-        this.logger.Debug("Trying to find free port in extension");
-        const int startPort = 49152;
-        const int endPort = 65535;
-        var ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
-        var tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
-        var ipEndPoint = ipGlobalProperties.GetActiveTcpListeners();
-
-        var usedPorts = ipEndPoint
-            .Where(o => o.Port >= startPort)
-            .Select(o => o.Port)
-            .Concat(
-                tcpConnInfoArray
-                    .Where(o => o.LocalEndPoint.Port >= startPort)
-                    .Select(o => o.LocalEndPoint.Port)
-            )
-            .ToHashSet();
-
-        this.logger.Debug($"Found {usedPorts.Count} used ports that could conflict");
-
-        for (var i = startPort; i < endPort; i++)
-        {
-            if (!usedPorts.Contains(i))
-            {
-                return i;
-            }
-        }
-
-        throw new InvalidOperationException(
-            $"Could not find any free TCP port between ports {startPort}-{endPort}"
-        );
     }
 
     public string FormatFile(string content, string filePath)
