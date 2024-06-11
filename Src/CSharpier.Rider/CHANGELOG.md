@@ -2,6 +2,10 @@
 
 # csharpier-rider Changelog
 
+## [1.7.4]
+- Only use CSharpier Server for 0.29.0+
+- Add option to bypass csharpier server.
+
 ## [1.7.3]
 - Fix issue with csharpier server not working when localhost resolved to IPv6 ::1
 

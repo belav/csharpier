@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Policy;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
 using Microsoft.VisualStudio.Imaging;
@@ -214,9 +215,9 @@ namespace CSharpier.VisualStudio
                 var customPath = this.customPathInstaller.GetPathForVersion(version);
 
                 this.logger.Debug("Adding new version " + version + " process for " + directory);
-                var installedVersion = GetInstalledVersion(version);
+                var installedVersion = this.GetInstalledVersion(version);
                 var pipeFilesVersion = new Version("0.12.0");
-                var serverVersion = new Version("0.28.0");
+                var serverVersion = new Version("0.29.0");
                 ICSharpierProcess cSharpierProcess;
 
                 if (
