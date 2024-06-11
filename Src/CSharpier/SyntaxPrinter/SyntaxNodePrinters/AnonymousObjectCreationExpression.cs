@@ -7,7 +7,11 @@ internal static class AnonymousObjectCreationExpression
         var alwaysBreak = node.Initializers.Count >= 3;
 
         return Doc.Group(
-            Token.PrintWithSuffix(node.NewKeyword, Doc.Line, context),
+            Token.PrintWithSuffix(
+                node.NewKeyword,
+                context.NewLineBeforeOpenBrace.HasFlag(BraceNewLine.AnonymousTypes) ? Doc.Line : " ",
+                context
+            ),
             Token.Print(node.OpenBraceToken, context),
             node.Initializers.Any()
                 ? Doc.Indent(

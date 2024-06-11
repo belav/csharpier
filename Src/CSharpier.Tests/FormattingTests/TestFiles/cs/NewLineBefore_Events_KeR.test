@@ -1,0 +1,19 @@
+﻿public class ClassName
+{
+    public delegate void EventNameHandler(object sender, EventArgs args);
+
+    private event EventNameHandler _classEvent;
+
+    public event EventNameHandler ClassEvent {
+        add {
+            // Do something
+            _classEvent += value;
+        }
+        
+        remove
+        {
+            // Do something
+            _classEvent -= value;
+        }
+    }
+}

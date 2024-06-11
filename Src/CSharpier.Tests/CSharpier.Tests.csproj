@@ -31,19 +31,33 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_Accessor_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_Allman.expected.test" />
+    <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_AnonymousMethods_KeR.expected.test" />
+    <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_AnonymousTypes_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_Catch_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_Else_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_Finally_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_KeR.expected.test" />
+    <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_Events_KeR.expected.test" />
+    <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_Indexers_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_LocalFunctions_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_Methods_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_Properties_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_Types_KeR.expected.test" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Accessor_KeR.expected.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Accessor_KeR.printerOptions.json" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Accessor_KeR.test" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Allman.expected.test" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Allman.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_AnonymousMethods_KeR.expected.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_AnonymousMethods_KeR.printerOptions.json" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_AnonymousMethods_KeR.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_AnonymousTypes_KeR.expected.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_AnonymousTypes_KeR.printerOptions.json" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_AnonymousTypes_KeR.test" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_Catch_KeR.expected.test" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_Catch_KeR.printerOptions.json" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_Catch_KeR.test" />
@@ -56,6 +70,12 @@
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_KeR.expected.test" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_KeR.printerOptions.json" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_KeR.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Events_KeR.expected.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Events_KeR.printerOptions.json" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Events_KeR.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Indexers_KeR.expected.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Indexers_KeR.printerOptions.json" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Indexers_KeR.test" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_LocalFunctions_KeR.expected.test" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_LocalFunctions_KeR.printerOptions.json" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_LocalFunctions_KeR.test" />
@@ -70,10 +90,15 @@
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Types_KeR.test" />
   </ItemGroup>
   <ItemGroup>
+    <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_AnonymousTypes_KeR.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_Finally_KeR.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_Catch_KeR.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_ControlBlocks_Else_KeR.printerOptions.json" />
+    <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_AnonymousMethods_KeR.printerOptions.json" />
+    <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_Events_KeR.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_LocalFunctions_KeR.printerOptions.json" />
+    <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_Accessor_KeR.printerOptions.json" />
+    <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_Indexers_KeR.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_Properties_KeR.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_Methods_KeR.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_Types_KeR.printerOptions.json" />
