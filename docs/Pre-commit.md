@@ -57,15 +57,10 @@ dotnet tool install husky
 dotnet husky install
 ```
 
-Optionally - add this to one of your projects to automate the install for future developers
+Optionally - add this to one of your projects to automate the installation for future developers
 ```xml
-<!-- set HUSKY to 0 in CI/CD disable this -->
-<Target Name="husky" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(HUSKY)' != 0">
-    <Exec Command="dotnet tool restore"  StandardOutputImportance="Low" StandardErrorImportance="High"/>
-    <Exec Command="dotnet husky install" StandardOutputImportance="Low" StandardErrorImportance="High"
-        <!-- update this to be the root of your solution --> 
-        WorkingDirectory="../../" />
-</Target>
+<!-- set the 'HUSKY' environment variable to '0' in CI/CD to disable this -->
+dotnet husky attach <path-to-project-file>
 ```
 
 Modify the file at `.husky/task-runner.json`
