@@ -53,6 +53,8 @@ repos:
 
 From the root of your repository
 ```bash
+cd <Your project root directory>
+dotnet new tool-manifest
 dotnet tool install husky
 dotnet husky install
 ```
