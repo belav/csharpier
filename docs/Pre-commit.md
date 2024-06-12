@@ -57,12 +57,6 @@ dotnet tool install husky
 dotnet husky install
 ```
 
-Optionally - add this to one of your projects to automate the installation for future developers
-You can set the HUSKY environment variable to 0 to disable Husky in CI/CD pipelines.
-```bash
-dotnet husky attach <path-to-project-file>
-```
-
 Modify the file at `.husky/task-runner.json`
 ```json
 {
@@ -78,6 +72,12 @@ Modify the file at `.husky/task-runner.json`
 You can run and test your task with the following command.
 ```bash
 dotnet husky run
+```
+
+Optionally - add this to one of your projects to automate the installation for future developers
+You can set the HUSKY environment variable to 0 to disable Husky in CI/CD pipelines.
+```bash
+dotnet husky attach <path-to-project-file>
 ```
 
 Once you are sure the task is working properly, you can add it as a pre-commit hook.
