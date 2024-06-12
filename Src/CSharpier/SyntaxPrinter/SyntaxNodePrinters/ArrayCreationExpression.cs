@@ -8,7 +8,10 @@ internal static class ArrayCreationExpression
             Token.PrintWithSuffix(node.NewKeyword, " ", context),
             Node.Print(node.Type, context),
             node.Initializer != null
-                ? Doc.Concat(Doc.Line, Node.Print(node.Initializer, context))
+                ? Doc.Concat(
+                    context.NewLineBeforeOpenBrace.HasFlag(BraceNewLine.ObjectCollectionArrayInitializers) ? Doc.Line : " ",
+                    Node.Print(node.Initializer, context)
+                )
                 : Doc.Null
         );
     }

@@ -51,6 +51,8 @@ internal static class Block
                     context.NewLineBeforeOpenBrace.HasFlag(BraceNewLine.Accessors) ? Doc.Line : " ",
                 AnonymousMethodExpressionSyntax =>
                     context.NewLineBeforeOpenBrace.HasFlag(BraceNewLine.AnonymousMethods) ? Doc.Line : " ",
+                SimpleLambdaExpressionSyntax =>
+                    context.NewLineBeforeOpenBrace.HasFlag(BraceNewLine.Lambdas) ? Doc.Line : " ",
                 _ => Doc.Line
             },
             Token.Print(node.OpenBraceToken, context),

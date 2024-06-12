@@ -13,10 +13,10 @@ public enum BraceNewLine
     ControlBlocks = 1 << 3, // Done
     Events = 1 << 4, // Done
     Indexers = 1 << 5, // Done
-    Lambdas = 1 << 6,
+    Lambdas = 1 << 6, // Done
     LocalFunctions = 1 << 7, // Done
     Methods = 1 << 8, // Done
-    ObjectCollectionArrayInitializers = 1 << 9,
+    ObjectCollectionArrayInitializers = 1 << 9, // Done
     Properties = 1 << 10, // Done
     Types = 1 << 11, // Done
 
