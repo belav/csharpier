@@ -58,8 +58,8 @@ dotnet husky install
 ```
 
 Optionally - add this to one of your projects to automate the installation for future developers
-```xml
-<!-- set the 'HUSKY' environment variable to '0' in CI/CD to disable this -->
+You can set the HUSKY environment variable to 0 to disable Husky in CI/CD pipelines.
+```bash
 dotnet husky attach <path-to-project-file>
 ```
 
