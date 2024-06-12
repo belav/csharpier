@@ -232,6 +232,13 @@ class ClassName
                 .CallMethod()
                 .CallMethod()
         };
+
+        // Issue#1268
+        var someObject = new List<(
+            int Field1__________________________________,
+            int Field2__________________________________
+        )>
+        { };
     }
 
     private SomeObject someObject =
