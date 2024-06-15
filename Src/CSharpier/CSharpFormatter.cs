@@ -128,7 +128,9 @@ internal class CSharpFormatter : IFormatter
                 NewLineBeforeOpenBrace = printerOptions.NewLineBeforeOpenBrace,
                 NewLineBeforeElse = printerOptions.NewLineBeforeElse,
                 NewLineBeforeCatch = printerOptions.NewLineBeforeCatch,
-                NewLineBeforeFinally = printerOptions.NewLineBeforeFinally
+                NewLineBeforeFinally = printerOptions.NewLineBeforeFinally,
+                NewLineBeforeMembersInObjectInitializers = printerOptions.NewLineBeforeMembersInObjectInitializers,
+                AvoidInlineInizializer = printerOptions.AvoidInlineInizializer,
             };
             var document = Node.Print(rootNode, formattingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
@@ -152,7 +154,9 @@ internal class CSharpFormatter : IFormatter
                     NewLineBeforeOpenBrace = printerOptions.NewLineBeforeOpenBrace,
                     NewLineBeforeElse = printerOptions.NewLineBeforeElse,
                     NewLineBeforeCatch = printerOptions.NewLineBeforeCatch,
-                    NewLineBeforeFinally = printerOptions.NewLineBeforeFinally
+                    NewLineBeforeFinally = printerOptions.NewLineBeforeFinally,
+                    NewLineBeforeMembersInObjectInitializers = printerOptions.NewLineBeforeMembersInObjectInitializers,
+                    AvoidInlineInizializer = printerOptions.AvoidInlineInizializer
                 };
                 document = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),

@@ -17,7 +17,13 @@ JSON
     "printWidth": 100,
     "useTabs": false,
     "tabWidth": 4,
-    "endOfLine": "auto"
+    "endOfLine": "auto",
+
+    "newLineBeforeOpenBrace": 0,
+    "newLineBeforeElse": true,
+    "newLineBeforeCatch": true,
+    "newLineBeforeFinally": true,
+    "newLineBeforeMembersInObjectInitializers": null
 }
 ```
 YAML
@@ -26,6 +32,12 @@ printWidth: 100
 useTabs: false
 tabWidth: 4
 endOfLine: auto
+
+newLineBeforeOpenBrace: 0
+newLineBeforeElse: true
+newLineBeforeCatch: true
+newLineBeforeFinally: true
+newLineBeforeMembersInObjectInitializers: null
 ```
 
 #### Print Width
@@ -56,6 +68,86 @@ Valid options:
 
 Default `auto`
 
+#### New line before open brace
+_Available only in CSharpierConfig_
+
+See [editorconfig](
+https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/csharp-formatting-options#csharp_new_line_before_open_brace) page to more information.
+Values are mapped in `BraceNewLine` and it's a flag value. Valid options:
+`all`, `none`, `accessors`, `anonymous_methods`, `anonymous_types`, `control_blocks`, `events`, `indexers`, `lambdas`, `local_functions`, `methods`, `object_collection_array_initializers`, `properties`, `types`
+
+All values is mapped into `BraceNewLine`.
+
+Default `65535` `all`
+
+#### New line before else
+_Available only in CSharpierConfig_
+
+Place `else` statements on a new line.
+
+Default `true`
+
+#### New line before catch
+_Available only in CSharpierConfig_
+
+Place `catch` statements on a new line.
+
+Default `true`
+
+#### New line before finally
+_Available only in CSharpierConfig_
+
+Place `finally` statements on a new line.
+
+Default `true`
+
+#### Avoid inline inizializer
+_Available only in CSharpierConfig_
+
+Avoid initializers for objects or arrays should be placed on the same line if they contain fewer than three elements or Collections are not complex element.
+
+Valid options:
+
+- `true`: Avoid initializers on a single line
+  ```csharp
+  var objectInitializer = new ObjectName
+  {
+      A = 1,
+      B = 2
+  };
+  ```
+- `false`: Permit initializers on a single line
+  ```csharp
+  var objectInitializer = new ObjectName { A = 1, B = 2 };
+  ```
+
+Default `false`
+
+#### New line before members in object initializers
+_Available only in CSharpierConfig_
+
+Require members of object initializers to be on separate lines or not.
+
+Valid options:
+
+- `true`: Require members of object initializers to be on separate lines
+  ```csharp
+  var objectInitializer = new ObjectName
+  {
+      A = 1,
+      B = 2
+  };
+  ```
+- `false`: Require members of object initializers to be on the same line
+  ```csharp
+  var objectInitializer = new ObjectName 
+  {
+      A = 1, B = 2
+  };
+  ```
+- `null`: Use default behaviour of CSharpier, inline for objects or arrays should be placed on the same line if they contain fewer than three elements or Collections are not complex element.
+
+Default `null`
 
 #### Preprocessor Symbol Sets
 _Removed in 0.25.0_
