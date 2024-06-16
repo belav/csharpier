@@ -36,7 +36,7 @@ public class CSharpierIgnoreTests
             .Should()
             .Be(
                 @"1
-2"
+2".ReplaceLineEndings("\n")
             );
     }
 
