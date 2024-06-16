@@ -146,7 +146,7 @@ class ClassName
                     : 0 != (r = comparer.Compare(tuple.Item1.LocalName, tuple.Item2.LocalName)) ? r
                     : 0
                     != (r = comparer.Compare(tuple.Item1.NamespaceURI, tuple.Item2.NamespaceURI))
-                    ? r
+                        ? r
                     : 0
             );
     }

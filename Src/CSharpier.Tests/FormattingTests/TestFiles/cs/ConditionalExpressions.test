@@ -146,6 +146,27 @@ public class ClassName
             : thingThing.IsNotBlank() ? thingThing
             : "enUs";
 
+        var languageCode =
+            something____________________________________.IsNotBlank()
+                ? something____________________________________
+            : otherThing____________________________________.IsNotBlank()
+                ? otherThing____________________________________
+            : thingThing____________________________________.IsNotBlank()
+                ? thingThing____________________________________
+            : "enUs";
+
+        var languageCode =
+            something____________________________________
+            && someCondition______________________________________
+                ? something____________________________________
+            : otherThing____________________________________
+            && someCondition______________________________________
+                ? otherThing____________________________________
+            : thingThing____________________________________
+            && someCondition______________________________________
+                ? thingThing____________________________________
+            : "enUs";
+
         var parameterType =
             property.PropertyType == typeof(string) ? "string"
             : property.PropertyType == typeof(int) ? "int"

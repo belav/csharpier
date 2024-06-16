@@ -88,9 +88,11 @@ internal static class ConditionalExpression
             node.Parent is ConditionalExpressionSyntax ? Doc.BreakParent : Doc.Null,
             Doc.Group(
                 Node.Print(node.Condition, context),
-                Doc.Line,
-                Token.PrintWithSuffix(node.QuestionToken, " ", context),
-                Doc.IndentIf(node.WhenTrue is ConditionalExpressionSyntax, whenTrue)
+                Doc.Indent(
+                    Doc.Line,
+                    Token.PrintWithSuffix(node.QuestionToken, " ", context),
+                    Doc.IndentIf(node.WhenTrue is ConditionalExpressionSyntax, whenTrue)
+                )
             ),
             Doc.Line,
             Doc.Group(Token.PrintWithSuffix(node.ColonToken, " ", context), whenFalse)
