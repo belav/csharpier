@@ -29,22 +29,23 @@ internal static class InitializerExpression
         var result = Doc.Concat(
             separator,
             Token.Print(node.OpenBraceToken, context),
-            Doc.Indent(
-                alwaysBreak ? Doc.HardLine : Doc.Line,
-                SeparatedSyntaxList.Print(
-                    node.Expressions,
-                    Node.Print,
-                    alwaysBreak ? Doc.HardLine : Doc.Line,
-                    context
-                )
-            ),
-            node.Expressions.Any()
-                ? alwaysBreak
-                    ? Doc.HardLine
-                    : Doc.Line
-                : Doc.Null,
+            node.Expressions.Count == 0
+                ? " "
+                : Doc.Concat(
+                    Doc.Indent(
+                        alwaysBreak ? Doc.HardLine : Doc.Line,
+                        SeparatedSyntaxList.Print(
+                            node.Expressions,
+                            Node.Print,
+                            alwaysBreak ? Doc.HardLine : Doc.Line,
+                            context
+                        )
+                    ),
+                    alwaysBreak ? Doc.HardLine : Doc.Line
+                ),
             Token.Print(node.CloseBraceToken, context)
         );
+
         return
             node.Parent
                 is not (

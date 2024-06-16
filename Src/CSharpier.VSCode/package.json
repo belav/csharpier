@@ -2,7 +2,7 @@
     "name": "csharpier-vscode",
     "displayName": "CSharpier - Code formatter",
     "description": "Code formatter using csharpier",
-    "version": "1.7.2",
+    "version": "1.7.3",
     "publisher": "csharpier",
     "author": "CSharpier",
     "homepage": "https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode",
@@ -52,6 +52,11 @@
                         "type": "string",
                         "default": "",
                         "description": "Path to directory containing dotnet-csharpier - used for testing the extension with new versions of csharpier."
+                    },
+                    "csharpier.dev.disableCSharpierServer": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Disable CSharpier Server."
                     }
                 }
             }
