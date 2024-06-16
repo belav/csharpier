@@ -30,7 +30,7 @@ public class ClassName
             elementSelector: static o => new Entity
             {
                 o.LongName_______________________,
-                o.LongName_______________________
+                o.LongName_______________________,
             }
         );
 
@@ -38,12 +38,12 @@ public class ClassName
             keySelector: static o => new Entity
             {
                 o.LongName_______________________,
-                o.LongName_______________________
+                o.LongName_______________________,
             },
             resultSelector: static o => new Entity
             {
                 o.LongName_______________________,
-                o.LongName_______________________
+                o.LongName_______________________,
             }
         );
     }

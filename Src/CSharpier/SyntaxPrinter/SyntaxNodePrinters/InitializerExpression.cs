@@ -38,14 +38,17 @@ internal static class InitializerExpression
                             node.Expressions,
                             Node.Print,
                             alwaysBreak ? Doc.HardLine : Doc.Line,
-                            context
+                            context,
+                            trailingSeparator: node.Kind()
+                                is not SyntaxKind.ComplexElementInitializerExpression
+                                ? TrailingComma.Print(node.CloseBraceToken, context)
+                                : Doc.Null
                         )
                     ),
                     alwaysBreak ? Doc.HardLine : Doc.Line
                 ),
             Token.Print(node.CloseBraceToken, context)
         );
-
         return
             node.Parent
                 is not (

@@ -232,8 +232,9 @@ namespace CSharpier
                 );
                 sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
 
+                // Omit the last separator when comparing the original node with the formatted node, as it legitimately may be added or removed
                 sourceBuilder.AppendLine(
-                    $"            result = this.CompareLists(originalNode.{propertyName}.GetSeparators().ToList(), formattedNode.{propertyName}.GetSeparators().ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);"
+                    $"            result = this.CompareLists(originalNode.{propertyName}.GetSeparators().Take(originalNode.{propertyName}.Count() - 1).ToList(), formattedNode.{propertyName}.GetSeparators().Take(formattedNode.{propertyName}.Count() - 1).ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);"
                 );
                 sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
             }

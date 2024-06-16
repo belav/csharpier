@@ -9,13 +9,13 @@ public class ClassRules
     private enum AlwaysLineBeforeEnum
     {
         One,
-        Two
+        Two,
     }
 
     private enum NoDoubleLines
     {
         One,
-        Two
+        Two,
     }
 
     private class AlwaysLineBeforeClass { }

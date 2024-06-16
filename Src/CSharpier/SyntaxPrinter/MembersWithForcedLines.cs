@@ -53,9 +53,21 @@ internal static class MembersWithForcedLines
 
             void AddSeparatorIfNeeded()
             {
-                if (members is SeparatedSyntaxList<T> list && memberIndex < list.SeparatorCount)
+                if (members is SeparatedSyntaxList<T> list)
                 {
-                    result.Add(Token.Print(list.GetSeparator(memberIndex), context));
+                    if (memberIndex < list.SeparatorCount)
+                    {
+                        result.Add(Token.Print(list.GetSeparator(memberIndex), context));
+                    }
+                    else if (
+                        node is EnumDeclarationSyntax enumDeclarationSyntax
+                        && member is EnumMemberDeclarationSyntax
+                    )
+                    {
+                        result.Add(
+                            TrailingComma.Print(enumDeclarationSyntax.CloseBraceToken, context)
+                        );
+                    }
                 }
             }
 

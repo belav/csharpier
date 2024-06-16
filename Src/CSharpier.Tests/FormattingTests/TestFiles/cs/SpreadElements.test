@@ -5,7 +5,7 @@ int[] someOtherArray =
 [
     .. value1________________________________,
     .. value2________________________________,
-    .. value3________________________________
+    .. value3________________________________,
 ];
 
 List<KeyValuePair<string, string>> list =
@@ -17,5 +17,5 @@ List<KeyValuePair<string, string>> list =
                 context.EntityDefinitions.TryGetValue(target, out var type) ? type.ClassName : null
             )
         )
-        .Where(kvp => kvp.Value != null)
+        .Where(kvp => kvp.Value != null),
 ];
