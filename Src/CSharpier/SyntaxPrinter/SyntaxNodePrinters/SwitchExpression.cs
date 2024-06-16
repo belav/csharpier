@@ -4,6 +4,29 @@ internal static class SwitchExpression
 {
     public static Doc Print(SwitchExpressionSyntax node, FormattingContext context)
     {
+        // TODO also look at keeping stuff with =>, see throw new
+        /*
+public class ClassName {
+    public bool Foo(object entry)
+    {
+        return entry switch
+        {
+            string s => s.Length switch
+            {
+                1 => true,
+                2 => false,
+                _ => throw new ArgumentOutOfRangeException(
+                    "this specific string length is not supported"
+                ),
+            },
+            int i => i,
+            _ => throw new ArgumentOutOfRangeException(
+                $"entry type {entry.GetType()} not supported"
+            ),
+        };
+    }
+}
+         */
         var sections = Doc.Group(
             Doc.Indent(
                 Doc.HardLine,
@@ -19,15 +42,11 @@ internal static class SwitchExpression
                             Doc.Group(
                                 Node.Print(o.Pattern, context),
                                 o.WhenClause != null ? Node.Print(o.WhenClause, context) : Doc.Null,
-                                Doc.Indent(
-                                    Doc.Concat(
-                                        Doc.Line,
-                                        Token.PrintWithSuffix(
-                                            o.EqualsGreaterThanToken,
-                                            " ",
-                                            context
-                                        ),
-                                        Node.Print(o.Expression, context)
+                                Doc.Concat(
+                                    " ",
+                                    Token.Print(o.EqualsGreaterThanToken, context),
+                                    Doc.Indent(
+                                        Doc.Concat(Doc.Line, Node.Print(o.Expression, context))
                                     )
                                 )
                             )
