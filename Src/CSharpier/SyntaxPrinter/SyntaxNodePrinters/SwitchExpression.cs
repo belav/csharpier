@@ -25,6 +25,67 @@ public class ClassName {
             ),
         };
     }
+    
+    also this one with comments
+    
+    private static bool TryAddEqualizedFieldsForStatements(
+            IEnumerable<IOperation> statementsToCheck,
+            ISymbol otherC,
+            INamedTypeSymbol type,
+            ArrayBuilder<IFieldSymbol> builder
+        ) =>
+            statementsToCheck.FirstOrDefault() switch
+            {
+                IReturnOperation
+                {
+                    ReturnedValue: ILiteralOperation
+                    {
+                        ConstantValue.HasValue: true,
+                        ConstantValue.Value: true,
+                    }
+                }
+                    // we are done with the comparison, the final statment does no checks
+                    => true,
+                IReturnOperation { ReturnedValue: IOperation value }
+                    => TryAddEqualizedFieldsForCondition(
+                        value,
+                        successRequirement: true,
+                        currentObject: type,
+                        otherObject: otherC,
+                        builder: builder
+                    ),
+                IConditionalOperation
+                {
+                    Condition: IOperation condition,
+                    WhenTrue: IOperation whenTrue,
+                    WhenFalse: var whenFalse,
+                }
+                    // 1. Check structure of if statment, get success requirement
+                    // and any potential statments in the non failure block
+                    // 2. Check condition for compared members
+                    // 3. Check remaining members in non failure block
+                    => TryGetSuccessCondition(
+                        whenTrue,
+                        whenFalse,
+                        statementsToCheck.Skip(1),
+                        out var successRequirement,
+                        out var remainingStatements
+                    )
+                        && TryAddEqualizedFieldsForCondition(
+                            condition,
+                            successRequirement,
+                            type,
+                            otherC,
+                            builder
+                        )
+                        && TryAddEqualizedFieldsForStatements(
+                            remainingStatements,
+                            otherC,
+                            type,
+                            builder
+                        ),
+                _ => false
+            };
 }
          */
         var sections = Doc.Group(
