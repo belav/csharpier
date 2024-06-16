@@ -98,7 +98,11 @@ internal static class ConditionalExpression
             Doc.Group(Token.PrintWithSuffix(node.ColonToken, " ", context), whenFalse)
         );
 
-        if (node.Parent is ReturnStatementSyntax)
+        if (
+            node.Parent
+            is ReturnStatementSyntax
+                or ArgumentSyntax { Parent: ArgumentListSyntax { Arguments.Count: > 1 } }
+        )
         {
             return Doc.Indent(contents);
         }

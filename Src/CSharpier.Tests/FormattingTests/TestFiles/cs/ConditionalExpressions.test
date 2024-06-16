@@ -184,5 +184,26 @@ public class ClassName
             : property.PropertyType == typeof(byte[]) ? "byte[]"
             : property.PropertyType == typeof(float) ? "float"
             : property.PropertyType.Name;
+
+        CallMethod(
+            something____________________________________.IsNotBlank()
+                ? something____________________________________
+            : otherThing____________________________________.IsNotBlank()
+                ? otherThing____________________________________
+            : thingThing____________________________________.IsNotBlank()
+                ? thingThing____________________________________
+            : "enUs"
+        );
+
+        CallMethod(
+            someParameter,
+            something____________________________________.IsNotBlank()
+                    ? something____________________________________
+                : otherThing____________________________________.IsNotBlank()
+                    ? otherThing____________________________________
+                : thingThing____________________________________.IsNotBlank()
+                    ? thingThing____________________________________
+                : "enUs"
+        );
     }
 }
