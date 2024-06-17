@@ -8,7 +8,7 @@ class ClassName
 			2 => 200,
 			3 when false => 300,
 
-			_ => throw new global::System.Exception()
+			_ => throw new global::System.Exception(),
 		};
 
 		return (GetState(), action, hasKey) switch
@@ -22,7 +22,7 @@ class ClassName
 			(DoorState.Locked, Action.Unlock, true) => DoorState.Closed,
 			(var state, _, _) => state,
 			(_, _, _)
-				=> DoorState.LongStateShouldNotGetExtraLine________________________________________
+				=> DoorState.LongStateShouldNotGetExtraLine________________________________________,
 		};
 
 		return someValue switch
@@ -62,14 +62,14 @@ class ClassName
 			{ } otherSyntax => CallSomeMethod(otherSyntax),
 			{ SomeProperty: true }
 				=> "Just because this is long, don't break the pattern                           ",
-			_ => CallSomeMethod(someValue)
+			_ => CallSomeMethod(someValue),
 		};
 
 		return someValue switch
 		{
-			{ IsParameter: true, } => noExtraLineAfterThis,
-			{ IsParameter: someLongValue____________________________________________, }
-				=> someOtherValue
+			{ IsParameter: true } => noExtraLineAfterThis,
+			{ IsParameter: someLongValue____________________________________________ }
+				=> someOtherValue,
 		};
 
 		return (original, updated) switch
@@ -86,7 +86,7 @@ class ClassName
 					TupleElementIndex: var ui
 				} updatedField
 			)
-				=> originalField.Type.Equals(updatedField.Type)
+				=> originalField.Type.Equals(updatedField.Type),
 		};
 	}
 }

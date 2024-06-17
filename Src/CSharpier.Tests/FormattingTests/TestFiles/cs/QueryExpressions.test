@@ -20,7 +20,7 @@ class ClassName
             {
                 One = c.One,
                 Two = c.Two,
-                Three = C.Three
+                Three = C.Three,
             };
 
         var whereQuery = from c in customers where c.Value == "true" select d;
@@ -70,7 +70,7 @@ class ClassName
             select new
             {
                 Country________________________ = g.Key,
-                CustCount____________________________ = g.Count()
+                CustCount____________________________ = g.Count(),
             };
 
         var complexQuerySupportsNewLines =

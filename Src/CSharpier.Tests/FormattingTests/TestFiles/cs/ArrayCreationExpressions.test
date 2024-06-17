@@ -17,6 +17,6 @@ class ClassName
     private static readonly char[] initializerIndents = new char[]
     {
         Path.DirectorySeparatorChar,
-        Path.AltDirectorySeparatorChar
+        Path.AltDirectorySeparatorChar,
     };
 }
