@@ -21,15 +21,14 @@ public class StringDifferTests
     {
         var result = AddNewLinesAndFindDifference("value", "value   ");
 
-        result
-            .Should()
-            .Be(
-                @"----------------------------- Expected: Around Line 1 -----------------------------
+        ActualShouldBe(
+            result,
+            @"----------------------------- Expected: Around Line 1 -----------------------------
 value
 ----------------------------- Actual: Around Line 1 -----------------------------
 value···
 "
-            );
+        );
     }
 
     [Test]
@@ -37,15 +36,14 @@ value···
     {
         var result = AddNewLinesAndFindDifference("value", "value\t");
 
-        result
-            .Should()
-            .Be(
-                @"----------------------------- Expected: Around Line 1 -----------------------------
+        ActualShouldBe(
+            result,
+            @"----------------------------- Expected: Around Line 1 -----------------------------
 value
 ----------------------------- Actual: Around Line 1 -----------------------------
 value→
 "
-            );
+        );
     }
 
     [Test]
@@ -53,9 +51,10 @@ value→
     {
         var result = AddNewLinesAndFindDifference("lineEndings\r\ndiffer", "lineEndings\ndiffer");
 
-        result
-            .Should()
-            .Be("The file contained different line endings than formatting it would result in.");
+        ActualShouldBe(
+            result,
+            "The file contained different line endings than formatting it would result in."
+        );
     }
 
     [Test]
@@ -63,9 +62,10 @@ value→
     {
         var result = PrintDifference("lineEndings\r\ndiffer\r\n", "lineEndings\ndiffer\n");
 
-        result
-            .Should()
-            .Be("The file contained different line endings than formatting it would result in.");
+        ActualShouldBe(
+            result,
+            "The file contained different line endings than formatting it would result in."
+        );
     }
 
     [Test]
@@ -73,15 +73,14 @@ value→
     {
         var result = AddNewLinesAndFindDifference("one", "two");
 
-        result
-            .Should()
-            .Be(
-                @"----------------------------- Expected: Around Line 1 -----------------------------
+        ActualShouldBe(
+            result,
+            @"----------------------------- Expected: Around Line 1 -----------------------------
 one
 ----------------------------- Actual: Around Line 1 -----------------------------
 two
 "
-            );
+        );
     }
 
     [Test]
@@ -99,10 +98,9 @@ four
 "
         );
 
-        result
-            .Should()
-            .Be(
-                @"----------------------------- Expected: Around Line 3 -----------------------------
+        ActualShouldBe(
+            result,
+            @"----------------------------- Expected: Around Line 3 -----------------------------
 two
 four
 ----------------------------- Actual: Around Line 3 -----------------------------
@@ -110,7 +108,7 @@ two
 three
 four
 "
-            );
+        );
     }
 
     [Test]
@@ -133,10 +131,9 @@ four
 "
         );
 
-        result
-            .Should()
-            .Be(
-                @"----------------------------- Expected: Around Line 4 -----------------------------
+        ActualShouldBe(
+            result,
+            @"----------------------------- Expected: Around Line 4 -----------------------------
     private string field1;
 
     private string field2;
@@ -145,7 +142,7 @@ four
 ····
     private string field2;
 "
-            );
+        );
     }
 
     [Test]
@@ -164,10 +161,9 @@ four
 "
         );
 
-        result
-            .Should()
-            .Be(
-                @"----------------------------- Expected: Around Line 3 -----------------------------
+        ActualShouldBe(
+            result,
+            @"----------------------------- Expected: Around Line 3 -----------------------------
 {
     private string field1;
 }
@@ -176,7 +172,7 @@ four
     private string field1;····
 }
 "
-            );
+        );
     }
 
     [Test]
@@ -187,15 +183,14 @@ four
             "public class ClassName  { }"
         );
 
-        result
-            .Should()
-            .Be(
-                @"----------------------------- Expected: Around Line 1 -----------------------------
+        ActualShouldBe(
+            result,
+            @"----------------------------- Expected: Around Line 1 -----------------------------
 public class ClassName { }
 ----------------------------- Actual: Around Line 1 -----------------------------
 public class ClassName  { }
 "
-            );
+        );
     }
 
     [Test]
@@ -206,15 +201,14 @@ public class ClassName  { }
             "public class ClassName  { } "
         );
 
-        result
-            .Should()
-            .Be(
-                @"----------------------------- Expected: Around Line 1 -----------------------------
+        ActualShouldBe(
+            result,
+            @"----------------------------- Expected: Around Line 1 -----------------------------
 public class ClassName { }
 ----------------------------- Actual: Around Line 1 -----------------------------
 public class ClassName  { }·
 "
-            );
+        );
     }
 
     [Test]
@@ -232,17 +226,16 @@ four
 "
         );
 
-        result
-            .Should()
-            .Be(
-                @"----------------------------- Expected: Around Line 4 -----------------------------
+        ActualShouldBe(
+            result,
+            @"----------------------------- Expected: Around Line 4 -----------------------------
 three
 
 ----------------------------- Actual: Around Line 4 -----------------------------
 three
 four
 "
-            );
+        );
     }
 
     [TestCase("\r\n")]
@@ -283,5 +276,10 @@ four
     private static string PrintDifference(string expected, string actual)
     {
         return StringDiffer.PrintFirstDifference(expected, actual);
+    }
+
+    private static void ActualShouldBe(string actual, string expected)
+    {
+        actual.ReplaceLineEndings().Should().Be(expected.ReplaceLineEndings());
     }
 }

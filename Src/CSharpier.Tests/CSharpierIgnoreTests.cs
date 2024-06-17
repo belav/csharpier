@@ -11,12 +11,11 @@ public class CSharpierIgnoreTests
     [Test]
     public void KeepLineBreaks()
     {
-        var testCode =
-            @"
+        var testCode = @"
 1
 
 2
-";
+".ReplaceLineEndings("\n");
 
         var result = PrintWithoutFormatting(testCode);
 
@@ -26,9 +25,8 @@ public class CSharpierIgnoreTests
     [Test]
     public void TrimTrailing()
     {
-        var testCode =
-            @"1    
-2";
+        var testCode = @"1    
+2".ReplaceLineEndings("\n");
 
         var result = PrintWithoutFormatting(testCode);
 
@@ -36,15 +34,14 @@ public class CSharpierIgnoreTests
             .Should()
             .Be(
                 @"1
-2"
+2".ReplaceLineEndings("\n")
             );
     }
 
     [Test]
     public void FullProperty()
     {
-        var testCode =
-            @"
+        var testCode = @"
 // csharpier-ignore
 public string Example
 {
@@ -58,7 +55,7 @@ public string Example
        return _example = number.ToString();
      }
 }
-";
+".ReplaceLineEndings("\n");
 
         var result = PrintWithoutFormatting(testCode);
 
@@ -67,14 +64,16 @@ public string Example
 
     private string PrintWithoutFormatting(string code)
     {
-        return CSharpierIgnore.PrintWithoutFormatting(
-            code,
-            new FormattingContext
-            {
-                LineEnding = Environment.NewLine,
-                IndentSize = 4,
-                UseTabs = false
-            }
-        );
+        return CSharpierIgnore
+            .PrintWithoutFormatting(
+                code,
+                new FormattingContext
+                {
+                    LineEnding = Environment.NewLine,
+                    IndentSize = 4,
+                    UseTabs = false
+                }
+            )
+            .ReplaceLineEndings("\n");
     }
 }
