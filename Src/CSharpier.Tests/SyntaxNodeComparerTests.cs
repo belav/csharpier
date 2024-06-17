@@ -85,7 +85,7 @@ public class ConstructorWithBase
         return;
     }
 }
-".ReplaceLineEndings()
+"
         );
     }
 
@@ -639,7 +639,7 @@ var someValue = $"""
             """";
         var right = """"
             var x = $$"""
-                
+
                 """;
             """";
 
@@ -880,11 +880,6 @@ var someValue = $"""
             SourceCodeKind.Regular,
             CancellationToken.None
         ).CompareSource();
-
-        if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
-        {
-            result = result.Replace("\r\n", "\n");
-        }
 
         return result;
     }
