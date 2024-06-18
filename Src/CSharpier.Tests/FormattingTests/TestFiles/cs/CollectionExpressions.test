@@ -9,14 +9,14 @@ string[] c =
     "________________________",
     "________________________",
     "________________________",
-    "________________________"
+    "________________________",
 ];
 
 int[][] d =
 [
     [1, 2, 3],
     [4, 5, 6],
-    [7, 8, 9]
+    [7, 8, 9],
 ];
 
 var a = new A { B = [1, 2, 3] };
@@ -33,7 +33,7 @@ items.AddRange(
         "which span multiple lines",
         "are added here",
         "and something bad",
-        "happens"
+        "happens",
     ]
 );
 
@@ -43,15 +43,15 @@ someObject = new SomeObject
     Property2 =
     [
         LongValue________________________________________________,
-        LongValue________________________________________________
+        LongValue________________________________________________,
     ],
-    Property3 = "three"
+    Property3 = "three",
 };
 
 someValue =
 [
     LongValue________________________________________________,
-    LongValue________________________________________________
+    LongValue________________________________________________,
 ];
 
 CallMethod(parameter1, parameterName: [1, 2]);
@@ -61,7 +61,7 @@ CallMethod(
     parameterName:
     [
         LongValue________________________________________________,
-        LongValue________________________________________________
+        LongValue________________________________________________,
     ]
 );
 
@@ -116,7 +116,7 @@ class MyClass
                 ArgConstants.NoInteractivity,
                 ArgConstants.UseProgramMain,
                 ArgConstants.NoHttps,
-                ArgConstants.Empty
+                ArgConstants.Empty,
             ],
         ];
 
@@ -138,7 +138,7 @@ class MyClass
             DayOfWeek.Wednesday,
             DayOfWeek.Thursday,
             DayOfWeek.Friday,
-            DayOfWeek.Saturday
+            DayOfWeek.Saturday,
         ];
 }
 

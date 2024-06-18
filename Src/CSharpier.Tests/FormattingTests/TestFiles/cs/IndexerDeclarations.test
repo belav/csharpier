@@ -1,4 +1,9 @@
 abstract class ClassName
 {
     abstract int this[int index] { get; set; }
+
+    public string this[
+        [SomeAttribute] int a________________________________,
+        [SomeAttribute] int b________________________________
+    ] => someValue;
 }

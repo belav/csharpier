@@ -6,7 +6,7 @@ public class ClassName
     {
         One = "One",
         Two = "Two",
-        ThreeThreeThree = "ThreeThreeThree"
+        ThreeThreeThree = "ThreeThreeThree",
     };
 
     public dynamic Value = new { NoName };

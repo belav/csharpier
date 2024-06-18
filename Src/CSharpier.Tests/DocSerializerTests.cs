@@ -233,13 +233,8 @@ internal class DocSerializerTests
         ActualShouldBe(actual, @$"Doc.TrailingComment(""1"", CommentType.{commentType})");
     }
 
-    private static void ActualShouldBe(string result, string be)
+    private static void ActualShouldBe(string actual, string expected)
     {
-        if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
-        {
-            be = be.Replace("\r\n", "\n");
-        }
-
-        result.Should().Be(be);
+        actual.ReplaceLineEndings().Should().Be(expected.ReplaceLineEndings());
     }
 }

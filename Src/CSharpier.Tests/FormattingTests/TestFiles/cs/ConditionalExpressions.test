@@ -100,13 +100,10 @@ public class ClassName
             ? trueValue________________________________
             : falseValue_______________________________;
 
-        return firstCondition
-            ? firstValue
-            : secondCondition
-                ? secondValue
-                : thirdCondition
-                    ? thirdValue
-                    : fourthValue;
+        return firstCondition ? firstValue
+            : secondCondition ? secondValue
+            : thirdCondition ? thirdValue
+            : fourthValue;
 
         return firstCondition
             ? secondCondition
@@ -118,11 +115,9 @@ public class ClassName
 
         return a ? b : c;
 
-        return a
-            ? b
-            : c
-                ? d
-                : e;
+        return a ? b
+            : c ? d
+            : e;
 
         var invocationIndent = someCondition
             ? SomeObject
@@ -138,6 +133,77 @@ public class ClassName
                 : SomeObject
                     .CallMethod__________________________________()
                     .CallMethod__________________________________()
+        );
+
+        return something.IsNotBlank() ? something
+            : otherThing.IsNotBlank() ? otherThing
+            : thingThing.IsNotBlank() ? thingThing
+            : "enUs";
+
+        var languageCode =
+            something.IsNotBlank() ? something
+            : otherThing.IsNotBlank() ? otherThing
+            : thingThing.IsNotBlank() ? thingThing
+            : "enUs";
+
+        var languageCode =
+            something____________________________________.IsNotBlank()
+                ? something____________________________________
+            : otherThing____________________________________.IsNotBlank()
+                ? otherThing____________________________________
+            : thingThing____________________________________.IsNotBlank()
+                ? thingThing____________________________________
+            : "enUs";
+
+        var languageCode =
+            something____________________________________
+            && someCondition______________________________________
+                ? something____________________________________
+            : otherThing____________________________________
+            && someCondition______________________________________
+                ? otherThing____________________________________
+            : thingThing____________________________________
+            && someCondition______________________________________
+                ? thingThing____________________________________
+            : "enUs";
+
+        var parameterType =
+            property.PropertyType == typeof(string) ? "string"
+            : property.PropertyType == typeof(int) ? "int"
+            : property.PropertyType == typeof(int?) ? "int?"
+            : property.PropertyType == typeof(DateTimeOffset) ? "DateTimeOffset"
+            : property.PropertyType == typeof(DateTimeOffset?) ? "DateTimeOffset?"
+            : property.PropertyType == typeof(DateTime) ? "DateTime"
+            : property.PropertyType == typeof(DateTime?) ? "DateTime?"
+            : property.PropertyType == typeof(decimal) ? "decimal"
+            : property.PropertyType == typeof(decimal?) ? "decimal?"
+            : property.PropertyType == typeof(Guid) ? "Guid"
+            : property.PropertyType == typeof(Guid?) ? "Guid?"
+            : property.PropertyType == typeof(bool) ? "bool"
+            : property.PropertyType == typeof(bool?) ? "bool?"
+            : property.PropertyType == typeof(byte[]) ? "byte[]"
+            : property.PropertyType == typeof(float) ? "float"
+            : property.PropertyType.Name;
+
+        CallMethod(
+            something____________________________________.IsNotBlank()
+                ? something____________________________________
+            : otherThing____________________________________.IsNotBlank()
+                ? otherThing____________________________________
+            : thingThing____________________________________.IsNotBlank()
+                ? thingThing____________________________________
+            : "enUs"
+        );
+
+        CallMethod(
+            someParameter,
+            something____________________________________.IsNotBlank()
+                    ? something____________________________________
+                : otherThing____________________________________.IsNotBlank()
+                    ? otherThing____________________________________
+                : thingThing____________________________________.IsNotBlank()
+                    ? thingThing____________________________________
+                : "enUs"
         );
     }
 }

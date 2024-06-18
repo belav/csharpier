@@ -53,19 +53,10 @@ repos:
 
 From the root of your repository
 ```bash
+cd <Your project root directory>
+dotnet new tool-manifest
 dotnet tool install husky
 dotnet husky install
-```
-
-Optionally - add this to one of your projects to automate the install for future developers
-```xml
-<!-- set HUSKY to 0 in CI/CD disable this -->
-<Target Name="husky" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(HUSKY)' != 0">
-    <Exec Command="dotnet tool restore"  StandardOutputImportance="Low" StandardErrorImportance="High"/>
-    <Exec Command="dotnet husky install" StandardOutputImportance="Low" StandardErrorImportance="High"
-        <!-- update this to be the root of your solution --> 
-        WorkingDirectory="../../" />
-</Target>
 ```
 
 Modify the file at `.husky/task-runner.json`
@@ -83,6 +74,12 @@ Modify the file at `.husky/task-runner.json`
 You can run and test your task with the following command.
 ```bash
 dotnet husky run
+```
+
+Optionally - add this to one of your projects to automate the installation for future developers
+You can set the HUSKY environment variable to 0 to disable Husky in CI/CD pipelines.
+```bash
+dotnet husky attach <path-to-project-file>
 ```
 
 Once you are sure the task is working properly, you can add it as a pre-commit hook.

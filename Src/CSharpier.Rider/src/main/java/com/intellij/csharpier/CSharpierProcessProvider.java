@@ -219,16 +219,26 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
             // but there are still 0.12 and 0.14 downloads happening
             var installedVersion = version.split("\\.");
             var versionWeCareAbout = Integer.parseInt(installedVersion[1]);
+            var serverVersion = 29;
 
             ICSharpierProcess csharpierProcess;
-            if (versionWeCareAbout >= 28) {
+            if (versionWeCareAbout >= serverVersion
+                && !CSharpierSettings.getInstance(this.project).getDisableCSharpierServer()
+            ) {
                 csharpierProcess = new CSharpierProcessServer(customPath, version, this.project);
             } else if (versionWeCareAbout >= 12) {
                 var useUtf8 = versionWeCareAbout >= 14;
 
+                if (versionWeCareAbout >= serverVersion
+                    && CSharpierSettings.getInstance(this.project).getDisableCSharpierServer()
+                ) {
+                    this.logger.debug(
+                    "CSharpier server is disabled, falling back to piping via stdin"
+                    );
+                }
+
                 csharpierProcess = new CSharpierProcessPipeMultipleFiles(customPath, useUtf8, version, this.project);
-            }
-            else {
+            } else {
                 if (!this.warnedForOldVersion) {
                     var content = "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.";
                     NotificationGroupManager.getInstance().getNotificationGroup("CSharpier")
@@ -238,7 +248,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
                     this.warnedForOldVersion = true;
                 }
 
-                csharpierProcess =  new CSharpierProcessSingleFile(customPath, version, this.project);
+                csharpierProcess = new CSharpierProcessSingleFile(customPath, version, this.project);
             }
 
             if (csharpierProcess.getProcessFailedToStart()) {

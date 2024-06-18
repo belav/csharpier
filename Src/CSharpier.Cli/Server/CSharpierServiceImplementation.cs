@@ -2,19 +2,11 @@ namespace CSharpier.Cli.Server;
 
 using System.IO.Abstractions;
 using CSharpier.Cli.Options;
+using Microsoft.Extensions.Logging;
 
-internal class CSharpierServiceImplementation
+internal class CSharpierServiceImplementation(string? configPath, ILogger logger)
 {
-    private readonly string? configPath;
-    private readonly IFileSystem fileSystem;
-    private readonly ConsoleLogger logger;
-
-    public CSharpierServiceImplementation(string? configPath, ConsoleLogger logger)
-    {
-        this.configPath = configPath;
-        this.logger = logger;
-        this.fileSystem = new FileSystem();
-    }
+    private readonly IFileSystem fileSystem = new FileSystem();
 
     public async Task<FormatFileResult> FormatFile(
         FormatFileParameter formatFileParameter,
@@ -23,6 +15,7 @@ internal class CSharpierServiceImplementation
     {
         try
         {
+            logger.LogInformation("Received request to format " + formatFileParameter.fileName);
             var directoryName = this.fileSystem.Path.GetDirectoryName(formatFileParameter.fileName);
             DebugLogger.Log(directoryName ?? string.Empty);
             if (directoryName == null)
@@ -34,9 +27,9 @@ internal class CSharpierServiceImplementation
 
             var optionsProvider = await OptionsProvider.Create(
                 directoryName,
-                this.configPath,
+                configPath,
                 this.fileSystem,
-                this.logger,
+                logger,
                 cancellationToken
             );
 

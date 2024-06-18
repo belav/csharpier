@@ -19,11 +19,13 @@ public class SyntaxNodeComparerTests
 
         ResultShouldBe(
             result,
-            @"----------------------------- Original: Around Line 0 -----------------------------
-class ClassName { }
------------------------------ Formatted: Around Line 0 -----------------------------
-namespace Namespace { }
-"
+            """
+            ----------------------------- Original: Around Line 0 -----------------------------
+            class ClassName { }
+            ----------------------------- Formatted: Around Line 0 -----------------------------
+            namespace Namespace { }
+
+            """
         );
     }
 
@@ -83,7 +85,7 @@ public class ConstructorWithBase
         return;
     }
 }
-".ReplaceLineEndings()
+"
         );
     }
 
@@ -637,7 +639,7 @@ var someValue = $"""
             """";
         var right = """"
             var x = $$"""
-                
+
                 """;
             """";
 
@@ -646,14 +648,222 @@ var someValue = $"""
         result.Should().NotBeEmpty();
     }
 
-    private static void ResultShouldBe(string result, string be)
+    [Test]
+    public void CollectionExpression_Work_With_Adding_Trailing_Comma_When_There_Was_None()
     {
-        if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
-        {
-            be = be.Replace("\r\n", "\n");
-        }
+        var left = """"
+            int[][] a =
+            [
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9]
+            ];
+            """";
+        var right = """"
+            int[][] a =
+            [
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9],
+            ];
+            """";
 
-        result.Should().Be(be);
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void CollectionExpression_Work_With_Removing_Trailing_Comma_When_There_Was_One()
+    {
+        var left = """"
+            int[] a = [1, 2, 3,];
+            """";
+        var right = """"
+            int[] a = [1, 2, 3];
+            """";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void AnonymousObjectCreationExpression_Work_With_Adding_Trailing_Comma_When_There_Was_None()
+    {
+        var left = """"
+            public dynamic a = new
+            {
+                One = "One",
+                Two = "Two",
+                ThreeThreeThree = "ThreeThreeThree"
+            };
+            """";
+        var right = """"
+            public dynamic a = new
+            {
+                One = "One",
+                Two = "Two",
+                ThreeThreeThree = "ThreeThreeThree",
+            };
+            """";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void AnonymousObjectCreationExpression_Work_With_Removing_Trailing_Comma_When_There_Was_One()
+    {
+        var left = """"
+            public dynamic a = new { Property = true, }
+            """";
+        var right = """"
+            public dynamic a = new { Property = true }
+            """";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void InitializerExpression_Work_With_Adding_Trailing_Comma_When_There_Was_None()
+    {
+        var left = """"
+            string[] a =
+            {
+                "someLongValue_____________________________________",
+                "someLongValue_____________________________________"
+            };
+            """";
+        var right = """"
+            string[] a =
+            {
+                "someLongValue_____________________________________",
+                "someLongValue_____________________________________",
+            };
+            """";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void InitializerExpression_Work_With_Removing_Trailing_Comma_When_There_Was_One()
+    {
+        var left = """"
+            int[] a = { 1, 2, };
+            """";
+        var right = """"
+            int[] a = { 1, 2 };
+            """";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void SwitchExpression_Work_With_Adding_Trailing_Comma_When_There_Was_None()
+    {
+        var left = """"
+            int switchExpressionNoTrailingComma()
+            {
+                return 1 switch { 1 => 100, _ => throw new global::System.Exception() };
+            }
+            """";
+        var right = """"
+            int switchExpressionNoTrailingComma()
+            {
+                return 1 switch
+                {
+                    1 => 100,
+                    _ => throw new global::System.Exception(),
+                };
+            }
+            """";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void ListPattern_Work_With_Adding_Trailing_Comma_When_There_Was_None()
+    {
+        var left = """"
+            object listPatternTrailingComma(object list)
+            {
+                return list switch
+                {
+                    [var elem] => elem * elem,
+                    [] => 0,
+                    [..] elems => elems.Sum(e => e + e)
+                };
+            }
+            """";
+        var right = """"
+            object listPatternTrailingComma(object list)
+            {
+                return list switch
+                {
+                    [var elem] => elem * elem,
+                    [] => 0,
+                    [..] elems => elems.Sum(e => e + e),
+                };
+            }
+            """";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void EnumDeclaration_Work_With_Adding_Trailing_Comma_When_There_Was_None()
+    {
+        var left = """"
+            public enum Enum
+            {
+                Foo = 1
+            }
+            """";
+        var right = """"
+            public enum Enum
+            {
+                Foo = 1,
+            }
+            """";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void EnumDeclaration_Work_Without_Removing_Trailing_Comma_When_There_Already_Was_One()
+    {
+        var left = """"
+            public enum Enum { Foo = 1, }
+            """";
+        var right = """"
+            public enum Enum
+            {
+                Foo = 1,
+            }
+            """";
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    private static void ResultShouldBe(string actual, string expected)
+    {
+        actual.ReplaceLineEndings().Should().Be(expected.ReplaceLineEndings());
     }
 
     private static string CompareSource(
@@ -670,11 +880,6 @@ var someValue = $"""
             SourceCodeKind.Regular,
             CancellationToken.None
         ).CompareSource();
-
-        if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
-        {
-            result = result.Replace("\r\n", "\n");
-        }
 
         return result;
     }

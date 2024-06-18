@@ -1,3 +1,7 @@
+## [1.7.3]
+- Only use CSharpier Server on 0.29.0+
+- Add option to bypass csharpier server.
+
 ## [1.7.2]
 - Fix issue with csharpier server not working when localhost resolved to IPv6 ::1
 

@@ -111,6 +111,11 @@ internal static class RightHandSide
             {
                 Condition: BinaryExpressionSyntax or ParenthesizedExpressionSyntax
             }
+            or ConditionalExpressionSyntax
+            {
+                WhenFalse: ConditionalExpressionSyntax,
+                WhenTrue: not ConditionalExpressionSyntax
+            }
             or ImplicitObjectCreationExpressionSyntax { Parent: EqualsValueClauseSyntax }
             or InterpolatedStringExpressionSyntax
             // TODO ditch fluid?

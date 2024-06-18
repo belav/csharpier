@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using CSharpier.DocTypes;
 using FluentAssertions;
 using NUnit.Framework;
@@ -10,14 +8,12 @@ namespace CSharpier.Tests;
 [Parallelizable(ParallelScope.All)]
 public class DocPrinterTests
 {
-    private static readonly string NewLine = Environment.NewLine;
-
     [Test]
     public void Lines_Allowed()
     {
         var doc = Doc.Concat(Doc.HardLine, "1");
 
-        PrintedDocShouldBe(doc, $"{NewLine}1");
+        PrintedDocShouldBe(doc, "\n1");
     }
 
     [Test]
@@ -33,7 +29,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Concat("1", Doc.HardLine, "3");
 
-        PrintedDocShouldBe(doc, $"1{NewLine}3");
+        PrintedDocShouldBe(doc, "1\n3");
     }
 
     [Test]
@@ -41,7 +37,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Concat("1", Doc.Line, "3");
 
-        PrintedDocShouldBe(doc, $"1{NewLine}3");
+        PrintedDocShouldBe(doc, "1\n3");
     }
 
     [Test]
@@ -57,7 +53,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Group(Doc.Concat("1", Doc.HardLine, "3"));
 
-        PrintedDocShouldBe(doc, $"1{NewLine}3");
+        PrintedDocShouldBe(doc, "1\n3");
     }
 
     [Test]
@@ -65,7 +61,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Group(Doc.Concat("1", Doc.Line, "2", Doc.HardLine, "3"));
 
-        PrintedDocShouldBe(doc, $"1{NewLine}2{NewLine}3");
+        PrintedDocShouldBe(doc, "1\n2\n3");
     }
 
     [Test]
@@ -73,7 +69,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Group(Doc.Concat("1", Doc.Line, "2", Doc.Line, "3", Doc.BreakParent));
 
-        PrintedDocShouldBe(doc, $"1{NewLine}2{NewLine}3");
+        PrintedDocShouldBe(doc, "1\n2\n3");
     }
 
     [Test]
@@ -88,7 +84,15 @@ public class DocPrinterTests
             )
         );
 
-        PrintedDocShouldBe(doc, $"0{NewLine}    1{NewLine}    2{NewLine}    3");
+        PrintedDocShouldBe(
+            doc,
+            """
+            0
+                1
+                2
+                3
+            """
+        );
     }
 
     [Test]
@@ -97,7 +101,7 @@ public class DocPrinterTests
         const string longText = "LongTextLongTextLongTextLongText";
         var doc = Doc.Group(Doc.Concat(longText, Doc.Line, longText, Doc.Line, longText));
 
-        PrintedDocShouldBe(doc, $"{longText}{NewLine}{longText}{NewLine}{longText}", 80);
+        PrintedDocShouldBe(doc, $"{longText}\n{longText}\n{longText}", 80);
     }
 
     [Test]
@@ -105,7 +109,14 @@ public class DocPrinterTests
     {
         var doc = Doc.Concat("0", Doc.Indent(Doc.Concat(Doc.HardLine, "1", Doc.HardLine, "2")));
 
-        PrintedDocShouldBe(doc, $"0{NewLine}    1{NewLine}    2");
+        PrintedDocShouldBe(
+            doc,
+            """
+            0
+                1
+                2
+            """
+        );
     }
 
     [Test]
@@ -120,7 +131,15 @@ public class DocPrinterTests
             )
         );
 
-        PrintedDocShouldBe(doc, $"0{NewLine}    1{NewLine}{NewLine}    2");
+        PrintedDocShouldBe(
+            doc,
+            """
+            0
+                1
+
+                2
+            """
+        );
     }
 
     [Test]
@@ -136,7 +155,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Concat(Doc.LiteralLine, "1");
 
-        PrintedDocShouldBe(doc, $"1");
+        PrintedDocShouldBe(doc, "1");
     }
 
     [Test]
@@ -152,7 +171,7 @@ public class DocPrinterTests
     {
         var doc = Doc.ForceFlat("1", Doc.LiteralLine, "2");
 
-        PrintedDocShouldBe(doc, $"1{NewLine}2");
+        PrintedDocShouldBe(doc, "1\n2");
     }
 
     [Test]
@@ -160,7 +179,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Group(Doc.ForceFlat("1", Doc.LiteralLine, "2"), Doc.Line, "3");
 
-        PrintedDocShouldBe(doc, $"1{NewLine}2{NewLine}3");
+        PrintedDocShouldBe(doc, "1\n2\n3");
     }
 
     [Test]
@@ -168,7 +187,14 @@ public class DocPrinterTests
     {
         var doc = Doc.Concat("{", Doc.Indent(Doc.HardLine, "indent", Doc.LiteralLine), "}");
 
-        PrintedDocShouldBe(doc, $"{{{NewLine}    indent{NewLine}}}");
+        PrintedDocShouldBe(
+            doc,
+            """
+            {
+                indent
+            }
+            """
+        );
     }
 
     [Test]
@@ -180,7 +206,7 @@ public class DocPrinterTests
             ")"
         );
 
-        PrintedDocShouldBe(doc, $"({NewLine}    1 {NewLine}2{NewLine}    3)");
+        PrintedDocShouldBe(doc, "(\n    1 \n2\n    3)");
     }
 
     [Test]
@@ -194,7 +220,7 @@ public class DocPrinterTests
 
         PrintedDocShouldBe(
             doc,
-            $"lkjasdkfljalsjkdfkjlasdfjklakljsdfjkasdfkljsdafjk jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj"
+            "lkjasdkfljalsjkdfkjlasdfjklakljsdfjkasdfkljsdafjk jaksdlflkasdlfjkajklsdfkljasfjklaslfkjasdfkj"
         );
     }
 
@@ -203,7 +229,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Concat(
             "1",
-            Doc.Group(Doc.Line, this.ActualConcat("2")),
+            Doc.Group(Doc.Line, ActualConcat("2")),
             Doc.HardLine,
             Doc.Concat(
                 "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
@@ -213,7 +239,11 @@ public class DocPrinterTests
         );
         PrintedDocShouldBe(
             doc,
-            $"1 2{NewLine}1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111{NewLine}2"
+            """
+            1 2
+            1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+            2
+            """
         );
     }
 
@@ -252,7 +282,10 @@ public class DocPrinterTests
 
         PrintedDocShouldBe(
             doc,
-            $"1111111111 1111111111 1111111111 1111111111 1111111111{NewLine}1111111111 1111111111 1111111111 1111111111 1111111111"
+            """
+            1111111111 1111111111 1111111111 1111111111 1111111111
+            1111111111 1111111111 1111111111 1111111111 1111111111
+            """
         );
     }
 
@@ -269,7 +302,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Group(Doc.HardLine, Doc.IfBreak("break", "flat"));
 
-        PrintedDocShouldBe(doc, $"{NewLine}break");
+        PrintedDocShouldBe(doc, "\nbreak");
     }
 
     [Test]
@@ -277,7 +310,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Group("another", Doc.Line, Doc.IfBreak("break", "flat"));
 
-        PrintedDocShouldBe(doc, $"another{NewLine}break", 10);
+        PrintedDocShouldBe(doc, "another\nbreak", 10);
     }
 
     [Test]
@@ -309,7 +342,7 @@ public class DocPrinterTests
             Doc.IfBreak("break", "flat", "hl")
         );
 
-        PrintedDocShouldBe(doc, $"1{NewLine}break");
+        PrintedDocShouldBe(doc, "1\nbreak");
     }
 
     [Test]
@@ -317,7 +350,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Group("1", Doc.Line, Doc.IfBreak(Doc.Concat("break", Doc.HardLine), "flat"));
 
-        PrintedDocShouldBe(doc, $"1{NewLine}break");
+        PrintedDocShouldBe(doc, "1\nbreak");
     }
 
     [Test]
@@ -325,7 +358,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Group("1", Doc.Line, Doc.IfBreak("break", Doc.Concat("flat", Doc.HardLine)));
 
-        PrintedDocShouldBe(doc, $"1{NewLine}break");
+        PrintedDocShouldBe(doc, "1\nbreak");
     }
 
     [Test]
@@ -336,7 +369,7 @@ public class DocPrinterTests
             Doc.IndentIfBreak("indent", "h1")
         );
 
-        PrintedDocShouldBe(doc, $"{NewLine}    indent");
+        PrintedDocShouldBe(doc, "\n    indent");
     }
 
     [Test]
@@ -378,7 +411,15 @@ public class DocPrinterTests
             "}"
         );
 
-        PrintedDocShouldBe(doc, $"{{{NewLine}    1{NewLine}#if{NewLine}}}");
+        PrintedDocShouldBe(
+            doc,
+            """
+            {
+                1
+            #if
+            }
+            """
+        );
     }
 
     [Test]
@@ -399,7 +440,13 @@ public class DocPrinterTests
             "y"
         );
 
-        PrintedDocShouldBe(doc, $"x // comment{NewLine}y");
+        PrintedDocShouldBe(
+            doc,
+            """
+            x // comment
+            y
+            """
+        );
     }
 
     [Test]
@@ -412,7 +459,13 @@ public class DocPrinterTests
             "y"
         );
 
-        PrintedDocShouldBe(doc, $"x // comment{NewLine}y");
+        PrintedDocShouldBe(
+            doc,
+            """
+            x // comment
+            y
+            """
+        );
     }
 
     [Test]
@@ -427,7 +480,13 @@ public class DocPrinterTests
                 "    #endregion"
             )
         );
-        PrintedDocShouldBe(doc, $" // trailing{NewLine}    #endregion");
+        PrintedDocShouldBe(
+            doc,
+            """
+             // trailing
+                #endregion
+            """
+        );
     }
 
     [Test]
@@ -435,7 +494,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Concat("1", Doc.HardLineIfNoPreviousLine, "2");
 
-        PrintedDocShouldBe(doc, $"1{NewLine}2");
+        PrintedDocShouldBe(doc, "1\n2");
     }
 
     [Test]
@@ -443,7 +502,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Concat("1", Doc.HardLine, Doc.HardLineIfNoPreviousLine, "2");
 
-        PrintedDocShouldBe(doc, $"1{NewLine}2");
+        PrintedDocShouldBe(doc, "1\n2");
     }
 
     [Test]
@@ -451,17 +510,15 @@ public class DocPrinterTests
     {
         var doc = Doc.Concat(Doc.HardLineIfNoPreviousLine, "1");
 
-        PrintedDocShouldBe(doc, $"{NewLine}1");
+        PrintedDocShouldBe(doc, "\n1");
     }
 
     [Test]
     public void HardLineIfNoPreviousLine_Should_Not_Insert_After_Indented_HardLine()
     {
-        var doc = this.ActualConcat(
-            Doc.Indent("1", Doc.HardLine, Doc.HardLineIfNoPreviousLine, "2")
-        );
+        var doc = ActualConcat(Doc.Indent("1", Doc.HardLine, Doc.HardLineIfNoPreviousLine, "2"));
 
-        PrintedDocShouldBe(doc, $"1{NewLine}    2");
+        PrintedDocShouldBe(doc, "1\n    2");
     }
 
     [Test]
@@ -469,7 +526,7 @@ public class DocPrinterTests
     {
         var doc = Doc.Group(Doc.HardLineSkipBreakIfFirstInGroup, "1", Doc.Line, "2");
 
-        PrintedDocShouldBe(doc, $"{NewLine}1 2");
+        PrintedDocShouldBe(doc, "\n1 2");
     }
 
     [Test]
@@ -484,7 +541,7 @@ public class DocPrinterTests
             "3"
         );
 
-        PrintedDocShouldBe(doc, $"{NewLine}1{NewLine}2{NewLine}3");
+        PrintedDocShouldBe(doc, "\n1\n2\n3");
     }
 
     [Test]
@@ -497,7 +554,7 @@ public class DocPrinterTests
             Doc.Group(Doc.HardLineSkipBreakIfFirstInGroup, "3")
         );
 
-        PrintedDocShouldBe(doc, $"1{NewLine}2{NewLine}3");
+        PrintedDocShouldBe(doc, "1\n2\n3");
     }
 
     [Test]
@@ -511,7 +568,7 @@ public class DocPrinterTests
             "2"
         );
 
-        PrintedDocShouldBe(doc, $"{NewLine}{NewLine}1 2");
+        PrintedDocShouldBe(doc, "\n\n1 2");
     }
 
     [Test]
@@ -524,7 +581,7 @@ public class DocPrinterTests
             "2"
         );
 
-        PrintedDocShouldBe(doc, $"{NewLine}1 2");
+        PrintedDocShouldBe(doc, "\n1 2");
     }
 
     [Test]
@@ -538,9 +595,11 @@ public class DocPrinterTests
         );
         PrintedDocShouldBe(
             doc,
-            @"
-someValue
-someValue",
+            """
+
+            someValue
+            someValue
+            """,
             10
         );
     }
@@ -559,9 +618,11 @@ someValue",
         );
         PrintedDocShouldBe(
             doc,
-            @"// shouldn't break next line
-// shouldn't break next line
-true || false"
+            """
+            // shouldn't break next line
+            // shouldn't break next line
+            true || false
+            """
         );
     }
 
@@ -576,7 +637,7 @@ true || false"
             "2"
         );
 
-        PrintedDocShouldBe(doc, $"#pragma{NewLine}1 2");
+        PrintedDocShouldBe(doc, "#pragma\n1 2");
     }
 
     [Test]
@@ -593,7 +654,7 @@ true || false"
             "tooLong tooLong",
             Doc.Concat("tooLong", Doc.HardLine, "tooLong")
         );
-        PrintedDocShouldBe(doc, $"tooLong{NewLine}tooLong", 10);
+        PrintedDocShouldBe(doc, "tooLong\ntooLong", 10);
     }
 
     [Test]
@@ -610,7 +671,7 @@ true || false"
             "ThisContentIsTooLong",
             Doc.Group("1", Doc.Line, "2", Doc.HardLine, "3")
         );
-        PrintedDocShouldBe(doc, $"1{NewLine}2{NewLine}3", 10);
+        PrintedDocShouldBe(doc, "1\n2\n3", 10);
     }
 
     [Test]
@@ -635,7 +696,7 @@ true || false"
             ),
             Doc.Concat("(1111111)", Doc.HardLine, "(1111111)")
         );
-        PrintedDocShouldBe(doc, $"(1111111){NewLine}(1111111)", 10);
+        PrintedDocShouldBe(doc, "(1111111)\n(1111111)", 10);
     }
 
     [Test]
@@ -655,7 +716,7 @@ true || false"
     public void Align_Should_Print_Basic_Case()
     {
         var doc = Doc.Concat("+ ", Doc.Align(2, Doc.Group("1", Doc.HardLine, "2")));
-        PrintedDocShouldBe(doc, $"+ 1{NewLine}  2");
+        PrintedDocShouldBe(doc, "+ 1\n  2");
     }
 
     [Test]
@@ -668,7 +729,7 @@ true || false"
                 Doc.Indent(Doc.Concat("+ ", Doc.Align(2, Doc.Group("1", Doc.HardLine, "2"))))
             )
         );
-        PrintedDocShouldBe(doc, $"+ + 1{NewLine}\t\t  2", useTabs: true);
+        PrintedDocShouldBe(doc, "+ + 1\n\t\t  2", useTabs: true);
     }
 
     [Test]
@@ -700,7 +761,13 @@ true || false"
         );
         PrintedDocShouldBe(
             doc,
-            @$"return firstCondition{NewLine}  ? firstValue{NewLine}  : secondCondition{NewLine}	  ? secondValue{NewLine}	  : thirdCondition;",
+            $"""
+            return firstCondition
+              ? firstValue
+              : secondCondition
+            {'\t'}  ? secondValue
+            {'\t'}  : thirdCondition;
+            """,
             useTabs: true
         );
     }
@@ -762,14 +829,9 @@ true || false"
         bool useTabs = false
     )
     {
-        if (Environment.GetEnvironmentVariable("NormalizeLineEndings") != null)
-        {
-            expected = expected.Replace("\r\n", "\n");
-        }
-
         var result = Print(doc, width, trimInitialLines, useTabs);
 
-        result.Should().Be(expected);
+        result.Should().Be(expected.ReplaceLineEndings("\n"));
     }
 
     private static string Print(
@@ -790,10 +852,11 @@ true || false"
                 },
                 Environment.NewLine
             )
+            .ReplaceLineEndings("\n")
             .TrimEnd('\r', '\n');
     }
 
-    private Concat ActualConcat(params Doc[] contents)
+    private static Concat ActualConcat(params Doc[] contents)
     {
         return new Concat(contents.ToList());
     }

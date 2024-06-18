@@ -17,5 +17,5 @@ public enum SubCode
     DoNotKeepLine,
 
     [ForceLine]
-    ForceLine
+    ForceLine,
 }

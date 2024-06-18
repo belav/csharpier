@@ -16,7 +16,8 @@ internal static class AnonymousObjectCreationExpression
                         node.Initializers,
                         AnonymousObjectMemberDeclarator.Print,
                         Doc.Line,
-                        context
+                        context,
+                        trailingSeparator: TrailingComma.Print(node.CloseBraceToken, context)
                     )
                 )
                 : Doc.Null,

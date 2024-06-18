@@ -42,6 +42,7 @@ dotnet_diagnostic.SA1500.severity = none
 dotnet_diagnostic.SA1501.severity = none
 dotnet_diagnostic.SA1502.severity = none
 dotnet_diagnostic.SA1504.severity = none
+dotnet_diagnostic.SA1515.severity = none
 dotnet_diagnostic.SA1516.severity = none
 
 # for csharpier <= 0.21.0
