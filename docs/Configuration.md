@@ -23,7 +23,10 @@ JSON
     "newLineBeforeElse": true,
     "newLineBeforeCatch": true,
     "newLineBeforeFinally": true,
-    "newLineBeforeMembersInObjectInitializers": null
+    "newLineBeforeMembersInObjectInitializers": null,
+    "newLineBeforeMembersInAnonymousTypes": null,
+
+    "avoidInlineInizializer": false
 }
 ```
 YAML
@@ -38,6 +41,9 @@ newLineBeforeElse: true
 newLineBeforeCatch: true
 newLineBeforeFinally: true
 newLineBeforeMembersInObjectInitializers: null
+newLineBeforeMembersInAnonymousTypes: null
+
+avoidInlineInizializer: false
 ```
 
 #### Print Width
@@ -101,28 +107,6 @@ Place `finally` statements on a new line.
 
 Default `true`
 
-#### Avoid inline inizializer
-_Available only in CSharpierConfig_
-
-Avoid initializers for objects or arrays should be placed on the same line if they contain fewer than three elements or Collections are not complex element.
-
-Valid options:
-
-- `true`: Avoid initializers on a single line
-  ```csharp
-  var objectInitializer = new ObjectName
-  {
-      A = 1,
-      B = 2
-  };
-  ```
-- `false`: Permit initializers on a single line
-  ```csharp
-  var objectInitializer = new ObjectName { A = 1, B = 2 };
-  ```
-
-Default `false`
-
 #### New line before members in object initializers
 _Available only in CSharpierConfig_
 
@@ -148,6 +132,56 @@ Valid options:
 - `null`: Use default behaviour of CSharpier, inline for objects or arrays should be placed on the same line if they contain fewer than three elements or Collections are not complex element.
 
 Default `null`
+
+#### New line before members in anonymous types
+_Available only in CSharpierConfig_
+
+Require members of anonymous types to be on separate lines or not.
+
+Valid options:
+
+- `true`: Require members of anonymous types to be on separate lines
+  ```csharp
+  var z = new
+  {
+      A = 3,
+      B = 4
+  }
+  ```
+- `false`: Require members of anonymous types to be on the same line
+  ```csharp
+  var z = new
+  {
+      A = 3, B = 4
+  }
+  ```
+- `null`: Use default behaviour of CSharpier, inline for objects or arrays should be placed on the same line if they contain fewer than three elements.
+
+Default `null`
+
+#### Avoid inline inizializer
+_Available only in CSharpierConfig_
+
+_Currently not available_
+
+Avoid initializers for objects or arrays should be placed on the same line if they contain fewer than three elements or Collections are not complex element.
+
+Valid options:
+
+- `true`: Avoid initializers on a single line
+  ```csharp
+  var objectInitializer = new ObjectName
+  {
+      A = 1,
+      B = 2
+  };
+  ```
+- `false`: Permit initializers on a single line
+  ```csharp
+  var objectInitializer = new ObjectName { A = 1, B = 2 };
+  ```
+
+Default `false`
 
 #### Preprocessor Symbol Sets
 _Removed in 0.25.0_

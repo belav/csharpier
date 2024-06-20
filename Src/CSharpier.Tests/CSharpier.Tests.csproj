@@ -31,7 +31,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Remove="FormattingTests\TestFiles\cs\AvoidInlineInizializer.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBeforeOpenBrace_Accessor_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBeforeOpenBrace_Allman.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBeforeOpenBrace_AnonymousMethods_KeR.expected.test" />
@@ -48,14 +47,14 @@
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_Catch_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_Else_KeR.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_Finally_KeR.expected.test" />
+    <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_False.expected.test" />
+    <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_Null.expected.test" />
+    <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_True.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInObjectInitializers_False.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInObjectInitializers_Null.expected.test" />
     <Content Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInObjectInitializers_True.expected.test" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="FormattingTests\TestFiles\cs\AvoidInlineInizializer.expected.test" />
-    <None Remove="FormattingTests\TestFiles\cs\AvoidInlineInizializer.printerOptions.json" />
-    <None Remove="FormattingTests\TestFiles\cs\AvoidInlineInizializer.test" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBeforeOpenBrace_Accessor_KeR.expected.test" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBeforeOpenBrace_Accessor_KeR.printerOptions.json" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBeforeOpenBrace_Accessor_KeR.test" />
@@ -103,6 +102,15 @@
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Finally_KeR.expected.test" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Finally_KeR.printerOptions.json" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_Finally_KeR.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_False.expected.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_False.printerOptions.json" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_False.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_Null.expected.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_Null.printerOptions.json" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_Null.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_True.expected.test" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_True.printerOptions.json" />
+    <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_True.test" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInObjectInitializers_False.expected.test" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInObjectInitializers_False.printerOptions.json" />
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInObjectInitializers_False.test" />
@@ -114,10 +122,12 @@
     <None Remove="FormattingTests\TestFiles\cs\NewLineBefore_MembersInObjectInitializers_True.test" />
   </ItemGroup>
   <ItemGroup>
+    <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_False.printerOptions.json" />
+    <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_Null.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_MembersInObjectInitializers_Null.printerOptions.json" />
+    <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_MembersInAnonymousTypes_True.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_MembersInObjectInitializers_True.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBefore_MembersInObjectInitializers_False.printerOptions.json" />
-    <AdditionalFiles Include="FormattingTests\TestFiles\cs\AvoidInlineInizializer.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBeforeOpenBrace_ObjectCollectionArrayInitializers_KeR.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBeforeOpenBrace_Lambdas_KeR.printerOptions.json" />
     <AdditionalFiles Include="FormattingTests\TestFiles\cs\NewLineBeforeOpenBrace_AnonymousTypes_KeR.printerOptions.json" />

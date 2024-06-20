@@ -15,6 +15,7 @@ internal class FormattingContext
     public required bool NewLineBeforeCatch { get; init; }
     public required bool NewLineBeforeFinally { get; init; }
     public required bool? NewLineBeforeMembersInObjectInitializers { get; set; }
+    public required bool? NewLineBeforeMembersInAnonymousTypes { get; set; }
     public required bool AvoidInlineInizializer { get; init; }
 
     // TODO the rest of these go into State

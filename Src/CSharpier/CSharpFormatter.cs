@@ -130,6 +130,7 @@ internal class CSharpFormatter : IFormatter
                 NewLineBeforeCatch = printerOptions.NewLineBeforeCatch,
                 NewLineBeforeFinally = printerOptions.NewLineBeforeFinally,
                 NewLineBeforeMembersInObjectInitializers = printerOptions.NewLineBeforeMembersInObjectInitializers,
+                NewLineBeforeMembersInAnonymousTypes = printerOptions.NewLineBeforeMembersInAnonymousTypes,
                 AvoidInlineInizializer = printerOptions.AvoidInlineInizializer,
             };
             var document = Node.Print(rootNode, formattingContext);
@@ -156,6 +157,7 @@ internal class CSharpFormatter : IFormatter
                     NewLineBeforeCatch = printerOptions.NewLineBeforeCatch,
                     NewLineBeforeFinally = printerOptions.NewLineBeforeFinally,
                     NewLineBeforeMembersInObjectInitializers = printerOptions.NewLineBeforeMembersInObjectInitializers,
+                    NewLineBeforeMembersInAnonymousTypes = printerOptions.NewLineBeforeMembersInAnonymousTypes,
                     AvoidInlineInizializer = printerOptions.AvoidInlineInizializer
                 };
                 document = Node.Print(

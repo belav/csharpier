@@ -16,6 +16,7 @@ internal class PrinterOptions
     public bool NewLineBeforeCatch { get; set; } = true;
     public bool NewLineBeforeFinally { get; set; } = true;
     public bool? NewLineBeforeMembersInObjectInitializers { get; set; } = null;
+    public bool? NewLineBeforeMembersInAnonymousTypes { get; set; } = null;
     public bool AvoidInlineInizializer { get; init; } = false;
 
     public const int WidthUsedByTests = 100;
