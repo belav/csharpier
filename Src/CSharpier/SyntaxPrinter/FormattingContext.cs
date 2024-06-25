@@ -16,7 +16,7 @@ internal class FormattingContext
     public required bool NewLineBeforeFinally { get; init; }
     public required bool? NewLineBeforeMembersInObjectInitializers { get; set; }
     public required bool? NewLineBeforeMembersInAnonymousTypes { get; set; }
-    public required bool AvoidInlineInizializer { get; init; }
+    public required bool? NewLineBetweenQueryExpressionClauses { get; set; }
 
     // TODO the rest of these go into State
     // context.State.PrintingDepth

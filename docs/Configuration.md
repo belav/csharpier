@@ -10,6 +10,11 @@ CSharpier has support for a configuration file. You can use any of the following
 The configuration file will be resolved based on the location of the file being formatted.
 - If a `.csharpierrc` file exists somewhere at or above the given file, that will be used.
 - Otherwise if an `.editorconfig` file exists somewhere at or above the given file, that will be used. Respecting editorconfig inheritance.
+
+In `csharpier-config` we added some [C# formatting options](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/csharp-formatting-options). For now
+
+- [New-line options](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/csharp-formatting-options#new-line-options)
+
 ### Configuration Options
 JSON
 ```json
@@ -25,8 +30,7 @@ JSON
     "newLineBeforeFinally": true,
     "newLineBeforeMembersInObjectInitializers": null,
     "newLineBeforeMembersInAnonymousTypes": null,
-
-    "avoidInlineInizializer": false
+    "newLineBetweenQueryExpressionClauses": true,
 }
 ```
 YAML
@@ -42,8 +46,7 @@ newLineBeforeCatch: true
 newLineBeforeFinally: true
 newLineBeforeMembersInObjectInitializers: null
 newLineBeforeMembersInAnonymousTypes: null
-
-avoidInlineInizializer: false
+newLineBetweenQueryExpressionClauses: true
 ```
 
 #### Print Width
@@ -159,29 +162,33 @@ Valid options:
 
 Default `null`
 
-#### Avoid inline inizializer
+#### New line between query expression clauses
 _Available only in CSharpierConfig_
 
-_Currently not available_
-
-Avoid initializers for objects or arrays should be placed on the same line if they contain fewer than three elements or Collections are not complex element.
+Require elements of query expression clauses to be on separate lines or not.
 
 Valid options:
 
-- `true`: Avoid initializers on a single line
+- `true`: Require elements of query expression clauses to be on separate lines
   ```csharp
-  var objectInitializer = new ObjectName
-  {
-      A = 1,
-      B = 2
-  };
+  var q =
+    from a in e
+    from b in e
+    select a * b;
   ```
-- `false`: Permit initializers on a single line
+  It's not exactly what we expected because the expression starts on a new line instead of continuing on the same line as the variable declaration. However, it is the best option for now.
+- `false`: Require elements of query expression clauses to be on the same line
   ```csharp
-  var objectInitializer = new ObjectName { A = 1, B = 2 };
-  ```
+  var q = from a in e from b in e select a * b;
 
-Default `false`
+  var queryLong =
+      from fieldA in listOrTable from fieldB in listOrTable
+      select fieltA * fieldB;
+  ```
+  It's not exactly what we expected because the expression starts on a new line instead of continuing on the same line as the variable declaration. However, it is the best option for now.
+- `null`: Use default behaviour of CSharpier.
+
+Default `null`
 
 #### Preprocessor Symbol Sets
 _Removed in 0.25.0_

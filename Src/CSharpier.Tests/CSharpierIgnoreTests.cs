@@ -71,7 +71,14 @@ public string Example
                 {
                     LineEnding = Environment.NewLine,
                     IndentSize = 4,
-                    UseTabs = false
+                    UseTabs = false,
+                    NewLineBeforeOpenBrace = BraceNewLine.All,
+                    NewLineBeforeElse = true,
+                    NewLineBeforeCatch = true,
+                    NewLineBeforeFinally = true,
+                    NewLineBeforeMembersInObjectInitializers = null,
+                    NewLineBeforeMembersInAnonymousTypes = null,
+                    NewLineBetweenQueryExpressionClauses = null
                 }
             )
             .ReplaceLineEndings("\n");
