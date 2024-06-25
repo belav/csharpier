@@ -78,7 +78,8 @@ public string Example
                     NewLineBeforeFinally = true,
                     NewLineBeforeMembersInObjectInitializers = null,
                     NewLineBeforeMembersInAnonymousTypes = null,
-                    NewLineBetweenQueryExpressionClauses = null
+                    NewLineBetweenQueryExpressionClauses = null,
+                    UsePrettierStyleTrailingCommas = true,
                 }
             )
             .ReplaceLineEndings("\n");

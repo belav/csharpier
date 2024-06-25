@@ -15,6 +15,10 @@ In `csharpier-config` we added some [C# formatting options](https://learn.micros
 
 - [New-line options](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/csharp-formatting-options#new-line-options)
 
+An other implementation is:
+
+- `UsePrettierStyleTrailingCommas`: Omit trailing comma for anonymous object/collection/initializer/switch expressions, list patterns and enum declarations in the case a line break occurs.
+
 ### Configuration Options
 JSON
 ```json
@@ -167,6 +171,8 @@ _Available only in CSharpierConfig_
 
 Require elements of query expression clauses to be on separate lines or not.
 
+It's not exactly what we expected because the expression starts on a new line instead of continuing on the same line as the variable declaration. However, it is the best option for now.
+
 Valid options:
 
 - `true`: Require elements of query expression clauses to be on separate lines
@@ -176,7 +182,6 @@ Valid options:
     from b in e
     select a * b;
   ```
-  It's not exactly what we expected because the expression starts on a new line instead of continuing on the same line as the variable declaration. However, it is the best option for now.
 - `false`: Require elements of query expression clauses to be on the same line
   ```csharp
   var q = from a in e from b in e select a * b;
@@ -185,10 +190,39 @@ Valid options:
       from fieldA in listOrTable from fieldB in listOrTable
       select fieltA * fieldB;
   ```
-  It's not exactly what we expected because the expression starts on a new line instead of continuing on the same line as the variable declaration. However, it is the best option for now.
 - `null`: Use default behaviour of CSharpier.
 
 Default `null`
+
+#### Use Prettier style trailing commas
+_Available only in CSharpierConfig_
+
+Force or no trailing comma for anonymous object/collection/initializer/switch expressions, list patterns and enum declarations in the case a line break occurs.
+
+Valid options:
+
+- `true`: Default configuration for `csharpier` after version _0.28.2_ 
+  ```csharp
+  var objectInitializerD = new
+  {
+      A = 1,
+      B = 2,
+      C = 3,
+      D = 4,
+  };
+  ```
+- `false`: Doesn't force trailing comma in the case a line break occurs
+  ```csharp
+  var objectInitializerD = new
+  {
+      A = 1,
+      B = 2,
+      C = 3,
+      D = 4
+  };
+  ```
+
+Default `true`
 
 #### Preprocessor Symbol Sets
 _Removed in 0.25.0_

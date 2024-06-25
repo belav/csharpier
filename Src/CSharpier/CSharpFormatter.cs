@@ -132,6 +132,7 @@ internal class CSharpFormatter : IFormatter
                 NewLineBeforeMembersInObjectInitializers = printerOptions.NewLineBeforeMembersInObjectInitializers,
                 NewLineBeforeMembersInAnonymousTypes = printerOptions.NewLineBeforeMembersInAnonymousTypes,
                 NewLineBetweenQueryExpressionClauses = printerOptions.NewLineBetweenQueryExpressionClauses,
+                UsePrettierStyleTrailingCommas = printerOptions.UsePrettierStyleTrailingCommas,
             };
             var document = Node.Print(rootNode, formattingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
@@ -158,7 +159,8 @@ internal class CSharpFormatter : IFormatter
                     NewLineBeforeFinally = printerOptions.NewLineBeforeFinally,
                     NewLineBeforeMembersInObjectInitializers = printerOptions.NewLineBeforeMembersInObjectInitializers,
                     NewLineBeforeMembersInAnonymousTypes = printerOptions.NewLineBeforeMembersInAnonymousTypes,
-                    NewLineBetweenQueryExpressionClauses = printerOptions.NewLineBetweenQueryExpressionClauses
+                    NewLineBetweenQueryExpressionClauses = printerOptions.NewLineBetweenQueryExpressionClauses,
+                    UsePrettierStyleTrailingCommas = printerOptions.UsePrettierStyleTrailingCommas
                 };
                 document = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),

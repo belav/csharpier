@@ -17,6 +17,7 @@ internal class FormattingContext
     public required bool? NewLineBeforeMembersInObjectInitializers { get; set; }
     public required bool? NewLineBeforeMembersInAnonymousTypes { get; set; }
     public required bool? NewLineBetweenQueryExpressionClauses { get; set; }
+    public required bool UsePrettierStyleTrailingCommas { get; set; }
 
     // TODO the rest of these go into State
     // context.State.PrintingDepth

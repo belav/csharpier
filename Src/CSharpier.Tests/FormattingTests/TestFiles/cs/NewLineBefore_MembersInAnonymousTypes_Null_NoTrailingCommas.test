@@ -2,14 +2,17 @@
 {
     public void MethodName()
     {
-        var objectInitializer = new { A = 1, B = 2 };
+        var objectInitializer = new
+        {
+            A = 1,
+            B = 2
+        };
 
         var objectInitializerD = new
         {
             A = 1,
-            B = 2,
-            C = 3,
-            D = 4,
+            B = 2, C = 3,
+            D = 4
         };
     }
 }
