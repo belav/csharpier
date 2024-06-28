@@ -17,7 +17,7 @@ Usage:
   dotnet-csharpier [options] [<directoryOrFile>]
 
 Arguments:
-  <directoryOrFile>    One or more paths to a directory containing files to format or a file to format. If a path is not specified the current directory is used
+  <directoryOrFile>    One or more paths to a directory containing C# files to format or a C# file to format. It may be ommited when piping data via stdin.
 
 Options:
   --check                      Check that files are formatted. Will not write any changes.
