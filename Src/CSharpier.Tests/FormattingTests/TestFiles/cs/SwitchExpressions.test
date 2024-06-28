@@ -101,6 +101,13 @@ class ClassName
 
         return someValue switch
         {
+            Some.One
+                // comment
+                => 1,
+        };
+
+        return someValue switch
+        {
             (true, true) => someOtherValue,
             (false, false) or someCondition =>
                 someValue_____________________________________________________,
