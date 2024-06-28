@@ -94,24 +94,34 @@ public class ClassName {
                 SeparatedSyntaxList.Print(
                     node.Arms,
                     (o, _) =>
-                        Doc.Concat(
+                    {
+                        var groupId1 = Guid.NewGuid().ToString();
+                        var groupId2 = Guid.NewGuid().ToString();
+                        return Doc.Concat(
                             ExtraNewLines.Print(o),
                             Token.PrintLeadingTrivia(
                                 o.Pattern.GetLeadingTrivia(),
                                 context.WithSkipNextLeadingTrivia()
                             ),
                             Doc.Group(
-                                Node.Print(o.Pattern, context),
-                                o.WhenClause != null ? Node.Print(o.WhenClause, context) : Doc.Null,
+                                Doc.GroupWithId(
+                                    groupId1,
+                                    Doc.Concat(
+                                        Node.Print(o.Pattern, context),
+                                        o.WhenClause != null
+                                            ? Node.Print(o.WhenClause, context)
+                                            : Doc.Null
+                                    )
+                                ),
                                 Doc.Concat(
                                     " ",
                                     Token.Print(o.EqualsGreaterThanToken, context),
-                                    Doc.Indent(
-                                        Doc.Concat(Doc.Line, Node.Print(o.Expression, context))
-                                    )
+                                    Doc.GroupWithId(groupId2, Doc.Indent(Doc.Line)),
+                                    Doc.IndentIfBreak(Node.Print(o.Expression, context), groupId2)
                                 )
                             )
-                        ),
+                        );
+                    },
                     Doc.HardLine,
                     context,
                     trailingSeparator: TrailingComma.Print(node.CloseBraceToken, context)
