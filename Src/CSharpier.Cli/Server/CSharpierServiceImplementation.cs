@@ -41,9 +41,15 @@ internal class CSharpierServiceImplementation(string? configPath, ILogger logger
                 return new FormatFileResult(Status.Ignored);
             }
 
+            var printerOptions = optionsProvider.GetPrinterOptionsFor(formatFileParameter.fileName);
+            if (printerOptions == null)
+            {
+                return new FormatFileResult(Status.UnsupportedFile);
+            }
+
             var result = await CSharpFormatter.FormatAsync(
                 formatFileParameter.fileContents,
-                optionsProvider.GetPrinterOptionsFor(formatFileParameter.fileName),
+                printerOptions,
                 cancellationToken
             );
 

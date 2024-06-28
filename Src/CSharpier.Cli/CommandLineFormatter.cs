@@ -65,18 +65,21 @@ internal static class CommandLineFormatter
                     );
 
                     var printerOptions = optionsProvider.GetPrinterOptionsFor(filePath);
-                    printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
+                    if (printerOptions is not null)
+                    {
+                        printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
 
-                    await PerformFormattingSteps(
-                        fileToFormatInfo,
-                        new StdOutFormattedFileWriter(console),
-                        commandLineFormatterResult,
-                        fileIssueLogger,
-                        printerOptions,
-                        commandLineOptions,
-                        FormattingCacheFactory.NullCache,
-                        cancellationToken
-                    );
+                        await PerformFormattingSteps(
+                            fileToFormatInfo,
+                            new StdOutFormattedFileWriter(console),
+                            commandLineFormatterResult,
+                            fileIssueLogger,
+                            printerOptions,
+                            commandLineOptions,
+                            FormattingCacheFactory.NullCache,
+                            cancellationToken
+                        );
+                    }
                 }
             }
             else
@@ -193,7 +196,11 @@ internal static class CommandLineFormatter
                 }
             }
 
-            async Task FormatFile(string actualFilePath, string originalFilePath)
+            async Task FormatFile(
+                string actualFilePath,
+                string originalFilePath,
+                bool warnForUnsupported = false
+            )
             {
                 if (
                     (
@@ -206,25 +213,33 @@ internal static class CommandLineFormatter
                 }
 
                 var printerOptions = optionsProvider.GetPrinterOptionsFor(actualFilePath);
-                printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
 
-                await FormatPhysicalFile(
-                    actualFilePath,
-                    originalFilePath,
-                    fileSystem,
-                    logger,
-                    commandLineFormatterResult,
-                    writer,
-                    commandLineOptions,
-                    printerOptions,
-                    formattingCache,
-                    cancellationToken
-                );
+                if (printerOptions is not null)
+                {
+                    printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
+                    await FormatPhysicalFile(
+                        actualFilePath,
+                        originalFilePath,
+                        fileSystem,
+                        logger,
+                        commandLineFormatterResult,
+                        writer,
+                        commandLineOptions,
+                        printerOptions,
+                        formattingCache,
+                        cancellationToken
+                    );
+                }
+                else if (warnForUnsupported)
+                {
+                    var fileIssueLogger = new FileIssueLogger(originalFilePath, logger);
+                    fileIssueLogger.WriteWarning("Is an unsupported file type.");
+                }
             }
 
             if (isFile)
             {
-                await FormatFile(directoryOrFilePath, originalDirectoryOrFile);
+                await FormatFile(directoryOrFilePath, originalDirectoryOrFile, true);
             }
             else if (isDirectory)
             {
@@ -246,7 +261,6 @@ internal static class CommandLineFormatter
                         "*.*",
                         SearchOption.AllDirectories
                     )
-                    .Where(o => o.EndsWithIgnoreCase(".cs") || o.EndsWithIgnoreCase(".csx"))
                     .Select(o =>
                     {
                         var normalizedPath = o.Replace("\\", "/");
@@ -295,16 +309,6 @@ internal static class CommandLineFormatter
         );
 
         var fileIssueLogger = new FileIssueLogger(originalFilePath, logger);
-
-        if (
-            !actualFilePath.EndsWithIgnoreCase(".cs")
-            && !actualFilePath.EndsWithIgnoreCase(".cst")
-            && !actualFilePath.EndsWithIgnoreCase(".csx")
-        )
-        {
-            fileIssueLogger.WriteWarning("Is an unsupported file type.");
-            return;
-        }
 
         logger.LogDebug(
             commandLineOptions.Check

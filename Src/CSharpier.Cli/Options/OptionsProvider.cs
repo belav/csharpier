@@ -3,30 +3,28 @@ namespace CSharpier.Cli.Options;
 using System.IO.Abstractions;
 using System.Text.Json;
 using CSharpier.Cli.EditorConfig;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using PrinterOptions = CSharpier.PrinterOptions;
 
 internal class OptionsProvider
 {
     private readonly IList<EditorConfigSections> editorConfigs;
     private readonly List<CSharpierConfigData> csharpierConfigs;
     private readonly IgnoreFile ignoreFile;
-    private readonly PrinterOptions? specifiedPrinterOptions;
+    private readonly ConfigurationFileOptions? specifiedConfigFile;
     private readonly IFileSystem fileSystem;
 
     private OptionsProvider(
         IList<EditorConfigSections> editorConfigs,
         List<CSharpierConfigData> csharpierConfigs,
         IgnoreFile ignoreFile,
-        PrinterOptions? specifiedPrinterOptions,
+        ConfigurationFileOptions? specifiedPrinterOptions,
         IFileSystem fileSystem
     )
     {
         this.editorConfigs = editorConfigs;
         this.csharpierConfigs = csharpierConfigs;
         this.ignoreFile = ignoreFile;
-        this.specifiedPrinterOptions = specifiedPrinterOptions;
+        this.specifiedConfigFile = specifiedPrinterOptions;
         this.fileSystem = fileSystem;
     }
 
@@ -39,18 +37,18 @@ internal class OptionsProvider
         bool limitConfigSearch = false
     )
     {
-        var specifiedPrinterOptions = configPath is not null
-            ? ConfigurationFileOptions.CreatePrinterOptionsFromPath(configPath, fileSystem, logger)
+        var specifiedConfigFile = configPath is not null
+            ? ConfigFileParser.Create(configPath, fileSystem, logger)
             : null;
 
         var csharpierConfigs = configPath is null
-            ? ConfigurationFileOptions.FindForDirectoryName(
+            ? ConfigFileParser.FindForDirectoryName(
                 directoryName,
                 fileSystem,
                 logger,
                 limitConfigSearch
             )
-            : Array.Empty<CSharpierConfigData>().ToList();
+            : [];
 
         IList<EditorConfigSections>? editorConfigSections = null;
 
@@ -78,16 +76,16 @@ internal class OptionsProvider
             editorConfigSections ?? Array.Empty<EditorConfigSections>(),
             csharpierConfigs,
             ignoreFile,
-            specifiedPrinterOptions,
+            specifiedConfigFile,
             fileSystem
         );
     }
 
-    public PrinterOptions GetPrinterOptionsFor(string filePath)
+    public PrinterOptions? GetPrinterOptionsFor(string filePath)
     {
-        if (this.specifiedPrinterOptions is not null)
+        if (this.specifiedConfigFile is not null)
         {
-            return this.specifiedPrinterOptions;
+            return this.specifiedConfigFile.ConvertToPrinterOptions(filePath);
         }
 
         var directoryName = this.fileSystem.Path.GetDirectoryName(filePath);
@@ -101,19 +99,23 @@ internal class OptionsProvider
             directoryName.StartsWith(o.DirectoryName)
         );
 
-        if (resolvedEditorConfig is null && resolvedCSharpierConfig is null)
-        {
-            return new PrinterOptions();
-        }
-
         if (resolvedCSharpierConfig is not null)
         {
-            return ConfigurationFileOptions.ConvertToPrinterOptions(
-                resolvedCSharpierConfig!.CSharpierConfig
-            );
+            return resolvedCSharpierConfig.CSharpierConfig.ConvertToPrinterOptions(filePath);
         }
 
-        return resolvedEditorConfig!.ConvertToPrinterOptions(filePath);
+        if (resolvedEditorConfig is not null)
+        {
+            DebugLogger.Log("has editorconfig");
+            return resolvedEditorConfig.ConvertToPrinterOptions(filePath);
+        }
+
+        if (filePath.EndsWith(".cs") || filePath.EndsWith(".csx"))
+        {
+            return new PrinterOptions { Formatter = "csharp" };
+        }
+
+        return null;
     }
 
     public bool IsIgnored(string actualFilePath)
@@ -126,7 +128,7 @@ internal class OptionsProvider
         return JsonSerializer.Serialize(
             new
             {
-                specified = this.specifiedPrinterOptions,
+                specified = this.specifiedConfigFile,
                 csharpierConfigs = this.csharpierConfigs,
                 editorConfigs = this.editorConfigs
             }

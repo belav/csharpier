@@ -4,15 +4,6 @@ using IniParser.Model;
 
 internal class Section
 {
-    private static readonly GlobMatcherOptions globOptions =
-        new()
-        {
-            MatchBase = true,
-            Dot = true,
-            AllowWindowsPaths = true,
-            AllowSingleBraceSets = true,
-        };
-
     private readonly GlobMatcher matcher;
 
     public string? IndentStyle { get; }
@@ -23,8 +14,7 @@ internal class Section
 
     public Section(SectionData section, string directory)
     {
-        var pattern = FixGlob(section.SectionName, directory);
-        this.matcher = GlobMatcher.Create(pattern, globOptions);
+        this.matcher = Globber.Create(section.SectionName, directory);
         this.IndentStyle = section.Keys["indent_style"];
         this.IndentSize = section.Keys["indent_size"];
         this.TabWidth = section.Keys["tab_width"];
@@ -35,22 +25,5 @@ internal class Section
     public bool IsMatch(string fileName)
     {
         return this.matcher.IsMatch(fileName);
-    }
-
-    private static string FixGlob(string glob, string directory)
-    {
-        glob = glob.IndexOf('/') switch
-        {
-            -1 => "**/" + glob,
-            0 => glob[1..],
-            _ => glob
-        };
-        directory = directory.Replace(@"\", "/");
-        if (!directory.EndsWith("/"))
-        {
-            directory += "/";
-        }
-
-        return directory + glob;
     }
 }

@@ -22,12 +22,22 @@ public class OptionsProviderTests
     }
 
     [Test]
-    public async Task Should_Return_Default_Options_With_No_File()
+    public async Task Should_Return_Default_Options_With_No_File_And_Known_Extension()
     {
         var context = new TestContext();
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         ShouldHaveDefaultOptions(result);
+    }
+
+    [Test]
+    public async Task Should_Return_Default_Options_With_No_File_And_Unknown_Extension()
+    {
+        var context = new TestContext();
+        var result = async () =>
+            await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cst");
+
+        await result.Should().ThrowAsync<Exception>();
     }
 
     [TestCase(".csharpierrc")]
@@ -190,6 +200,25 @@ endOfLine: crlf
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.UseTabs.Should().BeTrue();
+    }
+
+    [Test]
+    public async Task Should_Return_TabWidth_For_Overrid()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.csharpierrc",
+            """
+            overrides:
+                - files: "*.cst"
+                  formatter: "csharp"
+                  tabWidth: 2
+            """
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cst");
+
+        result.TabWidth.Should().Be(2);
     }
 
     [Test]
@@ -733,7 +762,14 @@ indent_size = 2
                 limitEditorConfigSearch
             );
 
-            return provider.GetPrinterOptionsFor(filePath);
+            var printerOptions = provider.GetPrinterOptionsFor(filePath);
+
+            if (printerOptions is null)
+            {
+                throw new Exception("PrinterOptions was null");
+            }
+
+            return printerOptions;
         }
     }
 }

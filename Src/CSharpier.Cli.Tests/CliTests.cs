@@ -236,6 +236,7 @@ max_line_length = 10"
         result.ExitCode.Should().Be(1);
     }
 
+    // TODO overrides tests for piping files
     [TestCase("\n")]
     [TestCase("\r\n")]
     public async Task Should_Format_Multiple_Piped_Files(string lineEnding)
