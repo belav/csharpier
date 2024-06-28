@@ -21,8 +21,8 @@ class ClassName
             (DoorState.Closed, Action.Lock, true) => DoorState.Locked,
             (DoorState.Locked, Action.Unlock, true) => DoorState.Closed,
             (var state, _, _) => state,
-            (_, _, _)
-                => DoorState.LongStateShouldNotGetExtraLine________________________________________,
+            (_, _, _) =>
+                DoorState.LongStateShouldNotGetExtraLine________________________________________,
         };
 
         return someValue switch
@@ -31,45 +31,42 @@ class ClassName
             { IsParameter: true } => 1,
             // this comment shouldn't affect the next line
             { IsParameter: false } => 0,
-            SomeLongObject someLongObject
-                => CallSomeMethodWith____________________________(someLongObject),
-            YetAnotherObject
-                => CallSomeMethod(
-                    someValue,
-                    andOtherParameters,
-                    thatMakeThisLongEnoughToBreak___________________
-                ),
+            SomeLongObject someLongObject => CallSomeMethodWith____________________________(
+                someLongObject
+            ),
+            YetAnotherObject => CallSomeMethod(
+                someValue,
+                andOtherParameters,
+                thatMakeThisLongEnoughToBreak___________________
+            ),
             VeryLongObject_______________________________________________________________
-                when count > 0
-                => CallSomeMethod(someValue),
-            OneMore
-                => "someStrings"
-                    + "moreStrings"
-                    + "andMoreStrings_________________________________________",
-            SomeOtherObject
-            or AnotherObject
-            or OrEvenSomeOtherObject_________________
-                => CallSomeMethod(someValue),
-            SomeOtherObject { SomeProperty: SomeOtherProject }
-            or AnotherObject
-                => CallSomeMethod(someValue),
-            AnotherObject
-            or SomeOtherObject { SomeProperty: SomeOtherProject }
-                => CallSomeMethod(someValue),
+                when count > 0 => CallSomeMethod(someValue),
+            OneMore => "someStrings"
+                + "moreStrings"
+                + "andMoreStrings_________________________________________",
+            SomeOtherObject or AnotherObject or OrEvenSomeOtherObject_________________ =>
+                CallSomeMethod(someValue),
+            SomeOtherObject { SomeProperty: SomeOtherProject } or AnotherObject => CallSomeMethod(
+                someValue
+            ),
+            AnotherObject or SomeOtherObject { SomeProperty: SomeOtherProject } => CallSomeMethod(
+                someValue
+            ),
             SomeOtherObject { Property: true } => CallSomeMethod(someValue),
-            SomeOtherObject { SomeProperty: YetAnotherObject { Property: true } }
-                => CallSomeMethod(someValue),
+            SomeOtherObject { SomeProperty: YetAnotherObject { Property: true } } => CallSomeMethod(
+                someValue
+            ),
             { } otherSyntax => CallSomeMethod(otherSyntax),
-            { SomeProperty: true }
-                => "Just because this is long, don't break the pattern                           ",
+            { SomeProperty: true } =>
+                "Just because this is long, don't break the pattern                           ",
             _ => CallSomeMethod(someValue),
         };
 
         return someValue switch
         {
             { IsParameter: true } => noExtraLineAfterThis,
-            { IsParameter: someLongValue____________________________________________ }
-                => someOtherValue,
+            { IsParameter: someLongValue____________________________________________ } =>
+                someOtherValue,
         };
 
         return (original, updated) switch
@@ -85,8 +82,7 @@ class ClassName
                     ContainingType: { IsTupleType: true },
                     TupleElementIndex: var ui
                 } updatedField
-            )
-                => originalField.Type.Equals(updatedField.Type),
+            ) => originalField.Type.Equals(updatedField.Type),
         };
 
         return someValue switch
@@ -101,14 +97,27 @@ class ClassName
             Some.One => 1,
             // comment
             Some.Two => 2,
+        };
+
+        return someValue switch
+        {
+            Some.One
+                // comment
+                => 1,
         };
 
         return someValue switch
         {
             (true, true) => someOtherValue,
-            (false, false)
-            or someCondition
-                => someValue_____________________________________________________,
+            (false, false) or someCondition =>
+                someValue_____________________________________________________,
+        };
+
+        return someValue switch
+        {
+            _ => throw new ArgumentOutOfRangeException(
+                "someLongString________________________________________________________________"
+            ),
         };
     }
 }
