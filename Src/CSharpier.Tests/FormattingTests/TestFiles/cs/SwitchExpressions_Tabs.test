@@ -31,34 +31,31 @@ class ClassName
 			{ IsParameter: true } => 1,
 			// this comment shouldn't affect the next line
 			{ IsParameter: false } => 0,
-			SomeLongObject someLongObject =>
-				CallSomeMethodWith____________________________(someLongObject),
-			YetAnotherObject =>
-				CallSomeMethod(
-					someValue,
-					andOtherParameters,
-					thatMakeThisLongEnoughToBreak___________________
-				),
+			SomeLongObject someLongObject => CallSomeMethodWith____________________________(
+				someLongObject
+			),
+			YetAnotherObject => CallSomeMethod(
+				someValue,
+				andOtherParameters,
+				thatMakeThisLongEnoughToBreak___________________
+			),
 			VeryLongObject_______________________________________________________________
-				when count > 0 =>
+				when count > 0 => CallSomeMethod(someValue),
+			OneMore => "someStrings"
+				+ "moreStrings"
+				+ "andMoreStrings_________________________________________",
+			SomeOtherObject or AnotherObject or OrEvenSomeOtherObject_________________ =>
 				CallSomeMethod(someValue),
-			OneMore =>
-				"someStrings"
-					+ "moreStrings"
-					+ "andMoreStrings_________________________________________",
-			SomeOtherObject
-			or AnotherObject
-			or OrEvenSomeOtherObject_________________ =>
-				CallSomeMethod(someValue),
-			SomeOtherObject { SomeProperty: SomeOtherProject }
-			or AnotherObject =>
-				CallSomeMethod(someValue),
-			AnotherObject
-			or SomeOtherObject { SomeProperty: SomeOtherProject } =>
-				CallSomeMethod(someValue),
+			SomeOtherObject { SomeProperty: SomeOtherProject } or AnotherObject => CallSomeMethod(
+				someValue
+			),
+			AnotherObject or SomeOtherObject { SomeProperty: SomeOtherProject } => CallSomeMethod(
+				someValue
+			),
 			SomeOtherObject { Property: true } => CallSomeMethod(someValue),
-			SomeOtherObject { SomeProperty: YetAnotherObject { Property: true } } =>
-				CallSomeMethod(someValue),
+			SomeOtherObject { SomeProperty: YetAnotherObject { Property: true } } => CallSomeMethod(
+				someValue
+			),
 			{ } otherSyntax => CallSomeMethod(otherSyntax),
 			{ SomeProperty: true } =>
 				"Just because this is long, don't break the pattern                           ",
@@ -85,8 +82,7 @@ class ClassName
 					ContainingType: { IsTupleType: true },
 					TupleElementIndex: var ui
 				} updatedField
-			) =>
-				originalField.Type.Equals(updatedField.Type),
+			) => originalField.Type.Equals(updatedField.Type),
 		};
 	}
 }
