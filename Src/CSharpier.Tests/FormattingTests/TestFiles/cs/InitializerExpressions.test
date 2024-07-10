@@ -3,6 +3,11 @@ class ClassName
     int[] array = { 1, 2 };
 
     int[] array =
+    [
+        1, // some comment
+    ];
+
+    int[] array =
     {
         "someLongValue_____________________________________",
         "someLongValue_____________________________________",
