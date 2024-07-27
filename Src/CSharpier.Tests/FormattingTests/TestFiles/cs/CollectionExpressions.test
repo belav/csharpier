@@ -86,7 +86,6 @@ CallMethod(_ =>
     ]
 );
 
-
 int[] someArray =
 [
     1
