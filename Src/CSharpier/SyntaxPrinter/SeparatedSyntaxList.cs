@@ -7,8 +7,35 @@ internal static class SeparatedSyntaxList
         Func<T, FormattingContext, Doc> printFunc,
         Doc afterSeparator,
         FormattingContext context,
-        int startingIndex = 0,
-        Doc? trailingSeparator = null
+        int startingIndex = 0
+    )
+        where T : SyntaxNode
+    {
+        return Print(list, printFunc, afterSeparator, context, startingIndex, null);
+    }
+
+    public static Doc PrintWithTrailingComma<T>(
+        SeparatedSyntaxList<T> list,
+        Func<T, FormattingContext, Doc> printFunc,
+        Doc afterSeparator,
+        FormattingContext context,
+        SyntaxToken? closingToken = null
+    )
+        where T : SyntaxNode
+    {
+        return Print(list, printFunc, afterSeparator, context, 0, closingToken);
+    }
+
+    // the names above aren't totally accurate
+    // sometimes there are trailing commas with calls to Print (some patterns do that)
+    // and if you pass null to PrintWithTrailingComma it won't add a trailing comma if there isn't one
+    private static Doc Print<T>(
+        SeparatedSyntaxList<T> list,
+        Func<T, FormattingContext, Doc> printFunc,
+        Doc afterSeparator,
+        FormattingContext context,
+        int startingIndex,
+        SyntaxToken? closingToken
     )
         where T : SyntaxNode
     {
@@ -17,44 +44,30 @@ internal static class SeparatedSyntaxList
         {
             docs.Add(printFunc(list[x], context));
 
-            var isTrailingSeparator = x == list.Count - 1;
-            SyntaxToken? trailingSeparatorToken = null;
-
-            if (isTrailingSeparator && x < list.SeparatorCount)
-            {
-                trailingSeparatorToken = list.GetSeparator(x);
-            }
-
+            // if the syntax tree doesn't have a trailing comma but we want want, then add it
             if (x >= list.SeparatorCount)
             {
-                if (
-                    (
-                        !trailingSeparatorToken.HasValue
-                        || !trailingSeparatorToken.Value.TrailingTrivia.Any(o => o.IsComment())
-                    )
-                    && isTrailingSeparator
-                    && trailingSeparator != null
-                )
+                if (closingToken != null)
                 {
-                    docs.Add(trailingSeparator);
+                    docs.Add(TrailingComma.Print(closingToken.Value, context));
                 }
 
                 continue;
             }
 
+            var isTrailingSeparator = x == list.Count - 1;
+
             if (isTrailingSeparator)
             {
-                if (
-                    trailingSeparatorToken.HasValue
-                    && trailingSeparatorToken.Value.TrailingTrivia.Any(o => o.IsComment())
-                )
+                var trailingSeparatorToken = list.GetSeparator(x);
+                // when the trailing separator has trailing comments, we have to print it normally to prevent it from collapsing
+                if (trailingSeparatorToken.TrailingTrivia.Any(o => o.IsComment()))
                 {
-                    docs.Add(Token.Print(list.GetSeparator(x), context));
+                    docs.Add(Token.Print(trailingSeparatorToken, context));
                 }
-                // TODO I think we can ditch this parameter, and if there is no current one, just call the TrailingComma.Print ourselves
-                else if (trailingSeparator != null)
+                else if (closingToken != null)
                 {
-                    docs.Add(trailingSeparator);
+                    docs.Add(TrailingComma.Print(closingToken.Value, context));
                 }
                 else
                 {

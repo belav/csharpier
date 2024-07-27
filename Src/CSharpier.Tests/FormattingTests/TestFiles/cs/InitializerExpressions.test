@@ -63,6 +63,10 @@ class ClassName
 
         var x = new OneProperty { One = true };
         var x = new TwoProperties { One = true, Two = true };
+        var x = new TwoProperties
+        {
+            One = true, // comment
+        };
         var x = new ThreeProperties
         {
             One = true,
