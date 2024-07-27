@@ -330,7 +330,7 @@ internal static class CommandLineFormatter
     )
     {
         if (
-            (commandLineOptions.StandardInFileContents != null && result.FailedCompilation > 0)
+            result.FailedCompilation > 0
             || (commandLineOptions.Check && result.UnformattedFiles > 0)
             || result.FailedSyntaxTreeValidation > 0
             || result.ExceptionsFormatting > 0
@@ -411,14 +411,7 @@ internal static class CommandLineFormatter
                 errorMessage.AppendLine(message.ToString());
             }
 
-            if (commandLineOptions.WriteStdout)
-            {
-                fileIssueLogger.WriteError(errorMessage.ToString());
-            }
-            else
-            {
-                fileIssueLogger.WriteWarning(errorMessage.ToString());
-            }
+            fileIssueLogger.WriteError(errorMessage.ToString());
 
             Interlocked.Increment(ref commandLineFormatterResult.FailedCompilation);
             return;
