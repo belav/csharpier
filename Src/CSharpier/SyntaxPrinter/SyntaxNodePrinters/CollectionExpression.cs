@@ -9,6 +9,7 @@ internal static class CollectionExpression
                 or AttributeArgumentSyntax
                 or ArrowExpressionClauseSyntax
                 or ExpressionElementSyntax
+                or SimpleLambdaExpressionSyntax
                 or AssignmentExpressionSyntax
                 {
                     Parent: not (
