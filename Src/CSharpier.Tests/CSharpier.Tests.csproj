@@ -3,7 +3,7 @@
     <IsPackable>false</IsPackable>
     <RootNamespace>CSharpier.Tests</RootNamespace>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../../Nuget/csharpier-editorconfig.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>True</SignAssembly>
   </PropertyGroup>
   <ItemGroup>

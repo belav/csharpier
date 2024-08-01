@@ -1,7 +1,8 @@
 name: Publish Nuget
 on:
   push:
-    branches: [ main ]
+    branches: [ build-fix ]
+  workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest

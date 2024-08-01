@@ -2,13 +2,13 @@
   <Import Project="../../Nuget/Build.props" />
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <PackageId>CSharpier</PackageId>
+    <PackageId>CSharpier-Config</PackageId>
     <AssemblyName>dotnet-csharpier-config</AssemblyName>
     <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
-    <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../../Nuget/csharpier-editorconfig.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>True</SignAssembly>
-    <PublicKey>002400000480000094000000060200000024000052534131000400000100010049d266ea1aeae09c0abfce28b8728314d4e4807126ee8bc56155a7ddc765997ed3522908b469ae133fc49ef0bfa957df36082c1c2e0ec8cdc05a4ca4dbd4e1bea6c17fc1008555e15af13a8fc871a04ffc38f5e60e6203bfaf01d16a2a283b90572ade79135801c1675bf38b7a5a60ec8353069796eb53a26ffdddc9ee1273be</PublicKey>
+    <PublicKey>0024000004800000940000000602000000240000525341310004000001000100F1336A544482E27A7A6D9EC6DE7C91AD2BF157844B2A02CB6A4EEB11036D42A4B1FE1BC4CA11B882E3E1ACA228CD45A96F1135FD7E18E0C5C4B376244A9115BB63CBEC48884FEB75503A31B6A7B57DD972A65E0D356F589D3AE1292E6D2546B38FE33DF0D42BA71B387783DB5B5C5EA1367FD468112DDFD47FD6CA7AE004C5B2</PublicKey>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ignore" />

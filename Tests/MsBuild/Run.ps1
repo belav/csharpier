@@ -50,7 +50,7 @@ RUN dotnet build -c Release
     $csharpierFrameworkVersion
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include=`"CSharpier.MsBuild`" Version=`"0.0.1`">
+    <PackageReference Include=`"CSharpier-Config.MsBuild`" Version=`"0.0.1`">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

@@ -19,7 +19,7 @@ public class ServerTests
     [Ignore("Not working on GH, test locally on linux?")]
     public async Task Stuff()
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
+        var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier-config.dll");
 
         var processStartInfo = new ProcessStartInfo("dotnet", $"{path} --server")
         {

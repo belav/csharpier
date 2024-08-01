@@ -2,7 +2,7 @@
     <Import Project="../../Nuget/Build.props"/>
     <PropertyGroup>
         <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
-        <PackageId>CSharpier.MsBuild</PackageId>
+        <PackageId>CSharpier-Config.MsBuild</PackageId>
         <DevelopmentDependency>true</DevelopmentDependency>
         <CSharpierOutputDir>../CSharpier.Cli/bin/$(Configuration)/$(TargetFramework)</CSharpierOutputDir>
     </PropertyGroup>

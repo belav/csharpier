@@ -7,7 +7,7 @@ function CSH-ReviewBranch {
 
     $repositoryRoot = Join-Path $PSScriptRoot ".."
     $csProjectPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/CSharpier.Cli.csproj"
-    $csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/bin/release/net8.0/dotnet-csharpier.dll"
+    $csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/bin/release/net8.0/dotnet-csharpier-config.dll"
 
     $location = Get-Location
 

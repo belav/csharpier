@@ -4,4 +4,4 @@
 docker run --rm -v ${pwd}:/app -e "NormalizeLineEndings=1" -w /app/tests mcr.microsoft.com/dotnet/sdk:7.0 dotnet test /app/Src/CSharpier.Tests/CSharpier.Tests.csproj --logger:trx
 
 # gross way to run csharpier against the csharpier-repos
-#docker run --rm -v ${pwd}:/app -e "NormalizeLineEndings=1" -w /app mcr.microsoft.com/dotnet/sdk:5.0 dotnet ./csharpier/Src/CSharpier/bin/Debug/net6.0/dotnet-csharpier.dll csharpier-repos --skip-write
+#docker run --rm -v ${pwd}:/app -e "NormalizeLineEndings=1" -w /app mcr.microsoft.com/dotnet/sdk:5.0 dotnet ./csharpier/Src/CSharpier/bin/Debug/net6.0/dotnet-csharpier-config.dll csharpier-repos --skip-write

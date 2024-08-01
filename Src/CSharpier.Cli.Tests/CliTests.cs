@@ -532,7 +532,7 @@ max_line_length = 10"
 
         public CsharpierProcess()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier-config.dll");
 
             this.command = CliWrap
                 .Cli.Wrap("dotnet")

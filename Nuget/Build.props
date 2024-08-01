@@ -1,10 +1,10 @@
 <Project>
   <PropertyGroup>
-    <Version>0.28.2</Version>
+    <Version>0.0.2</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/belav/csharpier</RepositoryUrl>
+    <RepositoryUrl>https://github.com/pisolofin/csharpier-editorconfig</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Description>CSharpier is an opinionated code formatter for c#.</Description>
+    <Description>CSharpier is an not opinionated code formatter for c#.</Description>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
