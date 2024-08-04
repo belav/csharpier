@@ -43,7 +43,7 @@ internal class CommandLineOptions
             {
                 Arity = ArgumentArity.ZeroOrMore,
                 Description =
-                    "One or more paths to a directory containing c# files to format or a c# file to format. If a path is not specified the current directory is used"
+                    "One or more paths to a directory containing C# files to format or a C# file to format. It may be ommited when piping data via stdin."
             }.LegalFilePathsOnly(),
             new Option(
                 new[] { "--check" },
