@@ -123,7 +123,7 @@ internal class CSharpFormatter : IFormatter
             var formattingContext = new FormattingContext
             {
                 LineEnding = lineEnding,
-                IndentSize = printerOptions.TabWidth,
+                IndentSize = printerOptions.IndentSize,
                 UseTabs = printerOptions.UseTabs,
             };
             var document = Node.Print(rootNode, formattingContext);
@@ -143,7 +143,7 @@ internal class CSharpFormatter : IFormatter
                 var formattingContext2 = new FormattingContext
                 {
                     LineEnding = lineEnding,
-                    IndentSize = printerOptions.TabWidth,
+                    IndentSize = printerOptions.IndentSize,
                     UseTabs = printerOptions.UseTabs,
                 };
                 document = Node.Print(

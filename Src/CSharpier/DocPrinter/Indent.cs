@@ -49,15 +49,15 @@ internal class Indenter
             return new Indent
             {
                 Value = indent.Value + "\t",
-                Length = indent.Length + this.PrinterOptions.TabWidth
+                Length = indent.Length + this.PrinterOptions.IndentSize
             };
         }
         else
         {
             return new Indent
             {
-                Value = indent.Value + new string(' ', this.PrinterOptions.TabWidth),
-                Length = indent.Length + this.PrinterOptions.TabWidth
+                Value = indent.Value + new string(' ', this.PrinterOptions.IndentSize),
+                Length = indent.Length + this.PrinterOptions.IndentSize
             };
         }
     }
@@ -137,7 +137,7 @@ internal class Indenter
             else
             {
                 value.Append('\t');
-                length += this.PrinterOptions.TabWidth;
+                length += this.PrinterOptions.IndentSize;
             }
         }
 

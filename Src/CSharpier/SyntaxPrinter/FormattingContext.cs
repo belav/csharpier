@@ -1,7 +1,6 @@
 namespace CSharpier.SyntaxPrinter;
 
 // TODO rename this to PrintingContext
-// TODO and rename PrinterOptions.TabWidth to PrinterOptions.IndentSize
 internal class FormattingContext
 {
     // TODO these go into Options
