@@ -5,7 +5,7 @@ internal class PrinterOptions
     public bool IncludeAST { get; init; }
     public bool IncludeDocTree { get; init; }
     public bool UseTabs { get; set; }
-    public int TabWidth { get; set; } = 4;
+    public int IndentSize { get; set; } = 4;
     public int Width { get; set; } = 100;
     public EndOfLine EndOfLine { get; set; } = EndOfLine.Auto;
     public bool TrimInitialLines { get; init; } = true;

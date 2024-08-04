@@ -314,6 +314,30 @@ max_line_length = 10"
     }
 
     [Test]
+    public async Task Should_Support_Override_Config_With_Multiple_Piped_Files()
+    {
+        const string fileContent = "var myVariable = someLongValue;";
+        var fileName = Path.Combine(testFileDirectory, "TooWide.cst");
+        await this.WriteFileAsync(
+            ".csharpierrc",
+            """
+            overrides:
+              - files: "*.cst"
+                formatter: "csharp"
+                printWidth: 10
+            """
+        );
+
+        var result = await new CsharpierProcess()
+            .WithArguments("--pipe-multiple-files")
+            .WithPipedInput($"{fileName}{'\u0003'}{fileContent}{'\u0003'}")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.Output.TrimEnd('\u0003').Should().Be("var myVariable =\n    someLongValue;\n");
+    }
+
+    [Test]
     public async Task Should_Not_Fail_On_Empty_File()
     {
         await this.WriteFileAsync("BasicFile.cs", "");

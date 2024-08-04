@@ -22,7 +22,7 @@ internal class ConfigurationFileOptions
         {
             return new PrinterOptions
             {
-                TabWidth = matchingOverride.TabWidth,
+                IndentSize = matchingOverride.TabWidth,
                 UseTabs = matchingOverride.UseTabs,
                 Width = matchingOverride.PrintWidth,
                 EndOfLine = matchingOverride.EndOfLine,
@@ -34,7 +34,7 @@ internal class ConfigurationFileOptions
         {
             return new PrinterOptions
             {
-                TabWidth = this.TabWidth,
+                IndentSize = this.TabWidth,
                 UseTabs = this.UseTabs,
                 Width = this.PrintWidth,
                 EndOfLine = this.EndOfLine,

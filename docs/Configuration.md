@@ -100,7 +100,7 @@ Overrides allows you to specify different configuration options based on glob pa
 
 ```yaml
 overrides:
-    - files: ["*.cst"]
+    - files: "*.cst"
       formatter: "csharp"
       tabWidth: 2
       useTabs: true
