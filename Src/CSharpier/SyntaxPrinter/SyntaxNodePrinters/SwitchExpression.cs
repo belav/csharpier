@@ -7,7 +7,7 @@ internal static class SwitchExpression
         var sections = Doc.Group(
             Doc.Indent(
                 Doc.HardLine,
-                SeparatedSyntaxList.Print(
+                SeparatedSyntaxList.PrintWithTrailingComma(
                     node.Arms,
                     (o, _) =>
                         Doc.Concat(
@@ -34,7 +34,7 @@ internal static class SwitchExpression
                         ),
                     Doc.HardLine,
                     context,
-                    trailingSeparator: TrailingComma.Print(node.CloseBraceToken, context)
+                    node.CloseBraceToken
                 )
             ),
             Doc.HardLine
