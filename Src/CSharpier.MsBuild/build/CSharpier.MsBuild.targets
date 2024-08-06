@@ -17,12 +17,14 @@
   </PropertyGroup>
 
   <Target Name="CSharpierFormatInner" Condition="'$(CSharpier_Bypass)' != 'true'">
+    <!-- IgnoreExitCode cleans up the output when files aren't formatted and fail the check -->
     <!-- &gt; NullOutput suppresses the output from this so that compilation errors will show up a single time -->
     <Exec
       ConsoleToMSBuild="true"
       StdOutEncoding="utf-8"
       StdErrEncoding="utf-8"
-      Command="dotnet &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check &quot;$(MSBuildProjectDirectory)&quot; &gt; $(NullOutput) " />
+      IgnoreExitCode="true"
+      Command="dotnet &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check --compilation-errors-as-warnings &quot;$(MSBuildProjectDirectory)&quot; &gt; $(NullOutput) " />
   </Target>
 
   <!-- getting this to run a single time for projects that target multiple frameworks requires all of this

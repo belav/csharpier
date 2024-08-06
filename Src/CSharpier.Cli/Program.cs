@@ -33,6 +33,7 @@ internal class Program
         bool noCache,
         bool noMSBuildCheck,
         bool includeGenerated,
+        bool compilationErrorsAsWarnings,
         string configPath,
         LogLevel logLevel,
         CancellationToken cancellationToken
@@ -95,7 +96,8 @@ internal class Program
             SkipWrite = skipWrite,
             WriteStdout = writeStdout || standardInFileContents != null,
             IncludeGenerated = includeGenerated,
-            ConfigPath = actualConfigPath
+            ConfigPath = actualConfigPath,
+            CompilationErrorsAsWarnings = compilationErrorsAsWarnings,
         };
 
         return await CommandLineFormatter.Format(
