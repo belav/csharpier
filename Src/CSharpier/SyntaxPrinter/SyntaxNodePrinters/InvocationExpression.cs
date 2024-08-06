@@ -23,9 +23,7 @@ internal static class InvocationExpression
 
         FlattenAndPrintNodes(node, printedNodes, context);
 
-        var groups = printedNodes.Any(o => o.Node is InvocationExpressionSyntax)
-            ? GroupPrintedNodesPrettierStyle(printedNodes)
-            : GroupPrintedNodesOnLines(printedNodes);
+        var groups = GroupPrintedNodesOnLines(printedNodes);
 
         var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
 
@@ -243,93 +241,6 @@ internal static class InvocationExpression
             }
 
             currentGroup.Add(printedNodes[index]);
-        }
-
-        return groups;
-    }
-
-    private static List<List<PrintedNode>> GroupPrintedNodesPrettierStyle(
-        List<PrintedNode> printedNodes
-    )
-    {
-        // We want to group the printed nodes in the following manner
-        //
-        //   a().b.c().d().e
-        // will be grouped as
-        //   [
-        //     [Identifier, InvocationExpression],
-        //     [MemberAccessExpression], [MemberAccessExpression, InvocationExpression],
-        //     [MemberAccessExpression, InvocationExpression],
-        //     [MemberAccessExpression],
-        //   ]
-
-        // so that we can print it as
-        //   a()
-        //     .b.c()
-        //     .d()
-        //     .e
-
-        // TODO #451 this whole thing could possibly just turn into a big loop
-        // based on the current node, and the next/previous node, decide when to create new groups.
-        // certain nodes need to stay in the current group, other nodes indicate that a new group needs to be created.
-        var groups = new List<List<PrintedNode>>();
-        var currentGroup = new List<PrintedNode> { printedNodes[0] };
-        var index = 1;
-        for (; index < printedNodes.Count; index++)
-        {
-            if (printedNodes[index].Node is InvocationExpressionSyntax)
-            {
-                currentGroup.Add(printedNodes[index]);
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        if (
-            printedNodes[0].Node is not (InvocationExpressionSyntax or PostfixUnaryExpressionSyntax)
-            && index < printedNodes.Count
-            && printedNodes[index].Node
-                is ElementAccessExpressionSyntax
-                    or PostfixUnaryExpressionSyntax
-        )
-        {
-            currentGroup.Add(printedNodes[index]);
-            index++;
-        }
-
-        groups.Add(currentGroup);
-        currentGroup = [];
-
-        var hasSeenNodeThatRequiresBreak = false;
-        for (; index < printedNodes.Count; index++)
-        {
-            if (
-                hasSeenNodeThatRequiresBreak
-                && printedNodes[index].Node
-                    is MemberAccessExpressionSyntax
-                        or ConditionalAccessExpressionSyntax
-            )
-            {
-                groups.Add(currentGroup);
-                currentGroup = [];
-                hasSeenNodeThatRequiresBreak = false;
-            }
-
-            if (
-                printedNodes[index].Node
-                is (InvocationExpressionSyntax or ElementAccessExpressionSyntax)
-            )
-            {
-                hasSeenNodeThatRequiresBreak = true;
-            }
-            currentGroup.Add(printedNodes[index]);
-        }
-
-        if (currentGroup.Any())
-        {
-            groups.Add(currentGroup);
         }
 
         return groups;
