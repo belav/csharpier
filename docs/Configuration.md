@@ -28,13 +28,14 @@ JSON
     "tabWidth": 4,
     "endOfLine": "auto",
 
-    "newLineBeforeOpenBrace": 0,
+    "newLineBeforeOpenBrace": "none",
     "newLineBeforeElse": true,
     "newLineBeforeCatch": true,
     "newLineBeforeFinally": true,
     "newLineBeforeMembersInObjectInitializers": null,
     "newLineBeforeMembersInAnonymousTypes": null,
     "newLineBetweenQueryExpressionClauses": true,
+    "usePrettierStyleTrailingCommas": true
 }
 ```
 YAML
@@ -44,13 +45,14 @@ useTabs: false
 tabWidth: 4
 endOfLine: auto
 
-newLineBeforeOpenBrace: 0
+newLineBeforeOpenBrace: none
 newLineBeforeElse: true
 newLineBeforeCatch: true
 newLineBeforeFinally: true
 newLineBeforeMembersInObjectInitializers: null
 newLineBeforeMembersInAnonymousTypes: null
 newLineBetweenQueryExpressionClauses: true
+usePrettierStyleTrailingCommas: true
 ```
 
 #### Print Width

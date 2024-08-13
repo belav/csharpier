@@ -13,6 +13,16 @@ internal class ConfigurationFileOptions
     public int TabWidth { get; init; } = 4;
     public bool UseTabs { get; init; }
 
+    [JsonConverter(typeof(CaseInsensitiveEnumConverter<BraceNewLine>))]
+    public BraceNewLine NewLineBeforeOpenBrace { get; init; } = BraceNewLine.None;
+    public bool NewLineBeforeElse { get; init; } = true;
+    public bool NewLineBeforeCatch { get; init; } = true;
+    public bool NewLineBeforeFinally { get; init; } = true;
+    public bool? NewLineBeforeMembersInObjectInitializers { get; init; } = null;
+    public bool? NewLineBeforeMembersInAnonymousTypes { get; init; } = null;
+    public bool NewLineBetweenQueryExpressionClauses { get; init; } =true;
+    public bool UsePrettierStyleTrailingCommas { get; init; } =true;
+
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
     public EndOfLine EndOfLine { get; init; }
 
@@ -38,7 +48,16 @@ internal class ConfigurationFileOptions
             TabWidth = configurationFileOptions.TabWidth,
             UseTabs = configurationFileOptions.UseTabs,
             Width = configurationFileOptions.PrintWidth,
-            EndOfLine = configurationFileOptions.EndOfLine
+            EndOfLine = configurationFileOptions.EndOfLine,
+
+            NewLineBeforeOpenBrace = configurationFileOptions.NewLineBeforeOpenBrace,
+            NewLineBeforeElse = configurationFileOptions.NewLineBeforeElse,
+            NewLineBeforeCatch = configurationFileOptions.NewLineBeforeCatch,
+            NewLineBeforeFinally = configurationFileOptions.NewLineBeforeFinally,
+            NewLineBeforeMembersInObjectInitializers = configurationFileOptions.NewLineBeforeMembersInObjectInitializers,
+            NewLineBeforeMembersInAnonymousTypes = configurationFileOptions.NewLineBeforeMembersInAnonymousTypes,
+            NewLineBetweenQueryExpressionClauses = configurationFileOptions.NewLineBetweenQueryExpressionClauses,
+            UsePrettierStyleTrailingCommas = configurationFileOptions.UsePrettierStyleTrailingCommas,
         };
     }
 
