@@ -34,15 +34,15 @@ internal static class InitializerExpression
                 : Doc.Concat(
                     Doc.Indent(
                         alwaysBreak ? Doc.HardLine : Doc.Line,
-                        SeparatedSyntaxList.Print(
+                        SeparatedSyntaxList.PrintWithTrailingComma(
                             node.Expressions,
                             Node.Print,
                             alwaysBreak ? Doc.HardLine : Doc.Line,
                             context,
-                            trailingSeparator: node.Kind()
+                            closingToken: node.Kind()
                                 is not SyntaxKind.ComplexElementInitializerExpression
-                                ? TrailingComma.Print(node.CloseBraceToken, context)
-                                : Doc.Null
+                                ? node.CloseBraceToken
+                                : null
                         )
                     ),
                     alwaysBreak ? Doc.HardLine : Doc.Line
