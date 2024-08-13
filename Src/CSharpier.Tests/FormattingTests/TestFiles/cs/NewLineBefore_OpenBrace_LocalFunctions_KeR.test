@@ -1,0 +1,12 @@
+﻿public class ClassName
+{
+    public void MethodName(int paramA)
+    {
+        int abc = 0;
+
+        int LocalFunction(int paramB)
+        {
+            int def = paramB;
+        }
+    }
+}

@@ -1,0 +1,11 @@
+﻿public class ClassName
+{
+    public void MethodName()
+    {
+        var anonymous = delegate(int param)
+        {
+            // Do something
+            return param;
+        };
+    }
+}

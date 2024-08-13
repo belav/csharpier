@@ -39,6 +39,18 @@ internal class EditorConfigSections
             printerOptions.EndOfLine = endOfLine;
         }
 
+        if (resolvedConfiguration.NewLineBeforeOpenBrace is { } newLineBeforeOpenBrace)
+        {
+            printerOptions.NewLineBeforeOpenBrace = newLineBeforeOpenBrace;
+        }
+
+        printerOptions.NewLineBeforeElse = resolvedConfiguration.NewLineBeforeElse ?? printerOptions.NewLineBeforeElse;
+        printerOptions.NewLineBeforeCatch = resolvedConfiguration.NewLineBeforeCatch ?? printerOptions.NewLineBeforeCatch;
+        printerOptions.NewLineBeforeFinally = resolvedConfiguration.NewLineBeforeFinally ?? printerOptions.NewLineBeforeFinally;
+        printerOptions.NewLineBeforeMembersInObjectInitializers = resolvedConfiguration.NewLineBeforeMembersInObjectInitializers ?? printerOptions.NewLineBeforeMembersInObjectInitializers;
+        printerOptions.NewLineBeforeMembersInAnonymousTypes = resolvedConfiguration.NewLineBeforeMembersInAnonymousTypes ?? printerOptions.NewLineBeforeMembersInAnonymousTypes;
+        printerOptions.NewLineBetweenQueryExpressionClauses = resolvedConfiguration.NewLineBetweenQueryExpressionClauses ?? printerOptions.NewLineBetweenQueryExpressionClauses;
+
         return printerOptions;
     }
 
@@ -49,6 +61,14 @@ internal class EditorConfigSections
         public int? TabWidth { get; }
         public int? MaxLineLength { get; }
         public EndOfLine? EndOfLine { get; }
+
+        public BraceNewLine? NewLineBeforeOpenBrace { get; }
+        public bool? NewLineBeforeElse { get; }
+        public bool? NewLineBeforeCatch { get; }
+        public bool? NewLineBeforeFinally { get; }
+        public bool? NewLineBeforeMembersInObjectInitializers { get; }
+        public bool? NewLineBeforeMembersInAnonymousTypes { get; }
+        public bool? NewLineBetweenQueryExpressionClauses { get; }
 
         public ResolvedConfiguration(List<Section> sections)
         {
@@ -93,6 +113,71 @@ internal class EditorConfigSections
             {
                 this.EndOfLine = result;
             }
+
+            var newLineBeforeOpenBrace = sections.LastOrDefault(o => o.NewLineBeforeOpenBrace != null)?.NewLineBeforeOpenBrace;
+            if (!String.IsNullOrWhiteSpace(newLineBeforeOpenBrace))
+            {
+                this.NewLineBeforeOpenBrace = ConvertToBraceNewLine(newLineBeforeOpenBrace);
+            }
+
+            var newLineBeforeElse = sections.LastOrDefault(o => o.NewLineBeforeElse != null)?.NewLineBeforeElse;
+            if (bool.TryParse(newLineBeforeElse, out var newLineBeforeElseValue))
+            {
+                this.NewLineBeforeElse = newLineBeforeElseValue;
+            }
+
+            var newLineBeforeCatch = sections.LastOrDefault(o => o.NewLineBeforeCatch != null)?.NewLineBeforeCatch;
+            if (bool.TryParse(newLineBeforeCatch, out var newLineBeforeCatchValue))
+            {
+                this.NewLineBeforeCatch = newLineBeforeCatchValue;
+            }
+
+            var newLineBeforeFinally = sections.LastOrDefault(o => o.NewLineBeforeFinally != null)?.NewLineBeforeFinally;
+            if (bool.TryParse(newLineBeforeFinally, out var newLineBeforeFinallyValue))
+            {
+                this.NewLineBeforeFinally = newLineBeforeFinallyValue;
+            }
+
+            var newLineBeforeMembersInObjectInitializers = sections.LastOrDefault(o => o.NewLineBeforeMembersInObjectInitializers != null)?.NewLineBeforeMembersInObjectInitializers;
+            if (!String.IsNullOrWhiteSpace(newLineBeforeMembersInObjectInitializers) && bool.TryParse(newLineBeforeMembersInObjectInitializers, out var newLineBeforeMembersInObjectInitializersValue))
+            {
+                this.NewLineBeforeMembersInObjectInitializers = newLineBeforeMembersInObjectInitializersValue;
+            }
+
+            var newLineBeforeMembersInAnonymousTypes = sections.LastOrDefault(o => o.NewLineBeforeMembersInAnonymousTypes != null)?.NewLineBeforeMembersInAnonymousTypes;
+            if (!String.IsNullOrWhiteSpace(newLineBeforeMembersInAnonymousTypes) && bool.TryParse(newLineBeforeMembersInAnonymousTypes, out var newLineBeforeMembersInAnonymousTypesValue))
+            {
+                this.NewLineBeforeMembersInAnonymousTypes = newLineBeforeMembersInAnonymousTypesValue;
+            }
+
+            var newLineBetweenQueryExpressionClauses = sections.LastOrDefault(o => o.NewLineBetweenQueryExpressionClauses != null)?.NewLineBetweenQueryExpressionClauses;
+            if (!String.IsNullOrWhiteSpace(newLineBetweenQueryExpressionClauses) && bool.TryParse(newLineBetweenQueryExpressionClauses, out var newLineBetweenQueryExpressionClausesValue))
+            {
+                this.NewLineBetweenQueryExpressionClauses = newLineBetweenQueryExpressionClausesValue;
+            }
         }
+    }
+
+    public static BraceNewLine ConvertToBraceNewLine(string input)
+    {
+        // Convert the string to a list of enum values
+        BraceNewLine result = BraceNewLine.None;
+        string[] values = input.Split(',');
+
+        foreach (var value in values)
+        {
+            // Normalize the string to match the enum naming
+            string enumValueName = value.Replace("_", "").ToLower();
+            foreach (BraceNewLine enumValue in Enum.GetValues(typeof(BraceNewLine)))
+            {
+                if (enumValue.ToString().ToLower() == enumValueName)
+                {
+                    result |= enumValue;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 }

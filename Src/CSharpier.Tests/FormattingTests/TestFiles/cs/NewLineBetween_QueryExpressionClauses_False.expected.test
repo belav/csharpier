@@ -1,0 +1,17 @@
+﻿public class ClassName
+{
+    public void MethodName()
+    {
+        var q = from a in e from b in e select a * b;
+
+        var queryLong =
+            from fieldA in listOrTable from fieldB in listOrTable
+            select fieltA * fieldB;
+
+        var qInLine = from a in e from b in e select a * b;
+
+        var queryLongInLine =
+            from fieldA in listOrTable from fieldB in listOrTable
+            select fieltA * fieldB;
+    }
+}

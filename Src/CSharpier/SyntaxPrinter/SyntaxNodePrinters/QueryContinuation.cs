@@ -6,7 +6,7 @@ internal static class QueryContinuation
     {
         return Doc.Concat(
             Token.PrintWithSuffix(node.IntoKeyword, " ", context),
-            Token.PrintWithSuffix(node.Identifier, Doc.Line, context),
+            Token.Print(node.Identifier, context),
             QueryBody.Print(node.Body, context)
         );
     }

@@ -1,0 +1,23 @@
+﻿public class ClassName
+{
+    public void MethodName()
+    {
+        var objectInitializer = new ObjectName { A = 1, B = 2 };
+
+        var collectionInizializer = new List<string> { "A", "B" };
+
+        var arrayInizializer = new string[] { "A", "B" };
+
+        var objectInitializerD = new ObjectName
+        {
+            A = 1,
+            B = 2,
+            C = 3,
+            D = 4
+        };
+
+        var collectionInizializerD = new List<string> { "A", "B", "C", "D", "A", "B", "C", "D" };
+
+        var arrayInizializerD = new string[] { "A", "B", "C", "D" };
+    }
+}

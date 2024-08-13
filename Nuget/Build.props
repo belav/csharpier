@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/pisolofin/csharpier-editorconfig</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

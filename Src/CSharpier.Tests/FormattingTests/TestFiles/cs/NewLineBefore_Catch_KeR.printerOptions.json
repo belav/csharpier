@@ -1,0 +1,6 @@
+﻿{
+    "NewLineBeforeOpenBrace": 65527,
+    "NewLineBeforeElse": true,
+    "NewLineBeforeCatch": false,
+    "NewLineBeforeFinally": true
+}

@@ -1,0 +1,10 @@
+﻿public class ClassName
+{
+    public void MethodName()
+    {
+        Func<int, int> lambdaFunction = x => {
+            // Do something
+            return 2 * x;
+        };
+    }
+}

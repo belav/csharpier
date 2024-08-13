@@ -6,7 +6,6 @@ internal static class QueryExpression
     {
         return Doc.Concat(
             FromClause.Print(node.FromClause, context),
-            Doc.Line,
             QueryBody.Print(node.Body, context)
         );
     }

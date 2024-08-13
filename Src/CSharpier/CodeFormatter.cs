@@ -27,7 +27,11 @@ public static class CodeFormatter
                 UseTabs = options.IndentStyle == IndentStyle.Tabs,
                 TabWidth = options.IndentSize,
                 EndOfLine = options.EndOfLine,
-                IncludeGenerated = options.IncludeGenerated
+                IncludeGenerated = options.IncludeGenerated,
+                NewLineBeforeOpenBrace = options.NewLineBeforeOpenBrace,
+                NewLineBeforeElse = options.NewLineBeforeElse,
+                NewLineBeforeCatch = options.NewLineBeforeCatch,
+                NewLineBeforeFinally = options.NewLineBeforeFinally
             },
             cancellationToken
         );

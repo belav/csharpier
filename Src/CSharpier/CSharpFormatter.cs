@@ -125,6 +125,14 @@ internal class CSharpFormatter : IFormatter
                 LineEnding = lineEnding,
                 IndentSize = printerOptions.TabWidth,
                 UseTabs = printerOptions.UseTabs,
+                NewLineBeforeOpenBrace = printerOptions.NewLineBeforeOpenBrace,
+                NewLineBeforeElse = printerOptions.NewLineBeforeElse,
+                NewLineBeforeCatch = printerOptions.NewLineBeforeCatch,
+                NewLineBeforeFinally = printerOptions.NewLineBeforeFinally,
+                NewLineBeforeMembersInObjectInitializers = printerOptions.NewLineBeforeMembersInObjectInitializers,
+                NewLineBeforeMembersInAnonymousTypes = printerOptions.NewLineBeforeMembersInAnonymousTypes,
+                NewLineBetweenQueryExpressionClauses = printerOptions.NewLineBetweenQueryExpressionClauses,
+                UsePrettierStyleTrailingCommas = printerOptions.UsePrettierStyleTrailingCommas,
             };
             var document = Node.Print(rootNode, formattingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
@@ -145,6 +153,14 @@ internal class CSharpFormatter : IFormatter
                     LineEnding = lineEnding,
                     IndentSize = printerOptions.TabWidth,
                     UseTabs = printerOptions.UseTabs,
+                    NewLineBeforeOpenBrace = printerOptions.NewLineBeforeOpenBrace,
+                    NewLineBeforeElse = printerOptions.NewLineBeforeElse,
+                    NewLineBeforeCatch = printerOptions.NewLineBeforeCatch,
+                    NewLineBeforeFinally = printerOptions.NewLineBeforeFinally,
+                    NewLineBeforeMembersInObjectInitializers = printerOptions.NewLineBeforeMembersInObjectInitializers,
+                    NewLineBeforeMembersInAnonymousTypes = printerOptions.NewLineBeforeMembersInAnonymousTypes,
+                    NewLineBetweenQueryExpressionClauses = printerOptions.NewLineBetweenQueryExpressionClauses,
+                    UsePrettierStyleTrailingCommas = printerOptions.UsePrettierStyleTrailingCommas
                 };
                 document = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),

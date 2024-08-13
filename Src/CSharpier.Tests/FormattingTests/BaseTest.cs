@@ -1,7 +1,6 @@
 using System.IO.Abstractions;
 using System.Text;
 using CSharpier.Cli;
-using CSharpier.SyntaxPrinter;
 using DiffEngine;
 using FluentAssertions;
 
@@ -29,9 +28,25 @@ public class BaseTest
             CancellationToken.None
         );
 
+        PrinterOptions printerOptions;
+        var printerOptionsFilePath = filePath.Replace(".test", ".printerOptions.json");
+        if (File.Exists(printerOptionsFilePath))
+        {
+            var printerOptionsReaderResult = await FileReader.ReadFileAsync(
+                printerOptionsFilePath,
+                new FileSystem(),
+                CancellationToken.None
+            );
+            printerOptions = System.Text.Json.JsonSerializer.Deserialize<PrinterOptions>(printerOptionsReaderResult.FileContents)!;
+        }
+        else
+        {
+            printerOptions = new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs };
+        }
+
         var result = await CSharpFormatter.FormatAsync(
             fileReaderResult.FileContents,
-            new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs },
+            printerOptions,
             fileExtension.EqualsIgnoreCase("csx") ? SourceCodeKind.Script : SourceCodeKind.Regular,
             CancellationToken.None
         );

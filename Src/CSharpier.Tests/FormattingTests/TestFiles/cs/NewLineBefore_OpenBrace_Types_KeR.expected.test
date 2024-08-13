@@ -1,0 +1,3 @@
+﻿public class ClassName {
+    public int Value;
+}

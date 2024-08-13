@@ -1,0 +1,54 @@
+﻿public class ClassName
+{
+    // Properties
+    public int Property
+    {
+        get
+        {
+            int abc = 0;
+            return 0;
+        }
+
+        set {
+            int abc = value;
+            int def = 0;
+        }
+    }
+
+    // Indexers
+    private int[] _array = new int[100];
+
+    public int this[int index]
+    {
+        get
+        {
+            if ((index < 0) || (index >= _array.Lenght)) { return -1; }
+
+            return _array[index];
+        }
+
+        set {
+            if ((index < 0) || (index >= _array.Lenght)) { return ; }
+
+            _array[index] = value;
+        }
+    }
+
+    // Events
+    public delegate void EventNameHandler(object sender, EventArgs args);
+
+    private event EventNameHandler _classEvent;
+
+    public event EventNameHandler ClassEvent {
+        add
+        {
+            // Do something
+            _classEvent += value;
+        }
+        remove
+        {
+            // Do something
+            _classEvent -= value;
+        }
+    }
+}

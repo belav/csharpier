@@ -1,0 +1,13 @@
+﻿public class ClassName
+{
+    public void MethodName()
+    {
+        var anonymous = new
+        {
+            PropertyA = 1,
+            PropertyB = "2",
+            PropertyC = 1.3,
+            PropertyD = DateTime.UtcNow
+        };
+    }
+}
