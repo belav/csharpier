@@ -1,9 +1,10 @@
 name: Deploy Website
-on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'Src/Website/**'
+
+# on:
+#   push:
+#     branches: [ main ]
+#     paths:
+#       - 'Src/Website/**'
 
 jobs:
   deploy:

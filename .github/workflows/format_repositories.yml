@@ -1,21 +1,21 @@
-name: Format Repositories
-on:
-  push:
-    branches: [ main ]
-    paths:
-      - "Src/CSharpier/**/*"
-    
-jobs:
-  format_repositories:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          path: csharpier
-      - uses: actions/setup-dotnet@v3
-      - uses: actions/checkout@v2
-        with:
-          repository: belav/csharpier-repos
-          path: csharpier-repos
-      - run: dotnet build csharpier/Src/CSharpier.Cli/CSharpier.Cli.csproj -c release
-      - run: dotnet csharpier/Src/CSharpier.Cli/bin/release/net7.0/dotnet-csharpier.dll csharpier-repos --skip-write
+# name: Format Repositories
+# on:
+#   push:
+#     branches: [ main ]
+#     paths:
+#       - "Src/CSharpier/**/*"
+#     
+# jobs:
+#   format_repositories:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#         with:
+#           path: csharpier
+#       - uses: actions/setup-dotnet@v3
+#       - uses: actions/checkout@v2
+#         with:
+#           repository: belav/csharpier-repos
+#           path: csharpier-repos
+#       - run: dotnet build csharpier/Src/CSharpier.Cli/CSharpier.Cli.csproj -c release
+#       - run: dotnet csharpier/Src/CSharpier.Cli/bin/release/net7.0/dotnet-csharpier-config.dll csharpier-repos --skip-write
