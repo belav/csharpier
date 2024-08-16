@@ -9,29 +9,7 @@ internal static class SwitchExpression
                 Doc.HardLine,
                 SeparatedSyntaxList.PrintWithTrailingComma(
                     node.Arms,
-                    (o, _) =>
-                        Doc.Concat(
-                            ExtraNewLines.Print(o),
-                            Token.PrintLeadingTrivia(
-                                o.Pattern.GetLeadingTrivia(),
-                                context.WithSkipNextLeadingTrivia()
-                            ),
-                            Doc.Group(
-                                Node.Print(o.Pattern, context),
-                                o.WhenClause != null ? Node.Print(o.WhenClause, context) : Doc.Null,
-                                Doc.Indent(
-                                    Doc.Concat(
-                                        Doc.Line,
-                                        Token.PrintWithSuffix(
-                                            o.EqualsGreaterThanToken,
-                                            " ",
-                                            context
-                                        ),
-                                        Node.Print(o.Expression, context)
-                                    )
-                                )
-                            )
-                        ),
+                    PrintArm,
                     Doc.HardLine,
                     context,
                     node.CloseBraceToken
@@ -50,6 +28,54 @@ internal static class SwitchExpression
             Token.Print(node.OpenBraceToken, context),
             sections,
             Token.Print(node.CloseBraceToken, context)
+        );
+    }
+
+    private static Doc PrintArm(
+        SwitchExpressionArmSyntax switchExpressionArm,
+        FormattingContext context
+    )
+    {
+        var arrowHasComment = switchExpressionArm.EqualsGreaterThanToken.LeadingTrivia.Any(o =>
+            o.IsComment()
+        );
+
+        var groupId2 = Guid.NewGuid().ToString();
+        var innerContents = arrowHasComment
+            ? Doc.Indent(
+                Doc.Concat(
+                    Doc.Line,
+                    Token.PrintWithSuffix(switchExpressionArm.EqualsGreaterThanToken, " ", context),
+                    Node.Print(switchExpressionArm.Expression, context)
+                )
+            )
+            : Doc.Concat(
+                " ",
+                Token.Print(switchExpressionArm.EqualsGreaterThanToken, context),
+                Doc.GroupWithId(groupId2, Doc.Indent(Doc.Line)),
+                Doc.IndentIfBreak(Node.Print(switchExpressionArm.Expression, context), groupId2)
+            );
+
+        var groupId1 = Guid.NewGuid().ToString();
+
+        return Doc.Concat(
+            ExtraNewLines.Print(switchExpressionArm),
+            Token.PrintLeadingTrivia(
+                switchExpressionArm.Pattern.GetLeadingTrivia(),
+                context.WithSkipNextLeadingTrivia()
+            ),
+            Doc.Group(
+                Doc.GroupWithId(
+                    groupId1,
+                    Doc.Concat(
+                        Node.Print(switchExpressionArm.Pattern, context),
+                        switchExpressionArm.WhenClause != null
+                            ? Node.Print(switchExpressionArm.WhenClause, context)
+                            : Doc.Null
+                    )
+                ),
+                innerContents
+            )
         );
     }
 }
