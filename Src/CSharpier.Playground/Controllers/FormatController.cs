@@ -68,7 +68,7 @@ public class FormatController : ControllerBase
                 IncludeAST = true,
                 IncludeDocTree = true,
                 Width = model.PrintWidth,
-                TabWidth = model.IndentSize,
+                IndentSize = model.IndentSize,
                 UseTabs = model.UseTabs
             },
             sourceCodeKind,

@@ -5,11 +5,12 @@ internal class PrinterOptions
     public bool IncludeAST { get; init; }
     public bool IncludeDocTree { get; init; }
     public bool UseTabs { get; set; }
-    public int TabWidth { get; set; } = 4;
+    public int IndentSize { get; set; } = 4;
     public int Width { get; set; } = 100;
     public EndOfLine EndOfLine { get; set; } = EndOfLine.Auto;
     public bool TrimInitialLines { get; init; } = true;
-    public bool IncludeGenerated { get; set; } = false;
+    public bool IncludeGenerated { get; set; }
+    public string Formatter { get; init; } = string.Empty;
 
     public const int WidthUsedByTests = 100;
 
