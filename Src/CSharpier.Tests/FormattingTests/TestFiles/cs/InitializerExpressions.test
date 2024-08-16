@@ -3,6 +3,11 @@ class ClassName
     int[] array = { 1, 2 };
 
     int[] array =
+    [
+        1, // some comment
+    ];
+
+    int[] array =
     {
         "someLongValue_____________________________________",
         "someLongValue_____________________________________",
@@ -58,6 +63,10 @@ class ClassName
 
         var x = new OneProperty { One = true };
         var x = new TwoProperties { One = true, Two = true };
+        var x = new TwoProperties
+        {
+            One = true, // comment
+        };
         var x = new ThreeProperties
         {
             One = true,
