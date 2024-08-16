@@ -649,24 +649,24 @@ var someValue = $"""
     }
 
     [Test]
-    public void CollectionExpression_Work_With_Adding_Trailing_Comma_When_There_Was_None()
+    public void CollectionExpression_Works_With_Adding_Trailing_Comma_When_There_Was_None()
     {
-        var left = """"
+        var left = """
             int[][] a =
             [
                 [1, 2, 3],
                 [4, 5, 6],
                 [7, 8, 9]
             ];
-            """";
-        var right = """"
+            """;
+        var right = """
             int[][] a =
             [
                 [1, 2, 3],
                 [4, 5, 6],
                 [7, 8, 9],
             ];
-            """";
+            """;
 
         var result = CompareSource(left, right);
 
@@ -674,14 +674,10 @@ var someValue = $"""
     }
 
     [Test]
-    public void CollectionExpression_Work_With_Removing_Trailing_Comma_When_There_Was_One()
+    public void CollectionExpression_Works_With_Removing_Trailing_Comma_When_There_Was_One()
     {
-        var left = """"
-            int[] a = [1, 2, 3,];
-            """";
-        var right = """"
-            int[] a = [1, 2, 3];
-            """";
+        var left = "int[] a = [1, 2, 3,];";
+        var right = "int[] a = [1, 2, 3];";
 
         var result = CompareSource(left, right);
 
@@ -689,24 +685,24 @@ var someValue = $"""
     }
 
     [Test]
-    public void AnonymousObjectCreationExpression_Work_With_Adding_Trailing_Comma_When_There_Was_None()
+    public void AnonymousObjectCreationExpression_Works_With_Adding_Trailing_Comma_When_There_Was_None()
     {
-        var left = """"
+        var left = """
             public dynamic a = new
             {
                 One = "One",
                 Two = "Two",
                 ThreeThreeThree = "ThreeThreeThree"
             };
-            """";
-        var right = """"
+            """;
+        var right = """
             public dynamic a = new
             {
                 One = "One",
                 Two = "Two",
                 ThreeThreeThree = "ThreeThreeThree",
             };
-            """";
+            """;
 
         var result = CompareSource(left, right);
 
@@ -714,14 +710,10 @@ var someValue = $"""
     }
 
     [Test]
-    public void AnonymousObjectCreationExpression_Work_With_Removing_Trailing_Comma_When_There_Was_One()
+    public void AnonymousObjectCreationExpression_Works_With_Removing_Trailing_Comma_When_There_Was_One()
     {
-        var left = """"
-            public dynamic a = new { Property = true, }
-            """";
-        var right = """"
-            public dynamic a = new { Property = true }
-            """";
+        var left = "public dynamic a = new { Property = true, }";
+        var right = "public dynamic a = new { Property = true }";
 
         var result = CompareSource(left, right);
 
@@ -729,22 +721,22 @@ var someValue = $"""
     }
 
     [Test]
-    public void InitializerExpression_Work_With_Adding_Trailing_Comma_When_There_Was_None()
+    public void InitializerExpression_Works_With_Adding_Trailing_Comma_When_There_Was_None()
     {
-        var left = """"
+        var left = """
             string[] a =
             {
                 "someLongValue_____________________________________",
                 "someLongValue_____________________________________"
             };
-            """";
-        var right = """"
+            """;
+        var right = """
             string[] a =
             {
                 "someLongValue_____________________________________",
                 "someLongValue_____________________________________",
             };
-            """";
+            """;
 
         var result = CompareSource(left, right);
 
@@ -752,14 +744,10 @@ var someValue = $"""
     }
 
     [Test]
-    public void InitializerExpression_Work_With_Removing_Trailing_Comma_When_There_Was_One()
+    public void InitializerExpression_Works_With_Removing_Trailing_Comma_When_There_Was_One()
     {
-        var left = """"
-            int[] a = { 1, 2, };
-            """";
-        var right = """"
-            int[] a = { 1, 2 };
-            """";
+        var left = "int[] a = { 1, 2, };";
+        var right = "int[] a = { 1, 2 };";
 
         var result = CompareSource(left, right);
 
@@ -767,15 +755,15 @@ var someValue = $"""
     }
 
     [Test]
-    public void SwitchExpression_Work_With_Adding_Trailing_Comma_When_There_Was_None()
+    public void SwitchExpression_Works_With_Adding_Trailing_Comma_When_There_Was_None()
     {
-        var left = """"
+        var left = """
             int switchExpressionNoTrailingComma()
             {
                 return 1 switch { 1 => 100, _ => throw new global::System.Exception() };
             }
-            """";
-        var right = """"
+            """;
+        var right = """
             int switchExpressionNoTrailingComma()
             {
                 return 1 switch
@@ -784,7 +772,7 @@ var someValue = $"""
                     _ => throw new global::System.Exception(),
                 };
             }
-            """";
+            """;
 
         var result = CompareSource(left, right);
 
@@ -792,9 +780,9 @@ var someValue = $"""
     }
 
     [Test]
-    public void ListPattern_Work_With_Adding_Trailing_Comma_When_There_Was_None()
+    public void ListPattern_Works_With_Adding_Trailing_Comma_When_There_Was_None()
     {
-        var left = """"
+        var left = """
             object listPatternTrailingComma(object list)
             {
                 return list switch
@@ -804,8 +792,8 @@ var someValue = $"""
                     [..] elems => elems.Sum(e => e + e)
                 };
             }
-            """";
-        var right = """"
+            """;
+        var right = """
             object listPatternTrailingComma(object list)
             {
                 return list switch
@@ -815,7 +803,7 @@ var someValue = $"""
                     [..] elems => elems.Sum(e => e + e),
                 };
             }
-            """";
+            """;
 
         var result = CompareSource(left, right);
 
@@ -823,20 +811,20 @@ var someValue = $"""
     }
 
     [Test]
-    public void EnumDeclaration_Work_With_Adding_Trailing_Comma_When_There_Was_None()
+    public void EnumDeclaration_Works_With_Adding_Trailing_Comma_When_There_Was_None()
     {
-        var left = """"
+        var left = """
             public enum Enum
             {
                 Foo = 1
             }
-            """";
-        var right = """"
+            """;
+        var right = """
             public enum Enum
             {
                 Foo = 1,
             }
-            """";
+            """;
 
         var result = CompareSource(left, right);
 
@@ -844,17 +832,42 @@ var someValue = $"""
     }
 
     [Test]
-    public void EnumDeclaration_Work_Without_Removing_Trailing_Comma_When_There_Already_Was_One()
+    public void EnumDeclaration_Works_Without_Removing_Trailing_Comma_When_There_Already_Was_One()
     {
-        var left = """"
+        var left = """
             public enum Enum { Foo = 1, }
-            """";
-        var right = """"
+            """;
+        var right = """
             public enum Enum
             {
                 Foo = 1,
             }
-            """";
+            """;
+
+        var result = CompareSource(left, right);
+
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void EnumDeclaration_Works_With_Adding_Trailing_Comma_When_There_Was_None_Inside_If_Directive()
+    {
+        var left = """
+            #if DEBUG
+            public enum Enum
+            {
+                Foo = 1
+            }
+            #endif
+            """;
+        var right = """
+            #if DEBUG
+            public enum Enum
+            {
+                Foo = 1,
+            }
+            #endif
+            """;
 
         var result = CompareSource(left, right);
 

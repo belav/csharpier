@@ -21,9 +21,8 @@ internal class DisabledTextComparer
     protected static string Squash(string code)
     {
         var result = new StringBuilder();
-        for (var index = 0; index < code.Length; index++)
+        foreach (var nextChar in code)
         {
-            var nextChar = code[index];
             if (nextChar is ' ' or '\t' or '\r' or '\n')
             {
                 if (
@@ -92,6 +91,14 @@ internal class DisabledTextComparer
             else
             {
                 result.Append(nextChar);
+            }
+
+            // this removes trailing commas so that added trailing commas inside #if blocks don't result
+            // in validation failures
+            if (nextChar is '}' && result.Length > 1 && result[^2] is ',')
+            {
+                result[^2] = nextChar;
+                result.Length -= 1;
             }
         }
 
