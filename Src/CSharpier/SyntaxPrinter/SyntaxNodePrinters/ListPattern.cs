@@ -8,12 +8,12 @@ internal static class ListPattern
             Token.Print(node.OpenBracketToken, context),
             Doc.Indent(
                 Doc.SoftLine,
-                SeparatedSyntaxList.Print(
+                SeparatedSyntaxList.PrintWithTrailingComma(
                     node.Patterns,
                     Node.Print,
                     Doc.Line,
                     context,
-                    trailingSeparator: TrailingComma.Print(node.CloseBracketToken, context)
+                    node.CloseBracketToken
                 )
             ),
             Doc.SoftLine,

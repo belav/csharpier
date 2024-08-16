@@ -32,12 +32,12 @@ internal static class CollectionExpression
             node.Elements.Any()
                 ? Doc.Indent(
                     alwaysBreak ? Doc.HardLine : Doc.IfBreak(Doc.Line, Doc.Null),
-                    SeparatedSyntaxList.Print(
+                    SeparatedSyntaxList.PrintWithTrailingComma(
                         node.Elements,
                         Node.Print,
                         alwaysBreak ? Doc.HardLine : Doc.Line,
                         context,
-                        trailingSeparator: TrailingComma.Print(node.CloseBracketToken, context)
+                        node.CloseBracketToken
                     )
                 )
                 : Doc.Null,
