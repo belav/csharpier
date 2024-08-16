@@ -12,12 +12,12 @@ internal static class AnonymousObjectCreationExpression
             node.Initializers.Any()
                 ? Doc.Indent(
                     alwaysBreak ? Doc.HardLine : Doc.Line,
-                    SeparatedSyntaxList.Print(
+                    SeparatedSyntaxList.PrintWithTrailingComma(
                         node.Initializers,
                         AnonymousObjectMemberDeclarator.Print,
                         Doc.Line,
                         context,
-                        trailingSeparator: TrailingComma.Print(node.CloseBraceToken, context)
+                        node.CloseBraceToken
                     )
                 )
                 : Doc.Null,
