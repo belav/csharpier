@@ -10,4 +10,4 @@ RUN npm ci
 COPY ./Src/Website/ .
 RUN npm run build
 
-ENTRYPOINT npm run serve -- --port 80 --host 0.0.0.0
+ENTRYPOINT npm run start:prod -- --port 80 --host 0.0.0.0

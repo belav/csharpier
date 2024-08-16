@@ -171,7 +171,7 @@ h1, h2, h3 {
 }
 
 @media only screen and (max-width: 1360px) {
-  .navbar__inner, .docs-wrapper {
+  .navbar__inner, .docs-wrapper, .main-wrapper {
     width: 100%;
   }
 }
