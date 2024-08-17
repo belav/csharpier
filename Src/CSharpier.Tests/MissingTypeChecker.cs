@@ -113,6 +113,6 @@ public class MissingTypeChecker
             "XmlNameAttributeSyntax",
             "XmlNameSyntax",
             "XmlPrefixSyntax",
-            "XmlTextAttributeSyntax"
+            "XmlTextAttributeSyntax",
         };
 }

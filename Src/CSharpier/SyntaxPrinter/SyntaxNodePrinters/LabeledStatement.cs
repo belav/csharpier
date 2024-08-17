@@ -9,7 +9,7 @@ internal static class LabeledStatement
             ExtraNewLines.Print(node),
             AttributeLists.Print(node, node.AttributeLists, context),
             Token.Print(node.Identifier, context),
-            Token.Print(node.ColonToken, context)
+            Token.Print(node.ColonToken, context),
         };
         if (node.Statement is BlockSyntax blockSyntax)
         {

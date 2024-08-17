@@ -85,7 +85,7 @@ internal static class Token
             var contents = new List<Doc>
             {
                 linesIncludingQuotes[0],
-                lastLineIsIndented ? Doc.HardLineNoTrim : Doc.LiteralLine
+                lastLineIsIndented ? Doc.HardLineNoTrim : Doc.LiteralLine,
             };
 
             var lines = syntaxToken.ValueText.Split(lineSeparators, StringSplitOptions.None);
@@ -138,7 +138,7 @@ internal static class Token
         {
             <= 0 => Doc.Null,
             1 => docs.First(),
-            _ => Doc.Concat(docs)
+            _ => Doc.Concat(docs),
         };
     }
 

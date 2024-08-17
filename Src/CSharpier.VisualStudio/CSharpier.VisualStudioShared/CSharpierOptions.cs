@@ -171,7 +171,7 @@
 
             await SaveOptions(
                 this.GetSolutionOptionsFileNameAsync,
-                new OptionsDto { RunOnSave = this.SolutionRunOnSave, }
+                new OptionsDto { RunOnSave = this.SolutionRunOnSave }
             );
 
             await SaveOptions(

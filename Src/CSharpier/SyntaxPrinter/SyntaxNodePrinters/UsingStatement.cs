@@ -25,7 +25,7 @@ internal static class UsingStatement
                 ),
                 Token.Print(node.CloseParenToken, context),
                 Doc.IfBreak(Doc.Null, Doc.SoftLine)
-            )
+            ),
         };
         if (node.Statement is UsingStatementSyntax)
         {

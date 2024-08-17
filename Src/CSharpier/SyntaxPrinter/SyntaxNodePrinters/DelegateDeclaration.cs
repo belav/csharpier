@@ -10,7 +10,7 @@ internal static class DelegateDeclaration
             Modifiers.PrintSorted(node.Modifiers, context),
             Token.PrintWithSuffix(node.DelegateKeyword, " ", context),
             Node.Print(node.ReturnType, context),
-            { " ", Token.Print(node.Identifier, context) }
+            { " ", Token.Print(node.Identifier, context) },
         };
         if (node.TypeParameterList != null)
         {

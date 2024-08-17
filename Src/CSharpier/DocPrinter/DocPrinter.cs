@@ -399,5 +399,5 @@ internal enum PrintMode
 {
     Flat,
     Break,
-    ForceFlat
+    ForceFlat,
 }

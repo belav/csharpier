@@ -44,8 +44,8 @@ internal static class ForStatement
             node.Statement switch
             {
                 ForStatementSyntax => Doc.Group(Doc.HardLine, Node.Print(node.Statement, context)),
-                _ => OptionalBraces.Print(node.Statement, context)
-            }
+                _ => OptionalBraces.Print(node.Statement, context),
+            },
         };
 
         return Doc.Concat(docs);

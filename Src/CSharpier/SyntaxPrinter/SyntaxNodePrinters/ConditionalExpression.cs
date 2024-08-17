@@ -39,7 +39,7 @@ internal static class ConditionalExpression
             Doc.Concat(whenTrue),
             Doc.Line,
             Token.PrintWithSuffix(node.ColonToken, " ", context),
-            Doc.Concat(whenFalse)
+            Doc.Concat(whenFalse),
         ];
 
         Doc[] outerContents =
@@ -60,7 +60,7 @@ internal static class ConditionalExpression
             node.Parent is ConditionalExpressionSyntax or ArgumentSyntax or ReturnStatementSyntax
             || node.Condition is InvocationExpressionSyntax
                 ? Doc.Indent(innerContents)
-                : Doc.Indent(innerContents)
+                : Doc.Indent(innerContents),
         ];
 
         return node.Parent is ConditionalExpressionSyntax

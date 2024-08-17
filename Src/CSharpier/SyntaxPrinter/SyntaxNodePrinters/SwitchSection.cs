@@ -6,7 +6,7 @@ internal static class SwitchSection
     {
         var docs = new List<Doc>
         {
-            Doc.Join(Doc.HardLine, node.Labels.Select(o => Node.Print(o, context)))
+            Doc.Join(Doc.HardLine, node.Labels.Select(o => Node.Print(o, context))),
         };
         if (node.Statements is [BlockSyntax blockSyntax])
         {

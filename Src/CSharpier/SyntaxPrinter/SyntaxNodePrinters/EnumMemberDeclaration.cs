@@ -8,7 +8,7 @@ internal static class EnumMemberDeclaration
         {
             AttributeLists.Print(node, node.AttributeLists, context),
             Modifiers.Print(node.Modifiers, context),
-            Token.Print(node.Identifier, context)
+            Token.Print(node.Identifier, context),
         };
         if (node.EqualsValue != null)
         {

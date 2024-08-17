@@ -19,7 +19,7 @@ public class NodePrinterGenerator : TemplatedGenerator
             {
                 PrinterName = fileName,
                 SyntaxNodeName = fileName + "Syntax",
-                VariableName = char.ToLower(fileName[0]) + fileName[1..]
+                VariableName = char.ToLower(fileName[0]) + fileName[1..],
             })
             .OrderBy(o => o.SyntaxNodeName)
             .ToArray();

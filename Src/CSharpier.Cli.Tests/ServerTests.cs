@@ -45,7 +45,7 @@ public class ServerTests
             var data = new FormatFileParameter
             {
                 fileName = "/Temp/test.cs",
-                fileContents = "public class TestClass    { }"
+                fileContents = "public class TestClass    { }",
             };
 
             var response = await httpClient.PostAsJsonAsync(

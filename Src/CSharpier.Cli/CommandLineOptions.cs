@@ -45,7 +45,7 @@ internal class CommandLineOptions
             {
                 Arity = ArgumentArity.ZeroOrMore,
                 Description =
-                    "One or more paths to a directory containing C# files to format or a C# file to format. It may be ommited when piping data via stdin."
+                    "One or more paths to a directory containing C# files to format or a C# file to format. It may be ommited when piping data via stdin.",
             }.LegalFilePathsOnly(),
             new Option(
                 new[] { "--check" },
@@ -99,7 +99,7 @@ internal class CommandLineOptions
             new Option(
                 new[] { "--compilation-errors-as-warnings" },
                 "Treat compilation errors from files as warnings instead of errors."
-            )
+            ),
         };
 
         rootCommand.AddValidator(cmd =>

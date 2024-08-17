@@ -12,5 +12,5 @@ public class CodeFormatterOptions
 public enum IndentStyle
 {
     Spaces,
-    Tabs
+    Tabs,
 }

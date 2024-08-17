@@ -60,7 +60,7 @@ internal class CSharpierServiceImplementation(string? configPath, ILogger logger
             DebugLogger.Log(ex.ToString());
             return new FormatFileResult(Status.Failed)
             {
-                errorMessage = "An exception was thrown\n" + ex
+                errorMessage = "An exception was thrown\n" + ex,
             };
         }
     }

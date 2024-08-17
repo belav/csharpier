@@ -26,7 +26,7 @@ internal class ConfigurationFileOptions
                 UseTabs = matchingOverride.UseTabs,
                 Width = matchingOverride.PrintWidth,
                 EndOfLine = matchingOverride.EndOfLine,
-                Formatter = matchingOverride.Formatter
+                Formatter = matchingOverride.Formatter,
             };
         }
 
@@ -38,7 +38,7 @@ internal class ConfigurationFileOptions
                 UseTabs = this.UseTabs,
                 Width = this.PrintWidth,
                 EndOfLine = this.EndOfLine,
-                Formatter = "csharp"
+                Formatter = "csharp",
             };
         }
 

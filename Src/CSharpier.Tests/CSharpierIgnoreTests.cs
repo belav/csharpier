@@ -71,7 +71,7 @@ public string Example
                 {
                     LineEnding = Environment.NewLine,
                     IndentSize = 4,
-                    UseTabs = false
+                    UseTabs = false,
                 }
             )
             .ReplaceLineEndings("\n");

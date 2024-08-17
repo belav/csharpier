@@ -28,7 +28,7 @@ public static class CodeFormatter
                 IndentSize = options.IndentSize,
                 EndOfLine = options.EndOfLine,
                 IncludeGenerated = options.IncludeGenerated,
-                Formatter = "csharp"
+                Formatter = "csharp",
             },
             cancellationToken
         );
@@ -58,7 +58,7 @@ public static class CodeFormatter
                 UseTabs = options.IndentStyle == IndentStyle.Tabs,
                 IndentSize = options.IndentSize,
                 EndOfLine = options.EndOfLine,
-                Formatter = "csharp"
+                Formatter = "csharp",
             },
             SourceCodeKind.Regular,
             cancellationToken

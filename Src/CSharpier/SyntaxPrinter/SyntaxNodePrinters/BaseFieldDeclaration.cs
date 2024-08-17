@@ -7,7 +7,7 @@ internal static class BaseFieldDeclaration
         var docs = new List<Doc>
         {
             AttributeLists.Print(node, node.AttributeLists, context),
-            Modifiers.PrintSorted(node.Modifiers, context)
+            Modifiers.PrintSorted(node.Modifiers, context),
         };
         if (node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax)
         {

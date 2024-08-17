@@ -5,5 +5,5 @@ public enum Status
     Formatted,
     Ignored,
     Failed,
-    UnsupportedFile
+    UnsupportedFile,
 }

@@ -187,7 +187,7 @@ internal partial class SyntaxNodeComparer
         {
             IsInvalid = true,
             OriginalSpan = originalNode?.Span,
-            NewSpan = formattedNode?.Span
+            NewSpan = formattedNode?.Span,
         };
     }
 
@@ -197,7 +197,7 @@ internal partial class SyntaxNodeComparer
         {
             IsInvalid = true,
             OriginalSpan = originalSpan,
-            NewSpan = formattedSpan
+            NewSpan = formattedSpan,
         };
     }
 

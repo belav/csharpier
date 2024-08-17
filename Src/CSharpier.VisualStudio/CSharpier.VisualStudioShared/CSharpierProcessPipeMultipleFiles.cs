@@ -51,7 +51,7 @@ namespace CSharpier.VisualStudio
                     StandardErrorEncoding = Encoding.UTF8,
                     UseShellExecute = false,
                     CreateNoWindow = true,
-                    EnvironmentVariables = { ["DOTNET_NOLOGO"] = "1" }
+                    EnvironmentVariables = { ["DOTNET_NOLOGO"] = "1" },
                 };
                 this.process = new Process { StartInfo = processStartInfo };
                 this.process.Start();

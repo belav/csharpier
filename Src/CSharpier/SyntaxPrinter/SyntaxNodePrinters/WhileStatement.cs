@@ -18,9 +18,11 @@ internal static class WhileStatement
             ),
             node.Statement switch
             {
-                WhileStatementSyntax
-                    => Doc.Group(Doc.HardLine, Node.Print(node.Statement, context)),
-                _ => OptionalBraces.Print(node.Statement, context)
+                WhileStatementSyntax => Doc.Group(
+                    Doc.HardLine,
+                    Node.Print(node.Statement, context)
+                ),
+                _ => OptionalBraces.Print(node.Statement, context),
             }
         );
 

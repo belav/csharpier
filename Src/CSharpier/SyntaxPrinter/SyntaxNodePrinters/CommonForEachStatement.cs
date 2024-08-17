@@ -6,15 +6,16 @@ internal static class CommonForEachStatement
     {
         var variable = node switch
         {
-            ForEachStatementSyntax forEach
-                => Doc.Concat(
-                    Node.Print(forEach.Type, context),
-                    " ",
-                    Token.Print(forEach.Identifier, context)
-                ),
-            ForEachVariableStatementSyntax forEachVariable
-                => Node.Print(forEachVariable.Variable, context),
-            _ => Doc.Null
+            ForEachStatementSyntax forEach => Doc.Concat(
+                Node.Print(forEach.Type, context),
+                " ",
+                Token.Print(forEach.Identifier, context)
+            ),
+            ForEachVariableStatementSyntax forEachVariable => Node.Print(
+                forEachVariable.Variable,
+                context
+            ),
+            _ => Doc.Null,
         };
 
         var docs = Doc.Concat(
@@ -40,9 +41,11 @@ internal static class CommonForEachStatement
             ),
             node.Statement switch
             {
-                CommonForEachStatementSyntax
-                    => Doc.Group(Doc.HardLine, Node.Print(node.Statement, context)),
-                _ => OptionalBraces.Print(node.Statement, context)
+                CommonForEachStatementSyntax => Doc.Group(
+                    Doc.HardLine,
+                    Node.Print(node.Statement, context)
+                ),
+                _ => OptionalBraces.Print(node.Statement, context),
             }
         );
 

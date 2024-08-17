@@ -160,7 +160,7 @@ internal abstract class Doc
 internal enum CommentType
 {
     SingleLine,
-    MultiLine
+    MultiLine,
 }
 
 interface IHasContents

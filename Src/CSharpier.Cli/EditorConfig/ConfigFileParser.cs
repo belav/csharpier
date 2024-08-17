@@ -20,7 +20,7 @@ internal static class ConfigFileParser
             AllowDuplicateSections = true,
             OverrideDuplicateKeys = true,
             SkipInvalidLines = true,
-            ThrowExceptionsOnError = false
+            ThrowExceptionsOnError = false,
         };
 
     public static ConfigFile Parse(string filePath, IFileSystem fileSystem)
@@ -44,7 +44,7 @@ internal static class ConfigFileParser
         return new ConfigFile
         {
             IsRoot = configData?.Global["root"] == "true",
-            Sections = sections
+            Sections = sections,
         };
     }
 }

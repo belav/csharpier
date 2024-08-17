@@ -59,7 +59,7 @@ internal static class EditorConfigParser
                 return new EditorConfigSections
                 {
                     DirectoryName = dirName,
-                    SectionsIncludingParentFiles = FindSections(o.FullName, fileSystem)
+                    SectionsIncludingParentFiles = FindSections(o.FullName, fileSystem),
                 };
             })
             .OrderByDescending(o => o.DirectoryName.Length)

@@ -10,7 +10,7 @@ internal static class NamespaceDeclaration
             Modifiers.Print(node.Modifiers, context),
             Token.Print(node.NamespaceKeyword, context),
             " ",
-            Node.Print(node.Name, context)
+            Node.Print(node.Name, context),
         };
 
         var innerDocs = new List<Doc>();

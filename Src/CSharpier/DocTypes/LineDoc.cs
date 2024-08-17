@@ -6,7 +6,7 @@ internal class LineDoc : Doc
     {
         Normal,
         Hard,
-        Soft
+        Soft,
     }
 
     public LineType Type { get; set; }

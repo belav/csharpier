@@ -27,7 +27,7 @@ internal static class InterpolatedStringExpression
 
         var docs = new List<Doc>
         {
-            Token.PrintWithoutLeadingTrivia(node.StringStartToken, context)
+            Token.PrintWithoutLeadingTrivia(node.StringStartToken, context),
         };
 
         docs.AddRange(node.Contents.Select(o => Node.Print(o, context)));
@@ -51,7 +51,7 @@ internal static class InterpolatedStringExpression
         var contents = new List<Doc>
         {
             Token.Print(node.StringStartToken, context),
-            lastLineIsIndented ? Doc.HardLineNoTrim : Doc.LiteralLine
+            lastLineIsIndented ? Doc.HardLineNoTrim : Doc.LiteralLine,
         };
         foreach (var content in node.Contents)
         {
