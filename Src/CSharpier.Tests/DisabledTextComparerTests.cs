@@ -47,6 +47,25 @@ public class DisabledTextComparerTests
     }
 
     [Test]
+    public void Squash_Should_Work_For_Trailing_Comma_With_Attribute()
+    {
+        var before = """
+            [
+                SomeAttribute,
+            ]
+            public class ClassName { }
+            """;
+
+        var after = """
+            [SomeAttribute]
+            public class ClassName { }
+
+            """;
+
+        Squash(before).Should().Be(Squash(after));
+    }
+
+    [Test]
     public void Squash_Should_Work_With_Pointer_Stuff()
     {
         var before = """
