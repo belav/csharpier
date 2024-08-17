@@ -2,7 +2,7 @@
 ## Breaking Changes
 ### The formatting command will now exit with an error code of 1 if one of the target files cannot be compiled [#1131](https://github.com/belav/csharpier/issues/1131)
 Prior to 0.29.0 if csharpier encountered a file that could not be compiled it would treat it as a warning and exit with a code of 0.  
-As of 0.2.9.0 a file that cannot be compiled is now treated as an error and csharpier will exit with code 1
+As of 0.29.0 a file that cannot be compiled is now treated as an error and csharpier will exit with code 1
 
 ## What's Changed
 ### Enforce trailing commas in object and collection initializer [#668](https://github.com/belav/csharpier/issues/668)
