@@ -6,7 +6,7 @@ internal static class QueryBody
     {
         var docs = new List<Doc>
         {
-            Doc.Join(Doc.Line, node.Clauses.Select(o => Node.Print(o, context)))
+            Doc.Join(Doc.Line, node.Clauses.Select(o => Node.Print(o, context))),
         };
         if (node.Clauses.Count > 0)
         {

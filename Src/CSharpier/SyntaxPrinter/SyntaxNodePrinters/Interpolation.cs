@@ -7,7 +7,7 @@ internal static class Interpolation
         var docs = new List<Doc>
         {
             Token.Print(node.OpenBraceToken, context),
-            Node.Print(node.Expression, context)
+            Node.Print(node.Expression, context),
         };
         if (node.AlignmentClause != null)
         {

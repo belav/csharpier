@@ -9,7 +9,7 @@ internal class IgnoreFile
     private static readonly string[] alwaysIgnored =
     {
         "**/node_modules/**/*.cs",
-        "**/obj/**/*.cs"
+        "**/obj/**/*.cs",
     };
 
     protected IgnoreFile(Ignore.Ignore ignore, string ignoreBaseDirectoryPath)

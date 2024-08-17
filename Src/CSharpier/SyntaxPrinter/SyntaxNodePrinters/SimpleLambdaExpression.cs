@@ -22,10 +22,11 @@ internal static class SimpleLambdaExpression
         return node.Body switch
         {
             BlockSyntax blockSyntax => Block.Print(blockSyntax, context),
-            ObjectCreationExpressionSyntax
-            or AnonymousObjectCreationExpressionSyntax
-                => Doc.Group(" ", Node.Print(node.Body, context)),
-            _ => Doc.Indent(Doc.Line, Node.Print(node.Body, context))
+            ObjectCreationExpressionSyntax or AnonymousObjectCreationExpressionSyntax => Doc.Group(
+                " ",
+                Node.Print(node.Body, context)
+            ),
+            _ => Doc.Indent(Doc.Line, Node.Print(node.Body, context)),
         };
     }
 }

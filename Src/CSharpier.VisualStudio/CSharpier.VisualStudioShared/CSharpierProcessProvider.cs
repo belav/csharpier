@@ -312,10 +312,10 @@ namespace CSharpier.VisualStudio
                         new ProcessStartInfo
                         {
                             FileName = "https://csharpier.com/docs/EditorsTroubleshooting",
-                            UseShellExecute = true
+                            UseShellExecute = true,
                         }
                     );
-                }
+                },
             };
 
             InfoBarService.Instance.ShowInfoBar(

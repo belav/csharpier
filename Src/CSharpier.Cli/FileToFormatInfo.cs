@@ -31,7 +31,7 @@ internal class FileToFormatInfo
             Path = path,
             FileContents = fileContents,
             Encoding = encoding,
-            UnableToDetectEncoding = unableToDetectEncoding
+            UnableToDetectEncoding = unableToDetectEncoding,
         };
     }
 
@@ -41,7 +41,7 @@ internal class FileToFormatInfo
         {
             Path = path,
             FileContents = fileContents,
-            Encoding = encoding
+            Encoding = encoding,
         };
     }
 }

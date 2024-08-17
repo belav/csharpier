@@ -102,7 +102,7 @@ internal class CSharpFormatter : IFormatter
                 {
                     Code = syntaxTree.ToString(),
                     CompilationErrors = diagnostics,
-                    AST = printerOptions.IncludeAST ? PrintAST(rootNode) : string.Empty
+                    AST = printerOptions.IncludeAST ? PrintAST(rootNode) : string.Empty,
                 };
 
                 return true;
@@ -172,7 +172,7 @@ internal class CSharpFormatter : IFormatter
         {
             return new CodeFormatterResult
             {
-                FailureMessage = "We can't handle this deep of recursion yet."
+                FailureMessage = "We can't handle this deep of recursion yet.",
             };
         }
     }

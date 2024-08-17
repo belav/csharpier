@@ -30,10 +30,8 @@ internal static class Parameter
             docs.Add(EqualsValueClause.Print(node.Default, context));
         }
 
-        return hasAttribute
-            ? Doc.GroupWithId(groupId, docs)
-            : docs.Count == 1
-                ? docs[0]
-                : Doc.Concat(docs);
+        return hasAttribute ? Doc.GroupWithId(groupId, docs)
+            : docs.Count == 1 ? docs[0]
+            : Doc.Concat(docs);
     }
 }

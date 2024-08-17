@@ -16,7 +16,7 @@ internal static class DocUtilities
             IHasContents hasContents => ContainsBreak(hasContents.Contents),
             Concat concat => concat.Contents.Any(ContainsBreak),
             IfBreak ifBreak => ContainsBreak(ifBreak.FlatContents),
-            _ => false
+            _ => false,
         };
     }
 
@@ -28,7 +28,7 @@ internal static class DocUtilities
             HardLine => true,
             LiteralLine => true,
             BreakParent => true,
-            _ => false
+            _ => false,
         };
     }
 

@@ -848,7 +848,7 @@ public class DocPrinterTests
                 {
                     Width = width,
                     TrimInitialLines = trimInitialLines,
-                    UseTabs = useTabs
+                    UseTabs = useTabs,
                 },
                 Environment.NewLine
             )

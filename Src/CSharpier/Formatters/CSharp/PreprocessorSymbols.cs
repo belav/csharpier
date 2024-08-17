@@ -86,7 +86,7 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
             new BooleanExpression
             {
                 Parameters = combination.Where(o => o.Value).Select(o => o.Key).ToList(),
-                Function = o => o.All(p => p.Value)
+                Function = o => o.All(p => p.Value),
             }
         );
     }
@@ -162,11 +162,11 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
         {
             var falseCombination = new Dictionary<string, bool>(subCombination)
             {
-                { parameterNames[0], false }
+                { parameterNames[0], false },
             };
             var trueCombination = new Dictionary<string, bool>(subCombination)
             {
-                { parameterNames[0], true }
+                { parameterNames[0], true },
             };
 
             combinations.Add(falseCombination);

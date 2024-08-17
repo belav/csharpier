@@ -23,7 +23,7 @@ internal static class Globber
         {
             -1 => "**/" + glob,
             0 => glob[1..],
-            _ => glob
+            _ => glob,
         };
         directory = directory.Replace(@"\", "/");
         if (!directory.EndsWith("/"))

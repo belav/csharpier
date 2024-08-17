@@ -30,6 +30,6 @@ namespace CSharpier.VisualStudio
     {
         Formatted,
         Ignored,
-        Failed
+        Failed,
     }
 }

@@ -174,7 +174,7 @@ internal static class BinaryExpression
             SyntaxKind.AsteriskToken => 12,
             SyntaxKind.SlashToken => 12,
             SyntaxKind.PercentToken => 12,
-            _ => throw new Exception($"No precedence defined for {syntaxToken}")
+            _ => throw new Exception($"No precedence defined for {syntaxToken}"),
         };
     }
 }

@@ -33,7 +33,7 @@ internal static class DocFitter
             var (currentIndent, currentMode, currentDoc) = newCommands switch
             {
                 { Count: > 0 } => newCommands.Pop(),
-                _ => remainingCommands.ElementAt(x++)
+                _ => remainingCommands.ElementAt(x++),
             };
 
             switch (currentDoc)

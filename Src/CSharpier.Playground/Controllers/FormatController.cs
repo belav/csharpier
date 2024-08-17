@@ -69,7 +69,7 @@ public class FormatController : ControllerBase
                 IncludeDocTree = true,
                 Width = model.PrintWidth,
                 IndentSize = model.IndentSize,
-                UseTabs = model.UseTabs
+                UseTabs = model.UseTabs,
             },
             sourceCodeKind,
             cancellationToken
@@ -90,14 +90,14 @@ public class FormatController : ControllerBase
             Json = result.AST,
             Doc = result.DocTree,
             Errors = result.CompilationErrors.Select(this.ConvertError).ToList(),
-            SyntaxValidation = await comparer.CompareSourceAsync(CancellationToken.None)
+            SyntaxValidation = await comparer.CompareSourceAsync(CancellationToken.None),
         };
     }
 
     private FormatError ConvertError(Diagnostic diagnostic)
     {
         var lineSpan = diagnostic.Location.SourceTree!.GetLineSpan(diagnostic.Location.SourceSpan);
-        return new FormatError { LineSpan = lineSpan, Description = diagnostic.ToString(), };
+        return new FormatError { LineSpan = lineSpan, Description = diagnostic.ToString() };
     }
 
     public string ExecuteApplication(string pathToExe, string workingDirectory, string args)
@@ -108,7 +108,7 @@ public class FormatController : ControllerBase
             RedirectStandardError = true,
             WindowStyle = ProcessWindowStyle.Hidden,
             WorkingDirectory = workingDirectory,
-            CreateNoWindow = true
+            CreateNoWindow = true,
         };
 
         var process = Process.Start(processStartInfo);

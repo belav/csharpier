@@ -52,7 +52,7 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
-                Environment = { ["DOTNET_NOLOGO"] = "1" }
+                Environment = { ["DOTNET_NOLOGO"] = "1" },
             };
             this.process = Process.Start(processStartInfo);
 

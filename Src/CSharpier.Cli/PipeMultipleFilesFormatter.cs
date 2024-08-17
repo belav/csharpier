@@ -54,20 +54,18 @@ internal static class PipeMultipleFilesFormatter
                 {
                     DirectoryOrFilePaths = new[]
                     {
-                        Path.Combine(Directory.GetCurrentDirectory(), fileName)
+                        Path.Combine(Directory.GetCurrentDirectory(), fileName),
                     },
                     OriginalDirectoryOrFilePaths = new[]
                     {
-                        Path.IsPathRooted(fileName)
-                            ? fileName
-                            : fileName.StartsWith(".")
-                                ? fileName
-                                : "./" + fileName
+                        Path.IsPathRooted(fileName) ? fileName
+                        : fileName.StartsWith(".") ? fileName
+                        : "./" + fileName,
                     },
                     StandardInFileContents = stringBuilder.ToString(),
                     Fast = true,
                     WriteStdout = true,
-                    ConfigPath = configPath
+                    ConfigPath = configPath,
                 };
 
                 try

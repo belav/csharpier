@@ -168,7 +168,7 @@ internal static class UsingDirectives
                     new UsingData
                     {
                         Using = usingDirective,
-                        LeadingTrivia = PrintLeadingTrivia(usingDirective)
+                        LeadingTrivia = PrintLeadingTrivia(usingDirective),
                     }
                 );
             }
@@ -184,7 +184,7 @@ internal static class UsingDirectives
                 var usingData = new UsingData
                 {
                     Using = usingDirective,
-                    LeadingTrivia = !openIf ? PrintLeadingTrivia(usingDirective) : Doc.Null
+                    LeadingTrivia = !openIf ? PrintLeadingTrivia(usingDirective) : Doc.Null,
                 };
 
                 if (usingDirective.GlobalKeyword.RawSyntaxKind() != SyntaxKind.None)

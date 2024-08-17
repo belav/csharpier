@@ -130,7 +130,7 @@ internal class OptionsProvider
             {
                 specified = this.specifiedConfigFile,
                 csharpierConfigs = this.csharpierConfigs,
-                editorConfigs = this.editorConfigs
+                editorConfigs = this.editorConfigs,
             }
         );
     }

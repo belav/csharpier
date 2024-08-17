@@ -29,7 +29,7 @@ namespace CSharpier.VisualStudio
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
-                CreateNoWindow = true
+                CreateNoWindow = true,
             };
             processStartInfo.EnvironmentVariables["DOTNET_NOLOGO"] = "1";
 

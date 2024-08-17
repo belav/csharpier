@@ -73,7 +73,7 @@ namespace CSharpier.VisualStudio
                 var parameter = new FormatFileParameter
                 {
                     fileContents = text,
-                    fileName = document.FullName
+                    fileName = document.FullName,
                 };
                 var result = csharpierProcess2.formatFile(parameter);
 

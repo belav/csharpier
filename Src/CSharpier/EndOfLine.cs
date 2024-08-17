@@ -4,5 +4,5 @@ public enum EndOfLine
 {
     Auto,
     CRLF,
-    LF
+    LF,
 }
