@@ -5,7 +5,7 @@ hide_table_of_contents: true
 ---
 
 CSharpier is an opinionated code formatter for c#. It uses Roslyn to parse your code and re-prints it using its own rules.
-The printing process was ported from [prettier](https://github.com/prettier/prettier) but has evolved over time.
+The printing process was ported from [prettier](https://github.com/prettier/prettier) but has evolved over time.  
 
 CSharpier provides a few basic options that affect formatting and follows the [Option Philosophy](https://prettier.io/docs/en/option-philosophy.html) of prettier. Option requests are out of scope for CSharpier, they will be closed without discussion.
 
