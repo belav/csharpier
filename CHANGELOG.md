@@ -1,4 +1,204 @@
-﻿# 0.28.2
+﻿# 0.29.0
+## Breaking Changes
+### The formatting command will now exit with an error code of 1 if one of the target files cannot be compiled [#1131](https://github.com/belav/csharpier/issues/1131)
+Prior to 0.29.0 if csharpier encountered a file that could not be compiled it would treat it as a warning and exit with a code of 0.  
+As of 0.2.9.0 a file that cannot be compiled is now treated as an error and csharpier will exit with code 1
+
+## What's Changed
+### Enforce trailing commas in object and collection initializer [#668](https://github.com/belav/csharpier/issues/668)
+CSharpier will now add trailing commas automatically where appropriate. It will collapse to a single line and remove the trailing comma in cases where everything fits on one line.
+```c#
+// input
+public enum SomeEnum
+{
+    Value1,
+    Value2
+}
+
+string[] someArray = new string[]
+{
+    someLongValue_____________________________________________,
+    someLongValue_____________________________________________
+};
+
+string[] someArray = new string[]
+{
+    someValue,
+    someValue,
+};
+
+// 0.29.0
+public enum SomeEnum
+{
+    Value1,
+    Value2,
+}
+
+string[] someArray = new string[]
+{
+    someLongValue_____________________________________________,
+    someLongValue_____________________________________________,
+}
+
+string[] someArray = new string[] { someValue, someValue };
+```
+Many thanks go to @dawust for the contribution.
+
+### Support for formatting custom file extensions [#1220](https://github.com/belav/csharpier/issues/1220)
+Prior to 0.29.0 csharpier would only format files with an extension of .cs or .csx. It is now possible to configure csharpier to format other files extensions, and to specify configuration options per file extension.
+See https://csharpier.com/docs/Configuration#configuration-overrides for more details.
+
+### Invalid blank line being added with lambda returning collection expression [#1306](https://github.com/belav/csharpier/issues/1306)
+```c#
+// input & expected output
+CallMethod(_ =>
+    [
+        LongValue________________________________________________,
+        LongValue________________________________________________,
+    ]
+);
+
+// 0.28.2
+CallMethod(_ =>
+
+    [
+        LongValue________________________________________________,
+        LongValue________________________________________________,
+    ]
+);
+
+```
+### Switch expressions do not break consistently with other lambdas [#1282](https://github.com/belav/csharpier/issues/1282)
+Prior to 0.29.0 csharpier would break before the `=>` in switch expression arms. It now breaks after them to be consistent with other lambda expressions.
+```c#
+// 0.28.2
+return someEnum switch
+{
+    Value1 => someOtherValue,
+    Value2
+    or Value3
+        => someValue________________________________________________________________________,
+    Value4
+        => someValue_____________________________________________________________________________,
+};
+
+// 0.29.0
+return someEnum switch
+{
+    Value1 => someOtherValue,
+    Value2 or Value3 =>
+        someValue________________________________________________________________________,
+    Value4 =>
+        someValue_____________________________________________________________________________,
+};
+
+```
+### Formatting of empty collection initializer for huge type [#1268](https://github.com/belav/csharpier/issues/1268)
+Empty collection expression initializers formatting was including a break plus indentation resulting in poor formatting.
+```c#
+// 0.28.2
+var someObject = new List<(
+    int Field1__________________________________,
+    int Field2__________________________________
+)>
+{
+    };
+
+// 0.29.0
+var someObject = new List<(
+    int Field1__________________________________,
+    int Field2__________________________________
+)>
+{ };
+
+```
+
+Thanks go to @Rudomitori for the contribution
+
+### Switch expression single line broken when preceded by comment [#1262](https://github.com/belav/csharpier/issues/1262)
+Improved formatting for short expression arms that have a leading comment.
+```c#
+// 0.28.2
+return someValue switch
+{
+    // comment
+    Some.One
+        => 1,
+    Some.Two => 2,
+};
+
+return someValue switch
+{
+    Some.One => 1,
+    // comment
+    Some.Two
+        => 2,
+};
+
+// 0.29.0
+return someValue switch
+{
+    // comment
+    Some.One => 1,
+    Some.Two => 2,
+};
+
+return someValue switch
+{
+    Some.One => 1,
+    // comment
+    Some.Two => 2,
+};
+
+```
+### Incorrect formatting of ternary expression with a comment after an interpolated string [#1258](https://github.com/belav/csharpier/issues/1258)
+Fixed bug with comments on a ternary expression that resulted in invalid code.
+```c#
+// input & expected output
+public string TrailingComment = someCondition
+    ? $"empty" // trailing comment
+    : someString;
+
+// 0.28.2
+public string TrailingComment = someCondition ? $"empty" // trailing comment : someString;
+
+```
+### Formatting for indexer parameters should mostly be the same as for method parameters. [#1255](https://github.com/belav/csharpier/issues/1255)
+Improved formatting of indexed properties that contained attributes.
+```c#
+// input & expected output
+public class ClassName
+{
+    public string this[
+        [SomeAttribute] int a________________________________,
+        [SomeAttribute] int b________________________________
+    ] => someValue;
+}
+
+// 0.28.2
+public class ClassName
+{
+    public string this[[SomeAttribute] int a________________________________, [SomeAttribute]
+        int b________________________________] => someValue;
+}
+
+```
+
+### Do not overwrite `CSharpier_Check` when already set. [#1314](https://github.com/belav/csharpier/pull/1314)
+Fixed a bug with csharpier.msbuild where it would overwrite the `CSharpier_Check` value in some cases.
+
+Thanks go to @PetSerAl for the contribution
+
+### The CLI has contradictory message about directoryOrFile being required [#1296](https://github.com/belav/csharpier/issues/1296)
+The help text for the cli has been improved to better indicate when `directoryOrFile` is required.
+
+Thanks go to @marcinjahn for the contribution
+
+### Fullwidth unicode characters should be accounted for in print width [#260](https://github.com/belav/csharpier/issues/260)
+CSharpier now considers full width unicode characters such as `가` to be 2 spaces wide when determining how to format code.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.28.2...0.29.0
+# 0.28.2
 ## What's Changed
 ### Pipe to `dotnet csharpier` fails when subdirectory is inaccessible [#1240](https://github.com/belav/csharpier/pull/1240)
 When running the following CSharpier would look for config files in subdirectories of the `pwd`. This could lead to exceptions if some of those directories were inaccessible.
@@ -2344,6 +2544,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
