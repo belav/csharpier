@@ -11,25 +11,3 @@ public enum E
     B = A,
     C = 2 + A,
 }
-
-public enum EnumWithDirective
-{
-    A,
-    B = A,
-    C = 2 + A
-#if DEBUG
-    ,
-    D = 4,
-#endif
-}
-
-public enum EnumWithDirective2
-{
-    A,
-    B = A,
-    C = 2 + A,
-#if DEBUG
-    D = 4,
-#endif
-    E = 5,
-}

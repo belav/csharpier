@@ -1,0 +1,81 @@
+int[] someArray =
+[
+    1
+#if DEBUG
+    ,
+    2
+#endif
+];
+
+int[] someArray =
+[
+    1
+#if !DEBUG
+    ,
+    2
+#endif
+];
+
+int[] someArray =
+[
+    1,
+#if DEBUG
+    2
+#endif
+];
+
+int[] someArray =
+[
+    1,
+#if !DEBUG
+    2
+#endif
+];
+
+public class ClassName
+{
+    private SomeCollection someCollection = new SomeCollection()
+    {
+        new SomeValue(),
+#if DEBUG
+        new SomeValue(),
+        new SomeValue()
+#endif
+    };
+
+    private SomeCollection someCollection = new SomeCollection()
+    {
+        new SomeValue()
+#if DEBUG
+        ,
+        new SomeValue(),
+        new SomeValue()
+#endif
+    };
+}
+
+public enum SomeEnum
+{
+    Value1
+#if DEBUG
+    ,
+    Value2,
+#endif
+}
+
+public enum SomeEnum
+{
+    Value1,
+#if DEBUG
+    Value2,
+#endif
+}
+
+public enum SomeEnum
+{
+    Value1,
+#if DEBUG
+    Value2,
+#endif
+    Value3,
+}

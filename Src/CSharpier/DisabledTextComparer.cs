@@ -95,7 +95,7 @@ internal class DisabledTextComparer
 
             // this removes trailing commas so that added trailing commas inside #if blocks don't result
             // in validation failures
-            if (nextChar is '}' && result.Length > 1 && result[^2] is ',')
+            if (nextChar is '}' or ']' && result.Length > 1 && result[^2] is ',')
             {
                 result[^2] = nextChar;
                 result.Length -= 1;

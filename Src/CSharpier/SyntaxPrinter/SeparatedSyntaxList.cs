@@ -61,7 +61,12 @@ internal static class SeparatedSyntaxList
             {
                 var trailingSeparatorToken = list.GetSeparator(x);
                 // when the trailing separator has trailing comments, we have to print it normally to prevent it from collapsing
-                if (trailingSeparatorToken.TrailingTrivia.Any(o => o.IsComment()))
+                // when the closing token has a directive, we can't assume the comma should be added/removed so just print it normally
+                if (
+                    trailingSeparatorToken.TrailingTrivia.Any(o => o.IsComment())
+                    || closingToken != null
+                        && closingToken.Value.LeadingTrivia.Any(o => o.IsDirective)
+                )
                 {
                     docs.Add(Token.Print(trailingSeparatorToken, context));
                 }
