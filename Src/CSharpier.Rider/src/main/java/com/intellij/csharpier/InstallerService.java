@@ -52,7 +52,6 @@ public class InstallerService {
         var normalizedPath = directoryThatContainsFile.replace('\\', '/');
         return StringUtils.containsIgnoreCase(normalizedPath, "resharper-host/DecompilerCache")
             || StringUtils.containsIgnoreCase(normalizedPath, "resharper-host/SourcesCache")
-            || directoryThatContainsFile.equals("/")
-            || directoryThatContainsFile.equals("\\");
+            || directoryThatContainsFile.equals("/");
     }
 }
