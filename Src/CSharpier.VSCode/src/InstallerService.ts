@@ -13,6 +13,7 @@ export class InstallerService {
     logger: Logger;
     killRunningProcesses: () => void;
     extension: Extension<unknown>;
+    warnedAlready = false;
 
     constructor(logger: Logger, killRunningProcesses: () => void, extension: Extension<unknown>) {
         this.logger = logger;
@@ -21,6 +22,11 @@ export class InstallerService {
     }
 
     public displayInstallNeededMessage = (directoryThatContainsFile: string) => {
+        if (this.warnedAlready || this.ignoreDirectory(directoryThatContainsFile)) {
+            return;
+        }
+
+        this.warnedAlready = true;
         this.logger.error("CSharpier was not found so files may not be formatted.");
 
         this.logger.info(this.extension.extensionKind);
@@ -119,4 +125,12 @@ export class InstallerService {
             },
         );
     };
+
+    private ignoreDirectory(directoryThatContainsFile: string) {
+        const normalizedPath = directoryThatContainsFile.replace(/\\/g, "/");
+        return (
+            normalizedPath.indexOf("/DecompilationMetadataAsSourceFileProvider/") >= 0 ||
+            normalizedPath === "/"
+        );
+    }
 }
