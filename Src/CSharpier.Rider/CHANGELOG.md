@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.8.0]
+- Use dotnet tool list to find both local and global installs of csharpier.
+
 ## [1.7.4]
 - Only use CSharpier Server for 0.29.0+
 - Add option to bypass csharpier server.
