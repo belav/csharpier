@@ -6,8 +6,7 @@ import com.intellij.openapi.project.Project;
 import java.io.*;
 import java.nio.charset.Charset;
 
-public class CSharpierProcessPipeMultipleFiles
-  implements ICSharpierProcess, Disposable {
+public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
 
   private final boolean useUtf8;
   private final String csharpierPath;
@@ -40,24 +39,14 @@ public class CSharpierProcessPipeMultipleFiles
 
   private void startProcess() {
     try {
-      var processBuilder = new ProcessBuilder(
-        this.csharpierPath,
-        "--pipe-multiple-files"
-      );
+      var processBuilder = new ProcessBuilder(this.csharpierPath, "--pipe-multiple-files");
       processBuilder.environment().put("DOTNET_NOLOGO", "1");
-      processBuilder
-        .environment()
-        .put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
+      processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
       this.process = processBuilder.start();
 
-      var charset = this.useUtf8
-        ? "utf-8"
-        : Charset.defaultCharset().toString();
+      var charset = this.useUtf8 ? "utf-8" : Charset.defaultCharset().toString();
 
-      this.stdin = new OutputStreamWriter(
-        this.process.getOutputStream(),
-        charset
-      );
+      this.stdin = new OutputStreamWriter(this.process.getOutputStream(), charset);
       this.stdOut = new BufferedReader(
         new InputStreamReader(this.process.getInputStream(), charset)
       );
@@ -66,10 +55,7 @@ public class CSharpierProcessPipeMultipleFiles
       var errorGobbler = new StreamGobbler(this.process.getErrorStream());
       errorGobbler.start();
     } catch (Exception e) {
-      this.logger.warn(
-          "Failed to spawn the needed csharpier process. Formatting cannot occur.",
-          e
-        );
+      this.logger.warn("Failed to spawn the needed csharpier process. Formatting cannot occur.", e);
       this.processFailedToStart = true;
     }
   }
@@ -87,9 +73,7 @@ public class CSharpierProcessPipeMultipleFiles
   @Override
   public String formatFile(String content, String filePath) {
     if (this.processFailedToStart) {
-      this.logger.warn(
-          "CSharpier proccess failed to start. Formatting cannot occur."
-        );
+      this.logger.warn("CSharpier proccess failed to start. Formatting cannot occur.");
       return "";
     }
 
@@ -138,9 +122,7 @@ public class CSharpierProcessPipeMultipleFiles
     var result = stringBuilder.toString();
 
     if (result == null || result.isEmpty()) {
-      this.logger.info(
-          "File is ignored by .csharpierignore or there was an error"
-        );
+      this.logger.info("File is ignored by .csharpierignore or there was an error");
       return "";
     }
 

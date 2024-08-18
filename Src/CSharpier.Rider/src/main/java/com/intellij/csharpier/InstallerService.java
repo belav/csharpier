@@ -38,8 +38,7 @@ public class InstallerService {
       .startsWith(this.project.getBasePath());
 
     var message = isOnlyGlobal
-      ? ("CSharpier needs to be installed globally to format files in " +
-        directoryThatContainsFile)
+      ? ("CSharpier needs to be installed globally to format files in " + directoryThatContainsFile)
       : "CSharpier needs to be installed to support formatting files";
 
     var notification = NotificationGroupManager.getInstance()
@@ -47,19 +46,11 @@ public class InstallerService {
       .createNotification(message, NotificationType.WARNING);
 
     notification.addAction(
-      new InstallGlobalAction(
-        "Install CSharpier Globally",
-        processKiller,
-        this.project
-      )
+      new InstallGlobalAction("Install CSharpier Globally", processKiller, this.project)
     );
     if (!isOnlyGlobal) {
       notification.addAction(
-        new InstallLocalAction(
-          "Install CSharpier Locally",
-          processKiller,
-          project
-        )
+        new InstallLocalAction("Install CSharpier Locally", processKiller, project)
       );
     }
 
@@ -69,14 +60,8 @@ public class InstallerService {
   private boolean ignoreDirectory(String directoryThatContainsFile) {
     var normalizedPath = directoryThatContainsFile.replace('\\', '/');
     return (
-      StringUtils.containsIgnoreCase(
-        normalizedPath,
-        "resharper-host/DecompilerCache"
-      ) ||
-      StringUtils.containsIgnoreCase(
-        normalizedPath,
-        "resharper-host/SourcesCache"
-      ) ||
+      StringUtils.containsIgnoreCase(normalizedPath, "resharper-host/DecompilerCache") ||
+      StringUtils.containsIgnoreCase(normalizedPath, "resharper-host/SourcesCache") ||
       directoryThatContainsFile.equals("/")
     );
   }

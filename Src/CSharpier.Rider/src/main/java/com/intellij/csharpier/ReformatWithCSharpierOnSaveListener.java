@@ -8,8 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class ReformatWithCSharpierOnSaveListener
-  implements FileDocumentManagerListener {
+public class ReformatWithCSharpierOnSaveListener implements FileDocumentManagerListener {
 
   Logger logger = CSharpierLogger.getInstance();
 

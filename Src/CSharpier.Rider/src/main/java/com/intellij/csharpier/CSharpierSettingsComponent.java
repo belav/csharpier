@@ -18,9 +18,7 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
 
   private final Project project;
   private JBCheckBox runOnSaveCheckBox = new JBCheckBox("Run on Save");
-  private JBCheckBox disableCSharpierServerCheckBox = new JBCheckBox(
-    "Disable CSharpier Server"
-  );
+  private JBCheckBox disableCSharpierServerCheckBox = new JBCheckBox("Disable CSharpier Server");
   private JBTextField customPathTextField = new JBTextField();
 
   public CSharpierSettingsComponent(@NotNull Project project) {
@@ -102,9 +100,7 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
 
     settings.setRunOnSave(this.runOnSaveCheckBox.isSelected());
     settings.setCustomPath(this.customPathTextField.getText());
-    settings.setDisableCSharpierServer(
-      this.disableCSharpierServerCheckBox.isSelected()
-    );
+    settings.setDisableCSharpierServer(this.disableCSharpierServerCheckBox.isSelected());
   }
 
   @Override
@@ -112,8 +108,6 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     var settings = CSharpierSettings.getInstance(this.project);
     this.runOnSaveCheckBox.setSelected(settings.getRunOnSave());
     this.customPathTextField.setText(settings.getCustomPath());
-    this.disableCSharpierServerCheckBox.setSelected(
-        settings.getDisableCSharpierServer()
-      );
+    this.disableCSharpierServerCheckBox.setSelected(settings.getDisableCSharpierServer());
   }
 }
