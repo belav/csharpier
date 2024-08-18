@@ -1,3 +1,8 @@
+## 1.8.0
+- Use `dotnet tool list` to look for both local and global installs of csharpier
+- Only show the "you need to install csharpier" notification once per run
+- Exclude some directories from the "you need to install csharpier" notification
+
 ## [1.7.3]
 - Only use CSharpier Server on 0.29.0+
 - Add option to bypass csharpier server.
