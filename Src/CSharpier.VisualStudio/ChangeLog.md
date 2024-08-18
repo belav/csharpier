@@ -1,4 +1,7 @@
-﻿## [1.7.4]
+﻿## [1.8.0]
+- Use dotnet tool list to find both local and global installs of csharpier.
+
+## [1.7.4]
 - Support for semver
 - Only use CSharpier Server on 0.29.0+
 
