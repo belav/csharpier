@@ -1,27 +1,26 @@
 package com.intellij.csharpier;
 
 public class NullCSharpierProcess implements ICSharpierProcess {
-    public static ICSharpierProcess Instance = new NullCSharpierProcess();
 
-    private NullCSharpierProcess() {}
+  public static ICSharpierProcess Instance = new NullCSharpierProcess();
 
-    @Override
-    public String getVersion() {
-        return "NULL";
-    }
+  private NullCSharpierProcess() {}
 
-    @Override
-    public boolean getProcessFailedToStart() {
-        return false;
-    }
+  @Override
+  public String getVersion() {
+    return "NULL";
+  }
 
-    @Override
-    public String formatFile(String content, String fileName) {
-        return "";
-    }
+  @Override
+  public boolean getProcessFailedToStart() {
+    return false;
+  }
 
-    @Override
-    public void dispose() {
+  @Override
+  public String formatFile(String content, String fileName) {
+    return "";
+  }
 
-    }
+  @Override
+  public void dispose() {}
 }
