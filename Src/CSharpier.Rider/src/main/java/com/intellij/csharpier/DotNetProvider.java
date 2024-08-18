@@ -40,14 +40,11 @@ public class DotNetProvider {
 
   private boolean findDotNet() {
     try {
-      var dotNetCoreRuntime =
-        RiderDotNetActiveRuntimeHost.Companion.getInstance(project)
-          .getDotNetCoreRuntime()
-          .getValue();
+      var dotNetCoreRuntime = RiderDotNetActiveRuntimeHost.Companion.getInstance(project)
+        .getDotNetCoreRuntime()
+        .getValue();
 
-      if (
-        dotNetCoreRuntime != null && dotNetCoreRuntime.getCliExePath() != null
-      ) {
+      if (dotNetCoreRuntime != null && dotNetCoreRuntime.getCliExePath() != null) {
         this.logger.debug(
             "Using dotnet found from RiderDotNetActiveRuntimeHost at " +
             dotNetCoreRuntime.getCliExePath()

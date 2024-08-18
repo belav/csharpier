@@ -14,9 +14,7 @@ public class ProcessHelper {
   ) {
     var logger = CSharpierLogger.getInstance();
     try {
-      var directoryToLog = workingDirectory == null
-        ? ""
-        : " in " + workingDirectory;
+      var directoryToLog = workingDirectory == null ? "" : " in " + workingDirectory;
 
       logger.debug("Running " + String.join(" ", command) + directoryToLog);
       var processBuilder = new ProcessBuilder(command);
@@ -34,12 +32,8 @@ public class ProcessHelper {
       }
 
       var process = processBuilder.start();
-      var output = new BufferedReader(
-        new InputStreamReader(process.getInputStream())
-      );
-      var error = new BufferedReader(
-        new InputStreamReader(process.getErrorStream())
-      );
+      var output = new BufferedReader(new InputStreamReader(process.getInputStream()));
+      var error = new BufferedReader(new InputStreamReader(process.getErrorStream()));
       var result = new StringBuilder();
       var errorResult = new StringBuilder();
       String line;

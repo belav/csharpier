@@ -44,9 +44,7 @@ public class ReformatWithCSharpierAction extends AnAction {
     var virtualFileString = virtualFile.toString();
     var filePrefix = "file://";
     if (!virtualFileString.startsWith(filePrefix)) {
-      this.logger.debug(
-          "VIRTUAL_FILE did not start with file://, was: " + virtualFileString
-        );
+      this.logger.debug("VIRTUAL_FILE did not start with file://, was: " + virtualFileString);
       e.getPresentation().setVisible(false);
       return;
     }
@@ -56,17 +54,11 @@ public class ReformatWithCSharpierAction extends AnAction {
     e.getPresentation().setVisible(isCSharpFile);
     var canFormat =
       isCSharpFile &&
-      FormattingService.getInstance(e.getProject()).getCanFormat(
-        file,
-        e.getProject()
-      );
+      FormattingService.getInstance(e.getProject()).getCanFormat(file, e.getProject());
     e.getPresentation().setEnabled(canFormat);
   }
 
-  private static void processFileInEditor(
-    @NotNull Project project,
-    @NotNull Document document
-  ) {
+  private static void processFileInEditor(@NotNull Project project, @NotNull Document document) {
     var formattingService = FormattingService.getInstance(project);
     formattingService.format(document, project);
   }

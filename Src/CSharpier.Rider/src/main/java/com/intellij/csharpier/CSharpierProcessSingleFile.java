@@ -12,11 +12,7 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
   private final String csharpierPath;
   private final String version;
 
-  public CSharpierProcessSingleFile(
-    String csharpierPath,
-    String version,
-    Project project
-  ) {
+  public CSharpierProcessSingleFile(String csharpierPath, String version, Project project) {
     this.csharpierPath = csharpierPath;
     this.dotNetProvider = DotNetProvider.getInstance(project);
     this.version = version;
@@ -36,21 +32,14 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
   public String formatFile(String content, String fileName) {
     try {
       this.logger.debug("Running " + this.csharpierPath + " --write-stdout");
-      var processBuilder = new ProcessBuilder(
-        this.csharpierPath,
-        "--write-stdout"
-      );
+      var processBuilder = new ProcessBuilder(this.csharpierPath, "--write-stdout");
       processBuilder.environment().put("DOTNET_NOLOGO", "1");
-      processBuilder
-        .environment()
-        .put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
+      processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
       processBuilder.redirectErrorStream(true);
       var process = processBuilder.start();
 
       var stdin = process.getOutputStream();
-      var stdOut = new BufferedReader(
-        new InputStreamReader(process.getInputStream())
-      );
+      var stdOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
       stdin.write(content.getBytes());
       stdin.close();
@@ -65,10 +54,7 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
 
       var result = output.toString();
 
-      if (
-        process.exitValue() == 0 &&
-        !result.contains("Failed to compile so was not formatted.")
-      ) {
+      if (process.exitValue() == 0 && !result.contains("Failed to compile so was not formatted.")) {
         return result;
       } else {
         this.logger.error(result);

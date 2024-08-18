@@ -29,12 +29,10 @@ public class FormattingService {
     if (
       !(psiFile.getLanguage().getID().equals("C#") ||
         // while testing in intellij it doesn't know about c#
-        (psiFile.getLanguage().getID().equals("TEXT") &&
-          psiFile.getName().endsWith(".cs")))
+        (psiFile.getLanguage().getID().equals("TEXT") && psiFile.getName().endsWith(".cs")))
     ) {
       this.logger.debug(
-          "Skipping formatting because language was " +
-          psiFile.getLanguage().getDisplayName()
+          "Skipping formatting because language was " + psiFile.getLanguage().getDisplayName()
         );
       return;
     }
@@ -56,14 +54,9 @@ public class FormattingService {
 
     var currentDocumentText = document.getText();
 
-    var csharpierProcess = CSharpierProcessProvider.getInstance(
-      project
-    ).getProcessFor(filePath);
+    var csharpierProcess = CSharpierProcessProvider.getInstance(project).getProcessFor(filePath);
     this.logger.info(
-        "Formatting started for " +
-        filePath +
-        " using CSharpier " +
-        csharpierProcess.getVersion()
+        "Formatting started for " + filePath + " using CSharpier " + csharpierProcess.getVersion()
       );
     var start = Instant.now();
     if (csharpierProcess instanceof ICSharpierProcess2) {
@@ -74,9 +67,7 @@ public class FormattingService {
       var result = csharpierProcess2.formatFile(parameter);
 
       var end = Instant.now();
-      this.logger.info(
-          "Formatted in " + (Duration.between(start, end).toMillis()) + "ms"
-        );
+      this.logger.info("Formatted in " + (Duration.between(start, end).toMillis()) + "ms");
 
       if (result != null) {
         switch (result.status) {
@@ -97,16 +88,12 @@ public class FormattingService {
       var result = csharpierProcess.formatFile(currentDocumentText, filePath);
 
       var end = Instant.now();
-      this.logger.info(
-          "Formatted in " + (Duration.between(start, end).toMillis()) + "ms"
-        );
+      this.logger.info("Formatted in " + (Duration.between(start, end).toMillis()) + "ms");
 
       if (result.length() == 0 || currentDocumentText.equals(result)) {
         this.logger.debug(
             "Skipping write because " +
-            (result.length() == 0
-                ? "result is empty"
-                : "current document equals result")
+            (result.length() == 0 ? "result is empty" : "current document equals result")
           );
       } else {
         updateText(document, project, result, currentDocumentText);
@@ -132,9 +119,7 @@ public class FormattingService {
   }
 
   public boolean getCanFormat(String filePath, Project project) {
-    var cSharpierProcess = CSharpierProcessProvider.getInstance(
-      project
-    ).getProcessFor(filePath);
+    var cSharpierProcess = CSharpierProcessProvider.getInstance(project).getProcessFor(filePath);
     return !NullCSharpierProcess.Instance.equals(cSharpierProcess);
   }
 }

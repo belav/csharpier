@@ -22,11 +22,7 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
   private Process process = null;
   private boolean processFailedToStart;
 
-  public CSharpierProcessServer(
-    String csharpierPath,
-    String version,
-    Project project
-  ) {
+  public CSharpierProcessServer(String csharpierPath, String version, Project project) {
     this.csharpierPath = csharpierPath;
     this.dotNetProvider = DotNetProvider.getInstance(project);
     this.version = version;
@@ -47,14 +43,10 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
       var processBuilder = new ProcessBuilder(this.csharpierPath, "--server");
       processBuilder.redirectErrorStream(true);
       processBuilder.environment().put("DOTNET_NOLOGO", "1");
-      processBuilder
-        .environment()
-        .put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
+      processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
       this.process = processBuilder.start();
 
-      var reader = new BufferedReader(
-        new InputStreamReader(this.process.getInputStream())
-      );
+      var reader = new BufferedReader(new InputStreamReader(this.process.getInputStream()));
 
       var executor = Executors.newSingleThreadExecutor();
       var future = executor.submit(() -> reader.readLine());
@@ -63,17 +55,13 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
       try {
         output = future.get(2, TimeUnit.SECONDS);
       } catch (TimeoutException e) {
-        this.logger.warn(
-            "Spawning the csharpier server timed out. Formatting cannot occur."
-          );
+        this.logger.warn("Spawning the csharpier server timed out. Formatting cannot occur.");
         this.process.destroy();
         return false;
       }
 
       if (!this.process.isAlive()) {
-        this.logger.warn(
-            "Spawning the csharpier server failed because it exited. " + output
-          );
+        this.logger.warn("Spawning the csharpier server failed because it exited. " + output);
         return false;
       }
 
@@ -91,9 +79,7 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
   @Override
   public FormatFileResult formatFile(FormatFileParameter parameter) {
     if (this.processFailedToStart) {
-      this.logger.warn(
-          "CSharpier process failed to start. Formatting cannot occur."
-        );
+      this.logger.warn("CSharpier process failed to start. Formatting cannot occur.");
       return null;
     }
 
@@ -121,17 +107,12 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
 
       var responseCode = connection.getResponseCode();
       if (responseCode != 200) {
-        this.logger.warn(
-            "Csharpier server returned non-200 status code of " + responseCode
-          );
+        this.logger.warn("Csharpier server returned non-200 status code of " + responseCode);
         connection.disconnect();
         return null;
       }
 
-      InputStreamReader reader = new InputStreamReader(
-        connection.getInputStream(),
-        "UTF-8"
-      );
+      InputStreamReader reader = new InputStreamReader(connection.getInputStream(), "UTF-8");
       var result = gson.fromJson(reader, FormatFileResult.class);
       reader.close();
 

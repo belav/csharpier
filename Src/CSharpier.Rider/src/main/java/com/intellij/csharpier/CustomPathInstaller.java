@@ -25,9 +25,7 @@ public class CustomPathInstaller {
       return true;
     }
     if (this.customPath != "" && this.customPath != null) {
-      this.logger.debug(
-          "Using csharpier at a custom path of " + this.customPath
-        );
+      this.logger.debug("Using csharpier at a custom path of " + this.customPath);
       return true;
     }
 
@@ -60,10 +58,7 @@ public class CustomPathInstaller {
     return this.validateInstall(pathToDirectoryForVersion, version);
   }
 
-  private boolean validateInstall(
-    String pathToDirectoryForVersion,
-    String version
-  ) {
+  private boolean validateInstall(String pathToDirectoryForVersion, String version) {
     try {
       var env = Map.of("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
 
@@ -74,24 +69,17 @@ public class CustomPathInstaller {
         new File(pathToDirectoryForVersion)
       ).trim();
 
-      this.logger.debug(
-          this.getPathForVersion(version) + "--version output: " + version
-        );
+      this.logger.debug(this.getPathForVersion(version) + "--version output: " + version);
       var versionWithoutHash = output.split(Pattern.quote("+"))[0];
-      this.logger.debug(
-          "Using " + versionWithoutHash + " as the version number."
-        );
+      this.logger.debug("Using " + versionWithoutHash + " as the version number.");
 
       if (versionWithoutHash.equals(version)) {
-        this.logger.debug(
-            "CSharpier at " + pathToDirectoryForVersion + " already exists"
-          );
+        this.logger.debug("CSharpier at " + pathToDirectoryForVersion + " already exists");
         return true;
       }
     } catch (Exception ex) {
       this.logger.warn(
-          "Exception while running 'dotnet csharpier --version' in " +
-          pathToDirectoryForVersion,
+          "Exception while running 'dotnet csharpier --version' in " + pathToDirectoryForVersion,
           ex
         );
     }
@@ -115,18 +103,12 @@ public class CustomPathInstaller {
     }
 
     if (SystemUtils.IS_OS_WINDOWS) {
-      return Path.of(
-        System.getenv("LOCALAPPDATA"),
-        "CSharpier",
-        version
-      ).toString();
+      return Path.of(System.getenv("LOCALAPPDATA"), "CSharpier", version).toString();
     }
 
     var userHome = System.getProperty("user.home");
     if (userHome == null) {
-      throw new Exception(
-        "There was no user.home property and the OS was not windows"
-      );
+      throw new Exception("There was no user.home property and the OS was not windows");
     }
 
     return Path.of(userHome, ".cache/csharpier", version).toString();

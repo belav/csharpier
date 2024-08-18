@@ -28,8 +28,7 @@ import javax.xml.xpath.XPathFactory;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Node;
 
-public class CSharpierProcessProvider
-  implements DocumentListener, Disposable, IProcessKiller {
+public class CSharpierProcessProvider implements DocumentListener, Disposable, IProcessKiller {
 
   private final CustomPathInstaller customPathInstaller;
   private final Logger logger = CSharpierLogger.getInstance();
@@ -37,18 +36,14 @@ public class CSharpierProcessProvider
 
   private boolean warnedForOldVersion;
   private final HashMap<String, Long> lastWarmedByDirectory = new HashMap<>();
-  private final HashMap<String, String> csharpierVersionByDirectory =
-    new HashMap<>();
-  private final HashMap<String, ICSharpierProcess> csharpierProcessesByVersion =
-    new HashMap<>();
+  private final HashMap<String, String> csharpierVersionByDirectory = new HashMap<>();
+  private final HashMap<String, ICSharpierProcess> csharpierProcessesByVersion = new HashMap<>();
 
   public CSharpierProcessProvider(@NotNull Project project) {
     this.project = project;
     this.customPathInstaller = new CustomPathInstaller(project);
 
-    EditorFactory.getInstance()
-      .getEventMulticaster()
-      .addDocumentListener(this, this);
+    EditorFactory.getInstance().getEventMulticaster().addDocumentListener(this, this);
   }
 
   @NotNull
@@ -62,9 +57,7 @@ public class CSharpierProcessProvider
     var file = FileDocumentManager.getInstance().getFile(document);
 
     if (
-      file == null ||
-      file.getExtension() == null ||
-      !file.getExtension().equalsIgnoreCase("cs")
+      file == null || file.getExtension() == null || !file.getExtension().equalsIgnoreCase("cs")
     ) {
       return;
     }
@@ -79,31 +72,23 @@ public class CSharpierProcessProvider
     }
     var directory = Path.of(filePath).getParent().toString();
     var now = Instant.now().toEpochMilli();
-    var lastWarmed =
-      this.lastWarmedByDirectory.getOrDefault(directory, Long.valueOf(0));
+    var lastWarmed = this.lastWarmedByDirectory.getOrDefault(directory, Long.valueOf(0));
     if (lastWarmed + 5000 > now) {
       return;
     }
     this.logger.debug("Ensure there is a csharpier process for " + directory);
     this.lastWarmedByDirectory.put(directory, now);
-    var version =
-      this.csharpierVersionByDirectory.getOrDefault(directory, null);
+    var version = this.csharpierVersionByDirectory.getOrDefault(directory, null);
     if (version == null) {
       version = this.getCSharpierVersion(directory);
       if (version == null || version.isEmpty()) {
-        InstallerService.getInstance(this.project).displayInstallNeededMessage(
-          directory,
-          this
-        );
+        InstallerService.getInstance(this.project).displayInstallNeededMessage(directory, this);
       }
       this.csharpierVersionByDirectory.put(directory, version);
     }
 
     if (!this.csharpierProcessesByVersion.containsKey(version)) {
-      this.csharpierProcessesByVersion.put(
-          version,
-          this.setupCSharpierProcess(directory, version)
-        );
+      this.csharpierProcessesByVersion.put(version, this.setupCSharpierProcess(directory, version));
     }
   }
 
@@ -114,16 +99,13 @@ public class CSharpierProcessProvider
     }
 
     var directory = Path.of(filePath).getParent().toString();
-    var version =
-      this.csharpierVersionByDirectory.getOrDefault(directory, null);
+    var version = this.csharpierVersionByDirectory.getOrDefault(directory, null);
     if (version == null) {
       this.findAndWarmProcess(filePath);
       version = this.csharpierVersionByDirectory.get(directory);
     }
 
-    if (
-      version == null || !this.csharpierProcessesByVersion.containsKey(version)
-    ) {
+    if (version == null || !this.csharpierProcessesByVersion.containsKey(version)) {
       // this shouldn't really happen, but just in case
       return NullCSharpierProcess.Instance;
     }
@@ -133,12 +115,9 @@ public class CSharpierProcessProvider
 
   private String getCSharpierVersion(String directoryThatContainsFile) {
     var csharpierVersion = FunctionRunner.runUntilNonNull(
-      () ->
-        this.findVersionInCsProjOfParentsDirectories(directoryThatContainsFile),
-      () ->
-        this.findCSharpierVersionInToolOutput(directoryThatContainsFile, false),
-      () ->
-        this.findCSharpierVersionInToolOutput(directoryThatContainsFile, true)
+      () -> this.findVersionInCsProjOfParentsDirectories(directoryThatContainsFile),
+      () -> this.findCSharpierVersionInToolOutput(directoryThatContainsFile, false),
+      () -> this.findCSharpierVersionInToolOutput(directoryThatContainsFile, true)
     );
 
     if (csharpierVersion == null) {
@@ -146,9 +125,7 @@ public class CSharpierProcessProvider
     }
 
     var versionWithoutHash = csharpierVersion.split(Pattern.quote("+"))[0];
-    this.logger.debug(
-        "Using " + versionWithoutHash + " as the version number."
-      );
+    this.logger.debug("Using " + versionWithoutHash + " as the version number.");
     return versionWithoutHash;
   }
 
@@ -163,9 +140,7 @@ public class CSharpierProcessProvider
     );
 
     this.logger.debug(
-        "Running 'dotnet tool list" +
-        (isGlobal ? "-g" : "") +
-        "' to look for version"
+        "Running 'dotnet tool list" + (isGlobal ? "-g" : "") + "' to look for version"
       );
     this.logger.debug("Output was: \n " + output);
 
@@ -187,9 +162,7 @@ public class CSharpierProcessProvider
     return null;
   }
 
-  private String findVersionInCsProjOfParentsDirectories(
-    String directoryThatContainsFile
-  ) {
+  private String findVersionInCsProjOfParentsDirectories(String directoryThatContainsFile) {
     this.logger.debug(
         "Looking for csproj in or above " +
         directoryThatContainsFile +
@@ -233,14 +206,9 @@ public class CSharpierProcessProvider
           continue;
         }
 
-        var versionOfMsBuildPackage = node
-          .getAttributes()
-          .getNamedItem("Version")
-          .getNodeValue();
+        var versionOfMsBuildPackage = node.getAttributes().getNamedItem("Version").getNodeValue();
         if (versionOfMsBuildPackage != null) {
-          this.logger.debug(
-              "Found version " + versionOfMsBuildPackage + " in " + pathToCsProj
-            );
+          this.logger.debug("Found version " + versionOfMsBuildPackage + " in " + pathToCsProj);
           return versionOfMsBuildPackage;
         }
       } catch (Exception e) {
@@ -256,10 +224,7 @@ public class CSharpierProcessProvider
     return null;
   }
 
-  private ICSharpierProcess setupCSharpierProcess(
-    String directory,
-    String version
-  ) {
+  private ICSharpierProcess setupCSharpierProcess(String directory, String version) {
     if (version == null || version.equals("")) {
       return NullCSharpierProcess.Instance;
     }
@@ -272,9 +237,7 @@ public class CSharpierProcessProvider
 
       var customPath = this.customPathInstaller.getPathForVersion(version);
 
-      this.logger.debug(
-          "Adding new version " + version + " process for " + directory
-        );
+      this.logger.debug("Adding new version " + version + " process for " + directory);
 
       // ComparableVersion was unhappy in rider 2023, this code should probably just go away
       // but there are still 0.12 and 0.14 downloads happening
@@ -287,23 +250,15 @@ public class CSharpierProcessProvider
         versionWeCareAbout >= serverVersion &&
         !CSharpierSettings.getInstance(this.project).getDisableCSharpierServer()
       ) {
-        csharpierProcess = new CSharpierProcessServer(
-          customPath,
-          version,
-          this.project
-        );
+        csharpierProcess = new CSharpierProcessServer(customPath, version, this.project);
       } else if (versionWeCareAbout >= 12) {
         var useUtf8 = versionWeCareAbout >= 14;
 
         if (
           versionWeCareAbout >= serverVersion &&
-          CSharpierSettings.getInstance(
-            this.project
-          ).getDisableCSharpierServer()
+          CSharpierSettings.getInstance(this.project).getDisableCSharpierServer()
         ) {
-          this.logger.debug(
-              "CSharpier server is disabled, falling back to piping via stdin"
-            );
+          this.logger.debug("CSharpier server is disabled, falling back to piping via stdin");
         }
 
         csharpierProcess = new CSharpierProcessPipeMultipleFiles(
@@ -324,11 +279,7 @@ public class CSharpierProcessProvider
           this.warnedForOldVersion = true;
         }
 
-        csharpierProcess = new CSharpierProcessSingleFile(
-          customPath,
-          version,
-          this.project
-        );
+        csharpierProcess = new CSharpierProcessSingleFile(customPath, version, this.project);
       }
 
       if (csharpierProcess.getProcessFailedToStart()) {
@@ -351,10 +302,7 @@ public class CSharpierProcessProvider
       .getNotificationGroup("CSharpier")
       .createNotification(title, message, NotificationType.WARNING);
     notification.addAction(
-      new OpenUrlAction(
-        "Read More",
-        "https://csharpier.com/docs/EditorsTroubleshooting"
-      )
+      new OpenUrlAction("Read More", "https://csharpier.com/docs/EditorsTroubleshooting")
     );
     notification.notify(this.project);
   }
@@ -366,9 +314,7 @@ public class CSharpierProcessProvider
 
   public void killRunningProcesses() {
     for (var key : this.csharpierProcessesByVersion.keySet()) {
-      this.logger.debug(
-          "disposing of process for version " + (key == "" ? "null" : key)
-        );
+      this.logger.debug("disposing of process for version " + (key == "" ? "null" : key));
       this.csharpierProcessesByVersion.get(key).dispose();
     }
     this.lastWarmedByDirectory.clear();

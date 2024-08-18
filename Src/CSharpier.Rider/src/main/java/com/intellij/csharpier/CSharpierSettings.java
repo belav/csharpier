@@ -7,12 +7,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 
-@State(
-  name = "com.intellij.csharpier",
-  storages = @Storage("CSharpierPlugin.xml")
-)
-public class CSharpierSettings
-  implements PersistentStateComponent<CSharpierSettings> {
+@State(name = "com.intellij.csharpier", storages = @Storage("CSharpierPlugin.xml"))
+public class CSharpierSettings implements PersistentStateComponent<CSharpierSettings> {
 
   @NotNull
   static CSharpierSettings getInstance(@NotNull Project project) {
