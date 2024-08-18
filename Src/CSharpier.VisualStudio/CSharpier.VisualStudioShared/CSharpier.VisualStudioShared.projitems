@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CSharpierProcessProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CustomPathInstaller.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FormattingService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FunctionRunner.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ICSharpierProcess.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InfoBarService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InstallerService.cs" />
