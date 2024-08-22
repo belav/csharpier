@@ -70,7 +70,7 @@ public class ServerTests
             process.Kill();
         }
     }
-    
+
     [Test]
     [Ignore("leaves things running when it fails and probably won't work on GH")]
     public void RunTwo()
@@ -82,10 +82,10 @@ public class ServerTests
             var command = Cli.Wrap("dotnet")
                 .WithArguments(path + " --server")
                 .WithValidation(CommandResultValidation.None);
-            
+
             using var cts = new CancellationTokenSource();
             cts.CancelAfter(TimeSpan.FromSeconds(5));
-            
+
             await foreach (var cmdEvent in command.ListenAsync(cancellationToken: cts.Token))
             {
                 switch (cmdEvent)
@@ -103,7 +103,6 @@ public class ServerTests
                         break;
                 }
             }
-
         }
 
         Task.WaitAll(NewFunction(), NewFunction());
