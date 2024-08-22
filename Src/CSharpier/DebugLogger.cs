@@ -7,7 +7,7 @@ internal class DebugLogger
     private static object lockObject = new();
 
     [Conditional("DEBUG")]
-    public static void Log(string message)
+    public static void Log(object message)
     {
         lock (lockObject)
         {
