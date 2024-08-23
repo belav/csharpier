@@ -14,12 +14,15 @@ internal class Program
     {
         var rootCommand = CommandLineOptions.Create();
         var checkCommand = CommandLineOptions.CreateCheckCommand();
+        var pipeCommand = CommandLineOptions.CreatePipeCommand();
 
         rootCommand.Handler = CommandHandler.Create(new CommandLineOptions.Handler(Run));
 
         rootCommand.AddCommand(checkCommand);
         checkCommand.Handler = CommandHandler.Create(new CommandLineOptions.CheckHandler(RunCheck));
 
+        rootCommand.AddCommand(pipeCommand);
+        pipeCommand.Handler = CommandHandler.Create(new CommandLineOptions.PipeHandler(RunPipe));
         return await rootCommand.InvokeAsync(args);
     }
 
@@ -37,7 +40,6 @@ internal class Program
             false,
             false,
             false,
-            false,
             null,
             false,
             false,
@@ -45,6 +47,25 @@ internal class Program
             false,
             configPath,
             logLevel,
+            cancellationToken
+        );
+    }
+
+    public static async Task<int> RunPipe(
+        string configPath,
+        LogLevel logLevel,
+        CancellationToken cancellationToken
+    )
+    {
+        var (actualConfigPath, console, logger) = CreateConsoleLoggerAndActualPath(
+            configPath,
+            logLevel
+        );
+
+        return await PipeMultipleFilesFormatter.StartServer(
+            console,
+            logger,
+            actualConfigPath,
             cancellationToken
         );
     }
@@ -57,7 +78,6 @@ internal class Program
         bool fast,
         bool skipWrite,
         bool writeStdout,
-        bool pipeMultipleFiles,
         bool server,
         int? serverPort,
         bool noCache,
@@ -69,21 +89,10 @@ internal class Program
         CancellationToken cancellationToken
     )
     {
-        // System.CommandLine passes string.empty instead of null when this isn't supplied even if we use string?
-        var actualConfigPath = string.IsNullOrEmpty(configPath) ? null : configPath;
-
-        var console = new SystemConsole();
-        var logger = new ConsoleLogger(console, logLevel);
-
-        if (pipeMultipleFiles)
-        {
-            return await PipeMultipleFilesFormatter.StartServer(
-                console,
-                logger,
-                actualConfigPath,
-                cancellationToken
-            );
-        }
+        var (actualConfigPath, console, logger) = CreateConsoleLoggerAndActualPath(
+            configPath,
+            logLevel
+        );
 
         if (server)
         {
@@ -137,5 +146,19 @@ internal class Program
             logger,
             cancellationToken
         );
+    }
+
+    private static (
+        string? actualConfigPath,
+        SystemConsole console,
+        ConsoleLogger logger
+    ) CreateConsoleLoggerAndActualPath(string configPath, LogLevel logLevel)
+    {
+        // System.CommandLine passes string.empty instead of null when this isn't supplied even if we use string?
+        var actualConfigPath = string.IsNullOrEmpty(configPath) ? null : configPath;
+
+        var console = new SystemConsole();
+        var logger = new ConsoleLogger(console, logLevel);
+        return (actualConfigPath, console, logger);
     }
 }

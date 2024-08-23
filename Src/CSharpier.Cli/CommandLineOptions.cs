@@ -25,7 +25,6 @@ internal class CommandLineOptions
         bool fast,
         bool skipWrite,
         bool writeStdout,
-        bool pipeMultipleFiles,
         bool server,
         int? serverPort,
         bool noCache,
@@ -44,21 +43,17 @@ internal class CommandLineOptions
         CancellationToken cancellationToken
     );
 
-    private static Option GetLogLevelOption()
-    {
-        return new Option<string>(
-            new[] { "--loglevel" },
-            () => LogLevel.Information.ToString(),
-            "Specify the log level - Debug, Information (default), Warning, Error, None"
-        );
-    }
+    internal delegate Task<int> PipeHandler(
+        string config,
+        LogLevel logLevel,
+        CancellationToken cancellationToken
+    );
 
     public static RootCommand Create()
     {
         var rootCommand = new RootCommand
         {
             GetDirectoryOrFileArgument(),
-            GetLogLevelOption(),
             new Option(
                 new[] { "--no-cache" },
                 "Bypass the cache to determine if a file needs to be formatted."
@@ -84,10 +79,6 @@ internal class CommandLineOptions
                 "Write the results of formatting any files to stdout."
             ),
             new Option(
-                new[] { "--pipe-multiple-files" },
-                "Keep csharpier running so that multiples files can be piped to it via stdin."
-            ),
-            new Option(
                 new[] { "--server" },
                 "Run CSharpier as a server so that multiple files may be formatted."
             ),
@@ -105,6 +96,14 @@ internal class CommandLineOptions
             new Option<string>(
                 new[] { "--config-path" },
                 "Path to the CSharpier configuration file"
+            )
+        );
+
+        rootCommand.AddGlobalOption(
+            new Option<string>(
+                new[] { "--loglevel" },
+                () => LogLevel.Information.ToString(),
+                "Specify the log level - Debug, Information (default), Warning, Error, None"
             )
         );
 
@@ -146,8 +145,17 @@ internal class CommandLineOptions
             "Check that files are formatted. Will not write any changes."
         );
         checkCommand.AddArgument(GetDirectoryOrFileArgument());
-        checkCommand.AddOption(GetLogLevelOption());
 
         return checkCommand;
+    }
+
+    public static Command CreatePipeCommand()
+    {
+        var pipeMultipleFilesCommand = new Command(
+            "pipe-files",
+            "Keep csharpier running so that multiples files can be piped to it via stdin."
+        );
+
+        return pipeMultipleFilesCommand;
     }
 }

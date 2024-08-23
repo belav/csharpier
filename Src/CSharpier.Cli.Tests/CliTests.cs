@@ -251,7 +251,7 @@ max_line_length = 10"
             + $"Test2.cs{'\u0003'}{unformattedContent2}{'\u0003'}";
 
         var result = await new CsharpierProcess()
-            .WithArguments("--pipe-multiple-files")
+            .WithArguments("pipe-files")
             .WithPipedInput(input)
             .ExecuteAsync();
 
@@ -269,7 +269,7 @@ max_line_length = 10"
         const string invalidFile = "public class ClassName { ";
 
         var result = await new CsharpierProcess()
-            .WithArguments("--pipe-multiple-files")
+            .WithArguments("pipe-files")
             .WithPipedInput($"{input}{'\u0003'}{invalidFile}{'\u0003'}")
             .ExecuteAsync();
 
@@ -289,7 +289,7 @@ max_line_length = 10"
         await this.WriteFileAsync(".csharpierignore", "Ignored.cs");
 
         var result = await new CsharpierProcess()
-            .WithArguments("--pipe-multiple-files")
+            .WithArguments("pipe-files")
             .WithPipedInput($"{fileName}{'\u0003'}{ignoredFile}{'\u0003'}")
             .ExecuteAsync();
 
@@ -305,7 +305,7 @@ max_line_length = 10"
         await this.WriteFileAsync(".csharpierrc", "printWidth: 10");
 
         var result = await new CsharpierProcess()
-            .WithArguments("--pipe-multiple-files")
+            .WithArguments("pipe-files")
             .WithPipedInput($"{fileName}{'\u0003'}{fileContent}{'\u0003'}")
             .ExecuteAsync();
 
@@ -329,7 +329,7 @@ max_line_length = 10"
         );
 
         var result = await new CsharpierProcess()
-            .WithArguments("--pipe-multiple-files")
+            .WithArguments("pipe-files")
             .WithPipedInput($"{fileName}{'\u0003'}{fileContent}{'\u0003'}")
             .ExecuteAsync();
 
