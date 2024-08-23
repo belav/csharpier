@@ -1,4 +1,17 @@
-﻿# 0.29.0
+﻿# 0.29.1
+## What's Changed
+### Sorting of usings with underscore differs from Visual Studio [#1327](https://github.com/belav/csharpier/issues/1327)
+CSharpier now sorts `_` to the bottom of usings.
+```c#
+using SomeCompany.MWord;
+using SomeCompany.ZWord;
+using SomeCompany._Word;
+```
+### Process cannot access the file "....net8.0\any\server.log" while running multiple extensions. [#1324](https://github.com/belav/csharpier/issues/1324)
+CSharpier Server now uses a log file name based on the port that it is starting on to avoid concurrency issues trying to access the same log file
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.29.0...0.29.1
+# 0.29.0
 ## Breaking Changes
 ### The formatting command will now exit with an error code of 1 if one of the target files cannot be compiled [#1131](https://github.com/belav/csharpier/issues/1131)
 Prior to 0.29.0 if csharpier encountered a file that could not be compiled it would treat it as a warning and exit with a code of 0.  
@@ -2544,6 +2557,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
