@@ -15,6 +15,7 @@ internal class Program
         var rootCommand = CommandLineOptions.Create();
         var checkCommand = CommandLineOptions.CreateCheckCommand();
         var pipeCommand = CommandLineOptions.CreatePipeCommand();
+        var serverCommand = CommandLineOptions.CreateServerCommand();
 
         rootCommand.Handler = CommandHandler.Create(new CommandLineOptions.Handler(Run));
 
@@ -23,6 +24,12 @@ internal class Program
 
         rootCommand.AddCommand(pipeCommand);
         pipeCommand.Handler = CommandHandler.Create(new CommandLineOptions.PipeHandler(RunPipe));
+
+        rootCommand.AddCommand(serverCommand);
+        serverCommand.Handler = CommandHandler.Create(
+            new CommandLineOptions.ServerHandler(RunServer)
+        );
+
         return await rootCommand.InvokeAsync(args);
     }
 
@@ -39,8 +46,6 @@ internal class Program
             false,
             false,
             false,
-            false,
-            null,
             false,
             false,
             false,
@@ -70,6 +75,21 @@ internal class Program
         );
     }
 
+    public static async Task<int> RunServer(
+        string configPath,
+        int? serverPort,
+        LogLevel logLevel,
+        CancellationToken cancellationToken
+    )
+    {
+        var (actualConfigPath, console, logger) = CreateConsoleLoggerAndActualPath(
+            configPath,
+            logLevel
+        );
+
+        return await ServerFormatter.StartServer(serverPort, logger, actualConfigPath);
+    }
+
     // TODO at some point (1.0?) the options should be cleaned up
     // and use sub commands
     public static async Task<int> Run(
@@ -78,8 +98,6 @@ internal class Program
         bool fast,
         bool skipWrite,
         bool writeStdout,
-        bool server,
-        int? serverPort,
         bool noCache,
         bool noMSBuildCheck,
         bool includeGenerated,
@@ -93,11 +111,6 @@ internal class Program
             configPath,
             logLevel
         );
-
-        if (server)
-        {
-            return await ServerFormatter.StartServer(serverPort, logger, actualConfigPath);
-        }
 
         var directoryOrFileNotProvided = directoryOrFile is null or { Length: 0 };
         var originalDirectoryOrFile = directoryOrFile;

@@ -25,8 +25,6 @@ internal class CommandLineOptions
         bool fast,
         bool skipWrite,
         bool writeStdout,
-        bool server,
-        int? serverPort,
         bool noCache,
         bool noMSBuildCheck,
         bool includeGenerated,
@@ -45,6 +43,13 @@ internal class CommandLineOptions
 
     internal delegate Task<int> PipeHandler(
         string config,
+        LogLevel logLevel,
+        CancellationToken cancellationToken
+    );
+
+    internal delegate Task<int> ServerHandler(
+        string config,
+        int? serverPort,
         LogLevel logLevel,
         CancellationToken cancellationToken
     );
@@ -77,14 +82,6 @@ internal class CommandLineOptions
             new Option(
                 new[] { "--write-stdout" },
                 "Write the results of formatting any files to stdout."
-            ),
-            new Option(
-                new[] { "--server" },
-                "Run CSharpier as a server so that multiple files may be formatted."
-            ),
-            new Option<int?>(
-                new[] { "--server-port" },
-                "Specify the port that CSharpier should start on. Defaults to a random unused port."
             ),
             new Option(
                 new[] { "--compilation-errors-as-warnings" },
@@ -157,5 +154,21 @@ internal class CommandLineOptions
         );
 
         return pipeMultipleFilesCommand;
+    }
+
+    public static Command CreateServerCommand()
+    {
+        var serverCommand = new Command(
+            "server",
+            "Run CSharpier as a server so that multiple files may be formatted."
+        );
+        serverCommand.AddOption(
+            new Option<int?>(
+                new[] { "--server-port" },
+                "Specify the port that CSharpier should start on. Defaults to a random unused port."
+            )
+        );
+
+        return serverCommand;
     }
 }
