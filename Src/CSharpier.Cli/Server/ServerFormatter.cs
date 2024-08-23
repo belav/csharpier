@@ -1,7 +1,6 @@
 namespace CSharpier.Cli.Server;
 
 using System.Net;
-using System.Net.NetworkInformation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -32,11 +31,21 @@ internal static class ServerFormatter
             ["Logging:File:FileSizeLimitBytes"] = "10000",
         };
         builder.Configuration.AddInMemoryCollection(values);
+        var currentPort = port ?? 0;
         builder.Services.AddLogging(loggingBuilder =>
         {
             loggingBuilder.AddFile(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "server.log"),
-                append: true
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "server{0}.log"),
+                o =>
+                {
+                    // name files based on the port so that multiple processes can log without fighting over a file
+                    // however before the server is started fully we won't have a port
+                    // this empty error handler will make sure if two processes both try to use that initial file
+                    // at the same time they won't crash
+                    o.HandleFileError = _ => { };
+                    o.FormatLogFileName = name =>
+                        string.Format(name, currentPort == 0 ? string.Empty : currentPort);
+                }
             );
         });
 
@@ -50,6 +59,7 @@ internal static class ServerFormatter
             )
             {
                 var uri = new Uri(address);
+                currentPort = uri.Port;
                 logger.LogInformation("Started on " + uri.Port);
             }
         });

@@ -2,6 +2,9 @@ namespace CSharpier.Cli.Tests;
 
 using System.Diagnostics;
 using System.Net.Http.Json;
+using System.Text;
+using CliWrap;
+using CliWrap.EventStream;
 using CSharpier.Cli.Server;
 using FluentAssertions;
 using NUnit.Framework;
@@ -66,5 +69,42 @@ public class ServerTests
         {
             process.Kill();
         }
+    }
+
+    [Test]
+    [Ignore("leaves things running when it fails and probably won't work on GH")]
+    public void RunTwo()
+    {
+        var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
+
+        async Task NewFunction()
+        {
+            var command = Cli.Wrap("dotnet")
+                .WithArguments(path + " --server")
+                .WithValidation(CommandResultValidation.None);
+
+            using var cts = new CancellationTokenSource();
+            cts.CancelAfter(TimeSpan.FromSeconds(5));
+
+            await foreach (var cmdEvent in command.ListenAsync(cancellationToken: cts.Token))
+            {
+                switch (cmdEvent)
+                {
+                    case StartedCommandEvent started:
+                        Console.WriteLine($"Process started; ID: {started.ProcessId}");
+                        break;
+                    case StandardOutputCommandEvent stdOut:
+                        Console.WriteLine($"Out> {stdOut.Text}");
+                        break;
+                    case StandardErrorCommandEvent stdErr:
+                        throw new Exception(stdErr.Text);
+                    case ExitedCommandEvent exited:
+                        Console.WriteLine($"Process exited; Code: {exited.ExitCode}");
+                        break;
+                }
+            }
+        }
+
+        Task.WaitAll(NewFunction(), NewFunction());
     }
 }
