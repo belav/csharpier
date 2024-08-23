@@ -226,7 +226,7 @@ max_line_length = 10"
         await this.WriteFileAsync("CheckUnformatted.cs", unformattedContent);
 
         var result = await new CsharpierProcess()
-            .WithArguments("CheckUnformatted.cs --check")
+            .WithArguments("check CheckUnformatted.cs")
             .ExecuteAsync();
 
         result

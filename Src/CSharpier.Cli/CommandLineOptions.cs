@@ -37,25 +37,28 @@ internal class CommandLineOptions
         CancellationToken cancellationToken
     );
 
+    internal delegate Task<int> CheckHandler(
+        string[] directoryOrFile,
+        string config,
+        LogLevel logLevel,
+        CancellationToken cancellationToken
+    );
+
+    private static Option GetLogLevelOption()
+    {
+        return new Option<string>(
+            new[] { "--loglevel" },
+            () => LogLevel.Information.ToString(),
+            "Specify the log level - Debug, Information (default), Warning, Error, None"
+        );
+    }
+
     public static RootCommand Create()
     {
         var rootCommand = new RootCommand
         {
-            new Argument<string[]>("directoryOrFile")
-            {
-                Arity = ArgumentArity.ZeroOrMore,
-                Description =
-                    "One or more paths to a directory containing C# files to format or a C# file to format. It may be ommited when piping data via stdin.",
-            }.LegalFilePathsOnly(),
-            new Option(
-                new[] { "--check" },
-                "Check that files are formatted. Will not write any changes."
-            ),
-            new Option<string>(
-                new[] { "--loglevel" },
-                () => LogLevel.Information.ToString(),
-                "Specify the log level - Debug, Information (default), Warning, Error, None"
-            ),
+            GetDirectoryOrFileArgument(),
+            GetLogLevelOption(),
             new Option(
                 new[] { "--no-cache" },
                 "Bypass the cache to determine if a file needs to be formatted."
@@ -92,15 +95,18 @@ internal class CommandLineOptions
                 new[] { "--server-port" },
                 "Specify the port that CSharpier should start on. Defaults to a random unused port."
             ),
-            new Option<string>(
-                new[] { "--config-path" },
-                "Path to the CSharpier configuration file"
-            ),
             new Option(
                 new[] { "--compilation-errors-as-warnings" },
                 "Treat compilation errors from files as warnings instead of errors."
             ),
         };
+
+        rootCommand.AddGlobalOption(
+            new Option<string>(
+                new[] { "--config-path" },
+                "Path to the CSharpier configuration file"
+            )
+        );
 
         rootCommand.AddValidator(cmd =>
         {
@@ -121,5 +127,27 @@ internal class CommandLineOptions
         });
 
         return rootCommand;
+    }
+
+    private static Argument<string[]> GetDirectoryOrFileArgument()
+    {
+        return new Argument<string[]>("directoryOrFile")
+        {
+            Arity = ArgumentArity.ZeroOrMore,
+            Description =
+                "One or more paths to a directory containing C# files to format or a C# file to format. It may be ommited when piping data via stdin.",
+        }.LegalFilePathsOnly();
+    }
+
+    public static Command CreateCheckCommand()
+    {
+        var checkCommand = new Command(
+            "check",
+            "Check that files are formatted. Will not write any changes."
+        );
+        checkCommand.AddArgument(GetDirectoryOrFileArgument());
+        checkCommand.AddOption(GetLogLevelOption());
+
+        return checkCommand;
     }
 }

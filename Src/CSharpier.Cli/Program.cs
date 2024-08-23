@@ -13,10 +13,40 @@ internal class Program
     public static async Task<int> Main(string[] args)
     {
         var rootCommand = CommandLineOptions.Create();
+        var checkCommand = CommandLineOptions.CreateCheckCommand();
 
         rootCommand.Handler = CommandHandler.Create(new CommandLineOptions.Handler(Run));
 
+        rootCommand.AddCommand(checkCommand);
+        checkCommand.Handler = CommandHandler.Create(new CommandLineOptions.CheckHandler(RunCheck));
+
         return await rootCommand.InvokeAsync(args);
+    }
+
+    public static Task<int> RunCheck(
+        string[]? directoryOrFile,
+        string configPath,
+        LogLevel logLevel,
+        CancellationToken cancellationToken
+    )
+    {
+        return Run(
+            directoryOrFile,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            null,
+            false,
+            false,
+            false,
+            false,
+            configPath,
+            logLevel,
+            cancellationToken
+        );
     }
 
     // TODO at some point (1.0?) the options should be cleaned up
