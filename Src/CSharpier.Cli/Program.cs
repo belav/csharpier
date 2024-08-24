@@ -13,11 +13,15 @@ internal class Program
     public static async Task<int> Main(string[] args)
     {
         var rootCommand = CommandLineOptions.Create();
+        var formatCommand = CommandLineOptions.CreateFormatCommand();
         var checkCommand = CommandLineOptions.CreateCheckCommand();
         var pipeCommand = CommandLineOptions.CreatePipeCommand();
         var serverCommand = CommandLineOptions.CreateServerCommand();
 
-        rootCommand.Handler = CommandHandler.Create(new CommandLineOptions.Handler(Run));
+        rootCommand.AddCommand(formatCommand);
+        formatCommand.Handler = CommandHandler.Create(
+            new CommandLineOptions.FormatHandler(RunFormat)
+        );
 
         rootCommand.AddCommand(checkCommand);
         checkCommand.Handler = CommandHandler.Create(new CommandLineOptions.CheckHandler(RunCheck));
@@ -31,6 +35,36 @@ internal class Program
         );
 
         return await rootCommand.InvokeAsync(args);
+    }
+
+    public static Task<int> RunFormat(
+        string[]? directoryOrFile,
+        bool fast,
+        bool skipWrite,
+        bool writeStdout,
+        bool noCache,
+        bool noMSBuildCheck,
+        bool includeGenerated,
+        bool compilationErrorsAsWarnings,
+        string configPath,
+        LogLevel logLevel,
+        CancellationToken cancellationToken
+    )
+    {
+        return Run(
+            directoryOrFile,
+            false,
+            fast,
+            skipWrite,
+            writeStdout,
+            noCache,
+            noMSBuildCheck,
+            includeGenerated,
+            compilationErrorsAsWarnings,
+            configPath,
+            logLevel,
+            cancellationToken
+        );
     }
 
     public static Task<int> RunCheck(
