@@ -141,7 +141,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         String directoryThatContainsFile,
         boolean isGlobal
     ) {
-        var command = List.of("tool", "list", (isGlobal ? "-g" : ""));
+        var command = isGlobal ? List.of("tool", "list", "-g") : List.of("tool", "list");
         var output = DotNetProvider.getInstance(this.project).execDotNet(
             command,
             new File(directoryThatContainsFile)
@@ -149,8 +149,12 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
         this.logger.debug(
                 "Running 'dotnet tool list" + (isGlobal ? "-g" : "") + "' to look for version"
-            );
+        );
         this.logger.debug("Output was: \n " + output);
+
+        if (output == null) {
+            return null;
+        }
 
         var lines = Arrays.stream(output.split("\n"))
             .map(String::trim)
