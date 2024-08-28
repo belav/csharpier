@@ -10,48 +10,48 @@ import org.jetbrains.annotations.NotNull;
 @State(name = "com.intellij.csharpier", storages = @Storage("CSharpierPlugin.xml"))
 public class CSharpierSettings implements PersistentStateComponent<CSharpierSettings> {
 
-  @NotNull
-  static CSharpierSettings getInstance(@NotNull Project project) {
-    return project.getService(CSharpierSettings.class);
-  }
+    @NotNull
+    static CSharpierSettings getInstance(@NotNull Project project) {
+        return project.getService(CSharpierSettings.class);
+    }
 
-  private boolean runOnSave;
+    private boolean runOnSave;
 
-  public boolean getRunOnSave() {
-    return this.runOnSave;
-  }
+    public boolean getRunOnSave() {
+        return this.runOnSave;
+    }
 
-  public void setRunOnSave(boolean value) {
-    this.runOnSave = value;
-  }
+    public void setRunOnSave(boolean value) {
+        this.runOnSave = value;
+    }
 
-  private String customPath;
+    private String customPath;
 
-  public String getCustomPath() {
-    return this.customPath;
-  }
+    public String getCustomPath() {
+        return this.customPath;
+    }
 
-  public void setCustomPath(String value) {
-    this.customPath = value;
-  }
+    public void setCustomPath(String value) {
+        this.customPath = value;
+    }
 
-  private boolean disableCSharpierServer;
+    private boolean disableCSharpierServer;
 
-  public boolean getDisableCSharpierServer() {
-    return this.disableCSharpierServer;
-  }
+    public boolean getDisableCSharpierServer() {
+        return this.disableCSharpierServer;
+    }
 
-  public void setDisableCSharpierServer(boolean value) {
-    this.disableCSharpierServer = value;
-  }
+    public void setDisableCSharpierServer(boolean value) {
+        this.disableCSharpierServer = value;
+    }
 
-  @Override
-  public CSharpierSettings getState() {
-    return this;
-  }
+    @Override
+    public CSharpierSettings getState() {
+        return this;
+    }
 
-  @Override
-  public void loadState(@NotNull CSharpierSettings state) {
-    XmlSerializerUtil.copyBean(state, this);
-  }
+    @Override
+    public void loadState(@NotNull CSharpierSettings state) {
+        XmlSerializerUtil.copyBean(state, this);
+    }
 }
