@@ -149,7 +149,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
         this.logger.debug(
                 "Running 'dotnet tool list" + (isGlobal ? "-g" : "") + "' to look for version"
-        );
+            );
         this.logger.debug("Output was: \n " + output);
 
         if (output == null) {

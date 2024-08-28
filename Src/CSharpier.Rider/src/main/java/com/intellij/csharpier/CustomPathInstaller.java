@@ -67,10 +67,14 @@ public class CustomPathInstaller {
                 command,
                 env,
                 new File(pathToDirectoryForVersion)
-            ).trim();
+            );
+
+            if (output == null) {
+                return false;
+            }
 
             this.logger.debug(this.getPathForVersion(version) + "--version output: " + version);
-            var versionWithoutHash = output.split(Pattern.quote("+"))[0];
+            var versionWithoutHash = output.trim().split(Pattern.quote("+"))[0];
             this.logger.debug("Using " + versionWithoutHash + " as the version number.");
 
             if (versionWithoutHash.equals(version)) {
