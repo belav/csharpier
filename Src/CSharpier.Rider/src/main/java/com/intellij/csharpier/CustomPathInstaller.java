@@ -64,13 +64,17 @@ public class CustomPathInstaller {
 
             var command = List.of(this.getPathForVersion(version), "--version");
             var output = ProcessHelper.executeCommand(
-                command,
-                env,
-                new File(pathToDirectoryForVersion)
-            ).trim();
+                    command,
+                    env,
+                    new File(pathToDirectoryForVersion)
+            );
+
+            if (output == null) {
+                return false;
+            }
 
             this.logger.debug(this.getPathForVersion(version) + "--version output: " + version);
-            var versionWithoutHash = output.split(Pattern.quote("+"))[0];
+            var versionWithoutHash = output.trim().split(Pattern.quote("+"))[0];
             this.logger.debug("Using " + versionWithoutHash + " as the version number.");
 
             if (versionWithoutHash.equals(version)) {

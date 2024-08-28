@@ -50,7 +50,7 @@ public class ProcessHelper {
             if (exitVal == 0) {
                 return result.toString().trim();
             }
-            logger.debug(errorResult.toString());
+            logger.debug("ErrorOutput: " + errorResult);
         } catch (Exception e) {
             logger.error(e);
         }
