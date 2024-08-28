@@ -64,9 +64,9 @@ public class CustomPathInstaller {
 
             var command = List.of(this.getPathForVersion(version), "--version");
             var output = ProcessHelper.executeCommand(
-                    command,
-                    env,
-                    new File(pathToDirectoryForVersion)
+                command,
+                env,
+                new File(pathToDirectoryForVersion)
             );
 
             if (output == null) {
