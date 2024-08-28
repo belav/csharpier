@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.8.1]
+- Possible fix for issue with OSX not being able to run dotnet tool list command
+
 ## [1.8.0]
 - Use dotnet tool list to find both local and global installs of csharpier.
 
