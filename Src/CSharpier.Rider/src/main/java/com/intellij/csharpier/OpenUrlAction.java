@@ -7,15 +7,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class OpenUrlAction extends AnAction {
 
-  private String url;
+    private String url;
 
-  public OpenUrlAction(String title, String url) {
-    super(title);
-    this.url = url;
-  }
+    public OpenUrlAction(String title, String url) {
+        super(title);
+        this.url = url;
+    }
 
-  @Override
-  public void actionPerformed(@NotNull AnActionEvent e) {
-    BrowserUtil.browse(this.url);
-  }
+    @Override
+    public void actionPerformed(@NotNull AnActionEvent e) {
+        BrowserUtil.browse(this.url);
+    }
 }
