@@ -19,7 +19,7 @@ public class Foo
 		*/
 		/*
 		The following line is an example with an indent:
-		    This line is indented by 4 spaces but will be converted to 1 tab
+			This line is indented by 4 spaces but will be converted to 1 tab
 		*/
 		/*
 		The following line is an example with an indent:
