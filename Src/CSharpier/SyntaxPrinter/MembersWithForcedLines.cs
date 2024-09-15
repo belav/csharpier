@@ -19,7 +19,7 @@ internal static class MembersWithForcedLines
         {
             result.Add(Doc.HardLine);
         }
-        ;
+
         var unFormattedCode = new StringBuilder();
         var printUnformatted = false;
         var lastMemberForcedBlankLine = false;

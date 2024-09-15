@@ -64,6 +64,53 @@ public class ClassName
         var unformatted =        true;
         var unformatted =        true;
     }
+
+    void ObjectInitialize()
+    {
+        return new SomeClass
+        {
+            // csharpier-ignore-start
+            SomeProperty =     someValue
+            // csharpier-ignore-end
+        };
+
+        return new SomeClass
+        {
+            SomeProperty1 = 1,
+
+            // csharpier-ignore-start
+            SomeProperty2 =     2,
+            // csharpier-ignore-end
+            SomeProperty3 = 3,
+        };
+
+        return new Lines
+        {
+            // csharpier-ignore-start
+            SomeProperty =     someValue,
+            SomeProperty2 =     someValue
+            // csharpier-ignore-end
+        };
+
+        return new Lines
+        {
+            // csharpier-ignore-start
+            SomeProperty =     someValue,
+
+            SomeProperty2 =     someValue
+            // csharpier-ignore-end
+        };
+
+        return new Lines
+        {
+            // csharpier-ignore-start
+            SomeProperty =     someValue,
+
+
+            SomeProperty2 =     someValue
+            // csharpier-ignore-end
+        };
+    }
 }
 
 public class ClassName2

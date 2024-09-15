@@ -203,7 +203,7 @@ endOfLine: crlf
     }
 
     [Test]
-    public async Task Should_Return_TabWidth_For_Overrid()
+    public async Task Should_Return_TabWidth_For_Override()
     {
         var context = new TestContext();
         context.WhenAFileExists(
@@ -525,6 +525,24 @@ indent_size = 2
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+        result.IndentSize.Should().Be(2);
+    }
+
+    [Test]
+    public async Task Should_Return_IndentSize_For_Formatter_In_Editorconfig()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            """
+            [*.cst]
+            indent_size = 2
+            csharpier_formatter = csharp
+            """
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cst");
+
         result.IndentSize.Should().Be(2);
     }
 
