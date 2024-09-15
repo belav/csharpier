@@ -221,6 +221,12 @@ internal class DocPrinter
                         this.Output.Append(indent.Value);
                         spacesToAppend -= indentLength;
                     }
+
+                    while (spacesToAppend > 0 && spacesToAppend >= this.PrinterOptions.IndentSize)
+                    {
+                        this.Output.Append('\t');
+                        spacesToAppend -= this.PrinterOptions.IndentSize;
+                    }
                 }
                 if (spacesToAppend > 0)
                 {
