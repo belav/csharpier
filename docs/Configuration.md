@@ -81,6 +81,7 @@ The long term plan is to improve Csharpier's ability to determine the symbol set
 
 ### Configuration Overrides ###
 _First available in 0.29.0_
+
 Overrides allows you to specify different configuration options based on glob patterns. This can be used to format non-standard extensions, or to change options based on file path. Top level options will apply to `**/*.{cs,csx}`
 
 ```json
@@ -114,7 +115,7 @@ _First available in 0.26.0_
 CSharpier supports configuration via an `.editorconfig` file. A `.csharpierrc*` file in the same directory will take priority.
 
 ```ini
-[*]
+[*.{cs|csx}]
 # Non-configurable behaviors
 charset = utf-8
 insert_final_newline = true
@@ -123,9 +124,20 @@ dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = false
 
 # Configurable behaviors
-# end_of_line = lf - there is no 'auto' with a .editorconfig
+# end_of_line = lf - there is no 'auto' with an .editorconfig
 indent_style = space
 indent_size = 4
 max_line_length = 100
-
 ```
+
+_First available in 0.29.2_
+
+Formatting non-standard file extensions using csharpier can be accomplished with the `csharpier_formatter` option
+```ini
+[*.cst]
+csharpier_formatter = csharp
+indent_style = space
+indent_size = 2
+max_line_length = 80
+```
+
