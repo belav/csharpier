@@ -4,6 +4,8 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests.Samples;
 
+using Microsoft.CodeAnalysis;
+
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
 public class Samples
@@ -36,7 +38,14 @@ public class Samples
             new PrinterOptions { IncludeDocTree = true, IncludeAST = true }
         );
 
-        var syntaxNodeComparer = new SyntaxNodeComparer(code, result.Code, CancellationToken.None);
+        var syntaxNodeComparer = new SyntaxNodeComparer(
+            code,
+            result.Code,
+            false,
+            false,
+            SourceCodeKind.Regular,
+            CancellationToken.None
+        );
 
         var compareResult = syntaxNodeComparer.CompareSource();
         compareResult.Should().BeEmpty();

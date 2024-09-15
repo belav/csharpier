@@ -7,7 +7,7 @@ internal static class AnonymousMethodExpression
         var docs = new List<Doc>
         {
             Modifiers.Print(node.Modifiers, context),
-            Token.Print(node.DelegateKeyword, context)
+            Token.Print(node.DelegateKeyword, context),
         };
 
         if (node.ParameterList != null)

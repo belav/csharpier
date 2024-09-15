@@ -8,6 +8,10 @@ public class ClassName
         // comment stays on this line
         $"two";
 
+    public string TrailingComment = someCondition
+        ? $"empty" // trailing comment
+        : someString;
+
     public string TwoValues = $"{SomeValue}{SomeOtherValue}";
 
     public string ForceFlatInString =
@@ -24,5 +28,37 @@ public class ClassName
         var s2 = $"x {1, -2}";
         var s3 = $"x {1:d}";
         var trailingComment = $"{someValue /* Comment shouldn't cause new line */}";
+    }
+
+    void RawString()
+    {
+        var multiLineRawInterpolated = $"""
+        this has the wrong indentation but because the interpolation contains new lines we leave it
+        {(someValue ?
+        One : Two)
+        }
+        """;
+
+        var multiLineRawInterpolated = $"""
+            This is a long message.
+            It has several lines.
+                Some are indented
+                        more than others.
+            Some should start at the first column.
+            Some have "quoted text" in them.
+            """;
+
+        var multiLineRawInterpolated = $"""
+            {one}
+            And {two} And
+            Just Text
+            {three}
+            """;
+
+        var multiLineRawInterpolated = $"""
+            {one}
+            And {two} And
+            Just Text
+            """;
     }
 }

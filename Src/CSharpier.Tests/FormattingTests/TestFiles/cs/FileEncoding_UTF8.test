@@ -6,5 +6,5 @@ public class ClassName
 public enum MeetingLocation
 {
     Café,
-    Restaurant
+    Restaurant,
 }

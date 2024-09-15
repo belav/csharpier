@@ -16,7 +16,7 @@ internal static class DocUtilities
             IHasContents hasContents => ContainsBreak(hasContents.Contents),
             Concat concat => concat.Contents.Any(ContainsBreak),
             IfBreak ifBreak => ContainsBreak(ifBreak.FlatContents),
-            _ => false
+            _ => false,
         };
     }
 
@@ -28,7 +28,7 @@ internal static class DocUtilities
             HardLine => true,
             LiteralLine => true,
             BreakParent => true,
-            _ => false
+            _ => false,
         };
     }
 
@@ -63,14 +63,14 @@ internal static class DocUtilities
 
             x++;
         }
-
-        return;
     }
 
-    public static void RemoveInitialDoubleHardLine(Doc doc)
+    public static Doc RemoveInitialDoubleHardLine(Doc doc)
     {
         var removeNextHardLine = false;
         RemoveInitialDoubleHardLine(doc, ref removeNextHardLine);
+
+        return doc;
     }
 
     private static void RemoveInitialDoubleHardLine(Doc doc, ref bool removeNextHardLine)

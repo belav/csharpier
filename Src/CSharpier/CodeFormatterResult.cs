@@ -13,4 +13,7 @@ public class CodeFormatterResult
     internal string FailureMessage { get; init; } = string.Empty;
 
     internal static readonly CodeFormatterResult Null = new();
+
+    internal bool ReorderedModifiers { get; init; }
+    internal bool ReorderedUsingsWithDisabledText { get; init; }
 }

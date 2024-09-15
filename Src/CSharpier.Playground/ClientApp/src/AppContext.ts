@@ -2,11 +2,41 @@ import { createContext, useContext } from "react";
 import { makeAutoObservable, runInAction } from "mobx";
 import { formatCode, setFormattedCodeEditor } from "./FormatCode";
 
+const getString = (key: string, defaultValue: string) => {
+    const result = window.sessionStorage.getItem(key);
+    if (result === null) {
+        return defaultValue;
+    }
+
+    return result;
+};
+
+const getBoolean = (key: string, defaultValue: boolean) => {
+    const result = window.sessionStorage.getItem(key);
+    if (result === null) {
+        return defaultValue;
+    }
+
+    return !!result;
+};
+
+const getNumber = (key: string, defaultValue: number) => {
+    const result = window.sessionStorage.getItem(key);
+    if (result === null) {
+        return defaultValue;
+    }
+
+    return parseInt(result, 10);
+};
+
 class AppState {
-    fileExtension = window.sessionStorage.getItem("fileExtension") ?? "cs";
-    showAst = window.sessionStorage.getItem("showAst") === "true";
-    showDoc = window.sessionStorage.getItem("showDoc") === "true";
-    hideNull = window.sessionStorage.getItem("hideNull") === "true";
+    printWidth = getNumber("printWidth", 100);
+    indentSize = getNumber("indentSize", 4);
+    useTabs = getBoolean("useTabs", false);
+    parser = getString("parser", "CSharp");
+    showAst = getBoolean("showAst", false);
+    showDoc = getBoolean("showDoc", false);
+    hideNull = getBoolean("hideNull", false);
     doc = "";
     isLoading = false;
     hasErrors = false;
@@ -18,15 +48,24 @@ class AppState {
         makeAutoObservable(this);
     }
 
-    setFileExtension = (value: string) => {
-        window.sessionStorage.setItem("fileExtension", value);
-        this.fileExtension = value;
-        if (value === "cs") {
-            this.setEnteredCode(defaultCs);
-        } else {
-            this.setEnteredCode(defaultCsProj);
-        }
-        this.formatCode();
+    setParser = (value: string) => {
+        window.sessionStorage.setItem("parser", value);
+        this.parser = value;
+    };
+
+    setIndentSize = (value: number) => {
+        window.sessionStorage.setItem("indentSize", value.toString(10));
+        this.indentSize = value;
+    };
+
+    setPrintWidth = (value: number) => {
+        window.sessionStorage.setItem("printWidth", value.toString(10));
+        this.printWidth = value;
+    };
+
+    setUseTabs = (value: boolean) => {
+        window.sessionStorage.setItem("useTabs", value.toString());
+        this.useTabs = value;
     };
 
     setShowAst = (value: boolean) => {
@@ -74,7 +113,13 @@ class AppState {
         (async () => {
             this.isLoading = true;
 
-            const { syntaxTree, formattedCode, doc, hasErrors } = await formatCode(this.enteredCode, this.fileExtension);
+            const { syntaxTree, formattedCode, doc, hasErrors } = await formatCode(
+                this.enteredCode,
+                this.printWidth,
+                this.indentSize,
+                this.useTabs,
+                this.parser,
+            );
 
             runInAction(() => {
                 this.isLoading = false;

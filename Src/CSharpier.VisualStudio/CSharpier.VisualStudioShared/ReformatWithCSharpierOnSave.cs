@@ -1,4 +1,4 @@
-using System.Linq;
+using System;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -26,8 +26,9 @@ namespace CSharpier.VisualStudio
 
         public static async Task InitializeAsync(CSharpierPackage package)
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
-            new ReformatWithCSharpierOnSave(package, dte!);
+            _ = new ReformatWithCSharpierOnSave(package, dte!);
         }
 
         public int OnBeforeSave(uint docCookie)
@@ -52,7 +53,6 @@ namespace CSharpier.VisualStudio
             }
 
             this.formattingService.Format(document);
-
             return VSConstants.S_OK;
         }
 
@@ -70,14 +70,21 @@ namespace CSharpier.VisualStudio
 
         private Document? FindDocument(uint docCookie)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
+            try
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                var documentInfo = this.runningDocumentTable.GetDocumentInfo(docCookie);
+                var documentPath = documentInfo.Moniker;
 
-            var documentInfo = this.runningDocumentTable.GetDocumentInfo(docCookie);
-            var documentPath = documentInfo.Moniker;
-
-            return this.dte.Documents
-                .Cast<Document>()
-                .FirstOrDefault(o => o.FullName == documentPath);
+                return this.dte.ActiveDocument?.FullName == documentPath
+                    ? this.dte.ActiveDocument
+                    : this.dte.Documents?.Item(documentPath);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error(ex);
+                return null;
+            }
         }
 
         public int OnAfterFirstDocumentLock(

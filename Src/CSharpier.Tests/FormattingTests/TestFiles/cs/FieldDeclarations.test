@@ -20,7 +20,7 @@ public class ClassName
     )
     {
         Property1 = 1,
-        Property2 = 2
+        Property2 = 2,
     };
 
     private LotsOfParametersToCauseBreaking ShortFieldName = new LotsOfParametersToCauseBreaking(
@@ -44,7 +44,7 @@ public class ClassName
         Property2 = false,
         Property3 = false,
         Property4 = false,
-        Property5 = false
+        Property5 = false,
     };
 
     // leading comments

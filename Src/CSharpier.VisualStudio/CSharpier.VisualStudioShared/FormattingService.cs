@@ -49,38 +49,83 @@ namespace CSharpier.VisualStudio
             var endPoint = textDocument.EndPoint.CreateEditPoint();
             var text = startPoint.GetText(endPoint);
 
-            this.logger.Info("Formatting started for " + document.FullName + ".");
+            var csharpierProcess = this.cSharpierProcessProvider.GetProcessFor(document.FullName);
+
+            this.logger.Info(
+                "Formatting started for "
+                    + document.FullName
+                    + " using CSharpier "
+                    + csharpierProcess.Version
+            );
             var stopwatch = Stopwatch.StartNew();
 
-            var newText = this.cSharpierProcessProvider
-                .GetProcessFor(document.FullName)
-                .FormatFile(text, document.FullName);
-
-            this.logger.Info("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");
-            if (string.IsNullOrEmpty(newText) || newText.Equals(text))
+            void UpdateText(string formattedText)
             {
-                this.logger.Debug(
-                    "Skipping write because "
-                        + (
-                            string.IsNullOrEmpty(newText)
-                                ? "result is empty"
-                                : "current document equals result"
-                        )
+                startPoint.ReplaceText(
+                    endPoint,
+                    formattedText,
+                    (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers
                 );
-                return;
             }
 
-            startPoint.ReplaceText(
-                endPoint,
-                newText,
-                (int)vsEPReplaceTextOptions.vsEPReplaceTextKeepMarkers
-            );
+            if (csharpierProcess is ICSharpierProcess2 csharpierProcess2)
+            {
+                var parameter = new FormatFileParameter
+                {
+                    fileContents = text,
+                    fileName = document.FullName,
+                };
+                var result = csharpierProcess2.formatFile(parameter);
+
+                this.logger.Info("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");
+
+                if (result == null)
+                {
+                    return;
+                }
+
+                switch (result.status)
+                {
+                    case Status.Formatted:
+                        UpdateText(result.formattedFile);
+                        break;
+                    case Status.Ignored:
+                        this.logger.Info("File is ignored by csharpier cli.");
+                        break;
+                    case Status.Failed:
+                        this.logger.Warn(
+                            "CSharpier cli failed to format the file and returned the following error: "
+                                + result.errorMessage
+                        );
+                        break;
+                }
+            }
+            else
+            {
+                var result = csharpierProcess.FormatFile(text, document.FullName);
+
+                this.logger.Info("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");
+
+                if (string.IsNullOrEmpty(result) || result.Equals(text))
+                {
+                    this.logger.Debug(
+                        "Skipping write because "
+                            + (
+                                string.IsNullOrEmpty(result)
+                                    ? "result is empty"
+                                    : "current document equals result"
+                            )
+                    );
+                }
+                else
+                {
+                    UpdateText(result);
+                }
+            }
         }
 
         public bool ProcessSupportsFormatting(Document document) =>
-            !(
-                this.cSharpierProcessProvider.GetProcessFor(document.FullName)
-                is NullCSharpierProcess
-            );
+            this.cSharpierProcessProvider.GetProcessFor(document.FullName)
+                is not NullCSharpierProcess;
     }
 }

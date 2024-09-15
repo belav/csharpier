@@ -1,0 +1,21 @@
+int[] someArray = [.. someOtherArray];
+int[] someOtherArray = [.. value1, .. value2, .. value3];
+
+int[] someOtherArray =
+[
+    .. value1________________________________,
+    .. value2________________________________,
+    .. value3________________________________,
+];
+
+List<KeyValuePair<string, string>> list =
+[
+    .. attribute
+        .Targets.Select(target =>
+            KeyValuePair.Create(
+                target,
+                context.EntityDefinitions.TryGetValue(target, out var type) ? type.ClassName : null
+            )
+        )
+        .Where(kvp => kvp.Value != null),
+];

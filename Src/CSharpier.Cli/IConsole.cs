@@ -2,7 +2,7 @@ using System.Text;
 
 namespace CSharpier.Cli;
 
-public interface IConsole
+internal interface IConsole
 {
     void WriteLine(string? line = null);
     void WriteErrorLine(string? line = null);
@@ -13,7 +13,7 @@ public interface IConsole
     void ResetColor();
 }
 
-public class SystemConsole : IConsole
+internal class SystemConsole : IConsole
 {
     public SystemConsole()
     {

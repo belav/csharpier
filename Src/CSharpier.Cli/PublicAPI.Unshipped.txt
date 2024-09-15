@@ -1,0 +1,1 @@
+﻿CSharpier.Cli.Server.Status.UnsupportedFile = 3 -> CSharpier.Cli.Server.Status

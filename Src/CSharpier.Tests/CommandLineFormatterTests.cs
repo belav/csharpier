@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Abstractions.TestingHelpers;
-using System.Linq;
 using System.Text;
-using System.Threading;
 using CSharpier.Cli;
 using FluentAssertions;
 using NUnit.Framework;
 
 namespace CSharpier.Tests;
+
+using Microsoft.Extensions.Logging;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
@@ -27,10 +24,28 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context);
 
-        result.ErrorLines
-            .First()
+        result
+            .ErrorOutputLines.First()
             .Should()
             .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
+
+        result.ExitCode.Should().Be(1);
+    }
+
+    [Test]
+    public void Format_Writes_Failed_To_Compile_As_Warning()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Invalid.cs", "asdfasfasdf");
+
+        var result = this.Format(context, compilationErrorsAsWarnings: true);
+
+        result
+            .OutputLines.First()
+            .Should()
+            .Be("Warning ./Invalid.cs - Failed to compile so was not formatted.");
+
+        result.ExitCode.Should().Be(0);
     }
 
     [Test]
@@ -41,8 +56,8 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context, directoryOrFilePaths: "Subdirectory");
 
-        result.ErrorLines
-            .First()
+        result
+            .ErrorOutputLines.First()
             .Should()
             .Be("Error ./Subdirectory/Invalid.cs - Failed to compile so was not formatted.");
     }
@@ -58,8 +73,8 @@ public class CommandLineFormatterTests
             directoryOrFilePaths: Path.Combine(context.GetRootPath(), "Subdirectory")
         );
 
-        result.ErrorLines
-            .First()
+        result
+            .ErrorOutputLines.First()
             .Should()
             .Be(
                 $"Error {context.GetRootPath().Replace('\\', '/')}/Subdirectory/Invalid.cs - Failed to compile so was not formatted."
@@ -74,8 +89,8 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context);
 
-        result.ErrorLines
-            .First()
+        result
+            .ErrorOutputLines.First()
             .Should()
             .Be("Error ./Directory/Invalid.cs - Failed to compile so was not formatted.");
     }
@@ -88,20 +103,84 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context, directoryOrFilePaths: "Unsupported.js");
 
-        result.ErrorLines
-            .First()
+        result
+            .OutputLines.First()
             .Should()
-            .Be(@"Error ./Unsupported.js - Is an unsupported file type.");
+            .Be("Warning ./Unsupported.js - Is an unsupported file type.");
+    }
+
+    [Test]
+    public void Format_Does_Not_Write_Unsupported_When_Formatting_Directory()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Unsupported.js", "asdfasfasdf");
+
+        var result = this.Format(context);
+
+        result.OutputLines.First().Should().StartWith("Formatted 0 files");
     }
 
     [Test]
     public void Format_Writes_File_With_Directory_Path()
     {
         var context = new TestContext();
-        const string unformattedFilePath = "Unformatted.cs";
+        var unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
         this.Format(context);
+
+        context.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
+    }
+
+    [Test]
+    public void Formats_CSX_File()
+    {
+        var context = new TestContext();
+        var unformattedFilePath = "Unformatted.csx";
+        context.WhenAFileExists(
+            unformattedFilePath,
+            """
+            #r "Microsoft.WindowsAzure.Storage"
+
+            public static void Run()
+            {
+            }
+            """
+        );
+
+        var result = this.Format(context);
+        result.OutputLines.First().Should().StartWith("Formatted 1 files");
+
+        context
+            .GetFileContent(unformattedFilePath)
+            .Should()
+            .Be(
+                """
+                #r "Microsoft.WindowsAzure.Storage"
+
+                public static void Run() { }
+
+                """
+            );
+    }
+
+    [Test]
+    public void Formats_Overrides_File()
+    {
+        var context = new TestContext();
+        var unformattedFilePath = "Unformatted.cst";
+        context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
+        context.WhenAFileExists(
+            ".csharpierrc",
+            """
+            overrides:
+              - files: "*.cst"
+                formatter: "csharp"
+            """
+        );
+
+        var result = this.Format(context);
+        result.OutputLines.First().Should().StartWith("Formatted 1 files");
 
         context.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
     }
@@ -131,13 +210,13 @@ public class CommandLineFormatterTests
         if (shouldPass)
         {
             result.ExitCode.Should().Be(0);
-            result.ErrorLines.Should().BeEmpty();
+            result.ErrorOutputLines.Should().BeEmpty();
         }
         else
         {
             result.ExitCode.Should().Be(1);
-            result.ErrorLines
-                .First()
+            result
+                .ErrorOutputLines.First()
                 .Should()
                 .EndWith(
                     $@"Test.csproj uses version {version} of CSharpier.MsBuild which is a mismatch with version {currentVersion}"
@@ -163,13 +242,63 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context);
 
-        result.ExitCode.Should().Be(1);
-        result.ErrorLines
-            .First()
+        result.ExitCode.Should().Be(0);
+        result
+            .OutputLines.First()
             .Should()
-            .EndWith(
-                $"Test.csproj uses an unknown version of CSharpier.MsBuild which is a mismatch with version {currentVersion}"
-            );
+            .EndWith($"Test.csproj uses an unknown version of CSharpier.MsBuild");
+    }
+
+    [TestCase("0.9.0", false)]
+    [TestCase("9999.0.0", false)]
+    [TestCase("current", true)]
+    public void Works_With_MSBuild_Version_Checking_When_No_Version_Specified_With_Directory_Props(
+        string version,
+        bool shouldPass
+    )
+    {
+        var context = new TestContext();
+        var currentVersion = typeof(CommandLineFormatter).Assembly.GetName().Version!.ToString(3);
+
+        var versionToTest = version == "current" ? currentVersion : version;
+
+        context.WhenAFileExists(
+            "Test.csproj",
+            $@"<Project Sdk=""Microsoft.NET.Sdk"">
+    <ItemGroup>
+        <PackageReference Include=""CSharpier.MsBuild"" />
+    </ItemGroup>
+</Project>
+"
+        );
+
+        context.WhenAFileExists(
+            "Directory.Packages.props",
+            $@"<Project>
+  <ItemGroup>
+    <PackageVersion Include=""CSharpier.MsBuild"" Version=""{versionToTest}"" />
+  </ItemGroup>
+</Project>
+"
+        );
+
+        var result = this.Format(context);
+
+        if (shouldPass)
+        {
+            result.ExitCode.Should().Be(0);
+            result.ErrorOutputLines.Should().BeEmpty();
+        }
+        else
+        {
+            result.ExitCode.Should().Be(1);
+            result
+                .ErrorOutputLines.First()
+                .Should()
+                .EndWith(
+                    $@"Test.csproj uses version {version} of CSharpier.MsBuild which is a mismatch with version {currentVersion}"
+                );
+        }
     }
 
     [Test]
@@ -190,7 +319,7 @@ public class CommandLineFormatterTests
         var result = this.Format(context);
 
         result.ExitCode.Should().Be(0);
-        result.ErrorLines.Should().BeEmpty();
+        result.ErrorOutputLines.Should().BeEmpty();
     }
 
     [Test]
@@ -228,13 +357,19 @@ public class CommandLineFormatterTests
 
         result.ExitCode.Should().Be(1);
         context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
-        result.Lines.First().Should().StartWith("Warning ./Unformatted.cs - Was not formatted.");
+        result
+            .ErrorOutputLines.First()
+            .Should()
+            .StartWith("Error ./Unformatted.cs - Was not formatted.");
     }
 
-    [TestCase("Src/node_modules/NodeFile.cs")]
-    [TestCase("node_modules/NodeFile.cs")]
-    [TestCase("node_modules/NodeFolder/NodeFile.cs")]
-    public void Format_Ignores_Node_Modules_File(string filePath)
+    [TestCase("Src/node_modules/File.cs")]
+    [TestCase("node_modules/File.cs")]
+    [TestCase("node_modules/Folder/File.cs")]
+    [TestCase("Src/obj/File.cs")]
+    [TestCase("obj/File.cs")]
+    [TestCase("obj/Folder/File.cs")]
+    public void Format_Ignores_Files_In_Special_Folders(string filePath)
     {
         var context = new TestContext();
         context.WhenAFileExists(filePath, UnformattedClassContent);
@@ -268,7 +403,58 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context);
 
-        result.Lines.Should().Contain("Total files: 0 ");
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
+    }
+
+    [TestCase("TemporaryGeneratedFile_Tester.cs")]
+    [TestCase("TestFile.designer.cs")]
+    [TestCase("TestFile.generated.cs")]
+    [TestCase("TestFile.g.cs")]
+    [TestCase("TestFile.g.i.cs")]
+    public void Format_Formats_Generated_Files_When_Include_Generated(string fileName)
+    {
+        var context = new TestContext();
+        var unformattedFilePath = fileName;
+        context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
+
+        var result = this.Format(context, includeGenerated: true);
+
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
+    }
+
+    [TestCase("// <autogenerated />")]
+    [TestCase("/* <autogenerated /> */")]
+    [TestCase("// <auto-generated />")]
+    [TestCase("/* <auto-generated /> */")]
+    public void Format_Skips_Auto_Generated_Comment_File(string comment)
+    {
+        var context = new TestContext();
+        var unformattedContent = $"{comment}\n{UnformattedClassContent}";
+        context.WhenAFileExists("AutoGenerated.cs", unformattedContent);
+
+        var result = this.Format(context);
+
+        result.ExitCode.Should().Be(0);
+        context.GetFileContent("AutoGenerated.cs").Should().Be(unformattedContent);
+    }
+
+    [TestCase("// <autogenerated />")]
+    [TestCase("/* <autogenerated /> */")]
+    [TestCase("// <auto-generated />")]
+    [TestCase("/* <auto-generated /> */")]
+    public void Format_Formats_Auto_Generated_Comment_File_When_Include_Generated(string comment)
+    {
+        var context = new TestContext();
+        var unformattedContent = $"{comment}\n{UnformattedClassContent}";
+        context.WhenAFileExists("AutoGenerated.cs", unformattedContent);
+
+        var result = this.Format(context, includeGenerated: true);
+
+        result.ExitCode.Should().Be(0);
+        context
+            .GetFileContent("AutoGenerated.cs")
+            .Should()
+            .Be($"{comment}\n{FormattedClassContent}");
     }
 
     [TestCase("File.cs", "File.cs")]
@@ -278,7 +464,7 @@ public class CommandLineFormatterTests
     [TestCase("Debug/Logs/File.cs", "Logs/")]
     [TestCase("Debug/Logs/File.cs", "Debug/Logs/File.cs")]
     [TestCase(
-        @"\Src\CSharpier.Playground\App_Data\Uploads\f45e11a81b926de2af29459af6974bb8.cs",
+        @"Src/CSharpier.Playground/App_Data/Uploads/f45e11a81b926de2af29459af6974bb8.cs",
         "Uploads/"
     )]
     public void File_In_Ignore_Skips_Formatting(string fileName, string ignoreContents)
@@ -290,10 +476,7 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context);
 
-        result.Lines
-            .FirstOrDefault(o => o.StartsWith("Total files"))
-            .Should()
-            .Be("Total files: 0 ");
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [TestCase("SubFolder/File.cs", "*.cs", "SubFolder")]
@@ -314,10 +497,7 @@ public class CommandLineFormatterTests
             directoryOrFilePaths: Path.Combine(context.GetRootPath(), baseDirectory)
         );
 
-        result.Lines
-            .FirstOrDefault(o => o.StartsWith("Total files"))
-            .Should()
-            .Be("Total files: 0 ");
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -335,10 +515,7 @@ public class CommandLineFormatterTests
             directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
         );
 
-        result.Lines
-            .FirstOrDefault(o => o.StartsWith("Total files"))
-            .Should()
-            .Be("Total files: 0 ");
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -357,10 +534,7 @@ public class CommandLineFormatterTests
             directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
         );
 
-        result.Lines
-            .FirstOrDefault(o => o.StartsWith("Total files"))
-            .Should()
-            .Be("Total files: 0 ");
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -373,10 +547,7 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context, directoryOrFilePaths: "Directory.WithPeriod");
 
-        result.Lines
-            .FirstOrDefault(o => o.StartsWith("Total files"))
-            .Should()
-            .Be("Total files: 0 ");
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -389,10 +560,7 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context, directoryOrFilePaths: unformattedFilePath1);
 
-        result.Lines
-            .FirstOrDefault(o => o.StartsWith("Total files"))
-            .Should()
-            .Be("Total files: 0 ");
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -405,14 +573,14 @@ public class CommandLineFormatterTests
         var result = this.Format(context);
 
         result.ExitCode.Should().Be(1);
-        result.ErrorLines
-            .First()
+        result
+            .ErrorOutputLines.First()
             .Replace("\\", "/")
             .Should()
             .Contain(
                 $"Error The .csharpierignore file at {path} could not be parsed due to the following line:"
             );
-        result.ErrorLines.Skip(1).First().Should().Contain(@"\Src\Uploads\*.cs");
+        result.ErrorOutputLines.Skip(1).First().Should().Contain(@"\Src\Uploads\*.cs");
     }
 
     [Test]
@@ -423,8 +591,8 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context, writeStdout: true);
 
-        result.Lines.Should().ContainSingle();
-        result.Lines.First().Should().Be(FormattedClassContent);
+        result.OutputLines.Should().ContainSingle();
+        result.OutputLines.First().Should().Be(FormattedClassContent);
     }
 
     [Test]
@@ -433,8 +601,8 @@ public class CommandLineFormatterTests
         var context = new TestContext();
         var result = this.Format(context, standardInFileContents: UnformattedClassContent);
 
-        result.Lines.Should().ContainSingle();
-        result.Lines.First().Should().Be(FormattedClassContent);
+        result.OutputLines.Should().ContainSingle();
+        result.OutputLines.First().Should().Be(FormattedClassContent);
     }
 
     [Test]
@@ -465,51 +633,50 @@ public class CommandLineFormatterTests
         var result = this.Format(context);
 
         context.GetFileContent("Invalid.cs").Should().Be(contents);
-        result.ErrorLines
-            .First()
+        result
+            .ErrorOutputLines.First()
             .Should()
             .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
     }
 
-    [Test]
-    public void File_Should_Format_With_Supplied_Symbols()
+    [TestCase(
+        @"class ClassName
+{
+#if DEBUG
+    private void MethodName() { }
+
+    static public void ReorderModifiers() { }
+#endif
+}
+"
+    )]
+    [TestCase(
+        @"#if DEBUG
+
+class ClassName
+{
+    private static string field1;
+
+    static public string reorderedField;
+}
+
+#endif
+"
+    )]
+    public void File_With_Reorder_Modifiers_In_If_Directive_Should_Pass_Validation(string contents)
     {
         var context = new TestContext();
-        context.WhenAFileExists(".csharpierrc", @"{ ""preprocessorSymbolSets"": [""FORMAT""] }");
-        context.WhenAFileExists(
-            "file1.cs",
-            @"public class ClassName
-{
-#if FORMAT
-    public     string ShortPropertyName;
-#elif NO_FORMAT
-    public     string ShortPropertyName;
-#else
-    public     string ShortPropertyName;
-#endif
-}
-"
-        );
 
-        this.Format(context);
+        context.WhenAFileExists("file1.cs", contents);
 
-        var result = context.GetFileContent("file1.cs");
+        var result = this.Format(context);
 
-        result
+        context
+            .GetFileContent("file1.cs")
             .Should()
-            .Be(
-                @"public class ClassName
-{
-#if FORMAT
-    public string ShortPropertyName;
-#elif NO_FORMAT
-    public     string ShortPropertyName;
-#else
-    public     string ShortPropertyName;
-#endif
-}
-"
-            );
+            .Be(contents.Replace("static public", "public static"));
+        result.ErrorOutputLines.Should().BeEmpty();
+        result.OutputLines.First().Should().StartWith("Formatted 1 files in");
     }
 
     [TestCase(".csharpierrc")]
@@ -523,8 +690,8 @@ public class CommandLineFormatterTests
 
         var result = this.Format(context);
 
-        result.Lines
-            .First()
+        result
+            .OutputLines.First()
             .Replace("\\", "/")
             .Should()
             .Be($"Warning The configuration file at {configPath} was empty.");
@@ -535,6 +702,8 @@ public class CommandLineFormatterTests
         bool skipWrite = false,
         bool check = false,
         bool writeStdout = false,
+        bool includeGenerated = false,
+        bool compilationErrorsAsWarnings = false,
         string? standardInFileContents = null,
         params string[] directoryOrFilePaths
     )
@@ -553,7 +722,7 @@ public class CommandLineFormatterTests
         }
 
         var fakeConsole = new TestConsole();
-        var testLogger = new ConsoleLogger(fakeConsole);
+        var testLogger = new ConsoleLogger(fakeConsole, LogLevel.Information);
         var exitCode = CommandLineFormatter
             .Format(
                 new CommandLineOptions
@@ -564,6 +733,8 @@ public class CommandLineFormatterTests
                     Check = check,
                     WriteStdout = writeStdout || standardInFileContents != null,
                     StandardInFileContents = standardInFileContents,
+                    IncludeGenerated = includeGenerated,
+                    CompilationErrorsAsWarnings = compilationErrorsAsWarnings,
                 },
                 context.FileSystem,
                 fakeConsole,
@@ -603,7 +774,11 @@ public class CommandLineFormatterTests
         }
     }
 
-    private record FormatResult(int ExitCode, IList<string> Lines, IList<string> ErrorLines);
+    private record FormatResult(
+        int ExitCode,
+        IList<string> OutputLines,
+        IList<string> ErrorOutputLines
+    );
 
     private class TestConsole : IConsole
     {

@@ -5,15 +5,14 @@ namespace CSharpier.FakeGenerators;
 
 public static class ValidNodeTypes
 {
-    public static IEnumerable<Type> Get()
+    public static IList<Type> Get()
     {
-        return typeof(CompilationUnitSyntax).Assembly
-            .GetTypes()
-            .Where(
-                o =>
-                    !o.IsAbstract
-                    && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
-                    && !Ignored.UnsupportedNodes.Contains(o.Name)
+        return typeof(CompilationUnitSyntax)
+            .Assembly.GetTypes()
+            .Where(o =>
+                !o.IsAbstract
+                && typeof(CSharpSyntaxNode).IsAssignableFrom(o)
+                && !Ignored.UnsupportedNodes.Contains(o.Name)
             )
             .OrderBy(o => o.Name)
             .ToList();

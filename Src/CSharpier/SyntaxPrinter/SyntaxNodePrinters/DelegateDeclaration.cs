@@ -7,10 +7,10 @@ internal static class DelegateDeclaration
         var docs = new List<Doc>
         {
             AttributeLists.Print(node, node.AttributeLists, context),
-            Modifiers.Print(node.Modifiers, context),
+            Modifiers.PrintSorted(node.Modifiers, context),
             Token.PrintWithSuffix(node.DelegateKeyword, " ", context),
             Node.Print(node.ReturnType, context),
-            { " ", Token.Print(node.Identifier, context) }
+            { " ", Token.Print(node.Identifier, context) },
         };
         if (node.TypeParameterList != null)
         {

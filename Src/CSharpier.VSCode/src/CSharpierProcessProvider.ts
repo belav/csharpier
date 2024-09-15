@@ -1,15 +1,19 @@
-import {Disposable, Extension, TextEditor, window, workspace} from "vscode";
+import { Disposable, Extension, TextEditor, window, workspace } from "vscode";
 import { Logger } from "./Logger";
 import * as path from "path";
 import * as semver from "semver";
-import { execSync } from "child_process";
 import * as convert from "xml-js";
-import { ICSharpierProcess, NullCSharpierProcess } from "./CSharpierProcess";
+import { ICSharpierProcess } from "./ICSharpierProcess";
 import { CSharpierProcessSingleFile } from "./CSharpierProcessSingleFile";
 import { CSharpierProcessPipeMultipleFiles } from "./CSharpierProcessPipeMultipleFiles";
 import * as fs from "fs";
 import { InstallerService } from "./InstallerService";
 import { CustomPathInstaller } from "./CustomPathInstaller";
+import { execDotNet } from "./DotNetProvider";
+import { NullCSharpierProcess } from "./NullCSharpierProcess";
+import { CSharpierProcessServer } from "./CSharpierProcessServer";
+import { ICSharpierProcess2 } from "./ICSharpierProcess";
+import { runFunctionsUntilResultFound } from "./RunFunctionsUntilResultFound";
 
 export class CSharpierProcessProvider implements Disposable {
     warnedForOldVersion = false;
@@ -18,12 +22,24 @@ export class CSharpierProcessProvider implements Disposable {
     installerService: InstallerService;
     warmingByDirectory: Record<string, boolean | undefined> = {};
     csharpierVersionByDirectory: Record<string, string | undefined> = {};
-    csharpierProcessesByVersion: Record<string, ICSharpierProcess | undefined> = {};
+    csharpierProcessesByVersion: Record<
+        string,
+        ICSharpierProcess | ICSharpierProcess2 | undefined
+    > = {};
+    disableCSharpierServer: boolean;
 
     constructor(logger: Logger, extension: Extension<unknown>) {
         this.logger = logger;
         this.customPathInstaller = new CustomPathInstaller(logger);
-        this.installerService = new InstallerService(this.logger, this.killRunningProcesses, extension);
+        this.installerService = new InstallerService(
+            this.logger,
+            this.killRunningProcesses,
+            extension,
+        );
+
+        this.disableCSharpierServer =
+            workspace.getConfiguration("csharpier").get<boolean>("dev.disableCSharpierServer") ??
+            false;
 
         window.onDidChangeActiveTextEditor((event: TextEditor | undefined) => {
             if (event?.document?.languageId !== "csharp") {
@@ -58,7 +74,7 @@ export class CSharpierProcessProvider implements Disposable {
         delete this.warmingByDirectory[directory];
     }
 
-    public getProcessFor = (filePath: string) => {
+    public getProcessFor = (filePath: string): ICSharpierProcess | ICSharpierProcess2 => {
         const directory = this.getDirectoryOfFile(filePath);
         let version = this.csharpierVersionByDirectory[directory];
         if (!version) {
@@ -100,6 +116,51 @@ export class CSharpierProcessProvider implements Disposable {
     };
 
     private getCSharpierVersion = (directoryThatContainsFile: string): string => {
+        const csharpierVersion = runFunctionsUntilResultFound(
+            () => this.findVersionInCsProjOfParentsDirectories(directoryThatContainsFile),
+            () => this.findCSharpierVersionInToolOutput(directoryThatContainsFile, false),
+            () => this.findCSharpierVersionInToolOutput(directoryThatContainsFile, true),
+        );
+
+        if (!csharpierVersion) {
+            return "";
+        }
+
+        const versionWithoutHash = csharpierVersion.split("+")[0];
+        this.logger.debug(`Using ${versionWithoutHash} as the version number.`);
+        return versionWithoutHash;
+    };
+
+    private findCSharpierVersionInToolOutput = (
+        directoryThatContainsFile: string,
+        isGlobal: boolean,
+    ) => {
+        const command = `tool list${isGlobal ? " -g" : ""}`;
+        const output = execDotNet(command, directoryThatContainsFile).toString().trim();
+
+        this.logger.debug(`Running 'dotnet ${command}' to look for version`);
+        this.logger.debug(`Output was: \n${output}`);
+
+        const lines = output
+            .split("\n")
+            .map(line => line.trim())
+            .filter(line => line.length > 0);
+
+        // The first two lines are headers
+        for (let i = 2; i < lines.length; i++) {
+            const columns = lines[i].split(/\s{2,}/);
+            if (columns.length >= 2) {
+                if (columns[0].toLowerCase() === "csharpier") {
+                    return columns[1];
+                }
+            }
+        }
+    };
+
+    private findVersionInCsProjOfParentsDirectories = (directoryThatContainsFile: string) => {
+        this.logger.debug(
+            `Looking for csproj in or above ${directoryThatContainsFile} that references CSharpier.MsBuild`,
+        );
         let currentDirectory = directoryThatContainsFile;
         let parentNumber = 0;
         while (parentNumber < 30) {
@@ -108,45 +169,12 @@ export class CSharpierProcessProvider implements Disposable {
                 return csProjVersion;
             }
 
-            const dotnetToolsPath = path.join(currentDirectory, ".config/dotnet-tools.json");
-            this.logger.debug(`Looking for ${dotnetToolsPath}`);
-            if (fs.existsSync(dotnetToolsPath)) {
-                const data = JSON.parse(fs.readFileSync(dotnetToolsPath).toString());
-                const version = data.tools.csharpier?.version;
-                if (version) {
-                    this.logger.debug("Found version " + version + " in " + dotnetToolsPath);
-                    return version;
-                }
-            }
-
             const nextDirectory = path.join(currentDirectory, "..");
             if (nextDirectory === currentDirectory) {
                 break;
             }
             currentDirectory = nextDirectory;
             parentNumber++;
-        }
-
-        this.logger.debug(
-            "Unable to find dotnet-tools.json, falling back to running dotnet csharpier --version",
-        );
-
-        let outputFromCsharpier: string;
-
-        try {
-            outputFromCsharpier = execSync(`dotnet csharpier --version`, {
-                cwd: directoryThatContainsFile,
-                env: { ...process.env, DOTNET_NOLOGO: "1" },
-            }).toString().trim();
-
-            this.logger.debug(`dotnet csharpier --version output ${outputFromCsharpier}`);
-            return outputFromCsharpier;
-
-        } catch (error: any) {
-            const message = !error.stderr ? error.toString() : error.stderr.toString();
-
-            this.logger.debug("dotnet csharpier --version failed with " + message);
-            return "";
         }
     };
 
@@ -204,22 +232,55 @@ export class CSharpierProcessProvider implements Disposable {
                 return NullCSharpierProcess.instance;
             }
 
-            this.customPathInstaller.ensureVersionInstalled(version);
+            if (!this.customPathInstaller.ensureVersionInstalled(version)) {
+                this.logger.debug(`Unable to validate install of version ${version}`);
+                this.displayFailureMessage();
+                return NullCSharpierProcess.instance;
+            }
+
             const customPath = this.customPathInstaller.getPathForVersion(version);
 
             this.logger.debug(`Adding new version ${version} process for ${directory}`);
 
-            if (semver.lt(version, "0.12.0")) {
+            let csharpierProcess: ICSharpierProcess;
+
+            const serverVersion = "0.29.0";
+
+            if (semver.gte(version, serverVersion) && !this.disableCSharpierServer) {
+                csharpierProcess = new CSharpierProcessServer(
+                    this.logger,
+                    customPath,
+                    directory,
+                    version,
+                );
+            } else if (semver.gte(version, "0.12.0")) {
+                if (semver.gte(version, serverVersion) && this.disableCSharpierServer) {
+                    this.logger.debug(
+                        "CSharpier server is disabled, falling back to piping via stdin",
+                    );
+                }
+
+                csharpierProcess = new CSharpierProcessPipeMultipleFiles(
+                    this.logger,
+                    customPath,
+                    directory,
+                    version,
+                );
+            } else {
                 if (!this.warnedForOldVersion) {
                     window.showInformationMessage(
                         "Please upgrade to CSharpier >= 0.12.0 for bug fixes and improved formatting speed.",
                     );
                     this.warnedForOldVersion = true;
                 }
-                return new CSharpierProcessSingleFile(this.logger, customPath);
-            } else {
-                return new CSharpierProcessPipeMultipleFiles(this.logger, customPath, directory);
+                csharpierProcess = new CSharpierProcessSingleFile(this.logger, customPath, version);
             }
+
+            if (csharpierProcess.getProcessFailedToStart()) {
+                this.displayFailureMessage();
+            }
+
+            return csharpierProcess;
         } catch (ex: any) {
             this.logger.error(ex.output.toString());
             this.logger.debug(
@@ -242,4 +303,10 @@ export class CSharpierProcessProvider implements Disposable {
         this.csharpierVersionByDirectory = {};
         this.csharpierProcessesByVersion = {};
     };
+
+    private displayFailureMessage() {
+        window.showErrorMessage(
+            "CSharpier could not be set up properly so formatting is not currently supported. See Output - CSharpier for details.",
+        );
+    }
 }

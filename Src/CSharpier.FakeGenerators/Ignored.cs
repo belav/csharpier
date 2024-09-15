@@ -18,7 +18,7 @@ public static class Ignored
         "isStructuredTrivia",
         "hasStructuredTrivia",
         "containsSkippedText",
-        "containsAnnotations"
+        "containsAnnotations",
     };
 
     public static readonly Type[] Types = { typeof(TextSpan), typeof(SyntaxTree) };

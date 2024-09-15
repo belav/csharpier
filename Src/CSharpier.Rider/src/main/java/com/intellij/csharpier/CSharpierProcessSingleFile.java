@@ -1,18 +1,31 @@
 package com.intellij.csharpier;
 
-import com.esotericsoftware.minlog.Log;
 import com.intellij.openapi.diagnostic.Logger;
-
+import com.intellij.openapi.project.Project;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 
 public class CSharpierProcessSingleFile implements ICSharpierProcess {
-    Logger logger = CSharpierLogger.getInstance();
-    String csharpierPath;
 
-    public CSharpierProcessSingleFile(String csharpierPath) {
+    private final DotNetProvider dotNetProvider;
+    private final Logger logger = CSharpierLogger.getInstance();
+    private final String csharpierPath;
+    private final String version;
+
+    public CSharpierProcessSingleFile(String csharpierPath, String version, Project project) {
         this.csharpierPath = csharpierPath;
+        this.dotNetProvider = DotNetProvider.getInstance(project);
+        this.version = version;
+    }
+
+    @Override
+    public String getVersion() {
+        return this.version;
+    }
+
+    @Override
+    public boolean getProcessFailedToStart() {
+        return false;
     }
 
     @Override
@@ -21,6 +34,7 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
             this.logger.debug("Running " + this.csharpierPath + " --write-stdout");
             var processBuilder = new ProcessBuilder(this.csharpierPath, "--write-stdout");
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
+            processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
             processBuilder.redirectErrorStream(true);
             var process = processBuilder.start();
 
@@ -34,17 +48,19 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
 
             var nextCharacter = stdOut.read();
             while (nextCharacter != -1) {
-                output.append((char)nextCharacter);
+                output.append((char) nextCharacter);
                 nextCharacter = stdOut.read();
             }
 
             var result = output.toString();
 
-            if (process.exitValue() == 0 && !result.contains("Failed to compile so was not formatted.")) {
+            if (
+                process.exitValue() == 0 &&
+                !result.contains("Failed to compile so was not formatted.")
+            ) {
                 return result;
-            }
-            else {
-                Log.error(result);
+            } else {
+                this.logger.error(result);
             }
         } catch (Exception e) {
             this.logger.error("error", e);
@@ -54,7 +70,5 @@ public class CSharpierProcessSingleFile implements ICSharpierProcess {
     }
 
     @Override
-    public void dispose() {
-
-    }
+    public void dispose() {}
 }

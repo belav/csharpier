@@ -1,0 +1,7 @@
+global using Global;
+using System;
+using global::Zebra;
+using Custom;
+using static Expression;
+using Point = (int x, int y);
+using Index = Microsoft.Framework.Index;

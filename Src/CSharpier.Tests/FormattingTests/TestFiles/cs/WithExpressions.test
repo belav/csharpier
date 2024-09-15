@@ -8,7 +8,7 @@ class ClassName
         {
             Property = "Value",
             AnotherProperty = "Value",
-            YetAnother = "Value"
+            YetAnother = "Value",
         };
     }
 }

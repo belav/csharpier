@@ -12,10 +12,11 @@ public class DisabledTextComparerTests
     {
         var before = "public string    Tester;";
 
-        var after =
-            @"public
-string Tester;
-";
+        var after = """
+            public
+            string Tester;
+
+            """;
 
         DisabledTextComparer.IsCodeBasicallyEqual(before, after).Should().BeTrue();
     }
@@ -31,73 +32,113 @@ string Tester;
     }
 
     [Test]
+    public void Squash_Should_Work_For_Trailing_Comma()
+    {
+        var before = """
+            public enum Enum
+            {
+                Foo = 1,
+            }
+            """;
+
+        var after = "public enum Enum {Foo=1}\n";
+
+        Squash(before).Should().Be(Squash(after));
+    }
+
+    [Test]
+    public void Squash_Should_Work_For_Trailing_Comma_With_Attribute()
+    {
+        var before = """
+            [
+                SomeAttribute,
+            ]
+            public class ClassName { }
+            """;
+
+        var after = """
+            [SomeAttribute]
+            public class ClassName { }
+
+            """;
+
+        Squash(before).Should().Be(Squash(after));
+    }
+
+    [Test]
     public void Squash_Should_Work_With_Pointer_Stuff()
     {
-        var before =
-            @"        [MethodImpl (MethodImplOptions.InternalCall)]
-        private static unsafe extern void ApplyUpdate_internal (IntPtr base_assm, byte* dmeta_bytes, int dmeta_length, byte *dil_bytes, int dil_length, byte *dpdb_bytes, int dpdb_length);";
+        var before = """
+                    [MethodImpl (MethodImplOptions.InternalCall)]
+                    private static unsafe extern void ApplyUpdate_internal (IntPtr base_assm, byte* dmeta_bytes, int dmeta_length, byte *dil_bytes, int dil_length, byte *dpdb_bytes, int dpdb_length);
+            """;
 
-        var after =
-            @"[MethodImpl(MethodImplOptions.InternalCall)]
-        private static unsafe extern void ApplyUpdate_internal(
-            IntPtr base_assm,
-            byte* dmeta_bytes,
-            int dmeta_length,
-            byte* dil_bytes,
-            int dil_length,
-            byte* dpdb_bytes,
-            int dpdb_length
-        );
-";
+        var after = """
+            [MethodImpl(MethodImplOptions.InternalCall)]
+                    private static unsafe extern void ApplyUpdate_internal(
+                        IntPtr base_assm,
+                        byte* dmeta_bytes,
+                        int dmeta_length,
+                        byte* dil_bytes,
+                        int dil_length,
+                        byte* dpdb_bytes,
+                        int dpdb_length
+                    );
+
+            """;
         Squash(before).Should().Be(Squash(after));
     }
 
     [Test]
     public void Squash_Should_Work_With_Commas()
     {
-        var before =
-            @"
-            TypeBuilder typeBuilder = moduleBuilder.DefineType(assemblyName.FullName
-                , TypeAttributes.Public |
-                  TypeAttributes.Class |
-                  TypeAttributes.AutoClass |
-                  TypeAttributes.AnsiClass |
-                  TypeAttributes.BeforeFieldInit |
-                  TypeAttributes.AutoLayout
-                , null);
-";
+        var before = """
 
-        var after =
-            @"
-TypeBuilder typeBuilder = moduleBuilder.DefineType(
-                assemblyName.FullName,
-                TypeAttributes.Public
-                    | TypeAttributes.Class
-                    | TypeAttributes.AutoClass
-                    | TypeAttributes.AnsiClass
-                    | TypeAttributes.BeforeFieldInit
-                    | TypeAttributes.AutoLayout,
-                null
-            );
-";
+                        TypeBuilder typeBuilder = moduleBuilder.DefineType(assemblyName.FullName
+                            , TypeAttributes.Public |
+                              TypeAttributes.Class |
+                              TypeAttributes.AutoClass |
+                              TypeAttributes.AnsiClass |
+                              TypeAttributes.BeforeFieldInit |
+                              TypeAttributes.AutoLayout
+                            , null);
+
+            """;
+
+        var after = """
+
+            TypeBuilder typeBuilder = moduleBuilder.DefineType(
+                            assemblyName.FullName,
+                            TypeAttributes.Public
+                                | TypeAttributes.Class
+                                | TypeAttributes.AutoClass
+                                | TypeAttributes.AnsiClass
+                                | TypeAttributes.BeforeFieldInit
+                                | TypeAttributes.AutoLayout,
+                            null
+                        );
+
+            """;
         Squash(before).Should().Be(Squash(after));
     }
 
     [Test]
     public void Squash_Should_Work_With_Period()
     {
-        var before =
-            @"
-            var options2 = (ProxyGenerationOptions)proxy.GetType().
-                GetField(""proxyGenerationOptions"", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
-";
+        var before = """
 
-        var after =
-            @"
-            var options2 = (ProxyGenerationOptions)proxy.GetType()
-                .GetField(""proxyGenerationOptions"", BindingFlags.Static | BindingFlags.NonPublic)
-                .GetValue(null);
-";
+                        var options2 = (ProxyGenerationOptions)proxy.GetType().
+                            GetField("proxyGenerationOptions", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+
+            """;
+
+        var after = """
+
+                        var options2 = (ProxyGenerationOptions)proxy.GetType()
+                            .GetField("proxyGenerationOptions", BindingFlags.Static | BindingFlags.NonPublic)
+                            .GetValue(null);
+
+            """;
         Squash(before).Should().Be(Squash(after));
     }
 

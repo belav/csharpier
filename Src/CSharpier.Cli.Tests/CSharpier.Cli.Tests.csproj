@@ -1,15 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <IsPackable>false</IsPackable>
+    <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CliWrap"/>
-    <PackageReference Include="FluentAssertions"/>
-    <PackageReference Include="Microsoft.NET.Test.Sdk"/>
-    <PackageReference Include="NUnit"/>
-    <PackageReference Include="NUnit3TestAdapter"/>
+    <PackageReference Include="CliWrap" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="GitHubActionsTestLogger" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpier.Cli\CSharpier.Cli.csproj"/>
+    <ProjectReference Include="..\CSharpier.Cli\CSharpier.Cli.csproj" />
   </ItemGroup>
 </Project>

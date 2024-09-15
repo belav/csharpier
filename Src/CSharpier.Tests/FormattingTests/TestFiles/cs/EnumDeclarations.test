@@ -2,12 +2,12 @@ enum AnEnum
 {
     One,
     Two,
-    Three
+    Three,
 }
 
 public enum E
 {
     A,
     B = A,
-    C = 2 + A
+    C = 2 + A,
 }

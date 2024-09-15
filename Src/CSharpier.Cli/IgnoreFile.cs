@@ -1,13 +1,16 @@
 using System.IO.Abstractions;
-using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
-public class IgnoreFile
+internal class IgnoreFile
 {
     protected Ignore.Ignore Ignore { get; }
     protected string IgnoreBaseDirectoryPath { get; }
-    private static readonly string[] alwaysIgnored = { "**/node_modules/**/*.cs" };
+    private static readonly string[] alwaysIgnored =
+    {
+        "**/node_modules/**/*.cs",
+        "**/obj/**/*.cs",
+    };
 
     protected IgnoreFile(Ignore.Ignore ignore, string ignoreBaseDirectoryPath)
     {
@@ -39,12 +42,9 @@ public class IgnoreFile
     public static async Task<IgnoreFile> Create(
         string baseDirectoryPath,
         IFileSystem fileSystem,
-        ILogger logger,
         CancellationToken cancellationToken
     )
     {
-        DebugLogger.Log("Creating ignore file for " + baseDirectoryPath);
-
         var ignore = new Ignore.Ignore();
 
         foreach (var name in alwaysIgnored)
@@ -77,12 +77,16 @@ public class IgnoreFile
             }
         }
 
-        return new IgnoreFile(ignore, fileSystem.Path.GetDirectoryName(ignoreFilePath));
+        var directoryName = fileSystem.Path.GetDirectoryName(ignoreFilePath);
+
+        ArgumentNullException.ThrowIfNull(directoryName);
+
+        return new IgnoreFile(ignore, directoryName);
     }
 
     private static string? FindIgnorePath(string baseDirectoryPath, IFileSystem fileSystem)
     {
-        var directoryInfo = fileSystem.DirectoryInfo.FromDirectoryName(baseDirectoryPath);
+        var directoryInfo = fileSystem.DirectoryInfo.New(baseDirectoryPath);
         while (directoryInfo != null)
         {
             var ignoreFilePath = fileSystem.Path.Combine(
@@ -101,7 +105,7 @@ public class IgnoreFile
     }
 }
 
-public class InvalidIgnoreFileException : Exception
+internal class InvalidIgnoreFileException : Exception
 {
     public InvalidIgnoreFileException(string message, Exception exception)
         : base(message, exception) { }

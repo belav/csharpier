@@ -14,7 +14,7 @@ public class ClassName
         this.Where(async () => true);
         this.Where([Attribute] async () => true);
         this.Where(static () => true);
-        this.Where(async static () => true);
+        this.Where(static async () => true);
         this.SomeMethod(
             (longParameter__________________, longParameter_________________) =>
                 longParameter________________
@@ -72,7 +72,7 @@ public class ClassName
             Handler = CommandHandler.Create(() =>
             {
                 doSomething();
-            })
+            }),
         };
 
         CallSomeMethod(

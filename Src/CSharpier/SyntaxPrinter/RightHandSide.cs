@@ -16,42 +16,50 @@ internal static class RightHandSide
 
         return layout switch
         {
-            Layout.BasicConcatWithoutLine
-                => Doc.Concat(leftDoc, operatorDoc, Node.Print(rightNode, context)),
-            Layout.BasicConcatWithSpace
-                => Doc.Concat(leftDoc, operatorDoc, " ", Node.Print(rightNode, context)),
-            Layout.BreakAfterOperator
-                => Doc.Group(
-                    Doc.Group(leftDoc),
-                    operatorDoc,
-                    Doc.Group(Doc.Indent(Doc.Line, Node.Print(rightNode, context)))
-                ),
-            Layout.Chain
-                => Doc.Concat(
-                    Doc.Group(leftDoc),
-                    operatorDoc,
-                    Doc.Line,
-                    Node.Print(rightNode, context)
-                ),
-            Layout.ChainTail
-                => Doc.Concat(
-                    Doc.Group(leftDoc),
-                    operatorDoc,
-                    Doc.Indent(Doc.Line, Node.Print(rightNode, context))
-                ),
-            Layout.Fluid
-                => Doc.Group(
-                    Doc.Group(leftDoc),
-                    operatorDoc,
-                    Doc.GroupWithId(groupId, Doc.Indent(Doc.Line)),
-                    Doc.IndentIfBreak(Node.Print(rightNode, context), groupId)
-                ),
-            _ => throw new Exception("The layout type of " + layout + " was not handled.")
+            Layout.BasicConcatWithoutLine => Doc.Concat(
+                leftDoc,
+                operatorDoc,
+                Node.Print(rightNode, context)
+            ),
+            Layout.BasicConcatWithSpace => Doc.Concat(
+                leftDoc,
+                operatorDoc,
+                " ",
+                Node.Print(rightNode, context)
+            ),
+            Layout.BreakAfterOperator => Doc.Group(
+                Doc.Group(leftDoc),
+                operatorDoc,
+                Doc.Group(Doc.Indent(Doc.Line, Node.Print(rightNode, context)))
+            ),
+            Layout.Chain => Doc.Concat(
+                Doc.Group(leftDoc),
+                operatorDoc,
+                Doc.Line,
+                Node.Print(rightNode, context)
+            ),
+            Layout.ChainTail => Doc.Concat(
+                Doc.Group(leftDoc),
+                operatorDoc,
+                Doc.Indent(Doc.Line, Node.Print(rightNode, context))
+            ),
+            Layout.Fluid => Doc.Group(
+                Doc.Group(leftDoc),
+                operatorDoc,
+                Doc.GroupWithId(groupId, Doc.Indent(Doc.Line)),
+                Doc.IndentIfBreak(Node.Print(rightNode, context), groupId)
+            ),
+            _ => throw new Exception("The layout type of " + layout + " was not handled."),
         };
     }
 
     private static Layout DetermineLayout(CSharpSyntaxNode leftNode, ExpressionSyntax rightNode)
     {
+        if (rightNode.GetLeadingTrivia().Any(o => o.IsComment()))
+        {
+            return Layout.BreakAfterOperator;
+        }
+
         var isTail = rightNode is not AssignmentExpressionSyntax;
         var shouldUseChainFormatting =
             leftNode is AssignmentExpressionSyntax
@@ -97,14 +105,18 @@ internal static class RightHandSide
             or InterpolatedStringExpressionSyntax
             {
                 StringStartToken.RawKind: (int)SyntaxKind.InterpolatedMultiLineRawStringStartToken
-            }
-                => Layout.BasicConcatWithSpace,
+            } => Layout.BasicConcatWithSpace,
             InitializerExpressionSyntax => Layout.BasicConcatWithoutLine,
             BinaryExpressionSyntax
             or CastExpressionSyntax { Type: GenericNameSyntax }
             or ConditionalExpressionSyntax
             {
                 Condition: BinaryExpressionSyntax or ParenthesizedExpressionSyntax
+            }
+            or ConditionalExpressionSyntax
+            {
+                WhenFalse: ConditionalExpressionSyntax,
+                WhenTrue: not ConditionalExpressionSyntax
             }
             or ImplicitObjectCreationExpressionSyntax { Parent: EqualsValueClauseSyntax }
             or InterpolatedStringExpressionSyntax
@@ -115,9 +127,8 @@ internal static class RightHandSide
             // TODO ditch fluid?
             // or MemberAccessExpressionSyntax
             or StackAllocArrayCreationExpressionSyntax
-            or QueryExpressionSyntax
-                => Layout.BreakAfterOperator,
-            _ => Layout.Fluid
+            or QueryExpressionSyntax => Layout.BreakAfterOperator,
+            _ => Layout.Fluid,
         };
     }
 

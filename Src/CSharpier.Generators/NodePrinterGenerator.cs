@@ -50,18 +50,15 @@ public class NodePrinterGenerator : ISourceGenerator
 
     private object GetModel(GeneratorExecutionContext context)
     {
-        var nodeTypes = context.Compilation.SyntaxTrees
-            .Where(o => o.FilePath.Contains("SyntaxNodePrinters"))
+        var nodeTypes = context
+            .Compilation.SyntaxTrees.Where(o => o.FilePath.Contains("SyntaxNodePrinters"))
             .Select(o => Path.GetFileNameWithoutExtension(o.FilePath))
-            .Select(
-                fileName =>
-                    new
-                    {
-                        PrinterName = fileName,
-                        SyntaxNodeName = fileName + "Syntax",
-                        VariableName = char.ToLower(fileName[0]) + fileName[1..]
-                    }
-            )
+            .Select(fileName => new
+            {
+                PrinterName = fileName,
+                SyntaxNodeName = fileName + "Syntax",
+                VariableName = char.ToLower(fileName[0]) + fileName[1..],
+            })
             .OrderBy(o => o.SyntaxNodeName)
             .ToArray();
 

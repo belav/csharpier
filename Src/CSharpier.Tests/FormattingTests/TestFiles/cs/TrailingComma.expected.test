@@ -1,0 +1,146 @@
+int[] shortCollectionExpressionTrailingComma = [1, 2, 3, 4, 5, 6, 7, 8];
+
+int[] shortCollectionExpressionNoTrailingComma = [1, 2, 3, 4, 5, 6, 7, 8];
+
+int[][] longCollectionExpressionTrailingComma =
+[
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+];
+
+int[][] longCollectionExpressionNoTrailingComma =
+[
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+];
+
+public dynamic shortAnonymousObjectCreationExpressionTrailingComma = new { Property = true };
+
+public dynamic shortAnonymousObjectCreationExpressionNoTrailingComma = new { Property = true };
+
+public dynamic longAnonymousObjectCreationExpressionTrailingComma = new
+{
+    One = "One",
+    Two = "Two",
+    ThreeThreeThree = "ThreeThreeThree",
+};
+
+public dynamic longAnonymousObjectCreationExpressionNoTrailingComma = new
+{
+    One = "One",
+    Two = "Two",
+    ThreeThreeThree = "ThreeThreeThree",
+};
+
+int[] shortInitializerExpressionTrailingComma = { 1, 2 };
+
+int[] shortInitializerExpressionNoTrailingComma = { 1, 2 };
+
+string[] longInitializerExpressionTrailingComma =
+{
+    "someLongValue_____________________________________",
+    "someLongValue_____________________________________",
+};
+
+string[] longInitializerExpressionNoTrailingComma =
+{
+    "someLongValue_____________________________________",
+    "someLongValue_____________________________________",
+};
+
+int switchExpressionTrailingComma()
+{
+    return 1 switch
+    {
+        1 => 100,
+        _ => throw new global::System.Exception(),
+    };
+}
+
+int switchExpressionNoTrailingComma()
+{
+    return 1 switch
+    {
+        1 => 100,
+        _ => throw new global::System.Exception(),
+    };
+}
+
+object listPatternTrailingComma(object list)
+{
+    return list switch
+    {
+        [var elem] => elem * elem,
+        [] => 0,
+        [..] elems => elems.Sum(e => e + e),
+    };
+}
+
+object listPatternNoTrailingComma(object list)
+{
+    return list switch
+    {
+        [var elem] => elem * elem,
+        [] => 0,
+        [..] elems => elems.Sum(e => e + e),
+    };
+}
+
+public enum EnumDeclarationTrailingComma
+{
+    Foo = 1,
+}
+
+public enum EnumDeclarationNoTrailingCommand
+{
+    Foo = 1,
+}
+
+public enum EnumDeclarationWithDirective
+{
+    Foo = 1,
+#if DEBUG
+    Bar = 2,
+#endif
+    Abc = 3,
+}
+
+public enum EnumDeclarationWithDirectiveBeforeBracket
+{
+    Foo = 1,
+#if DEBUG
+    Bar = 2,
+#endif
+}
+
+public enum EnumDeclarationWithLeadingCommaInDirective
+{
+    Foo = 1
+#if DEBUG
+    ,
+    Bar = 2
+#endif
+    ,
+    Abc = 3,
+}
+
+public enum EnumDeclarationWithLeadingCommaInDirectiveBeforeBracket
+{
+    Foo = 1
+#if DEBUG
+    ,
+    Bar = 2
+#endif
+}
+
+public enum EnumDeclarationWithLeadingCommaInDirectiveAndTrailingComma
+{
+    Foo = 1
+#if DEBUG
+    ,
+    Bar = 2
+#endif
+    ,
+}

@@ -9,11 +9,17 @@ internal static class MembersWithForcedLines
     public static List<Doc> Print<T>(
         CSharpSyntaxNode node,
         IReadOnlyList<T> members,
-        FormattingContext context
+        FormattingContext context,
+        bool skipFirstHardLine = false
     )
         where T : MemberDeclarationSyntax
     {
-        var result = new List<Doc> { Doc.HardLine };
+        var result = new List<Doc>();
+        if (!skipFirstHardLine)
+        {
+            result.Add(Doc.HardLine);
+        }
+
         var unFormattedCode = new StringBuilder();
         var printUnformatted = false;
         var lastMemberForcedBlankLine = false;
@@ -47,9 +53,21 @@ internal static class MembersWithForcedLines
 
             void AddSeparatorIfNeeded()
             {
-                if (members is SeparatedSyntaxList<T> list && memberIndex < list.SeparatorCount)
+                if (members is SeparatedSyntaxList<T> list)
                 {
-                    result.Add(Token.Print(list.GetSeparator(memberIndex), context));
+                    if (memberIndex < list.SeparatorCount)
+                    {
+                        result.Add(Token.Print(list.GetSeparator(memberIndex), context));
+                    }
+                    else if (
+                        node is EnumDeclarationSyntax enumDeclarationSyntax
+                        && member is EnumMemberDeclarationSyntax
+                    )
+                    {
+                        result.Add(
+                            TrailingComma.Print(enumDeclarationSyntax.CloseBraceToken, context)
+                        );
+                    }
                 }
             }
 
@@ -72,11 +90,11 @@ internal static class MembersWithForcedLines
             if (
                 member is MethodDeclarationSyntax methodDeclaration
                 && node is ClassDeclarationSyntax classDeclaration
-                && classDeclaration.Modifiers.Any(
-                    o => o.RawSyntaxKind() is SyntaxKind.AbstractKeyword
+                && classDeclaration.Modifiers.Any(o =>
+                    o.RawSyntaxKind() is SyntaxKind.AbstractKeyword
                 )
-                && methodDeclaration.Modifiers.Any(
-                    o => o.RawSyntaxKind() is SyntaxKind.AbstractKeyword
+                && methodDeclaration.Modifiers.Any(o =>
+                    o.RawSyntaxKind() is SyntaxKind.AbstractKeyword
                 )
             )
             {
@@ -138,7 +156,9 @@ internal static class MembersWithForcedLines
                 result.Add(ExtraNewLines.Print(member));
             }
             else if (
-                addBlankLine && !triviaContainsEndIfOrRegion && !skipAddingLineBecauseIgnoreEnded
+                addBlankLine
+                && !triviaContainsEndIfOrRegion
+                && !skipAddingLineBecauseIgnoreEnded
             )
             {
                 result.Add(Doc.HardLine);

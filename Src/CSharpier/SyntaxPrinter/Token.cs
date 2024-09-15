@@ -9,6 +9,11 @@ internal static class Token
         return PrintSyntaxToken(syntaxToken, context, skipLeadingTrivia: true);
     }
 
+    public static Doc PrintWithoutTrailingTrivia(SyntaxToken syntaxToken, FormattingContext context)
+    {
+        return PrintSyntaxToken(syntaxToken, context, skipTrailingTrivia: true);
+    }
+
     public static Doc Print(SyntaxToken syntaxToken, FormattingContext context)
     {
         return PrintSyntaxToken(syntaxToken, context);
@@ -17,17 +22,21 @@ internal static class Token
     public static Doc PrintWithSuffix(
         SyntaxToken syntaxToken,
         Doc suffixDoc,
-        FormattingContext context
+        FormattingContext context,
+        bool skipLeadingTrivia = false
     )
     {
-        return PrintSyntaxToken(syntaxToken, context, suffixDoc);
+        return PrintSyntaxToken(syntaxToken, context, suffixDoc, skipLeadingTrivia);
     }
+
+    internal static readonly string[] lineSeparators = new[] { "\r\n", "\r", "\n" };
 
     private static Doc PrintSyntaxToken(
         SyntaxToken syntaxToken,
         FormattingContext context,
         Doc? suffixDoc = null,
-        bool skipLeadingTrivia = false
+        bool skipLeadingTrivia = false,
+        bool skipTrailingTrivia = false
     )
     {
         if (syntaxToken.RawSyntaxKind() == SyntaxKind.None)
@@ -36,7 +45,7 @@ internal static class Token
         }
 
         var docs = new List<Doc>();
-        if (!skipLeadingTrivia && !context.ShouldSkipNextLeadingTrivia)
+        if (!skipLeadingTrivia && !context.SkipNextLeadingTrivia)
         {
             var leadingTrivia = PrintLeadingTrivia(syntaxToken, context);
             if (leadingTrivia != Doc.Null)
@@ -45,7 +54,7 @@ internal static class Token
             }
         }
 
-        context.ShouldSkipNextLeadingTrivia = false;
+        context.SkipNextLeadingTrivia = false;
 
         if (
             (
@@ -61,20 +70,63 @@ internal static class Token
                         { RawKind: (int)SyntaxKind.InterpolatedVerbatimStringStartToken }
                     }
             )
-            || syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken
         )
         {
-            var lines = syntaxToken.Text.Replace("\r", string.Empty).Split(new[] { '\n' });
+            var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
             docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
+        }
+        else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
+        {
+            var linesIncludingQuotes = syntaxToken.Text.Split(
+                lineSeparators,
+                StringSplitOptions.None
+            );
+            var lastLineIsIndented = linesIncludingQuotes[^1][0] is '\t' or ' ';
+            var contents = new List<Doc>
+            {
+                linesIncludingQuotes[0],
+                lastLineIsIndented ? Doc.HardLineNoTrim : Doc.LiteralLine,
+            };
+
+            var lines = syntaxToken.ValueText.Split(lineSeparators, StringSplitOptions.None);
+            foreach (var line in lines)
+            {
+                contents.Add(line);
+                contents.Add(
+                    lastLineIsIndented
+                        ? string.IsNullOrEmpty(line)
+                            ? Doc.HardLine
+                            : Doc.HardLineNoTrim
+                        : Doc.LiteralLine
+                );
+            }
+
+            contents.Add(linesIncludingQuotes[^1].TrimStart());
+
+            var hasArgumentParent = syntaxToken.Parent.HasParent(typeof(ArgumentSyntax));
+
+            docs.Add(Doc.IndentIf(!hasArgumentParent, Doc.Concat(contents)));
+        }
+        else if (
+            syntaxToken.RawSyntaxKind()
+            is SyntaxKind.InterpolatedMultiLineRawStringStartToken
+                or SyntaxKind.InterpolatedRawStringEndToken
+        )
+        {
+            docs.Add(syntaxToken.Text.Trim());
         }
         else
         {
             docs.Add(syntaxToken.Text);
         }
-        var trailingTrivia = PrintTrailingTrivia(syntaxToken);
-        if (trailingTrivia != Doc.Null)
+
+        if (!skipTrailingTrivia)
         {
-            docs.Add(trailingTrivia);
+            var trailingTrivia = PrintTrailingTrivia(syntaxToken);
+            if (trailingTrivia != Doc.Null)
+            {
+                docs.Add(trailingTrivia);
+            }
         }
 
         if (suffixDoc != null)
@@ -86,13 +138,16 @@ internal static class Token
         {
             <= 0 => Doc.Null,
             1 => docs.First(),
-            _ => Doc.Concat(docs)
+            _ => Doc.Concat(docs),
         };
     }
 
     public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken, FormattingContext context)
     {
-        var isClosingBrace = syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken;
+        var isClosingBrace =
+            syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken
+            || syntaxToken.Parent is CollectionExpressionSyntax
+                && syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBracketToken;
 
         var printedTrivia = PrivatePrintLeadingTrivia(
             syntaxToken.LeadingTrivia,
@@ -222,7 +277,7 @@ internal static class Token
                 );
                 docs.Add(Doc.HardLine);
             }
-            else if (IsDirective(kind))
+            else if (trivia.IsDirective)
             {
                 var triviaText = trivia.ToString();
 
@@ -249,11 +304,9 @@ internal static class Token
                     printNewLines = false;
                 }
             }
-
-            PreprocessorSymbols.AddSymbolSet(trivia);
         }
 
-        while (skipLastHardline && docs.Any() && docs.Last() is HardLine)
+        while (skipLastHardline && docs.Any() && docs.Last() is HardLine or NullDoc)
         {
             docs.RemoveAt(docs.Count - 1);
         }
@@ -298,25 +351,10 @@ internal static class Token
     private static bool IsMultiLineComment(SyntaxKind kind) =>
         kind is SyntaxKind.MultiLineCommentTrivia or SyntaxKind.MultiLineDocumentationCommentTrivia;
 
-    private static bool IsDirective(SyntaxKind kind) =>
-        kind
-            is SyntaxKind.IfDirectiveTrivia
-                or SyntaxKind.ElseDirectiveTrivia
-                or SyntaxKind.ElifDirectiveTrivia
-                or SyntaxKind.EndIfDirectiveTrivia
-                or SyntaxKind.LineDirectiveTrivia
-                or SyntaxKind.ErrorDirectiveTrivia
-                or SyntaxKind.WarningDirectiveTrivia
-                or SyntaxKind.PragmaWarningDirectiveTrivia
-                or SyntaxKind.PragmaChecksumDirectiveTrivia
-                or SyntaxKind.DefineDirectiveTrivia
-                or SyntaxKind.UndefDirectiveTrivia
-                or SyntaxKind.NullableDirectiveTrivia;
-
     private static bool IsRegion(SyntaxKind kind) =>
         kind is SyntaxKind.RegionDirectiveTrivia or SyntaxKind.EndRegionDirectiveTrivia;
 
-    private static Doc PrintTrailingTrivia(SyntaxToken node)
+    public static Doc PrintTrailingTrivia(SyntaxToken node)
     {
         return PrintTrailingTrivia(node.TrailingTrivia);
     }
@@ -341,34 +379,27 @@ internal static class Token
 
     public static bool HasComments(SyntaxToken syntaxToken)
     {
-        return syntaxToken.LeadingTrivia.Any(
-                o =>
-                    o.RawSyntaxKind()
-                        is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
+        return syntaxToken.LeadingTrivia.Any(o =>
+                o.RawSyntaxKind() is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
             )
-            || syntaxToken.TrailingTrivia.Any(
-                o =>
-                    o.RawSyntaxKind()
-                        is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
+            || syntaxToken.TrailingTrivia.Any(o =>
+                o.RawSyntaxKind() is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
             );
     }
 
     public static bool HasLeadingCommentMatching(SyntaxNode node, Regex regex)
     {
         return node.GetLeadingTrivia()
-            .Any(
-                o =>
-                    o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
-                    && regex.IsMatch(o.ToString())
+            .Any(o =>
+                o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
+                && regex.IsMatch(o.ToString())
             );
     }
 
     public static bool HasLeadingCommentMatching(SyntaxToken token, Regex regex)
     {
-        return token.LeadingTrivia.Any(
-            o =>
-                o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
-                && regex.IsMatch(o.ToString())
+        return token.LeadingTrivia.Any(o =>
+            o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia && regex.IsMatch(o.ToString())
         );
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 namespace CSharpier.Playground.Controllers;
 
 using CSharpier.Formatters.Xml;
+using CSharpier.Utilities;
 
 public class FormatResult
 {
@@ -12,6 +13,7 @@ public class FormatResult
     public required string Json { get; set; }
     public required string Doc { get; set; }
     public required List<FormatError> Errors { get; set; }
+    public required string SyntaxValidation { get; set; }
 }
 
 public class FormatError
@@ -31,19 +33,50 @@ public class FormatController : ControllerBase
         this.logger = logger;
     }
 
-    [HttpPost]
-    public async Task<FormatResult> Post([FromBody] string content, string fileExtension)
+    public class PostModel
     {
+        public string Code { get; set; } = string.Empty;
+
+        // TODO ditch this and use the parser?
+        public string FileExtension { get; set; } = string.Empty;
+        public int PrintWidth { get; set; }
+        public int IndentSize { get; set; }
+        public bool UseTabs { get; set; }
+        public string Parser { get; set; } = string.Empty;
+    }
+
+    [HttpPost]
+    public async Task<FormatResult> Post(
+        [FromBody] PostModel model,
+        CancellationToken cancellationToken
+    )
+    {
+        var sourceCodeKind = model.FileExtension.EqualsIgnoreCase(".csx")
+            ? SourceCodeKind.Script
+            : SourceCodeKind.Regular;
+
         var result = await CodeFormatter.FormatAsync(
-            content,
-            fileExtension,
+            model.Code,
+            model.FileExtension,
             new PrinterOptions
             {
                 IncludeAST = true,
                 IncludeDocTree = true,
-                Width = PrinterOptions.WidthUsedByTests
+                Width = model.PrintWidth,
+                IndentSize = model.IndentSize,
+                UseTabs = model.UseTabs,
             },
-            CancellationToken.None
+            cancellationToken
+        );
+
+        // TODO what about xml?
+        var comparer = new SyntaxNodeComparer(
+            model.Code,
+            result.Code,
+            result.ReorderedModifiers,
+            result.ReorderedUsingsWithDisabledText,
+            sourceCodeKind,
+            cancellationToken
         );
 
         return new FormatResult
@@ -52,13 +85,14 @@ public class FormatController : ControllerBase
             Json = result.AST,
             Doc = result.DocTree,
             Errors = result.CompilationErrors.Select(this.ConvertError).ToList(),
+            SyntaxValidation = await comparer.CompareSourceAsync(CancellationToken.None),
         };
     }
 
     private FormatError ConvertError(Diagnostic diagnostic)
     {
         var lineSpan = diagnostic.Location.SourceTree!.GetLineSpan(diagnostic.Location.SourceSpan);
-        return new FormatError { LineSpan = lineSpan, Description = diagnostic.ToString(), };
+        return new FormatError { LineSpan = lineSpan, Description = diagnostic.ToString() };
     }
 
     public string ExecuteApplication(string pathToExe, string workingDirectory, string args)
@@ -69,7 +103,7 @@ public class FormatController : ControllerBase
             RedirectStandardError = true,
             WindowStyle = ProcessWindowStyle.Hidden,
             WorkingDirectory = workingDirectory,
-            CreateNoWindow = true
+            CreateNoWindow = true,
         };
 
         var process = Process.Start(processStartInfo);

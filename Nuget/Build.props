@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+    <Version>0.29.2</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/belav/csharpier</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>CSharpier is an opinionated code formatter for c#.</Description>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>

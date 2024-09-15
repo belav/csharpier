@@ -6,6 +6,8 @@ internal static class OptionalBraces
     {
         return node is BlockSyntax blockSyntax
             ? Block.Print(blockSyntax, context)
-            : Doc.Indent(Doc.HardLine, Node.Print(node, context));
+            : DocUtilities.RemoveInitialDoubleHardLine(
+                Doc.Indent(Doc.HardLine, Node.Print(node, context))
+            );
     }
 }

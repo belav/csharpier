@@ -1,1 +1,2 @@
-﻿
+﻿CSharpier.CodeFormatterOptions.IncludeGenerated.get -> bool
+CSharpier.CodeFormatterOptions.IncludeGenerated.init -> void

@@ -4,8 +4,18 @@ internal static class ParameterList
 {
     public static Doc Print(ParameterListSyntax node, FormattingContext context)
     {
+        return Print(node, node.OpenParenToken, node.CloseParenToken, context);
+    }
+
+    public static Doc Print(
+        BaseParameterListSyntax node,
+        SyntaxToken openToken,
+        SyntaxToken closeToken,
+        FormattingContext context
+    )
+    {
         return Doc.Group(
-            Token.Print(node.OpenParenToken, context),
+            Token.Print(openToken, context),
             node.Parameters.Count > 0
                 ? Doc.Concat(
                     Doc.Indent(
@@ -20,7 +30,7 @@ internal static class ParameterList
                     Doc.SoftLine
                 )
                 : Doc.Null,
-            Token.Print(node.CloseParenToken, context)
+            Token.Print(closeToken, context)
         );
     }
 }

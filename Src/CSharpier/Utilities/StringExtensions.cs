@@ -5,13 +5,6 @@ namespace CSharpier.Utilities;
 
 internal static class StringExtensions
 {
-    public static string CalculateHash(this string value)
-    {
-        using var hasher = MD5.Create();
-        var hashedBytes = hasher.ComputeHash(Encoding.UTF8.GetBytes(value));
-        return BitConverter.ToString(hashedBytes).Replace("-", string.Empty).ToLower();
-    }
-
     public static bool EqualsIgnoreCase(this string value, string otherValue)
     {
         return string.Compare(value, otherValue, StringComparison.OrdinalIgnoreCase) == 0;
@@ -37,9 +30,36 @@ internal static class StringExtensions
         return value == null || string.IsNullOrEmpty(value.Trim());
     }
 
-    // this will eventually deal with the visual width not being the same as the code width https://github.com/belav/csharpier/issues/260
+    // some unicode characters should be considered size of 2 when calculating how big this string will be when printed
     public static int GetPrintedWidth(this string value)
     {
-        return value.Length;
+        return value.Sum(CharacterSizeCalculator.CalculateWidth);
+    }
+
+    public static int CalculateCurrentLeadingIndentation(this string line, int indentSize)
+    {
+        var result = 0;
+        foreach (var character in line)
+        {
+            if (character == ' ')
+            {
+                result += 1;
+            }
+            // I'm not sure why this converts tabs to the size of an indent
+            // I'd think this should be based on if UseTabs is true or not
+            // if using tabs, this should be considered one
+            // but then how do we convert spaces to tabs?
+            // this seems to work, and it came from the comments code
+            else if (character == '\t')
+            {
+                result += indentSize;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return result;
     }
 }

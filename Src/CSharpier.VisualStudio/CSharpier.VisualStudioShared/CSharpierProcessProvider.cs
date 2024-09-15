@@ -1,25 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml;
-using Newtonsoft.Json;
 
 namespace CSharpier.VisualStudio
 {
     public class CSharpierProcessProvider : IProcessKiller
     {
         private readonly CustomPathInstaller customPathInstaller;
+        private readonly CSharpierPackage package;
         private readonly Logger logger;
 
         private bool warnedForOldVersion;
 
-        private readonly Dictionary<string, bool> warmingByDirectory =
-            new Dictionary<string, bool>();
-        private readonly Dictionary<string, string> csharpierVersionByDirectory =
-            new Dictionary<string, string>();
-        private readonly Dictionary<string, ICSharpierProcess> csharpierProcessesByVersion =
-            new Dictionary<string, ICSharpierProcess>();
+        private readonly Dictionary<string, bool> warmingByDirectory = new();
+        private readonly Dictionary<string, string> csharpierVersionByDirectory = new();
+        private readonly Dictionary<string, ICSharpierProcess> csharpierProcessesByVersion = new();
 
         private static CSharpierProcessProvider? instance;
 
@@ -32,6 +31,7 @@ namespace CSharpier.VisualStudio
         {
             this.logger = Logger.Instance;
             this.customPathInstaller = CustomPathInstaller.GetInstance(package);
+            this.package = package;
         }
 
         public void FindAndWarmProcess(string filePath)
@@ -39,14 +39,14 @@ namespace CSharpier.VisualStudio
             var directory = new FileInfo(filePath).DirectoryName;
             if (directory == null)
             {
-                this.logger.Warn("There was no directory for " + filePath);
+                this.logger.Warn($"There was no directory for {filePath}");
                 return;
             }
             if (this.warmingByDirectory.TryGetValue(directory, out var warming) && warming)
             {
                 return;
             }
-            this.logger.Debug("Ensure there is a csharpier process for " + directory);
+            this.logger.Debug($"Ensure there is a csharpier process for {directory}");
             this.warmingByDirectory[directory] = true;
             if (!this.csharpierVersionByDirectory.TryGetValue(directory, out var version))
             {
@@ -84,7 +84,7 @@ namespace CSharpier.VisualStudio
             )
             {
                 // this shouldn't really happen, but just in case
-                return new NullCSharpierProcess();
+                return NullCSharpierProcess.Instance;
             }
 
             return cSharpierProcess;
@@ -92,10 +92,32 @@ namespace CSharpier.VisualStudio
 
         private string GetCSharpierVersion(string directoryThatContainsFile)
         {
+            var csharpierVersion = FunctionRunner.RunUntilNonNull(
+                () => this.FindVersionInCsProjOfParentsDirectories(directoryThatContainsFile),
+                () => this.FindCSharpierVersionInToolOutput(directoryThatContainsFile, false),
+                () => this.FindCSharpierVersionInToolOutput(directoryThatContainsFile, true)
+            );
+
+            if (csharpierVersion == null)
+            {
+                return "";
+            }
+
+            var versionWithoutHash = csharpierVersion.Split('+')[0];
+            this.logger.Debug($"Using {versionWithoutHash} as the version number.");
+
+            return versionWithoutHash;
+        }
+
+        private string? FindVersionInCsProjOfParentsDirectories(string directoryThatContainsFile)
+        {
+            this.logger.Debug(
+                $"Looking for csproj in or above {directoryThatContainsFile} that references CSharpier.MsBuild"
+            );
             var currentDirectory = new DirectoryInfo(directoryThatContainsFile);
             try
             {
-                while (true)
+                while (currentDirectory != null)
                 {
                     var csProjVersion = this.FindVersionInCsProj(currentDirectory);
                     if (csProjVersion != null)
@@ -103,29 +125,6 @@ namespace CSharpier.VisualStudio
                         return csProjVersion;
                     }
 
-                    var dotnetToolsPath = Path.Combine(
-                        currentDirectory.FullName,
-                        ".config/dotnet-tools.json"
-                    );
-                    this.logger.Debug("Looking for " + dotnetToolsPath);
-                    if (File.Exists(dotnetToolsPath))
-                    {
-                        var data = File.ReadAllText(dotnetToolsPath);
-                        var toolsManifest = JsonConvert.DeserializeObject<ToolsManifest>(data);
-                        var versionFromTools = toolsManifest?.Tools?.Csharpier?.Version;
-                        if (versionFromTools != null)
-                        {
-                            this.logger.Debug(
-                                "Found version " + versionFromTools + " in " + dotnetToolsPath
-                            );
-                            return versionFromTools;
-                        }
-                    }
-
-                    if (currentDirectory.Parent == null)
-                    {
-                        break;
-                    }
                     currentDirectory = currentDirectory.Parent;
                 }
             }
@@ -134,22 +133,43 @@ namespace CSharpier.VisualStudio
                 this.logger.Error(ex);
             }
 
-            this.logger.Debug(
-                "Unable to find dotnet-tools.json, falling back to running dotnet csharpier --version"
-            );
+            return null;
+        }
 
+        private string? FindCSharpierVersionInToolOutput(
+            string directoryThatContainsFile,
+            bool isGlobal
+        )
+        {
             var env = new Dictionary<string, string> { { "DOTNET_NOLOGO", "1" } };
-
-            var versionFromCommand = ProcessHelper.ExecuteCommand(
+            var output = ProcessHelper.ExecuteCommand(
                 "dotnet",
-                "csharpier --version",
+                $"tool list{(isGlobal ? " -g" : "")}",
                 env,
                 directoryThatContainsFile
             );
 
-            this.logger.Debug("dotnet csharpier --version output: " + versionFromCommand);
+            this.logger.Debug(
+                $"Running 'dotnet tool list{(isGlobal ? "-g" : "")}' to look for version"
+            );
+            this.logger.Debug($"Output was: \n {output}");
 
-            return versionFromCommand;
+            var lines = output.Split('\n').Select(o => o.Trim()).ToList();
+
+            // The first two lines are headers, so we start at index 2
+            for (var i = 2; i < lines.Count; i++)
+            {
+                var columns = Regex.Split(lines[i], "\\s{2,}"); // Split by 2 or more spaces
+                if (columns.Length >= 2)
+                {
+                    if (columns[0].ToLower() == "csharpier")
+                    {
+                        return columns[1];
+                    }
+                }
+            }
+
+            return null;
         }
 
         private string? FindVersionInCsProj(DirectoryInfo currentDirectory)
@@ -179,7 +199,7 @@ namespace CSharpier.VisualStudio
                 if (versionOfMsBuildPackage != null)
                 {
                     this.logger.Debug(
-                        "Found version " + versionOfMsBuildPackage + " in " + pathToCsProj.FullName
+                        $"Found version {versionOfMsBuildPackage} in {pathToCsProj.FullName}"
                     );
                     return versionOfMsBuildPackage;
                 }
@@ -192,18 +212,50 @@ namespace CSharpier.VisualStudio
         {
             if (string.IsNullOrEmpty(version))
             {
-                return new NullCSharpierProcess();
+                return NullCSharpierProcess.Instance;
             }
 
-            this.customPathInstaller.EnsureVersionInstalled(version);
-            var customPath = this.customPathInstaller.GetPathForVersion(version);
             try
             {
-                this.logger.Debug("Adding new version " + version + " process for " + directory);
+                if (!this.customPathInstaller.EnsureVersionInstalled(version))
+                {
+                    this.DisplayFailureMessage();
+                    return NullCSharpierProcess.Instance;
+                }
+                var customPath = this.customPathInstaller.GetPathForVersion(version);
 
-                var installedVersion = new Version(version);
+                this.logger.Debug($"Adding new version {version} process for {directory}");
+                var installedVersion = this.GetInstalledVersion(version);
                 var pipeFilesVersion = new Version("0.12.0");
-                if (installedVersion.CompareTo(pipeFilesVersion) < 0)
+                var serverVersion = new Version("0.29.0");
+                ICSharpierProcess cSharpierProcess;
+
+                if (
+                    installedVersion.CompareTo(serverVersion) >= 0
+                    && !CSharpierOptions.Instance.DisableCSharpierServer
+                )
+                {
+                    cSharpierProcess = new CSharpierProcessServer(customPath, version, this.logger);
+                }
+                else if (installedVersion.CompareTo(pipeFilesVersion) >= 0)
+                {
+                    if (
+                        installedVersion.CompareTo(serverVersion) >= 0
+                        && CSharpierOptions.Instance.DisableCSharpierServer
+                    )
+                    {
+                        this.logger.Debug(
+                            "CSharpier server is disabled, falling back to piping via stdin"
+                        );
+                    }
+
+                    cSharpierProcess = new CSharpierProcessPipeMultipleFiles(
+                        customPath,
+                        version,
+                        this.logger
+                    );
+                }
+                else
                 {
                     if (!this.warnedForOldVersion)
                     {
@@ -213,16 +265,73 @@ namespace CSharpier.VisualStudio
                         this.warnedForOldVersion = true;
                     }
 
-                    return new CSharpierProcessSingleFile(customPath, this.logger);
+                    cSharpierProcess = new CSharpierProcessSingleFile(
+                        customPath,
+                        version,
+                        this.logger
+                    );
                 }
-                return new CSharpierProcessPipeMultipleFiles(customPath, this.logger);
+
+                if (cSharpierProcess.ProcessFailedToStart)
+                {
+                    this.DisplayFailureMessage();
+                }
+
+                return cSharpierProcess;
             }
             catch (Exception ex)
             {
                 this.logger.Error(ex);
+                this.DisplayFailureMessage();
             }
 
-            return new NullCSharpierProcess();
+            return NullCSharpierProcess.Instance;
+        }
+
+        private Version GetInstalledVersion(string version)
+        {
+            if (Version.TryParse(version, out var installedVersion) && installedVersion != null)
+            {
+                return installedVersion;
+            }
+
+            // handle semver versions
+            // regex from https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+            var regex = Regex.Match(
+                version,
+                @"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+            );
+            if (regex.Success && regex.Groups.Count > 3)
+            {
+                return new Version($"{regex.Groups[1]}.{regex.Groups[2]}.{regex.Groups[3]}");
+            }
+
+            throw new ArgumentException($"Unable to parse version '{version}'", nameof(version));
+        }
+
+        private void DisplayFailureMessage()
+        {
+            var actionButton = new InfoBarActionButton
+            {
+                IsHyperLink = true,
+                Text = "Read More",
+                Context = "ReadMore",
+                OnClicked = () =>
+                {
+                    Process.Start(
+                        new ProcessStartInfo
+                        {
+                            FileName = "https://csharpier.com/docs/EditorsTroubleshooting",
+                            UseShellExecute = true,
+                        }
+                    );
+                },
+            };
+
+            InfoBarService.Instance.ShowInfoBar(
+                "CSharpier could not be set up properly so formatting is not currently supported.",
+                new[] { actionButton }
+            );
         }
 
         public void KillRunningProcesses()
@@ -230,7 +339,7 @@ namespace CSharpier.VisualStudio
             foreach (var version in this.csharpierProcessesByVersion.Keys)
             {
                 this.logger.Debug(
-                    "disposing of process for version " + (version == "" ? "null" : version)
+                    $"disposing of process for version {(version == "" ? "null" : version)}"
                 );
                 this.csharpierProcessesByVersion[version].Dispose();
             }

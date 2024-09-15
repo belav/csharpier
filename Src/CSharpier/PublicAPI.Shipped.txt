@@ -4,6 +4,12 @@ CSharpier.CodeFormatterOptions
 CSharpier.CodeFormatterOptions.CodeFormatterOptions() -> void
 CSharpier.CodeFormatterOptions.Width.get -> int
 CSharpier.CodeFormatterOptions.Width.init -> void
+CSharpier.CodeFormatterOptions.EndOfLine.get -> CSharpier.EndOfLine
+CSharpier.CodeFormatterOptions.EndOfLine.init -> void
+CSharpier.CodeFormatterOptions.IndentSize.get -> int
+CSharpier.CodeFormatterOptions.IndentSize.init -> void
+CSharpier.CodeFormatterOptions.IndentStyle.get -> CSharpier.IndentStyle
+CSharpier.CodeFormatterOptions.IndentStyle.init -> void
 CSharpier.CodeFormatterResult
 CSharpier.CodeFormatterResult.Code.get -> string!
 CSharpier.CodeFormatterResult.CompilationErrors.get -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Diagnostic!>!
@@ -11,3 +17,10 @@ static CSharpier.CodeFormatter.Format(Microsoft.CodeAnalysis.SyntaxTree! syntaxT
 static CSharpier.CodeFormatter.Format(string! code, CSharpier.CodeFormatterOptions? options = null) -> CSharpier.CodeFormatterResult!
 static CSharpier.CodeFormatter.FormatAsync(Microsoft.CodeAnalysis.SyntaxTree! syntaxTree, CSharpier.CodeFormatterOptions? options = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<CSharpier.CodeFormatterResult!>!
 static CSharpier.CodeFormatter.FormatAsync(string! code, CSharpier.CodeFormatterOptions? options = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<CSharpier.CodeFormatterResult!>!
+CSharpier.EndOfLine
+CSharpier.EndOfLine.Auto = 0 -> CSharpier.EndOfLine
+CSharpier.EndOfLine.CRLF = 1 -> CSharpier.EndOfLine
+CSharpier.EndOfLine.LF = 2 -> CSharpier.EndOfLine
+CSharpier.IndentStyle
+CSharpier.IndentStyle.Spaces = 0 -> CSharpier.IndentStyle
+CSharpier.IndentStyle.Tabs = 1 -> CSharpier.IndentStyle

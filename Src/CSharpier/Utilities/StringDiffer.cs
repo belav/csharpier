@@ -15,24 +15,8 @@ internal static class StringDiffer
             return string.Empty;
         }
 
-        var x = 1;
-        while (x <= expected.Length && x <= actual.Length)
+        if (!EndsWithExactlyOneNewline(actual))
         {
-            var endOfExpected = expected[^x];
-            var endOfActual = actual[^x];
-            var expectedIsNewLine = endOfExpected is '\r' or '\n';
-            var actualIsNewLine = endOfActual is '\r' or '\n';
-            if (expectedIsNewLine && actualIsNewLine)
-            {
-                x++;
-                continue;
-            }
-
-            if (!expectedIsNewLine && !actualIsNewLine)
-            {
-                break;
-            }
-
             return "The file did not end with a single newline.";
         }
 
@@ -62,13 +46,14 @@ internal static class StringDiffer
             );
             if (previousExpectedLine != null)
             {
-                stringBuilder.AppendLine(MakeWhiteSpaceVisible(previousExpectedLine));
+                stringBuilder.AppendLine(previousExpectedLine);
             }
-            stringBuilder.AppendLine(MakeWhiteSpaceVisible(expectedLine));
+
+            stringBuilder.AppendLine(expectedLine);
             var nextExpectedLine = expectedReader.ReadLine();
             if (nextExpectedLine != null)
             {
-                stringBuilder.AppendLine(MakeWhiteSpaceVisible(nextExpectedLine));
+                stringBuilder.AppendLine(nextExpectedLine);
             }
 
             stringBuilder.AppendLine(
@@ -76,19 +61,58 @@ internal static class StringDiffer
             );
             if (previousActualLine != null)
             {
-                stringBuilder.AppendLine(MakeWhiteSpaceVisible(previousActualLine));
+                stringBuilder.AppendLine(previousActualLine);
             }
-            stringBuilder.AppendLine(MakeWhiteSpaceVisible(actualLine));
+
+            if (string.IsNullOrWhiteSpace(actualLine))
+            {
+                stringBuilder.AppendLine(MakeWhiteSpaceVisible(actualLine));
+            }
+            else
+            {
+                if (actualLine[^1] is ' ' or '\t')
+                {
+                    var lastNonWhitespace = FindIndexOfNonWhitespace(actualLine);
+                    stringBuilder.AppendLine(
+                        actualLine[..lastNonWhitespace]
+                            + MakeWhiteSpaceVisible(actualLine[lastNonWhitespace..])
+                    );
+                }
+                else
+                {
+                    stringBuilder.AppendLine(actualLine);
+                }
+            }
+
             var nextActualLine = actualReader.ReadLine();
             if (nextActualLine != null)
             {
-                stringBuilder.AppendLine(MakeWhiteSpaceVisible(nextActualLine));
+                stringBuilder.AppendLine(nextActualLine);
             }
 
             return stringBuilder.ToString();
         }
 
         return "The file contained different line endings than formatting it would result in.";
+    }
+
+    private static bool EndsWithExactlyOneNewline(string value)
+    {
+        return (!value.EndsWith("\r\n") && value.EndsWith("\n") && !value.EndsWith("\n\n"))
+            || (value.EndsWith("\r\n") && !value.EndsWith("\r\n\r\n"));
+    }
+
+    private static int FindIndexOfNonWhitespace(string input)
+    {
+        for (var x = input.Length - 1; x >= 0; x--)
+        {
+            if (input[x] is not (' ' or '\t'))
+            {
+                return x;
+            }
+        }
+
+        return -1;
     }
 
     private static string? MakeWhiteSpaceVisible(string? value)

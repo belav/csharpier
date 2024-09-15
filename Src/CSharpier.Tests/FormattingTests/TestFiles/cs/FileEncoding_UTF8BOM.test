@@ -6,5 +6,5 @@
 public enum MeetingLocation
 {
     Café,
-    Restaurant
+    Restaurant,
 }

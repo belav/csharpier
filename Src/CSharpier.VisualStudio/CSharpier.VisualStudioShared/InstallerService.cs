@@ -67,8 +67,8 @@ namespace CSharpier.VisualStudio
                         this.logger.Debug("Installing CSharpier globally");
                         ProcessHelper.ExecuteCommand("dotnet", "tool install -g csharpier");
                         processKiller.KillRunningProcesses();
-                    }
-                }
+                    },
+                },
             };
 
             if (!isOnlyGlobal)
@@ -101,7 +101,7 @@ namespace CSharpier.VisualStudio
                                 solutionBasePath
                             );
                             processKiller.KillRunningProcesses();
-                        }
+                        },
                     }
                 );
             }

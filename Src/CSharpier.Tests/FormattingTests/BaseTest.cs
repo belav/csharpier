@@ -7,6 +7,9 @@ using FluentAssertions;
 
 namespace CSharpier.Tests.FormattingTests;
 
+using CSharpier.Utilities;
+using Microsoft.CodeAnalysis;
+
 public class BaseTest
 {
     private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent("CSharpier.Tests");
@@ -30,12 +33,11 @@ public class BaseTest
             CancellationToken.None
         );
 
-        PreprocessorSymbols.Reset();
-
         var result = await CodeFormatter.FormatAsync(
             fileReaderResult.FileContents,
             "." + fileExtensionWithoutDot,
             new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs },
+            // TODO fileExtensionWithoutDot.EqualsIgnoreCase("csx") ? SourceCodeKind.Script : SourceCodeKind.Regular,
             CancellationToken.None
         );
 
@@ -61,7 +63,14 @@ public class BaseTest
             normalizedCode = normalizedCode.Replace("\r\n", "\n");
         }
 
-        var comparer = new SyntaxNodeComparer(expectedCode, normalizedCode, CancellationToken.None);
+        var comparer = new SyntaxNodeComparer(
+            expectedCode,
+            normalizedCode,
+            false,
+            false,
+            SourceCodeKind.Regular,
+            CancellationToken.None
+        );
 
         result.CompilationErrors.Should().BeEmpty();
         result.FailureMessage.Should().BeEmpty();

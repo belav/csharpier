@@ -1,0 +1,27 @@
+public class DontReorderThis
+{
+#if !SILVERLIGHT
+    [Attribute]
+#endif
+    internal
+#if !SILVERLIGHT
+    unsafe
+#endif
+    static String Method() { }
+
+#if MONO
+    public void NewSymbolSet() { }
+#endif
+
+#if !SILVERLIGHT
+    [Attribute]
+#endif
+    private
+#if !SILVERLIGHT
+    static
+#endif
+    string Field;
+
+    // comment should not reorder modifiers
+    static public void Method() { }
+}

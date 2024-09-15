@@ -2,8 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Threading;
-using Microsoft.VisualStudio.Text.Editor.OptionsExtensionMethods;
+using System.Threading.Tasks;
 using Process = System.Diagnostics.Process;
 
 namespace CSharpier.VisualStudio
@@ -11,31 +10,24 @@ namespace CSharpier.VisualStudio
     public class CSharpierProcessPipeMultipleFiles : ICSharpierProcess
     {
         private readonly Logger logger;
-        private readonly Process process;
+        private Process process;
+        private readonly string csharpierPath;
+        private StreamWriter standardIn;
 
-        private readonly StreamWriter standardIn;
+        public string Version { get; }
+        public bool ProcessFailedToStart { get; private set; }
 
-        public CSharpierProcessPipeMultipleFiles(string csharpierPath, Logger logger)
+        public CSharpierProcessPipeMultipleFiles(
+            string csharpierPath,
+            string version,
+            Logger logger
+        )
         {
             this.logger = logger;
+            this.csharpierPath = csharpierPath;
+            this.Version = version;
 
-            var processStartInfo = new ProcessStartInfo(csharpierPath, " --pipe-multiple-files")
-            {
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                StandardOutputEncoding = Encoding.UTF8,
-                StandardErrorEncoding = Encoding.UTF8,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-            processStartInfo.EnvironmentVariables["DOTNET_NOLOGO"] = "1";
-            this.process = new Process { StartInfo = processStartInfo };
-            this.process.Start();
-            this.standardIn = new StreamWriter(
-                this.process.StandardInput.BaseStream,
-                Encoding.UTF8
-            );
+            this.StartProcess();
 
             this.logger.Debug("Warm CSharpier with initial format");
             // warm by formatting a file twice, the 3rd time is when it gets really fast
@@ -43,26 +35,80 @@ namespace CSharpier.VisualStudio
             this.FormatFile("public class ClassName { }", "Test.cs");
         }
 
+        private void StartProcess()
+        {
+            try
+            {
+                var processStartInfo = new ProcessStartInfo(
+                    this.csharpierPath,
+                    " --pipe-multiple-files"
+                )
+                {
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    StandardOutputEncoding = Encoding.UTF8,
+                    StandardErrorEncoding = Encoding.UTF8,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    EnvironmentVariables = { ["DOTNET_NOLOGO"] = "1" },
+                };
+                this.process = new Process { StartInfo = processStartInfo };
+                this.process.Start();
+                this.standardIn = new StreamWriter(
+                    this.process.StandardInput.BaseStream,
+                    Encoding.UTF8
+                );
+            }
+            catch (Exception ex)
+            {
+                this.logger.Warn(
+                    "Failed to spawn the needed csharpier process. Formatting cannot occur."
+                );
+                this.logger.Error(ex);
+                this.ProcessFailedToStart = true;
+            }
+        }
+
         public string FormatFile(string content, string filePath)
         {
-            this.standardIn.Write(filePath);
-            this.standardIn.Write('\u0003');
-            this.standardIn.Write(content);
-            this.standardIn.Write('\u0003');
-            this.standardIn.Flush();
+            if (this.ProcessFailedToStart)
+            {
+                this.logger.Warn("CSharpier process failed to start. Formatting cannot occur.");
+                return "";
+            }
 
             var stringBuilder = new StringBuilder();
 
-            var nextCharacter = this.process.StandardOutput.Read();
-            while (nextCharacter != -1)
+            var task = Task.Run(() =>
             {
-                if (nextCharacter == '\u0003')
-                {
-                    break;
-                }
+                this.standardIn.Write(filePath);
+                this.standardIn.Write('\u0003');
+                this.standardIn.Write(content);
+                this.standardIn.Write('\u0003');
+                this.standardIn.Flush();
 
-                stringBuilder.Append((char)nextCharacter);
-                nextCharacter = this.process.StandardOutput.Read();
+                var nextCharacter = this.process.StandardOutput.Read();
+                while (nextCharacter != -1)
+                {
+                    if (nextCharacter == '\u0003')
+                    {
+                        break;
+                    }
+
+                    stringBuilder.Append((char)nextCharacter);
+                    nextCharacter = this.process.StandardOutput.Read();
+                }
+            });
+
+            // csharpier will freeze in some instances when "Format on Save" is also installed and the file has compilation errors
+            // this detects that and recovers from it
+            if (!task.Wait(TimeSpan.FromSeconds(3)))
+            {
+                this.logger.Warn("CSharpier process appears to be hung, restarting it.");
+                this.process.Kill();
+                this.StartProcess();
+                return string.Empty;
             }
 
             var result = stringBuilder.ToString();

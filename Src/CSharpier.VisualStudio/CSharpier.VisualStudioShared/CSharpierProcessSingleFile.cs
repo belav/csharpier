@@ -8,10 +8,14 @@ namespace CSharpier.VisualStudio
         private readonly string csharpierPath;
         private readonly Logger logger;
 
-        public CSharpierProcessSingleFile(string csharpierPath, Logger logger)
+        public string Version { get; }
+        public bool ProcessFailedToStart => false;
+
+        public CSharpierProcessSingleFile(string csharpierPath, string version, Logger logger)
         {
             this.csharpierPath = csharpierPath;
             this.logger = logger;
+            this.Version = version;
         }
 
         public string FormatFile(string content, string fileName)
@@ -25,7 +29,7 @@ namespace CSharpier.VisualStudio
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
-                CreateNoWindow = true
+                CreateNoWindow = true,
             };
             processStartInfo.EnvironmentVariables["DOTNET_NOLOGO"] = "1";
 
@@ -42,7 +46,8 @@ namespace CSharpier.VisualStudio
 
             var result = output.ToString();
             if (
-                process.ExitCode == 0 && !result.Contains("Failed to compile so was not formatted.")
+                process.ExitCode == 0
+                && !result.Contains("Failed to compile so was not formatted.")
             )
             {
                 return result;

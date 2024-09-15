@@ -12,11 +12,12 @@ internal static class AnonymousObjectCreationExpression
             node.Initializers.Any()
                 ? Doc.Indent(
                     alwaysBreak ? Doc.HardLine : Doc.Line,
-                    SeparatedSyntaxList.Print(
+                    SeparatedSyntaxList.PrintWithTrailingComma(
                         node.Initializers,
                         AnonymousObjectMemberDeclarator.Print,
                         Doc.Line,
-                        context
+                        context,
+                        node.CloseBraceToken
                     )
                 )
                 : Doc.Null,

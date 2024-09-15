@@ -7,14 +7,15 @@
     <depends>com.intellij.modules.rider</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.intellij.csharpier.ReformatWithCSharpierOnSave"/>
         <projectService serviceImplementation="com.intellij.csharpier.CSharpierProcessProvider"/>
+        <projectService serviceImplementation="com.intellij.csharpier.DotNetProvider"/>
         <projectService serviceImplementation="com.intellij.csharpier.FormattingService"/>
         <projectService serviceImplementation="com.intellij.csharpier.CSharpierSettings"/>
         <projectService serviceImplementation="com.intellij.csharpier.InstallerService"/>
         <notificationGroup id="CSharpier" displayType="STICKY_BALLOON"/>
         <postStartupActivity implementation="com.intellij.csharpier.CSharpierStartup"/>
         <projectConfigurable
+                displayName="CSharpier"
                 parentId="tools"
                 id="com.intellij.csharpier.CSharpierSettingsComponent"
                 instance="com.intellij.csharpier.CSharpierSettingsComponent"/>
@@ -25,4 +26,8 @@
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
     </actions>
+    <applicationListeners>
+      <listener class="com.intellij.csharpier.ReformatWithCSharpierOnSaveListener"
+                topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener"/>
+    </applicationListeners>
 </idea-plugin>

@@ -15,7 +15,7 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual.Should().Be("Doc.Directive(\"1\")");
+        ActualShouldBe(actual, "Doc.Directive(\"1\")");
     }
 
     [Test]
@@ -37,10 +37,9 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual
-            .Should()
-            .Be(
-                @"Doc.Concat(
+        ActualShouldBe(
+            actual,
+            @"Doc.Concat(
     Doc.Line,
     Doc.LiteralLine,
     Doc.HardLine,
@@ -53,7 +52,7 @@ internal class DocSerializerTests
     Doc.BreakParent,
     ""1""
 )"
-            );
+        );
     }
 
     [Test]
@@ -63,14 +62,13 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual
-            .Should()
-            .Be(
-                @"Doc.Group(
+        ActualShouldBe(
+            actual,
+            @"Doc.Group(
     Doc.Null,
     Doc.Null
 )"
-            );
+        );
     }
 
     [Test]
@@ -80,15 +78,14 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual
-            .Should()
-            .Be(
-                @"Doc.GroupWithId(
+        ActualShouldBe(
+            actual,
+            @"Doc.GroupWithId(
     ""1"",
     Doc.Null,
     Doc.Null
 )"
-            );
+        );
     }
 
     [Test]
@@ -101,10 +98,9 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual
-            .Should()
-            .Be(
-                @"Doc.ConditionalGroup(
+        ActualShouldBe(
+            actual,
+            @"Doc.ConditionalGroup(
     Doc.Concat(
         Doc.Line,
         Doc.Line
@@ -114,7 +110,7 @@ internal class DocSerializerTests
         Doc.LiteralLine
     )
 )"
-            );
+        );
     }
 
     [Test]
@@ -124,15 +120,14 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual
-            .Should()
-            .Be(
-                @"Doc.Align(
+        ActualShouldBe(
+            actual,
+            @"Doc.Align(
     2,
     Doc.Null,
     Doc.Null
 )"
-            );
+        );
     }
 
     [Test]
@@ -142,14 +137,13 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual
-            .Should()
-            .Be(
-                @"Doc.ForceFlat(
+        ActualShouldBe(
+            actual,
+            @"Doc.ForceFlat(
     Doc.Null,
     Doc.Null
 )"
-            );
+        );
     }
 
     [Test]
@@ -159,14 +153,13 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual
-            .Should()
-            .Be(
-                @"Doc.Indent(
+        ActualShouldBe(
+            actual,
+            @"Doc.Indent(
     Doc.Null,
     Doc.Null
 )"
-            );
+        );
     }
 
     [Test]
@@ -176,14 +169,13 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual
-            .Should()
-            .Be(
-                @"Doc.IndentIfBreak(
+        ActualShouldBe(
+            actual,
+            @"Doc.IndentIfBreak(
     Doc.Null,
     ""1""
 )"
-            );
+        );
     }
 
     [Test]
@@ -193,15 +185,14 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual
-            .Should()
-            .Be(
-                @"Doc.IfBreak(
+        ActualShouldBe(
+            actual,
+            @"Doc.IfBreak(
     Doc.Null,
     Doc.Line,
     ""1""
 )"
-            );
+        );
     }
 
     [Test]
@@ -211,14 +202,13 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual
-            .Should()
-            .Be(
-                @"Doc.IfBreak(
+        ActualShouldBe(
+            actual,
+            @"Doc.IfBreak(
     Doc.Null,
     Doc.Line
 )"
-            );
+        );
     }
 
     [TestCase(CommentType.SingleLine)]
@@ -229,7 +219,7 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual.Should().Be(@$"Doc.LeadingComment(""1"", CommentType.{commentType})");
+        ActualShouldBe(actual, @$"Doc.LeadingComment(""1"", CommentType.{commentType})");
     }
 
     [TestCase(CommentType.SingleLine)]
@@ -240,6 +230,11 @@ internal class DocSerializerTests
 
         var actual = DocSerializer.Serialize(doc);
 
-        actual.Should().Be(@$"Doc.TrailingComment(""1"", CommentType.{commentType})");
+        ActualShouldBe(actual, @$"Doc.TrailingComment(""1"", CommentType.{commentType})");
+    }
+
+    private static void ActualShouldBe(string actual, string expected)
+    {
+        actual.ReplaceLineEndings().Should().Be(expected.ReplaceLineEndings());
     }
 }

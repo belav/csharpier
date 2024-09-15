@@ -5,5 +5,46 @@ public class ClassName
         this.Method(true);
 
         this.NamedArguments(b: true, c: "false");
+
+        this.ToDictionary(o => o.Key, o => new { o.Prop });
+
+        this.ToDictionary(o => o.Key, o => new Entity { o.Prop });
+
+        this.ToDictionary_____________(
+            o => o.VeryLongKey_________________________,
+            o => new { o.Prop }
+        );
+
+        this.ToDictionary_____________(
+            o => o.VeryLongKey_________________________,
+            o => new Entity { o.Prop }
+        );
+
+        this.ToDictionary_____________(
+            keySelector: static o => o.Key,
+            elementSelector: static o => new Entity { o.Prop }
+        );
+
+        this.ToDictionary_____________(
+            keySelector: static o => o.Key,
+            elementSelector: static o => new Entity
+            {
+                o.LongName_______________________,
+                o.LongName_______________________,
+            }
+        );
+
+        this.GroupBy_____________(
+            keySelector: static o => new Entity
+            {
+                o.LongName_______________________,
+                o.LongName_______________________,
+            },
+            resultSelector: static o => new Entity
+            {
+                o.LongName_______________________,
+                o.LongName_______________________,
+            }
+        );
     }
 }

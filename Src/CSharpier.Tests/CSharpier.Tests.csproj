@@ -3,10 +3,13 @@
     <IsPackable>false</IsPackable>
     <RootNamespace>CSharpier.Tests</RootNamespace>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DiffEngine" />
     <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="GitHubActionsTestLogger" PrivateAssets="all" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit3TestAdapter" />

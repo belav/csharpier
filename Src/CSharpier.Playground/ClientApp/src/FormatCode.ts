@@ -2,11 +2,17 @@ let gutters: any[] = [];
 let marks: any[] = [];
 let editor: any = undefined;
 
-export const formatCode = async (code: string, fileExtension: string) => {
+export const formatCode = async (
+    code: string,
+    printWidth: number,
+    indentSize: number,
+    useTabs: boolean,
+    parser: string,
+) => {
     const makeRequest = async () => {
-        const response = await fetch("/Format?fileExtension=" + fileExtension, {
+        const response = await fetch("/Format", {
             method: "POST",
-            body: JSON.stringify(code),
+            body: JSON.stringify({ code, printWidth, indentSize, useTabs, parser }),
             headers: {
                 "Content-Type": "application/json",
                 "cache-control": "no-cache",
@@ -24,6 +30,7 @@ export const formatCode = async (code: string, fileExtension: string) => {
                 formattedCode: data.code,
                 doc: data.doc,
                 hasErrors: !!data.errors.length,
+                syntaxValidation: data.syntaxValidation,
             };
         } else {
             const text = await response.text();

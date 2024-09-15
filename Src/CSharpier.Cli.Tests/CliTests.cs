@@ -1,18 +1,12 @@
-using System;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using CliWrap;
-using CliWrap.Buffered;
-using FluentAssertions;
-using NUnit.Framework;
-
 namespace CSharpier.Cli.Tests;
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
+using System.Text;
+using CliWrap;
+using CliWrap.Buffered;
+using FluentAssertions;
+using NUnit.Framework;
 
 // these tests are kind of nice as c# because they run in the same place.
 // except the one test that has issues with console input redirection
@@ -67,12 +61,8 @@ public class CliTests
 
         var result = await new CsharpierProcess().WithArguments("BasicFile.cs").ExecuteAsync();
 
-        result.Output.Should().StartWith("Total time:");
-        result.Output
-            .Should()
-            .Contain(
-                "Total files:                                                                           1"
-            );
+        result.ErrorOutput.Should().BeNullOrEmpty();
+        result.Output.Should().StartWith("Formatted 1 files in ");
         result.ExitCode.Should().Be(0);
         (await this.ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
     }
@@ -88,12 +78,7 @@ public class CliTests
 
         var result = await new CsharpierProcess().WithArguments(subdirectory).ExecuteAsync();
 
-        result.Output.Should().StartWith("Total time:");
-        result.Output
-            .Should()
-            .Contain(
-                "Total files:                                                                           1"
-            );
+        result.Output.Should().StartWith("Formatted 1 files in ");
         result.ExitCode.Should().Be(0);
         (await this.ReadAllTextAsync("Subdirectory/BasicFile.cs")).Should().Be(formattedContent);
     }
@@ -140,8 +125,8 @@ public class CliTests
         var result = await new CsharpierProcess().ExecuteAsync();
 
         result.ExitCode.Should().Be(1);
-        result.ErrorOutput
-            .Should()
+        result
+            .ErrorOutput.Should()
             .Contain("directoryOrFile is required when not piping stdin to CSharpier");
     }
 
@@ -151,6 +136,42 @@ public class CliTests
     {
         var formattedContent1 = "public class ClassName1 { }" + lineEnding;
         var unformattedContent1 = $"public class ClassName1 {{{lineEnding}{lineEnding}}}";
+
+        var result = await new CsharpierProcess()
+            .WithPipedInput(unformattedContent1)
+            .ExecuteAsync();
+
+        result.Output.Should().Be(formattedContent1);
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    public async Task Should_Format_Piped_File_With_Config()
+    {
+        await this.WriteFileAsync(".csharpierrc", "printWidth: 10");
+
+        var formattedContent1 = "var x =\n    _________________longName;\n";
+        var unformattedContent1 = "var x = _________________longName;\n";
+
+        var result = await new CsharpierProcess()
+            .WithPipedInput(unformattedContent1)
+            .ExecuteAsync();
+
+        result.Output.Should().Be(formattedContent1);
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    public async Task Should_Format_Piped_File_With_EditorConfig()
+    {
+        await this.WriteFileAsync(
+            ".editorconfig",
+            @"[*]
+max_line_length = 10"
+        );
+
+        var formattedContent1 = "var x =\n    _________________longName;\n";
+        var unformattedContent1 = "var x = _________________longName;\n";
 
         var result = await new CsharpierProcess()
             .WithPipedInput(unformattedContent1)
@@ -173,15 +194,15 @@ public class CliTests
         result.ExitCode.Should().Be(0);
     }
 
-    [Test]
-    public async Task Should_Print_NotFound()
+    [TestCase("BasicFile.cs")]
+    [TestCase("./BasicFile.cs")]
+    [TestCase("/BasicFile.cs")]
+    public async Task Should_Print_NotFound(string path)
     {
-        var result = await new CsharpierProcess().WithArguments("/BasicFile.cs").ExecuteAsync();
+        var result = await new CsharpierProcess().WithArguments(path).ExecuteAsync();
 
         result.Output.Should().BeEmpty();
-        result.ErrorOutput
-            .Should()
-            .StartWith("There was no file or directory found at /BasicFile.cs");
+        result.ErrorOutput.Should().StartWith("There was no file or directory found at " + path);
         result.ExitCode.Should().Be(1);
     }
 
@@ -208,13 +229,14 @@ public class CliTests
             .WithArguments("CheckUnformatted.cs --check")
             .ExecuteAsync();
 
-        result.Output
-            .Replace("\\", "/")
+        result
+            .ErrorOutput.Replace("\\", "/")
             .Should()
-            .StartWith("Warning ./CheckUnformatted.cs - Was not formatted.");
+            .StartWith("Error ./CheckUnformatted.cs - Was not formatted.");
         result.ExitCode.Should().Be(1);
     }
 
+    // TODO overrides tests for piping files
     [TestCase("\n")]
     [TestCase("\r\n")]
     public async Task Should_Format_Multiple_Piped_Files(string lineEnding)
@@ -251,10 +273,10 @@ public class CliTests
             .WithPipedInput($"{input}{'\u0003'}{invalidFile}{'\u0003'}")
             .ExecuteAsync();
 
-        result.ErrorOutput
-            .Should()
-            .Be(
-                $"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}  (1,26): error CS1513: }} expected{Environment.NewLine}"
+        result
+            .ErrorOutput.Should()
+            .StartWith(
+                $"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}  (1,26): error CS1513: }}"
             );
         result.ExitCode.Should().Be(1);
     }
@@ -292,13 +314,37 @@ public class CliTests
     }
 
     [Test]
+    public async Task Should_Support_Override_Config_With_Multiple_Piped_Files()
+    {
+        const string fileContent = "var myVariable = someLongValue;";
+        var fileName = Path.Combine(testFileDirectory, "TooWide.cst");
+        await this.WriteFileAsync(
+            ".csharpierrc",
+            """
+            overrides:
+              - files: "*.cst"
+                formatter: "csharp"
+                printWidth: 10
+            """
+        );
+
+        var result = await new CsharpierProcess()
+            .WithArguments("--pipe-multiple-files")
+            .WithPipedInput($"{fileName}{'\u0003'}{fileContent}{'\u0003'}")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.Output.TrimEnd('\u0003').Should().Be("var myVariable =\n    someLongValue;\n");
+    }
+
+    [Test]
     public async Task Should_Not_Fail_On_Empty_File()
     {
         await this.WriteFileAsync("BasicFile.cs", "");
 
         var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
 
-        result.Output.Should().StartWith("Total time:");
+        result.Output.Should().StartWith("Formatted 0 files in ");
         result.ErrorOutput.Should().BeEmpty();
         result.ExitCode.Should().Be(0);
     }
@@ -313,6 +359,47 @@ public class CliTests
         result.ErrorOutput.Should().BeEmpty();
         result.ExitCode.Should().Be(0);
         result.Output.Should().StartWith("Warning The csproj at ");
+    }
+
+    [Test]
+    public async Task Should_Not_Fail_On_Mismatched_MSBuild_With_No_Check()
+    {
+        await this.WriteFileAsync(
+            "Test.csproj",
+            @"<Project Sdk=""Microsoft.NET.Sdk"">
+    <ItemGroup>
+        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
+    </ItemGroup>
+</Project>"
+        );
+
+        var result = await new CsharpierProcess()
+            .WithArguments("--no-msbuild-check .")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
+        result.Output.Should().StartWith("Formatted 0 files in ");
+    }
+
+    [Test]
+    public async Task Should_Fail_On_Mismatched_MSBuild()
+    {
+        await this.WriteFileAsync(
+            "Test.csproj",
+            @"<Project Sdk=""Microsoft.NET.Sdk"">
+    <ItemGroup>
+        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
+    </ItemGroup>
+</Project>"
+        );
+
+        var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+
+        result
+            .ErrorOutput.Should()
+            .Contain("uses version 99 of CSharpier.MsBuild which is a mismatch with version");
+        result.ExitCode.Should().Be(1);
     }
 
     [Test]
@@ -472,8 +559,8 @@ public class CliTests
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
 
-            this.command = CliWrap.Cli
-                .Wrap("dotnet")
+            this.command = CliWrap
+                .Cli.Wrap("dotnet")
                 .WithArguments(path)
                 .WithWorkingDirectory(testFileDirectory)
                 .WithValidation(CommandResultValidation.None)

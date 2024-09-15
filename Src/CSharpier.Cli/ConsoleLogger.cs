@@ -2,15 +2,17 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
-public class ConsoleLogger : ILogger
+internal class ConsoleLogger : ILogger
 {
     private static readonly object ConsoleLock = new();
 
     private readonly IConsole console;
+    private readonly LogLevel loggingLevel;
 
-    public ConsoleLogger(IConsole console)
+    public ConsoleLogger(IConsole console, LogLevel loggingLevel)
     {
         this.console = console;
+        this.loggingLevel = loggingLevel;
     }
 
     public virtual void Log<TState>(
@@ -21,6 +23,11 @@ public class ConsoleLogger : ILogger
         Func<TState, Exception, string> formatter
     )
     {
+        if (logLevel < this.loggingLevel)
+        {
+            return;
+        }
+
         void Write(string value)
         {
             if (logLevel >= LogLevel.Error)
@@ -103,6 +110,7 @@ public class ConsoleLogger : ILogger
     }
 
     public IDisposable BeginScope<TState>(TState state)
+        where TState : notnull
     {
         throw new NotImplementedException();
     }

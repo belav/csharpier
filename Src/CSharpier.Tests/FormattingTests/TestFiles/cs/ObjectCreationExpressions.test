@@ -6,7 +6,7 @@ public class ClassName
 
     public ClassName WithMediumInitializer = new ClassName
     {
-        Property_____________________________ = true
+        Property_____________________________ = true,
     };
 
     public ClassName WithBigInitializer = new ClassName
@@ -15,7 +15,7 @@ public class ClassName
         Property2 = false,
         Property3 = false,
         Property4 = false,
-        Property5 = false
+        Property5 = false,
     };
 
     public ClassName TrailingComma = new ClassName_______________________
@@ -35,7 +35,7 @@ public class ClassName
         new ClassName("parameter1", "parameter2") { Property1 = true }
     )
     {
-        Property1 = true
+        Property1 = true,
     };
 
     public SomeGenericObject<SomeRandomObject> WithGenericLongEnoughToBreak =

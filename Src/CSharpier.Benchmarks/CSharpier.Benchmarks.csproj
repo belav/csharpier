@@ -1,12 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet"/>
-    <PackageReference Include="BenchmarkDotNet.Annotations"/>
+    <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="BenchmarkDotNet.Annotations" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpier\CSharpier.csproj"/>
+    <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
   </ItemGroup>
 </Project>

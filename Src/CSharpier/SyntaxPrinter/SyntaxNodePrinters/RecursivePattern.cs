@@ -27,15 +27,17 @@ internal static class RecursivePattern
         if (node.PositionalPatternClause != null)
         {
             result.Add(
-                node.Parent is SwitchExpressionArmSyntax or CasePatternSwitchLabelSyntax
+                node.Parent
+                    is SwitchExpressionArmSyntax
+                        or CasePatternSwitchLabelSyntax
+                        or BinaryPatternSyntax
+                        {
+                            Parent: SwitchExpressionArmSyntax or CasePatternSwitchLabelSyntax
+                        }
                     ? Doc.Null
                     : Doc.SoftLine,
-                Token.PrintLeadingTrivia(node.PositionalPatternClause.OpenParenToken, context),
                 Doc.Group(
-                    Token.PrintWithoutLeadingTrivia(
-                        node.PositionalPatternClause.OpenParenToken,
-                        context
-                    ),
+                    Token.Print(node.PositionalPatternClause.OpenParenToken, context),
                     Doc.Indent(
                         Doc.SoftLine,
                         SeparatedSyntaxList.Print(
@@ -73,18 +75,14 @@ internal static class RecursivePattern
             else
             {
                 result.Add(
-                    Token.PrintLeadingTrivia(node.PropertyPatternClause.OpenBraceToken, context),
                     Doc.Group(
                         node.Type != null
-                        && !node.PropertyPatternClause.OpenBraceToken.LeadingTrivia.Any(
-                            o => o.IsDirective || o.IsComment()
+                        && !node.PropertyPatternClause.OpenBraceToken.LeadingTrivia.Any(o =>
+                            o.IsDirective || o.IsComment()
                         )
                             ? Doc.Line
                             : Doc.Null,
-                        Token.PrintWithoutLeadingTrivia(
-                            node.PropertyPatternClause.OpenBraceToken,
-                            context
-                        ),
+                        Token.Print(node.PropertyPatternClause.OpenBraceToken, context),
                         Doc.Indent(
                             node.PropertyPatternClause.Subpatterns.Any() ? Doc.Line : Doc.Null,
                             SeparatedSyntaxList.Print(

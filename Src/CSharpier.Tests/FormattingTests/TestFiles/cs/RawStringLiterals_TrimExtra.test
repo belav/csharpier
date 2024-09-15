@@ -1,0 +1,11 @@
+var whatAboutWhiteSpace = """
+    Four Spaces
+  
+    That last line is only two
+    """;
+
+var whatAboutWhiteSpace = $"""
+    Four Spaces
+  
+    That last line is only two
+    """;

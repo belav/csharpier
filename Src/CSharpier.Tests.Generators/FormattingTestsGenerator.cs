@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.IO;
+using System.Linq;
+using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Tests.Generators;
 
@@ -33,12 +35,11 @@ public class FormattingTestsGenerator : ISourceGenerator
 
     private IEnumerable<string> GetExtensions(GeneratorExecutionContext context)
     {
-        return context.AdditionalFiles
-            .Where(
-                o =>
-                    o.Path.EndsWith(".test")
-                    && !o.Path.EndsWith(".actual.test")
-                    && !o.Path.EndsWith(".expected.test")
+        return context
+            .AdditionalFiles.Where(o =>
+                o.Path.EndsWith(".test")
+                && !o.Path.EndsWith(".actual.test")
+                && !o.Path.EndsWith(".expected.test")
             )
             .Select(o => new FileInfo(o.Path).Directory!.Name)
             .Distinct();
@@ -46,23 +47,19 @@ public class FormattingTestsGenerator : ISourceGenerator
 
     protected object GetModel(GeneratorExecutionContext context, string extension)
     {
-        var tests = context.AdditionalFiles
-            .Where(
-                o =>
-                    o.Path.EndsWith(".test")
-                    && !o.Path.EndsWith(".actual.test")
-                    && !o.Path.EndsWith(".expected.test")
-                    && new FileInfo(o.Path).Directory!.Name == extension
+        var tests = context
+            .AdditionalFiles.Where(o =>
+                o.Path.EndsWith(".test")
+                && !o.Path.EndsWith(".actual.test")
+                && !o.Path.EndsWith(".expected.test")
+                && new FileInfo(o.Path).Directory!.Name == extension
             )
-            .Select(
-                o =>
-                    new
-                    {
-                        Name = Path.GetFileNameWithoutExtension(o.Path),
-                        FileExtension = new FileInfo(o.Path).Directory!.Name,
-                        UseTabs = Path.GetFileNameWithoutExtension(o.Path).EndsWith("_Tabs")
-                    }
-            );
+            .Select(o => new
+            {
+                Name = Path.GetFileNameWithoutExtension(o.Path),
+                FileExtension = new FileInfo(o.Path).Directory!.Name,
+                UseTabs = Path.GetFileNameWithoutExtension(o.Path).EndsWith("_Tabs"),
+            });
 
         return new { Tests = tests, FileExtension = extension };
     }

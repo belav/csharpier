@@ -8,10 +8,18 @@ internal static class ListPattern
             Token.Print(node.OpenBracketToken, context),
             Doc.Indent(
                 Doc.SoftLine,
-                SeparatedSyntaxList.Print(node.Patterns, Node.Print, Doc.Line, context)
+                SeparatedSyntaxList.PrintWithTrailingComma(
+                    node.Patterns,
+                    Node.Print,
+                    Doc.Line,
+                    context,
+                    node.CloseBracketToken
+                )
             ),
             Doc.SoftLine,
-            Token.Print(node.CloseBracketToken, context)
+            Token.Print(node.CloseBracketToken, context),
+            node.Designation is not null ? " " : Doc.Null,
+            Node.Print(node.Designation, context)
         );
     }
 }

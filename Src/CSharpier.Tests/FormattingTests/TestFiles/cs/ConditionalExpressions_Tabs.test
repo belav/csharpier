@@ -100,13 +100,10 @@ public class ClassName
 			? trueValue________________________________
 			: falseValue_______________________________;
 
-		return firstCondition
-			? firstValue
-			: secondCondition
-				? secondValue
-				: thirdCondition
-					? thirdValue
-					: fourthValue;
+		return firstCondition ? firstValue
+			: secondCondition ? secondValue
+			: thirdCondition ? thirdValue
+			: fourthValue;
 
 		return firstCondition
 			? secondCondition
@@ -118,11 +115,9 @@ public class ClassName
 
 		return a ? b : c;
 
-		return a
-			? b
-			: c
-				? d
-				: e;
+		return a ? b
+			: c ? d
+			: e;
 
 		var invocationIndent = someCondition
 			? SomeObject

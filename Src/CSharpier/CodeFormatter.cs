@@ -1,3 +1,7 @@
+using System.Text;
+using CSharpier.SyntaxPrinter;
+using System.Text.Json;
+
 namespace CSharpier;
 
 using CSharpier.Formatters.Xml;
@@ -19,7 +23,15 @@ public static class CodeFormatter
 
         return CSharpFormatter.FormatAsync(
             code,
-            new PrinterOptions { Width = options.Width },
+            new PrinterOptions
+            {
+                Width = options.Width,
+                UseTabs = options.IndentStyle == IndentStyle.Tabs,
+                IndentSize = options.IndentSize,
+                EndOfLine = options.EndOfLine,
+                IncludeGenerated = options.IncludeGenerated,
+                Formatter = "csharp",
+            },
             cancellationToken
         );
     }
@@ -42,7 +54,15 @@ public static class CodeFormatter
 
         return CSharpFormatter.FormatAsync(
             syntaxTree,
-            new PrinterOptions { Width = options.Width },
+            new PrinterOptions
+            {
+                Width = options.Width,
+                UseTabs = options.IndentStyle == IndentStyle.Tabs,
+                IndentSize = options.IndentSize,
+                EndOfLine = options.EndOfLine,
+                Formatter = "csharp",
+            },
+            SourceCodeKind.Regular,
             cancellationToken
         );
     }
