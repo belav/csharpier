@@ -1,6 +1,6 @@
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
-
 using System.Text.RegularExpressions;
+
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BaseMethodDeclaration
 {

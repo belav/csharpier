@@ -1,9 +1,8 @@
+using CSharpier.SyntaxPrinter;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CSharpier.Tests;
-
-using CSharpier.SyntaxPrinter;
-using FluentAssertions;
 
 [TestFixture]
 public class CSharpierIgnoreTests

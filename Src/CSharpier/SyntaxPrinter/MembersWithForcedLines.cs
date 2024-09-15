@@ -1,8 +1,7 @@
 using System.Collections.Immutable;
+using System.Text;
 
 namespace CSharpier.SyntaxPrinter;
-
-using System.Text;
 
 internal static class MembersWithForcedLines
 {

@@ -1,7 +1,7 @@
-namespace CSharpier.Tests;
-
 using FluentAssertions;
 using NUnit.Framework;
+
+namespace CSharpier.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]

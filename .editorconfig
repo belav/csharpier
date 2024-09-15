@@ -4,4 +4,5 @@ indent_style = space
 
 [*.{cs,vb}]
 dotnet_diagnostic.RS0041.severity = warning
+dotnet_diagnostic.IDE0065.severity = warning
 csharp_using_directive_placement = outside_namespace

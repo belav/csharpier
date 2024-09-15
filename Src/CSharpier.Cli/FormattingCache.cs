@@ -3,11 +3,10 @@ using System.IO.Abstractions;
 using System.IO.Hashing;
 using System.Text;
 using System.Text.Json;
+using CSharpier.Cli.Options;
 using CSharpier.Utilities;
 
 namespace CSharpier.Cli;
-
-using CSharpier.Cli.Options;
 
 internal interface IFormattingCache
 {

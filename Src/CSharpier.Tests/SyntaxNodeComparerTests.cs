@@ -1,9 +1,8 @@
 using FluentAssertions;
+using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 
 namespace CSharpier.Tests;
-
-using Microsoft.CodeAnalysis;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]

@@ -1,6 +1,6 @@
-namespace CSharpier.SyntaxPrinter;
-
 using System.Text;
+
+namespace CSharpier.SyntaxPrinter;
 
 internal static class SeparatedSyntaxList
 {

@@ -1,7 +1,7 @@
-namespace CSharpier.SyntaxPrinter;
-
 using System.Text;
 using System.Text.RegularExpressions;
+
+namespace CSharpier.SyntaxPrinter;
 
 internal static class CSharpierIgnore
 {

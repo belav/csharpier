@@ -1,6 +1,6 @@
-namespace CSharpier.Formatters.Xml.XmlNodePrinters;
-
 using System.Xml;
+
+namespace CSharpier.Formatters.Xml.XmlNodePrinters;
 
 internal static class Element
 {

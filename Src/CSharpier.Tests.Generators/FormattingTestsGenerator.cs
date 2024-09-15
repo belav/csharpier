@@ -1,12 +1,11 @@
 ﻿using System.IO;
 using System.Linq;
-using Microsoft.CodeAnalysis;
-
-namespace CSharpier.Tests.Generators;
-
 using System.Text;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Scriban;
+
+namespace CSharpier.Tests.Generators;
 
 // the magic command to get source generators to actually regenerate when they get stuck with old code
 // dotnet build-server shutdown

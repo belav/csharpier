@@ -4,9 +4,6 @@ using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Playground.Controllers;
 
-using CSharpier.Formatters.Xml;
-using CSharpier.Utilities;
-
 public class FormatResult
 {
     public required string Code { get; set; }

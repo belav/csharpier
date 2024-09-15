@@ -1,8 +1,8 @@
-namespace CSharpier.Formatters.Xml;
-
 using System.Text.Json;
 using System.Xml;
 using CSharpier.Formatters.Xml.XmlNodePrinters;
+
+namespace CSharpier.Formatters.Xml;
 
 internal static class XmlFormatter
 {
@@ -19,7 +19,7 @@ internal static class XmlFormatter
         {
             Code = formattedXml,
             DocTree = printerOptions.IncludeDocTree ? DocSerializer.Serialize(doc) : string.Empty,
-            AST = printerOptions.IncludeAST ? JsonSerializer.Serialize(xmlDocument) : string.Empty
+            AST = printerOptions.IncludeAST ? JsonSerializer.Serialize(xmlDocument) : string.Empty,
         };
     }
 }

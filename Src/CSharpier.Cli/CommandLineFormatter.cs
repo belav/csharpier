@@ -3,11 +3,10 @@ using System.IO.Abstractions;
 using System.Text;
 using CSharpier.Cli.Options;
 using CSharpier.Utilities;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
-
-using Microsoft.CodeAnalysis;
 
 internal static class CommandLineFormatter
 {
@@ -177,9 +176,9 @@ internal static class CommandLineFormatter
                 cancellationToken
             );
 
-            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[
-                x
-            ].Replace("\\", "/");
+            var originalDirectoryOrFile = commandLineOptions
+                .OriginalDirectoryOrFilePaths[x]
+                .Replace("\\", "/");
 
             var formattingCache = await FormattingCacheFactory.InitializeAsync(
                 commandLineOptions,
@@ -255,8 +254,12 @@ internal static class CommandLineFormatter
                     return 1;
                 }
 
-                var tasks = fileSystem.Directory
-                    .EnumerateFiles(directoryOrFilePath, "*.*", SearchOption.AllDirectories)
+                var tasks = fileSystem
+                    .Directory.EnumerateFiles(
+                        directoryOrFilePath,
+                        "*.*",
+                        SearchOption.AllDirectories
+                    )
                     .Select(o =>
                     {
                         var normalizedPath = o.Replace("\\", "/");

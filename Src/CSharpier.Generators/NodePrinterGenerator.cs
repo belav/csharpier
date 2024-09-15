@@ -1,9 +1,9 @@
-﻿namespace CSharpier.Generators;
-
-using System.Text;
+﻿using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Scriban;
+
+namespace CSharpier.Generators;
 
 // the magic command to get source generators to actually regenerate when they get stuck with old code
 // dotnet build-server shutdown

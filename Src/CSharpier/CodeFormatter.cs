@@ -1,10 +1,9 @@
 using System.Text;
-using CSharpier.SyntaxPrinter;
 using System.Text.Json;
+using CSharpier.Formatters.Xml;
+using CSharpier.SyntaxPrinter;
 
 namespace CSharpier;
-
-using CSharpier.Formatters.Xml;
 
 public static class CodeFormatter
 {
