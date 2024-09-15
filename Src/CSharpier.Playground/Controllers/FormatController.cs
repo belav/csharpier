@@ -36,9 +36,6 @@ public class FormatController : ControllerBase
     public class PostModel
     {
         public string Code { get; set; } = string.Empty;
-
-        // TODO ditch this and use the parser?
-        public string FileExtension { get; set; } = string.Empty;
         public int PrintWidth { get; set; }
         public int IndentSize { get; set; }
         public bool UseTabs { get; set; }
@@ -51,13 +48,15 @@ public class FormatController : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        var sourceCodeKind = model.FileExtension.EqualsIgnoreCase(".csx")
+        // TODO
+        var sourceCodeKind = false // model.FileExtension.EqualsIgnoreCase(".csx")
             ? SourceCodeKind.Script
             : SourceCodeKind.Regular;
 
         var result = await CodeFormatter.FormatAsync(
             model.Code,
-            model.FileExtension,
+            // TODO
+            ".cs",
             new PrinterOptions
             {
                 IncludeAST = true,
