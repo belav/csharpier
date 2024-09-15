@@ -70,7 +70,7 @@ public class ClassName
 
 ```
 
-Use a ranged ignore to exclude multiple lines from formatting. A range is valid around statements and members.
+Use a ranged ignore to exclude multiple lines from formatting. A range is not valid in all contexts. Currently it works with statements, members and object initializer expressions.
 ```csharp
 // csharpier-ignore-start
 public class Unformatted1     { }
@@ -104,6 +104,12 @@ public class ClassName
             
             var formatted = true;
         }
+
+        return new SomeClass
+        {
+            // csharpier-ignore-start
+            SomeProperty    = true
+            // csharpier-ignore-end
     }
 }
 ```
