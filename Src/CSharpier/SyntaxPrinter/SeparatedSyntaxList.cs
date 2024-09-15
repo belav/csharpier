@@ -1,5 +1,7 @@
 namespace CSharpier.SyntaxPrinter;
 
+using System.Text;
+
 internal static class SeparatedSyntaxList
 {
     public static Doc Print<T>(
@@ -40,8 +42,38 @@ internal static class SeparatedSyntaxList
         where T : SyntaxNode
     {
         var docs = new List<Doc>();
+        var unFormattedCode = new StringBuilder();
+        var printUnformatted = false;
         for (var x = startingIndex; x < list.Count; x++)
         {
+            var member = list[x];
+
+            if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
+            {
+                docs.Add(unFormattedCode.ToString().Trim());
+                unFormattedCode.Clear();
+                printUnformatted = false;
+            }
+            else if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreStartRegex))
+            {
+                if (!printUnformatted && x > 0)
+                {
+                    docs.Add(Doc.HardLine);
+                }
+                printUnformatted = true;
+            }
+
+            if (printUnformatted)
+            {
+                unFormattedCode.Append(CSharpierIgnore.PrintWithoutFormatting(member, context));
+                if (x < list.SeparatorCount)
+                {
+                    unFormattedCode.AppendLine(list.GetSeparator(x).Text);
+                }
+
+                continue;
+            }
+
             docs.Add(printFunc(list[x], context));
 
             // if the syntax tree doesn't have a trailing comma but we want want, then add it
@@ -84,6 +116,11 @@ internal static class SeparatedSyntaxList
                 docs.Add(Token.Print(list.GetSeparator(x), context));
                 docs.Add(afterSeparator);
             }
+        }
+
+        if (unFormattedCode.Length > 0)
+        {
+            docs.Add(unFormattedCode.ToString().Trim());
         }
 
         return docs.Count == 0 ? Doc.Null : Doc.Concat(docs);
