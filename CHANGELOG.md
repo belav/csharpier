@@ -1,4 +1,81 @@
-﻿# 0.29.1
+﻿# 0.29.2
+## What's Changed
+### Comments don't follow tabs indent style [#1343](https://github.com/belav/csharpier/issues/1343)
+Prior to `0.29.2` CSharpier was converting any tabs within the block of a multiline comment to spaces.
+```c#
+public void SomeFunction()
+{
+	/*
+	The following line is an example with an indent:
+		This line is indented by one tab. (prior to 0.29.2 this would end up as a tab followed by 4 spaces)
+	*/
+	/*
+	The following line is an example with an indent:
+		This line is indented by 4 spaces but will be converted to 1 tab (prior to 0.29.2 this would end up as a tab followed by 4 spaces)
+	*/
+	/*
+	The following line is an example with an indent:
+	   This line is indented by 3 spaces but will be left as 3 spaces
+	*/
+}
+```
+### `csharpier-ignore-start` now supported in object initializers [#1342](https://github.com/belav/csharpier/issues/1342)
+```c#
+// input & expected output
+return new SomeClass
+{
+    // csharpier-ignore-start
+    SomeProperty =     someValue,
+    SomeProperty2 =     someValue
+    // csharpier-ignore-end
+};
+
+// 0.29.1
+return new SomeClass
+{
+    // csharpier-ignore-start
+    SomeProperty = someValue,
+    SomeProperty2 = someValue
+    // csharpier-ignore-end
+};
+
+```
+### Fixed extra new line between cast and collection expression. [#1334](https://github.com/belav/csharpier/issues/1334)
+```c#
+// input & expected output
+CallMethod(
+    (string[])
+        [
+            longerValue_____________________________________________,
+            longerValue_____________________________________________,
+        ]
+);
+
+// 0.29.1
+CallMethod(
+    (string[])
+
+        [
+            longerValue_____________________________________________,
+            longerValue_____________________________________________,
+        ]
+);
+
+```
+
+### Support custom extensions in .editorconfig [#1273](https://github.com/belav/csharpier/issues/1273)
+As of `0.29.0` CSharpier could format non-standard file extensions, but only if configured in the `csharpierrc` file. This is now supported with an `.editorconfig`
+
+```ini
+[*.cst]
+csharpier_formatter = csharp
+indent_style = space
+indent_size = 2
+max_line_length = 80
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.29.1...0.29.2
+# 0.29.1
 ## What's Changed
 ### Sorting of usings with underscore differs from Visual Studio [#1327](https://github.com/belav/csharpier/issues/1327)
 CSharpier now sorts `_` to the bottom of usings.
@@ -2557,6 +2634,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 

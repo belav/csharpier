@@ -11,6 +11,7 @@ internal class Section
     public string? TabWidth { get; }
     public string? MaxLineLength { get; }
     public string? EndOfLine { get; }
+    public string? Formatter { get; }
 
     public Section(SectionData section, string directory)
     {
@@ -20,6 +21,7 @@ internal class Section
         this.TabWidth = section.Keys["tab_width"];
         this.MaxLineLength = section.Keys["max_line_length"];
         this.EndOfLine = section.Keys["end_of_line"];
+        this.Formatter = section.Keys["csharpier_formatter"];
     }
 
     public bool IsMatch(string fileName)

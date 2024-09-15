@@ -146,3 +146,35 @@ class MyClass
     ]
 )]
 class ClassName { }
+
+class CastExpressions
+{
+    void MethodName()
+    {
+        var x = (string[])[someValue, someValue];
+
+        var x = (string[])
+            [longValue________________________________, longValue________________________________];
+
+        var x = (string[])
+            [
+                longerValue_____________________________________________,
+                longerValue_____________________________________________,
+            ];
+
+        CallMethod((string[])[someValue, someValue]);
+
+        CallMethod(
+            (string[])
+                [longValue______________________________, longValue______________________________]
+        );
+
+        CallMethod(
+            (string[])
+                [
+                    longerValue_____________________________________________,
+                    longerValue_____________________________________________,
+                ]
+        );
+    }
+}

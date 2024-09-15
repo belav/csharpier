@@ -8,6 +8,7 @@ internal static class CollectionExpression
             is ArgumentSyntax { NameColon: null }
                 or AttributeArgumentSyntax
                 or ArrowExpressionClauseSyntax
+                or CastExpressionSyntax
                 or ExpressionElementSyntax
                 or SimpleLambdaExpressionSyntax
                 or AssignmentExpressionSyntax
