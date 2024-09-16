@@ -110,9 +110,24 @@ internal class OptionsProvider
             return resolvedEditorConfig.ConvertToPrinterOptions(filePath);
         }
 
-        if (filePath.EndsWith(".cs") || filePath.EndsWith(".csx"))
+        if (filePath.EndsWith(".cs"))
         {
-            return new PrinterOptions { Formatter = "csharp" };
+            return new PrinterOptions { Formatter = Formatter.CSharp };
+        }
+
+        if (filePath.EndsWith(".csx"))
+        {
+            return new PrinterOptions { Formatter = Formatter.CSharpScript };
+        }
+
+        if (
+            filePath.EndsWith(".csproj")
+            || filePath.EndsWith(".props")
+            || filePath.EndsWith(".targets")
+            || filePath.EndsWith(".xml")
+        )
+        {
+            return new PrinterOptions { Formatter = Formatter.XML };
         }
 
         return null;

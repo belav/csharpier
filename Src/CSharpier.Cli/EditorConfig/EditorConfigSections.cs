@@ -16,14 +16,18 @@ internal class EditorConfigSections
 
         var formatter =
             resolvedConfiguration.Formatter
-            ?? (filePath.EndsWith(".cs") || filePath.EndsWith(".csx") ? "csharp" : null);
+            ?? (
+                filePath.EndsWith(".cs") ? "CSharp"
+                : filePath.EndsWith(".csx") ? "CSharpScript"
+                : null
+            );
 
-        if (formatter == null)
+        if (!Enum.TryParse<Formatter>(formatter, ignoreCase: true, out var parsedFormatter))
         {
             return null;
         }
 
-        var printerOptions = new PrinterOptions { Formatter = formatter };
+        var printerOptions = new PrinterOptions { Formatter = parsedFormatter };
 
         if (resolvedConfiguration.MaxLineLength is { } maxLineLength)
         {

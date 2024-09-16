@@ -20,13 +20,24 @@ internal class ConfigurationFileOptions
         var matchingOverride = this.Overrides.LastOrDefault(o => o.IsMatch(filePath));
         if (matchingOverride is not null)
         {
+            if (
+                !Enum.TryParse<Formatter>(
+                    matchingOverride.Formatter,
+                    ignoreCase: true,
+                    out var parsedFormatter
+                )
+            )
+            {
+                return null;
+            }
+
             return new PrinterOptions
             {
                 IndentSize = matchingOverride.TabWidth,
                 UseTabs = matchingOverride.UseTabs,
                 Width = matchingOverride.PrintWidth,
                 EndOfLine = matchingOverride.EndOfLine,
-                Formatter = matchingOverride.Formatter,
+                Formatter = parsedFormatter,
             };
         }
 
@@ -38,7 +49,7 @@ internal class ConfigurationFileOptions
                 UseTabs = this.UseTabs,
                 Width = this.PrintWidth,
                 EndOfLine = this.EndOfLine,
-                Formatter = "csharp",
+                Formatter = filePath.EndsWith(".cs") ? Formatter.CSharp : Formatter.CSharpScript,
             };
         }
 

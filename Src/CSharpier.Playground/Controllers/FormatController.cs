@@ -36,7 +36,7 @@ public class FormatController : ControllerBase
         public int PrintWidth { get; set; }
         public int IndentSize { get; set; }
         public bool UseTabs { get; set; }
-        public string Parser { get; set; } = string.Empty;
+        public string Formatter { get; set; } = string.Empty;
     }
 
     [HttpPost]
@@ -45,15 +45,13 @@ public class FormatController : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        // TODO
-        var sourceCodeKind = false // model.FileExtension.EqualsIgnoreCase(".csx")
-            ? SourceCodeKind.Script
-            : SourceCodeKind.Regular;
+        if (!Enum.TryParse<Formatter>(model.Formatter, ignoreCase: true, out var parsedFormatter))
+        {
+            throw new Exception("Invalid formatter " + model.Formatter);
+        }
 
         var result = await CodeFormatter.FormatAsync(
             model.Code,
-            // TODO
-            ".cs",
             new PrinterOptions
             {
                 IncludeAST = true,
@@ -61,17 +59,18 @@ public class FormatController : ControllerBase
                 Width = model.PrintWidth,
                 IndentSize = model.IndentSize,
                 UseTabs = model.UseTabs,
+                Formatter = parsedFormatter,
             },
             cancellationToken
         );
 
-        // TODO what about xml?
+        // TODO xml what about this?
         var comparer = new SyntaxNodeComparer(
             model.Code,
             result.Code,
             result.ReorderedModifiers,
             result.ReorderedUsingsWithDisabledText,
-            sourceCodeKind,
+            parsedFormatter is Formatter.CSharp ? SourceCodeKind.Regular : SourceCodeKind.Script,
             cancellationToken
         );
 

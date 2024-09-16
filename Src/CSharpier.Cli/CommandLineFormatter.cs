@@ -176,9 +176,9 @@ internal static class CommandLineFormatter
                 cancellationToken
             );
 
-            var originalDirectoryOrFile = commandLineOptions
-                .OriginalDirectoryOrFilePaths[x]
-                .Replace("\\", "/");
+            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[
+                x
+            ].Replace("\\", "/");
 
             var formattingCache = await FormattingCacheFactory.InitializeAsync(
                 commandLineOptions,
@@ -254,12 +254,8 @@ internal static class CommandLineFormatter
                     return 1;
                 }
 
-                var tasks = fileSystem
-                    .Directory.EnumerateFiles(
-                        directoryOrFilePath,
-                        "*.*",
-                        SearchOption.AllDirectories
-                    )
+                var tasks = fileSystem.Directory
+                    .EnumerateFiles(directoryOrFilePath, "*.*", SearchOption.AllDirectories)
                     .Select(o =>
                     {
                         var normalizedPath = o.Replace("\\", "/");
@@ -385,7 +381,6 @@ internal static class CommandLineFormatter
         {
             codeFormattingResult = await CodeFormatter.FormatAsync(
                 fileToFormatInfo.FileContents,
-                Path.GetExtension(fileToFormatInfo.Path),
                 printerOptions,
                 cancellationToken
             );
@@ -435,7 +430,7 @@ internal static class CommandLineFormatter
         // TODO xml what about allowing lines between elements?
         if (!commandLineOptions.Fast && fileToFormatInfo.Path.EndsWithIgnoreCase(".cs"))
         {
-            // TODO the thing above should do this if we are using the csharp formatter
+            // TODO xml the thing above should do this if we are using the csharp formatter
             var sourceCodeKind = Path.GetExtension(fileToFormatInfo.Path).EqualsIgnoreCase(".csx")
                 ? SourceCodeKind.Script
                 : SourceCodeKind.Regular;

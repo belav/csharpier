@@ -32,11 +32,22 @@ public class BaseTest
             CancellationToken.None
         );
 
+        var formatter = fileExtensionWithoutDot switch
+        {
+            "cs" => Formatter.CSharp,
+            "csx" => Formatter.CSharpScript,
+            "xml" => Formatter.XML,
+            _ => Formatter.Unknown,
+        };
+
         var result = await CodeFormatter.FormatAsync(
             fileReaderResult.FileContents,
-            "." + fileExtensionWithoutDot,
-            new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs },
-            // TODO fileExtensionWithoutDot.EqualsIgnoreCase("csx") ? SourceCodeKind.Script : SourceCodeKind.Regular,
+            new PrinterOptions
+            {
+                Width = PrinterOptions.WidthUsedByTests,
+                UseTabs = useTabs,
+                Formatter = formatter,
+            },
             CancellationToken.None
         );
 
@@ -62,6 +73,7 @@ public class BaseTest
             normalizedCode = normalizedCode.Replace("\r\n", "\n");
         }
 
+        // TODO xml what about this?
         var comparer = new SyntaxNodeComparer(
             expectedCode,
             normalizedCode,

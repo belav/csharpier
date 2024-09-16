@@ -78,7 +78,8 @@ public class ServerTests
 
         async Task NewFunction()
         {
-            var command = Cli.Wrap("dotnet")
+            var command = CliWrap
+                .Cli.Wrap("dotnet")
                 .WithArguments(path + " --server")
                 .WithValidation(CommandResultValidation.None);
 

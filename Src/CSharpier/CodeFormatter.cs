@@ -29,7 +29,7 @@ public static class CodeFormatter
                 IndentSize = options.IndentSize,
                 EndOfLine = options.EndOfLine,
                 IncludeGenerated = options.IncludeGenerated,
-                Formatter = "csharp",
+                Formatter = Formatter.CSharp,
             },
             cancellationToken
         );
@@ -59,7 +59,7 @@ public static class CodeFormatter
                 UseTabs = options.IndentStyle == IndentStyle.Tabs,
                 IndentSize = options.IndentSize,
                 EndOfLine = options.EndOfLine,
-                Formatter = "csharp",
+                Formatter = Formatter.CSharp,
             },
             SourceCodeKind.Regular,
             cancellationToken
@@ -68,25 +68,28 @@ public static class CodeFormatter
 
     internal static async Task<CodeFormatterResult> FormatAsync(
         string fileContents,
-        string fileExtension,
         PrinterOptions options,
         CancellationToken cancellationToken
     )
     {
-        var loweredExtension = fileExtension.ToLower();
-
-        if (loweredExtension is ".cs")
+        return options.Formatter switch
         {
-            return await CSharpFormatter.FormatAsync(fileContents, options, cancellationToken);
-        }
-
-        // TODO XML maybe make this opt in until it is better tested?
-        // TODO XML maybe don't include xml by default?
-        if (loweredExtension is ".csproj" or ".props" or ".targets" or ".xml")
-        {
-            return XmlFormatter.Format(fileContents, options);
-        }
-
-        return new CodeFormatterResult { FailureMessage = "Is an unsupported file type." };
+            Formatter.CSharp
+                => await CSharpFormatter.FormatAsync(
+                    fileContents,
+                    options,
+                    SourceCodeKind.Regular,
+                    cancellationToken
+                ),
+            Formatter.CSharpScript
+                => await CSharpFormatter.FormatAsync(
+                    fileContents,
+                    options,
+                    SourceCodeKind.Script,
+                    cancellationToken
+                ),
+            Formatter.XML => XmlFormatter.Format(fileContents, options),
+            _ => new CodeFormatterResult { FailureMessage = "Is an unsupported file type." }
+        };
     }
 }

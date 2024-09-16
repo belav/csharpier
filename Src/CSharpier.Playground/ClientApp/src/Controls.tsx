@@ -3,8 +3,6 @@ import "./Controls.css";
 import { observer } from "mobx-react-lite";
 import { useAppContext } from "./AppContext";
 
-// TODO review this, looks like I was changing it to use mobx
-// https://github.com/belav/csharpier/pull/858/files#diff-fe7eb3d9ce08803cc37869645e835dda3ecb5cf2e87991e6b73a7a246091f37b
 export const Controls = observer(() => {
     const {
         printWidth,
@@ -13,8 +11,8 @@ export const Controls = observer(() => {
         setIndentSize,
         useTabs,
         setUseTabs,
-        parser,
-        setParser,
+        formatter,
+        setFormatter,
         showDoc,
         setShowDoc,
         hideNull,
@@ -44,7 +42,7 @@ export const Controls = observer(() => {
                     Use Tabs
                 </label>
                 <label>Parser</label>
-                <select value={parser} onChange={e => setParser(e.target.value)}>
+                <select value={formatter} onChange={e => setFormatter(e.target.value)}>
                     <option value="CSharp">C#</option>
                     <option value="CSharpScript">C# Script</option>
                     <option value="XML">XML</option>

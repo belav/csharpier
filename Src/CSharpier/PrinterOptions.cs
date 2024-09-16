@@ -10,7 +10,7 @@ internal class PrinterOptions
     public EndOfLine EndOfLine { get; set; } = EndOfLine.Auto;
     public bool TrimInitialLines { get; init; } = true;
     public bool IncludeGenerated { get; set; }
-    public string Formatter { get; init; } = string.Empty;
+    public Formatter Formatter { get; init; } = Formatter.Unknown;
 
     public const int WidthUsedByTests = 100;
 
@@ -33,4 +33,12 @@ internal class PrinterOptions
 
         return "\n";
     }
+}
+
+internal enum Formatter
+{
+    Unknown,
+    CSharp,
+    CSharpScript,
+    XML,
 }

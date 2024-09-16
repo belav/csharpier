@@ -33,7 +33,7 @@ class AppState {
     printWidth = getNumber("printWidth", 100);
     indentSize = getNumber("indentSize", 4);
     useTabs = getBoolean("useTabs", false);
-    parser = getString("parser", "CSharp");
+    formatter = getString("formatter", "CSharp");
     showAst = getBoolean("showAst", false);
     showDoc = getBoolean("showDoc", false);
     hideNull = getBoolean("hideNull", false);
@@ -48,9 +48,9 @@ class AppState {
         makeAutoObservable(this);
     }
 
-    setParser = (value: string) => {
-        window.sessionStorage.setItem("parser", value);
-        this.parser = value;
+    setFormatter = (value: string) => {
+        window.sessionStorage.setItem("formatter", value);
+        this.formatter = value;
     };
 
     setIndentSize = (value: number) => {
