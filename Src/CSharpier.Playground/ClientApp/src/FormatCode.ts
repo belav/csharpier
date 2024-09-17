@@ -7,12 +7,12 @@ export const formatCode = async (
     printWidth: number,
     indentSize: number,
     useTabs: boolean,
-    parser: string,
+    formatter: string,
 ) => {
     const makeRequest = async () => {
         const response = await fetch("/Format", {
             method: "POST",
-            body: JSON.stringify({ code, printWidth, indentSize, useTabs, parser }),
+            body: JSON.stringify({ code, printWidth, indentSize, useTabs, formatter }),
             headers: {
                 "Content-Type": "application/json",
                 "cache-control": "no-cache",

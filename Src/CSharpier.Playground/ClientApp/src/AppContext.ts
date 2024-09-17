@@ -118,7 +118,7 @@ class AppState {
                 this.printWidth,
                 this.indentSize,
                 this.useTabs,
-                this.parser,
+                this.formatter,
             );
 
             runInAction(() => {

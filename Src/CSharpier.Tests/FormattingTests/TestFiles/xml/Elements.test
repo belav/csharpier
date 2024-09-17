@@ -2,10 +2,13 @@
     <Element />
     <Element></Element>
     <ElementWithText>Text</ElementWithText>
-    <SystemRuntimeSerializationPrimitivesPackageVersion
-        >4.3.0</SystemRuntimeSerializationPrimitivesPackageVersion
+    <LongElement____________________________________________
+        >TextValue</LongElement____________________________________________
     >
-    <RoslynToolPath Condition=" '$(RoslynToolPath)' == '' "
-        >$(MSBuildThisFileDirectory)..\..\tools\roslynlatest</RoslynToolPath
+    <ElementWithAttribute Attribute="AttributeValue_______________">TextValue</ElementWithAttribute>
+    <ElementWithAttribute Attribute="AttributeValue________________">TextValue</ElementWithAttribute>
+    <ElementWithAttribute Attribute="AttributeValue_________________"
+        >TextValue</ElementWithAttribute
     >
-</Root>
+    </Root
+>

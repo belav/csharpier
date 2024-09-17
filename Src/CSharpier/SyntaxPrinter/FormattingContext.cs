@@ -10,6 +10,7 @@ internal class FormattingContext
     public required bool UseTabs { get; init; }
 
     // TODO the rest of these go into State
+
     // context.State.PrintingDepth
     public int PrintingDepth { get; set; }
     public bool NextTriviaNeedsLine { get; set; }
