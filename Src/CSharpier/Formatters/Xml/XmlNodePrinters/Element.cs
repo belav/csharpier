@@ -2,9 +2,6 @@ using System.Xml;
 
 namespace CSharpier.Formatters.Xml.XmlNodePrinters;
 
-// TODO it may be worth looking
-// at how this works instead of the html one
-// https://github.com/prettier/plugin-xml/blob/main/src/printer.js
 internal static class Element
 {
     internal static Doc Print(XmlElement node)
