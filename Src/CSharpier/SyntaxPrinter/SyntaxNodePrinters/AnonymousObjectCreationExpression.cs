@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class AnonymousObjectCreationExpression
 {
-    public static Doc Print(AnonymousObjectCreationExpressionSyntax node, FormattingContext context)
+    public static Doc Print(AnonymousObjectCreationExpressionSyntax node, PrintingContext context)
     {
         var alwaysBreak = node.Initializers.Count >= 3;
 

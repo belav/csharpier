@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class JoinClause
 {
-    public static Doc Print(JoinClauseSyntax node, FormattingContext context)
+    public static Doc Print(JoinClauseSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

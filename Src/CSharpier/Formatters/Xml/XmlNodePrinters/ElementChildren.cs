@@ -7,26 +7,6 @@ internal static class ElementChildren
     public static Doc Print(XmlElement node)
     {
         return PrintChildren(node, Node.Print);
-
-        // if (node.ChildNodes.Count == 0)
-        // {
-        //     return Doc.Null;
-        // }
-        //
-        // if (node.FirstChild is XmlText)
-        // {
-        //     return Node.Print(node.FirstChild);
-        // }
-        //
-        // var result = new List<Doc>();
-        //
-        // foreach (XmlNode xmlNode in node.ChildNodes)
-        // {
-        //     result.Add(Doc.Line);
-        //     result.Add(Node.Print(xmlNode));
-        // }
-        //
-        // return Doc.Concat(Doc.BreakParent, Doc.Concat(result), Doc.Line);
     }
 
     public static Doc PrintChildren(XmlElement node, Func<XmlNode, Doc> print)
@@ -57,9 +37,9 @@ internal static class ElementChildren
         // }
 
         var groupIds = new List<string>();
-        foreach (var child in node.ChildNodes)
+        foreach (var _ in node.ChildNodes)
         {
-            groupIds.Add(Guid.NewGuid().ToString());
+            groupIds.Add(Symbol.For("symbol"));
         }
 
         var result = new List<Doc>();

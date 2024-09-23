@@ -7,7 +7,7 @@ internal static class RightHandSide
         Doc leftDoc,
         Doc operatorDoc,
         ExpressionSyntax rightNode,
-        FormattingContext context
+        PrintingContext context
     )
     {
         var layout = DetermineLayout(leftNode, rightNode);

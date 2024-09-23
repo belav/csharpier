@@ -16,15 +16,16 @@ internal static class Element
         // node.lastChild.isTrailingSpaceSensitive &&
         // !node.lastChild.hasTrailingSpaces;
 
-        // TODO good idea for group names
-        var attrGroupId = Guid.NewGuid().ToString(); // Symbol("element-attr-group-id");
+        var attrGroupId = Symbol.For("element-attr-group-id");
 
-        Group PrintTag(Doc doc) =>
-            Doc.Group(
-                Doc.GroupWithId(attrGroupId, PrintOpeningTag(node)),
+        Group PrintTag(Doc doc)
+        {
+            return Doc.Group(
+                Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(node)),
                 doc,
-                PrintClosingTag(node)
+                Tag.PrintClosingTag(node)
             );
+        }
 
         Doc PrintChildrenDoc(params Doc[] childrenDoc)
         {
@@ -43,6 +44,7 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
+            // this seems to only apply if whitespace is not strict
             // if (
             //     node.firstChild.hasLeadingSpaces &&
             //     node.firstChild.isLeadingSpaceSensitive
@@ -50,13 +52,14 @@ internal static class Element
             //     return Doc.Line;
             // }
 
-            // if (
-            //     node.firstChild.type == "text" &&
-            //     node.isWhitespaceSensitive &&
-            //     node.isIndentationSensitive
-            // ) {
-            //     return dedentToRoot(Doc.SoftLine);
-            // }
+            if (node.HasChildNodes && node.ChildNodes[0] is XmlText
+            // && node.isWhitespaceSensitive
+            // && node.isIndentationSensitive
+            )
+            {
+                // TODO we don't have dedent?
+                // return dedentToRoot(Doc.SoftLine);
+            }
 
             return Doc.SoftLine;
         }
@@ -145,225 +148,39 @@ internal static class Element
         // );
     }
 
-    private static Doc PrintOpeningTag(XmlElement node)
-    {
-        return Doc.Concat("<" + node.Name, PrintAttributes(node), node.IsEmpty ? Doc.Null : ">");
-
-        // return [
-        //     printOpeningTagStart(node, options),
-        //     printAttributes(path, options, print),
-        //     node.isSelfClosing ? "" : printOpeningTagEnd(node),
-        // ];
-    }
-
-    private static Doc PrintClosingTag(XmlElement node)
-    {
-        return Doc.Concat(
-            node.IsEmpty ? Doc.Null : PrintClosingTagStart(node),
-            PrintClosingTagEnd(node)
-        );
-        // return [
-        //     node.isSelfClosing ? "" : printClosingTagStart(node, options),
-        //     printClosingTagEnd(node, options),
-        // ];
-    }
-
-    private static Doc PrintClosingTagStart(XmlElement node)
-    {
-        // return node.lastChild is not null &&
-        //        needsToBorrowParentClosingTagStartMarker(node.lastChild)
-        //     ? Doc.Null
-        //     :
-
-        return Doc.Concat(PrintClosingTagPrefix(node), PrintClosingTagStartMarker(node));
-    }
-
-    private static Doc PrintClosingTagStartMarker(XmlElement node)
-    {
-        // if (shouldNotPrintClosingTag(node)) {
-        //     return "";
-        // }
-        // switch (node.type) {
-        //     case "ieConditionalComment":
-        //         return "<!";
-        //     case "element":
-        //         if (node.hasHtmComponentClosingTag) {
-        //             return "<//";
-        //         }
-        //     // fall through
-        //     default:
-        return "</" + node.Name;
-    }
-
-    private static Doc PrintClosingTagEnd(XmlElement node)
-    {
-        // return (
-        //     node.next
-        //         ? needsToBorrowPrevClosingTagEndMarker(node.next)
-        //         : needsToBorrowLastChildClosingTagEndMarker(node.parent)
-        // )
-        //     ? ""
-        //     : [
-        //         printClosingTagEndMarker(node, options),
-        //         printClosingTagSuffix(node, options),
-        //     ];
-
-        return Doc.Concat(PrintClosingTagEndMarker(node), PrintClosingTagSuffix(node));
-    }
-
-    private static Doc PrintClosingTagEndMarker(XmlElement node)
-    {
-        // if (shouldNotPrintClosingTag(node, options)) {
-        //     return "";
-        // }
-        // switch (node.type) {
-        //     case "ieConditionalComment":
-        //     case "ieConditionalEndComment":
-        //         return "[endif]-->";
-        //     case "ieConditionalStartComment":
-        //         return "]><!-->";
-        //     case "interpolation":
-        //         return "}}";
-        //     case "angularIcuExpression":
-        //         return "}";
-        //     case "element":
-        //         if (node.isSelfClosing) {
-        //             return "/>";
-        //         }
-        //     // fall through
-        //     default:
-
-        return node.IsEmpty ? "/>" : ">";
-    }
-
-    private static Doc PrintClosingTagSuffix(XmlElement node)
-    {
-        return Doc.Null;
-        // return needsToBorrowParentClosingTagStartMarker(node)
-        //     ? printClosingTagStartMarker(node.parent, options)
-        //     : needsToBorrowNextOpeningTagStartMarker(node)
-        //         ? printOpeningTagStartMarker(node.next)
-        //         : "";
-    }
-
-    private static Doc PrintClosingTagPrefix(XmlElement node)
-    {
-        return Doc.Null;
-        // return needsToBorrowLastChildClosingTagEndMarker(node)
-        //     ? printClosingTagEndMarker(node.lastChild, options)
-        //     : "";
-    }
-
     private static bool ForceBreakContent(XmlElement node)
+    {
+        var childNode = node.ChildNodes.Count == 1 ? node.ChildNodes[0] : null;
+
+        return childNode is not null && childNode is not XmlText
+        // && HasLeadingLineBreak(childNode)
+        // && (!childNode.isTrailingSpaceSensitive || HasTrailingLineBreak(childNode))
+        ;
+    }
+
+    private static bool HasLeadingLineBreak(XmlNode node)
     {
         return false;
         // return (
-        //     forceBreakChildren(node) ||
-        //     (node.type === "element" &&
-        //                    node.children.length > 0 &&
-        //                    (["body", "script", "style"].includes(node.name) ||
-        //                     node.children.some((child) => hasNonTextChild(child)))) ||
-        //     (node.firstChild &&
-        //         node.firstChild === node.lastChild &&
-        //         node.firstChild.type !== "text" &&
-        //                                  hasLeadingLineBreak(node.firstChild) &&
-        //                                  (!node.lastChild.isTrailingSpaceSensitive ||
-        //                                   hasTrailingLineBreak(node.lastChild)))
+        //     node.hasLeadingSpaces &&
+        //     (node.prev
+        //         ? node.prev.sourceSpan.end.line < node.sourceSpan.start.line
+        //         : node.parent.type === "root" ||
+        //                                node.parent.startSourceSpan.end.line < node.sourceSpan.start.line)
         // );
     }
 
-    private static Doc PrintAttributes(XmlElement node)
+    private static bool HasTrailingLineBreak(XmlNode node)
     {
-        if (node.Attributes.Count == 0)
-        {
-            return node.IsEmpty ? " " : Doc.Null;
-        }
-
-        // this is just shoved in here for now
-        var result = new List<Doc>();
-        foreach (XmlAttribute attribute in node.Attributes)
-        {
-            result.Add(Doc.Line, attribute.Name, "=\"", attribute.Value, "\"");
-        }
-
-        return Doc.Indent(result);
-        // const ignoreAttributeData =
-        //     node.prev?.type === "comment" &&
-        //     getPrettierIgnoreAttributeCommentData(node.prev.value);
-        //
-        // const hasPrettierIgnoreAttribute =
-        //     typeof ignoreAttributeData === "boolean"
-        //         ? () => ignoreAttributeData
-        //         : Array.isArray(ignoreAttributeData)
-        //           ? (attribute) => ignoreAttributeData.includes(attribute.rawName)
-        //           : () => false;
-        //
-        // const printedAttributes = path.map(
-        //     ({ node: attribute }) =>
-        //         hasPrettierIgnoreAttribute(attribute)
-        //             ? replaceEndOfLine(
-        //                   options.originalText.slice(
-        //                       locStart(attribute),
-        //                       locEnd(attribute),
-        //                   ),
-        //               )
-        //             : print(),
-        //     "attrs",
+        return false;
+        // return (
+        //     node.hasTrailingSpaces &&
+        //     (node.next
+        //         ? node.next.sourceSpan.start.line > node.sourceSpan.end.line
+        //         : node.parent.type === "root" ||
+        //                                (node.parent.endSourceSpan &&
+        //                                 node.parent.endSourceSpan.start.line >
+        //                                 node.sourceSpan.end.line))
         // );
-        //
-        // const forceNotToBreakAttrContent =
-        //     node.type === "element" &&
-        //     node.fullName === "script" &&
-        //     node.attrs.length === 1 &&
-        //     node.attrs[0].fullName === "src" &&
-        //     node.children.length === 0;
-        //
-        // const shouldPrintAttributePerLine =
-        //     options.singleAttributePerLine &&
-        //     node.attrs.length > 1 &&
-        //     !isVueSfcBlock(node, options);
-        // const attributeLine = shouldPrintAttributePerLine ? hardline : line;
-        //
-        // /** @type {Doc[]} */
-        // const parts = [
-        //     indent([
-        //         forceNotToBreakAttrContent ? " " : line,
-        //         join(attributeLine, printedAttributes),
-        //     ]),
-        // ];
-        //
-        // if (
-        //     /**
-        //      *     123<a
-        //      *       attr
-        //      *           ~
-        //      *       >456
-        //      */
-        //     (node.firstChild &&
-        //         needsToBorrowParentOpeningTagEndMarker(node.firstChild)) ||
-        //     /**
-        //      *     <span
-        //      *       >123<meta
-        //      *                ~
-        //      *     /></span>
-        //      */
-        //     (node.isSelfClosing &&
-        //         needsToBorrowLastChildClosingTagEndMarker(node.parent)) ||
-        //     forceNotToBreakAttrContent
-        // ) {
-        //     parts.push(node.isSelfClosing ? " " : "");
-        // } else {
-        //     parts.push(
-        //         options.bracketSameLine
-        //             ? node.isSelfClosing
-        //                 ? " "
-        //                 : ""
-        //             : node.isSelfClosing
-        //               ? line
-        //               : softline,
-        //     );
-        // }
-        //
-        // return parts;
     }
 }

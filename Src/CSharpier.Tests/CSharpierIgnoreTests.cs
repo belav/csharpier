@@ -66,11 +66,14 @@ public string Example
         return CSharpierIgnore
             .PrintWithoutFormatting(
                 code,
-                new FormattingContext
+                new PrintingContext
                 {
-                    LineEnding = Environment.NewLine,
-                    IndentSize = 4,
-                    UseTabs = false,
+                    Options = new PrintingContext.PrintingContextOptions
+                    {
+                        LineEnding = Environment.NewLine,
+                        IndentSize = 4,
+                        UseTabs = false,
+                    },
                 }
             )
             .ReplaceLineEndings("\n");

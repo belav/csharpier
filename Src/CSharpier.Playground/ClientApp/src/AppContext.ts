@@ -17,7 +17,7 @@ const getBoolean = (key: string, defaultValue: boolean) => {
         return defaultValue;
     }
 
-    return !!result;
+    return result === "true";
 };
 
 const getNumber = (key: string, defaultValue: number) => {

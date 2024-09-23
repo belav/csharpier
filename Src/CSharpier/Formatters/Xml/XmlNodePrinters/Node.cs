@@ -29,15 +29,38 @@ internal static class Node
             return Element.Print(xmlElement);
         }
 
-        if (xmlNode is XmlText)
+        if (xmlNode is XmlText xmlText)
         {
-            return xmlNode.OuterXml;
+            List<Doc> doc =
+            [
+                Tag.PrintOpeningTagPrefix(xmlText),
+                .. Utils.GetTextValueParts(xmlText),
+                Tag.PrintClosingTagSuffix(xmlText),
+            ];
+
+            if (doc.All(o => o is StringDoc))
+            {
+                var result = string.Join(string.Empty, doc.Select(o => ((StringDoc)o).Value));
+                return result;
+            }
+
+            return Doc.Concat(doc);
+
+            // var printed = CleanDoc(doc);
+            //
+            //
+            // // if (Array.isArray(printed)) {
+            // //     return fill(printed);
+            // // }
+            //
+            // return printed;
         }
 
         if (xmlNode is XmlComment)
         {
             return xmlNode.OuterXml;
         }
+        // TODO printer-html.js
 
         throw new Exception("Need to handle + " + xmlNode);
     }

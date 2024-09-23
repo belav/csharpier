@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class VarPattern
 {
-    public static Doc Print(VarPatternSyntax node, FormattingContext context)
+    public static Doc Print(VarPatternSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             Token.PrintWithSuffix(node.VarKeyword, " ", context),

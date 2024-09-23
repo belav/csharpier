@@ -1,0 +1,34 @@
+namespace CSharpier.SyntaxPrinter;
+
+internal class PrintingContext
+{
+    public required PrintingContextOptions Options { get; init; }
+    public PrintingContextState State { get; init; } = new();
+
+    public PrintingContext WithSkipNextLeadingTrivia()
+    {
+        this.State.SkipNextLeadingTrivia = true;
+        return this;
+    }
+
+    public class PrintingContextOptions
+    {
+        public required string LineEnding { get; init; }
+        public required int IndentSize { get; init; }
+        public required bool UseTabs { get; init; }
+    }
+
+    public class PrintingContextState
+    {
+        public int PrintingDepth { get; set; }
+        public bool NextTriviaNeedsLine { get; set; }
+        public bool SkipNextLeadingTrivia { get; set; }
+
+        // we need to keep track if we reordered modifiers because when modifiers are moved inside
+        // of an #if, then we can't compare the before and after disabled text in the source file
+        public bool ReorderedModifiers { get; set; }
+
+        // we also need to keep track if we move around usings with disabledText
+        public bool ReorderedUsingsWithDisabledText { get; set; }
+    }
+}

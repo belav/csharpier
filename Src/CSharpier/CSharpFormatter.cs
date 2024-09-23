@@ -109,16 +109,21 @@ internal static class CSharpFormatter
         try
         {
             var lineEnding = PrinterOptions.GetLineEnding(syntaxTree.ToString(), printerOptions);
-            var formattingContext = new FormattingContext
+            var printingContext = new PrintingContext
             {
-                LineEnding = lineEnding,
-                IndentSize = printerOptions.IndentSize,
-                UseTabs = printerOptions.UseTabs,
+                Options = new PrintingContext.PrintingContextOptions
+                {
+                    LineEnding = lineEnding,
+                    IndentSize = printerOptions.IndentSize,
+                    UseTabs = printerOptions.UseTabs,
+                },
             };
-            var document = Node.Print(rootNode, formattingContext);
+            var document = Node.Print(rootNode, printingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
-            var reorderedModifiers = formattingContext.ReorderedModifiers;
-            var reorderedUsingsWithDisabledText = formattingContext.ReorderedUsingsWithDisabledText;
+            var reorderedModifiers = printingContext.State.ReorderedModifiers;
+            var reorderedUsingsWithDisabledText = printingContext
+                .State
+                .ReorderedUsingsWithDisabledText;
 
             foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
             {
@@ -129,21 +134,25 @@ internal static class CSharpFormatter
                     return result;
                 }
 
-                var formattingContext2 = new FormattingContext
+                var formattingContext2 = new PrintingContext
                 {
-                    LineEnding = lineEnding,
-                    IndentSize = printerOptions.IndentSize,
-                    UseTabs = printerOptions.UseTabs,
+                    Options = new PrintingContext.PrintingContextOptions
+                    {
+                        LineEnding = lineEnding,
+                        IndentSize = printerOptions.IndentSize,
+                        UseTabs = printerOptions.UseTabs,
+                    },
                 };
                 document = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),
                     formattingContext2
                 );
                 formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
-                reorderedModifiers = reorderedModifiers || formattingContext2.ReorderedModifiers;
+                reorderedModifiers =
+                    reorderedModifiers || formattingContext2.State.ReorderedModifiers;
                 reorderedUsingsWithDisabledText =
                     reorderedUsingsWithDisabledText
-                    || formattingContext2.ReorderedUsingsWithDisabledText;
+                    || formattingContext2.State.ReorderedUsingsWithDisabledText;
             }
 
             return new CodeFormatterResult
