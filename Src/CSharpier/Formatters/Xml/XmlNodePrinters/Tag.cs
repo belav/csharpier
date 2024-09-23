@@ -55,7 +55,8 @@ internal static class Tag
             // && node.prev.type !== "docType"
             //    && node.type !== "angularControlFlowBlock"
             && node.PreviousSibling is not (XmlText or XmlComment)
-        // && node.isLeadingSpaceSensitive
+            // && node.isLeadingSpaceSensitive
+            && !true
         // && !node.hasLeadingSpaces
         ;
     }
@@ -100,7 +101,7 @@ internal static class Tag
                 ? NeedsToBorrowPrevClosingTagEndMarker(node.NextSibling)
                 : NeedsToBorrowLastChildClosingTagEndMarker(node.ParentNode!)
         )
-            ? ""
+            ? Doc.Null
             : Doc.Concat(PrintClosingTagEndMarker(node), PrintClosingTagSuffix(node));
     }
 
@@ -114,8 +115,10 @@ internal static class Tag
          *     >
          */
         return !node.LastChild!.GetLastDescendant().IsTextLike()
-        // && node.lastChild?.isTrailingSpaceSensitive
+            // we don't want to take into account whitespace
+            && !true
         // && !node.lastChild.hasTrailingSpaces
+        // && node.lastChild?.isTrailingSpaceSensitive
         // && !isPreLikeNode(node)
         ;
     }
@@ -151,7 +154,7 @@ internal static class Tag
                 ? PrintClosingTagStartMarker(node.ParentNode!)
             : NeedsToBorrowNextOpeningTagStartMarker(node)
                 ? PrintOpeningTagStartMarker(node.NextSibling!)
-            : "";
+            : Doc.Null;
     }
 
     private static Doc PrintOpeningTagStartMarker(XmlNode node)
@@ -204,10 +207,8 @@ internal static class Tag
          *     >
          */
         return (
-            node.NextSibling is null
-            // && !node.hasTrailingSpaces
-            // && node.isTrailingSpaceSensitive
-            && node.GetLastDescendant().IsTextLike()
+            node.NextSibling is null && node.IsTextLike() && node.GetLastDescendant().IsTextLike()
+        // && !node.hasTrailingSpaces
         );
     }
 
@@ -231,6 +232,8 @@ internal static class Tag
          *       ^
          */
         return node.PreviousSibling is null
+            // I think isLeadingSpaceSensitive is true for text/comment
+            && node.IsTextLike()
         // && node.isLeadingSpaceSensitive && !node.hasLeadingSpaces
         ;
     }
@@ -242,6 +245,7 @@ internal static class Tag
             return node.IsEmpty ? " " : Doc.Null;
         }
 
+        // TODO !!!!!!!!!!!!!!!!! this is next
         // this is just shoved in here for now
         var result = new List<Doc>();
         foreach (XmlAttribute attribute in node.Attributes)

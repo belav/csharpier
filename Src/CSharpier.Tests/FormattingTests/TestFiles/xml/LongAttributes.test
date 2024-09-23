@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Target
-        Name="CoreCompile"
-        Inputs="$(MSBuildAllProjects);
+  <Target
+    Name="CoreCompile"
+    Inputs="$(MSBuildAllProjects);
                 @(Compile);
                 @(_CoreCompileResourceInputs);
                 $(ApplicationIcon);
@@ -14,13 +14,13 @@
                 $(Win32Manifest);
                 @(CustomAdditionalCompileInputs);
                 $(ResolvedCodeAnalysisRuleSet)"
-        Outputs="@(DocFileItem);
+    Outputs="@(DocFileItem);
                  @(IntermediateAssembly);
                  @(_DebugSymbolsIntermediatePath);
                  $(NonExistentFile);
                  @(CustomAdditionalCompileOutputs)"
-        Returns="@(CscCommandLineArgs)"
-        DependsOnTargets="$(CoreCompileDependsOn)"
+    Returns="@(CscCommandLineArgs)"
+    DependsOnTargets="$(CoreCompileDependsOn)"
     >
         <Csc
             Condition=" '%(_CoreCompileResourceInputs.WithCulture)' != 'true' "
