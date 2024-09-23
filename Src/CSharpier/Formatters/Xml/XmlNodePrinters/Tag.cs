@@ -7,13 +7,28 @@ internal static class Tag
 {
     public static Doc PrintOpeningTag(XmlElement node)
     {
-        return Doc.Concat("<" + node.Name, PrintAttributes(node), node.IsEmpty ? Doc.Null : ">");
+        return Doc.Concat(
+            PrintOpeningTagStart(node),
+            PrintAttributes(node),
+            node.IsEmpty ? Doc.Null : PrintOpeningTagEnd(node)
+        );
+    }
 
-        // return [
-        //     printOpeningTagStart(node, options),
-        //     printAttributes(path, options, print),
-        //     node.isSelfClosing ? "" : printOpeningTagEnd(node),
-        // ];
+    private static Doc PrintOpeningTagStart(XmlElement node)
+    {
+        return
+            node.PreviousSibling is not null
+            && NeedsToBorrowNextOpeningTagStartMarker(node.PreviousSibling)
+            ? Doc.Null
+            : Doc.Concat(PrintOpeningTagPrefix(node), PrintOpeningTagStartMarker(node));
+    }
+
+    private static Doc PrintOpeningTagEnd(XmlElement node)
+    {
+        return
+            node.FirstChild is not null && NeedsToBorrowParentOpeningTagEndMarker(node.FirstChild)
+            ? Doc.Null
+            : PrintOpeningTagEndMarker(node);
     }
 
     public static Doc PrintOpeningTagPrefix(XmlNode node)
@@ -51,20 +66,14 @@ internal static class Tag
             node.IsEmpty ? Doc.Null : PrintClosingTagStart(node),
             PrintClosingTagEnd(node)
         );
-        // return [
-        //     node.isSelfClosing ? "" : printClosingTagStart(node, options),
-        //     printClosingTagEnd(node, options),
-        // ];
     }
 
     public static Doc PrintClosingTagStart(XmlElement node)
     {
-        // return node.lastChild is not null &&
-        //        needsToBorrowParentClosingTagStartMarker(node.lastChild)
-        //     ? Doc.Null
-        //     :
-
-        return Doc.Concat(PrintClosingTagPrefix(node), PrintClosingTagStartMarker(node));
+        return
+            node.LastChild is not null && NeedsToBorrowParentClosingTagStartMarker(node.LastChild)
+            ? Doc.Null
+            : Doc.Concat(PrintClosingTagPrefix(node), PrintClosingTagStartMarker(node));
     }
 
     public static Doc PrintClosingTagStartMarker(XmlNode node)
@@ -86,18 +95,29 @@ internal static class Tag
 
     public static Doc PrintClosingTagEnd(XmlElement node)
     {
-        // return (
-        //     node.next
-        //         ? needsToBorrowPrevClosingTagEndMarker(node.next)
-        //         : needsToBorrowLastChildClosingTagEndMarker(node.parent)
-        // )
-        //     ? ""
-        //     : [
-        //         printClosingTagEndMarker(node, options),
-        //         printClosingTagSuffix(node, options),
-        //     ];
+        return (
+            node.NextSibling is not null
+                ? NeedsToBorrowPrevClosingTagEndMarker(node.NextSibling)
+                : NeedsToBorrowLastChildClosingTagEndMarker(node.ParentNode!)
+        )
+            ? ""
+            : Doc.Concat(PrintClosingTagEndMarker(node), PrintClosingTagSuffix(node));
+    }
 
-        return Doc.Concat(PrintClosingTagEndMarker(node), PrintClosingTagSuffix(node));
+    private static bool NeedsToBorrowLastChildClosingTagEndMarker(XmlNode node)
+    {
+        /*
+         *     <p
+         *       ><a></a
+         *       ></p
+         *       ^
+         *     >
+         */
+        return !node.LastChild!.GetLastDescendant().IsTextLike()
+        // && node.lastChild?.isTrailingSpaceSensitive
+        // && !node.lastChild.hasTrailingSpaces
+        // && !isPreLikeNode(node)
+        ;
     }
 
     public static Doc PrintClosingTagEndMarker(XmlElement node)
@@ -164,9 +184,7 @@ internal static class Tag
          *        ^^
          *     >
          */
-        return node.NextSibling is not null
-            && node.NextSibling is not (XmlText or XmlComment)
-            && node is XmlText or XmlComment
+        return node.NextSibling is not null && !node.NextSibling.IsTextLike() && node.IsTextLike()
         // && node.isTrailingSpaceSensitive
         // && !node.hasTrailingSpaces
         ;
@@ -189,7 +207,7 @@ internal static class Tag
             node.NextSibling is null
             // && !node.hasTrailingSpaces
             // && node.isTrailingSpaceSensitive
-            && node.LastChild is (XmlText or XmlComment)
+            && node.GetLastDescendant().IsTextLike()
         );
     }
 
