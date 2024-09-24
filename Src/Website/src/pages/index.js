@@ -50,6 +50,13 @@ export default function Home() {
                 <div className="codeContainer">
                     <div className="codeExample" />
                 </div>
+                <div className="sponsor">
+                    <h2>Sponsors</h2>
+                    Special thanks to the <a href="https://github.com/aws/dotnet-foss">.NET on AWS Open Source Software Fund</a> for sponsoring the ongoing development CSharpier.
+                    <div>
+                        <a href="https://github.com/aws/dotnet-foss"><img src="/img/aws.png" alt="aws logo" /></a>
+                    </div>
+                </div>
             </main>
         </Layout>
     );

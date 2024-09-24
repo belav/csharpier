@@ -200,3 +200,7 @@ h1, h2, h3 {
 .theme-doc-sidebar-item-category ul {
   margin-left: 10px;
 }
+
+.sponsor {
+  img { padding: 10px 0; }
+}
