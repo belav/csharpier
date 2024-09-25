@@ -201,6 +201,6 @@ h1, h2, h3 {
   margin-left: 10px;
 }
 
-.sponsor {
-  img { padding: 10px 0; }
+.sponsor img {
+   padding: 20px 0 40px;
 }
