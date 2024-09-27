@@ -1,15 +1,16 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Xml;
+using CSharpier.SyntaxPrinter;
 
 namespace CSharpier.Formatters.Xml.XmlNodePrinters;
 
 internal static class Tag
 {
-    public static Doc PrintOpeningTag(XmlElement node)
+    public static Doc PrintOpeningTag(XmlElement node, PrintingContext context)
     {
         return Doc.Concat(
             PrintOpeningTagStart(node),
-            PrintAttributes(node),
+            Attributes.Print(node, context),
             node.IsEmpty ? Doc.Null : PrintOpeningTagEnd(node)
         );
     }
@@ -105,7 +106,7 @@ internal static class Tag
             : Doc.Concat(PrintClosingTagEndMarker(node), PrintClosingTagSuffix(node));
     }
 
-    private static bool NeedsToBorrowLastChildClosingTagEndMarker(XmlNode node)
+    public static bool NeedsToBorrowLastChildClosingTagEndMarker(XmlNode node)
     {
         /*
          *     <p
@@ -187,8 +188,13 @@ internal static class Tag
          *        ^^
          *     >
          */
-        return node.NextSibling is not null && !node.NextSibling.IsTextLike() && node.IsTextLike()
+        return node.NextSibling is not null
+            && !node.NextSibling.IsTextLike()
+            // && node.IsTextLike()
+            && node is XmlText
         // && node.isTrailingSpaceSensitive
+        // prettier does something with removing end of line nodes and setting this value, I don't know
+        // that we have that funcionality
         // && !node.hasTrailingSpaces
         ;
     }
@@ -207,7 +213,7 @@ internal static class Tag
          *     >
          */
         return (
-            node.NextSibling is null && node.IsTextLike() && node.GetLastDescendant().IsTextLike()
+            node.NextSibling is null && node.IsTextLike() && node.GetLastDescendant() is XmlText
         // && !node.hasTrailingSpaces
         );
     }
@@ -220,7 +226,7 @@ internal static class Tag
         //     : "";
     }
 
-    private static bool NeedsToBorrowParentOpeningTagEndMarker(XmlNode node)
+    public static bool NeedsToBorrowParentOpeningTagEndMarker(XmlNode node)
     {
         /*
          *     <p
@@ -233,105 +239,10 @@ internal static class Tag
          */
         return node.PreviousSibling is null
             // I think isLeadingSpaceSensitive is true for text/comment
-            && node.IsTextLike()
+            // && node.IsTextLike()
+            && node is XmlText
         // && node.isLeadingSpaceSensitive && !node.hasLeadingSpaces
         ;
-    }
-
-    public static Doc PrintAttributes(XmlElement node)
-    {
-        if (node.Attributes.Count == 0)
-        {
-            return node.IsEmpty ? " " : Doc.Null;
-        }
-
-        // TODO !!!!!!!!!!!!!!!!! this is next
-        // this is just shoved in here for now
-        var result = new List<Doc>();
-        foreach (XmlAttribute attribute in node.Attributes)
-        {
-            result.Add(Doc.Line, attribute.Name, "=\"", attribute.Value, "\"");
-        }
-
-        return Doc.Indent(result);
-        // const ignoreAttributeData =
-        //     node.prev?.type === "comment" &&
-        //     getPrettierIgnoreAttributeCommentData(node.prev.value);
-        //
-        // const hasPrettierIgnoreAttribute =
-        //     typeof ignoreAttributeData === "boolean"
-        //         ? () => ignoreAttributeData
-        //         : Array.isArray(ignoreAttributeData)
-        //           ? (attribute) => ignoreAttributeData.includes(attribute.rawName)
-        //           : () => false;
-        //
-        // const printedAttributes = path.map(
-        //     ({ node: attribute }) =>
-        //         hasPrettierIgnoreAttribute(attribute)
-        //             ? replaceEndOfLine(
-        //                   options.originalText.slice(
-        //                       locStart(attribute),
-        //                       locEnd(attribute),
-        //                   ),
-        //               )
-        //             : print(),
-        //     "attrs",
-        // );
-        //
-        // const forceNotToBreakAttrContent =
-        //     node.type === "element" &&
-        //     node.fullName === "script" &&
-        //     node.attrs.length === 1 &&
-        //     node.attrs[0].fullName === "src" &&
-        //     node.children.length === 0;
-        //
-        // const shouldPrintAttributePerLine =
-        //     options.singleAttributePerLine &&
-        //     node.attrs.length > 1 &&
-        //     !isVueSfcBlock(node, options);
-        // const attributeLine = shouldPrintAttributePerLine ? hardline : line;
-        //
-        // /** @type {Doc[]} */
-        // const parts = [
-        //     indent([
-        //         forceNotToBreakAttrContent ? " " : line,
-        //         join(attributeLine, printedAttributes),
-        //     ]),
-        // ];
-        //
-        // if (
-        //     /**
-        //      *     123<a
-        //      *       attr
-        //      *           ~
-        //      *       >456
-        //      */
-        //     (node.firstChild &&
-        //         needsToBorrowParentOpeningTagEndMarker(node.firstChild)) ||
-        //     /**
-        //      *     <span
-        //      *       >123<meta
-        //      *                ~
-        //      *     /></span>
-        //      */
-        //     (node.isSelfClosing &&
-        //         needsToBorrowLastChildClosingTagEndMarker(node.parent)) ||
-        //     forceNotToBreakAttrContent
-        // ) {
-        //     parts.push(node.isSelfClosing ? " " : "");
-        // } else {
-        //     parts.push(
-        //         options.bracketSameLine
-        //             ? node.isSelfClosing
-        //                 ? " "
-        //                 : ""
-        //             : node.isSelfClosing
-        //               ? line
-        //               : softline,
-        //     );
-        // }
-        //
-        // return parts;
     }
 
     private static string PrintOpeningTagEndMarker(XmlNode node)

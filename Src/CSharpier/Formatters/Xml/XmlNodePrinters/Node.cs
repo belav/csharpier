@@ -1,17 +1,18 @@
 using System.Xml;
+using CSharpier.SyntaxPrinter;
 
 namespace CSharpier.Formatters.Xml.XmlNodePrinters;
 
 internal static class Node
 {
-    internal static Doc Print(XmlNode xmlNode)
+    internal static Doc Print(XmlNode xmlNode, PrintingContext context)
     {
         if (xmlNode is XmlDocument xmlDocument)
         {
             var result = new List<Doc>();
             foreach (XmlNode node in xmlDocument.ChildNodes)
             {
-                result.Add(Print(node), Doc.HardLine);
+                result.Add(Print(node, context), Doc.HardLine);
             }
 
             result.Add(Doc.HardLine);
@@ -26,7 +27,7 @@ internal static class Node
 
         if (xmlNode is XmlElement xmlElement)
         {
-            return Element.Print(xmlElement);
+            return Element.Print(xmlElement, context);
         }
 
         if (xmlNode is XmlText xmlText)
@@ -60,7 +61,7 @@ internal static class Node
         {
             return xmlNode.OuterXml;
         }
-        // TODO printer-html.js
+        // TODO xml printer-html.js
 
         throw new Exception("Need to handle + " + xmlNode);
     }

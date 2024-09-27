@@ -40,17 +40,13 @@ public class BaseTest
             _ => Formatter.Unknown,
         };
 
-        // TODO how do we make sure that 2 is the default for xml?
-        var indentSize = formatter is Formatter.XML ? 2 : 4;
-
         var result = await CodeFormatter.FormatAsync(
             fileReaderResult.FileContents,
-            new PrinterOptions
+            new PrinterOptions(formatter)
             {
                 Width = PrinterOptions.WidthUsedByTests,
                 UseTabs = useTabs,
-                Formatter = formatter,
-                IndentSize = indentSize,
+                IndentSize = formatter == Formatter.XML ? 2 : 4,
             },
             CancellationToken.None
         );

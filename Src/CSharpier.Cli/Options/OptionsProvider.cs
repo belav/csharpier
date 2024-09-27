@@ -112,12 +112,12 @@ internal class OptionsProvider
 
         if (filePath.EndsWith(".cs"))
         {
-            return new PrinterOptions { Formatter = Formatter.CSharp };
+            return new PrinterOptions(Formatter.CSharp);
         }
 
         if (filePath.EndsWith(".csx"))
         {
-            return new PrinterOptions { Formatter = Formatter.CSharpScript };
+            return new PrinterOptions(Formatter.CSharpScript);
         }
 
         if (
@@ -125,9 +125,10 @@ internal class OptionsProvider
             || filePath.EndsWith(".props")
             || filePath.EndsWith(".targets")
             || filePath.EndsWith(".xml")
+            || filePath.EndsWith(".config")
         )
         {
-            return new PrinterOptions { Formatter = Formatter.XML };
+            return new PrinterOptions(Formatter.XML);
         }
 
         return null;

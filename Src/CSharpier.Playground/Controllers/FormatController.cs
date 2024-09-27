@@ -52,14 +52,13 @@ public class FormatController : ControllerBase
 
         var result = await CodeFormatter.FormatAsync(
             model.Code,
-            new PrinterOptions
+            new PrinterOptions(parsedFormatter)
             {
                 IncludeAST = true,
                 IncludeDocTree = true,
                 Width = model.PrintWidth,
                 IndentSize = model.IndentSize,
                 UseTabs = model.UseTabs,
-                Formatter = parsedFormatter,
             },
             cancellationToken
         );

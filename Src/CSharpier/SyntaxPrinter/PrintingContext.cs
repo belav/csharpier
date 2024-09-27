@@ -5,6 +5,16 @@ internal class PrintingContext
     public required PrintingContextOptions Options { get; init; }
     public PrintingContextState State { get; init; } = new();
 
+    private readonly Dictionary<string, int> groupNumberByValue = new();
+
+    public string GroupFor(string value)
+    {
+        var number = this.groupNumberByValue.GetValueOrDefault(value, 0) + 1;
+        this.groupNumberByValue[value] = number;
+
+        return value + " #" + number;
+    }
+
     public PrintingContext WithSkipNextLeadingTrivia()
     {
         this.State.SkipNextLeadingTrivia = true;

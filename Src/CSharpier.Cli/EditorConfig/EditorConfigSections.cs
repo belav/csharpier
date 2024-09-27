@@ -27,7 +27,7 @@ internal class EditorConfigSections
             return null;
         }
 
-        var printerOptions = new PrinterOptions { Formatter = parsedFormatter };
+        var printerOptions = new PrinterOptions(parsedFormatter);
 
         if (resolvedConfiguration.MaxLineLength is { } maxLineLength)
         {

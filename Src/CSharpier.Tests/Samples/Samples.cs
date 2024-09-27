@@ -34,7 +34,7 @@ public class Samples
         var code = await File.ReadAllTextAsync(file);
         var result = await CSharpFormatter.FormatAsync(
             code,
-            new PrinterOptions { IncludeDocTree = true, IncludeAST = true }
+            new PrinterOptions(Formatter.CSharp) { IncludeDocTree = true, IncludeAST = true }
         );
 
         var syntaxNodeComparer = new SyntaxNodeComparer(

@@ -1,13 +1,14 @@
 using System.Xml;
+using CSharpier.SyntaxPrinter;
 
 namespace CSharpier.Formatters.Xml.XmlNodePrinters;
 
 internal static class Element
 {
-    internal static Doc Print(XmlElement node)
+    internal static Doc Print(XmlElement node, PrintingContext context)
     {
         var shouldHugContent = false;
-        // TODO need any of this?
+        // TODO xml need any of this?
         // node.ChildNodes.Count == 1 &&
         // (node.firstChild.type == "interpolation" ||
         //     node.firstChild.type == "angularIcuExpression") &&
@@ -16,12 +17,12 @@ internal static class Element
         // node.lastChild.isTrailingSpaceSensitive &&
         // !node.lastChild.hasTrailingSpaces;
 
-        var attrGroupId = Symbol.For("element-attr-group-id");
+        var attrGroupId = context.GroupFor("element-attr-group-id");
 
         Group PrintTag(Doc doc)
         {
             return Doc.Group(
-                Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(node)),
+                Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(node, context)),
                 doc,
                 Tag.PrintClosingTag(node)
             );
@@ -57,7 +58,7 @@ internal static class Element
             // && node.isIndentationSensitive
             )
             {
-                // TODO we don't have dedent?
+                // TODO xml we don't have dedent?
                 // return dedentToRoot(Doc.SoftLine);
             }
 
@@ -117,7 +118,7 @@ internal static class Element
         return PrintTag(
             Doc.Concat(
                 ForceBreakContent(node) ? Doc.BreakParent : "",
-                PrintChildrenDoc(PrintLineBeforeChildren(), ElementChildren.Print(node)),
+                PrintChildrenDoc(PrintLineBeforeChildren(), ElementChildren.Print(node, context)),
                 PrintLineAfterChildren()
             )
         );

@@ -1,7 +1,4 @@
-using System.Text;
-using System.Text.Json;
 using CSharpier.Formatters.Xml;
-using CSharpier.SyntaxPrinter;
 
 namespace CSharpier;
 
@@ -22,14 +19,13 @@ public static class CodeFormatter
 
         return CSharpFormatter.FormatAsync(
             code,
-            new PrinterOptions
+            new PrinterOptions(Formatter.CSharp)
             {
                 Width = options.Width,
                 UseTabs = options.IndentStyle == IndentStyle.Tabs,
                 IndentSize = options.IndentSize,
                 EndOfLine = options.EndOfLine,
                 IncludeGenerated = options.IncludeGenerated,
-                Formatter = Formatter.CSharp,
             },
             cancellationToken
         );
@@ -53,13 +49,12 @@ public static class CodeFormatter
 
         return CSharpFormatter.FormatAsync(
             syntaxTree,
-            new PrinterOptions
+            new PrinterOptions(Formatter.CSharp)
             {
                 Width = options.Width,
                 UseTabs = options.IndentStyle == IndentStyle.Tabs,
                 IndentSize = options.IndentSize,
                 EndOfLine = options.EndOfLine,
-                Formatter = Formatter.CSharp,
             },
             SourceCodeKind.Regular,
             cancellationToken
@@ -74,22 +69,20 @@ public static class CodeFormatter
     {
         return options.Formatter switch
         {
-            Formatter.CSharp
-                => await CSharpFormatter.FormatAsync(
-                    fileContents,
-                    options,
-                    SourceCodeKind.Regular,
-                    cancellationToken
-                ),
-            Formatter.CSharpScript
-                => await CSharpFormatter.FormatAsync(
-                    fileContents,
-                    options,
-                    SourceCodeKind.Script,
-                    cancellationToken
-                ),
+            Formatter.CSharp => await CSharpFormatter.FormatAsync(
+                fileContents,
+                options,
+                SourceCodeKind.Regular,
+                cancellationToken
+            ),
+            Formatter.CSharpScript => await CSharpFormatter.FormatAsync(
+                fileContents,
+                options,
+                SourceCodeKind.Script,
+                cancellationToken
+            ),
             Formatter.XML => XmlFormatter.Format(fileContents, options),
-            _ => new CodeFormatterResult { FailureMessage = "Is an unsupported file type." }
+            _ => new CodeFormatterResult { FailureMessage = "Is an unsupported file type." },
         };
     }
 }

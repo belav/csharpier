@@ -1,15 +1,16 @@
 using System.Xml;
+using CSharpier.SyntaxPrinter;
 
 namespace CSharpier.Formatters.Xml.XmlNodePrinters;
 
 internal static class ElementChildren
 {
-    public static Doc Print(XmlElement node)
+    public static Doc Print(XmlElement node, PrintingContext context)
     {
-        return PrintChildren(node, Node.Print);
+        return PrintChildren(node, context);
     }
 
-    public static Doc PrintChildren(XmlElement node, Func<XmlNode, Doc> print)
+    public static Doc PrintChildren(XmlElement node, PrintingContext context)
     {
         // this force breaks html, head, ul, ol, etc
         // if (forceBreakChildren(node)) {
@@ -39,7 +40,7 @@ internal static class ElementChildren
         var groupIds = new List<string>();
         foreach (var _ in node.ChildNodes)
         {
-            groupIds.Add(Symbol.For("symbol"));
+            groupIds.Add(context.GroupFor("symbol"));
         }
 
         var result = new List<Doc>();
@@ -133,7 +134,7 @@ internal static class ElementChildren
                     Doc.Concat(leadingParts),
                     Doc.GroupWithId(
                         groupIds[x],
-                        PrintChild(childNode, Node.Print),
+                        PrintChild(childNode, context),
                         Doc.Concat(trailingParts)
                     )
                 ),
@@ -158,7 +159,7 @@ internal static class ElementChildren
         // );
     }
 
-    public static Doc PrintChild(XmlNode child, Func<XmlNode, Doc> print)
+    public static Doc PrintChild(XmlNode child, PrintingContext context)
     {
         // should we try to support csharpier-ignore some day?
         // if (HasPrettierIgnore(child))
@@ -178,7 +179,7 @@ internal static class ElementChildren
         //     };
         // }
 
-        return print(child);
+        return Node.Print(child, context);
     }
 
     // public static int GetEndLocation(XmlElement node)
