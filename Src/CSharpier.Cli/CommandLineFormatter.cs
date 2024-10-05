@@ -3,11 +3,10 @@ using System.IO.Abstractions;
 using System.Text;
 using CSharpier.Cli.Options;
 using CSharpier.Utilities;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
-
-using Microsoft.CodeAnalysis;
 
 internal static class CommandLineFormatter
 {
@@ -177,9 +176,9 @@ internal static class CommandLineFormatter
                 cancellationToken
             );
 
-            var originalDirectoryOrFile = commandLineOptions
-                .OriginalDirectoryOrFilePaths[x]
-                .Replace("\\", "/");
+            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[
+                x
+            ].Replace("\\", "/");
 
             var formattingCache = await FormattingCacheFactory.InitializeAsync(
                 commandLineOptions,
@@ -255,12 +254,8 @@ internal static class CommandLineFormatter
                     return 1;
                 }
 
-                var tasks = fileSystem
-                    .Directory.EnumerateFiles(
-                        directoryOrFilePath,
-                        "*.*",
-                        SearchOption.AllDirectories
-                    )
+                var tasks = fileSystem.Directory
+                    .EnumerateFiles(directoryOrFilePath, "*.*", SearchOption.AllDirectories)
                     .Select(o =>
                     {
                         var normalizedPath = o.Replace("\\", "/");
@@ -380,18 +375,13 @@ internal static class CommandLineFormatter
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        CodeFormatterResult codeFormattingResult;
-
-        var sourceCodeKind = Path.GetExtension(fileToFormatInfo.Path).EqualsIgnoreCase(".csx")
-            ? SourceCodeKind.Script
-            : SourceCodeKind.Regular;
+        CodeFormatterResult? codeFormattingResult;
 
         try
         {
-            codeFormattingResult = await CSharpFormatter.FormatAsync(
+            codeFormattingResult = await CodeFormatter.FormatAsync(
                 fileToFormatInfo.FileContents,
                 printerOptions,
-                sourceCodeKind,
                 cancellationToken
             );
         }
@@ -434,8 +424,17 @@ internal static class CommandLineFormatter
             return;
         }
 
-        if (!commandLineOptions.Fast)
+        // TODO xml implement this stuff - maybe new PR?
+        // https://github.com/belav/csharpier/pull/858#issuecomment-1487385384
+        // TODO xml review this https://github.com/belav/csharpier-repos/pull/67
+        // TODO xml what about allowing lines between elements?
+        if (!commandLineOptions.Fast && fileToFormatInfo.Path.EndsWithIgnoreCase(".cs"))
         {
+            // TODO xml the thing above should do this if we are using the csharp formatter
+            var sourceCodeKind = Path.GetExtension(fileToFormatInfo.Path).EqualsIgnoreCase(".csx")
+                ? SourceCodeKind.Script
+                : SourceCodeKind.Regular;
+
             var syntaxNodeComparer = new SyntaxNodeComparer(
                 fileToFormatInfo.FileContents,
                 codeFormattingResult.Code,

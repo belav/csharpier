@@ -1,6 +1,6 @@
-namespace CSharpier;
-
 using System.Text.Json;
+
+namespace CSharpier;
 
 internal static partial class SyntaxNodeJsonWriter
 {

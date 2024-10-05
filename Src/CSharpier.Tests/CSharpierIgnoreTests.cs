@@ -1,9 +1,8 @@
+using CSharpier.SyntaxPrinter;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CSharpier.Tests;
-
-using CSharpier.SyntaxPrinter;
-using FluentAssertions;
 
 [TestFixture]
 public class CSharpierIgnoreTests
@@ -67,11 +66,14 @@ public string Example
         return CSharpierIgnore
             .PrintWithoutFormatting(
                 code,
-                new FormattingContext
+                new PrintingContext
                 {
-                    LineEnding = Environment.NewLine,
-                    IndentSize = 4,
-                    UseTabs = false,
+                    Options = new PrintingContext.PrintingContextOptions
+                    {
+                        LineEnding = Environment.NewLine,
+                        IndentSize = 4,
+                        UseTabs = false,
+                    },
                 }
             )
             .ReplaceLineEndings("\n");

@@ -2,11 +2,10 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Text;
 using CSharpier.Cli;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
 namespace CSharpier.Tests;
-
-using Microsoft.Extensions.Logging;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]

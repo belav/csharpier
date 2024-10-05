@@ -2,12 +2,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class SimpleLambdaExpression
 {
-    public static Doc Print(SimpleLambdaExpressionSyntax node, FormattingContext context)
+    public static Doc Print(SimpleLambdaExpressionSyntax node, PrintingContext context)
     {
         return Doc.Group(PrintHead(node, context), PrintBody(node, context));
     }
 
-    public static Doc PrintHead(SimpleLambdaExpressionSyntax node, FormattingContext context)
+    public static Doc PrintHead(SimpleLambdaExpressionSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             Modifiers.PrintSorted(node.Modifiers, context),
@@ -17,7 +17,7 @@ internal static class SimpleLambdaExpression
         );
     }
 
-    public static Doc PrintBody(SimpleLambdaExpressionSyntax node, FormattingContext context)
+    public static Doc PrintBody(SimpleLambdaExpressionSyntax node, PrintingContext context)
     {
         return node.Body switch
         {

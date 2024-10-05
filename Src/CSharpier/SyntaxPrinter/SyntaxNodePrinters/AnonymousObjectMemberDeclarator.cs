@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class AnonymousObjectMemberDeclarator
 {
-    public static Doc Print(AnonymousObjectMemberDeclaratorSyntax node, FormattingContext context)
+    public static Doc Print(AnonymousObjectMemberDeclaratorSyntax node, PrintingContext context)
     {
         var docs = new List<Doc>();
         if (

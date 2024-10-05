@@ -1,14 +1,14 @@
-namespace CSharpier.SyntaxPrinter;
-
 using System.Text;
+
+namespace CSharpier.SyntaxPrinter;
 
 internal static class SeparatedSyntaxList
 {
     public static Doc Print<T>(
         SeparatedSyntaxList<T> list,
-        Func<T, FormattingContext, Doc> printFunc,
+        Func<T, PrintingContext, Doc> printFunc,
         Doc afterSeparator,
-        FormattingContext context,
+        PrintingContext context,
         int startingIndex = 0
     )
         where T : SyntaxNode
@@ -18,9 +18,9 @@ internal static class SeparatedSyntaxList
 
     public static Doc PrintWithTrailingComma<T>(
         SeparatedSyntaxList<T> list,
-        Func<T, FormattingContext, Doc> printFunc,
+        Func<T, PrintingContext, Doc> printFunc,
         Doc afterSeparator,
-        FormattingContext context,
+        PrintingContext context,
         SyntaxToken? closingToken = null
     )
         where T : SyntaxNode
@@ -33,9 +33,9 @@ internal static class SeparatedSyntaxList
     // and if you pass null to PrintWithTrailingComma it won't add a trailing comma if there isn't one
     private static Doc Print<T>(
         SeparatedSyntaxList<T> list,
-        Func<T, FormattingContext, Doc> printFunc,
+        Func<T, PrintingContext, Doc> printFunc,
         Doc afterSeparator,
-        FormattingContext context,
+        PrintingContext context,
         int startingIndex,
         SyntaxToken? closingToken
     )

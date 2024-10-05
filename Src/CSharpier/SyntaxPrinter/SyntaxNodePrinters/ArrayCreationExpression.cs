@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ArrayCreationExpression
 {
-    public static Doc Print(ArrayCreationExpressionSyntax node, FormattingContext context)
+    public static Doc Print(ArrayCreationExpressionSyntax node, PrintingContext context)
     {
         return Doc.Group(
             Token.PrintWithSuffix(node.NewKeyword, " ", context),

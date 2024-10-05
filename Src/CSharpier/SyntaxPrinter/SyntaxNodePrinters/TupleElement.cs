@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class TupleElement
 {
-    public static Doc Print(TupleElementSyntax node, FormattingContext context)
+    public static Doc Print(TupleElementSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             Node.Print(node.Type, context),

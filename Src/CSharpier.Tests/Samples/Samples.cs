@@ -1,10 +1,9 @@
 using System.Text;
 using FluentAssertions;
+using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 
 namespace CSharpier.Tests.Samples;
-
-using Microsoft.CodeAnalysis;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
@@ -35,7 +34,7 @@ public class Samples
         var code = await File.ReadAllTextAsync(file);
         var result = await CSharpFormatter.FormatAsync(
             code,
-            new PrinterOptions { IncludeDocTree = true, IncludeAST = true }
+            new PrinterOptions(Formatter.CSharp) { IncludeDocTree = true, IncludeAST = true }
         );
 
         var syntaxNodeComparer = new SyntaxNodeComparer(
@@ -51,12 +50,12 @@ public class Samples
         compareResult.Should().BeEmpty();
 
         await File.WriteAllTextAsync(
-            file.Replace(".test", ".actual.test"),
+            file.Replace(".cst", ".actual.test"),
             result.Code,
             Encoding.UTF8
         );
         await File.WriteAllTextAsync(
-            file.Replace(".test", ".doctree.txt"),
+            file.Replace(".cst", ".doctree.txt"),
             result.DocTree,
             Encoding.UTF8
         );

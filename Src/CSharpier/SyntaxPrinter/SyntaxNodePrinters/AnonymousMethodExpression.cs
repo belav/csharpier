@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class AnonymousMethodExpression
 {
-    public static Doc Print(AnonymousMethodExpressionSyntax node, FormattingContext context)
+    public static Doc Print(AnonymousMethodExpressionSyntax node, PrintingContext context)
     {
         var docs = new List<Doc>
         {

@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class IsPatternExpression
 {
-    public static Doc Print(IsPatternExpressionSyntax node, FormattingContext context)
+    public static Doc Print(IsPatternExpressionSyntax node, PrintingContext context)
     {
         if (node.Parent is not (IfStatementSyntax or ParenthesizedExpressionSyntax))
         {

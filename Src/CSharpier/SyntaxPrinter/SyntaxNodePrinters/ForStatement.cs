@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ForStatement
 {
-    public static Doc Print(ForStatementSyntax node, FormattingContext context)
+    public static Doc Print(ForStatementSyntax node, PrintingContext context)
     {
         var docs = new List<Doc>
         {
