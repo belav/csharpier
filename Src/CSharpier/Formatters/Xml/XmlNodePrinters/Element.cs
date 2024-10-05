@@ -19,15 +19,6 @@ internal static class Element
 
         var attrGroupId = context.GroupFor("element-attr-group-id");
 
-        Group PrintTag(Doc doc)
-        {
-            return Doc.Group(
-                Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(node, context)),
-                doc,
-                Tag.PrintClosingTag(node)
-            );
-        }
-
         Doc PrintChildrenDoc(params Doc[] childrenDoc)
         {
             if (shouldHugContent)
@@ -43,6 +34,11 @@ internal static class Element
             if (shouldHugContent)
             {
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
+            }
+
+            if (node.Attributes.Count == 0 && node.ChildNodes is [XmlText])
+            {
+                return Doc.Null;
             }
 
             // this seems to only apply if whitespace is not strict
@@ -85,6 +81,11 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
+            if (node.Attributes.Count == 0 && node.ChildNodes is [XmlText])
+            {
+                return Doc.Null;
+            }
+
             // if (
             //     node.lastChild.hasTrailingSpaces &&
             //     node.lastChild.isTrailingSpaceSensitive
@@ -105,22 +106,23 @@ internal static class Element
 
             return Doc.SoftLine;
         }
-        ;
 
-        if (node.ChildNodes.Count == 0)
-        {
-            return PrintTag(
-                ""
-            // node.hasDanglingSpaces && node.isDanglingSpaceSensitive ? Doc.Line : ""
-            );
-        }
+        var elementContent =
+            node.ChildNodes.Count == 0
+                ? Doc.Null
+                : Doc.Concat(
+                    ForceBreakContent(node) ? Doc.BreakParent : "",
+                    PrintChildrenDoc(
+                        PrintLineBeforeChildren(),
+                        ElementChildren.Print(node, context)
+                    ),
+                    PrintLineAfterChildren()
+                );
 
-        return PrintTag(
-            Doc.Concat(
-                ForceBreakContent(node) ? Doc.BreakParent : "",
-                PrintChildrenDoc(PrintLineBeforeChildren(), ElementChildren.Print(node, context)),
-                PrintLineAfterChildren()
-            )
+        return Doc.Group(
+            Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(node, context)),
+            elementContent,
+            Tag.PrintClosingTag(node)
         );
 
         // if (element.IsEmpty)

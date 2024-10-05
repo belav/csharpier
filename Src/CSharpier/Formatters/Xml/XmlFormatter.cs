@@ -12,6 +12,15 @@ internal static class XmlFormatter
         var xmlDocument = new XmlDocument();
         xmlDocument.LoadXml(xml);
 
+        // TODO xml - what about an xml comparer? can we just parse both and use the builtin xml writer for now?
+
+
+        // TODO xml every file gets this warning from git
+        // warning: in the working copy of 'runtime/src/tests/Common/mergedrunner.targets', LF will be replaced by CRLF the next time Git touches it
+
+        // TODO xml
+        // C:\projects\csharpier-repos\runtime\src\libraries\System.ServiceModel.Syndication\tests\TestFeeds\AtomDisjointItems.xml has some weirdness
+
         var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
         var printingContext = new PrintingContext
         {

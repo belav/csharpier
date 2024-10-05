@@ -7,11 +7,6 @@ internal static class ElementChildren
 {
     public static Doc Print(XmlElement node, PrintingContext context)
     {
-        return PrintChildren(node, context);
-    }
-
-    public static Doc PrintChildren(XmlElement node, PrintingContext context)
-    {
         // this force breaks html, head, ul, ol, etc
         // if (forceBreakChildren(node)) {
         //     return [

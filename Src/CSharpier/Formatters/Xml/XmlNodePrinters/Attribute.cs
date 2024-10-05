@@ -38,12 +38,13 @@ internal static class Attributes
             );
         }
 
-        // const forceNotToBreakAttrContent =
-        //     node.type === "element" &&
-        //     node.fullName === "script" &&
-        //     node.attrs.length === 1 &&
-        //     node.attrs[0].fullName === "src" &&
-        //     node.children.length === 0;
+        var forceNotToBreakAttrContent =
+            node.Attributes.Count == 1 && node.ChildNodes.Cast<XmlNode>().Any(o => o is XmlElement);
+        // node.type === "element" &&
+        // node.fullName === "script" &&
+        // node.attrs.length === 1 &&
+        // node.attrs[0].fullName === "src" &&
+        // node.children.length === 0;
 
         // TODO xml probably attribute per line if there are more than x attributes
         // const shouldPrintAttributePerLine =
@@ -56,8 +57,7 @@ internal static class Attributes
         var parts = new List<Doc>
         {
             Doc.Indent(
-                // forceNotToBreakAttrContent ? " " : line,
-                Doc.Line,
+                forceNotToBreakAttrContent ? " " : Doc.Line,
                 Doc.Join(attributeLine, printedAttributes)
             ),
         };
@@ -80,7 +80,7 @@ internal static class Attributes
              *     /></span>
              */
             || (node.IsEmpty && Tag.NeedsToBorrowLastChildClosingTagEndMarker(node.ParentNode!))
-        // || forceNotToBreakAttrContent
+            || forceNotToBreakAttrContent
         )
         {
             parts.Add(node.IsEmpty ? " " : "");
@@ -95,22 +95,9 @@ internal static class Attributes
 
     private static Doc Print(XmlAttribute attribute, PrintingContext context)
     {
-        // TODO xml what if this is empty? also supposendly it can't be null
-        if (attribute.Value is null)
-        {
-            return attribute.Name;
-        }
+        const string quote = "\"";
 
-        // const quote = getPreferredQuote(value, '"');
-        var quote = "\"";
-
-        var value = attribute.Value;
-        // const value = unescapeQuoteEntities(node.value);
-        // value = replaceEndOfLine(
-        //         quote === '"'
-        //             ? value.replaceAll('"', "&quot;")
-        //             : value.replaceAll("'", "&apos;"),
-        //     ),
+        var value = attribute.Value.Replace("\"", "&quot;");
 
         return Doc.Concat(attribute.Name, "=", quote, value, quote);
     }

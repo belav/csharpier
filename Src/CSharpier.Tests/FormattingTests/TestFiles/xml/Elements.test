@@ -2,9 +2,7 @@
   <Element />
   <Element></Element>
   <ElementWithText>Text</ElementWithText>
-  <LongElement____________________________________________
-    >TextValue</LongElement____________________________________________
-  >
+  <LongElement____________________________________________>TextValue</LongElement____________________________________________>
   <ElementWithAttribute Attribute="AttributeValue________________">TextValue</ElementWithAttribute>
   <ElementWithAttribute Attribute="AttributeValue_________________">TextValue</ElementWithAttribute>
   <ElementWithAttribute Attribute="AttributeValue__________________"
