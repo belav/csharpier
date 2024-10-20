@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class Block
 {
-    public static Doc Print(BlockSyntax node, FormattingContext context)
+    public static Doc Print(BlockSyntax node, PrintingContext context)
     {
         if (
             node.Statements.Count == 0

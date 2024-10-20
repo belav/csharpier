@@ -1,9 +1,9 @@
-namespace CSharpier.Cli.Options;
-
 using System.IO.Abstractions;
 using System.Text.Json;
 using CSharpier.Cli.EditorConfig;
 using Microsoft.Extensions.Logging;
+
+namespace CSharpier.Cli.Options;
 
 internal class OptionsProvider
 {
@@ -110,9 +110,25 @@ internal class OptionsProvider
             return resolvedEditorConfig.ConvertToPrinterOptions(filePath);
         }
 
-        if (filePath.EndsWith(".cs") || filePath.EndsWith(".csx"))
+        if (filePath.EndsWith(".cs"))
         {
-            return new PrinterOptions { Formatter = "csharp" };
+            return new PrinterOptions(Formatter.CSharp);
+        }
+
+        if (filePath.EndsWith(".csx"))
+        {
+            return new PrinterOptions(Formatter.CSharpScript);
+        }
+
+        if (
+            filePath.EndsWith(".csproj")
+            || filePath.EndsWith(".props")
+            || filePath.EndsWith(".targets")
+            || filePath.EndsWith(".xml")
+            || filePath.EndsWith(".config")
+        )
+        {
+            return new PrinterOptions(Formatter.XML);
         }
 
         return null;

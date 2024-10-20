@@ -1,10 +1,10 @@
-namespace CSharpier.Tests;
-
 using System.IO.Abstractions.TestingHelpers;
 using CSharpier.Cli.Options;
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
+
+namespace CSharpier.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Fixtures)]

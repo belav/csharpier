@@ -1,6 +1,6 @@
-namespace CSharpier.Cli.EditorConfig;
-
 using IniParser.Model;
+
+namespace CSharpier.Cli.EditorConfig;
 
 internal class Section
 {

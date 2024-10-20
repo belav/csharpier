@@ -1,10 +1,9 @@
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.FakeGenerators;
-
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public class SyntaxNodeComparerGenerator
 {

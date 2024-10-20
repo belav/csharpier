@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class LocalDeclarationStatement
 {
-    public static Doc Print(LocalDeclarationStatementSyntax node, FormattingContext context)
+    public static Doc Print(LocalDeclarationStatementSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

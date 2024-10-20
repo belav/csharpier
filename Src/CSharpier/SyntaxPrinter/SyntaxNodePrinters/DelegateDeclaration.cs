@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class DelegateDeclaration
 {
-    public static Doc Print(DelegateDeclarationSyntax node, FormattingContext context)
+    public static Doc Print(DelegateDeclarationSyntax node, PrintingContext context)
     {
         var docs = new List<Doc>
         {

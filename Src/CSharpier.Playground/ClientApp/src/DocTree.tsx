@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { UnControlled as CodeMirror } from "react-codemirror2";
 import { useAppContext } from "./AppContext";
+import { observer } from "mobx-react-lite";
 
 const options = {
     mode: {
@@ -14,9 +15,9 @@ const options = {
 
 const regex = /\s+Doc\.Null,/g;
 
-export const DocTree = () => {
+export const DocTree = observer(() => {
     const { doc, hideNull } = useAppContext();
     const docToDisplay = hideNull ? doc.replaceAll(regex, "") : doc;
 
     return <CodeMirror value={docToDisplay} options={options} onBeforeChange={() => {}} onChange={() => {}} />;
-};
+});

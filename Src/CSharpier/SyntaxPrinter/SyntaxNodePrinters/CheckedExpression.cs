@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class CheckedExpression
 {
-    public static Doc Print(CheckedExpressionSyntax node, FormattingContext context)
+    public static Doc Print(CheckedExpressionSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.Keyword, context),

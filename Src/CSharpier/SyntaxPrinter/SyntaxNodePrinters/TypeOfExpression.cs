@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class TypeOfExpression
 {
-    public static Doc Print(TypeOfExpressionSyntax node, FormattingContext context)
+    public static Doc Print(TypeOfExpressionSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.Keyword, context),

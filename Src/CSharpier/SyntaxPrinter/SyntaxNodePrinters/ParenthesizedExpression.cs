@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ParenthesizedExpression
 {
-    public static Doc Print(ParenthesizedExpressionSyntax node, FormattingContext context)
+    public static Doc Print(ParenthesizedExpressionSyntax node, PrintingContext context)
     {
         return Doc.Group(
             Token.Print(node.OpenParenToken, context),

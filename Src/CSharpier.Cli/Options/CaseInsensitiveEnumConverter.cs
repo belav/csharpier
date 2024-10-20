@@ -1,7 +1,7 @@
-namespace CSharpier.Cli.Options;
-
 using System.Text.Json;
 using System.Text.Json.Serialization;
+
+namespace CSharpier.Cli.Options;
 
 internal class CaseInsensitiveEnumConverter<TEnum> : JsonConverter<TEnum>
     where TEnum : struct
