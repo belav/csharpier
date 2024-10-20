@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="../../Nuget/Build.props"/>
     <PropertyGroup>
-        <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <PackageId>CSharpier.MsBuild</PackageId>
         <DevelopmentDependency>true</DevelopmentDependency>
         <CSharpierOutputDir>../CSharpier.Cli/bin/$(Configuration)/$(TargetFramework)</CSharpierOutputDir>
@@ -10,7 +10,7 @@
     <!--
         Note: There is no <ProjectReference /> here because that would cause msbuild to
         make it a dependency in the output package, which causes all sorts of issues as
-        CSharpier is a net6.0 project with <PackAsTool> and this is neither.
+        CSharpier is a net9.0 project with <PackAsTool> and this is neither.
     -->
     <Target Name="BuildCSharpier" BeforeTargets="Restore">
       <Exec command="dotnet build -c $(Configuration)" WorkingDirectory="../CSharpier.Cli" />
