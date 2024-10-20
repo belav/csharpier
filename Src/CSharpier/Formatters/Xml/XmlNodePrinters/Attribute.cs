@@ -38,8 +38,10 @@ internal static class Attributes
             );
         }
 
-        var forceNotToBreakAttrContent =
-            node.Attributes.Count == 1 && node.ChildNodes.Cast<XmlNode>().Any(o => o is XmlElement);
+        var doNotBreakAttributes =
+            node.Attributes.Count == 1
+            && !node.Attributes[0].Value.Contains('\n')
+            && (node.ChildNodes.Cast<XmlNode>().Any(o => o is XmlElement) || node.IsEmpty);
         // node.type === "element" &&
         // node.fullName === "script" &&
         // node.attrs.length === 1 &&
@@ -57,7 +59,7 @@ internal static class Attributes
         var parts = new List<Doc>
         {
             Doc.Indent(
-                forceNotToBreakAttrContent ? " " : Doc.Line,
+                doNotBreakAttributes ? " " : Doc.Line,
                 Doc.Join(attributeLine, printedAttributes)
             ),
         };
@@ -80,7 +82,7 @@ internal static class Attributes
              *     /></span>
              */
             || (node.IsEmpty && Tag.NeedsToBorrowLastChildClosingTagEndMarker(node.ParentNode!))
-            || forceNotToBreakAttrContent
+            || doNotBreakAttributes
         )
         {
             parts.Add(node.IsEmpty ? " " : "");

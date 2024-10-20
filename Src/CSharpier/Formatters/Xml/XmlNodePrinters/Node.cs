@@ -61,7 +61,11 @@ internal static class Node
         {
             return xmlNode.OuterXml;
         }
-        // TODO xml printer-html.js
+
+        if (xmlNode is XmlCDataSection)
+        {
+            return xmlNode.OuterXml;
+        }
 
         throw new Exception("Need to handle + " + xmlNode);
     }

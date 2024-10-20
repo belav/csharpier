@@ -1,4 +1,5 @@
 using System.Xml;
+using System.Xml.Linq;
 
 namespace CSharpier.Formatters.Xml.XmlNodePrinters;
 
@@ -83,7 +84,7 @@ internal static class Utils
             yield break;
         }
 
-        yield return xmlText.Value;
+        yield return new XElement("EncodeText", xmlText.Value).LastNode!.ToString();
 
         // return node.parent.isWhitespaceSensitive
         //     ? node.parent.isIndentationSensitive

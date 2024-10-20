@@ -8,4 +8,5 @@
   <ElementWithAttribute Attribute="AttributeValue__________________"
     >TextValue</ElementWithAttribute
   >
+  <ElementWithEncodedText>&lt;b&gt;SomeText&lt;/b&gt;</ElementWithEncodedText>
 </Root>
