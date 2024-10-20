@@ -29,7 +29,7 @@
     <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="21.0.29" />
     <PackageVersion Include="System.IO.Hashing" Version="8.0.0" />
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-    <PackageVersion Include="System.Text.Json" Version="8.0.4" />
+    <PackageVersion Include="System.Text.Json" Version="8.0.5" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageVersion Include="YamlDotNet" Version="16.1.2" />
   </ItemGroup>
