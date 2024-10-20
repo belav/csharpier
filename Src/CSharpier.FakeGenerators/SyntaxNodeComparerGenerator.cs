@@ -75,7 +75,7 @@ namespace CSharpier
                 sourceBuilder.AppendLine(
                     $"""
                 case {syntaxNodeType.Name} {lowerCaseName}:
-                    if (this.IgnoreDisabledText)
+                    if (this.ReorderedUsingsWithDisabledText)
                         return Equal;
                     return this.Compare{syntaxNodeType.Name}({lowerCaseName}, formattedNode as {syntaxNodeType.Name});
 """
