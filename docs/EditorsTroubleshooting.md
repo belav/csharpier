@@ -34,7 +34,7 @@ When the extension is unable to format files, it is generally a problem with bei
 - Change the dropdown to `CSharpier`
 
 ### Rider
-- Execute the action `Show Log in Explorer
+- Execute the action `Show Log in Explorer`
 - Look for lines that contain `#c.i.c.CSharpierLogger`
 
 ## Troubleshooting Steps
