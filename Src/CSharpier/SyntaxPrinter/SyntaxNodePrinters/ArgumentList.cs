@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ArgumentList
 {
-    public static Doc Print(ArgumentListSyntax node, FormattingContext context)
+    public static Doc Print(ArgumentListSyntax node, PrintingContext context)
     {
         return Doc.Group(
             Doc.IndentIf(

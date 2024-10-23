@@ -1,10 +1,10 @@
-namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
-
 using System.Text.RegularExpressions;
+
+namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BaseMethodDeclaration
 {
-    public static Doc Print(CSharpSyntaxNode node, FormattingContext context)
+    public static Doc Print(CSharpSyntaxNode node, PrintingContext context)
     {
         SyntaxList<AttributeListSyntax>? attributeLists = null;
         SyntaxTokenList? modifiers = null;
@@ -95,7 +95,11 @@ internal static class BaseMethodDeclaration
                     .Trim();
 
                 docs.Add(
-                    Regex.Replace(methodWithoutAttributes, @"\s*(\r\n?|\n)", context.LineEnding)
+                    Regex.Replace(
+                        methodWithoutAttributes,
+                        @"\s*(\r\n?|\n)",
+                        context.Options.LineEnding
+                    )
                 );
             }
 
@@ -127,11 +131,11 @@ internal static class BaseMethodDeclaration
             if (modifiers is not { Count: > 0 })
             {
                 docs.Add(Token.PrintLeadingTrivia(returnType.GetLeadingTrivia(), context));
-                context.SkipNextLeadingTrivia = true;
+                context.State.SkipNextLeadingTrivia = true;
             }
 
             declarationGroup.Add(Node.Print(returnType, context), " ");
-            context.SkipNextLeadingTrivia = false;
+            context.State.SkipNextLeadingTrivia = false;
         }
 
         if (explicitInterfaceSpecifier != null)

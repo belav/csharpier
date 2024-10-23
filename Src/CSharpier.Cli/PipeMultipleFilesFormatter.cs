@@ -1,8 +1,8 @@
-namespace CSharpier.Cli;
-
 using System.IO.Abstractions;
 using System.Text;
 using Microsoft.Extensions.Logging;
+
+namespace CSharpier.Cli;
 
 internal static class PipeMultipleFilesFormatter
 {

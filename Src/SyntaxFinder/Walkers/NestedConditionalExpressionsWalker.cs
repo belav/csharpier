@@ -1,9 +1,9 @@
-namespace SyntaxFinder.Walkers;
-
 using System.Collections.Concurrent;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace SyntaxFinder.Walkers;
 
 public class NestedConditionalExpressionsWalker(string file) : SyntaxFinderWalker(file)
 {

@@ -1,11 +1,13 @@
-namespace CSharpier.Cli.Options;
-
 using System.Text.Json.Serialization;
 using CSharpier.Cli.EditorConfig;
+
+namespace CSharpier.Cli.Options;
 
 internal class ConfigurationFileOptions
 {
     public int PrintWidth { get; init; } = 100;
+
+    // TODO xml how do we get this to default to 2 for xml?
     public int TabWidth { get; init; } = 4;
     public bool UseTabs { get; init; }
 
@@ -20,25 +22,37 @@ internal class ConfigurationFileOptions
         var matchingOverride = this.Overrides.LastOrDefault(o => o.IsMatch(filePath));
         if (matchingOverride is not null)
         {
-            return new PrinterOptions
+            if (
+                !Enum.TryParse<Formatter>(
+                    matchingOverride.Formatter,
+                    ignoreCase: true,
+                    out var parsedFormatter
+                )
+            )
+            {
+                return null;
+            }
+
+            return new PrinterOptions(parsedFormatter)
             {
                 IndentSize = matchingOverride.TabWidth,
                 UseTabs = matchingOverride.UseTabs,
                 Width = matchingOverride.PrintWidth,
                 EndOfLine = matchingOverride.EndOfLine,
-                Formatter = matchingOverride.Formatter,
             };
         }
 
+        // TODO xml we need a default one for xml as well
         if (filePath.EndsWith(".cs") || filePath.EndsWith(".csx"))
         {
-            return new PrinterOptions
+            return new PrinterOptions(
+                filePath.EndsWith(".cs") ? Formatter.CSharp : Formatter.CSharpScript
+            )
             {
                 IndentSize = this.TabWidth,
                 UseTabs = this.UseTabs,
                 Width = this.PrintWidth,
                 EndOfLine = this.EndOfLine,
-                Formatter = "csharp",
             };
         }
 

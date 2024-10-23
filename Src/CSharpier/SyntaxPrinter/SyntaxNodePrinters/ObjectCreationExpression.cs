@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ObjectCreationExpression
 {
-    public static Doc Print(ObjectCreationExpressionSyntax node, FormattingContext context)
+    public static Doc Print(ObjectCreationExpressionSyntax node, PrintingContext context)
     {
         return BreakParentIfNested(
             node,

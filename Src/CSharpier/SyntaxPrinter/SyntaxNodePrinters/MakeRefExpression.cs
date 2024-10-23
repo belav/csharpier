@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class MakeRefExpression
 {
-    public static Doc Print(MakeRefExpressionSyntax node, FormattingContext context)
+    public static Doc Print(MakeRefExpressionSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.Keyword, context),

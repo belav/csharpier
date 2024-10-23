@@ -1,8 +1,7 @@
 using System.CommandLine;
+using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
-
-using Microsoft.Extensions.Logging;
 
 internal class CommandLineOptions
 {

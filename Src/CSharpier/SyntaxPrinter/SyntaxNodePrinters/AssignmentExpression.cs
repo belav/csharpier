@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class AssignmentExpression
 {
-    public static Doc Print(AssignmentExpressionSyntax node, FormattingContext context)
+    public static Doc Print(AssignmentExpressionSyntax node, PrintingContext context)
     {
         Doc possibleNewLines = Doc.Null;
 

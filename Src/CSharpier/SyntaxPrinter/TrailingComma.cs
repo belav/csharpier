@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class TrailingComma
 {
-    public static Doc Print(SyntaxToken closingToken, FormattingContext context)
+    public static Doc Print(SyntaxToken closingToken, PrintingContext context)
     {
         return closingToken.LeadingTrivia.Any(o => o.IsDirective)
             ? Doc.Null

@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/clike/clike";
-import { useAppContext } from "./AppContext";
 import { useOptions } from "./Hooks";
+import { useAppContext } from "./AppContext";
+import { observer } from "mobx-react-lite";
 
-export const CodeEditor = () => {
+export const CodeEditor = observer(() => {
     const { formatCode, enteredCode, setEnteredCode } = useAppContext();
     useEffect(() => {
         formatCode();
@@ -23,4 +24,4 @@ export const CodeEditor = () => {
             onChange={() => {}}
         />
     );
-};
+});

@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ConstructorConstraint
 {
-    public static Doc Print(ConstructorConstraintSyntax node, FormattingContext context)
+    public static Doc Print(ConstructorConstraintSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.NewKeyword, context),

@@ -5,9 +5,6 @@
  * From https://github.com/SLaks/Minimatch
  */
 
-#nullable disable
-
-namespace CSharpier.Cli.EditorConfig;
 
 using System;
 using System.Collections.Generic;
@@ -15,6 +12,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+
+#nullable disable
+
+namespace CSharpier.Cli.EditorConfig;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
