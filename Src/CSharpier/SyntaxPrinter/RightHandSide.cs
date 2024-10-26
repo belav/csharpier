@@ -118,14 +118,9 @@ internal static class RightHandSide
                 WhenFalse: ConditionalExpressionSyntax,
                 WhenTrue: not ConditionalExpressionSyntax
             }
-            or ImplicitObjectCreationExpressionSyntax { Parent: EqualsValueClauseSyntax }
             or InterpolatedStringExpressionSyntax
-            // TODO ditch fluid?
-            // or InvocationExpressionSyntax
             or IsPatternExpressionSyntax
             or LiteralExpressionSyntax
-            // TODO ditch fluid?
-            // or MemberAccessExpressionSyntax
             or StackAllocArrayCreationExpressionSyntax
             or QueryExpressionSyntax => Layout.BreakAfterOperator,
             _ => Layout.Fluid,
