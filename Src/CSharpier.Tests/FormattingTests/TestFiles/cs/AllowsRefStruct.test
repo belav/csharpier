@@ -1,0 +1,9 @@
+public class C<T>
+    where T : allows ref struct
+{
+    // Use T as a ref struct:
+    public void M(scoped T p)
+    {
+        // The parameter p must follow ref safety rules
+    }
+}

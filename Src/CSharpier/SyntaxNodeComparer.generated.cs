@@ -44,6 +44,8 @@ namespace CSharpier
                  return this.CompareAccessorListSyntax(accessorListSyntax, formattedNode as AccessorListSyntax);
              case AliasQualifiedNameSyntax aliasQualifiedNameSyntax:
                  return this.CompareAliasQualifiedNameSyntax(aliasQualifiedNameSyntax, formattedNode as AliasQualifiedNameSyntax);
+             case AllowsConstraintClauseSyntax allowsConstraintClauseSyntax:
+                 return this.CompareAllowsConstraintClauseSyntax(allowsConstraintClauseSyntax, formattedNode as AllowsConstraintClauseSyntax);
              case AnonymousMethodExpressionSyntax anonymousMethodExpressionSyntax:
                  return this.CompareAnonymousMethodExpressionSyntax(anonymousMethodExpressionSyntax, formattedNode as AnonymousMethodExpressionSyntax);
              case AnonymousObjectCreationExpressionSyntax anonymousObjectCreationExpressionSyntax:
@@ -390,6 +392,8 @@ namespace CSharpier
                  return this.CompareReferenceDirectiveTriviaSyntax(referenceDirectiveTriviaSyntax, formattedNode as ReferenceDirectiveTriviaSyntax);
              case RefExpressionSyntax refExpressionSyntax:
                  return this.CompareRefExpressionSyntax(refExpressionSyntax, formattedNode as RefExpressionSyntax);
+             case RefStructConstraintSyntax refStructConstraintSyntax:
+                 return this.CompareRefStructConstraintSyntax(refStructConstraintSyntax, formattedNode as RefStructConstraintSyntax);
              case RefTypeExpressionSyntax refTypeExpressionSyntax:
                  return this.CompareRefTypeExpressionSyntax(refTypeExpressionSyntax, formattedNode as RefTypeExpressionSyntax);
              case RefTypeSyntax refTypeSyntax:
@@ -473,6 +477,8 @@ namespace CSharpier
              case UnsafeStatementSyntax unsafeStatementSyntax:
                  return this.CompareUnsafeStatementSyntax(unsafeStatementSyntax, formattedNode as UnsafeStatementSyntax);
                 case UsingDirectiveSyntax usingDirectiveSyntax:
+                    if (this.ReorderedUsingsWithDisabledText)
+                        return Equal;
                     return this.CompareUsingDirectiveSyntax(usingDirectiveSyntax, formattedNode as UsingDirectiveSyntax);
              case UsingStatementSyntax usingStatementSyntax:
                  return this.CompareUsingStatementSyntax(usingStatementSyntax, formattedNode as UsingStatementSyntax);
@@ -574,6 +580,18 @@ namespace CSharpier
             if (originalNode.IsVar != formattedNode.IsVar) return NotEqual(originalNode, formattedNode);
             originalStack.Push((originalNode.Name, originalNode));
             formattedStack.Push((formattedNode.Name, formattedNode));
+            return Equal;
+        }
+      private CompareResult CompareAllowsConstraintClauseSyntax(AllowsConstraintClauseSyntax originalNode, AllowsConstraintClauseSyntax formattedNode)
+      {
+          CompareResult result;
+            result = this.Compare(originalNode.AllowsKeyword, formattedNode.AllowsKeyword, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            result = this.CompareLists(originalNode.Constraints, formattedNode.Constraints, null, o => o.Span, originalNode.Span, formattedNode.Span);
+            if (result.IsInvalid) return result;
+            result = this.CompareLists(originalNode.Constraints.GetSeparators().Take(originalNode.Constraints.Count() - 1).ToList(), formattedNode.Constraints.GetSeparators().Take(formattedNode.Constraints.Count() - 1).ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);
+            if (result.IsInvalid) return result;
+            if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
       private CompareResult CompareAnonymousMethodExpressionSyntax(AnonymousMethodExpressionSyntax originalNode, AnonymousMethodExpressionSyntax formattedNode)
@@ -3124,6 +3142,16 @@ namespace CSharpier
             formattedStack.Push((formattedNode.Expression, formattedNode));
             if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             result = this.Compare(originalNode.RefKeyword, formattedNode.RefKeyword, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            return Equal;
+        }
+      private CompareResult CompareRefStructConstraintSyntax(RefStructConstraintSyntax originalNode, RefStructConstraintSyntax formattedNode)
+      {
+          CompareResult result;
+            if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
+            result = this.Compare(originalNode.RefKeyword, formattedNode.RefKeyword, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            result = this.Compare(originalNode.StructKeyword, formattedNode.StructKeyword, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             return Equal;
         }

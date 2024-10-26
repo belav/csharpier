@@ -15,6 +15,7 @@ namespace CSharpier
             if (syntaxNode is AccessorDeclarationSyntax) WriteAccessorDeclarationSyntax(builder, syntaxNode as AccessorDeclarationSyntax);
             if (syntaxNode is AccessorListSyntax) WriteAccessorListSyntax(builder, syntaxNode as AccessorListSyntax);
             if (syntaxNode is AliasQualifiedNameSyntax) WriteAliasQualifiedNameSyntax(builder, syntaxNode as AliasQualifiedNameSyntax);
+            if (syntaxNode is AllowsConstraintClauseSyntax) WriteAllowsConstraintClauseSyntax(builder, syntaxNode as AllowsConstraintClauseSyntax);
             if (syntaxNode is AnonymousMethodExpressionSyntax) WriteAnonymousMethodExpressionSyntax(builder, syntaxNode as AnonymousMethodExpressionSyntax);
             if (syntaxNode is AnonymousObjectCreationExpressionSyntax) WriteAnonymousObjectCreationExpressionSyntax(builder, syntaxNode as AnonymousObjectCreationExpressionSyntax);
             if (syntaxNode is AnonymousObjectMemberDeclaratorSyntax) WriteAnonymousObjectMemberDeclaratorSyntax(builder, syntaxNode as AnonymousObjectMemberDeclaratorSyntax);
@@ -188,6 +189,7 @@ namespace CSharpier
             if (syntaxNode is RecursivePatternSyntax) WriteRecursivePatternSyntax(builder, syntaxNode as RecursivePatternSyntax);
             if (syntaxNode is ReferenceDirectiveTriviaSyntax) WriteReferenceDirectiveTriviaSyntax(builder, syntaxNode as ReferenceDirectiveTriviaSyntax);
             if (syntaxNode is RefExpressionSyntax) WriteRefExpressionSyntax(builder, syntaxNode as RefExpressionSyntax);
+            if (syntaxNode is RefStructConstraintSyntax) WriteRefStructConstraintSyntax(builder, syntaxNode as RefStructConstraintSyntax);
             if (syntaxNode is RefTypeExpressionSyntax) WriteRefTypeExpressionSyntax(builder, syntaxNode as RefTypeExpressionSyntax);
             if (syntaxNode is RefTypeSyntax) WriteRefTypeSyntax(builder, syntaxNode as RefTypeSyntax);
             if (syntaxNode is RefValueExpressionSyntax) WriteRefValueExpressionSyntax(builder, syntaxNode as RefValueExpressionSyntax);
@@ -372,6 +374,32 @@ namespace CSharpier
                 WriteSyntaxNode(nameBuilder, syntaxNode.Name);
                 properties.Add($"\"name\":{nameBuilder.ToString()}");
             }
+            builder.Append(string.Join(",", properties.Where(o => o != null)));
+            builder.Append("}");
+        }
+        public static void WriteAllowsConstraintClauseSyntax(StringBuilder builder, AllowsConstraintClauseSyntax syntaxNode)
+        {
+            builder.Append("{");
+            var properties = new List<string>();
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            if (syntaxNode.AllowsKeyword != default(SyntaxToken))
+            {
+                var allowsKeywordBuilder = new StringBuilder();
+                WriteSyntaxToken(allowsKeywordBuilder, syntaxNode.AllowsKeyword);
+                properties.Add($"\"allowsKeyword\":{allowsKeywordBuilder.ToString()}");
+            }
+            var constraints = new List<string>();
+            foreach(var node in syntaxNode.Constraints)
+            {
+                var innerBuilder = new StringBuilder();
+                WriteSyntaxNode(innerBuilder, node);
+                constraints.Add(innerBuilder.ToString());
+            }
+            properties.Add($"\"constraints\":[{string.Join(",", constraints)}]");
+            properties.Add(WriteBoolean("hasLeadingTrivia", syntaxNode.HasLeadingTrivia));
+            properties.Add(WriteBoolean("hasTrailingTrivia", syntaxNode.HasTrailingTrivia));
+            properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             builder.Append(string.Join(",", properties.Where(o => o != null)));
             builder.Append("}");
         }
@@ -2078,6 +2106,12 @@ namespace CSharpier
             properties.Add(WriteBoolean("hasLeadingTrivia", syntaxNode.HasLeadingTrivia));
             properties.Add(WriteBoolean("hasTrailingTrivia", syntaxNode.HasTrailingTrivia));
             properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
+            if (syntaxNode.ReadOnlyKeyword != default(SyntaxToken))
+            {
+                var readOnlyKeywordBuilder = new StringBuilder();
+                WriteSyntaxToken(readOnlyKeywordBuilder, syntaxNode.ReadOnlyKeyword);
+                properties.Add($"\"readOnlyKeyword\":{readOnlyKeywordBuilder.ToString()}");
+            }
             if (syntaxNode.RefKindKeyword != default(SyntaxToken))
             {
                 var refKindKeywordBuilder = new StringBuilder();
@@ -6936,6 +6970,30 @@ namespace CSharpier
                 var refKeywordBuilder = new StringBuilder();
                 WriteSyntaxToken(refKeywordBuilder, syntaxNode.RefKeyword);
                 properties.Add($"\"refKeyword\":{refKeywordBuilder.ToString()}");
+            }
+            builder.Append(string.Join(",", properties.Where(o => o != null)));
+            builder.Append("}");
+        }
+        public static void WriteRefStructConstraintSyntax(StringBuilder builder, RefStructConstraintSyntax syntaxNode)
+        {
+            builder.Append("{");
+            var properties = new List<string>();
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add(WriteBoolean("hasLeadingTrivia", syntaxNode.HasLeadingTrivia));
+            properties.Add(WriteBoolean("hasTrailingTrivia", syntaxNode.HasTrailingTrivia));
+            properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
+            if (syntaxNode.RefKeyword != default(SyntaxToken))
+            {
+                var refKeywordBuilder = new StringBuilder();
+                WriteSyntaxToken(refKeywordBuilder, syntaxNode.RefKeyword);
+                properties.Add($"\"refKeyword\":{refKeywordBuilder.ToString()}");
+            }
+            if (syntaxNode.StructKeyword != default(SyntaxToken))
+            {
+                var structKeywordBuilder = new StringBuilder();
+                WriteSyntaxToken(structKeywordBuilder, syntaxNode.StructKeyword);
+                properties.Add($"\"structKeyword\":{structKeywordBuilder.ToString()}");
             }
             builder.Append(string.Join(",", properties.Where(o => o != null)));
             builder.Append("}");
