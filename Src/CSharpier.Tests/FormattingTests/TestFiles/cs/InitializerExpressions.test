@@ -250,9 +250,39 @@ class ClassName
         { };
     }
 
-    private SomeObject someObject =
-        new(someLongParameter___________________)
-        {
-            SomeProperty = someLongValue____________________________,
-        };
+    SomeObject someObject = new()
+    {
+        Property = longValue_______________________________________________________________________,
+    };
+
+    SomeObject someObject = new SomeObject
+    {
+        Property = longValue_______________________________________________________________________,
+    };
+
+    SomeObject someObject = new(someLongParameter___________________)
+    {
+        Property = longValue_______________________________________________________________________,
+    };
+
+    SomeObject someObject = new SomeObject(someLongParameter___________________)
+    {
+        Property = longValue_______________________________________________________________________,
+    };
+
+    SomeObject someObject = new(
+        someLongParameter___________________,
+        someLongParameter___________________
+    )
+    {
+        Property = longValue_______________________________________________________________________,
+    };
+
+    SomeObject someObject = new SomeObject(
+        someLongParameter___________________,
+        someLongParameter___________________
+    )
+    {
+        Property = longValue_______________________________________________________________________,
+    };
 }
