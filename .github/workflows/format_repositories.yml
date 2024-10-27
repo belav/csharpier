@@ -9,11 +9,11 @@ jobs:
   format_repositories:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           path: csharpier
-      - uses: actions/setup-dotnet@v3
-      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v4
         with:
           repository: belav/csharpier-repos
           path: csharpier-repos
