@@ -22,9 +22,20 @@ internal class FormattingContext
     // we also need to keep track if we move around usings with disabledText
     public bool ReorderedUsingsWithDisabledText { get; set; }
 
+    public TrailingCommaContext? TrailingComma { get; set; }
+
     public FormattingContext WithSkipNextLeadingTrivia()
     {
         this.SkipNextLeadingTrivia = true;
         return this;
     }
+    
+    public FormattingContext WithTrailingComma(SyntaxTrivia syntaxTrivia, Doc doc)
+    {
+        this.TrailingComma = new TrailingCommaContext(syntaxTrivia, doc);
+        return this;
+    }
+    
+    public record TrailingCommaContext(SyntaxTrivia TrailingComment, Doc PrintedTrailingComma);
+
 }
