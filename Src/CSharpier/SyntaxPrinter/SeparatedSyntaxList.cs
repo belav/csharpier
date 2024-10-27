@@ -78,6 +78,8 @@ internal static class SeparatedSyntaxList
                 .GetTrailingTrivia()
                 .FirstOrDefault(o => o.IsComment());
 
+            // we want a trailing comma, but we need to get it printed in place before a trailing comment
+            // shove it in the context so the token printing can pick it up and put it in place
             if (
                 x >= list.SeparatorCount
                 && closingToken is not null
