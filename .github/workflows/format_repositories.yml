@@ -14,6 +14,8 @@ jobs:
         with:
           path: csharpier
       - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: csharpier/global.json
       - uses: actions/checkout@v4
         with:
           repository: belav/csharpier-repos
