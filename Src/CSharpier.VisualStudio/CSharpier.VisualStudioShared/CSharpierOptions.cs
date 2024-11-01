@@ -226,7 +226,8 @@
             static void OnFileChanged(object sender, FileSystemEventArgs e)
             {
 #pragma warning disable VSTHRD103 // Call async methods when in an async method
-                ThreadHelper.JoinableTaskFactory.Run(async () => {
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
                     await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                     await Instance.LoadAsync();
                 });
@@ -236,7 +237,7 @@
             _hotReloadWatcher.Changed += OnFileChanged;
             _hotReloadWatcher.Created += OnFileChanged;
             _hotReloadWatcher.Renamed += OnFileChanged;
-            
+
             _hotReloadWatcher.EnableRaisingEvents = true;
         }
 
