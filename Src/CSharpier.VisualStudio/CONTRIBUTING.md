@@ -8,6 +8,8 @@ Publishing
 - Update version in BOTH files at CSharpier.VisualStudio[2019]/source.extension.vsixmanifest
 - Update ChangeLog.md
 - build solution in release (can this happen via command line?)
-- go to https://marketplace.visualstudio.com/manage/publishers/csharpier (with personal microsoft account)
-- three dots - edit - add new vsix
-- Automate this if we release a lot
+- use cli
+  - CSH-PublishVS [AccessToken] 
+- old way
+  - go to https://marketplace.visualstudio.com/manage/publishers/csharpier (with personal microsoft account)
+  - three dots - edit - add new vsix

@@ -7,7 +7,7 @@
         <MoreInfo>https://github.com/belav/csharpier</MoreInfo>
         <License>LICENSE</License>
         <Icon>logo.png</Icon>
-        <Tags>Format, Formatting, LineEnd, Tab, Space, CSharpier, Prettier</Tags>
+        <Tags>CSharpier;Formatting;Prettier;C#;Code;Format;Formatter;Formatting</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[16.0, 17.0)" />
