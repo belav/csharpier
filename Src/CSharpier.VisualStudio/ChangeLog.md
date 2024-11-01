@@ -1,4 +1,7 @@
-﻿## [1.8.0]
+﻿## [1.9.0]
+- Configuration will hot reload: changes to `.vs/$(SolutionName)/v17/csharpier.json` will trigger a reload of the configuration in an opened Visual Studio instance.
+
+## [1.8.0]
 - Use dotnet tool list to find both local and global installs of csharpier.
 
 ## [1.7.4]
