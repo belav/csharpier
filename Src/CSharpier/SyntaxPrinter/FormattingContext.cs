@@ -29,13 +29,12 @@ internal class FormattingContext
         this.SkipNextLeadingTrivia = true;
         return this;
     }
-    
+
     public FormattingContext WithTrailingComma(SyntaxTrivia syntaxTrivia, Doc doc)
     {
         this.TrailingComma = new TrailingCommaContext(syntaxTrivia, doc);
         return this;
     }
-    
-    public record TrailingCommaContext(SyntaxTrivia TrailingComment, Doc PrintedTrailingComma);
 
+    public record TrailingCommaContext(SyntaxTrivia TrailingComment, Doc PrintedTrailingComma);
 }
