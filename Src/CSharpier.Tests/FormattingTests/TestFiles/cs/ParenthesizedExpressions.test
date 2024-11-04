@@ -1,16 +1,34 @@
-class ClassName
-{
-    void MethodName()
-    {
-        var x =
-            query
-            && (
-                currentChar == '='
-                || currentChar == '<'
-                || currentChar == '!'
-                || currentChar == '>'
-                || currentChar == '|'
-                || currentChar == '&'
-            );
-    }
-}
+var x =
+    query
+    && (
+        currentChar == '='
+        || currentChar == '<'
+        || currentChar == '!'
+        || currentChar == '>'
+        || currentChar == '|'
+        || currentChar == '&'
+    );
+
+// some comment won't break the next line
+(someObject as SomeType).CallMethod();
+
+(someObject as Exactly100____________________________________________________________).CallMethod();
+(someObject as SomeLongType___________________________________________________________)
+    .CallMethod();
+(someObject as SomeLongType________________________________________________________________________)
+    .CallMethod();
+
+(
+    someObject
+    as UnlikelyButThisIsWhatItWouldLookLike_________________________________________________
+)
+    .CallMethod();
+
+(
+    someObject
+    as UnlikelyButThisIsWhatItWouldLookLike_________________________________________________
+)
+    .CallMethod______________()
+    .CallMethod______________()
+    .CallMethod______________();
+
