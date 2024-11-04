@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json.schemastore.org/vsix-publish",
+  "categories": [
+    "coding"
+  ],
+  "identity": {
+    "internalName": "CSharpier"
+  },
+  "overview": "README.md",
+  "priceCategory": "free",
+  "publisher": "csharpier",
+  "private": false,
+  "qna": true,
+  "repo": "https://github.com/belav/csharpier"
+}
