@@ -12,7 +12,7 @@ internal static class RightHandSide
     {
         var layout = DetermineLayout(leftNode, rightNode);
 
-        var groupId = Guid.NewGuid().ToString();
+        var groupId = layout.ToString() + Guid.NewGuid();
 
         return layout switch
         {
@@ -98,7 +98,8 @@ internal static class RightHandSide
 
         return rightNode switch
         {
-            LiteralExpressionSyntax
+            CollectionExpressionSyntax
+            or LiteralExpressionSyntax
             {
                 Token.RawKind: (int)SyntaxKind.MultiLineRawStringLiteralToken
             }
