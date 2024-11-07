@@ -40,24 +40,25 @@ const initPlugin = async (context: ExtensionContext) => {
     NullCSharpierProcess.create(logger);
 
     const csharpierProcessProvider = new CSharpierProcessProvider(logger, context.extension);
-    const diagnosticsDocumentSelector: DocumentFilter[] = [{
-        language:'csharp',
-        scheme: 'file',
-    }];
+    const diagnosticsDocumentSelector: DocumentFilter[] = [
+        {
+            language: "csharp",
+            scheme: "file",
+        },
+    ];
     const diagnosticsService = new DiagnosticsService(
         csharpierProcessProvider,
         diagnosticsDocumentSelector,
-        logger
+        logger,
     );
-    const fixAllCodeActionProvider = new FixAllCodeActionProvider(
-        diagnosticsDocumentSelector
-    );
+    const fixAllCodeActionProvider = new FixAllCodeActionProvider(diagnosticsDocumentSelector);
 
     new FormattingService(logger, csharpierProcessProvider);
     new FixAllCodeActionsCommand(context, csharpierProcessProvider, logger);
 
     context.subscriptions.push(
-        csharpierProcessProvider, 
+        csharpierProcessProvider,
         fixAllCodeActionProvider,
-        diagnosticsService);
+        diagnosticsService,
+    );
 };
