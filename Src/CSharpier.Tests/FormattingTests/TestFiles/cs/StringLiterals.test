@@ -183,5 +183,9 @@ SomeVerbatimString
 SomeVerbatimString
 ".CallMethod().CallMethod().CallMethod()
         );
+
+        var someStringWithLineBreakAndLongValue =
+            $@"
+        {someValue.GetValue().Name} someLongText________________________________________________________________";
     }
 }
