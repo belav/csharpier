@@ -1,10 +1,13 @@
-import { ExtensionContext, window, workspace } from "vscode";
+import { DocumentFilter, ExtensionContext, window, workspace } from "vscode";
 import { CSharpierProcessProvider } from "./CSharpierProcessProvider";
 import { FormattingService } from "./FormattingService";
 import { Logger } from "./Logger";
 import { findDotNet } from "./DotNetProvider";
 import { options } from "./Options";
 import { NullCSharpierProcess } from "./NullCSharpierProcess";
+import { FixAllCodeActionsCommand } from "./FixAllCodeActionCommand";
+import { DiagnosticsService } from "./DiagnosticsService";
+import { FixAllCodeActionProvider } from "./FixAllCodeActionProvider";
 
 export async function activate(context: ExtensionContext) {
     if (!workspace.isTrusted) {
@@ -37,7 +40,24 @@ const initPlugin = async (context: ExtensionContext) => {
     NullCSharpierProcess.create(logger);
 
     const csharpierProcessProvider = new CSharpierProcessProvider(logger, context.extension);
-    new FormattingService(logger, csharpierProcessProvider);
+    const diagnosticsDocumentSelector: DocumentFilter[] = [{
+        language:'csharp',
+        scheme: 'file',
+    }];
+    const diagnosticsService = new DiagnosticsService(
+        csharpierProcessProvider,
+        diagnosticsDocumentSelector,
+        logger
+    );
+    const fixAllCodeActionProvider = new FixAllCodeActionProvider(
+        diagnosticsDocumentSelector
+    );
 
-    context.subscriptions.push(csharpierProcessProvider);
+    new FormattingService(logger, csharpierProcessProvider);
+    new FixAllCodeActionsCommand(context, csharpierProcessProvider, logger);
+
+    context.subscriptions.push(
+        csharpierProcessProvider, 
+        fixAllCodeActionProvider,
+        diagnosticsService);
 };
