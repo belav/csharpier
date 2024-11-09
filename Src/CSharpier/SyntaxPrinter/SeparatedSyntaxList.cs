@@ -74,12 +74,30 @@ internal static class SeparatedSyntaxList
                 continue;
             }
 
+            var firstTrailingComment = list[x]
+                .GetTrailingTrivia()
+                .FirstOrDefault(o => o.IsComment());
+
+            // we want a trailing comma, but we need to get it printed in place before a trailing comment
+            // shove it in the context so the token printing can pick it up and put it in place
+            if (
+                x >= list.SeparatorCount
+                && closingToken is not null
+                && firstTrailingComment != default
+            )
+            {
+                context.WithTrailingComma(
+                    firstTrailingComment,
+                    TrailingComma.Print(closingToken.Value, context, true)
+                );
+            }
+
             docs.Add(printFunc(list[x], context));
 
             // if the syntax tree doesn't have a trailing comma but we want want, then add it
             if (x >= list.SeparatorCount)
             {
-                if (closingToken != null)
+                if (closingToken != null && firstTrailingComment == default)
                 {
                     docs.Add(TrailingComma.Print(closingToken.Value, context));
                 }

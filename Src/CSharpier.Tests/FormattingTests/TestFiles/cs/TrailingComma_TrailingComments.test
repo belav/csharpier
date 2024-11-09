@@ -1,0 +1,17 @@
+var someObject = new SomeObject()
+{
+    Property1 = 1,
+    Property2 = 2 // Trailing Comment
+};
+
+var someObject = new SomeObject()
+{
+    Property1 = 1,
+    Property2 = [] // Trailing Comment
+};
+
+var someObject = new SomeObject()
+{
+    Property1 = 1,
+    Property2 = [/* this formatting isn't ideal, but this probably won't happen in the real world */ ] // Trailing Comment
+};

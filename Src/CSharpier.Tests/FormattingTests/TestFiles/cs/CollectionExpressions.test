@@ -149,6 +149,18 @@ class ClassName { }
 
 class CastExpressions
 {
+    public SomeType[] ShortName =
+    [
+        someLongValue___________________________________________________,
+        someLongValue___________________________________________________,
+    ];
+
+    public SomeType[] LongName____________________________________________________________________________ =
+    [
+        someLongValue___________________________________________________,
+        someLongValue___________________________________________________,
+    ];
+
     void MethodName()
     {
         var x = (string[])[someValue, someValue];
