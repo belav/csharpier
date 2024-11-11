@@ -176,9 +176,9 @@ internal static class CommandLineFormatter
                 cancellationToken
             );
 
-            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[
-                x
-            ].Replace("\\", "/");
+            var originalDirectoryOrFile = commandLineOptions
+                .OriginalDirectoryOrFilePaths[x]
+                .Replace("\\", "/");
 
             var formattingCache = await FormattingCacheFactory.InitializeAsync(
                 commandLineOptions,
@@ -254,8 +254,12 @@ internal static class CommandLineFormatter
                     return 1;
                 }
 
-                var tasks = fileSystem.Directory
-                    .EnumerateFiles(directoryOrFilePath, "*.*", SearchOption.AllDirectories)
+                var tasks = fileSystem
+                    .Directory.EnumerateFiles(
+                        directoryOrFilePath,
+                        "*.*",
+                        SearchOption.AllDirectories
+                    )
                     .Select(o =>
                     {
                         var normalizedPath = o.Replace("\\", "/");
@@ -423,45 +427,47 @@ internal static class CommandLineFormatter
             fileIssueLogger.WriteError(codeFormattingResult.FailureMessage);
             return;
         }
-        
-        // TODO #819 review this https://github.com/belav/csharpier-repos/pull/67
-        // TODO #819 what about allowing lines between elements? new issue?
-        
-        if (!commandLineOptions.Fast && fileToFormatInfo.Path.EndsWithIgnoreCase(".cs"))
+
+        if (!commandLineOptions.Fast)
         {
-            // TODO #819 the thing above should do this if we are using the csharp formatter
-            var sourceCodeKind = Path.GetExtension(fileToFormatInfo.Path).EqualsIgnoreCase(".csx")
-                ? SourceCodeKind.Script
-                : SourceCodeKind.Regular;
-
-            var syntaxNodeComparer = new SyntaxNodeComparer(
-                fileToFormatInfo.FileContents,
-                codeFormattingResult.Code,
-                codeFormattingResult.ReorderedModifiers,
-                codeFormattingResult.ReorderedUsingsWithDisabledText,
-                sourceCodeKind,
-                cancellationToken
-            );
-
-            try
+            if (printerOptions.Formatter is Formatter.CSharp or Formatter.CSharpScript)
             {
-                var failure = await syntaxNodeComparer.CompareSourceAsync(cancellationToken);
-                if (!string.IsNullOrEmpty(failure))
+                var sourceCodeKind =
+                    printerOptions.Formatter is Formatter.CSharpScript
+                        ? SourceCodeKind.Script
+                        : SourceCodeKind.Regular;
+
+                var syntaxNodeComparer = new SyntaxNodeComparer(
+                    fileToFormatInfo.FileContents,
+                    codeFormattingResult.Code,
+                    codeFormattingResult.ReorderedModifiers,
+                    codeFormattingResult.ReorderedUsingsWithDisabledText,
+                    sourceCodeKind,
+                    cancellationToken
+                );
+
+                try
+                {
+                    var failure = await syntaxNodeComparer.CompareSourceAsync(cancellationToken);
+                    if (!string.IsNullOrEmpty(failure))
+                    {
+                        Interlocked.Increment(
+                            ref commandLineFormatterResult.FailedSyntaxTreeValidation
+                        );
+                        fileIssueLogger.WriteError($"Failed syntax tree validation.\n{failure}");
+                    }
+                }
+                catch (Exception ex)
                 {
                     Interlocked.Increment(
-                        ref commandLineFormatterResult.FailedSyntaxTreeValidation
+                        ref commandLineFormatterResult.ExceptionsValidatingSource
                     );
-                    fileIssueLogger.WriteError($"Failed syntax tree validation.\n{failure}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Interlocked.Increment(ref commandLineFormatterResult.ExceptionsValidatingSource);
 
-                fileIssueLogger.WriteError(
-                    "Failed with exception during syntax tree validation.",
-                    ex
-                );
+                    fileIssueLogger.WriteError(
+                        "Failed with exception during syntax tree validation.",
+                        ex
+                    );
+                }
             }
         }
 

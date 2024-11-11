@@ -33,6 +33,21 @@ internal class PrinterOptions(Formatter formatter)
 
         return "\n";
     }
+
+    public static Formatter GetFormatter(string filePath)
+    {
+        var formatter =
+            filePath.EndsWith(".cs") ? Formatter.CSharp
+            : filePath.EndsWith(".csx") ? Formatter.CSharpScript
+            : filePath.EndsWith(".csproj")
+            || filePath.EndsWith(".props")
+            || filePath.EndsWith(".targets")
+            || filePath.EndsWith(".xml")
+            || filePath.EndsWith(".config")
+                ? Formatter.XML
+            : Formatter.Unknown;
+        return formatter;
+    }
 }
 
 internal enum Formatter

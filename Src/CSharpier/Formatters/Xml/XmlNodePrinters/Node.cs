@@ -1,4 +1,5 @@
 using System.Xml;
+using System.Xml.Linq;
 using CSharpier.SyntaxPrinter;
 
 namespace CSharpier.Formatters.Xml.XmlNodePrinters;
@@ -25,6 +26,11 @@ internal static class Node
             return xmlDeclaration.OuterXml;
         }
 
+        if (xmlNode is XmlDocumentType xmlDocumentType)
+        {
+            return xmlDocumentType.OuterXml.Replace("[]", string.Empty);
+        }
+
         if (xmlNode is XmlElement xmlElement)
         {
             return Element.Print(xmlElement, context);
@@ -35,7 +41,7 @@ internal static class Node
             List<Doc> doc =
             [
                 Tag.PrintOpeningTagPrefix(xmlText),
-                .. Utils.GetTextValueParts(xmlText),
+                .. GetTextValueParts(xmlText),
                 Tag.PrintClosingTagSuffix(xmlText),
             ];
 
@@ -46,15 +52,6 @@ internal static class Node
             }
 
             return Doc.Concat(doc);
-
-            // var printed = CleanDoc(doc);
-            //
-            //
-            // // if (Array.isArray(printed)) {
-            // //     return fill(printed);
-            // // }
-            //
-            // return printed;
         }
 
         if (xmlNode is XmlComment)
@@ -68,5 +65,15 @@ internal static class Node
         }
 
         throw new Exception("Need to handle + " + xmlNode);
+    }
+
+    private static IEnumerable<Doc> GetTextValueParts(XmlText xmlText)
+    {
+        if (xmlText.Value is null)
+        {
+            yield break;
+        }
+
+        yield return new XElement("EncodeText", xmlText.Value).LastNode!.ToString();
     }
 }

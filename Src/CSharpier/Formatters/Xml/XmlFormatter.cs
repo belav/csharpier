@@ -12,7 +12,16 @@ internal static class XmlFormatter
         var xmlDocument = new XmlDocument();
         xmlDocument.LoadXml(xml);
 
+        // TODO #819 Error ./efcore/eng/sdl-tsa-vars.config - Threw exception while formatting.
+        // Data at the root level is invalid. Line 1, position 1.
+        // not all configs are xml, should we try to detect that?
+
+        // TODO #819 review this https://github.com/belav/csharpier-repos/pull/67
+
         /* TODO #819 all of these things
+
+XmlDocumentType
+https://github.com/belav/csharpier-repos/blob/main/mono/mcs/tools/mdoc/Test/TestEcmaDocs.xml
 
 still getting this
 warning: in the working copy of 'runtime/src/tests/Common/mergedrunner.targets', LF will be replaced by CRLF the next time Git touches it

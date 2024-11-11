@@ -6,9 +6,7 @@ namespace CSharpier.Cli.Options;
 internal class ConfigurationFileOptions
 {
     public int PrintWidth { get; init; } = 100;
-
-    // TODO #819 how do we get this to default to 2 for xml?
-    public int TabWidth { get; init; } = 4;
+    public int? TabWidth { get; init; }
     public bool UseTabs { get; init; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
@@ -42,14 +40,12 @@ internal class ConfigurationFileOptions
             };
         }
 
-        // TODO #819 we need a default one for xml as well
-        if (filePath.EndsWith(".cs") || filePath.EndsWith(".csx"))
+        var formatter = PrinterOptions.GetFormatter(filePath);
+        if (formatter != Formatter.Unknown)
         {
-            return new PrinterOptions(
-                filePath.EndsWith(".cs") ? Formatter.CSharp : Formatter.CSharpScript
-            )
+            return new PrinterOptions(formatter)
             {
-                IndentSize = this.TabWidth,
+                IndentSize = this.TabWidth ?? (formatter == Formatter.XML ? 2 : 4),
                 UseTabs = this.UseTabs,
                 Width = this.PrintWidth,
                 EndOfLine = this.EndOfLine,

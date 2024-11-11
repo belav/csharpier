@@ -110,28 +110,8 @@ internal class OptionsProvider
             return resolvedEditorConfig.ConvertToPrinterOptions(filePath);
         }
 
-        if (filePath.EndsWith(".cs"))
-        {
-            return new PrinterOptions(Formatter.CSharp);
-        }
-
-        if (filePath.EndsWith(".csx"))
-        {
-            return new PrinterOptions(Formatter.CSharpScript);
-        }
-
-        if (
-            filePath.EndsWith(".csproj")
-            || filePath.EndsWith(".props")
-            || filePath.EndsWith(".targets")
-            || filePath.EndsWith(".xml")
-            || filePath.EndsWith(".config")
-        )
-        {
-            return new PrinterOptions(Formatter.XML);
-        }
-
-        return null;
+        var formatter = PrinterOptions.GetFormatter(filePath);
+        return formatter != Formatter.Unknown ? new PrinterOptions(formatter) : null;
     }
 
     public bool IsIgnored(string actualFilePath)

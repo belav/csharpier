@@ -42,18 +42,6 @@ internal static class Attributes
             node.Attributes.Count == 1
             && !node.Attributes[0].Value.Contains('\n')
             && (node.ChildNodes.Cast<XmlNode>().Any(o => o is XmlElement) || node.IsEmpty);
-        // node.type === "element" &&
-        // node.fullName === "script" &&
-        // node.attrs.length === 1 &&
-        // node.attrs[0].fullName === "src" &&
-        // node.children.length === 0;
-
-        // TODO #819 probably attribute per line if there are more than x attributes
-        // const shouldPrintAttributePerLine =
-        //     options.singleAttributePerLine &&
-        //     node.attrs.length > 1 &&
-        //     !isVueSfcBlock(node, options);
-        // const attributeLine = shouldPrintAttributePerLine ? hardline : line;
         var attributeLine = Doc.Line;
 
         var parts = new List<Doc>
