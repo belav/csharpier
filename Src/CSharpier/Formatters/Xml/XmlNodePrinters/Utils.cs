@@ -9,7 +9,7 @@ internal static class Utils
     {
         var isLeadingSpaceSensitive = IsLeadingSpaceSensitiveNode2();
 
-        // TODO xml what is interpolation?
+        // TODO #819 what is interpolation?
         // if (
         //     isLeadingSpaceSensitive &&
         //     !node.prev &&
@@ -22,7 +22,7 @@ internal static class Utils
 
         bool IsLeadingSpaceSensitiveNode2()
         {
-            // TODO xml need this?
+            // TODO #819 need this?
             // if (isFrontMatter(node) || node.type === "angularControlFlowBlock") {
             //     return false;
             // }
@@ -47,7 +47,7 @@ internal static class Utils
                 return false;
             }
 
-            // TODO xml html
+            // TODO #819 html
             // if (isPreLikeNode(node.parent)) {
             //     return true;
             // }

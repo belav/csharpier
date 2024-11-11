@@ -73,7 +73,7 @@ public class BaseTest
             normalizedCode = normalizedCode.Replace("\r\n", "\n");
         }
 
-        // TODO xml what about this?
+        // TODO #1359 xml comparer here
         var comparer = new SyntaxNodeComparer(
             expectedCode,
             normalizedCode,

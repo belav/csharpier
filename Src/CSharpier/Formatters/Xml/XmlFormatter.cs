@@ -12,7 +12,7 @@ internal static class XmlFormatter
         var xmlDocument = new XmlDocument();
         xmlDocument.LoadXml(xml);
 
-        /* TODO xml all of these things
+        /* TODO #819 all of these things
 
 still getting this
 warning: in the working copy of 'runtime/src/tests/Common/mergedrunner.targets', LF will be replaced by CRLF the next time Git touches it

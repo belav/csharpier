@@ -7,7 +7,7 @@ internal class ConfigurationFileOptions
 {
     public int PrintWidth { get; init; } = 100;
 
-    // TODO xml how do we get this to default to 2 for xml?
+    // TODO #819 how do we get this to default to 2 for xml?
     public int TabWidth { get; init; } = 4;
     public bool UseTabs { get; init; }
 
@@ -42,7 +42,7 @@ internal class ConfigurationFileOptions
             };
         }
 
-        // TODO xml we need a default one for xml as well
+        // TODO #819 we need a default one for xml as well
         if (filePath.EndsWith(".cs") || filePath.EndsWith(".csx"))
         {
             return new PrinterOptions(

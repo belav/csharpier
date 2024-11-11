@@ -63,7 +63,7 @@ public class FormatController : ControllerBase
             cancellationToken
         );
 
-        // TODO xml what about this?
+        // TODO #1359 need to do xml compare here
         var comparer = new SyntaxNodeComparer(
             model.Code,
             result.Code,

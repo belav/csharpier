@@ -48,7 +48,7 @@ internal static class Attributes
         // node.attrs[0].fullName === "src" &&
         // node.children.length === 0;
 
-        // TODO xml probably attribute per line if there are more than x attributes
+        // TODO #819 probably attribute per line if there are more than x attributes
         // const shouldPrintAttributePerLine =
         //     options.singleAttributePerLine &&
         //     node.attrs.length > 1 &&

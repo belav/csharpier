@@ -423,14 +423,13 @@ internal static class CommandLineFormatter
             fileIssueLogger.WriteError(codeFormattingResult.FailureMessage);
             return;
         }
-
-        // TODO xml implement this stuff - maybe new PR?
-        // https://github.com/belav/csharpier/pull/858#issuecomment-1487385384
-        // TODO xml review this https://github.com/belav/csharpier-repos/pull/67
-        // TODO xml what about allowing lines between elements?
+        
+        // TODO #819 review this https://github.com/belav/csharpier-repos/pull/67
+        // TODO #819 what about allowing lines between elements? new issue?
+        
         if (!commandLineOptions.Fast && fileToFormatInfo.Path.EndsWithIgnoreCase(".cs"))
         {
-            // TODO xml the thing above should do this if we are using the csharp formatter
+            // TODO #819 the thing above should do this if we are using the csharp formatter
             var sourceCodeKind = Path.GetExtension(fileToFormatInfo.Path).EqualsIgnoreCase(".csx")
                 ? SourceCodeKind.Script
                 : SourceCodeKind.Regular;
