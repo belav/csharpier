@@ -78,6 +78,12 @@ internal static class HasMismatchedCliAndMsBuildVersions
             }
 
             var versionOfMsBuildPackage = csharpierMsBuildElement.Attribute("Version")?.Value;
+            if (versionOfMsBuildPackage == "0.0.1")
+            {
+                // csharpier uses 0.0.1 as a placeholder in some tests, just ignore it
+                continue;
+            }
+
             if (versionOfMsBuildPackage == null)
             {
                 versionOfMsBuildPackage = GetPackagesVersion(pathToCsProj);
