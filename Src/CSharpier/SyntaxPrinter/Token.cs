@@ -125,6 +125,16 @@ internal static class Token
             var trailingTrivia = PrintTrailingTrivia(syntaxToken);
             if (trailingTrivia != Doc.Null)
             {
+                if (
+                    context.TrailingComma is not null
+                    && syntaxToken.TrailingTrivia.FirstOrDefault(o => o.IsComment())
+                        == context.TrailingComma.TrailingComment
+                )
+                {
+                    docs.Add(context.TrailingComma.PrintedTrailingComma);
+                    context.TrailingComma = null;
+                }
+
                 docs.Add(trailingTrivia);
             }
         }

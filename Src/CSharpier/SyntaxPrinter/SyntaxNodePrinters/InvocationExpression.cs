@@ -34,30 +34,30 @@ internal static class InvocationExpression
         var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
 
         var forceOneLine =
-            groups.Count <= cutoff
-            && (
-                groups
-                    .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
-                    .Any(o =>
-                        o.Last().Node
-                            is not (
-                                InvocationExpressionSyntax
-                                or ElementAccessExpressionSyntax
-                                or PostfixUnaryExpressionSyntax
-                                {
-                                    Operand: InvocationExpressionSyntax
-                                }
-                            )
+            (
+                groups.Count <= cutoff
+                && (
+                    groups
+                        .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
+                        .Any(o =>
+                            o.Last().Node
+                                is not (
+                                    InvocationExpressionSyntax
+                                    or ElementAccessExpressionSyntax
+                                    or PostfixUnaryExpressionSyntax
+                                    {
+                                        Operand: InvocationExpressionSyntax
+                                    }
+                                )
+                        )
+                    // if the last group contains just a !, make sure it doesn't end up on a new line
+                    || (
+                        groups.Last().Count == 1
+                        && groups.Last()[0].Node is PostfixUnaryExpressionSyntax
                     )
-                // if the last group contains just a !, make sure it doesn't end up on a new line
-                || (
-                    groups.Last().Count == 1
-                    && groups.Last()[0].Node is PostfixUnaryExpressionSyntax
                 )
-            );
-
-        if (
-            forceOneLine
+            )
+            || node.HasParent(typeof(InterpolatedStringExpressionSyntax))
             // this handles the case of a multiline string being part of an invocation chain
             // conditional groups don't propagate breaks so we need to avoid the conditional group
             || groups[0]
@@ -78,8 +78,9 @@ internal static class InvocationExpression
                             Token.Text.Length: > 0
                         } literalExpressionSyntax
                         && literalExpressionSyntax.Token.Text.Contains('\n')
-                )
-        )
+                );
+
+        if (forceOneLine)
         {
             return Doc.Group(oneLine);
         }

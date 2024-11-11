@@ -58,6 +58,8 @@
         private static readonly AsyncLazy<CSharpierOptions> liveModel =
             new(CreateAsync, ThreadHelper.JoinableTaskFactory);
 
+        private static FileSystemWatcher _hotReloadWatcher;
+
         public static CSharpierOptions Instance
         {
             get
@@ -73,6 +75,7 @@
         {
             var instance = new CSharpierOptions();
             await instance.LoadAsync();
+            await InitializeHotReloadWatcherAsync();
             return instance;
         }
 
@@ -112,7 +115,7 @@
             }
 
             await LoadOptionsFromFile(
-                this.GetSolutionOptionsFileNameAsync,
+                GetSolutionOptionsFileNameAsync,
                 o =>
                 {
                     newInstance.SolutionRunOnSave = o.RunOnSave;
@@ -170,7 +173,7 @@
             }
 
             await SaveOptions(
-                this.GetSolutionOptionsFileNameAsync,
+                GetSolutionOptionsFileNameAsync,
                 new OptionsDto { RunOnSave = this.SolutionRunOnSave }
             );
 
@@ -197,7 +200,7 @@
             );
         }
 
-        private async Task<string?> GetSolutionOptionsFileNameAsync()
+        private static async Task<string?> GetSolutionOptionsFileNameAsync()
         {
 #pragma warning disable VSSDK006
             var solution =
@@ -209,6 +212,33 @@
             return userOptsFile != null
                 ? Path.Combine(Path.GetDirectoryName(userOptsFile), "csharpier.json")
                 : null;
+        }
+
+        private static async Task InitializeHotReloadWatcherAsync()
+        {
+            string filePath = await GetSolutionOptionsFileNameAsync();
+
+            _hotReloadWatcher = new FileSystemWatcher(
+                Path.GetDirectoryName(filePath),
+                Path.GetFileName(filePath)
+            );
+
+            static void OnFileChanged(object sender, FileSystemEventArgs e)
+            {
+#pragma warning disable VSTHRD103 // Call async methods when in an async method
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    await Instance.LoadAsync();
+                });
+#pragma warning restore
+            }
+
+            _hotReloadWatcher.Changed += OnFileChanged;
+            _hotReloadWatcher.Created += OnFileChanged;
+            _hotReloadWatcher.Renamed += OnFileChanged;
+
+            _hotReloadWatcher.EnableRaisingEvents = true;
         }
 
         private class OptionsDto
