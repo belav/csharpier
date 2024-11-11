@@ -126,13 +126,13 @@ internal static class Token
             if (trailingTrivia != Doc.Null)
             {
                 if (
-                    context.TrailingComma is not null
+                    context.State.TrailingComma is not null
                     && syntaxToken.TrailingTrivia.FirstOrDefault(o => o.IsComment())
-                        == context.TrailingComma.TrailingComment
+                        == context.State.TrailingComma.TrailingComment
                 )
                 {
-                    docs.Add(context.TrailingComma.PrintedTrailingComma);
-                    context.TrailingComma = null;
+                    docs.Add(context.State.TrailingComma.PrintedTrailingComma);
+                    context.State.TrailingComma = null;
                 }
 
                 docs.Add(trailingTrivia);
