@@ -22,6 +22,8 @@ Use the [official plugin](https://plugins.jetbrains.com/plugin/18243-csharpier)
 
 It can be installed via the Plugins dialog.
 ### Neovim
+Use [conform.nvim](https://github.com/stevearc/conform.nvim)
+or
 Use [neoformat](https://github.com/sbdchd/neoformat)
 
 ### Emacs
