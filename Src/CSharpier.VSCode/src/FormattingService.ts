@@ -1,14 +1,11 @@
-import { performance } from "perf_hooks";
 import {
     CancellationToken,
-    Diagnostic,
     FormattingOptions,
     languages,
     Position,
     Range,
     TextDocument,
     TextEdit,
-    WorkspaceEdit,
 } from "vscode";
 import { Difference, generateDifferences } from "prettier-linter-helpers";
 import { FormatDocumentProvider } from "./FormatDocumentProvider";

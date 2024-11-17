@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 import { Difference, generateDifferences, showInvisibles } from "prettier-linter-helpers";
 import { FixAllCodeActionsCommand } from "./FixAllCodeActionCommand";
-import { CSharpierProcessProvider } from "./CSharpierProcessProvider";
 import { Logger } from "./Logger";
 import { FormatDocumentProvider } from "./FormatDocumentProvider";
 

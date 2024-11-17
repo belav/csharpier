@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
-import { CSharpierProcessProvider } from "./CSharpierProcessProvider";
 import { Logger } from "./Logger";
+import { FormatDocumentProvider } from "./FormatDocumentProvider";
 
 export class FixAllCodeActionsCommand {
     public static readonly Id = "csharpier-vscode.fixAllCodeActions";
@@ -8,7 +8,7 @@ export class FixAllCodeActionsCommand {
 
     constructor(
         private readonly context: vscode.ExtensionContext,
-        private readonly csharpierProcessProvider: CSharpierProcessProvider,
+        private readonly formatDocumentProvider: FormatDocumentProvider,
         private readonly logger: Logger,
     ) {
         this.context.subscriptions.push(vscode.commands.registerCommand(this.id, this.execute));
@@ -33,21 +33,7 @@ export class FixAllCodeActionsCommand {
     };
 
     private async getChanges(document: vscode.TextDocument): Promise<string | null> {
-        let formattedSource = "";
-        const source = document.getText();
-        const csharpierProcess = this.csharpierProcessProvider.getProcessFor(document.fileName);
-        if ("formatFile2" in csharpierProcess) {
-            const parameter = {
-                fileContents: source,
-                fileName: document.fileName,
-            };
-            const result = await csharpierProcess.formatFile2(parameter);
-            if (result) {
-                formattedSource = result.formattedFile;
-            }
-        } else {
-            formattedSource = await csharpierProcess.formatFile(source, document.fileName);
-        }
+        const formattedSource = (await this.formatDocumentProvider.formatDocument(document)) ?? "";
         return formattedSource;
     }
 }

@@ -56,7 +56,7 @@ const initPlugin = async (context: ExtensionContext) => {
     const fixAllCodeActionProvider = new FixAllCodeActionProvider(diagnosticsDocumentSelector);
 
     new FormattingService(formatDocumentProvider);
-    new FixAllCodeActionsCommand(context, csharpierProcessProvider, logger);
+    new FixAllCodeActionsCommand(context, formatDocumentProvider, logger);
 
     context.subscriptions.push(
         csharpierProcessProvider,
