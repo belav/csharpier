@@ -3,6 +3,7 @@ import { Difference, generateDifferences, showInvisibles } from "prettier-linter
 import { FixAllCodeActionsCommand } from "./FixAllCodeActionCommand";
 import { CSharpierProcessProvider } from "./CSharpierProcessProvider";
 import { Logger } from "./Logger";
+import { FormatDocumentProvider } from "./FormatDocumentProvider";
 
 const DIAGNOSTICS_ID = "csharpier";
 const DIAGNOSTICS_SOURCE_ID = "diagnostic";
@@ -26,7 +27,7 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
     private readonly disposables: vscode.Disposable[] = [];
 
     constructor(
-        private readonly csharpierProcessProvider: CSharpierProcessProvider,
+        private readonly formatDocumentProvider: FormatDocumentProvider,
         private readonly documentSelector: Array<vscode.DocumentFilter>,
         private readonly logger: Logger,
     ) {
@@ -154,20 +155,8 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
 
     private async getDiff(document: vscode.TextDocument): Promise<CsharpierDiff> {
         const source = document.getText();
-        const csharpierProcess = this.csharpierProcessProvider.getProcessFor(document.fileName);
-        let formattedSource = "";
-        if ("formatFile2" in csharpierProcess) {
-            const parameter = {
-                fileContents: source,
-                fileName: document.fileName,
-            };
-            const result = await csharpierProcess.formatFile2(parameter);
-            if (result) {
-                formattedSource = result.formattedFile;
-            }
-        } else {
-            formattedSource = await csharpierProcess.formatFile(source, document.fileName);
-        }
+        const formattedSource =
+            (await this.formatDocumentProvider.formatDocument(document)) ?? source;
         const differences = generateDifferences(source, formattedSource);
         return {
             source,

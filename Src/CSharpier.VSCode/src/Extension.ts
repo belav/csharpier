@@ -8,6 +8,7 @@ import { NullCSharpierProcess } from "./NullCSharpierProcess";
 import { FixAllCodeActionsCommand } from "./FixAllCodeActionCommand";
 import { DiagnosticsService } from "./DiagnosticsService";
 import { FixAllCodeActionProvider } from "./FixAllCodeActionProvider";
+import { FormatDocumentProvider } from "./FormatDocumentProvider";
 
 export async function activate(context: ExtensionContext) {
     if (!workspace.isTrusted) {
@@ -40,6 +41,7 @@ const initPlugin = async (context: ExtensionContext) => {
     NullCSharpierProcess.create(logger);
 
     const csharpierProcessProvider = new CSharpierProcessProvider(logger, context.extension);
+    const formatDocumentProvider = new FormatDocumentProvider(logger, csharpierProcessProvider);
     const diagnosticsDocumentSelector: DocumentFilter[] = [
         {
             language: "csharp",
@@ -47,13 +49,13 @@ const initPlugin = async (context: ExtensionContext) => {
         },
     ];
     const diagnosticsService = new DiagnosticsService(
-        csharpierProcessProvider,
+        formatDocumentProvider,
         diagnosticsDocumentSelector,
         logger,
     );
     const fixAllCodeActionProvider = new FixAllCodeActionProvider(diagnosticsDocumentSelector);
 
-    new FormattingService(logger, csharpierProcessProvider);
+    new FormattingService(formatDocumentProvider);
     new FixAllCodeActionsCommand(context, csharpierProcessProvider, logger);
 
     context.subscriptions.push(
