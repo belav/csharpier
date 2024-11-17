@@ -1,4 +1,114 @@
-﻿# 0.29.2
+﻿# 0.30.0
+## Breaking Changes
+The CSharpier dotnet tool no longer supports net6 & net7.
+## What's Changed
+### Support C# 13 & dotnet 9. [#1318](https://github.com/belav/csharpier/issues/1318)
+CSharpier now supports dotnet 9 along with formatting all C# 13 language features.
+### Inconsistent Formatting for new() Operator Compared to Explicit Object Constructors [#1364](https://github.com/belav/csharpier/issues/1364)
+Implicit and explicit object initialization with constructors was not formatted consistently
+```c#
+// input & expected output
+SomeObject someObject = new(
+    someLongParameter___________________,
+    someLongParameter___________________
+)
+{
+    Property = longValue_______________________________________________________________________,
+};
+
+SomeObject someObject = new SomeObject(
+    someLongParameter___________________,
+    someLongParameter___________________
+)
+{
+    Property = longValue_______________________________________________________________________,
+};
+
+// 0.29.2
+SomeObject someObject =
+    new(someLongParameter___________________, someLongParameter___________________)
+    {
+        Property = longValue_______________________________________________________________________,
+    };
+
+SomeObject someObject = new SomeObject(
+    someLongParameter___________________,
+    someLongParameter___________________
+)
+{
+    Property = longValue_______________________________________________________________________,
+};
+
+```
+### Adds additional space before each member access in verbatim interpolated multiline string [#1358](https://github.com/belav/csharpier/issues/1358)
+When an interpolated verbatim string contained line breaks, the code within the interpolations would contain extra spaces.
+```c#
+// input & expected output
+var someStringWithLineBreakAndLongValue =
+    $@"
+{someValue.GetValue().Name} someLongText________________________________________________________________";
+
+// 0.29.2
+var someStringWithLineBreakAndLongValue =
+    $@"
+        {someValue .GetValue() .Name} someLongText________________________________________________________________";
+```
+
+### Inserting trailing comma with trailing comment causes problems. [#1354](https://github.com/belav/csharpier/issues/1354)
+CSharpier would insert a trailing comma after a trailing comment and format the end result poorly.
+```c#
+// input
+var someObject = new SomeObject()
+{
+    Property1 = 1,
+    Property2 = 2 // Trailing Comment
+};
+
+// 0.29.2
+var someObject = new SomeObject()
+{
+    Property1 = 1,
+    Property2 =
+        2 // Trailing Comment
+    ,
+};
+
+// 0.30.0
+var someObject = new SomeObject()
+{
+    Property1 = 1,
+    Property2 = 2, // Trailing Comment
+};
+```
+
+### Double line break before collection expression in field [#1351](https://github.com/belav/csharpier/issues/1351)
+CSharpier was inserting an extra line break on a long field name followed by a collection expression to initialize it.
+```c#
+// input & expected output
+class ClassName
+{
+    public SomeType[] LongName____________________________________________________________________________ =
+    [
+        someLongValue___________________________________________________,
+        someLongValue___________________________________________________,
+    ];
+}
+
+// 0.29.2
+class ClassName
+{
+    public SomeType[] LongName____________________________________________________________________________ =
+
+        [
+            someLongValue___________________________________________________,
+            someLongValue___________________________________________________,
+        ];
+}
+
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.29.2...0.30.0
+# 0.29.2
 ## What's Changed
 ### Comments don't follow tabs indent style [#1343](https://github.com/belav/csharpier/issues/1343)
 Prior to `0.29.2` CSharpier was converting any tabs within the block of a multiline comment to spaces.
@@ -2634,6 +2744,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 

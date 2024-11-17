@@ -34,7 +34,7 @@ When the extension is unable to format files, it is generally a problem with bei
 - Change the dropdown to `CSharpier`
 
 ### Rider
-- Execute the action `Show Log in Explorer
+- Execute the action `Show Log in Explorer`
 - Look for lines that contain `#c.i.c.CSharpierLogger`
 
 ## Troubleshooting Steps
@@ -46,7 +46,7 @@ The following can help track down issues with the extension being unable to inst
    `C:\Users\[UserName]\AppData\Local\CSharpier\[CSharpierVersion]` or<br/>
    `$HOME/.cache/csharpier/[CSharpierVersion]`
 3. Assuming the directory above exists, attempt to run the following in that directory<br/>
-   `dotnet-csharpier --version`
+   `dotnet csharpier --version`
 4. If the installation appears to be corrupt, delete the directory and install CSharpier there yourself<br/>
    `dotnet tool install csharpier --version [CSharpierVersion] --tool-path [PathFromStep2]`
 5. Repeat step 3 to validate the install
