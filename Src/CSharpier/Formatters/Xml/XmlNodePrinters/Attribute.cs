@@ -1,4 +1,5 @@
 using System.Xml;
+using System.Xml.Linq;
 using CSharpier.SyntaxPrinter;
 
 namespace CSharpier.Formatters.Xml.XmlNodePrinters;
@@ -85,10 +86,9 @@ internal static class Attributes
 
     private static Doc Print(XmlAttribute attribute, PrintingContext context)
     {
-        const string quote = "\"";
+        var value = new XElement("EncodeText", attribute.Value).LastNode!.ToString();
 
-        var value = attribute.Value.Replace("\"", "&quot;");
-
-        return Doc.Concat(attribute.Name, "=", quote, value, quote);
+        // TODO #819 may need to convert everything to use XDocument to get this working properly with preserving encoded values, ugh
+        return Doc.Concat(attribute.Name, "=", "\"", value, "\"");
     }
 }

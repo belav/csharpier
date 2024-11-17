@@ -41,7 +41,7 @@ internal static class Node
             List<Doc> doc =
             [
                 Tag.PrintOpeningTagPrefix(xmlText),
-                .. GetTextValueParts(xmlText),
+                GetEncodedTextValue(xmlText),
                 Tag.PrintClosingTagSuffix(xmlText),
             ];
 
@@ -67,13 +67,13 @@ internal static class Node
         throw new Exception("Need to handle + " + xmlNode);
     }
 
-    private static IEnumerable<Doc> GetTextValueParts(XmlText xmlText)
+    private static Doc GetEncodedTextValue(XmlText xmlText)
     {
         if (xmlText.Value is null)
         {
-            yield break;
+            return Doc.Null;
         }
 
-        yield return new XElement("EncodeText", xmlText.Value).LastNode!.ToString();
+        return new XElement("EncodeText", xmlText.Value).LastNode!.ToString();
     }
 }
