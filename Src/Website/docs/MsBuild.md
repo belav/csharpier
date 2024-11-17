@@ -51,10 +51,10 @@ Valid options are:
 - Debug
 
 ### Target Frameworks
-CSharpier.MSBuild will be run with net6.0, net7.0 or net8.0 if the project targets one of the three frameworks. In cases where the project targets something else (net48, netstandard2.0) `CSharpier_FrameworkVersion` will default to net7.0
-This can be controlled with the following property. This property is required if the csproj is targeting < net6.0 (netstandard2.0, net48, etc) and net7.0 is not installed.
+CSharpier.MSBuild will be run with net8.0 or net9.0 if the project targets one of the three frameworks. In cases where the project targets something else (net48, netstandard2.0) `CSharpier_FrameworkVersion` will default to net8.0
+This can be controlled with the following property. This property is required if the csproj is targeting < net8.0 (netstandard2.0, net48, etc) and net8.0 is not installed.
 ```xml
   <PropertyGroup>
-    <CSharpier_FrameworkVersion>net6.0</CSharpier_FrameworkVersion>
+    <CSharpier_FrameworkVersion>net8.0</CSharpier_FrameworkVersion>
   </PropertyGroup>
 ```
