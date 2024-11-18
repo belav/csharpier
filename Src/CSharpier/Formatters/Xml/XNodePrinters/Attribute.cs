@@ -2,15 +2,15 @@ using System.Xml;
 using System.Xml.Linq;
 using CSharpier.SyntaxPrinter;
 
-namespace CSharpier.Formatters.Xml.XmlNodePrinters;
+namespace CSharpier.Formatters.Xml.XNodePrinters;
 
 internal static class Attributes
 {
-    public static Doc Print(XmlElement node, PrintingContext context)
+    public static Doc Print(XElement element, PrintingContext context)
     {
-        if (node.Attributes.Count == 0)
+        if (!element.Attributes().Any())
         {
-            return node.IsEmpty ? " " : Doc.Null;
+            return element.IsEmpty ? " " : Doc.Null;
         }
 
         // const ignoreAttributeData =
@@ -25,7 +25,7 @@ internal static class Attributes
         //           : () => false;
 
         var printedAttributes = new List<Doc>();
-        foreach (XmlAttribute attribute in node.Attributes)
+        foreach (var attribute in element.Attributes())
         {
             printedAttributes.Add(
                 // hasPrettierIgnoreAttribute(attribute)
@@ -40,9 +40,9 @@ internal static class Attributes
         }
 
         var doNotBreakAttributes =
-            node.Attributes.Count == 1
-            && !node.Attributes[0].Value.Contains('\n')
-            && (node.ChildNodes.Cast<XmlNode>().Any(o => o is XmlElement) || node.IsEmpty);
+            element.Attributes().Count() == 1
+            && !element.Attributes().First().Value.Contains('\n')
+            && (element.Nodes().Any(o => o is XElement) || element.IsEmpty);
         var attributeLine = Doc.Line;
 
         var parts = new List<Doc>
@@ -61,8 +61,8 @@ internal static class Attributes
              *       >456
              */
             (
-                node.ChildNodes.Count > 0
-                && Tag.NeedsToBorrowParentOpeningTagEndMarker(node.ChildNodes[0]!)
+                element.Nodes().Any()
+                && Tag.NeedsToBorrowParentOpeningTagEndMarker(element.Nodes().First())
             )
             /*
              *     <span
@@ -70,25 +70,25 @@ internal static class Attributes
              *                ~
              *     /></span>
              */
-            || (node.IsEmpty && Tag.NeedsToBorrowLastChildClosingTagEndMarker(node.ParentNode!))
+            || (element.IsEmpty && Tag.NeedsToBorrowLastChildClosingTagEndMarker(element.Parent!))
             || doNotBreakAttributes
         )
         {
-            parts.Add(node.IsEmpty ? " " : "");
+            parts.Add(element.IsEmpty ? " " : "");
         }
         else
         {
-            parts.Add(node.IsEmpty ? Doc.Line : Doc.SoftLine);
+            parts.Add(element.IsEmpty ? Doc.Line : Doc.SoftLine);
         }
 
         return Doc.Concat(parts);
     }
 
-    private static Doc Print(XmlAttribute attribute, PrintingContext context)
+    private static Doc Print(XAttribute attribute, PrintingContext context)
     {
         var value = new XElement("EncodeText", attribute.Value).LastNode!.ToString();
 
         // TODO #819 may need to convert everything to use XDocument to get this working properly with preserving encoded values, ugh
-        return Doc.Concat(attribute.Name, "=", "\"", value, "\"");
+        return Doc.Concat(attribute.Name.ToString(), "=", "\"", value, "\"");
     }
 }

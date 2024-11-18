@@ -1,11 +1,11 @@
-using System.Xml;
+using System.Xml.Linq;
 using CSharpier.SyntaxPrinter;
 
-namespace CSharpier.Formatters.Xml.XmlNodePrinters;
+namespace CSharpier.Formatters.Xml.XNodePrinters;
 
 internal static class Element
 {
-    internal static Doc Print(XmlElement node, PrintingContext context)
+    internal static Doc Print(XElement node, PrintingContext context)
     {
         var shouldHugContent = false;
         var attrGroupId = context.GroupFor("element-attr-group-id");
@@ -27,10 +27,11 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
-            if (node.Attributes.Count == 0 && node.ChildNodes is [XmlText])
-            {
-                return Doc.Null;
-            }
+            // TODO #819
+            // if (!node.Attributes().Any() && node.Nodes() is [XText])
+            // {
+            //     return Doc.Null;
+            // }
 
             return Doc.SoftLine;
         }
@@ -43,24 +44,21 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
-            if (node.Attributes.Count == 0 && node.ChildNodes is [XmlText])
-            {
-                return Doc.Null;
-            }
+            // TODO #819
+            // if (node.Attributes.Count == 0 && node.ChildNodes is [XmlText])
+            // {
+            //     return Doc.Null;
+            // }
             return Doc.SoftLine;
         }
 
-        var elementContent =
-            node.ChildNodes.Count == 0
-                ? Doc.Null
-                : Doc.Concat(
-                    ForceBreakContent(node) ? Doc.BreakParent : "",
-                    PrintChildrenDoc(
-                        PrintLineBeforeChildren(),
-                        ElementChildren.Print(node, context)
-                    ),
-                    PrintLineAfterChildren()
-                );
+        var elementContent = !node.Nodes().Any()
+            ? Doc.Null
+            : Doc.Concat(
+                ForceBreakContent(node) ? Doc.BreakParent : "",
+                PrintChildrenDoc(PrintLineBeforeChildren(), ElementChildren.Print(node, context)),
+                PrintLineAfterChildren()
+            );
 
         return Doc.Group(
             Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(node, context)),
@@ -69,12 +67,10 @@ internal static class Element
         );
     }
 
-    
-    
-    private static bool ForceBreakContent(XmlElement node)
+    private static bool ForceBreakContent(XElement node)
     {
-        var childNode = node.ChildNodes.Count == 1 ? node.ChildNodes[0] : null;
+        var childNode = node.Nodes().Count() == 1 ? node.Nodes().First() : null;
 
-        return childNode is not null && childNode is not XmlText;
+        return childNode is not null && childNode is not XText;
     }
 }

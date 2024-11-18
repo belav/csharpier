@@ -1,7 +1,8 @@
 using System.Text.Json;
 using System.Xml;
+using System.Xml.Linq;
 using CSharpier.SyntaxPrinter;
-using Node = CSharpier.Formatters.Xml.XmlNodePrinters.Node;
+using Node = CSharpier.Formatters.Xml.XNodePrinters.Node;
 
 namespace CSharpier.Formatters.Xml;
 
@@ -9,8 +10,7 @@ internal static class XmlFormatter
 {
     internal static CodeFormatterResult Format(string xml, PrinterOptions printerOptions)
     {
-        var xmlDocument = new XmlDocument();
-        xmlDocument.LoadXml(xml);
+        var xDocument = XDocument.Parse(xml, LoadOptions.PreserveWhitespace);
 
         // TODO #819 Error ./efcore/eng/sdl-tsa-vars.config - Threw exception while formatting.
         // Data at the root level is invalid. Line 1, position 1.
@@ -26,14 +26,14 @@ internal static class XmlFormatter
                 UseTabs = printerOptions.UseTabs,
             },
         };
-        var doc = Node.Print(xmlDocument, printingContext);
+        var doc = Node.Print(xDocument, printingContext);
         var formattedXml = DocPrinter.DocPrinter.Print(doc, printerOptions, lineEnding);
 
         return new CodeFormatterResult
         {
             Code = formattedXml,
             DocTree = printerOptions.IncludeDocTree ? DocSerializer.Serialize(doc) : string.Empty,
-            AST = printerOptions.IncludeAST ? JsonSerializer.Serialize(xmlDocument) : string.Empty,
+            AST = printerOptions.IncludeAST ? JsonSerializer.Serialize(xDocument) : string.Empty,
         };
     }
 }

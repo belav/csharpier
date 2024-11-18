@@ -1,11 +1,12 @@
 using System.Xml;
+using System.Xml.Linq;
 using CSharpier.SyntaxPrinter;
 
-namespace CSharpier.Formatters.Xml.XmlNodePrinters;
+namespace CSharpier.Formatters.Xml.XNodePrinters;
 
 internal static class ElementChildren
 {
-    public static Doc Print(XmlElement node, PrintingContext context)
+    public static Doc Print(XElement element, PrintingContext context)
     {
         // this force breaks html, head, ul, ol, etc
         // if (forceBreakChildren(node)) {
@@ -33,16 +34,16 @@ internal static class ElementChildren
         // }
 
         var groupIds = new List<string>();
-        foreach (var _ in node.ChildNodes)
+        foreach (var _ in element.Nodes())
         {
             groupIds.Add(context.GroupFor("symbol"));
         }
 
         var result = new List<Doc>();
         var x = 0;
-        foreach (XmlNode childNode in node.ChildNodes)
+        foreach (var childNode in element.Nodes())
         {
-            // if (child is XmlText) {
+            // if (child is XText) {
             //     if (childNode.prev && isTextLikeNode(childNode.prev)) {
             //         const prevBetweenLine = printBetweenLine(
             //             childNode.prev,
@@ -70,17 +71,17 @@ internal static class ElementChildren
             var trailingParts = new List<Doc>();
             var nextParts = new List<Doc>();
 
-            var prevBetweenLine = childNode.PreviousSibling is not null
-                ? PrintBetweenLine(childNode.PreviousSibling, childNode)
+            var prevBetweenLine = childNode.PreviousNode is not null
+                ? PrintBetweenLine(childNode.PreviousNode, childNode)
                 : Doc.Null;
 
-            var nextBetweenLine = childNode.NextSibling is not null
-                ? PrintBetweenLine(childNode, childNode.NextSibling)
+            var nextBetweenLine = childNode.NextNode is not null
+                ? PrintBetweenLine(childNode, childNode.NextNode)
                 : Doc.Null;
 
             if (prevBetweenLine is not NullDoc)
             {
-                if (ForceNextEmptyLine(childNode.PreviousSibling))
+                if (ForceNextEmptyLine(childNode.PreviousNode))
                 {
                     prevParts.Add(Doc.HardLine);
                     prevParts.Add(Doc.HardLine);
@@ -89,7 +90,7 @@ internal static class ElementChildren
                 {
                     prevParts.Add(Doc.HardLine);
                 }
-                else if (childNode.PreviousSibling is XmlText)
+                else if (childNode.PreviousNode is XText)
                 {
                     leadingParts.Add(prevBetweenLine);
                 }
@@ -103,7 +104,7 @@ internal static class ElementChildren
             {
                 if (ForceNextEmptyLine(childNode))
                 {
-                    if (childNode.NextSibling is XmlText)
+                    if (childNode.NextNode is XText)
                     {
                         nextParts.Add(Doc.HardLine);
                         nextParts.Add(Doc.HardLine);
@@ -111,7 +112,7 @@ internal static class ElementChildren
                 }
                 else if (nextBetweenLine is HardLine)
                 {
-                    if (childNode.NextSibling is XmlText)
+                    if (childNode.NextNode is XText)
                     {
                         nextParts.Add(Doc.HardLine);
                     }
@@ -143,7 +144,7 @@ internal static class ElementChildren
         return Doc.Concat(result);
     }
 
-    private static bool ForceNextEmptyLine(XmlNode? childNode)
+    private static bool ForceNextEmptyLine(XNode? childNode)
     {
         return false;
         // return (
@@ -154,7 +155,7 @@ internal static class ElementChildren
         // );
     }
 
-    public static Doc PrintChild(XmlNode child, PrintingContext context)
+    public static Doc PrintChild(XNode child, PrintingContext context)
     {
         // should we try to support csharpier-ignore some day?
         // if (HasPrettierIgnore(child))
@@ -190,9 +191,9 @@ internal static class ElementChildren
     //     return endLocation;
     // }
 
-    public static Doc PrintBetweenLine(XmlNode prevNode, XmlNode nextNode)
+    public static Doc PrintBetweenLine(XNode prevNode, XNode nextNode)
     {
-        return prevNode is XmlText && nextNode is XmlText
+        return prevNode is XText && nextNode is XText
             ? Doc.HardLine
             // ? prevNode.isTrailingSpaceSensitive
             //     ? prevNode.hasTrailingSpaces
