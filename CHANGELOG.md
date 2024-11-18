@@ -1,4 +1,8 @@
-﻿# 0.30.0
+﻿# 0.30.1
+## What's Changed
+Revert tool command back to `dotnet-csharpier`, it was supposed to be changed to `csharpier` for 1.0.0
+
+# 0.30.0
 ## Breaking Changes
 The CSharpier dotnet tool no longer supports net6 & net7.
 ## What's Changed
