@@ -29,8 +29,10 @@ internal abstract class Doc
 
     public static readonly HardLine HardLineIfNoPreviousLine = new(true);
 
-    public static readonly HardLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup =
-        new(true, true);
+    public static readonly HardLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup = new(
+        true,
+        true
+    );
 
     public static readonly LiteralLine LiteralLine = new();
 
