@@ -12,16 +12,15 @@ internal static class ConfigFileParser
     // "Comment: starts with a ; or a #."
     private static readonly Regex CommentRegex = new("^[;#].*$");
 
-    private static readonly IniParserConfiguration Configuration =
-        new()
-        {
-            CommentRegex = CommentRegex,
-            AllowDuplicateKeys = true,
-            AllowDuplicateSections = true,
-            OverrideDuplicateKeys = true,
-            SkipInvalidLines = true,
-            ThrowExceptionsOnError = false,
-        };
+    private static readonly IniParserConfiguration Configuration = new()
+    {
+        CommentRegex = CommentRegex,
+        AllowDuplicateKeys = true,
+        AllowDuplicateSections = true,
+        OverrideDuplicateKeys = true,
+        SkipInvalidLines = true,
+        ThrowExceptionsOnError = false,
+    };
 
     public static ConfigFile Parse(string filePath, IFileSystem fileSystem)
     {
