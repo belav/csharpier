@@ -55,8 +55,10 @@
             this.DisableCSharpierServer = newInstance.DisableCSharpierServer;
         }
 
-        private static readonly AsyncLazy<CSharpierOptions> liveModel =
-            new(CreateAsync, ThreadHelper.JoinableTaskFactory);
+        private static readonly AsyncLazy<CSharpierOptions> liveModel = new(
+            CreateAsync,
+            ThreadHelper.JoinableTaskFactory
+        );
 
         private static FileSystemWatcher _hotReloadWatcher;
 

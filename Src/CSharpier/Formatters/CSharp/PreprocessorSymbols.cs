@@ -4,8 +4,10 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
 {
     private readonly List<string[]> symbolSets = new();
     private readonly HashSet<string> squashedSymbolSets = new();
-    private SymbolContext CurrentContext =
-        new() { ParentContext = new SymbolContext { ParentContext = null! } };
+    private SymbolContext CurrentContext = new()
+    {
+        ParentContext = new SymbolContext { ParentContext = null! },
+    };
 
     private PreprocessorSymbols()
         : base(SyntaxWalkerDepth.Trivia) { }

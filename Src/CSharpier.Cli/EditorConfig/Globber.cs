@@ -2,14 +2,13 @@ namespace CSharpier.Cli.EditorConfig;
 
 internal static class Globber
 {
-    private static readonly GlobMatcherOptions globOptions =
-        new()
-        {
-            MatchBase = true,
-            Dot = true,
-            AllowWindowsPaths = true,
-            AllowSingleBraceSets = true,
-        };
+    private static readonly GlobMatcherOptions globOptions = new()
+    {
+        MatchBase = true,
+        Dot = true,
+        AllowWindowsPaths = true,
+        AllowSingleBraceSets = true,
+    };
 
     public static GlobMatcher Create(string files, string directory)
     {
