@@ -10,7 +10,7 @@ internal static class XmlFormatter
 {
     internal static CodeFormatterResult Format(string xml, PrinterOptions printerOptions)
     {
-        var xDocument = XDocument.Parse(xml, LoadOptions.PreserveWhitespace);
+        var xDocument = XDocument.Parse(xml);
 
         // TODO #819 Error ./efcore/eng/sdl-tsa-vars.config - Threw exception while formatting.
         // Data at the root level is invalid. Line 1, position 1.

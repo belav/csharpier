@@ -6,22 +6,22 @@ namespace CSharpier.Formatters.Xml.XNodePrinters;
 
 internal static class Tag
 {
-    public static Doc PrintOpeningTag(XElement node, PrintingContext context)
+    public static Doc PrintOpeningTag(XElement element, PrintingContext context)
     {
         return Doc.Concat(
-            PrintOpeningTagStart(node),
-            Attributes.Print(node, context),
-            node.IsEmpty ? Doc.Null : PrintOpeningTagEnd(node)
+            PrintOpeningTagStart(element),
+            Attributes.Print(element, context),
+            element.IsEmpty ? Doc.Null : PrintOpeningTagEnd(element)
         );
     }
 
-    private static Doc PrintOpeningTagStart(XElement node)
+    private static Doc PrintOpeningTagStart(XElement element)
     {
         return
-            node.PreviousNode is not null
-            && NeedsToBorrowNextOpeningTagStartMarker(node.PreviousNode)
+            element.PreviousNode is not null
+            && NeedsToBorrowNextOpeningTagStartMarker(element.PreviousNode)
             ? Doc.Null
-            : Doc.Concat(PrintOpeningTagPrefix(node), PrintOpeningTagStartMarker(node));
+            : Doc.Concat(PrintOpeningTagPrefix(element), PrintOpeningTagStartMarker(element));
     }
 
     private static Doc PrintOpeningTagEnd(XElement node)
@@ -32,11 +32,12 @@ internal static class Tag
             : PrintOpeningTagEndMarker(node);
     }
 
-    public static Doc PrintOpeningTagPrefix(XNode node)
+    public static Doc PrintOpeningTagPrefix(XElement element)
     {
-        return NeedsToBorrowParentOpeningTagEndMarker(node) ? PrintOpeningTagEndMarker(node.Parent!)
-            : NeedsToBorrowPrevClosingTagEndMarker(node)
-                ? PrintClosingTagEndMarker((node.PreviousNode as XElement)!)
+        return NeedsToBorrowParentOpeningTagEndMarker(element)
+                ? PrintOpeningTagEndMarker(element.Parent!)
+            : NeedsToBorrowPrevClosingTagEndMarker(element)
+                ? PrintClosingTagEndMarker((element.PreviousNode as XElement)!)
             : "";
     }
 
@@ -69,16 +70,16 @@ internal static class Tag
         );
     }
 
-    public static Doc PrintClosingTagStart(XElement node)
+    public static Doc PrintClosingTagStart(XElement element)
     {
-        var lastChild = node.Nodes().LastOrDefault();
+        var lastChild = element.Nodes().LastOrDefault();
 
         return lastChild is not null && NeedsToBorrowParentClosingTagStartMarker(lastChild)
             ? Doc.Null
-            : Doc.Concat(PrintClosingTagPrefix(node), PrintClosingTagStartMarker(node));
+            : Doc.Concat(PrintClosingTagPrefix(element), PrintClosingTagStartMarker(element));
     }
 
-    public static Doc PrintClosingTagStartMarker(XNode node)
+    public static Doc PrintClosingTagStartMarker(XElement element)
     {
         // if (shouldNotPrintClosingTag(node)) {
         //     return "";
@@ -92,7 +93,7 @@ internal static class Tag
         //         }
         //     // fall through
         //     default:
-        return "</" + node;
+        return "</" + element.Name;
     }
 
     public static Doc PrintClosingTagEnd(XElement node)
@@ -115,9 +116,9 @@ internal static class Tag
          *       ^
          *     >
          */
-        return !node.Nodes().Last().GetLastDescendant().IsTextLike()
-            // we don't want to take into account whitespace
-            && !true
+        return false
+        // we don't want to take into account whitespace
+        // && !node.Nodes().Last().GetLastDescendant().IsTextLike()
         // && !node.lastChild.hasTrailingSpaces
         // && node.lastChild?.isTrailingSpaceSensitive
         // && !isPreLikeNode(node)

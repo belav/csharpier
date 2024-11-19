@@ -1,3 +1,4 @@
+using System.Xml;
 using System.Xml.Linq;
 using CSharpier.SyntaxPrinter;
 
@@ -27,11 +28,10 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
-            // TODO #819
-            // if (!node.Attributes().Any() && node.Nodes() is [XText])
-            // {
-            //     return Doc.Null;
-            // }
+            if (!node.Attributes().Any() && node.Nodes().ToList() is [XText])
+            {
+                return Doc.Null;
+            }
 
             return Doc.SoftLine;
         }
@@ -44,11 +44,10 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
-            // TODO #819
-            // if (node.Attributes.Count == 0 && node.ChildNodes is [XmlText])
-            // {
-            //     return Doc.Null;
-            // }
+            if (!node.Attributes().Any() && node.Nodes().ToList() is [XText])
+            {
+                return Doc.Null;
+            }
             return Doc.SoftLine;
         }
 

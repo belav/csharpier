@@ -37,12 +37,7 @@ internal static class Node
 
         if (xNode is XText xText)
         {
-            List<Doc> doc =
-            [
-                Tag.PrintOpeningTagPrefix(xText),
-                GetEncodedTextValue(xText),
-                Tag.PrintClosingTagSuffix(xText),
-            ];
+            List<Doc> doc = [GetEncodedTextValue(xText)];
 
             if (doc.All(o => o is StringDoc))
             {
