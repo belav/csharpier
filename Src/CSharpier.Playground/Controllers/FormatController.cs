@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
-using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Playground.Controllers;
-
-using CSharpier.Utilities;
 
 public class FormatResult
 {
@@ -30,16 +23,10 @@ public class FormatError
 [Route("[controller]")]
 public class FormatController : ControllerBase
 {
-    private readonly IWebHostEnvironment webHostEnvironment;
     private readonly ILogger logger;
 
-    // ReSharper disable once SuggestBaseTypeForParameter
-    public FormatController(
-        IWebHostEnvironment webHostEnvironment,
-        ILogger<FormatController> logger
-    )
+    public FormatController(ILogger<FormatController> logger)
     {
-        this.webHostEnvironment = webHostEnvironment;
         this.logger = logger;
     }
 
@@ -49,7 +36,7 @@ public class FormatController : ControllerBase
         public int PrintWidth { get; set; }
         public int IndentSize { get; set; }
         public bool UseTabs { get; set; }
-        public string Parser { get; set; } = string.Empty;
+        public string Formatter { get; set; } = string.Empty;
     }
 
     [HttpPost]
@@ -58,12 +45,14 @@ public class FormatController : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        var sourceCodeKind = model.Parser.EqualsIgnoreCase("CSharp")
-            ? SourceCodeKind.Regular
-            : SourceCodeKind.Script;
-        var result = await CSharpFormatter.FormatAsync(
+        if (!Enum.TryParse<Formatter>(model.Formatter, ignoreCase: true, out var parsedFormatter))
+        {
+            throw new Exception("Invalid formatter " + model.Formatter);
+        }
+
+        var result = await CodeFormatter.FormatAsync(
             model.Code,
-            new PrinterOptions
+            new PrinterOptions(parsedFormatter)
             {
                 IncludeAST = true,
                 IncludeDocTree = true,
@@ -71,16 +60,16 @@ public class FormatController : ControllerBase
                 IndentSize = model.IndentSize,
                 UseTabs = model.UseTabs,
             },
-            sourceCodeKind,
             cancellationToken
         );
 
+        // TODO #1359 need to do xml compare here
         var comparer = new SyntaxNodeComparer(
             model.Code,
             result.Code,
             result.ReorderedModifiers,
             result.ReorderedUsingsWithDisabledText,
-            sourceCodeKind,
+            parsedFormatter is Formatter.CSharp ? SourceCodeKind.Regular : SourceCodeKind.Script,
             cancellationToken
         );
 

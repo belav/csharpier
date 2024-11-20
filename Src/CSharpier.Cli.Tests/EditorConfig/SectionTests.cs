@@ -1,9 +1,9 @@
-namespace CSharpier.Cli.Tests.EditorConfig;
-
 using CSharpier.Cli.EditorConfig;
 using FluentAssertions;
 using IniParser.Model;
 using NUnit.Framework;
+
+namespace CSharpier.Cli.Tests.EditorConfig;
 
 [TestFixture]
 public class SectionTests

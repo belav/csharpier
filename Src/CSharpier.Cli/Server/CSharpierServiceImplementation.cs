@@ -1,8 +1,8 @@
-namespace CSharpier.Cli.Server;
-
 using System.IO.Abstractions;
 using CSharpier.Cli.Options;
 using Microsoft.Extensions.Logging;
+
+namespace CSharpier.Cli.Server;
 
 internal class CSharpierServiceImplementation(string? configPath, ILogger logger)
 {

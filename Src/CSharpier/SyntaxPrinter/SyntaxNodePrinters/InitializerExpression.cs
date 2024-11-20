@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class InitializerExpression
 {
-    public static Doc Print(InitializerExpressionSyntax node, FormattingContext context)
+    public static Doc Print(InitializerExpressionSyntax node, PrintingContext context)
     {
         Doc separator = node.Parent
             is AssignmentExpressionSyntax

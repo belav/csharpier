@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class Parameter
 {
-    public static Doc Print(ParameterSyntax node, FormattingContext context)
+    public static Doc Print(ParameterSyntax node, PrintingContext context)
     {
         var hasAttribute = node.AttributeLists.Any();
         var groupId = hasAttribute ? Guid.NewGuid().ToString() : string.Empty;

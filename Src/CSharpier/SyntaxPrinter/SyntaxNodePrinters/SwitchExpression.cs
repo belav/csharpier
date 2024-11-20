@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class SwitchExpression
 {
-    public static Doc Print(SwitchExpressionSyntax node, FormattingContext context)
+    public static Doc Print(SwitchExpressionSyntax node, PrintingContext context)
     {
         var sections = Doc.Group(
             Doc.Indent(
@@ -33,7 +33,7 @@ internal static class SwitchExpression
 
     private static Doc PrintArm(
         SwitchExpressionArmSyntax switchExpressionArm,
-        FormattingContext context
+        PrintingContext context
     )
     {
         var arrowHasComment = switchExpressionArm.EqualsGreaterThanToken.LeadingTrivia.Any(o =>

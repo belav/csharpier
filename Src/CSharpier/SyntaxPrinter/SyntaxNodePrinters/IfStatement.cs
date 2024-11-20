@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class IfStatement
 {
-    public static Doc Print(IfStatementSyntax node, FormattingContext context)
+    public static Doc Print(IfStatementSyntax node, PrintingContext context)
     {
         var docs = new List<Doc>();
         if (node.Parent is not ElseClauseSyntax)

@@ -1,0 +1,6 @@
+<!-- ====================================================================== -->
+<!-- This XML is a description of the Common Language Infrastructure (CLI) library. -->
+<!-- This file is a normative part of Partition IV of the following standards: ISO/IEC 23271 and ECMA 335 -->
+<!-- ====================================================================== -->
+<!DOCTYPE Libraries SYSTEM "CLILibraryTypes.dtd">
+<root></root>

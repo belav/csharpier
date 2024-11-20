@@ -2,10 +2,9 @@
 using System.Threading;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Benchmarks;
-
-using Microsoft.CodeAnalysis;
 
 [MemoryDiagnoser]
 public class Benchmarks
@@ -13,7 +12,10 @@ public class Benchmarks
     [Benchmark]
     public void Default_CodeFormatter()
     {
-        CSharpFormatter.FormatAsync(this.largeCode, new PrinterOptions()).GetAwaiter().GetResult();
+        CSharpFormatter
+            .FormatAsync(this.largeCode, new PrinterOptions(Formatter.CSharp))
+            .GetAwaiter()
+            .GetResult();
     }
 
     [Benchmark]

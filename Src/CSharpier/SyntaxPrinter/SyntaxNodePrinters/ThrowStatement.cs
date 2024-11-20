@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ThrowStatement
 {
-    public static Doc Print(ThrowStatementSyntax node, FormattingContext context)
+    public static Doc Print(ThrowStatementSyntax node, PrintingContext context)
     {
         var expression =
             node.Expression != null

@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ContinueStatement
 {
-    public static Doc Print(ContinueStatementSyntax node, FormattingContext context)
+    public static Doc Print(ContinueStatementSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

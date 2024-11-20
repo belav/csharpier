@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class SwitchStatement
 {
-    public static Doc Print(SwitchStatementSyntax node, FormattingContext context)
+    public static Doc Print(SwitchStatementSyntax node, PrintingContext context)
     {
         var sections =
             node.Sections.Count == 0

@@ -4,7 +4,7 @@ internal static class ExternAliasDirective
 {
     public static Doc Print(
         ExternAliasDirectiveSyntax node,
-        FormattingContext context,
+        PrintingContext context,
         bool printExtraLines = true
     )
     {

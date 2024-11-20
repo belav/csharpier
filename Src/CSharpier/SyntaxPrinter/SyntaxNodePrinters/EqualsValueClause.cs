@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class EqualsValueClause
 {
-    public static Doc Print(EqualsValueClauseSyntax node, FormattingContext context)
+    public static Doc Print(EqualsValueClauseSyntax node, PrintingContext context)
     {
         Doc separator = Doc.Line;
         if (node.Parent is PropertyDeclarationSyntax)

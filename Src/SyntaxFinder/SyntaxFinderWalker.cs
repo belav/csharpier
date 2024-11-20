@@ -1,7 +1,7 @@
-namespace SyntaxFinder;
-
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+
+namespace SyntaxFinder;
 
 public abstract class SyntaxFinderWalker(string file) : CSharpSyntaxWalker
 {
