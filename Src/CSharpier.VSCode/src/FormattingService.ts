@@ -1,81 +1,85 @@
-import { performance } from "perf_hooks";
-import { languages, Range, TextDocument, TextEdit } from "vscode";
-import { CSharpierProcessProvider } from "./CSharpierProcessProvider";
-import { Logger } from "./Logger";
-import { Status } from "./ICSharpierProcess";
+import {
+    CancellationToken,
+    FormattingOptions,
+    languages,
+    Position,
+    Range,
+    TextDocument,
+    TextEdit,
+} from "vscode";
+import { Difference, generateDifferences } from "prettier-linter-helpers";
+import { FormatDocumentProvider } from "./FormatDocumentProvider";
 
 export class FormattingService {
-    logger: Logger;
-    csharpierProcessProvider: CSharpierProcessProvider;
-
-    constructor(logger: Logger, csharpierProcessProvider: CSharpierProcessProvider) {
-        this.logger = logger;
-        this.csharpierProcessProvider = csharpierProcessProvider;
-
+    constructor(private readonly formatDocumentProvider: FormatDocumentProvider) {
         languages.registerDocumentFormattingEditProvider("csharp", {
             provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
         });
+
+        languages.registerDocumentRangeFormattingEditProvider("csharp", {
+            provideDocumentRangeFormattingEdits: this.provideDocumentRangeFormattingEdits,
+        });
+    }
+
+    private provideDocumentRangeFormattingEdits = async (
+        document: TextDocument,
+        range: Range,
+    ): Promise<TextEdit[]> => {
+        const differences = await this.getDifferences(document);
+        const edits: TextEdit[] = [];
+
+        for (const difference of differences) {
+            const diffRange = this.getRange(document, difference);
+            if (range.contains(diffRange)) {
+                const textEdit = this.getTextEdit(diffRange, difference);
+                if (textEdit) {
+                    edits.push(textEdit);
+                }
+            }
+        }
+
+        return edits;
+    };
+
+    private getTextEdit(range: Range, difference: Difference) {
+        if (difference.operation === generateDifferences.INSERT) {
+            return TextEdit.insert(
+                new Position(range.start.line, range.start.character),
+                difference.insertText!,
+            );
+        } else if (difference.operation === generateDifferences.REPLACE) {
+            return TextEdit.replace(range, difference.insertText!);
+        } else if (difference.operation === generateDifferences.DELETE) {
+            return TextEdit.delete(range);
+        }
+    }
+
+    private async getDifferences(document: TextDocument) {
+        const source = document.getText();
+        const formattedSource =
+            (await this.formatDocumentProvider.formatDocument(document)) ?? source;
+        return generateDifferences(source, formattedSource);
+    }
+
+    private getRange(document: TextDocument, difference: Difference): Range {
+        if (difference.operation === generateDifferences.INSERT) {
+            const start = document.positionAt(difference.offset);
+            return new Range(start.line, start.character, start.line, start.character);
+        }
+        const start = document.positionAt(difference.offset);
+        const end = document.positionAt(difference.offset + difference.deleteText!.length);
+        return new Range(start.line, start.character, end.line, end.character);
     }
 
     private provideDocumentFormattingEdits = async (document: TextDocument) => {
-        const csharpierProcess = this.csharpierProcessProvider.getProcessFor(document.fileName);
-
-        this.logger.info(
-            "Formatting started for " +
-                document.fileName +
-                " using CSharpier " +
-                csharpierProcess.getVersion(),
-        );
-        const startTime = performance.now();
-        const text = document.getText();
-
         const updateText = (newText: string) => {
             return [TextEdit.replace(FormattingService.fullDocumentRange(document), newText)];
         };
 
-        if ("formatFile2" in csharpierProcess) {
-            const parameter = {
-                fileContents: text,
-                fileName: document.fileName,
-            };
-            const result = await csharpierProcess.formatFile2(parameter);
+        const formattedSource = await this.formatDocumentProvider.formatDocument(document);
 
-            this.logger.info("Formatted in " + (performance.now() - startTime) + "ms");
-
-            if (result == null) {
-                return;
-            }
-
-            switch (result.status) {
-                case "Formatted":
-                    return updateText(result.formattedFile);
-                case "Ignored":
-                    this.logger.info("File is ignored by csharpier cli.");
-                    break;
-                case "Failed":
-                    this.logger.warn(
-                        "CSharpier cli failed to format the file and returned the following error: " +
-                            result.errorMessage,
-                    );
-                    break;
-                default:
-                    this.logger.warn("Didn't handle " + result.status);
-                    break;
-            }
-        } else {
-            const newText = await csharpierProcess.formatFile(text, document.fileName);
-            const endTime = performance.now();
-            this.logger.info("Formatted in " + (endTime - startTime) + "ms");
-            if (!newText || newText === text) {
-                this.logger.debug(
-                    "Skipping write because " + !newText
-                        ? "result is empty"
-                        : "current document equals result",
-                );
-                return [];
-            }
-
-            return updateText(newText);
+        if (formattedSource) {
+            return updateText(formattedSource);
         }
 
         return [];
