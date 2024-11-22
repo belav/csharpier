@@ -10,6 +10,7 @@ internal static class CollectionExpression
                 or ArrowExpressionClauseSyntax
                 or CastExpressionSyntax
                 or ExpressionElementSyntax
+                or InitializerExpressionSyntax
                 or SimpleLambdaExpressionSyntax
                 or AssignmentExpressionSyntax
                 {

@@ -86,6 +86,17 @@ CallMethod(_ =>
     ]
 );
 
+Dictionary<string, string[]> dictionary = new()
+{
+    {
+        "Key",
+        [
+            "SomeValue__________________________________________",
+            "SomeValue__________________________________________",
+        ]
+    },
+};
+
 class MyClass
 {
     private readonly List<string> _items;
