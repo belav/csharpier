@@ -1,4 +1,53 @@
-﻿# 0.30.1
+﻿# 0.30.2
+## What's Changed
+### Collection expression inside a dictionary adds unexpected new line [#1390](https://github.com/belav/csharpier/issues/1390)
+```c#
+// input & expected output
+Dictionary<string, string[]> dictionary = new()
+{
+    {
+        "Key",
+        [
+            "SomeValue__________________________________________",
+            "SomeValue__________________________________________",
+        ]
+    },
+};
+
+// 0.30.1
+Dictionary<string, string[]> dictionary = new()
+{
+    {
+        "Key",
+
+        [
+            "SomeValue__________________________________________",
+            "SomeValue__________________________________________",
+        ]
+    },
+};
+```
+### Failed syntax tree validation reported when trailing comma added before a trailing comment [#1388](https://github.com/belav/csharpier/issues/1388)
+With the following code, CSharpier will add a trailing comma before the trailing comment.  
+CSharpier's syntax tree validation was incorrectly reporting this as a failure.
+```c#
+// input
+var someObject = new SomeObject()
+{
+    Property1 = 1,
+    Property2 = 2 // Trailing Comment
+};
+
+// output
+var someObject = new SomeObject()
+{
+    Property1 = 1,
+    Property2 = 2, // Trailing Comment
+};
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.30.1...0.30.2
+# 0.30.1
 ## What's Changed
 Revert tool command back to `dotnet-csharpier`, it was supposed to be changed to `csharpier` for 1.0.0
 
@@ -2748,6 +2797,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
