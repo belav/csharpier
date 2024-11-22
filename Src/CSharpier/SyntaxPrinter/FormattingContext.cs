@@ -22,6 +22,10 @@ internal class FormattingContext
     // we also need to keep track if we move around usings with disabledText
     public bool ReorderedUsingsWithDisabledText { get; set; }
 
+    // when adding a trailing comma in front of a trailing comment it is very hard to determine how to compare
+    // that trailing comment, so just ignore all trailing trivia
+    public bool MovedTrailingTrivia { get; set; }
+
     public TrailingCommaContext? TrailingComma { get; set; }
 
     public FormattingContext WithSkipNextLeadingTrivia()
