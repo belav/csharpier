@@ -75,6 +75,7 @@
         "@types/mocha": "9.0.0",
         "@types/node": "14.x",
         "@types/node-fetch": "^2.6.11",
+        "@types/prettier-linter-helpers": "^1.0.4",
         "@types/semver": "7.3.9",
         "@types/vscode": "1.60.0",
         "prettier": "2.4.1",
@@ -88,6 +89,7 @@
         "xml-js": "1.6.11"
     },
     "dependencies": {
-        "node-fetch": "^2.7.0"
+        "node-fetch": "^2.7.0",
+        "prettier-linter-helpers": "^1.0.0"
     }
 }
