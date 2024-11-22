@@ -16,4 +16,5 @@ public class CodeFormatterResult
 
     internal bool ReorderedModifiers { get; init; }
     internal bool ReorderedUsingsWithDisabledText { get; init; }
+    internal bool MovedTrailingTrivia { get; init; }
 }

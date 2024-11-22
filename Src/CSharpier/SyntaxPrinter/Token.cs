@@ -132,6 +132,7 @@ internal static class Token
                 )
                 {
                     docs.Add(context.TrailingComma.PrintedTrailingComma);
+                    context.MovedTrailingTrivia = true;
                     context.TrailingComma = null;
                 }
 

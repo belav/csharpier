@@ -10,6 +10,7 @@ internal partial class SyntaxNodeComparer
     protected SyntaxTree NewSyntaxTree { get; }
     protected bool ReorderedModifiers { get; }
     protected bool ReorderedUsingsWithDisabledText { get; }
+    protected bool MovedTrailingTrivia { get; }
 
     private static readonly CompareResult Equal = new();
 
@@ -18,6 +19,7 @@ internal partial class SyntaxNodeComparer
         string newSourceCode,
         bool reorderedModifiers,
         bool reorderedUsingsWithDisabledText,
+        bool movedTrailingTrivia,
         SourceCodeKind sourceCodeKind,
         CancellationToken cancellationToken
     )
@@ -26,6 +28,7 @@ internal partial class SyntaxNodeComparer
         this.NewSourceCode = newSourceCode;
         this.ReorderedModifiers = reorderedModifiers;
         this.ReorderedUsingsWithDisabledText = reorderedUsingsWithDisabledText;
+        this.MovedTrailingTrivia = movedTrailingTrivia;
 
         var cSharpParseOptions = new CSharpParseOptions(
             CSharpFormatter.LanguageVersion,
@@ -129,7 +132,8 @@ internal partial class SyntaxNodeComparer
         this.formattedStack.Push((formattedStart, formattedStart));
         while (this.originalStack.Count > 0)
         {
-            var result = this.Compare(this.originalStack.Pop(), this.formattedStack.Pop());
+            var valueTuple = this.originalStack.Pop();
+            var result = this.Compare(valueTuple, this.formattedStack.Pop());
             if (result.IsInvalid)
             {
                 return result;
@@ -274,7 +278,9 @@ internal partial class SyntaxNodeComparer
             return result;
         }
 
-        var result2 = this.Compare(originalToken.TrailingTrivia, formattedToken.TrailingTrivia);
+        var result2 = this.MovedTrailingTrivia
+            ? Equal
+            : this.Compare(originalToken.TrailingTrivia, formattedToken.TrailingTrivia);
 
         return result2.IsInvalid ? result2 : Equal;
     }

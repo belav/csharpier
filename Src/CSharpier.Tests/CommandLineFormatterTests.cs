@@ -679,6 +679,26 @@ class ClassName
         result.OutputLines.First().Should().StartWith("Formatted 1 files in");
     }
 
+    [Test]
+    public void File_With_Added_Trailing_Comma_Before_Comment_Should_Pass_Validation()
+    {
+        var context = new TestContext();
+
+        var fileContents = """
+            var someObject = new SomeObject()
+            {
+                Property1 = 1,
+                Property2 = 2 // Trailing Comment
+            };
+            """;
+        context.WhenAFileExists("file1.cs", fileContents);
+
+        var result = this.Format(context);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        result.OutputLines.First().Should().StartWith("Formatted 1 files in");
+    }
+
     [TestCase(".csharpierrc")]
     [TestCase(".csharpierrc.json")]
     [TestCase(".csharpierrc.yaml")]

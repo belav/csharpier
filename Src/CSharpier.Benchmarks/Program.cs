@@ -24,6 +24,7 @@ public class Benchmarks
             this.code,
             false,
             false,
+            false,
             SourceCodeKind.Regular,
             CancellationToken.None
         );
