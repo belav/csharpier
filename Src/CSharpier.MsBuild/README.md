@@ -4,7 +4,16 @@ One way to test the changes in the build/* files
 - Edit those files at `C:\Users\[Username]\.nuget\packages\csharpier.msbuild\[VersionNumber]\build`
 - Ensure you revert those files and make the same changes to the files here.
 
-Another way
-- the validate PR GH action does this, currently only uses the net8 sdk
-- dotnet pack Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj -o nupkg /p:Version=0.0.1
-- docker build -f ./Tests/CSharpier.MsBuild.Test/Dockerfile .
+Some automated tests exist
+- the validate PR GH action runs these, mostly around framework versions
+- cd ./Tests/MsBuild
+- ./Run.ps1
+
+Other things that would be really really nice to automate
+- exits properly in release when no files formatted  
+  https://github.com/belav/csharpier/issues/1357
+- same as above if thing set
+- formats files in debug
+- formats files if told to in release
+- a few scenarios in here I think, compilation errors etc  
+  https://github.com/belav/csharpier/issues/1131 

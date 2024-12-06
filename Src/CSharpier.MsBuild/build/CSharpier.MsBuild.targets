@@ -11,12 +11,16 @@
     <FirstTargetFramework Condition=" '$(TargetFrameworks)' == '' ">$(TargetFramework)</FirstTargetFramework>
     <FirstTargetFramework Condition=" '$(FirstTargetFrameworks)' == '' ">$(TargetFrameworks.Split(';')[0])</FirstTargetFramework>
     <NullOutput>NUL</NullOutput>
+    <IgnoreExitCode>true</IgnoreExitCode>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(OS)' != 'Windows_NT' ">
     <NullOutput>/dev/null</NullOutput>
+    <IgnoreExitCode>false</IgnoreExitCode>
   </PropertyGroup>
 
+  <!-- https://github.com/belav/csharpier/issues/1131 -->
+  
   <Target Name="CSharpierFormatInner" Condition="'$(CSharpier_Bypass)' != 'true'">
     <!-- IgnoreExitCode cleans up the output when files aren't formatted and fail the check -->
     <!-- &gt; NullOutput suppresses the output from this so that compilation errors will show up a single time -->

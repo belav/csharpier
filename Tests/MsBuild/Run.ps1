@@ -19,9 +19,15 @@ New-Item $basePath -ItemType Directory | Out-Null
 $failureMessage = ""
 
 foreach ($scenario in $scenarios) {
+    # these fail on windows in GH and because they use dockerfiles for the scenarios we don't need to run them twice anyway
+    if ($env:GithubOS -eq "windows-latest") {
+        continue
+    }
+    
     Write-Host "::group::$($scenario.name)"
 
     $scenarioPath = Join-Path $basePath $scenario.name
+    Write-Host $scenarioPath
     New-Item $scenarioPath -ItemType Directory | Out-Null
 
     $dockerFile = Join-Path $scenarioPath "DockerFile"
@@ -38,7 +44,7 @@ RUN dotnet build -c Release
     $csprojFile = Join-Path $scenarioPath "Project.csproj"
 
     $csharpierFrameworkVersion = ""
-    if ($null -ne $scenario.csharpier_frameworkVersion) {
+    if ([bool]($scenario.PSobject.Properties.name -match "csharpier_frameworkVersion")) {
         $csharpierFrameworkVersion = "
     <CSharpier_FrameworkVersion>$($scenario.csharpier_frameworkVersion)</CSharpier_FrameworkVersion>
 "
@@ -66,6 +72,23 @@ RUN dotnet build -c Release
 
     Write-Host "::endgroup::"
 }
+
+
+Write-Host "::group::UnformattedFileCausesError"
+
+$output = (& dotnet build -c Release ./TestCases/UnformattedFileCausesError/Project.csproj) | Out-String
+Write-Host $output
+if ($LASTEXITCODE -ne 1) {
+    $failureMessage += "::error::The TestCase UnformattedFileCausesError did not return an exit code of 1`n"
+}
+# test output to see what is in it
+
+Write-Host "::endgroup::"
+
+
+# OneError
+# any other scenarior to test?
+
 
 if ($failureMessage -ne "") {
     Write-Host $failureMessage
