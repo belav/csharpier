@@ -1,5 +1,14 @@
 ﻿# 0.30.2
 ## What's Changed
+### CSharpier.MsBuild now uses DOTNET_HOST_PATH instead of just dotnet [#1380](https://github.com/belav/csharpier/pull/1387)
+Use current dotnet binary from DOTNET_HOST_PATH instead of just dotnet.
+- Global (in PATH) may not exist (when used Binaries, but not Installers).
+- Global can have different runtime version.
+- Consistent with outer tools (csc for example).
+https://github.com/dotnet/roslyn/blob/324fd25331c969cd742ba68eee09ffd4b6fd29e3/src/Compilers/Shared/RuntimeHostInfo.cs#L61-L64
+- It is documented to be used for that purpose.
+https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-environment-variables#dotnet_host_path
+
 ### Collection expression inside a dictionary adds unexpected new line [#1390](https://github.com/belav/csharpier/issues/1390)
 ```c#
 // input & expected output
