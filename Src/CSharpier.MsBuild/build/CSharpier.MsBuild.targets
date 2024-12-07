@@ -25,6 +25,8 @@
       StdOutEncoding="utf-8"
       StdErrEncoding="utf-8"
       IgnoreExitCode="true"
+      IgnoreStandardErrorWarningFormat="true"
+      CustomErrorRegularExpression="^Error "
       Command="&quot;$(CSharpier_dotnet_Path)&quot; exec &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check --compilation-errors-as-warnings &quot;$(MSBuildProjectDirectory)&quot; &gt; $(NullOutput) " />
   </Target>
 
