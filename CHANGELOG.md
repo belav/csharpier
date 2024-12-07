@@ -1,4 +1,12 @@
-﻿# 0.30.2
+﻿# 0.30.3
+## What's Changed
+### CSharpier.MsBuild doesn't fail the github action anymore [#1357](https://github.com/belav/csharpier/issues/1357)
+The changes for [1311](https://github.com/belav/csharpier/pull/1311) caused CSharpier.MsBuild to not report unformatted files as errors on linux.
+
+Thanks go to @PetSerAl for the fix
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.30.2...0.30.3
+# 0.30.2
 ## What's Changed
 ### CSharpier.MsBuild now uses DOTNET_HOST_PATH instead of just dotnet [#1387](https://github.com/belav/csharpier/pull/1387)
 Use current dotnet binary from DOTNET_HOST_PATH instead of just dotnet.
@@ -2806,6 +2814,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
