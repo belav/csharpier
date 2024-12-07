@@ -11,12 +11,10 @@
     <FirstTargetFramework Condition=" '$(TargetFrameworks)' == '' ">$(TargetFramework)</FirstTargetFramework>
     <FirstTargetFramework Condition=" '$(FirstTargetFrameworks)' == '' ">$(TargetFrameworks.Split(';')[0])</FirstTargetFramework>
     <NullOutput>NUL</NullOutput>
-    <IgnoreExitCode>true</IgnoreExitCode>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(OS)' != 'Windows_NT' ">
     <NullOutput>/dev/null</NullOutput>
-    <IgnoreExitCode>false</IgnoreExitCode>
   </PropertyGroup>
 
   <!-- https://github.com/belav/csharpier/issues/1131 -->
@@ -31,7 +29,7 @@
       IgnoreExitCode="true"
       IgnoreStandardErrorWarningFormat="true"
       CustomErrorRegularExpression="^Error "
-      Command="&quot;$(CSharpier_dotnet_Path)&quot; exec &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check --compilation-errors-as-warnings &quot;$(MSBuildProjectDirectory)&quot; &gt; $(NullOutput) " />
+      Command="&quot;$(CSharpier_dotnet_Path)&quot; exec &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check &quot;$(MSBuildProjectDirectory)&quot; &gt; $(NullOutput) " />
   </Target>
 
   <!-- getting this to run a single time for projects that target multiple frameworks requires all of this
