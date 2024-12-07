@@ -5,15 +5,12 @@ One way to test the changes in the build/* files
 - Ensure you revert those files and make the same changes to the files here.
 
 Some automated tests exist
-- the validate PR GH action runs these, mostly around framework versions
+- the validate PR GH action runs these
 - cd ./Tests/MsBuild
-- ./Run.ps1
+- ./Run.ps1 - some of these don't seem to work well locally
 
 Other things that would be really really nice to automate
-- exits properly in release when no files formatted  
-  https://github.com/belav/csharpier/issues/1357
-- same as above if thing set
 - formats files in debug
 - formats files if told to in release
-- a few scenarios in here I think, compilation errors etc  
-  https://github.com/belav/csharpier/issues/1131 
+- checks files if told to in debug
+- log levels

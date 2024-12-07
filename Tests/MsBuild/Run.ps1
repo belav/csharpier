@@ -16,7 +16,7 @@ if (Test-Path $basePath) {
 
 New-Item $basePath -ItemType Directory | Out-Null
 
-$failureMessage = ""
+$failureMessages = @()
 
 foreach ($scenario in $scenarios) {
     # these fail on windows in GH and because they use dockerfiles for the scenarios we don't need to run them twice anyway
@@ -67,7 +67,7 @@ RUN dotnet build -c Release
     docker build . -f $dockerFile
 
     if ($LASTEXITCODE -ne 0) {
-        $failureMessage += "::error::The scenario $($scenario.name) failed to build. See the logs above for details`n"
+        $failureMessages += "The scenario $($scenario.name) failed to build. See the logs above for details"
     }
 
     Write-Host "::endgroup::"
@@ -76,19 +76,20 @@ RUN dotnet build -c Release
 
 Write-Host "::group::UnformattedFileCausesError"
 $output = [TestHelper]::RunTestCase("UnformattedFileCausesError", $true)
-# TODO do we need to test output?
 Write-Host "::endgroup::"
 
 Write-Host "::group::FileThatCantCompileCausesOneError"
 $output = [TestHelper]::RunTestCase("FileThatCantCompileCausesOneError", $true)
-# TODO what do we need to look for in the output?
+if (-not($output.Contains("1 Error(s)"))) {
+    $failureMessages += "The TestCase FileThatCantCompileCausesOneError did not contain the text '1 Error(s)1"
+}
+
 Write-Host "::endgroup::"
 
-# TODO any other scenarior to test?
-
-
-if ($failureMessage -ne "") {
-    Write-Host $failureMessage
+if ($failureMessages.Length -ne 0) {
+    foreach ($message in $failureMessages) {
+        Write-Host "::error::$message`n"
+    }
     exit 1
 }
 
@@ -103,7 +104,7 @@ class TestHelper {
         }
 
         if ($LASTEXITCODE -ne $expectedExitCode) {
-            $failureMessage += "::error::The TestCase $testCase did not return an exit code of $expectedExitCode`n"
+            $failureMessages += "The TestCase $testCase did not return an exit code of $expectedExitCode"
         }
         
         return $output
