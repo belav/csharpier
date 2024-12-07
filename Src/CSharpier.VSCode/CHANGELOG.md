@@ -1,3 +1,7 @@
+## 1.9.0
+- Support format selection
+- Support for inline highlighting of formatting issues + code actions to format them
+
 ## 1.8.0
 - Use `dotnet tool list` to look for both local and global installs of csharpier
 - Only show the "you need to install csharpier" notification once per run
