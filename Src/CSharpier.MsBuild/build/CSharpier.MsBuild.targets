@@ -17,8 +17,6 @@
     <NullOutput>/dev/null</NullOutput>
   </PropertyGroup>
 
-  <!-- https://github.com/belav/csharpier/issues/1131 -->
-  
   <Target Name="CSharpierFormatInner" Condition="'$(CSharpier_Bypass)' != 'true'">
     <!-- IgnoreExitCode cleans up the output when files aren't formatted and fail the check -->
     <!-- &gt; NullOutput suppresses the output from this so that compilation errors will show up a single time -->

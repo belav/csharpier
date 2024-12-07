@@ -19,7 +19,7 @@ New-Item $basePath -ItemType Directory | Out-Null
 $failureMessages = @()
 
 foreach ($scenario in $scenarios) {
-    # these fail on windows in GH and because they use dockerfiles for the scenarios we don't need to run them twice anyway
+    # these fail on windows in GH and because they use docker for the scenarios we don't need to run them twice anyway
     if ($env:GithubOS -eq "windows-latest") {
         continue
     }
