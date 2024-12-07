@@ -75,23 +75,38 @@ RUN dotnet build -c Release
 
 
 Write-Host "::group::UnformattedFileCausesError"
-
-$output = (& dotnet build -c Release ./TestCases/UnformattedFileCausesError/Project.csproj) | Out-String
-Write-Host $output
-if ($LASTEXITCODE -ne 1) {
-    $failureMessage += "::error::The TestCase UnformattedFileCausesError did not return an exit code of 1`n"
-}
-# test output to see what is in it
-
+$output = [TestHelper]::RunTestCase("UnformattedFileCausesError", $true)
+# TODO do we need to test output?
 Write-Host "::endgroup::"
 
+Write-Host "::group::FileThatCantCompileCausesOneError"
+$output = [TestHelper]::RunTestCase("FileThatCantCompileCausesOneError", $true)
+# TODO what do we need to look for in the output?
+Write-Host "::endgroup::"
 
-# OneError
-# any other scenarior to test?
+# TODO any other scenarior to test?
 
 
 if ($failureMessage -ne "") {
     Write-Host $failureMessage
     exit 1
+}
+
+class TestHelper {
+    static [string] RunTestCase([string] $testCase, [bool] $expectErrorCode) {
+        $output = (& dotnet build -c Release ./TestCases/$($testCase)/Project.csproj) | Out-String
+        Write-Host $output
+        
+        $expectedExitCode = 0
+        if ($expectErrorCode -eq $true) {
+            $expectedExitCode = 1
+        }
+
+        if ($LASTEXITCODE -ne $expectedExitCode) {
+            $failureMessage += "::error::The TestCase $testCase did not return an exit code of $expectedExitCode`n"
+        }
+        
+        return $output
+    }
 }
 
