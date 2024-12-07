@@ -1,6 +1,6 @@
 ﻿# 0.30.2
 ## What's Changed
-### CSharpier.MsBuild now uses DOTNET_HOST_PATH instead of just dotnet [#1380](https://github.com/belav/csharpier/pull/1387)
+### CSharpier.MsBuild now uses DOTNET_HOST_PATH instead of just dotnet [#1387](https://github.com/belav/csharpier/pull/1387)
 Use current dotnet binary from DOTNET_HOST_PATH instead of just dotnet.
 - Global (in PATH) may not exist (when used Binaries, but not Installers).
 - Global can have different runtime version.
