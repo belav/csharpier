@@ -3,7 +3,7 @@ import { Difference, generateDifferences, showInvisibles } from "prettier-linter
 import { FixAllCodeActionsCommand } from "./FixAllCodeActionCommand";
 import { Logger } from "./Logger";
 import { FormatDocumentProvider } from "./FormatDocumentProvider";
-import {workspace} from "vscode";
+import { workspace } from "vscode";
 
 const DIAGNOSTICS_ID = "csharpier";
 const DIAGNOSTICS_SOURCE_ID = "diagnostic";
