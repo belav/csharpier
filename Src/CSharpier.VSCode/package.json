@@ -48,6 +48,11 @@
                         "default": false,
                         "description": "Enable debug logs."
                     },
+                    "csharpier.enableDiagnostics": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Enable diagnostics that highlight code that is not formatted with CSharpier."
+                    },
                     "csharpier.dev.customPath": {
                         "type": "string",
                         "default": "",
