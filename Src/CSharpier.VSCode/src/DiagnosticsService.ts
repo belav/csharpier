@@ -3,6 +3,7 @@ import { Difference, generateDifferences, showInvisibles } from "prettier-linter
 import { FixAllCodeActionsCommand } from "./FixAllCodeActionCommand";
 import { Logger } from "./Logger";
 import { FormatDocumentProvider } from "./FormatDocumentProvider";
+import { workspace } from "vscode";
 
 const DIAGNOSTICS_ID = "csharpier";
 const DIAGNOSTICS_SOURCE_ID = "diagnostic";
@@ -54,7 +55,8 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
     public async runDiagnostics(document: vscode.TextDocument): Promise<void> {
         const shouldRunDiagnostics =
             this.documentSelector.some(selector => selector.language === document.languageId) &&
-            !!vscode.workspace.getWorkspaceFolder(document.uri);
+            !!vscode.workspace.getWorkspaceFolder(document.uri) &&
+            (workspace.getConfiguration("csharpier").get<boolean>("enableDiagnostics") ?? true);
         if (shouldRunDiagnostics) {
             try {
                 const diff = await this.getDiff(document);

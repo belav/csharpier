@@ -1,3 +1,6 @@
+## 1.9.1
+- Add option for disabling diagnostics.
+
 ## 1.9.0
 - Support format selection
 - Support for inline highlighting of formatting issues + code actions to format them

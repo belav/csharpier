@@ -2,7 +2,7 @@
     "name": "csharpier-vscode",
     "displayName": "CSharpier - Code formatter",
     "description": "Code formatter using csharpier",
-    "version": "1.9.0",
+    "version": "1.9.1",
     "publisher": "csharpier",
     "author": "CSharpier",
     "homepage": "https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode",
@@ -47,6 +47,11 @@
                         "type": "boolean",
                         "default": false,
                         "description": "Enable debug logs."
+                    },
+                    "csharpier.enableDiagnostics": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Enable diagnostics that highlight code that is not formatted with CSharpier."
                     },
                     "csharpier.dev.customPath": {
                         "type": "string",
