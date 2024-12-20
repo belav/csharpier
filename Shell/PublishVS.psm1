@@ -7,6 +7,14 @@ function CSH-PublishVS {
     $repositoryRoot = Join-Path $PSScriptRoot ".."
     $vsRoot = Join-Path $repositoryRoot "/Src/CSharpier.VisualStudio"
 
+    $msbuild = "C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\msbuild.exe"
+    
+    & $msbuild $vsRoot\CSharpier.VisualStudio.sln -p:Configuration=Release
+    
+    if ($LASTEXITCODE -ne 0) {
+        return
+    }
+    
     $vsixPath = "C:\Program Files\Microsoft Visual Studio\2022\Professional\VSSDK\VisualStudioIntegration\Tools\Bin\VsixPublisher.exe"
 
     & $vsixPath publish `
