@@ -60,7 +60,7 @@
             ThreadHelper.JoinableTaskFactory
         );
 
-        private static FileSystemWatcher _hotReloadWatcher;
+        private static FileSystemWatcher? hotReloadWatcher;
 
         public static CSharpierOptions Instance
         {
@@ -83,7 +83,7 @@
 
         public void Load()
         {
-            ThreadHelper.JoinableTaskFactory.Run(LoadAsync);
+            ThreadHelper.JoinableTaskFactory.Run(this.LoadAsync);
         }
 
         private async Task LoadAsync()
@@ -140,7 +140,7 @@
 
         public void Save()
         {
-            ThreadHelper.JoinableTaskFactory.Run(SaveAsync);
+            ThreadHelper.JoinableTaskFactory.Run(this.SaveAsync);
         }
 
         public async Task SaveAsync()
@@ -204,6 +204,7 @@
 
         private static async Task<string?> GetSolutionOptionsFileNameAsync()
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 #pragma warning disable VSSDK006
             var solution =
                 await AsyncServiceProvider.GlobalProvider.GetServiceAsync(typeof(SVsSolution))
@@ -212,16 +213,20 @@
             solution!.GetSolutionInfo(out _, out _, out var userOptsFile);
 
             return userOptsFile != null
-                ? Path.Combine(Path.GetDirectoryName(userOptsFile), "csharpier.json")
+                ? Path.Combine(Path.GetDirectoryName(userOptsFile)!, "csharpier.json")
                 : null;
         }
 
         private static async Task InitializeHotReloadWatcherAsync()
         {
-            string filePath = await GetSolutionOptionsFileNameAsync();
+            var filePath = await GetSolutionOptionsFileNameAsync();
+            if (filePath is null)
+            {
+                return;
+            }
 
-            _hotReloadWatcher = new FileSystemWatcher(
-                Path.GetDirectoryName(filePath),
+            hotReloadWatcher = new FileSystemWatcher(
+                Path.GetDirectoryName(filePath)!,
                 Path.GetFileName(filePath)
             );
 
@@ -236,11 +241,11 @@
 #pragma warning restore
             }
 
-            _hotReloadWatcher.Changed += OnFileChanged;
-            _hotReloadWatcher.Created += OnFileChanged;
-            _hotReloadWatcher.Renamed += OnFileChanged;
+            hotReloadWatcher.Changed += OnFileChanged;
+            hotReloadWatcher.Created += OnFileChanged;
+            hotReloadWatcher.Renamed += OnFileChanged;
 
-            _hotReloadWatcher.EnableRaisingEvents = true;
+            hotReloadWatcher.EnableRaisingEvents = true;
         }
 
         private class OptionsDto
