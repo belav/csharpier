@@ -76,6 +76,8 @@ namespace CSharpier.VisualStudio
                 var documentInfo = this.runningDocumentTable.GetDocumentInfo(docCookie);
                 var documentPath = documentInfo.Moniker;
 
+                Logger.Instance.Debug("Trying to find - " + documentPath);
+
                 return this.dte.ActiveDocument?.FullName == documentPath
                     ? this.dte.ActiveDocument
                     : this.dte.Documents?.Item(documentPath);

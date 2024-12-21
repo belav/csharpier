@@ -69,6 +69,12 @@ namespace CSharpier.VisualStudio
             this.warmingByDirectory.Remove(directory);
         }
 
+        public bool HasWarmedProcessFor(string filePath)
+        {
+            var directory = new FileInfo(filePath).DirectoryName;
+            return this.csharpierVersionByDirectory.TryGetValue(directory, out _);
+        }
+
         public ICSharpierProcess GetProcessFor(string filePath)
         {
             var directory = new FileInfo(filePath).DirectoryName;
