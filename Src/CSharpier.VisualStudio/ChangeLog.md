@@ -1,4 +1,7 @@
-﻿## [1.9.1]
+﻿## [1.9.2]
+- Remove eagerly warming csharpier at startup. Optimize right click menu so it doesn't have noticeable delay on initial file that is open at startup.
+
+## [1.9.1]
 - Fix bug if you open CSharpier options page without a solution loaded in VisualStudio
 
 ## [1.9.0]
