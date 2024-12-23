@@ -26,7 +26,7 @@ export const formatCode = async (
             }, 100);
 
             return {
-                syntaxTree: JSON.parse(data.json),
+                syntaxTree: !data.json ? undefined : JSON.parse(data.json),
                 formattedCode: data.code,
                 doc: data.doc,
                 hasErrors: !!data.errors.length,

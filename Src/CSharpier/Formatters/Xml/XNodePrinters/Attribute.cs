@@ -6,7 +6,7 @@ namespace CSharpier.Formatters.Xml.XNodePrinters;
 
 internal static class Attributes
 {
-    public static Doc Print(XElement element, PrintingContext context)
+    public static Doc Print(XElement element, XmlPrintingContext context)
     {
         if (!element.Attributes().Any())
         {
@@ -25,23 +25,18 @@ internal static class Attributes
         //           : () => false;
 
         var printedAttributes = new List<Doc>();
+        var index = 0;
+        var xmlNode = context.Mapping[element];
         foreach (var attribute in element.Attributes())
         {
-            printedAttributes.Add(
-                // hasPrettierIgnoreAttribute(attribute)
-                // ? replaceEndOfLine(
-                //     options.originalText.slice(
-                //         locStart(attribute),
-                //         locEnd(attribute),
-                //     ),
-                // ) :
-                Print(attribute, context)
-            );
+            printedAttributes.Add(Print((attribute, xmlNode.Attributes![index]), context));
+
+            index++;
         }
 
         var doNotBreakAttributes =
             element.Attributes().Count() == 1
-            && !element.Attributes().First().Value.Contains('\n')
+            && !context.Mapping[element].Attributes![0].Value.Contains('\n')
             && (element.Nodes().Any(o => o is XElement) || element.IsEmpty);
         var attributeLine = Doc.Line;
 
@@ -84,11 +79,14 @@ internal static class Attributes
         return Doc.Concat(parts);
     }
 
-    private static Doc Print(XAttribute attribute, PrintingContext context)
+    private static Doc Print((XAttribute, XmlAttribute) attributes, XmlPrintingContext context)
     {
+        var (attribute, xmlAttribute) = attributes;
+
         var value = new XElement("EncodeText", attribute.Value).LastNode!.ToString();
 
-        // TODO #819 may need to convert everything to use XDocument to get this working properly with preserving encoded values, ugh
-        return Doc.Concat(attribute.Name.ToString(), "=", "\"", value, "\"");
+        // TODO #819 we need to somehow combine the value from XAttribute and XmlAttribute, ugh
+        // probably also need to take into account \n vs \r\n
+        return Doc.Concat(attribute.Name.ToString(), "=", "\"", xmlAttribute.Value, "\"");
     }
 }

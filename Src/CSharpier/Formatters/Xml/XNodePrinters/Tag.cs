@@ -6,7 +6,7 @@ namespace CSharpier.Formatters.Xml.XNodePrinters;
 
 internal static class Tag
 {
-    public static Doc PrintOpeningTag(XElement element, PrintingContext context)
+    public static Doc PrintOpeningTag(XElement element, XmlPrintingContext context)
     {
         return Doc.Concat(
             PrintOpeningTagStart(element),
@@ -26,13 +26,12 @@ internal static class Tag
 
     private static Doc PrintOpeningTagEnd(XElement node)
     {
-        var firstChild = node.Nodes().FirstOrDefault();
-        return firstChild is not null && NeedsToBorrowParentOpeningTagEndMarker(firstChild)
+        return node.FirstNode is not null && NeedsToBorrowParentOpeningTagEndMarker(node.FirstNode)
             ? Doc.Null
             : PrintOpeningTagEndMarker(node);
     }
 
-    public static Doc PrintOpeningTagPrefix(XElement element)
+    public static Doc PrintOpeningTagPrefix(XNode element)
     {
         return NeedsToBorrowParentOpeningTagEndMarker(element)
                 ? PrintOpeningTagEndMarker(element.Parent!)

@@ -6,7 +6,7 @@ namespace CSharpier.Formatters.Xml.XNodePrinters;
 
 internal static class Element
 {
-    internal static Doc Print(XElement node, PrintingContext context)
+    internal static Doc Print(XElement node, XmlPrintingContext context)
     {
         var shouldHugContent = false;
         var attrGroupId = context.GroupFor("element-attr-group-id");

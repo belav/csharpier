@@ -5,7 +5,7 @@ namespace CSharpier.Formatters.Xml.XNodePrinters;
 
 internal static class Node
 {
-    internal static Doc Print(XNode xNode, PrintingContext context)
+    internal static Doc Print(XNode xNode, XmlPrintingContext context)
     {
         if (xNode is XDocument xDocument)
         {
@@ -37,7 +37,12 @@ internal static class Node
 
         if (xNode is XText xText)
         {
-            List<Doc> doc = [GetEncodedTextValue(xText)];
+            List<Doc> doc =
+            [
+                Tag.PrintOpeningTagPrefix(xText),
+                GetEncodedTextValue(xText),
+                Tag.PrintClosingTagSuffix(xText),
+            ];
 
             if (doc.All(o => o is StringDoc))
             {

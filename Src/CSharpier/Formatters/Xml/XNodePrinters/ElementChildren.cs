@@ -6,33 +6,8 @@ namespace CSharpier.Formatters.Xml.XNodePrinters;
 
 internal static class ElementChildren
 {
-    public static Doc Print(XElement element, PrintingContext context)
+    public static Doc Print(XElement element, XmlPrintingContext context)
     {
-        // this force breaks html, head, ul, ol, etc
-        // if (forceBreakChildren(node)) {
-        //     return [
-        //         breakParent,
-        //
-        //         ...path.map((childPath) => {
-        //         const childNode = childPath.node;
-        //         const prevBetweenLine = !childNode.prev
-        //         ? ""
-        //         : printBetweenLine(childNode.prev, childNode);
-        //         return [
-        //         !prevBetweenLine
-        //         ? ""
-        //         : [
-        //         prevBetweenLine,
-        //         forceNextEmptyLine(childNode.prev)
-        //             ? hardline
-        //             : "",
-        //         ],
-        //         printChild(childPath, options, print),
-        //         ];
-        //         }, "children"),
-        //     ];
-        // }
-
         var groupIds = new List<string>();
         foreach (var _ in element.Nodes())
         {
@@ -43,29 +18,6 @@ internal static class ElementChildren
         var x = 0;
         foreach (var childNode in element.Nodes())
         {
-            // if (child is XText) {
-            //     if (childNode.prev && isTextLikeNode(childNode.prev)) {
-            //         const prevBetweenLine = printBetweenLine(
-            //             childNode.prev,
-            //             childNode,
-            //         );
-            //         if (prevBetweenLine) {
-            //             if (forceNextEmptyLine(childNode.prev)) {
-            //                 return [
-            //                     hardline,
-            //                     hardline,
-            //                     printChild(childPath, options, print),
-            //                 ];
-            //             }
-            //             return [
-            //                 prevBetweenLine,
-            //                 printChild(childPath, options, print),
-            //             ];
-            //         }
-            //     }
-            //     return printChild(childPath, options, print);
-            // }
-
             var prevParts = new List<Doc>();
             var leadingParts = new List<Doc>();
             var trailingParts = new List<Doc>();
@@ -155,7 +107,7 @@ internal static class ElementChildren
         // );
     }
 
-    public static Doc PrintChild(XNode child, PrintingContext context)
+    public static Doc PrintChild(XNode child, XmlPrintingContext context)
     {
         // should we try to support csharpier-ignore some day?
         // if (HasPrettierIgnore(child))
