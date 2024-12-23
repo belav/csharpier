@@ -78,7 +78,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         if (lastWarmed + 5000 > now) {
             return;
         }
-        this.logger.debug("Ensure there is a csharpier process for " + directory);
+        this.logger.debug("Ensure there is a csharpier process for " + filePath);
         this.lastWarmedByDirectory.put(directory, now);
         var version = this.csharpierVersionByDirectory.getOrDefault(directory, null);
         if (version == null) {
