@@ -92,7 +92,7 @@ internal static class Tag
         //         }
         //     // fall through
         //     default:
-        return "</" + element.Name;
+        return "</" + element.Name.LocalName;
     }
 
     public static Doc PrintClosingTagEnd(XElement node)
@@ -178,7 +178,7 @@ internal static class Tag
         //     }
         // // fall through
         // default:
-        return $"<{(node is XElement element ? element.Name : node.ToString())}";
+        return $"<{(node is XElement element ? element.Name.LocalName : node.ToString())}";
     }
 
     private static bool NeedsToBorrowNextOpeningTagStartMarker(XNode node)
@@ -191,7 +191,7 @@ internal static class Tag
         return node.NextNode is not null
             && !node.NextNode.IsTextLike()
             // && node.IsTextLike()
-            && node is XText
+            && node is XText and not XCData
         // && node.isTrailingSpaceSensitive
         // prettier does something with removing end of line nodes and setting this value, I don't know
         // that we have that funcionality
@@ -213,7 +213,9 @@ internal static class Tag
          *     >
          */
         return (
-            node.NextNode is null && node.IsTextLike() && node.GetLastDescendant() is XText
+            node.NextNode is null
+            && node.IsTextLike()
+            && node.GetLastDescendant() is XText and not XCData
         // && !node.hasTrailingSpaces
         );
     }
@@ -240,7 +242,7 @@ internal static class Tag
         return node.PreviousNode is null
             // I think isLeadingSpaceSensitive is true for text/comment
             // && node.IsTextLike()
-            && node is XText
+            && node is XText and not XCData
         // && node.isLeadingSpaceSensitive && !node.hasLeadingSpaces
         ;
     }

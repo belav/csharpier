@@ -10,6 +10,12 @@ internal static class Node
         if (xNode is XDocument xDocument)
         {
             var result = new List<Doc>();
+
+            if (xDocument.Declaration is not null)
+            {
+                result.Add(xDocument.Declaration.ToString(), Doc.HardLine);
+            }
+
             foreach (var node in xDocument.Nodes())
             {
                 result.Add(Print(node, context), Doc.HardLine);
@@ -19,11 +25,6 @@ internal static class Node
 
             return Doc.Concat(result);
         }
-
-        // if (xNode is XDeclaration xmlDeclaration)
-        // {
-        //     return xmlDeclaration.OuterXml;
-        // }
 
         if (xNode is XDocumentType xDocumentType)
         {
@@ -58,22 +59,21 @@ internal static class Node
             return xNode.ToString();
         }
 
-        // if (xNode is XCDataSection)
-        // {
-        //     return xNode.OuterXml;
-        // }
-
         throw new Exception("Need to handle + " + xNode);
     }
 
-    // TODO #819 don't need this?
-    private static Doc GetEncodedTextValue(XText xmlText)
+    private static Doc GetEncodedTextValue(XText xText)
     {
-        if (xmlText.Value is null)
+        if (xText.Value is null)
         {
             return Doc.Null;
         }
 
-        return new XElement("EncodeText", xmlText.Value).LastNode!.ToString();
+        if (xText is XCData xcData)
+        {
+            return xcData.ToString();
+        }
+
+        return new XElement("EncodeText", xText.Value).LastNode!.ToString();
     }
 }

@@ -28,7 +28,7 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
-            if (!node.Attributes().Any() && node.Nodes().ToList() is [XText])
+            if (!node.Attributes().Any() && node.Nodes().ToList() is [XText] and not [XCData])
             {
                 return Doc.Null;
             }
@@ -44,7 +44,7 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
-            if (!node.Attributes().Any() && node.Nodes().ToList() is [XText])
+            if (!node.Attributes().Any() && node.Nodes().ToList() is [XText] and not [XCData])
             {
                 return Doc.Null;
             }
@@ -70,6 +70,6 @@ internal static class Element
     {
         var childNode = node.Nodes().Count() == 1 ? node.Nodes().First() : null;
 
-        return childNode is not null && childNode is not XText;
+        return childNode is not null && childNode is XCData or not XText;
     }
 }

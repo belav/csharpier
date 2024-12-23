@@ -1,3 +1,4 @@
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using CSharpier.SyntaxPrinter;
@@ -83,10 +84,58 @@ internal static class Attributes
     {
         var (attribute, xmlAttribute) = attributes;
 
-        var value = new XElement("EncodeText", attribute.Value).LastNode!.ToString();
+        string GetAttributeValue()
+        {
+            var xValue = new XElement("EncodeText", attribute.Value)
+                .LastNode!.ToString()
+                .Replace("\"", "&quot;")
+                .Replace("\r\n", "&#010;")
+                .Replace("\n", "&#010;");
+            var xmlValue = xmlAttribute.Value;
 
-        // TODO #819 we need to somehow combine the value from XAttribute and XmlAttribute, ugh
-        // probably also need to take into account \n vs \r\n
-        return Doc.Concat(attribute.Name.ToString(), "=", "\"", xmlAttribute.Value, "\"");
+            if (xValue == xmlValue)
+            {
+                return xValue;
+            }
+
+            var valueBuilder = new StringBuilder();
+            var xmlIndex = 0;
+            var xIndex = 0;
+            while (xIndex < xValue.Length)
+            {
+                var xChar = xValue[xIndex];
+                var xmlChar = xmlValue[xmlIndex];
+
+                if (xChar == ' ' && xmlChar == '\r')
+                {
+                    valueBuilder.Append(xmlChar);
+                    xmlIndex++;
+                    xmlChar = xmlValue[xmlIndex];
+                }
+
+                if (xChar == xmlChar || (xChar == ' ' && xmlChar == '\n'))
+                {
+                    valueBuilder.Append(xmlChar);
+                }
+
+                if (xChar == '&')
+                {
+                    do
+                    {
+                        valueBuilder.Append(xChar);
+                        xIndex++;
+                        xChar = xValue[xIndex];
+                    } while (xChar != ';');
+                    valueBuilder.Append(xChar);
+                }
+
+                xIndex++;
+                xmlIndex++;
+            }
+
+            return valueBuilder.ToString();
+        }
+
+        return Doc.Concat(attribute.Name.ToString(), "=", "\"", GetAttributeValue(), "\"");
     }
 }
