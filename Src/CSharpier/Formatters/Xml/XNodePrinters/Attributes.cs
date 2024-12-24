@@ -1,7 +1,6 @@
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using CSharpier.SyntaxPrinter;
 
 namespace CSharpier.Formatters.Xml.XNodePrinters;
 
@@ -30,7 +29,7 @@ internal static class Attributes
         var xmlNode = context.Mapping[element];
         foreach (var attribute in element.Attributes())
         {
-            printedAttributes.Add(Print((attribute, xmlNode.Attributes![index]), context));
+            printedAttributes.Add(PrintAttribute(attribute, xmlNode.Attributes![index]));
 
             index++;
         }
@@ -80,15 +79,15 @@ internal static class Attributes
         return Doc.Concat(parts);
     }
 
-    private static Doc Print((XAttribute, XmlAttribute) attributes, XmlPrintingContext context)
+    private static Doc PrintAttribute(XAttribute attribute, XmlAttribute xmlAttribute)
     {
-        var (attribute, xmlAttribute) = attributes;
-
+        // XAttribute mostly gets us what we want, but it removes new lines
+        // XmlAttribute gives us those new lines
+        // this makes use of both values to get the final value we want to display
         string GetAttributeValue()
         {
-            var xValue = new XElement("EncodeText", attribute.Value)
-                .LastNode!.ToString()
-                .Replace("\"", "&quot;")
+            var xValue = attribute
+                .Value.Replace("\"", "&quot;")
                 .Replace("\r\n", "&#010;")
                 .Replace("\n", "&#010;");
             var xmlValue = xmlAttribute.Value;
