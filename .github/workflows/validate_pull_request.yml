@@ -27,11 +27,15 @@ jobs:
           dotnet tool restore
           dotnet csharpier . --check
   test_msbuild:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
     name: Test CSharpier.MSBuild
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v3
-      - run: |
+      - env:
+          GithubOS: ${{matrix.os}}
+        run: |
           pwsh ./Tests/MsBuild/Run.ps1
-

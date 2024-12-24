@@ -1,4 +1,70 @@
-﻿# 0.30.1
+﻿# 0.30.3
+## What's Changed
+### CSharpier.MsBuild doesn't fail the github action anymore [#1357](https://github.com/belav/csharpier/issues/1357)
+The changes for [1311](https://github.com/belav/csharpier/pull/1311) caused CSharpier.MsBuild to not report unformatted files as errors on linux.
+
+Thanks go to @PetSerAl for the fix
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.30.2...0.30.3
+# 0.30.2
+## What's Changed
+### CSharpier.MsBuild now uses DOTNET_HOST_PATH instead of just dotnet [#1387](https://github.com/belav/csharpier/pull/1387)
+Use current dotnet binary from DOTNET_HOST_PATH instead of just dotnet.
+- Global (in PATH) may not exist (when used Binaries, but not Installers).
+- Global can have different runtime version.
+- Consistent with outer tools (csc for example).
+https://github.com/dotnet/roslyn/blob/324fd25331c969cd742ba68eee09ffd4b6fd29e3/src/Compilers/Shared/RuntimeHostInfo.cs#L61-L64
+- It is documented to be used for that purpose.
+https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-environment-variables#dotnet_host_path
+
+### Collection expression inside a dictionary adds unexpected new line [#1390](https://github.com/belav/csharpier/issues/1390)
+```c#
+// input & expected output
+Dictionary<string, string[]> dictionary = new()
+{
+    {
+        "Key",
+        [
+            "SomeValue__________________________________________",
+            "SomeValue__________________________________________",
+        ]
+    },
+};
+
+// 0.30.1
+Dictionary<string, string[]> dictionary = new()
+{
+    {
+        "Key",
+
+        [
+            "SomeValue__________________________________________",
+            "SomeValue__________________________________________",
+        ]
+    },
+};
+```
+### Failed syntax tree validation reported when trailing comma added before a trailing comment [#1388](https://github.com/belav/csharpier/issues/1388)
+With the following code, CSharpier will add a trailing comma before the trailing comment.  
+CSharpier's syntax tree validation was incorrectly reporting this as a failure.
+```c#
+// input
+var someObject = new SomeObject()
+{
+    Property1 = 1,
+    Property2 = 2 // Trailing Comment
+};
+
+// output
+var someObject = new SomeObject()
+{
+    Property1 = 1,
+    Property2 = 2, // Trailing Comment
+};
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.30.1...0.30.2
+# 0.30.1
 ## What's Changed
 Revert tool command back to `dotnet-csharpier`, it was supposed to be changed to `csharpier` for 1.0.0
 
@@ -2748,6 +2814,8 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
+
 
 
 

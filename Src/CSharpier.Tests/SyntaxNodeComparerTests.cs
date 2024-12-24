@@ -873,6 +873,30 @@ var someValue = $"""
         result.Should().BeEmpty();
     }
 
+    [Test]
+    public void CollectionExpression_Works_With_Adding_Comma_Before_Comment()
+    {
+        var left = """
+            var someObject = new SomeObject()
+            {
+                Property1 = 1,
+                Property2 = 2 // Trailing Comment
+            };
+            """;
+
+        var right = """
+            var someObject = new SomeObject()
+            {
+                Property1 = 1,
+                Property2 = 2, // Trailing Comment
+            };
+            """;
+
+        var result = CompareSource(left, right, movedTrailingTrivia: true);
+
+        result.Should().BeEmpty();
+    }
+
     private static void ResultShouldBe(string actual, string expected)
     {
         actual.ReplaceLineEndings().Should().Be(expected.ReplaceLineEndings());
@@ -881,7 +905,8 @@ var someValue = $"""
     private static string CompareSource(
         string left,
         string right,
-        bool reorderedUsingsWithDisabledText = false
+        bool reorderedUsingsWithDisabledText = false,
+        bool movedTrailingTrivia = false
     )
     {
         var result = new SyntaxNodeComparer(
@@ -889,6 +914,7 @@ var someValue = $"""
             right,
             false,
             reorderedUsingsWithDisabledText,
+            movedTrailingTrivia,
             SourceCodeKind.Regular,
             CancellationToken.None
         ).CompareSource();

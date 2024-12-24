@@ -124,6 +124,7 @@ internal static class CSharpFormatter
             var reorderedUsingsWithDisabledText = printingContext
                 .State
                 .ReorderedUsingsWithDisabledText;
+            var movedTrailingTrivia = printingContext.State.MovedTrailingTrivia;
 
             foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
             {
@@ -153,6 +154,8 @@ internal static class CSharpFormatter
                 reorderedUsingsWithDisabledText =
                     reorderedUsingsWithDisabledText
                     || formattingContext2.State.ReorderedUsingsWithDisabledText;
+                movedTrailingTrivia =
+                    movedTrailingTrivia || formattingContext2.State.MovedTrailingTrivia;
             }
 
             return new CodeFormatterResult
@@ -164,6 +167,7 @@ internal static class CSharpFormatter
                 AST = printerOptions.IncludeAST ? PrintAST(rootNode) : string.Empty,
                 ReorderedModifiers = reorderedModifiers,
                 ReorderedUsingsWithDisabledText = reorderedUsingsWithDisabledText,
+                MovedTrailingTrivia = movedTrailingTrivia,
             };
         }
         catch (InTooDeepException)

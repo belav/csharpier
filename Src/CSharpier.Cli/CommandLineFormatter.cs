@@ -442,6 +442,7 @@ internal static class CommandLineFormatter
                     codeFormattingResult.Code,
                     codeFormattingResult.ReorderedModifiers,
                     codeFormattingResult.ReorderedUsingsWithDisabledText,
+                    codeFormattingResult.MovedTrailingTrivia,
                     sourceCodeKind,
                     cancellationToken
                 );

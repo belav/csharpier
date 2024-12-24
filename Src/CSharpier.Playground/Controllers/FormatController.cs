@@ -69,6 +69,7 @@ public class FormatController : ControllerBase
             result.Code,
             result.ReorderedModifiers,
             result.ReorderedUsingsWithDisabledText,
+            result.MovedTrailingTrivia,
             parsedFormatter is Formatter.CSharp ? SourceCodeKind.Regular : SourceCodeKind.Script,
             cancellationToken
         );

@@ -20,7 +20,7 @@ internal class PrintingContext
         this.State.SkipNextLeadingTrivia = true;
         return this;
     }
-    
+
     public PrintingContext WithTrailingComma(SyntaxTrivia syntaxTrivia, Doc doc)
     {
         this.State.TrailingComma = new TrailingCommaContext(syntaxTrivia, doc);
@@ -46,9 +46,13 @@ internal class PrintingContext
 
         // we also need to keep track if we move around usings with disabledText
         public bool ReorderedUsingsWithDisabledText { get; set; }
-        
+
         public TrailingCommaContext? TrailingComma { get; set; }
+
+        // when adding a trailing comma in front of a trailing comment it is very hard to determine how to compare
+        // that trailing comment, so just ignore all trailing trivia
+        public bool MovedTrailingTrivia { get; set; }
     }
-    
+
     public record TrailingCommaContext(SyntaxTrivia TrailingComment, Doc PrintedTrailingComma);
 }

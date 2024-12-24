@@ -72,16 +72,3 @@ dotnet tool install csharpier
 
 # rebuild container image
 ```
-
-## Limitations
-
-Format Selection is not supported.
-
-Only `"editor.formatOnSaveMode" : "file"` is supported. If using other modes, you can set `file` by scoping the setting:
-```json
-"editor.formatOnSave": true,
-"editor.formatOnSaveMode": "modifications"
-"[csharp]": {
-    "editor.formatOnSaveMode": "file"
-}
-```
